@@ -79,13 +79,11 @@
 		6DDEFAF225AEDCA800A6912A /* CTR */ = {
 			isa = PBXGroup;
 			children = (
-				6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */,
-				6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */,
-				6DDEFAF725AEDCA800A6912A /* ViewController.swift */,
+				6DDEFB3725AEE01A00A6912A /* Configuration */,
+				6DDEFB3325AEDFC800A6912A /* Infrastructure */,
+				6DDEFB3425AEDFD500A6912A /* Interface */,
 				6DDEFAF925AEDCA800A6912A /* Main.storyboard */,
-				6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */,
-				6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */,
-				6DDEFB0125AEDCAA00A6912A /* Info.plist */,
+				6DDEFAF725AEDCA800A6912A /* ViewController.swift */,
 			);
 			name = CTR;
 			path = Sources/CTR;
@@ -98,6 +96,56 @@
 				6DDEFB0C25AEDCAA00A6912A /* Info.plist */,
 			);
 			path = CTRTests;
+			sourceTree = "<group>";
+		};
+		6DDEFB3325AEDFC800A6912A /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB3625AEE00800A6912A /* Resources */,
+				6DDEFB3525AEDFF200A6912A /* Core */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		6DDEFB3425AEDFD500A6912A /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB3A25AEE03B00A6912A /* Launch */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		6DDEFB3525AEDFF200A6912A /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */,
+				6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		6DDEFB3625AEE00800A6912A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6DDEFB3725AEE01A00A6912A /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB0125AEDCAA00A6912A /* Info.plist */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		6DDEFB3A25AEE03B00A6912A /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */,
+			);
+			path = Launch;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -367,7 +415,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -386,7 +434,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
