@@ -10,10 +10,11 @@
 		6DDEFAF425AEDCA800A6912A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */; };
 		6DDEFAF625AEDCA800A6912A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */; };
 		6DDEFAF825AEDCA800A6912A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFAF725AEDCA800A6912A /* ViewController.swift */; };
-		6DDEFAFB25AEDCA800A6912A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DDEFAF925AEDCA800A6912A /* Main.storyboard */; };
 		6DDEFAFD25AEDCAA00A6912A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */; };
 		6DDEFB0025AEDCAA00A6912A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */; };
 		6DDEFB0B25AEDCAA00A6912A /* CoronaTesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB0A25AEDCAA00A6912A /* CoronaTesterTests.swift */; };
+		6DDEFB4125AF13D000A6912A /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4025AF13D000A6912A /* Coordinator.swift */; };
+		6DDEFB4625AF198F00A6912A /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,13 +32,14 @@
 		6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6DDEFAF725AEDCA800A6912A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		6DDEFAFA25AEDCA800A6912A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6DDEFAFF25AEDCAA00A6912A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DDEFB0125AEDCAA00A6912A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DDEFB0625AEDCAA00A6912A /* CTRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CTRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DDEFB0A25AEDCAA00A6912A /* CoronaTesterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoronaTesterTests.swift; sourceTree = "<group>"; };
 		6DDEFB0C25AEDCAA00A6912A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6DDEFB4025AF13D000A6912A /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +81,10 @@
 		6DDEFAF225AEDCA800A6912A /* CTR */ = {
 			isa = PBXGroup;
 			children = (
-				6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */,
-				6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */,
+				6DDEFB3725AEE01A00A6912A /* Configuration */,
+				6DDEFB3325AEDFC800A6912A /* Infrastructure */,
+				6DDEFB3425AEDFD500A6912A /* Interface */,
 				6DDEFAF725AEDCA800A6912A /* ViewController.swift */,
-				6DDEFAF925AEDCA800A6912A /* Main.storyboard */,
-				6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */,
-				6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */,
-				6DDEFB0125AEDCAA00A6912A /* Info.plist */,
 			);
 			name = CTR;
 			path = Sources/CTR;
@@ -100,6 +99,74 @@
 			path = CTRTests;
 			sourceTree = "<group>";
 		};
+		6DDEFB3325AEDFC800A6912A /* Infrastructure */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB3525AEDFF200A6912A /* Core */,
+				6DDEFB3F25AF13C300A6912A /* Model */,
+				6DDEFB3625AEE00800A6912A /* Resources */,
+			);
+			path = Infrastructure;
+			sourceTree = "<group>";
+		};
+		6DDEFB3425AEDFD500A6912A /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB4425AF193D00A6912A /* Main */,
+				6DDEFB3A25AEE03B00A6912A /* Launch */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		6DDEFB3525AEDFF200A6912A /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */,
+				6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		6DDEFB3625AEE00800A6912A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		6DDEFB3725AEE01A00A6912A /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB0125AEDCAA00A6912A /* Info.plist */,
+			);
+			path = Configuration;
+			sourceTree = "<group>";
+		};
+		6DDEFB3A25AEE03B00A6912A /* Launch */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */,
+			);
+			path = Launch;
+			sourceTree = "<group>";
+		};
+		6DDEFB3F25AF13C300A6912A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB4025AF13D000A6912A /* Coordinator.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		6DDEFB4425AF193D00A6912A /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -110,6 +177,7 @@
 				6DDEFAEC25AEDCA800A6912A /* Sources */,
 				6DDEFAED25AEDCA800A6912A /* Frameworks */,
 				6DDEFAEE25AEDCA800A6912A /* Resources */,
+				6DDEFB5325AF1DA800A6912A /* Run Script SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -182,7 +250,6 @@
 			files = (
 				6DDEFB0025AEDCAA00A6912A /* LaunchScreen.storyboard in Resources */,
 				6DDEFAFD25AEDCAA00A6912A /* Assets.xcassets in Resources */,
-				6DDEFAFB25AEDCA800A6912A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,13 +262,36 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6DDEFB5325AF1DA800A6912A /* Run Script SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script SwiftLint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6DDEFAEC25AEDCA800A6912A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DDEFB4125AF13D000A6912A /* Coordinator.swift in Sources */,
 				6DDEFAF825AEDCA800A6912A /* ViewController.swift in Sources */,
 				6DDEFAF425AEDCA800A6912A /* AppDelegate.swift in Sources */,
+				6DDEFB4625AF198F00A6912A /* MainCoordinator.swift in Sources */,
 				6DDEFAF625AEDCA800A6912A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -225,14 +315,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6DDEFAF925AEDCA800A6912A /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6DDEFAFA25AEDCA800A6912A /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -367,7 +449,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -386,7 +469,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

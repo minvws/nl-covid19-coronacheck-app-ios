@@ -1,9 +1,9 @@
-//
-//  ViewController.swift
-//  CoronaTester
-//
-//  Created by Rool Paap on 13/01/2021.
-//
+/*
+* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+*
+*  SPDX-License-Identifier: EUPL-1.2
+*/
 
 import UIKit
 
@@ -12,8 +12,8 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
+
+		view.backgroundColor = .orange
 	}
 
-
 }
-
