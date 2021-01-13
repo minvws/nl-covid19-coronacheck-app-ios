@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -14,13 +14,17 @@ import Foundation
 ///
 /// Coordinators typically communicate to each other via delegates.
 class Coordinator: NSObject {
+
     private(set) var children = [Coordinator]()
 
     /// Start the coordinator. Usually this presents or pushes the (initial) viewcontroller managed by the coordinator.
     func start() {
+
         preconditionFailure("Override start() in your subclass")
     }
 
+	/// Add a child coordinator
+	/// - Parameter coordinator: the coordinator to add
     func addChildCoordinator(_ coordinator: Coordinator) {
 
         if !children.contains(where: { $0 === coordinator }) {
@@ -28,6 +32,8 @@ class Coordinator: NSObject {
         }
     }
 
+	/// Remove a child coordinator
+	/// - Parameter coordinator: the coordinator to remove
     func removeChildCoordinator(_ coordinator: Coordinator) {
 
         if let index = children.firstIndex(where: { $0 === coordinator }) {
@@ -38,6 +44,8 @@ class Coordinator: NSObject {
 
 extension Coordinator {
 
+	/// Add a child coordinator and start it.
+	/// - Parameter coordinator: the coordinator to add and start
     func startChildCoordinator(_ coordinator: Coordinator) {
 
         addChildCoordinator(coordinator)

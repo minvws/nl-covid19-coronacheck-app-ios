@@ -15,11 +15,13 @@ class MainCoordinator: Coordinator {
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene) {
+		
 		window = UIWindow(windowScene: scene)
 	}
 
 	/// For use with iOS 12.
 	override init() {
+
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 	}
 
