@@ -10,21 +10,37 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-	/// The main coordinator for routing
-	var mainCoordinator: MainCoordinator?
+	/// The app coordinator for routing
+	var appCoordinator: AppCoordinator?
 
 	func application(
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+		styleUI()
+
 		if #available(iOS 13.0, *) {
 			// Use Scene lifecycle
 		} else {
-			mainCoordinator = MainCoordinator()
-			mainCoordinator?.start()
+			appCoordinator = AppCoordinator(navigationController: UINavigationController())
+			appCoordinator?.start()
 		}
 
 		return true
+	}
+
+	/// Setup the apperance of the navigation bar
+	func styleUI() {
+
+		// Custom navigation bar appearance
+		UINavigationBar.appearance().barTintColor = .white
+		UINavigationBar.appearance().titleTextAttributes = [
+			NSAttributedString.Key.foregroundColor: UIColor.darkText
+		]
+		UINavigationBar.appearance().isTranslucent = false
+		UINavigationBar.appearance().shadowImage = UIImage()
+		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+		UINavigationBar.appearance().backgroundColor = .clear
 	}
 
 	// MARK: UISceneSession Lifecycle

@@ -10,8 +10,8 @@ import UIKit
 @available(iOS 13.0, *)
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
-	/// The main coordinator for routing
-	var mainCoordinator: MainCoordinator?
+	/// The app coordinator for routing
+	var appCoordinator: AppCoordinator?
 
 	func scene(
 		_ scene: UIScene,
@@ -23,8 +23,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// are new (see `application:configurationForConnectingSceneSession` instead).
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 
-		mainCoordinator = MainCoordinator(scene: windowScene)
-		mainCoordinator?.start()
+		appCoordinator = AppCoordinator(scene: windowScene, navigationController: UINavigationController())
+		appCoordinator?.start()
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {
