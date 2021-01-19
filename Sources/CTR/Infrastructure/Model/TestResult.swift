@@ -11,9 +11,6 @@ import Foundation
 /// The type of test results
 enum TestResultType: String, Codable {
 
-	/// Result is positive for Covid-19
-	case positive
-
 	/// Result is negative for Covid-19
 	case negative
 
@@ -22,7 +19,6 @@ enum TestResultType: String, Codable {
 
 	/// Key mapping
 	enum CodingKeys: CodingKey {
-		case positive
 		case negative
 		case unknown
 	}
@@ -46,7 +42,7 @@ struct TestResult: Codable {
 	func generateString() -> String {
 
 		if let data = try? JSONEncoder().encode(self),
-		   let convertedToString = String(data: data, encoding: .utf8) {
+		   let convertedToString = String(data: data, encoding: .ascii) {
 			print("CTR: Converted Testresult to \(convertedToString)")
 				return convertedToString
 		}

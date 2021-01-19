@@ -29,13 +29,18 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameter result: the test result
 	func setTestResult(_ result: TestResult)
 
+	/// Set the event
+	/// - Parameter event: the event
+	func setEvent(_ event: Event)
+
 	/// Dismiss the viewcontroller
 	func dismiss()
 }
 
 class VerifierCoordinator: Coordinator {
 
-	var event: Event = Event(title: "Demo Event", location: "Ziggo Dome", time: "Vanavond")
+	var event: Event = Event(
+		title: "Awesome Event", location: "Ziggo Dome", time: "Vanavond")
 
 	var testResult: TestResult?
 
@@ -66,7 +71,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 	/// Navigate to the Eventt Scene
 	func navigateToEvent() {
-		
+
+		let viewController = VerifierEventViewController()
+		viewController.coordinator = self
+		viewController.event = event
+		navigationController.pushViewController(viewController, animated: true)
 	}
 
 	/// Navigate to the Generate Event QR Scene
@@ -100,6 +109,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	func setTestResult(_ result: TestResult) {
 
 		self.testResult = result
+	}
+
+	/// Set the event
+	/// - Parameter event: the event
+	func setEvent(_ event: Event) {
+
+		self.event = event
 	}
 
 	/// Navigate to the start fo the customer flow

@@ -42,6 +42,7 @@ class VerifierGenerateQRViewController: BaseViewController {
 
 		if let filter = CIFilter(name: "CIQRCodeGenerator") {
 			filter.setValue(data, forKey: "inputMessage")
+			filter.setValue("M", forKey: "inputCorrectionLevel") // LMQH
 			let transform = CGAffineTransform(scaleX: 3, y: 3)
 
 			if let output = filter.outputImage?.transformed(by: transform) {

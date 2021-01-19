@@ -25,14 +25,14 @@ class CustomerFetchResultViewController: BaseViewController {
         // Do any additional setup after loading the view.
 		title = "Burger Fetch Result"
 
-		sceneView.primaryTitle = "Test Resultaat Positief"
+		sceneView.primaryTitle = "Test Resultaat Onbekend"
 		sceneView.primaryButtonColor = Theme.colors.warning
 
 		sceneView.secondaryTitle = "Test Resultaat Negatief"
 		sceneView.secondaryButtonColor = Theme.colors.ok
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.coordinator?.setTestResult(TestResult(status: .positive, timeStamp: Date()))
+			self?.coordinator?.setTestResult(TestResult(status: .unknown, timeStamp: nil))
 			self?.coordinator?.dismiss()
 		}
 

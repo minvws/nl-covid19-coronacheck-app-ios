@@ -29,7 +29,7 @@ struct Event: Codable {
 	func generateString() -> String {
 
 		if let data = try? JSONEncoder().encode(self),
-		   let convertedToString = String(data: data, encoding: .utf8) {
+		   let convertedToString = String(data: data, encoding: .ascii) {
 			print("CTR: Converted Event to \(convertedToString)")
 			return convertedToString
 		}
