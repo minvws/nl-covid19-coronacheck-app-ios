@@ -132,6 +132,7 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
+    fastlane-plugin-firebase_app_distribution (0.2.5)
     ffi (1.14.2)
     fourflusher (2.3.1)
     fuzzy_match (2.0.4)
@@ -245,6 +246,7 @@ PLATFORMS
 DEPENDENCIES
   cocoapods (~> 1.10)
   fastlane (~> 2.171)
+  fastlane-plugin-firebase_app_distribution
   xcode-install (~> 2.6)
 
 BUNDLED WITH

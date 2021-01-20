@@ -1,0 +1,32 @@
+name: test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  swiftlint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Run SwiftLint for changes in this pull request
+      uses: norio-nomura/action-swiftlint@3.1.0
+      with:
+        args: --force-exclude
+      env:
+        DIFF_BASE: ${{ github.base_ref }}
+  test:
+    runs-on: macOS-latest
+    timeout-minutes: 15
+    needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Build and test
+      env:
+        SLACK_URL: ${{ secrets.SLACK_URL }}
+      run: |
+        bundle install
+        bundle exec fastlane ios test_ci

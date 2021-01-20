@@ -38,11 +38,11 @@ else
 fi
 
 # Install pods via cocoapods
-#printf "Installing pods via cocoapods... "
-#if bundle exec pod repo update --silent && bundle exec pod install --silent; then
-#  printf "${GREEN}[ok]${NO_COLOR}\n"
-#else
-#  exit -1
-#fi
+printf "Installing pods via cocoapods... "
+if bundle exec pod repo update --silent && bundle exec pod install --silent; then
+  printf "${GREEN}[ok]${NO_COLOR}\n"
+else
+  exit -1
+fi
 
 printf "\n${CLEAR_LINE}${GREEN}All done! Everything seems a-okay 👌${NO_COLOR}\n"
