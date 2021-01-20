@@ -42,14 +42,14 @@ platform :ios do
 
     deploy_test
 
-    deploy_acc
+    # deploy_acc
 
-    deploy_prod
+    # deploy_prod
 
-    inform_slack(
-      default_payloads: [:git_author],
-      message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
-    )
+    # inform_slack(
+    #   default_payloads: [:git_author],
+    #   message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
+    # )
   end
 
   desc "Build and deploy via Firebase from CI"
