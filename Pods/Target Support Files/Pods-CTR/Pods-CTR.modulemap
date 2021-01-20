@@ -1,0 +1,6 @@
+framework module Pods_CTR {
+  umbrella header "Pods-CTR-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3454914E5AF11C275EA2153E /* Pods_CTR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A30077C20B882A3D85DB17 /* Pods_CTR.framework */; };
 		6D2C0FA725B6B7B50030FD17 /* CustomerFetchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */; };
 		6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */; };
 		6D7F9C9E25B6BAE80006F227 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */; };
@@ -44,6 +45,7 @@
 		6DDEFB0B25AEDCAA00A6912A /* CoronaTesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB0A25AEDCAA00A6912A /* CoronaTesterTests.swift */; };
 		6DDEFB4125AF13D000A6912A /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4025AF13D000A6912A /* Coordinator.swift */; };
 		6DDEFB4625AF198F00A6912A /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */; };
+		B6DE255683A671A9E9E1920A /* Pods_CTRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192B189FA7E43E58EBB66C2D /* Pods_CTRTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14BEF0F1915ABAC71F7DBC29 /* Pods-CTRTests.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
+		192B189FA7E43E58EBB66C2D /* Pods_CTRTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CTRTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A0BC9F3F0139731EAF777CF /* Pods-CTR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTR.release.xcconfig"; path = "Target Support Files/Pods-CTR/Pods-CTR.release.xcconfig"; sourceTree = "<group>"; };
+		3B52A804A4BBCC8868B017C7 /* Pods-CTR.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTR.ad hoc test.xcconfig"; path = "Target Support Files/Pods-CTR/Pods-CTR.ad hoc test.xcconfig"; sourceTree = "<group>"; };
+		43DFF135785CA98651880F6B /* Pods-CTR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTR.debug.xcconfig"; path = "Target Support Files/Pods-CTR/Pods-CTR.debug.xcconfig"; sourceTree = "<group>"; };
+		4EBDF2056641810A28CBFB35 /* Pods-CTR.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTR.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-CTR/Pods-CTR.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
+		6844CCE973A338A8698CFD59 /* Pods-CTRTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.ad hoc test.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
 		6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerFetchResultViewController.swift; sourceTree = "<group>"; };
 		6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
@@ -98,6 +107,13 @@
 		6DDEFB0C25AEDCAA00A6912A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DDEFB4025AF13D000A6912A /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		791400B115E369E3827EEC30 /* Pods-CTRTests.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
+		7D5C60869FB0D218FDBB85BC /* Pods-CTR.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTR.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-CTR/Pods-CTR.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
+		A1A30077C20B882A3D85DB17 /* Pods_CTR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CTR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A8968400416918733E866B94 /* Pods-CTRTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.app store.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.app store.xcconfig"; sourceTree = "<group>"; };
+		B7C0B7F15574104D3923E2F3 /* Pods-CTRTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.release.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.release.xcconfig"; sourceTree = "<group>"; };
+		EBFCC46857E754D1EC5C3189 /* Pods-CTRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.debug.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FD09D8523E7901C965D6A35B /* Pods-CTR.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTR.app store.xcconfig"; path = "Target Support Files/Pods-CTR/Pods-CTR.app store.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3454914E5AF11C275EA2153E /* Pods_CTR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,12 +129,41 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6DE255683A671A9E9E1920A /* Pods_CTRTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		24D22EDDC156812B48895190 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A1A30077C20B882A3D85DB17 /* Pods_CTR.framework */,
+				192B189FA7E43E58EBB66C2D /* Pods_CTRTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2AA686B9ED54FFE475502A40 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				43DFF135785CA98651880F6B /* Pods-CTR.debug.xcconfig */,
+				3A0BC9F3F0139731EAF777CF /* Pods-CTR.release.xcconfig */,
+				FD09D8523E7901C965D6A35B /* Pods-CTR.app store.xcconfig */,
+				3B52A804A4BBCC8868B017C7 /* Pods-CTR.ad hoc test.xcconfig */,
+				7D5C60869FB0D218FDBB85BC /* Pods-CTR.ad hoc prod.xcconfig */,
+				4EBDF2056641810A28CBFB35 /* Pods-CTR.ad hoc acc.xcconfig */,
+				EBFCC46857E754D1EC5C3189 /* Pods-CTRTests.debug.xcconfig */,
+				B7C0B7F15574104D3923E2F3 /* Pods-CTRTests.release.xcconfig */,
+				A8968400416918733E866B94 /* Pods-CTRTests.app store.xcconfig */,
+				6844CCE973A338A8698CFD59 /* Pods-CTRTests.ad hoc test.xcconfig */,
+				791400B115E369E3827EEC30 /* Pods-CTRTests.ad hoc prod.xcconfig */,
+				14BEF0F1915ABAC71F7DBC29 /* Pods-CTRTests.ad hoc acc.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		6D92849125B5CB96009D4350 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +221,8 @@
 				6DDEFAF225AEDCA800A6912A /* CTR */,
 				6DDEFB0925AEDCAA00A6912A /* CTRTests */,
 				6DDEFAF125AEDCA800A6912A /* Products */,
+				2AA686B9ED54FFE475502A40 /* Pods */,
+				24D22EDDC156812B48895190 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -293,10 +341,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6DDEFB1A25AEDCAA00A6912A /* Build configuration list for PBXNativeTarget "CTR" */;
 			buildPhases = (
+				E3DE62BD8DE220B1385BF71F /* [CP] Check Pods Manifest.lock */,
 				6DDEFB5325AF1DA800A6912A /* Run Script SwiftLint */,
 				6DDEFAEC25AEDCA800A6912A /* Sources */,
 				6DDEFAED25AEDCA800A6912A /* Frameworks */,
 				6DDEFAEE25AEDCA800A6912A /* Resources */,
+				E4EA7374153A2B53934A9159 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -311,6 +361,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6DDEFB1D25AEDCAA00A6912A /* Build configuration list for PBXNativeTarget "CTRTests" */;
 			buildPhases = (
+				5C54D5A93BD09B964B179BAB /* [CP] Check Pods Manifest.lock */,
 				6DDEFB0225AEDCAA00A6912A /* Sources */,
 				6DDEFB0325AEDCAA00A6912A /* Frameworks */,
 				6DDEFB0425AEDCAA00A6912A /* Resources */,
@@ -333,6 +384,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1230;
 				LastUpgradeCheck = 1230;
+				ORGANIZATIONNAME = "De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.";
 				TargetAttributes = {
 					6DDEFAEF25AEDCA800A6912A = {
 						CreatedOnToolsVersion = 12.3;
@@ -384,6 +436,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		5C54D5A93BD09B964B179BAB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CTRTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6DDEFB5325AF1DA800A6912A /* Run Script SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -401,6 +475,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		E3DE62BD8DE220B1385BF71F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CTR-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E4EA7374153A2B53934A9159 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CTR/Pods-CTR-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CTR/Pods-CTR-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CTR/Pods-CTR-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -520,8 +633,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Test;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -531,6 +646,7 @@
 		};
 		6D0B2B0A25B8099D00DEFE07 /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B52A804A4BBCC8868B017C7 /* Pods-CTR.ad hoc test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -551,6 +667,7 @@
 		};
 		6D0B2B0B25B8099D00DEFE07 /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6844CCE973A338A8698CFD59 /* Pods-CTRTests.ad hoc test.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -617,8 +734,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = ACC;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -628,6 +747,7 @@
 		};
 		6D0B2B0D25B809A800DEFE07 /* Ad Hoc Acc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4EBDF2056641810A28CBFB35 /* Pods-CTR.ad hoc acc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -648,6 +768,7 @@
 		};
 		6D0B2B0E25B809A800DEFE07 /* Ad Hoc Acc */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 14BEF0F1915ABAC71F7DBC29 /* Pods-CTRTests.ad hoc acc.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -714,8 +835,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Production;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -725,6 +848,7 @@
 		};
 		6D0B2B1025B809B100DEFE07 /* Ad Hoc Prod */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D5C60869FB0D218FDBB85BC /* Pods-CTR.ad hoc prod.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -745,6 +869,7 @@
 		};
 		6D0B2B1125B809B100DEFE07 /* Ad Hoc Prod */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 791400B115E369E3827EEC30 /* Pods-CTRTests.ad hoc prod.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -811,8 +936,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = error;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Production;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -822,6 +949,7 @@
 		};
 		6D0B2B1325B809D500DEFE07 /* App Store */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FD09D8523E7901C965D6A35B /* Pods-CTR.app store.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -842,6 +970,7 @@
 		};
 		6D0B2B1425B809D500DEFE07 /* App Store */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A8968400416918733E866B94 /* Pods-CTRTests.app store.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -914,8 +1043,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Development;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -969,8 +1100,10 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				LOG_LEVEL = error;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				NETWORK_CONFIGURATION = Production;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -980,6 +1113,7 @@
 		};
 		6DDEFB1B25AEDCAA00A6912A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43DFF135785CA98651880F6B /* Pods-CTR.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1000,6 +1134,7 @@
 		};
 		6DDEFB1C25AEDCAA00A6912A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A0BC9F3F0139731EAF777CF /* Pods-CTR.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1020,6 +1155,7 @@
 		};
 		6DDEFB1E25AEDCAA00A6912A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBFCC46857E754D1EC5C3189 /* Pods-CTRTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1042,6 +1178,7 @@
 		};
 		6DDEFB1F25AEDCAA00A6912A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7C0B7F15574104D3923E2F3 /* Pods-CTRTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
