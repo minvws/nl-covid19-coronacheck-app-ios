@@ -11,7 +11,7 @@ class VerifierResultViewController: BaseViewController {
 
 	weak var coordinator: VerifierCoordinatorDelegate?
 
-	var testResult: TestResult?
+	var valid: Bool = false
 
 	let sceneView = ResultView()
 
@@ -22,9 +22,9 @@ class VerifierResultViewController: BaseViewController {
 	}
 
     override func viewDidLoad() {
-        super.viewDidLoad()
+		super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+		// Do any additional setup after loading the view.
 		title = "Verifier Result"
 
 		sceneView.primaryTitle = "Scan Again"
@@ -32,15 +32,12 @@ class VerifierResultViewController: BaseViewController {
 			self?.coordinator?.dismiss()
 		}
 
-		if let result = testResult {
-			switch result.status {
-				case .negative:
-					sceneView.labelText = "V"
-					sceneView.labelColor = Theme.colors.ok
-				default:
-					sceneView.labelText = "X"
-					sceneView.labelColor = Theme.colors.warning
-			}
+		if valid {
+			sceneView.labelText = "V"
+			sceneView.labelColor = Theme.colors.ok
+		} else {
+			sceneView.labelText = "X"
+			sceneView.labelColor = Theme.colors.warning
 		}
 	}
 }

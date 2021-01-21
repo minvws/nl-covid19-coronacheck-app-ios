@@ -10,11 +10,8 @@ import UIKit
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 
-	/// Navigate to the Eventt Scene
-	func navigateToEvent()
-
-	/// Navigate to the Generate Event QR Scene
-	func navigateToEventQR()
+	/// Navigate to the Agent  Scene
+	func navigateToAgent()
 
 	// Navigate to the Customer Scan Scene
 	func navigateToCustomerScan()
@@ -29,9 +26,13 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameter result: the test result
 	func setTestResult(_ result: TestResult)
 
-	/// Set the event
-	/// - Parameter event: the event
-	func setEvent(_ event: Event)
+	/// Set the agent envelope
+	/// - Parameter event: the agentEvelope
+	func setAgentEnvelope(_ agentEvelope: AgentEnvelope)
+
+	/// Set the customer QR
+	/// - Parameter result: customer QR
+	func setCustomerQR(_ result: CustomerQR)
 
 	/// Dismiss the viewcontroller
 	func dismiss()
@@ -39,10 +40,11 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 class VerifierCoordinator: Coordinator {
 
-	var event: Event = Event(
-		title: "Awesome Event", location: "Ziggo Dome", time: "Vanavond")
+	var agentEnvelope: AgentEnvelope?
 
 	var testResult: TestResult?
+
+	var customerQR: CustomerQR?
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -69,21 +71,11 @@ class VerifierCoordinator: Coordinator {
 
 extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
-	/// Navigate to the Eventt Scene
-	func navigateToEvent() {
+	/// Navigate to the Agent  Scene
+	func navigateToAgent() {
 
-		let viewController = VerifierEventViewController()
+		let viewController = VerifierAgentScanViewController()
 		viewController.coordinator = self
-		viewController.event = event
-		navigationController.pushViewController(viewController, animated: true)
-	}
-
-	/// Navigate to the Generate Event QR Scene
-	func navigateToEventQR() {
-
-		let viewController = VerifierGenerateQRViewController()
-		viewController.coordinator = self
-		viewController.qrString = event.generateString()
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
@@ -100,7 +92,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let viewController = VerifierResultViewController()
 		viewController.coordinator = self
-		viewController.testResult = testResult
+		viewController.valid = validateCustomerQR()
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
@@ -111,11 +103,18 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		self.testResult = result
 	}
 
-	/// Set the event
-	/// - Parameter event: the event
-	func setEvent(_ event: Event) {
+	/// Set the agent envelope
+	/// - Parameter event: the agentEvelope
+	func setAgentEnvelope(_ envelope: AgentEnvelope) {
 
-		self.event = event
+		self.agentEnvelope = envelope
+	}
+
+	/// Set the customer QR
+	/// - Parameter result: customer QR
+	func setCustomerQR(_ result: CustomerQR) {
+
+		self.customerQR = result
 	}
 
 	/// Navigate to the start fo the customer flow
@@ -131,5 +130,36 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	func dismiss() {
 
 		navigationController.popViewController(animated: true)
+		(navigationController.viewControllers.last as? VerifierStartViewController)?.event = agentEnvelope?.agent.event
 	}
+}
+
+extension VerifierCoordinator {
+
+	func validateCustomerQR() -> Bool {
+
+		guard let agentEnvelope = agentEnvelope,
+			  let customerQR = customerQR else {
+			return false
+		}
+
+		// Unencrypted
+
+		do {
+			if let data = customerQR.payload.data(using: .utf8) {
+				let payload = try JSONDecoder().decode(Payload.self, from: data)
+
+				if let result = payload.test?.result {
+					return result == 0
+				}
+
+				return false
+			}
+		} catch let error {
+			print("CTR: error! \(error)")
+			return false
+		}
+		return false
+	}
+
 }

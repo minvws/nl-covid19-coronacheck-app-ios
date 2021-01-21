@@ -23,13 +23,13 @@ class VerifierScanViewController: ScanViewController {
 
 		do {
 			if let data = code.data(using: .utf8) {
-				let result = try JSONDecoder().decode(TestResult.self, from: data)
-				print(result)
-				coordinator?.setTestResult(result)
+				let result = try JSONDecoder().decode(CustomerQR.self, from: data)
+
+				coordinator?.setCustomerQR(result)
 				coordinator?.navigateToTestResult()
 			}
 		} catch let error {
-			print("error! \(error)")
+			print("CTR: error! \(error)")
 		}
 	}
 }

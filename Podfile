@@ -8,6 +8,7 @@ target 'CTR' do
   # Pods for CTR
   pod 'Sodium', '~> 0.8.0'
   pod 'CocoaLumberjack/Swift', '~> 3.7.0'
+  pod 'Alamofire', '5.4.1'
 
   target 'CTRTests' do
     inherit! :search_paths

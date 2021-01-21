@@ -57,6 +57,14 @@ class MainView: BaseView {
 		return button
 	}()
 
+	private let messageLabel: Label = {
+
+		let label = Label(body: nil).multiline()
+		label.translatesAutoresizingMaskIntoConstraints = false
+		label.textAlignment = .center
+		return label
+	}()
+
 	/// setup the views
 	override func setupViews() {
 
@@ -81,7 +89,6 @@ class MainView: BaseView {
 	private func setupStackView() {
 
 		stackView.addArrangedSubview(primaryButton)
-		stackView.addArrangedSubview(secondaryButton)
 	}
 	/// Setup the constraints
 	override func setupViewConstraints() {
@@ -107,7 +114,13 @@ class MainView: BaseView {
 			primaryButton.trailingAnchor.constraint(
 				equalTo: stackView.trailingAnchor,
 				constant: -ViewTraits.buttonOffset
-			),
+			)
+		])
+	}
+
+	func setupSecondaryButtonConstraints() {
+
+		NSLayoutConstraint.activate([
 
 			secondaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			secondaryButton.leadingAnchor.constraint(
@@ -138,6 +151,21 @@ class MainView: BaseView {
 		])
 	}
 
+	func setutMessageLabelConstraints() {
+
+		NSLayoutConstraint.activate([
+
+			messageLabel.leadingAnchor.constraint(
+				equalTo: stackView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			messageLabel.trailingAnchor.constraint(
+				equalTo: stackView.trailingAnchor,
+				constant: -ViewTraits.margin
+			)
+		])
+	}
+
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
@@ -147,6 +175,12 @@ class MainView: BaseView {
 	var secondaryTitle: String = "" {
 		didSet {
 			secondaryButton.setTitle(secondaryTitle, for: .normal)
+			if secondaryTitle.isEmpty {
+				stackView.removeArrangedSubview(secondaryButton)
+			} else {
+				stackView.addArrangedSubview(secondaryButton)
+				setupSecondaryButtonConstraints()
+			}
 		}
 	}
 
@@ -162,22 +196,31 @@ class MainView: BaseView {
 		}
 	}
 
-	var primaryButtonColor: UIColor = Theme.colors.primary {
+	var message: String = "" {
+		didSet {
+			messageLabel.text = message
+			if message.isEmpty {
+				stackView.removeArrangedSubview(messageLabel)
+			} else {
+				stackView.addArrangedSubview(messageLabel)
+				setutMessageLabelConstraints()
+			}
+		}
+	}
 
+	var primaryButtonColor: UIColor = Theme.colors.primary {
 		didSet {
 			primaryButton.backgroundColor = primaryButtonColor
 		}
 	}
 
 	var secondaryButtonColor: UIColor = Theme.colors.primary {
-
 		didSet {
 			secondaryButton.backgroundColor = secondaryButtonColor
 		}
 	}
 
 	var tertiaryButtonColor: UIColor = Theme.colors.primary {
-
 		didSet {
 			tertiaryButton.backgroundColor = tertiaryButtonColor
 		}
