@@ -6,7 +6,7 @@ target 'CTR' do
   use_frameworks!
 
   # Pods for CTR
-  pod 'Sodium', '~> 0.8.0'
+  pod 'Sodium', '~> 0.9.1'
   pod 'CocoaLumberjack/Swift', '~> 3.7.0'
   pod 'Alamofire', '5.4.1'
 

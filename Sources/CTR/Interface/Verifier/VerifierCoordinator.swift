@@ -134,6 +134,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 }
 
+import Sodium
+
 extension VerifierCoordinator {
 
 	func validateCustomerQR() -> Bool {
@@ -145,21 +147,48 @@ extension VerifierCoordinator {
 
 		// Unencrypted
 
-		do {
-			if let data = customerQR.payload.data(using: .utf8) {
-				let payload = try JSONDecoder().decode(Payload.self, from: data)
+		if let messageBytes = stringToBytes(base64EncodedInput: customerQR.payload),
+		   let publicKeyBytes = stringToBytes(base64EncodedInput: customerQR.publicKey),
+		   let secretKey = agentEnvelope.agent.event.privateKey,
+		   let secretKeyBytes = stringToBytes(base64EncodedInput: secretKey),
+		   let nonceBytes = stringToBytes(base64EncodedInput: customerQR.nonce) {
 
-				if let result = payload.test?.result {
-					return result == 0
+			let sodium = Sodium()
+
+			if let unencryptedBytes = sodium.box.open(
+				authenticatedCipherText: messageBytes,
+				senderPublicKey: publicKeyBytes,
+				recipientSecretKey: secretKeyBytes,
+				nonce: nonceBytes
+			) {
+
+				let unencryptedData = Data(bytes: unencryptedBytes, count: unencryptedBytes.count)
+				let unencryptedString = String(bytes: unencryptedBytes, encoding: .utf8)
+
+				print("CTR: Decrypted: \(unencryptedString ?? "")")
+
+				do {
+					let payload = try JSONDecoder().decode(Payload.self, from: unencryptedData)
+					if let result = payload.test?.result {
+						return result == 0
+					}
+
+					return false
+				} catch let error {
+					print("CTR: error! \(error)")
+					return false
 				}
-
-				return false
 			}
-		} catch let error {
-			print("CTR: error! \(error)")
-			return false
 		}
+
 		return false
 	}
 
+	func stringToBytes(base64EncodedInput input: String) -> Bytes? {
+
+		if let data = Data(base64Encoded: input) {
+			return [UInt8](data)
+		}
+		return nil
+	}
 }

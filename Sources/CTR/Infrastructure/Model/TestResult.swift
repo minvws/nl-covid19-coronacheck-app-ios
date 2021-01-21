@@ -66,7 +66,7 @@ struct Payload: Codable {
 	var identifier: String
 	var time: Int64
 	var test: TestResult?
-	var signature: TestSignature?
+	var signature: String?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {

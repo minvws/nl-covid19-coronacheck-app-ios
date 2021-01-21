@@ -14,6 +14,7 @@ class ResultView: BaseView {
 
 		// Dimensions
 		static let buttonHeight: CGFloat = 50
+		static let resultHeight: CGFloat = 200
 
 		// Margins
 		static let margin: CGFloat = 16.0
@@ -107,7 +108,8 @@ class ResultView: BaseView {
 			resultLabel.trailingAnchor.constraint(
 				equalTo: stackView.trailingAnchor,
 				constant: -ViewTraits.margin
-			)
+			),
+			resultLabel.heightAnchor.constraint(equalToConstant: ViewTraits.resultHeight)
 		])
 	}
 

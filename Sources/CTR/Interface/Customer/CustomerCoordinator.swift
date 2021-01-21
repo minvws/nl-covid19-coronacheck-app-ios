@@ -143,23 +143,6 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 	}
 }
 
-/*
-
-struct Payload: Codable {
-var identifier: String
-var time: Int64
-var test: String?
-var signature: String?
-}
-
-struct CustomerQR: Codable {
-
-var publicKey: String
-var nonce: String
-var payload: String
-}
-*/
-
 import Sodium
 
 extension CustomerCoordinator {
@@ -182,19 +165,59 @@ extension CustomerCoordinator {
 			identifier: eventIdentifier,
 			time: Int64(Date().timeIntervalSince1970),
 			test: testResultForEvent,
-			signature: signature
+			signature: signature?.signature
 		)
 
 		let payloadString = generateString(object: payload)
 		print("CTR:  Unencrypted payload: \(payload)")
 
-//		let sodium = Sodium()
+		let sodium = Sodium()
+
+		let nonceBytes = sodium.randomBytes.buf(length: 24)!
+		let nonceString = bytesToBase64String(nonceBytes)
+
+		if let publicKey = event.publicKey,
+		   let publicKeyBytes = stringToBytes(base64EncodedInput: publicKey),
+		   let payloadBytes = stringToBytes(rawInput: payloadString),
+		   let keyPair = sodium.box.keyPair() {
+
+			let secretKeyBytes = keyPair.secretKey
+			let secretKeyString = bytesToBase64String(secretKeyBytes)
+
+			if let encryptedPayloadBytes = sodium.box.seal(
+				message: payloadBytes,
+				recipientPublicKey: publicKeyBytes,
+				senderSecretKey: secretKeyBytes,
+				nonce: nonceBytes) {
+
+
 //
-//		guard let citizenEvenKeyPair = sodium.box.keyPair() else {
-//			return ""
-//		}
-//
-//		let nonce = sodium.randomBytes.random()
+//			if let (encryptedPayloadBytes, nonceBytes) = sodium.box.seal(
+//				message: payloadBytes,
+//				recipientPublicKey: publicKeyBytes,
+//				senderSecretKey: publicKeyBytes) {
+
+
+//				let decr = sodium.box.open(authenticatedCipherText: encryptedPayloadBytes, senderPublicKey: keyPair.secretKey, recipientSecretKey: publicKeyBytes, nonce: nonceBytes)
+//				let decryptedData = Data(bytes: decr!, count: decr!.count)
+//				let decryptedString = String(bytes: decr!, encoding: .utf8)
+
+
+//				print("CTR: Check DEcr: \(decryptedString ?? "")")
+
+				let nonceString = bytesToBase64String(nonceBytes)
+
+				let encryptedPayloadBase64String = bytesToBase64String(encryptedPayloadBytes)
+
+				let customerQR = CustomerQR(
+					publicKey: bytesToBase64String(keyPair.publicKey),
+					nonce: nonceString,
+					payload: encryptedPayloadBase64String
+				)
+
+				return generateString(object: customerQR)
+			}
+		}
 
 		let customerQR = CustomerQR(
 			publicKey: "x",
@@ -208,10 +231,36 @@ extension CustomerCoordinator {
 	func generateString<T>(object: T) -> String where T: Codable {
 
 		if let data = try? JSONEncoder().encode(object),
-		   let convertedToString = String(data: data, encoding: .ascii) {
+		   let convertedToString = String(data: data, encoding: .utf8) {
 			print("CTR: Converted to \(convertedToString)")
 			return convertedToString
 		}
 		return ""
+	}
+
+	func bytesToBase64Data(_ input: [UInt8]) -> Data {
+
+		return Data(bytes: input, count: input.count).base64EncodedData()
+	}
+
+	func bytesToBase64String(_ input: [UInt8]) -> String {
+
+		return Data(bytes: input, count: input.count).base64EncodedString()
+	}
+
+	func stringToBytes(base64EncodedInput input: String) -> Bytes? {
+
+		if let data = Data(base64Encoded: input) {
+			return [UInt8](data)
+		}
+		return nil
+	}
+
+	func stringToBytes(rawInput input: String) -> Bytes? {
+
+		if let data = input.data(using: .utf8) {
+			return [UInt8](data)
+		}
+		return nil
 	}
 }

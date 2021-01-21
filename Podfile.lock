@@ -3,12 +3,12 @@ PODS:
   - CocoaLumberjack/Core (3.7.0)
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
-  - Sodium (0.8.0)
+  - Sodium (0.9.1)
 
 DEPENDENCIES:
   - Alamofire (= 5.4.1)
   - CocoaLumberjack/Swift (~> 3.7.0)
-  - Sodium (~> 0.8.0)
+  - Sodium (~> 0.9.1)
 
 SPEC REPOS:
   trunk:
@@ -19,8 +19,8 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
-  Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
+  Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
 
-PODFILE CHECKSUM: e16facbeada90da273ac862cc3c44d5a23fab62b
+PODFILE CHECKSUM: 1abbbe8d03aad7478bb0cf6165fb019ae3244207
 
 COCOAPODS: 1.10.1
