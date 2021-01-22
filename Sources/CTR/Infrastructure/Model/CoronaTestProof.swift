@@ -163,14 +163,15 @@ class CoronaTestProof {
 
 		guard let event = eventEnvelope?.event,
 			  let eventIdentifier = event.identifier,
-			  let testResultForEvent = testResultForEvent,
 			  let testResultEnvelope = testResultEnvelope else {
 			return ""
 		}
 
 		var signature: TestSignature?
-		for candidate in testResultEnvelope.signatures where candidate.identifier == testResultForEvent.identifier {
-			signature = candidate
+		if let testResult = testResultForEvent {
+			for candidate in testResultEnvelope.signatures where candidate.identifier == testResult.identifier {
+				signature = candidate
+			}
 		}
 
 		let payload = Payload(
@@ -185,16 +186,13 @@ class CoronaTestProof {
 
 		let sodium = Sodium()
 
-		let nonceBytes = sodium.randomBytes.buf(length: 24)!
-		let nonceString = bytesToBase64String(nonceBytes)
-
-		if let publicKey = event.publicKey,
+		if let nonceBytes = sodium.randomBytes.buf(length: 24),
+		   let publicKey = event.publicKey,
 		   let publicKeyBytes = stringToBytes(base64EncodedInput: publicKey),
 		   let payloadBytes = stringToBytes(rawInput: payloadString),
 		   let keyPair = sodium.box.keyPair() {
 
 			let secretKeyBytes = keyPair.secretKey
-			//			let secretKeyString = bytesToBase64String(secretKeyBytes)
 
 			if let encryptedPayloadBytes = sodium.box.seal(
 				message: payloadBytes,

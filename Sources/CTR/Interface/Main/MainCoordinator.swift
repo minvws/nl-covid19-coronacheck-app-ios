@@ -31,11 +31,13 @@ class MainCoordinator: NSObject, Coordinator {
 		self.navigationController = navigationController
 	}
 
+	/// The corona Test Proof Model
 	let coronaTestProof = CoronaTestProof()
 
 	// Designated starter method
 	func start() {
 
+		// Start the CoronaTestProof
 		coronaTestProof.populate()
 
 		navigationController.delegate = self
