@@ -31,8 +31,12 @@ class MainCoordinator: NSObject, Coordinator {
 		self.navigationController = navigationController
 	}
 
+	let coronaTestProof = CoronaTestProof()
+
 	// Designated starter method
 	func start() {
+
+		coronaTestProof.populate()
 
 		navigationController.delegate = self
 		let viewController = MainViewController()
@@ -47,6 +51,7 @@ extension MainCoordinator: MainCoordinatorDelegate {
 	func navigateToCustomer() {
 
 		let coordinator = CustomerCoordinator(navigationController: navigationController)
+		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}
 
@@ -54,6 +59,7 @@ extension MainCoordinator: MainCoordinatorDelegate {
 	func navigateToVerifier() {
 
 		let coordinator = VerifierCoordinator(navigationController: navigationController)
+		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}
 }

@@ -44,7 +44,7 @@ class CustomerScanViewController: ScanViewController {
 
 		ac.addAction(UIAlertAction(title: "Ok", style: .default) { [weak self] _ in
 
-			self?.coordinator?.setEvent(envelope.event)
+			self?.coordinator?.setEvent(envelope)
 			self?.coordinator?.navigateToCustomerQR()
 		})
 		present(ac, animated: true)
@@ -93,14 +93,16 @@ class CustomerScanViewController: ScanViewController {
 						} else {
 							foundValidTest = userTest
 						}
+					} else {
+						print("CTR: Test expired for this event")
 					}
 				} else {
-					print("CTR: Test expired for this event")
+					print("CTR: Test not for this event")
 				}
 			}
 		}
 		displayEvent(envelope)
 		print("CTR: Check Event result: \(String(describing: foundValidTest))")
-		coordinator?.setTestResult(foundValidTest)
+//		coordinator?.setTestResult(foundValidTest)
 	}
 }

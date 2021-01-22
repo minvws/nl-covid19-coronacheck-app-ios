@@ -1,5 +1,5 @@
 disabled_rules:
-  - trailing_whitespace
+ # - trailing_whitespace
   - line_length
   - unused_closure_parameter
   - large_tuple
@@ -48,3 +48,10 @@ identifier_name:
 function_parameter_count:
   warning: 7
 reporter: "xcode"
+
+switch_case_alignment:
+    indented_cases: true
+
+trailing_whitespace:
+  ignores_empty_lines: true
+  ignores_comments: true

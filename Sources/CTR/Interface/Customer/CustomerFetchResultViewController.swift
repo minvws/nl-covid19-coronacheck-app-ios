@@ -36,9 +36,14 @@ class CustomerFetchResultViewController: BaseViewController {
         // Do any additional setup after loading the view.
 		title = "Burger Fetch Result"
 
-		sceneView.primaryTitle = "Haal test resultaten op"
+		sceneView.primaryTitle = "Login met Digid"
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.fetchTestResults()
+		}
+
+		sceneView.secondaryButtonTappedCommand = { [weak self] in
+
+			self?.coordinator?.navigateToCustomerQR()
 		}
     }
 
@@ -55,6 +60,7 @@ class CustomerFetchResultViewController: BaseViewController {
 			}
 
 			strongSelf.coordinator?.setTestResultEnvelope(envelope)
+			strongSelf.sceneView.message = ""
 
 			if let envelope = envelope {
 				for result in envelope.testResults {
@@ -63,6 +69,8 @@ class CustomerFetchResultViewController: BaseViewController {
 					strongSelf.sceneView.message += "Test op \(strongSelf.dateFormatter.string(from: date)): \(result.result)\n"
 				}
 			}
+			// Show the button
+			strongSelf.sceneView.secondaryTitle = "Genereer toegangsbewijs"
 		}
 	}
 }

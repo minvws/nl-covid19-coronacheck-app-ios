@@ -26,14 +26,16 @@ class CustomerStartViewController: BaseViewController {
 		title = "Burger Start"
 
 		sceneView.primaryTitle = "Haal TestResultaat op"
-		sceneView.secondaryTitle = "Bezoek event"
+//		sceneView.secondaryTitle = "Bezoek event"
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.coordinator?.navigateToFetchResults()
 		}
 
-		sceneView.secondaryButtonTappedCommand = { [weak self] in
-			self?.coordinator?.navigateToVisitEvent()
-		}
+//		sceneView.secondaryButtonTappedCommand = { [weak self] in
+//			self?.coordinator?.navigateToVisitEvent()
+//		}
+
+		sceneView.message = "Meer informatie over deze app."
     }
 }

@@ -6,7 +6,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-
 import Foundation
 
 struct Issuer: Codable {
@@ -26,6 +25,7 @@ struct Issuer: Codable {
 struct Issuers: Codable {
 
 	var issuers: [Issuer]
+	
 	enum CodingKeys: String, CodingKey {
 
 		case issuers

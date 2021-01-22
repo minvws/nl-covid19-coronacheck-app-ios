@@ -39,5 +39,35 @@ class APIClient {
 						completionHandler(nil)
 				}
 			}
-		}
+	}
+
+	func getAgentEnvelope(identifier: String, completionHandler: @escaping (AgentEnvelope?) -> Void) {
+
+		AF.request("https://api-ct.bananenhalen.nl/verifier/get_agent/\(identifier)")
+			.responseDecodable(of: AgentEnvelope.self) { response in
+
+				switch response.result {
+					case let .success(object):
+						completionHandler(object)
+
+					case .failure:
+						completionHandler(nil)
+				}
+			}
+	}
+
+	func getEvent(identifier: String, completionHandler: @escaping (EventEnvelope?) -> Void) {
+
+		AF.request("https://api-ct.bananenhalen.nl/verifier/get_event/\(identifier)")
+			.responseDecodable(of: EventEnvelope.self) { response in
+
+				switch response.result {
+					case let .success(object):
+						completionHandler(object)
+
+					case .failure:
+						completionHandler(nil)
+				}
+			}
+	}
 }

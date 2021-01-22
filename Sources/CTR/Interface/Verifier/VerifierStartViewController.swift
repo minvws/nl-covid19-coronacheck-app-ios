@@ -48,17 +48,20 @@ class VerifierStartViewController: BaseViewController {
         // Do any additional setup after loading the view.
 		title = "Verifier Start"
 
-		sceneView.primaryTitle = "Login als Agent"
-		sceneView.secondaryTitle = "Scan Customer"
+		sceneView.primaryTitle = "Start met scannen van bezoekers" // Login als Agent"
+//		sceneView.secondaryTitle = "Scan Customer"
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.coordinator?.navigateToAgent()
-		}
-
-		sceneView.secondaryButtonTappedCommand = { [weak self] in
-
+//			self?.coordinator?.navigateToAgent()
 			self?.coordinator?.navigateToCustomerScan()
 		}
+
+//		sceneView.secondaryButtonTappedCommand = { [weak self] in
+//
+//			self?.coordinator?.navigateToCustomerScan()
+//		}
+
+		sceneView.message = "Meer informatie over deze app."
     }
 }
