@@ -65,8 +65,13 @@ class CustomerFetchResultViewController: BaseViewController {
 			if let envelope = envelope {
 				for result in envelope.testResults {
 
+					var type = ""
+					for candidate in envelope.types where result.testType == candidate.identifier {
+						type = candidate.name
+					}
+
 					let date = Date(timeIntervalSince1970: TimeInterval(result.dateTaken))
-					strongSelf.sceneView.message += "Test op \(strongSelf.dateFormatter.string(from: date)): \(result.result)\n"
+					strongSelf.sceneView.message += "Test (\(type)) op \(strongSelf.dateFormatter.string(from: date)): \(result.result == 0 ? "NEG" : "POS")\n"
 				}
 			}
 			// Show the button

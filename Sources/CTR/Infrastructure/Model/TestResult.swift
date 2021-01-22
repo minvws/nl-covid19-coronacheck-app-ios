@@ -12,11 +12,13 @@ struct TestResultEnvelope: Codable {
 
 	var testResults: [TestResult]
 	var signatures: [TestSignature]
+	var types: [TestType]
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 		case testResults = "test_results"
 		case signatures = "test_signatures"
+		case types = "test_types"
 	}
 }
 
@@ -52,7 +54,7 @@ struct TestResult: Codable {
 struct TestType: Codable {
 	var name: String
 	var identifier: String
-	var maxValidity: Int
+	var maxValidity: Int?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {

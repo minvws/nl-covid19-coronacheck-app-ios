@@ -12,7 +12,7 @@ import Sodium
 class CoronaTestProof {
 
 	//	let eventIdentifier = "66f27d6a-b221-4e66-a3b4-8f199b2be116"
-		let eventIdentifier = "d9ff36de-2357-4fa6-a64e-1569aa57bf1c"
+	let eventIdentifier = "d9ff36de-2357-4fa6-a64e-1569aa57bf1c"
 	//	let eventIdentifier = "26820d8a-471e-4dc7-a38d-462b2baac5e0"
 	//	let eventIdentifier = "904d864c-8e1b-499f-b9a1-d0debb1f5a6a"
 	//	let eventIdentifier = "99285236-1847-4cdb-9c7d-4ac035282800"
@@ -21,14 +21,12 @@ class CoronaTestProof {
 	//	let eventIdentifier = "7d42af0f-9238-4289-812b-d9fec46b8c78"
 	//	let eventIdentifier = "802d041c-f007-47e5-a48e-a221eb22137d"
 
-	var userIdentifier = "ef9f409a-8613-4600-b135-8d2ac12559b3"
-	//	var userIdentifier = "29b16f70-5f8a-49b4-a35f-5db253f5beab"
-	//	var userIdentifier = "039072d7-875b-4928-a92e-b7d5b219d71a"
-	//	var userIdentifier = "5e7a13ef-b037-42df-8a08-704d3e2a488a"
+	//	let userIdentifier = "ef9f409a-8613-4600-b135-8d2ac12559b3"
+	let userIdentifier = "29b16f70-5f8a-49b4-a35f-5db253f5beab"
+	//	let userIdentifier = "039072d7-875b-4928-a92e-b7d5b219d71a"
+	//	let userIdentifier = "5e7a13ef-b037-42df-8a08-704d3e2a488a"
 
 	var agentEnvelope: AgentEnvelope?
-
-//	var testResult: TestResult?
 
 	var customerQR: CustomerQR?
 
@@ -87,7 +85,8 @@ class CoronaTestProof {
 				if userTest.testType == validTestType.identifier {
 
 					// Still Valid
-					if userTest.dateTaken + Int64(validTestType.maxValidity) >= Int64(Date().timeIntervalSince1970) {
+					if let maxValidity = validTestType.maxValidity,
+					   userTest.dateTaken + Int64(maxValidity) >= Int64(Date().timeIntervalSince1970) {
 
 						print("CTR: Found a test for this event: \(validTestType.name), result was \(userTest.result)\n")
 						// Replace or store
@@ -109,7 +108,6 @@ class CoronaTestProof {
 			}
 		}
 		print("CTR: Check Event result: \(String(describing: foundValidTest))")
-//		coordinator?.setTestResult(foundValidTest)
 		testResultForEvent = foundValidTest
 	}
 
@@ -182,7 +180,7 @@ class CoronaTestProof {
 		)
 
 		let payloadString = generateString(object: payload)
-		print("CTR:  Unencrypted payload: \(payload)")
+		print("CTR:  Unencrypted payload: \(payloadString)")
 
 		let sodium = Sodium()
 
