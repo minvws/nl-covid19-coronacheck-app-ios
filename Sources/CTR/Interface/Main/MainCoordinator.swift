@@ -37,6 +37,11 @@ class MainCoordinator: NSObject, Coordinator {
 	// Designated starter method
 	func start() {
 
+		guard !ProcessInfo.processInfo.isTesting else {
+			// do not launc when unit testing
+			return
+		}
+
 		// Start the CoronaTestProof
 		coronaTestProof.populate()
 
