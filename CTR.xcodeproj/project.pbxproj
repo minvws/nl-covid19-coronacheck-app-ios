@@ -10,7 +10,7 @@
 		3454914E5AF11C275EA2153E /* Pods_CTR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1A30077C20B882A3D85DB17 /* Pods_CTR.framework */; };
 		6D2C0FA725B6B7B50030FD17 /* CustomerFetchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */; };
 		6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */; };
-		6D3035FB25BAAA9C00110B16 /* CoronaTestProof.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3035FA25BAAA9C00110B16 /* CoronaTestProof.swift */; };
+		6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3035FA25BAAA9C00110B16 /* CTRModel.swift */; };
 		6D73051625B85CD200BA808C /* VerifierAgentScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73051525B85CD200BA808C /* VerifierAgentScanViewController.swift */; };
 		6D73052F25B876F000BA808C /* Issuers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73052E25B876F000BA808C /* Issuers.swift */; };
 		6D73053A25B8783000BA808C /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73053925B8783000BA808C /* APIClient.swift */; };
@@ -40,11 +40,17 @@
 		6D9284C825B5D9D3009D4350 /* CustomeGenerateQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284C725B5D9D3009D4350 /* CustomeGenerateQRViewController.swift */; };
 		6D9284D025B5DAAC009D4350 /* VerifierScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */; };
 		6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */; };
+		6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */; };
+		6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9394225BD8CD80026F071 /* Configuration.swift */; };
+		6DD9394825BD8DAF0026F071 /* configuration-development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD9394725BD8DAF0026F071 /* configuration-development.plist */; };
+		6DD9394C25BD8F5E0026F071 /* APIRouterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9394B25BD8F5E0026F071 /* APIRouterProtocol.swift */; };
+		6DD9395125BD90FF0026F071 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9395025BD90FF0026F071 /* APIRouter.swift */; };
+		6DD9395525BD924F0026F071 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9395425BD924F0026F071 /* HTTP.swift */; };
+		6DD9395925BD963A0026F071 /* URLRequest+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9395825BD963A0026F071 /* URLRequest+Utils.swift */; };
 		6DDEFAF425AEDCA800A6912A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */; };
 		6DDEFAF625AEDCA800A6912A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */; };
 		6DDEFAFD25AEDCAA00A6912A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */; };
 		6DDEFB0025AEDCAA00A6912A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DDEFAFE25AEDCAA00A6912A /* LaunchScreen.storyboard */; };
-		6DDEFB0B25AEDCAA00A6912A /* CoronaTesterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB0A25AEDCAA00A6912A /* CoronaTesterTests.swift */; };
 		6DDEFB4125AF13D000A6912A /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4025AF13D000A6912A /* Coordinator.swift */; };
 		6DDEFB4625AF198F00A6912A /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */; };
 		B6DE255683A671A9E9E1920A /* Pods_CTRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 192B189FA7E43E58EBB66C2D /* Pods_CTRTests.framework */; };
@@ -70,7 +76,7 @@
 		6844CCE973A338A8698CFD59 /* Pods-CTRTests.ad hoc test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.ad hoc test.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.ad hoc test.xcconfig"; sourceTree = "<group>"; };
 		6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerFetchResultViewController.swift; sourceTree = "<group>"; };
 		6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
-		6D3035FA25BAAA9C00110B16 /* CoronaTestProof.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoronaTestProof.swift; sourceTree = "<group>"; };
+		6D3035FA25BAAA9C00110B16 /* CTRModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTRModel.swift; sourceTree = "<group>"; };
 		6D73051525B85CD200BA808C /* VerifierAgentScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierAgentScanViewController.swift; sourceTree = "<group>"; };
 		6D73052E25B876F000BA808C /* Issuers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issuers.swift; sourceTree = "<group>"; };
 		6D73053925B8783000BA808C /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -100,6 +106,13 @@
 		6D9284C725B5D9D3009D4350 /* CustomeGenerateQRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomeGenerateQRViewController.swift; sourceTree = "<group>"; };
 		6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierScanViewController.swift; sourceTree = "<group>"; };
 		6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierResultViewController.swift; sourceTree = "<group>"; };
+		6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
+		6DD9394225BD8CD80026F071 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		6DD9394725BD8DAF0026F071 /* configuration-development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-development.plist"; sourceTree = "<group>"; };
+		6DD9394B25BD8F5E0026F071 /* APIRouterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRouterProtocol.swift; sourceTree = "<group>"; };
+		6DD9395025BD90FF0026F071 /* APIRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
+		6DD9395425BD924F0026F071 /* HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
+		6DD9395825BD963A0026F071 /* URLRequest+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLRequest+Utils.swift"; sourceTree = "<group>"; };
 		6DDEFAF025AEDCA800A6912A /* CTR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CTR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -107,7 +120,6 @@
 		6DDEFAFF25AEDCAA00A6912A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6DDEFB0125AEDCAA00A6912A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DDEFB0625AEDCAA00A6912A /* CTRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CTRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6DDEFB0A25AEDCAA00A6912A /* CoronaTesterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoronaTesterTests.swift; sourceTree = "<group>"; };
 		6DDEFB0C25AEDCAA00A6912A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DDEFB4025AF13D000A6912A /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		6DDEFB4525AF198F00A6912A /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
@@ -171,7 +183,7 @@
 		6D73052D25B876C100BA808C /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6D73053925B8783000BA808C /* APIClient.swift */,
+				6DD9394F25BD90BC0026F071 /* API */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -179,7 +191,6 @@
 		6D92849125B5CB96009D4350 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */,
 				6D92849225B5CB96009D4350 /* Theme.swift */,
 				6D92849325B5CB96009D4350 /* Haptic.swift */,
 			);
@@ -226,6 +237,49 @@
 			path = Verifier;
 			sourceTree = "<group>";
 		};
+		6DB080A925BB0EF300A56B22 /* Infrastrucure */ = {
+			isa = PBXGroup;
+			children = (
+				6DB080AA25BB0F0500A56B22 /* Services */,
+			);
+			path = Infrastrucure;
+			sourceTree = "<group>";
+		};
+		6DB080AA25BB0F0500A56B22 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6DD9394625BD8D9A0026F071 /* Development */ = {
+			isa = PBXGroup;
+			children = (
+				6DD9394725BD8DAF0026F071 /* configuration-development.plist */,
+			);
+			path = Development;
+			sourceTree = "<group>";
+		};
+		6DD9394F25BD90BC0026F071 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				6D73053925B8783000BA808C /* APIClient.swift */,
+				6DD9394B25BD8F5E0026F071 /* APIRouterProtocol.swift */,
+				6DD9395025BD90FF0026F071 /* APIRouter.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		6DD9395C25BD96450026F071 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				6DD9395825BD963A0026F071 /* URLRequest+Utils.swift */,
+				6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		6DDEFAE725AEDCA800A6912A = {
 			isa = PBXGroup;
 			children = (
@@ -260,7 +314,7 @@
 		6DDEFB0925AEDCAA00A6912A /* CTRTests */ = {
 			isa = PBXGroup;
 			children = (
-				6DDEFB0A25AEDCAA00A6912A /* CoronaTesterTests.swift */,
+				6DB080A925BB0EF300A56B22 /* Infrastrucure */,
 				6DDEFB0C25AEDCAA00A6912A /* Info.plist */,
 			);
 			path = CTRTests;
@@ -270,6 +324,7 @@
 			isa = PBXGroup;
 			children = (
 				6DDEFB3525AEDFF200A6912A /* Core */,
+				6DD9395C25BD96450026F071 /* Extensions */,
 				6DDEFB3F25AF13C300A6912A /* Model */,
 				6DDEFB3625AEE00800A6912A /* Resources */,
 				6D73052D25B876C100BA808C /* Services */,
@@ -312,6 +367,8 @@
 		6DDEFB3725AEE01A00A6912A /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				6DD9394225BD8CD80026F071 /* Configuration.swift */,
+				6DD9394625BD8D9A0026F071 /* Development */,
 				6DDEFB0125AEDCAA00A6912A /* Info.plist */,
 				6D7F9CB725B6DBA60006F227 /* InfoPlist.strings */,
 			);
@@ -330,10 +387,11 @@
 			isa = PBXGroup;
 			children = (
 				6DDEFB4025AF13D000A6912A /* Coordinator.swift */,
+				6D3035FA25BAAA9C00110B16 /* CTRModel.swift */,
 				6D7F9CAD25B6C6BB0006F227 /* Event.swift */,
+				6DD9395425BD924F0026F071 /* HTTP.swift */,
 				6D73052E25B876F000BA808C /* Issuers.swift */,
 				6D7F9CA125B6BFD10006F227 /* TestResult.swift */,
-				6D3035FA25BAAA9C00110B16 /* CoronaTestProof.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -379,6 +437,7 @@
 				6DDEFB0225AEDCAA00A6912A /* Sources */,
 				6DDEFB0325AEDCAA00A6912A /* Frameworks */,
 				6DDEFB0425AEDCAA00A6912A /* Resources */,
+				B5E76A94CE91C87AA7FBF403 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -437,6 +496,7 @@
 				6D7F9CB825B6DBA60006F227 /* InfoPlist.strings in Resources */,
 				6DDEFB0025AEDCAA00A6912A /* LaunchScreen.storyboard in Resources */,
 				6DDEFAFD25AEDCAA00A6912A /* Assets.xcassets in Resources */,
+				6DD9394825BD8DAF0026F071 /* configuration-development.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +549,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		B5E76A94CE91C87AA7FBF403 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CTRTests/Pods-CTRTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CTRTests/Pods-CTRTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CTRTests/Pods-CTRTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		E3DE62BD8DE220B1385BF71F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -551,7 +628,8 @@
 				6D9284A825B5CECF009D4350 /* MainViewController.swift in Sources */,
 				6D9284B825B5D22B009D4350 /* CustomerCoordinator.swift in Sources */,
 				6D7F9C9E25B6BAE80006F227 /* QRCodeView.swift in Sources */,
-				6D3035FB25BAAA9C00110B16 /* CoronaTestProof.swift in Sources */,
+				6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */,
+				6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */,
 				6D9284D025B5DAAC009D4350 /* VerifierScanViewController.swift in Sources */,
 				6D7F9CD625B700010006F227 /* EventView.swift in Sources */,
 				6D7F9CCC25B6E6590006F227 /* Label.swift in Sources */,
@@ -560,14 +638,18 @@
 				6D7F9CDC25B704000006F227 /* UIViewController+Keyboard.swift in Sources */,
 				6D92849C25B5CBC0009D4350 /* BaseViewController.swift in Sources */,
 				6DDEFB4625AF198F00A6912A /* MainCoordinator.swift in Sources */,
+				6DD9395925BD963A0026F071 /* URLRequest+Utils.swift in Sources */,
+				6DD9395125BD90FF0026F071 /* APIRouter.swift in Sources */,
 				6D73052F25B876F000BA808C /* Issuers.swift in Sources */,
 				6D73051625B85CD200BA808C /* VerifierAgentScanViewController.swift in Sources */,
 				6D9284C825B5D9D3009D4350 /* CustomeGenerateQRViewController.swift in Sources */,
 				6DDEFAF625AEDCA800A6912A /* SceneDelegate.swift in Sources */,
 				6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */,
 				6D2C0FA725B6B7B50030FD17 /* CustomerFetchResultViewController.swift in Sources */,
+				6DD9394C25BD8F5E0026F071 /* APIRouterProtocol.swift in Sources */,
 				6D92849E25B5CBC0009D4350 /* BaseView.swift in Sources */,
 				6D9284C425B5D9C0009D4350 /* CustomeScanViewController.swift in Sources */,
+				6DD9395525BD924F0026F071 /* HTTP.swift in Sources */,
 				6D92849425B5CB96009D4350 /* Theme.swift in Sources */,
 				6D7F9CAE25B6C6BB0006F227 /* Event.swift in Sources */,
 			);
@@ -577,7 +659,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DDEFB0B25AEDCAA00A6912A /* CoronaTesterTests.swift in Sources */,
+				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

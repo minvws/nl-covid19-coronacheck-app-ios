@@ -40,7 +40,7 @@ protocol CustomerCoordinatorDelegate: AnyObject {
 
 class CustomerCoordinator: Coordinator {
 
-	var coronaTestProof: CoronaTestProof?
+	var coronaTestProof: CTRModel?
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []

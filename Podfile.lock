@@ -3,24 +3,44 @@ PODS:
   - CocoaLumberjack/Core (3.7.0)
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
+  - Nimble (9.0.0)
+  - OHHTTPStubs/Core (9.1.0)
+  - OHHTTPStubs/Default (9.1.0):
+    - OHHTTPStubs/Core
+    - OHHTTPStubs/JSON
+    - OHHTTPStubs/NSURLSession
+    - OHHTTPStubs/OHPathHelpers
+  - OHHTTPStubs/JSON (9.1.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/NSURLSession (9.1.0):
+    - OHHTTPStubs/Core
+  - OHHTTPStubs/OHPathHelpers (9.1.0)
+  - OHHTTPStubs/Swift (9.1.0):
+    - OHHTTPStubs/Default
   - Sodium (0.9.1)
 
 DEPENDENCIES:
   - Alamofire (= 5.4.1)
   - CocoaLumberjack/Swift (~> 3.7.0)
+  - Nimble (= 9.0.0)
+  - OHHTTPStubs/Swift (= 9.1.0)
   - Sodium (~> 0.9.1)
 
 SPEC REPOS:
   trunk:
     - Alamofire
     - CocoaLumberjack
+    - Nimble
+    - OHHTTPStubs
     - Sodium
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
+  Nimble: 3b4ec3fd40f1dc178058e0981107721c615643d8
+  OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
 
-PODFILE CHECKSUM: 1abbbe8d03aad7478bb0cf6165fb019ae3244207
+PODFILE CHECKSUM: d3acb772002882b24ec89a72c2a7136ea82da63e
 
 COCOAPODS: 1.10.1

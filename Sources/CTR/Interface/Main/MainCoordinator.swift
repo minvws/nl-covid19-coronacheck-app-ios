@@ -32,7 +32,7 @@ class MainCoordinator: NSObject, Coordinator {
 	}
 
 	/// The corona Test Proof Model
-	let coronaTestProof = CoronaTestProof()
+	let coronaTestProof = CTRModel()
 
 	// Designated starter method
 	func start() {

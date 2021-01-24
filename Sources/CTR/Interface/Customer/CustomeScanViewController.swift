@@ -83,7 +83,6 @@ class CustomerScanViewController: ScanViewController {
 					if let maxValidity = validTestType.maxValidity,
 					   userTest.dateTaken + Int64(maxValidity) >= Int64(Date().timeIntervalSince1970) {
 
-
 						print("CTR: Found a test for this event: \(validTestType.name), result was \(userTest.result)\n")
 						// Replace or store
 						if let existing = foundValidTest {

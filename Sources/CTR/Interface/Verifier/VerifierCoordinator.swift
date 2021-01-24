@@ -36,7 +36,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 class VerifierCoordinator: Coordinator {
 
-	var coronaTestProof: CoronaTestProof?
+	var coronaTestProof: CTRModel?
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
