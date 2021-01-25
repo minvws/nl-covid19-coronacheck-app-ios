@@ -1,0 +1,4 @@
+${PODS_ROOT}/Target Support Files/Pods-CTR/Pods-CTR-frameworks.sh
+${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
+${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework
+${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework

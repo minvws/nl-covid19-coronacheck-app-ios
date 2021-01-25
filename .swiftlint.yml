@@ -1,0 +1,57 @@
+disabled_rules:
+ # - trailing_whitespace
+  - line_length
+  - unused_closure_parameter
+  - large_tuple
+  - cyclomatic_complexity
+opt_in_rules:
+  - empty_count
+  - closure_spacing
+  - contains_over_first_not_nil
+  - explicit_init
+  - first_where
+  - let_var_whitespace
+  - literal_expression_end_indentation
+  - multiline_parameters
+  - nimble_operator
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prohibited_super_call
+  - unneeded_parentheses_in_closure_argument
+excluded:
+  - Pods
+  - TheAnyThingTests
+  - TheAnyThingUITests
+force_cast: warning
+force_try:
+  severity: warning
+function_body_length:
+  - 100
+  - 200
+type_body_length:
+  - 300
+  - 400
+nesting:
+  type_level:
+    warning: 2
+    error: 4
+file_length:
+  warning: 800
+  error: 2000
+identifier_name:
+  min_length:
+    warning: 2
+    error: 2
+  max_length:
+    warning: 50
+    error: 60
+function_parameter_count:
+  warning: 7
+reporter: "xcode"
+
+switch_case_alignment:
+    indented_cases: true
+
+trailing_whitespace:
+  ignores_empty_lines: true
+  ignores_comments: true

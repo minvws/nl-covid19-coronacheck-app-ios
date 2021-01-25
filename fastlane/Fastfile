@@ -1,0 +1,139 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Run tests for integration purposes"
+  lane :test_ci do
+    prepare
+
+    # run_tests(
+    #   app_name: "CTR",
+    #   device: "iPhone 11 Pro",
+    #   workspace: "CTR.xcworkspace",
+    #   scheme: "CoronaTester",
+    #   reinstall_app: true,
+    #   app_identifier: "nl.rijksoverheid.ctr",
+    #   skip_slack: true
+    # )
+  end
+
+  desc "Build and deploy via Firebase"
+  lane :deploy do
+    prepare
+
+    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "CTR", configuration: "Ad Hoc Prod")
+    build_number = determine_build_number()
+
+    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
+
+    deploy_test
+
+    # deploy_acc
+
+    # deploy_prod
+
+    # inform_slack(
+    #   default_payloads: [:git_author],
+    #   message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
+    # )
+  end
+
+  desc "Build and deploy via Firebase from CI"
+  lane :deploy_ci do
+    setup_ci(provider: "travis", force: true)
+
+    import_certificate(
+      certificate_path: ENV["CERTIFICATE_PATH"],
+      certificate_password: ENV["CERTIFICATE_PASSWORD"],
+      keychain_name: ENV["MATCH_KEYCHAIN_NAME"],
+      keychain_password: ""
+    )
+
+    install_provisioning_profile(path: "fastlane/profiles/CoronaTester_Ad_Hoc.mobileprovision")
+
+    deploy
+  end
+
+  private_lane :prepare do
+    xcversion(version: "12.3")
+  end
+
+  private_lane :determine_build_number do |options|
+      ENV['GITHUB_RUN_NUMBER']
+  end
+
+  private_lane :deploy_test do
+    build_ios_app(
+      scheme: "CoronaTester",
+      configuration: "Ad Hoc Test",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:168257592968:ios:87200fa917a43f0f26493d",
+      groups: "testers"
+    )
+  end
+
+  private_lane :deploy_acc do
+    build_ios_app(
+      scheme: "CoronaTester",
+      configuration: "Ad Hoc Acc",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:406021306322:ios:c348fa3e6d8575972cfa0b",
+      groups: "testers"
+    )
+  end
+
+  private_lane :deploy_prod do
+    build_ios_app(
+      scheme: "CoronaTester",
+      configuration: "Ad Hoc Prod",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:625955224267:ios:f1931622b1d8a00e97794e",
+      groups: "testers"
+    )
+  end
+
+  private_lane :inform_slack do |options|
+    unless ENV['SLACK_URL'].nil?
+      slack(options)
+    end
+  end
+
+end
