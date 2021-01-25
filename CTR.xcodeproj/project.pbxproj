@@ -757,7 +757,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -862,7 +862,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -967,7 +967,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1072,7 +1072,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1241,7 +1241,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1265,7 +1265,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/CTR/Configuration/Info.plist";
+				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
