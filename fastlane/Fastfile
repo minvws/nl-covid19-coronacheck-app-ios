@@ -19,6 +19,7 @@ platform :ios do
   desc "Run tests for integration purposes"
   lane :test_ci do
     prepare
+    dependencies
 
     run_tests(
       app_name: "CTR",
@@ -34,6 +35,7 @@ platform :ios do
   desc "Build and deploy via Firebase"
   lane :deploy do
     prepare
+    dependencies
 
     version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "CTR", configuration: "Ad Hoc Prod")
     build_number = determine_build_number()
@@ -70,6 +72,14 @@ platform :ios do
 
   private_lane :prepare do
     xcversion(version: "12.3")
+  end
+
+  private_lane :dependencies do 
+    cocoapods(
+      clean_install: true,
+      podfile: "./Podfile",
+      silent: true
+    )
   end
 
   private_lane :determine_build_number do |options|
