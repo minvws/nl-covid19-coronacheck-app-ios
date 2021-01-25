@@ -23,7 +23,7 @@ platform :ios do
 
     run_tests(
       app_name: "CTR",
-      device: "iPhone 11 Pro",
+      device: "iPhone 12",
       workspace: "CTR.xcworkspace",
       scheme: "CoronaTester",
       reinstall_app: true,
@@ -44,14 +44,14 @@ platform :ios do
 
     deploy_test
 
-    # deploy_acc
+    deploy_acc
 
-    # deploy_prod
+    deploy_prod
 
-    # inform_slack(
-    #   default_payloads: [:git_author],
-    #   message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
-    # )
+    inform_slack(
+      default_payloads: [:git_author],
+      message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
+    )
   end
 
   desc "Build and deploy via Firebase from CI"
