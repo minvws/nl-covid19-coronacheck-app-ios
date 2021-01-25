@@ -24,7 +24,7 @@ platform :ios do
       app_name: "CTR",
       device: "iPhone 11 Pro",
       workspace: "CTR.xcworkspace",
-      scheme: "CTR",
+      scheme: "CoronaTester",
       reinstall_app: true,
       app_identifier: "nl.rijksoverheid.ctr",
       skip_slack: true
@@ -78,7 +78,7 @@ platform :ios do
 
   private_lane :deploy_test do
     build_ios_app(
-      scheme: "CTR",
+      scheme: "CoronaTester",
       configuration: "Ad Hoc Test",
       export_options: {
         method: "ad-hoc",
@@ -96,7 +96,7 @@ platform :ios do
 
   private_lane :deploy_acc do
     build_ios_app(
-      scheme: "CTR",
+      scheme: "CoronaTester",
       configuration: "Ad Hoc Acc",
       export_options: {
         method: "ad-hoc",
@@ -114,7 +114,7 @@ platform :ios do
 
   private_lane :deploy_prod do
     build_ios_app(
-      scheme: "CTR",
+      scheme: "CoronaTester",
       configuration: "Ad Hoc Prod",
       export_options: {
         method: "ad-hoc",
