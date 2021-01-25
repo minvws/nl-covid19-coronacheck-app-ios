@@ -102,34 +102,34 @@ class Button: UIButton {
 
     // MARK: - Private
 
-    private func updateButtonType() {
+	private func updateButtonType() {
 		
-        switch style {
-        case .primary:
-//            if isEnabled {
-               backgroundColor = Theme.colors.primary
-                setTitleColor(.white, for: .normal)
-//            } else {
-//                backgroundColor = Theme.colors.tertiary
-//                setTitleColor(.gray, for: .normal)
-//            }
-//        case .secondary:
-//            backgroundColor = Theme.colors.tertiary
-//            setTitleColor(Theme.colors.primary, for: .normal)
-        case .tertiary:
-            backgroundColor = Theme.colors.tertiary
-            setTitleColor(Theme.colors.primary, for: .normal)
-//        case .warning:
-//            backgroundColor = Theme.colors.warning
-//            setTitleColor(.white, for: .normal)
-//        case .info:
-//            backgroundColor = .clear
-//            setTitleColor(Theme.colors.primary, for: .normal)
-        }
-
-//        contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-        tintColor = .white
-    }
+		switch style {
+			case .primary:
+				//            if isEnabled {
+				backgroundColor = Theme.colors.primary
+				setTitleColor(.white, for: .normal)
+			//            } else {
+			//                backgroundColor = Theme.colors.tertiary
+			//                setTitleColor(.gray, for: .normal)
+			//            }
+			//        case .secondary:
+			//            backgroundColor = Theme.colors.tertiary
+			//            setTitleColor(Theme.colors.primary, for: .normal)
+			case .tertiary:
+				backgroundColor = Theme.colors.tertiary
+				setTitleColor(Theme.colors.primary, for: .normal)
+			//        case .warning:
+			//            backgroundColor = Theme.colors.warning
+			//            setTitleColor(.white, for: .normal)
+			//        case .info:
+			//            backgroundColor = .clear
+			//            setTitleColor(Theme.colors.primary, for: .normal)
+		}
+		
+		//        contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
+		tintColor = .white
+	}
 
     private func updateRoundedCorners() {
         if rounded {

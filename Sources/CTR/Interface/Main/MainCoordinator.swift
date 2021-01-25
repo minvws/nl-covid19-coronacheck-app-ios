@@ -31,8 +31,19 @@ class MainCoordinator: NSObject, Coordinator {
 		self.navigationController = navigationController
 	}
 
+	/// The corona Test Proof Model
+	let coronaTestProof = CTRModel()
+
 	// Designated starter method
 	func start() {
+
+		guard !ProcessInfo.processInfo.isTesting else {
+			// do not launc when unit testing
+			return
+		}
+
+		// Start the CoronaTestProof
+		coronaTestProof.populate()
 
 		navigationController.delegate = self
 		let viewController = MainViewController()
@@ -47,6 +58,7 @@ extension MainCoordinator: MainCoordinatorDelegate {
 	func navigateToCustomer() {
 
 		let coordinator = CustomerCoordinator(navigationController: navigationController)
+		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}
 
@@ -54,6 +66,7 @@ extension MainCoordinator: MainCoordinatorDelegate {
 	func navigateToVerifier() {
 
 		let coordinator = VerifierCoordinator(navigationController: navigationController)
+		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}
 }

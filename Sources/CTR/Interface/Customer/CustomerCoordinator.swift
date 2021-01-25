@@ -24,11 +24,15 @@ protocol CustomerCoordinatorDelegate: AnyObject {
 
 	/// Set the test result
 	/// - Parameter result: the test result
-	func setTestResult(_ result: TestResult)
+	func setTestResultEnvelope(_ result: TestResultEnvelope?)
+
+//	/// Set the test result
+//	/// - Parameter result: the test result
+//	func setTestResult(_ result: TestResult?)
 
 	/// Set the event
 	/// - Parameter event: the event
-	func setEvent(_ event: Event)
+	func setEvent(_ event: EventEnvelope)
 
 	/// Dismiss the viewcontroller
 	func dismiss()
@@ -36,9 +40,7 @@ protocol CustomerCoordinatorDelegate: AnyObject {
 
 class CustomerCoordinator: Coordinator {
 
-	var testResult: TestResult = TestResult(status: .unknown, timeStamp: nil)
-
-	var event: Event?
+	var coronaTestProof: CTRModel?
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -70,6 +72,7 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 
 		let viewController = CustomerFetchResultViewController()
 		viewController.coordinator = self
+		viewController.userIdentifier = coronaTestProof?.userIdentifier
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
@@ -78,6 +81,8 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 
 		let viewController = CustomerScanViewController()
 		viewController.coordinator = self
+		viewController.issuers = coronaTestProof?.issuers ?? []
+		viewController.testResults = coronaTestProof?.testResultEnvelope
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
@@ -86,7 +91,7 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 
 		let viewController = CustomerGenerateQRViewController()
 		viewController.coordinator = self
-		viewController.qrString = testResult.generateString()
+		viewController.qrString = coronaTestProof?.generateCustomerQRString() ?? ""
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
@@ -101,17 +106,25 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 
 	/// Set the test result
 	/// - Parameter result: the test result
-	func setTestResult(_ result: TestResult) {
+	func setTestResultEnvelope(_ result: TestResultEnvelope?) {
 
-		self.testResult = result
+		coronaTestProof?.testResultEnvelope = result
+		coronaTestProof?.checkEvent()
 	}
 
 	/// Set the event
 	/// - Parameter event: the event
-	func setEvent(_ event: Event) {
+	func setEvent(_ event: EventEnvelope) {
 
-		self.event = event
+		coronaTestProof?.eventEnvelope = event
 	}
+
+//	/// Set the test result
+//	/// - Parameter result: the test result
+//	func setTestResult(_ result: TestResult?) {
+//
+//		coronaTestProof?.testResultForEvent = result
+//	}
 
 	/// Dismiss the viewcontroller
 	func dismiss() {

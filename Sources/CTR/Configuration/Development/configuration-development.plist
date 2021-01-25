@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>api</key>
+	<dict>
+		<key>apiHost</key>
+		<string>https://api-ct.bananenhalen.nl</string>
+		<key>agentEndpoint</key>
+		<string>/verifier/get_agent</string>
+		<key>eventEndpoint</key>
+		<string>/verifier/get_event</string>
+		<key>publicKeysEndpoint</key>
+		<string>/verifier/get_public_keys</string>
+		<key>testresultsEndpoint</key>
+		<string>/citizen/get_test_results</string>
+	</dict>
+</dict>
+</plist>
