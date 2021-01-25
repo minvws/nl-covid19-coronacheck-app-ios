@@ -19,7 +19,7 @@ jobs:
         DIFF_BASE: ${{ github.base_ref }}
   test:
     runs-on: macOS-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
     - name: Checkout
