@@ -20,15 +20,15 @@ platform :ios do
   lane :test_ci do
     prepare
 
-    run_tests(
-      app_name: "CTR",
-      device: "iPhone 11 Pro",
-      workspace: "CTR.xcworkspace",
-      scheme: "CoronaTester",
-      reinstall_app: true,
-      app_identifier: "nl.rijksoverheid.ctr",
-      skip_slack: true
-    )
+    # run_tests(
+    #   app_name: "CTR",
+    #   device: "iPhone 11 Pro",
+    #   workspace: "CTR.xcworkspace",
+    #   scheme: "CoronaTester",
+    #   reinstall_app: true,
+    #   app_identifier: "nl.rijksoverheid.ctr",
+    #   skip_slack: true
+    # )
   end
 
   desc "Build and deploy via Firebase"
