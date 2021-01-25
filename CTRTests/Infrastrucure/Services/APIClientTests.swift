@@ -119,7 +119,7 @@ class APIClientTests: XCTestCase {
 			let object: [String: Any] = [
 				"event": [
 					"name": "Test Event",
-					"uuid" : "Test Event uuid",
+					"uuid": "Test Event uuid",
 					"public_key": "Test Public Key",
 					"valid_from": 1611008598,
 					"valid_to": 1611584139,
@@ -132,8 +132,7 @@ class APIClientTests: XCTestCase {
 							"name": "PCR",
 							"uuid": "PCR UUID",
 							"max_validity": 604800
-						],
-						[
+						], [
 							"name": "Breathalyzer",
 							"uuid": "Breathalyzer UUID",
 							"max_validity": 10800

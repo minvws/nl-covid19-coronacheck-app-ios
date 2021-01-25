@@ -6,15 +6,16 @@ target 'CTR' do
   use_frameworks!
 
   # Pods for CTR
-  pod 'Sodium', '~> 0.9.1'
-  pod 'CocoaLumberjack/Swift', '~> 3.7.0'
   pod 'Alamofire', '5.4.1'
+  pod 'CocoaLumberjack/Swift', '3.7.0'
+  pod 'Sodium', '0.9.1'
 
   target 'CTRTests' do
     inherit! :search_paths
     # Pods for testing
-    pod 'OHHTTPStubs/Swift', '9.1.0'
     pod 'Nimble', '9.0.0'
+    pod 'OHHTTPStubs/Swift', '9.1.0'
+
   end
 
 end
