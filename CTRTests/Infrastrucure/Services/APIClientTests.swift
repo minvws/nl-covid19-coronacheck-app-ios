@@ -6,7 +6,6 @@
 */
 
 import XCTest
-import Nimble
 import OHHTTPStubs
 @testable import CTR
 
@@ -69,14 +68,11 @@ class APIClientTests: XCTestCase {
 		APIClient().getAgentEnvelope(identifier: identifier) { response in
 			
 			// Then
-			expect(response)
-				.toNot(beNil(), description: "Agent Envelope should not be nil")
-			expect(response?.agent)
-				.toNot(beNil(), description: "There should be an agent")
-			expect(response?.agent.event)
-				.toNot(beNil(), description: "There should be an event")
-			expect(response?.agent.event.validTestsTypes)
-				.to(haveCount(1), description: "There should be one valid test type")
+			XCTAssertNotNil(response, "Agent Envelope should not be nil")
+			XCTAssertNotNil(response?.agent, "There should be an agent")
+			XCTAssertNotNil(response?.agent.event, "There should be an event")
+			XCTAssertEqual(response?.agent.event.validTestsTypes.count, 1, "There should be one valid test")
+
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -101,8 +97,7 @@ class APIClientTests: XCTestCase {
 		APIClient().getAgentEnvelope(identifier: identifier) { response in
 			
 			// Then
-			expect(response)
-				.to(beNil(), description: "Result should be nil")
+			XCTAssertNil(response, "Result should be nil")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -153,12 +148,9 @@ class APIClientTests: XCTestCase {
 		APIClient().getEvent(identifier: identifier) { response in
 			
 			// Then
-			expect(response)
-				.toNot(beNil(), description: "Agent Envelope should not be nil")
-			expect(response?.event)
-				.toNot(beNil(), description: "There should be an event")
-			expect(response?.event.validTestsTypes)
-				.to(haveCount(2), description: "There should be two valid test type")
+			XCTAssertNotNil(response, "Event Envelope should not be nil")
+			XCTAssertNotNil(response?.event, "There should be an event")
+			XCTAssertEqual(response?.event.validTestsTypes.count, 2, "There should be two valid test types")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -183,8 +175,7 @@ class APIClientTests: XCTestCase {
 		APIClient().getEvent(identifier: identifier) { response in
 			
 			// Then
-			expect(response)
-				.to(beNil(), description: "Result should be nil")
+			XCTAssertNil(response, "Result should be nil")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -207,12 +198,10 @@ class APIClientTests: XCTestCase {
 		APIClient().getPublicKeys { response in
 			
 			// Then
-			expect(response)
-				.toNot(beNil(), description: "Result should not be nil")
-			expect(response)
-				.to(haveCount(1), description: "There should be one issuer")
-			expect(response.first?.identifier)
-				.to(equal("TestUUID"), description: "The identifier should match")
+			XCTAssertNotNil(response, "Response should not be nil")
+			XCTAssertEqual(response.count, 1, "There should be one issuer")
+			XCTAssertEqual(response.first?.identifier, "TestUUID", "The identifier should match")
+
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -236,10 +225,8 @@ class APIClientTests: XCTestCase {
 		APIClient().getPublicKeys { response in
 			
 			// Then
-			expect(response)
-				.toNot(beNil(), description: "Result should not be nil")
-			expect(response)
-				.to(haveCount(0), description: "There should be no issuers")
+			XCTAssertNotNil(response, "Result should be nil")
+			XCTAssertTrue(response.isEmpty, "There should be no issuers")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -279,14 +266,11 @@ class APIClientTests: XCTestCase {
 		APIClient().getTestResults(identifier: identifier) { response in
 			
 			// Then
-			expect(response)
-				.toNot(beNil(), description: "Result should not be nil")
-			expect(response?.testResults)
-				.to(haveCount(1), description: "There should be one result")
-			expect(response?.signatures)
-				.to(haveCount(1), description: "There should be one signature")
-			expect(response?.types)
-				.to(haveCount(1), description: "There should be one type")
+			XCTAssertNotNil(response, "Response should not be nil")
+			XCTAssertEqual(response?.testResults.count, 1, "There should be one result")
+			XCTAssertEqual(response?.signatures.count, 1, "There should be one signature")
+			XCTAssertEqual(response?.types.count, 1, "There should be one type")
+			
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -311,8 +295,7 @@ class APIClientTests: XCTestCase {
 		APIClient().getTestResults(identifier: identifier) { response in
 			
 			// Then
-			expect(response)
-				.to(beNil(), description: "Result should be nil")
+			XCTAssertNil(response, "Result should be nil")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)

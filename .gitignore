@@ -30,3 +30,6 @@ xcuserdata/
 *.ipa
 *.dSYM.zip
 *.dSYM
+report.junit
+report.html
+report.xml
