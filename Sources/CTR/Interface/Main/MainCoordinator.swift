@@ -46,8 +46,11 @@ class MainCoordinator: NSObject, Coordinator {
 		coronaTestProof.populate()
 
 		navigationController.delegate = self
-		let viewController = MainViewController()
-		viewController.coordinator = self
+		let viewController = MainViewController(
+			viewModel: MainViewModel(
+				coordinator: self
+			)
+		)
 		navigationController.setViewControllers([viewController], animated: true)
 	}
 }

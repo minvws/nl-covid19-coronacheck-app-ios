@@ -23,6 +23,9 @@ enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
 	/// Get the test results
 	case testResults(identifier: String)
 
+	/// Post the authorization token
+	case authorizationToken(token: String)
+
 	// MARK: - Host
 
 	/// The API Host
@@ -41,6 +44,9 @@ enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
 
 	/// The test resutlsendpoint
 	static let testResultsEndpoint = Configuration().getTestResultsEndpoint()
+
+	/// The test resutlsendpoint
+	static let authorizationTokenEndpoint = "/to_be_decided"
 
 	// MARK: - APIRouterProtocol
 
@@ -73,6 +79,10 @@ enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
 	/// The HTTP Method (POST, GET)
 	var method: HTTPMethod {
 
+		if case ApiRouter.authorizationToken = self {
+			return .post
+		}
+
 		return .get
 	}
 
@@ -91,6 +101,9 @@ enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
 
 			case .testResults:
 				return ApiRouter.testResultsEndpoint + "/"
+
+			case .authorizationToken:
+				return ApiRouter.authorizationTokenEndpoint
 		}
 	}
 
@@ -110,6 +123,11 @@ enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
 
 	/// The http body
 	var body: Data? {
+
+		if case let ApiRouter.authorizationToken(token) = self {
+
+			return "token: \(token)".data(using: .utf8)
+		}
 		return nil
 	}
 

@@ -15,5 +15,18 @@
 		<key>testresultsEndpoint</key>
 		<string>/citizen/get_test_results</string>
 	</dict>
+	<key>digid</key>
+	<dict>
+		<key>authorizationUrl</key>
+		<string>/coronitacc/oauth2/v1/auth</string>
+		<key>host</key>
+		<string>https://login.ggdghor.nl</string>
+		<key>tokenUrl</key>
+		<string>/coronitacc/oauth2/v1/token</string>
+		<key>consumerId</key>
+		<string>6456237456911667336</string>
+		<key>redirectUri</key>
+		<string>coronatester-app-dev://auth/login</string>
+	</dict>
 </dict>
 </plist>

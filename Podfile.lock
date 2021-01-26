@@ -1,5 +1,10 @@
 PODS:
   - Alamofire (5.4.1)
+  - AppAuth (1.4.0):
+    - AppAuth/Core (= 1.4.0)
+    - AppAuth/ExternalUserAgent (= 1.4.0)
+  - AppAuth/Core (1.4.0)
+  - AppAuth/ExternalUserAgent (1.4.0)
   - CocoaLumberjack/Core (3.7.0)
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
@@ -20,6 +25,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire (= 5.4.1)
+  - AppAuth (= 1.4.0)
   - CocoaLumberjack/Swift (= 3.7.0)
   - OHHTTPStubs/Swift (= 9.1.0)
   - Sodium (= 0.9.1)
@@ -27,16 +33,18 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Alamofire
+    - AppAuth
     - CocoaLumberjack
     - OHHTTPStubs
     - Sodium
 
 SPEC CHECKSUMS:
   Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
+  AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
 
-PODFILE CHECKSUM: 9486d39b9cf57c354f5914fa93aa98132fc44e35
+PODFILE CHECKSUM: f7efc275306529296da35fc9b8a5a4de3c221637
 
 COCOAPODS: 1.10.1

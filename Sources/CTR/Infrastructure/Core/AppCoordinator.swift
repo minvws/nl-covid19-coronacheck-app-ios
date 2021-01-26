@@ -37,9 +37,14 @@ class AppCoordinator: Coordinator {
 	// Designated starter method
 	func start() {
 
+		// Setup Logging
+		LogHandler.setup()
+
+		// Set the root
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
 
+		// Start the mainCoordinator
 		let mainCoordinator = MainCoordinator(navigationController: navigationController)
 		startChildCoordinator(mainCoordinator)
 	}

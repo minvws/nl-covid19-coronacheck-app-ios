@@ -32,6 +32,12 @@ protocol APIClientProtocol {
 	///   - identifier: the identifier of the user
 	///   - completionHandler: the completion handler
 	func getTestResults(identifier: String, completionHandler: @escaping (TestResultEnvelope?) -> Void)
+
+	/// Post the authorization token
+	/// - Parameters:
+	///   - token: the authorization token
+	///   - completionHandler: the completion handler
+	func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void)
 }
 
 /// The Api Client for all API Calls.
@@ -116,6 +122,27 @@ class APIClient: APIClientProtocol {
 				case let .failure(error):
 					print(error)
 					completionHandler(nil)
+			}
+		}
+	}
+
+	/// Post the authorization token
+	/// - Parameters:
+	///   - token: the authorization token
+	///   - completionHandler: the completion handler
+	func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void) {
+
+		AF.request(
+			ApiRouter.authorizationToken(token: token)
+		).response { response in
+
+			switch response.result {
+				case .success:
+					completionHandler(true)
+
+				case let .failure(error):
+					print(error)
+					completionHandler(false)
 			}
 		}
 	}

@@ -23,6 +23,7 @@ class APIClientTests: XCTestCase {
 	let eventEndpoint = ApiRouter.eventEndpoint
 	let publicKeyEndpoint = ApiRouter.publicKeysEndpoint
 	let testResultEndpoint = ApiRouter.testResultsEndpoint
+	let authorizationEndpoint = ApiRouter.authorizationTokenEndpoint
 	
 	// MARK: - Tests
 	
@@ -296,6 +297,57 @@ class APIClientTests: XCTestCase {
 			
 			// Then
 			XCTAssertNil(response, "Result should be nil")
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the post authorization token with success
+	func testPostAuthenticationTokenSuccess() {
+
+		// Given
+		let expectation = self.expectation(description: "post authorization token success")
+		let token = "testPostAuthenticationTokenSuccess"
+		stub(condition: isPath(authorizationEndpoint)) { _ in
+
+			return HTTPStubsResponse(
+				jsonObject: [],
+				statusCode: 200,
+				headers: nil
+			)
+		}
+
+		// When
+		APIClient().postAuthorizationToken(token) { response in
+
+			// Then
+			XCTAssertTrue(response, "Result should be be false")
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the post authorization token without internet
+	func testPostAuthorizationTokenNoInternet() {
+
+		// Given
+		let expectation = self.expectation(description: "post authorization token no internet")
+		let token = "testPostAuthorizationTokenNoInternet"
+
+		stub(condition: isPath(authorizationEndpoint)) { _ in
+
+			let notConnectedError = NSError(
+				domain: NSURLErrorDomain,
+				code: URLError.notConnectedToInternet.rawValue
+			)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+
+		// When
+		APIClient().postAuthorizationToken(token) { response in
+
+			// Then
+			XCTAssertFalse(response, "Result should be be false")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
