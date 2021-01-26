@@ -33,7 +33,10 @@ protocol ConfigurationProtocol {
 class Configuration: ConfigurationProtocol {
 
 	/// Dictionary with API configs
-	private var api: NSDictionary = [:]
+	var api: NSDictionary = [:]
+
+	/// Dictionary with DigiD configs
+	var digid: NSDictionary = [:]
 
 	/// Initlializer
 	init() {
@@ -43,6 +46,9 @@ class Configuration: ConfigurationProtocol {
 		if let path = plistPath, let dictionary = NSDictionary(contentsOfFile: path) {
 			if let apiDict = dictionary["api"] as? NSDictionary {
 				api = apiDict
+			}
+			if let apiDict = dictionary["digid"] as? NSDictionary {
+				digid = apiDict
 			}
 		}
 	}

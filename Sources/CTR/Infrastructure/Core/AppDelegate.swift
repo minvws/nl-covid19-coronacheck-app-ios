@@ -6,12 +6,16 @@
 */
 
 import UIKit
+import AppAuth
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
+
+	// login flow
+	var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
 	func application(
 		_ application: UIApplication,
@@ -63,6 +67,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// If any sessions were discarded while the application was not running,
 		// this will be called shortly after application:didFinishLaunchingWithOptions.
 		// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+	}
+
+	// MARK: - Open URL
+
+	func application(
+		_ app: UIApplication,
+		open url: URL,
+		options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+
+		// Incoming url
+		print("CTR: AppDelegate -> url = \(url)")
+
+		// Determine who sent the URL.
+		let sendingAppID = options[.sourceApplication]
+		print("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
+
+		// Sends the URL to the current authorization flow (if any) which will
+		// process it if it relates to an authorization response.
+		if let authorizationFlow = self.currentAuthorizationFlow,
+		   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+			self.currentAuthorizationFlow = nil
+			return true
+		}
+
+		// Your additional URL handling (if any)
+
+		return false
+
 	}
 
 }

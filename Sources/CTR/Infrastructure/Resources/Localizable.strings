@@ -1,0 +1,25 @@
+/* 
+  Localizable.strings
+  CTR
+
+  Created by Rool Paap on 25/01/2021.
+  Copyright © 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport. All rights reserved.
+*/
+
+/* MARK: - General */
+"general.yes" = "Ja";
+"general.no" = "Nee";
+"general.save" = "Opslaan";
+"general.cancel" = "Annuleren";
+"general.close" = "Sluiten";
+"general.next" = "Volgende";
+"general.start" = "Beginnen";
+"general.edit" = "Wijzig";
+"general.done" = "Klaar";
+"general.ok" = "Oké";
+"general.tryAgain" = "Opnieuw proberen";
+"general.delete" = "Verwijderen";
+
+/* MARK: - Main */
+"main.customer" = "Burger";
+"main.verifier" = "Verifier";

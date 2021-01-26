@@ -70,9 +70,14 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults() {
 
-		let viewController = CustomerFetchResultViewController()
-		viewController.coordinator = self
-		viewController.userIdentifier = coronaTestProof?.userIdentifier
+		let viewController = CustomerFetchResultViewController(
+			viewModel: FetchResultViewModel(
+				coordinator: self,
+				openIdClient: OpenIdClient(configuration: Configuration()),
+				userIdentifier: coronaTestProof?.userIdentifier
+			)
+		)
+
 		navigationController.pushViewController(viewController, animated: true)
 	}
 

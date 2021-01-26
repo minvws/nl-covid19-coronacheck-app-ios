@@ -7,6 +7,7 @@ target 'CTR' do
 
   # Pods for CTR
   pod 'Alamofire', '5.4.1'
+  pod 'AppAuth', '1.4.0'
   pod 'CocoaLumberjack/Swift', '3.7.0'
   pod 'Sodium', '0.9.1'
 

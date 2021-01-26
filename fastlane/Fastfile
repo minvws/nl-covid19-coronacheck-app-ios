@@ -50,7 +50,7 @@ platform :ios do
 
     inform_slack(
       default_payloads: [:git_author],
-      message: "Successfully distributed beta build #{version} (#{build_number}) :rocket:",
+      message: "Successfully distributed iOS beta build #{version} (#{build_number}) :rocket:",
     )
   end
 

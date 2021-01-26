@@ -11,11 +11,11 @@ import Sodium
 class CTRModel {
 
 	//	let eventIdentifier = "66f27d6a-b221-4e66-a3b4-8f199b2be116"
-	//	let eventIdentifier = "d9ff36de-2357-4fa6-a64e-1569aa57bf1c"
+		let eventIdentifier = "d9ff36de-2357-4fa6-a64e-1569aa57bf1c"
 	//	let eventIdentifier = "26820d8a-471e-4dc7-a38d-462b2baac5e0"
 	//	let eventIdentifier = "904d864c-8e1b-499f-b9a1-d0debb1f5a6a"
 	//	let eventIdentifier = "99285236-1847-4cdb-9c7d-4ac035282800"
-	let eventIdentifier = "ae7077dd-cf79-41e3-9248-9e71eb3e127e"
+	// let eventIdentifier = "ae7077dd-cf79-41e3-9248-9e71eb3e127e"
 	//	let eventIdentifier = "3a381807-c564-4bad-960c-8eabf95d23fc"
 	//	let eventIdentifier = "7d42af0f-9238-4289-812b-d9fec46b8c78"
 	//	let eventIdentifier = "802d041c-f007-47e5-a48e-a221eb22137d"
@@ -43,13 +43,14 @@ class CTRModel {
 
 		fetchIssuers()
 		fetchAgent()
-		getEvent()
+//		getEvent()
 	}
 
 	func fetchIssuers() {
 
 		apiClient.getPublicKeys { issuers in
 			self.issuers = issuers
+			self.getEvent()
 		}
 	}
 
@@ -62,7 +63,7 @@ class CTRModel {
 
 	func getEvent() {
 
-		apiClient.getEvent(identifier: eventIdentifier) { envelope in
+		apiClient.getEvent(identifier: eventIdentifier) { [self] envelope in
 			self.eventEnvelope = envelope
 		}
 	}
