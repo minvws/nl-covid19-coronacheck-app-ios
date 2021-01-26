@@ -17,6 +17,9 @@ class FetchResultViewModel {
 	/// The open id client
 	var openIdClient: OpenIdClientProtocol
 
+	/// The API Client
+	var apiClient: APIClientProtocol = APIClient()
+
 	/// The date formatter for the timestamps
 	lazy var dateFormatter: DateFormatter = {
 
@@ -79,7 +82,7 @@ class FetchResultViewModel {
 	/// - Parameter accessToken: the access token
 	func postAccessToken(_ accessToken: String) {
 
-		APIClient().postAuthorizationToken(accessToken) { success in
+		apiClient.postAuthorizationToken(accessToken) { success in
 			self.message += "\n delivered to API \(success)"
 		}
 	}

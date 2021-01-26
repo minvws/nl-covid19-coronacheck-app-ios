@@ -60,11 +60,11 @@ class OpenIdClient: OpenIdClientProtocol, Logging {
 			// Store the flow
 			appDelegate.currentAuthorizationFlow =
 
-				// Request the authorization tokoen
+				// Request the access token
 				OIDAuthState.authState(byPresenting: request, presenting: presenter) { authState, error in
 					if let authState = authState {
 						self.authorizationState = authState
-						self.logDebug("Got authorization tokens. Access token: " +
+						self.logDebug("Got access tokens. Access token: " +
 								"\(authState.lastTokenResponse?.accessToken ?? "nil")")
 
 						onCompletion(authState.lastTokenResponse?.accessToken)

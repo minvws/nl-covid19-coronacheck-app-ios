@@ -11,6 +11,7 @@
 		6D01D8A225BFF8D700A4AB89 /* Configuration+DigiD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */; };
 		6D01D8C525C0262600A4AB89 /* OpenIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */; };
 		6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C825C02E1A00A4AB89 /* Logging.swift */; };
+		6D01D8E325C0501C00A4AB89 /* CustomerFetchResultModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8E225C0501C00A4AB89 /* CustomerFetchResultModelTests.swift */; };
 		6D2C0FA725B6B7B50030FD17 /* CustomerFetchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */; };
 		6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */; };
 		6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3035FA25BAAA9C00110B16 /* CTRModel.swift */; };
@@ -86,6 +87,7 @@
 		6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configuration+DigiD.swift"; sourceTree = "<group>"; };
 		6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdClient.swift; sourceTree = "<group>"; };
 		6D01D8C825C02E1A00A4AB89 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		6D01D8E225C0501C00A4AB89 /* CustomerFetchResultModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerFetchResultModelTests.swift; sourceTree = "<group>"; };
 		6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerFetchResultViewController.swift; sourceTree = "<group>"; };
 		6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		6D3035FA25BAAA9C00110B16 /* CTRModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTRModel.swift; sourceTree = "<group>"; };
@@ -196,6 +198,30 @@
 				14BEF0F1915ABAC71F7DBC29 /* Pods-CTRTests.ad hoc acc.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		6D01D8DF25C04FDB00A4AB89 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				6D01D8E025C04FEA00A4AB89 /* Customer */,
+			);
+			path = Interface;
+			sourceTree = "<group>";
+		};
+		6D01D8E025C04FEA00A4AB89 /* Customer */ = {
+			isa = PBXGroup;
+			children = (
+				6D01D8E125C04FF400A4AB89 /* FetchResults */,
+			);
+			path = Customer;
+			sourceTree = "<group>";
+		};
+		6D01D8E125C04FF400A4AB89 /* FetchResults */ = {
+			isa = PBXGroup;
+			children = (
+				6D01D8E225C0501C00A4AB89 /* CustomerFetchResultModelTests.swift */,
+			);
+			path = FetchResults;
 			sourceTree = "<group>";
 		};
 		6D73052D25B876C100BA808C /* Services */ = {
@@ -337,8 +363,9 @@
 		6DDEFB0925AEDCAA00A6912A /* CTRTests */ = {
 			isa = PBXGroup;
 			children = (
-				6DB080A925BB0EF300A56B22 /* Infrastrucure */,
 				6DDEFB0C25AEDCAA00A6912A /* Info.plist */,
+				6DB080A925BB0EF300A56B22 /* Infrastrucure */,
+				6D01D8DF25C04FDB00A4AB89 /* Interface */,
 			);
 			path = CTRTests;
 			sourceTree = "<group>";
@@ -696,6 +723,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
+				6D01D8E325C0501C00A4AB89 /* CustomerFetchResultModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

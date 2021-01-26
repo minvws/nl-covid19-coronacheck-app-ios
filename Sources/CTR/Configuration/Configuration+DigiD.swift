@@ -46,7 +46,7 @@ extension Configuration: ConfigurationDigidProtocol {
 	func getAuthorizationURL() -> URL {
 
 		guard let value = digid["authorizationUrl"] as? String,
-			  let url = URL(string: value) else {
+			  let url = URL(string: getDigidHost() + value) else {
 			fatalError("Configuration: No DigiD Authorization url provided")
 		}
 		return url
@@ -57,7 +57,7 @@ extension Configuration: ConfigurationDigidProtocol {
 	func getTokenURL() -> URL {
 
 		guard let value = digid["tokenUrl"] as? String,
-			  let url = URL(string: value) else {
+			  let url = URL(string: getDigidHost() + value) else {
 			fatalError("Configuration: No DigiD Token url provided")
 		}
 		return url

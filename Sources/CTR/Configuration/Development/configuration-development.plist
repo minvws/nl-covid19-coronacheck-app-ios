@@ -18,11 +18,13 @@
 	<key>digid</key>
 	<dict>
 		<key>authorizationUrl</key>
-		<string>https://login.ggdghor.nl/coronitacc/oauth2/v1/auth</string>
+		<string>/coronitacc/oauth2/v1/auth</string>
 		<key>host</key>
 		<string>https://login.ggdghor.nl</string>
 		<key>tokenUrl</key>
-		<string>https://login.ggdghor.nl/coronitacc/oauth2/v1/token</string>
+		<string>/coronitacc/oauth2/v1/token</string>
+		<key>consumerId</key>
+		<string>6456237456911667336</string>
 		<key>redirectUri</key>
 		<string>coronatester-app-dev://auth/login</string>
 	</dict>

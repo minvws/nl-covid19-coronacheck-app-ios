@@ -46,7 +46,7 @@ enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
 	static let testResultsEndpoint = Configuration().getTestResultsEndpoint()
 
 	/// The test resutlsendpoint
-	static let authorizationTokenEndpoint = "to be decided"
+	static let authorizationTokenEndpoint = "/to_be_decided"
 
 	// MARK: - APIRouterProtocol
 
