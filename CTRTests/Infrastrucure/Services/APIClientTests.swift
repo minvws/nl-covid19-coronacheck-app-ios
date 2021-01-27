@@ -66,7 +66,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getAgentEnvelope(identifier: identifier) { response in
+		ApiClient().getAgentEnvelope(identifier: identifier) { response in
 			
 			// Then
 			XCTAssertNotNil(response, "Agent Envelope should not be nil")
@@ -95,7 +95,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getAgentEnvelope(identifier: identifier) { response in
+		ApiClient().getAgentEnvelope(identifier: identifier) { response in
 			
 			// Then
 			XCTAssertNil(response, "Result should be nil")
@@ -146,7 +146,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getEvent(identifier: identifier) { response in
+		ApiClient().getEvent(identifier: identifier) { response in
 			
 			// Then
 			XCTAssertNotNil(response, "Event Envelope should not be nil")
@@ -173,7 +173,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getEvent(identifier: identifier) { response in
+		ApiClient().getEvent(identifier: identifier) { response in
 			
 			// Then
 			XCTAssertNil(response, "Result should be nil")
@@ -196,7 +196,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getPublicKeys { response in
+		ApiClient().getPublicKeys { response in
 			
 			// Then
 			XCTAssertNotNil(response, "Response should not be nil")
@@ -223,7 +223,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getPublicKeys { response in
+		ApiClient().getPublicKeys { response in
 			
 			// Then
 			XCTAssertNotNil(response, "Result should be nil")
@@ -264,7 +264,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getTestResults(identifier: identifier) { response in
+		ApiClient().getTestResults(identifier: identifier) { response in
 			
 			// Then
 			XCTAssertNotNil(response, "Response should not be nil")
@@ -293,7 +293,7 @@ class APIClientTests: XCTestCase {
 		}
 		
 		// When
-		APIClient().getTestResults(identifier: identifier) { response in
+		ApiClient().getTestResults(identifier: identifier) { response in
 			
 			// Then
 			XCTAssertNil(response, "Result should be nil")
@@ -318,7 +318,7 @@ class APIClientTests: XCTestCase {
 		}
 
 		// When
-		APIClient().postAuthorizationToken(token) { response in
+		ApiClient().postAuthorizationToken(token) { response in
 
 			// Then
 			XCTAssertTrue(response, "Result should be be false")
@@ -344,7 +344,7 @@ class APIClientTests: XCTestCase {
 		}
 
 		// When
-		APIClient().postAuthorizationToken(token) { response in
+		ApiClient().postAuthorizationToken(token) { response in
 
 			// Then
 			XCTAssertFalse(response, "Result should be be false")

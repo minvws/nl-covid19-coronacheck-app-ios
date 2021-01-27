@@ -35,6 +35,9 @@ class Configuration: ConfigurationProtocol {
 	/// Dictionary with API configs
 	var api: NSDictionary = [:]
 
+	/// Dictionary with app update configs
+	var remoteConfig: NSDictionary = [:]
+
 	/// Dictionary with DigiD configs
 	var digid: NSDictionary = [:]
 
@@ -46,6 +49,9 @@ class Configuration: ConfigurationProtocol {
 		if let path = plistPath, let dictionary = NSDictionary(contentsOfFile: path) {
 			if let apiDict = dictionary["api"] as? NSDictionary {
 				api = apiDict
+			}
+			if let apiDict = dictionary["remoteConfig"] as? NSDictionary {
+				remoteConfig = apiDict
 			}
 			if let apiDict = dictionary["digid"] as? NSDictionary {
 				digid = apiDict

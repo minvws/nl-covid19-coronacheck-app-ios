@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 /// The protocol for all api calls
-protocol APIClientProtocol {
+protocol ApiClientProtocol {
 
 	/// Get the agent details
 	/// - Parameters:
@@ -41,7 +41,7 @@ protocol APIClientProtocol {
 }
 
 /// The Api Client for all API Calls.
-class APIClient: APIClientProtocol {
+class ApiClient: ApiClientProtocol {
 
 	/// Get the agent details
 	/// - Parameters:

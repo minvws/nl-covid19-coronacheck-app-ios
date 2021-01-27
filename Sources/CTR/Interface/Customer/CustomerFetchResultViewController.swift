@@ -18,7 +18,7 @@ class FetchResultViewModel {
 	var openIdClient: OpenIdClientProtocol
 
 	/// The API Client
-	var apiClient: APIClientProtocol = APIClient()
+	var apiClient: ApiClientProtocol = ApiClient()
 
 	/// The date formatter for the timestamps
 	lazy var dateFormatter: DateFormatter = {
@@ -100,7 +100,7 @@ class FetchResultViewModel {
 			return
 		}
 
-		APIClient().getTestResults(identifier: identifier) { [weak self] envelope in
+		ApiClient().getTestResults(identifier: identifier) { [weak self] envelope in
 
 			guard let strongSelf = self else {
 				return

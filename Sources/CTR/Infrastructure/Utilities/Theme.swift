@@ -130,10 +130,10 @@ final class Colors {
 //    var lightOrange: UIColor {
 //        return color(for: "LightOrange")
 //    }
-//
-//    var captionGray: UIColor {
-//        return color(for: "CaptionGray")
-//    }
+
+    var captionGray: UIColor {
+        return color(for: "CaptionGray")
+    }
 //
 //    var separator: UIColor {
 //        return color(for: "Separator")

@@ -62,6 +62,8 @@ class Button: UIButton {
         self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchUpInside)
         self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 
+		self.translatesAutoresizingMaskIntoConstraints = false
+
         self.style = style
 
         updateButtonType()

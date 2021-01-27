@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+protocol AppCoordinatorDelegate: AnyObject {
+
+	/// Open a url
+	func openUrl(_ url: URL)
+}
+
 class AppCoordinator: Coordinator {
 
 	/// The UI Window
@@ -34,11 +40,14 @@ class AppCoordinator: Coordinator {
 		self.navigationController = navigationController
 	}
 
-	// Designated starter method
+	/// Designated starter method
 	func start() {
 
 		// Setup Logging
 		LogHandler.setup()
+
+		// Check if the app is the minimum version. If not, show the app update screen
+		updateConfiguration()
 
 		// Set the root
 		window.rootViewController = navigationController
@@ -47,5 +56,61 @@ class AppCoordinator: Coordinator {
 		// Start the mainCoordinator
 		let mainCoordinator = MainCoordinator(navigationController: navigationController)
 		startChildCoordinator(mainCoordinator)
+	}
+
+	/// flag for updating configuration
+	private var isUpdatingConfiguration = false
+
+	var remoteConfigManager: RemoteConfigManagerProtocol = RemoteConfigManager()
+
+	/// Update the configuration
+	func updateConfiguration() {
+
+		// Execute once.
+		guard !isUpdatingConfiguration else {
+			return
+		}
+
+		isUpdatingConfiguration = true
+
+		remoteConfigManager.update { [unowned self] updateState in
+			switch updateState {
+				case .updateRequired(let versionInformation):
+					showRequiredUpdate(with: versionInformation)
+				case .noActionNeeded:
+					break
+			}
+
+			isUpdatingConfiguration = false
+		}
+	}
+
+	/// Show the Update Required View
+	/// - Parameter versionInformation: the version information
+	private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
+
+		guard var topController = window.rootViewController else { return }
+
+		while let newTopController = topController.presentedViewController {
+			topController = newTopController
+		}
+
+		guard !(topController is AppUpdateViewController) else { return }
+
+		let viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
+		let updateController = AppUpdateViewController(viewModel: viewModel)
+		
+		topController.present(updateController, animated: true)
+	}
+}
+
+// MARK: - AppCoordinatorDelegate
+
+extension AppCoordinator: AppCoordinatorDelegate {
+
+	/// Open a url
+	func openUrl(_ url: URL) {
+
+		UIApplication.shared.open(url)
 	}
 }

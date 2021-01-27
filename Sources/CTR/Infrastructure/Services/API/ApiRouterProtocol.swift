@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-protocol APIRouterProtocol {
+protocol ApiRouterProtocol {
 
 	/// The base url
 	var baseUrl: URL { get }
@@ -37,7 +37,7 @@ protocol APIRouterProtocol {
 	func asURLRequest() throws -> URLRequest
 }
 
-extension APIRouterProtocol {
+extension ApiRouterProtocol {
 
 	// MARK: - URLRequestConvertible
 

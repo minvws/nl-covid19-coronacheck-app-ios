@@ -37,7 +37,7 @@ class CTRModel {
 
 	var eventEnvelope: EventEnvelope?
 
-	var apiClient: APIClientProtocol = APIClient()
+	var apiClient: ApiClientProtocol = ApiClient()
 
 	func populate() {
 
