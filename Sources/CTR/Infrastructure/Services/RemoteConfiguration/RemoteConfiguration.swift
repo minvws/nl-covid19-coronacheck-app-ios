@@ -39,6 +39,18 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	}
 
 	/// Initializer
+	/// - Parameters:
+	///   - minVersion: The minimum required version
+	///   - minVersionMessage: The message for the minium required version
+	///   - storeUrl: The url to the appStore
+	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?) {
+		
+		self.minimumVersion = minVersion
+		self.minimumVersionMessage = minVersionMessage
+		self.appStoreURL = storeUrl
+	}
+
+	/// Initializer
 	/// - Parameter decoder: the decoder
 	/// - Throws: decoder error
 	init(from decoder: Decoder) throws {
@@ -57,11 +69,31 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 }
 
 /// Should the app be updated?
-enum UpdateState {
+enum UpdateState: Equatable {
 
 	/// The app should be updated
 	case updateRequired(AppVersionInformation)
 
 	/// The app is fine.
 	case noActionNeeded
+
+	// MARK: Equatable
+
+	/// Equatable
+	/// - Parameters:
+	///   - lhs: the left hand side
+	///   - rhs: the right hand side
+	/// - Returns: True if both sides are equal
+	static func == (lhs: UpdateState, rhs: UpdateState) -> Bool {
+		switch (lhs, rhs) {
+			case (noActionNeeded, noActionNeeded):
+				return true
+			case (noActionNeeded, updateRequired), (updateRequired, noActionNeeded):
+				return false
+			case (let .updateRequired(lhsVersion), let .updateRequired(rhsVersion)):
+				return lhsVersion.minimumVersion == rhsVersion.minimumVersion &&
+					lhsVersion.minimumVersionMessage == rhsVersion.minimumVersionMessage &&
+					lhsVersion.appStoreURL == rhsVersion.appStoreURL
+		}
+	}
 }
