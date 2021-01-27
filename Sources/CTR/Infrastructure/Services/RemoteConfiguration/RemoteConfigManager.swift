@@ -43,6 +43,8 @@ class RemoteConfigManager: RemoteConfigManagerProtocol, Logging {
 	/// The current app version supplier
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
+	var remoteApiClient: RemoteConfigurationApiClientProtocol = RemoteConfigurationApiClient()
+
 	/// The current app version
 	var appVersion: String {
 
@@ -51,6 +53,7 @@ class RemoteConfigManager: RemoteConfigManagerProtocol, Logging {
 	/// Update the remote configuration
 	/// - Parameter completion: completion handler
 	func update(completion: @escaping (UpdateState) -> Void) {
+
 		func fullVersionString(_ version: String) -> String {
 			var components = version.split(separator: ".")
 			let missingComponents = max(0, 3 - components.count)
@@ -59,7 +62,7 @@ class RemoteConfigManager: RemoteConfigManagerProtocol, Logging {
 			return components.joined(separator: ".")
 		}
 
-		RemoteConfigurationApiClient().getRemoteConfiguration { config in
+		remoteApiClient.getRemoteConfiguration { config in
 			if let remoteConfig = config {
 				let requiredVersion = fullVersionString(remoteConfig.minimumVersion)
 				let currentVersion = fullVersionString(self.appVersion)
@@ -70,7 +73,6 @@ class RemoteConfigManager: RemoteConfigManagerProtocol, Logging {
 					completion(.updateRequired(remoteConfig))
 				} else {
 					completion(.noActionNeeded)
-//					completion(.updateRequired(remoteConfig))
 				}
 			} else {
 				completion(.noActionNeeded)
