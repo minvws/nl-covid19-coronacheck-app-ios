@@ -1,10 +1,9 @@
-//
-//  UIViewController+Keyboard.swift
-//  Alarm112
-//
-//  Created by Rool Paap on 03/09/2018.
-//  Copyright © 2020 Landelijke Meldkamer Samenwerking. All rights reserved.
-//
+/*
+* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+*
+*  SPDX-License-Identifier: EUPL-1.2
+*/
 
 import UIKit
 

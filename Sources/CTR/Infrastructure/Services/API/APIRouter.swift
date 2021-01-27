@@ -9,7 +9,7 @@ import Alamofire
 import Foundation
 
 /// The API Router
-enum ApiRouter: APIRouterProtocol, URLRequestConvertible {
+enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 
 	/// Get the agent details
 	case agent(identifier: String)

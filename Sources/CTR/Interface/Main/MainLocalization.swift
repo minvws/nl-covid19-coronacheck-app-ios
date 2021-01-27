@@ -18,5 +18,4 @@ extension String {
 
 		return Localization.string(for: "main.verifier")
 	}
-
 }

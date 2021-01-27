@@ -57,8 +57,15 @@ extension String {
 //    static var edit: String { return Localization.string(for: "edit") }
 //    static var selectDate: String { return Localization.string(for: "selectDate") }
 //    static var done: String { return Localization.string(for: "done") }
-//    static var ok: String { return Localization.string(for: "ok") }
+    static var ok: String {
+		
+		return Localization.string(for: "general.ok")
+	}
 //    static var tryAgain: String { return Localization.string(for: "tryAgain") }
 //    static var delete: String { return Localization.string(for: "delete") }
-//    static var errorTitle: String { return Localization.string(for: "error.title") }
+
+	static var errorTitle: String {
+
+		return Localization.string(for: "general.error.title")
+	}
 }
