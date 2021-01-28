@@ -101,6 +101,7 @@ class CustomerFetchResultModelTests: XCTestCase {
 		var getTestResultsCalled = false
 		var postAuthorizationTokenCalled = false
 		var postAuthorizationTokenToken: String?
+		var getTestResultsIdentifier: String?
 
 		func getAgentEnvelope(identifier: String, completionHandler: @escaping (AgentEnvelope?) -> Void) {
 
@@ -120,6 +121,11 @@ class CustomerFetchResultModelTests: XCTestCase {
 		func getTestResults(identifier: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
 
 			getTestResultsCalled = true
+			getTestResultsIdentifier = identifier
+		}
+
+		func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
+
 		}
 
 		func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void) {
@@ -159,8 +165,10 @@ class CustomerFetchResultModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
-		XCTAssertTrue(apiSpy.postAuthorizationTokenCalled, "Methos should be called")
-		XCTAssertEqual(apiSpy.postAuthorizationTokenToken, openIdSpy.token, "Token must match")
+//		XCTAssertTrue(apiSpy.postAuthorizationTokenCalled, "Methos should be called")
+//		XCTAssertEqual(apiSpy.postAuthorizationTokenToken, openIdSpy.token, "Token must match")
+		XCTAssertTrue(apiSpy.getTestResultsCalled, "Methos should be called")
+		XCTAssertEqual(apiSpy.getTestResultsIdentifier, openIdSpy.token, "Token must match")
 	}
 
 	/// Test the secondary button tapped, open id returns an error

@@ -11,7 +11,7 @@ struct TestResultEnvelope: Codable {
 
 	var testResults: [TestResult]
 	var signatures: [TestSignature]
-	var types: [TestType]
+	var types: [TestType]?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {

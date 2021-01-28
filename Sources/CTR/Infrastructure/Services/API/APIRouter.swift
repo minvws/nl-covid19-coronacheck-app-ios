@@ -23,6 +23,9 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	/// Get the test results
 	case testResults(identifier: String)
 
+	/// Get the test results
+	case testResultsWithAuthToken(token: String)
+
 	/// Post the authorization token
 	case authorizationToken(token: String)
 
@@ -99,7 +102,7 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 			case .publicKeys:
 				return ApiRouter.publicKeysEndpoint
 
-			case .testResults:
+			case .testResults, .testResultsWithAuthToken:
 				return ApiRouter.testResultsEndpoint + "/"
 
 			case .authorizationToken:
@@ -111,9 +114,13 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	var queryItems: [URLQueryItem]? {
 		switch self {
 			case let .testResults(identifier):
-
 				return [
 					URLQueryItem(name: "userUUID", value: identifier)
+				]
+
+			case let .testResultsWithAuthToken(token):
+				return [
+					URLQueryItem(name: "access_token", value: token)
 				]
 
 			default:

@@ -270,7 +270,7 @@ class APIClientTests: XCTestCase {
 			XCTAssertNotNil(response, "Response should not be nil")
 			XCTAssertEqual(response?.testResults.count, 1, "There should be one result")
 			XCTAssertEqual(response?.signatures.count, 1, "There should be one signature")
-			XCTAssertEqual(response?.types.count, 1, "There should be one type")
+			XCTAssertEqual(response?.types?.count, 1, "There should be one type")
 			
 			expectation.fulfill()
 		}
