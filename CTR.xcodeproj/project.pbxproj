@@ -58,6 +58,7 @@
 		6D9284D025B5DAAC009D4350 /* VerifierScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */; };
 		6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */; };
 		6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */; };
+		6DC6CC9425C2D0B500060237 /* ctcl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DC6CC9025C2CFE000060237 /* ctcl.framework */; };
 		6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9394225BD8CD80026F071 /* Configuration.swift */; };
 		6DD9394825BD8DAF0026F071 /* configuration-development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD9394725BD8DAF0026F071 /* configuration-development.plist */; };
 		6DD9394C25BD8F5E0026F071 /* ApiRouterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9394B25BD8F5E0026F071 /* ApiRouterProtocol.swift */; };
@@ -146,6 +147,7 @@
 		6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierScanViewController.swift; sourceTree = "<group>"; };
 		6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierResultViewController.swift; sourceTree = "<group>"; };
 		6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
+		6DC6CC9025C2CFE000060237 /* ctcl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ctcl.framework; sourceTree = "<group>"; };
 		6DD9394225BD8CD80026F071 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		6DD9394725BD8DAF0026F071 /* configuration-development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-development.plist"; sourceTree = "<group>"; };
 		6DD9394B25BD8F5E0026F071 /* ApiRouterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiRouterProtocol.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DC6CC9425C2D0B500060237 /* ctcl.framework in Frameworks */,
 				3454914E5AF11C275EA2153E /* Pods_CTR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,6 +202,7 @@
 		24D22EDDC156812B48895190 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6DC6CC9025C2CFE000060237 /* ctcl.framework */,
 				A1A30077C20B882A3D85DB17 /* Pods_CTR.framework */,
 				192B189FA7E43E58EBB66C2D /* Pods_CTRTests.framework */,
 			);
@@ -881,6 +885,10 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -986,6 +994,10 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1091,6 +1103,10 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1196,6 +1212,10 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1365,6 +1385,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1389,6 +1413,10 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Sources/CTR/Configuration/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				LD_RUNPATH_SEARCH_PATHS = (
