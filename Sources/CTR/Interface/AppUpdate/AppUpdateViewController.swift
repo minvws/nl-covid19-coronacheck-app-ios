@@ -42,6 +42,7 @@ class AppUpdateViewController: BaseViewController {
 	}
 
     override func viewDidLoad() {
+
         super.viewDidLoad()
 
 		// Binding
@@ -50,7 +51,6 @@ class AppUpdateViewController: BaseViewController {
 				self.showCannotOpenUrl()
 			}
 		}
-
 		viewModel.$message.binding = {
 			self.sceneView.messageLabel.text = $0
 		}
@@ -74,7 +74,12 @@ class AppUpdateViewController: BaseViewController {
 			title: .errorTitle,
 			message: .updateAppErrorMessage,
 			preferredStyle: .alert)
-		alertController.addAction(UIAlertAction(title: .ok, style: .default, handler: nil))
+		alertController.addAction(
+			UIAlertAction(
+				title: .ok,
+				style: .default,
+				handler: nil)
+		)
 		present(alertController, animated: true, completion: nil)
 	}
 }

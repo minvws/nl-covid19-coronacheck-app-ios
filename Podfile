@@ -15,6 +15,7 @@ target 'CTR' do
     inherit! :search_paths
     # Pods for testing
     pod 'OHHTTPStubs/Swift', '9.1.0'
+    pod 'ViewControllerPresentationSpy', '~> 5.0'
 
   end
 

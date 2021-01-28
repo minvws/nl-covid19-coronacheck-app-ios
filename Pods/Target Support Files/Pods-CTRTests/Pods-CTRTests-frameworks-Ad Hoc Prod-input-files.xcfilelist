@@ -1,2 +1,3 @@
 ${PODS_ROOT}/Target Support Files/Pods-CTRTests/Pods-CTRTests-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/OHHTTPStubs/OHHTTPStubs.framework
+${BUILT_PRODUCTS_DIR}/ViewControllerPresentationSpy/ViewControllerPresentationSpy.framework
