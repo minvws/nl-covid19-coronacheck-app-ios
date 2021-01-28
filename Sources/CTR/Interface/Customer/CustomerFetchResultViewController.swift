@@ -9,7 +9,9 @@ import UIKit
 import Sodium
 import AppAuth
 
-class FetchResultViewModel {
+class FetchResultViewModel: Logging {
+
+	var loggingCategory: String = "FetchResultViewModel"
 
 	/// Configuration
 	var configuration: ConfigurationDigidProtocol = Configuration()
@@ -86,7 +88,7 @@ class FetchResultViewModel {
 //			self.message += "\n delivered to API \(success)"
 //		}
 
-		apiClient.getTestResults(identifier: accessToken) { [weak self] envelope in
+		apiClient.getTestResultsWithToken(token: accessToken) { [weak self] envelope in
 
 			self?.handleResponse(envelope)
 		}
@@ -95,6 +97,7 @@ class FetchResultViewModel {
 	private func handleResponse(_ envelope: TestResultEnvelope?) {
 
 		coordinator?.setTestResultEnvelope(envelope)
+		logDebug("handleResponse: \(String(describing: envelope))")
 
 		if let envelope = envelope {
 			for result in envelope.testResults {
