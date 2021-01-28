@@ -33,6 +33,12 @@ protocol ApiClientProtocol {
 	///   - completionHandler: the completion handler
 	func getTestResults(identifier: String, completionHandler: @escaping (TestResultEnvelope?) -> Void)
 
+	/// Get the test results
+	/// - Parameters:
+	///   - token: the access token
+	///   - completionHandler: the completion handler
+	func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void)
+
 	/// Post the authorization token
 	/// - Parameters:
 	///   - token: the authorization token
@@ -112,6 +118,28 @@ class ApiClient: ApiClientProtocol {
 
 		AF.request(
 			ApiRouter.testResults(identifier: identifier)
+		)
+		.responseDecodable(of: TestResultEnvelope.self) { response in
+
+			switch response.result {
+				case let .success(object):
+					completionHandler(object)
+
+				case let .failure(error):
+					print(error)
+					completionHandler(nil)
+			}
+		}
+	}
+
+	/// Get the test results
+	/// - Parameters:
+	///   - token: the access token
+	///   - completionHandler: the completion handler
+	func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
+
+		AF.request(
+			ApiRouter.testResultsWithAuthToken(token: token)
 		)
 		.responseDecodable(of: TestResultEnvelope.self) { response in
 

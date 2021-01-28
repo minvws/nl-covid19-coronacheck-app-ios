@@ -270,7 +270,7 @@ class APIClientTests: XCTestCase {
 			XCTAssertNotNil(response, "Response should not be nil")
 			XCTAssertEqual(response?.testResults.count, 1, "There should be one result")
 			XCTAssertEqual(response?.signatures.count, 1, "There should be one signature")
-			XCTAssertEqual(response?.types.count, 1, "There should be one type")
+			XCTAssertEqual(response?.types?.count, 1, "There should be one type")
 			
 			expectation.fulfill()
 		}
@@ -283,7 +283,7 @@ class APIClientTests: XCTestCase {
 		// Given
 		let expectation = self.expectation(description: "get test results no internet")
 		let identifier = "testGetTestResultsNoInternet"
-		stub(condition: isPath(testResultEndpoint + "/?userUUID=\(identifier)")) { _ in
+		stub(condition: pathStartsWith(testResultEndpoint)) { _ in
 			
 			let notConnectedError = NSError(
 				domain: NSURLErrorDomain,
@@ -295,6 +295,75 @@ class APIClientTests: XCTestCase {
 		// When
 		ApiClient().getTestResults(identifier: identifier) { response in
 			
+			// Then
+			XCTAssertNil(response, "Result should be nil")
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the get test results call with success
+	func testGetTestResultsWithTokenSuccess() {
+
+		// Given
+		let expectation = self.expectation(description: "get test results with token success")
+		let token = "testGetTestResultsWithTokenSuccess"
+		stub(condition: isPath(testResultEndpoint)) { _ in
+
+			let object: [String: Any] = [
+				"test_signatures":
+					[
+						["uuid": "TestUUID", "signature": "TestSignature"]
+					],
+				"test_results":
+					[
+						["uuid": "result uuid", "test_type": "type 1", "date_taken": 1611008913, "result": 0]
+					],
+				"test_types":
+					[
+						["uuid": "type 1", "name": "PCR"]
+					]
+			]
+
+			return HTTPStubsResponse(
+				jsonObject: object,
+				statusCode: 200,
+				headers: nil
+			)
+		}
+
+		// When
+		ApiClient().getTestResultsWithToken(token: token) { response in
+
+			// Then
+			XCTAssertNotNil(response, "Response should not be nil")
+			XCTAssertEqual(response?.testResults.count, 1, "There should be one result")
+			XCTAssertEqual(response?.signatures.count, 1, "There should be one signature")
+			XCTAssertEqual(response?.types?.count, 1, "There should be one type")
+
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the get test results call with token without internet
+	func testGetTestResultsWithTokenNoInternet() {
+
+		// Given
+		let expectation = self.expectation(description: "get test results with token no internet")
+		let token = "testGetTestResultsWithTokenNoInternet"
+		stub(condition: pathStartsWith(testResultEndpoint)) { _ in
+
+			let notConnectedError = NSError(
+				domain: NSURLErrorDomain,
+				code: URLError.notConnectedToInternet.rawValue
+			)
+			return HTTPStubsResponse(error: notConnectedError)
+		}
+
+		// When
+		ApiClient().getTestResultsWithToken(token: token) { response in
+
 			// Then
 			XCTAssertNil(response, "Result should be nil")
 			expectation.fulfill()
