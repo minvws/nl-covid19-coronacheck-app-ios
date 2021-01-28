@@ -9,7 +9,9 @@ import UIKit
 import Sodium
 import AppAuth
 
-class FetchResultViewModel {
+class FetchResultViewModel: Logging {
+
+	var loggingCategory: String = "FetchResultViewModel"
 
 	/// Configuration
 	var configuration: ConfigurationDigidProtocol = Configuration()
@@ -71,7 +73,7 @@ class FetchResultViewModel {
 
 			self.message = "Access token: \(accessToken ?? "nil")"
 			if let token = accessToken {
-				self.postAccessToken(token)
+				self.handleAccessToken(token)
 			}
 		} onError: { error in
 			self.message = "Authorization error: \(error?.localizedDescription ?? "Unknown error")"
@@ -80,11 +82,39 @@ class FetchResultViewModel {
 
 	/// Post the access token
 	/// - Parameter accessToken: the access token
-	func postAccessToken(_ accessToken: String) {
+	func handleAccessToken(_ accessToken: String) {
 
-		apiClient.postAuthorizationToken(accessToken) { success in
-			self.message += "\n delivered to API \(success)"
+//		apiClient.postAuthorizationToken(accessToken) { success in
+//			self.message += "\n delivered to API \(success)"
+//		}
+
+		apiClient.getTestResultsWithToken(token: accessToken) { [weak self] envelope in
+
+			self?.handleResponse(envelope)
 		}
+	}
+
+	private func handleResponse(_ envelope: TestResultEnvelope?) {
+
+		coordinator?.setTestResultEnvelope(envelope)
+		logDebug("handleResponse: \(String(describing: envelope))")
+
+		if let envelope = envelope {
+			for result in envelope.testResults {
+
+				var type = ""
+				if let types = envelope.types {
+					for candidate in types where result.testType == candidate.identifier {
+						type = candidate.name
+					}
+				}
+
+				let date = Date(timeIntervalSince1970: TimeInterval(result.dateTaken))
+				message += "Test (\(type)) op \(dateFormatter.string(from: date)): \(result.result == 0 ? "NEG" : "POS")\n"
+			}
+		}
+		// Show the button
+		tertiaryButtonTitle = "Genereer toegangsbewijs"
 	}
 
 	/// User tapped on the third button
@@ -100,29 +130,11 @@ class FetchResultViewModel {
 			return
 		}
 
+		message = ""
+
 		ApiClient().getTestResults(identifier: identifier) { [weak self] envelope in
 
-			guard let strongSelf = self else {
-				return
-			}
-
-			strongSelf.coordinator?.setTestResultEnvelope(envelope)
-			strongSelf.message = ""
-
-			if let envelope = envelope {
-				for result in envelope.testResults {
-
-					var type = ""
-					for candidate in envelope.types where result.testType == candidate.identifier {
-						type = candidate.name
-					}
-
-					let date = Date(timeIntervalSince1970: TimeInterval(result.dateTaken))
-					strongSelf.message += "Test (\(type)) op \(strongSelf.dateFormatter.string(from: date)): \(result.result == 0 ? "NEG" : "POS")\n"
-				}
-			}
-			// Show the button
-			strongSelf.tertiaryButtonTitle = "Genereer toegangsbewijs"
+			self?.handleResponse(envelope)
 		}
 	}
 }
