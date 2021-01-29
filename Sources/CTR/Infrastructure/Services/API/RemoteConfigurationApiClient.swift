@@ -28,6 +28,7 @@ class RemoteConfigurationApiClient: RemoteConfigurationApiClientProtocol {
 		AF.request(
 			RemoteConfigurationRouter.getRemoteConfiguration
 		)
+		.cacheResponse(using: ResponseCacher(behavior: .doNotCache))
 		.responseDecodable(of: RemoteConfiguration.self) { response in
 
 			switch response.result {

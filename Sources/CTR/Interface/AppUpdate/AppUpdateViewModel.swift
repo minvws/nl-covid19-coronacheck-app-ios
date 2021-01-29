@@ -7,19 +7,29 @@
 
 import Foundation
 
+/// Viewmodel for updating the application
 class AppUpdateViewModel {
 
 	/// The url to the app store
-	let updateURL: URL?
+	fileprivate var updateURL: URL?
 
 	/// The coordinator delegate
 	weak var coordinator: AppCoordinatorDelegate?
 
+	/// The title
+	@Bindable fileprivate(set) var title: String
+
 	/// The update message
-	@Bindable private(set) var message: String
+	@Bindable fileprivate(set) var message: String
+
+	/// The action text
+	@Bindable fileprivate(set) var actionTitle: String
 
 	/// Flag if we can't open the app store
-	@Bindable private(set) var showCannotOpenAppStoreAlert: Bool
+	@Bindable fileprivate(set) var showCannotOpenAlert: Bool
+
+	/// The error message if we can not open the url
+	@Bindable fileprivate(set) var errorMessage: String?
 
 	/// Initializer
 	/// - Parameters:
@@ -28,18 +38,41 @@ class AppUpdateViewModel {
 	init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation) {
 
 		self.coordinator = coordinator
+		title = .updateAppTitle
 		message = versionInformation.minimumVersionMessage ?? .updateAppContent
+		actionTitle = .updateAppButton
 		updateURL = versionInformation.appStoreURL
-		showCannotOpenAppStoreAlert = false
+		showCannotOpenAlert = false
+		errorMessage = .updateAppErrorMessage
 	}
 
 	/// User tapped on the update button
-	func updateButtonTapped() {
+	func actionButtonTapped() {
 
 		guard let url = updateURL else {
-			showCannotOpenAppStoreAlert = true
+			showCannotOpenAlert = true
 			return
 		}
 		coordinator?.openUrl(url)
+	}
+}
+
+/// Viewmodel when the app is deactivated
+class EndOfLifeViewModel: AppUpdateViewModel {
+
+	/// Initializer
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	///   - versionInformation: the verion information
+	override init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation) {
+
+		super.init(coordinator: coordinator, versionInformation: versionInformation)
+
+		self.title = .endOfLifeTitle
+		self.message = .endOfLifeDescription
+		self.errorMessage = .endOfLifeErrorMessage
+		self.actionTitle = .learnMore
+		self.updateURL = versionInformation.informationURL
+		self.errorMessage = .endOfLifeErrorMessage
 	}
 }

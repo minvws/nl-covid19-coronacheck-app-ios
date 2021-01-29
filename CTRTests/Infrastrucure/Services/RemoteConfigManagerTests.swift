@@ -85,7 +85,9 @@ class RemoteConfigManagerTests: XCTestCase {
 			RemoteConfiguration(
 				minVersion: "1.0.0",
 				minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
-				storeUrl: nil
+				storeUrl: nil,
+				deactivated: nil,
+				informationURL: nil
 			)
 		)
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -110,7 +112,9 @@ class RemoteConfigManagerTests: XCTestCase {
 			RemoteConfiguration(
 				minVersion: "1.0",
 				minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
-				storeUrl: nil
+				storeUrl: nil,
+				deactivated: nil,
+				informationURL: nil
 			)
 		)
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -134,7 +138,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.1",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualBug",
-			storeUrl: nil
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
 		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -143,7 +149,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.updateRequired(configuration))
+			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}
@@ -158,7 +164,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		let configuration = RemoteConfiguration(
 			minVersion: "4.3.2",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualMajor",
-			storeUrl: nil
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
 		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
 		sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
@@ -167,7 +175,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.updateRequired(configuration))
+			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}
@@ -182,7 +190,9 @@ class RemoteConfigManagerTests: XCTestCase {
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
-			storeUrl: nil
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
 		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
@@ -192,6 +202,32 @@ class RemoteConfigManagerTests: XCTestCase {
 
 			// Then
 			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the remote config manager update call with end of life
+	func testRemoteConfigManagerEndOfLife() {
+
+		// Given
+		let expectation = self.expectation(description: "remote config current version higher")
+		let configuration = RemoteConfiguration(
+			minVersion: "1.0.0",
+			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
+			storeUrl: nil,
+			deactivated: "deactivated",
+			informationURL: nil
+		)
+		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
+		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+
+		// When
+		sut.update { state in
+
+			// Then
+			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}

@@ -75,8 +75,8 @@ class AppCoordinator: Coordinator {
 
 		remoteConfigManager.update { [unowned self] updateState in
 			switch updateState {
-				case .updateRequired(let versionInformation):
-					showRequiredUpdate(with: versionInformation)
+				case .actionRequired(let versionInformation):
+					showActionRequired(with: versionInformation)
 				case .noActionNeeded:
 					break
 			}
@@ -85,9 +85,9 @@ class AppCoordinator: Coordinator {
 		}
 	}
 
-	/// Show the Update Required View
+	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
-	private func showRequiredUpdate(with versionInformation: AppVersionInformation) {
+	private func showActionRequired(with versionInformation: AppVersionInformation) {
 
 		guard var topController = window.rootViewController else { return }
 
@@ -97,9 +97,12 @@ class AppCoordinator: Coordinator {
 
 		guard !(topController is AppUpdateViewController) else { return }
 
-		let viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
+		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
+
+		if versionInformation.isDeactivated {
+			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)
+		}
 		let updateController = AppUpdateViewController(viewModel: viewModel)
-		
 		topController.present(updateController, animated: true)
 	}
 }
