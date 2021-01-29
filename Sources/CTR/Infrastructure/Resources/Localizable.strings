@@ -20,12 +20,18 @@
 "general.tryAgain" = "Opnieuw proberen";
 "general.delete" = "Verwijderen";
 "general.error.title" = "Er ging iets mis";
+"general.learnMore" = "Lees meer";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "De app heeft een update nodig";
 "updateApp.content" = "Om de app te gebruiken heb je de laatste versie uit de store nodig.";
 "updateApp.button" = "Updaten";
+
+/* MARK: - EndOfLife */
+"endOfLife.error.message" = "De website kan niet geopend worden.";
+"endOfLife.title" = "CoronaTester is gestopt";
+"endOfLife.description" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
 
 /* MARK: - Main */
 "main.customer" = "Burger";

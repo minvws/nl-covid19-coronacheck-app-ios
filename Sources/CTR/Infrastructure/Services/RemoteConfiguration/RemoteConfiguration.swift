@@ -18,24 +18,47 @@ protocol AppVersionInformation {
 
 	/// The url to the appStore
 	var appStoreURL: URL? { get }
+
+	/// The url to the site
+	var informationURL: URL? { get }
+
+	/// Is the app deactvated?
+	var appDeactivated: String? { get }
+}
+
+extension AppVersionInformation {
+
+	/// Is the app deactivated?
+	var isDeactivated: Bool {
+
+		return appDeactivated == "deactivated"
+	}
 }
 
 struct RemoteConfiguration: AppVersionInformation, Codable {
 
 	/// The minimum required version
-	var minimumVersion: String
+	let minimumVersion: String
 
 	/// The message for the minium required version
-	var minimumVersionMessage: String?
+	let minimumVersionMessage: String?
 
 	/// The url to the appStore
-	var appStoreURL: URL?
+	let appStoreURL: URL?
+
+	/// The url to the site
+	var informationURL: URL?
+
+	/// Is the app deactvated?
+	let appDeactivated: String?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 		case minimumVersion = "iosMinimumVersion"
 		case minimumVersionMessage = "iosMinimumVersionMessage"
 		case appStoreURL = "iosAppStoreURL"
+		case appDeactivated = "appDeactivated"
+		case informationURL = "informationURL"
 	}
 
 	/// Initializer
@@ -43,28 +66,15 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	///   - minVersion: The minimum required version
 	///   - minVersionMessage: The message for the minium required version
 	///   - storeUrl: The url to the appStore
-	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?) {
+	///   - deactiviated: The deactivation String
+	///   - informationURL: The information url
+	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?, deactivated: String?, informationURL: URL?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
 		self.appStoreURL = storeUrl
-	}
-
-	/// Initializer
-	/// - Parameter decoder: the decoder
-	/// - Throws: decoder error
-	init(from decoder: Decoder) throws {
-
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-
-		minimumVersion = try container.decode(String.self, forKey: .minimumVersion)
-		minimumVersionMessage = try? container.decode(String?.self, forKey: .minimumVersionMessage)
-
-		if let appStoreURLString = try? container.decode(String?.self, forKey: .appStoreURL) {
-			appStoreURL = URL(string: appStoreURLString)
-		} else {
-			appStoreURL = nil
-		}
+		self.appDeactivated = deactivated
+		self.informationURL = informationURL
 	}
 }
 
@@ -72,7 +82,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 enum UpdateState: Equatable {
 
 	/// The app should be updated
-	case updateRequired(AppVersionInformation)
+	case actionRequired(AppVersionInformation)
 
 	/// The app is fine.
 	case noActionNeeded
@@ -88,12 +98,14 @@ enum UpdateState: Equatable {
 		switch (lhs, rhs) {
 			case (noActionNeeded, noActionNeeded):
 				return true
-			case (noActionNeeded, updateRequired), (updateRequired, noActionNeeded):
+			case (noActionNeeded, actionRequired), (actionRequired, noActionNeeded):
 				return false
-			case (let .updateRequired(lhsVersion), let .updateRequired(rhsVersion)):
+			case (let .actionRequired(lhsVersion), let .actionRequired(rhsVersion)):
 				return lhsVersion.minimumVersion == rhsVersion.minimumVersion &&
 					lhsVersion.minimumVersionMessage == rhsVersion.minimumVersionMessage &&
-					lhsVersion.appStoreURL == rhsVersion.appStoreURL
+					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
+					lhsVersion.informationURL == rhsVersion.informationURL &&
+					lhsVersion.appDeactivated == rhsVersion.appDeactivated
 		}
 	}
 }

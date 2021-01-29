@@ -28,7 +28,9 @@ class AppUpdateViewControllerTests: XCTestCase {
 			versionInformation: RemoteConfiguration(
 				minVersion: "1.0",
 				minVersionMessage: "AppUpdateViewControllerTests",
-				storeUrl: nil
+				storeUrl: nil,
+				deactivated: nil,
+				informationURL: nil
 			)
 		)
 

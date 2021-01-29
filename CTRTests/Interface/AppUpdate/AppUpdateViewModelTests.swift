@@ -23,7 +23,9 @@ class AppUpdateViewModelTests: XCTestCase {
 		let appVersionInfo = RemoteConfiguration(
 			minVersion: "1.0",
 			minVersionMessage: "test message",
-			storeUrl: URL(string: "https://apple.com")
+			storeUrl: URL(string: "https://apple.com"),
+			deactivated: nil,
+			informationURL: nil
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -44,7 +46,7 @@ class AppUpdateViewModelTests: XCTestCase {
 			return
 		}
 
-		XCTAssertFalse(strongSut.showCannotOpenAppStoreAlert, "We should not show an alert")
+		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
 		XCTAssertEqual(strongSut.message, "test message")
 
 	}
@@ -56,7 +58,9 @@ class AppUpdateViewModelTests: XCTestCase {
 		let appVersionInfo = RemoteConfiguration(
 			minVersion: "1.0",
 			minVersionMessage: nil,
-			storeUrl: nil
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
 
 		// When
@@ -67,7 +71,7 @@ class AppUpdateViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.showCannotOpenAppStoreAlert, "We should not show an alert")
+		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
 		XCTAssertEqual(strongSut.message, .updateAppContent)
 	}
 
@@ -77,7 +81,7 @@ class AppUpdateViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut?.updateButtonTapped()
+		sut?.actionButtonTapped()
 
 		// Then
 		XCTAssertTrue(appCoordinatorSpy.openUrlCalled, "Method should be called")
@@ -85,7 +89,7 @@ class AppUpdateViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.showCannotOpenAppStoreAlert, "We should not show an alert")
+		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
 	}
 
 	/// Test the update button tapped method with an url
@@ -95,13 +99,15 @@ class AppUpdateViewModelTests: XCTestCase {
 		let appVersionInfo = RemoteConfiguration(
 			minVersion: "1.0",
 			minVersionMessage: "test",
-			storeUrl: nil
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// When
-		sut?.updateButtonTapped()
+		sut?.actionButtonTapped()
 
 		// Then
 		XCTAssertFalse(appCoordinatorSpy.openUrlCalled, "Method should NOT be called")
@@ -109,6 +115,54 @@ class AppUpdateViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(strongSut.showCannotOpenAppStoreAlert, "We should show an alert")
+		XCTAssertTrue(strongSut.showCannotOpenAlert, "We should show an alert")
+	}
+
+	/// Test the initializer for end of life
+	func testInitializerEndOfLifeNoUrl() {
+
+		// Given
+		let appVersionInfo = RemoteConfiguration(
+			minVersion: "1.0",
+			minVersionMessage: nil,
+			storeUrl: nil,
+			deactivated: "deactivated",
+			informationURL: nil
+		)
+
+		// When
+		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertEqual(strongSut.message, .endOfLifeDescription)
+	}
+
+	/// Test the initializer for end of life
+	func testInitializerEndOfLifeWithUrl() {
+
+		// Given
+		let appVersionInfo = RemoteConfiguration(
+			minVersion: "1.0",
+			minVersionMessage: nil,
+			storeUrl: nil,
+			deactivated: "deactivated",
+			informationURL: URL(string: "https://apple.com")
+		)
+
+		// When
+		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertEqual(strongSut.errorMessage, .endOfLifeErrorMessage)
 	}
 }
