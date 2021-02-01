@@ -21,6 +21,32 @@ struct TestResultEnvelope: Codable {
 	}
 }
 
+struct Ism: Codable {
+
+	var identifier: String
+	var ism: String
+
+	/// Key mapping
+	enum CodingKeys: String, CodingKey {
+		case identifier = "uuid"
+		case ism = "ism"
+	}
+}
+
+struct IsmResponse: Codable {
+
+	var isms: [Ism]
+	var signatures: [TestSignature]
+	var types: [TestType]?
+
+	enum CodingKeys: String, CodingKey {
+
+		case isms = "test_results"
+		case signatures = "test_signatures"
+		case types = "test_types"
+	}
+}
+
 struct TestSignature: Codable {
 
 	var identifier: String

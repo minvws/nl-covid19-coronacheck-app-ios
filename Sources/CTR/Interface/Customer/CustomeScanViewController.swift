@@ -27,7 +27,7 @@ class CustomerScanViewController: ScanViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		title = "Burger Scan"
+		title = "Holder Scan"
     }
 
 	func displayEvent(_ envelope: EventEnvelope) {

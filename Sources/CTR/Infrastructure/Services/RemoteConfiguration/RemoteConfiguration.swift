@@ -23,7 +23,7 @@ protocol AppVersionInformation {
 	var informationURL: URL? { get }
 
 	/// Is the app deactvated?
-	var appDeactivated: String? { get }
+	var appDeactivated: Bool? { get }
 }
 
 extension AppVersionInformation {
@@ -31,7 +31,7 @@ extension AppVersionInformation {
 	/// Is the app deactivated?
 	var isDeactivated: Bool {
 
-		return appDeactivated == "deactivated"
+		return appDeactivated ?? false
 	}
 }
 
@@ -50,7 +50,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	var informationURL: URL?
 
 	/// Is the app deactvated?
-	let appDeactivated: String?
+	let appDeactivated: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -68,7 +68,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	///   - storeUrl: The url to the appStore
 	///   - deactiviated: The deactivation String
 	///   - informationURL: The information url
-	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?, deactivated: String?, informationURL: URL?) {
+	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?, deactivated: Bool?, informationURL: URL?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage

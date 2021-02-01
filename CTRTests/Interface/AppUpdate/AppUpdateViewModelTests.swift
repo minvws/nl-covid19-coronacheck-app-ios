@@ -126,7 +126,7 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersion: "1.0",
 			minVersionMessage: nil,
 			storeUrl: nil,
-			deactivated: "deactivated",
+			deactivated: true,
 			informationURL: nil
 		)
 
@@ -150,7 +150,7 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersion: "1.0",
 			minVersionMessage: nil,
 			storeUrl: nil,
-			deactivated: "deactivated",
+			deactivated: true,
 			informationURL: URL(string: "https://apple.com")
 		)
 

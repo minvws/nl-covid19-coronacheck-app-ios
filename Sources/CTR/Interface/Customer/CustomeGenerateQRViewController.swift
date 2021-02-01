@@ -26,7 +26,7 @@ class CustomerGenerateQRViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		title = "Burger Generate QR"
+		title = "Holder Generate QR"
 
 		sceneView.primaryTitle = "Terug naar start"
 		sceneView.primaryButtonTappedCommand = { [weak self] in

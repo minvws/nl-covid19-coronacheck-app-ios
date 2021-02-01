@@ -21,9 +21,9 @@ class APIClientTests: XCTestCase {
 	
 	let agentEndpoint = ApiRouter.agentEndpoint
 	let eventEndpoint = ApiRouter.eventEndpoint
+	let nonceEndpoint = ApiRouter.nonceEndpoint
 	let publicKeyEndpoint = ApiRouter.publicKeysEndpoint
 	let testResultEndpoint = ApiRouter.testResultsEndpoint
-	let authorizationEndpoint = ApiRouter.authorizationTokenEndpoint
 	
 	// MARK: - Tests
 	
@@ -371,39 +371,39 @@ class APIClientTests: XCTestCase {
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	/// Test the post authorization token with success
-	func testPostAuthenticationTokenSuccess() {
+	/// Test the get noncewith success
+	func testgetNonceSuccess() {
 
 		// Given
-		let expectation = self.expectation(description: "post authorization token success")
-		let token = "testPostAuthenticationTokenSuccess"
-		stub(condition: isPath(authorizationEndpoint)) { _ in
+		let expectation = self.expectation(description: "get nonce success")
+		stub(condition: isPath(nonceEndpoint)) { _ in
 
 			return HTTPStubsResponse(
-				jsonObject: [],
+				jsonObject: ["nonce": "test nonce", "stoken": "test stoken"],
 				statusCode: 200,
 				headers: nil
 			)
 		}
 
 		// When
-		ApiClient().postAuthorizationToken(token) { response in
+		ApiClient().getNonce { response in
 
 			// Then
-			XCTAssertTrue(response, "Result should be be false")
+			XCTAssertNotNil(response, "Response should not be nil")
+			XCTAssertEqual(response?.nonce, "test nonce", "Nonce should match")
+			XCTAssertEqual(response?.stoken, "test stoken", "Stoken should match")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
 	}
 
-	/// Test the post authorization token without internet
-	func testPostAuthorizationTokenNoInternet() {
+	/// Test the get noncewithout internet
+	func testGetNonceNoInternet() {
 
 		// Given
-		let expectation = self.expectation(description: "post authorization token no internet")
-		let token = "testPostAuthorizationTokenNoInternet"
+		let expectation = self.expectation(description: "get nonce no internet")
 
-		stub(condition: isPath(authorizationEndpoint)) { _ in
+		stub(condition: isPath(nonceEndpoint)) { _ in
 
 			let notConnectedError = NSError(
 				domain: NSURLErrorDomain,
@@ -413,10 +413,10 @@ class APIClientTests: XCTestCase {
 		}
 
 		// When
-		ApiClient().postAuthorizationToken(token) { response in
+		ApiClient().getNonce { response in
 
 			// Then
-			XCTAssertFalse(response, "Result should be be false")
+			XCTAssertNil(response, "Result should be nil")
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)

@@ -17,6 +17,9 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	/// Get event details
 	case event(identifier: String)
 
+	/// Get the nonce
+	case nonce
+
 	/// Get the public keys
 	case publicKeys
 
@@ -26,8 +29,8 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	/// Get the test results
 	case testResultsWithAuthToken(token: String)
 
-	/// Post the authorization token
-	case authorizationToken(token: String)
+	/// Get the test results
+	case testResultsWithIssuerSignatureMessage(body: Data)
 
 	// MARK: - Host
 
@@ -42,14 +45,17 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	/// The event endpoint
 	static let eventEndpoint = Configuration().getEventEndpoint()
 
+	/// The nonce endpoint
+	static let nonceEndpoint = Configuration().getNonceEndpoint()
+
 	/// The public keys endpoint
 	static let publicKeysEndpoint = Configuration().getPublicKeysEndpoint()
 
 	/// The test resutlsendpoint
 	static let testResultsEndpoint = Configuration().getTestResultsEndpoint()
 
-	/// The test resutlsendpoint
-	static let authorizationTokenEndpoint = "/to_be_decided"
+	/// The test result with ism endpoint
+	static let ismEndpoint = Configuration().getIsmEndpoint()
 
 	// MARK: - APIRouterProtocol
 
@@ -82,7 +88,7 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	/// The HTTP Method (POST, GET)
 	var method: HTTPMethod {
 
-		if case ApiRouter.authorizationToken = self {
+		if case ApiRouter.testResultsWithIssuerSignatureMessage = self {
 			return .post
 		}
 
@@ -99,14 +105,17 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 			case let .event(identifier):
 				return ApiRouter.eventEndpoint + "/" + identifier
 
+			case .nonce:
+				return ApiRouter.nonceEndpoint
+
 			case .publicKeys:
 				return ApiRouter.publicKeysEndpoint
 
 			case .testResults, .testResultsWithAuthToken:
 				return ApiRouter.testResultsEndpoint + "/"
 
-			case .authorizationToken:
-				return ApiRouter.authorizationTokenEndpoint
+			case .testResultsWithIssuerSignatureMessage:
+				return ApiRouter.ismEndpoint + "/"
 		}
 	}
 
@@ -123,6 +132,13 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 					URLQueryItem(name: "access_token", value: token)
 				]
 
+//			case let .testResultsWithIssuerSignatureMessage(accesToken, stoken, issuerCommitmentMessage):
+//				return [
+//					URLQueryItem(name: "access_token", value: accesToken),
+//					URLQueryItem(name: "stoken", value: stoken),
+//					URLQueryItem(name: "issuerCommitmentMessage", value: issuerCommitmentMessage)
+//				]
+
 			default:
 				return nil
 		}
@@ -131,9 +147,8 @@ enum ApiRouter: ApiRouterProtocol, URLRequestConvertible {
 	/// The http body
 	var body: Data? {
 
-		if case let ApiRouter.authorizationToken(token) = self {
-
-			return "token: \(token)".data(using: .utf8)
+		if case let .testResultsWithIssuerSignatureMessage(body) = self {
+			return body
 		}
 		return nil
 	}

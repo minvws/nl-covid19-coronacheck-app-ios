@@ -23,7 +23,7 @@ class CustomerStartViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		title = "Burger Start"
+		title = "Holder Start"
 
 		sceneView.primaryTitle = "Haal TestResultaat op"
 //		sceneView.secondaryTitle = "Bezoek event"

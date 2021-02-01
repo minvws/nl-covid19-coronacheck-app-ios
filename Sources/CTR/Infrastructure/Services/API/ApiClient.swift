@@ -27,6 +27,10 @@ protocol ApiClientProtocol {
 	/// - Parameter completionHandler: completion handler
 	func getPublicKeys(completionHandler: @escaping ([Issuer]) -> Void)
 
+	/// Get the nonce
+	/// - Parameter completionHandler: completion handler
+	func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void)
+
 	/// Get the test results
 	/// - Parameters:
 	///   - identifier: the identifier of the user
@@ -39,11 +43,17 @@ protocol ApiClientProtocol {
 	///   - completionHandler: the completion handler
 	func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void)
 
-	/// Post the authorization token
+	/// Get the test results with issue signature message
 	/// - Parameters:
-	///   - token: the authorization token
+	///   - accessToken: the access token
+	///   - stoken: the stoken
+	///   - issuerCommitmentMessage: the issuer commitment message
 	///   - completionHandler: the completion handler
-	func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void)
+	func getTestResultsWithISM(
+		accessToken: String,
+		stoken: String?,
+		issuerCommitmentMessage: String?,
+		completionHandler: @escaping (IsmResponse?) -> Void)
 }
 
 /// The Api Client for all API Calls.
@@ -110,6 +120,25 @@ class ApiClient: ApiClientProtocol {
 		}
 	}
 
+	/// Get the nonce
+	/// - Parameter completionHandler: completion handler
+	func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void) {
+
+		AF.request(
+			ApiRouter.nonce
+		)
+		.responseDecodable(of: NonceEnvelope.self) { response in
+
+			switch response.result {
+				case let .success(object):
+					completionHandler(object)
+
+				case .failure:
+					completionHandler(nil)
+			}
+		}
+	}
+
 	/// Get the test results
 	/// - Parameters:
 	///   - identifier: the identifier of the user
@@ -154,24 +183,67 @@ class ApiClient: ApiClientProtocol {
 		}
 	}
 
-	/// Post the authorization token
+	/// Get the test results with issue signature message
 	/// - Parameters:
-	///   - token: the authorization token
+	///   - accessToken: the access token
+	///   - stoken: the stoken
+	///   - issuerCommitmentMessage: the issuer commitment message
 	///   - completionHandler: the completion handler
-	func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void) {
+	func getTestResultsWithISM(
+		accessToken: String,
+		stoken: String?,
+		issuerCommitmentMessage: String?,
+		completionHandler: @escaping (IsmResponse?) -> Void) {
 
-		AF.request(
-			ApiRouter.authorizationToken(token: token)
-		).response { response in
+		guard let stoken = stoken, let issuerCommitmentMessage = issuerCommitmentMessage else {
+			return
+		}
 
-			switch response.result {
-				case .success:
-					completionHandler(true)
+		if let icm2 = convertToDictionary(text: issuerCommitmentMessage) {
 
-				case let .failure(error):
-					print(error)
-					completionHandler(false)
+			let rolus: [String: AnyObject] = [
+				"access_token": accessToken as AnyObject,
+				"stoken": stoken as AnyObject,
+				"icm": icm2 as AnyObject
+			]
+
+			let jsonData = try? JSONSerialization.data(withJSONObject: rolus, options: .prettyPrinted)
+
+			AF.request(
+				ApiRouter.testResultsWithIssuerSignatureMessage(body: jsonData!)
+			)
+			.responseDecodable(of: IsmResponse.self) { response in
+
+				switch response.result {
+					case let .success(object):
+						completionHandler(object)
+
+					case let .failure(error):
+						print(error)
+						completionHandler(nil)
+				}
 			}
 		}
+	}
+
+	func convertToDictionary(text: String) -> [String: AnyObject]? {
+		if let data = text.data(using: .utf8) {
+			do {
+				return try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject]
+			} catch {
+				print(error.localizedDescription)
+			}
+		}
+		return nil
+	}
+
+	func generateString<T>(object: T) -> String where T: Codable {
+
+		if let data = try? JSONEncoder().encode(object),
+		   let convertedToString = String(data: data, encoding: .utf8) {
+			print("CTR: Converted to \(convertedToString)")
+			return convertedToString
+		}
+		return ""
 	}
 }

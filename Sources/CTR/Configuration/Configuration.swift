@@ -21,6 +21,10 @@ protocol ConfigurationProtocol {
 	/// - Returns: the event endpoint
 	func getEventEndpoint() -> String
 
+	/// Get the endpoint for the nonce
+	/// - Returns: the nonce endpoint
+	func getNonceEndpoint() -> String
+
 	/// Get the endpoint for the public keys
 	/// - Returns: the public keys endpoint
 	func getPublicKeysEndpoint() -> String
@@ -28,6 +32,10 @@ protocol ConfigurationProtocol {
 	/// Get the endpoint for the test results
 	/// - Returns: the test results endpoint
 	func getTestResultsEndpoint() -> String
+
+	/// Get the endpoint for the test results with ism
+	/// - Returns: the test results endpoint
+	func getIsmEndpoint() -> String
 }
 
 class Configuration: ConfigurationProtocol {
@@ -89,6 +97,16 @@ class Configuration: ConfigurationProtocol {
 		return value
 	}
 
+	/// Get the endpoint for the nonce
+	/// - Returns: the nonce endpoint
+	func getNonceEndpoint() -> String {
+
+		guard let value = api["nonceEndpoint"] as? String else {
+			fatalError("Configuration: No Nonce Endpoint provided")
+		}
+		return value
+	}
+
 	/// Get the endpoint for the public keys
 	/// - Returns: the public keys endpoint
 	func getPublicKeysEndpoint() -> String {
@@ -105,6 +123,16 @@ class Configuration: ConfigurationProtocol {
 
 		guard let value = api["testresultsEndpoint"] as? String else {
 			fatalError("Configuration: No Public Keys Endpoint provided")
+		}
+		return value
+	}
+
+	/// Get the endpoint for the test results with ism
+	/// - Returns: the test results endpoint
+	func getIsmEndpoint() -> String {
+
+		guard let value = api["ismEndpoint"] as? String else {
+			fatalError("Configuration: No ISM Endpoint provided")
 		}
 		return value
 	}

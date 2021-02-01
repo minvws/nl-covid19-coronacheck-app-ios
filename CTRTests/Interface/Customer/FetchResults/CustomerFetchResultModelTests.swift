@@ -100,8 +100,7 @@ class CustomerFetchResultModelTests: XCTestCase {
 		var getPublicKeysCalled = false
 		var getTestResultsCalled = false
 		var getTestResultsWithTokenCalled = false
-		var postAuthorizationTokenCalled = false
-		var postAuthorizationTokenToken: String?
+		var getNonceCalled = false
 		var getTestResultsIdentifier: String?
 		var getTestResultsToken: String?
 
@@ -113,6 +112,11 @@ class CustomerFetchResultModelTests: XCTestCase {
 		func getEvent(identifier: String, completionHandler: @escaping (EventEnvelope?) -> Void) {
 
 			getEventCalled = true
+		}
+
+		func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void) {
+
+			getNonceCalled = true
 		}
 
 		func getPublicKeys(completionHandler: @escaping ([Issuer]) -> Void) {
@@ -131,12 +135,6 @@ class CustomerFetchResultModelTests: XCTestCase {
 			getTestResultsWithTokenCalled = true
 			getTestResultsToken = token
 		}
-
-		func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void) {
-
-			postAuthorizationTokenCalled = true
-			postAuthorizationTokenToken = token
-		}
 	}
 
 	// MARK: Tests
@@ -153,7 +151,7 @@ class CustomerFetchResultModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
-		XCTAssertFalse(apiSpy.postAuthorizationTokenCalled, "Methos should NOT be called when there is no token")
+		XCTAssertFalse(apiSpy.getNonceCalled, "Method should NOT be called when there is no token")
 	}
 
 	/// Test the secondary button tapped, open id returns a token
@@ -171,8 +169,8 @@ class CustomerFetchResultModelTests: XCTestCase {
 		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
 //		XCTAssertTrue(apiSpy.postAuthorizationTokenCalled, "Methos should be called")
 //		XCTAssertEqual(apiSpy.postAuthorizationTokenToken, openIdSpy.token, "Token must match")
-		XCTAssertTrue(apiSpy.getTestResultsWithTokenCalled, "Methos should be called")
-		XCTAssertEqual(apiSpy.getTestResultsToken, openIdSpy.token, "Token must match")
+		XCTAssertTrue(apiSpy.getNonceCalled, "Methos should be called")
+//		XCTAssertEqual(apiSpy.getTestResultsToken, openIdSpy.token, "Token must match")
 	}
 
 	/// Test the secondary button tapped, open id returns an error
@@ -188,6 +186,6 @@ class CustomerFetchResultModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
-		XCTAssertFalse(apiSpy.postAuthorizationTokenCalled, "Methos should NOT be called when there is an error")
+		XCTAssertFalse(apiSpy.getNonceCalled, "Method should NOT be called when there is an error")
 	}
 }

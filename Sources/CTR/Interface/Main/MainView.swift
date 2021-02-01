@@ -27,7 +27,7 @@ class MainView: BaseView {
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
-		view.alignment = .leading
+		view.alignment = .center
 		view.distribution = .fill
 		view.spacing = 40.0
 		return view

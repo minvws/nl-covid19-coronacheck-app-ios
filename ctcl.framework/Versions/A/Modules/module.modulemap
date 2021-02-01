@@ -1,6 +1,6 @@
 framework module "Ctcl" {
 	header "ref.h"
-    header "Jsoninterface.objc.h"
+    header "Clmobile.objc.h"
     header "Universe.objc.h"
     header "Ctcl.h"
 

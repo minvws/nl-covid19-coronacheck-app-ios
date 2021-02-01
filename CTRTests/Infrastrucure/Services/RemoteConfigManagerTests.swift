@@ -217,7 +217,7 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
 			storeUrl: nil,
-			deactivated: "deactivated",
+			deactivated: true,
 			informationURL: nil
 		)
 		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)

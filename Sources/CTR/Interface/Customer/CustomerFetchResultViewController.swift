@@ -22,6 +22,9 @@ class FetchResultViewModel: Logging {
 	/// The API Client
 	var apiClient: ApiClientProtocol = ApiClient()
 
+	/// The crypto manager
+	var cryptoManager: CryptoManagerProtocol = CryptoManager()
+
 	/// The date formatter for the timestamps
 	lazy var dateFormatter: DateFormatter = {
 
@@ -35,6 +38,8 @@ class FetchResultViewModel: Logging {
 
 	/// The user identifier
 	var userIdentifier: String?
+
+	weak var presentingViewController: UIViewController?
 
 	// MARK: - Bindable properties
 
@@ -68,29 +73,64 @@ class FetchResultViewModel: Logging {
 	/// User tapped on the second button
 	func secondaryButtonTapped(_ viewController: UIViewController) {
 
-		openIdClient.requestAccessToken(
-			presenter: viewController) { accessToken in
+		self.presentingViewController = viewController
+		fetchNonce()
+	}
 
-			self.message = "Access token: \(accessToken ?? "nil")"
-			if let token = accessToken {
-				self.handleAccessToken(token)
-			}
-		} onError: { error in
-			self.message = "Authorization error: \(error?.localizedDescription ?? "Unknown error")"
+	func getAccessToken() {
+
+		guard let viewController = presentingViewController else {
+			message = "Can't present login"
+			return
 		}
+
+		openIdClient.requestAccessToken(
+			presenter: viewController) { [weak self] accessToken in
+
+			self?.message = "Access token: \(accessToken ?? "nil")"
+			if let token = accessToken {
+				self?.handleAccessToken(token)
+			}
+		} onError: { [weak self] error in
+			self?.message = "Authorization error: \(error?.localizedDescription ?? "Unknown error")"
+		}
+	}
+
+	/// Fetch a nonce from the server
+	func fetchNonce() {
+		apiClient.getNonce { [weak self] envelope in
+
+			if let envelope = envelope {
+				self?.cryptoManager.setNonce(envelope.nonce)
+				self?.cryptoManager.setStoken(envelope.stoken)
+				self?.cryptoManager.debug()
+				self?.getAccessToken()
+			} else {
+				self?.message = "Can't connect"
+			}
+		}
+	}
+
+	func getTestResults() {
+		//		apiClient.getTestResultsWithToken(token: accessToken) { [weak self] envelope in
+		//
+		//			self?.handleResponse(envelope)
+		//		}
 	}
 
 	/// Post the access token
 	/// - Parameter accessToken: the access token
 	func handleAccessToken(_ accessToken: String) {
 
-//		apiClient.postAuthorizationToken(accessToken) { success in
-//			self.message += "\n delivered to API \(success)"
-//		}
+		if let icm = cryptoManager.generateCommitment(), let stoken = cryptoManager.getStoken() {
+			self.logDebug("Woot Woot")
 
-		apiClient.getTestResultsWithToken(token: accessToken) { [weak self] envelope in
+			apiClient.getTestResultsWithISM(accessToken: accessToken, stoken: stoken, issuerCommitmentMessage: icm) { (result) in
+//				self.handleResponse(result)
 
-			self?.handleResponse(envelope)
+				self.logDebug("ISM Response: \(String(describing: result))")
+
+			}
 		}
 	}
 
@@ -126,16 +166,16 @@ class FetchResultViewModel: Logging {
 	/// Fetch some test results from the API
 	func fetchFakeTestResults() {
 
-		guard let identifier = userIdentifier else {
-			return
-		}
+//		guard let identifier = userIdentifier else {
+//			return
+//		}
+//
+//		message = ""
 
-		message = ""
-
-		ApiClient().getTestResults(identifier: identifier) { [weak self] envelope in
-
-			self?.handleResponse(envelope)
-		}
+//		ApiClient().getTestResults(identifier: identifier) { [weak self] envelope in
+//
+//			self?.handleResponse(envelope)
+//		}
 	}
 }
 
@@ -168,7 +208,7 @@ class CustomerFetchResultViewController: BaseViewController {
 		super.viewDidLoad()
 
 		// Do any additional setup after loading the view.
-		title = "Burger Fetch Result"
+		title = "Holder Fetch Result"
 
 		viewModel.$primaryButtonTitle.binding = {
 
