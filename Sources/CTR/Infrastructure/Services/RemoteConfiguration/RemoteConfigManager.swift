@@ -70,7 +70,9 @@ class RemoteConfigManager: RemoteConfigManagerProtocol, Logging {
 				self.logDebug("Updated remote configuration: \(remoteConfig)")
 
 				if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-					completion(.updateRequired(remoteConfig))
+					completion(.actionRequired(remoteConfig))
+				} else if remoteConfig.isDeactivated {
+					completion(.actionRequired(remoteConfig))
 				} else {
 					completion(.noActionNeeded)
 				}

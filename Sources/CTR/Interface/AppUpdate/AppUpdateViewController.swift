@@ -10,10 +10,13 @@ import UIKit
 class AppUpdateViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: AppUpdateViewModel
+	let viewModel: AppUpdateViewModel
 
 	/// The view
 	let sceneView = AppUpdateView()
+
+	/// The error Message
+	var errorMessage: String?
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -45,26 +48,43 @@ class AppUpdateViewController: BaseViewController {
 
         super.viewDidLoad()
 
+		// Do the binding
+		setupBinding()
+
+		// Actions
+		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+    }
+
+	private func setupBinding() {
+
 		// Binding
-		viewModel.$showCannotOpenAppStoreAlert.binding = {
+		viewModel.$showCannotOpenAlert.binding = {
 			if $0 {
 				self.showCannotOpenUrl()
 			}
 		}
 		viewModel.$message.binding = {
+
 			self.sceneView.messageLabel.text = $0
 		}
+		viewModel.$title.binding = {
 
-		// Fixed texts & actions
-		sceneView.titleLabel.text = .updateAppTitle
-		sceneView.primaryButton.setTitle(.updateAppButton, for: .normal)
-		sceneView.primaryButton.touchUpInside(self, action: #selector(updateButtonTapped))
-    }
+			self.sceneView.titleLabel.text = $0
+		}
+		viewModel.$errorMessage.binding = {
+
+			self.errorMessage = $0
+		}
+		viewModel.$actionTitle.binding = {
+
+			self.sceneView.primaryButton.setTitle($0, for: .normal)
+		}
+	}
 
 	/// User tapped on the button
-    @objc private func updateButtonTapped() {
+    @objc private func primaryButtonTapped() {
 
-		viewModel.updateButtonTapped()
+		viewModel.actionButtonTapped()
     }
 
 	/// Show alert that we can't open the url
@@ -72,7 +92,7 @@ class AppUpdateViewController: BaseViewController {
 
 		let alertController = UIAlertController(
 			title: .errorTitle,
-			message: .updateAppErrorMessage,
+			message: errorMessage,
 			preferredStyle: .alert)
 		alertController.addAction(
 			UIAlertAction(

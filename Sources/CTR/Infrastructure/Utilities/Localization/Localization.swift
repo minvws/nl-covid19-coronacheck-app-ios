@@ -68,4 +68,9 @@ extension String {
 
 		return Localization.string(for: "general.error.title")
 	}
+
+	static var learnMore: String {
+
+		return Localization.string(for: "general.learnMore")
+	}
 }
