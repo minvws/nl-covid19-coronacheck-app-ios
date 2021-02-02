@@ -13,26 +13,11 @@ protocol CustomerCoordinatorDelegate: AnyObject {
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults()
 
-	/// Navigate to the Visit Event Scene
-	func navigateToVisitEvent()
-
 	// Navigate to the Generate Customer QR Scene
 	func navigateToCustomerQR()
 
 	/// Navigate to the start fo the customer flow
 	func navigateToStart()
-
-	/// Set the test result
-	/// - Parameter result: the test result
-	func setTestResultEnvelope(_ result: TestResultEnvelope?)
-
-//	/// Set the test result
-//	/// - Parameter result: the test result
-//	func setTestResult(_ result: TestResult?)
-
-	/// Set the event
-	/// - Parameter event: the event
-	func setEvent(_ event: EventEnvelope)
 
 	/// Dismiss the viewcontroller
 	func dismiss()
@@ -81,16 +66,6 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	// Navigate to the Visit Event Scene
-	func navigateToVisitEvent() {
-
-		let viewController = CustomerScanViewController()
-		viewController.coordinator = self
-		viewController.issuers = coronaTestProof?.issuers ?? []
-		viewController.testResults = coronaTestProof?.testResultEnvelope
-		navigationController.pushViewController(viewController, animated: true)
-	}
-
 	// Navigate to the Generate Customer QR Scene
 	func navigateToCustomerQR() {
 
@@ -108,28 +83,6 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 		}
 		navigationController.popToViewController(navigationController.viewControllers[1], animated: true)
 	}
-
-	/// Set the test result
-	/// - Parameter result: the test result
-	func setTestResultEnvelope(_ result: TestResultEnvelope?) {
-
-		coronaTestProof?.testResultEnvelope = result
-		coronaTestProof?.checkEvent()
-	}
-
-	/// Set the event
-	/// - Parameter event: the event
-	func setEvent(_ event: EventEnvelope) {
-
-		coronaTestProof?.eventEnvelope = event
-	}
-
-//	/// Set the test result
-//	/// - Parameter result: the test result
-//	func setTestResult(_ result: TestResult?) {
-//
-//		coronaTestProof?.testResultForEvent = result
-//	}
 
 	/// Dismiss the viewcontroller
 	func dismiss() {

@@ -77,6 +77,7 @@ class FetchResultViewModel: Logging {
 		fetchNonce()
 	}
 
+	/// Get the access token
 	func getAccessToken() {
 
 		guard let viewController = presentingViewController else {
@@ -89,7 +90,7 @@ class FetchResultViewModel: Logging {
 
 			self?.message = "Access token: \(accessToken ?? "nil")"
 			if let token = accessToken {
-				self?.handleAccessToken(token)
+				self?.getTestResults(token)
 			}
 		} onError: { [weak self] error in
 			self?.message = "Authorization error: \(error?.localizedDescription ?? "Unknown error")"
@@ -98,6 +99,7 @@ class FetchResultViewModel: Logging {
 
 	/// Fetch a nonce from the server
 	func fetchNonce() {
+
 		apiClient.getNonce { [weak self] envelope in
 
 			if let envelope = envelope {
@@ -111,48 +113,33 @@ class FetchResultViewModel: Logging {
 		}
 	}
 
-	func getTestResults() {
-		//		apiClient.getTestResultsWithToken(token: accessToken) { [weak self] envelope in
-		//
-		//			self?.handleResponse(envelope)
-		//		}
-	}
-
 	/// Post the access token
 	/// - Parameter accessToken: the access token
-	func handleAccessToken(_ accessToken: String) {
+	func getTestResults(_ accessToken: String) {
 
-		if let icm = cryptoManager.generateCommitment(), let stoken = cryptoManager.getStoken() {
-			self.logDebug("Woot Woot")
+		if let icm = cryptoManager.generateCommitmentMessage(),
+		   let icmDictionary = icm.convertToDictionary(),
+		   let stoken = cryptoManager.getStoken() {
 
-			apiClient.getTestResultsWithISM(accessToken: accessToken, stoken: stoken, issuerCommitmentMessage: icm) { (result) in
-//				self.handleResponse(result)
+			let dictionary: [String: AnyObject] = [
+				"access_token": accessToken as AnyObject,
+				"stoken": stoken as AnyObject,
+				"icm": icmDictionary as AnyObject
+			]
 
-				self.logDebug("ISM Response: \(String(describing: result))")
-
+			apiClient.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] result in
+				self?.logDebug("ISM Response: \(String(describing: result))")
+				self?.handleTestProofsResponse(result)
 			}
 		}
 	}
 
-	private func handleResponse(_ envelope: TestResultEnvelope?) {
+	private func handleTestProofsResponse(_ testProofs: TestProofs?) {
 
-		coordinator?.setTestResultEnvelope(envelope)
-		logDebug("handleResponse: \(String(describing: envelope))")
-
-		if let envelope = envelope {
-			for result in envelope.testResults {
-
-				var type = ""
-				if let types = envelope.types {
-					for candidate in types where result.testType == candidate.identifier {
-						type = candidate.name
-					}
-				}
-
-				let date = Date(timeIntervalSince1970: TimeInterval(result.dateTaken))
-				message += "Test (\(type)) op \(dateFormatter.string(from: date)): \(result.result == 0 ? "NEG" : "POS")\n"
-			}
+		if let proofs = testProofs {
+			cryptoManager.setProofs(proofs)
 		}
+
 		// Show the button
 		tertiaryButtonTitle = "Genereer toegangsbewijs"
 	}
@@ -166,16 +153,16 @@ class FetchResultViewModel: Logging {
 	/// Fetch some test results from the API
 	func fetchFakeTestResults() {
 
-//		guard let identifier = userIdentifier else {
-//			return
-//		}
-//
-//		message = ""
+		guard let identifier = userIdentifier else {
+			return
+		}
 
-//		ApiClient().getTestResults(identifier: identifier) { [weak self] envelope in
-//
-//			self?.handleResponse(envelope)
-//		}
+		message = ""
+
+		apiClient.getTestResults(identifier: identifier) { result in
+			self.logDebug("ISM Response: \(String(describing: result))")
+			self.handleTestProofsResponse(result)
+		}
 	}
 }
 

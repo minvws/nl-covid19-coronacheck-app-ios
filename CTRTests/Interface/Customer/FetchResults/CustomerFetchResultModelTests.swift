@@ -95,28 +95,20 @@ class CustomerFetchResultModelTests: XCTestCase {
 
 	class ApiSpy: ApiClientProtocol {
 
-		var getAgentEnvelopeCalled = false
-		var getEventCalled = false
+		var getNonceCalled = false
+		var shouldReturnNonce = false
+		var nonceEnvelope: NonceEnvelope?
 		var getPublicKeysCalled = false
 		var getTestResultsCalled = false
-		var getTestResultsWithTokenCalled = false
-		var getNonceCalled = false
 		var getTestResultsIdentifier: String?
-		var getTestResultsToken: String?
-
-		func getAgentEnvelope(identifier: String, completionHandler: @escaping (AgentEnvelope?) -> Void) {
-
-			getAgentEnvelopeCalled = true
-		}
-
-		func getEvent(identifier: String, completionHandler: @escaping (EventEnvelope?) -> Void) {
-
-			getEventCalled = true
-		}
+		var getTestResultsWithISMCalled = false
 
 		func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void) {
 
 			getNonceCalled = true
+			if shouldReturnNonce {
+				completionHandler(nonceEnvelope)
+			}
 		}
 
 		func getPublicKeys(completionHandler: @escaping ([Issuer]) -> Void) {
@@ -124,68 +116,50 @@ class CustomerFetchResultModelTests: XCTestCase {
 			getPublicKeysCalled = true
 		}
 
-		func getTestResults(identifier: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
+		func getTestResults(identifier: String, completionHandler: @escaping (TestProofs?) -> Void) {
 
 			getTestResultsCalled = true
 			getTestResultsIdentifier = identifier
 		}
 
-		func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
+		func fetchTestResultsWithISM(dictionary: [String: AnyObject], completionHandler: @escaping (TestProofs?) -> Void) {
 
-			getTestResultsWithTokenCalled = true
-			getTestResultsToken = token
+			getTestResultsWithISMCalled = true
 		}
 	}
 
 	// MARK: Tests
 
-	/// Test the secondary button tapped, open id returns no token
-	func testSecondaryButtonTappedNoToken() {
+	/// Test the secondary button tapped, api returns no nonce
+	func testSecondaryButtonTappedNoNonce() {
 
 		// Given
 		let apiSpy = ApiSpy()
+		apiSpy.shouldReturnNonce = false
 		sut?.apiClient = apiSpy
 
 		// When
 		sut?.secondaryButtonTapped(UIViewController())
 
 		// Then
-		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
-		XCTAssertFalse(apiSpy.getNonceCalled, "Method should NOT be called when there is no token")
+		XCTAssertTrue(apiSpy.getNonceCalled, "Method should be called")
+		XCTAssertFalse(openIdSpy.requestAccessTokenCalled, "Access token should not be requested without nonce")
 	}
 
-	/// Test the secondary button tapped, open id returns a token
-	func testSecondaryButtonTappedWithToken() {
-
-		// Given
-		let apiSpy = ApiSpy()
-		sut?.apiClient = apiSpy
-		openIdSpy.token = "testSecondaryButtonTappedWithToken"
-
-		// When
-		sut?.secondaryButtonTapped(UIViewController())
-
-		// Then
-		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
-//		XCTAssertTrue(apiSpy.postAuthorizationTokenCalled, "Methos should be called")
-//		XCTAssertEqual(apiSpy.postAuthorizationTokenToken, openIdSpy.token, "Token must match")
-		XCTAssertTrue(apiSpy.getNonceCalled, "Methos should be called")
-//		XCTAssertEqual(apiSpy.getTestResultsToken, openIdSpy.token, "Token must match")
-	}
-
-	/// Test the secondary button tapped, open id returns an error
-	func testSecondaryButtonTappedWithError() {
-
-		// Given
-		let apiSpy = ApiSpy()
-		sut?.apiClient = apiSpy
-		openIdSpy.shouldError = true
-
-		// When
-		sut?.secondaryButtonTapped(UIViewController())
-
-		// Then
-		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Method should be called")
-		XCTAssertFalse(apiSpy.getNonceCalled, "Method should NOT be called when there is an error")
-	}
+//	/// Test the secondary button tapped, api returns with nonce
+//	func testSecondaryButtonTappedWithNonce() {
+//
+//		// Given
+//		let apiSpy = ApiSpy()
+//		apiSpy.shouldReturnNonce = false
+//		apiSpy.nonceEnvelope = NonceEnvelope(nonce: "test", stoken: "test")
+//		sut?.apiClient = apiSpy
+//
+//		// When
+//		sut?.secondaryButtonTapped(UIViewController())
+//
+//		// Then
+//		XCTAssertTrue(apiSpy.getNonceCalled, "Method should be called")
+//		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Access token should be requested")
+//	}
 }

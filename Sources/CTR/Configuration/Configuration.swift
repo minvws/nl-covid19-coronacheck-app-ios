@@ -13,14 +13,6 @@ protocol ConfigurationProtocol {
 	/// - Returns: the host for the API
 	func getAPIHost() -> String
 
-	/// Get the endpoint for the agent
-	/// - Returns: the agent endpoint
-	func getAgentEndpoint() -> String
-
-	/// Get the endpoint for the event
-	/// - Returns: the event endpoint
-	func getEventEndpoint() -> String
-
 	/// Get the endpoint for the nonce
 	/// - Returns: the nonce endpoint
 	func getNonceEndpoint() -> String
@@ -28,10 +20,6 @@ protocol ConfigurationProtocol {
 	/// Get the endpoint for the public keys
 	/// - Returns: the public keys endpoint
 	func getPublicKeysEndpoint() -> String
-
-	/// Get the endpoint for the test results
-	/// - Returns: the test results endpoint
-	func getTestResultsEndpoint() -> String
 
 	/// Get the endpoint for the test results with ism
 	/// - Returns: the test results endpoint
@@ -77,26 +65,6 @@ class Configuration: ConfigurationProtocol {
 		return value
 	}
 
-	/// Get the endpoint for the agent
-	/// - Returns: the agent endpoint
-	func getAgentEndpoint() -> String {
-
-		guard let value = api["agentEndpoint"] as? String else {
-			fatalError("Configuration: No Agent Endpoint provided")
-		}
-		return value
-	}
-
-	/// Get the endpoint for the event
-	/// - Returns: the event endpoint
-	func getEventEndpoint() -> String {
-
-		guard let value = api["eventEndpoint"] as? String else {
-			fatalError("Configuration: No Event Endpoint provided")
-		}
-		return value
-	}
-
 	/// Get the endpoint for the nonce
 	/// - Returns: the nonce endpoint
 	func getNonceEndpoint() -> String {
@@ -112,16 +80,6 @@ class Configuration: ConfigurationProtocol {
 	func getPublicKeysEndpoint() -> String {
 
 		guard let value = api["publicKeysEndpoint"] as? String else {
-			fatalError("Configuration: No Public Keys Endpoint provided")
-		}
-		return value
-	}
-
-	/// Get the endpoint for the test results
-	/// - Returns: the test results endpoint
-	func getTestResultsEndpoint() -> String {
-
-		guard let value = api["testresultsEndpoint"] as? String else {
 			fatalError("Configuration: No Public Keys Endpoint provided")
 		}
 		return value

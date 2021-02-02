@@ -21,32 +21,6 @@ struct TestResultEnvelope: Codable {
 	}
 }
 
-struct Ism: Codable {
-
-	var identifier: String
-	var ism: String
-
-	/// Key mapping
-	enum CodingKeys: String, CodingKey {
-		case identifier = "uuid"
-		case ism = "ism"
-	}
-}
-
-struct IsmResponse: Codable {
-
-	var isms: [Ism]
-	var signatures: [TestSignature]
-	var types: [TestType]?
-
-	enum CodingKeys: String, CodingKey {
-
-		case isms = "test_results"
-		case signatures = "test_signatures"
-		case types = "test_types"
-	}
-}
-
 struct TestSignature: Codable {
 
 	var identifier: String
@@ -73,19 +47,6 @@ struct TestResult: Codable {
 		case testType = "test_type"
 		case dateTaken = "date_taken"
 		case result
-	}
-}
-
-struct TestType: Codable {
-	var name: String
-	var identifier: String
-	var maxValidity: Int?
-
-	/// Key mapping
-	enum CodingKeys: String, CodingKey {
-		case identifier = "uuid"
-		case name
-		case maxValidity = "max_validity"
 	}
 }
 

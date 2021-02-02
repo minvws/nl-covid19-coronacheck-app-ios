@@ -6,16 +6,10 @@
 	<dict>
 		<key>apiHost</key>
 		<string>https://api-ct.bananenhalen.nl</string>
-		<key>agentEndpoint</key>
-		<string>/issuer/get_agent</string>
-		<key>eventEndpoint</key>
-		<string>/issuer/get_event</string>
 		<key>nonceEndpoint</key>
 		<string>/holder/get_nonce</string>
 		<key>publicKeysEndpoint</key>
 		<string>/holder/get_public_keys</string>
-		<key>testresultsEndpoint</key>
-		<string>/holder/get_test_results</string>
 		<key>ismEndpoint</key>
 		<string>/holder/get_test_ism</string>
 	</dict>

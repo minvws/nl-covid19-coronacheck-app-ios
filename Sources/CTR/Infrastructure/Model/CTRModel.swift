@@ -31,194 +31,179 @@ class CTRModel {
 
 	var issuers: [Issuer] = []
 
-	var testResultEnvelope: TestResultEnvelope?
-
-	var testResultForEvent: TestResult?
-
-	var eventEnvelope: EventEnvelope?
+//	var testResultEnvelope: TestResultEnvelope?
+//
+//	var testResultForEvent: TestResult?
+//
+//	var eventEnvelope: EventEnvelope?
 
 	var apiClient: ApiClientProtocol = ApiClient()
 
 	func populate() {
 
 		fetchIssuers()
-		fetchAgent()
-//		getEvent()
 	}
 
 	func fetchIssuers() {
 
 		apiClient.getPublicKeys { issuers in
 			self.issuers = issuers
-			self.getEvent()
-		}
-	}
-
-	func fetchAgent() {
-
-		apiClient.getAgentEnvelope(identifier: eventIdentifier) { envelope in
-			self.agentEnvelope = envelope
-		}
-	}
-
-	func getEvent() {
-
-		apiClient.getEvent(identifier: eventIdentifier) { [self] envelope in
-			self.eventEnvelope = envelope
+//			self.getEvent()
 		}
 	}
 
 	func checkEvent() {
 
-		guard let testResultsEnvelope = testResultEnvelope,
-			  let eventEnvelope = eventEnvelope else {
-			print("CTR: error checking, no test results")
-			return
-		}
-
-		var foundValidTest: TestResult?
-
-		for validTestType in eventEnvelope.event.validTestsTypes {
-			for userTest in testResultsEnvelope.testResults {
-
-				// Same Test Type (PCR etc)
-				if userTest.testType == validTestType.identifier {
-
-					// Still Valid
-					if let maxValidity = validTestType.maxValidity,
-					   userTest.dateTaken + Int64(maxValidity) >= Int64(Date().timeIntervalSince1970) {
-
-						print("CTR: Found a test for this event: \(validTestType.name), result was \(userTest.result)\n")
-						// Replace or store
-						if let existing = foundValidTest {
-
-							if userTest.dateTaken >= existing.dateTaken {
-								foundValidTest = userTest
-							}
-
-						} else {
-							foundValidTest = userTest
-						}
-					} else {
-						print("CTR: Test expired for this event")
-					}
-				} else {
-					print("CTR: Test not for this event")
-				}
-			}
-		}
-		print("CTR: Check Event result: \(String(describing: foundValidTest))")
-		testResultForEvent = foundValidTest
+//		guard let testResultsEnvelope = testResultEnvelope,
+//			  let eventEnvelope = eventEnvelope else {
+//			print("CTR: error checking, no test results")
+//			return
+//		}
+//
+//		var foundValidTest: TestResult?
+//
+//		for validTestType in eventEnvelope.event.validTestsTypes {
+//			for userTest in testResultsEnvelope.testResults {
+//
+//				// Same Test Type (PCR etc)
+//				if userTest.testType == validTestType.identifier {
+//
+//					// Still Valid
+//					if let maxValidity = validTestType.maxValidity,
+//					   userTest.dateTaken + Int64(maxValidity) >= Int64(Date().timeIntervalSince1970) {
+//
+//						print("CTR: Found a test for this event: \(validTestType.name), result was \(userTest.result)\n")
+//						// Replace or store
+//						if let existing = foundValidTest {
+//
+//							if userTest.dateTaken >= existing.dateTaken {
+//								foundValidTest = userTest
+//							}
+//
+//						} else {
+//							foundValidTest = userTest
+//						}
+//					} else {
+//						print("CTR: Test expired for this event")
+//					}
+//				} else {
+//					print("CTR: Test not for this event")
+//				}
+//			}
+//		}
+//		print("CTR: Check Event result: \(String(describing: foundValidTest))")
+//		testResultForEvent = foundValidTest
 	}
 
 	func validateCustomerQR() -> Bool {
 
-		guard let agentEnvelope = agentEnvelope,
-			  let customerQR = customerQR else {
-			return false
-		}
-
-		// Unencrypted
-
-		if let messageBytes = stringToBytes(base64EncodedInput: customerQR.payload),
-		   let publicKeyBytes = stringToBytes(base64EncodedInput: customerQR.publicKey),
-		   let secretKey = agentEnvelope.agent.event.privateKey,
-		   let secretKeyBytes = stringToBytes(base64EncodedInput: secretKey),
-		   let nonceBytes = stringToBytes(base64EncodedInput: customerQR.nonce) {
-
-			let sodium = Sodium()
-
-			if let unencryptedBytes = sodium.box.open(
-				authenticatedCipherText: messageBytes,
-				senderPublicKey: publicKeyBytes,
-				recipientSecretKey: secretKeyBytes,
-				nonce: nonceBytes
-			) {
-
-				let unencryptedData = Data(bytes: unencryptedBytes, count: unencryptedBytes.count)
-				let unencryptedString = String(bytes: unencryptedBytes, encoding: .utf8)
-
-				print("CTR: Decrypted: \(unencryptedString ?? "")")
-
-				do {
-					let payload = try JSONDecoder().decode(Payload.self, from: unencryptedData)
-					if let result = payload.test?.result {
-						return result == 0
-					}
-
-					return false
-				} catch let error {
-					print("CTR: error! \(error)")
-					return false
-				}
-			}
-		}
+//		guard let agentEnvelope = agentEnvelope,
+//			  let customerQR = customerQR else {
+//			return false
+//		}
+//
+//		// Unencrypted
+//
+//		if let messageBytes = stringToBytes(base64EncodedInput: customerQR.payload),
+//		   let publicKeyBytes = stringToBytes(base64EncodedInput: customerQR.publicKey),
+//		   let secretKey = agentEnvelope.agent.event.privateKey,
+//		   let secretKeyBytes = stringToBytes(base64EncodedInput: secretKey),
+//		   let nonceBytes = stringToBytes(base64EncodedInput: customerQR.nonce) {
+//
+//			let sodium = Sodium()
+//
+//			if let unencryptedBytes = sodium.box.open(
+//				authenticatedCipherText: messageBytes,
+//				senderPublicKey: publicKeyBytes,
+//				recipientSecretKey: secretKeyBytes,
+//				nonce: nonceBytes
+//			) {
+//
+//				let unencryptedData = Data(bytes: unencryptedBytes, count: unencryptedBytes.count)
+//				let unencryptedString = String(bytes: unencryptedBytes, encoding: .utf8)
+//
+//				print("CTR: Decrypted: \(unencryptedString ?? "")")
+//
+//				do {
+//					let payload = try JSONDecoder().decode(Payload.self, from: unencryptedData)
+//					if let result = payload.test?.result {
+//						return result == 0
+//					}
+//
+//					return false
+//				} catch let error {
+//					print("CTR: error! \(error)")
+//					return false
+//				}
+//			}
+//		}
 
 		return false
 	}
 
 	func generateCustomerQRString() -> String {
 
-		guard let event = eventEnvelope?.event,
-			  let eventIdentifier = event.identifier,
-			  let testResultEnvelope = testResultEnvelope else {
-			return ""
-		}
-
-		var signature: TestSignature?
-		if let testResult = testResultForEvent {
-			for candidate in testResultEnvelope.signatures where candidate.identifier == testResult.identifier {
-				signature = candidate
-			}
-		}
-
-		let payload = Payload(
-			identifier: eventIdentifier,
-			time: Int64(Date().timeIntervalSince1970),
-			test: testResultForEvent,
-			signature: signature?.signature
-		)
-
-		let payloadString = generateString(object: payload)
-		print("CTR:  Unencrypted payload: \(payloadString)")
-
-		let sodium = Sodium()
-
-		if let nonceBytes = sodium.randomBytes.buf(length: 24),
-		   let publicKey = event.publicKey,
-		   let publicKeyBytes = stringToBytes(base64EncodedInput: publicKey),
-		   let payloadBytes = stringToBytes(rawInput: payloadString),
-		   let keyPair = sodium.box.keyPair() {
-
-			let secretKeyBytes = keyPair.secretKey
-
-			if let encryptedPayloadBytes = sodium.box.seal(
-				message: payloadBytes,
-				recipientPublicKey: publicKeyBytes,
-				senderSecretKey: secretKeyBytes,
-				nonce: nonceBytes) {
-
-				let nonceString = bytesToBase64String(nonceBytes)
-
-				let encryptedPayloadBase64String = bytesToBase64String(encryptedPayloadBytes)
-
-				let customerQR = CustomerQR(
-					publicKey: bytesToBase64String(keyPair.publicKey),
-					nonce: nonceString,
-					payload: encryptedPayloadBase64String
-				)
-
-				return generateString(object: customerQR)
-			}
-		}
-
-		let customerQR = CustomerQR(
-			publicKey: "x",
-			nonce: "x",
-			payload: payloadString
-		)
-
-		return generateString(object: customerQR)
+//		guard let event = eventEnvelope?.event,
+//			  let eventIdentifier = event.identifier,
+//			  let testResultEnvelope = testResultEnvelope else {
+//			return ""
+//		}
+//
+//		var signature: TestSignature?
+//		if let testResult = testResultForEvent {
+//			for candidate in testResultEnvelope.signatures where candidate.identifier == testResult.identifier {
+//				signature = candidate
+//			}
+//		}
+//
+//		let payload = Payload(
+//			identifier: eventIdentifier,
+//			time: Int64(Date().timeIntervalSince1970),
+//			test: testResultForEvent,
+//			signature: signature?.signature
+//		)
+//
+//		let payloadString = generateString(object: payload)
+//		print("CTR:  Unencrypted payload: \(payloadString)")
+//
+//		let sodium = Sodium()
+//
+//		if let nonceBytes = sodium.randomBytes.buf(length: 24),
+//		   let publicKey = event.publicKey,
+//		   let publicKeyBytes = stringToBytes(base64EncodedInput: publicKey),
+//		   let payloadBytes = stringToBytes(rawInput: payloadString),
+//		   let keyPair = sodium.box.keyPair() {
+//
+//			let secretKeyBytes = keyPair.secretKey
+//
+//			if let encryptedPayloadBytes = sodium.box.seal(
+//				message: payloadBytes,
+//				recipientPublicKey: publicKeyBytes,
+//				senderSecretKey: secretKeyBytes,
+//				nonce: nonceBytes) {
+//
+//				let nonceString = bytesToBase64String(nonceBytes)
+//
+//				let encryptedPayloadBase64String = bytesToBase64String(encryptedPayloadBytes)
+//
+//				let customerQR = CustomerQR(
+//					publicKey: bytesToBase64String(keyPair.publicKey),
+//					nonce: nonceString,
+//					payload: encryptedPayloadBase64String
+//				)
+//
+//				return generateString(object: customerQR)
+//			}
+//		}
+//
+//		let customerQR = CustomerQR(
+//			publicKey: "x",
+//			nonce: "x",
+//			payload: payloadString
+//		)
+//
+//		return generateString(object: customerQR)
+		return ""
 	}
 
 	func generateString<T>(object: T) -> String where T: Codable {

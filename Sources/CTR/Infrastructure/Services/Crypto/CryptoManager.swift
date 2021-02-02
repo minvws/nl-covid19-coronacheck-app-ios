@@ -28,43 +28,36 @@ protocol CryptoManagerProtocol {
 	/// - Parameter stoken: the stoken
 	func setStoken(_ stoken: String)
 
-	func generateCommitment() -> String?
+	/// Set the proofs
+	/// - Parameter proofs: the test proofs
+	func setProofs(_ proofs: TestProofs)
+
+	/// Generate the commitment message
+	/// - Returns: commitment message
+	func generateCommitmentMessage() -> String?
 
 	/// Get the stoken
 	/// - Returns: the stoken
 	func getStoken() -> String?
 }
 
-struct IsmRequest: Codable {
-
-	let accessToken: String
-	let stoken: String
-	let issuerCommitmentMessage: String
-
-	enum CodingKeys: String, CodingKey {
-
-		case accessToken = "access_token"
-		case stoken = "stoken"
-		case issuerCommitmentMessage = "icm"
-	}
-}
-
-/// Structure to hold cryptography data
-private struct CryptoData: Codable {
-
-	/// The key of the holder
-	var holderSecretKey: Data?
-	var nonce: String?
-	var stoken: String?
-
-	/// Empty crypto data
-	static var empty: CryptoData {
-		return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil)
-	}
-}
-
 /// The cryptography manager
 class CryptoManager: CryptoManagerProtocol, Logging {
+
+	/// Structure to hold cryptography data
+	private struct CryptoData: Codable {
+
+		/// The key of the holder
+		var holderSecretKey: Data?
+		var nonce: String?
+		var stoken: String?
+		var proofs: TestProofs?
+
+		/// Empty crypto data
+		static var empty: CryptoData {
+			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, proofs: nil)
+		}
+	}
 
 	/// Array of constants
 	private struct Constants {
@@ -82,9 +75,7 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 	required init() {
 
 		// Public Key
-		if let content = FileReader(bundle: Bundle(for: type(of: self)), fileName: "issuerPk", fileType: "xml").read() {
-			issuerPublicKey = content.data(using: .utf8)
-		}
+		readPublicKey()
 
 		if cryptoData.holderSecretKey == nil {
 			if let result = ClmobileGenerateHolderSk(),
@@ -95,6 +86,14 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 					stoken: nil
 				)
 			}
+		}
+	}
+
+	/// Read the public key
+	func readPublicKey() {
+
+		if let content = FileReader(bundle: Bundle(for: type(of: self)), fileName: "issuerPk", fileType: "xml").read() {
+			issuerPublicKey = content.data(using: .utf8)
 		}
 	}
 
@@ -111,21 +110,21 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 		}
 	}
 
-	func generateCommitment() -> String? {
+	/// Generate the commitment message
+	/// - Returns: the issuer commitment message
+	func generateCommitmentMessage() -> String? {
 
-		if let nonce = cryptoData.nonce {
-			let string = "\(nonce)"
-			let nonceData = Data(string.bytes)
-
-			if let result = ClmobileCreateCommitmentMessage(cryptoData.holderSecretKey, issuerPublicKey, nonceData) {
-				if result.error.isEmpty {
-					if let value = result.value {
-						let string = String(decoding: value, as: UTF8.self)
-						return string
-					}
-				} else {
-					self.logDebug("ICM: \(result.error)")
-				}
+		if let nonce = cryptoData.nonce,
+		   let result = ClmobileCreateCommitmentMessage(
+			cryptoData.holderSecretKey,
+			issuerPublicKey,
+			Data(nonce.bytes)
+		   ) {
+			if let value = result.value, result.error.isEmpty {
+				let string = String(decoding: value, as: UTF8.self)
+				return string
+			} else {
+				self.logDebug("ICM: \(result.error)")
 			}
 		}
 		return nil
@@ -143,6 +142,13 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 	func setStoken(_ stoken: String) {
 
 		cryptoData.stoken = stoken
+	}
+
+	/// Set the proofs
+	/// - Parameter proofs: the test proofs
+	func setProofs(_ proofs: TestProofs) {
+
+		cryptoData.proofs = proofs
 	}
 
 	/// Get the stoken
