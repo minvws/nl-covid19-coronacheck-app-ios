@@ -33,15 +33,12 @@
 		6D73052F25B876F000BA808C /* Issuers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73052E25B876F000BA808C /* Issuers.swift */; };
 		6D73053A25B8783000BA808C /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73053925B8783000BA808C /* ApiClient.swift */; };
 		6D7F9C9E25B6BAE80006F227 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */; };
-		6D7F9CA225B6BFD20006F227 /* TestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CA125B6BFD10006F227 /* TestResult.swift */; };
-		6D7F9CAE25B6C6BB0006F227 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CAD25B6C6BB0006F227 /* Event.swift */; };
 		6D7F9CB825B6DBA60006F227 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7F9CB725B6DBA60006F227 /* InfoPlist.strings */; };
 		6D7F9CBC25B6E3A50006F227 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CBB25B6E3A50006F227 /* ScanViewController.swift */; };
 		6D7F9CC825B6E6170006F227 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CC725B6E6170006F227 /* ResultView.swift */; };
 		6D7F9CCC25B6E6590006F227 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CCB25B6E6590006F227 /* Label.swift */; };
 		6D7F9CD625B700010006F227 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CD525B700010006F227 /* EventView.swift */; };
 		6D7F9CDC25B704000006F227 /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */; };
-		6D7FFAB825C935AE00B5482F /* TestProof.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAB725C935AE00B5482F /* TestProof.swift */; };
 		6D8865E725C7FBBB00DE661E /* ctcl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8865E625C7FBBB00DE661E /* ctcl.framework */; };
 		6D8865F625C8004500DE661E /* issuerPk.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6D8865F525C8004500DE661E /* issuerPk.xml */; };
 		6D8865FA25C800BA00DE661E /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8865F925C800BA00DE661E /* FileReader.swift */; };
@@ -132,15 +129,12 @@
 		6D73052E25B876F000BA808C /* Issuers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issuers.swift; sourceTree = "<group>"; };
 		6D73053925B8783000BA808C /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
-		6D7F9CA125B6BFD10006F227 /* TestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestResult.swift; sourceTree = "<group>"; };
-		6D7F9CAD25B6C6BB0006F227 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		6D7F9CB725B6DBA60006F227 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		6D7F9CBB25B6E3A50006F227 /* ScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		6D7F9CC725B6E6170006F227 /* ResultView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		6D7F9CCB25B6E6590006F227 /* Label.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		6D7F9CD525B700010006F227 /* EventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Keyboard.swift"; sourceTree = "<group>"; };
-		6D7FFAB725C935AE00B5482F /* TestProof.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestProof.swift; sourceTree = "<group>"; };
 		6D8865E625C7FBBB00DE661E /* ctcl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ctcl.framework; sourceTree = "<group>"; };
 		6D8865F525C8004500DE661E /* issuerPk.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = issuerPk.xml; sourceTree = "<group>"; };
 		6D8865F925C800BA00DE661E /* FileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
@@ -252,17 +246,17 @@
 			isa = PBXGroup;
 			children = (
 				6DC6CC3525C2A04F00060237 /* AppUpdate */,
-				6D01D8E025C04FEA00A4AB89 /* Customer */,
+				6D01D8E025C04FEA00A4AB89 /* Holder */,
 			);
 			path = Interface;
 			sourceTree = "<group>";
 		};
-		6D01D8E025C04FEA00A4AB89 /* Customer */ = {
+		6D01D8E025C04FEA00A4AB89 /* Holder */ = {
 			isa = PBXGroup;
 			children = (
 				6D01D8E125C04FF400A4AB89 /* FetchResults */,
 			);
-			path = Customer;
+			path = Holder;
 			sourceTree = "<group>";
 		};
 		6D01D8E125C04FF400A4AB89 /* FetchResults */ = {
@@ -531,11 +525,8 @@
 			children = (
 				6DDEFB4025AF13D000A6912A /* Coordinator.swift */,
 				6D3035FA25BAAA9C00110B16 /* CTRModel.swift */,
-				6D7F9CAD25B6C6BB0006F227 /* Event.swift */,
 				6DD9395425BD924F0026F071 /* HTTP.swift */,
 				6D73052E25B876F000BA808C /* Issuers.swift */,
-				6D7F9CA125B6BFD10006F227 /* TestResult.swift */,
-				6D7FFAB725C935AE00B5482F /* TestProof.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -812,7 +803,6 @@
 				6D8865FA25C800BA00DE661E /* FileReader.swift in Sources */,
 				6D7F9CCC25B6E6590006F227 /* Label.swift in Sources */,
 				6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */,
-				6D7F9CA225B6BFD20006F227 /* TestResult.swift in Sources */,
 				6D7F9CDC25B704000006F227 /* UIViewController+Keyboard.swift in Sources */,
 				6D92849C25B5CBC0009D4350 /* BaseViewController.swift in Sources */,
 				6DE6FD6D25C1873D006602AC /* RemoteConfigurationApiClient.swift in Sources */,
@@ -839,9 +829,7 @@
 				6DD9395525BD924F0026F071 /* HTTP.swift in Sources */,
 				6D92849425B5CB96009D4350 /* Theme.swift in Sources */,
 				6DC6CCF025C3039C00060237 /* String+SHA256.swift in Sources */,
-				6D7FFAB825C935AE00B5482F /* TestProof.swift in Sources */,
 				6D5D202625BF001500DC2E27 /* MainViewModel.swift in Sources */,
-				6D7F9CAE25B6C6BB0006F227 /* Event.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

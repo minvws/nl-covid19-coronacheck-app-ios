@@ -56,10 +56,6 @@ class AppCoordinator: Coordinator {
 		// Start the mainCoordinator
 		let mainCoordinator = MainCoordinator(navigationController: navigationController)
 		startChildCoordinator(mainCoordinator)
-
-		// Here for now, load the crypto manager, check the key
-		let manager = CryptoManager()
-		manager.debug()
 	}
 
 	/// flag for updating configuration

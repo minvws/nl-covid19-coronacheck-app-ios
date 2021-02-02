@@ -85,20 +85,12 @@ class APIClientTests: XCTestCase {
 		stub(condition: pathStartsWith(ismEndpoint)) { _ in
 
 			let object: [String: Any] = [
-				"test_proofs": [[
-					"test_proof": [
-						"ism": "test ism",
-						"attributes": [
-							"test 1",
-							"test 2"
-						]
-					],
-					"signature": "test signature",
-					"test_type": [
-						"uuid": "type 1",
-						"name": "PCR"
-					]
-				]]
+
+				"ism": "test ism",
+				"attributes": [
+					"test 1",
+					"test 2"
+				]
 			]
 
 			return HTTPStubsResponse(
@@ -113,10 +105,6 @@ class APIClientTests: XCTestCase {
 
 			// Then
 			XCTAssertNotNil(response, "Response should not be nil")
-			XCTAssertEqual(response?.testProofs?.count, 1, "There should be one proof")
-			XCTAssertEqual(response?.testProofs?.first?.issuerSignedMessage?.base64Ism, "test ism", "The ism should match")
-			XCTAssertEqual(response?.testProofs?.first?.signature, "test signature", "Signature should match")
-
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)
@@ -206,20 +194,12 @@ class APIClientTests: XCTestCase {
 		stub(condition: pathStartsWith(ismEndpoint)) { _ in
 
 			let object: [String: Any] = [
-				"test_proofs": [[
-					"test_proof": [
-						"ism": "test ism",
-						"attributes": [
-							"test 1",
-							"test 2"
-						]
-					],
-					"signature": "test signature",
-					"test_type": [
-						"uuid": "type 1",
-						"name": "PCR"
-					]
-				]]
+
+				"ism": "test ism",
+				"attributes": [
+					"test 1",
+					"test 2"
+				]
 			]
 
 			return HTTPStubsResponse(
@@ -239,10 +219,6 @@ class APIClientTests: XCTestCase {
 
 			// Then
 			XCTAssertNotNil(response, "Response should not be nil")
-			XCTAssertEqual(response?.testProofs?.count, 1, "There should be one proof")
-			XCTAssertEqual(response?.testProofs?.first?.issuerSignedMessage?.base64Ism, "test ism", "The ism should match")
-			XCTAssertEqual(response?.testProofs?.first?.signature, "test signature", "Signature should match")
-
 			expectation.fulfill()
 		}
 		waitForExpectations(timeout: 10, handler: nil)

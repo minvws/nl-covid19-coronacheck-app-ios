@@ -16,6 +16,8 @@ class FetchResultModelTests: XCTestCase {
 	/// Spies
 	var coordinatorSpy = HolderCoordinatorSpy()
 	var openIdSpy = OpenClientSpy()
+	var apiSpy = ApiSpy()
+	var cryptoSpy = CryptoManagerSpy()
 
 	// MARK: Test lifecycle
 	override func setUp() {
@@ -26,6 +28,10 @@ class FetchResultModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			openIdClient: openIdSpy,
 			userIdentifier: nil)
+		apiSpy = ApiSpy()
+		sut?.apiClient = apiSpy
+		cryptoSpy = CryptoManagerSpy()
+		sut?.cryptoManager = cryptoSpy
 
 		super.setUp()
 	}
@@ -102,15 +108,67 @@ class FetchResultModelTests: XCTestCase {
 			getPublicKeysCalled = true
 		}
 
-		func getTestResults(identifier: String, completionHandler: @escaping (TestProofs?) -> Void) {
+		func getTestResults(identifier: String, completionHandler: @escaping (Data?) -> Void) {
 
 			getTestResultsCalled = true
 			getTestResultsIdentifier = identifier
 		}
 
-		func fetchTestResultsWithISM(dictionary: [String: AnyObject], completionHandler: @escaping (TestProofs?) -> Void) {
+		func fetchTestResultsWithISM(dictionary: [String: AnyObject], completionHandler: @escaping (Data?) -> Void) {
 
 			getTestResultsWithISMCalled = true
+		}
+	}
+
+	class CryptoManagerSpy: CryptoManagerProtocol {
+
+		var setNonceCalled = false
+		var setStokenCalled = false
+		var setProofsCalled = false
+		var nonce: String?
+		var stoken: String?
+		var proofs: Data?
+
+		required init() {
+			 // Nothing for this spy class
+		}
+
+		func debug() {
+
+		}
+
+		func setNonce(_ nonce: String) {
+
+			setNonceCalled = true
+			self.nonce = nonce
+		}
+
+		func setStoken(_ stoken: String) {
+
+			setStokenCalled = true
+			self.stoken = stoken
+		}
+
+		func setProofs(_ proofs: Data?) {
+
+			setProofsCalled = true
+			self.proofs = proofs
+		}
+
+		func generateCommitmentMessage() -> String? {
+			return nil
+		}
+
+		func generateQRmessage() -> String? {
+			return nil
+		}
+
+		func getStoken() -> String? {
+			return stoken
+		}
+
+		func verifyQRMessage(_ message: String) -> Bool {
+			return false
 		}
 	}
 
@@ -120,9 +178,7 @@ class FetchResultModelTests: XCTestCase {
 	func testSecondaryButtonTappedNoNonce() {
 
 		// Given
-		let apiSpy = ApiSpy()
 		apiSpy.shouldReturnNonce = false
-		sut?.apiClient = apiSpy
 
 		// When
 		sut?.secondaryButtonTapped(UIViewController())
@@ -132,20 +188,20 @@ class FetchResultModelTests: XCTestCase {
 		XCTAssertFalse(openIdSpy.requestAccessTokenCalled, "Access token should not be requested without nonce")
 	}
 
-//	/// Test the secondary button tapped, api returns with nonce
-//	func testSecondaryButtonTappedWithNonce() {
-//
-//		// Given
-//		let apiSpy = ApiSpy()
-//		apiSpy.shouldReturnNonce = false
-//		apiSpy.nonceEnvelope = NonceEnvelope(nonce: "test", stoken: "test")
-//		sut?.apiClient = apiSpy
-//
-//		// When
-//		sut?.secondaryButtonTapped(UIViewController())
-//
-//		// Then
-//		XCTAssertTrue(apiSpy.getNonceCalled, "Method should be called")
-//		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Access token should be requested")
-//	}
+	/// Test the secondary button tapped, api returns with nonce
+	func testSecondaryButtonTappedWithNonce() {
+
+		// Given
+		apiSpy.shouldReturnNonce = true
+		apiSpy.nonceEnvelope = NonceEnvelope(nonce: "test", stoken: "test")
+
+		// When
+		sut?.secondaryButtonTapped(UIViewController())
+
+		// Then
+		XCTAssertTrue(apiSpy.getNonceCalled, "Method should be called")
+		XCTAssertTrue(cryptoSpy.setNonceCalled, "Method should be called")
+		XCTAssertTrue(cryptoSpy.setStokenCalled, "Method should be called")
+		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Access token should be requested")
+	}
 }

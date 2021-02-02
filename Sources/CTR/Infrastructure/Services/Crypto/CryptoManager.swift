@@ -188,6 +188,7 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 		let proofAsn1 = Data(base64Encoded: message)
 		if let result = ClmobileVerify(issuerPublicKey, proofAsn1) {
 
+			// This logic should not be here, it should only expose the attributes.
 			return result.error.isEmpty && result.unixTimeSeconds > 0
 		}
 		return false
