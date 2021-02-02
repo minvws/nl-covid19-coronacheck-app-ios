@@ -42,10 +42,9 @@ class GenerateQRViewModel: Logging {
 
 	private func generateQRMessage() {
 
-		
-
-
-
+		if let message = cryptoManager.generateQRmessage() {
+			qrMessage = message
+		}
 	}
 }
 

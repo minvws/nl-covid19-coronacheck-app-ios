@@ -25,15 +25,15 @@ protocol ApiClientProtocol {
 	///   - completionHandler: the completion handler
 	func getTestResults(
 		identifier: String,
-		completionHandler: @escaping (TestProofs?) -> Void)
-	
+		completionHandler: @escaping (Data?) -> Void)
+
 	/// Fetch the test results with issue signature message
 	/// - Parameters:
 	///   - dictionary: dictionary
 	///   - completionHandler: the completion handler
 	func fetchTestResultsWithISM(
 		dictionary: [String: AnyObject],
-		completionHandler: @escaping (TestProofs?) -> Void)
+		completionHandler: @escaping (Data?) -> Void)
 }
 
 /// The Api Client for all API Calls.
@@ -76,7 +76,7 @@ class ApiClient: ApiClientProtocol {
 			}
 		}
 	}
-	
+
 	/// Get the test results
 	/// debug purpose only!
 	/// - Parameters:
@@ -84,17 +84,16 @@ class ApiClient: ApiClientProtocol {
 	///   - completionHandler: the completion handler
 	func getTestResults(
 		identifier: String,
-		completionHandler: @escaping (TestProofs?) -> Void) {
-		
+		completionHandler: @escaping (Data?) -> Void) {
+
 		AF.request(
 			ApiRouter.testResults(identifier: identifier)
 		)
-		.responseDecodable(of: TestProofs.self) { response in
-			
+		.responseData { response in
 			switch response.result {
-				case let .success(object):
-					completionHandler(object)
-					
+				case let .success(data):
+					completionHandler(data)
+
 				case let .failure(error):
 					print(error)
 					completionHandler(nil)
@@ -108,14 +107,14 @@ class ApiClient: ApiClientProtocol {
 	///   - completionHandler: the completion handler
 	func fetchTestResultsWithISM(
 		dictionary: [String: AnyObject],
-		completionHandler: @escaping (TestProofs?) -> Void) {
+		completionHandler: @escaping (Data?) -> Void) {
 		
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 			AF.request(
 				ApiRouter.testResultsWithIssuerSignatureMessage(body: jsonData)
 			)
-			.responseDecodable(of: TestProofs.self) { response in
+			.responseData { response in
 				
 				switch response.result {
 					case let .success(object):

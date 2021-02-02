@@ -69,7 +69,6 @@ extension MainCoordinator: MainCoordinatorDelegate {
 	func navigateToVerifier() {
 
 		let coordinator = VerifierCoordinator(navigationController: navigationController)
-		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}
 }

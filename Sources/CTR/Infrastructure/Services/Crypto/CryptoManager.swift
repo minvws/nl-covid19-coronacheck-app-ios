@@ -30,15 +30,21 @@ protocol CryptoManagerProtocol {
 
 	/// Set the proofs
 	/// - Parameter proofs: the test proofs
-	func setProofs(_ proofs: TestProofs)
+	func setProofs(_ proofs: Data?)
 
 	/// Generate the commitment message
 	/// - Returns: commitment message
 	func generateCommitmentMessage() -> String?
 
+	/// Generate a qr message
+	/// - Returns: qr message
+	func generateQRmessage() -> String?
+
 	/// Get the stoken
 	/// - Returns: the stoken
 	func getStoken() -> String?
+
+	func verifyQRMessage(_ message: String) -> Bool
 }
 
 /// The cryptography manager
@@ -51,7 +57,7 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 		var holderSecretKey: Data?
 		var nonce: String?
 		var stoken: String?
-		var proofs: TestProofs?
+		var proofs: Data?
 
 		/// Empty crypto data
 		static var empty: CryptoData {
@@ -130,6 +136,25 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 		return nil
 	}
 
+	func generateQRmessage() -> String? {
+
+		guard let holderSecretKey = cryptoData.holderSecretKey, let ism = cryptoData.proofs else {
+
+			return nil
+		}
+
+		let credentails = ClmobileCreateCredential(holderSecretKey, ism)
+		if let value = credentails?.value {
+			let disclosed = ClmobileDiscloseAllWithTime(issuerPublicKey, value)
+			if let base64Value = disclosed?.value?.base64EncodedString() {
+				logDebug("QR message: \(base64Value)")
+				return base64Value
+			}
+		}
+
+		return nil
+	}
+
 	/// Set the nonce
 	/// - Parameter nonce: the nonce
 	func setNonce(_ nonce: String) {
@@ -146,7 +171,7 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 
 	/// Set the proofs
 	/// - Parameter proofs: the test proofs
-	func setProofs(_ proofs: TestProofs) {
+	func setProofs(_ proofs: Data?) {
 
 		cryptoData.proofs = proofs
 	}
@@ -156,5 +181,15 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 	func getStoken() -> String? {
 
 		return cryptoData.stoken
+	}
+
+	func verifyQRMessage(_ message: String) -> Bool {
+
+		let proofAsn1 = Data(base64Encoded: message)
+		if let result = ClmobileVerify(issuerPublicKey, proofAsn1) {
+
+			return result.error.isEmpty && result.unixTimeSeconds > 0
+		}
+		return false
 	}
 }

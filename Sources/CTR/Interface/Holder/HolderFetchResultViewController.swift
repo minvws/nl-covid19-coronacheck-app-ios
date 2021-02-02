@@ -128,17 +128,19 @@ class FetchResultViewModel: Logging {
 			]
 
 			apiClient.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] result in
-				self?.logDebug("ISM Response: \(String(describing: result))")
 				self?.handleTestProofsResponse(result)
 			}
 		}
 	}
 
-	private func handleTestProofsResponse(_ testProofs: TestProofs?) {
+	private func handleTestProofsResponse(_ data: Data?) {
 
-		if let proofs = testProofs {
-			cryptoManager.setProofs(proofs)
+		if let unwrapped = data {
+
+			logDebug("ISM Response: \(String(decoding: unwrapped, as: UTF8.self))")
 		}
+
+		cryptoManager.setProofs(data)
 
 		// Show the button
 		tertiaryButtonTitle = "Genereer toegangsbewijs"
@@ -160,7 +162,6 @@ class FetchResultViewModel: Logging {
 		message = ""
 
 		apiClient.getTestResults(identifier: identifier) { result in
-			self.logDebug("ISM Response: \(String(describing: result))")
 			self.handleTestProofsResponse(result)
 		}
 	}

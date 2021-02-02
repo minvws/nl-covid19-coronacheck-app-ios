@@ -7,13 +7,52 @@
 
 import UIKit
 
-class VerifierResultViewController: BaseViewController {
+class VerifierResultViewModel {
 
+	/// Coordination Delegate
 	weak var coordinator: VerifierCoordinatorDelegate?
 
-	var valid: Bool = false
+	// MARK: - Bindable properties
+
+	@Bindable private(set) var primaryButtonTitle: String
+	@Bindable private(set) var isValid: Bool
+
+	/// Initializer
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	///   - result: is this a valid test
+	init(
+		coordinator: VerifierCoordinatorDelegate,
+		result: Bool) {
+
+		self.coordinator = coordinator
+		primaryButtonTitle = "Scan opnieuw"
+		isValid = result
+	}
+
+	func dismiss() {
+		
+		coordinator?.dismiss()
+	}
+}
+
+class VerifierResultViewController: BaseViewController {
+
+	private let viewModel: VerifierResultViewModel
 
 	let sceneView = ResultView()
+
+	init(viewModel: VerifierResultViewModel) {
+
+		self.viewModel = viewModel
+
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+
+		fatalError("init(coder:) has not been implemented")
+	}
 
 	// MARK: View lifecycle
 	override func loadView() {
@@ -21,23 +60,32 @@ class VerifierResultViewController: BaseViewController {
 		view = sceneView
 	}
 
-    override func viewDidLoad() {
+	override func viewDidLoad() {
+
 		super.viewDidLoad()
 
 		// Do any additional setup after loading the view.
 		title = "Verifier Result"
 
-		sceneView.primaryTitle = "Scan Again"
-		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.coordinator?.dismiss()
+		viewModel.$primaryButtonTitle.binding = {
+
+			self.sceneView.primaryTitle = $0
 		}
 
-		if valid {
-			sceneView.labelText = "V"
-			sceneView.labelColor = Theme.colors.ok
-		} else {
-			sceneView.labelText = "X"
-			sceneView.labelColor = Theme.colors.warning
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+
+			self?.viewModel.dismiss()
+		}
+
+		viewModel.$isValid.binding = {
+
+			if $0 {
+				self.sceneView.labelText = "V"
+				self.sceneView.labelColor = Theme.colors.ok
+			} else {
+				self.sceneView.labelText = "X"
+				self.sceneView.labelColor = Theme.colors.warning
+			}
 		}
 	}
 }
