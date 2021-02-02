@@ -8,19 +8,19 @@
 import XCTest
 @testable import CTR
 
-class CustomerFetchResultModelTests: XCTestCase {
+class FetchResultModelTests: XCTestCase {
 
 	// MARK: Subject under test
 	var sut: FetchResultViewModel?
 
 	/// Spies
-	var coordinatorSpy = CustomerCoordinatorSpy()
+	var coordinatorSpy = HolderCoordinatorSpy()
 	var openIdSpy = OpenClientSpy()
 
 	// MARK: Test lifecycle
 	override func setUp() {
 
-		coordinatorSpy = CustomerCoordinatorSpy()
+		coordinatorSpy = HolderCoordinatorSpy()
 		openIdSpy = OpenClientSpy()
 		sut = FetchResultViewModel(
 			coordinator: coordinatorSpy,
@@ -32,41 +32,24 @@ class CustomerFetchResultModelTests: XCTestCase {
 
 	// MARK: Test Doubles
 
-	class CustomerCoordinatorSpy: CustomerCoordinatorDelegate {
+	class HolderCoordinatorSpy: HolderCoordinatorDelegate {
 
 		var navigateToFetchResultsCalled = false
-		var navigateToVisitEventCalled = false
-		var navigateToCustomerQRCalled = false
+		var navigateToHolderQRCalled = false
 		var navigateToStartCalled = false
-		var setTestResultEnvelopeCalled = false
-		var setEventCalled = false
 		var dismissCalled = false
 
 		func navigateToFetchResults() {
 			navigateToFetchResultsCalled = true
 		}
 
-		func navigateToVisitEvent() {
-			navigateToVisitEventCalled = true
-		}
-
-		func navigateToCustomerQR() {
-			navigateToCustomerQRCalled = true
+		func navigateToHolderQR() {
+			navigateToHolderQRCalled = true
 		}
 
 		func navigateToStart() {
 
 			navigateToStartCalled = true
-		}
-
-		func setTestResultEnvelope(_ result: TestResultEnvelope?) {
-
-			setTestResultEnvelopeCalled = true
-		}
-
-		func setEvent(_ event: EventEnvelope) {
-
-			setEventCalled = true
 		}
 
 		func dismiss() {
@@ -81,7 +64,10 @@ class CustomerFetchResultModelTests: XCTestCase {
 		var shouldError: Bool = false
 		var requestAccessTokenCalled = false
 
-		func requestAccessToken(presenter: UIViewController, onCompletion: @escaping (String?) -> Void, onError: @escaping (Error?) -> Void) {
+		func requestAccessToken(
+			presenter: UIViewController,
+			onCompletion: @escaping (String?) -> Void,
+			onError: @escaping (Error?) -> Void) {
 
 			requestAccessTokenCalled = true
 

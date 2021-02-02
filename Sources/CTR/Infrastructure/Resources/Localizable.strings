@@ -34,5 +34,5 @@
 "endOfLife.description" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
 
 /* MARK: - Main */
-"main.customer" = "Holder";
+"main.holder" = "Holder";
 "main.verifier" = "Verifier";

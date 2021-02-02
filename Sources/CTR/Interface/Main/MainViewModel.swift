@@ -17,13 +17,13 @@ class MainViewModel {
 	init(coordinator: MainCoordinatorDelegate) {
 
 		self.coordinator = coordinator
-		primaryButtonTitle = .mainCustomer
+		primaryButtonTitle = .mainHolder
 		secondaryButtonTitle = .mainVerifier
 	}
 
 	func primaryButtonTapped() {
 
-		coordinator?.navigateToCustomer()
+		coordinator?.navigateToHolder()
 	}
 
 	func secondaryButtonTapped() {

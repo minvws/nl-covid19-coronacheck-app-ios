@@ -23,7 +23,7 @@ class VerifierScanViewController: ScanViewController {
 
 		do {
 			if let data = code.data(using: .utf8) {
-				let result = try JSONDecoder().decode(CustomerQR.self, from: data)
+				let result = try JSONDecoder().decode(HolderQR.self, from: data)
 
 				coordinator?.setCustomerQR(result)
 				coordinator?.navigateToTestResult()

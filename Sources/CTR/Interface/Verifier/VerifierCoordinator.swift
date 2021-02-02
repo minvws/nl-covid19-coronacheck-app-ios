@@ -28,7 +28,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	/// Set the customer QR
 	/// - Parameter result: customer QR
-	func setCustomerQR(_ result: CustomerQR)
+	func setCustomerQR(_ result: HolderQR)
 
 	/// Dismiss the viewcontroller
 	func dismiss()
@@ -97,7 +97,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 	/// Set the customer QR
 	/// - Parameter result: customer QR
-	func setCustomerQR(_ result: CustomerQR) {
+	func setCustomerQR(_ result: HolderQR) {
 
 		coronaTestProof?.customerQR = result
 	}

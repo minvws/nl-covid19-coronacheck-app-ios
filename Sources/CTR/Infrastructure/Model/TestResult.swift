@@ -65,7 +65,7 @@ struct Payload: Codable {
 	}
 }
 
-struct CustomerQR: Codable {
+struct HolderQR: Codable {
 
 	var publicKey: String
 	var nonce: String

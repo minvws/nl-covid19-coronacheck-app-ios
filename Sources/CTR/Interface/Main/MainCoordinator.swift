@@ -10,8 +10,8 @@ import UIKit
 
 protocol MainCoordinatorDelegate: AnyObject {
 
-	/// Navigate to the customer flow
-	func navigateToCustomer()
+	/// Navigate to the holder flow
+	func navigateToHolder()
 
 	/// Navigate toe the verifier flow
 	func navigateToVerifier()
@@ -57,10 +57,10 @@ class MainCoordinator: NSObject, Coordinator {
 
 extension MainCoordinator: MainCoordinatorDelegate {
 
-	/// Navigate to the customer flow
-	func navigateToCustomer() {
+	/// Navigate to the holder flow
+	func navigateToHolder() {
 
-		let coordinator = CustomerCoordinator(navigationController: navigationController)
+		let coordinator = HolderCoordinator(navigationController: navigationController)
 		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}
@@ -91,7 +91,7 @@ extension MainCoordinator: UINavigationControllerDelegate {
 			return
 		}
 
-		if fromViewController is VerifierStartViewController || fromViewController is CustomerStartViewController {
+		if fromViewController is VerifierStartViewController || fromViewController is HolderStartViewController {
 			childCoordinators = []
 		}
 	}

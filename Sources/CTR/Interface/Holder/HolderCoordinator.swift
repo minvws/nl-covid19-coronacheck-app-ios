@@ -8,22 +8,22 @@
 import Foundation
 import UIKit
 
-protocol CustomerCoordinatorDelegate: AnyObject {
+protocol HolderCoordinatorDelegate: AnyObject {
 
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults()
 
-	// Navigate to the Generate Customer QR Scene
-	func navigateToCustomerQR()
+	// Navigate to the Generate Holder QR Scene
+	func navigateToHolderQR()
 
-	/// Navigate to the start fo the customer flow
+	/// Navigate to the start fo the holder flow
 	func navigateToStart()
 
 	/// Dismiss the viewcontroller
 	func dismiss()
 }
 
-class CustomerCoordinator: Coordinator {
+class HolderCoordinator: Coordinator {
 
 	var coronaTestProof: CTRModel?
 
@@ -42,20 +42,20 @@ class CustomerCoordinator: Coordinator {
 	// Designated starter method
 	func start() {
 
-		let viewController = CustomerStartViewController()
+		let viewController = HolderStartViewController()
 		viewController.coordinator = self
 		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 
-// MARK: - CustomerCoordinatorDelegate
+// MARK: - HolderCoordinatorDelegate
 
-extension CustomerCoordinator: CustomerCoordinatorDelegate {
+extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults() {
 
-		let viewController = CustomerFetchResultViewController(
+		let viewController = HolderFetchResultViewController(
 			viewModel: FetchResultViewModel(
 				coordinator: self,
 				openIdClient: OpenIdClient(configuration: Configuration()),
@@ -66,16 +66,14 @@ extension CustomerCoordinator: CustomerCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	// Navigate to the Generate Customer QR Scene
-	func navigateToCustomerQR() {
+	// Navigate to the Generate Holder QR Scene
+	func navigateToHolderQR() {
 
-		let viewController = CustomerGenerateQRViewController()
-		viewController.coordinator = self
-		viewController.qrString = coronaTestProof?.generateCustomerQRString() ?? ""
+		let viewController = HolderGenerateQRViewController(viewModel: GenerateQRViewModel(coordinator: self))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 	
-	/// Navigate to the start fo the customer flow
+	/// Navigate to the start fo the holder flow
 	func navigateToStart() {
 
 		guard navigationController.viewControllers.count > 1 else {

@@ -27,7 +27,7 @@ class CTRModel {
 
 	var agentEnvelope: AgentEnvelope?
 
-	var customerQR: CustomerQR?
+	var customerQR: HolderQR?
 
 	var issuers: [Issuer] = []
 
@@ -206,39 +206,39 @@ class CTRModel {
 		return ""
 	}
 
-	func generateString<T>(object: T) -> String where T: Codable {
-
-		if let data = try? JSONEncoder().encode(object),
-		   let convertedToString = String(data: data, encoding: .utf8) {
-			print("CTR: Converted to \(convertedToString)")
-			return convertedToString
-		}
-		return ""
-	}
-
-	func bytesToBase64Data(_ input: [UInt8]) -> Data {
-
-		return Data(bytes: input, count: input.count).base64EncodedData()
-	}
-
-	func bytesToBase64String(_ input: [UInt8]) -> String {
-
-		return Data(bytes: input, count: input.count).base64EncodedString()
-	}
-
-	func stringToBytes(base64EncodedInput input: String) -> Bytes? {
-
-		if let data = Data(base64Encoded: input) {
-			return [UInt8](data)
-		}
-		return nil
-	}
-
-	func stringToBytes(rawInput input: String) -> Bytes? {
-
-		if let data = input.data(using: .utf8) {
-			return [UInt8](data)
-		}
-		return nil
-	}
+//	func generateString<T>(object: T) -> String where T: Codable {
+//
+//		if let data = try? JSONEncoder().encode(object),
+//		   let convertedToString = String(data: data, encoding: .utf8) {
+//			print("CTR: Converted to \(convertedToString)")
+//			return convertedToString
+//		}
+//		return ""
+//	}
+//
+//	func bytesToBase64Data(_ input: [UInt8]) -> Data {
+//
+//		return Data(bytes: input, count: input.count).base64EncodedData()
+//	}
+//
+//	func bytesToBase64String(_ input: [UInt8]) -> String {
+//
+//		return Data(bytes: input, count: input.count).base64EncodedString()
+//	}
+//
+//	func stringToBytes(base64EncodedInput input: String) -> Bytes? {
+//
+//		if let data = Data(base64Encoded: input) {
+//			return [UInt8](data)
+//		}
+//		return nil
+//	}
+//
+//	func stringToBytes(rawInput input: String) -> Bytes? {
+//
+//		if let data = input.data(using: .utf8) {
+//			return [UInt8](data)
+//		}
+//		return nil
+//	}
 }

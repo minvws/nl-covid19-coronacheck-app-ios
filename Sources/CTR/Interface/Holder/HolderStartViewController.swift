@@ -7,9 +7,9 @@
 
 import UIKit
 
-class CustomerStartViewController: BaseViewController {
+class HolderStartViewController: BaseViewController {
 
-	weak var coordinator: CustomerCoordinatorDelegate?
+	weak var coordinator: HolderCoordinatorDelegate?
 
 	let sceneView = MainView()
 

@@ -34,7 +34,7 @@ class FetchResultViewModel: Logging {
 	}()
 
 	/// Coordination Delegate
-	weak var coordinator: CustomerCoordinatorDelegate?
+	weak var coordinator: HolderCoordinatorDelegate?
 
 	/// The user identifier
 	var userIdentifier: String?
@@ -53,7 +53,7 @@ class FetchResultViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - userIdentifier: the user identifier
 	init(
-		coordinator: CustomerCoordinatorDelegate,
+		coordinator: HolderCoordinatorDelegate,
 		openIdClient: OpenIdClientProtocol,
 		userIdentifier: String?) {
 
@@ -147,7 +147,7 @@ class FetchResultViewModel: Logging {
 	/// User tapped on the third button
 	func tertiaryButtonTapped() {
 
-		coordinator?.navigateToCustomerQR()
+		coordinator?.navigateToHolderQR()
 	}
 
 	/// Fetch some test results from the API
@@ -166,7 +166,7 @@ class FetchResultViewModel: Logging {
 	}
 }
 
-class CustomerFetchResultViewController: BaseViewController {
+class HolderFetchResultViewController: BaseViewController {
 
 	private let viewModel: FetchResultViewModel
 

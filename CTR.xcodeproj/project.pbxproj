@@ -11,8 +11,8 @@
 		6D01D8A225BFF8D700A4AB89 /* Configuration+DigiD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */; };
 		6D01D8C525C0262600A4AB89 /* OpenIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */; };
 		6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C825C02E1A00A4AB89 /* Logging.swift */; };
-		6D01D8E325C0501C00A4AB89 /* CustomerFetchResultModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8E225C0501C00A4AB89 /* CustomerFetchResultModelTests.swift */; };
-		6D2C0FA725B6B7B50030FD17 /* CustomerFetchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */; };
+		6D01D8E325C0501C00A4AB89 /* FetchResultModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8E225C0501C00A4AB89 /* FetchResultModelTests.swift */; };
+		6D2C0FA725B6B7B50030FD17 /* HolderFetchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */; };
 		6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */; };
 		6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3035FA25BAAA9C00110B16 /* CTRModel.swift */; };
 		6D4A977A25BDA6410084CAA1 /* ProcessInfo+Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A977925BDA6410084CAA1 /* ProcessInfo+Testing.swift */; };
@@ -55,11 +55,11 @@
 		6D92849E25B5CBC0009D4350 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D92849B25B5CBC0009D4350 /* BaseView.swift */; };
 		6D9284A225B5CCDD009D4350 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284A125B5CCDD009D4350 /* MainView.swift */; };
 		6D9284A825B5CECF009D4350 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284A725B5CECF009D4350 /* MainViewController.swift */; };
-		6D9284B025B5D076009D4350 /* CustomerStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284AF25B5D076009D4350 /* CustomerStartViewController.swift */; };
+		6D9284B025B5D076009D4350 /* HolderStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284AF25B5D076009D4350 /* HolderStartViewController.swift */; };
 		6D9284B425B5D08D009D4350 /* VerifierStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284B325B5D08D009D4350 /* VerifierStartViewController.swift */; };
-		6D9284B825B5D22B009D4350 /* CustomerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284B725B5D22B009D4350 /* CustomerCoordinator.swift */; };
+		6D9284B825B5D22B009D4350 /* HolderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284B725B5D22B009D4350 /* HolderCoordinator.swift */; };
 		6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284BD25B5D351009D4350 /* VerifierCoordinator.swift */; };
-		6D9284C825B5D9D3009D4350 /* CustomeGenerateQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284C725B5D9D3009D4350 /* CustomeGenerateQRViewController.swift */; };
+		6D9284C825B5D9D3009D4350 /* HolderGenerateQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284C725B5D9D3009D4350 /* HolderGenerateQRViewController.swift */; };
 		6D9284D025B5DAAC009D4350 /* VerifierScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */; };
 		6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */; };
 		6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */; };
@@ -111,8 +111,8 @@
 		6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configuration+DigiD.swift"; sourceTree = "<group>"; };
 		6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdClient.swift; sourceTree = "<group>"; };
 		6D01D8C825C02E1A00A4AB89 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
-		6D01D8E225C0501C00A4AB89 /* CustomerFetchResultModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerFetchResultModelTests.swift; sourceTree = "<group>"; };
-		6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerFetchResultViewController.swift; sourceTree = "<group>"; };
+		6D01D8E225C0501C00A4AB89 /* FetchResultModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchResultModelTests.swift; sourceTree = "<group>"; };
+		6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderFetchResultViewController.swift; sourceTree = "<group>"; };
 		6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		6D3035FA25BAAA9C00110B16 /* CTRModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTRModel.swift; sourceTree = "<group>"; };
 		6D4A977925BDA6410084CAA1 /* ProcessInfo+Testing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProcessInfo+Testing.swift"; sourceTree = "<group>"; };
@@ -155,11 +155,11 @@
 		6D92849B25B5CBC0009D4350 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		6D9284A125B5CCDD009D4350 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		6D9284A725B5CECF009D4350 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		6D9284AF25B5D076009D4350 /* CustomerStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerStartViewController.swift; sourceTree = "<group>"; };
+		6D9284AF25B5D076009D4350 /* HolderStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderStartViewController.swift; sourceTree = "<group>"; };
 		6D9284B325B5D08D009D4350 /* VerifierStartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierStartViewController.swift; sourceTree = "<group>"; };
-		6D9284B725B5D22B009D4350 /* CustomerCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomerCoordinator.swift; sourceTree = "<group>"; };
+		6D9284B725B5D22B009D4350 /* HolderCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderCoordinator.swift; sourceTree = "<group>"; };
 		6D9284BD25B5D351009D4350 /* VerifierCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierCoordinator.swift; sourceTree = "<group>"; };
-		6D9284C725B5D9D3009D4350 /* CustomeGenerateQRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomeGenerateQRViewController.swift; sourceTree = "<group>"; };
+		6D9284C725B5D9D3009D4350 /* HolderGenerateQRViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderGenerateQRViewController.swift; sourceTree = "<group>"; };
 		6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierScanViewController.swift; sourceTree = "<group>"; };
 		6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierResultViewController.swift; sourceTree = "<group>"; };
 		6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
@@ -270,7 +270,7 @@
 		6D01D8E125C04FF400A4AB89 /* FetchResults */ = {
 			isa = PBXGroup;
 			children = (
-				6D01D8E225C0501C00A4AB89 /* CustomerFetchResultModelTests.swift */,
+				6D01D8E225C0501C00A4AB89 /* FetchResultModelTests.swift */,
 			);
 			path = FetchResults;
 			sourceTree = "<group>";
@@ -326,15 +326,15 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
-		6D9284AD25B5D037009D4350 /* Customer */ = {
+		6D9284AD25B5D037009D4350 /* Holder */ = {
 			isa = PBXGroup;
 			children = (
-				6D9284B725B5D22B009D4350 /* CustomerCoordinator.swift */,
-				6D9284AF25B5D076009D4350 /* CustomerStartViewController.swift */,
-				6D2C0FA625B6B7B50030FD17 /* CustomerFetchResultViewController.swift */,
-				6D9284C725B5D9D3009D4350 /* CustomeGenerateQRViewController.swift */,
+				6D9284B725B5D22B009D4350 /* HolderCoordinator.swift */,
+				6D9284AF25B5D076009D4350 /* HolderStartViewController.swift */,
+				6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */,
+				6D9284C725B5D9D3009D4350 /* HolderGenerateQRViewController.swift */,
 			);
-			path = Customer;
+			path = Holder;
 			sourceTree = "<group>";
 		};
 		6D9284AE25B5D03E009D4350 /* Verifier */ = {
@@ -480,7 +480,7 @@
 			children = (
 				6DE6FD5B25C16497006602AC /* AppUpdate */,
 				6D92849825B5CBC0009D4350 /* Common */,
-				6D9284AD25B5D037009D4350 /* Customer */,
+				6D9284AD25B5D037009D4350 /* Holder */,
 				6DDEFB3A25AEE03B00A6912A /* Launch */,
 				6DDEFB4425AF193D00A6912A /* Main */,
 				6D9284AE25B5D03E009D4350 /* Verifier */,
@@ -801,10 +801,10 @@
 				6D92849D25B5CBC0009D4350 /* Button.swift in Sources */,
 				6D9284B425B5D08D009D4350 /* VerifierStartViewController.swift in Sources */,
 				6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */,
-				6D9284B025B5D076009D4350 /* CustomerStartViewController.swift in Sources */,
+				6D9284B025B5D076009D4350 /* HolderStartViewController.swift in Sources */,
 				6D5E06BA25C19627008E2124 /* UIStackView+Axis.swift in Sources */,
 				6D9284A825B5CECF009D4350 /* MainViewController.swift in Sources */,
-				6D9284B825B5D22B009D4350 /* CustomerCoordinator.swift in Sources */,
+				6D9284B825B5D22B009D4350 /* HolderCoordinator.swift in Sources */,
 				6D7F9C9E25B6BAE80006F227 /* QRCodeView.swift in Sources */,
 				6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */,
 				6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */,
@@ -829,13 +829,13 @@
 				6D73052F25B876F000BA808C /* Issuers.swift in Sources */,
 				6D5E06B225C19437008E2124 /* AppUpdateViewController.swift in Sources */,
 				6D73051625B85CD200BA808C /* VerifierAgentScanViewController.swift in Sources */,
-				6D9284C825B5D9D3009D4350 /* CustomeGenerateQRViewController.swift in Sources */,
+				6D9284C825B5D9D3009D4350 /* HolderGenerateQRViewController.swift in Sources */,
 				6DDEFAF625AEDCA800A6912A /* SceneDelegate.swift in Sources */,
 				6DE6FD6925C18668006602AC /* RemoteConfigurationRouter.swift in Sources */,
 				6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */,
 				6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */,
 				6D5D203225BF190700DC2E27 /* Localization.swift in Sources */,
-				6D2C0FA725B6B7B50030FD17 /* CustomerFetchResultViewController.swift in Sources */,
+				6D2C0FA725B6B7B50030FD17 /* HolderFetchResultViewController.swift in Sources */,
 				6DD9394C25BD8F5E0026F071 /* ApiRouterProtocol.swift in Sources */,
 				6DC6CCE425C2F7D100060237 /* KeychainItem.swift in Sources */,
 				6D5D202E25BF189400DC2E27 /* MainLocalization.swift in Sources */,
@@ -858,7 +858,7 @@
 				6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */,
 				6DC6CC4125C2A95C00060237 /* AppCoordinatorSpy.swift in Sources */,
 				6D5E06CA25C1C54A008E2124 /* RemoteConfigApiClientTests.swift in Sources */,
-				6D01D8E325C0501C00A4AB89 /* CustomerFetchResultModelTests.swift in Sources */,
+				6D01D8E325C0501C00A4AB89 /* FetchResultModelTests.swift in Sources */,
 				6DC6CC3D25C2A6D400060237 /* AppUpdateViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
