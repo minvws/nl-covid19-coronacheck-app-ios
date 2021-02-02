@@ -42,9 +42,13 @@ class HolderCoordinator: Coordinator {
 	// Designated starter method
 	func start() {
 
-		let viewController = HolderStartViewController()
-		viewController.coordinator = self
-		navigationController.pushViewController(viewController, animated: true)
+		let coordinator = OnboardingCoordinator(navigationController: navigationController)
+		coordinator.coronaTestProof = coronaTestProof
+		startChildCoordinator(coordinator)
+
+//		let viewController = HolderStartViewController()
+//		viewController.coordinator = self
+//		navigationController.pushViewController(viewController, animated: true)
 	}
 }
 

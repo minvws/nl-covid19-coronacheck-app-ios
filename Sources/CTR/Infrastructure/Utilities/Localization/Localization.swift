@@ -52,7 +52,10 @@ extension String {
 //    static var save: String { return Localization.string(for: "save") }
 //    static var cancel: String { return Localization.string(for: "cancel") }
 //    static var close: String { return Localization.string(for: "close") }
-//    static var next: String { return Localization.string(for: "next") }
+    static var next: String {
+
+		return Localization.string(for: "general.next")
+	}
 //    static var start: String { return Localization.string(for: "start") }
 //    static var edit: String { return Localization.string(for: "edit") }
 //    static var selectDate: String { return Localization.string(for: "selectDate") }

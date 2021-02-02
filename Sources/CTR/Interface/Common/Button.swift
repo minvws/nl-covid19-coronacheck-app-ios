@@ -13,7 +13,7 @@ class Button: UIButton {
     enum ButtonType {
         case primary
 //        case secondary
-        case tertiary
+//        case tertiary
 //        case warning
 //        case info
     }
@@ -118,9 +118,9 @@ class Button: UIButton {
 			//        case .secondary:
 			//            backgroundColor = Theme.colors.tertiary
 			//            setTitleColor(Theme.colors.primary, for: .normal)
-			case .tertiary:
-				backgroundColor = Theme.colors.tertiary
-				setTitleColor(Theme.colors.primary, for: .normal)
+//			case .tertiary:
+//				backgroundColor = Theme.colors.tertiary
+//				setTitleColor(Theme.colors.primary, for: .normal)
 			//        case .warning:
 			//            backgroundColor = Theme.colors.warning
 			//            setTitleColor(.white, for: .normal)

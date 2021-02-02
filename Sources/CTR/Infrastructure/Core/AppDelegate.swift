@@ -37,11 +37,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func styleUI() {
 
 		// Custom navigation bar appearance
-		UINavigationBar.appearance().barTintColor = .white
+		UINavigationBar.appearance().barTintColor = .clear
 		UINavigationBar.appearance().titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: UIColor.darkText
 		]
-		UINavigationBar.appearance().isTranslucent = false
+		UINavigationBar.appearance().isTranslucent = true
 		UINavigationBar.appearance().shadowImage = UIImage()
 		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
 		UINavigationBar.appearance().backgroundColor = .clear

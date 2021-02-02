@@ -36,3 +36,16 @@
 /* MARK: - Main */
 "main.holder" = "Holder";
 "main.verifier" = "Verifier";
+
+/* MARK: - Onboarding */
+"onboarding.title.1" = "Veilig op pad";
+"onboarding.message.1" = "We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
+"onboarding.title.2" = "Jouw QR-code op zak";
+"onboarding.message.2" = "In deze app zet je jouw testuitslag om in een QR-code. Deze laat je scannen bij de ingang van het café, in de rij voor een event of bij andere uitgaansgelegenheden.";
+"onboarding.title.3" = "VUitslag geldt 2 dagen";
+"onboarding.message.3" = "Een negatieve testuitslag is 2 dagen geldig. Daarna niet meer. De QR-code verdwijnt dan automatisch uit de app. Nieuwe QR nodig? Laat je dan opnieuw op corona testen.";
+"onboarding.title.4" = "Een veilig systeem";
+"onboarding.message.4" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
+"onboarding.title.5" = "Privacy staat voorop";
+"onboarding.message.5" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\n\nLees de privacyverklaring";
+
