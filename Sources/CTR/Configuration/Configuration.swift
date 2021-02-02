@@ -13,21 +13,17 @@ protocol ConfigurationProtocol {
 	/// - Returns: the host for the API
 	func getAPIHost() -> String
 
-	/// Get the endpoint for the agent
-	/// - Returns: the agent endpoint
-	func getAgentEndpoint() -> String
-
-	/// Get the endpoint for the event
-	/// - Returns: the event endpoint
-	func getEventEndpoint() -> String
+	/// Get the endpoint for the nonce
+	/// - Returns: the nonce endpoint
+	func getNonceEndpoint() -> String
 
 	/// Get the endpoint for the public keys
 	/// - Returns: the public keys endpoint
 	func getPublicKeysEndpoint() -> String
 
-	/// Get the endpoint for the test results
+	/// Get the endpoint for the test results with ism
 	/// - Returns: the test results endpoint
-	func getTestResultsEndpoint() -> String
+	func getIsmEndpoint() -> String
 }
 
 class Configuration: ConfigurationProtocol {
@@ -69,22 +65,12 @@ class Configuration: ConfigurationProtocol {
 		return value
 	}
 
-	/// Get the endpoint for the agent
-	/// - Returns: the agent endpoint
-	func getAgentEndpoint() -> String {
+	/// Get the endpoint for the nonce
+	/// - Returns: the nonce endpoint
+	func getNonceEndpoint() -> String {
 
-		guard let value = api["agentEndpoint"] as? String else {
-			fatalError("Configuration: No Agent Endpoint provided")
-		}
-		return value
-	}
-
-	/// Get the endpoint for the event
-	/// - Returns: the event endpoint
-	func getEventEndpoint() -> String {
-
-		guard let value = api["eventEndpoint"] as? String else {
-			fatalError("Configuration: No Event Endpoint provided")
+		guard let value = api["nonceEndpoint"] as? String else {
+			fatalError("Configuration: No Nonce Endpoint provided")
 		}
 		return value
 	}
@@ -99,12 +85,12 @@ class Configuration: ConfigurationProtocol {
 		return value
 	}
 
-	/// Get the endpoint for the test results
+	/// Get the endpoint for the test results with ism
 	/// - Returns: the test results endpoint
-	func getTestResultsEndpoint() -> String {
+	func getIsmEndpoint() -> String {
 
-		guard let value = api["testresultsEndpoint"] as? String else {
-			fatalError("Configuration: No Public Keys Endpoint provided")
+		guard let value = api["ismEndpoint"] as? String else {
+			fatalError("Configuration: No ISM Endpoint provided")
 		}
 		return value
 	}

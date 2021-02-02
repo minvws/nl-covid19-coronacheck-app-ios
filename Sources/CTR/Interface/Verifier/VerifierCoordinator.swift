@@ -10,25 +10,18 @@ import UIKit
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 
-	/// Navigate to the Agent  Scene
-	func navigateToAgent()
+	// Navigate to the Scan Scene
+	func navigateToScan()
 
-	// Navigate to the Customer Scan Scene
-	func navigateToCustomerScan()
+	// Navigate to the Scan Result
+	func navigateToScanResult()
 
-	// Navigate to the Test Result
-	func navigateToTestResult()
-
-	/// Navigate to the start fo the customer flow
+	/// Navigate to the start fo the verifier flow
 	func navigateToStart()
 
-	/// Set the agent envelope
-	/// - Parameter event: the agentEvelope
-	func setAgentEnvelope(_ agentEvelope: AgentEnvelope)
-
-	/// Set the customer QR
-	/// - Parameter result: customer QR
-	func setCustomerQR(_ result: CustomerQR)
+	/// Set the scan result
+	/// - Parameter result: True if valid
+	func setScanResult(_ result: Bool)
 
 	/// Dismiss the viewcontroller
 	func dismiss()
@@ -36,7 +29,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 class VerifierCoordinator: Coordinator {
 
-	var coronaTestProof: CTRModel?
+	var isValid: Bool = false
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -63,46 +56,33 @@ class VerifierCoordinator: Coordinator {
 
 extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
-	/// Navigate to the Agent  Scene
-	func navigateToAgent() {
+	// Navigate to the Scan Scene
+	func navigateToScan() {
 
-		let viewController = VerifierAgentScanViewController()
-		viewController.coordinator = self
-		navigationController.pushViewController(viewController, animated: true)
-	}
-
-	// Navigate to the Customer Scan Scene
-	func navigateToCustomerScan() {
-
-		let viewController = VerifierScanViewController()
-		viewController.coordinator = self
+		let viewController = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
 	// Navigate to the Test Result
-	func navigateToTestResult() {
+	func navigateToScanResult() {
 
-		let viewController = VerifierResultViewController()
-		viewController.coordinator = self
-		viewController.valid = coronaTestProof?.validateCustomerQR() ?? false
+		let viewController = VerifierResultViewController(
+			viewModel: VerifierResultViewModel(
+				coordinator: self,
+				result: isValid
+			)
+		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	/// Set the agent envelope
-	/// - Parameter event: the agentEvelope
-	func setAgentEnvelope(_ envelope: AgentEnvelope) {
+	/// Set the scan result
+	/// - Parameter result: True if valid
+	func setScanResult(_ result: Bool) {
 
-		coronaTestProof?.agentEnvelope = envelope
+		isValid = result
 	}
 
-	/// Set the customer QR
-	/// - Parameter result: customer QR
-	func setCustomerQR(_ result: CustomerQR) {
-
-		coronaTestProof?.customerQR = result
-	}
-
-	/// Navigate to the start fo the customer flow
+	/// Navigate to the start fo the verifier flow
 	func navigateToStart() {
 
 		guard navigationController.viewControllers.count > 1 else {

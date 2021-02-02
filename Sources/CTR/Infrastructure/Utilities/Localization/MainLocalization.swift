@@ -9,9 +9,9 @@ import Foundation
 
 extension String {
 
-	static var mainCustomer: String {
+	static var mainHolder: String {
 
-		return Localization.string(for: "main.customer")
+		return Localization.string(for: "main.holder")
 	}
 
 	static var mainVerifier: String {

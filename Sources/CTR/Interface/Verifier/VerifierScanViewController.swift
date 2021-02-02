@@ -7,29 +7,75 @@
 
 import UIKit
 
-class VerifierScanViewController: ScanViewController {
+class VerifierScanViewModel: Logging {
 
+	var loggingCategory: String = "VerifierScanViewModel"
+
+	/// The crypto manager
+	var cryptoManager: CryptoManagerProtocol = CryptoManager()
+
+	/// Coordination Delegate
 	weak var coordinator: VerifierCoordinatorDelegate?
 
+	// MARK: - Bindable properties
+
+	@Bindable private(set) var primaryButtonTitle: String
+
+	/// Initializer
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	///   - userIdentifier: the user identifier
+	init(
+		coordinator: VerifierCoordinatorDelegate) {
+
+		self.coordinator = coordinator
+		primaryButtonTitle = "scan opnieuw"
+	}
+
+	func parseQRMessage(_ message: String) {
+
+		let result = cryptoManager.verifyQRMessage(message)
+		coordinator?.setScanResult(result)
+		coordinator?.navigateToScanResult()
+	}
+}
+
+class VerifierScanViewController: ScanViewController {
+
+	private let viewModel: VerifierScanViewModel
+
+	init(viewModel: VerifierScanViewModel) {
+
+		self.viewModel = viewModel
+
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	// MARK: View lifecycle
+	override func loadView() {
+
+		view = sceneView
+	}
+
 	override func viewDidLoad() {
+
 		super.viewDidLoad()
 
 		// Do any additional setup after loading the view.
 		title = "Verifier Scan"
-	}
 
-	override func found(code: String) {
-		super.found(code: code)
+		viewModel.$primaryButtonTitle.binding = {
 
-		do {
-			if let data = code.data(using: .utf8) {
-				let result = try JSONDecoder().decode(CustomerQR.self, from: data)
-
-				coordinator?.setCustomerQR(result)
-				coordinator?.navigateToTestResult()
-			}
-		} catch let error {
-			print("CTR: error! \(error)")
+			self.sceneView.primaryTitle = $0
 		}
+	}
+	override func found(code: String) {
+
+		viewModel.parseQRMessage(code)
 	}
 }

@@ -10,120 +10,89 @@ import Foundation
 
 /// The protocol for all api calls
 protocol ApiClientProtocol {
-
-	/// Get the agent details
-	/// - Parameters:
-	///   - identifier: the identifer of the event
-	///   - completionHandler: the completion handler
-	func getAgentEnvelope(identifier: String, completionHandler: @escaping (AgentEnvelope?) -> Void)
-
-	/// Get the event details
-	/// - Parameters:
-	///   - identifier: the event identifier
-	///   - completionHandler: completion handler
-	func getEvent(identifier: String, completionHandler: @escaping (EventEnvelope?) -> Void)
-
+	
 	/// Get the public keys
 	/// - Parameter completionHandler: completion handler
 	func getPublicKeys(completionHandler: @escaping ([Issuer]) -> Void)
-
+	
+	/// Get the nonce
+	/// - Parameter completionHandler: completion handler
+	func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void)
+	
 	/// Get the test results
 	/// - Parameters:
 	///   - identifier: the identifier of the user
 	///   - completionHandler: the completion handler
-	func getTestResults(identifier: String, completionHandler: @escaping (TestResultEnvelope?) -> Void)
+	func getTestResults(
+		identifier: String,
+		completionHandler: @escaping (Data?) -> Void)
 
-	/// Get the test results
+	/// Fetch the test results with issue signature message
 	/// - Parameters:
-	///   - token: the access token
+	///   - dictionary: dictionary
 	///   - completionHandler: the completion handler
-	func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void)
-
-	/// Post the authorization token
-	/// - Parameters:
-	///   - token: the authorization token
-	///   - completionHandler: the completion handler
-	func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void)
+	func fetchTestResultsWithISM(
+		dictionary: [String: AnyObject],
+		completionHandler: @escaping (Data?) -> Void)
 }
 
 /// The Api Client for all API Calls.
 class ApiClient: ApiClientProtocol {
-
-	/// Get the agent details
-	/// - Parameters:
-	///   - identifier: the identifer of the event
-	///   - completionHandler: the completion handler
-	func getAgentEnvelope(identifier: String, completionHandler: @escaping (AgentEnvelope?) -> Void) {
-
-		AF.request(
-			ApiRouter.agent(identifier: identifier)
-		)
-		.responseDecodable(of: AgentEnvelope.self) { response in
-
-			switch response.result {
-				case let .success(object):
-					completionHandler(object)
-
-				case .failure:
-					completionHandler(nil)
-			}
-		}
-	}
-
-	/// Get the event details
-	/// - Parameters:
-	///   - identifier: the event identifier
-	///   - completionHandler: completion handler
-	func getEvent(identifier: String, completionHandler: @escaping (EventEnvelope?) -> Void) {
-
-		AF.request(
-			ApiRouter.event(identifier: identifier)
-		)
-		.responseDecodable(of: EventEnvelope.self) { response in
-
-			switch response.result {
-				case let .success(object):
-					completionHandler(object)
-
-				case .failure:
-					completionHandler(nil)
-			}
-		}
-	}
-
+	
 	/// Get the public keys
 	/// - Parameter completionHandler: completion handler
 	func getPublicKeys(completionHandler: @escaping ([Issuer]) -> Void) {
-
+		
 		AF.request(
 			ApiRouter.publicKeys
 		)
 		.responseDecodable(of: Issuers.self) { response in
-
+			
 			switch response.result {
 				case let .success(object):
 					completionHandler(object.issuers)
-
+					
 				case .failure:
 					completionHandler([])
 			}
 		}
 	}
+	
+	/// Get the nonce
+	/// - Parameter completionHandler: completion handler
+	func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void) {
+		
+		AF.request(
+			ApiRouter.nonce
+		)
+		.responseDecodable(of: NonceEnvelope.self) { response in
+			
+			switch response.result {
+				case let .success(object):
+					completionHandler(object)
+					
+				case .failure:
+					completionHandler(nil)
+			}
+		}
+	}
 
 	/// Get the test results
+	/// debug purpose only!
 	/// - Parameters:
 	///   - identifier: the identifier of the user
 	///   - completionHandler: the completion handler
-	func getTestResults(identifier: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
+	func getTestResults(
+		identifier: String,
+		completionHandler: @escaping (Data?) -> Void) {
 
 		AF.request(
 			ApiRouter.testResults(identifier: identifier)
 		)
-		.responseDecodable(of: TestResultEnvelope.self) { response in
-
+		.responseData { response in
 			switch response.result {
-				case let .success(object):
-					completionHandler(object)
+				case let .success(data):
+					completionHandler(data)
 
 				case let .failure(error):
 					print(error)
@@ -131,47 +100,34 @@ class ApiClient: ApiClientProtocol {
 			}
 		}
 	}
-
-	/// Get the test results
+	
+	/// Fetch the test results with issue signature message
 	/// - Parameters:
-	///   - token: the access token
+	///   - dictionary: dictionary
 	///   - completionHandler: the completion handler
-	func getTestResultsWithToken(token: String, completionHandler: @escaping (TestResultEnvelope?) -> Void) {
-
-		AF.request(
-			ApiRouter.testResultsWithAuthToken(token: token)
-		)
-		.responseDecodable(of: TestResultEnvelope.self) { response in
-
-			switch response.result {
-				case let .success(object):
-					completionHandler(object)
-
-				case let .failure(error):
-					print(error)
-					completionHandler(nil)
+	func fetchTestResultsWithISM(
+		dictionary: [String: AnyObject],
+		completionHandler: @escaping (Data?) -> Void) {
+		
+		do {
+			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+			AF.request(
+				ApiRouter.testResultsWithIssuerSignatureMessage(body: jsonData)
+			)
+			.responseData { response in
+				
+				switch response.result {
+					case let .success(object):
+						completionHandler(object)
+						
+					case let .failure(error):
+						print(error)
+						completionHandler(nil)
+				}
 			}
-		}
-	}
-
-	/// Post the authorization token
-	/// - Parameters:
-	///   - token: the authorization token
-	///   - completionHandler: the completion handler
-	func postAuthorizationToken(_ token: String, completionHandler: @escaping (Bool) -> Void) {
-
-		AF.request(
-			ApiRouter.authorizationToken(token: token)
-		).response { response in
-
-			switch response.result {
-				case .success:
-					completionHandler(true)
-
-				case let .failure(error):
-					print(error)
-					completionHandler(false)
-			}
+			
+		} catch {
+			completionHandler(nil)
 		}
 	}
 }

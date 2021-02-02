@@ -6,14 +6,12 @@
 	<dict>
 		<key>apiHost</key>
 		<string>https://api-ct.bananenhalen.nl</string>
-		<key>agentEndpoint</key>
-		<string>/verifier/get_agent</string>
-		<key>eventEndpoint</key>
-		<string>/verifier/get_event</string>
+		<key>nonceEndpoint</key>
+		<string>/holder/get_nonce</string>
 		<key>publicKeysEndpoint</key>
-		<string>/verifier/get_public_keys</string>
-		<key>testresultsEndpoint</key>
-		<string>/citizen/get_test_results</string>
+		<string>/holder/get_public_keys</string>
+		<key>ismEndpoint</key>
+		<string>/holder/get_test_ism</string>
 	</dict>
 	<key>digid</key>
 	<dict>
@@ -31,9 +29,9 @@
 	<key>remoteConfig</key>
 	<dict>
 		<key>host</key>
-		<string>https://labs.roolproductions.com</string>
+		<string>https://api-ct.bananenhalen.nl</string>
 		<key>configEndpoint</key>
-		<string>/v1/config</string>
+		<string>/holder/config</string>
 	</dict>
 </dict>
 </plist>
