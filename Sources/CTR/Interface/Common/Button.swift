@@ -52,7 +52,7 @@ class Button: UIButton {
 
         self.setTitle(title, for: .normal)
         self.title = title
-        self.titleLabel?.font = Theme.fonts.headline
+        self.titleLabel?.font = Theme.fonts.bodyBold
 
         self.layer.cornerRadius = 5
         self.clipsToBounds = true

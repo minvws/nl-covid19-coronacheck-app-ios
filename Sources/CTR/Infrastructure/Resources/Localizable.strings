@@ -48,4 +48,5 @@
 "onboarding.message.4" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
 "onboarding.title.5" = "Privacy staat voorop";
 "onboarding.message.5" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\n\nLees de privacyverklaring";
+"onboarding.message.5.underline" = "Lees de privacyverklaring";
 

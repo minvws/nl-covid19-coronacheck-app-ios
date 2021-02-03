@@ -75,81 +75,18 @@ class Fonts {
 }
 
 final class Colors {
-    var primary: UIColor {
-        return color(for: "PrimaryColor")
-    }
 
-    var tertiary: UIColor {
-        return color(for: "TertiaryColor")
-    }
+	var primary: UIColor { return color(for: "PrimaryColor") }
 
-    var warning: UIColor {
-        return color(for: "WarningColor")
-    }
-//
-//    var gray: UIColor {
-//        return color(for: "GrayColor")
-//    }
-//
-    var ok: UIColor {
-        return color(for: "OkGreen")
-    }
-//
-//    var notified: UIColor {
-//        return color(for: "NotifiedRed")
-//    }
-//
-//    var inactive: UIColor {
-//        return color(for: "InactiveOrange")
-//    }
-//
-//    var statusGradientActive: UIColor {
-//        return color(for: "StatusGradientBlue")
-//    }
-//
-//    var statusGradientNotified: UIColor {
-//        return color(for: "StatusGradientRed")
-//    }
-//
-//    var navigationControllerBackground: UIColor {
-//        return color(for: "NavigationControllerBackgroundColor")
-//    }
-//
-//    var viewControllerBackground: UIColor {
-//        return color(for: "ViewControllerBackgroundColor")
-//    }
-//
-//    var headerBackgroundBlue: UIColor {
-//        return color(for: "HeaderBackgroundBlue")
-//    }
-//
-//    var headerBackgroundRed: UIColor {
-//        return color(for: "HeaderBackgroundRed")
-//    }
-//
-//    var lightOrange: UIColor {
-//        return color(for: "LightOrange")
-//    }
+	var iosBlue: UIColor { return color(for: "IosBlue") }
 
-    var captionGray: UIColor {
-        return color(for: "CaptionGray")
-    }
-//
-//    var separator: UIColor {
-//        return color(for: "Separator")
-//    }
-//
-//    var graySeparator: UIColor {
-//        return color(for: "GraySeparator")
-//    }
-//
-//    var disabledBorder: UIColor {
-//        return color(for: "DisabledBorder")
-//    }
-//
-//    var disabledIcon: UIColor {
-//        return color(for: "DisabledIcon")
-//    }
+    var tertiary: UIColor { return color(for: "TertiaryColor") }
+
+    var warning: UIColor { return color(for: "WarningColor") }
+
+    var ok: UIColor { return color(for: "OkGreen") }
+
+	var gray: UIColor { return color(for: "DotGray") }
 
     // MARK: - Private
 

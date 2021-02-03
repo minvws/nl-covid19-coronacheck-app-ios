@@ -59,4 +59,9 @@ extension String {
 		return Localization.string(for: "onboarding.message.5")
 	}
 
+	static var onboardingUnderline5: String {
+
+		return Localization.string(for: "onboarding.message.5.underline")
+	}
+
 }

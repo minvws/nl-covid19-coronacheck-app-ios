@@ -13,14 +13,15 @@ class OnboardingView: BaseView {
 	private struct ViewTraits {
 		
 		// Dimensions
-		static let buttonHeight: CGFloat = 50
-		static let titleLineHeight: CGFloat = 34
-		static let messageLineHeight: CGFloat = 20
+		static let buttonHeight: CGFloat = 52
+		static let titleLineHeight: CGFloat = 26
+		static let messageLineHeight: CGFloat = 22
 		
 		// Margins
-		static let margin: CGFloat = 16.0
+		static let margin: CGFloat = 20.0
 		static let ribbonOffset: CGFloat = 15.0
-		static let buttonWidthPercentage: CGFloat = 0.5
+		static let buttonWidth: CGFloat = 182.0
+		static let pageControlMargin: CGFloat = 12.0
 	}
 	
 	private let ribbonView: UIImageView = {
@@ -62,8 +63,8 @@ class OnboardingView: BaseView {
 		let view = UIPageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isUserInteractionEnabled = false
-		view.pageIndicatorTintColor = .lightGray
-		view.currentPageIndicatorTintColor = .gray
+		view.pageIndicatorTintColor = Theme.colors.gray.withAlphaComponent(0.3)
+		view.currentPageIndicatorTintColor = Theme.colors.gray
 		return view
 	}()
 	
@@ -158,10 +159,7 @@ class OnboardingView: BaseView {
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(
-				equalTo: widthAnchor,
-				multiplier: ViewTraits.buttonWidthPercentage
-			),
+			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
@@ -184,7 +182,7 @@ class OnboardingView: BaseView {
 			// Page Control
 			pageControl.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin),
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
@@ -210,5 +208,16 @@ class OnboardingView: BaseView {
 		didSet {
 			imageView.image = image
 		}
+	}
+
+	func underline(_ text: String?) {
+
+		guard let underlinedText = text,
+			  let messageText = message else {
+			return
+		}
+
+		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
+		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 	}
 }

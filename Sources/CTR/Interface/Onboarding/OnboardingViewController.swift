@@ -49,6 +49,9 @@ class OnboardingViewController: BaseViewController {
 
 		viewModel.$title.binding = { self.sceneView.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$underlinedText.binding = {
+			self.sceneView.underline($0)
+		}
 		viewModel.$image.binding = { self.sceneView.image = $0 }
 		viewModel.$numberOfPages.binding = { self.sceneView.pageControl.numberOfPages = $0 }
 		viewModel.$pageNumber.binding = {

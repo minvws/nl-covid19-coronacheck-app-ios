@@ -14,6 +14,7 @@ class OnboardingViewModel {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
+	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var pageNumber: Int
 	@Bindable private(set) var numberOfPages: Int
@@ -35,6 +36,7 @@ class OnboardingViewModel {
 		message = onboardingInfo.message
 		image = onboardingInfo.image
 		pageNumber = onboardingInfo.step.rawValue
+		underlinedText = onboardingInfo.underlinedText
 		self.numberOfPages = numberOfPages
 		self.step = onboardingInfo.step
 	}
