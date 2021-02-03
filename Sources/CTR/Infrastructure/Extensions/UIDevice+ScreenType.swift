@@ -10,6 +10,12 @@ import UIKit
 
 extension UIDevice {
 
+	/// Is this a device with a smaller screen? (4" screen)
+	var isSmallScreen: Bool {
+
+		return UIScreen.main.nativeBounds.height <= 1136
+	}
+
 	/// Does this phone have a notch?
 	var hasNotch: Bool {
 		

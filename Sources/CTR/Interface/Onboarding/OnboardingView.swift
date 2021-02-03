@@ -14,28 +14,30 @@ class OnboardingView: BaseView {
 		
 		// Dimensions
 		static let buttonHeight: CGFloat = 50
+		static let titleLineHeight: CGFloat = 34
+		static let messageLineHeight: CGFloat = 20
 		
 		// Margins
 		static let margin: CGFloat = 16.0
 		static let ribbonOffset: CGFloat = 15.0
-		static let buttonOffset: CGFloat = 80.0
+		static let buttonWidthPercentage: CGFloat = 0.5
 	}
 	
-	let ribbonView: UIImageView = {
+	private let ribbonView: UIImageView = {
 		
 		let view = UIImageView(image: .ribbon)
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
-	let imageContainerView: UIView = {
+	private let imageContainerView: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 	
-	let imageView: UIImageView = {
+	private let imageView: UIImageView = {
 		
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -44,13 +46,13 @@ class OnboardingView: BaseView {
 	}()
 	
 	/// The title label
-	let titleLabel: Label = {
+	private let titleLabel: Label = {
 		
 		return Label(title1: nil).multiline()
 	}()
 	
 	/// The message label
-	let messageLabel: Label = {
+	private let messageLabel: Label = {
 		
 		return Label(body: nil).multiline()
 	}()
@@ -72,8 +74,6 @@ class OnboardingView: BaseView {
 		button.rounded = true
 		return button
 	}()
-
-	private var ribbonTopConstraint: NSLayoutConstraint?
 	
 	/// setup the views
 	override func setupViews() {
@@ -99,15 +99,15 @@ class OnboardingView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-
-		ribbonTopConstraint = ribbonView.topAnchor.constraint(equalTo: topAnchor)
-		ribbonTopConstraint?.constant = UIDevice.current.hasNotch ? ViewTraits.ribbonOffset : -ViewTraits.ribbonOffset
-		ribbonTopConstraint?.isActive = true
 		
 		NSLayoutConstraint.activate([
 			
 			// Ribbon
 			ribbonView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			ribbonView.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: UIDevice.current.hasNotch ? ViewTraits.ribbonOffset : -ViewTraits.ribbonOffset
+			),
 
 			// ImageContainer
 			imageContainerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
@@ -156,30 +156,49 @@ class OnboardingView: BaseView {
 			),
 			messageLabel.bottomAnchor.constraint(
 				equalTo: pageControl.topAnchor,
-				constant: -ViewTraits.margin
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
 			),
 			
 			// Page Control
 			pageControl.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: -ViewTraits.margin)
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin)
 			,
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
 			
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
-			primaryButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.buttonOffset
-			),
-			primaryButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.buttonOffset
+			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+			primaryButton.widthAnchor.constraint(
+				equalTo: widthAnchor,
+				multiplier: ViewTraits.buttonWidthPercentage
 			),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	// MARK: Public Access
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
+		}
+	}
+
+	/// The message
+	var message: String? {
+		didSet {
+			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+		}
+	}
+
+	var image: UIImage? {
+		didSet {
+			imageView.image = image
+		}
 	}
 }

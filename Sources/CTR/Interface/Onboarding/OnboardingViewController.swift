@@ -15,19 +15,33 @@ class OnboardingViewModel {
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var image: UIImage?
-	@Bindable private(set) var step: Int
+	@Bindable private(set) var pageNumber: Int
+	@Bindable private(set) var numberOfPages: Int
 
+	var step: OnboardingStep
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: OnboardingCoordinatorDelegate, onboardingInfo: OnboardingInfo) {
+	///   - onboardingInfo: the container with onboarding info
+	///   - numberOfPages: the total number of pages
+	init(
+		coordinator: OnboardingCoordinatorDelegate,
+		onboardingInfo: OnboardingInfo,
+		numberOfPages: Int) {
 
 		self.coordinator = coordinator
 
 		title = onboardingInfo.title
 		message = onboardingInfo.message
 		image = onboardingInfo.image
-		step = onboardingInfo.step.rawValue
+		pageNumber = onboardingInfo.step.rawValue
+		self.numberOfPages = numberOfPages
+		self.step = onboardingInfo.step
+	}
+
+	func nextButtonClicked() {
+
+		coordinator?.nextButtonClicked(step: step)
 	}
 }
 
@@ -48,7 +62,6 @@ class OnboardingViewController: BaseViewController {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
-//		modalPresentationStyle = .overFullScreen
 	}
 
 	/// Required initialzer
@@ -72,30 +85,23 @@ class OnboardingViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = {
-
-			self.sceneView.titleLabel.text = $0
-		}
-
-		viewModel.$message.binding = {
-
-			self.sceneView.messageLabel.text = $0
-		}
-		viewModel.$image.binding = {
-
-			self.sceneView.imageView.image = $0
-		}
-		viewModel.$step.binding = {
+		viewModel.$title.binding = { self.sceneView.title = $0 }
+		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$image.binding = { self.sceneView.image = $0 }
+		viewModel.$numberOfPages.binding = { self.sceneView.pageControl.numberOfPages = $0 }
+		viewModel.$pageNumber.binding = {
 
 			self.sceneView.pageControl.currentPage = $0
+			self.navigationItem.hidesBackButton = $0 == 0
 		}
 
 		sceneView.primaryButton.setTitle(.next, for: .normal)
-		sceneView.pageControl.numberOfPages = 5
+		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+	}
 
-		navigationItem.hidesBackButton = true
+	/// User tapped on the button
+	@objc private func primaryButtonTapped() {
 
-//		// Actions
-//		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		viewModel.nextButtonClicked()
 	}
 }

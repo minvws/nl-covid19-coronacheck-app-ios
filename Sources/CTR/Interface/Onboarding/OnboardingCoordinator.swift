@@ -9,9 +9,14 @@ import UIKit
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
 
+	/// The user clicked on the next button
+	/// - Parameter step: the current onboarding step
+	func nextButtonClicked(step: OnboardingStep)
 }
 
-class OnboardingCoordinator: Coordinator {
+class OnboardingCoordinator: Coordinator, Logging {
+
+	var loggingCategory: String = "OnboardingCoordinator"
 
 	var coronaTestProof: CTRModel?
 
@@ -25,25 +30,35 @@ class OnboardingCoordinator: Coordinator {
 	init(navigationController: UINavigationController) {
 
 		self.navigationController = navigationController
+		onboardingInfos = factory.generate()
 	}
 
-	var currentStep: OnboardingStep = .safelyOnTheRoad
-
-	var onboardingInfo: [OnboardingInfo] = []
+	var onboardingInfos: [OnboardingInfo] = []
 
 	var factory: OnboardingFactoryProtocol = OnboardingFactory()
 
 	// Designated starter method
 	func start() {
 
-		onboardingInfo = factory.generate()
+		if let info = onboardingInfos.first {
+			addOnboardingStep(info)
+		}
+	}
 
-		let info = onboardingInfo[currentStep.rawValue]
+	/*
+
+	Thijs Weitkamp iPhone 
+	*/
+
+	/// Add an onboarding step
+	/// - Parameter info: the info for the onboarding step
+	func addOnboardingStep(_ info: OnboardingInfo) {
 
 		let viewController = OnboardingViewController(
 			viewModel: OnboardingViewModel(
 				coordinator: self,
-				onboardingInfo: info
+				onboardingInfo: info,
+				numberOfPages: onboardingInfos.count
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -54,4 +69,18 @@ class OnboardingCoordinator: Coordinator {
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 
+	/// The user clicked on the next button
+	/// - Parameter step: the current onboarding step
+	func nextButtonClicked(step: OnboardingStep) {
+
+		let rawValue = step.rawValue
+
+		if rawValue < onboardingInfos.count {
+			let info = onboardingInfos[rawValue + 1]
+			addOnboardingStep(info)
+		} else if rawValue == onboardingInfos.count {
+
+			self.logInfo("Onboarding completed!")
+		}
+	}
 }
