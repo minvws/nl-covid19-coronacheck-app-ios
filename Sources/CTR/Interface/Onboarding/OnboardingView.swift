@@ -130,7 +130,7 @@ class OnboardingView: BaseView {
 				equalTo: imageContainerView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			
+
 			// Title
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -144,7 +144,7 @@ class OnboardingView: BaseView {
 				equalTo: messageLabel.topAnchor,
 				constant: -ViewTraits.margin
 			),
-			
+
 			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -154,18 +154,7 @@ class OnboardingView: BaseView {
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			messageLabel.bottomAnchor.constraint(
-				equalTo: pageControl.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
-			),
-			
-			// Page Control
-			pageControl.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin)
-			,
-			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor),
-			
+
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -180,22 +169,43 @@ class OnboardingView: BaseView {
 		])
 	}
 
+	override func layoutSubviews() {
+		super.layoutSubviews()
+
+		// Layout page control when the view has a frame
+		NSLayoutConstraint.activate([
+
+			// Message
+			messageLabel.bottomAnchor.constraint(
+				equalTo: pageControl.topAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
+			),
+
+			// Page Control
+			pageControl.bottomAnchor.constraint(
+				equalTo: primaryButton.topAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin),
+			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
+		])
+	}
+
 	// MARK: Public Access
 
-	/// The title
+	/// The onboarding title
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 
-	/// The message
+	/// The onboarding message
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
 		}
 	}
 
+	/// The onboarding mage
 	var image: UIImage? {
 		didSet {
 			imageView.image = image

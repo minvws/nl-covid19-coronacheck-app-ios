@@ -14,11 +14,15 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	func nextButtonClicked(step: OnboardingStep)
 }
 
+protocol OnboardingDelegate: AnyObject {
+
+	/// The onboarding is finished
+	func finishOnboarding()
+}
+
 class OnboardingCoordinator: Coordinator, Logging {
 
 	var loggingCategory: String = "OnboardingCoordinator"
-
-	var coronaTestProof: CTRModel?
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -26,39 +30,39 @@ class OnboardingCoordinator: Coordinator, Logging {
 	/// The navigation controller
 	var navigationController: UINavigationController
 
+	weak var onboardingDelegate: OnboardingDelegate?
+
 	/// Initiatilzer
-	init(navigationController: UINavigationController) {
+	init(
+		navigationController: UINavigationController,
+		onboardingDelegate: OnboardingDelegate) {
 
 		self.navigationController = navigationController
-		onboardingInfos = factory.generate()
+		self.onboardingDelegate = onboardingDelegate
+		onboardingPages = factory.create()
 	}
 
-	var onboardingInfos: [OnboardingInfo] = []
+	var onboardingPages: [OnboardingPage] = []
 
 	var factory: OnboardingFactoryProtocol = OnboardingFactory()
-
+	
 	// Designated starter method
 	func start() {
 
-		if let info = onboardingInfos.first {
+		if let info = onboardingPages.first {
 			addOnboardingStep(info)
 		}
 	}
 
-	/*
-
-	Thijs Weitkamp iPhone 
-	*/
-
 	/// Add an onboarding step
 	/// - Parameter info: the info for the onboarding step
-	func addOnboardingStep(_ info: OnboardingInfo) {
+	func addOnboardingStep(_ info: OnboardingPage) {
 
 		let viewController = OnboardingViewController(
 			viewModel: OnboardingViewModel(
 				coordinator: self,
 				onboardingInfo: info,
-				numberOfPages: onboardingInfos.count
+				numberOfPages: onboardingPages.count
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -74,13 +78,15 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	func nextButtonClicked(step: OnboardingStep) {
 
 		let rawValue = step.rawValue
+		let nextValue = rawValue + 1
 
-		if rawValue < onboardingInfos.count {
-			let info = onboardingInfos[rawValue + 1]
+		if nextValue < onboardingPages.count {
+			let info = onboardingPages[nextValue]
 			addOnboardingStep(info)
-		} else if rawValue == onboardingInfos.count {
+		} else if nextValue == onboardingPages.count {
 
 			self.logInfo("Onboarding completed!")
+			onboardingDelegate?.finishOnboarding()
 		}
 	}
 }
