@@ -18,14 +18,14 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	/// Navigate to the start fo the holder flow
 	func navigateToStart()
-
-	/// Dismiss the viewcontroller
-	func dismiss()
 }
 
 class HolderCoordinator: Coordinator {
 
 	var coronaTestProof: CTRModel?
+
+	/// The onboardings manager
+	var onboardingManager: OnboardingManagerProtocol = OnboardingManager()
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -42,15 +42,30 @@ class HolderCoordinator: Coordinator {
 	// Designated starter method
 	func start() {
 
-		let viewController = HolderStartViewController()
-		viewController.coordinator = self
-		navigationController.pushViewController(viewController, animated: true)
+		if onboardingManager.needsOnboarding {
+
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self
+			)
+			startChildCoordinator(coordinator)
+		} else {
+
+			navigateToHolderStart()
+		}
 	}
 }
 
 // MARK: - HolderCoordinatorDelegate
 
 extension HolderCoordinator: HolderCoordinatorDelegate {
+
+	func navigateToHolderStart() {
+
+		let viewController = HolderStartViewController()
+		viewController.coordinator = self
+		navigationController.viewControllers = [viewController]
+	}
 
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults() {
@@ -76,15 +91,24 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the start fo the holder flow
 	func navigateToStart() {
 
-		guard navigationController.viewControllers.count > 1 else {
-			return
-		}
-		navigationController.popToViewController(navigationController.viewControllers[1], animated: true)
+		navigationController.popToRootViewController(animated: true)
 	}
+}
 
-	/// Dismiss the viewcontroller
-	func dismiss() {
+extension HolderCoordinator: OnboardingDelegate {
 
-		navigationController.popViewController(animated: true)
+	/// The onboarding is finished
+	func finishOnboarding() {
+
+		// Mark as complete
+		onboardingManager.finishOnboarding()
+
+		// Remove child coordinator
+		if let onboardingCoorinator = childCoordinators.first {
+			removeChildCoordinator(onboardingCoorinator)
+		}
+
+		// Navigate to Holder Start.
+		navigateToHolderStart()
 	}
 }

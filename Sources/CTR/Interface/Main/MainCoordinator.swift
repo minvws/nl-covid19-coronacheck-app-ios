@@ -42,8 +42,8 @@ class MainCoordinator: NSObject, Coordinator {
 			return
 		}
 
-		// Start the CoronaTestProof
-		coronaTestProof.populate()
+//		// Start the CoronaTestProof
+//		coronaTestProof.populate()
 
 		navigationController.delegate = self
 		let viewController = MainViewController(
