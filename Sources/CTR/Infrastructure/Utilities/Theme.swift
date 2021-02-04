@@ -76,6 +76,8 @@ class Fonts {
 
 final class Colors {
 
+	var dark: UIColor { return color(for: "DarkColor") }
+
 	var primary: UIColor { return color(for: "PrimaryColor") }
 
 	var iosBlue: UIColor { return color(for: "IosBlue") }

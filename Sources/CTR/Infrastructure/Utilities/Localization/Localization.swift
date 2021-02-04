@@ -67,6 +67,11 @@ extension String {
 //    static var tryAgain: String { return Localization.string(for: "tryAgain") }
 //    static var delete: String { return Localization.string(for: "delete") }
 
+	static var previous: String {
+
+		return Localization.string(for: "general.previous")
+	}
+
 	static var errorTitle: String {
 
 		return Localization.string(for: "general.error.title")
