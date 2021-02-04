@@ -26,8 +26,6 @@ class CTRModel {
 
 	var issuers: [Issuer] = []
 
-	var apiClient: ApiClientProtocol = ApiClient()
-
 	func populate() {
 
 		fetchIssuers()
@@ -35,8 +33,6 @@ class CTRModel {
 
 	func fetchIssuers() {
 
-		apiClient.getPublicKeys { issuers in
-			self.issuers = issuers
-		}
+// Todo
 	}
 }

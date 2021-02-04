@@ -2,17 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>api</key>
-	<dict>
-		<key>apiHost</key>
-		<string>https://api-ct.bananenhalen.nl</string>
-		<key>nonceEndpoint</key>
-		<string>/holder/get_nonce</string>
-		<key>publicKeysEndpoint</key>
-		<string>/holder/get_public_keys</string>
-		<key>ismEndpoint</key>
-		<string>/holder/get_test_ism</string>
-	</dict>
 	<key>digid</key>
 	<dict>
 		<key>authorizationEndpoint</key>
@@ -25,13 +14,6 @@
 		<string>6456237456911667336</string>
 		<key>redirectUri</key>
 		<string>coronatester-app-dev://auth/login</string>
-	</dict>
-	<key>remoteConfig</key>
-	<dict>
-		<key>host</key>
-		<string>https://api-ct.bananenhalen.nl</string>
-		<key>configEndpoint</key>
-		<string>/holder/config</string>
 	</dict>
 </dict>
 </plist>

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NETWORK_CONFIGURATION</key>
+	<string>$(NETWORK_CONFIGURATION)</string>
 	<key>CFBundleDisplayName</key>
 	<string>CTR</string>
 	<key>CFBundleExecutable</key>

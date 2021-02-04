@@ -61,7 +61,8 @@ class AppCoordinator: Coordinator {
 	/// flag for updating configuration
 	private var isUpdatingConfiguration = false
 
-	var remoteConfigManager: RemoteConfigManagerProtocol = RemoteConfigManager()
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 
 	/// Update the configuration
 	func updateConfiguration() {
