@@ -16,7 +16,7 @@ class FetchResultModelTests: XCTestCase {
 	/// Spies
 	var coordinatorSpy = HolderCoordinatorSpy()
 	var openIdSpy = OpenClientSpy()
-	var apiSpy = ApiSpy()
+	var networkManagerSpy = NetworkSpy(configuration: .test)
 	var cryptoSpy = CryptoManagerSpy()
 
 	// MARK: Test lifecycle
@@ -28,8 +28,8 @@ class FetchResultModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			openIdClient: openIdSpy,
 			userIdentifier: nil)
-		apiSpy = ApiSpy()
-		sut?.apiClient = apiSpy
+		networkManagerSpy = NetworkSpy(configuration: .test)
+		sut?.networkManager = networkManagerSpy
 		cryptoSpy = CryptoManagerSpy()
 		sut?.cryptoManager = cryptoSpy
 
@@ -85,121 +85,34 @@ class FetchResultModelTests: XCTestCase {
 		}
 	}
 
-	class ApiSpy: ApiClientProtocol {
-
-		var getNonceCalled = false
-		var shouldReturnNonce = false
-		var nonceEnvelope: NonceEnvelope?
-		var getPublicKeysCalled = false
-		var getTestResultsCalled = false
-		var getTestResultsIdentifier: String?
-		var getTestResultsWithISMCalled = false
-
-		func getNonce(completionHandler: @escaping (NonceEnvelope?) -> Void) {
-
-			getNonceCalled = true
-			if shouldReturnNonce {
-				completionHandler(nonceEnvelope)
-			}
-		}
-
-		func getPublicKeys(completionHandler: @escaping ([Issuer]) -> Void) {
-
-			getPublicKeysCalled = true
-		}
-
-		func getTestResults(identifier: String, completionHandler: @escaping (Data?) -> Void) {
-
-			getTestResultsCalled = true
-			getTestResultsIdentifier = identifier
-		}
-
-		func fetchTestResultsWithISM(dictionary: [String: AnyObject], completionHandler: @escaping (Data?) -> Void) {
-
-			getTestResultsWithISMCalled = true
-		}
-	}
-
-	class CryptoManagerSpy: CryptoManagerProtocol {
-
-		var setNonceCalled = false
-		var setStokenCalled = false
-		var setProofsCalled = false
-		var nonce: String?
-		var stoken: String?
-		var proofs: Data?
-
-		required init() {
-			 // Nothing for this spy class
-		}
-
-		func debug() {
-
-		}
-
-		func setNonce(_ nonce: String) {
-
-			setNonceCalled = true
-			self.nonce = nonce
-		}
-
-		func setStoken(_ stoken: String) {
-
-			setStokenCalled = true
-			self.stoken = stoken
-		}
-
-		func setProofs(_ proofs: Data?) {
-
-			setProofsCalled = true
-			self.proofs = proofs
-		}
-
-		func generateCommitmentMessage() -> String? {
-			return nil
-		}
-
-		func generateQRmessage() -> String? {
-			return nil
-		}
-
-		func getStoken() -> String? {
-			return stoken
-		}
-
-		func verifyQRMessage(_ message: String) -> Bool {
-			return false
-		}
-	}
-
 	// MARK: Tests
 
-	/// Test the secondary button tapped, api returns no nonce
-	func testSecondaryButtonTappedNoNonce() {
+	/// Test the primary button tapped, api returns no nonce
+	func testPrimaryButtonTappedNoNonce() {
 
 		// Given
-		apiSpy.shouldReturnNonce = false
+		networkManagerSpy.shouldReturnNonce = false
 
 		// When
-		sut?.secondaryButtonTapped(UIViewController())
+		sut?.primaryButtonTapped(UIViewController())
 
 		// Then
-		XCTAssertTrue(apiSpy.getNonceCalled, "Method should be called")
+		XCTAssertTrue(networkManagerSpy.getNonceCalled, "Method should be called")
 		XCTAssertFalse(openIdSpy.requestAccessTokenCalled, "Access token should not be requested without nonce")
 	}
 
-	/// Test the secondary button tapped, api returns with nonce
-	func testSecondaryButtonTappedWithNonce() {
+	/// Test the primary button tapped, api returns with nonce
+	func testPrimaryButtonTappedWithNonce() {
 
 		// Given
-		apiSpy.shouldReturnNonce = true
-		apiSpy.nonceEnvelope = NonceEnvelope(nonce: "test", stoken: "test")
+		networkManagerSpy.shouldReturnNonce = true
+		networkManagerSpy.nonceEnvelope = NonceEnvelope(nonce: "test", stoken: "test")
 
 		// When
-		sut?.secondaryButtonTapped(UIViewController())
+		sut?.primaryButtonTapped(UIViewController())
 
 		// Then
-		XCTAssertTrue(apiSpy.getNonceCalled, "Method should be called")
+		XCTAssertTrue(networkManagerSpy.getNonceCalled, "Method should be called")
 		XCTAssertTrue(cryptoSpy.setNonceCalled, "Method should be called")
 		XCTAssertTrue(cryptoSpy.setStokenCalled, "Method should be called")
 		XCTAssertTrue(openIdSpy.requestAccessTokenCalled, "Access token should be requested")

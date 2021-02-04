@@ -36,6 +36,8 @@
 		6D5E06C625C1A5C4008E2124 /* AppUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E06C525C1A5C4008E2124 /* AppUpdateViewModel.swift */; };
 		6D5E06CA25C1C54A008E2124 /* RemoteConfigApiClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E06C925C1C54A008E2124 /* RemoteConfigApiClientTests.swift */; };
 		6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E06CF25C1CD09008E2124 /* RemoteConfigManagerTests.swift */; };
+		6D68CACD25CC1610008FE2C8 /* NetworkManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */; };
+		6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */; };
 		6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */; };
 		6D73052F25B876F000BA808C /* Issuers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73052E25B876F000BA808C /* Issuers.swift */; };
 		6D7C908A25CA86FE00AEC5DE /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7C908825CA86FE00AEC5DE /* String+extension.swift */; };
@@ -154,6 +156,8 @@
 		6D5E06C525C1A5C4008E2124 /* AppUpdateViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUpdateViewModel.swift; sourceTree = "<group>"; };
 		6D5E06C925C1C54A008E2124 /* RemoteConfigApiClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigApiClientTests.swift; sourceTree = "<group>"; };
 		6D5E06CF25C1CD09008E2124 /* RemoteConfigManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigManagerTests.swift; sourceTree = "<group>"; };
+		6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManagerSpy.swift; sourceTree = "<group>"; };
+		6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoManagerSpy.swift; sourceTree = "<group>"; };
 		6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndOfLifeLocalization.swift; sourceTree = "<group>"; };
 		6D73052E25B876F000BA808C /* Issuers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issuers.swift; sourceTree = "<group>"; };
 		6D7C908825CA86FE00AEC5DE /* String+extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+extension.swift"; sourceTree = "<group>"; };
@@ -315,6 +319,8 @@
 		6D20239125CAB15500CFCD14 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */,
+				6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */,
 				6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */,
 			);
 			path = Utils;
@@ -343,7 +349,6 @@
 			children = (
 				6D1F304925CBDC22000E901D /* Services.swift */,
 				6DAE8BCC25CB242700AAF2A7 /* NetworkManager */,
-				6DD9394F25BD90BC0026F071 /* API */,
 				6D8865F425C8001100DE661E /* Crypto */,
 				6D7C909225CA9CF800AEC5DE /* Onboarding */,
 				6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */,
@@ -516,13 +521,6 @@
 				6DD9394725BD8DAF0026F071 /* configuration-development.plist */,
 			);
 			path = Development;
-			sourceTree = "<group>";
-		};
-		6DD9394F25BD90BC0026F071 /* API */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = API;
 			sourceTree = "<group>";
 		};
 		6DD9395C25BD96450026F071 /* Extensions */ = {
@@ -987,8 +985,10 @@
 				6D20238E25CAABB500CFCD14 /* OnboardingManagerTests.swift in Sources */,
 				6DC6CC3725C2A06B00060237 /* AppUpdateViewModelTests.swift in Sources */,
 				6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */,
+				6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */,
 				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
 				6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */,
+				6D68CACD25CC1610008FE2C8 /* NetworkManagerSpy.swift in Sources */,
 				6DC6CC4125C2A95C00060237 /* AppCoordinatorSpy.swift in Sources */,
 				6D2023B825CAB7E200CFCD14 /* OnboardingViewControllerTests.swift in Sources */,
 				6D2023BC25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift in Sources */,

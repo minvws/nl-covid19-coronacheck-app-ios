@@ -26,21 +26,6 @@ class RemoteConfigManagerTests: XCTestCase {
 
 	// MARK: - TestDoubles
 
-	class RemoteConfigurationApiSpy: RemoteConfigurationApiClientProtocol {
-
-		var remoteConfig: RemoteConfiguration?
-
-		init(_ config: RemoteConfiguration?) {
-
-			remoteConfig = config
-		}
-
-		func getRemoteConfiguration(_ completionHandler: @escaping (RemoteConfiguration?) -> Void) {
-
-			completionHandler(remoteConfig)
-		}
-	}
-
 	class AppVersionSupplierSpy: AppVersionSupplierProtocol {
 
 		var appVersion: String
@@ -63,7 +48,9 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config no result from api")
-		sut.remoteApiClient = RemoteConfigurationApiSpy(nil)
+		let networkSpy = NetworkSpy(configuration: .test)
+		networkSpy.remoteConfig = nil
+		sut.networkManager = networkSpy
 
 		// When
 		sut.update { state in
@@ -81,15 +68,15 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config versions are equal")
-		sut.remoteApiClient = RemoteConfigurationApiSpy(
-			RemoteConfiguration(
-				minVersion: "1.0.0",
-				minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil
-			)
+		let networkSpy = NetworkSpy(configuration: .test)
+		networkSpy.remoteConfig = RemoteConfiguration(
+			minVersion: "1.0.0",
+			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
+		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
 		// When
@@ -108,15 +95,15 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config versions are almost equal")
-		sut.remoteApiClient = RemoteConfigurationApiSpy(
-			RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil
-			)
+		let networkSpy = NetworkSpy(configuration: .test)
+		networkSpy.remoteConfig = RemoteConfiguration(
+			minVersion: "1.0",
+			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
+			storeUrl: nil,
+			deactivated: nil,
+			informationURL: nil
 		)
+		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
 		// When
@@ -135,6 +122,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config update required on bug")
+		let networkSpy = NetworkSpy(configuration: .test)
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.1",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualBug",
@@ -142,7 +130,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil
 		)
-		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
+		networkSpy.remoteConfig = configuration
+		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
 		// When
@@ -161,6 +150,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config update required on major")
+		let networkSpy = NetworkSpy(configuration: .test)
 		let configuration = RemoteConfiguration(
 			minVersion: "4.3.2",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualMajor",
@@ -168,7 +158,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil
 		)
-		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
+		networkSpy.remoteConfig = configuration
+		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
 
 		// When
@@ -187,6 +178,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config current version higher")
+		let networkSpy = NetworkSpy(configuration: .test)
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
@@ -194,7 +186,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil
 		)
-		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
+		networkSpy.remoteConfig = configuration
+		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
 
 		// When
@@ -213,6 +206,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config current version higher")
+		let networkSpy = NetworkSpy(configuration: .test)
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
@@ -220,7 +214,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			deactivated: true,
 			informationURL: nil
 		)
-		sut.remoteApiClient = RemoteConfigurationApiSpy(configuration)
+		networkSpy.remoteConfig = configuration
+		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
 		// When

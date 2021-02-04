@@ -24,14 +24,6 @@ class FetchResultViewModel: Logging {
 	/// The crypto manager
 	var cryptoManager: CryptoManagerProtocol = CryptoManager()
 
-	/// The date formatter for the timestamps
-	lazy var dateFormatter: DateFormatter = {
-
-		let isoFormatter = DateFormatter()
-		isoFormatter.dateFormat = "dd MMM YYYY - HH:mm"
-		return isoFormatter
-	}()
-
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
