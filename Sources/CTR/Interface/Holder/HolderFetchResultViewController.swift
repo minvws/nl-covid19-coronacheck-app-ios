@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import Sodium
 import AppAuth
 
 class FetchResultViewModel: Logging {
@@ -19,19 +18,11 @@ class FetchResultViewModel: Logging {
 	/// The open id client
 	var openIdClient: OpenIdClientProtocol
 
-	/// The API Client
-	var apiClient: ApiClientProtocol = ApiClient()
+	/// The network manager
+	var networkManager: NetworkManaging = Services.networkManager
 
 	/// The crypto manager
 	var cryptoManager: CryptoManagerProtocol = CryptoManager()
-
-	/// The date formatter for the timestamps
-	lazy var dateFormatter: DateFormatter = {
-
-		let isoFormatter = DateFormatter()
-		isoFormatter.dateFormat = "dd MMM YYYY - HH:mm"
-		return isoFormatter
-	}()
 
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
@@ -44,7 +35,6 @@ class FetchResultViewModel: Logging {
 	// MARK: - Bindable properties
 
 	@Bindable private(set) var primaryButtonTitle: String
-	@Bindable private(set) var secondaryButtonTitle: String
 	@Bindable private(set) var tertiaryButtonTitle: String?
 	@Bindable private(set) var message: String = ""
 
@@ -58,20 +48,13 @@ class FetchResultViewModel: Logging {
 		userIdentifier: String?) {
 
 		self.coordinator = coordinator
-		primaryButtonTitle = "Login met Digid (Fake)"
-		secondaryButtonTitle = "Login met Digid"
+		primaryButtonTitle = "Login met Digid"
 		self.userIdentifier = userIdentifier
 		self.openIdClient = openIdClient
 	}
 
 	/// User tapped on the primary button
-	func primaryButtonTapped() {
-
-		fetchFakeTestResults()
-	}
-
-	/// User tapped on the second button
-	func secondaryButtonTapped(_ viewController: UIViewController) {
+	func primaryButtonTapped(_ viewController: UIViewController) {
 
 		self.presentingViewController = viewController
 		fetchNonce()
@@ -100,15 +83,19 @@ class FetchResultViewModel: Logging {
 	/// Fetch a nonce from the server
 	func fetchNonce() {
 
-		apiClient.getNonce { [weak self] envelope in
+		networkManager.getNonce { [weak self] resultwrapper in
 
-			if let envelope = envelope {
-				self?.cryptoManager.setNonce(envelope.nonce)
-				self?.cryptoManager.setStoken(envelope.stoken)
-				self?.cryptoManager.debug()
-				self?.getAccessToken()
-			} else {
-				self?.message = "Can't connect"
+			switch resultwrapper {
+				case let .success(envelope):
+					
+					self?.cryptoManager.setNonce(envelope.nonce)
+					self?.cryptoManager.setStoken(envelope.stoken)
+					self?.cryptoManager.debug()
+					self?.getAccessToken()
+				case let .failure(networkError):
+
+					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
+					self?.message = "Can't connect"
 			}
 		}
 	}
@@ -127,8 +114,15 @@ class FetchResultViewModel: Logging {
 				"icm": icmDictionary as AnyObject
 			]
 
-			apiClient.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] result in
-				self?.handleTestProofsResponse(result)
+			networkManager.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
+
+				switch resultwrapper {
+					case let .success((_, data)):
+						self?.handleTestProofsResponse(data)
+					case let .failure(networkError):
+						self?.logError("Can't fetch the IsM: \(networkError.localizedDescription)")
+						self?.message = "Can't connect"
+				}
 			}
 		}
 	}
@@ -150,20 +144,6 @@ class FetchResultViewModel: Logging {
 	func tertiaryButtonTapped() {
 
 		coordinator?.navigateToHolderQR()
-	}
-
-	/// Fetch some test results from the API
-	func fetchFakeTestResults() {
-
-		guard let identifier = userIdentifier else {
-			return
-		}
-
-		message = ""
-
-		apiClient.getTestResults(identifier: identifier) { result in
-			self.handleTestProofsResponse(result)
-		}
 	}
 }
 
@@ -202,10 +182,6 @@ class HolderFetchResultViewController: BaseViewController {
 
 			self.sceneView.primaryTitle = $0
 		}
-		viewModel.$secondaryButtonTitle.binding = {
-
-			self.sceneView.secondaryTitle = $0
-		}
 		viewModel.$tertiaryButtonTitle.binding = {
 
 			self.sceneView.tertiaryTitle = $0 ?? ""
@@ -217,15 +193,11 @@ class HolderFetchResultViewController: BaseViewController {
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.viewModel.primaryButtonTapped()
-		}
-
-		sceneView.secondaryButtonTappedCommand = { [weak self] in
-
 			guard let strongSelf = self else {
 				return
 			}
-			strongSelf.viewModel.secondaryButtonTapped(strongSelf)
+
+			self?.viewModel.primaryButtonTapped(strongSelf)
 		}
 
 		sceneView.tertiaryButtonTappedCommand = { [weak self] in

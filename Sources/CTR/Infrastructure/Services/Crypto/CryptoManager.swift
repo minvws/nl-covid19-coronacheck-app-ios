@@ -6,6 +6,7 @@
 */
 
 import Foundation
+import Sodium
 import Ctcl
 
 struct NonceEnvelope: Codable {
