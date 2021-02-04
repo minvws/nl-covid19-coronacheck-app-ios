@@ -1,5 +1,4 @@
 PODS:
-  - Alamofire (5.4.1)
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -25,7 +24,6 @@ PODS:
   - ViewControllerPresentationSpy (5.0.0)
 
 DEPENDENCIES:
-  - Alamofire (= 5.4.1)
   - AppAuth (= 1.4.0)
   - CocoaLumberjack/Swift (= 3.7.0)
   - OHHTTPStubs/Swift (= 9.1.0)
@@ -34,7 +32,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - Alamofire
     - AppAuth
     - CocoaLumberjack
     - OHHTTPStubs
@@ -42,13 +39,12 @@ SPEC REPOS:
     - ViewControllerPresentationSpy
 
 SPEC CHECKSUMS:
-  Alamofire: 2291f7d21ca607c491dd17642e5d40fdcda0e65c
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
   ViewControllerPresentationSpy: 7cfa8ef8ec9fa197ea58ee6e9ac72bbe5442281b
 
-PODFILE CHECKSUM: a0e68d0f299a250ec7ee4c707af282672484ae39
+PODFILE CHECKSUM: 9039fd9047a734b4c55c73d2a1441b26597f7f5c
 
 COCOAPODS: 1.10.1
