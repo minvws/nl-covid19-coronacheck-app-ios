@@ -73,18 +73,18 @@ struct NetworkConfiguration {
 		name: "ACC",
 		api: .init(
 			scheme: "https",
-			host: "acceptatie.coronamelder-api.nl",
+			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v1"],
-			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
+			path: [""],
+			sslSignature: nil, //[Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
 			tokenParams: [:]
 		),
 		cdn: .init(
 			scheme: "https",
-			host: "acceptatie.coronamelder-dist.nl",
+			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"],
-			sslSignature: [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
+			path: [""],
+			sslSignature: nil, // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
 			tokenParams: [:]
 		)
 	)
@@ -93,18 +93,18 @@ struct NetworkConfiguration {
 		name: "Production",
 		api: .init(
 			scheme: "https",
-			host: "coronamelder-api.nl",
+			host: "api-ct.bananenhalen.nl",
 			port: nil,
 			path: ["v1"],
-			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
+			sslSignature: nil, // [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
 			tokenParams: [:]
 		),
 		cdn: .init(
 			scheme: "https",
-			host: "productie.coronamelder-dist.nl",
+			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"],
-			sslSignature: [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
+			path: [""],
+			sslSignature: nil, //[Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
 			tokenParams: [:]
 		)
 	)
@@ -126,12 +126,6 @@ struct NetworkConfiguration {
 
 		return self.combine(path: Endpoint.testResultIsm, fromCdn: false)
 	}
-
-//
-//    func caseUrl(identifier: String) -> URL? {
-//        return self.combine(path: Endpoint.case(identifier: identifier))
-//    }
-//
 
 	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {
 		let endpointConfig = fromCdn ? cdn : api

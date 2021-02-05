@@ -44,9 +44,9 @@ platform :ios do
 
     deploy_test
 
-    deploy_acc
+    # deploy_acc
 
-    deploy_prod
+    # deploy_prod
 
     inform_slack(
       default_payloads: [:git_author],
