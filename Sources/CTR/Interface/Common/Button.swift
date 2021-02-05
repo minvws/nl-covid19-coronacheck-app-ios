@@ -108,19 +108,19 @@ class Button: UIButton {
 		
 		switch style {
 			case .primary:
-				//            if isEnabled {
-				backgroundColor = Theme.colors.primary
-				setTitleColor(.white, for: .normal)
-			//            } else {
-			//                backgroundColor = Theme.colors.tertiary
-			//                setTitleColor(.gray, for: .normal)
-			//            }
+				if isEnabled {
+					backgroundColor = Theme.colors.primary
+					setTitleColor(.white, for: .normal)
+				} else {
+					backgroundColor = Theme.colors.gray
+					setTitleColor(.white, for: .normal)
+				}
 			//        case .secondary:
 			//            backgroundColor = Theme.colors.tertiary
 			//            setTitleColor(Theme.colors.primary, for: .normal)
-//			case .tertiary:
-//				backgroundColor = Theme.colors.tertiary
-//				setTitleColor(Theme.colors.primary, for: .normal)
+			//			case .tertiary:
+			//				backgroundColor = Theme.colors.tertiary
+			//				setTitleColor(Theme.colors.primary, for: .normal)
 			//        case .warning:
 			//            backgroundColor = Theme.colors.warning
 			//            setTitleColor(.white, for: .normal)
