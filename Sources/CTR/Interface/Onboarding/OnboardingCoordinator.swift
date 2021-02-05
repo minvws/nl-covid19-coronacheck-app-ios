@@ -12,6 +12,13 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	/// The user clicked on the next button
 	/// - Parameter step: the current onboarding step
 	func nextButtonClicked(step: OnboardingStep)
+
+	/// Show the privacy page
+	/// - Parameter viewController: the presenting viewcontroller
+	func showPrivacyPage(_ viewController: UIViewController)
+
+	/// Dismiss the presented viewcontroller
+	func dismiss()
 }
 
 protocol OnboardingDelegate: AnyObject {
@@ -30,7 +37,11 @@ class OnboardingCoordinator: Coordinator, Logging {
 	/// The navigation controller
 	var navigationController: UINavigationController
 
+	/// The onboarding delegate
 	weak var onboardingDelegate: OnboardingDelegate?
+
+	/// A presenting view controller
+	weak var presentingViewController: UIViewController?
 
 	/// Initiatilzer
 	init(
@@ -88,5 +99,27 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 			self.logInfo("Onboarding completed!")
 			onboardingDelegate?.finishOnboarding()
 		}
+	}
+
+	/// Show the privacy page
+	/// - Parameter viewController: the presenting view controller
+	func showPrivacyPage(_ viewController: UIViewController) {
+
+		let viewModel = PrivacyViewModel(
+			coordinator: self,
+			title: .privacyTitle,
+			message: .privacyMessage
+		)
+		let privacyViewController = PrivacyViewController(viewModel: viewModel)
+		let navigationController = UINavigationController(rootViewController: privacyViewController)
+
+		viewController.present(navigationController, animated: true, completion: nil)
+		presentingViewController = viewController
+	}
+
+	func dismiss() {
+
+		presentingViewController?.dismiss(animated: true, completion: nil)
+		presentingViewController = nil
 	}
 }

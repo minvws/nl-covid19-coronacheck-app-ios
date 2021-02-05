@@ -51,3 +51,6 @@
 "onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\n\nLees de privacyverklaring";
 "onboarding.message.privacy.underline" = "Lees de privacyverklaring";
 
+/* MARK: - Privacy */
+"privacy.message" = "** de privacy verklaring **";
+"privacy.title" = "Privacy verklaring";

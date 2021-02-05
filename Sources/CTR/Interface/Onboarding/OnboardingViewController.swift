@@ -51,6 +51,7 @@ class OnboardingViewController: BaseViewController {
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 		viewModel.$underlinedText.binding = {
 			self.sceneView.underline($0)
+			self.setupLink()
 		}
 		viewModel.$image.binding = { self.sceneView.image = $0 }
 		viewModel.$numberOfPages.binding = { self.sceneView.pageControl.numberOfPages = $0 }
@@ -64,9 +65,22 @@ class OnboardingViewController: BaseViewController {
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
+	func setupLink() {
+
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
+		sceneView.messageLabel.addGestureRecognizer(tapGesture)
+		sceneView.messageLabel.isUserInteractionEnabled = true
+	}
+
 	/// User tapped on the button
 	@objc private func primaryButtonTapped() {
 
 		viewModel.nextButtonClicked()
+	}
+
+	/// User tapped on the link
+	@objc private func linkTapped() {
+
+		viewModel.linkClicked(self)
 	}
 }

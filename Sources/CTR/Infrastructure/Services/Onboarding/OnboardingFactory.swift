@@ -48,7 +48,7 @@ struct OnboardingFactory: OnboardingFactoryProtocol {
 	/// - Returns: an array of onboarding steps
 	func create() -> [OnboardingPage] {
 
-		return [
+		let pages = [
 			OnboardingPage(
 				title: .onboardingTitleSafely,
 				message: .onboardingMessageSafely,
@@ -85,5 +85,7 @@ struct OnboardingFactory: OnboardingFactoryProtocol {
 				underlinedText: .onboardingUnderlinePrivacy
 			)
 		]
+
+		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
 	}
 }

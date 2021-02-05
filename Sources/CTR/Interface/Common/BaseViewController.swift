@@ -68,7 +68,6 @@ class BaseViewController: UIViewController {
 			for: .normal
 		)
 
-
 		navigationItem.backBarButtonItem = backbutton
 	}
 

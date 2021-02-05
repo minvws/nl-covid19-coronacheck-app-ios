@@ -53,7 +53,7 @@ class OnboardingView: BaseView {
 	}()
 	
 	/// The message label
-	private let messageLabel: Label = {
+	let messageLabel: Label = {
 		
 		return Label(body: nil).multiline()
 	}()
