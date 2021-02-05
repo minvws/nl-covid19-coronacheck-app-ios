@@ -15,9 +15,6 @@ class OnboardingViewController: BaseViewController {
 	/// The view
 	let sceneView = OnboardingView()
 
-	/// The error Message
-	var errorMessage: String?
-
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: OnboardingViewModel) {

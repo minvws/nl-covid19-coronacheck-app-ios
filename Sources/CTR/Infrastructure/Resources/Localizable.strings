@@ -54,3 +54,8 @@
 /* MARK: - Privacy */
 "privacy.message" = "** de privacy verklaring **";
 "privacy.title" = "Privacy verklaring";
+
+/* MARK: - Terms & Conditions */
+"terms.message" = "** de gebruiks voorwaarden **";
+"terms.agree" = "Ik ga akkoord met de voorwaarden.";
+"terms.title" = "Gebruiksvoorwaarden";

@@ -19,6 +19,9 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 
 	/// Dismiss the presented viewcontroller
 	func dismiss()
+
+	/// The user agreed on the terms
+	func termsAgreed()
 }
 
 protocol OnboardingDelegate: AnyObject {
@@ -96,8 +99,7 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 			addOnboardingStep(info)
 		} else if nextValue == onboardingPages.count {
 
-			self.logInfo("Onboarding completed!")
-			onboardingDelegate?.finishOnboarding()
+			showTermsPage()
 		}
 	}
 
@@ -117,9 +119,24 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		presentingViewController = viewController
 	}
 
+	func showTermsPage() {
+
+		let viewModel = TermsViewModel(coordinator: self)
+		let viewController = TermsViewController(viewModel: viewModel)
+
+		navigationController.pushViewController(viewController, animated: true)
+	}
+
 	func dismiss() {
 
 		presentingViewController?.dismiss(animated: true, completion: nil)
 		presentingViewController = nil
+	}
+
+	/// The user agreed on the terms
+	func termsAgreed() {
+
+		self.logInfo("Onboarding completed!")
+		onboardingDelegate?.finishOnboarding()
 	}
 }

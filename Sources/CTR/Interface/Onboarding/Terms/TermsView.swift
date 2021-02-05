@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingView: BaseView {
+class TermsView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -30,21 +30,6 @@ class OnboardingView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-
-	private let imageContainerView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-	
-	private let imageView: UIImageView = {
-		
-		let view = UIImageView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .scaleAspectFit
-		return view
-	}()
 	
 	/// The title label
 	private let titleLabel: Label = {
@@ -57,14 +42,19 @@ class OnboardingView: BaseView {
 		
 		return Label(body: nil).multiline()
 	}()
-	
-	let pageControl: UIPageControl = {
-		
-		let view = UIPageControl()
+
+	/// The message label
+	let agreeLabel: Label = {
+
+		return Label(body: nil).multiline()
+	}()
+
+	let toggleView: UISwitch = {
+
+		let view = UISwitch()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isUserInteractionEnabled = false
-		view.pageIndicatorTintColor = Theme.colors.gray.withAlphaComponent(0.3)
-		view.currentPageIndicatorTintColor = Theme.colors.gray
+		view.onTintColor = Theme.colors.primary
+		view.accessibilityIdentifier = "ToggleView"
 		return view
 	}()
 	
@@ -88,11 +78,10 @@ class OnboardingView: BaseView {
 		
 		super.setupViewHierarchy()
 		addSubview(ribbonView)
-		imageContainerView.addSubview(imageView)
-		addSubview(imageContainerView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
-		addSubview(pageControl)
+		addSubview(agreeLabel)
+		addSubview(toggleView)
 		addSubview(primaryButton)
 	}
 	
@@ -108,28 +97,6 @@ class OnboardingView: BaseView {
 			ribbonView.topAnchor.constraint(
 				equalTo: topAnchor,
 				constant: UIDevice.current.hasNotch ? 0 : -ViewTraits.ribbonOffset
-			),
-
-			// ImageContainer
-			imageContainerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
-			imageContainerView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
-			imageContainerView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin),
-			imageContainerView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// Image
-			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
-			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
-			imageView.leadingAnchor.constraint(
-				equalTo: imageContainerView.leadingAnchor,
-				constant: ViewTraits.margin),
-			imageView.trailingAnchor.constraint(
-				equalTo: imageContainerView.trailingAnchor,
-				constant: -ViewTraits.margin
 			),
 
 			// Title
@@ -156,6 +123,30 @@ class OnboardingView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
+			// Agree
+			agreeLabel.leadingAnchor.constraint(
+				equalTo: toggleView.trailingAnchor,
+				constant: ViewTraits.margin
+			),
+			agreeLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			agreeLabel.centerYAnchor.constraint(
+				equalTo: toggleView.centerYAnchor,
+				constant: -ViewTraits.margin
+			),
+
+			// Toggle
+			toggleView.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+
+			toggleView.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: ViewTraits.margin),
+			toggleView.bottomAnchor.constraint(equalTo: primaryButton.topAnchor, constant: -ViewTraits.margin),
+			toggleView.heightAnchor.constraint(equalToConstant: 50),
+
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -164,26 +155,6 @@ class OnboardingView: BaseView {
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
-		])
-	}
-
-	override func layoutSubviews() {
-		super.layoutSubviews()
-
-		// Layout page control when the view has a frame
-		NSLayoutConstraint.activate([
-
-			// Message
-			messageLabel.bottomAnchor.constraint(
-				equalTo: pageControl.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
-			),
-
-			// Page Control
-			pageControl.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
-			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
 
@@ -203,21 +174,10 @@ class OnboardingView: BaseView {
 		}
 	}
 
-	/// The onboarding mage
-	var image: UIImage? {
+	/// The onboarding message
+	var agree: String? {
 		didSet {
-			imageView.image = image
+			agreeLabel.attributedText = agree?.setLineHeight(ViewTraits.messageLineHeight)
 		}
-	}
-
-	func underline(_ text: String?) {
-
-		guard let underlinedText = text,
-			  let messageText = message else {
-			return
-		}
-
-		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
-		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 	}
 }

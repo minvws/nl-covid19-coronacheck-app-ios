@@ -119,6 +119,18 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut?.nextButtonClicked(step: .privacy)
 
 		// Then
+		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be a page pushed")
+		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should be called")
+	}
+
+	func testNextButtonClickedTerms() {
+
+		// Given
+
+		// When
+		sut?.termsAgreed()
+
+		// Then
 		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no page pushed")
 		XCTAssertTrue(onboardingDelegateSpy.finishOnboardingCalled, "Method should be called")
 	}

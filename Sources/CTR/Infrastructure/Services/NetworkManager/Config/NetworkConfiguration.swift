@@ -76,7 +76,7 @@ struct NetworkConfiguration {
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
 			path: [""],
-			sslSignature: nil, //[Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
+			sslSignature: nil, // [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
 			tokenParams: [:]
 		),
 		cdn: .init(
@@ -104,7 +104,7 @@ struct NetworkConfiguration {
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
 			path: [""],
-			sslSignature: nil, //[Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
+			sslSignature: nil, // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
 			tokenParams: [:]
 		)
 	)
