@@ -9,59 +9,59 @@ import Foundation
 
 extension String {
 
-	static var onboardingTitle1: String {
+	static var onboardingTitleSafely: String {
 
-		return Localization.string(for: "onboarding.title.1")
+		return Localization.string(for: "onboarding.title.safely")
 	}
 
-	static var onboardingMessage1: String {
+	static var onboardingMessageSafely: String {
 
-		return Localization.string(for: "onboarding.message.1")
+		return Localization.string(for: "onboarding.message.safely")
 	}
 
-	static var onboardingTitle2: String {
+	static var onboardingTitleYourQR: String {
 
-		return Localization.string(for: "onboarding.title.2")
+		return Localization.string(for: "onboarding.title.yourqr")
 	}
 
-	static var onboardingMessage2: String {
+	static var onboardingMessageYourQR: String {
 
-		return Localization.string(for: "onboarding.message.2")
+		return Localization.string(for: "onboarding.message.yourqr")
 	}
 
-	static var onboardingTitle3: String {
+	static var onboardingTitleValidity: String {
 
-		return Localization.string(for: "onboarding.title.3")
+		return Localization.string(for: "onboarding.title.validity")
 	}
 
-	static var onboardingMessage3: String {
+	static var onboardingMessageValidity: String {
 
-		return Localization.string(for: "onboarding.message.3")
+		return Localization.string(for: "onboarding.message.validity")
 	}
 
-	static var onboardingTitle4: String {
+	static var onboardingTitleSecureSystem: String {
 
-		return Localization.string(for: "onboarding.title.4")
+		return Localization.string(for: "onboarding.title.securesystem")
 	}
 
-	static var onboardingMessage4: String {
+	static var onboardingMessageSecureSystem: String {
 
-		return Localization.string(for: "onboarding.message.4")
+		return Localization.string(for: "onboarding.message.securesystem")
 	}
 
-	static var onboardingTitle5: String {
+	static var onboardingTitlePrivacy: String {
 
-		return Localization.string(for: "onboarding.title.5")
+		return Localization.string(for: "onboarding.title.privacy")
 	}
 
-	static var onboardingMessage5: String {
+	static var onboardingMessagePrivacy: String {
 
-		return Localization.string(for: "onboarding.message.5")
+		return Localization.string(for: "onboarding.message.privacy")
 	}
 
-	static var onboardingUnderline5: String {
+	static var onboardingUnderlinePrivacy: String {
 
-		return Localization.string(for: "onboarding.message.5.underline")
+		return Localization.string(for: "onboarding.message.privacy.underline")
 	}
 
 }

@@ -13,11 +13,23 @@ import XCTest
 class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 
 	var nextButtonClickedCalled = false
+	var dismissCalled = false
+	var showPrivacyPageCalled = false
 	var step: OnboardingStep?
 
 	func nextButtonClicked(step: OnboardingStep) {
 
 		nextButtonClickedCalled = true
 		self.step = step
+	}
+
+	func dismiss() {
+
+		dismissCalled = true
+	}
+
+	func showPrivacyPage(_ viewController: UIViewController) {
+
+		showPrivacyPageCalled = true
 	}
 }

@@ -9,11 +9,13 @@ import UIKit
 
 extension UIImage {
 
-	static var ribbon: UIImage? { return UIImage(named: "Rijkslint") }
+	static var onboardingSafely: UIImage? { return UIImage(named: "Safely") }
 
-	static var onboarding1: UIImage? { return UIImage(named: "Onboarding2") }
-	static var onboarding2: UIImage? { return UIImage(named: "Onboarding2") }
-	static var onboarding3: UIImage? { return UIImage(named: "Onboarding2") }
-	static var onboarding4: UIImage? { return UIImage(named: "Onboarding2") }
-	static var onboarding5: UIImage? { return UIImage(named: "Onboarding2") }
+	static var onboardingYourQR: UIImage? { return UIImage(named: "YourQR") }
+
+	static var onboardingValidity: UIImage? { return UIImage(named: "Validity") }
+
+	static var onboardingSecureSystem: UIImage? { return UIImage(named: "SecureSystem") }
+	
+	static var onboardingPrivacy: UIImage? { return UIImage(named: "Privacy") }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
  *
  *  SPDX-License-Identifier: EUPL-1.2
@@ -11,7 +11,7 @@ import Foundation
 final class Services {
     private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
-//    private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
+    private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
     
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
     /// - parameter networkManager: The type conforming to [NetworkManaging](x-source-tag://NetworkManaging) to be used as the global networkManager
@@ -27,12 +27,11 @@ final class Services {
 		remoteConfigManagingType = configManager
     }
 
-//
-//    /// Override the [OnboardingManaging](x-source-tag://OnboardingManaging) type that will be instantiated
-//    /// - parameter onboardingManaging: The type conforming to [OnboardingManaging](x-source-tag://OnboardingManaging) to be used as the global onboardingManager
-//    static func use(_ onboardingManager: OnboardingManaging.Type) {
-//        onboardingManagingType = onboardingManager
-//    }
+    /// Override the [OnboardingManaging](x-source-tag://OnboardingManaging) type that will be instantiated
+    /// - parameter onboardingManaging: The type conforming to [OnboardingManaging](x-source-tag://OnboardingManaging) to be used as the global onboardingManager
+    static func use(_ onboardingManager: OnboardingManaging.Type) {
+        onboardingManagingType = onboardingManager
+    }
     
     static private(set) var networkManager: NetworkManaging = {
         let networkConfiguration: NetworkConfiguration
@@ -57,5 +56,5 @@ final class Services {
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
 
-//    static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
+	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
 }

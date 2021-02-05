@@ -1,12 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "Onboarding2.pdf",
+      "filename" : "icon_arrow.pdf",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
   }
 }

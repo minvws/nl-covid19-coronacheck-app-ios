@@ -45,6 +45,30 @@ class BaseViewController: UIViewController {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
 		}
+		styleBackButton()
+	}
+
+	func styleBackButton() {
+
+		let backbutton = UIBarButtonItem(
+			title: .previous,
+			style: .plain,
+			target: nil,
+			action: nil
+		)
+
+		navigationController?.navigationBar.backIndicatorImage = .backArrow
+		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
+
+		backbutton.setTitleTextAttributes(
+			[
+				NSAttributedString.Key.font: Theme.fonts.bodyBold,
+				NSAttributedString.Key.foregroundColor: Theme.colors.dark
+			],
+			for: .normal
+		)
+
+		navigationItem.backBarButtonItem = backbutton
 	}
 
 	override func viewDidAppear(_ animated: Bool) {

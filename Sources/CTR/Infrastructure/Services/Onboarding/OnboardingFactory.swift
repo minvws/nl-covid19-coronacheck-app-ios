@@ -48,42 +48,44 @@ struct OnboardingFactory: OnboardingFactoryProtocol {
 	/// - Returns: an array of onboarding steps
 	func create() -> [OnboardingPage] {
 
-		return [
+		let pages = [
 			OnboardingPage(
-				title: .onboardingTitle1,
-				message: .onboardingMessage1,
-				image: .onboarding1,
+				title: .onboardingTitleSafely,
+				message: .onboardingMessageSafely,
+				image: .onboardingSafely,
 				step: .safelyOnTheRoad,
 				underlinedText: nil
 			),
 			OnboardingPage(
-				title: .onboardingTitle2,
-				message: .onboardingMessage2,
-				image: .onboarding2,
+				title: .onboardingTitleYourQR,
+				message: .onboardingMessageYourQR,
+				image: .onboardingYourQR,
 				step: .yourQR,
 				underlinedText: nil
 			),
 			OnboardingPage(
-				title: .onboardingTitle3,
-				message: .onboardingMessage3,
-				image: .onboarding3,
+				title: .onboardingTitleValidity,
+				message: .onboardingMessageValidity,
+				image: .onboardingValidity,
 				step: .validity,
 				underlinedText: nil
 			),
 			OnboardingPage(
-				title: .onboardingTitle4,
-				message: .onboardingMessage4,
-				image: .onboarding4,
+				title: .onboardingTitleSecureSystem,
+				message: .onboardingMessageSecureSystem,
+				image: .onboardingSecureSystem,
 				step: .safeSystem,
 				underlinedText: nil
 			),
 			OnboardingPage(
-				title: .onboardingTitle5,
-				message: .onboardingMessage5,
-				image: .onboarding5,
+				title: .onboardingTitlePrivacy,
+				message: .onboardingMessagePrivacy,
+				image: .onboardingPrivacy,
 				step: .privacy,
-				underlinedText: .onboardingUnderline5
+				underlinedText: .onboardingUnderlinePrivacy
 			)
 		]
+
+		return pages.sorted { $0.step.rawValue < $1.step.rawValue }
 	}
 }

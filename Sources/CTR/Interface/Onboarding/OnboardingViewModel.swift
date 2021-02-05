@@ -47,4 +47,8 @@ class OnboardingViewModel {
 		// Notify the coordinator
 		coordinator?.nextButtonClicked(step: step)
 	}
+
+	func linkClicked(_ viewController: UIViewController) {
+		coordinator?.showPrivacyPage(viewController)
+	}
 }
