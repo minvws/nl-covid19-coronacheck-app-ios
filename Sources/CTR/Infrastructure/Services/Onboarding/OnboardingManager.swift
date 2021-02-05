@@ -7,7 +7,10 @@
 
 import Foundation
 
-protocol OnboardingManagerProtocol {
+protocol OnboardingManaging {
+
+	// Initialize
+	init()
 
 	/// Do we need onboarding? True if we do
 	var needsOnboarding: Bool { get }
@@ -20,7 +23,7 @@ protocol OnboardingManagerProtocol {
 }
 
 /// - Tag: OnboardingManager
-class OnboardingManager: OnboardingManagerProtocol, Logging {
+class OnboardingManager: OnboardingManaging, Logging {
 
 	var loggingCategory: String = "OnboardingManager"
 
@@ -39,6 +42,11 @@ class OnboardingManager: OnboardingManagerProtocol, Logging {
 
 	@Keychain(name: "onboardingData", service: Constants.keychainService, clearOnReinstall: true)
 	private var onboardingData: OnboardingData = .empty // swiftlint:disable:this let_var_whitespace
+
+	/// Initializer
+	required init() {
+		// Required by protocol
+	}
 
 	/// Do we need onboarding? True if we do
 	var needsOnboarding: Bool {

@@ -73,13 +73,13 @@ class OnboardingViewController: BaseViewController {
 	}
 
 	/// User tapped on the button
-	@objc private func primaryButtonTapped() {
+	@objc func primaryButtonTapped() {
 
 		viewModel.nextButtonClicked()
 	}
 
 	/// User tapped on the link
-	@objc private func linkTapped() {
+	@objc func linkTapped() {
 
 		viewModel.linkClicked(self)
 	}

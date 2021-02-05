@@ -18,7 +18,7 @@ class OnboardingViewControllerTests: XCTestCase {
 	let page = OnboardingPage(
 		title: "Onboarding Title",
 		message: "Onboarding Message",
-		image: .onboarding1,
+		image: .onboardingSafely,
 		step: .safelyOnTheRoad,
 		underlinedText: nil
 	)
@@ -88,5 +88,17 @@ class OnboardingViewControllerTests: XCTestCase {
 		// Then
 		XCTAssertTrue(coordinatorSpy.nextButtonClickedCalled, "Method should be called")
 		XCTAssertEqual(coordinatorSpy.step, OnboardingStep.safelyOnTheRoad, "Step should match")
+	}
+
+	func testLink() {
+
+		// Given
+		loadView()
+
+		// When
+		sut?.linkTapped()
+
+		// Then
+		XCTAssertTrue(coordinatorSpy.showPrivacyPageCalled, "Method should be called")
 	}
 }

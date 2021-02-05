@@ -25,7 +25,7 @@ class HolderCoordinator: Coordinator {
 	var coronaTestProof: CTRModel?
 
 	/// The onboardings manager
-	var onboardingManager: OnboardingManagerProtocol = OnboardingManager()
+	var onboardingManager: OnboardingManaging = Services.onboardingManager
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
