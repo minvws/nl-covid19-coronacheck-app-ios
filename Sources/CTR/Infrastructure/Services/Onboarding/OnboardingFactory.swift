@@ -33,6 +33,9 @@ struct OnboardingPage {
 
 	/// The part of the text that should be underlined
 	let underlinedText: String?
+
+	/// The consent text
+	let consent: String?
 }
 
 protocol OnboardingFactoryProtocol {
@@ -54,35 +57,40 @@ struct OnboardingFactory: OnboardingFactoryProtocol {
 				message: .onboardingMessageSafely,
 				image: .onboardingSafely,
 				step: .safelyOnTheRoad,
-				underlinedText: nil
+				underlinedText: nil,
+				consent: nil
 			),
 			OnboardingPage(
 				title: .onboardingTitleYourQR,
 				message: .onboardingMessageYourQR,
 				image: .onboardingYourQR,
 				step: .yourQR,
-				underlinedText: nil
+				underlinedText: nil,
+				consent: nil
 			),
 			OnboardingPage(
 				title: .onboardingTitleValidity,
 				message: .onboardingMessageValidity,
 				image: .onboardingValidity,
 				step: .validity,
-				underlinedText: nil
+				underlinedText: nil,
+				consent: nil
 			),
 			OnboardingPage(
 				title: .onboardingTitleSecureSystem,
 				message: .onboardingMessageSecureSystem,
 				image: .onboardingSecureSystem,
 				step: .safeSystem,
-				underlinedText: nil
+				underlinedText: nil,
+				consent: nil
 			),
 			OnboardingPage(
 				title: .onboardingTitlePrivacy,
 				message: .onboardingMessagePrivacy,
 				image: .onboardingPrivacy,
 				step: .privacy,
-				underlinedText: .onboardingUnderlinePrivacy
+				underlinedText: .onboardingUnderlinePrivacy,
+				consent: .onboardingConsentPrivacy
 			)
 		]
 

@@ -48,6 +48,17 @@ class OnboardingPageView: BaseView {
 		
 		return Label(body: nil).multiline()
 	}()
+
+	let consentButton: ConsentButton = {
+
+		let button = ConsentButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		return button
+	}()
+
+	var messageBottomConstraintWithConsent: NSLayoutConstraint?
+	var messageBottomConstraintWithoutConsent: NSLayoutConstraint?
 	
 	/// setup the views
 	override func setupViews() {
@@ -64,6 +75,7 @@ class OnboardingPageView: BaseView {
 		addSubview(imageContainerView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
+		addSubview(consentButton)
 	}
 	
 	/// Setup the constraints
@@ -118,11 +130,30 @@ class OnboardingPageView: BaseView {
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			messageLabel.bottomAnchor.constraint(
+
+			// Consent Button
+			consentButton.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			consentButton.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			consentButton.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
+
+		messageBottomConstraintWithoutConsent = messageLabel.bottomAnchor.constraint(
+			equalTo: bottomAnchor,
+			constant: -ViewTraits.margin
+		)
+		messageBottomConstraintWithConsent = messageLabel.bottomAnchor.constraint(
+			equalTo: consentButton.topAnchor,
+			constant: -ViewTraits.margin
+		)
 	}
 
 	// MARK: Public Access
@@ -159,5 +190,18 @@ class OnboardingPageView: BaseView {
 
 		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
+	}
+
+	var consent: String? {
+		didSet {
+			consentButton.setTitle(consent, for: .normal)
+			if consent != nil {
+				messageBottomConstraintWithConsent?.isActive = true
+				consentButton.isHidden = false
+			} else {
+				messageBottomConstraintWithoutConsent?.isActive = true
+				consentButton.isHidden = true
+			}
+		}
 	}
 }

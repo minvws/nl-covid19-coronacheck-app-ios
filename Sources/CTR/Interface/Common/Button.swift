@@ -113,7 +113,7 @@ class Button: UIButton {
 					setTitleColor(.white, for: .normal)
 				} else {
 					backgroundColor = Theme.colors.gray
-					setTitleColor(.white, for: .normal)
+					setTitleColor(Theme.colors.tertiary, for: .normal)
 				}
 			//        case .secondary:
 			//            backgroundColor = Theme.colors.tertiary

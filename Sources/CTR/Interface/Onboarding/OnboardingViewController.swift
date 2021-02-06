@@ -7,13 +7,14 @@
 
 import UIKit
 
-class OnboardingViewModel {
+class OnboardingViewModel: ConsentDelegate {
 
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
 
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [OnboardingPage]
+	@Bindable private(set) var enabled: Bool
 
 	/// Initializer
 	/// - Parameters:
@@ -26,6 +27,7 @@ class OnboardingViewModel {
 
 		self.coordinator = coordinator
 		self.pages = pages
+		self.enabled = true
 	}
 
 	/// Add an onboarding step
@@ -35,6 +37,7 @@ class OnboardingViewModel {
 		let viewController = OnboardingPageViewController(
 			viewModel: OnboardingPageViewModel(
 				coordinator: self.coordinator!,
+				consentDelegate: self,
 				onboardingInfo: info
 			)
 		)
@@ -45,6 +48,11 @@ class OnboardingViewModel {
 	func finishOnboarding() {
 
 		coordinator?.finishOnboarding()
+	}
+
+	func consentGiven(_ consent: Bool) {
+
+		enabled = consent
 	}
 }
 
@@ -65,6 +73,12 @@ class OnboardingViewController: BaseViewController {
 			if let index = currentIndex {
 				sceneView.pageControl.currentPage = index
 				navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
+				let page = onboardingPages[index]
+				if page.consent == nil {
+					sceneView.primaryButton.isEnabled = true
+				} else {
+					sceneView.primaryButton.isEnabled = viewModel.enabled
+				}
 			}
 		}
 	}
@@ -97,6 +111,8 @@ class OnboardingViewController: BaseViewController {
 		view = sceneView
 	}
 
+	private var onboardingPages = [OnboardingPage]()
+
 	/// the onboarding viewcontrollers
 	private var viewControllers = [UIViewController]()
 
@@ -109,8 +125,9 @@ class OnboardingViewController: BaseViewController {
 
 		setupPageController()
 		viewModel.$pages.binding = {
+			self.onboardingPages = $0
 			self.currentIndex = 0
-			for page in $0 {
+			for page in self.onboardingPages {
 				self.viewControllers.append(self.viewModel.getOnboardingStep(page))
 			}
 			if let firstVC = self.viewControllers.first {
@@ -123,6 +140,10 @@ class OnboardingViewController: BaseViewController {
 
 		sceneView.primaryButton.setTitle(.next, for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+
+		viewModel.$enabled.binding = {
+			self.sceneView.primaryButton.isEnabled = $0
+		}
 
 		setupBackButton()
 	}
@@ -156,6 +177,7 @@ class OnboardingViewController: BaseViewController {
 			let nextVC = viewControllers[index]
 			self.pageViewController?.setViewControllers([nextVC], direction: .reverse, animated: true, completion: nil)
 			currentIndex = index
+			self.sceneView.primaryButton.isEnabled = true
 		}
 	}
 

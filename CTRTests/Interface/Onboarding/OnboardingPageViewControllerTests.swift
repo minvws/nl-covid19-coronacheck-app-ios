@@ -14,13 +14,15 @@ class OnboardingPageViewControllerTests: XCTestCase {
 	var sut: OnboardingPageViewController?
 
 	var coordinatorSpy = OnboardingCoordinatorSpy()
+	var consentDelegateSpy = ConsentDelegateSpy()
 
 	let page = OnboardingPage(
 		title: "Onboarding Title",
 		message: "Onboarding Message",
 		image: .onboardingSafely,
 		step: .safelyOnTheRoad,
-		underlinedText: "Message"
+		underlinedText: "Message",
+		consent: nil
 	)
 
 	var window = UIWindow()
@@ -31,10 +33,12 @@ class OnboardingPageViewControllerTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = OnboardingCoordinatorSpy()
+		consentDelegateSpy = ConsentDelegateSpy()
 
 		sut = OnboardingPageViewController(
 			viewModel: OnboardingPageViewModel(
 				coordinator: coordinatorSpy,
+				consentDelegate: consentDelegateSpy,
 				onboardingInfo: page
 			)
 		)
@@ -54,9 +58,21 @@ class OnboardingPageViewControllerTests: XCTestCase {
 		}
 	}
 
+	// MARK: TestDoubles
+
+	class ConsentDelegateSpy: ConsentDelegate {
+
+		var consentGivenCalled = false
+
+		func consentGiven(_ consent: Bool) {
+
+			consentGivenCalled = true
+		}
+	}
+
 	// MARK: Test
 
-	/// Test all the content
+	/// Test all the content without consent
 	func testContent() {
 
 		// Given
@@ -73,8 +89,44 @@ class OnboardingPageViewControllerTests: XCTestCase {
 		XCTAssertEqual(strongSut.sceneView.title, page.title, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, page.message, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.image, page.image, "Image should match")
+		XCTAssertFalse(consentDelegateSpy.consentGivenCalled, "Method should not be called")
 	}
 
+	/// Test all the content with consent
+	func testContentWithConsent() {
+
+		// Given
+		sut = OnboardingPageViewController(
+			viewModel: OnboardingPageViewModel(
+				coordinator: coordinatorSpy,
+				consentDelegate: consentDelegateSpy,
+				onboardingInfo: OnboardingPage(
+					title: "Onboarding Title",
+					message: "Onboarding Message",
+					image: .onboardingSafely,
+					step: .safelyOnTheRoad,
+					underlinedText: "Message",
+					consent: "consent"
+				)
+			)
+		)
+
+		// When
+		loadView()
+
+		// Then
+		guard let strongSut = sut else {
+
+			XCTFail("Can not unwrap sut")
+			return
+		}
+		XCTAssertEqual(strongSut.sceneView.title, page.title, "Title should match")
+		XCTAssertEqual(strongSut.sceneView.message, page.message, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.image, page.image, "Image should match")
+		XCTAssertTrue(consentDelegateSpy.consentGivenCalled, "Method should be called")
+	}
+
+	/// Test the user tapped on the link
 	func testLink() {
 
 		// Given
@@ -85,5 +137,18 @@ class OnboardingPageViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(coordinatorSpy.showPrivacyPageCalled, "Method should be called")
+	}
+
+	/// Test the user tapped on the consent button
+	func testConsentGiven() {
+
+		// Given
+		loadView()
+
+		// When
+		sut?.sceneView.consentButton.sendActions(for: .valueChanged)
+
+		// Then
+		XCTAssertTrue(consentDelegateSpy.consentGivenCalled, "Method should be called")
 	}
 }

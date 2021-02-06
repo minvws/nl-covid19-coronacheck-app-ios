@@ -51,6 +51,11 @@ class OnboardingPageViewController: BaseViewController {
 			self.setupLink()
 		}
 		viewModel.$image.binding = { self.sceneView.image = $0 }
+
+		viewModel.$consent.binding = {
+			self.sceneView.consent = $0
+		}
+		self.sceneView.consentButton.valueChanged(self, action: #selector(consentValueChanged))
 	}
 
 	/// Setup a gesture recognizer for underlined text
@@ -65,5 +70,21 @@ class OnboardingPageViewController: BaseViewController {
 	@objc func linkTapped() {
 
 		viewModel.linkClicked(self)
+	}
+
+	/// User tapped on the consent button
+	@objc func consentValueChanged(_ sender: ConsentButton) {
+
+		viewModel.consentGiven(sender.isSelected)
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+
+		if self.sceneView.consent != nil {
+			// if there is a consent button, notify the model (and thus the container) of its state
+			viewModel.consentGiven(sceneView.consentButton.isSelected)
+		}
 	}
 }

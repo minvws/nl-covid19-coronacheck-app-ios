@@ -64,4 +64,9 @@ extension String {
 		return Localization.string(for: "holder.onboarding.message.privacy.underline")
 	}
 
+	static var onboardingConsentPrivacy: String {
+
+		return Localization.string(for: "holder.onboarding.message.privacy.consent")
+	}
+
 }
