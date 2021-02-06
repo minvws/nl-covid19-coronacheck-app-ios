@@ -39,23 +39,18 @@
 "main.verifier" = "Verifier";
 
 /* MARK: - Onboarding */
-"onboarding.title.safely" = "Veilig op pad";
-"onboarding.message.safely" = "We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
-"onboarding.title.yourqr" = "Jouw QR-code op zak";
-"onboarding.message.yourqr" = "In deze app zet je jouw testuitslag om in een QR-code. Deze laat je scannen bij de ingang van het café, in de rij voor een event of bij andere uitgaansgelegenheden.";
-"onboarding.title.validity" = "Uitslag geldt 2 dagen";
-"onboarding.message.validity" = "Een negatieve testuitslag is 2 dagen geldig. Daarna niet meer. De QR-code verdwijnt dan automatisch uit de app. Nieuwe QR nodig? Laat je dan opnieuw op corona testen.";
-"onboarding.title.securesystem" = "Een veilig systeem";
-"onboarding.message.securesystem" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
-"onboarding.title.privacy" = "Privacy staat voorop";
-"onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\n\nLees de privacyverklaring";
-"onboarding.message.privacy.underline" = "Lees de privacyverklaring";
+"holder.onboarding.title.safely" = "Veilig op pad";
+"holder.onboarding.message.safely" = "We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
+"holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
+"holder.onboarding.message.yourqr" = "In deze app zet je jouw testuitslag om in een QR-code. Deze laat je scannen bij de ingang van het café, in de rij voor een event of bij andere uitgaansgelegenheden.";
+"holder.onboarding.title.validity" = "Uitslag geldt 2 dagen";
+"holder.onboarding.message.validity" = "Een negatieve testuitslag is 2 dagen geldig. Daarna niet meer. De QR-code verdwijnt dan automatisch uit de app. Nieuwe QR nodig? Laat je dan opnieuw op corona testen.";
+"holder.onboarding.title.securesystem" = "Een veilig systeem";
+"holder.onboarding.message.securesystem" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
+"holder.onboarding.title.privacy" = "Privacy staat voorop";
+"holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\n\nLees de privacyverklaring";
+"holder.onboarding.message.privacy.underline" = "Lees de privacyverklaring";
 
 /* MARK: - Privacy */
-"privacy.message" = "** de privacy verklaring **";
-"privacy.title" = "Privacy verklaring";
-
-/* MARK: - Terms & Conditions */
-"terms.message" = "** de gebruiks voorwaarden **";
-"terms.agree" = "Ik ga akkoord met de voorwaarden.";
-"terms.title" = "Gebruiksvoorwaarden";
+"holder.privacy.message" = "** de privacy verklaring **";
+"holder.privacy.title" = "Privacy verklaring";

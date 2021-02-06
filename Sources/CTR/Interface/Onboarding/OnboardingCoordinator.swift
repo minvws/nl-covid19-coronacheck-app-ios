@@ -9,10 +9,6 @@ import UIKit
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
 
-	/// The user clicked on the next button
-	/// - Parameter step: the current onboarding step
-	func nextButtonClicked(step: OnboardingStep)
-
 	/// Show the privacy page
 	/// - Parameter viewController: the presenting viewcontroller
 	func showPrivacyPage(_ viewController: UIViewController)
@@ -20,8 +16,8 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	/// Dismiss the presented viewcontroller
 	func dismiss()
 
-	/// The user agreed on the terms
-	func termsAgreed()
+	/// The onboarding is finished
+	func finishOnboarding()
 }
 
 protocol OnboardingDelegate: AnyObject {
@@ -56,29 +52,20 @@ class OnboardingCoordinator: Coordinator, Logging {
 		onboardingPages = factory.create()
 	}
 
+	/// The onboarding pages
 	var onboardingPages: [OnboardingPage] = []
 
+	/// The factory for onboarding pages
 	var factory: OnboardingFactoryProtocol = OnboardingFactory()
 	
 	// Designated starter method
 	func start() {
 
-		if let info = onboardingPages.first {
-			addOnboardingStep(info)
-		}
-	}
-
-	/// Add an onboarding step
-	/// - Parameter info: the info for the onboarding step
-	func addOnboardingStep(_ info: OnboardingPage) {
-
-		let viewController = OnboardingViewController(
-			viewModel: OnboardingViewModel(
-				coordinator: self,
-				onboardingInfo: info,
-				numberOfPages: onboardingPages.count
-			)
+		let viewModel = OnboardingViewModel(
+			coordinator: self,
+			pages: onboardingPages
 		)
+		let viewController = OnboardingViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 }
@@ -87,30 +74,14 @@ class OnboardingCoordinator: Coordinator, Logging {
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 
-	/// The user clicked on the next button
-	/// - Parameter step: the current onboarding step
-	func nextButtonClicked(step: OnboardingStep) {
-
-		let rawValue = step.rawValue
-		let nextValue = rawValue + 1
-
-		if nextValue < onboardingPages.count {
-			let info = onboardingPages[nextValue]
-			addOnboardingStep(info)
-		} else if nextValue == onboardingPages.count {
-
-			showTermsPage()
-		}
-	}
-
 	/// Show the privacy page
 	/// - Parameter viewController: the presenting view controller
 	func showPrivacyPage(_ viewController: UIViewController) {
 
 		let viewModel = PrivacyViewModel(
 			coordinator: self,
-			title: .privacyTitle,
-			message: .privacyMessage
+			title: .holderPrivacyTitle,
+			message: .holderPrivacyMessage
 		)
 		let privacyViewController = PrivacyViewController(viewModel: viewModel)
 		let navigationController = UINavigationController(rootViewController: privacyViewController)
@@ -119,24 +90,15 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		presentingViewController = viewController
 	}
 
-	func showTermsPage() {
-
-		let viewModel = TermsViewModel(coordinator: self)
-		let viewController = TermsViewController(viewModel: viewModel)
-
-		navigationController.pushViewController(viewController, animated: true)
-	}
-
 	func dismiss() {
 
 		presentingViewController?.dismiss(animated: true, completion: nil)
 		presentingViewController = nil
 	}
 
-	/// The user agreed on the terms
-	func termsAgreed() {
-
-		self.logInfo("Onboarding completed!")
+	/// The onboarding is finished
+	func finishOnboarding() {
+		
 		onboardingDelegate?.finishOnboarding()
 	}
 }

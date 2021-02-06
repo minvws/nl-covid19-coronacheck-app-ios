@@ -11,13 +11,10 @@ import UIKit
 class PrivacyViewController: BaseViewController {
 
 	/// The model
-	let viewModel: PrivacyViewModel
+	private let viewModel: PrivacyViewModel
 
 	/// The view
 	let sceneView = PrivacyView()
-
-	/// The error Message
-	var errorMessage: String?
 
 	/// Initializer
 	/// - Parameter viewModel: view model

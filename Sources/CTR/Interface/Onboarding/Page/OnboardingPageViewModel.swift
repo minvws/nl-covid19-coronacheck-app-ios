@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingViewModel {
+class OnboardingPageViewModel {
 
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
@@ -16,39 +16,26 @@ class OnboardingViewModel {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var image: UIImage?
-	@Bindable private(set) var pageNumber: Int
-	@Bindable private(set) var numberOfPages: Int
 
-	var step: OnboardingStep
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - onboardingInfo: the container with onboarding info
-	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: OnboardingCoordinatorDelegate,
-		onboardingInfo: OnboardingPage,
-		numberOfPages: Int) {
+		onboardingInfo: OnboardingPage) {
 
 		self.coordinator = coordinator
-
 		title = onboardingInfo.title
 		message = onboardingInfo.message
 		image = onboardingInfo.image
-		pageNumber = onboardingInfo.step.rawValue
 		underlinedText = onboardingInfo.underlinedText
-		self.numberOfPages = numberOfPages
-		self.step = onboardingInfo.step
 	}
 
-	/// The user clicked on the next button
-	func nextButtonClicked() {
-
-		// Notify the coordinator
-		coordinator?.nextButtonClicked(step: step)
-	}
-
+	/// Show the privacy page
+	/// - Parameter viewController: the presenting viewcontroller
 	func linkClicked(_ viewController: UIViewController) {
+		
 		coordinator?.showPrivacyPage(viewController)
 	}
 }

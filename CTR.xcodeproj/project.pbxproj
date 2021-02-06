@@ -15,8 +15,8 @@
 		6D1F304A25CBDC22000E901D /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1F304925CBDC22000E901D /* Services.swift */; };
 		6D20238E25CAABB500CFCD14 /* OnboardingManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20238D25CAABB500CFCD14 /* OnboardingManagerTests.swift */; };
 		6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */; };
-		6D2023B225CAB7A200CFCD14 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20239F25CAB71000CFCD14 /* OnboardingViewModel.swift */; };
-		6D2023B825CAB7E200CFCD14 /* OnboardingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023B725CAB7E200CFCD14 /* OnboardingViewControllerTests.swift */; };
+		6D2023B225CAB7A200CFCD14 /* OnboardingPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20239F25CAB71000CFCD14 /* OnboardingPageViewModel.swift */; };
+		6D2023B825CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023B725CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift */; };
 		6D2023BC25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023BB25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift */; };
 		6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */; };
 		6D2C0FA725B6B7B50030FD17 /* HolderFetchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */; };
@@ -36,7 +36,9 @@
 		6D5E06C625C1A5C4008E2124 /* AppUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E06C525C1A5C4008E2124 /* AppUpdateViewModel.swift */; };
 		6D5E06CA25C1C54A008E2124 /* RemoteConfigApiClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E06C925C1C54A008E2124 /* RemoteConfigApiClientTests.swift */; };
 		6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5E06CF25C1CD09008E2124 /* RemoteConfigManagerTests.swift */; };
-		6D6777D625CD3E7B00F6F2D1 /* TermsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777D525CD3E7B00F6F2D1 /* TermsLocalization.swift */; };
+		6D6777DA25CD60FC00F6F2D1 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777D925CD60FC00F6F2D1 /* OnboardingViewController.swift */; };
+		6D6777DE25CD662200F6F2D1 /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777DD25CD662200F6F2D1 /* OnboardingPageView.swift */; };
+		6D6777FF25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777FE25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift */; };
 		6D68CACD25CC1610008FE2C8 /* NetworkManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */; };
 		6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */; };
 		6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */; };
@@ -56,7 +58,7 @@
 		6D7F9CDC25B704000006F227 /* UIViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */; };
 		6D7FFAD925C9A43100B5482F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAD825C9A43100B5482F /* OnboardingView.swift */; };
 		6D7FFADD25C9A6EB00B5482F /* OnboardingImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFADC25C9A6EB00B5482F /* OnboardingImage.swift */; };
-		6D7FFAE125C9A7E200B5482F /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAE025C9A7E200B5482F /* OnboardingViewController.swift */; };
+		6D7FFAE125C9A7E200B5482F /* OnboardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAE025C9A7E200B5482F /* OnboardingPageViewController.swift */; };
 		6D7FFAE525C9A8AD00B5482F /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAE425C9A8AD00B5482F /* OnboardingCoordinator.swift */; };
 		6D7FFAE925C9AF6B00B5482F /* UIDevice+ScreenType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAE825C9AF6B00B5482F /* UIDevice+ScreenType.swift */; };
 		6D7FFAED25C9B65E00B5482F /* OnboardingFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7FFAEC25C9B65E00B5482F /* OnboardingFactory.swift */; };
@@ -102,8 +104,6 @@
 		6DD43DA225CD1E160041D658 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA125CD1E160041D658 /* PrivacyView.swift */; };
 		6DD43DA625CD23F70041D658 /* GeneralLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */; };
 		6DD43DAB25CD25F70041D658 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */; };
-		6DD43DB625CD35A40041D658 /* TermsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DB525CD35A40041D658 /* TermsViewModel.swift */; };
-		6DD43DBC25CD3AC50041D658 /* TermsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DBB25CD3AC50041D658 /* TermsView.swift */; };
 		6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9394225BD8CD80026F071 /* Configuration.swift */; };
 		6DD9394825BD8DAF0026F071 /* configuration-development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DD9394725BD8DAF0026F071 /* configuration-development.plist */; };
 		6DD9395525BD924F0026F071 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD9395425BD924F0026F071 /* HTTP.swift */; };
@@ -144,8 +144,8 @@
 		6D1F304925CBDC22000E901D /* Services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		6D20238D25CAABB500CFCD14 /* OnboardingManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManagerTests.swift; sourceTree = "<group>"; };
 		6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationControllerSpy.swift; sourceTree = "<group>"; };
-		6D20239F25CAB71000CFCD14 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
-		6D2023B725CAB7E200CFCD14 /* OnboardingViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerTests.swift; sourceTree = "<group>"; };
+		6D20239F25CAB71000CFCD14 /* OnboardingPageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewModel.swift; sourceTree = "<group>"; };
+		6D2023B725CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewControllerTests.swift; sourceTree = "<group>"; };
 		6D2023BB25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorySpy.swift; sourceTree = "<group>"; };
 		6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorTests.swift; sourceTree = "<group>"; };
 		6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderFetchResultViewController.swift; sourceTree = "<group>"; };
@@ -165,7 +165,9 @@
 		6D5E06C525C1A5C4008E2124 /* AppUpdateViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUpdateViewModel.swift; sourceTree = "<group>"; };
 		6D5E06C925C1C54A008E2124 /* RemoteConfigApiClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigApiClientTests.swift; sourceTree = "<group>"; };
 		6D5E06CF25C1CD09008E2124 /* RemoteConfigManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigManagerTests.swift; sourceTree = "<group>"; };
-		6D6777D525CD3E7B00F6F2D1 /* TermsLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsLocalization.swift; sourceTree = "<group>"; };
+		6D6777D925CD60FC00F6F2D1 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		6D6777DD25CD662200F6F2D1 /* OnboardingPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
+		6D6777FE25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewControllerTests.swift; sourceTree = "<group>"; };
 		6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManagerSpy.swift; sourceTree = "<group>"; };
 		6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoManagerSpy.swift; sourceTree = "<group>"; };
 		6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralImage.swift; sourceTree = "<group>"; };
@@ -185,7 +187,7 @@
 		6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Keyboard.swift"; sourceTree = "<group>"; };
 		6D7FFAD825C9A43100B5482F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		6D7FFADC25C9A6EB00B5482F /* OnboardingImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingImage.swift; sourceTree = "<group>"; };
-		6D7FFAE025C9A7E200B5482F /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		6D7FFAE025C9A7E200B5482F /* OnboardingPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewController.swift; sourceTree = "<group>"; };
 		6D7FFAE425C9A8AD00B5482F /* OnboardingCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinator.swift; sourceTree = "<group>"; };
 		6D7FFAE825C9AF6B00B5482F /* UIDevice+ScreenType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIDevice+ScreenType.swift"; sourceTree = "<group>"; };
 		6D7FFAEC25C9B65E00B5482F /* OnboardingFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFactory.swift; sourceTree = "<group>"; };
@@ -231,8 +233,6 @@
 		6DD43DA125CD1E160041D658 /* PrivacyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralLocalization.swift; sourceTree = "<group>"; };
 		6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
-		6DD43DB525CD35A40041D658 /* TermsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsViewModel.swift; sourceTree = "<group>"; };
-		6DD43DBB25CD3AC50041D658 /* TermsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsView.swift; sourceTree = "<group>"; };
 		6DD9394225BD8CD80026F071 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		6DD9394725BD8DAF0026F071 /* configuration-development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-development.plist"; sourceTree = "<group>"; };
 		6DD9395425BD924F0026F071 /* HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
@@ -349,7 +349,8 @@
 			children = (
 				6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */,
 				6D2023BB25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift */,
-				6D2023B725CAB7E200CFCD14 /* OnboardingViewControllerTests.swift */,
+				6D2023B725CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift */,
+				6D6777FE25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -361,6 +362,16 @@
 				6D7FFADC25C9A6EB00B5482F /* OnboardingImage.swift */,
 			);
 			path = Image;
+			sourceTree = "<group>";
+		};
+		6D6777E525CD6D8A00F6F2D1 /* Page */ = {
+			isa = PBXGroup;
+			children = (
+				6D6777DD25CD662200F6F2D1 /* OnboardingPageView.swift */,
+				6D7FFAE025C9A7E200B5482F /* OnboardingPageViewController.swift */,
+				6D20239F25CAB71000CFCD14 /* OnboardingPageViewModel.swift */,
+			);
+			path = Page;
 			sourceTree = "<group>";
 		};
 		6D73052D25B876C100BA808C /* Services */ = {
@@ -388,12 +399,11 @@
 		6D7FFAD725C9A41400B5482F /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				6DD43DB425CD358B0041D658 /* Terms */,
+				6D6777E525CD6D8A00F6F2D1 /* Page */,
 				6DD43DA925CD25DD0041D658 /* Privacy */,
 				6D7FFAE425C9A8AD00B5482F /* OnboardingCoordinator.swift */,
+				6D6777D925CD60FC00F6F2D1 /* OnboardingViewController.swift */,
 				6D7FFAD825C9A43100B5482F /* OnboardingView.swift */,
-				6D7FFAE025C9A7E200B5482F /* OnboardingViewController.swift */,
-				6D20239F25CAB71000CFCD14 /* OnboardingViewModel.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -534,7 +544,6 @@
 				6D5D202D25BF189400DC2E27 /* MainLocalization.swift */,
 				6D7FFAF025C9B8CF00B5482F /* OnboardingLocalization.swift */,
 				6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */,
-				6D6777D525CD3E7B00F6F2D1 /* TermsLocalization.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -547,15 +556,6 @@
 				6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */,
 			);
 			path = Privacy;
-			sourceTree = "<group>";
-		};
-		6DD43DB425CD358B0041D658 /* Terms */ = {
-			isa = PBXGroup;
-			children = (
-				6DD43DBB25CD3AC50041D658 /* TermsView.swift */,
-				6DD43DB525CD35A40041D658 /* TermsViewModel.swift */,
-			);
-			path = Terms;
 			sourceTree = "<group>";
 		};
 		6DD9394625BD8D9A0026F071 /* Development */ = {
@@ -964,20 +964,20 @@
 				6D7FFAD925C9A43100B5482F /* OnboardingView.swift in Sources */,
 				6DE6FD8425C18BCA006602AC /* RemoteConfigManager.swift in Sources */,
 				6DAE8BE125CB242700AAF2A7 /* Encodable+AnyEncodable.swift in Sources */,
+				6D6777DA25CD60FC00F6F2D1 /* OnboardingViewController.swift in Sources */,
 				6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */,
 				6D92849D25B5CBC0009D4350 /* Button.swift in Sources */,
 				6D9284B425B5D08D009D4350 /* VerifierStartViewController.swift in Sources */,
-				6DD43DB625CD35A40041D658 /* TermsViewModel.swift in Sources */,
 				6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */,
 				6D9284B025B5D076009D4350 /* HolderStartViewController.swift in Sources */,
 				6D5E06BA25C19627008E2124 /* UIStackView+Axis.swift in Sources */,
 				6D9284A825B5CECF009D4350 /* MainViewController.swift in Sources */,
 				6D9284B825B5D22B009D4350 /* HolderCoordinator.swift in Sources */,
-				6DD43DBC25CD3AC50041D658 /* TermsView.swift in Sources */,
 				6DAE8BDE25CB242700AAF2A7 /* NetworkManaging.swift in Sources */,
-				6D7FFAE125C9A7E200B5482F /* OnboardingViewController.swift in Sources */,
+				6D7FFAE125C9A7E200B5482F /* OnboardingPageViewController.swift in Sources */,
 				6DAE8BE325CB242700AAF2A7 /* NetworkManagerURLSessionDelegate.swift in Sources */,
 				6D7F9C9E25B6BAE80006F227 /* QRCodeView.swift in Sources */,
+				6D6777DE25CD662200F6F2D1 /* OnboardingPageView.swift in Sources */,
 				6DAE8BDB25CB242700AAF2A7 /* HTTPMethod.swift in Sources */,
 				6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */,
 				6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */,
@@ -1009,8 +1009,7 @@
 				6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */,
 				6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */,
 				6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */,
-				6D6777D625CD3E7B00F6F2D1 /* TermsLocalization.swift in Sources */,
-				6D2023B225CAB7A200CFCD14 /* OnboardingViewModel.swift in Sources */,
+				6D2023B225CAB7A200CFCD14 /* OnboardingPageViewModel.swift in Sources */,
 				6D7C908A25CA86FE00AEC5DE /* String+extension.swift in Sources */,
 				6DD43DAB25CD25F70041D658 /* PrivacyViewModel.swift in Sources */,
 				6DAE8BDA25CB242700AAF2A7 /* Certificates.swift in Sources */,
@@ -1042,11 +1041,12 @@
 				6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */,
 				6D68CACD25CC1610008FE2C8 /* NetworkManagerSpy.swift in Sources */,
 				6DC6CC4125C2A95C00060237 /* AppCoordinatorSpy.swift in Sources */,
-				6D2023B825CAB7E200CFCD14 /* OnboardingViewControllerTests.swift in Sources */,
+				6D2023B825CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift in Sources */,
 				6D2023BC25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift in Sources */,
 				6D5E06CA25C1C54A008E2124 /* RemoteConfigApiClientTests.swift in Sources */,
 				6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */,
 				6D01D8E325C0501C00A4AB89 /* FetchResultModelTests.swift in Sources */,
+				6D6777FF25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift in Sources */,
 				6DC6CC3D25C2A6D400060237 /* AppUpdateViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

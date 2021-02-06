@@ -9,13 +9,13 @@ import Foundation
 
 extension String {
 
-	static var privacyTitle: String {
+	static var holderPrivacyTitle: String {
 
-		return Localization.string(for: "privacy.title")
+		return Localization.string(for: "holder.privacy.title")
 	}
 
-	static var privacyMessage: String {
+	static var holderPrivacyMessage: String {
 
-		return Localization.string(for: "privacy.message")
+		return Localization.string(for: "holder.privacy.message")
 	}
 }

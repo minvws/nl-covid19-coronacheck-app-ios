@@ -11,57 +11,57 @@ extension String {
 
 	static var onboardingTitleSafely: String {
 
-		return Localization.string(for: "onboarding.title.safely")
+		return Localization.string(for: "holder.onboarding.title.safely")
 	}
 
 	static var onboardingMessageSafely: String {
 
-		return Localization.string(for: "onboarding.message.safely")
+		return Localization.string(for: "holder.onboarding.message.safely")
 	}
 
 	static var onboardingTitleYourQR: String {
 
-		return Localization.string(for: "onboarding.title.yourqr")
+		return Localization.string(for: "holder.onboarding.title.yourqr")
 	}
 
 	static var onboardingMessageYourQR: String {
 
-		return Localization.string(for: "onboarding.message.yourqr")
+		return Localization.string(for: "holder.onboarding.message.yourqr")
 	}
 
 	static var onboardingTitleValidity: String {
 
-		return Localization.string(for: "onboarding.title.validity")
+		return Localization.string(for: "holder.onboarding.title.validity")
 	}
 
 	static var onboardingMessageValidity: String {
 
-		return Localization.string(for: "onboarding.message.validity")
+		return Localization.string(for: "holder.onboarding.message.validity")
 	}
 
 	static var onboardingTitleSecureSystem: String {
 
-		return Localization.string(for: "onboarding.title.securesystem")
+		return Localization.string(for: "holder.onboarding.title.securesystem")
 	}
 
 	static var onboardingMessageSecureSystem: String {
 
-		return Localization.string(for: "onboarding.message.securesystem")
+		return Localization.string(for: "holder.onboarding.message.securesystem")
 	}
 
 	static var onboardingTitlePrivacy: String {
 
-		return Localization.string(for: "onboarding.title.privacy")
+		return Localization.string(for: "holder.onboarding.title.privacy")
 	}
 
 	static var onboardingMessagePrivacy: String {
 
-		return Localization.string(for: "onboarding.message.privacy")
+		return Localization.string(for: "holder.onboarding.message.privacy")
 	}
 
 	static var onboardingUnderlinePrivacy: String {
 
-		return Localization.string(for: "onboarding.message.privacy.underline")
+		return Localization.string(for: "holder.onboarding.message.privacy.underline")
 	}
 
 }
