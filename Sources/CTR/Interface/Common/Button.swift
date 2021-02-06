@@ -110,10 +110,10 @@ class Button: UIButton {
 			case .primary:
 				if isEnabled {
 					backgroundColor = Theme.colors.primary
-					setTitleColor(.white, for: .normal)
+					setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
 				} else {
 					backgroundColor = Theme.colors.gray
-					setTitleColor(.white, for: .normal)
+					setTitleColor(Theme.colors.tertiary, for: .normal)
 				}
 			//        case .secondary:
 			//            backgroundColor = Theme.colors.tertiary
@@ -123,14 +123,14 @@ class Button: UIButton {
 			//				setTitleColor(Theme.colors.primary, for: .normal)
 			//        case .warning:
 			//            backgroundColor = Theme.colors.warning
-			//            setTitleColor(.white, for: .normal)
+			//            setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
 			//        case .info:
 			//            backgroundColor = .clear
 			//            setTitleColor(Theme.colors.primary, for: .normal)
 		}
 		
 		//        contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-		tintColor = .white
+		tintColor = Theme.colors.viewControllerBackground
 	}
 
     private func updateRoundedCorners() {

@@ -14,8 +14,6 @@ class OnboardingView: BaseView {
 		
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
-		static let titleLineHeight: CGFloat = 26
-		static let messageLineHeight: CGFloat = 22
 		
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -23,7 +21,8 @@ class OnboardingView: BaseView {
 		static let buttonWidth: CGFloat = 182.0
 		static let pageControlMargin: CGFloat = 12.0
 	}
-	
+
+	/// The government ribbon
 	private let ribbonView: UIImageView = {
 		
 		let view = UIImageView(image: .ribbon)
@@ -31,33 +30,15 @@ class OnboardingView: BaseView {
 		return view
 	}()
 
-	private let imageContainerView: UIView = {
+	/// The container for the the onboarding views
+	let containerView: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-	
-	private let imageView: UIImageView = {
-		
-		let view = UIImageView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .scaleAspectFit
-		return view
-	}()
-	
-	/// The title label
-	private let titleLabel: Label = {
-		
-		return Label(title1: nil).multiline()
-	}()
-	
-	/// The message label
-	let messageLabel: Label = {
-		
-		return Label(body: nil).multiline()
-	}()
-	
+
+	/// The control buttons
 	let pageControl: UIPageControl = {
 		
 		let view = UIPageControl()
@@ -80,7 +61,7 @@ class OnboardingView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = .white
+		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
 	/// Setup the hierarchy
@@ -88,10 +69,7 @@ class OnboardingView: BaseView {
 		
 		super.setupViewHierarchy()
 		addSubview(ribbonView)
-		imageContainerView.addSubview(imageView)
-		addSubview(imageContainerView)
-		addSubview(titleLabel)
-		addSubview(messageLabel)
+		addSubview(containerView)
 		addSubview(pageControl)
 		addSubview(primaryButton)
 	}
@@ -111,47 +89,11 @@ class OnboardingView: BaseView {
 			),
 
 			// ImageContainer
-			imageContainerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
-			imageContainerView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
-			imageContainerView.leadingAnchor.constraint(
+			containerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
+			containerView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin),
-			imageContainerView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// Image
-			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
-			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
-			imageView.leadingAnchor.constraint(
-				equalTo: imageContainerView.leadingAnchor,
-				constant: ViewTraits.margin),
-			imageView.trailingAnchor.constraint(
-				equalTo: imageContainerView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// Title
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.trailingAnchor.constraint(
+			containerView.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
@@ -168,13 +110,14 @@ class OnboardingView: BaseView {
 	}
 
 	override func layoutSubviews() {
+		
 		super.layoutSubviews()
 
 		// Layout page control when the view has a frame
 		NSLayoutConstraint.activate([
 
 			// Message
-			messageLabel.bottomAnchor.constraint(
+			containerView.bottomAnchor.constraint(
 				equalTo: pageControl.topAnchor,
 				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
 			),
@@ -185,39 +128,5 @@ class OnboardingView: BaseView {
 				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
 			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
-	}
-
-	// MARK: Public Access
-
-	/// The onboarding title
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
-		}
-	}
-
-	/// The onboarding message
-	var message: String? {
-		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
-		}
-	}
-
-	/// The onboarding mage
-	var image: UIImage? {
-		didSet {
-			imageView.image = image
-		}
-	}
-
-	func underline(_ text: String?) {
-
-		guard let underlinedText = text,
-			  let messageText = message else {
-			return
-		}
-
-		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
-		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 	}
 }

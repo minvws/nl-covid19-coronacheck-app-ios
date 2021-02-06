@@ -7,48 +7,57 @@
 
 import UIKit
 
-class OnboardingViewModel {
+protocol ConsentDelegate: AnyObject {
+
+	func consentGiven(_ consent: Bool)
+}
+
+class OnboardingPageViewModel: Logging {
+
+	var loggingCategory: String = "OnboardingPageViewModel"
 
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
+
+	/// Consent delegate
+	weak var delegate: ConsentDelegate?
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var image: UIImage?
-	@Bindable private(set) var pageNumber: Int
-	@Bindable private(set) var numberOfPages: Int
+	@Bindable private(set) var consent: String?
 
-	var step: OnboardingStep
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - onboardingInfo: the container with onboarding info
-	///   - numberOfPages: the total number of pages
 	init(
 		coordinator: OnboardingCoordinatorDelegate,
-		onboardingInfo: OnboardingPage,
-		numberOfPages: Int) {
+		consentDelegate: ConsentDelegate?,
+		onboardingInfo: OnboardingPage) {
 
 		self.coordinator = coordinator
-
+		delegate = consentDelegate
 		title = onboardingInfo.title
 		message = onboardingInfo.message
 		image = onboardingInfo.image
-		pageNumber = onboardingInfo.step.rawValue
 		underlinedText = onboardingInfo.underlinedText
-		self.numberOfPages = numberOfPages
-		self.step = onboardingInfo.step
+		consent = onboardingInfo.consent
 	}
 
-	/// The user clicked on the next button
-	func nextButtonClicked() {
-
-		// Notify the coordinator
-		coordinator?.nextButtonClicked(step: step)
-	}
-
+	/// Show the privacy page
+	/// - Parameter viewController: the presenting viewcontroller
 	func linkClicked(_ viewController: UIViewController) {
+		
 		coordinator?.showPrivacyPage(viewController)
+	}
+
+	/// Was consent given?
+	/// - Parameter consent: True if it was
+	func consentGiven(_ consent: Bool) {
+
+		logDebug("Consent given: \(consent)")
+		delegate?.consentGiven(consent)
 	}
 }

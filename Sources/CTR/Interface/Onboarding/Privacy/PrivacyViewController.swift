@@ -11,13 +11,10 @@ import UIKit
 class PrivacyViewController: BaseViewController {
 
 	/// The model
-	let viewModel: PrivacyViewModel
+	private let viewModel: PrivacyViewModel
 
 	/// The view
 	let sceneView = PrivacyView()
-
-	/// The error Message
-	var errorMessage: String?
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -48,7 +45,7 @@ class PrivacyViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
+		viewModel.$title.binding = { self.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)

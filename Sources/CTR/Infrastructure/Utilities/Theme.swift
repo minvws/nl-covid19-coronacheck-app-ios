@@ -90,6 +90,10 @@ final class Colors {
 
 	var gray: UIColor { return color(for: "DotGray") }
 
+	var disabledIcon: UIColor { return color(for: "DisabledIcon") }
+
+	var viewControllerBackground: UIColor { return color(for: "ViewControllerBackgroundColor") }
+
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

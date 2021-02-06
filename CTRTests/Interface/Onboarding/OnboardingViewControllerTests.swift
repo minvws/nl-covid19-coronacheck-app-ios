@@ -20,7 +20,8 @@ class OnboardingViewControllerTests: XCTestCase {
 		message: "Onboarding Message",
 		image: .onboardingSafely,
 		step: .safelyOnTheRoad,
-		underlinedText: nil
+		underlinedText: nil,
+		consent: nil
 	)
 
 	var window = UIWindow()
@@ -35,8 +36,7 @@ class OnboardingViewControllerTests: XCTestCase {
 		sut = OnboardingViewController(
 			viewModel: OnboardingViewModel(
 				coordinator: coordinatorSpy,
-				onboardingInfo: page,
-				numberOfPages: 1
+				pages: [page]
 			)
 		)
 		window = UIWindow()
@@ -71,13 +71,11 @@ class OnboardingViewControllerTests: XCTestCase {
 			XCTFail("Can not unwrap sut")
 			return
 		}
-		XCTAssertEqual(strongSut.sceneView.title, page.title, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, page.message, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.image, page.image, "Image should match")
 		XCTAssertEqual(strongSut.sceneView.primaryButton.titleLabel?.text, .next, "Button title should match")
 	}
 
-	func testNext() {
+	/// Test tap on the next button with only one item
+	func testNextTappedWithOneItem() {
 
 		// Given
 		loadView()
@@ -86,19 +84,85 @@ class OnboardingViewControllerTests: XCTestCase {
 		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.nextButtonClickedCalled, "Method should be called")
-		XCTAssertEqual(coordinatorSpy.step, OnboardingStep.safelyOnTheRoad, "Step should match")
+		XCTAssertTrue(coordinatorSpy.finishOnboardingCalled, "Method should be called")
 	}
 
-	func testLink() {
+	/// Test tap on the next button with two items
+	func testNextTappedWithTwoItems() {
 
 		// Given
+		sut = OnboardingViewController(
+			viewModel: OnboardingViewModel(
+				coordinator: coordinatorSpy,
+				pages: [page, page]
+			)
+		)
 		loadView()
 
 		// When
-		sut?.linkTapped()
+		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.showPrivacyPageCalled, "Method should be called")
+		XCTAssertFalse(coordinatorSpy.finishOnboardingCalled, "Method should NOT be called")
+	}
+
+	/// Test tap on the next button with two items while on the second page
+	func testWithTwoItemsWhileOnSecondPage() {
+
+		// Given
+		sut = OnboardingViewController(
+			viewModel: OnboardingViewModel(
+				coordinator: coordinatorSpy,
+				pages: [page, page]
+			)
+		)
+		loadView()
+
+		// When
+		sut?.currentIndex = 1
+
+		// Then
+		XCTAssertNotNil(sut?.navigationItem.leftBarButtonItem, "There should be a back button")
+	}
+
+	/// Test tap on the next button with two items while on the second page
+	func testNextTappedWithTwoItemsWhileOnSecondPage() {
+
+		// Given
+		sut = OnboardingViewController(
+			viewModel: OnboardingViewModel(
+				coordinator: coordinatorSpy,
+				pages: [page, page]
+			)
+		)
+		loadView()
+		sut?.currentIndex = 1
+
+		// When
+		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		XCTAssertTrue(coordinatorSpy.finishOnboardingCalled, "Method should be called")
+	}
+
+	/// Test tap on the next button with two items while on the second page
+	func testBackButtonTappedWithTwoItemsWhileOnSecondPage() {
+
+		// Given
+		sut = OnboardingViewController(
+			viewModel: OnboardingViewModel(
+				coordinator: coordinatorSpy,
+				pages: [page, page]
+			)
+		)
+		loadView()
+		sut?.currentIndex = 1
+
+		// When
+		sut?.backbuttonTapped()
+
+		// Then
+		XCTAssertFalse(coordinatorSpy.finishOnboardingCalled, "Method should not be called")
+		XCTAssertEqual(sut?.currentIndex, 0, "Current Index should be 0")
 	}
 }

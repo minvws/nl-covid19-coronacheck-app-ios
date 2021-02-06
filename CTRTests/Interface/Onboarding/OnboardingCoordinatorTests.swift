@@ -37,6 +37,25 @@ class OnboardingCoordinatorTests: XCTestCase {
 		}
 	}
 
+	// MARK: - Test Doubles
+
+	class ViewControllerSpy: UIViewController {
+
+		var presentCalled = false
+		var dismissCalled = false
+
+		override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+
+			presentCalled = true
+			super.present(viewControllerToPresent, animated: flag, completion: completion)
+		}
+
+		override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+			dismissCalled = true
+			super.dismiss(animated: flag, completion: completion)
+		}
+	}
+
 	// MARK: - Tests
 
 	func testInitializer() {
@@ -51,6 +70,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
 	}
 
+	/// Test the start call
 	func testStart() {
 
 		// Given
@@ -63,76 +83,45 @@ class OnboardingCoordinatorTests: XCTestCase {
 		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
 	}
 
-	func testNextButtonClickedFirstPage() {
+	/// Test the show privacy page call
+	func testShowPrivacyPage() {
 
 		// Given
+		let viewControllerSpy = ViewControllerSpy()
 
 		// When
-		sut?.nextButtonClicked(step: .safelyOnTheRoad)
+		sut?.showPrivacyPage(viewControllerSpy)
 
 		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be one page pushed")
+		XCTAssertTrue(viewControllerSpy.presentCalled, "The method should be called")
 		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
 	}
 
-	func testNextButtonClickedSecondPage() {
+	/// Test the dimiss call
+	func testDismiss() {
 
 		// Given
+		let viewControllerSpy = ViewControllerSpy()
+		sut?.showPrivacyPage(viewControllerSpy)
 
 		// When
-		sut?.nextButtonClicked(step: .yourQR)
+		sut?.dismiss()
 
 		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be one page pushed")
+		XCTAssertTrue(viewControllerSpy.dismissCalled, "The method should be called")
 		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
 	}
 
-	func testNextButtonClickedThirdPage() {
+	/// Test the finish onboarding call
+	func testFinishOnboarding() {
 
 		// Given
 
 		// When
-		sut?.nextButtonClicked(step: .validity)
+		sut?.finishOnboarding()
 
 		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be one page pushed")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
-	}
-
-	func testNextButtonClickedForthPage() {
-
-		// Given
-
-		// When
-		sut?.nextButtonClicked(step: .safeSystem)
-
-		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be one page pushed")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
-	}
-
-	func testNextButtonClickedFifthPage() {
-
-		// Given
-
-		// When
-		sut?.nextButtonClicked(step: .privacy)
-
-		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be a page pushed")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should be called")
-	}
-
-	func testNextButtonClickedTerms() {
-
-		// Given
-
-		// When
-		sut?.termsAgreed()
-
-		// Then
-		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no page pushed")
+		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
 		XCTAssertTrue(onboardingDelegateSpy.finishOnboardingCalled, "Method should be called")
 	}
-
 }
