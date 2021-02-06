@@ -61,7 +61,7 @@ class OnboardingView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = .white
+		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
 	/// Setup the hierarchy

@@ -13,7 +13,6 @@ class PrivacyView: BaseView {
 	private struct ViewTraits {
 		
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
 		
 		// Margins
@@ -37,12 +36,6 @@ class PrivacyView: BaseView {
 		view.spacing = ViewTraits.margin
 		return view
 	}()
-
-	/// The title label
-	private let titleLabel: Label = {
-		
-		return Label(title1: nil).multiline()
-	}()
 	
 	/// The message label
 	let messageLabel: Label = {
@@ -54,7 +47,7 @@ class PrivacyView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = .white
+		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
 	/// Setup the hierarchy
@@ -62,7 +55,6 @@ class PrivacyView: BaseView {
 		
 		super.setupViewHierarchy()
 
-		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		scrollView.addSubview(stackView)
 
@@ -100,13 +92,6 @@ class PrivacyView: BaseView {
 	}
 
 	// MARK: Public Access
-
-	/// The onboarding title
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
-		}
-	}
 
 	/// The onboarding message
 	var message: String? {

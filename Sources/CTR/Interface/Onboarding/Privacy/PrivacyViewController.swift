@@ -45,7 +45,7 @@ class PrivacyViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
+		viewModel.$title.binding = { self.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)

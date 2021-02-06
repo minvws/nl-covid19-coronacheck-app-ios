@@ -69,7 +69,7 @@ class MainView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = .white
+		backgroundColor = Theme.colors.viewControllerBackground
 
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))

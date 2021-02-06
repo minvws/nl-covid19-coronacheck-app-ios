@@ -59,7 +59,7 @@ class ConsentButton: UIButton {
 		titleLabel?.lineBreakMode = .byWordWrapping
 		titleLabel?.numberOfLines = 0
 
-		tintColor = .white
+		tintColor = Theme.colors.viewControllerBackground
 		backgroundColor = Theme.colors.tertiary
 		setTitleColor(UIColor(white: 0.235, alpha: 0.85), for: .normal)
 		contentHorizontalAlignment = .left

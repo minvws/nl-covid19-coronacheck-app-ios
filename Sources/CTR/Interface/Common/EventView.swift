@@ -71,7 +71,7 @@ class EventView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = .white
+		backgroundColor = Theme.colors.viewControllerBackground
 
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}

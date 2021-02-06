@@ -48,7 +48,7 @@
 "holder.onboarding.title.securesystem" = "Een veilig systeem";
 "holder.onboarding.message.securesystem" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
-"holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\n\nLees de privacyverklaring";
+"holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\nLees de privacyverklaring";
 "holder.onboarding.message.privacy.underline" = "Lees de privacyverklaring";
 "holder.onboarding.message.privacy.consent" = "Ik heb de privacyverklaring gelezen";
 

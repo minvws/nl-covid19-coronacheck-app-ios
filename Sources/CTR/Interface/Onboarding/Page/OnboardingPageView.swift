@@ -64,7 +64,7 @@ class OnboardingPageView: BaseView {
 	override func setupViews() {
 		
 		super.setupViews()
-		backgroundColor = .white
+		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
 	/// Setup the hierarchy
@@ -88,13 +88,8 @@ class OnboardingPageView: BaseView {
 			// ImageContainer
 			imageContainerView.topAnchor.constraint(equalTo: topAnchor),
 			imageContainerView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
-			imageContainerView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin),
-			imageContainerView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
+			imageContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			imageContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			// Image
 			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
@@ -108,42 +103,21 @@ class OnboardingPageView: BaseView {
 			),
 
 			// Title
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
+			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.margin
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
 			),
 
 			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
+			messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			// Consent Button
-			consentButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			consentButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			consentButton.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			consentButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+			consentButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+			consentButton.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 
 		messageBottomConstraintWithoutConsent = messageLabel.bottomAnchor.constraint(
