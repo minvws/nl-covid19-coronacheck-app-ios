@@ -48,9 +48,17 @@
 "holder.onboarding.title.securesystem" = "Een veilig systeem";
 "holder.onboarding.message.securesystem" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
-"holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.\nLees de privacyverklaring";
-"holder.onboarding.message.privacy.underline" = "Lees de privacyverklaring";
-"holder.onboarding.message.privacy.consent" = "Ik heb de privacyverklaring gelezen";
+"holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.";
+
+/* MARK: - Consent */
+"holder.consent.title" = "Zo gebruikt de app je gegevens";
+"holder.consent.message" = "In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"holder.consent.message.underlined" = "privacyverklaring";
+"holder.consent.item.1" = "Gebruik van CoronatTester is vrijwillig.";
+"holder.consent.item.2" = "Dit is een lorum ipsum regel.";
+"holder.consent.item.3" = "Je naam wordt niet gebruikt of bewaard.";
+"holder.consent.item.4" = "Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
+"holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
 /* MARK: - Privacy */
 "holder.privacy.message" = "** de privacy verklaring **";

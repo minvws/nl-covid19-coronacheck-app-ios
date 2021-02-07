@@ -7,15 +7,15 @@
 
 import UIKit
 
-class OnboardingViewModel: ConsentDelegate {
-
+class OnboardingViewModel {
+	
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
-
+	
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [OnboardingPage]
 	@Bindable private(set) var enabled: Bool
-
+	
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -24,110 +24,95 @@ class OnboardingViewModel: ConsentDelegate {
 	init(
 		coordinator: OnboardingCoordinatorDelegate,
 		pages: [OnboardingPage]) {
-
+		
 		self.coordinator = coordinator
 		self.pages = pages
 		self.enabled = true
 	}
-
+	
 	/// Add an onboarding step
 	/// - Parameter info: the info for the onboarding step
 	func getOnboardingStep(_ info: OnboardingPage) -> UIViewController {
-
+		
 		let viewController = OnboardingPageViewController(
 			viewModel: OnboardingPageViewModel(
 				coordinator: self.coordinator!,
-				consentDelegate: self,
 				onboardingInfo: info
 			)
 		)
 		return viewController
 	}
-
+	
 	/// We have finished the onboarding
 	func finishOnboarding() {
-
+		
 		coordinator?.finishOnboarding()
-	}
-
-	func consentGiven(_ consent: Bool) {
-
-		enabled = consent
 	}
 }
 
 class OnboardingViewController: BaseViewController {
-
+	
 	/// The model
 	private let viewModel: OnboardingViewModel
-
+	
 	/// The view
 	let sceneView = OnboardingView()
-
+	
 	/// The page controller
 	private var pageViewController: UIPageViewController?
-
+	
 	/// The current index of the visbile page
 	var currentIndex: Int? {
 		didSet {
 			if let index = currentIndex {
 				sceneView.pageControl.currentPage = index
 				navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
-				let page = onboardingPages[index]
-				if page.consent == nil {
-					sceneView.primaryButton.isEnabled = true
-				} else {
-					sceneView.primaryButton.isEnabled = viewModel.enabled
-				}
 			}
 		}
 	}
-
+	
 	/// the possibile next index of the page
 	private var pendingIndex: Int?
-
+	
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: OnboardingViewModel) {
-
+		
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
 	}
-
+	
 	/// Required initialzer
 	/// - Parameter coder: the code
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-
+	
 	/// Show always in portrait
 	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 		return .portrait
 	}
-
+	
 	// MARK: View lifecycle
 	override func loadView() {
-
+		
 		view = sceneView
 	}
-
-	private var onboardingPages = [OnboardingPage]()
-
+	
 	/// the onboarding viewcontrollers
 	private var viewControllers = [UIViewController]()
-
+	
 	// the back button
 	private var backButton: UIBarButtonItem?
-
+	
 	override func viewDidLoad() {
-
+		
 		super.viewDidLoad()
-
+		
 		setupPageController()
 		viewModel.$pages.binding = {
-			self.onboardingPages = $0
 			self.currentIndex = 0
-			for page in self.onboardingPages {
+			for page in $0 {
 				self.viewControllers.append(self.viewModel.getOnboardingStep(page))
 			}
 			if let firstVC = self.viewControllers.first {
@@ -137,22 +122,22 @@ class OnboardingViewController: BaseViewController {
 			self.sceneView.pageControl.numberOfPages = $0.count
 			self.sceneView.pageControl.currentPage = 0
 		}
-
+		
 		sceneView.primaryButton.setTitle(.next, for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-
+		
 		viewModel.$enabled.binding = {
 			self.sceneView.primaryButton.isEnabled = $0
 		}
-
+		
 		setupBackButton()
 	}
-
+	
 	/// Create a custom back button so we can catch the click on the back button.
 	private func setupBackButton() {
-
+		
 		navigationItem.hidesBackButton = true
-
+		
 		let button = UIButton(type: .custom)
 		button.setTitle(.previous, for: .normal)
 		button.setTitleColor(Theme.colors.dark, for: .normal)
@@ -164,13 +149,13 @@ class OnboardingViewController: BaseViewController {
 		// Increase the hit area, move the button 5 px to the left
 		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
-
+		
 		backButton = UIBarButtonItem(customView: button)
 	}
-
+	
 	/// The user tapped on the back button
 	@objc func backbuttonTapped() {
-
+		
 		if var index = currentIndex, index > 0 {
 			// Move to the previous page
 			index -= 1
@@ -180,10 +165,10 @@ class OnboardingViewController: BaseViewController {
 			self.sceneView.primaryButton.isEnabled = true
 		}
 	}
-
+	
 	/// Setup the page controller
 	private func setupPageController() {
-
+		
 		let pageCtrl = UIPageViewController(
 			transitionStyle: .scroll,
 			navigationOrientation: .horizontal,
@@ -193,18 +178,18 @@ class OnboardingViewController: BaseViewController {
 		pageCtrl.dataSource = self
 		pageCtrl.delegate = self
 		pageCtrl.view.backgroundColor = .clear
-
+		
 		pageCtrl.view.frame = sceneView.containerView.frame
 		sceneView.containerView.addSubview(pageCtrl.view)
 		self.addChild(pageCtrl)
 		pageCtrl.didMove(toParent: self)
 	}
-
+	
 	/// User tapped on the button
 	@objc func primaryButtonTapped() {
-
+		
 		if var index = currentIndex {
-
+			
 			if index == viewControllers.count - 1 {
 				// We tapped on the last page
 				viewModel.finishOnboarding()
@@ -222,7 +207,7 @@ class OnboardingViewController: BaseViewController {
 // MARK: - UIPageViewControllerDataSource & UIPageViewControllerDelegate
 
 extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
-
+	
 	/// Get the view controller before the current
 	/// - Parameters:
 	///   - pageViewController: the page view controller
@@ -231,11 +216,11 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
 	func pageViewController(
 		_ pageViewController: UIPageViewController,
 		viewControllerBefore viewController: UIViewController) -> UIViewController? {
-
+		
 		guard let viewControllerIndex = viewControllers.firstIndex(of: viewController) else {
 			return nil
 		}
-
+		
 		currentIndex = viewControllerIndex
 		if currentIndex == 0 {
 			return nil
@@ -251,20 +236,20 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
 	func pageViewController(
 		_ pageViewController: UIPageViewController,
 		viewControllerAfter viewController: UIViewController) -> UIViewController? {
-
+		
 		guard let viewControllerIndex = viewControllers.firstIndex(of: viewController) else {
 			return nil
 		}
-
+		
 		currentIndex = viewControllerIndex
 		if viewControllerIndex == viewControllers.count - 1 {
 			return nil
 		}
-
+		
 		let nextIndex = abs((viewControllerIndex + 1) % viewControllers.count)
 		return viewControllers[nextIndex]
 	}
-
+	
 	/// The page view controller will move to the another view controller
 	/// - Parameters:
 	///   - pageViewController: the page view controller
@@ -272,13 +257,13 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
 	func pageViewController(
 		_ pageViewController: UIPageViewController,
 		willTransitionTo pendingViewControllers: [UIViewController]) {
-
+		
 		if let first = pendingViewControllers.first, let viewControllerIndex = viewControllers.firstIndex(of: first) {
-
+			
 			pendingIndex = viewControllerIndex
 		}
 	}
-
+	
 	/// The page view controller has moved the another view controller
 	/// - Parameters:
 	///   - pageViewController: the page view controller
@@ -290,7 +275,7 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
 		didFinishAnimating finished: Bool,
 		previousViewControllers: [UIViewController],
 		transitionCompleted completed: Bool) {
-
+		
 		if completed {
 			currentIndex = pendingIndex
 		}
