@@ -47,7 +47,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	let appStoreURL: URL?
 
 	/// The url to the site
-	var informationURL: URL?
+	let informationURL: URL?
 
 	/// Is the app deactvated?
 	let appDeactivated: Bool?
@@ -75,6 +75,11 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
+	}
+
+	/// Default remote configuration
+	static var `default`: RemoteConfiguration {
+		return RemoteConfiguration(minVersion: "1.0.0", minVersionMessage: nil, storeUrl: nil, deactivated: false, informationURL: nil)
 	}
 }
 

@@ -43,6 +43,10 @@ class AppCoordinator: Coordinator {
 	/// Designated starter method
 	func start() {
 
+		guard !ProcessInfo.processInfo.isTesting else {
+			return
+		}
+
 		// Setup Logging
 		LogHandler.setup()
 
