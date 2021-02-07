@@ -21,8 +21,8 @@ class ConsentButton: UIButton {
 	var useHapticFeedback = true
 
 	required init(title: String = "", selected: Bool = false) {
-		icon = UIImageView(image: UIImage(named: "Toggle/Normal"),
-						   highlightedImage: UIImage(named: "Toggle/Selected"))
+
+		icon = ImageView( imageName: "Toggle/Normal", highlightedImageName: "Toggle/Selected")
 
 		super.init(frame: .zero)
 

@@ -98,7 +98,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 extension HolderCoordinator: OnboardingDelegate {
 
 	/// The onboarding is finished
-	func finishOnboarding() {
+	func consentGiven() {
 
 		// Mark as complete
 		onboardingManager.finishOnboarding()

@@ -8,59 +8,62 @@
 import UIKit
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
-
+	
 	/// Show the privacy page
 	/// - Parameter viewController: the presenting viewcontroller
 	func showPrivacyPage(_ viewController: UIViewController)
-
+	
 	/// Dismiss the presented viewcontroller
 	func dismiss()
-
+	
 	/// The onboarding is finished
 	func finishOnboarding()
+
+	/// Consent was given
+	func consentGiven()
 }
 
 protocol OnboardingDelegate: AnyObject {
-
-	/// The onboarding is finished
-	func finishOnboarding()
+	
+	/// The consent is given
+	func consentGiven()
 }
 
 class OnboardingCoordinator: Coordinator, Logging {
-
+	
 	var loggingCategory: String = "OnboardingCoordinator"
-
+	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
-
+	
 	/// The navigation controller
 	var navigationController: UINavigationController
-
+	
 	/// The onboarding delegate
 	weak var onboardingDelegate: OnboardingDelegate?
-
+	
 	/// A presenting view controller
 	weak var presentingViewController: UIViewController?
-
+	
 	/// Initiatilzer
 	init(
 		navigationController: UINavigationController,
 		onboardingDelegate: OnboardingDelegate) {
-
+		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate
 		onboardingPages = factory.create()
 	}
-
+	
 	/// The onboarding pages
 	var onboardingPages: [OnboardingPage] = []
-
+	
 	/// The factory for onboarding pages
 	var factory: OnboardingFactoryProtocol = OnboardingFactory()
 	
 	// Designated starter method
 	func start() {
-
+		
 		let viewModel = OnboardingViewModel(
 			coordinator: self,
 			pages: onboardingPages
@@ -73,11 +76,11 @@ class OnboardingCoordinator: Coordinator, Logging {
 // MARK: - OnboardingCoordinatorDelegate
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
-
+	
 	/// Show the privacy page
 	/// - Parameter viewController: the presenting view controller
 	func showPrivacyPage(_ viewController: UIViewController) {
-
+		
 		let viewModel = PrivacyViewModel(
 			coordinator: self,
 			title: .holderPrivacyTitle,
@@ -85,20 +88,27 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		)
 		let privacyViewController = PrivacyViewController(viewModel: viewModel)
 		let navigationController = UINavigationController(rootViewController: privacyViewController)
-
+		
 		viewController.present(navigationController, animated: true, completion: nil)
 		presentingViewController = viewController
 	}
-
+	
 	func dismiss() {
-
+		
 		presentingViewController?.dismiss(animated: true, completion: nil)
 		presentingViewController = nil
 	}
-
+	
 	/// The onboarding is finished
 	func finishOnboarding() {
 		
-		onboardingDelegate?.finishOnboarding()
+		let viewController = ConsentViewController(viewModel: ConsentViewModel(coordinator: self))
+		navigationController.pushViewController(viewController, animated: true)
+	}
+
+	/// Consent was given
+	func consentGiven() {
+
+		onboardingDelegate?.consentGiven()
 	}
 }

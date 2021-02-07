@@ -15,6 +15,7 @@ class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 	var finishOnboardingCalled = false
 	var dismissCalled = false
 	var showPrivacyPageCalled = false
+	var consentGivenCalled = false
 
 	func dismiss() {
 
@@ -29,5 +30,10 @@ class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 	func finishOnboarding() {
 
 		finishOnboardingCalled = true
+	}
+
+	func consentGiven() {
+
+		consentGivenCalled = true
 	}
 }
