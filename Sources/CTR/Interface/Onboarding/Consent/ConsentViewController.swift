@@ -44,7 +44,7 @@ class ConsentView: BaseView {
 	}()
 
 	/// The stack view for the privacy hightlight items
-	private let itemStackView: UIStackView = {
+	let itemStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -255,7 +255,7 @@ class ConsentViewModel {
 class ConsentViewController: BaseViewController {
 
 	/// The model
-	private let viewModel: ConsentViewModel
+	let viewModel: ConsentViewModel
 
 	/// The view
 	let sceneView = ConsentView()
@@ -339,6 +339,8 @@ class ConsentViewController: BaseViewController {
 	/// The user tapped on the primary button
 	@objc func primaryButtonTapped() {
 
-		viewModel.primaryButtonTapped()
+		if sceneView.primaryButton.isEnabled {
+			viewModel.primaryButtonTapped()
+		}
 	}
 }

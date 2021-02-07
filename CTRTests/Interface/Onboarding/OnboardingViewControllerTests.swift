@@ -19,9 +19,7 @@ class OnboardingViewControllerTests: XCTestCase {
 		title: "Onboarding Title",
 		message: "Onboarding Message",
 		image: .onboardingSafely,
-		step: .safelyOnTheRoad,
-		underlinedText: nil,
-		consent: nil
+		step: .safelyOnTheRoad
 	)
 
 	var window = UIWindow()

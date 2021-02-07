@@ -30,10 +30,10 @@ class OnboardingCoordinatorTests: XCTestCase {
 
 	class OnboardingDelegateSpy: OnboardingDelegate {
 
-		var finishOnboardingCalled = false
+		var consentGivenCalled = false
 
-		func finishOnboarding() {
-			finishOnboardingCalled = true
+		func consentGiven() {
+			consentGivenCalled = true
 		}
 	}
 
@@ -67,7 +67,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// Then
 		XCTAssertEqual(sut?.onboardingPages.count, 5, "There should be 5 pages")
 		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
+		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should not be called")
 	}
 
 	/// Test the start call
@@ -80,7 +80,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be no pages pushed")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
+		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should not be called")
 	}
 
 	/// Test the show privacy page call
@@ -94,7 +94,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(viewControllerSpy.presentCalled, "The method should be called")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
+		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should not be called")
 	}
 
 	/// Test the dimiss call
@@ -109,7 +109,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(viewControllerSpy.dismissCalled, "The method should be called")
-		XCTAssertFalse(onboardingDelegateSpy.finishOnboardingCalled, "Method should not be called")
+		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should not be called")
 	}
 
 	/// Test the finish onboarding call
@@ -121,7 +121,20 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut?.finishOnboarding()
 
 		// Then
+		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 1, "There should be one page pushed")
+		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should not be called")
+	}
+
+	/// Test the consent given call
+	func testConsentGiven() {
+
+		// Given
+
+		// When
+		sut?.consentGiven()
+
+		// Then
 		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
-		XCTAssertTrue(onboardingDelegateSpy.finishOnboardingCalled, "Method should be called")
+		XCTAssertTrue(onboardingDelegateSpy.consentGivenCalled, "Method should be called")
 	}
 }
