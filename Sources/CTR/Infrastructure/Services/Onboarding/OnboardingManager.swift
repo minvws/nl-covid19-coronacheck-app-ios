@@ -37,7 +37,7 @@ class OnboardingManager: OnboardingManaging, Logging {
 	}
 
 	private struct Constants {
-		static let keychainService = "OnboardingManager"
+		static let keychainService = "OnboardingManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	@Keychain(name: "onboardingData", service: Constants.keychainService, clearOnReinstall: true)

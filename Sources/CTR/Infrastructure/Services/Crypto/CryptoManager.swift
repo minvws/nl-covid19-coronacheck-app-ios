@@ -68,7 +68,7 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 
 	/// Array of constants
 	private struct Constants {
-		static let keychainService = "CryptoManager"
+		static let keychainService = "CryptoManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	/// The crypto data stored in the keychain

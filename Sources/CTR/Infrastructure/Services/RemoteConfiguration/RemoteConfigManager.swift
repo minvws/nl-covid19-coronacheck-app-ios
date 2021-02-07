@@ -37,6 +37,7 @@ struct AppVersionSupplier: AppVersionSupplierProtocol {
 		if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
 			return version
 		}
+		// Default to 1.0.0
 		return "1.0.0"
 	}
 }
@@ -46,6 +47,10 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// Category for logging
 	let loggingCategory = "RemoteConfigManager"
+
+	private struct Constants {
+		static let keychainService = "RemoteConfigManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+	}
 
 	/// The current app version supplier
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
@@ -59,6 +64,11 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		return versionSupplier.getCurrentVersion()
 	}
 
+	/// Persist the remote configuration in the keychain
+	@Keychain(name: "storedConfiguration", service: Constants.keychainService, clearOnReinstall: false)
+	private var storedConfiguration: RemoteConfiguration = .default
+
+	/// Initialize
 	required init() {
 
 		// Required by protocol
@@ -70,13 +80,23 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 		networkManager.getRemoteConfiguration { [weak self] resultwrapper in
 
+			guard let strongSelf = self else {
+				return
+			}
+
 			switch resultwrapper {
 				case let .success(remoteConfiguration):
-					self?.compare(remoteConfiguration, completion: completion)
+					// Persist the remote configuration
+					strongSelf.storedConfiguration = remoteConfiguration
+					// Decide what to do
+					strongSelf.compare(remoteConfiguration, completion: completion)
 
 				case let .failure(networkError):
-					self?.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
-					completion(.noActionNeeded)
+					// Fallback to the last known remote configuration
+					strongSelf.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
+					strongSelf.logDebug("Using stored Configuration \(strongSelf.storedConfiguration)")
+					// Decide what to do
+					strongSelf.compare(strongSelf.storedConfiguration, completion: completion)
 			}
 		}
 	}
@@ -95,10 +115,13 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		logDebug("Updated remote configuration: \(remoteConfiguration)")
 
 		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+			// Update the app
 			completion(.actionRequired(remoteConfiguration))
 		} else if remoteConfiguration.isDeactivated {
+			// Kill the app
 			completion(.actionRequired(remoteConfiguration))
 		} else {
+			// Nothing to do
 			completion(.noActionNeeded)
 		}
 	}
