@@ -48,10 +48,10 @@ class BaseViewController: UIViewController {
 		styleBackButton()
 	}
 
-	func styleBackButton() {
+	func styleBackButton(buttonText: String = .previous) {
 
 		let backbutton = UIBarButtonItem(
-			title: .previous,
+			title: buttonText,
 			style: .plain,
 			target: nil,
 			action: nil

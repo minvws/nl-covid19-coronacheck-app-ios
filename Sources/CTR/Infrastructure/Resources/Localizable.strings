@@ -38,7 +38,14 @@
 "main.holder" = "Holder";
 "main.verifier" = "Verifier";
 
-/* MARK: - Onboarding */
+/* MARK: - Holder Menu */
+"holder.menu.dashboard" = "Mijn overzicht";
+"holder.menu.settings" = "Instellingen";
+"holder.menu.faq" = "Meest gestelde vragen";
+"holder.menu.about" = "Over deze app";
+"holder.menu.privacy" = "Privacyverklaring";
+
+/* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Veilig op pad";
 "holder.onboarding.message.safely" = "We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
@@ -50,7 +57,7 @@
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
 "holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.";
 
-/* MARK: - Consent */
+/* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app je gegevens";
 "holder.consent.message" = "In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "holder.consent.message.underlined" = "privacyverklaring";
@@ -63,3 +70,13 @@
 /* MARK: - Privacy */
 "holder.privacy.message" = "** de privacy verklaring **";
 "holder.privacy.title" = "Privacy verklaring";
+
+/* MARK: - Holder Dashboard */
+"holder.dashboard.title" = "Mijn overzicht";
+"holder.dashboard.intro" = "Wil je een restaurant, event of andere uitgaansgelegenheid bezoeken? Daar heb je een negatieve testuistlag voor nodig, in de vorm van een QR-code.";
+"holder.dashboard.appointment.title" = "Maak een testafspraak";
+"holder.dashboard.appointment.message" = "Wil je een QR-code maken?\nLaat je dan eerst testen.";
+"holder.dashboard.appointment.action" = "Maak afspraak";
+"holder.dashboard.create.title" = "Maak een QR-code";
+"holder.dashboard.create.message" = "Heb je je testresultaat al? Laat je negative resultaat zien met jouw QR-code.";
+"holder.dashboard.create.action" = "Maak QR-code";

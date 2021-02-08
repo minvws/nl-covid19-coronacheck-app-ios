@@ -12,7 +12,7 @@ class Button: UIButton {
 
     enum ButtonType {
         case primary
-//        case secondary
+        case secondary
 //        case tertiary
 //        case warning
 //        case info
@@ -80,20 +80,6 @@ class Button: UIButton {
         return self
     }
 
-//    func flashTitle(_ title: String, duration: TimeInterval = 2) {
-//
-//        guard !isFlashingTitle else { return }
-//
-//        let currentTitle = self.title
-//        self.title = title
-//
-//        isFlashingTitle = true
-//        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-//            self.title = currentTitle
-//            self.isFlashingTitle = false
-//        }
-//    }
-
     // MARK: - Overrides
 
     override func layoutSubviews() {
@@ -112,12 +98,13 @@ class Button: UIButton {
 					backgroundColor = Theme.colors.primary
 					setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
 				} else {
-					backgroundColor = Theme.colors.gray
-					setTitleColor(Theme.colors.tertiary, for: .normal)
+					backgroundColor = Theme.colors.tertiary
+					setTitleColor(Theme.colors.gray, for: .normal)
 				}
-			//        case .secondary:
-			//            backgroundColor = Theme.colors.tertiary
-			//            setTitleColor(Theme.colors.primary, for: .normal)
+			case .secondary:
+				backgroundColor = Theme.colors.secondary
+				setTitleColor(Theme.colors.dark, for: .normal)
+				self.titleLabel?.font = Theme.fonts.subheadBold
 			//			case .tertiary:
 			//				backgroundColor = Theme.colors.tertiary
 			//				setTitleColor(Theme.colors.primary, for: .normal)
@@ -134,12 +121,14 @@ class Button: UIButton {
 	}
 
     private func updateRoundedCorners() {
+
         if rounded {
             layer.cornerRadius = min(bounds.width, bounds.height) / 2
         }
     }
 
     @objc private func touchDownAnimation() {
+
         if useHapticFeedback { Haptic.light() }
 
         UIButton.animate(withDuration: 0.2, animations: {
@@ -148,6 +137,7 @@ class Button: UIButton {
     }
 
     @objc private func touchUpAnimation() {
+
         UIButton.animate(withDuration: 0.2, animations: {
             self.transform = CGAffineTransform.identity
         })
