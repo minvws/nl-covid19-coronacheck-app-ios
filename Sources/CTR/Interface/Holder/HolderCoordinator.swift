@@ -10,14 +10,17 @@ import UIKit
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
+	/// Navigate to the start fo the holder flow
+	func navigateToStart()
+
+	/// Navigate to appointment
+	func navigateToAppointment()
+
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults()
 
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR()
-
-	/// Navigate to the start fo the holder flow
-	func navigateToStart()
 }
 
 class HolderCoordinator: Coordinator {
@@ -28,7 +31,7 @@ class HolderCoordinator: Coordinator {
 	var coronaTestProof: CTRModel?
 
 	/// The side panel controller
-	var sidePanelController: SidePanelController?
+	var sidePanel: SidePanelController?
 
 	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
@@ -69,18 +72,31 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func navigateToHolderStart() {
 
-		let dashboardViewController = HolderStartViewController() // DashboardViewController()
-		let menu = MenuViewController()
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self
+			)
+		)
+		let menu = HolderMenuViewController()
 
-		let sidePanelController = CustomSidePanelController(sideController: menu)
-		sidePanelController.selectedViewController = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel = CustomSidePanelController(sideController: menu)
+		sidePanel?.selectedViewController = UINavigationController(
+			rootViewController: dashboardViewController
+		)
 
 		// Replace the root with the side panel controller
-		window.rootViewController = sidePanelController
+		window.rootViewController = sidePanel
+	}
 
-//		let viewController = HolderStartViewController()
-//		viewController.coordinator = self
-//		navigationController.viewControllers = [viewController]
+	/// Navigate to appointment
+	func navigateToAppointment() {
+
+		let destination = AppointmentViewController(
+			viewModel: AppointmentViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the Fetch Result Scene

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-               BuildableName = "CTR.app"
+               BuildableName = "CoronaTester.app"
                BlueprintName = "CTR"
                ReferencedContainer = "container:CTR.xcodeproj">
             </BuildableReference>
@@ -39,7 +39,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-            BuildableName = "CTR.app"
+            BuildableName = "CoronaTester.app"
             BlueprintName = "CTR"
             ReferencedContainer = "container:CTR.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-            BuildableName = "CTR.app"
+            BuildableName = "CoronaTester.app"
             BlueprintName = "CTR"
             ReferencedContainer = "container:CTR.xcodeproj">
          </BuildableReference>
@@ -89,7 +89,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-            BuildableName = "CTR.app"
+            BuildableName = "CoronaTester.app"
             BlueprintName = "CTR"
             ReferencedContainer = "container:CTR.xcodeproj">
          </BuildableReference>

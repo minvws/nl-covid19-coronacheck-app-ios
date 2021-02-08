@@ -7,12 +7,12 @@
   
 import UIKit
 
-class MenuViewController: BaseViewController {
+class HolderMenuViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
 	      title = "Menu"
-		view.backgroundColor = .magenta
+		view.backgroundColor = Theme.colors.primary
     }
 }

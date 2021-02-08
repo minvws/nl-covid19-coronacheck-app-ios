@@ -94,7 +94,7 @@ extension MainCoordinator: UINavigationControllerDelegate {
 			return
 		}
 
-		if fromViewController is VerifierStartViewController || fromViewController is HolderStartViewController {
+		if fromViewController is VerifierStartViewController || fromViewController is HolderDashboardViewController {
 			childCoordinators = []
 		}
 	}

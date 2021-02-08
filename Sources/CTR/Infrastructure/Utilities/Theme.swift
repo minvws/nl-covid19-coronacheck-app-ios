@@ -80,6 +80,8 @@ final class Colors {
 
 	var primary: UIColor { return color(for: "PrimaryColor") }
 
+	var secondary: UIColor { return color(for: "SecondaryColor") }
+
 	var iosBlue: UIColor { return color(for: "IosBlue") }
 
     var tertiary: UIColor { return color(for: "TertiaryColor") }
@@ -93,6 +95,12 @@ final class Colors {
 	var disabledIcon: UIColor { return color(for: "DisabledIcon") }
 
 	var viewControllerBackground: UIColor { return color(for: "ViewControllerBackgroundColor") }
+
+	var appointment: UIColor { return color(for: "AppointmentColor") }
+
+	var create: UIColor { return color(for: "CreateColor") }
+
+	var shadow: UIColor { return color(for: "ShadowColor") }
 
     // MARK: - Private
 
