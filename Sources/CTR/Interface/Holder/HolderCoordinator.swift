@@ -10,6 +10,8 @@ import UIKit
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
+	// MARK: Navigation
+
 	/// Navigate to the start fo the holder flow
 	func navigateToStart()
 
@@ -21,9 +23,20 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR()
+
+	// MARK: Menu
+
+	/// Close the menu
+	func closeMenu()
+
+	/// Open a menu item
+	/// - Parameter identifier: the menu identifier
+	func openMenuItem(_ identifier: MenuIdentifier)
 }
 
-class HolderCoordinator: Coordinator {
+class HolderCoordinator: Coordinator, Logging {
+
+	var loggingCategory: String = "HolderCoordinator"
 
 	/// The UI Window
 	private var window: UIWindow
@@ -41,6 +54,8 @@ class HolderCoordinator: Coordinator {
 
 	/// The navigation controller
 	var navigationController: UINavigationController
+
+	var dashboardNavigationContoller: UINavigationController?
 
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -70,19 +85,24 @@ class HolderCoordinator: Coordinator {
 
 extension HolderCoordinator: HolderCoordinatorDelegate {
 
+	// MARK: Navigation
+
 	func navigateToHolderStart() {
+
+		let menu = HolderMenuViewController(
+			viewModel: HolderMenuViewModel(
+				coordinator: self
+			)
+		)
+		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
 
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self
 			)
 		)
-		let menu = HolderMenuViewController()
-
-		sidePanel = CustomSidePanelController(sideController: menu)
-		sidePanel?.selectedViewController = UINavigationController(
-			rootViewController: dashboardViewController
-		)
+		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationContoller
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
@@ -124,6 +144,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func navigateToStart() {
 
 		navigationController.popToRootViewController(animated: true)
+	}
+
+	// MARK: Menu
+
+	/// Close the menu
+	func closeMenu() {
+
+		sidePanel?.hideSidePanel()
+	}
+
+	/// Open a menu item
+	/// - Parameter identifier: the menu identifier
+	func openMenuItem(_ identifier: MenuIdentifier) {
+
+		switch identifier {
+			case .overview:
+				dashboardNavigationContoller?.popToRootViewController(animated: false)
+				sidePanel?.selectedViewController = dashboardNavigationContoller
+			default:
+				self.logInfo("User tapped on \(identifier), not implemented")
+		}
 	}
 }
 

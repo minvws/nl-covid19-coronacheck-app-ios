@@ -38,6 +38,13 @@
 "main.holder" = "Holder";
 "main.verifier" = "Verifier";
 
+/* MARK: - Holder Menu */
+"holder.menu.dashboard" = "Mijn overzicht";
+"holder.menu.settings" = "Instellingen";
+"holder.menu.faq" = "Meest gestelde vragen";
+"holder.menu.about" = "Over deze app";
+"holder.menu.privacy" = "Privacyverklaring";
+
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Veilig op pad";
 "holder.onboarding.message.safely" = "We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
