@@ -15,7 +15,7 @@ class CardView: BaseView {
 		// Dimensions
 		static let buttonHeight: CGFloat = 42
 		static let titleLineHeight: CGFloat = 28
-		static let messageLineHeight: CGFloat = 26
+		static let messageLineHeight: CGFloat = 22
 		static let cornerRadius: CGFloat = 15
 		static let messageRatio: CGFloat = 0.75
 		static let buttonRatio: CGFloat = 0.5
@@ -175,7 +175,7 @@ class CardView: BaseView {
 
 	var primaryTitle: String = "" {
 		didSet {
-			primaryButton.setTitle(primaryTitle.uppercased(), for: .normal)
+			primaryButton.setTitle(primaryTitle, for: .normal)
 		}
 	}
 

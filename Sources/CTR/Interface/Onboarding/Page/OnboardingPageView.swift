@@ -14,10 +14,11 @@ class OnboardingPageView: BaseView {
 		
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
-		static let messageLineHeight: CGFloat = 22
+		static let messageLineHeight: CGFloat = UIDevice.current.isSmallScreen ? 17 : 22
 		
 		// Margins
-		static let margin: CGFloat = 20.0
+		static let margin: CGFloat = UIDevice.current.isSmallScreen ? 0 : 20
+		static let spacing: CGFloat = UIDevice.current.isSmallScreen ? 10 : 40
 	}
 	
 	/// The container for centering the image
@@ -36,7 +37,29 @@ class OnboardingPageView: BaseView {
 		view.contentMode = .scaleAspectFit
 		return view
 	}()
-	
+
+	private let stackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .leading
+		view.distribution = .fillEqually
+		view.spacing = ViewTraits.spacing
+		return view
+	}()
+
+	private let bottomStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .leading
+		view.distribution = .fill
+		view.spacing = ViewTraits.margin
+		return view
+	}()
+
 	/// The title label
 	private let titleLabel: Label = {
 		
@@ -61,24 +84,24 @@ class OnboardingPageView: BaseView {
 		
 		super.setupViewHierarchy()
 		imageContainerView.addSubview(imageView)
-		addSubview(imageContainerView)
-		addSubview(titleLabel)
-		addSubview(messageLabel)
+
+		bottomStackView.addArrangedSubview(titleLabel)
+		bottomStackView.addArrangedSubview(messageLabel)
+		bottomStackView.addArrangedSubview(UIView())
+
+		stackView.addArrangedSubview(imageContainerView)
+		stackView.addArrangedSubview(bottomStackView)
 	}
 	
 	/// Setup the constraints
 	override func setupViewConstraints() {
 		
 		super.setupViewConstraints()
+
+		stackView.embed(in: self)
 		
 		NSLayoutConstraint.activate([
-			
-			// ImageContainer
-			imageContainerView.topAnchor.constraint(equalTo: topAnchor),
-			imageContainerView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
-			imageContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			imageContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			
+
 			// Image
 			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
 			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
@@ -87,22 +110,6 @@ class OnboardingPageView: BaseView {
 				constant: ViewTraits.margin),
 			imageView.trailingAnchor.constraint(
 				equalTo: imageContainerView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			
-			// Title
-			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
-			),
-			
-			// Message
-			messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-			messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-			messageLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
