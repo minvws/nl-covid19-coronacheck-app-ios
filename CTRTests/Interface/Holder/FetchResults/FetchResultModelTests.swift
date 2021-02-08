@@ -40,10 +40,18 @@ class FetchResultModelTests: XCTestCase {
 
 	class HolderCoordinatorSpy: HolderCoordinatorDelegate {
 
+		var navigateToAppointmentCalled = false
 		var navigateToFetchResultsCalled = false
 		var navigateToHolderQRCalled = false
 		var navigateToStartCalled = false
 		var dismissCalled = false
+
+		var dopenMenuItemCalled = false
+		var closeMenuCalled = false
+
+		func navigateToAppointment() {
+			navigateToAppointmentCalled = true
+		}
 
 		func navigateToFetchResults() {
 			navigateToFetchResultsCalled = true
@@ -61,6 +69,16 @@ class FetchResultModelTests: XCTestCase {
 		func dismiss() {
 
 			dismissCalled = true
+		}
+
+		func openMenuItem(_ identifier: MenuIdentifier) {
+
+			dopenMenuItemCalled = true
+		}
+
+		func closeMenu() {
+
+			closeMenuCalled = true
 		}
 	}
 

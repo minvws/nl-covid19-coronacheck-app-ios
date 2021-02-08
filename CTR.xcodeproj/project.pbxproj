@@ -295,7 +295,7 @@
 		6DD9394725BD8DAF0026F071 /* configuration-development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-development.plist"; sourceTree = "<group>"; };
 		6DD9395425BD924F0026F071 /* HTTP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		6DD9395825BD963A0026F071 /* URLRequest+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLRequest+Utils.swift"; sourceTree = "<group>"; };
-		6DDEFAF025AEDCA800A6912A /* CoronaTester.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoronaTester.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6DDEFAF025AEDCA800A6912A /* CTR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CTR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -756,7 +756,7 @@
 		6DDEFAF125AEDCA800A6912A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6DDEFAF025AEDCA800A6912A /* CoronaTester.app */,
+				6DDEFAF025AEDCA800A6912A /* CTR.app */,
 				6DDEFB0625AEDCAA00A6912A /* CTRTests.xctest */,
 			);
 			name = Products;
@@ -913,7 +913,7 @@
 			);
 			name = CTR;
 			productName = CoronaTester;
-			productReference = 6DDEFAF025AEDCA800A6912A /* CoronaTester.app */;
+			productReference = 6DDEFAF025AEDCA800A6912A /* CTR.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6DDEFB0525AEDCAA00A6912A /* CTRTests */ = {
@@ -1331,6 +1331,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				DISPLAY_NAME = "CoronaTester Test";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1442,6 +1443,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				DISPLAY_NAME = "CoronaTester ACC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1553,6 +1555,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				DISPLAY_NAME = "CoronaTester PROD";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1664,6 +1667,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				DISPLAY_NAME = CoronaTester;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1839,6 +1843,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				DISPLAY_NAME = "CoronaTester Dev";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1850,7 +1855,8 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
-				PRODUCT_NAME = CoronaTester;
+				PRODUCT_MODULE_NAME = CTR;
+				PRODUCT_NAME = CTR;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1870,6 +1876,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
+				DISPLAY_NAME = CoronaTester;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
