@@ -17,7 +17,7 @@ protocol AppCoordinatorDelegate: AnyObject {
 class AppCoordinator: Coordinator {
 
 	/// The UI Window
-	private let window: UIWindow
+	let window: UIWindow
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -58,7 +58,7 @@ class AppCoordinator: Coordinator {
 		window.makeKeyAndVisible()
 
 		// Start the mainCoordinator
-		let mainCoordinator = MainCoordinator(navigationController: navigationController)
+		let mainCoordinator = MainCoordinator(navigationController: navigationController, window: window)
 		startChildCoordinator(mainCoordinator)
 	}
 

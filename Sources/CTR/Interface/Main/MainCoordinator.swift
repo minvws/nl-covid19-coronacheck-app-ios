@@ -22,13 +22,17 @@ class MainCoordinator: NSObject, Coordinator {
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
+	/// The UI Window
+	private var window: UIWindow
+
 	/// The navigation controller
 	var navigationController: UINavigationController
 
 	/// Initiatilzer
-	init(navigationController: UINavigationController) {
+	init(navigationController: UINavigationController, window: UIWindow) {
 
 		self.navigationController = navigationController
+		self.window = window
 	}
 
 	/// The corona Test Proof Model
@@ -60,7 +64,7 @@ extension MainCoordinator: MainCoordinatorDelegate {
 	/// Navigate to the holder flow
 	func navigateToHolder() {
 
-		let coordinator = HolderCoordinator(navigationController: navigationController)
+		let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
 		coordinator.coronaTestProof = coronaTestProof
 		startChildCoordinator(coordinator)
 	}

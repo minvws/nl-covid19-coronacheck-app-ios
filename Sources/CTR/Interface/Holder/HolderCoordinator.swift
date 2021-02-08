@@ -22,7 +22,13 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 class HolderCoordinator: Coordinator {
 
+	/// The UI Window
+	private var window: UIWindow
+
 	var coronaTestProof: CTRModel?
+
+	/// The side panel controller
+	var sidePanelController: SidePanelController?
 
 	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
@@ -34,9 +40,10 @@ class HolderCoordinator: Coordinator {
 	var navigationController: UINavigationController
 
 	/// Initiatilzer
-	init(navigationController: UINavigationController) {
+	init(navigationController: UINavigationController, window: UIWindow) {
 
 		self.navigationController = navigationController
+		self.window = window
 	}
 
 	// Designated starter method
@@ -62,9 +69,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func navigateToHolderStart() {
 
-		let viewController = HolderStartViewController()
-		viewController.coordinator = self
-		navigationController.viewControllers = [viewController]
+		let dashboardViewController = HolderStartViewController() // DashboardViewController()
+		let menu = MenuViewController()
+
+		let sidePanelController = CustomSidePanelController(sideController: menu)
+		sidePanelController.selectedViewController = UINavigationController(rootViewController: dashboardViewController)
+
+		// Replace the root with the side panel controller
+		window.rootViewController = sidePanelController
+
+//		let viewController = HolderStartViewController()
+//		viewController.coordinator = self
+//		navigationController.viewControllers = [viewController]
 	}
 
 	/// Navigate to the Fetch Result Scene
