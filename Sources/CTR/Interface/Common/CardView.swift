@@ -54,7 +54,7 @@ class CardView: BaseView {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .scaleAspectFill
+		view.contentMode = .bottomRight
 		view.clipsToBounds = true
 		return view
 	}()

@@ -47,14 +47,14 @@ class HolderDashboardViewModel: Logging {
 			title: .holderDashboardAppointmentTitle,
 			message: .holderDashboardAppointmentMessage,
 			actionTitle: .holderDashboardAppointmentAction,
-			image: nil
+			image: .appointment
 		)
 		self.createCard = CardInfo(
 			identifier: .create,
 			title: .holderDashboardCreateTitle,
 			message: .holderDashboardCreateMessage,
 			actionTitle: .holderDashboardCreatetAction,
-			image: nil
+			image: .create
 		)
 	}
 
