@@ -7,73 +7,6 @@
 
 import UIKit
 
-class AppointmentView: BaseView {
-
-	/// The display constants
-	private struct ViewTraits {
-
-		// Dimensions
-		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 182.0
-
-		// Margins
-		static let margin: CGFloat = 20.0
-	}
-
-	/// the update button
-	let primaryButton: Button = {
-
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
-		return button
-	}()
-
-	override func setupViews() {
-		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
-	}
-
-	/// Setup the hierarchy
-	override func setupViewHierarchy() {
-
-		super.setupViewHierarchy()
-		addSubview(primaryButton)
-	}
-
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-
-			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
-		])
-	}
-}
-
-class AppointmentViewModel {
-
-	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
-
-	/// Initializer
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-
-	init(coordinator: HolderCoordinatorDelegate) {
-
-		self.coordinator = coordinator
-	}
-}
-
 class AppointmentViewController: BaseViewController {
 
 	private let viewModel: AppointmentViewModel
@@ -101,8 +34,45 @@ class AppointmentViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
-		title = "* 1.1.0 *"
 
-		sceneView.primaryButton.setTitle("* maak een afspraak *", for: .normal)
+		viewModel.$title.binding = {
+			self.title = $0
+			self.sceneView.title = $0
+		}
+
+		viewModel.$body.binding = {
+			self.sceneView.message = $0
+		}
+
+		viewModel.$linkedBody.binding = {
+			self.sceneView.underline($0)
+			self.setupLink()
+		}
+
+		viewModel.$buttonTitle.binding = {
+			self.sceneView.primaryTitle = $0
+		}
+
+		viewModel.$image.binding = {
+			self.sceneView.headerImage = $0
+		}
+
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.buttonClick()
+		}
+	}
+
+	/// Setup a gesture recognizer for underlined text
+	private func setupLink() {
+
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
+		sceneView.messageLabel.addGestureRecognizer(tapGesture)
+		sceneView.messageLabel.isUserInteractionEnabled = true
+	}
+
+	/// User tapped on the link
+	@objc func linkTapped() {
+
+		viewModel.linkedClick()
 	}
 }

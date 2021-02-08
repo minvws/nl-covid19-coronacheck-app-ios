@@ -73,10 +73,16 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Wil je een restaurant, event of andere uitgaansgelegenheid bezoeken? Daar heb je een negatieve testuistlag voor nodig, in de vorm van een QR-code.";
+"holder.dashboard.intro" = "Wil je een restaurant, event of andere uitgaansgelegenheid bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
 "holder.dashboard.appointment.title" = "Maak een testafspraak";
 "holder.dashboard.appointment.message" = "Wil je een QR-code maken?\nLaat je dan eerst testen.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
 "holder.dashboard.create.title" = "Maak een QR-code";
-"holder.dashboard.create.message" = "Heb je je testresultaat al? Laat je negative resultaat zien met jouw QR-code.";
+"holder.dashboard.create.message" = "Heb je je testresultaat al? Laat je negatieve resultaat zien met jouw QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
+
+/* MARK: - Appointment */
+"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je uitje. Lees de meest gestelde vragen over een test plannen.";
+"holder.appointment.link" = "Lees de meest gestelde vragen over een test plannen.";
+"holder.appointment.title" = "Maak een testafpraak";
+"holder.appointment.button.title" = "Maak een afpraak";
