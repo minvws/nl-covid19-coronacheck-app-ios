@@ -97,6 +97,7 @@ class CardView: BaseView {
 			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
+			
 
 			// Primary Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),

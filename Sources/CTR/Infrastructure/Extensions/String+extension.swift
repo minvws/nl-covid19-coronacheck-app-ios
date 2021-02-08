@@ -44,6 +44,24 @@ extension String {
 		return attributedText
 	}
 
+	/// Change the color a part of the text
+	/// - Parameters:
+	///   - text: the part to color
+	///   - color: the color to underline with
+	/// - Returns: attributed string
+	func color(text: String, with color: UIColor) -> NSAttributedString {
+
+		let underlineRange = (self as NSString).range(of: text)
+		let attributes: [NSAttributedString.Key: Any] = [
+			.foregroundColor: color
+		]
+		let attributedText = NSMutableAttributedString(
+			string: self
+		)
+		attributedText.addAttributes(attributes, range: underlineRange)
+		return attributedText
+	}
+
 	/// Set the line height
 	/// - Parameter lineHeight: the line height
 	/// - Returns: attributed string
