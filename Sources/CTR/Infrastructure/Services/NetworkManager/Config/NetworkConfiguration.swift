@@ -127,6 +127,12 @@ struct NetworkConfiguration {
 		return self.combine(path: Endpoint.testResultIsm, fromCdn: false)
 	}
 
+	/// The nonce url
+	var testProvidersUrl: URL? {
+
+		return self.combine(path: Endpoint.testProviders, fromCdn: false)
+	}
+
 	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {
 		let endpointConfig = fromCdn ? cdn : api
         var urlComponents = URLComponents()
@@ -149,6 +155,24 @@ struct NetworkConfiguration {
 
         return urlComponents.url
     }
+
+	func combine(components: URLComponents, params: [String: String] = [:]) -> URL? {
+
+		var urlComponents = components
+
+		if !params.isEmpty {
+			urlComponents.percentEncodedQueryItems = params.compactMap { parameter in
+				guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet),
+					  let value = parameter.value.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet) else {
+					return nil
+				}
+
+				return URLQueryItem(name: name, value: value)
+			}
+		}
+
+		return urlComponents.url
+	}
 
     private var urlQueryEncodedCharacterSet: CharacterSet = {
         // WARNING: Do not remove this code, this will break signature validation on the backend.

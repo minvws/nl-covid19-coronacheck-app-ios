@@ -27,6 +27,9 @@ struct Endpoint {
 
 	/// Endpoint for test results as ism
 	static let testResultIsm = Path(components: "holder", "get_test_ism")
+
+	/// Endpoint for test providers
+	static let testProviders = Path(components: "holder", "config_ctp")
     
 //    static let pairings = Path(components: "pairings")
 //

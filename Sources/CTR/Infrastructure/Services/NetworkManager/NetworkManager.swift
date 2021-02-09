@@ -68,6 +68,50 @@ class NetworkManager: NetworkManaging, Logging {
 			completion(.failure(.encodingError))
 		}
 	}
+
+	/// Get the test providers
+	/// - Parameter completion: completion handler
+	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.testProvidersUrl,
+			method: .GET
+		)
+
+		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+
+		decodedJSONData(request: urlRequest, completion: open)
+	}
+
+	/// Get a test result
+	/// - Parameters:
+	///   - providerUrl: the url of the test provider
+	///   - token: the token to fetch
+	///   - code: the code for verification
+	///   - completion: the completion handler
+	func getTestResult(
+		providerUrl: URL,
+		token: TestToken,
+		code: String?,
+		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(token.token)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
+		]
+
+		var body: Data?
+
+		if let requiredCode = code {
+			let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
+			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+		}
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
+
+		decodedJSONData(request: urlRequest, completion: completion)
+	}
 	
 	// MARK: - Construct Request
 	

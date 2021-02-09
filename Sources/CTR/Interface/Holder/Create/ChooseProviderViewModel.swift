@@ -63,5 +63,15 @@ class ChooseProviderViewModel: Logging {
 	func providerSelected(_ identifier: ProviderIdentifier) {
 
 		logInfo("Selected \(identifier)")
+
+		if identifier == ProviderIdentifier.ggd {
+
+			Services.proofManager.getCoronaTestProviders()
+
+
+
+		}
+
+
 	}
 }

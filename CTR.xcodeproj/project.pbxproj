@@ -128,6 +128,10 @@
 		6DBFE48125D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
 		6DBFE48925D2DA4A00B3D006 /* ChooseProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */; };
 		6DBFE48A25D2DA4A00B3D006 /* ChooseProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */; };
+		6DBFE49325D2DB7A00B3D006 /* ProofManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE49225D2DB7A00B3D006 /* ProofManager.swift */; };
+		6DBFE49425D2DB7A00B3D006 /* ProofManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE49225D2DB7A00B3D006 /* ProofManager.swift */; };
+		6DBFE4BD25D2F8A300B3D006 /* ProofManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE4BC25D2F8A300B3D006 /* ProofManaging.swift */; };
+		6DBFE4BE25D2F8A300B3D006 /* ProofManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE4BC25D2F8A300B3D006 /* ProofManaging.swift */; };
 		6DC4CBB325D11BDC00986F9E /* ConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC4CBB225D11BDC00986F9E /* ConsentView.swift */; };
 		6DC4CBB725D11BE600986F9E /* ConsentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC4CBB625D11BE600986F9E /* ConsentViewModel.swift */; };
 		6DC6CC3725C2A06B00060237 /* AppUpdateViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC6CC3625C2A06B00060237 /* AppUpdateViewModelTests.swift */; };
@@ -416,6 +420,8 @@
 		6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderLocalization.swift; sourceTree = "<group>"; };
 		6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewModel.swift; sourceTree = "<group>"; };
 		6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewController.swift; sourceTree = "<group>"; };
+		6DBFE49225D2DB7A00B3D006 /* ProofManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofManager.swift; sourceTree = "<group>"; };
+		6DBFE4BC25D2F8A300B3D006 /* ProofManaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofManaging.swift; sourceTree = "<group>"; };
 		6DC4CBB225D11BDC00986F9E /* ConsentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsentView.swift; sourceTree = "<group>"; };
 		6DC4CBB625D11BE600986F9E /* ConsentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsentViewModel.swift; sourceTree = "<group>"; };
 		6DC6CC3625C2A06B00060237 /* AppUpdateViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewModelTests.swift; sourceTree = "<group>"; };
@@ -665,12 +671,13 @@
 		6D73052D25B876C100BA808C /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6D1F304925CBDC22000E901D /* Services.swift */,
-				6DAE8BCC25CB242700AAF2A7 /* NetworkManager */,
 				6D8865F425C8001100DE661E /* Crypto */,
+				6DAE8BCC25CB242700AAF2A7 /* NetworkManager */,
 				6D7C909225CA9CF800AEC5DE /* Onboarding */,
 				6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */,
+				6DBFE49125D2DB5C00B3D006 /* ProofManager */,
 				6DE6FD7825C18952006602AC /* RemoteConfiguration */,
+				6D1F304925CBDC22000E901D /* Services.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -832,6 +839,15 @@
 				6D20238D25CAABB500CFCD14 /* OnboardingManagerTests.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		6DBFE49125D2DB5C00B3D006 /* ProofManager */ = {
+			isa = PBXGroup;
+			children = (
+				6DBFE49225D2DB7A00B3D006 /* ProofManager.swift */,
+				6DBFE4BC25D2F8A300B3D006 /* ProofManaging.swift */,
+			);
+			path = ProofManager;
 			sourceTree = "<group>";
 		};
 		6DC6CC3525C2A04F00060237 /* AppUpdate */ = {
@@ -1375,6 +1391,7 @@
 			files = (
 				6DD7D81825D26D3A00B97B7F /* AppointmentViewModel.swift in Sources */,
 				6DD7D81925D26D3A00B97B7F /* UserDefaults.swift in Sources */,
+				6DBFE4BE25D2F8A300B3D006 /* ProofManaging.swift in Sources */,
 				6DD7D81A25D26D3A00B97B7F /* DashboardImage.swift in Sources */,
 				6DD7D81B25D26D3A00B97B7F /* Haptic.swift in Sources */,
 				6DD7D81C25D26D3A00B97B7F /* OnboardingManager.swift in Sources */,
@@ -1405,6 +1422,7 @@
 				6DD7D83525D26D3A00B97B7F /* Encodable+AnyEncodable.swift in Sources */,
 				6DD7D83625D26D3A00B97B7F /* HolderDashboardViewModel.swift in Sources */,
 				6DD7D83725D26D3A00B97B7F /* OnboardingViewController.swift in Sources */,
+				6DBFE49425D2DB7A00B3D006 /* ProofManager.swift in Sources */,
 				6DD7D83825D26D3A00B97B7F /* ScanView.swift in Sources */,
 				6DD7D83925D26D3A00B97B7F /* Button.swift in Sources */,
 				6DD7D83A25D26D3A00B97B7F /* VerifierStartViewController.swift in Sources */,
@@ -1498,6 +1516,7 @@
 			files = (
 				6DB386F625D18EE800B2CD7C /* AppointmentViewModel.swift in Sources */,
 				6DC6CCE325C2F7D100060237 /* UserDefaults.swift in Sources */,
+				6DBFE4BD25D2F8A300B3D006 /* ProofManaging.swift in Sources */,
 				6D5A7C0325D174470008B904 /* DashboardImage.swift in Sources */,
 				6D92849525B5CB96009D4350 /* Haptic.swift in Sources */,
 				6D7C909425CA9D2600AEC5DE /* OnboardingManager.swift in Sources */,
@@ -1528,6 +1547,7 @@
 				6DAE8BE125CB242700AAF2A7 /* Encodable+AnyEncodable.swift in Sources */,
 				6D5A7BEC25D147D90008B904 /* HolderDashboardViewModel.swift in Sources */,
 				6D6777DA25CD60FC00F6F2D1 /* OnboardingViewController.swift in Sources */,
+				6DBFE49325D2DB7A00B3D006 /* ProofManager.swift in Sources */,
 				6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */,
 				6D92849D25B5CBC0009D4350 /* Button.swift in Sources */,
 				6D9284B425B5D08D009D4350 /* VerifierStartViewController.swift in Sources */,
