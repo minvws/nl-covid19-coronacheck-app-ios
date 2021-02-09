@@ -8,6 +8,26 @@
 import Foundation
 import UIKit
 
+/// The Application flavor
+enum AppFlavor: String {
+	
+	/// We are a holder
+	case holder
+	
+	/// We are a verifier
+	case verifier
+	
+	/// The flavor of the app
+	static var flavor: AppFlavor {
+		
+		if let value = Bundle.main.infoDictionary?["APP_FLAVOR"] as? String,
+		   let fls = AppFlavor(rawValue: value ) {
+			return fls
+		}
+		return .holder
+	}
+}
+
 protocol AppCoordinatorDelegate: AnyObject {
 
 	/// Open a url
@@ -57,9 +77,26 @@ class AppCoordinator: Coordinator {
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
 
-		// Start the mainCoordinator
-		let mainCoordinator = MainCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(mainCoordinator)
+		switch AppFlavor.flavor {
+			case .holder:
+				startAsHolder()
+			default:
+				startAsVerifier()
+		}
+	}
+
+	/// Start the app as a holder
+	func startAsHolder() {
+
+		let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
+		startChildCoordinator(coordinator)
+	}
+
+	/// Start the app as a verifiier
+	func startAsVerifier() {
+
+		let coordinator = VerifierCoordinator(navigationController: navigationController)
+		startChildCoordinator(coordinator)
 	}
 
 	/// flag for updating configuration

@@ -26,11 +26,16 @@ Run tests for integration purposes
 fastlane ios deploy
 ```
 Build and deploy via Firebase
-### ios deploy_ci
+### ios deploy_holder_ci
 ```
-fastlane ios deploy_ci
+fastlane ios deploy_holder_ci
 ```
-Build and deploy via Firebase from CI
+Build and deploy the holder app via Firebase from CI
+### ios deploy_verifier_ci
+```
+fastlane ios deploy_verifier_ci
+```
+Build and deploy the verifier app via Firebase from CI
 
 ----
 

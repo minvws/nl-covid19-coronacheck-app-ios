@@ -14,9 +14,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-               BuildableName = "CTR.app"
-               BlueprintName = "Holder"
+               BlueprintIdentifier = "6DD7D81425D26D3A00B97B7F"
+               BuildableName = "Verifier.app"
+               BlueprintName = "Verifier"
+               ReferencedContainer = "container:CTR.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6DDEFB0525AEDCAA00A6912A"
+               BuildableName = "CTRTests.xctest"
+               BlueprintName = "CTRTests"
                ReferencedContainer = "container:CTR.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,35 +40,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "NO"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "--unittesting"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-            BuildableName = "CTR.app"
-            BlueprintName = "Holder"
-            ReferencedContainer = "container:CTR.xcodeproj">
-         </BuildableReference>
-      </CodeCoverageTargets>
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6DDEFB0525AEDCAA00A6912A"
-               BuildableName = "CTRTests.xctest"
-               BlueprintName = "CTRTests"
-               ReferencedContainer = "container:CTR.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -71,9 +58,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-            BuildableName = "CTR.app"
-            BlueprintName = "Holder"
+            BlueprintIdentifier = "6DD7D81425D26D3A00B97B7F"
+            BuildableName = "Verifier.app"
+            BlueprintName = "Verifier"
             ReferencedContainer = "container:CTR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -88,9 +75,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6DDEFAEF25AEDCA800A6912A"
-            BuildableName = "CTR.app"
-            BlueprintName = "Holder"
+            BlueprintIdentifier = "6DD7D81425D26D3A00B97B7F"
+            BuildableName = "Verifier.app"
+            BlueprintName = "Verifier"
             ReferencedContainer = "container:CTR.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
