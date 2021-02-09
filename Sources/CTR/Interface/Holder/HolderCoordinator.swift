@@ -68,14 +68,23 @@ class HolderCoordinator: Coordinator, Logging {
 	func start() {
 
 		if onboardingManager.needsOnboarding {
-
+			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self
 			)
 			startChildCoordinator(coordinator)
-		} else {
 
+		} else if onboardingManager.needsConsent {
+			// Show the consent page
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self
+			)
+			addChildCoordinator(coordinator)
+			coordinator.navigateToConsent()
+		} else {
+			// Start with the holder app
 			navigateToHolderStart()
 		}
 	}
@@ -170,11 +179,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 extension HolderCoordinator: OnboardingDelegate {
 
+	/// User has seen all the onboarding pages
+	func finishOnboarding() {
+
+		onboardingManager.finishOnboarding()
+	}
+
 	/// The onboarding is finished
 	func consentGiven() {
 
 		// Mark as complete
-		onboardingManager.finishOnboarding()
+		onboardingManager.consentGiven()
 
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {

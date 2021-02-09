@@ -134,7 +134,7 @@ class ConsentViewControllerTests: XCTestCase {
 	}
 
 	/// Test the user tapped on the enabled primary button
-	func testPrimaryButtonTappedDiabled() {
+	func testPrimaryButtonTappedDisabled() {
 
 		// Given
 		loadView()
