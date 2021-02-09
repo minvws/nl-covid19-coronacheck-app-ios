@@ -1336,6 +1336,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3B52A804A4BBCC8868B017C7 /* Pods-CTR.ad hoc test.xcconfig */;
 			buildSettings = {
+				APP_FLAVOR = holder;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1448,6 +1449,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4EBDF2056641810A28CBFB35 /* Pods-CTR.ad hoc acc.xcconfig */;
 			buildSettings = {
+				APP_FLAVOR = holder;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1560,6 +1562,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7D5C60869FB0D218FDBB85BC /* Pods-CTR.ad hoc prod.xcconfig */;
 			buildSettings = {
+				APP_FLAVOR = holder;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1672,6 +1675,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FD09D8523E7901C965D6A35B /* Pods-CTR.app store.xcconfig */;
 			buildSettings = {
+				APP_FLAVOR = holder;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1848,6 +1852,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43DFF135785CA98651880F6B /* Pods-CTR.debug.xcconfig */;
 			buildSettings = {
+				APP_FLAVOR = holder;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1881,6 +1886,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3A0BC9F3F0139731EAF777CF /* Pods-CTR.release.xcconfig */;
 			buildSettings = {
+				APP_FLAVOR = holder;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
