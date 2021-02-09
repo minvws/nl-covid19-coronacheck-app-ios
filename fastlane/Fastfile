@@ -32,6 +32,12 @@ platform :ios do
     )
   end
 
+  desc "Build and deploy the apps via Firebase from CI"
+  lane :deploy_ci do
+    deploy_holder_ci
+    deploy_verifier_ci
+  end
+
   desc "Build and deploy the Holder app via Firebase from CI"
   lane :deploy_holder_ci do
     setup_ci(provider: "travis", force: true)
@@ -40,7 +46,7 @@ platform :ios do
 
     install_provisioning_profile(path: "fastlane/profiles/CoronaTester_Ad_Hoc.mobileprovision")
 
-    #deploy
+    deploy_holder
   end
 
   desc "Build and deploy the Verifier app via Firebase from CI"
@@ -51,7 +57,7 @@ platform :ios do
 
     install_provisioning_profile(path: "fastlane/profiles/CoronaTester_Verifier_Ad_Hoc.mobileprovision")
 
-    #deploy
+    deploy_verifier
   end
 
   desc "Build and deploy the Holder app via Firebase"

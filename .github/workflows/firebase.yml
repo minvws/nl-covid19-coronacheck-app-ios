@@ -26,5 +26,4 @@ jobs:
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
         bundle install
-        bundle exec fastlane ios deploy_holder_ci
-		bundle exec fastlane ios deploy_verifier_ci
+        bundle exec fastlane ios deploy_ci
