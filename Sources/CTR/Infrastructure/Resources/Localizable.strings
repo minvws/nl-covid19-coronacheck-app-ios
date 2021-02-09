@@ -86,3 +86,12 @@
 "holder.appointment.link" = "Lees de meest gestelde vragen over een test plannen.";
 "holder.appointment.title" = "Maak een testafpraak";
 "holder.appointment.button.title" = "Maak een afpraak";
+
+/* MARK: - Choose Provider */
+"holder.provider.title" = "Maak QR-Code";
+"holder.provider.subtitle" = "Waar ben je getest?";
+"holder.provider.message" = "Is je testresultaat bekend? Dan kan je er een QR-code van maken. Geef hieronder aan bij welke testlocatie je bent getest.";
+"holder.provider.ggd.title" = "GGD";
+"holder.provider.ggd.subtitle" = "Log in met je DigiD";
+"holder.provider.commercial.title" = "Commerciele testlocatie";
+"holder.provider.commercial.subtitle" = "Log in jet een unieke code";

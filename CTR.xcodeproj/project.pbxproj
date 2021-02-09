@@ -84,6 +84,10 @@
 		6D80113025D29A3B00D2EEAB /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80112E25D29A3B00D2EEAB /* OnboardingViewModel.swift */; };
 		6D80113C25D2B6AE00D2EEAB /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */; };
 		6D80113D25D2B6AE00D2EEAB /* Placeholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */; };
+		6D80114325D2C00E00D2EEAB /* ChooseProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80114225D2C00E00D2EEAB /* ChooseProviderView.swift */; };
+		6D80114425D2C00E00D2EEAB /* ChooseProviderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80114225D2C00E00D2EEAB /* ChooseProviderView.swift */; };
+		6D80114C25D2C25C00D2EEAB /* ScrollViewWithHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */; };
+		6D80114D25D2C25C00D2EEAB /* ScrollViewWithHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */; };
 		6D8865E725C7FBBB00DE661E /* ctcl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8865E625C7FBBB00DE661E /* ctcl.framework */; };
 		6D8865F625C8004500DE661E /* issuerPk.xml in Resources */ = {isa = PBXBuildFile; fileRef = 6D8865F525C8004500DE661E /* issuerPk.xml */; };
 		6D8865FA25C800BA00DE661E /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8865F925C800BA00DE661E /* FileReader.swift */; };
@@ -118,6 +122,12 @@
 		6DB386EC25D17E9A00B2CD7C /* AppointmentLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */; };
 		6DB386F225D18EDF00B2CD7C /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */; };
 		6DB386F625D18EE800B2CD7C /* AppointmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */; };
+		6DBFE47A25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */; };
+		6DBFE47B25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */; };
+		6DBFE48025D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
+		6DBFE48125D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
+		6DBFE48925D2DA4A00B3D006 /* ChooseProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */; };
+		6DBFE48A25D2DA4A00B3D006 /* ChooseProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */; };
 		6DC4CBB325D11BDC00986F9E /* ConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC4CBB225D11BDC00986F9E /* ConsentView.swift */; };
 		6DC4CBB725D11BE600986F9E /* ConsentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC4CBB625D11BE600986F9E /* ConsentViewModel.swift */; };
 		6DC6CC3725C2A06B00060237 /* AppUpdateViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC6CC3625C2A06B00060237 /* AppUpdateViewModelTests.swift */; };
@@ -367,6 +377,8 @@
 		6D7FFAF025C9B8CF00B5482F /* OnboardingLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLocalization.swift; sourceTree = "<group>"; };
 		6D80112E25D29A3B00D2EEAB /* OnboardingViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Placeholder.swift; sourceTree = "<group>"; };
+		6D80114225D2C00E00D2EEAB /* ChooseProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseProviderView.swift; sourceTree = "<group>"; };
+		6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollViewWithHeader.swift; sourceTree = "<group>"; };
 		6D8865E625C7FBBB00DE661E /* ctcl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ctcl.framework; sourceTree = "<group>"; };
 		6D8865F525C8004500DE661E /* issuerPk.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = issuerPk.xml; sourceTree = "<group>"; };
 		6D8865F925C800BA00DE661E /* FileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
@@ -401,6 +413,9 @@
 		6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentLocalization.swift; sourceTree = "<group>"; };
 		6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
 		6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentViewModel.swift; sourceTree = "<group>"; };
+		6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderLocalization.swift; sourceTree = "<group>"; };
+		6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewModel.swift; sourceTree = "<group>"; };
+		6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewController.swift; sourceTree = "<group>"; };
 		6DC4CBB225D11BDC00986F9E /* ConsentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsentView.swift; sourceTree = "<group>"; };
 		6DC4CBB625D11BE600986F9E /* ConsentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsentViewModel.swift; sourceTree = "<group>"; };
 		6DC6CC3625C2A06B00060237 /* AppUpdateViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdateViewModelTests.swift; sourceTree = "<group>"; };
@@ -683,6 +698,16 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		6D80114125D2BF7100D2EEAB /* Create */ = {
+			isa = PBXGroup;
+			children = (
+				6D80114225D2C00E00D2EEAB /* ChooseProviderView.swift */,
+				6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */,
+				6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */,
+			);
+			path = Create;
+			sourceTree = "<group>";
+		};
 		6D8865F425C8001100DE661E /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
@@ -710,20 +735,21 @@
 		6D92849825B5CBC0009D4350 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6D9284A125B5CCDD009D4350 /* MainView.swift */,
 				6D92849B25B5CBC0009D4350 /* BaseView.swift */,
 				6D92849925B5CBC0009D4350 /* BaseViewController.swift */,
 				6D92849A25B5CBC0009D4350 /* Button.swift */,
+				6D27550925D1201800164F2E /* CardView.swift */,
 				6D67780425CEAECF00F6F2D1 /* ConsentButton.swift */,
 				6D7F9CD525B700010006F227 /* EventView.swift */,
 				6DD1156225D0137600DF6AF4 /* ImageView.swift */,
 				6D7F9CCB25B6E6590006F227 /* Label.swift */,
+				6D9284A125B5CCDD009D4350 /* MainView.swift */,
+				6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */,
 				6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */,
 				6D7F9CC725B6E6170006F227 /* ResultView.swift */,
 				6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */,
-				6D27550925D1201800164F2E /* CardView.swift */,
 				6D7F9CBB25B6E3A50006F227 /* ScanViewController.swift */,
-				6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */,
+				6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -732,6 +758,7 @@
 			isa = PBXGroup;
 			children = (
 				6D5A7BF125D148E20008B904 /* Appointment */,
+				6D80114125D2BF7100D2EEAB /* Create */,
 				6DD1158425D021D900DF6AF4 /* Dashboard */,
 				6D9284B725B5D22B009D4350 /* HolderCoordinator.swift */,
 				6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */,
@@ -831,6 +858,7 @@
 				6D5A7BF625D1622E0008B904 /* MenuLocalization.swift */,
 				6D7FFAF025C9B8CF00B5482F /* OnboardingLocalization.swift */,
 				6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */,
+				6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -1405,6 +1433,7 @@
 				6DD7D85225D26D3A00B97B7F /* FileReader.swift in Sources */,
 				6DD7D85325D26D3A00B97B7F /* Label.swift in Sources */,
 				6DD7D85425D26D3A00B97B7F /* VerifierResultViewController.swift in Sources */,
+				6DBFE47B25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */,
 				6DD7D85525D26D3A00B97B7F /* UIView+Embed.swift in Sources */,
 				6DD7D85625D26D3A00B97B7F /* ConsentButton.swift in Sources */,
 				6DD7D85725D26D3A00B97B7F /* UIDevice+ScreenType.swift in Sources */,
@@ -1416,6 +1445,7 @@
 				6DD7D85E25D26D3A00B97B7F /* URLRequest+Utils.swift in Sources */,
 				6DD7D85F25D26D3A00B97B7F /* AppUpdateLocalization.swift in Sources */,
 				6DD7D86025D26D3A00B97B7F /* Endpoint.swift in Sources */,
+				6DBFE48A25D2DA4A00B3D006 /* ChooseProviderViewController.swift in Sources */,
 				6DD7D86125D26D3A00B97B7F /* Codable+UserInfo.swift in Sources */,
 				6DD7D86225D26D3A00B97B7F /* String+Dictionary.swift in Sources */,
 				6DD7D86325D26D3A00B97B7F /* Issuers.swift in Sources */,
@@ -1425,12 +1455,14 @@
 				6D80113D25D2B6AE00D2EEAB /* Placeholder.swift in Sources */,
 				6DD7D86725D26D3A00B97B7F /* OpenSSL.m in Sources */,
 				6DD7D86825D26D3A00B97B7F /* OnboardingFactory.swift in Sources */,
+				6D80114D25D2C25C00D2EEAB /* ScrollViewWithHeader.swift in Sources */,
 				6DD7D86925D26D3A00B97B7F /* GeneralLocalization.swift in Sources */,
 				6DD7D86A25D26D3A00B97B7F /* NetworkManager.swift in Sources */,
 				6DD7D86B25D26D3A00B97B7F /* GeneralImage.swift in Sources */,
 				6DD7D86C25D26D3A00B97B7F /* VerifierCoordinator.swift in Sources */,
 				6DD7D86D25D26D3A00B97B7F /* EndOfLifeLocalization.swift in Sources */,
 				6DD7D86E25D26D3A00B97B7F /* OnboardingPageViewModel.swift in Sources */,
+				6DBFE48125D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */,
 				6D80113025D29A3B00D2EEAB /* OnboardingViewModel.swift in Sources */,
 				6DD7D86F25D26D3A00B97B7F /* String+extension.swift in Sources */,
 				6DD7D87025D26D3A00B97B7F /* PrivacyViewModel.swift in Sources */,
@@ -1452,6 +1484,7 @@
 				6DD7D88025D26D3A00B97B7F /* Services.swift in Sources */,
 				6DD7D88125D26D3A00B97B7F /* OnboardingCoordinator.swift in Sources */,
 				6DD7D88225D26D3A00B97B7F /* NSAttributedString+extension.swift in Sources */,
+				6D80114425D2C00E00D2EEAB /* ChooseProviderView.swift in Sources */,
 				6DD7D88325D26D3A00B97B7F /* DashboardLocalization.swift in Sources */,
 				6DD7D88425D26D3A00B97B7F /* String+SHA256.swift in Sources */,
 				6DD7D88525D26D3A00B97B7F /* SignatureConfiguration.swift in Sources */,
@@ -1523,6 +1556,7 @@
 				6D8865FA25C800BA00DE661E /* FileReader.swift in Sources */,
 				6D7F9CCC25B6E6590006F227 /* Label.swift in Sources */,
 				6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */,
+				6DBFE47A25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */,
 				6DAACCFD25CEB9EB00D3C320 /* UIView+Embed.swift in Sources */,
 				6D67780A25CEAF7C00F6F2D1 /* ConsentButton.swift in Sources */,
 				6D7FFAE925C9AF6B00B5482F /* UIDevice+ScreenType.swift in Sources */,
@@ -1534,6 +1568,7 @@
 				6DD9395925BD963A0026F071 /* URLRequest+Utils.swift in Sources */,
 				6D5E06B625C1947F008E2124 /* AppUpdateLocalization.swift in Sources */,
 				6DAE8BDD25CB242700AAF2A7 /* Endpoint.swift in Sources */,
+				6DBFE48925D2DA4A00B3D006 /* ChooseProviderViewController.swift in Sources */,
 				6DAE8BE025CB242700AAF2A7 /* Codable+UserInfo.swift in Sources */,
 				6D54AAF025C8532200D92212 /* String+Dictionary.swift in Sources */,
 				6D73052F25B876F000BA808C /* Issuers.swift in Sources */,
@@ -1543,12 +1578,14 @@
 				6D80113C25D2B6AE00D2EEAB /* Placeholder.swift in Sources */,
 				6D33015625CFE68500A98C1C /* OpenSSL.m in Sources */,
 				6D7FFAED25C9B65E00B5482F /* OnboardingFactory.swift in Sources */,
+				6D80114C25D2C25C00D2EEAB /* ScrollViewWithHeader.swift in Sources */,
 				6DD43DA625CD23F70041D658 /* GeneralLocalization.swift in Sources */,
 				6DAE8BDF25CB242700AAF2A7 /* NetworkManager.swift in Sources */,
 				6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */,
 				6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */,
 				6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */,
 				6D2023B225CAB7A200CFCD14 /* OnboardingPageViewModel.swift in Sources */,
+				6DBFE48025D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */,
 				6D80112F25D29A3B00D2EEAB /* OnboardingViewModel.swift in Sources */,
 				6D7C908A25CA86FE00AEC5DE /* String+extension.swift in Sources */,
 				6DD43DAB25CD25F70041D658 /* PrivacyViewModel.swift in Sources */,
@@ -1570,6 +1607,7 @@
 				6D1F304A25CBDC22000E901D /* Services.swift in Sources */,
 				6D7FFAE525C9A8AD00B5482F /* OnboardingCoordinator.swift in Sources */,
 				6D7C908B25CA86FE00AEC5DE /* NSAttributedString+extension.swift in Sources */,
+				6D80114325D2C00E00D2EEAB /* ChooseProviderView.swift in Sources */,
 				6D27551225D1259D00164F2E /* DashboardLocalization.swift in Sources */,
 				6DC6CCF025C3039C00060237 /* String+SHA256.swift in Sources */,
 				6D33016425CFE72D00A98C1C /* SignatureConfiguration.swift in Sources */,

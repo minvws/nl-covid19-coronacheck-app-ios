@@ -18,6 +18,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to appointment
 	func navigateToAppointment()
 
+	/// Navigate to choose provider
+	func navigateToChooseProvider()
+
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults()
 
@@ -125,6 +128,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
+	/// Navigate to choose provider
+	func navigateToChooseProvider() {
+
+		let destination = ChooseProviderViewController(
+			viewModel: ChooseProviderViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+
 	}
 
 	/// Navigate to the Fetch Result Scene

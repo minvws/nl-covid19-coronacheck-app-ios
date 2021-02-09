@@ -64,7 +64,8 @@ class HolderDashboardViewModel: Logging {
 
 		if identifier == CardIdentifier.appointment {
 			coordinator?.navigateToAppointment()
+		} else if identifier == CardIdentifier.create {
+			coordinator?.navigateToChooseProvider()
 		}
-
 	}
 }
