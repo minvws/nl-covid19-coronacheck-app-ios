@@ -104,7 +104,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
-
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self
@@ -173,6 +172,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationContoller
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
+
+				let destinationViewController = PlaceholderViewController()
+				destinationViewController.placeholder = "\(identifier)"
+				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				sidePanel?.selectedViewController = navigationController
 		}
 	}
 }

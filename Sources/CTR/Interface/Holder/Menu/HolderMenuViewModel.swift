@@ -13,7 +13,7 @@ enum MenuIdentifier {
 	case settings
 	case faq
 	case about
-	case privacy
+	case feedback
 }
 
 struct MenuItem {
@@ -45,7 +45,7 @@ class HolderMenuViewModel {
 		self.bottomMenu = [
 			MenuItem(identifier: .faq, title: .holderMenuFaq),
 			MenuItem(identifier: .about, title: .holderMenuAbout),
-			MenuItem(identifier: .privacy, title: .holderMenuPrivacy)
+			MenuItem(identifier: .feedback, title: .holderMenuFeedback)
 		]
 	}
 

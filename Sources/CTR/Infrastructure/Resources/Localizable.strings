@@ -43,7 +43,7 @@
 "holder.menu.settings" = "Instellingen";
 "holder.menu.faq" = "Meest gestelde vragen";
 "holder.menu.about" = "Over deze app";
-"holder.menu.privacy" = "Privacyverklaring";
+"holder.menu.feedback" = "Geef ons feedback";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Veilig op pad";
