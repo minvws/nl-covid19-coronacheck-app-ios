@@ -1,4 +1,4 @@
-${PODS_ROOT}/Target Support Files/Pods-CTR/Pods-CTR-frameworks.sh
+${PODS_ROOT}/Target Support Files/Pods-Verifier/Pods-Verifier-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework
 ${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework
 ${BUILT_PRODUCTS_DIR}/Sodium/Sodium.framework
