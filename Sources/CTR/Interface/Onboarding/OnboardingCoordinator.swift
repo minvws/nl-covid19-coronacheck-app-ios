@@ -19,11 +19,17 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	/// The onboarding is finished
 	func finishOnboarding()
 
+	/// Navigate to the consent page
+	func navigateToConsent()
+
 	/// Consent was given
 	func consentGiven()
 }
 
 protocol OnboardingDelegate: AnyObject {
+
+	/// The onboarding is finished
+	func finishOnboarding()
 	
 	/// The consent is given
 	func consentGiven()
@@ -92,7 +98,8 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		viewController.present(navigationController, animated: true, completion: nil)
 		presentingViewController = viewController
 	}
-	
+
+	/// Dismiss the presented viewcontroller
 	func dismiss() {
 		
 		presentingViewController?.dismiss(animated: true, completion: nil)
@@ -101,7 +108,17 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	
 	/// The onboarding is finished
 	func finishOnboarding() {
-		
+
+		// Notify that we finished the onboarding
+		onboardingDelegate?.finishOnboarding()
+
+		// Go to consent
+		navigateToConsent()
+	}
+
+	/// Navigate to the consent page
+	func navigateToConsent() {
+
 		let viewController = ConsentViewController(viewModel: ConsentViewModel(coordinator: self))
 		navigationController.pushViewController(viewController, animated: true)
 	}

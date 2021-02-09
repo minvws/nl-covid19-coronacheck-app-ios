@@ -39,7 +39,19 @@ class OnboardingManagerTests: XCTestCase {
 		XCTAssertTrue(value, "needs onboarding should be true")
 	}
 
-	func testFinish() {
+	func testGetNeedsConsent() {
+
+		// Given
+		sut.reset()
+
+		// When
+		let value = sut.needsConsent
+
+		// Then
+		XCTAssertTrue(value, "needs consent should be true")
+	}
+
+	func testFinishOnboarding() {
 
 		// Given
 
@@ -50,5 +62,18 @@ class OnboardingManagerTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(value, "needs onboarding should be false")
+	}
+
+	func testConsentGiven() {
+
+		// Given
+
+		// When
+		sut.consentGiven()
+
+		let value = sut.needsConsent
+
+		// Then
+		XCTAssertFalse(value, "needs consent should be false")
 	}
 }

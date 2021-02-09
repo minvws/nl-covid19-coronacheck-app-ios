@@ -15,8 +15,14 @@ protocol OnboardingManaging {
 	/// Do we need onboarding? True if we do
 	var needsOnboarding: Bool { get }
 
+	/// Do we need conset? True if we do
+	var needsConsent: Bool { get }
+
 	/// The onboarding is finished
 	func finishOnboarding()
+
+	/// Give consent
+	func consentGiven()
 
 	/// Reset the manager
 	func reset()
@@ -27,21 +33,30 @@ class OnboardingManager: OnboardingManaging, Logging {
 
 	var loggingCategory: String = "OnboardingManager"
 
+	/// The onboarding data to persist
 	private struct OnboardingData: Codable {
+
+		/// The user needs to do the onboarding
 		var needsOnboarding: Bool
+
+		/// The user needs to give consent
+		var needsConsent: Bool
 
 		/// Empty crypto data
 		static var empty: OnboardingData {
-			return OnboardingData(needsOnboarding: true)
+			return OnboardingData(needsOnboarding: true, needsConsent: true)
 		}
 	}
 
 	private struct Constants {
+
+		/// The key chain service
 		static let keychainService = "OnboardingManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
+	// keychained onboardings data
 	@Keychain(name: "onboardingData", service: Constants.keychainService, clearOnReinstall: true)
-	private var onboardingData: OnboardingData = .empty // swiftlint:disable:this let_var_whitespace
+	private var onboardingData: OnboardingData = .empty
 
 	/// Initializer
 	required init() {
@@ -54,10 +69,22 @@ class OnboardingManager: OnboardingManaging, Logging {
 		return onboardingData.needsOnboarding
 	}
 
+	/// Do we need consent? True if we do
+	var needsConsent: Bool {
+
+		return onboardingData.needsConsent
+	}
+
 	/// The onboarding is finished
 	func finishOnboarding() {
 
 		onboardingData.needsOnboarding = false
+	}
+
+	/// Give consent
+	func consentGiven() {
+
+		onboardingData.needsConsent = false
 	}
 
 	/// Reset the manager
