@@ -97,11 +97,15 @@ class FetchResultModelTests: XCTestCase {
 		}
 	}
 
-	class OpenClientSpy: OpenIdClientProtocol {
+	class OpenClientSpy: OpenIdManaging {
 
 		var token: String?
 		var shouldError: Bool = false
 		var requestAccessTokenCalled = false
+
+		required init() {
+
+		}
 
 		func requestAccessToken(
 			presenter: UIViewController,
