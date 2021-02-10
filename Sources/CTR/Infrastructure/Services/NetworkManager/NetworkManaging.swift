@@ -40,6 +40,7 @@ extension NetworkResponseHandleError {
 enum HTTPHeaderKey: String {
     case contentType = "Content-Type"
     case acceptedContentType = "Accept"
+	case authorization = "Authorization"
 }
 
 enum HTTPContentType: String {
@@ -72,4 +73,40 @@ protocol NetworkManaging {
 	func fetchTestResultsWithISM(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void)
+
+	/// Get the test providers
+	/// - Parameter completion: completion handler
+	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
+
+	/// Get the test types
+	/// - Parameter completion: completion handler
+	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void)
+
+	/// Get a test result
+	/// - Parameters:
+	///   - providerUrl: the url of the test provider
+	///   - token: the token to fetch
+	///   - code: the code for verification
+	///   - completion: the completion handler
+	func getTestResult(
+		providerUrl: URL,
+		token: TestToken,
+		code: String?,
+		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void)
+}
+
+struct SignedResponse: Codable {
+
+	/// The payload
+	let payload: String
+
+	/// The signature
+	let signature: String
+
+	// Key mapping
+	enum CodingKeys: String, CodingKey {
+
+		case payload
+		case signature
+	}
 }

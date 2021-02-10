@@ -12,6 +12,7 @@ final class Services {
     private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
+	private static var proofManagerType: ProofManaging.Type = ProofManager.self
     
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
     /// - parameter networkManager: The type conforming to [NetworkManaging](x-source-tag://NetworkManaging) to be used as the global networkManager
@@ -32,6 +33,12 @@ final class Services {
     static func use(_ onboardingManager: OnboardingManaging.Type) {
         onboardingManagingType = onboardingManager
     }
+
+	/// Override the [ProofManaging](x-source-tag://OnboardingManaging) type that will be instantiated
+	/// - parameter proofManager: The type conforming to [ProofManaging](x-source-tag://ProofManaging) to be used as the global proof manager
+	static func use(_ proofManager: ProofManaging.Type) {
+		proofManagerType = proofManager
+	}
     
     static private(set) var networkManager: NetworkManaging = {
         let networkConfiguration: NetworkConfiguration
@@ -57,4 +64,6 @@ final class Services {
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
 
 	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
+
+	static private(set) var proofManager: ProofManaging = proofManagerType.init()
 }

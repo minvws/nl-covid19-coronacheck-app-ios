@@ -27,10 +27,10 @@ struct Endpoint {
 
 	/// Endpoint for test results as ism
 	static let testResultIsm = Path(components: "holder", "get_test_ism")
-    
-//    static let pairings = Path(components: "pairings")
-//
-//    static func `case`(identifier: String) -> Path { Path(components: "cases", identifier) }
-//
-//    static let questionnaires = Path(components: "questionnaires")
+
+	/// Endpoint for test providers
+	static let testProviders = Path(components: "holder", "config_ctp")
+
+	/// Endpoint for test types
+	static let testTypes = Path(components: "holder", "get_test_types")
 }

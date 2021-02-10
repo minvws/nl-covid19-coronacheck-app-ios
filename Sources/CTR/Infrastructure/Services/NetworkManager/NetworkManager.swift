@@ -25,9 +25,10 @@ class NetworkManager: NetworkManaging, Logging {
 	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void) {
 		let urlRequest = constructRequest(
 			url: networkConfiguration.remoteConfigurationUrl,
-			method: .GET)
-		
-		decodedJSONData(request: urlRequest, completion: completion)
+			method: .GET
+		)
+
+		decodedSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Get the nonce
@@ -39,7 +40,7 @@ class NetworkManager: NetworkManaging, Logging {
 			method: .GET
 		)
 
-		decodedJSONData(request: urlRequest, completion: completion)
+		decodedSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Fetch the test results with issue signature message
@@ -66,6 +67,72 @@ class NetworkManager: NetworkManaging, Logging {
 		} catch {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
+		}
+	}
+
+	/// Get the test providers
+	/// - Parameter completion: completion handler
+	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.testProvidersUrl,
+			method: .GET
+		)
+
+		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+
+		decodedSignedJSONData(request: urlRequest, completion: open)
+	}
+
+	/// Get the test types
+	/// - Parameter completion: completion handler
+	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.testTypesUrl,
+			method: .GET
+		)
+
+		func open(result: Result<ArrayEnvelope<TestType>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+
+		decodedSignedJSONData(request: urlRequest, completion: open)
+	}
+
+	/// Get a test result
+	/// - Parameters:
+	///   - providerUrl: the url of the test provider
+	///   - token: the token to fetch
+	///   - code: the code for verification
+	///   - completion: the completion handler
+	func getTestResult(
+		providerUrl: URL,
+		token: TestToken,
+		code: String?,
+		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(token.requestToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
+		]
+
+		if var urlComps = URLComponents(url: providerUrl, resolvingAgainstBaseURL: false) {
+			urlComps.queryItems = [URLQueryItem(name: "sigInline", value: "1")]
+			if let appendedUrl = urlComps.url {
+
+				var body: Data?
+
+				if let requiredCode = code {
+					let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
+					body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+				}
+				let urlRequest = constructRequest(url: appendedUrl, method: .POST, body: body, headers: headers)
+
+				decodedSignedJSONData(request: urlRequest, completion: completion)
+			}
 		}
 	}
 	
@@ -151,6 +218,42 @@ class NetworkManager: NetworkManaging, Logging {
 			}
 		}
 	}
+
+	private func decodedSignedJSONData<Object: Decodable>(
+		request: Result<URLRequest, NetworkError>,
+		completion: @escaping (Result<Object, NetworkError>) -> Void) {
+		data(request: request) { result in
+
+			/// Decode to SignedResult
+			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
+			switch signedResult {
+				case let .success(signedResponse):
+					if let payloaData = Data(base64Encoded: signedResponse.payload),
+					   let signatureData = Data(base64Encoded: signedResponse.signature) {
+
+						let validator = CryptoUtility(signatureValidator: SignatureValidator())
+						validator.validate(data: payloaData, signature: signatureData) { valid in
+							// Todo: return error on invalid
+							self.logDebug("Are we valid?: \(valid)")
+
+							let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: payloaData)
+							DispatchQueue.main.async {
+								switch decodedResult {
+									case let .success(object):
+										completion(.success(object))
+									case let .failure(responseError):
+										completion(.failure(responseError.asNetworkError))
+								}
+							}
+						}
+					}
+				case let .failure(networkError):
+					DispatchQueue.main.async {
+						completion(.failure(networkError))
+					}
+			}
+		}
+	}
 	
 	// MARK: - Utilities
 	
@@ -189,7 +292,7 @@ class NetworkManager: NetworkManaging, Logging {
 			completion(.failure(.invalidResponse))
 			return
 		}
-		
+
 		if let error = self.inspect(response: response) {
 			completion(.failure(error))
 			return

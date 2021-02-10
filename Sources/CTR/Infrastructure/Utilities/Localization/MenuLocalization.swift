@@ -29,8 +29,8 @@ extension String {
 		return Localization.string(for: "holder.menu.about")
 	}
 
-	static var holderMenuPrivacy: String {
+	static var holderMenuFeedback: String {
 
-		return Localization.string(for: "holder.menu.privacy")
+		return Localization.string(for: "holder.menu.feedback")
 	}
 }

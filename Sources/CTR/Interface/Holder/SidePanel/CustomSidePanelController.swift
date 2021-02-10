@@ -31,16 +31,15 @@ class CustomSidePanelController: SidePanelController {
 		let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
 		if let navItem = mainViewController?.navigationItem,
 			navItem.leftBarButtonItem == nil {
-			let hamburger = UIImage.hamburger // .withRenderingMode(.alwaysTemplate)
+			let hamburger = UIImage.hamburger
 			let button = UIBarButtonItem(
 				image: hamburger,
 				style: .plain,
 				target: self,
 				action: #selector(showSidePanel))
-//			button.tintColor = UIColor.white
 			navItem.leftBarButtonItem = button
             navItem.leftBarButtonItem?.accessibilityIdentifier = "OpenMenuButton"
-//            navItem.leftBarButtonItem?.accessibilityLabel = "accessibility_navigation_drawer_open".localized()
+			navItem.leftBarButtonItem?.accessibilityLabel = .close
 		}
 		super.updateSelectedViewcontroller()
 	}

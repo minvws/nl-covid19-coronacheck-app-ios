@@ -59,8 +59,34 @@ class HolderDashboardViewController: BaseViewController {
 				self?.viewModel.cardClicked(cardInfo.identifier)
 			}
 		}
+
+		viewModel.$qrMessage.binding = {
+
+			if let value = $0 {
+				let image = self.generateQRCode(from: value)
+				self.sceneView.qrView.image = image
+				self.sceneView.qrView.isHidden = false
+			} else {
+				self.sceneView.qrView.isHidden = true
+			}
+		}
 		
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
+	}
+
+	func generateQRCode(from string: String) -> UIImage? {
+
+		let data = string.data(using: String.Encoding.ascii)
+
+		if let filter = CIFilter(name: "CIQRCodeGenerator") {
+			filter.setValue(data, forKey: "inputMessage")
+			let transform = CGAffineTransform(scaleX: 3, y: 3)
+
+			if let output = filter.outputImage?.transformed(by: transform) {
+				return UIImage(ciImage: output)
+			}
+		}
+		return nil
 	}
 }

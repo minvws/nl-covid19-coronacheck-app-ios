@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppointmentView: BaseView {
+class AppointmentView: ScrollViewWithHeader {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -25,32 +25,6 @@ class AppointmentView: BaseView {
 		static let titleTopMargin: CGFloat = 34.0
 		static let messageTopMargin: CGFloat = 24.0
 	}
-
-	/// The scrollview
-	private let scrollView: UIScrollView = {
-
-		let view = UIScrollView(frame: .zero)
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
-	let contentView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
-	/// The header image
-	let headerImageView: UIImageView = {
-
-		let view = UIImageView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .scaleAspectFill
-		view.backgroundColor = Theme.colors.appointment
-		view.clipsToBounds = true
-		return view
-	}()
 
 	/// The title label
 	let titleLabel: Label = {
@@ -75,7 +49,7 @@ class AppointmentView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		headerImageView.backgroundColor = Theme.colors.appointment
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -83,10 +57,6 @@ class AppointmentView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-
-		addSubview(scrollView)
-		contentView.embed(in: scrollView)
-		contentView.addSubview(headerImageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
 		contentView.addSubview(primaryButton)
@@ -98,24 +68,6 @@ class AppointmentView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			// Scroll
-			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-
-			// Content
-			contentView.widthAnchor.constraint( equalTo: scrollView.widthAnchor),
-
-			// Header image
-			headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-			headerImageView.heightAnchor.constraint(
-				equalTo: headerImageView.widthAnchor,
-				multiplier: ViewTraits.imageRatio
-			),
 
 			// Title
 			titleLabel.topAnchor.constraint(
@@ -197,13 +149,6 @@ class AppointmentView: BaseView {
 
 		let attributedUnderlined = messageText.color(text: underlinedText, with: Theme.colors.iosBlue)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
-	}
-
-	/// The header image
-	var headerImage: UIImage? {
-		didSet {
-			headerImageView.image = headerImage
-		}
 	}
 
 	var primaryTitle: String = "" {

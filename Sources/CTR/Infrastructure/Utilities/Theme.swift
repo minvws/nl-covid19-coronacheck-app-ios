@@ -102,6 +102,8 @@ final class Colors {
 
 	var shadow: UIColor { return color(for: "ShadowColor") }
 
+	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
+
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

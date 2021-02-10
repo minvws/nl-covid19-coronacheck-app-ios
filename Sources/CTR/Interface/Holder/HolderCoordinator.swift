@@ -18,11 +18,26 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to appointment
 	func navigateToAppointment()
 
+	/// Navigate to choose provider
+	func navigateToChooseProvider()
+
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults()
 
+	/// Navigate to List Results Scene
+	func navigateToListResults()
+
+	/// Navigate to create proof
+	func navigateToCreateProof()
+
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR()
+
+	/// Navigate to the start fo the holder flow
+	func navigateBackToStart()
+
+	/// Dismiss the presented viewcontroller
+	func dismiss()
 
 	// MARK: Menu
 
@@ -48,6 +63,15 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
+
+	/// The onboardings manager
+	var proofManager: ProofManaging = Services.proofManager
+
+	/// The crypto manager
+	var cryptoManager: CryptoManagerProtocol = CryptoManager()
+
+	/// The network manager
+	var networkManager: NetworkManaging = Services.networkManager
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -84,6 +108,11 @@ class HolderCoordinator: Coordinator, Logging {
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
 		} else {
+
+			// Fetch the details for the proof manager
+			proofManager.fetchCoronaTestProviders()
+			proofManager.fetchTestTypes()
+			
 			// Start with the holder app
 			navigateToHolderStart()
 		}
@@ -104,10 +133,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
-
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
-				coordinator: self
+				coordinator: self,
+				cryptoManager: cryptoManager
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
@@ -128,6 +157,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
+	/// Navigate to choose provider
+	func navigateToChooseProvider() {
+
+		let destination = ChooseProviderViewController(
+			viewModel: ChooseProviderViewModel(
+				coordinator: self,
+				proofManager: proofManager
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults() {
 
@@ -142,17 +183,57 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
+	/// Navigate to List Results Scene
+	func navigateToListResults() {
+
+		let viewController = ListResultsViewController(
+			viewModel: ListResultsViewModel(
+				coordinator: self,
+				proofManager: proofManager
+			)
+		)
+		let destination = UINavigationController(rootViewController: viewController)
+		navigationController = destination
+
+		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+	}
+
+	/// Navigate to create proof
+	func navigateToCreateProof() {
+		let viewController = CreateProofViewController(
+			viewModel: CreateProofViewiewModel(
+				coordinator: self,
+				proofManager: proofManager,
+				cryptoManager: cryptoManager,
+				networkManager: networkManager
+			)
+		)
+
+		navigationController.pushViewController(viewController, animated: true)
+	}
+
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR() {
 
-		let viewController = HolderGenerateQRViewController(viewModel: GenerateQRViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
+//		let viewController = HolderGenerateQRViewController(viewModel: GenerateQRViewModel(coordinator: self))
+//		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	/// Navigate to the start fo the holder flow
 	func navigateToStart() {
+//
+//		navigationController.popToRootViewController(animated: true)
+	}
 
-		navigationController.popToRootViewController(animated: true)
+	/// Navigate to the start fo the holder flow
+	func navigateBackToStart() {
+
+		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.popToRootViewController(animated: true)
+	}
+
+	func dismiss() {
+		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 
 	// MARK: Menu
@@ -173,6 +254,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationContoller
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
+
+				let destinationViewController = PlaceholderViewController()
+				destinationViewController.placeholder = "\(identifier)"
+				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				sidePanel?.selectedViewController = navigationController
 		}
 	}
 }

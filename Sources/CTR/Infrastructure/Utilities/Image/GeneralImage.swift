@@ -16,4 +16,7 @@ extension UIImage {
 	static var cross: UIImage? { return UIImage(named: "Cross") }
 
 	static var hamburger: UIImage? { return UIImage(named: "Hamburger") }
+
+	static var disclosure: UIImage? { return UIImage(named: "Disclosure") }
+
 }

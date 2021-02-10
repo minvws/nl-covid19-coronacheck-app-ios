@@ -112,19 +112,31 @@ struct NetworkConfiguration {
 	/// The remote configuration url
     var remoteConfigurationUrl: URL? {
 
-        return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
+		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false, params: ["sigInline": "1"])
     }
 
 	/// The nonce url
 	var nonceUrl: URL? {
 
-		return self.combine(path: Endpoint.nonce, fromCdn: false)
+		return self.combine(path: Endpoint.nonce, fromCdn: false, params: ["sigInline": "1"])
 	}
 
 	/// The nonce url
 	var testResultIsmUrl: URL? {
 
 		return self.combine(path: Endpoint.testResultIsm, fromCdn: false)
+	}
+
+	/// The providers url
+	var testProvidersUrl: URL? {
+
+		return self.combine(path: Endpoint.testProviders, fromCdn: false, params: ["sigInline": "1"])
+	}
+
+	/// The types url
+	var testTypesUrl: URL? {
+
+		return self.combine(path: Endpoint.testTypes, fromCdn: false, params: ["sigInline": "1"])
 	}
 
 	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {
@@ -137,6 +149,7 @@ struct NetworkConfiguration {
 		urlComponents.path = urlComponents.path.replacingOccurrences(of: "//", with: "/")
 
         if !params.isEmpty {
+			urlComponents.path += "/"
             urlComponents.percentEncodedQueryItems = params.compactMap { parameter in
                 guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet),
                     let value = parameter.value.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet) else {
@@ -149,6 +162,24 @@ struct NetworkConfiguration {
 
         return urlComponents.url
     }
+
+	func combine(components: URLComponents, params: [String: String] = [:]) -> URL? {
+
+		var urlComponents = components
+
+		if !params.isEmpty {
+			urlComponents.percentEncodedQueryItems = params.compactMap { parameter in
+				guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet),
+					  let value = parameter.value.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet) else {
+					return nil
+				}
+
+				return URLQueryItem(name: name, value: value)
+			}
+		}
+
+		return urlComponents.url
+	}
 
     private var urlQueryEncodedCharacterSet: CharacterSet = {
         // WARNING: Do not remove this code, this will break signature validation on the backend.

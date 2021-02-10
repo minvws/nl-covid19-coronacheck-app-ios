@@ -39,6 +39,21 @@ class FetchResultModelTests: XCTestCase {
 	// MARK: Test Doubles
 
 	class HolderCoordinatorSpy: HolderCoordinatorDelegate {
+		func navigateToChooseProvider() {
+			// Nothing yet
+		}
+
+		func navigateToListResults() {
+			// Nothing yet
+		}
+
+		func navigateToCreateProof() {
+			// Nothing yet
+		}
+
+		func navigateBackToStart() {
+			// Nothing yet
+		}
 
 		var navigateToAppointmentCalled = false
 		var navigateToFetchResultsCalled = false
