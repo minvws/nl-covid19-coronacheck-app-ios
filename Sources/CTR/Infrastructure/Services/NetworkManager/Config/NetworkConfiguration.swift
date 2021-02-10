@@ -112,13 +112,13 @@ struct NetworkConfiguration {
 	/// The remote configuration url
     var remoteConfigurationUrl: URL? {
 
-        return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
+		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false, params: ["sigInline": "1"])
     }
 
 	/// The nonce url
 	var nonceUrl: URL? {
 
-		return self.combine(path: Endpoint.nonce, fromCdn: false)
+		return self.combine(path: Endpoint.nonce, fromCdn: false, params: ["sigInline": "1"])
 	}
 
 	/// The nonce url
@@ -130,13 +130,13 @@ struct NetworkConfiguration {
 	/// The providers url
 	var testProvidersUrl: URL? {
 
-		return self.combine(path: Endpoint.testProviders, fromCdn: false)
+		return self.combine(path: Endpoint.testProviders, fromCdn: false, params: ["sigInline": "1"])
 	}
 
 	/// The types url
 	var testTypesUrl: URL? {
 
-		return self.combine(path: Endpoint.testTypes, fromCdn: false)
+		return self.combine(path: Endpoint.testTypes, fromCdn: false, params: ["sigInline": "1"])
 	}
 
 	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {
@@ -149,6 +149,7 @@ struct NetworkConfiguration {
 		urlComponents.path = urlComponents.path.replacingOccurrences(of: "//", with: "/")
 
         if !params.isEmpty {
+			urlComponents.path += "/"
             urlComponents.percentEncodedQueryItems = params.compactMap { parameter in
                 guard let name = parameter.key.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet),
                     let value = parameter.value.addingPercentEncoding(withAllowedCharacters: urlQueryEncodedCharacterSet) else {

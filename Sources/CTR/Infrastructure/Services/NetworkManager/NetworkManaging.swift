@@ -94,3 +94,19 @@ protocol NetworkManaging {
 		code: String?,
 		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void)
 }
+
+struct SignedResponse: Codable {
+
+	/// The payload
+	let payload: String
+
+	/// The signature
+	let signature: String
+
+	// Key mapping
+	enum CodingKeys: String, CodingKey {
+
+		case payload
+		case signature
+	}
+}
