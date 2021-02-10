@@ -24,8 +24,17 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the Fetch Result Scene
 	func navigateToFetchResults()
 
+	/// Navigate to List Results Scene
+	func navigateToListResults()
+
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR()
+
+	/// Navigate to the start fo the holder flow
+	func navigateBackToStart()
+
+	/// Dismiss the presented viewcontroller
+	func dismiss()
 
 	// MARK: Menu
 
@@ -51,6 +60,9 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
+
+	/// The onboardings manager
+	var proofManager: ProofManaging = Services.proofManager
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -87,6 +99,11 @@ class HolderCoordinator: Coordinator, Logging {
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
 		} else {
+
+			// Fetch the details for the proof manager
+			proofManager.getCoronaTestProviders()
+			proofManager.getTestTypes()
+			
 			// Start with the holder app
 			navigateToHolderStart()
 		}
@@ -139,7 +156,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-
 	}
 
 	/// Navigate to the Fetch Result Scene
@@ -156,6 +172,19 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
+	/// Navigate to List Results Scene
+	func navigateToListResults() {
+
+		let viewController = ListResultsViewController(
+			viewModel: ListResultsViewModel(
+				coordinator: self
+			)
+		)
+		let destination = UINavigationController(rootViewController: viewController)
+
+		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+	}
+
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR() {
 
@@ -167,6 +196,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func navigateToStart() {
 
 		navigationController.popToRootViewController(animated: true)
+	}
+
+	/// Navigate to the start fo the holder flow
+	func navigateBackToStart() {
+
+		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.popToRootViewController(animated: true)
+	}
+
+	func dismiss() {
+		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 
 	// MARK: Menu

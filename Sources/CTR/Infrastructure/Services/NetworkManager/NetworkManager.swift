@@ -85,6 +85,23 @@ class NetworkManager: NetworkManaging, Logging {
 		decodedJSONData(request: urlRequest, completion: open)
 	}
 
+	/// Get the test types
+	/// - Parameter completion: completion handler
+	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.testTypesUrl,
+			method: .GET
+		)
+
+		func open(result: Result<ArrayEnvelope<TestType>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+
+		decodedJSONData(request: urlRequest, completion: open)
+
+	}
+
 	/// Get a test result
 	/// - Parameters:
 	///   - providerUrl: the url of the test provider
@@ -98,7 +115,7 @@ class NetworkManager: NetworkManaging, Logging {
 		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
 
 		let headers: [HTTPHeaderKey: String] = [
-			HTTPHeaderKey.authorization: "Bearer \(token.token)",
+			HTTPHeaderKey.authorization: "Bearer \(token.requestToken)",
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
 		]
 

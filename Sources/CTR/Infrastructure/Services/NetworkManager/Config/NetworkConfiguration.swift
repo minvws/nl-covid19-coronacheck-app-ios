@@ -127,10 +127,16 @@ struct NetworkConfiguration {
 		return self.combine(path: Endpoint.testResultIsm, fromCdn: false)
 	}
 
-	/// The nonce url
+	/// The providers url
 	var testProvidersUrl: URL? {
 
 		return self.combine(path: Endpoint.testProviders, fromCdn: false)
+	}
+
+	/// The types url
+	var testTypesUrl: URL? {
+
+		return self.combine(path: Endpoint.testTypes, fromCdn: false)
 	}
 
 	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {

@@ -11,8 +11,17 @@ protocol ProofManaging {
 
 	init()
 
-	/// Get the provicers
+	/// Get the providers
 	func getCoronaTestProviders()
+
+	/// Get the test types
+	func getTestTypes()
+
+	/// Get a test result
+	/// - Parameters:
+	///   - code: the verification code
+	///   - oncompletion: completion handler
+	func getTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void)
 }
 
 /// The test providers
@@ -42,32 +51,44 @@ struct TestProvider: Codable {
 
 struct TestToken: Codable {
 
-	let token: String
+	/// The request token
+	let requestToken: String
+
+	/// The version of the protocol
 	let protocolVersion: String
+
+	/// The identifier of the provider
 	let providerIdentifier: String
 
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
-		case token
+		case requestToken = "token"
 		case protocolVersion
 		case providerIdentifier
 	}
 
 	static var positiveTest: TestToken {
-		return TestToken(token: "YYYYYYYYYYYY", protocolVersion: "1.0", providerIdentifier: "BRB")
+		return TestToken(requestToken: "YYYYYYYYYYYY", protocolVersion: "1.0", providerIdentifier: "BRB")
 	}
 
 	static var negativeTest: TestToken {
-		return TestToken(token: "0450A462FF82", protocolVersion: "1.0", providerIdentifier: "BRB")
+		return TestToken(requestToken: "0450A462FF82", protocolVersion: "1.0", providerIdentifier: "BRB")
 	}
 }
 
 struct TestResult: Codable {
 
+	/// The identifier of the test result
 	let unique: String
+
+	/// The timestamp of the test result
 	let sampleDate: String
+
+	/// The type of test (identifier)
 	let testType: String
+
+	/// Is this a negative test result?
 	let negativeResult: Bool
 
 	// Key mapping
@@ -80,14 +101,27 @@ struct TestResult: Codable {
 	}
 }
 
+/// The state of a test
 enum TestState: String, Codable {
 
+	/// The test result is pending
 	case pending
+
+	/// The test is complete
 	case complete
+
+	/// The test is invalid
 	case invalid
+
+	/// Verification is required before we can fetch the result
 	case verificationRequired = "verification_required"
+
+	/// Unknown state
 	case unknown
 
+	/// Custom initializer to default to unknown state
+	/// - Parameter decoder: the decoder
+	/// - Throws: Decoding error
 	init(from decoder: Decoder) throws {
 		self = try TestState(rawValue: decoder.singleValueContainer().decode(RawValue.self)) ?? .unknown
 	}
@@ -95,9 +129,16 @@ enum TestState: String, Codable {
 
 struct TestResultWrapper: Codable {
 
-	let result: TestResult?
-	let protocolVersion: String
+	/// The provider identifier
 	let providerIdentifier: String
+
+	/// The protocol version
+	let protocolVersion: String
+
+	/// The test result
+	let result: TestResult?
+
+	/// The state of the test
 	let status: TestState
 
 	// Key mapping
@@ -107,5 +148,22 @@ struct TestResultWrapper: Codable {
 		case protocolVersion
 		case providerIdentifier
 		case status
+	}
+}
+
+/// The type of tests
+struct TestType: Codable {
+
+	/// The identifier of the test type
+	let identifier: String
+
+	/// The name of the test type
+	let name: String
+
+	// Key mapping
+	enum CodingKeys: String, CodingKey {
+
+		case identifier = "uuid"
+		case name
 	}
 }

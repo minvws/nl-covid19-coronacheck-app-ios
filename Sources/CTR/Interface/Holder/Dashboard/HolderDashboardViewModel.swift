@@ -60,8 +60,6 @@ class HolderDashboardViewModel: Logging {
 
 	func cardClicked(_ identifier: CardIdentifier) {
 
-		logDebug("cardClicked: \(identifier)")
-
 		if identifier == CardIdentifier.appointment {
 			coordinator?.navigateToAppointment()
 		} else if identifier == CardIdentifier.create {

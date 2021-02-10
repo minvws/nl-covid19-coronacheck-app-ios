@@ -20,12 +20,15 @@ class ProofManager: ProofManaging, Logging {
 		/// The key of the holder
 		var testProviders: [TestProvider]
 
+		/// The key of the holder
+		var testTypes: [TestType]
+
 		/// The test result
 		var testResult: TestResult?
 
 		/// Empty crypto data
 		static var empty: ProofData {
-			return ProofData(testProviders: [], testResult: nil)
+			return ProofData(testProviders: [], testTypes: [], testResult: nil)
 		}
 	}
 
@@ -47,18 +50,35 @@ class ProofManager: ProofManaging, Logging {
 	func getCoronaTestProviders() {
 
 		networkManager.getTestProviders { response in
-			// Repsonse is of type (Result<[TestProvider], NetworkError>)
+			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
 					self.proofData.testProviders = providers
-					self.getTestResult()
 				case let .failure(error):
 					self.logError("Error getting the test providers: \(error)")
 			}
 		}
 	}
 
-	func getTestResult(_ code: String = "1234") {
+	/// Get the test types
+	func getTestTypes() {
+
+		networkManager.getTestTypes { response in
+			// Response is of type (Result<[TestType], NetworkError>)
+			switch response {
+				case let .success(types):
+					self.proofData.testTypes = types
+				case let .failure(error):
+					self.logError("Error getting the test types: \(error)")
+			}
+		}
+	}
+
+	/// Get a test result
+	/// - Parameters:
+	///   - code: the verification code
+	///   - oncompletion: completion handler
+	func getTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void) {
 
 		let token = TestToken.negativeTest
 		for provider in proofData.testProviders where provider.identifier == token.providerIdentifier {
@@ -75,9 +95,11 @@ class ProofManager: ProofManaging, Logging {
 					case let .success(wrapper):
 						if let result = wrapper.result {
 							self.proofData.testResult = result
+							oncompletion(nil)
 						}
 					case let .failure(error):
 						self.logError("Error getting the result: \(error)")
+						oncompletion(error)
 				}
 			}
 		}

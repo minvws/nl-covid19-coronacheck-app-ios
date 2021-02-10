@@ -32,13 +32,12 @@ class ChooseProviderViewModel: Logging {
 	@Bindable private(set) var subtitle: String
 	@Bindable private(set) var body: String
 	@Bindable private(set) var providers: [Provider]
+	@Bindable private(set) var showProgress: Bool
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - userIdentifier: the user identifier
-	init(
-		coordinator: HolderCoordinatorDelegate) {
+	init(coordinator: HolderCoordinatorDelegate) {
 
 		self.coordinator = coordinator
 		title = .holderChooseProviderTitle
@@ -46,16 +45,17 @@ class ChooseProviderViewModel: Logging {
 		body = .holderChooseProviderMessage
 		providers = [
 			Provider(
-				identifier: .ggd,
-				name: .holderChooseProviderGGDTitle,
-				subTitle: .holderChooseProviderGGDSubtitle
-			),
-			Provider(
 				identifier: .commercial,
 				name: .holderChooseProviderCommercialTitle,
 				subTitle: .holderChooseProviderCommercialSubtitle
+			),
+			Provider(
+				identifier: .ggd,
+				name: .holderChooseProviderGGDTitle,
+				subTitle: .holderChooseProviderGGDSubtitle
 			)
 		]
+		showProgress = false
 	}
 
 	/// The user selected a provider
@@ -64,14 +64,19 @@ class ChooseProviderViewModel: Logging {
 
 		logInfo("Selected \(identifier)")
 
-		if identifier == ProviderIdentifier.ggd {
+		if identifier == ProviderIdentifier.commercial {
 
-			Services.proofManager.getCoronaTestProviders()
+			showProgress = true
 
+			Services.proofManager.getTestResult("1234") { [weak self] error in
+				self?.showProgress = false
 
-
+				if let error = error {
+					self?.logDebug("Error: \(error.localizedDescription)")
+				} else {
+					self?.coordinator?.navigateToListResults()
+				}
+			}
 		}
-
-
 	}
 }

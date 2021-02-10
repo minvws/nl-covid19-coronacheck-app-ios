@@ -9,6 +9,7 @@ target 'Holder' do
   pod 'AppAuth', '1.4.0'
   pod 'CocoaLumberjack/Swift', '3.7.0'
   pod 'Sodium', '0.9.1'
+  pod 'MBProgressHUD', '1.2.0'
 
   target 'CTRTests' do
     inherit! :search_paths
@@ -28,5 +29,7 @@ target 'Verifier' do
   pod 'AppAuth', '1.4.0'
   pod 'CocoaLumberjack/Swift', '3.7.0'
   pod 'Sodium', '0.9.1'
+  pod 'MBProgressHUD', '1.2.0'
+
 
 end

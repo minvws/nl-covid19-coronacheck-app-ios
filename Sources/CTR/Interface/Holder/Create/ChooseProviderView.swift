@@ -17,7 +17,7 @@ class ButtonWithSubtitle: BaseView {
 		static let shadowRadius: CGFloat = 6
 		static let shadowOpacity: Float = 0.3
 
-//		// Margins
+		// Margins
 		static let textMargin: CGFloat = 2.0
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 18.0

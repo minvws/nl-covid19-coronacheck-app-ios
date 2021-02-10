@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import MBProgressHUD
 
 class ChooseProviderViewController: BaseViewController {
 
@@ -61,6 +62,15 @@ class ChooseProviderViewController: BaseViewController {
 					self?.viewModel.providerSelected(provider.identifier)
 				}
 				self.sceneView.stackView.addArrangedSubview(button)
+			}
+		}
+
+		viewModel.$showProgress.binding = {
+
+			if $0 {
+				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
+			} else {
+				MBProgressHUD.hide(for: self.sceneView, animated: true)
 			}
 		}
 	}

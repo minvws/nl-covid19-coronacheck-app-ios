@@ -30,10 +30,7 @@ struct Endpoint {
 
 	/// Endpoint for test providers
 	static let testProviders = Path(components: "holder", "config_ctp")
-    
-//    static let pairings = Path(components: "pairings")
-//
-//    static func `case`(identifier: String) -> Path { Path(components: "cases", identifier) }
-//
-//    static let questionnaires = Path(components: "questionnaires")
+
+	/// Endpoint for test types
+	static let testTypes = Path(components: "holder", "get_test_types")
 }

@@ -12,6 +12,8 @@
 		6D01D8C525C0262600A4AB89 /* OpenIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */; };
 		6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C825C02E1A00A4AB89 /* Logging.swift */; };
 		6D01D8E325C0501C00A4AB89 /* FetchResultModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8E225C0501C00A4AB89 /* FetchResultModelTests.swift */; };
+		6D02446425D3239200EF8D32 /* ListResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02446325D3239200EF8D32 /* ListResultsViewController.swift */; };
+		6D02446C25D3BDD200EF8D32 /* TestResultsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */; };
 		6D1F304A25CBDC22000E901D /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1F304925CBDC22000E901D /* Services.swift */; };
 		6D20238E25CAABB500CFCD14 /* OnboardingManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20238D25CAABB500CFCD14 /* OnboardingManagerTests.swift */; };
 		6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */; };
@@ -309,6 +311,8 @@
 		6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdClient.swift; sourceTree = "<group>"; };
 		6D01D8C825C02E1A00A4AB89 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		6D01D8E225C0501C00A4AB89 /* FetchResultModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchResultModelTests.swift; sourceTree = "<group>"; };
+		6D02446325D3239200EF8D32 /* ListResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListResultsViewController.swift; sourceTree = "<group>"; };
+		6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestResultsLocalization.swift; sourceTree = "<group>"; };
 		6D1F304925CBDC22000E901D /* Services.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		6D20238D25CAABB500CFCD14 /* OnboardingManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManagerTests.swift; sourceTree = "<group>"; };
 		6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationControllerSpy.swift; sourceTree = "<group>"; };
@@ -567,6 +571,14 @@
 			path = FetchResults;
 			sourceTree = "<group>";
 		};
+		6D02446225D3231B00EF8D32 /* ListResults */ = {
+			isa = PBXGroup;
+			children = (
+				6D02446325D3239200EF8D32 /* ListResultsViewController.swift */,
+			);
+			path = ListResults;
+			sourceTree = "<group>";
+		};
 		6D20239125CAB15500CFCD14 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
@@ -770,6 +782,7 @@
 				6D9284B725B5D22B009D4350 /* HolderCoordinator.swift */,
 				6D2C0FA625B6B7B50030FD17 /* HolderFetchResultViewController.swift */,
 				6D9284C725B5D9D3009D4350 /* HolderGenerateQRViewController.swift */,
+				6D02446225D3231B00EF8D32 /* ListResults */,
 				6DD1158525D021EE00DF6AF4 /* Menu */,
 				6DD1159025D0228700DF6AF4 /* SidePanel */,
 			);
@@ -865,6 +878,7 @@
 			children = (
 				6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */,
 				6D5E06B525C1947F008E2124 /* AppUpdateLocalization.swift */,
+				6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */,
 				6DD1155C25D00EB200DF6AF4 /* ConsentLocalization.swift */,
 				6D27551125D1259D00164F2E /* DashboardLocalization.swift */,
 				6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */,
@@ -874,7 +888,7 @@
 				6D5A7BF625D1622E0008B904 /* MenuLocalization.swift */,
 				6D7FFAF025C9B8CF00B5482F /* OnboardingLocalization.swift */,
 				6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */,
-				6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */,
+				6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -1541,6 +1555,7 @@
 				6DC6CCE825C3027500060237 /* CryptoManager.swift in Sources */,
 				6DD1156325D0137600DF6AF4 /* ImageView.swift in Sources */,
 				6D5A7BE825D147CC0008B904 /* HolderDashboardView.swift in Sources */,
+				6D02446C25D3BDD200EF8D32 /* TestResultsLocalization.swift in Sources */,
 				6D7FFAD925C9A43100B5482F /* OnboardingView.swift in Sources */,
 				6DE6FD8425C18BCA006602AC /* RemoteConfigManager.swift in Sources */,
 				6DD1159625D022B000DF6AF4 /* SidePanelController.swift in Sources */,
@@ -1573,6 +1588,7 @@
 				6D33016325CFE72D00A98C1C /* SignatureValidator.swift in Sources */,
 				6D68CB1525CC3D3C008FE2C8 /* PrivacyViewController.swift in Sources */,
 				6D01D8C525C0262600A4AB89 /* OpenIdClient.swift in Sources */,
+				6D02446425D3239200EF8D32 /* ListResultsViewController.swift in Sources */,
 				6D8865FA25C800BA00DE661E /* FileReader.swift in Sources */,
 				6D7F9CCC25B6E6590006F227 /* Label.swift in Sources */,
 				6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */,
