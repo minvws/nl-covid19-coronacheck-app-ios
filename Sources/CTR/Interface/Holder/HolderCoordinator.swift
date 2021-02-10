@@ -101,8 +101,8 @@ class HolderCoordinator: Coordinator, Logging {
 		} else {
 
 			// Fetch the details for the proof manager
-			proofManager.getCoronaTestProviders()
-			proofManager.getTestTypes()
+//			proofManager.getCoronaTestProviders()
+//			proofManager.getTestTypes()
 			
 			// Start with the holder app
 			navigateToHolderStart()
