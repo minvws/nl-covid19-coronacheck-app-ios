@@ -16,7 +16,7 @@ class FetchResultViewModel: Logging {
 	var configuration: ConfigurationDigidProtocol = Configuration()
 
 	/// The open id client
-	var openIdClient: OpenIdClientProtocol
+	var openIdClient: OpenIdManaging
 
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
@@ -44,7 +44,7 @@ class FetchResultViewModel: Logging {
 	///   - userIdentifier: the user identifier
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		openIdClient: OpenIdClientProtocol,
+		openIdClient: OpenIdManaging,
 		userIdentifier: String?) {
 
 		self.coordinator = coordinator

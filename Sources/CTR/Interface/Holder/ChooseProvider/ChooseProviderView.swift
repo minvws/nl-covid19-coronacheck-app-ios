@@ -197,7 +197,7 @@ class ChooseProviderView: ScrollViewWithHeader {
 	override func setupViews() {
 
 		super.setupViews()
-		headerImageView.backgroundColor = Theme.colors.lightBackground
+		headerImageView.backgroundColor = Theme.colors.create
 	}
 
 	/// Setup the hierarchy

@@ -51,6 +51,11 @@ class ChooseProviderViewController: BaseViewController {
 			self.sceneView.message = $0
 		}
 
+		viewModel.$image.binding = {
+			
+			self.sceneView.headerImage = $0
+		}
+
 		viewModel.$providers.binding = { providers in
 
 			for provider in providers {
@@ -59,7 +64,10 @@ class ChooseProviderViewController: BaseViewController {
 				button.title = provider.name
 				button.subtitle = provider.subTitle
 				button.primaryButtonTappedCommand = { [weak self] in
-					self?.viewModel.providerSelected(provider.identifier)
+					self?.viewModel.providerSelected(
+						provider.identifier,
+						presentingViewController: self
+					)
 				}
 				self.sceneView.stackView.addArrangedSubview(button)
 			}
