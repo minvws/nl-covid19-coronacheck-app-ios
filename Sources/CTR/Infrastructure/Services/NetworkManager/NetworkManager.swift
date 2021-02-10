@@ -228,15 +228,15 @@ class NetworkManager: NetworkManaging, Logging {
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
 			switch signedResult {
 				case let .success(signedResponse):
-					if let payloaData = Data(base64Encoded: signedResponse.payload),
-					   let signatureData = Data(base64Encoded: signedResponse.signature) {
-
+                    
+                    if let payloadData = signedResponse.payload.data(using: .utf8),
+                       let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+                  let signatureData = Data(base64Encoded: signedResponse.signature) {
 						let validator = CryptoUtility(signatureValidator: SignatureValidator())
-						validator.validate(data: payloaData, signature: signatureData) { valid in
+                        validator.validate(data: payloadData, signature: signatureData) { valid in
 							// Todo: return error on invalid
-							self.logDebug("Are we valid?: \(valid)")
-
-							let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: payloaData)
+                            self.logDebug("We got: \(decodedPayloadData)")
+                            let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 							DispatchQueue.main.async {
 								switch decodedResult {
 									case let .success(object):

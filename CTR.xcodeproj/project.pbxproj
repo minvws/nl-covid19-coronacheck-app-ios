@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		326E62C125D45DBF0072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
+		326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
+		326E62C325D45DC00072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
 		519B78DE872ADE672386F136 /* Pods_CTRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B11B62DA3FFAAD3B4ADD8D6 /* Pods_CTRTests.framework */; };
 		6D01D8A225BFF8D700A4AB89 /* Configuration+DigiD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */; };
 		6D01D8C525C0262600A4AB89 /* OpenIdClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C425C0262600A4AB89 /* OpenIdClient.swift */; };
@@ -306,6 +309,7 @@
 		16372116B65A21309B19B451 /* Pods-Verifier.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Verifier.app store.xcconfig"; path = "Target Support Files/Pods-Verifier/Pods-Verifier.app store.xcconfig"; sourceTree = "<group>"; };
 		2A6B0348B4A336DC36A81263 /* Pods-Verifier.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Verifier.release.xcconfig"; path = "Target Support Files/Pods-Verifier/Pods-Verifier.release.xcconfig"; sourceTree = "<group>"; };
 		2B45CBAD1BBB10D4AB52A07C /* Pods-Holder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Holder.release.xcconfig"; path = "Target Support Files/Pods-Holder/Pods-Holder.release.xcconfig"; sourceTree = "<group>"; };
+		326E62C025D45DBF0072CB8E /* demo-root.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = "demo-root.pem"; sourceTree = "<group>"; };
 		3C5139559A0CA7A84B73CC36 /* Pods-CTRTests.app store.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.app store.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.app store.xcconfig"; sourceTree = "<group>"; };
 		3F5D985EBB118088FAF8DB9F /* Pods-Verifier.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Verifier.debug.xcconfig"; path = "Target Support Files/Pods-Verifier/Pods-Verifier.debug.xcconfig"; sourceTree = "<group>"; };
 		5A871B0BD7C484BECD4B60E1 /* Pods-Verifier.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Verifier.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-Verifier/Pods-Verifier.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
@@ -1060,6 +1064,7 @@
 				6D92848D25B5CB85009D4350 /* Colors.xcassets */,
 				6D5D203925BF1C0A00DC2E27 /* Localizable.strings */,
 				6D33015925CFE6BA00A98C1C /* nl-root.pem */,
+				326E62C025D45DBF0072CB8E /* demo-root.pem */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1225,6 +1230,7 @@
 			files = (
 				6DD7D88D25D26D3A00B97B7F /* issuerPk.xml in Resources */,
 				6DD7D88E25D26D3A00B97B7F /* Colors.xcassets in Resources */,
+				326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6DD7D88F25D26D3A00B97B7F /* Localizable.strings in Resources */,
 				6DD7D89025D26D3A00B97B7F /* InfoPlist.strings in Resources */,
 				6DD7D89125D26D3A00B97B7F /* LaunchScreen.storyboard in Resources */,
@@ -1240,6 +1246,7 @@
 			files = (
 				6D8865F625C8004500DE661E /* issuerPk.xml in Resources */,
 				6D92848E25B5CB85009D4350 /* Colors.xcassets in Resources */,
+				326E62C125D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6D5D203A25BF1C0A00DC2E27 /* Localizable.strings in Resources */,
 				6D7F9CB825B6DBA60006F227 /* InfoPlist.strings in Resources */,
 				6DDEFB0025AEDCAA00A6912A /* LaunchScreen.storyboard in Resources */,
@@ -1253,6 +1260,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				326E62C325D45DC00072CB8E /* demo-root.pem in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
