@@ -109,4 +109,10 @@ class ProofManager: ProofManaging, Logging {
 
 		return proofData.testWrapper
 	}
+
+	/// Remove the test wrapper
+	func removeTestWrapper() {
+		
+		proofData.testWrapper = nil
+	}
 }

@@ -73,6 +73,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 
+	/// The network manager
+	var openIdManager: OpenIdManaging = Services.openIdManager
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
@@ -163,7 +166,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = ChooseProviderViewController(
 			viewModel: ChooseProviderViewModel(
 				coordinator: self,
-				proofManager: proofManager
+				proofManager: proofManager,
+				openIdManager: openIdManager
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -175,7 +179,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = HolderFetchResultViewController(
 			viewModel: FetchResultViewModel(
 				coordinator: self,
-				openIdClient: OpenIdClient(configuration: Configuration()),
+				openIdClient: openIdManager,
 				userIdentifier: coronaTestProof?.userIdentifier
 			)
 		)

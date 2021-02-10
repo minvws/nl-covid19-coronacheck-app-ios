@@ -26,6 +26,9 @@ protocol ProofManaging: AnyObject {
 	/// Get a test result
 	/// - Returns: a test result
 	func getTestWrapper() -> TestResultWrapper?
+
+	/// Remove the test wrapper
+	func removeTestWrapper()
 }
 
 /// The test providers

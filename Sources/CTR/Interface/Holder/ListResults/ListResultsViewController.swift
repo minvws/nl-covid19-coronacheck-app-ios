@@ -13,19 +13,18 @@ class ListResultView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		//		// Dimensions
-		//		static let buttonHeight: CGFloat = 52
-		//		static let buttonWidth: CGFloat = 212.0
-		//		static let titleLineHeight: CGFloat = 26
-		//		static let messageLineHeight: CGFloat = 22
-		//		static let imageRatio: CGFloat = 0.75
-		//
 		// Margins
 		static let margin: CGFloat = 20.0
-		//		static let buttonMargin: CGFloat = 54.0
-		//		static let titleTopMargin: CGFloat = 34.0
-		//		static let messageTopMargin: CGFloat = 24.0
+		static let messageTopMargin: CGFloat = 4.0
 	}
+
+	/// The select image
+	let selectImageView: UIImageView = {
+		let view = UIImageView(image: .radio)
+		view.tintColor = Theme.colors.viewControllerBackground
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 
 	/// The header label
 	let headerLabel: Label = {
@@ -66,7 +65,7 @@ class ListResultView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.dark
+		view.backgroundColor = Theme.colors.line
 		return view
 	}()
 
@@ -74,7 +73,7 @@ class ListResultView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.dark
+		view.backgroundColor = Theme.colors.line
 		return view
 	}()
 
@@ -93,6 +92,7 @@ class ListResultView: BaseView {
 		addSubview(headerLabel)
 		addSubview(disclaimerButton)
 		addSubview(topLineView)
+		addSubview(selectImageView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(bottomLineView)
@@ -126,13 +126,25 @@ class ListResultView: BaseView {
 			topLineView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			topLineView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
+			// Select Image
+			selectImageView.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			selectImageView.topAnchor.constraint(
+				equalTo: topLineView.bottomAnchor,
+				constant: 30
+			),
+			selectImageView.widthAnchor.constraint(equalToConstant: 20),
+			selectImageView.heightAnchor.constraint(equalToConstant: 20),
+
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topLineView.bottomAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: selectImageView.trailingAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.trailingAnchor.constraint(
@@ -141,16 +153,12 @@ class ListResultView: BaseView {
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
-				constant: -4 // -ViewTraits.messageTopMargin
+				constant: -ViewTraits.messageTopMargin
 			),
 
 			// Message
 			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: selectImageView.trailingAnchor,
 				constant: ViewTraits.margin
 			),
 			messageLabel.trailingAnchor.constraint(
@@ -416,6 +424,7 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var buttonTitle: String
 	@Bindable private(set) var recentHeader: String
 	@Bindable private(set) var tooltip: String
+	@Bindable private(set) var showAlert: Bool = false
 	@Bindable private(set) var listItem: ListResultItem?
 
 	/// Initializer
@@ -455,6 +464,7 @@ class ListResultsViewModel: Logging {
 		}
 	}
 
+	/// Show the screen for pending results
 	private func reportPendingResult() {
 
 		title = .holderTestResultsPendingTitle
@@ -463,6 +473,7 @@ class ListResultsViewModel: Logging {
 		self.listItem = nil
 	}
 
+	/// Show the scene for no negative restults
 	private func reportNoTestResult() {
 
 		self.title = .holderTestResultsNoResultsTitle
@@ -471,18 +482,24 @@ class ListResultsViewModel: Logging {
 		self.listItem = nil
 	}
 
+	/// Show the screen for negative restults
+	/// - Parameter result: the negative result
 	private func reportTestResult(_ result: TestResult) {
 
 		self.title = .holderTestResultsResultsTitle
 		self.message = .holderTestResultsResultsText
 		self.buttonTitle = .holderTestResultsResultsButton
-		let date = dateFormatter.date(from: result.sampleDate)
-		let dateString = dateFormatter2.string(from: date!)
+		let date = parseDateFormatter.date(from: result.sampleDate)
+		let dateString = printDateFormatter.string(from: date!)
 
-		self.listItem = ListResultItem(identifier: result.unique, date: dateString)
+		self.listItem = ListResultItem(
+			identifier: result.unique,
+			date: dateString
+		)
 	}
 
-	private lazy var dateFormatter: DateFormatter = {
+	/// Formatter to parse
+	private lazy var parseDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.calendar = .current
 		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
@@ -490,28 +507,36 @@ class ListResultsViewModel: Logging {
 		return dateFormatter
 	}()
 
-	private lazy var dateFormatter2: DateFormatter = {
+	/// Formatter to print
+	private lazy var printDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "EEEE d MMM HH:mm"
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
 
 	func buttonClick() {
 
-		if let item = listItem {
+		if listItem != nil {
+			// Works for now with just one result
 			coordinator?.navigateToCreateProof()
 		} else {
-			coordinator?.navigateBackToStart()
+			doDismiss()
 		}
 	}
 
 	func dismiss() {
 
-		if let item = listItem {
-			// Todo: Show Alert
+		if listItem != nil {
+			showAlert = true
 		} else {
-			coordinator?.navigateBackToStart()
+			doDismiss()
 		}
+	}
+
+	func doDismiss() {
+
+		coordinator?.navigateBackToStart()
 	}
 }
 
@@ -557,6 +582,12 @@ class ListResultsViewController: BaseViewController {
 			self.sceneView.primaryTitle = $0
 		}
 
+		viewModel.$showAlert.binding = {
+			if $0 {
+				self.showAlert()
+			}
+		}
+
 		viewModel.$listItem.binding = {
 			if let item = $0 {
 				self.sceneView.resultView.isHidden = false
@@ -567,7 +598,6 @@ class ListResultsViewController: BaseViewController {
 			} else {
 				self.sceneView.resultView.isHidden = true
 			}
-
 		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
@@ -618,5 +648,31 @@ class ListResultsViewController: BaseViewController {
 		navigationItem.leftBarButtonItem = button
 		navigationController?.navigationItem.leftBarButtonItem = button
 		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
+	}
+
+	/// Show alert
+	private func showAlert() {
+
+		let alertController = UIAlertController(
+			title: .holderTestResultsAlertTitle,
+			message: .holderTestResultsAlertMessage,
+			preferredStyle: .alert)
+		alertController.addAction(
+			UIAlertAction(
+				title: .holderTestResultsAlertOk,
+				style: .default,
+				handler: { _ in
+					self.viewModel.doDismiss()
+				}
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .holderTestResultsAlertCancel,
+				style: .cancel,
+				handler: nil
+			)
+		)
+		present(alertController, animated: true, completion: nil)
 	}
 }
