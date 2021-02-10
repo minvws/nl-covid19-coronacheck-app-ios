@@ -19,6 +19,16 @@ extension String {
 		return Localization.string(for: "holder.testresults.results.text")
 	}
 
+	static var holderTestResultsPendingTitle: String {
+
+		return Localization.string(for: "holder.testresults.pending.title")
+	}
+
+	static var holderTestResultsPendingText: String {
+
+		return Localization.string(for: "holder.testresults.pending.text")
+	}
+
 	static var holderTestResultsResultsButton: String {
 
 		return Localization.string(for: "holder.testresults.results.button")
@@ -34,9 +44,9 @@ extension String {
 		return Localization.string(for: "holder.testresults.noresults.text")
 	}
 
-	static var holderTestResultsNoResultsButton: String {
+	static var holderTestResultsBackToMenuButton: String {
 
-		return Localization.string(for: "holder.testresults.noresults.button")
+		return Localization.string(for: "holder.testresults.back.button")
 	}
 
 	static var holderTestResultsDisclaimer: String {

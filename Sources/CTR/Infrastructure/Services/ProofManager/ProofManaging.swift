@@ -7,21 +7,25 @@
 
 import Foundation
 
-protocol ProofManaging {
+protocol ProofManaging: AnyObject {
 
 	init()
 
 	/// Get the providers
-	func getCoronaTestProviders()
+	func fetchCoronaTestProviders()
 
 	/// Get the test types
-	func getTestTypes()
+	func fetchTestTypes()
 
 	/// Get a test result
 	/// - Parameters:
 	///   - code: the verification code
 	///   - oncompletion: completion handler
-	func getTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void)
+	func fetchTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void)
+
+	/// Get a test result
+	/// - Returns: a test result
+	func getTestWrapper() -> TestResultWrapper?
 }
 
 /// The test providers
@@ -75,7 +79,34 @@ struct TestToken: Codable {
 	static var negativeTest: TestToken {
 		return TestToken(requestToken: "0450A462FF82", protocolVersion: "1.0", providerIdentifier: "BRB")
 	}
+
+	static var pendingTest: TestToken {
+		return TestToken(requestToken: "96F50E1126BB", protocolVersion: "1.0", providerIdentifier: "BRB")
+	}
 }
+
+/**
+{
+"result": {
+"unique": "4b50662ac8d6969ecf07e5305a9ee9b76230a832",
+"sampleDate": "2021-02-27T14:12:36+00:00",
+"testType": "775caa2149",
+"negativeResult": true
+},
+"protocolVersion": "1.0",
+"providerIdentifier": "BRB",
+"status": "complete"
+}
+
+{
+"protocolVersion": "1.0",
+"providerIdentifier": "BRB",
+"pollToken": "6023d06df02d7",
+"pollDelay": 300,
+"status": "pending"
+}
+
+*/
 
 struct TestResult: Codable {
 

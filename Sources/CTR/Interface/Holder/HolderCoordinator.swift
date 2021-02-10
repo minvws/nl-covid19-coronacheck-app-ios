@@ -27,6 +27,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to List Results Scene
 	func navigateToListResults()
 
+	/// Navigate to create proof
+	func navigateToCreateProof()
+
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR()
 
@@ -63,6 +66,12 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The onboardings manager
 	var proofManager: ProofManaging = Services.proofManager
+
+	/// The crypto manager
+	var cryptoManager: CryptoManagerProtocol = CryptoManager()
+
+	/// The network manager
+	var networkManager: NetworkManaging = Services.networkManager
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -101,8 +110,8 @@ class HolderCoordinator: Coordinator, Logging {
 		} else {
 
 			// Fetch the details for the proof manager
-//			proofManager.getCoronaTestProviders()
-//			proofManager.getTestTypes()
+			proofManager.fetchCoronaTestProviders()
+			proofManager.fetchTestTypes()
 			
 			// Start with the holder app
 			navigateToHolderStart()
@@ -126,7 +135,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
-				coordinator: self
+				coordinator: self,
+				cryptoManager: cryptoManager
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
@@ -152,7 +162,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let destination = ChooseProviderViewController(
 			viewModel: ChooseProviderViewModel(
-				coordinator: self
+				coordinator: self,
+				proofManager: proofManager
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -177,25 +188,41 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let viewController = ListResultsViewController(
 			viewModel: ListResultsViewModel(
-				coordinator: self
+				coordinator: self,
+				proofManager: proofManager
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)
+		navigationController = destination
 
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+	}
+
+	/// Navigate to create proof
+	func navigateToCreateProof() {
+		let viewController = CreateProofViewController(
+			viewModel: CreateProofViewiewModel(
+				coordinator: self,
+				proofManager: proofManager,
+				cryptoManager: cryptoManager,
+				networkManager: networkManager
+			)
+		)
+
+		navigationController.pushViewController(viewController, animated: true)
 	}
 
 	// Navigate to the Generate Holder QR Scene
 	func navigateToHolderQR() {
 
-		let viewController = HolderGenerateQRViewController(viewModel: GenerateQRViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
+//		let viewController = HolderGenerateQRViewController(viewModel: GenerateQRViewModel(coordinator: self))
+//		navigationController.pushViewController(viewController, animated: true)
 	}
 	
 	/// Navigate to the start fo the holder flow
 	func navigateToStart() {
-
-		navigationController.popToRootViewController(animated: true)
+//
+//		navigationController.popToRootViewController(animated: true)
 	}
 
 	/// Navigate to the start fo the holder flow

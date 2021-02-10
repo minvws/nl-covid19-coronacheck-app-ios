@@ -292,7 +292,7 @@ class NetworkManager: NetworkManaging, Logging {
 			completion(.failure(.invalidResponse))
 			return
 		}
-		
+
 		if let error = self.inspect(response: response) {
 			completion(.failure(error))
 			return

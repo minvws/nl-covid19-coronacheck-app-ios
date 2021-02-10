@@ -43,4 +43,16 @@ class NetworkSpy: NetworkManaging {
 	func fetchTestResultsWithISM(dictionary: [String: AnyObject], completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
 		// Nothing yet
 	}
+
+	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+		// Nothing yet
+	}
+
+	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
+		// Nothing yet
+	}
+
+	func getTestResult(providerUrl: URL, token: TestToken, code: String?, completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
+		// Nothing yet
+	}
 }

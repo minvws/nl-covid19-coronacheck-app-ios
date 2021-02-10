@@ -15,7 +15,7 @@ struct NonceEnvelope: Codable {
 	let stoken: String
 }
 
-protocol CryptoManagerProtocol {
+protocol CryptoManagerProtocol: AnyObject {
 
 	init()
 
@@ -59,10 +59,11 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 		var nonce: String?
 		var stoken: String?
 		var proofs: Data?
+		var value: Data?
 
 		/// Empty crypto data
 		static var empty: CryptoData {
-			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, proofs: nil)
+			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, proofs: nil, value: nil)
 		}
 	}
 
@@ -144,12 +145,22 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 			return nil
 		}
 
-		let credentails = ClmobileCreateCredential(holderSecretKey, ism)
-		if let value = credentails?.value {
+		if let value = cryptoData.value {
 			let disclosed = ClmobileDiscloseAllWithTime(issuerPublicKey, value)
 			if let base64Value = disclosed?.value?.base64EncodedString() {
 				logDebug("QR message: \(base64Value)")
 				return base64Value
+			}
+		} else {
+			let credentails = ClmobileCreateCredential(holderSecretKey, ism)
+			if let value = credentails?.value {
+				cryptoData.value = value
+
+				let disclosed = ClmobileDiscloseAllWithTime(issuerPublicKey, value)
+				if let base64Value = disclosed?.value?.base64EncodedString() {
+					logDebug("QR message: \(base64Value)")
+					return base64Value
+				}
 			}
 		}
 

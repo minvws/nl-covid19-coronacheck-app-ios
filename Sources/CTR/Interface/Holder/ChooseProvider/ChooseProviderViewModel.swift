@@ -27,6 +27,8 @@ class ChooseProviderViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
+	weak var proofManager: ProofManaging?
+
 	@Bindable private(set) var image: UIImage?
 	@Bindable private(set) var title: String
 	@Bindable private(set) var subtitle: String
@@ -37,9 +39,11 @@ class ChooseProviderViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: HolderCoordinatorDelegate) {
+	///   - proofManager: the proof manager
+	init(coordinator: HolderCoordinatorDelegate, proofManager: ProofManaging) {
 
 		self.coordinator = coordinator
+		self.proofManager = proofManager
 		title = .holderChooseProviderTitle
 		subtitle = .holderChooseProviderSubtitle
 		body = .holderChooseProviderMessage
@@ -68,7 +72,7 @@ class ChooseProviderViewModel: Logging {
 
 			showProgress = true
 
-			Services.proofManager.getTestResult("1234") { [weak self] error in
+			proofManager?.fetchTestResult("1234") { [weak self] error in
 				self?.showProgress = false
 
 				if let error = error {

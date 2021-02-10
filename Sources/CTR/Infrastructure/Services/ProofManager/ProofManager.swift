@@ -24,11 +24,11 @@ class ProofManager: ProofManaging, Logging {
 		var testTypes: [TestType]
 
 		/// The test result
-		var testResult: TestResult?
+		var testWrapper: TestResultWrapper?
 
 		/// Empty crypto data
 		static var empty: ProofData {
-			return ProofData(testProviders: [], testTypes: [], testResult: nil)
+			return ProofData(testProviders: [], testTypes: [], testWrapper: nil)
 		}
 	}
 
@@ -47,7 +47,7 @@ class ProofManager: ProofManaging, Logging {
 	}
 
 	/// Get the providers
-	func getCoronaTestProviders() {
+	func fetchCoronaTestProviders() {
 
 		networkManager.getTestProviders { response in
 			// Response is of type (Result<[TestProvider], NetworkError>)
@@ -61,7 +61,7 @@ class ProofManager: ProofManaging, Logging {
 	}
 
 	/// Get the test types
-	func getTestTypes() {
+	func fetchTestTypes() {
 
 		networkManager.getTestTypes { response in
 			// Response is of type (Result<[TestType], NetworkError>)
@@ -78,7 +78,7 @@ class ProofManager: ProofManaging, Logging {
 	/// - Parameters:
 	///   - code: the verification code
 	///   - oncompletion: completion handler
-	func getTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void) {
+	func fetchTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void) {
 
 		let token = TestToken.negativeTest
 		for provider in proofData.testProviders where provider.identifier == token.providerIdentifier {
@@ -93,15 +93,20 @@ class ProofManager: ProofManaging, Logging {
 
 				switch response {
 					case let .success(wrapper):
-						if let result = wrapper.result {
-							self.proofData.testResult = result
-							oncompletion(nil)
-						}
+						self.proofData.testWrapper = wrapper
+						oncompletion(nil)
 					case let .failure(error):
 						self.logError("Error getting the result: \(error)")
 						oncompletion(error)
 				}
 			}
 		}
+	}
+
+	/// Get a test result
+	/// - Returns: a test result
+	func getTestWrapper() -> TestResultWrapper? {
+
+		return proofData.testWrapper
 	}
 }

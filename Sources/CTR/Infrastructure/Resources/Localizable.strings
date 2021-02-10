@@ -100,9 +100,12 @@
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testrestultaat (geen corona). Verwerk het testresultaat tot een bewijs in de vorrm van een QR-code.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
-"holder.testresults.noresults.title" = "Geen negatieve testresultaten";
-"holder.testresults.noresults.text" = "Er is geen negatief testresultaat gevonden. Heb je het idee dat dit niet klopt? Neem dan contact op met de testaanbieder.";
-"holder.testresults.noresults.button" = "Terug naar Mijn overzicht";
+"holder.testresults.noresults.title" = "Er is geen negatief restresultaat";
+"holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan komen door:\n - Je testresultaat is nog niet verwerkt. Dit kan x uur duren.\n - Je hebt geen test gedaan.\n - Je test is positief. Je testaanbieder neemt dan contact met jou op.";
+"holder.testresults.back.button" = "Terug naar Mijn overzicht";
+"holder.testresults.pending.title" = "Testresultaat nog niet bekend";
+"holder.testresults.pending.text" = "Het testresultaat is nog niet bekend. Probeer het later nog een.\n\nNeem voor vragen contact op met jouw testaanbieder.";
+
 "holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat";

@@ -48,9 +48,9 @@ class HolderDashboardView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
-	let qrView: UIView = {
+	let qrView: UIImageView = {
 
-		let view = UIView()
+		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = .magenta
 		view.isHidden = true
@@ -125,7 +125,7 @@ class HolderDashboardView: BaseView {
 			),
 
 			// CardView
-			qrView.widthAnchor.constraint(equalTo: qrView.heightAnchor, multiplier: ViewTraits.cardRatio),
+			qrView.widthAnchor.constraint(equalTo: qrView.heightAnchor, multiplier: 1),
 			appointmentCard.widthAnchor.constraint(equalTo: appointmentCard.heightAnchor, multiplier: ViewTraits.cardRatio),
 			createCard.widthAnchor.constraint(equalTo: createCard.heightAnchor, multiplier: ViewTraits.cardRatio)
 		])

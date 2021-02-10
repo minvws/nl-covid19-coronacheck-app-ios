@@ -27,9 +27,11 @@ class HolderDashboardViewModel: Logging {
 
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
+	weak var cryptoManager: CryptoManagerProtocol?
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
+	@Bindable private(set) var qrMessage: String?
 	@Bindable private(set) var appointmentCard: CardInfo
 	@Bindable private(set) var createCard: CardInfo
 
@@ -37,11 +39,13 @@ class HolderDashboardViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 
-	init(coordinator: HolderCoordinatorDelegate) {
+	init(coordinator: HolderCoordinatorDelegate, cryptoManager: CryptoManagerProtocol) {
 
 		self.coordinator = coordinator
+		self.cryptoManager = cryptoManager
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
+		self.qrMessage = nil
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
 			title: .holderDashboardAppointmentTitle,
@@ -56,6 +60,7 @@ class HolderDashboardViewModel: Logging {
 			actionTitle: .holderDashboardCreatetAction,
 			image: .create
 		)
+		generateQRMessage()
 	}
 
 	func cardClicked(_ identifier: CardIdentifier) {
@@ -65,5 +70,23 @@ class HolderDashboardViewModel: Logging {
 		} else if identifier == CardIdentifier.create {
 			coordinator?.navigateToChooseProvider()
 		}
+	}
+
+	private func generateQRMessage() {
+
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//
+			if let message = self.cryptoManager?.generateQRmessage() {
+				self.qrMessage = message
+			}
+//		}
+
+//		DispatchQueue.global(qos: .background).async {
+//
+//			if let message = self.cryptoManager?.generateQRmessage() {
+//
+//				self.logDebug("message: \(message)")
+//			}
+//		}
 	}
 }
