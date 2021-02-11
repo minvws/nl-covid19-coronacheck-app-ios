@@ -8,7 +8,9 @@
 import Foundation
 import AppAuth
 
-protocol OpenIdClientProtocol {
+protocol OpenIdManaging: AnyObject {
+
+	init()
 
 	/// Request an access token
 	/// - Parameters:
@@ -21,7 +23,7 @@ protocol OpenIdClientProtocol {
 		onError: @escaping (Error?) -> Void)
 }
 
-class OpenIdClient: OpenIdClientProtocol, Logging {
+class OpenIdManager: OpenIdManaging, Logging {
 
 	let loggingCategory: String = "OpenIdClient"
 
@@ -30,6 +32,10 @@ class OpenIdClient: OpenIdClientProtocol, Logging {
 
 	/// authorization State
 	private var authorizationState: OIDAuthState?
+
+	required init() {
+		configuration = Configuration()
+	}
 
 	/// Initializer
 	/// - Parameter configuration: the digid configuration

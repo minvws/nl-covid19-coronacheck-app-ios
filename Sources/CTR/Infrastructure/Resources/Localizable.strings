@@ -105,7 +105,10 @@
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
 "holder.testresults.pending.text" = "Het testresultaat is nog niet bekend. Probeer het later nog een.\n\nNeem voor vragen contact op met jouw testaanbieder.";
-
 "holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat";
+"holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
+"holder.testresults.alert.message" = "Als je nu stopt kan je later opnieuw inloogen met DigiD om je QR-code te maken.";
+"holder.testresults.alert.ok" = "Ja, Stop";
+"holder.testresults.alert.cancel" = "Nee, terug";

@@ -63,4 +63,24 @@ extension String {
 
 		return Localization.string(for: "holder.testresults.negative")
 	}
+
+	static var holderTestResultsAlertTitle: String {
+
+		return Localization.string(for: "holder.testresults.alert.title")
+	}
+
+	static var holderTestResultsAlertMessage: String {
+
+		return Localization.string(for: "holder.testresults.alert.message")
+	}
+
+	static var holderTestResultsAlertOk: String {
+
+		return Localization.string(for: "holder.testresults.alert.ok")
+	}
+
+	static var holderTestResultsAlertCancel: String {
+
+		return Localization.string(for: "holder.testresults.alert.cancel")
+	}
 }
