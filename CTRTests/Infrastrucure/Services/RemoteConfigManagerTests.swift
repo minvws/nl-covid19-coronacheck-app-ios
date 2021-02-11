@@ -41,6 +41,20 @@ class RemoteConfigManagerTests: XCTestCase {
 		}
 	}
 
+	class CryptoUtilitySpy: CryptoUtilityProtocol {
+		func validate(data: Data, signature: Data, completion: @escaping (Bool) -> Void) {
+
+		}
+
+		func signature(forData data: Data, key: Data) -> Data {
+			return Data()
+		}
+
+		func sha256(data: Data) -> String? {
+			return nil
+		}
+	}
+
 	// MARK: - Tests
 
 	/// Test the remote config manager update call no result from the api
@@ -48,7 +62,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config no result from api")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		networkSpy.remoteConfig = nil
 		sut.networkManager = networkSpy
 
@@ -68,7 +82,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config versions are equal")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		networkSpy.remoteConfig = RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
@@ -95,7 +109,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config versions are almost equal")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		networkSpy.remoteConfig = RemoteConfiguration(
 			minVersion: "1.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
@@ -122,7 +136,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config update required on bug")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.1",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualBug",
@@ -150,7 +164,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config update required on major")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		let configuration = RemoteConfiguration(
 			minVersion: "4.3.2",
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualMajor",
@@ -178,7 +192,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config current version higher")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
@@ -206,7 +220,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		let expectation = self.expectation(description: "remote config current version higher")
-		let networkSpy = NetworkSpy(configuration: .test)
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		let configuration = RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
