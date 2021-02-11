@@ -265,7 +265,7 @@ errit:
     X509_STORE_free(store); store = NULL;
     
     X509_free(cert); cert = NULL;
-    PKCS7_free(p7); p7 = NULL;
+//    PKCS7_free(p7); p7 = NULL;
     
     return result == 1;
 }
