@@ -7,16 +7,26 @@
 
 import UIKit
 
+/// The identty of a provider
 enum ProviderIdentifier: String {
 
-	case ggd
+	// A Commercial Test Provider
 	case commercial
+
+	/// The GGD
+	case ggd
 }
 
-struct Provider {
+/// Struct for information to display the different test providers
+struct DisplayProvider {
 
+	/// The identifer
 	let identifier: ProviderIdentifier
+
+	/// The name
 	let name: String
+
+	/// The subtite
 	let subTitle: String
 }
 
@@ -37,7 +47,7 @@ class ChooseProviderViewModel: Logging {
 	@Bindable private(set) var title: String
 	@Bindable private(set) var subtitle: String
 	@Bindable private(set) var body: String
-	@Bindable private(set) var providers: [Provider]
+	@Bindable private(set) var providers: [DisplayProvider]
 	@Bindable private(set) var showProgress: Bool
 
 	/// Initializer
@@ -57,12 +67,12 @@ class ChooseProviderViewModel: Logging {
 		body = .holderChooseProviderMessage
 		image = .createBig
 		providers = [
-			Provider(
+			DisplayProvider(
 				identifier: .commercial,
 				name: .holderChooseProviderCommercialTitle,
 				subTitle: .holderChooseProviderCommercialSubtitle
 			),
-			Provider(
+			DisplayProvider(
 				identifier: .ggd,
 				name: .holderChooseProviderGGDTitle,
 				subTitle: .holderChooseProviderGGDSubtitle
@@ -79,7 +89,7 @@ class ChooseProviderViewModel: Logging {
 		_ identifier: ProviderIdentifier,
 		presentingViewController: UIViewController?) {
 
-		logInfo("Selected \(identifier)")
+		logInfo("Provider selected: \(identifier)")
 
 		if identifier == ProviderIdentifier.commercial {
 			loginCommercial()
@@ -88,6 +98,7 @@ class ChooseProviderViewModel: Logging {
 		}
 	}
 
+	/// Login at a commercial tester
 	func loginCommercial() {
 
 		showProgress = true
@@ -117,16 +128,24 @@ class ChooseProviderViewModel: Logging {
 			self?.logDebug("Got Acces token: \(accessToken ?? "nil") ")
 
 			// Can't deal with token just yet.
-//			if let token = accessToken {
-//				self?.getTestResults(token)
-//			}
+			//			if let token = accessToken {
+			//				self?.getTestResults(token)
+			//			}
 			// For now, reset test results
 			self?.proofManager?.removeTestWrapper()
 			self?.coordinator?.navigateToListResults()
 
 		} onError: { [weak self] error in
 			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+		}
+	}
 
+	/// The user has no DigiD
+	func noDidiD() {
+
+		logInfo("Provider selected: no DigiD")
+		if let url = URL(string: "https://digid.nl/aanvragen") {
+			coordinator?.openUrl(url)
 		}
 	}
 }

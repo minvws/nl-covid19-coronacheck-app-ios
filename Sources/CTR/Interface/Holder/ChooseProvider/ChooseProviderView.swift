@@ -189,7 +189,7 @@ class ChooseProviderView: ScrollViewWithHeader {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .fill
-		view.distribution = .fillEqually
+		view.distribution = .fill
 		view.spacing = ViewTraits.spacing
 		return view
 	}()

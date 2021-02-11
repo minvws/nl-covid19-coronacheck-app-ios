@@ -95,6 +95,7 @@
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.commercial.title" = "Commerciele testlocatie";
 "holder.provider.commercial.subtitle" = "Log in jet een unieke code";
+"holder.provider.nodigid" = "Ik heb geen DidiD";
 
 /* MARK: - Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

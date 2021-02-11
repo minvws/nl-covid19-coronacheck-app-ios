@@ -86,6 +86,10 @@ class FetchResultModelTests: XCTestCase {
 			dismissCalled = true
 		}
 
+		func openUrl(_ url: URL) {
+			// Nothin yet
+		}
+
 		func openMenuItem(_ identifier: MenuIdentifier) {
 
 			dopenMenuItemCalled = true

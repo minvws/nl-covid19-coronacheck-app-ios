@@ -39,6 +39,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Dismiss the presented viewcontroller
 	func dismiss()
 
+	/// Open a url
+	func openUrl(_ url: URL)
+
 	// MARK: Menu
 
 	/// Close the menu
@@ -238,6 +241,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func dismiss() {
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+	}
+
+	/// Open a url
+	func openUrl(_ url: URL) {
+
+		UIApplication.shared.open(url)
 	}
 
 	// MARK: Menu
