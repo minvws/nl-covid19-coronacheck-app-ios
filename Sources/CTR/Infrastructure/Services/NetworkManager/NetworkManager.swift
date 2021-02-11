@@ -11,10 +11,16 @@ class NetworkManager: NetworkManaging, Logging {
 
 	private(set) var loggingCategory: String = "Network"
 	private(set) var networkConfiguration: NetworkConfiguration
-	
-	required init(configuration: NetworkConfiguration) {
+	private(set) var validator: CryptoUtilityProtocol
+
+	/// Initializer
+	/// - Parameters:
+	///   - configuration: the network configuration
+	///   - validator: the signature validator
+	required init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol) {
 
 		self.networkConfiguration = configuration
+		self.validator = validator
 		self.sessionDelegate = NetworkManagerURLSessionDelegate(configuration)
 		self.session = URLSession(
 			configuration: .ephemeral,
@@ -219,6 +225,10 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 	}
 
+	/// Decode a signed response into JSON
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler
 	private func decodedSignedJSONData<Object: Decodable>(
 		request: Result<URLRequest, NetworkError>,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {
@@ -228,22 +238,26 @@ class NetworkManager: NetworkManaging, Logging {
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
 			switch signedResult {
 				case let .success(signedResponse):
-					if let payloaData = Data(base64Encoded: signedResponse.payload),
+
+					if let base64PayloadData = signedResponse.payload.data(using: .utf8),
+					   let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 					   let signatureData = Data(base64Encoded: signedResponse.signature) {
 
-						let validator = CryptoUtility(signatureValidator: SignatureValidator())
-						validator.validate(data: payloaData, signature: signatureData) { valid in
-							// Todo: return error on invalid
-							self.logDebug("Are we valid?: \(valid)")
-
-							let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: payloaData)
-							DispatchQueue.main.async {
-								switch decodedResult {
-									case let .success(object):
-										completion(.success(object))
-									case let .failure(responseError):
-										completion(.failure(responseError.asNetworkError))
+						// Validate signature (on the base64 payload)
+						self.validator.validate(data: base64PayloadData, signature: signatureData) { valid in
+							if valid {
+								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+								DispatchQueue.main.async {
+									switch decodedResult {
+										case let .success(object):
+											completion(.success(object))
+										case let .failure(responseError):
+											completion(.failure(responseError.asNetworkError))
+									}
 								}
+							} else {
+								self.logError("We got an invalid signature!")
+								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 							}
 						}
 					}

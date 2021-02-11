@@ -19,7 +19,7 @@ class NetworkSpy: NetworkManaging {
 	//		var getTestResultsIdentifier: String?
 	//		var getTestResultsWithISMCalled = false
 
-	required init(configuration: NetworkConfiguration) {
+	required init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol) {
 
 		networkConfiguration = configuration
 	}

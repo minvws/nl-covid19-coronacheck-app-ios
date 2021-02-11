@@ -64,8 +64,10 @@ final class Services {
         } else {
             networkConfiguration = fallbackConfiguration
         }
+
+		let validator = CryptoUtility(signatureValidator: SignatureValidator())
         
-        return networkManagingType.init(configuration: networkConfiguration)
+        return networkManagingType.init(configuration: networkConfiguration, validator: validator)
     }()
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
