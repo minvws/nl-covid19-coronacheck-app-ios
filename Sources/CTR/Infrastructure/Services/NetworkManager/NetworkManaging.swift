@@ -55,8 +55,10 @@ protocol NetworkManaging {
     var networkConfiguration: NetworkConfiguration { get }
 
 	/// Initializer
-	/// - Parameter configuration: the network configuration
-    init(configuration: NetworkConfiguration)
+	/// - Parameters:
+	///   - configuration: the network configuration
+	///   - validator: the signature validator
+	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler

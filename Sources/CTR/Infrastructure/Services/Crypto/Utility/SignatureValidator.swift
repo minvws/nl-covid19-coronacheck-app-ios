@@ -31,6 +31,7 @@ final class SignatureValidator: SignatureValidating, Logging {
 	func validate(signature: Data, content: Data) -> Bool {
 
 		guard let rootCertificateData = validatedRootCertificateData() else {
+            logError("validatedRootCertificateData is invalid")
 			return false
 		}
 
@@ -53,18 +54,21 @@ final class SignatureValidator: SignatureValidating, Logging {
 	private func validatedRootCertificateData() -> Data? {
 
 		guard let certificateData = SignatureConfiguration.rootCertificateData else {
+            logError("rootCertificateData is invalid")
 			return nil
 		}
-
-		guard openssl.validateSerialNumber(
+        
+   	guard openssl.validateSerialNumber(
 				SignatureConfiguration.rootSerial,
 				forCertificateData: certificateData) else {
+        logError("validateSerialNumber(rootSerial) is invalid")
 			return nil
 		}
 
-		guard openssl.validateSubjectKeyIdentifier(
+   guard openssl.validateSubjectKeyIdentifier(
 				SignatureConfiguration.rootSubjectKeyIdentifier,
 				forCertificateData: certificateData) else {
+            logError("validateSubjectKeyIdentifier(rootSubjectKeyIdentifier) failed")
 			return nil
 		}
 
