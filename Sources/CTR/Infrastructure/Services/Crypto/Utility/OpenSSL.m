@@ -259,7 +259,7 @@ errit:
     if (signatureBlob) BIO_free(signatureBlob);
     if (contentBlob) BIO_free(contentBlob);
     if (certificateBlob) BIO_free(certificateBlob);
-    
+
     return result == 1;
 }
 
