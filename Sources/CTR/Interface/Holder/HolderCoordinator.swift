@@ -12,26 +12,23 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
-	/// Navigate to the start fo the holder flow
-	func navigateToStart()
-
 	/// Navigate to appointment
 	func navigateToAppointment()
 
 	/// Navigate to choose provider
 	func navigateToChooseProvider()
 
-	/// Navigate to the Fetch Result Scene
-	func navigateToFetchResults()
+	/// Navigate to the token overview scene
+	func navigateToTokenOverview()
+
+	/// Navigate to the token entry scene
+	func navigateToTokenEntry()
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
 
 	/// Navigate to create proof
 	func navigateToCreateProof()
-
-	// Navigate to the Generate Holder QR Scene
-	func navigateToHolderQR()
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
@@ -176,18 +173,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to the Fetch Result Scene
-	func navigateToFetchResults() {
+	/// Navigate to the token overview scene
+	func navigateToTokenOverview() {
 
-		let viewController = HolderFetchResultViewController(
-			viewModel: FetchResultViewModel(
-				coordinator: self,
-				openIdClient: openIdManager,
-				userIdentifier: coronaTestProof?.userIdentifier
+		let destination = TokenOverviewViewController(
+			viewModel: TokenOverviewViewModel(
+				coordinator: self
 			)
 		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
 
-		navigationController.pushViewController(viewController, animated: true)
+	/// Navigate to the token entry scene
+	func navigateToTokenEntry() {
+
+		let destination = TokenEntryViewController(
+			viewModel: TokenEntryViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to List Results Scene
@@ -217,19 +222,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 
 		navigationController.pushViewController(viewController, animated: true)
-	}
-
-	// Navigate to the Generate Holder QR Scene
-	func navigateToHolderQR() {
-
-//		let viewController = HolderGenerateQRViewController(viewModel: GenerateQRViewModel(coordinator: self))
-//		navigationController.pushViewController(viewController, animated: true)
-	}
-	
-	/// Navigate to the start fo the holder flow
-	func navigateToStart() {
-//
-//		navigationController.popToRootViewController(animated: true)
 	}
 
 	/// Navigate to the start fo the holder flow

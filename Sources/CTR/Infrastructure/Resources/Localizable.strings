@@ -95,7 +95,24 @@
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.commercial.title" = "Commerciele testlocatie";
 "holder.provider.commercial.subtitle" = "Log in jet een unieke code";
-"holder.provider.nodigid" = "Ik heb geen DidiD";
+"holder.provider.nodigid" = "Ik heb geen DigiD";
+
+/* MARK: - Token Overview */
+"holder.tokenoverview.title" = "Testresultaat ophalen";
+"holder.tokenoverview.text" = "Heb je je laten testen bij een commerciele testlocatie? Dan heb je een unieke code gekregen of eeh QR-code.";
+"holder.tokenoverview.nocode" = "Ik heb geen code";
+"holder.tokenoverview.code.title" = "BCFGJLQR5347";
+"holder.tokenoverview.code.subtitle" = "Ik heb een code gekreken";
+"holder.tokenoverview.qr.title" = "QR";
+"holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code gekreken";
+
+/* MARK: - Token entry */
+"holder.tokenentry.title" = "Code invullen";
+"holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen. Of klik op de link in je e-mail, als de testlocatie je gemaild heeft.";
+"holder.tokenentry.token.title" = "Unieke code";
+"holder.tokenentry.token.placeholder" = "Bijv BCFGJLQUVXYZ234589";
+"holder.tokenentry.verification.title" = "Verificatie code";
+"holder.tokenentry.verification.placeholder" = "0576";
 
 /* MARK: - Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

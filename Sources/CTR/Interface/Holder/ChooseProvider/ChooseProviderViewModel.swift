@@ -101,17 +101,19 @@ class ChooseProviderViewModel: Logging {
 	/// Login at a commercial tester
 	func loginCommercial() {
 
-		showProgress = true
+		coordinator?.navigateToTokenOverview()
 
-		proofManager?.fetchTestResult("1234") { [weak self] error in
-			self?.showProgress = false
-
-			if let error = error {
-				self?.logDebug("Error: \(error.localizedDescription)")
-			} else {
-				self?.coordinator?.navigateToListResults()
-			}
-		}
+//		showProgress = true
+//
+//		proofManager?.fetchTestResult("1234") { [weak self] error in
+//			self?.showProgress = false
+//
+//			if let error = error {
+//				self?.logDebug("Error: \(error.localizedDescription)")
+//			} else {
+//				self?.coordinator?.navigateToListResults()
+//			}
+//		}
 	}
 
 	/// Login at the GGD
