@@ -222,7 +222,7 @@ class CreateProofViewiewModel: Logging {
 			networkManager?.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
 
 				switch resultwrapper {
-					case let .success((_, data)):
+					case let .success(data):
 						self?.handleTestProofsResponse(data)
 					case let .failure(networkError):
 						self?.showProgress = false

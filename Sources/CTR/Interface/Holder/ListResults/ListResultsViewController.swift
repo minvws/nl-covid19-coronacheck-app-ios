@@ -447,7 +447,7 @@ class ListResultsViewModel: Logging {
 
 	/// The te test result
 	func checkResult() {
-
+		
 		if let wrapper = proofManager?.getTestWrapper() {
 			switch wrapper.status {
 				case .complete:

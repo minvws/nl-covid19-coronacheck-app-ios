@@ -45,6 +45,8 @@ protocol CryptoManagerProtocol: AnyObject {
 	/// - Returns: the stoken
 	func getStoken() -> String?
 
+	func reset()
+
 	func verifyQRMessage(_ message: String) -> Bool
 }
 
@@ -95,6 +97,11 @@ class CryptoManager: CryptoManagerProtocol, Logging {
 				)
 			}
 		}
+	}
+
+	func reset() {
+
+		cryptoData = .empty
 	}
 
 	/// Read the public key
