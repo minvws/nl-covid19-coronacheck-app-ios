@@ -7,6 +7,141 @@
 
 import UIKit
 
+class QRImageView: BaseView {
+
+	/// The display constants
+	private struct ViewTraits {
+
+		// Dimensions
+		static let cornerRadius: CGFloat = 15
+		static let shadowRadius: CGFloat = 8
+		static let shadowOpacity: Float = 0.3
+
+		// Margins
+		static let margin: CGFloat = 24.0
+		static let labelSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 20.0
+		static let imageSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 40.0
+	}
+
+	let imageView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	/// The title label
+	let titleLabel: Label = {
+
+		return Label(title3: nil)
+	}()
+
+	/// The message label
+	let messageLabel: Label = {
+
+		return Label(subhead: nil)
+	}()
+
+	override func setupViews() {
+
+		super.setupViews()
+
+		backgroundColor = .white
+
+		titleLabel.textAlignment = .center
+		messageLabel.textAlignment = .center
+
+		layer.cornerRadius = ViewTraits.cornerRadius
+
+		// Shadow
+		layer.shadowColor = Theme.colors.shadow.cgColor
+		layer.shadowOpacity = ViewTraits.shadowOpacity
+		layer.shadowOffset = .zero
+		layer.shadowRadius = ViewTraits.shadowRadius
+		// Cache Shadow
+		layer.shouldRasterize = true
+		layer.rasterizationScale = UIScreen.main.scale
+	}
+
+	/// Setup the hierarchy
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+
+		addSubview(titleLabel)
+		addSubview(imageView)
+		addSubview(messageLabel)
+	}
+	/// Setup the constraints
+	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+
+			// Title
+			titleLabel.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: ViewTraits.margin
+			),
+			titleLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.labelSidemargin
+			),
+			titleLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.labelSidemargin
+			),
+			titleLabel.bottomAnchor.constraint(
+				equalTo: imageView.topAnchor,
+				constant: -ViewTraits.margin
+			),
+
+			// QR View
+			imageView.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.imageSidemargin
+			),
+			imageView.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.imageSidemargin
+			),
+			imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
+			imageView.bottomAnchor.constraint(
+				equalTo: messageLabel.topAnchor,
+				constant: -ViewTraits.margin
+			),
+
+			// Message
+			messageLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.labelSidemargin
+			),
+			messageLabel.bottomAnchor.constraint(
+				equalTo: bottomAnchor,
+				constant: -ViewTraits.margin
+			),
+			messageLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.labelSidemargin
+			)
+		])
+	}
+
+	/// The  message
+	var title: String? {
+		didSet {
+			titleLabel.text = title
+		}
+	}
+
+	/// The  message
+	var message: String? {
+		didSet {
+			messageLabel.text = message
+		}
+	}
+}
+
 class HolderDashboardView: BaseView {
 
 	/// The display constants
@@ -23,7 +158,7 @@ class HolderDashboardView: BaseView {
 	}
 
 	/// The scrollview
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 
 		let view = UIScrollView(frame: .zero)
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -48,11 +183,10 @@ class HolderDashboardView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
-	let qrView: UIImageView = {
+	let qrView: QRImageView = {
 
-		let view = UIImageView()
+		let view = QRImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .magenta
 		view.isHidden = true
 		return view
 	}()
@@ -72,12 +206,6 @@ class HolderDashboardView: BaseView {
 		view.backgroundColor = Theme.colors.create
 		return view
 	}()
-
-	/// setup the views
-	override func setupViews() {
-
-		super.setupViews()
-	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
@@ -125,16 +253,15 @@ class HolderDashboardView: BaseView {
 			),
 
 			// CardView
-			qrView.widthAnchor.constraint(equalTo: qrView.heightAnchor, multiplier: 1),
 			appointmentCard.widthAnchor.constraint(equalTo: appointmentCard.heightAnchor, multiplier: ViewTraits.cardRatio),
 			createCard.widthAnchor.constraint(equalTo: createCard.heightAnchor, multiplier: ViewTraits.cardRatio)
 		])
 	}
 
-	/// The onboarding message
+	/// The  message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			messageLabel.text = message
 		}
 	}
 }

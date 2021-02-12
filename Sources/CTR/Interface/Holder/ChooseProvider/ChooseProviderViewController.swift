@@ -63,15 +63,6 @@ class ChooseProviderViewController: BaseViewController {
 			}
 			self.setupNoDigidButton()
 		}
-
-		viewModel.$showProgress.binding = {
-
-			if $0 {
-				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
-			} else {
-				MBProgressHUD.hide(for: self.sceneView, animated: true)
-			}
-		}
 	}
 
 	/// Setup a provider button

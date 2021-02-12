@@ -38,4 +38,14 @@ extension String {
 
 		return Localization.string(for: "holder.tokenentry.verification.placeholder")
 	}
+
+	static var holderTokenEntryErrorInvalidCode: String {
+
+		return Localization.string(for: "holder.tokenentry.error.invalid.code")
+	}
+
+	static var holderTokenEntryErrorInvalidProvider: String {
+
+		return Localization.string(for: "holder.tokenentry.error.invalid.provider")
+	}
 }

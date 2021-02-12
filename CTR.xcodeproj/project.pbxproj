@@ -165,6 +165,8 @@
 		6DD19D7A25D5516F001FDDDC /* TokenEntryLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */; };
 		6DD19D7B25D5516F001FDDDC /* TokenEntryLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */; };
 		6DD19D7F25D55174001FDDDC /* TokenOverviewLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */; };
+		6DD19DC025D66DF5001FDDDC /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819E025D53CC6009A96D7 /* ScrollView.swift */; };
+		6DD19DC525D67FB6001FDDDC /* Configuration+General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */; };
 		6DD43DA225CD1E160041D658 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA125CD1E160041D658 /* PrivacyView.swift */; };
 		6DD43DA625CD23F70041D658 /* GeneralLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */; };
 		6DD43DAB25CD25F70041D658 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */; };
@@ -460,6 +462,7 @@
 		6DD1159125D0229700DF6AF4 /* CustomSidePanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomSidePanelController.swift; sourceTree = "<group>"; };
 		6DD1159525D022B000DF6AF4 /* SidePanelController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidePanelController.swift; sourceTree = "<group>"; };
 		6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenEntryLocalization.swift; sourceTree = "<group>"; };
+		6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configuration+General.swift"; sourceTree = "<group>"; };
 		6DD43DA125CD1E160041D658 /* PrivacyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralLocalization.swift; sourceTree = "<group>"; };
 		6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
@@ -1084,6 +1087,7 @@
 			children = (
 				6DD9394225BD8CD80026F071 /* Configuration.swift */,
 				6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */,
+				6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */,
 				6DD9394625BD8D9A0026F071 /* Development */,
 				6DDEFB0125AEDCAA00A6912A /* holder-Info.plist */,
 				6DD7D89E25D26D3A00B97B7F /* verifier-Info.plist */,
@@ -1560,6 +1564,7 @@
 				6DD7D88325D26D3A00B97B7F /* DashboardLocalization.swift in Sources */,
 				6DD7D88425D26D3A00B97B7F /* String+SHA256.swift in Sources */,
 				6DD7D88525D26D3A00B97B7F /* SignatureConfiguration.swift in Sources */,
+				6DD19DC025D66DF5001FDDDC /* ScrollView.swift in Sources */,
 				6DD7D88625D26D3A00B97B7F /* CardView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1663,6 +1668,7 @@
 				6DAE8BDF25CB242700AAF2A7 /* NetworkManager.swift in Sources */,
 				6D9819D725D53A9C009A96D7 /* TokenOverviewViewController.swift in Sources */,
 				6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */,
+				6DD19DC525D67FB6001FDDDC /* Configuration+General.swift in Sources */,
 				6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */,
 				6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */,
 				6D2023B225CAB7A200CFCD14 /* OnboardingPageViewModel.swift in Sources */,
@@ -1811,7 +1817,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "CoronaTester Test";
+				DISPLAY_NAME = "CoronaCheck Test";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1924,7 +1930,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "CoronaTester ACC";
+				DISPLAY_NAME = "CoronaCheck ACC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2037,7 +2043,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "CoronaTester PROD";
+				DISPLAY_NAME = "CoronaCheck PROD";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2150,7 +2156,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = CoronaTester;
+				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2205,7 +2211,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				DISPLAY_NAME = "Verifier Dev";
+				DISPLAY_NAME = "CoronaTestScanner D";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2239,7 +2245,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = Verifier;
+				DISPLAY_NAME = CoronaTestScanner;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2271,7 +2277,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = Verifier;
+				DISPLAY_NAME = CoronaTestScanner;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2303,7 +2309,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "Verifier Test";
+				DISPLAY_NAME = "CoronaTestScanner Test";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2335,7 +2341,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "Verifier PROD";
+				DISPLAY_NAME = "CoronaTestScanner PROD";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2367,7 +2373,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "Verifier ACC";
+				DISPLAY_NAME = "CoronaTestScanner ACC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2521,7 +2527,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				DISPLAY_NAME = "CoronaTester Dev";
+				DISPLAY_NAME = "CoronaCheck D";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2555,7 +2561,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = CoronaTester;
+				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

@@ -12,6 +12,9 @@ class Configuration {
 	/// Dictionary with DigiD configs
 	var digid: NSDictionary = [:]
 
+	/// Dictionary with General configs
+	var general: NSDictionary = [:]
+
 	/// Initlializer
 	init() {
 
@@ -20,6 +23,10 @@ class Configuration {
 		if let path = plistPath, let dictionary = NSDictionary(contentsOfFile: path) {
 			if let apiDict = dictionary["digid"] as? NSDictionary {
 				digid = apiDict
+			}
+
+			if let apiDict = dictionary["general"] as? NSDictionary {
+				general = apiDict
 			}
 		}
 	}

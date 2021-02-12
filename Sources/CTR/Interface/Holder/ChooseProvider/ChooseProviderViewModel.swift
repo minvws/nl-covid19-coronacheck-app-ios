@@ -48,7 +48,6 @@ class ChooseProviderViewModel: Logging {
 	@Bindable private(set) var subtitle: String
 	@Bindable private(set) var body: String
 	@Bindable private(set) var providers: [DisplayProvider]
-	@Bindable private(set) var showProgress: Bool
 
 	/// Initializer
 	/// - Parameters:
@@ -56,11 +55,9 @@ class ChooseProviderViewModel: Logging {
 	///   - proofManager: the proof manager
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
 		openIdManager: OpenIdManaging) {
 
 		self.coordinator = coordinator
-		self.proofManager = proofManager
 		self.openIdManager = openIdManager
 		title = .holderChooseProviderTitle
 		subtitle = .holderChooseProviderSubtitle
@@ -78,7 +75,6 @@ class ChooseProviderViewModel: Logging {
 				subTitle: .holderChooseProviderGGDSubtitle
 			)
 		]
-		showProgress = false
 	}
 
 	/// The user selected a provider
@@ -102,18 +98,6 @@ class ChooseProviderViewModel: Logging {
 	func loginCommercial() {
 
 		coordinator?.navigateToTokenOverview()
-
-//		showProgress = true
-//
-//		proofManager?.fetchTestResult("1234") { [weak self] error in
-//			self?.showProgress = false
-//
-//			if let error = error {
-//				self?.logDebug("Error: \(error.localizedDescription)")
-//			} else {
-//				self?.coordinator?.navigateToListResults()
-//			}
-//		}
 	}
 
 	/// Login at the GGD

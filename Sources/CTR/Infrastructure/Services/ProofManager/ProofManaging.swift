@@ -17,11 +17,21 @@ protocol ProofManaging: AnyObject {
 	/// Get the test types
 	func fetchTestTypes()
 
-	/// Get a test result
+	/// Get the test result for a token
 	/// - Parameters:
+	///   - token: the request token
 	///   - code: the verification code
 	///   - oncompletion: completion handler
-	func fetchTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void)
+	func fetchTestResult(
+		_ token: RequestToken,
+		code: String?,
+		provider: TestProvider,
+		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
+
+	/// Get the provider for a test token
+	/// - Parameter token: the test token
+	/// - Returns: the test provider
+	func getTestProvider(_ token: RequestToken) -> TestProvider?
 
 	/// Get a test result
 	/// - Returns: a test result
@@ -29,6 +39,11 @@ protocol ProofManaging: AnyObject {
 
 	/// Remove the test wrapper
 	func removeTestWrapper()
+}
+
+enum ProofError: Error {
+
+	case invalidUrl
 }
 
 /// The test providers
@@ -56,10 +71,11 @@ struct TestProvider: Codable {
 	}
 }
 
-struct TestToken: Codable {
+/// The request token to fetch a test result form a commercial tester
+struct RequestToken: Codable {
 
 	/// The request token
-	let requestToken: String
+	let token: String
 
 	/// The version of the protocol
 	let protocolVersion: String
@@ -70,47 +86,13 @@ struct TestToken: Codable {
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
-		case requestToken = "token"
+		case token
 		case protocolVersion
 		case providerIdentifier
 	}
-
-	static var positiveTest: TestToken {
-		return TestToken(requestToken: "YYYYYYYYYYYY", protocolVersion: "1.0", providerIdentifier: "BRB")
-	}
-
-	static var negativeTest: TestToken {
-		return TestToken(requestToken: "0450A462FF82", protocolVersion: "1.0", providerIdentifier: "BRB")
-	}
-
-	static var pendingTest: TestToken {
-		return TestToken(requestToken: "96F50E1126BB", protocolVersion: "1.0", providerIdentifier: "BRB")
-	}
 }
 
-/**
-{
-"result": {
-"unique": "4b50662ac8d6969ecf07e5305a9ee9b76230a832",
-"sampleDate": "2021-02-27T14:12:36+00:00",
-"testType": "775caa2149",
-"negativeResult": true
-},
-"protocolVersion": "1.0",
-"providerIdentifier": "BRB",
-"status": "complete"
-}
-
-{
-"protocolVersion": "1.0",
-"providerIdentifier": "BRB",
-"pollToken": "6023d06df02d7",
-"pollDelay": 300,
-"status": "pending"
-}
-
-*/
-
+/// A test result
 struct TestResult: Codable {
 
 	/// The identifier of the test result
@@ -145,7 +127,7 @@ enum TestState: String, Codable {
 	case complete
 
 	/// The test is invalid
-	case invalid
+	case invalid = "invalid_token"
 
 	/// Verification is required before we can fetch the result
 	case verificationRequired = "verification_required"
@@ -161,6 +143,7 @@ enum TestState: String, Codable {
 	}
 }
 
+/// A wrapper arround a test result.
 struct TestResultWrapper: Codable {
 
 	/// The provider identifier

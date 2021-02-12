@@ -74,31 +74,46 @@ class ProofManager: ProofManaging, Logging {
 		}
 	}
 
-	/// Get a test result
+	/// Get the provider for a test token
+	/// - Parameter token: the test token
+	/// - Returns: the test provider
+	func getTestProvider(_ token: RequestToken) -> TestProvider? {
+
+		for provider in proofData.testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
+			return provider
+		}
+		return nil
+	}
+
+	/// Get the test result for a token
 	/// - Parameters:
+	///   - token: the request token
 	///   - code: the verification code
 	///   - oncompletion: completion handler
-	func fetchTestResult(_ code: String, oncompletion: @escaping (Error?) -> Void) {
+	func fetchTestResult(
+		_ token: RequestToken,
+		code: String?,
+		provider: TestProvider,
+		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
 
-		let token = TestToken.negativeTest
-		for provider in proofData.testProviders where provider.identifier == token.providerIdentifier {
+		guard let url = provider.resultURL else {
+			self.logError("No url provided for \(provider)")
+			oncompletion(.failure(ProofError.invalidUrl))
+			return
+		}
 
-			guard let url = provider.resultURL else {
-				self.logError("No url provided for \(provider)")
-				return
-			}
+		networkManager.getTestResult(providerUrl: url, token: token, code: code) { response in
+			// response is of type (Result<TestResultWrapper, NetworkError>)
 
-			networkManager.getTestResult(providerUrl: url, token: token, code: code) { response in
-				// response is of type (Result<TestResultWrapper, NetworkError>)
-
-				switch response {
-					case let .success(wrapper):
+			switch response {
+				case let .success(wrapper):
+					if wrapper.status == .complete {
 						self.proofData.testWrapper = wrapper
-						oncompletion(nil)
-					case let .failure(error):
-						self.logError("Error getting the result: \(error)")
-						oncompletion(error)
-				}
+					}
+					oncompletion(.success(wrapper))
+				case let .failure(error):
+					self.logError("Error getting the result: \(error)")
+					oncompletion(.failure(error))
 			}
 		}
 	}

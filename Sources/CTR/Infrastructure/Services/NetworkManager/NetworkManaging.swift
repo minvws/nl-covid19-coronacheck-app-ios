@@ -92,7 +92,7 @@ protocol NetworkManaging {
 	///   - completion: the completion handler
 	func getTestResult(
 		providerUrl: URL,
-		token: TestToken,
+		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void)
 }

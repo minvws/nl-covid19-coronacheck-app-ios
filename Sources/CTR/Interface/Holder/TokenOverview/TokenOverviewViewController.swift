@@ -20,10 +20,10 @@ class TokenOverviewView: ScrollView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 54.0
-		static let titleTopMargin: CGFloat = 34.0
+		static let stackMargin: CGFloat = 48.0
+		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
 		static let messageTopMargin: CGFloat = 24.0
-		static let spacing: CGFloat = 24.0
+		static let spacing: CGFloat = 28.0
 	}
 
 	/// The title label
@@ -101,7 +101,7 @@ class TokenOverviewView: ScrollView {
 			// StackView
 			stackView.topAnchor.constraint(
 				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.stackMargin
 			),
 			stackView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -109,10 +109,6 @@ class TokenOverviewView: ScrollView {
 			),
 			stackView.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])

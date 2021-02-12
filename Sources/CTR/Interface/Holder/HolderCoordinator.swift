@@ -139,7 +139,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager
+				cryptoManager: cryptoManager,
+				proofManager: proofManager
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
@@ -166,7 +167,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = ChooseProviderViewController(
 			viewModel: ChooseProviderViewModel(
 				coordinator: self,
-				proofManager: proofManager,
 				openIdManager: openIdManager
 			)
 		)
@@ -189,7 +189,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
-				coordinator: self
+				coordinator: self,
+				proofManager: proofManager
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)

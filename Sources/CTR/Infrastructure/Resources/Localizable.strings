@@ -80,6 +80,8 @@
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Heb je je testresultaat al? Laat je negatieve resultaat zien met jouw QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
+"holder.dashboard.qr.title" = "Scan QR-code bij entree";
+"holder.dashboard.qr.message" = "Geldig tot %@";
 
 /* MARK: - Appointment */
 "holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je uitje. Lees de meest gestelde vragen over een test plannen.";
@@ -94,12 +96,12 @@
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.commercial.title" = "Commerciele testlocatie";
-"holder.provider.commercial.subtitle" = "Log in jet een unieke code";
+"holder.provider.commercial.subtitle" = "Log in met een unieke code";
 "holder.provider.nodigid" = "Ik heb geen DigiD";
 
 /* MARK: - Token Overview */
 "holder.tokenoverview.title" = "Testresultaat ophalen";
-"holder.tokenoverview.text" = "Heb je je laten testen bij een commerciele testlocatie? Dan heb je een unieke code gekregen of eeh QR-code.";
+"holder.tokenoverview.text" = "Heb je je laten testen bij een commerciele testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
 "holder.tokenoverview.code.title" = "BCFGJLQR5347";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code gekreken";
@@ -113,6 +115,8 @@
 "holder.tokenentry.token.placeholder" = "Bijv BCFGJLQUVXYZ234589";
 "holder.tokenentry.verification.title" = "Verificatie code";
 "holder.tokenentry.verification.placeholder" = "0576";
+"holder.tokenentry.error.invalid.code" = "Deze code is ongeldig";
+"holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
 /* MARK: - Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

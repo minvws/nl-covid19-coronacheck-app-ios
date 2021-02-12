@@ -10,7 +10,7 @@ import UIKit
 class ScrollView: BaseView {
 
 	/// The scrollview
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 
 		let view = UIScrollView(frame: .zero)
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,9 @@ class ScrollView: BaseView {
 			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
 
 			// Content
-			contentView.widthAnchor.constraint( equalTo: scrollView.widthAnchor)
+			contentView.widthAnchor.constraint( equalTo: scrollView.widthAnchor),
+			contentView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
+			contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
 		])
 	}
 }
