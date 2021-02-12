@@ -89,6 +89,9 @@ class HolderDashboardViewModel: Logging {
 		if let message = self.cryptoManager?.generateQRmessage() {
 			self.qrMessage = message
 
+			// Max Brightness
+			UIScreen.main.brightness = 1
+
 			// Date
 			if let wrapper = proofManager?.getTestWrapper(),
 			   let dateString = wrapper.result?.sampleDate,
@@ -102,6 +105,8 @@ class HolderDashboardViewModel: Logging {
 					self.logDebug("Valid until \(printDate)")
 				}
 			}
+		} else {
+			self.qrMessage = nil
 		}
 	}
 

@@ -68,13 +68,12 @@ protocol NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void)
 
-	/// Fetch the test results with issue signature message
 	/// - Parameters:
 	///   - dictionary: dictionary
 	///   - completionHandler: the completion handler
 	func fetchTestResultsWithISM(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void)
+		completion: @escaping (Result<Data, NetworkError>) -> Void)
 
 	/// Get the test providers
 	/// - Parameter completion: completion handler

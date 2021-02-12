@@ -112,13 +112,13 @@ struct NetworkConfiguration {
 	/// The remote configuration url
     var remoteConfigurationUrl: URL? {
 
-		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false, params: ["sigInlineV2": "1"])
+		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
     }
 
 	/// The nonce url
 	var nonceUrl: URL? {
 
-		return self.combine(path: Endpoint.nonce, fromCdn: false, params: ["sigInlineV2": "1"])
+		return self.combine(path: Endpoint.nonce, fromCdn: false)
 	}
 
 	/// The nonce url
@@ -130,13 +130,13 @@ struct NetworkConfiguration {
 	/// The providers url
 	var testProvidersUrl: URL? {
 
-		return self.combine(path: Endpoint.testProviders, fromCdn: false, params: ["sigInlineV2": "1"])
+		return self.combine(path: Endpoint.testProviders, fromCdn: false)
 	}
 
 	/// The types url
 	var testTypesUrl: URL? {
 
-		return self.combine(path: Endpoint.testTypes, fromCdn: false, params: ["sigInlineV2": "1"])
+		return self.combine(path: Endpoint.testTypes, fromCdn: false)
 	}
 
 	private func combine(path: Path, fromCdn: Bool, params: [String: String] = [:]) -> URL? {

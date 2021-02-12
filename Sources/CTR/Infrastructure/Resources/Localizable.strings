@@ -103,6 +103,7 @@
 "holder.tokenoverview.title" = "Testresultaat ophalen";
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciele testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
+"holder.tokenoverview.nocode.details" = "Als je je bij een commerciele testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.  ";
 "holder.tokenoverview.code.title" = "BCFGJLQR5347";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code gekreken";
 "holder.tokenoverview.qr.title" = "QR";

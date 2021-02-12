@@ -24,6 +24,11 @@ extension String {
 		return Localization.string(for: "holder.tokenoverview.nocode")
 	}
 
+	static var holderTokenOverviewNoCodeDetails: String {
+
+		return Localization.string(for: "holder.tokenoverview.nocode.details")
+	}
+
 	static var holderTokenOverviewCodeTitle: String {
 
 		return Localization.string(for: "holder.tokenoverview.code.title")

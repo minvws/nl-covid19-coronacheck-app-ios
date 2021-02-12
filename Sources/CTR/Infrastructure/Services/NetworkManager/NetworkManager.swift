@@ -55,7 +55,7 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - completionHandler: the completion handler
 	func fetchTestResultsWithISM(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
+		completion: @escaping (Result<Data, NetworkError>) -> Void) {
 
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
@@ -65,8 +65,9 @@ class NetworkManager: NetworkManaging, Logging {
 				body: jsonData
 			)
 
-			data(request: urlRequest) { resultwrapper in
+			decodedSignedData(request: urlRequest) { resultwrapper in
 				DispatchQueue.main.async {
+
 					completion(resultwrapper)
 				}
 			}
@@ -124,22 +125,15 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.authorization: "Bearer \(token.token)",
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
 		]
+		var body: Data?
 
-		if var urlComps = URLComponents(url: providerUrl, resolvingAgainstBaseURL: false) {
-			urlComps.queryItems = [URLQueryItem(name: "sigInlineV2", value: "1")]
-			if let appendedUrl = urlComps.url {
-
-				var body: Data?
-
-				if let requiredCode = code {
-					let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
-					body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-				}
-				let urlRequest = constructRequest(url: appendedUrl, method: .POST, body: body, headers: headers)
-
-				decodedSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
-			}
+		if let requiredCode = code {
+			let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
+			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 		}
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
+
+		decodedSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 	
 	// MARK: - Construct Request
@@ -256,6 +250,42 @@ class NetworkManager: NetworkManaging, Logging {
 											completion(.failure(responseError.asNetworkError))
 									}
 								}
+							} else {
+								self.logError("We got an invalid signature!")
+								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+							}
+						}
+					}
+				case let .failure(networkError):
+					DispatchQueue.main.async {
+						completion(.failure(networkError))
+					}
+			}
+		}
+	}
+
+	/// Decode a signed response into Data
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler
+	private func decodedSignedData(
+		request: Result<URLRequest, NetworkError>,
+		ignore400: Bool = false,
+		completion: @escaping (Result<Data, NetworkError>) -> Void) {
+		data(request: request, ignore400: ignore400) { result in
+
+			/// Decode to SignedResult
+			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
+			switch signedResult {
+				case let .success(signedResponse):
+
+					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+					   let signatureData = Data(base64Encoded: signedResponse.signature) {
+
+						// Validate signature (on the base64 payload)
+						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
+							if valid {
+								completion(.success(decodedPayloadData))
 							} else {
 								self.logError("We got an invalid signature!")
 								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))

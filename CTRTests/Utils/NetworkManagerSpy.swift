@@ -40,7 +40,7 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	func fetchTestResultsWithISM(dictionary: [String: AnyObject], completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
+	func fetchTestResultsWithISM(dictionary: [String: AnyObject], completion: @escaping (Result<Data, NetworkError>) -> Void) {
 		// Nothing yet
 	}
 
