@@ -126,7 +126,7 @@ class NetworkManager: NetworkManaging, Logging {
 		]
 
 		if var urlComps = URLComponents(url: providerUrl, resolvingAgainstBaseURL: false) {
-			urlComps.queryItems = [URLQueryItem(name: "sigInline", value: "1")]
+			urlComps.queryItems = [URLQueryItem(name: "sigInlineV2", value: "1")]
 			if let appendedUrl = urlComps.url {
 
 				var body: Data?
@@ -241,12 +241,11 @@ class NetworkManager: NetworkManaging, Logging {
 			switch signedResult {
 				case let .success(signedResponse):
 
-					if let base64PayloadData = signedResponse.payload.data(using: .utf8),
-					   let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 					   let signatureData = Data(base64Encoded: signedResponse.signature) {
 
 						// Validate signature (on the base64 payload)
-						self.validator.validate(data: base64PayloadData, signature: signatureData) { valid in
+						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
 							if valid {
 								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
