@@ -43,6 +43,10 @@ class CryptoManagerSpy: CryptoManagerProtocol {
 		self.proofs = proofs
 	}
 
+	func reset() {
+		// Nothing yet
+	}
+
 	func generateCommitmentMessage() -> String? {
 		return nil
 	}

@@ -105,6 +105,8 @@ class HolderDashboardViewModel: Logging {
 					self.logDebug("Valid until \(printDate)")
 				}
 			}
+		} else {
+			self.qrMessage = nil
 		}
 	}
 

@@ -8,7 +8,13 @@
 import Foundation
 import UIKit
 
-protocol HolderCoordinatorDelegate: AnyObject {
+protocol Dismissable: AnyObject {
+
+	/// Dismiss the presented viewcontroller
+	func dismiss()
+}
+
+protocol HolderCoordinatorDelegate: Dismissable {
 
 	// MARK: Navigation
 
@@ -33,8 +39,11 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
 
-	/// Dismiss the presented viewcontroller
-	func dismiss()
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	func presentInformationPage(title: String, body: String)
 
 	/// Open a url
 	func openUrl(_ url: URL)
@@ -234,6 +243,23 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func dismiss() {
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+	}
+
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	func presentInformationPage(title: String, body: String) {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: title,
+				message: body
+			)
+		)
+		let destination = UINavigationController(rootViewController: viewController)
+		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
 
 	/// Open a url
