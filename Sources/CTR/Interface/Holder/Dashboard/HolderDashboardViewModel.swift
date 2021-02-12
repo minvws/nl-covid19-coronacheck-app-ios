@@ -29,8 +29,13 @@ class HolderDashboardViewModel: Logging {
 	weak var coordinator: HolderCoordinatorDelegate?
 	weak var cryptoManager: CryptoManagerProtocol?
 
+	/// The proof manager
+	weak var proofManager: ProofManaging?
+
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
+	@Bindable private(set) var qrTitle: String
+	@Bindable private(set) var qrSubTitle: String?
 	@Bindable private(set) var qrMessage: String?
 	@Bindable private(set) var appointmentCard: CardInfo
 	@Bindable private(set) var createCard: CardInfo
@@ -39,12 +44,14 @@ class HolderDashboardViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 
-	init(coordinator: HolderCoordinatorDelegate, cryptoManager: CryptoManagerProtocol) {
+	init(coordinator: HolderCoordinatorDelegate, cryptoManager: CryptoManagerProtocol, proofManager: ProofManaging) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
+		self.proofManager = proofManager
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
+		self.qrTitle = .holderDashboardQRTitle
 		self.qrMessage = nil
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
@@ -72,21 +79,46 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
+	func checkQRMessage() {
+
+		generateQRMessage()
+	}
+
 	private func generateQRMessage() {
 
-//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//
-			if let message = self.cryptoManager?.generateQRmessage() {
-				self.qrMessage = message
-			}
-//		}
+		if let message = self.cryptoManager?.generateQRmessage() {
+			self.qrMessage = message
 
-//		DispatchQueue.global(qos: .background).async {
-//
-//			if let message = self.cryptoManager?.generateQRmessage() {
-//
-//				self.logDebug("message: \(message)")
-//			}
-//		}
+			// Date
+			if let wrapper = proofManager?.getTestWrapper(),
+			   let dateString = wrapper.result?.sampleDate,
+			   let date = parseDateFormatter.date(from: dateString) {
+
+				var comp = DateComponents()
+				comp.second = Configuration().getTestResultTTL()
+				if let extendedDate = Calendar.current.date(byAdding: comp, to: date) {
+					let printDate = printDateFormatter.string(from: extendedDate)
+					qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
+					self.logDebug("Valid until \(printDate)")
+				}
+			}
+		}
 	}
+
+	/// Formatter to parse
+	private lazy var parseDateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.calendar = .current
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+		return dateFormatter
+	}()
+
+	/// Formatter to print
+	private lazy var printDateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "d MMMM HH:mm"
+		return dateFormatter
+	}()
 }

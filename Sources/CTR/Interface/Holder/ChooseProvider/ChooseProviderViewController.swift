@@ -59,27 +59,41 @@ class ChooseProviderViewController: BaseViewController {
 		viewModel.$providers.binding = { providers in
 
 			for provider in providers {
-				let button = ButtonWithSubtitle()
-				button.isUserInteractionEnabled = true
-				button.title = provider.name
-				button.subtitle = provider.subTitle
-				button.primaryButtonTappedCommand = { [weak self] in
-					self?.viewModel.providerSelected(
-						provider.identifier,
-						presentingViewController: self
-					)
-				}
-				self.sceneView.stackView.addArrangedSubview(button)
+				self.setupProviderButton(provider)
 			}
+			self.setupNoDigidButton()
 		}
+	}
 
-		viewModel.$showProgress.binding = {
+	/// Setup a provider button
+	/// - Parameter provider: the provider
+	func setupProviderButton(_ provider: DisplayProvider) {
 
-			if $0 {
-				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
-			} else {
-				MBProgressHUD.hide(for: self.sceneView, animated: true)
-			}
+		let button = ButtonWithSubtitle()
+		button.isUserInteractionEnabled = true
+		button.title = provider.name
+		button.subtitle = provider.subTitle
+		button.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.providerSelected(
+				provider.identifier,
+				presentingViewController: self
+			)
 		}
+		self.sceneView.stackView.addArrangedSubview(button)
+	}
+
+	/// Setup no diigid button
+	func setupNoDigidButton() {
+
+		let label = Label(bodyBold: .holderChooseProviderNoDigiD)
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noDidiDTapped))
+		label.isUserInteractionEnabled = true
+		label.addGestureRecognizer(tapGesture)
+		sceneView.stackView.addArrangedSubview(label)
+	}
+
+	@objc func noDidiDTapped() {
+
+		viewModel.noDidiD()
 	}
 }

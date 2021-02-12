@@ -42,7 +42,7 @@ class HolderMenuViewController: BaseViewController {
 				let view = HolderMenuItemView()
 				view.titleLabel.text = item.title
 				view.titleLabel.textColor = Theme.colors.secondary
-				view.titleLabel.font = Theme.fonts.title3
+				view.titleLabel.font = Theme.fonts.title2
 				view.primaryButtonTappedCommand  = { [weak self] in
 					self?.viewModel.menuItemClicked(item.identifier)
 				}

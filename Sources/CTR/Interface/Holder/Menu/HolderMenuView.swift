@@ -117,7 +117,7 @@ class HolderMenu: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(topStackView)
-		addSubview(lineView)
+//		addSubview(lineView)
 		addSubview(bottomStackView)
 	}
 
@@ -143,18 +143,22 @@ class HolderMenu: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Line
-			lineView.heightAnchor.constraint(equalToConstant: 1),
-			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			lineView.topAnchor.constraint(
-				equalTo: topStackView.bottomAnchor,
-				constant: ViewTraits.lineMarginTop
-			),
+//			// Line
+//			lineView.heightAnchor.constraint(equalToConstant: 1),
+//			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//			lineView.topAnchor.constraint(
+//				equalTo: topStackView.bottomAnchor,
+//				constant: ViewTraits.lineMarginTop
+//			),
 
 			// Bottom Stack view
+//			bottomStackView.topAnchor.constraint(
+//				equalTo: lineView.bottomAnchor,
+//				constant: ViewTraits.lineMarginBottom
+//			),
 			bottomStackView.topAnchor.constraint(
-				equalTo: lineView.bottomAnchor,
+				equalTo: topStackView.bottomAnchor,
 				constant: ViewTraits.lineMarginBottom
 			),
 			bottomStackView.leadingAnchor.constraint(

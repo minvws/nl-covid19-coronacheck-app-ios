@@ -37,6 +37,8 @@ class HolderDashboardViewController: BaseViewController {
 
 		viewModel.$title.binding = { self.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$qrTitle.binding = { self.sceneView.qrView.title = $0 }
+		viewModel.$qrSubTitle.binding = { self.sceneView.qrView.message = $0 }
 
 		viewModel.$appointmentCard.binding = { cardInfo in
 
@@ -64,7 +66,7 @@ class HolderDashboardViewController: BaseViewController {
 
 			if let value = $0 {
 				let image = self.generateQRCode(from: value)
-				self.sceneView.qrView.image = image
+				self.sceneView.qrView.imageView.image = image
 				self.sceneView.qrView.isHidden = false
 			} else {
 				self.sceneView.qrView.isHidden = true
@@ -73,6 +75,13 @@ class HolderDashboardViewController: BaseViewController {
 		
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+		
+		super.viewWillAppear(animated)
+		viewModel.checkQRMessage()
+		sceneView.scrollView.setContentOffset(.zero, animated: true)
 	}
 
 	func generateQRCode(from string: String) -> UIImage? {

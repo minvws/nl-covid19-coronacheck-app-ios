@@ -116,17 +116,17 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - completion: the completion handler
 	func getTestResult(
 		providerUrl: URL,
-		token: TestToken,
+		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
 
 		let headers: [HTTPHeaderKey: String] = [
-			HTTPHeaderKey.authorization: "Bearer \(token.requestToken)",
+			HTTPHeaderKey.authorization: "Bearer \(token.token)",
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
 		]
 
 		if var urlComps = URLComponents(url: providerUrl, resolvingAgainstBaseURL: false) {
-			urlComps.queryItems = [URLQueryItem(name: "sigInline", value: "1")]
+			urlComps.queryItems = [URLQueryItem(name: "sigInlineV2", value: "1")]
 			if let appendedUrl = urlComps.url {
 
 				var body: Data?
@@ -137,7 +137,7 @@ class NetworkManager: NetworkManaging, Logging {
 				}
 				let urlRequest = constructRequest(url: appendedUrl, method: .POST, body: body, headers: headers)
 
-				decodedSignedJSONData(request: urlRequest, completion: completion)
+				decodedSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 			}
 		}
 	}
@@ -196,27 +196,28 @@ class NetworkManager: NetworkManaging, Logging {
 			.resume()
 	}
 	
-	private func data(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
+	private func data(request: Result<URLRequest, NetworkError>, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
 		switch request {
 			case let .success(request):
-				data(request: request, completion: completion)
+				data(request: request, ignore400: ignore400, completion: completion)
 			case let .failure(error):
 				completion(.failure(error))
 		}
 	}
 	
-	private func data(request: URLRequest, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
+	private func data(request: URLRequest, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
 		dataTask(with: request) { data, response, error in
 			self.handleNetworkResponse(
 				data,
 				response: response,
 				error: error,
+				ignore400: ignore400,
 				completion: completion)
 		}
 	}
 	
-	private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, completion: @escaping (Result<Object, NetworkError>) -> Void) {
-		data(request: request) { result in
+	private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, ignore400: Bool = false, completion: @escaping (Result<Object, NetworkError>) -> Void) {
+		data(request: request, ignore400: ignore400) { result in
 			let decodedResult: Result<Object, NetworkError> = self.jsonResponseHandler(result: result)
 			
 			DispatchQueue.main.async {
@@ -231,20 +232,20 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - completion: completion handler
 	private func decodedSignedJSONData<Object: Decodable>(
 		request: Result<URLRequest, NetworkError>,
+		ignore400: Bool = false,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {
-		data(request: request) { result in
+		data(request: request, ignore400: ignore400) { result in
 
 			/// Decode to SignedResult
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
 			switch signedResult {
 				case let .success(signedResponse):
 
-					if let base64PayloadData = signedResponse.payload.data(using: .utf8),
-					   let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 					   let signatureData = Data(base64Encoded: signedResponse.signature) {
 
 						// Validate signature (on the base64 payload)
-						self.validator.validate(data: base64PayloadData, signature: signatureData) { valid in
+						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
 							if valid {
 								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
@@ -276,6 +277,7 @@ class NetworkManager: NetworkManaging, Logging {
 		_ object: Object?,
 		response: URLResponse?,
 		error: Error?,
+		ignore400: Bool = false,
 		completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
 		if error != nil {
 			completion(.failure(.invalidResponse))
@@ -308,8 +310,10 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		if let error = self.inspect(response: response) {
-			completion(.failure(error))
-			return
+			if error == .resourceNotFound && !ignore400 {
+				completion(.failure(error))
+				return
+			}
 		}
 		
 		completion(.success((response, object)))

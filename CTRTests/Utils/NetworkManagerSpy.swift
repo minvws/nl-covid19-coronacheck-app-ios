@@ -52,7 +52,7 @@ class NetworkSpy: NetworkManaging {
 		// Nothing yet
 	}
 
-	func getTestResult(providerUrl: URL, token: TestToken, code: String?, completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
+	func getTestResult(providerUrl: URL, token: RequestToken, code: String?, completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void) {
 		// Nothing yet
 	}
 }

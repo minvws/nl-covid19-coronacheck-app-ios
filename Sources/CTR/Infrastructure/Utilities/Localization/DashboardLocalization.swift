@@ -48,4 +48,14 @@ extension String {
 
 		return Localization.string(for: "holder.dashboard.create.action")
 	}
+
+	static var holderDashboardQRTitle: String {
+
+		return Localization.string(for: "holder.dashboard.qr.title")
+	}
+
+	static var holderDashboardQRMessage: String {
+
+		return Localization.string(for: "holder.dashboard.qr.message")
+	}
 }

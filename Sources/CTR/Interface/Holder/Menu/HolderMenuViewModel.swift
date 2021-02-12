@@ -39,11 +39,11 @@ class HolderMenuViewModel {
 		self.coordinator = coordinator
 
 		self.topMenu = [
-			MenuItem(identifier: .overview, title: .holderMenuDashboard),
-			MenuItem(identifier: .settings, title: .holderMenuSettings)
+			MenuItem(identifier: .overview, title: .holderMenuDashboard)
 		]
 		self.bottomMenu = [
 			MenuItem(identifier: .faq, title: .holderMenuFaq),
+			MenuItem(identifier: .settings, title: .holderMenuSettings),
 			MenuItem(identifier: .about, title: .holderMenuAbout),
 			MenuItem(identifier: .feedback, title: .holderMenuFeedback)
 		]
