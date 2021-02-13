@@ -40,6 +40,13 @@ class TokenEntryViewController: BaseViewController {
 
 		viewModel.$title.binding = { self.sceneView.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$token.binding = { token in
+			self.sceneView.tokenEntryView.inputField.text = token
+			if token == nil {
+				self.sceneView.tokenEntryView.inputField.becomeFirstResponder()
+
+			}
+		}
 		viewModel.$tokenTitle.binding = { self.sceneView.tokenEntryView.header = $0 }
 		viewModel.$tokenPlaceholder.binding = { self.sceneView.tokenEntryView.inputField.placeholder = $0 }
 		viewModel.$verificationCodeTitle.binding = { self.sceneView.verificationEntryView.header = $0 }
@@ -89,7 +96,6 @@ class TokenEntryViewController: BaseViewController {
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		sceneView.tokenEntryView.inputField.becomeFirstResponder()
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {

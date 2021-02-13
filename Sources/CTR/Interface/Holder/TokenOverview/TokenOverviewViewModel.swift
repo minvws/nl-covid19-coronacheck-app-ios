@@ -77,9 +77,10 @@ class TokenOverviewViewModel: Logging {
 		logInfo("Provider selected: \(identifier)")
 
 		if identifier == TokenIdentifier.code {
-			coordinator?.navigateToTokenEntry()
+			coordinator?.navigateToTokenEntry(nil)
 		} else if identifier == TokenIdentifier.qr {
 			// Todo, create scanner and parse code.
+			coordinator?.navigateToTokenScan()
 		}
 	}
 

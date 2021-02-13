@@ -109,6 +109,10 @@
 "holder.tokenoverview.qr.title" = "QR";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code gekreken";
 
+/* MARK: - Token Scan */
+"holder.tokenscan.title" = "Scan QR-code";
+"holder.tokenscan.message" = "Richt je toestel op de QR-code die je van de testlocatie hebt gekregen.";
+
 /* MARK: - Token entry */
 "holder.tokenentry.title" = "Code invullen";
 "holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen. Of klik op de link in je e-mail, als de testlocatie je gemaild heeft.";

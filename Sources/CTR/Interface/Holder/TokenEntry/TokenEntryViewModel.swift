@@ -26,6 +26,7 @@ class TokenEntryViewModel: Logging {
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var tokenTitle: String
+	@Bindable private(set) var token: String?
 	@Bindable private(set) var tokenPlaceholder: String
 	@Bindable private(set) var verificationCodeTitle: String
 	@Bindable private(set) var verificationCodePlaceholder: String
@@ -39,10 +40,12 @@ class TokenEntryViewModel: Logging {
 	///   - proofManager: the proof manager
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging) {
+		proofManager: ProofManaging,
+		requestToken: RequestToken?) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
+		self.requestToken = requestToken
 
 		title = .holderTokenEntryTitle
 		message = .holderTokenEntryText
@@ -50,6 +53,13 @@ class TokenEntryViewModel: Logging {
 		tokenPlaceholder = .holderTokenEntryTokenPlaceholder
 		verificationCodeTitle = .holderTokenEntryVerificationTitle
 		verificationCodePlaceholder = .holderTokenEntryVerificationPlaceholder
+
+		if let unwrappedToken = requestToken {
+			fetchResult(unwrappedToken)
+			self.token = unwrappedToken.token
+		} else {
+			self.token = nil
+		}
 	}
 
 	func checkToken(_ text: String?) {

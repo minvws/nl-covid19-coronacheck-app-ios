@@ -65,10 +65,11 @@ extension String {
 	/// Set the line height
 	/// - Parameter lineHeight: the line height
 	/// - Returns: attributed string
-	func setLineHeight(_ lineHeight: CGFloat = 20.0) -> NSAttributedString {
+	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping
+		paragraphStyle.alignment = alignment
 		paragraphStyle.minimumLineHeight = lineHeight
 
 		let attrString = NSAttributedString(
