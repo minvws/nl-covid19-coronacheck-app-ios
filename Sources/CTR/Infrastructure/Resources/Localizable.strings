@@ -135,3 +135,10 @@
 "holder.testresults.alert.message" = "Als je nu stopt kan je later opnieuw inloogen met DigiD om je QR-code te maken.";
 "holder.testresults.alert.ok" = "Ja, Stop";
 "holder.testresults.alert.cancel" = "Nee, terug";
+
+/* MARK: - Create Proof */
+"holder.proof.title" = "Van jouw testresultaat wordt nu een QR-code gemaakt";
+"holder.proof.text" = "In de QR-code wordt verwerkt dat je negatief getest bent (geen corona) op %@.\n\nIn deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.";
+"holder.proof.text.bold" = "negatief getest";
+"holder.proof.text.at" = "om";
+"holder.proof.action" = "Naar mijn QR";

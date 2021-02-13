@@ -107,7 +107,7 @@ class HolderCoordinator: Coordinator, Logging {
 
 		// Fetch the details for the proof manager
 		proofManager.fetchCoronaTestProviders()
-		proofManager.fetchTestTypes()
+//		proofManager.fetchTestTypes()
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
