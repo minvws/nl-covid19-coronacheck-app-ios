@@ -7,72 +7,60 @@
 
 import UIKit
 
-class PrivacyView: BaseView {
-	
+class ScrolledStackView: BaseView {
+
 	/// The display constants
 	private struct ViewTraits {
-		
-		// Dimensions
-		static let messageLineHeight: CGFloat = 22
-		
+
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let topMargin: CGFloat = 16.0
+		static let spacing: CGFloat = 32.0
 	}
 
-	private let scrollView: UIScrollView = {
+	/// The scrollview
+	let scrollView: UIScrollView = {
 
-		let scrollView = UIScrollView(frame: .zero)
-		scrollView.translatesAutoresizingMaskIntoConstraints = false
-		return scrollView
+		let view = UIScrollView(frame: .zero)
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 
+	/// The stackview for the content
 	let stackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .fill
-		view.distribution = .fill
-		view.spacing = ViewTraits.margin
+		view.distribution = .equalSpacing
+		view.spacing = ViewTraits.spacing
 		return view
 	}()
-	
-	/// The message label
-	let messageLabel: Label = {
-		
-		return Label(body: nil).multiline()
-	}()
 
-	/// setup the views
-	override func setupViews() {
-		
-		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
-	}
-	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
-		
+
 		super.setupViewHierarchy()
-
-		stackView.addArrangedSubview(messageLabel)
 		scrollView.addSubview(stackView)
-
 		addSubview(scrollView)
 	}
-	
+
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		
+
 		NSLayoutConstraint.activate([
 
 			// Scrollview
+			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			scrollView.bottomAnchor.constraint(
+				equalTo: bottomAnchor,
+				constant: -ViewTraits.margin
+			),
 
 			// StackView
 			stackView.widthAnchor.constraint(
@@ -82,21 +70,12 @@ class PrivacyView: BaseView {
 			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 			stackView.topAnchor.constraint(
 				equalTo: scrollView.topAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.topMargin
 			),
 			stackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
-	}
-
-	// MARK: Public Access
-
-	/// The message
-	var message: String? {
-		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
-		}
 	}
 }

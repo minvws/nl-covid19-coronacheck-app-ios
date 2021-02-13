@@ -27,7 +27,7 @@ class AppointmentView: ScrollViewWithHeader {
 	}
 
 	/// The title label
-	let titleLabel: Label = {
+	private let titleLabel: Label = {
 
 		return Label(title1: nil).multiline()
 	}()
@@ -39,13 +39,14 @@ class AppointmentView: ScrollViewWithHeader {
 	}()
 
 	/// the update button
-	let primaryButton: Button = {
+	private let primaryButton: Button = {
 
 		let button = Button(title: "Button 1", style: .primary)
 		button.rounded = true
 		return button
 	}()
 
+	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
@@ -92,10 +93,6 @@ class AppointmentView: ScrollViewWithHeader {
 				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
 			messageLabel.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
@@ -124,14 +121,14 @@ class AppointmentView: ScrollViewWithHeader {
 
 	// MARK: Public Access
 
-	/// The onboarding title
+	/// The  title
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 
-	/// The onboarding message
+	/// The  message
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
@@ -147,7 +144,7 @@ class AppointmentView: ScrollViewWithHeader {
 			return
 		}
 
-		let attributedUnderlined = messageText.color(text: underlinedText, with: Theme.colors.iosBlue)
+		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 	}
 

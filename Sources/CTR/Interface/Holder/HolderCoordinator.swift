@@ -14,6 +14,7 @@ protocol Dismissable: AnyObject {
 	func dismiss()
 }
 
+// swiftlint:disable class_delegate_protocol
 protocol HolderCoordinatorDelegate: Dismissable {
 
 	// MARK: Navigation
@@ -57,6 +58,7 @@ protocol HolderCoordinatorDelegate: Dismissable {
 	/// - Parameter identifier: the menu identifier
 	func openMenuItem(_ identifier: MenuIdentifier)
 }
+// swiftlint:enable class_delegate_protocol
 
 class HolderCoordinator: Coordinator, Logging {
 
@@ -73,16 +75,16 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
 
-	/// The onboardings manager
+	/// The proof manager
 	var proofManager: ProofManaging = Services.proofManager
 
 	/// The crypto manager
-	var cryptoManager: CryptoManagerProtocol = CryptoManager()
+	var cryptoManager: CryptoManaging = Services.cryptoManager
 
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 
-	/// The network manager
+	/// The open ID manager
 	var openIdManager: OpenIdManaging = Services.openIdManager
 
 	/// The Child Coordinators

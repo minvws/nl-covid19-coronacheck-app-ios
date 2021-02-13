@@ -220,21 +220,21 @@ class ListResultView: BaseView {
 
 	// MARK: Public Access
 
-	/// The onboarding title
+	/// The header
 	var header: String? {
 		didSet {
 			headerLabel.text = header
 		}
 	}
 
-	/// The onboarding title
+	/// The title
 	var title: String? {
 		didSet {
 			titleLabel.text = title
 		}
 	}
 
-	/// The onboarding message
+	/// The message
 	var message: String? {
 		didSet {
 			messageLabel.text = message
@@ -380,14 +380,14 @@ class ListResultsView: BaseView {
 
 	// MARK: Public Access
 
-	/// The onboarding title
+	/// The title
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 
-	/// The onboarding message
+	/// The message
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)

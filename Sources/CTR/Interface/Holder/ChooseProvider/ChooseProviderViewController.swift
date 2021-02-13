@@ -14,6 +14,8 @@ class ChooseProviderViewController: BaseViewController {
 
 	let sceneView = ChooseProviderView()
 
+	// MARK: Initializers
+
 	init(viewModel: ChooseProviderViewModel) {
 
 		self.viewModel = viewModel
@@ -27,6 +29,7 @@ class ChooseProviderViewController: BaseViewController {
 	}
 
 	// MARK: View lifecycle
+
 	override func loadView() {
 
 		view = sceneView
@@ -36,26 +39,10 @@ class ChooseProviderViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = {
-
-			self.title = $0
-		}
-
-		viewModel.$subtitle.binding = {
-
-			self.sceneView.title = $0
-		}
-
-		viewModel.$body.binding = {
-
-			self.sceneView.message = $0
-		}
-
-		viewModel.$image.binding = {
-			
-			self.sceneView.headerImage = $0
-		}
-
+		viewModel.$title.binding = { self.title = $0 }
+		viewModel.$subtitle.binding = { self.sceneView.title = $0 }
+		viewModel.$body.binding = { self.sceneView.message = $0 }
+		viewModel.$image.binding = { self.sceneView.headerImage = $0 }
 		viewModel.$providers.binding = { providers in
 
 			for provider in providers {
@@ -63,7 +50,12 @@ class ChooseProviderViewController: BaseViewController {
 			}
 			self.setupNoDigidButton()
 		}
+
+		// Only show an arrow as back button
+		styleBackButton(buttonText: "")
 	}
+
+	// MARK: Helper Methods
 
 	/// Setup a provider button
 	/// - Parameter provider: the provider
@@ -89,9 +81,13 @@ class ChooseProviderViewController: BaseViewController {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noDidiDTapped))
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)
+		label.heightAnchor.constraint(equalToConstant: 40).isActive = true
 		sceneView.stackView.addArrangedSubview(label)
 	}
 
+	// MARK: User interaction
+
+	/// User tapped on the no digid button
 	@objc func noDidiDTapped() {
 
 		viewModel.noDidiD()

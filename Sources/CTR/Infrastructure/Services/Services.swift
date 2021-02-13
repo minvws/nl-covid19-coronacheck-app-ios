@@ -9,12 +9,20 @@ import Foundation
 
 /// Global container for the different services used in the app
 final class Services {
-    private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
-    private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
+	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
+	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
 	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
 	private static var proofManagerType: ProofManaging.Type = ProofManager.self
-    
+	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
+
+	/// Override the [CryptoManaging](x-source-tag://CryptoManaging) type that will be instantiated
+	/// - parameter cryptoManager: The type conforming to [CryptoManaging](x-source-tag://CryptoManaging) to be used as the global cryptoManager
+	static func use(_ cryptoManager: CryptoManaging.Type) {
+
+		cryptoManagingType = cryptoManager
+	}
+
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
     /// - parameter networkManager: The type conforming to [NetworkManaging](x-source-tag://NetworkManaging) to be used as the global networkManager
     static func use(_ networkManager: NetworkManaging.Type) {
@@ -36,7 +44,7 @@ final class Services {
     }
 
 	/// Override the [OpenIdManaging](x-source-tag://OpenIdManaging) type that will be instantiated
-	/// - parameter openIdManager: The type conforming to [OpenIdManaging](x-source-tag://OpenIdManaging) to be used as the global proof manager
+	/// - parameter openIdManager: The type conforming to [OpenIdManaging](x-source-tag://OpenIdManaging) to be used as the global openID manager
 	static func use(_ openIdManager: OpenIdManaging.Type) {
 		openIdManagerType = openIdManager
 	}
@@ -46,6 +54,8 @@ final class Services {
 	static func use(_ proofManager: ProofManaging.Type) {
 		proofManagerType = proofManager
 	}
+
+	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
         let networkConfiguration: NetworkConfiguration
@@ -69,6 +79,8 @@ final class Services {
         
         return networkManagingType.init(configuration: networkConfiguration, validator: validator)
     }()
+
+	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
 

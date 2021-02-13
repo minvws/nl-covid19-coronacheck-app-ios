@@ -9,15 +9,25 @@ import UIKit
 
 class AppointmentViewModel: Logging {
 
+	/// The logging category
 	var loggingCategory: String = "AppointmentViewModel"
 
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
+	/// The header image
 	@Bindable private(set) var image: UIImage?
+
+	/// The title of the scene
 	@Bindable private(set) var title: String
+
+	/// The information body of the scene
 	@Bindable private(set) var body: String
+
+	/// The underlined and linked part of the body
 	@Bindable private(set) var linkedBody: String
+
+	/// The title on the button
 	@Bindable private(set) var buttonTitle: String
 
 	/// Initializer
@@ -34,13 +44,21 @@ class AppointmentViewModel: Logging {
 		self.image = UIImage.appointment
 	}
 
+	/// The user wants more information
 	func linkedClick() {
 
 		logInfo("Clicked on read more about test appointment")
+		if let url = URL(string: "https://www.rijksoverheid.nl/coronatest") {
+			coordinator?.openUrl(url)
+		}
 	}
 
+	/// The user wants to create an appointment
 	func buttonClick() {
 
 		logInfo("Create appointment clicked")
+		if let url = URL(string: "https://coronatest.nl/") {
+			coordinator?.openUrl(url)
+		}
 	}
 }

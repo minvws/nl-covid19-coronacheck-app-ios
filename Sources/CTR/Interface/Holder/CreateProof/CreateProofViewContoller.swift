@@ -123,14 +123,14 @@ class CreateProofView: BaseView {
 
 	// MARK: Public Access
 
-	/// The onboarding title
+	/// The title
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 
-	/// The onboarding message
+	/// The message
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
@@ -156,7 +156,7 @@ class CreateProofViewiewModel: Logging {
 
 	weak var proofManager: ProofManaging?
 
-	weak var cryptoManager: CryptoManagerProtocol?
+	weak var cryptoManager: CryptoManaging?
 
 	/// The network manager
 	var networkManager: NetworkManaging?
@@ -170,7 +170,7 @@ class CreateProofViewiewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
-	init(coordinator: HolderCoordinatorDelegate, proofManager: ProofManaging, cryptoManager: CryptoManagerProtocol, networkManager: NetworkManaging) {
+	init(coordinator: HolderCoordinatorDelegate, proofManager: ProofManaging, cryptoManager: CryptoManaging, networkManager: NetworkManaging) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager

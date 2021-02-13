@@ -13,6 +13,8 @@ class HolderDashboardViewController: BaseViewController {
 
 	let sceneView = HolderDashboardView()
 
+	// MARK: Initializers
+
 	init(viewModel: HolderDashboardViewModel) {
 
 		self.viewModel = viewModel
@@ -26,6 +28,7 @@ class HolderDashboardViewController: BaseViewController {
 	}
 
 	// MARK: View lifecycle
+
 	override func loadView() {
 
 		view = sceneView
@@ -39,35 +42,17 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 		viewModel.$qrTitle.binding = { self.sceneView.qrView.title = $0 }
 		viewModel.$qrSubTitle.binding = { self.sceneView.qrView.message = $0 }
-
-		viewModel.$appointmentCard.binding = { cardInfo in
-
-			self.sceneView.appointmentCard.title = cardInfo.title
-			self.sceneView.appointmentCard.message = cardInfo.message
-			self.sceneView.appointmentCard.primaryTitle = cardInfo.actionTitle
-			self.sceneView.appointmentCard.backgroundImage = cardInfo.image
-			self.sceneView.appointmentCard.primaryButtonTappedCommand = { [weak self] in
-				self?.viewModel.cardClicked(cardInfo.identifier)
-			}
-		}
-
-		viewModel.$createCard.binding = { cardInfo in
-
-			self.sceneView.createCard.title = cardInfo.title
-			self.sceneView.createCard.message = cardInfo.message
-			self.sceneView.createCard.primaryTitle = cardInfo.actionTitle
-			self.sceneView.createCard.backgroundImage = cardInfo.image
-			self.sceneView.createCard.primaryButtonTappedCommand = { [weak self] in
-				self?.viewModel.cardClicked(cardInfo.identifier)
-			}
-		}
+		viewModel.$appointmentCard.binding = { self.styleCard(self.sceneView.appointmentCard, cardInfo: $0) }
+		viewModel.$createCard.binding = { self.styleCard(self.sceneView.createCard, cardInfo: $0) }
 
 		viewModel.$qrMessage.binding = {
 
 			if let value = $0 {
 				let image = self.generateQRCode(from: value)
-				self.sceneView.qrView.imageView.image = image
+				self.sceneView.qrView.qrImage = image
 				self.sceneView.qrView.isHidden = false
+				// Scroll to top
+				self.sceneView.scrollView.setContentOffset(.zero, animated: true)
 			} else {
 				self.sceneView.qrView.isHidden = true
 			}
@@ -78,12 +63,31 @@ class HolderDashboardViewController: BaseViewController {
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
-		
+
 		super.viewWillAppear(animated)
 		viewModel.checkQRMessage()
-		sceneView.scrollView.setContentOffset(.zero, animated: true)
 	}
 
+	// MARK: Helper methods
+
+	/// Style a dashboard card view
+	/// - Parameters:
+	///   - card: the card view
+	///   - cardInfo: the card information
+	func styleCard(_ card: CardView, cardInfo: CardInfo) {
+
+		card.title = cardInfo.title
+		card.message = cardInfo.message
+		card.primaryTitle = cardInfo.actionTitle
+		card.backgroundImage = cardInfo.image
+		card.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.cardClicked(cardInfo.identifier)
+		}
+	}
+
+	/// Generate a QR image from a string
+	/// - Parameter string: the string to embed
+	/// - Returns: QR image
 	func generateQRCode(from string: String) -> UIImage? {
 
 		let data = string.data(using: String.Encoding.ascii)

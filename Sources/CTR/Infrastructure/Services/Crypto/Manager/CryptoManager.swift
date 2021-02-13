@@ -15,7 +15,7 @@ struct NonceEnvelope: Codable {
 	let stoken: String
 }
 
-protocol CryptoManagerProtocol: AnyObject {
+protocol CryptoManaging: AnyObject {
 
 	init()
 
@@ -51,7 +51,7 @@ protocol CryptoManagerProtocol: AnyObject {
 }
 
 /// The cryptography manager
-class CryptoManager: CryptoManagerProtocol, Logging {
+class CryptoManager: CryptoManaging, Logging {
 
 	/// Structure to hold cryptography data
 	private struct CryptoData: Codable {
