@@ -27,7 +27,6 @@
 		6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */; };
 		6D27550A25D1201800164F2E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27550925D1201800164F2E /* CardView.swift */; };
 		6D27551225D1259D00164F2E /* DashboardLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27551125D1259D00164F2E /* DashboardLocalization.swift */; };
-		6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */; };
 		6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3035FA25BAAA9C00110B16 /* CTRModel.swift */; };
 		6D33015625CFE68500A98C1C /* OpenSSL.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D33015525CFE68500A98C1C /* OpenSSL.m */; };
 		6D33015A25CFE6BA00A98C1C /* nl-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 6D33015925CFE6BA00A98C1C /* nl-root.pem */; };
@@ -89,6 +88,12 @@
 		6D67D90F25D7E4AC00827277 /* CreateProofView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D90D25D7E4AC00827277 /* CreateProofView.swift */; };
 		6D67D91425D7E4C700827277 /* CreateProofViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D91325D7E4C700827277 /* CreateProofViewModel.swift */; };
 		6D67D91525D7E4C700827277 /* CreateProofViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D91325D7E4C700827277 /* CreateProofViewModel.swift */; };
+		6D67D91B25D7F46700827277 /* TokenScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D91A25D7F46700827277 /* TokenScanViewController.swift */; };
+		6D67D91C25D7F46700827277 /* TokenScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D91A25D7F46700827277 /* TokenScanViewController.swift */; };
+		6D67D92125D7F8CB00827277 /* TokenScanLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D92025D7F8CB00827277 /* TokenScanLocalization.swift */; };
+		6D67D92225D7F8CB00827277 /* TokenScanLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D92025D7F8CB00827277 /* TokenScanLocalization.swift */; };
+		6D67D92725D7F94A00827277 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D92625D7F94A00827277 /* ScanView.swift */; };
+		6D67D92825D7F94A00827277 /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D67D92625D7F94A00827277 /* ScanView.swift */; };
 		6D68CACD25CC1610008FE2C8 /* NetworkManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */; };
 		6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */; };
 		6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */; };
@@ -237,7 +242,6 @@
 		6DD7D83525D26D3A00B97B7F /* Encodable+AnyEncodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAE8BD625CB242700AAF2A7 /* Encodable+AnyEncodable.swift */; };
 		6DD7D83625D26D3A00B97B7F /* HolderDashboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5A7BEB25D147D90008B904 /* HolderDashboardViewModel.swift */; };
 		6DD7D83725D26D3A00B97B7F /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6777D925CD60FC00F6F2D1 /* OnboardingViewController.swift */; };
-		6DD7D83825D26D3A00B97B7F /* ScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */; };
 		6DD7D83925D26D3A00B97B7F /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D92849A25B5CBC0009D4350 /* Button.swift */; };
 		6DD7D83A25D26D3A00B97B7F /* VerifierStartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284B325B5D08D009D4350 /* VerifierStartViewController.swift */; };
 		6DD7D83B25D26D3A00B97B7F /* ConsentLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1155C25D00EB200DF6AF4 /* ConsentLocalization.swift */; };
@@ -373,7 +377,6 @@
 		6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorTests.swift; sourceTree = "<group>"; };
 		6D27550925D1201800164F2E /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		6D27551125D1259D00164F2E /* DashboardLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardLocalization.swift; sourceTree = "<group>"; };
-		6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		6D3035FA25BAAA9C00110B16 /* CTRModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTRModel.swift; sourceTree = "<group>"; };
 		6D33015325CFE68400A98C1C /* CTR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTR-Bridging-Header.h"; sourceTree = "<group>"; };
 		6D33015425CFE68500A98C1C /* OpenSSL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenSSL.h; sourceTree = "<group>"; };
@@ -422,6 +425,9 @@
 		6D67D90325D7DA2F00827277 /* CreateProofLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProofLocalization.swift; sourceTree = "<group>"; };
 		6D67D90D25D7E4AC00827277 /* CreateProofView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProofView.swift; sourceTree = "<group>"; };
 		6D67D91325D7E4C700827277 /* CreateProofViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateProofViewModel.swift; sourceTree = "<group>"; };
+		6D67D91A25D7F46700827277 /* TokenScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenScanViewController.swift; sourceTree = "<group>"; };
+		6D67D92025D7F8CB00827277 /* TokenScanLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenScanLocalization.swift; sourceTree = "<group>"; };
+		6D67D92625D7F94A00827277 /* ScanView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanView.swift; sourceTree = "<group>"; };
 		6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManagerSpy.swift; sourceTree = "<group>"; };
 		6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoManagerSpy.swift; sourceTree = "<group>"; };
 		6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralImage.swift; sourceTree = "<group>"; };
@@ -750,6 +756,23 @@
 			path = Page;
 			sourceTree = "<group>";
 		};
+		6D67D91925D7F44700827277 /* TokenScan */ = {
+			isa = PBXGroup;
+			children = (
+				6D67D91A25D7F46700827277 /* TokenScanViewController.swift */,
+			);
+			path = TokenScan;
+			sourceTree = "<group>";
+		};
+		6D67D93C25D81FD700827277 /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				6D67D92625D7F94A00827277 /* ScanView.swift */,
+				6D7F9CBB25B6E3A50006F227 /* ScanViewController.swift */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
 		6D73052D25B876C100BA808C /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -838,8 +861,7 @@
 				6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */,
 				6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */,
 				6D7F9CC725B6E6170006F227 /* ResultView.swift */,
-				6D2C0FAA25B6B92C0030FD17 /* ScanView.swift */,
-				6D7F9CBB25B6E3A50006F227 /* ScanViewController.swift */,
+				6D67D93C25D81FD700827277 /* Scan */,
 				6D82260925D7C142000B60F9 /* ScrolledStackView.swift */,
 				6D9819E025D53CC6009A96D7 /* ScrollView.swift */,
 				6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */,
@@ -860,6 +882,7 @@
 				6DD1159025D0228700DF6AF4 /* SidePanel */,
 				6D9819EB25D54B1C009A96D7 /* TokenEntry */,
 				6D9819D525D53A5F009A96D7 /* TokenOverview */,
+				6D67D91925D7F44700827277 /* TokenScan */,
 			);
 			path = Holder;
 			sourceTree = "<group>";
@@ -987,6 +1010,7 @@
 				6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */,
 				6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */,
 				6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */,
+				6D67D92025D7F8CB00827277 /* TokenScanLocalization.swift */,
 				6D67D90325D7DA2F00827277 /* CreateProofLocalization.swift */,
 			);
 			path = Localization;
@@ -1556,7 +1580,6 @@
 				6D67D91525D7E4C700827277 /* CreateProofViewModel.swift in Sources */,
 				6DD7D83725D26D3A00B97B7F /* OnboardingViewController.swift in Sources */,
 				6DBFE49425D2DB7A00B3D006 /* ProofManager.swift in Sources */,
-				6DD7D83825D26D3A00B97B7F /* ScanView.swift in Sources */,
 				6D9819F425D54FBA009A96D7 /* TokenEntryViewController.swift in Sources */,
 				6DD7D83925D26D3A00B97B7F /* Button.swift in Sources */,
 				6DD7D83A25D26D3A00B97B7F /* VerifierStartViewController.swift in Sources */,
@@ -1589,6 +1612,7 @@
 				6D67D8C825D7CFE800827277 /* TokenOverviewViewModel.swift in Sources */,
 				6DD7D85225D26D3A00B97B7F /* FileReader.swift in Sources */,
 				6DD7D85325D26D3A00B97B7F /* Label.swift in Sources */,
+				6D67D92225D7F8CB00827277 /* TokenScanLocalization.swift in Sources */,
 				6DD7D85425D26D3A00B97B7F /* VerifierResultViewController.swift in Sources */,
 				6D67D8FF25D7D5DE00827277 /* ListResultsViewModel.swift in Sources */,
 				6D67D8F325D7D56200827277 /* ListResultView.swift in Sources */,
@@ -1599,6 +1623,7 @@
 				6DD7D85725D26D3A00B97B7F /* UIDevice+ScreenType.swift in Sources */,
 				6DD7D85825D26D3A00B97B7F /* UIViewController+Keyboard.swift in Sources */,
 				6DD7D85925D26D3A00B97B7F /* BaseViewController.swift in Sources */,
+				6D67D92825D7F94A00827277 /* ScanView.swift in Sources */,
 				6D67D90525D7DA2F00827277 /* CreateProofLocalization.swift in Sources */,
 				6DD7D85A25D26D3A00B97B7F /* ProcessInfo+Testing.swift in Sources */,
 				6DD7D85C25D26D3A00B97B7F /* AppointmentViewController.swift in Sources */,
@@ -1627,6 +1652,7 @@
 				6DBFE48125D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */,
 				6D80113025D29A3B00D2EEAB /* OnboardingViewModel.swift in Sources */,
 				6DD7D86F25D26D3A00B97B7F /* String+extension.swift in Sources */,
+				6D67D91C25D7F46700827277 /* TokenScanViewController.swift in Sources */,
 				6DD7D87025D26D3A00B97B7F /* PrivacyViewModel.swift in Sources */,
 				6DD7D87125D26D3A00B97B7F /* Certificates.swift in Sources */,
 				6D67D8D125D7D15600827277 /* EntryView.swift in Sources */,
@@ -1707,7 +1733,6 @@
 				6D5A7BEC25D147D90008B904 /* HolderDashboardViewModel.swift in Sources */,
 				6D6777DA25CD60FC00F6F2D1 /* OnboardingViewController.swift in Sources */,
 				6DBFE49325D2DB7A00B3D006 /* ProofManager.swift in Sources */,
-				6D2C0FAB25B6B92C0030FD17 /* ScanView.swift in Sources */,
 				6D92849D25B5CBC0009D4350 /* Button.swift in Sources */,
 				6D9284B425B5D08D009D4350 /* VerifierStartViewController.swift in Sources */,
 				6DD1155D25D00EB200DF6AF4 /* ConsentLocalization.swift in Sources */,
@@ -1739,6 +1764,7 @@
 				6D67D8C725D7CFE800827277 /* TokenOverviewViewModel.swift in Sources */,
 				6D02446425D3239200EF8D32 /* ListResultsViewController.swift in Sources */,
 				6D8865FA25C800BA00DE661E /* FileReader.swift in Sources */,
+				6D67D92125D7F8CB00827277 /* TokenScanLocalization.swift in Sources */,
 				6D7F9CCC25B6E6590006F227 /* Label.swift in Sources */,
 				6D67D8FE25D7D5DE00827277 /* ListResultsViewModel.swift in Sources */,
 				6D67D8F225D7D56200827277 /* ListResultView.swift in Sources */,
@@ -1749,6 +1775,7 @@
 				6D67780A25CEAF7C00F6F2D1 /* ConsentButton.swift in Sources */,
 				6D7FFAE925C9AF6B00B5482F /* UIDevice+ScreenType.swift in Sources */,
 				6D7F9CDC25B704000006F227 /* UIViewController+Keyboard.swift in Sources */,
+				6D67D92725D7F94A00827277 /* ScanView.swift in Sources */,
 				6D67D90425D7DA2F00827277 /* CreateProofLocalization.swift in Sources */,
 				6D92849C25B5CBC0009D4350 /* BaseViewController.swift in Sources */,
 				6D4A977A25BDA6410084CAA1 /* ProcessInfo+Testing.swift in Sources */,
@@ -1777,6 +1804,7 @@
 				6D9284BE25B5D351009D4350 /* VerifierCoordinator.swift in Sources */,
 				6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */,
 				6D2023B225CAB7A200CFCD14 /* OnboardingPageViewModel.swift in Sources */,
+				6D67D91B25D7F46700827277 /* TokenScanViewController.swift in Sources */,
 				6DBFE48025D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */,
 				6D80112F25D29A3B00D2EEAB /* OnboardingViewModel.swift in Sources */,
 				6D67D8D025D7D15600827277 /* EntryView.swift in Sources */,

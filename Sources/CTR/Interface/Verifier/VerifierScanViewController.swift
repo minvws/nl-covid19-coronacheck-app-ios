@@ -62,20 +62,20 @@ class VerifierScanViewController: ScanViewController {
 		view = sceneView
 	}
 
-	override func viewDidLoad() {
-
-		super.viewDidLoad()
-
-		// Do any additional setup after loading the view.
-		title = "Verifier Scan"
-
-		viewModel.$primaryButtonTitle.binding = {
-
-			self.sceneView.primaryTitle = $0
-		}
-	}
-	override func found(code: String) {
-
-		viewModel.parseQRMessage(code)
-	}
+//	override func viewDidLoad() {
+//
+//		super.viewDidLoad()
+//
+//		// Do any additional setup after loading the view.
+//		title = "Verifier Scan"
+//
+//		viewModel.$primaryButtonTitle.binding = {
+//
+//			self.sceneView.primaryTitle = $0
+//		}
+//	}
+//	override func found(code: String) {
+//
+//		viewModel.parseQRMessage(code)
+//	}
 }

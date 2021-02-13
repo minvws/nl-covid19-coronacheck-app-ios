@@ -28,8 +28,11 @@ protocol HolderCoordinatorDelegate: Dismissable {
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview()
 
+	/// Navigate to the token scanner
+	func navigateToTokenScan()
+
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry()
+	func navigateToTokenEntry(_ token: RequestToken?)
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
@@ -107,7 +110,7 @@ class HolderCoordinator: Coordinator, Logging {
 
 		// Fetch the details for the proof manager
 		proofManager.fetchCoronaTestProviders()
-//		proofManager.fetchTestTypes()
+		//		proofManager.fetchTestTypes()
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
@@ -182,8 +185,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
 
+	}
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview() {
 
@@ -195,13 +198,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
+	/// Navigate to the token scanner
+	func navigateToTokenScan() {
+
+		let destination = TokenScanViewController(
+			viewModel: TokenScanViewModel(
+				coordinator: self
+			)
+		)
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
 	/// Navigate to the token entry scene
-	func navigateToTokenEntry() {
+	func navigateToTokenEntry(_ token: RequestToken? = nil) {
 
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
-				proofManager: proofManager
+				proofManager: proofManager,
+				requestToken: token
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
