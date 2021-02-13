@@ -32,6 +32,7 @@ struct DisplayProvider {
 
 class ChooseProviderViewModel: Logging {
 
+	/// The logging category
 	var loggingCategory: String = "ChooseProviderViewModel"
 
 	/// Coordination Delegate
@@ -43,16 +44,25 @@ class ChooseProviderViewModel: Logging {
 	/// The open id client
 	weak var openIdManager: OpenIdManaging?
 
+	/// The header image
 	@Bindable private(set) var image: UIImage?
+
+	/// The title of the scene
 	@Bindable private(set) var title: String
+
+	/// The sub title of the scene (differs from the page title)
 	@Bindable private(set) var subtitle: String
+
+	/// The information body of the scene
 	@Bindable private(set) var body: String
+
+	/// The Test Provider options
 	@Bindable private(set) var providers: [DisplayProvider]
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
+	///   - openIdManager: the open ID manager
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		openIdManager: OpenIdManaging) {

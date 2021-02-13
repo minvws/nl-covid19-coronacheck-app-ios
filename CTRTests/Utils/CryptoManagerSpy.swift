@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class CryptoManagerSpy: CryptoManagerProtocol {
+class CryptoManagerSpy: CryptoManaging {
 
 	var setNonceCalled = false
 	var setStokenCalled = false

@@ -41,6 +41,9 @@ class ProofManager: ProofManaging, Logging {
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
 	private var proofData: ProofData = .empty
 
+	@UserDefaults(key: "providersFetchedTimestamp", defaultValue: nil)
+	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+
 	/// Initializer
 	required init() {
 		// Required by protocol
@@ -49,13 +52,22 @@ class ProofManager: ProofManaging, Logging {
 	/// Get the providers
 	func fetchCoronaTestProviders() {
 
-		networkManager.getTestProviders { response in
+		#if DEBUG
+		if let lastFetchedTimestamp = providersFetchedTimestamp,
+		   lastFetchedTimestamp > Date() - 3600, !proofData.testProviders.isEmpty {
+			// Don't fetch again within an hour
+				return
+		}
+		#endif
+
+		networkManager.getTestProviders { [weak self] response in
+			self?.providersFetchedTimestamp = Date()
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
-					self.proofData.testProviders = providers
+					self?.proofData.testProviders = providers
 				case let .failure(error):
-					self.logError("Error getting the test providers: \(error)")
+					self?.logError("Error getting the test providers: \(error)")
 			}
 		}
 	}
@@ -63,13 +75,13 @@ class ProofManager: ProofManaging, Logging {
 	/// Get the test types
 	func fetchTestTypes() {
 
-		networkManager.getTestTypes { response in
+		networkManager.getTestTypes { [weak self] response in
 			// Response is of type (Result<[TestType], NetworkError>)
 			switch response {
 				case let .success(types):
-					self.proofData.testTypes = types
+					self?.proofData.testTypes = types
 				case let .failure(error):
-					self.logError("Error getting the test types: \(error)")
+					self?.logError("Error getting the test types: \(error)")
 			}
 		}
 	}

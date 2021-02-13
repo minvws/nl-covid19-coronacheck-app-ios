@@ -30,4 +30,32 @@ extension NSAttributedString {
 		)
 		return attrString
 	}
+
+
+	/// bold a part of the text
+	/// - Parameters:
+	///   - underlined: the part to underline
+	///   - color: the color to underline with
+	/// - Returns: attributed string
+	func bold(_ bolds: [String], with font: UIFont) -> NSAttributedString {
+
+		var output = NSMutableAttributedString(attributedString: self)
+
+		for bold in bolds {
+
+			if let boldRange = self.string.range(of: bold) {
+				let attributes: [NSAttributedString.Key: Any] = [
+					.font: font
+				]
+
+				output.addAttributes(attributes, range: NSRange(boldRange, in: self.string))
+			}
+		}
+
+		return output
+	}
+
+	func rangeOf(string: String) -> Range<String.Index>? {
+		return self.string.range(of: string)
+	}
 }

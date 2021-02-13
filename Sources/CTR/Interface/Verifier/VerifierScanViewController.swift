@@ -12,7 +12,7 @@ class VerifierScanViewModel: Logging {
 	var loggingCategory: String = "VerifierScanViewModel"
 
 	/// The crypto manager
-	var cryptoManager: CryptoManagerProtocol = CryptoManager()
+	var cryptoManager: CryptoManaging = CryptoManager()
 
 	/// Coordination Delegate
 	weak var coordinator: VerifierCoordinatorDelegate?

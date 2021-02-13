@@ -13,6 +13,8 @@ class AppointmentViewController: BaseViewController {
 
 	let sceneView = AppointmentView()
 
+	// MARK: Initializers
+
 	init(viewModel: AppointmentViewModel) {
 
 		self.viewModel = viewModel
@@ -26,6 +28,7 @@ class AppointmentViewController: BaseViewController {
 	}
 
 	// MARK: View lifecycle
+
 	override func loadView() {
 
 		view = sceneView
@@ -40,27 +43,22 @@ class AppointmentViewController: BaseViewController {
 			self.sceneView.title = $0
 		}
 
-		viewModel.$body.binding = {
-			self.sceneView.message = $0
-		}
+		viewModel.$body.binding = { self.sceneView.message = $0 }
 
 		viewModel.$linkedBody.binding = {
 			self.sceneView.underline($0)
 			self.setupLink()
 		}
 
-		viewModel.$buttonTitle.binding = {
-			self.sceneView.primaryTitle = $0
-		}
-
-		viewModel.$image.binding = {
-			self.sceneView.headerImage = $0
-		}
+		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$image.binding = { self.sceneView.headerImage = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonClick()
 		}
 	}
+
+	// MARK: Helper methods
 
 	/// Setup a gesture recognizer for underlined text
 	private func setupLink() {
@@ -69,6 +67,8 @@ class AppointmentViewController: BaseViewController {
 		sceneView.messageLabel.addGestureRecognizer(tapGesture)
 		sceneView.messageLabel.isUserInteractionEnabled = true
 	}
+
+	// MARK: User interaction
 
 	/// User tapped on the link
 	@objc func linkTapped() {

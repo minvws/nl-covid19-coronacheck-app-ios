@@ -6,8 +6,9 @@
 */
 
 import UIKit
+import EasyTipView
 
-class ChooseProviderView: ScrollViewWithHeader {
+class ListResultsView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -24,8 +25,6 @@ class ChooseProviderView: ScrollViewWithHeader {
 		static let buttonMargin: CGFloat = 54.0
 		static let titleTopMargin: CGFloat = 34.0
 		static let messageTopMargin: CGFloat = 24.0
-		static let spacing: CGFloat = 24.0
-		static let stackviewTopMargin: CGFloat = 32.0
 	}
 
 	/// The title label
@@ -40,31 +39,37 @@ class ChooseProviderView: ScrollViewWithHeader {
 		return Label(body: nil).multiline()
 	}()
 
-	/// The stackview for the content
-	let stackView: UIStackView = {
+	/// the update button
+	let primaryButton: Button = {
 
-		let view = UIStackView()
+		let button = Button(title: "Button 1", style: .primary)
+		button.rounded = true
+		return button
+	}()
+
+	let resultView: ListResultView = {
+
+		let view = ListResultView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
-		view.alignment = .fill
-		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
+		view.isHidden = true
 		return view
 	}()
 
 	override func setupViews() {
 
 		super.setupViews()
-		headerImageView.backgroundColor = Theme.colors.create
+		view?.backgroundColor = Theme.colors.viewControllerBackground
+		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		contentView.addSubview(titleLabel)
-		contentView.addSubview(messageLabel)
-		contentView.addSubview(stackView)
+		addSubview(titleLabel)
+		addSubview(messageLabel)
+		addSubview(resultView)
+		addSubview(primaryButton)
 	}
 
 	/// Setup the constraints
@@ -76,15 +81,15 @@ class ChooseProviderView: ScrollViewWithHeader {
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: headerImageView.bottomAnchor,
-				constant: ViewTraits.titleTopMargin
+				equalTo: topAnchor,
+				constant: ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
+				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
+				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 			titleLabel.bottomAnchor.constraint(
@@ -94,32 +99,43 @@ class ChooseProviderView: ScrollViewWithHeader {
 
 			// Message
 			messageLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// StackView
-			stackView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.stackviewTopMargin
-			),
-			stackView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			stackView.trailingAnchor.constraint(
+			messageLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			stackView.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
+
+			// Result
+			resultView.topAnchor.constraint(
+				equalTo: messageLabel.bottomAnchor,
+				constant: ViewTraits.margin
+			),
+			resultView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			resultView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+			// Button
+			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			primaryButton.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			primaryButton.bottomAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	/// User tapped on the primary button
+	@objc func primaryButtonTapped() {
+
+		primaryButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -137,4 +153,13 @@ class ChooseProviderView: ScrollViewWithHeader {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
 		}
 	}
+
+	var primaryTitle: String = "" {
+		didSet {
+			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+
+	/// The user tapped on the primary button
+	var primaryButtonTappedCommand: (() -> Void)?
 }
