@@ -93,7 +93,7 @@ protocol NetworkManaging {
 		providerUrl: URL,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<TestResultWrapper, NetworkError>) -> Void)
+		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 
 struct SignedResponse: Codable {

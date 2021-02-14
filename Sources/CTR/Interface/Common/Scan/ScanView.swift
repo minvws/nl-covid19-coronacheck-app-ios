@@ -19,6 +19,7 @@ class ScanView: BaseView {
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 20.0
+		static let maskOffset: CGFloat = 100.0
 	}
 
 	/// The message label
@@ -117,7 +118,7 @@ class ScanView: BaseView {
 		let rectPath = UIBezierPath(
 			roundedRect: CGRect(
 				x: ViewTraits.margin,
-				y: (sampleMask.frame.size.height - rectWidth) / 2,
+				y: (sampleMask.frame.size.height - rectWidth + ViewTraits.maskOffset) / 2,
 				width: rectWidth,
 				height: rectWidth
 			),

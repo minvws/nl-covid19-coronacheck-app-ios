@@ -94,7 +94,7 @@ class CreateProofViewiewModel: Logging {
 		if let icm = cryptoManager?.generateCommitmentMessage(),
 		   let icmDictionary = icm.convertToDictionary(),
 		   let stoken = cryptoManager?.getStoken(),
-		   let wrapper = proofManager?.getTestWrapper() {
+		   let wrapper = proofManager?.getSignedWrapper() {
 
 			let dictionary: [String: AnyObject] = [
 				"test": generateString(object: wrapper) as AnyObject,

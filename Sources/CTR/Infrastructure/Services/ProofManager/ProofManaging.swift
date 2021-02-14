@@ -37,6 +37,10 @@ protocol ProofManaging: AnyObject {
 	/// - Returns: a test result
 	func getTestWrapper() -> TestResultWrapper?
 
+	/// Get the signed test result
+	/// - Returns: a test result
+	func getSignedWrapper() -> SignedResponse?
+
 	/// Remove the test wrapper
 	func removeTestWrapper()
 }

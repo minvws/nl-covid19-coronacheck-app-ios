@@ -18,4 +18,9 @@ extension String {
 
 		return Localization.string(for: "holder.tokenscan.message")
 	}
+
+	static var holderTokenScanTorchAccessibility: String {
+
+		return Localization.string(for: "holder.tokenscan.torch.accessibility")
+	}
 }

@@ -56,7 +56,7 @@ class TokenEntryViewModel: Logging {
 
 		if let unwrappedToken = requestToken {
 			fetchResult(unwrappedToken)
-			self.token = unwrappedToken.token
+			self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
 		} else {
 			self.token = nil
 		}
@@ -68,6 +68,7 @@ class TokenEntryViewModel: Logging {
 			if let requestToken = createRequestToken(input) {
 				self.requestToken = requestToken
 				fetchResult(requestToken)
+				errorMessage = nil
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
 			}
@@ -78,6 +79,7 @@ class TokenEntryViewModel: Logging {
 
 		if let input = text, !input.isEmpty {
 			verificationCode = text
+			errorMessage = nil
 			if let token = requestToken {
 				fetchResult(token)
 			}
@@ -100,6 +102,7 @@ class TokenEntryViewModel: Logging {
 			provider: provider) {  [weak self] response in
 
 			self?.showProgress = false
+			self?.errorMessage = nil
 
 			switch response {
 				case let .success(wrapper):

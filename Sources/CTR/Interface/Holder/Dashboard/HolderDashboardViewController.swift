@@ -42,6 +42,7 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 		viewModel.$qrTitle.binding = { self.sceneView.qrView.title = $0 }
 		viewModel.$qrSubTitle.binding = { self.sceneView.qrView.message = $0 }
+		viewModel.$expiredTitle.binding = { self.sceneView.expiredQRView.title = $0 }
 		viewModel.$appointmentCard.binding = { self.styleCard(self.sceneView.appointmentCard, cardInfo: $0) }
 		viewModel.$createCard.binding = { self.styleCard(self.sceneView.createCard, cardInfo: $0) }
 
@@ -50,11 +51,26 @@ class HolderDashboardViewController: BaseViewController {
 			if let value = $0 {
 				let image = self.generateQRCode(from: value)
 				self.sceneView.qrView.qrImage = image
+			} else {
+				self.sceneView.qrView.qrImage = nil
+			}
+		}
+
+		viewModel.$showValidQR.binding = {
+			if $0 {
 				self.sceneView.qrView.isHidden = false
 				// Scroll to top
 				self.sceneView.scrollView.setContentOffset(.zero, animated: true)
 			} else {
 				self.sceneView.qrView.isHidden = true
+			}
+		}
+
+		viewModel.$showExpiredQR.binding = {
+			if $0 {
+				self.sceneView.expiredQRView.isHidden = false
+			} else {
+				self.sceneView.expiredQRView.isHidden = true
 			}
 		}
 		
@@ -65,7 +81,7 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		viewModel.checkQRMessage()
+		viewModel.checkQRValidity()
 	}
 
 	// MARK: Helper methods

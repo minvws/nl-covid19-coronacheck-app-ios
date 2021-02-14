@@ -106,6 +106,8 @@ final class Colors {
 
 	var line: UIColor { return color(for: "LineColor") }
 
+	var error: UIColor { return color(for: "ErrorColor") }
+
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

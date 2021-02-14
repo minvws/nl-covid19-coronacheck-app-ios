@@ -24,6 +24,7 @@ class TokenEntryView: ScrollView {
 		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
 		static let messageTopMargin: CGFloat = 24.0
 		static let entryMargin: CGFloat = 16.0
+		static let errorMargin: CGFloat = 8.0
 	}
 
 	/// The title label
@@ -54,6 +55,14 @@ class TokenEntryView: ScrollView {
 		return view
 	}()
 
+	let errorView: ErrorView = {
+
+		let view = ErrorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
@@ -62,6 +71,7 @@ class TokenEntryView: ScrollView {
 		contentView.addSubview(messageLabel)
 		contentView.addSubview(tokenEntryView)
 		contentView.addSubview(verificationEntryView)
+		contentView.addSubview(errorView)
 	}
 
 	/// Setup the constraints
@@ -123,6 +133,19 @@ class TokenEntryView: ScrollView {
 			verificationEntryView.topAnchor.constraint(
 				equalTo: tokenEntryView.bottomAnchor,
 				constant: ViewTraits.entryMargin
+			),
+
+			errorView.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			errorView.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			errorView.topAnchor.constraint(
+				equalTo: verificationEntryView.bottomAnchor,
+				constant: ViewTraits.errorMargin
 			)
 		])
 	}

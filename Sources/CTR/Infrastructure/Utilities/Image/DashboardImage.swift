@@ -16,4 +16,6 @@ extension UIImage {
 	static var createBig: UIImage? { return UIImage(named: "CreateQRBig") }
 
 	static var radio: UIImage? { return UIImage(named: "Radio") }
+
+	static var expiredQR: UIImage? { return UIImage(named: "ExpiredQR") }
 }

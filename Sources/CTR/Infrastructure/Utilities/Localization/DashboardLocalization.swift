@@ -58,4 +58,9 @@ extension String {
 
 		return Localization.string(for: "holder.dashboard.qr.message")
 	}
+
+	static var holderDashboardQRExpired: String {
+
+		return Localization.string(for: "holder.dashboard.qr.expired")
+	}
 }

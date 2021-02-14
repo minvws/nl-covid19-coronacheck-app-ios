@@ -90,6 +90,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The open ID manager
 	var openIdManager: OpenIdManaging = Services.openIdManager
 
+	/// The general configuration
+	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
@@ -154,7 +157,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager
+				proofManager: proofManager,
+				configuration: generalConfiguration
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)

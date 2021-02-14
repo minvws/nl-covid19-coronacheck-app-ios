@@ -26,9 +26,12 @@ class ProofManager: ProofManaging, Logging {
 		/// The test result
 		var testWrapper: TestResultWrapper?
 
+		/// The signed Wrapper
+		var signedWrapper: SignedResponse?
+
 		/// Empty crypto data
 		static var empty: ProofData {
-			return ProofData(testProviders: [], testTypes: [], testWrapper: nil)
+			return ProofData(testProviders: [], testTypes: [], testWrapper: nil, signedWrapper: nil)
 		}
 	}
 
@@ -115,14 +118,16 @@ class ProofManager: ProofManaging, Logging {
 		}
 
 		networkManager.getTestResult(providerUrl: url, token: token, code: code) { response in
-			// response is of type (Result<TestResultWrapper, NetworkError>)
+			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
 
 			switch response {
 				case let .success(wrapper):
-					if wrapper.status == .complete {
-						self.proofData.testWrapper = wrapper
-					}
-					oncompletion(.success(wrapper))
+					print("iii")
+					if wrapper.0.status == .complete {
+						self.proofData.testWrapper = wrapper.0
+						self.proofData.signedWrapper = wrapper.1
+				}
+					oncompletion(.success(wrapper.0))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
 					oncompletion(.failure(error))
@@ -135,6 +140,13 @@ class ProofManager: ProofManaging, Logging {
 	func getTestWrapper() -> TestResultWrapper? {
 
 		return proofData.testWrapper
+	}
+
+	/// Get the signed test result
+	/// - Returns: a test result
+	func getSignedWrapper() -> SignedResponse? {
+
+		return proofData.signedWrapper
 	}
 
 	/// Remove the test wrapper

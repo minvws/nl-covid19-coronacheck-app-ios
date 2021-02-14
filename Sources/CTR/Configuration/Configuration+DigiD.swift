@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ConfigurationDigidProtocol {
+protocol ConfigurationDigidProtocol: AnyObject {
 
 	/// Get the digid host
 	/// - Returns: the digid host
