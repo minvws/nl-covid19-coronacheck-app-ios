@@ -24,4 +24,3 @@ extension String {
 		return Localization.string(for: "holder.tokenscan.torch.accessibility")
 	}
 }
-
