@@ -93,6 +93,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The general configuration
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 
+	/// The factory for onboarding pages
+	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
@@ -119,7 +122,8 @@ class HolderCoordinator: Coordinator, Logging {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
-				onboardingDelegate: self
+				onboardingDelegate: self,
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 
@@ -127,7 +131,8 @@ class HolderCoordinator: Coordinator, Logging {
 			// Show the consent page
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
-				onboardingDelegate: self
+				onboardingDelegate: self,
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()

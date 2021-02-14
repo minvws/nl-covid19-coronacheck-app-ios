@@ -10,26 +10,17 @@ import UIKit
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 
-	// Navigate to the Scan Scene
-	func navigateToScan()
-
-	// Navigate to the Scan Result
-	func navigateToScanResult()
-
-	/// Navigate to the start fo the verifier flow
-	func navigateToStart()
-
-	/// Set the scan result
-	/// - Parameter result: True if valid
-	func setScanResult(_ result: Bool)
-
-	/// Dismiss the viewcontroller
-	func dismiss()
+	/// Navigate to verifier welcome scene
+	func navigateToVerifierWelcome()
 }
 
 class VerifierCoordinator: Coordinator {
 
-	var isValid: Bool = false
+	/// The onboardings manager
+	var onboardingManager: OnboardingManaging = Services.onboardingManager
+
+	/// The factory for onboarding pages
+	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -46,9 +37,28 @@ class VerifierCoordinator: Coordinator {
 	// Designated starter method
 	func start() {
 
-		let viewController = VerifierStartViewController()
-		viewController.coordinator = self
-		navigationController.pushViewController(viewController, animated: true)
+		if onboardingManager.needsOnboarding {
+			/// Start with the onboarding
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self,
+				factory: onboardingFactory
+			)
+			startChildCoordinator(coordinator)
+
+		} else if onboardingManager.needsConsent {
+			// Show the consent page
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self,
+				factory: onboardingFactory
+			)
+			addChildCoordinator(coordinator)
+			coordinator.navigateToConsent()
+		} else {
+
+			navigateToVerifierWelcome()
+		}
 	}
 }
 
@@ -56,44 +66,35 @@ class VerifierCoordinator: Coordinator {
 
 extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
-	// Navigate to the Scan Scene
-	func navigateToScan() {
+	/// Navigate to verifier welcome scene
+	func navigateToVerifierWelcome() {
 
-		let viewController = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
+		let destination = VerifierStartViewController()
+		destination.coordinator = self
+		navigationController.pushViewController(destination, animated: true)
+	}
+}
+
+extension VerifierCoordinator: OnboardingDelegate {
+
+	/// User has seen all the onboarding pages
+	func finishOnboarding() {
+
+		onboardingManager.finishOnboarding()
 	}
 
-	// Navigate to the Test Result
-	func navigateToScanResult() {
+	/// The onboarding is finished
+	func consentGiven() {
 
-		let viewController = VerifierResultViewController(
-			viewModel: VerifierResultViewModel(
-				coordinator: self,
-				result: isValid
-			)
-		)
-		navigationController.pushViewController(viewController, animated: true)
-	}
+		// Mark as complete
+		onboardingManager.consentGiven()
 
-	/// Set the scan result
-	/// - Parameter result: True if valid
-	func setScanResult(_ result: Bool) {
-
-		isValid = result
-	}
-
-	/// Navigate to the start fo the verifier flow
-	func navigateToStart() {
-
-		guard navigationController.viewControllers.count > 1 else {
-			return
+		// Remove child coordinator
+		if let onboardingCoorinator = childCoordinators.first {
+			removeChildCoordinator(onboardingCoorinator)
 		}
-		navigationController.popToViewController(navigationController.viewControllers[1], animated: true)
-	}
 
-	/// Dismiss the viewcontroller
-	func dismiss() {
-
-		navigationController.popViewController(animated: true)
+		// Navigate to Verifier Welcome.
+		navigateToVerifierWelcome()
 	}
 }

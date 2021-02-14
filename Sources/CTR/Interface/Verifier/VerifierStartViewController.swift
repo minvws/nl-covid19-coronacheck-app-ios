@@ -27,10 +27,10 @@ class VerifierStartViewController: BaseViewController {
 
 		sceneView.primaryTitle = "Scan bezoekers"
 
-		sceneView.primaryButtonTappedCommand = { [weak self] in
-
-			self?.coordinator?.navigateToScan()
-		}
+//		sceneView.primaryButtonTappedCommand = { [weak self] in
+//
+//			self?.coordinator?.navigateToScan()
+//		}
 		sceneView.message = "Meer informatie over deze app."
     }
 }

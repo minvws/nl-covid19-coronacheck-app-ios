@@ -7,55 +7,112 @@
   
 import Foundation
 
+// MARK: - Holder
+
 extension String {
 
-	static var onboardingTitleSafely: String {
+	static var holderOnboardingTitleSafely: String {
 
 		return Localization.string(for: "holder.onboarding.title.safely")
 	}
 
-	static var onboardingMessageSafely: String {
+	static var holderOnboardingMessageSafely: String {
 
 		return Localization.string(for: "holder.onboarding.message.safely")
 	}
 
-	static var onboardingTitleYourQR: String {
+	static var holderOnboardingTitleYourQR: String {
 
 		return Localization.string(for: "holder.onboarding.title.yourqr")
 	}
 
-	static var onboardingMessageYourQR: String {
+	static var holderOnboardingMessageYourQR: String {
 
 		return Localization.string(for: "holder.onboarding.message.yourqr")
 	}
 
-	static var onboardingTitleValidity: String {
+	static var holderOnboardingTitleValidity: String {
 
 		return Localization.string(for: "holder.onboarding.title.validity")
 	}
 
-	static var onboardingMessageValidity: String {
+	static var holderOnboardingMessageValidity: String {
 
 		return Localization.string(for: "holder.onboarding.message.validity")
 	}
 
-	static var onboardingTitleSecureSystem: String {
+	static var holderOnboardingTitleSecureSystem: String {
 
 		return Localization.string(for: "holder.onboarding.title.securesystem")
 	}
 
-	static var onboardingMessageSecureSystem: String {
+	static var holderOnboardingMessageSecureSystem: String {
 
 		return Localization.string(for: "holder.onboarding.message.securesystem")
 	}
 
-	static var onboardingTitlePrivacy: String {
+	static var holderOnboardingTitlePrivacy: String {
 
 		return Localization.string(for: "holder.onboarding.title.privacy")
 	}
 
-	static var onboardingMessagePrivacy: String {
+	static var holderOnboardingMessagePrivacy: String {
 
 		return Localization.string(for: "holder.onboarding.message.privacy")
+	}
+}
+
+// MARK: - Verifier
+
+extension String {
+
+	static var verifierOnboardingTitleSafely: String {
+
+		return Localization.string(for: "verifier.onboarding.title.safely")
+	}
+
+	static var verifierOnboardingMessageSafely: String {
+
+		return Localization.string(for: "verifier.onboarding.message.safely")
+	}
+
+	static var verifierOnboardingTitleYourQR: String {
+
+		return Localization.string(for: "verifier.onboarding.title.yourqr")
+	}
+
+	static var verifierOnboardingMessageYourQR: String {
+
+		return Localization.string(for: "verifier.onboarding.message.yourqr")
+	}
+
+	static var verifierOnboardingTitleValidity: String {
+
+		return Localization.string(for: "verifier.onboarding.title.validity")
+	}
+
+	static var verifierOnboardingMessageValidity: String {
+
+		return Localization.string(for: "verifier.onboarding.message.validity")
+	}
+
+	static var verifierOnboardingTitleSecureSystem: String {
+
+		return Localization.string(for: "verifier.onboarding.title.securesystem")
+	}
+
+	static var verifierOnboardingMessageSecureSystem: String {
+
+		return Localization.string(for: "verifier.onboarding.message.securesystem")
+	}
+
+	static var verifierOnboardingTitlePrivacy: String {
+
+		return Localization.string(for: "verifier.onboarding.title.privacy")
+	}
+
+	static var verifierOnboardingMessagePrivacy: String {
+
+		return Localization.string(for: "verifier.onboarding.message.privacy")
 	}
 }

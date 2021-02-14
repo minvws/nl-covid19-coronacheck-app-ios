@@ -7,45 +7,92 @@
   
 import Foundation
 
+// MARK: - Holder
+
 extension String {
 
-	static var consentTitle: String {
+	static var holderConsentTitle: String {
 
 		return Localization.string(for: "holder.consent.title")
 	}
 
-	static var consentMessage: String {
+	static var holderConsentMessage: String {
 
 		return Localization.string(for: "holder.consent.message")
 	}
 
-	static var consentMessageUnderlined: String {
+	static var holderConsentMessageUnderlined: String {
 
 		return Localization.string(for: "holder.consent.message.underlined")
 	}
 
-	static var consentItemOne: String {
+	static var holderConsentItemOne: String {
 
 		return Localization.string(for: "holder.consent.item.1")
 	}
 
-	static var consentItemTwo: String {
+	static var holderConsentItemTwo: String {
 
 		return Localization.string(for: "holder.consent.item.2")
 	}
 
-	static var consentItemThree: String {
+	static var holderConsentItemThree: String {
 
 		return Localization.string(for: "holder.consent.item.3")
 	}
 
-	static var consentItemFour: String {
+	static var holderConsentItemFour: String {
 
 		return Localization.string(for: "holder.consent.item.4")
 	}
 
-	static var consentButtonTitle: String {
+	static var holderConsentButtonTitle: String {
 
 		return Localization.string(for: "holder.consent.button")
+	}
+}
+
+// MARK: - Verifier
+
+extension String {
+
+	static var verifierConsentTitle: String {
+
+		return Localization.string(for: "verifier.consent.title")
+	}
+
+	static var verifierConsentMessage: String {
+
+		return Localization.string(for: "verifier.consent.message")
+	}
+
+	static var verifierConsentMessageUnderlined: String {
+
+		return Localization.string(for: "verifier.consent.message.underlined")
+	}
+
+	static var verifierConsentItemOne: String {
+
+		return Localization.string(for: "verifier.consent.item.1")
+	}
+
+	static var verifierConsentItemTwo: String {
+
+		return Localization.string(for: "verifier.consent.item.2")
+	}
+
+	static var verifierConsentItemThree: String {
+
+		return Localization.string(for: "verifier.consent.item.3")
+	}
+
+	static var verifierConsentItemFour: String {
+
+		return Localization.string(for: "verifier.consent.item.4")
+	}
+
+	static var verifierConsentButtonTitle: String {
+
+		return Localization.string(for: "verifier.consent.button")
 	}
 }
