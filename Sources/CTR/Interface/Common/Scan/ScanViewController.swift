@@ -8,7 +8,9 @@
 import AVFoundation
 import UIKit
 
-class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDelegate {
+class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDelegate, Logging {
+
+	var loggingCategory: String = "ScanViewController"
 
 	var captureSession: AVCaptureSession!
 	var previewLayer: AVCaptureVideoPreviewLayer!
@@ -20,15 +22,6 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 		view = sceneView
 	}
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-//		sceneView.primaryButtonTappedCommand = { [weak self] in
-//
-//			self?.captureSession.startRunning()
-//		}
-    }
 
 	func setupScan() {
 
@@ -71,6 +64,16 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		captureSession.startRunning()
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+
+		// Force navigation title color to white
+		let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+		navigationController?.navigationBar.titleTextAttributes = textAttributes
+		navigationController?.navigationBar.tintColor = .white
+	}
+
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 
@@ -87,6 +90,11 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		if captureSession?.isRunning == true {
 			captureSession.stopRunning()
 		}
+
+		// Reset navigation title color
+		let textAttributes = [NSAttributedString.Key.foregroundColor: Theme.colors.dark]
+		navigationController?.navigationBar.titleTextAttributes = textAttributes
+		navigationController?.navigationBar.tintColor = Theme.colors.dark
 	}
 
 	func failed() {
@@ -95,7 +103,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			message: "Your device does not support scanning a code from an item. Please use a device with a camera.",
 			preferredStyle: .alert
 		)
-		ac.addAction(UIAlertAction(title: "OK", style: .default))
+		ac.addAction(UIAlertAction(title: .ok, style: .default))
 		present(ac, animated: true)
 		captureSession = nil
 	}
@@ -122,5 +130,46 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
 		return .portrait
+	}
+
+	/// Toggle the torch
+	@objc func toggleTorch() {
+
+		guard let device = AVCaptureDevice.default(for: AVMediaType.video), device.hasTorch else {
+			// No camera or no torch
+			return
+		}
+		do {
+			try device.lockForConfiguration()
+			if device.torchMode == AVCaptureDevice.TorchMode.on {
+				device.torchMode = AVCaptureDevice.TorchMode.off
+			} else {
+				try device.setTorchModeOn(level: 1.0)
+			}
+			device.unlockForConfiguration()
+		} catch {
+			self.logError("toggleTorch: \(error)")
+		}
+	}
+
+	/// Add a close button to the navigation bar.
+	/// - Parameters:
+	///   - action: the action when the users taps the close button
+	///   - accessibilityLabel: the label for Voice Over
+	func addTorchButton(
+		action: Selector?,
+		accessibilityLabel: String) {
+
+		let button = UIBarButtonItem(
+			image: .torch,
+			style: .plain,
+			target: self,
+			action: action
+		)
+		button.accessibilityIdentifier = "TorchButton"
+		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityTraits = UIAccessibilityTraits.button
+		navigationItem.rightBarButtonItem = button
+		navigationController?.navigationItem.rightBarButtonItem = button
 	}
 }

@@ -6,6 +6,8 @@
 	<dict>
 		<key>testresultTTL</key>
 		<integer>172800</integer>
+		<key>QRTTL</key>
+		<integer>180</integer>
 	</dict>
 	<key>digid</key>
 	<dict>

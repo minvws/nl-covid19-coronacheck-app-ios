@@ -19,4 +19,10 @@ extension UIImage {
 
 	static var disclosure: UIImage? { return UIImage(named: "Disclosure") }
 
+	static var error: UIImage? { return UIImage(named: "Error") }
+
+	static var torch: UIImage? { return UIImage(named: "Torch") }
+
+	static var questionMark: UIImage? { return UIImage(named: "QuestionMark") }
+
 }

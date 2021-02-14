@@ -32,6 +32,14 @@ class HolderDashboardView: ScrolledStackView {
 		return view
 	}()
 
+	let expiredQRView: ExpiredQRView = {
+
+		let view = ExpiredQRView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
+	}()
+
 	/// The appointment Card
 	let appointmentCard: CardView = {
 
@@ -56,6 +64,7 @@ class HolderDashboardView: ScrolledStackView {
 
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(qrView)
+		stackView.addArrangedSubview(expiredQRView)
 		stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
 	}

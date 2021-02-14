@@ -62,7 +62,10 @@ class TokenEntryViewController: BaseViewController {
 
 		viewModel.$errorMessage.binding = {
 			if let message = $0 {
-				self.showAlert(message)
+				self.sceneView.errorView.error = message
+				self.sceneView.errorView.isHidden = false
+			} else {
+				self.sceneView.errorView.isHidden = true
 			}
 		}
 
@@ -79,7 +82,7 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.verificationEntryView.inputField.delegate = self
 		sceneView.verificationEntryView.inputField.tag = 1
 
-		// Only show an arrow as back button
+			// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
 
@@ -136,24 +139,6 @@ class TokenEntryViewController: BaseViewController {
 
 		tapGestureRecognizer?.isEnabled = false
 		sceneView.scrollView.contentInset.bottom = 0.0
-	}
-
-	/// Show alert
-	private func showAlert(_ message: String) {
-
-		let alertController = UIAlertController(
-			title: .errorTitle,
-			message: message,
-			preferredStyle: .alert)
-
-		alertController.addAction(
-			UIAlertAction(
-				title: .ok,
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
 	}
 }
 

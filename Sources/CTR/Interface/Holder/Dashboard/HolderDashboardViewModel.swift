@@ -50,6 +50,11 @@ class HolderDashboardViewModel: Logging {
 	/// The proof manager
 	weak var proofManager: ProofManaging?
 
+	weak var configuration: ConfigurationGeneralProtocol?
+
+	/// A timer to keep sending pings
+	var validityTimer: Timer?
+
 	/// The title of the scene
 	@Bindable private(set) var title: String
 
@@ -62,8 +67,17 @@ class HolderDashboardViewModel: Logging {
 	/// The message below the QR card
 	@Bindable private(set) var qrSubTitle: String?
 
+	/// The message on the expired card
+	@Bindable private(set) var expiredTitle: String?
+
 	/// The encrypted test proof
 	@Bindable private(set) var qrMessage: String?
+
+	/// Show a valid QR Message
+	@Bindable private(set) var showValidQR: Bool
+
+	/// Show an expired QR Message
+	@Bindable private(set) var showExpiredQR: Bool
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -76,15 +90,26 @@ class HolderDashboardViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
-	init(coordinator: HolderCoordinatorDelegate, cryptoManager: CryptoManaging, proofManager: ProofManaging) {
+	///   - configuration: the configuration
+	init(
+		coordinator: HolderCoordinatorDelegate,
+		cryptoManager: CryptoManaging,
+		proofManager: ProofManaging,
+		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
+		self.configuration = configuration
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
 		self.qrTitle = .holderDashboardQRTitle
-		self.qrMessage = nil
+		self.expiredTitle = .holderDashboardQRExpired
+
+		// Start by showing nothing
+		self.showValidQR = false
+		self.showExpiredQR = false
+
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
 			title: .holderDashboardAppointmentTitle,
@@ -99,7 +124,6 @@ class HolderDashboardViewModel: Logging {
 			actionTitle: .holderDashboardCreatetAction,
 			image: .create
 		)
-		generateQRMessage()
 	}
 
 	/// The user tapped on one of the cards
@@ -113,37 +137,71 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	/// Check the QR Message
-	func checkQRMessage() {
+	/// Check the QR Validity
+	@objc func checkQRValidity() {
 
-		generateQRMessage()
-	}
+		if let wrapper = proofManager?.getTestWrapper(),
+		   let dateString = wrapper.result?.sampleDate,
+		   let date = parseDateFormatter.date(from: dateString) {
 
-	/// Generate the qr message from proof and crypto
-	private func generateQRMessage() {
+			var comp = DateComponents()
+			comp.second = Configuration().getTestResultTTL()
+			if let validUntilDate = Calendar.current.date(byAdding: comp, to: date) {
+				let printDate = printDateFormatter.string(from: validUntilDate)
 
-		if let message = self.cryptoManager?.generateQRmessage() {
-			self.qrMessage = message
-
-			// Max Brightness
-			UIScreen.main.brightness = 1
-
-			// Calculate valid until
-			if let wrapper = proofManager?.getTestWrapper(),
-			   let dateString = wrapper.result?.sampleDate,
-			   let date = parseDateFormatter.date(from: dateString) {
-
-				var comp = DateComponents()
-				comp.second = Configuration().getTestResultTTL()
-				if let extendedDate = Calendar.current.date(byAdding: comp, to: date) {
-					let printDate = printDateFormatter.string(from: extendedDate)
-					qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
-					self.logDebug("Proof is valid until \(printDate)")
+				if validUntilDate > Date() {
+					logDebug("Proof is valid until \(printDate)")
+					showQRMessageIsValid(printDate)
+					startValidityTimer()
+				} else {
+					// No longer valid
+					logDebug("Proof is no longer valid \(printDate)")
+					showQRMessageIsExpired()
+					validityTimer?.invalidate()
+					validityTimer = nil
 				}
 			}
 		} else {
-			self.qrMessage = nil
+			qrMessage = nil
+			showValidQR = false
+			showExpiredQR = false
 		}
+	}
+
+	func showQRMessageIsValid(_ printDate: String) {
+
+		if let message = self.cryptoManager?.generateQRmessage() {
+			qrMessage = message
+			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
+			showValidQR = true
+			showExpiredQR = false
+		}
+	}
+
+	func showQRMessageIsExpired() {
+
+		showValidQR = false
+		showExpiredQR = true
+	}
+
+	/// Start the validity timer, check every 10 seconds.
+	func startValidityTimer() {
+
+		guard validityTimer == nil else {
+			return
+		}
+
+		guard let configuration = configuration else {
+			return
+		}
+
+		validityTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(configuration.getQRTTL()),
+			target: self,
+			selector: (#selector(checkQRValidity)),
+			userInfo: nil,
+			repeats: true
+		)
 	}
 
 	/// Formatter to parse
