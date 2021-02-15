@@ -56,6 +56,8 @@ FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTime(NSData* 
 
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileGenerateHolderSk(void);
 
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileReadCredential(NSData* _Nullable credJson);
+
 FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerify(NSData* _Nullable issuerPkXml, NSData* _Nullable proofAsn1);
 
 #endif

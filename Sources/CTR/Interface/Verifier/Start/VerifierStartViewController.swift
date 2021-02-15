@@ -9,9 +9,21 @@ import UIKit
 
 class VerifierStartViewController: BaseViewController {
 
-	weak var coordinator: VerifierCoordinatorDelegate?
+	private let viewModel: VerifierStartViewModel
 
-	let sceneView = MainView()
+	let sceneView = VerifierStartView()
+
+	init(viewModel: VerifierStartViewModel) {
+
+		self.viewModel = viewModel
+
+		super.init(nibName: nil, bundle: nil)
+	}
+
+	required init?(coder: NSCoder) {
+
+		fatalError("init(coder:) has not been implemented")
+	}
 
 	// MARK: View lifecycle
 	override func loadView() {
@@ -20,19 +32,44 @@ class VerifierStartViewController: BaseViewController {
 	}
 
     override func viewDidLoad() {
+
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-		title = "Scan QR-code"
-
-		sceneView.primaryTitle = "Start scannen"
+		viewModel.$title.binding = { self.title = $0 }
+		viewModel.$header.binding = { self.sceneView.title = $0 }
+		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$primaryButtonTitle.binding = { self.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.coordinator?.navigateToScan()
+			self?.viewModel.primaryButtonTapped()
+		}
+
+		viewModel.$linkedMessage.binding = {
+
+			self.sceneView.underline($0)
+			self.setupLink()
 		}
 		
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
     }
+
+	// MARK: Helper methods
+
+	/// Setup a gesture recognizer for underlined text
+	private func setupLink() {
+
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
+		sceneView.messageLabel.addGestureRecognizer(tapGesture)
+		sceneView.messageLabel.isUserInteractionEnabled = true
+	}
+
+	// MARK: User interaction
+
+	/// User tapped on the link
+	@objc func linkTapped() {
+
+		viewModel.linkTapped(self)
+	}
 }

@@ -98,17 +98,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
 
-		let dashboardViewController = VerifierStartViewController()
-		dashboardViewController.coordinator = self
-
-		//		let dashboardViewController = HolderDashboardViewController(
-		//			viewModel: HolderDashboardViewModel(
-		//				coordinator: self,
-		//				cryptoManager: cryptoManager,
-		//				proofManager: proofManager,
-		//				configuration: generalConfiguration
-		//			)
-		//		)
+		let dashboardViewController = VerifierStartViewController(
+			viewModel: VerifierStartViewModel(
+				coordinator: self
+			)
+		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationContoller
 
