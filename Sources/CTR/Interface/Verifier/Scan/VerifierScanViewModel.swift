@@ -52,11 +52,8 @@ class VerifierScanViewModel: Logging {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let result = cryptoManager?.verifyQRMessage(message) {
-			logDebug("Result: \(result)")
-			//		coordinator?.setScanResult(result)
-			coordinator?.navigateToScanResult()
-
+		if let attributes = cryptoManager?.verifyQRMessage(message) {
+			coordinator?.navigateToScanResult(attributes)
 		} else {
 			startScanning = true
 		}

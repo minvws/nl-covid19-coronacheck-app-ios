@@ -17,7 +17,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToScan()
 
 	/// Navigate to the scan result
-	func navigateToScanResult()
+	/// - Parameter attributes: the scanned attributes
+	func navigateToScanResult(_ attributes: Attributes)
 }
 
 class VerifierCoordinator: Coordinator, Logging {
@@ -118,24 +119,24 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to the QR scanner
 	func navigateToScan() {
 
-		navigateToScanResult()
+		let destination = VerifierScanViewController(
+			viewModel: VerifierScanViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager
+			)
+		)
 
-//		let destination = VerifierScanViewController(
-//			viewModel: VerifierScanViewModel(
-//				coordinator: self,
-//				cryptoManager: cryptoManager
-//			)
-//		)
-//
-//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the scan result
-	func navigateToScanResult() {
+	/// - Parameter attributes: the scanned attributes
+	func navigateToScanResult(_ attributes: Attributes) {
 
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
-				delegate: self
+				delegate: self,
+				attributes: attributes
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)

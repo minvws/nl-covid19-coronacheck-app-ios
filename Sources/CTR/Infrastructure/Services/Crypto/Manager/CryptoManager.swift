@@ -15,6 +15,18 @@ struct NonceEnvelope: Codable {
 	let stoken: String
 }
 
+struct CrypoAttributes: Codable {
+
+	let sampleTime: String
+	let testType: String
+}
+
+struct Attributes {
+
+	let cryptoAttributes: CrypoAttributes
+	let unixTimeStamp: Int64
+}
+
 protocol CryptoManaging: AnyObject {
 
 	init()
@@ -49,7 +61,7 @@ protocol CryptoManaging: AnyObject {
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: True if valid
-	func verifyQRMessage(_ message: String) -> Bool
+	func verifyQRMessage(_ message: String) -> Attributes?
 }
 
 /// The cryptography manager
@@ -197,14 +209,24 @@ class CryptoManager: CryptoManaging, Logging {
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: True if valid
-	func verifyQRMessage(_ message: String) -> Bool {
+	func verifyQRMessage(_ message: String) -> Attributes? {
 
-		let proofAsn1 = Data(base64Encoded: message)
+		let proofAsn1 = Data(base64Encoded: message, options: .ignoreUnknownCharacters)
 		if let result = ClmobileVerify(issuerPublicKey, proofAsn1) {
 
-			// This logic should not be here, it should only expose the attributes.
-			return result.error.isEmpty && result.unixTimeSeconds > 0
+			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
+				self.logError("Error Proof: \(result.error)")
+				return nil
+			}
+
+			do {
+				let object = try JSONDecoder().decode(CrypoAttributes.self, from: attributesJson)
+				return Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds)
+			} catch {
+				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+				return nil
+			}
 		}
-		return false
+		return nil
 	}
 }
