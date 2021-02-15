@@ -7,6 +7,8 @@
   
 import Foundation
 
+// MARK: - Holder
+
 extension String {
 
 	static var holderMenuDashboard: String {
@@ -32,5 +34,30 @@ extension String {
 	static var holderMenuFeedback: String {
 
 		return Localization.string(for: "holder.menu.feedback")
+	}
+}
+
+// MARK: - Verifier
+
+extension String {
+
+	static var verifierMenuDashboard: String {
+
+		return Localization.string(for: "verifier.menu.dashboard")
+	}
+
+	static var verifierMenuSupport: String {
+
+		return Localization.string(for: "verifier.menu.support")
+	}
+
+	static var verifierMenuAbout: String {
+
+		return Localization.string(for: "verifier.menu.about")
+	}
+
+	static var verifierMenuFeedback: String {
+
+		return Localization.string(for: "verifier.menu.feedback")
 	}
 }

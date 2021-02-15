@@ -7,7 +7,7 @@
   
 import UIKit
 
-class HolderMenuItemView: BaseView {
+class MenuItemView: BaseView {
 
 	/// The message label
 	let titleLabel: Label = {
@@ -58,7 +58,7 @@ class HolderMenuItemView: BaseView {
 	var primaryButtonTappedCommand: (() -> Void)?
 }
 
-class HolderMenu: BaseView {
+class MenuView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {

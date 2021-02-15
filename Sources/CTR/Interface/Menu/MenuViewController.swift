@@ -7,13 +7,13 @@
   
 import UIKit
 
-class HolderMenuViewController: BaseViewController {
+class MenuViewController: BaseViewController {
 
-	private let viewModel: HolderMenuViewModel
+	private let viewModel: MenuViewModel
 
-	let sceneView = HolderMenu()
+	let sceneView = MenuView()
 
-	init(viewModel: HolderMenuViewModel) {
+	init(viewModel: MenuViewModel) {
 
 		self.viewModel = viewModel
 
@@ -39,7 +39,7 @@ class HolderMenuViewController: BaseViewController {
 
 			for item in items {
 
-				let view = HolderMenuItemView()
+				let view = MenuItemView()
 				view.titleLabel.text = item.title
 				view.titleLabel.textColor = Theme.colors.secondary
 				view.titleLabel.font = Theme.fonts.title2
@@ -54,7 +54,7 @@ class HolderMenuViewController: BaseViewController {
 
 			for item in items {
 
-				let view = HolderMenuItemView()
+				let view = MenuItemView()
 				view.titleLabel.text = item.title
 				view.titleLabel.textColor = Theme.colors.secondary.withAlphaComponent(0.8)
 				view.titleLabel.font = Theme.fonts.bodyBold

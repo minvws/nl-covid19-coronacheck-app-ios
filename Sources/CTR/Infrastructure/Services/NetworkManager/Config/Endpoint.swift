@@ -20,7 +20,7 @@ struct Endpoint {
     // MARK: - API
 
 	/// Endpoint for the remote configuration
-    static let remoteConfiguration = Path(components: "holder", "config")
+	static let remoteConfiguration = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "config")
 
 	/// Endpoint for the nonce
 	static let nonce = Path(components: "holder", "get_nonce")

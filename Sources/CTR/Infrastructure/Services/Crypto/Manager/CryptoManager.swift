@@ -19,8 +19,6 @@ protocol CryptoManaging: AnyObject {
 
 	init()
 
-	func debug()
-
 	/// Set the nonce
 	/// - Parameter nonce: the nonce
 	func setNonce(_ nonce: String)
@@ -37,16 +35,20 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: commitment message
 	func generateCommitmentMessage() -> String?
 
-	/// Generate a qr message
-	/// - Returns: qr message
+	/// Generate the QR message
+	/// - Returns: the QR message
 	func generateQRmessage() -> String?
 
 	/// Get the stoken
 	/// - Returns: the stoken
 	func getStoken() -> String?
 
+	/// Reset the vault
 	func reset()
 
+	/// Verify the QR message
+	/// - Parameter message: the scanned QR code
+	/// - Returns: True if valid
 	func verifyQRMessage(_ message: String) -> Bool
 }
 
@@ -87,7 +89,7 @@ class CryptoManager: CryptoManaging, Logging {
 		// Public Key
 		readPublicKey()
 
-		if cryptoData.holderSecretKey == nil {
+		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = ClmobileGenerateHolderSk(),
 			   let data = result.value {
 				self.cryptoData = CryptoData(
@@ -99,6 +101,7 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 	}
 
+	/// Reset the vault
 	func reset() {
 
 		cryptoData = .empty
@@ -109,19 +112,6 @@ class CryptoManager: CryptoManaging, Logging {
 
 		if let content = FileReader(bundle: Bundle(for: type(of: self)), fileName: "issuerPk", fileType: "xml").read() {
 			issuerPublicKey = content.data(using: .utf8)
-		}
-	}
-
-	/// Debug method
-	func debug() {
-
-		if let holderSK = cryptoData.holderSecretKey {
-			let holderSKString = String(decoding: holderSK, as: UTF8.self)
-			self.logDebug("CryptoData:\n holderSK: \(holderSKString)\n nonce: \(cryptoData.nonce ?? "n/a")\n stoken: \(cryptoData.stoken ?? "n/a")")
-		}
-		if let issuerPK = issuerPublicKey {
-			let issuerPublicKeyString = String(decoding: issuerPK, as: UTF8.self)
-			self.logDebug("CryptoData:\n issuerPublicKey: \(String(issuerPublicKeyString.prefix(54))))")
 		}
 	}
 
@@ -145,6 +135,8 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
+	/// Generate the QR message
+	/// - Returns: the QR message
 	func generateQRmessage() -> String? {
 
 		guard let holderSecretKey = cryptoData.holderSecretKey, let ism = cryptoData.proofs else {
@@ -202,6 +194,9 @@ class CryptoManager: CryptoManaging, Logging {
 		return cryptoData.stoken
 	}
 
+	/// Verify the QR message
+	/// - Parameter message: the scanned QR code
+	/// - Returns: True if valid
 	func verifyQRMessage(_ message: String) -> Bool {
 
 		let proofAsn1 = Data(base64Encoded: message)

@@ -6,28 +6,30 @@
 */
 
 import UIKit
-import EasyTipView
 
-class ListResultsView: BaseView {
+class ResultView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
 
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
-		static let titleLineHeight: CGFloat = 26
-		static let messageLineHeight: CGFloat = 22
-		static let imageRatio: CGFloat = 0.75
+		static let buttonWidth: CGFloat = 212.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 54.0
-		static let titleTopMargin: CGFloat = 34.0
-		static let messageTopMargin: CGFloat = 24.0
 	}
 
+	let imageView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .center
+		return view
+	}()
+
 	/// The title label
-	let titleLabel: Label = {
+	private let titleLabel: Label = {
 
 		return Label(title1: nil).multiline()
 	}()
@@ -35,29 +37,25 @@ class ListResultsView: BaseView {
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(body: nil).multiline()
+		return Label(headline: nil).multiline()
 	}()
 
-	/// the update button
-	let primaryButton: Button = {
+	/// the scan button
+	private let primaryButton: Button = {
 
-		let button = Button(title: "Button 1", style: .primary)
+		let button = Button(title: "Button 1", style: .secondary)
+		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
 		return button
 	}()
 
-	let resultView: ListResultView = {
-
-		let view = ListResultView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isHidden = true
-		return view
-	}()
-
+	/// setup the views
 	override func setupViews() {
 
 		super.setupViews()
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = .gray // Theme.colors.viewControllerBackground
+		titleLabel.textAlignment = .center
+		messageLabel.textAlignment = .center
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -65,22 +63,33 @@ class ListResultsView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+
+		addSubview(imageView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
-		addSubview(resultView)
 		addSubview(primaryButton)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
-		super.setupViewConstraints()
-
 		NSLayoutConstraint.activate([
+
+			// Image
+			imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: ViewTraits.margin),
+			imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
+			imageView.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			imageView.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
+				equalTo: imageView.bottomAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(
@@ -93,7 +102,7 @@ class ListResultsView: BaseView {
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.messageTopMargin
+				constant: -ViewTraits.margin
 			),
 
 			// Message
@@ -106,29 +115,48 @@ class ListResultsView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Result
-			resultView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.margin
-			),
-			resultView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			resultView.trailingAnchor.constraint(equalTo: trailingAnchor),
-
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
-			primaryButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			primaryButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
+			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	var primaryTitle: String = "" {
+		didSet {
+			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+
+	/// The  title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
+		}
+	}
+
+	/// The message
+	var message: String? {
+		didSet {
+			messageLabel.text = message
+		}
+	}
+
+	/// Underline part ot the message
+	/// - Parameter text: the text to underline
+	func underline(_ text: String?) {
+
+		guard let underlinedText = text,
+			  let messageText = message else {
+			return
+		}
+
+		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.dark)
+		messageLabel.attributedText = attributedUnderlined
 	}
 
 	/// User tapped on the primary button
@@ -138,26 +166,6 @@ class ListResultsView: BaseView {
 	}
 
 	// MARK: Public Access
-
-	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
-		}
-	}
-
-	/// The message
-	var message: String? {
-		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
-		}
-	}
-
-	var primaryTitle: String = "" {
-		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
-		}
-	}
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?

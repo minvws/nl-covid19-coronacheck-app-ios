@@ -7,11 +7,11 @@
 
 import UIKit
 
-class TokenScanViewController: ScanViewController {
+class VerifierScanViewController: ScanViewController {
 
-	private let viewModel: TokenScanViewModel
+	private let viewModel: VerifierScanViewModel
 
-	init(viewModel: TokenScanViewModel) {
+	init(viewModel: VerifierScanViewModel) {
 
 		self.viewModel = viewModel
 
@@ -52,6 +52,6 @@ class TokenScanViewController: ScanViewController {
 
 	override func found(code: String) {
 
-		viewModel.parseCode(code)
+		viewModel.parseQRMessage(code)
 	}
 }

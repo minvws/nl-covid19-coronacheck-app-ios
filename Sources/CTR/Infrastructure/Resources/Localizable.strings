@@ -149,6 +149,12 @@
 
 /* MARK: - Verifier */
 
+/* MARK: - Holder Menu */
+"verifier.menu.dashboard" = "Scan QR-code";
+"verifier.menu.support" = "Support";
+"verifier.menu.about" = "Over deze app";
+"verifier.menu.feedback" = "Geef ons feedback";
+
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "**Veilig op pad";
 "verifier.onboarding.message.safely" = "**We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
@@ -174,3 +180,16 @@
 /* MARK: - Verifier Privacy */
 "verifier.privacy.message" = "** de privacy verklaring **";
 "verifier.privacy.title" = "Privacy verklaring";
+
+/* MARK: - Verifier Token Scan */
+"verifier.scan.title" = "Scan QR-code";
+"verifier.scan.message" = "Richt je toestel op de QR-code van de persoon die naar binnen wil.";
+"verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
+
+/* MARK: - Verifier Result */
+"verifier.result.access.title" = "Geldige QR-code";
+"verifier.result.access.message" = "Geef toegang";
+"verifier.result.denied.title" = "Geen geldige QR-code";
+"verifier.result.denied.message" = "Weiger toegang.\nLees mogelijke oorzaken.";
+"verifier.result.denied.link" = "Lees mogelijke oorzaken.";
+"verifier.result.next" = "Scan volgende";

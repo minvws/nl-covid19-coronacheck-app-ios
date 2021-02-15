@@ -20,6 +20,9 @@ class TokenScanViewModel: Logging {
 	/// The message of the scene
 	@Bindable private(set) var message: String
 
+	/// The accessibility message for the torch
+	@Bindable private(set) var torchAccessibility: String
+
 	/// Start scanning
 	@Bindable private(set) var startScanning: Bool = false
 
@@ -31,8 +34,11 @@ class TokenScanViewModel: Logging {
 		self.coordinator = coordinator
 		self.title = .holderTokenScanTitle
 		self.message = .holderTokenScanMessage
+		self.torchAccessibility = .holderTokenScanTorchAccessibility
 	}
 
+	/// Parse the scanned QR-code
+	/// - Parameter code: the scanned code
 	func parseCode(_ code: String) {
 
 		do {

@@ -23,14 +23,16 @@ class VerifierStartViewController: BaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		title = "Verifier Start"
+		title = "Scan QR-code"
 
-		sceneView.primaryTitle = "Scan bezoekers"
+		sceneView.primaryTitle = "Start scannen"
 
-//		sceneView.primaryButtonTappedCommand = { [weak self] in
-//
-//			self?.coordinator?.navigateToScan()
-//		}
-		sceneView.message = "Meer informatie over deze app."
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+
+			self?.coordinator?.navigateToScan()
+		}
+		
+		// Only show an arrow as back button
+		styleBackButton(buttonText: "")
     }
 }
