@@ -15,7 +15,6 @@ class ListResultsView: BaseView {
 
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 212.0
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
 		static let imageRatio: CGFloat = 0.75

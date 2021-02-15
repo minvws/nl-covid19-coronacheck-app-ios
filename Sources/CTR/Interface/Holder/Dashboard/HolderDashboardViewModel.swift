@@ -168,6 +168,8 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
+	/// Show the QR message is valid
+	/// - Parameter printDate: valid until time
 	func showQRMessageIsValid(_ printDate: String) {
 
 		if let message = self.cryptoManager?.generateQRmessage() {
@@ -178,6 +180,7 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
+	/// Show the QR Message is expired
 	func showQRMessageIsExpired() {
 
 		showValidQR = false
@@ -196,7 +199,7 @@ class HolderDashboardViewModel: Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL()),
+			timeInterval: TimeInterval(configuration.getQRTTL() - 30),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,

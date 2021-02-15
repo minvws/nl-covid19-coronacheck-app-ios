@@ -39,7 +39,7 @@ extension NSAttributedString {
 	/// - Returns: attributed string
 	func bold(_ bolds: [String], with font: UIFont) -> NSAttributedString {
 
-		var output = NSMutableAttributedString(attributedString: self)
+		let output = NSMutableAttributedString(attributedString: self)
 
 		for bold in bolds {
 

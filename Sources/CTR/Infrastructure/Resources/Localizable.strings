@@ -34,9 +34,7 @@
 "endOfLife.title" = "CoronaTester is gestopt";
 "endOfLife.description" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
 
-/* MARK: - Main */
-"main.holder" = "Holder";
-"main.verifier" = "Verifier";
+/* MARK: - Holder */
 
 /* MARK: - Holder Menu */
 "holder.menu.dashboard" = "Mijn overzicht";
@@ -67,7 +65,7 @@
 "holder.consent.item.4" = "Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
-/* MARK: - Privacy */
+/* MARK: - Holder Privacy */
 "holder.privacy.message" = "** de privacy verklaring **";
 "holder.privacy.title" = "Privacy verklaring";
 
@@ -84,13 +82,13 @@
 "holder.dashboard.qr.message" = "Geldig tot %@";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 
-/* MARK: - Appointment */
+/* MARK: - Holder Appointment */
 "holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je uitje. Lees de meest gestelde vragen over een test plannen.";
 "holder.appointment.link" = "Lees de meest gestelde vragen over een test plannen.";
 "holder.appointment.title" = "Maak een testafpraak";
 "holder.appointment.button.title" = "Maak een afpraak";
 
-/* MARK: - Choose Provider */
+/* MARK: - Holder Choose Provider */
 "holder.provider.title" = "Maak QR-Code";
 "holder.provider.subtitle" = "Waar ben je getest?";
 "holder.provider.message" = "Is je testresultaat bekend? Dan kan je er een QR-code van maken. Geef hieronder aan bij welke testlocatie je bent getest.";
@@ -100,7 +98,7 @@
 "holder.provider.commercial.subtitle" = "Log in met een unieke code";
 "holder.provider.nodigid" = "Ik heb geen DigiD";
 
-/* MARK: - Token Overview */
+/* MARK: - Holder Token Overview */
 "holder.tokenoverview.title" = "Testresultaat ophalen";
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciele testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
@@ -110,12 +108,12 @@
 "holder.tokenoverview.qr.title" = "QR";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code gekreken";
 
-/* MARK: - Token Scan */
+/* MARK: - Holder Token Scan */
 "holder.tokenscan.title" = "Scan QR-code";
 "holder.tokenscan.message" = "Richt je toestel op de QR-code die je van de testlocatie hebt gekregen.";
 "holder.tokenscan.torch.accessibility" = "Zet de zaklamp aan.";
 
-/* MARK: - Token entry */
+/* MARK: - Holder Token entry */
 "holder.tokenentry.title" = "Code invullen";
 "holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen. Of klik op de link in je e-mail, als de testlocatie je gemaild heeft.";
 "holder.tokenentry.token.title" = "Unieke code";
@@ -125,7 +123,7 @@
 "holder.tokenentry.error.invalid.code" = "Deze code is ongeldig";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
-/* MARK: - Test Results */
+/* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testrestultaat (geen corona). Verwerk het testresultaat tot een bewijs in de vorrm van een QR-code.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
@@ -142,9 +140,56 @@
 "holder.testresults.alert.ok" = "Ja, Stop";
 "holder.testresults.alert.cancel" = "Nee, terug";
 
-/* MARK: - Create Proof */
+/* MARK: - Holder Create Proof */
 "holder.proof.title" = "Van jouw testresultaat wordt nu een QR-code gemaakt";
 "holder.proof.text" = "In de QR-code wordt verwerkt dat je negatief getest bent (geen corona) op %@.\n\nIn deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.";
 "holder.proof.text.bold" = "negatief getest";
 "holder.proof.text.at" = "om";
 "holder.proof.action" = "Naar mijn QR";
+
+/* MARK: - Verifier */
+
+/* MARK: - Holder Menu */
+"verifier.menu.dashboard" = "Scan QR-code";
+"verifier.menu.support" = "Support";
+"verifier.menu.about" = "Over deze app";
+"verifier.menu.feedback" = "Geef ons feedback";
+
+/* MARK: - Verifier Onboarding */
+"verifier.onboarding.title.safely" = "**Veilig op pad";
+"verifier.onboarding.message.safely" = "**We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
+"verifier.onboarding.title.yourqr" = "**Jouw QR-code op zak";
+"verifier.onboarding.message.yourqr" = "**In deze app zet je jouw testuitslag om in een QR-code. Deze laat je scannen bij de ingang van het café, in de rij voor een event of bij andere uitgaansgelegenheden.";
+"verifier.onboarding.title.validity" = "**Uitslag geldt 2 dagen";
+"verifier.onboarding.message.validity" = "**Een negatieve testuitslag is 2 dagen geldig. Daarna niet meer. De QR-code verdwijnt dan automatisch uit de app. Nieuwe QR nodig? Laat je dan opnieuw op corona testen.";
+"verifier.onboarding.title.securesystem" = "**Een veilig systeem";
+"verifier.onboarding.message.securesystem" = "**Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
+"verifier.onboarding.title.privacy" = "**Privacy staat voorop";
+"verifier.onboarding.message.privacy" = "**Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.";
+
+/* MARK: - Verifier Consent */
+"verifier.consent.title" = "**Zo gebruikt de app je gegevens";
+"verifier.consent.message" = "**In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"verifier.consent.message.underlined" = "privacyverklaring";
+"verifier.consent.item.1" = "**Gebruik van CoronatTester is vrijwillig.";
+"verifier.consent.item.2" = "**Dit is een lorum ipsum regel.";
+"verifier.consent.item.3" = "**Je naam wordt niet gebruikt of bewaard.";
+"verifier.consent.item.4" = "**Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
+"verifier.consent.button" = "**Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
+
+/* MARK: - Verifier Privacy */
+"verifier.privacy.message" = "** de privacy verklaring **";
+"verifier.privacy.title" = "Privacy verklaring";
+
+/* MARK: - Verifier Token Scan */
+"verifier.scan.title" = "Scan QR-code";
+"verifier.scan.message" = "Richt je toestel op de QR-code van de persoon die naar binnen wil.";
+"verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
+
+/* MARK: - Verifier Result */
+"verifier.result.access.title" = "Geldige QR-code";
+"verifier.result.access.message" = "Geef toegang";
+"verifier.result.denied.title" = "Geen geldige QR-code";
+"verifier.result.denied.message" = "Weiger toegang.\nLees mogelijke oorzaken.";
+"verifier.result.denied.link" = "Lees mogelijke oorzaken.";
+"verifier.result.next" = "Scan volgende";

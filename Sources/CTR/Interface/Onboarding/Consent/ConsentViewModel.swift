@@ -12,6 +12,9 @@ class ConsentViewModel {
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
 
+	/// The onboarding factory for all texts.
+	var factory: OnboardingFactoryProtocol
+
 	/// Is the button enabled?
 	@Bindable private(set) var isContinueButtonEnabled: Bool
 	@Bindable private(set) var title: String
@@ -23,19 +26,15 @@ class ConsentViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: OnboardingCoordinatorDelegate) {
+	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol) {
 
 		self.coordinator = coordinator
-		self.title = .consentTitle
-		self.message = .consentMessage
-		self.underlinedText = .consentMessageUnderlined
-		self.consentText = .consentButtonTitle
-		self.summary = [
-			.consentItemOne,
-			.consentItemTwo,
-			.consentItemThree,
-			.consentItemFour
-		]
+		self.factory = factory
+		self.title = factory.getConsentTitle()
+		self.message = factory.getConsentMessage()
+		self.underlinedText = factory.getConsentLink()
+		self.consentText = factory.getConsentButtonTitle()
+		self.summary = factory.getConsentItems()
 		self.isContinueButtonEnabled = false
 	}
 

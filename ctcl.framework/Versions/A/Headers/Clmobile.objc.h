@@ -23,7 +23,7 @@
 - (nonnull instancetype)init;
 // skipped field CreateCredentialMessage.IssueSignatureMessage with unsupported type: *github.com/privacybydesign/gabi.IssueSignatureMessage
 
-// skipped field CreateCredentialMessage.AttributeValues with unsupported type: []string
+// skipped field CreateCredentialMessage.Attributes with unsupported type: map[string]string
 
 @end
 
@@ -43,8 +43,7 @@
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-// skipped field VerifyResult.AttributeValues with unsupported type: []string
-
+@property (nonatomic) NSData* _Nullable attributesJson;
 @property (nonatomic) int64_t unixTimeSeconds;
 @property (nonatomic) NSString* _Nonnull error;
 @end

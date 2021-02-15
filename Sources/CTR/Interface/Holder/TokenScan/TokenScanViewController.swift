@@ -42,10 +42,12 @@ class TokenScanViewController: ScanViewController {
 				self.captureSession.startRunning()
 			}
 		}
+		viewModel.$torchAccessibility.binding = {
+			self.addTorchButton(action: #selector(self.toggleTorch), accessibilityLabel: $0)
+		}
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
-		addTorchButton(action: #selector(toggleTorch), accessibilityLabel: .holderTokenScanTorchAccessibility)
 	}
 
 	override func found(code: String) {

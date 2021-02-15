@@ -95,7 +95,7 @@ class AppCoordinator: Coordinator {
 	/// Start the app as a verifiier
 	func startAsVerifier() {
 
-		let coordinator = VerifierCoordinator(navigationController: navigationController)
+		let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
 		startChildCoordinator(coordinator)
 	}
 

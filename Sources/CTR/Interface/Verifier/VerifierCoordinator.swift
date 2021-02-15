@@ -10,26 +10,35 @@ import UIKit
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 
-	// Navigate to the Scan Scene
+	/// Navigate to verifier welcome scene
+	func navigateToVerifierWelcome()
+
+	/// Navigate to the QR scanner
 	func navigateToScan()
 
-	// Navigate to the Scan Result
-	func navigateToScanResult()
-
-	/// Navigate to the start fo the verifier flow
-	func navigateToStart()
-
-	/// Set the scan result
-	/// - Parameter result: True if valid
-	func setScanResult(_ result: Bool)
-
-	/// Dismiss the viewcontroller
-	func dismiss()
+	/// Navigate to the scan result
+	/// - Parameter attributes: the scanned attributes
+	func navigateToScanResult(_ attributes: Attributes)
 }
 
-class VerifierCoordinator: Coordinator {
+class VerifierCoordinator: Coordinator, Logging {
 
-	var isValid: Bool = false
+	var loggingCategory: String = "VerifierCoordinator"
+
+	/// The UI Window
+	private var window: UIWindow
+
+	/// The side panel controller
+	var sidePanel: SidePanelController?
+
+	/// The onboardings manager
+	var onboardingManager: OnboardingManaging = Services.onboardingManager
+
+	/// The factory for onboarding pages
+	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
+
+	/// The crypto manager
+	var cryptoManager: CryptoManaging = Services.cryptoManager
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -37,18 +46,41 @@ class VerifierCoordinator: Coordinator {
 	/// The navigation controller
 	var navigationController: UINavigationController
 
+	/// The dashboard navigation controller
+	var dashboardNavigationContoller: UINavigationController?
+
 	/// Initiatilzer
-	init(navigationController: UINavigationController) {
+	init(navigationController: UINavigationController, window: UIWindow) {
 
 		self.navigationController = navigationController
+		self.window = window
 	}
 
 	// Designated starter method
 	func start() {
 
-		let viewController = VerifierStartViewController()
-		viewController.coordinator = self
-		navigationController.pushViewController(viewController, animated: true)
+		if onboardingManager.needsOnboarding {
+			/// Start with the onboarding
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self,
+				factory: onboardingFactory
+			)
+			startChildCoordinator(coordinator)
+
+		} else if onboardingManager.needsConsent {
+			// Show the consent page
+			let coordinator = OnboardingCoordinator(
+				navigationController: navigationController,
+				onboardingDelegate: self,
+				factory: onboardingFactory
+			)
+			addChildCoordinator(coordinator)
+			coordinator.navigateToConsent()
+		} else {
+
+			navigateToVerifierWelcome()
+		}
 	}
 }
 
@@ -56,44 +88,142 @@ class VerifierCoordinator: Coordinator {
 
 extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
-	// Navigate to the Scan Scene
-	func navigateToScan() {
+	/// Navigate to verifier welcome scene
+	func navigateToVerifierWelcome() {
 
-		let viewController = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
-		navigationController.pushViewController(viewController, animated: true)
+		let menu = MenuViewController(
+			viewModel: MenuViewModel(
+				delegate: self
+			)
+		)
+		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
+
+		let dashboardViewController = VerifierStartViewController()
+		dashboardViewController.coordinator = self
+
+		//		let dashboardViewController = HolderDashboardViewController(
+		//			viewModel: HolderDashboardViewModel(
+		//				coordinator: self,
+		//				cryptoManager: cryptoManager,
+		//				proofManager: proofManager,
+		//				configuration: generalConfiguration
+		//			)
+		//		)
+		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationContoller
+
+		// Replace the root with the side panel controller
+		window.rootViewController = sidePanel
 	}
 
-	// Navigate to the Test Result
-	func navigateToScanResult() {
+	/// Navigate to the QR scanner
+	func navigateToScan() {
+
+		let destination = VerifierScanViewController(
+			viewModel: VerifierScanViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager
+			)
+		)
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
+	/// Navigate to the scan result
+	/// - Parameter attributes: the scanned attributes
+	func navigateToScanResult(_ attributes: Attributes) {
 
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
-				coordinator: self,
-				result: isValid
+				delegate: self,
+				attributes: attributes
 			)
 		)
-		navigationController.pushViewController(viewController, animated: true)
+		let destination = UINavigationController(rootViewController: viewController)
+		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
+}
 
-	/// Set the scan result
-	/// - Parameter result: True if valid
-	func setScanResult(_ result: Bool) {
+// MARK: - Dismissable
 
-		isValid = result
-	}
+extension VerifierCoordinator: Dismissable {
 
-	/// Navigate to the start fo the verifier flow
-	func navigateToStart() {
-
-		guard navigationController.viewControllers.count > 1 else {
-			return
-		}
-		navigationController.popToViewController(navigationController.viewControllers[1], animated: true)
-	}
-
-	/// Dismiss the viewcontroller
 	func dismiss() {
 
-		navigationController.popViewController(animated: true)
+		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+	}
+}
+
+// MARK: - MenuDelegate
+
+extension VerifierCoordinator: MenuDelegate {
+
+	/// Close the menu
+	func closeMenu() {
+
+		sidePanel?.hideSidePanel()
+	}
+
+	/// Open a menu item
+	/// - Parameter identifier: the menu identifier
+	func openMenuItem(_ identifier: MenuIdentifier) {
+
+		switch identifier {
+			case .overview:
+				dashboardNavigationContoller?.popToRootViewController(animated: false)
+				sidePanel?.selectedViewController = dashboardNavigationContoller
+			default:
+				self.logInfo("User tapped on \(identifier), not implemented")
+
+				let destinationViewController = PlaceholderViewController()
+				destinationViewController.placeholder = "\(identifier)"
+				let navigationController = UINavigationController(rootViewController: destinationViewController)
+				sidePanel?.selectedViewController = navigationController
+		}
+	}
+
+	/// Get the items for the top menu
+	/// - Returns: the top menu items
+	func getTopMenuItems() -> [MenuItem] {
+
+		return [
+			MenuItem(identifier: .overview, title: .verifierMenuDashboard),
+			MenuItem(identifier: .support, title: .verifierMenuSupport)
+		]
+	}
+	/// Get the items for the bottom menu
+	/// - Returns: the bottom menu items
+	func getBottomMenuItems() -> [MenuItem] {
+
+		return [
+			MenuItem(identifier: .about, title: .verifierMenuAbout),
+			MenuItem(identifier: .feedback, title: .verifierMenuFeedback)
+		]
+	}
+}
+
+// MARK: - OnboardingDelegate
+
+extension VerifierCoordinator: OnboardingDelegate {
+
+	/// User has seen all the onboarding pages
+	func finishOnboarding() {
+
+		onboardingManager.finishOnboarding()
+	}
+
+	/// The onboarding is finished
+	func consentGiven() {
+
+		// Mark as complete
+		onboardingManager.consentGiven()
+
+		// Remove child coordinator
+		if let onboardingCoorinator = childCoordinators.first {
+			removeChildCoordinator(onboardingCoorinator)
+		}
+
+		// Navigate to Verifier Welcome.
+		navigateToVerifierWelcome()
 	}
 }

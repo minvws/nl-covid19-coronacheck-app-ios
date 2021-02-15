@@ -14,8 +14,7 @@ protocol Dismissable: AnyObject {
 	func dismiss()
 }
 
-// swiftlint:disable class_delegate_protocol
-protocol HolderCoordinatorDelegate: Dismissable {
+protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
@@ -51,15 +50,6 @@ protocol HolderCoordinatorDelegate: Dismissable {
 
 	/// Open a url
 	func openUrl(_ url: URL)
-
-	// MARK: Menu
-
-	/// Close the menu
-	func closeMenu()
-
-	/// Open a menu item
-	/// - Parameter identifier: the menu identifier
-	func openMenuItem(_ identifier: MenuIdentifier)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -69,8 +59,6 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The UI Window
 	private var window: UIWindow
-
-	var coronaTestProof: CTRModel?
 
 	/// The side panel controller
 	var sidePanel: SidePanelController?
@@ -93,12 +81,16 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The general configuration
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 
+	/// The factory for onboarding pages
+	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
 	/// The navigation controller
 	var navigationController: UINavigationController
 
+	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
 
 	/// Initiatilzer
@@ -119,7 +111,8 @@ class HolderCoordinator: Coordinator, Logging {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
-				onboardingDelegate: self
+				onboardingDelegate: self,
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 
@@ -127,7 +120,8 @@ class HolderCoordinator: Coordinator, Logging {
 			// Show the consent page
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
-				onboardingDelegate: self
+				onboardingDelegate: self,
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
@@ -147,9 +141,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func navigateToHolderStart() {
 
-		let menu = HolderMenuViewController(
-			viewModel: HolderMenuViewModel(
-				coordinator: self
+		let menu = MenuViewController(
+			viewModel: MenuViewModel(
+				delegate: self
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
@@ -244,6 +238,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	/// Navigate to create proof
 	func navigateToCreateProof() {
+		
 		let viewController = CreateProofViewController(
 			viewModel: CreateProofViewiewModel(
 				coordinator: self,
@@ -261,10 +256,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 		(sidePanel?.selectedViewController as? UINavigationController)?.popToRootViewController(animated: true)
-	}
-
-	func dismiss() {
-		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 
 	/// Show an information page
@@ -289,8 +280,21 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		UIApplication.shared.open(url)
 	}
+}
 
-	// MARK: Menu
+// MARK: - Dismissable
+
+extension HolderCoordinator: Dismissable {
+
+	func dismiss() {
+
+		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+	}
+}
+
+// MARK: - MenuDelegate
+
+extension HolderCoordinator: MenuDelegate {
 
 	/// Close the menu
 	func closeMenu() {
@@ -315,7 +319,29 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				sidePanel?.selectedViewController = navigationController
 		}
 	}
+
+	/// Get the items for the top menu
+	/// - Returns: the top menu items
+	func getTopMenuItems() -> [MenuItem] {
+
+		return [
+			MenuItem(identifier: .overview, title: .holderMenuDashboard)
+		]
+	}
+	/// Get the items for the bottom menu
+	/// - Returns: the bottom menu items
+	func getBottomMenuItems() -> [MenuItem] {
+
+		return [
+			MenuItem(identifier: .faq, title: .holderMenuFaq),
+			MenuItem(identifier: .settings, title: .holderMenuSettings),
+			MenuItem(identifier: .about, title: .holderMenuAbout),
+			MenuItem(identifier: .feedback, title: .holderMenuFeedback)
+		]
+	}
 }
+
+// MARK: - OnboardingDelegate
 
 extension HolderCoordinator: OnboardingDelegate {
 

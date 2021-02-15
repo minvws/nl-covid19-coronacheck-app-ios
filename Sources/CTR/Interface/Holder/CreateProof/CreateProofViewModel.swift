@@ -78,7 +78,6 @@ class CreateProofViewiewModel: Logging {
 
 					self?.cryptoManager?.setNonce(envelope.nonce)
 					self?.cryptoManager?.setStoken(envelope.stoken)
-					self?.cryptoManager?.debug()
 					self?.fetchTestProof()
 				case let .failure(networkError):
 					self?.showProgress = false

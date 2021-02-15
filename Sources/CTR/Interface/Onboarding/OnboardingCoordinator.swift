@@ -47,6 +47,8 @@ class OnboardingCoordinator: Coordinator, Logging {
 	
 	/// The onboarding delegate
 	weak var onboardingDelegate: OnboardingDelegate?
+
+	var onboardingFactory: OnboardingFactoryProtocol
 	
 	/// A presenting view controller
 	weak var presentingViewController: UIViewController?
@@ -54,18 +56,17 @@ class OnboardingCoordinator: Coordinator, Logging {
 	/// Initiatilzer
 	init(
 		navigationController: UINavigationController,
-		onboardingDelegate: OnboardingDelegate) {
+		onboardingDelegate: OnboardingDelegate,
+		factory: OnboardingFactoryProtocol) {
 		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate
-		onboardingPages = factory.create()
+		onboardingFactory = factory
+		onboardingPages = onboardingFactory.create()
 	}
 	
 	/// The onboarding pages
 	var onboardingPages: [OnboardingPage] = []
-	
-	/// The factory for onboarding pages
-	var factory: OnboardingFactoryProtocol = OnboardingFactory()
 	
 	// Designated starter method
 	func start() {
@@ -89,8 +90,8 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		
 		let viewModel = PrivacyViewModel(
 			coordinator: self,
-			title: .holderPrivacyTitle,
-			message: .holderPrivacyMessage
+			title: onboardingFactory.getPrivacyTitle(),
+			message: onboardingFactory.getPrivacyMessage()
 		)
 		let privacyViewController = PrivacyViewController(viewModel: viewModel)
 		let navigationController = UINavigationController(rootViewController: privacyViewController)
@@ -119,7 +120,12 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	/// Navigate to the consent page
 	func navigateToConsent() {
 
-		let viewController = ConsentViewController(viewModel: ConsentViewModel(coordinator: self))
+		let viewController = ConsentViewController(
+			viewModel: ConsentViewModel(
+				coordinator: self,
+				factory: onboardingFactory
+			)
+		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
 

@@ -86,10 +86,6 @@ final class Colors {
 
     var tertiary: UIColor { return color(for: "TertiaryColor") }
 
-    var warning: UIColor { return color(for: "WarningColor") }
-
-    var ok: UIColor { return color(for: "OkGreen") }
-
 	var gray: UIColor { return color(for: "DotGray") }
 
 	var disabledIcon: UIColor { return color(for: "DisabledIcon") }
@@ -107,6 +103,10 @@ final class Colors {
 	var line: UIColor { return color(for: "LineColor") }
 
 	var error: UIColor { return color(for: "ErrorColor") }
+
+	var denied: UIColor { return color(for: "DeniedColor") }
+
+	var access: UIColor { return color(for: "AccessColor") }
 
     // MARK: - Private
 
