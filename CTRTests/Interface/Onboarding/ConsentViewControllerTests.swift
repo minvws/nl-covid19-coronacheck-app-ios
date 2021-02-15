@@ -25,7 +25,8 @@ class ConsentViewControllerTests: XCTestCase {
 		coordinatorSpy = OnboardingCoordinatorSpy()
 		sut = ConsentViewController(
 			viewModel: ConsentViewModel(
-				coordinator: coordinatorSpy
+				coordinator: coordinatorSpy,
+				factory: HolderOnboardingFactory()
 			)
 		)
 		window = UIWindow()
@@ -60,9 +61,9 @@ class ConsentViewControllerTests: XCTestCase {
 			XCTFail("Can not unwrap sut")
 			return
 		}
-		XCTAssertEqual(strongSut.sceneView.title, .consentTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .consentMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.consent, .consentButtonTitle, "Consent should match")
+		XCTAssertEqual(strongSut.sceneView.title, .holderConsentTitle, "Title should match")
+		XCTAssertEqual(strongSut.sceneView.message, .holderConsentMessage, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.consent, .holderConsentButtonTitle, "Consent should match")
 		XCTAssertEqual(strongSut.sceneView.itemStackView.arrangedSubviews.count, 4, "There should be 4 items")
 	}
 

@@ -59,7 +59,7 @@ class CryptoManagerSpy: CryptoManaging {
 		return stoken
 	}
 
-	func verifyQRMessage(_ message: String) -> Bool {
-		return false
+	func verifyQRMessage(_ message: String) -> Attributes? {
+		return nil
 	}
 }
