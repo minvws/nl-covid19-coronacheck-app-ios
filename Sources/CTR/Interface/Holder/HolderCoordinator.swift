@@ -152,7 +152,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
 				configuration: generalConfiguration
 			)
 		)

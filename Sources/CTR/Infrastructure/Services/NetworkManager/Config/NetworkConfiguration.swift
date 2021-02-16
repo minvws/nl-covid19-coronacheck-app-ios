@@ -73,17 +73,17 @@ struct NetworkConfiguration {
 		name: "ACC",
 		api: .init(
 			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api.acc.bananenhalen.nl" : "verifier-api.acc.bananenhalen.nl",
 			port: nil,
-			path: [""],
-			sslSignature: nil, // [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
+			path: ["v1"],
+			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
 			tokenParams: [:]
 		),
 		cdn: .init(
 			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api.acc.bananenhalen.nl" : "verifier-api.acc.bananenhalen.nl",
 			port: nil,
-			path: [""],
+			path: ["v1"],
 			sslSignature: nil, // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
 			tokenParams: [:]
 		)

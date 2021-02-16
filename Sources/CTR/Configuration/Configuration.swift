@@ -18,7 +18,20 @@ class Configuration {
 	/// Initlializer
 	init() {
 
-		let plistPath: String? = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
+		let plistPath: String?
+
+		if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
+			if networkConfigurationValue.lowercased() == "production" {
+				plistPath = Bundle.main.path(forResource: "configuration-production", ofType: "plist")
+			} else if networkConfigurationValue.lowercased() == "acc" {
+				plistPath = Bundle.main.path(forResource: "configuration-acceptance", ofType: "plist")
+			} else {
+				plistPath = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
+			}
+		} else {
+			// Fallback to development
+			plistPath = Bundle.main.path(forResource: "configuration-development", ofType: "plist")
+		}
 
 		if let path = plistPath, let dictionary = NSDictionary(contentsOfFile: path) {
 			if let apiDict = dictionary["digid"] as? NSDictionary {

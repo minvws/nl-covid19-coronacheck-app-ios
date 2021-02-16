@@ -122,6 +122,7 @@ class CreateProofViewiewModel: Logging {
 		}
 		showProgress = false
 		cryptoManager?.setProofs(data)
+		proofManager?.removeTestWrapper()
 		if let message = cryptoManager?.generateQRmessage() {
 			print("message: \(message)")
 		}

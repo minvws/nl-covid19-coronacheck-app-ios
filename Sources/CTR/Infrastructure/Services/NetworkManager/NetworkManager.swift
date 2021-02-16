@@ -65,7 +65,7 @@ class NetworkManager: NetworkManaging, Logging {
 				body: jsonData
 			)
 
-			decodedSignedData(request: urlRequest) { resultwrapper in
+			decodedSignedData(request: urlRequest, ignore400: true) { resultwrapper in
 				DispatchQueue.main.async {
 
 					completion(resultwrapper)
@@ -362,14 +362,16 @@ class NetworkManager: NetworkManaging, Logging {
 		if let response = response as? HTTPURLResponse {
 			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
 			
-			let headers = response.allHeaderFields.map { header, value in
-				return String("\(header): \(value)")
-			}.joined(separator: "\n")
-			
-			logDebug("Response headers: \n\(headers)")
+//			let headers = response.allHeaderFields.map { header, value in
+//				return String("\(header): \(value)")
+//			}.joined(separator: "\n")
+//			
+//			logDebug("Response headers: \n\(headers)")
 			
 			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
-				logDebug("Resonse body: \n\(body)")
+				if !body.starts(with: "{\"signature") {
+					logDebug("Resonse body: \n\(body)")
+				}
 			}
 		} else if let error = error {
 			logDebug("Error with response: \(error)")
@@ -397,7 +399,9 @@ class NetworkManager: NetworkManaging, Logging {
 	private func decodeJson<Object: Decodable>(data: Data) -> Result<Object, NetworkResponseHandleError> {
 		do {
 			let object = try self.jsonDecoder.decode(Object.self, from: data)
-			self.logDebug("Response Object: \(object)")
+			if !(object is SignedResponse) {
+				self.logDebug("Response Object: \(object)")
+			}
 			return .success(object)
 		} catch {
 			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -409,7 +413,8 @@ class NetworkManager: NetworkManaging, Logging {
 	}
 	
 	/// Response handler which decodes JSON
-	private func jsonResponseHandler<Object: Decodable>(result: Result<(URLResponse, Data), NetworkError>) -> Result<Object, NetworkError> {
+	private func jsonResponseHandler<Object: Decodable>(
+		result: Result<(URLResponse, Data), NetworkError>) -> Result<Object, NetworkError> {
 		switch result {
 			case let .success(result):
 				return decodeJson(data: result.1)
