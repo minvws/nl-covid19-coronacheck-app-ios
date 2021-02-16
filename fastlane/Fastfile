@@ -72,7 +72,7 @@ platform :ios do
 
     deploy_holder_test
 
-    # deploy_acc
+    deploy_holder_acc
 
     # deploy_prod
 
@@ -94,7 +94,7 @@ platform :ios do
 
     deploy_verifier_test
 
-    # deploy_acc
+    deploy_verifier_acc
 
     # deploy_prod
 
@@ -166,7 +166,7 @@ platform :ios do
     )
   end
 
-  private_lane :deploy_acc do
+  private_lane :deploy_holder_acc do
     build_ios_app(
       scheme: "CoronaTester",
       configuration: "Ad Hoc Acc",
@@ -181,6 +181,24 @@ platform :ios do
     firebase_app_distribution(
       app: "1:406021306322:ios:c348fa3e6d8575972cfa0b",
       groups: "testers"
+    )
+  end
+
+  private_lane :deploy_verifier_acc do
+    build_ios_app(
+      scheme: "CoronaTester",
+      configuration: "Ad Hoc Acc",
+      export_options: {
+        method: "ad-hoc",
+        provisioningProfiles: {
+          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+        }
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:406021306322:ios:efc9c030ce5e5bcd2cfa0b",
+      groups: "verifiers"
     )
   end
 
