@@ -186,7 +186,7 @@ platform :ios do
 
   private_lane :deploy_verifier_acc do
     build_ios_app(
-      scheme: "CoronaTester",
+      scheme: "Verifier",
       configuration: "Ad Hoc Acc",
       export_options: {
         method: "ad-hoc",
