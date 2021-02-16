@@ -58,6 +58,10 @@ protocol CryptoManaging: AnyObject {
 	/// Reset the vault
 	func reset()
 
+	/// Read the crypto credentials
+	/// - Returns: the credentials
+	func readCredentials() -> CrypoAttributes? 
+
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: True if valid
@@ -142,6 +146,24 @@ class CryptoManager: CryptoManaging, Logging {
 				return string
 			} else {
 				self.logDebug("ICM: \(result.error)")
+			}
+		}
+		return nil
+	}
+
+	/// Read the crypto credentials
+	/// - Returns: the credentials
+	func readCredentials() -> CrypoAttributes? {
+
+		if let cryptoDataValue = cryptoData.value,
+		   let response = ClmobileReadCredential(cryptoDataValue),
+		   let value = response.value {
+			do {
+				let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
+				return object
+			} catch {
+				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+				return nil
 			}
 		}
 		return nil

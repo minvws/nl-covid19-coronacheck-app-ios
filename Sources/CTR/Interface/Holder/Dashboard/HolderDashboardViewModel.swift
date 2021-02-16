@@ -47,11 +47,8 @@ class HolderDashboardViewModel: Logging {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
 	/// The configuration
-	weak var configuration: ConfigurationGeneralProtocol?
+	var configuration: ConfigurationGeneralProtocol
 
 	/// The previous brightness
 	var previousBrightness: CGFloat?
@@ -98,12 +95,10 @@ class HolderDashboardViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
-		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
-		self.proofManager = proofManager
 		self.configuration = configuration
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
@@ -144,22 +139,21 @@ class HolderDashboardViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		if let wrapper = proofManager?.getTestWrapper(),
-		   let dateString = wrapper.result?.sampleDate,
-		   let date = parseDateFormatter.date(from: dateString) {
+		if let credentials = cryptoManager?.readCredentials() {
 
-			var comp = DateComponents()
-			comp.second = Configuration().getTestResultTTL()
-			if let validUntilDate = Calendar.current.date(byAdding: comp, to: date) {
-				let printDate = printDateFormatter.string(from: validUntilDate)
-
-				if validUntilDate > Date() {
+			let now = Date().timeIntervalSince1970
+			if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+				let validity = TimeInterval(configuration.getTestResultTTL())
+				let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
+				if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
+					// valid
 					logDebug("Proof is valid until \(printDate)")
 					showQRMessageIsValid(printDate)
 					startValidityTimer()
 					setBrightness()
 				} else {
-					// No longer valid
+
+					// expired
 					logDebug("Proof is no longer valid \(printDate)")
 					showQRMessageIsExpired()
 					validityTimer?.invalidate()
@@ -210,10 +204,6 @@ class HolderDashboardViewModel: Logging {
 	func startValidityTimer() {
 
 		guard validityTimer == nil else {
-			return
-		}
-
-		guard let configuration = configuration else {
 			return
 		}
 
