@@ -191,7 +191,7 @@ platform :ios do
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaTester Ad Hoc"
+          "nl.rijksoverheid.ctr.verifier" => "CoronaTester Verifier Ad Hoc"
         }
       }
     )
