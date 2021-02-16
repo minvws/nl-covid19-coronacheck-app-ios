@@ -73,6 +73,11 @@ class HolderDashboardViewController: BaseViewController {
 				self.sceneView.expiredQRView.isHidden = true
 			}
 		}
+
+		viewModel.$hideQRForCapture.binding = {
+
+			self.sceneView.hideQRImage = $0
+		}
 		
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
