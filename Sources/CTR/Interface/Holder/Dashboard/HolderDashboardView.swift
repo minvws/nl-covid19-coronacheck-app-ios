@@ -96,4 +96,11 @@ class HolderDashboardView: ScrolledStackView {
 			messageLabel.text = message
 		}
 	}
+
+	/// Hide the QR Image
+	var hideQRImage: Bool = false {
+		didSet {
+			qrView.hideQRImage = hideQRImage
+		}
+	}
 }

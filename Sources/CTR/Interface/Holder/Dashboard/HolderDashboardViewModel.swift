@@ -80,6 +80,9 @@ class HolderDashboardViewModel: Logging {
 	/// Show an expired QR Message
 	@Bindable private(set) var showExpiredQR: Bool
 
+	/// Show a valid QR Message
+	@Bindable private(set) var hideQRForCapture: Bool
+
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
 
@@ -108,6 +111,7 @@ class HolderDashboardViewModel: Logging {
 		// Start by showing nothing
 		self.showValidQR = false
 		self.showExpiredQR = false
+		self.hideQRForCapture = false
 
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
@@ -123,6 +127,8 @@ class HolderDashboardViewModel: Logging {
 			actionTitle: .holderDashboardCreatetAction,
 			image: .create
 		)
+
+		self.addObserver()
 	}
 
 	/// The user tapped on one of the cards
@@ -234,4 +240,29 @@ class HolderDashboardViewModel: Logging {
 		dateFormatter.dateFormat = "d MMMM HH:mm"
 		return dateFormatter
 	}()
+}
+
+extension HolderDashboardViewModel {
+
+	func addObserver() {
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(preventScreenCapture),
+			name: UIScreen.capturedDidChangeNotification,
+			object: nil
+		)
+
+	}
+
+	/// Prevent screen capture
+	@objc func preventScreenCapture() {
+
+		if UIScreen.main.isCaptured {
+			hideQRForCapture = true
+			self.logWarning("Screen capture in progress")
+		} else {
+			hideQRForCapture = false
+			self.logWarning("Screen capture ended")
+		}
+	}
 }

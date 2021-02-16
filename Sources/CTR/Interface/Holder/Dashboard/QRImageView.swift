@@ -156,4 +156,11 @@ class QRImageView: BaseView {
 			imageView.image = qrImage
 		}
 	}
+
+	/// Hide the QR Image
+	var hideQRImage: Bool = false {
+		didSet {
+			imageView.isHidden = hideQRImage
+		}
+	}
 }

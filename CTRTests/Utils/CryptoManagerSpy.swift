@@ -62,4 +62,8 @@ class CryptoManagerSpy: CryptoManaging {
 	func verifyQRMessage(_ message: String) -> Attributes? {
 		return nil
 	}
+
+	func readCredentials() -> CrypoAttributes? {
+		return nil
+	}
 }

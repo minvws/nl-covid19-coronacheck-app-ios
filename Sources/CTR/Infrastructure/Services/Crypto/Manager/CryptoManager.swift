@@ -194,6 +194,8 @@ class CryptoManager: CryptoManaging, Logging {
 					logDebug("QR message: \(base64Value)")
 					return base64Value
 				}
+			} else {
+				logDebug("QR: \(String(describing: credentails?.error))")
 			}
 		}
 
