@@ -112,12 +112,30 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
+//	/// Generate a QR image from a string
+//	/// - Parameter string: the string to embed
+//	/// - Returns: QR image
+//	func generateQRCode(from string: String) -> UIImage? {
+//
+//		let data = string.data(using: String.Encoding.ascii)
+//
+//		if let filter = CIFilter(name: "CIQRCodeGenerator") {
+//			filter.setValue(data, forKey: "inputMessage")
+//			let transform = CGAffineTransform(scaleX: 3, y: 3)
+//
+//			if let output = filter.outputImage?.transformed(by: transform) {
+//				return UIImage(ciImage: output)
+//			}
+//		}
+//		return nil
+//	}
+
 	/// Generate a QR image from a string
 	/// - Parameter string: the string to embed
 	/// - Returns: QR image
-	func generateQRCode(from string: String) -> UIImage? {
+	func generateQRCode(from data: Data) -> UIImage? {
 
-		let data = string.data(using: String.Encoding.ascii)
+//		let data = string.data(using: String.Encoding.ascii)
 
 		if let filter = CIFilter(name: "CIQRCodeGenerator") {
 			filter.setValue(data, forKey: "inputMessage")
@@ -129,4 +147,5 @@ class HolderDashboardViewController: BaseViewController {
 		}
 		return nil
 	}
+
 }

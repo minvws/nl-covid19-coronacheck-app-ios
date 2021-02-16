@@ -105,7 +105,7 @@ class HolderCoordinator: Coordinator, Logging {
 	func start() {
 
 		// Fetch the details for the proof manager
-		proofManager.fetchCoronaTestProviders()
+//		proofManager.fetchCoronaTestProviders()
 		//		proofManager.fetchTestTypes()
 
 		if onboardingManager.needsOnboarding {
