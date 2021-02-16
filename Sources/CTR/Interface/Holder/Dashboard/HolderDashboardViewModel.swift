@@ -72,7 +72,7 @@ class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var expiredTitle: String?
 
 	/// The encrypted test proof
-	@Bindable private(set) var qrMessage: String?
+	@Bindable private(set) var qrMessage: Data?
 
 	/// Show a valid QR Message
 	@Bindable private(set) var showValidQR: Bool

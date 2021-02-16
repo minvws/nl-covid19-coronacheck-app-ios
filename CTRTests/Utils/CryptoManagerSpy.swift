@@ -51,7 +51,7 @@ class CryptoManagerSpy: CryptoManaging {
 		return nil
 	}
 
-	func generateQRmessage() -> String? {
+	func generateQRmessage() -> Data? {
 		return nil
 	}
 

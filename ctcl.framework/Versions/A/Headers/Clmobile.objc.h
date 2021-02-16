@@ -54,10 +54,14 @@ FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCredential(NSData* _Nu
 
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTime(NSData* _Nullable issuerPkXml, NSData* _Nullable credJson);
 
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTimeQrEncoded(NSData* _Nullable issuerPkXml, NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
+
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileGenerateHolderSk(void);
 
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileReadCredential(NSData* _Nullable credJson);
 
 FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerify(NSData* _Nullable issuerPkXml, NSData* _Nullable proofAsn1);
+
+FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerifyQREncoded(NSData* _Nullable issuerPkXml, NSData* _Nullable proofQrEncodedAsn1);
 
 #endif

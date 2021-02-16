@@ -112,12 +112,10 @@ class HolderDashboardViewController: BaseViewController {
 		}
 	}
 
-	/// Generate a QR image from a string
-	/// - Parameter string: the string to embed
+	/// Generate a QR image
+	/// - Parameter data: the data to embed
 	/// - Returns: QR image
-	func generateQRCode(from string: String) -> UIImage? {
-
-		let data = string.data(using: String.Encoding.ascii)
+	func generateQRCode(from data: Data) -> UIImage? {
 
 		if let filter = CIFilter(name: "CIQRCodeGenerator") {
 			filter.setValue(data, forKey: "inputMessage")

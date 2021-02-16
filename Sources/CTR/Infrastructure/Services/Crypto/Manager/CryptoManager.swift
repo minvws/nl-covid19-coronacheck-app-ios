@@ -49,7 +49,7 @@ protocol CryptoManaging: AnyObject {
 
 	/// Generate the QR message
 	/// - Returns: the QR message
-	func generateQRmessage() -> String?
+	func generateQRmessage() -> Data?
 
 	/// Get the stoken
 	/// - Returns: the stoken
@@ -171,34 +171,36 @@ class CryptoManager: CryptoManaging, Logging {
 
 	/// Generate the QR message
 	/// - Returns: the QR message
-	func generateQRmessage() -> String? {
+	func generateQRmessage() -> Data? {
 
-		guard let holderSecretKey = cryptoData.holderSecretKey, let ism = cryptoData.proofs else {
-
+		guard let holderSecretKey = cryptoData.holderSecretKey,
+			  let ism = cryptoData.proofs else {
 			return nil
 		}
 
 		if let value = cryptoData.value {
-			let disclosed = ClmobileDiscloseAllWithTime(issuerPublicKey, value)
-			if let base64Value = disclosed?.value?.base64EncodedString() {
-				logDebug("QR message: \(base64Value)")
-				return base64Value
-			}
+			return createQRMessage(value, holderSecretKey: holderSecretKey)
 		} else {
 			let credentails = ClmobileCreateCredential(holderSecretKey, ism)
 			if let value = credentails?.value {
 				cryptoData.value = value
-
-				let disclosed = ClmobileDiscloseAllWithTime(issuerPublicKey, value)
-				if let base64Value = disclosed?.value?.base64EncodedString() {
-					logDebug("QR message: \(base64Value)")
-					return base64Value
-				}
+				return createQRMessage(value, holderSecretKey: holderSecretKey)
 			} else {
 				logDebug("QR: \(String(describing: credentails?.error))")
 			}
 		}
 
+		return nil
+	}
+
+	private func createQRMessage(_ value: Data?, holderSecretKey: Data) -> Data? {
+
+		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, value)
+		if let payload = disclosed?.value {
+			let message = String(decoding: payload, as: UTF8.self)
+			logDebug("QR message: \(message)")
+			return payload
+		}
 		return nil
 	}
 
@@ -235,8 +237,8 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Returns: True if valid
 	func verifyQRMessage(_ message: String) -> Attributes? {
 
-		let proofAsn1 = Data(base64Encoded: message, options: .ignoreUnknownCharacters)
-		if let result = ClmobileVerify(issuerPublicKey, proofAsn1) {
+		let proofAsn1 = message.data(using: .utf8)
+		if let result = ClmobileVerifyQREncoded(issuerPublicKey, proofAsn1) {
 
 			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
 				self.logError("Error Proof: \(result.error)")

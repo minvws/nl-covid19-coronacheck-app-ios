@@ -55,7 +55,8 @@ class VerifierScanViewModel: Logging {
 		if let attributes = cryptoManager?.verifyQRMessage(message) {
 			coordinator?.navigateToScanResult(attributes)
 		} else {
-			startScanning = true
+			coordinator?.navigateToScanResult(Attributes(cryptoAttributes: CrypoAttributes(sampleTime: "", testType: ""), unixTimeStamp: 0))
+//			startScanning = true
 		}
 	}
 }
