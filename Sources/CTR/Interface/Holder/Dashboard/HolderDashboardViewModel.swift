@@ -50,7 +50,11 @@ class HolderDashboardViewModel: Logging {
 	/// The proof manager
 	weak var proofManager: ProofManaging?
 
+	/// The configuration
 	weak var configuration: ConfigurationGeneralProtocol?
+
+	/// The previous brightness
+	var previousBrightness: CGFloat?
 
 	/// A timer to keep sending pings
 	var validityTimer: Timer?
@@ -153,19 +157,34 @@ class HolderDashboardViewModel: Logging {
 					logDebug("Proof is valid until \(printDate)")
 					showQRMessageIsValid(printDate)
 					startValidityTimer()
+					setBrightness()
 				} else {
 					// No longer valid
 					logDebug("Proof is no longer valid \(printDate)")
 					showQRMessageIsExpired()
 					validityTimer?.invalidate()
 					validityTimer = nil
+					setBrightness(reset: true)
 				}
 			}
 		} else {
 			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
+			setBrightness(reset: true)
 		}
+	}
+
+	/// Adjust the brightness
+	/// - Parameter reset: True if we reset to previous value
+	func setBrightness(reset: Bool = false) {
+
+		let currentBrightness = UIScreen.main.brightness
+		if currentBrightness < 1 {
+			previousBrightness = currentBrightness
+		}
+
+		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
 	}
 
 	/// Show the QR message is valid

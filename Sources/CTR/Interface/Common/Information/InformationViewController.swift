@@ -46,8 +46,10 @@ class InformationViewController: BaseViewController {
 
 		viewModel.$title.binding = { self.sceneView.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$showBottomCloseButton.binding = { self.sceneView.closeButtonIsHidden = !$0 }
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		sceneView.closeButton.touchUpInside(self, action: #selector(closeButtonTapped))
 	}
 
 	/// User tapped on the button

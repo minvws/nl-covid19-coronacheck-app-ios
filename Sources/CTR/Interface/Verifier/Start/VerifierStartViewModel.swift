@@ -53,16 +53,10 @@ class VerifierStartViewModel: Logging {
 
 	func linkTapped(_ viewController: UIViewController) {
 
-		logDebug("Tapped on link")
-
-//		if let cooord = coordinator {
-//
-//			let infoVC = InformationViewController(viewModel: InformationViewModel(coordinator: cooord, title: "Rolus", message: "Carolus"))
-//
-//			infoVC.modalPresentationStyle = .custom
-//			infoVC.transitioningDelegate = viewController as! UIViewControllerTransitioningDelegate
-//
-//			viewController.present(infoVC, animated: true, completion: nil)
-//		}
+		coordinator?.presentInformationPage(
+			title: .verifierScanInstructionsTitle,
+			body: .verifierScanInstructionsMessage,
+			showBottomCloseButton: true
+		)
 	}
 }

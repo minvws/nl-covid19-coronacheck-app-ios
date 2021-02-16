@@ -13,7 +13,7 @@ class VerifierResultViewModel: Logging {
 	var loggingCategory: String = "VerifierResultViewModel"
 
 	/// Coordination Delegate
-	weak var delegate: Dismissable?
+	weak var coordinator: VerifierCoordinator?
 
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol = Configuration()
@@ -40,11 +40,11 @@ class VerifierResultViewModel: Logging {
 
 	/// Initialzier
 	/// - Parameters:
-	///   - delegate: the dismissable delegae
+	///   - coordinator: the dismissable delegae
 	///   - attributes: the decrypted attributes
-	init(delegate: Dismissable, attributes: Attributes) {
+	init(coordinator: VerifierCoordinator, attributes: Attributes) {
 
-		self.delegate = delegate
+		self.coordinator = coordinator
 		self.attributes = attributes
 
 		primaryButtonTitle = .verifierResultButtonTitle
@@ -112,11 +112,16 @@ class VerifierResultViewModel: Logging {
 	/// Dismiss ourselves
 	func dismiss() {
 
-		delegate?.dismiss()
+		coordinator?.dismiss()
 	}
 
 	func linkTapped() {
 
 		logDebug("Tapped on link")
+		coordinator?.presentInformationPage(
+			title: .verifierDeniedTitle,
+			body: .verifierDeniedMessage,
+			showBottomCloseButton: true
+		)
 	}
 }

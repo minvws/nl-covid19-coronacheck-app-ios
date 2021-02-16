@@ -84,6 +84,12 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.checkQRValidity()
 	}
 
+	override func viewWillDisappear(_ animated: Bool) {
+
+		super.viewWillDisappear(animated)
+		viewModel.setBrightness(reset: true)
+	}
+
 	// MARK: Helper methods
 
 	/// Style a dashboard card view

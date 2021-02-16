@@ -167,6 +167,10 @@
 		6D9819ED25D54EB4009A96D7 /* TokenEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */; };
 		6D9819F425D54FBA009A96D7 /* TokenEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */; };
 		6D9819F825D54FBE009A96D7 /* TokenOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819D625D53A9B009A96D7 /* TokenOverviewViewController.swift */; };
+		6DA08BBE25DBA91400A13187 /* ScanInstructionsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */; };
+		6DA08BBF25DBA91400A13187 /* ScanInstructionsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */; };
+		6DA08BC425DBAF1300A13187 /* DeniedInstructionsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */; };
+		6DA08BC525DBAF1300A13187 /* DeniedInstructionsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */; };
 		6DAACCFD25CEB9EB00D3C320 /* UIView+Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAACCFC25CEB9EB00D3C320 /* UIView+Embed.swift */; };
 		6DAACD0A25CEBAA200D3C320 /* UIEdgeInsets+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAACD0925CEBAA200D3C320 /* UIEdgeInsets+Convenience.swift */; };
 		6DAE8BDA25CB242700AAF2A7 /* Certificates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAE8BCE25CB242700AAF2A7 /* Certificates.swift */; };
@@ -503,6 +507,8 @@
 		6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOverviewLocalization.swift; sourceTree = "<group>"; };
 		6D9819E025D53CC6009A96D7 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenEntryViewController.swift; sourceTree = "<group>"; };
+		6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanInstructionsLocalization.swift; sourceTree = "<group>"; };
+		6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeniedInstructionsLocalization.swift; sourceTree = "<group>"; };
 		6DAACCFC25CEB9EB00D3C320 /* UIView+Embed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
 		6DAACD0925CEBAA200D3C320 /* UIEdgeInsets+Convenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Convenience.swift"; sourceTree = "<group>"; };
 		6DAE8BCE25CB242700AAF2A7 /* Certificates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Certificates.swift; sourceTree = "<group>"; };
@@ -1057,6 +1063,8 @@
 				6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */,
 				6D67D92025D7F8CB00827277 /* TokenScanLocalization.swift */,
 				6DF96B6A25DA57100008662B /* ScanLocalization.swift */,
+				6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */,
+				6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */,
 				6D18FBAB25DA79A40041770B /* ResultLocalization.swift */,
 				6D67D90325D7DA2F00827277 /* CreateProofLocalization.swift */,
 			);
@@ -1669,6 +1677,7 @@
 				6DD7D84525D26D3A00B97B7F /* QRCodeView.swift in Sources */,
 				6DD7D84625D26D3A00B97B7F /* OnboardingPageView.swift in Sources */,
 				6D3C353225D41E65005D3259 /* CreateProofViewContoller.swift in Sources */,
+				6DA08BBF25DBA91400A13187 /* ScanInstructionsLocalization.swift in Sources */,
 				6DD7D84725D26D3A00B97B7F /* MenuLocalization.swift in Sources */,
 				6DD7D84825D26D3A00B97B7F /* HTTPMethod.swift in Sources */,
 				6DD7D84925D26D3A00B97B7F /* CTRModel.swift in Sources */,
@@ -1679,6 +1688,7 @@
 				6DD7D84D25D26D3A00B97B7F /* CustomSidePanelController.swift in Sources */,
 				6DC91CA525D9299800B74973 /* ExpiredQRView.swift in Sources */,
 				6DD19DE525D6DD9C001FDDDC /* InformationView.swift in Sources */,
+				6DA08BC525DBAF1300A13187 /* DeniedInstructionsLocalization.swift in Sources */,
 				6DD7D84F25D26D3A00B97B7F /* SignatureValidator.swift in Sources */,
 				6DD7D85025D26D3A00B97B7F /* PrivacyViewController.swift in Sources */,
 				6DD7D85125D26D3A00B97B7F /* OpenIdManager.swift in Sources */,
@@ -1830,6 +1840,7 @@
 				6D7F9C9E25B6BAE80006F227 /* QRCodeView.swift in Sources */,
 				6D6777DE25CD662200F6F2D1 /* OnboardingPageView.swift in Sources */,
 				6D5A7BF725D1622E0008B904 /* MenuLocalization.swift in Sources */,
+				6DA08BBE25DBA91400A13187 /* ScanInstructionsLocalization.swift in Sources */,
 				6DAE8BDB25CB242700AAF2A7 /* HTTPMethod.swift in Sources */,
 				6D3035FB25BAAA9C00110B16 /* CTRModel.swift in Sources */,
 				6DD9394325BD8CD80026F071 /* Configuration.swift in Sources */,
@@ -1840,6 +1851,7 @@
 				6DD19DE425D6DD9C001FDDDC /* InformationView.swift in Sources */,
 				6DC91CA425D9299800B74973 /* ExpiredQRView.swift in Sources */,
 				6D33016325CFE72D00A98C1C /* SignatureValidator.swift in Sources */,
+				6DA08BC425DBAF1300A13187 /* DeniedInstructionsLocalization.swift in Sources */,
 				6D68CB1525CC3D3C008FE2C8 /* PrivacyViewController.swift in Sources */,
 				6D01D8C525C0262600A4AB89 /* OpenIdManager.swift in Sources */,
 				6D67D8C725D7CFE800827277 /* TokenOverviewViewModel.swift in Sources */,

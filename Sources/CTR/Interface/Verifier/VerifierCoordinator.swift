@@ -19,6 +19,13 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
 	func navigateToScanResult(_ attributes: Attributes)
+
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	///   - showBottomCloseButton: True if the bottom close button should be shown
+	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
 }
 
 class VerifierCoordinator: Coordinator, Logging {
@@ -129,8 +136,26 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
-				delegate: self,
+				coordinator: self,
 				attributes: attributes
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	///   - showBottomCloseButton: True if the bottom close button should be shown
+	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: title,
+				message: body,
+				showBottomCloseButton: showBottomCloseButton
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)
@@ -144,7 +169,11 @@ extension VerifierCoordinator: Dismissable {
 
 	func dismiss() {
 
-		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+		if sidePanel?.selectedViewController?.presentedViewController != nil {
+			sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
+		} else {
+			(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: false)
+		}
 	}
 }
 
