@@ -86,6 +86,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 			switch resultwrapper {
 				case let .success(remoteConfiguration):
+					strongSelf.logDebug("Updated remote configuration: \(remoteConfiguration)")
 					// Persist the remote configuration
 					strongSelf.storedConfiguration = remoteConfiguration
 					// Decide what to do
@@ -111,8 +112,6 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)
 		let currentVersion = fullVersionString(self.appVersion)
-
-		logDebug("Updated remote configuration: \(remoteConfiguration)")
 
 		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
 			// Update the app

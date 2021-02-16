@@ -11,6 +11,10 @@
 		326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
 		326E62C325D45DC00072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
 		519B78DE872ADE672386F136 /* Pods_CTRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B11B62DA3FFAAD3B4ADD8D6 /* Pods_CTRTests.framework */; };
+		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
+		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
+		6D0022B925DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
+		6D0022BA25DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
 		6D01D8A225BFF8D700A4AB89 /* Configuration+DigiD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */; };
 		6D01D8C525C0262600A4AB89 /* OpenIdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C425C0262600A4AB89 /* OpenIdManager.swift */; };
 		6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C825C02E1A00A4AB89 /* Logging.swift */; };
@@ -384,6 +388,8 @@
 		5A871B0BD7C484BECD4B60E1 /* Pods-Verifier.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Verifier.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-Verifier/Pods-Verifier.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
 		5CA74F6CB18D0B4DEB56FA8F /* Pods-Verifier.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Verifier.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-Verifier/Pods-Verifier.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
 		6CECB65DACA0F40C491AD0BA /* Pods-Holder.ad hoc prod.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Holder.ad hoc prod.xcconfig"; path = "Target Support Files/Pods-Holder/Pods-Holder.ad hoc prod.xcconfig"; sourceTree = "<group>"; };
+		6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-acceptance.plist"; sourceTree = "<group>"; };
+		6D0022B825DBC3FA00E91084 /* configuration-production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-production.plist"; sourceTree = "<group>"; };
 		6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configuration+DigiD.swift"; sourceTree = "<group>"; };
 		6D01D8C425C0262600A4AB89 /* OpenIdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdManager.swift; sourceTree = "<group>"; };
 		6D01D8C825C02E1A00A4AB89 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
@@ -986,9 +992,9 @@
 			isa = PBXGroup;
 			children = (
 				6DAE8BCE25CB242700AAF2A7 /* Certificates.swift */,
+				6DAE8BD125CB242700AAF2A7 /* Endpoint.swift */,
 				6DAE8BCF25CB242700AAF2A7 /* HTTPMethod.swift */,
 				6DAE8BD025CB242700AAF2A7 /* NetworkConfiguration.swift */,
-				6DAE8BD125CB242700AAF2A7 /* Endpoint.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -1126,6 +1132,8 @@
 			isa = PBXGroup;
 			children = (
 				6DD9394725BD8DAF0026F071 /* configuration-development.plist */,
+				6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */,
+				6D0022B825DBC3FA00E91084 /* configuration-production.plist */,
 			);
 			path = Development;
 			sourceTree = "<group>";
@@ -1420,7 +1428,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DD7D88D25D26D3A00B97B7F /* issuerPk.xml in Resources */,
+				6D0022BA25DBC3FA00E91084 /* configuration-production.plist in Resources */,
 				6DD7D88E25D26D3A00B97B7F /* Colors.xcassets in Resources */,
+				6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */,
 				326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6DD7D88F25D26D3A00B97B7F /* Localizable.strings in Resources */,
 				6DD7D89025D26D3A00B97B7F /* InfoPlist.strings in Resources */,
@@ -1436,7 +1446,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D8865F625C8004500DE661E /* issuerPk.xml in Resources */,
+				6D0022B925DBC3FA00E91084 /* configuration-production.plist in Resources */,
 				6D92848E25B5CB85009D4350 /* Colors.xcassets in Resources */,
+				6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */,
 				326E62C125D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6D5D203A25BF1C0A00DC2E27 /* Localizable.strings in Resources */,
 				6D7F9CB825B6DBA60006F227 /* InfoPlist.strings in Resources */,
@@ -2449,7 +2461,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QMK879NYMV;
-				DISPLAY_NAME = "CoronaTestScanner D";
+				DISPLAY_NAME = "Scanner Dev";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2483,7 +2495,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = CoronaTestScanner;
+				DISPLAY_NAME = Scanner;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2515,7 +2527,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = CoronaTestScanner;
+				DISPLAY_NAME = Scanner;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2547,7 +2559,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "CoronaTestScanner Test";
+				DISPLAY_NAME = "Scanner Test";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2579,7 +2591,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "CoronaTestScanner PROD";
+				DISPLAY_NAME = "Scanner PROD";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -2611,7 +2623,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = C2H38GV99H;
-				DISPLAY_NAME = "CoronaTestScanner ACC";
+				DISPLAY_NAME = "Scanner ACC";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

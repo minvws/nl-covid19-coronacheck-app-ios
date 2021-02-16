@@ -30,6 +30,8 @@ protocol ConfigurationDigidProtocol: AnyObject {
 	func getRedirectUri() -> URL
 }
 
+// MARK: - ConfigurationDigidProtocol
+
 extension Configuration: ConfigurationDigidProtocol {
 
 	/// Get the digid host
