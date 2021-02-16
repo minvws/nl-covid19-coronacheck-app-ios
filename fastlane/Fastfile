@@ -162,7 +162,7 @@ platform :ios do
 
     firebase_app_distribution(
       app: "1:168257592968:ios:528e987682225ac626493d",
-      groups: "testers"
+      groups: "verifiers"
     )
   end
 
