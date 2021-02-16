@@ -48,7 +48,7 @@ class ChooseProviderViewController: BaseViewController {
 			for provider in providers {
 				self.setupProviderButton(provider)
 			}
-			self.setupNoDigidButton()
+//			self.setupNoDigidButton()
 		}
 
 		// Only show an arrow as back button

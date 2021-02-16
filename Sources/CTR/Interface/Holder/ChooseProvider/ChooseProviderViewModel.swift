@@ -78,12 +78,12 @@ class ChooseProviderViewModel: Logging {
 				identifier: .commercial,
 				name: .holderChooseProviderCommercialTitle,
 				subTitle: .holderChooseProviderCommercialSubtitle
-			),
-			DisplayProvider(
-				identifier: .ggd,
-				name: .holderChooseProviderGGDTitle,
-				subTitle: .holderChooseProviderGGDSubtitle
 			)
+//			DisplayProvider(
+//				identifier: .ggd,
+//				name: .holderChooseProviderGGDTitle,
+//				subTitle: .holderChooseProviderGGDSubtitle
+//			)
 		]
 	}
 
