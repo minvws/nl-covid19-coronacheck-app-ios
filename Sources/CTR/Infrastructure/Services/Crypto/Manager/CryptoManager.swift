@@ -180,22 +180,11 @@ class CryptoManager: CryptoManaging, Logging {
 
 		if let value = cryptoData.value {
 			return createQRMessage(value, holderSecretKey: holderSecretKey)
-			//			let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, value)
-			//			if let base64Value = disclosed?.value?.base64EncodedString() {
-			//				logDebug("QR message: \(base64Value)")
-			//				return base64Value
-			//			}
 		} else {
 			let credentails = ClmobileCreateCredential(holderSecretKey, ism)
 			if let value = credentails?.value {
 				cryptoData.value = value
 				return createQRMessage(value, holderSecretKey: holderSecretKey)
-
-				//				let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, value)
-				//				if let base64Value = disclosed?.value?.base64EncodedString() {
-				//					logDebug("QR message: \(base64Value)")
-				//					return base64Value
-				//				}
 			} else {
 				logDebug("QR: \(String(describing: credentails?.error))")
 			}
@@ -210,8 +199,6 @@ class CryptoManager: CryptoManaging, Logging {
 		if let payload = disclosed?.value {
 			let message = String(decoding: payload, as: UTF8.self)
 			logDebug("QR message: \(message)")
-//
-		verifyQRMessage(payload)
 			return payload
 		}
 		return nil
@@ -250,34 +237,7 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Returns: True if valid
 	func verifyQRMessage(_ message: String) -> Attributes? {
 
-//		let proofAsn1 = Data(base64Encoded: message, options: .ignoreUnknownCharacters)
-//		if let result = ClmobileVerify(issuerPublicKey, proofAsn1) {
-
-		let stripped = String(message.replacingOccurrences(of: "\"", with: ""))
-		let proofAsn1 = stripped.data(using: .utf8)
-		if let result = ClmobileVerifyQREncoded(issuerPublicKey, proofAsn1) {
-
-			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
-				self.logError("Error Proof: \(result.error)")
-				return nil
-			}
-
-			do {
-				let object = try JSONDecoder().decode(CrypoAttributes.self, from: attributesJson)
-				return Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds)
-			} catch {
-				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
-				return nil
-			}
-		}
-		return nil
-	}
-
-	/// Verify the QR message
-	/// - Parameter message: the scanned QR code
-	/// - Returns: True if valid
-	func verifyQRMessage(_ proofAsn1: Data) -> Attributes? {
-
+		let proofAsn1 = message.data(using: .utf8)
 		if let result = ClmobileVerifyQREncoded(issuerPublicKey, proofAsn1) {
 
 			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
