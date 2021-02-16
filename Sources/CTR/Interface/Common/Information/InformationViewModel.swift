@@ -12,8 +12,14 @@ class InformationViewModel {
 	/// Dismissable Delegate
 	weak var coordinator: Dismissable?
 
+	/// The title of the information page
 	@Bindable private(set) var title: String
+
+	/// The message of the information page
 	@Bindable private(set) var message: String
+
+	/// Show Bottom Close Button
+	@Bindable private(set) var showBottomCloseButton: Bool
 
 	/// Initializer
 	/// - Parameters:
@@ -23,11 +29,13 @@ class InformationViewModel {
 	init(
 		coordinator: Dismissable,
 		title: String,
-		message: String) {
+		message: String,
+		showBottomCloseButton: Bool) {
 
 		self.coordinator = coordinator
 		self.title = title
 		self.message = message
+		self.showBottomCloseButton = showBottomCloseButton
 	}
 
 	/// The user clicked on the next button

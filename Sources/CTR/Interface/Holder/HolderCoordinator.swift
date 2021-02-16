@@ -46,7 +46,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	func presentInformationPage(title: String, body: String)
+	///   - showBottomCloseButton: True if the bottom close button should be shown
+	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
 
 	/// Open a url
 	func openUrl(_ url: URL)
@@ -262,13 +263,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	func presentInformationPage(title: String, body: String) {
+	///   - showBottomCloseButton: True if the bottom close button should be shown
+	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body
+				message: body,
+				showBottomCloseButton: showBottomCloseButton
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)

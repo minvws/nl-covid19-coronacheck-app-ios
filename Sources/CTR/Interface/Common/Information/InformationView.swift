@@ -14,6 +14,7 @@ class InformationView: BaseView {
 
 		// Dimensions
 		static let messageLineHeight: CGFloat = 22
+		static let buttonHeight: CGFloat = 52
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -51,6 +52,19 @@ class InformationView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
+	/// the close button
+	let closeButton: Button = {
+
+		let button = Button(title: "", style: .secondary)
+		button.setAttributedTitle(String.close.underline(underlined: .close), for: .normal)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		return button
+	}()
+
+	/// The bottom constraint
+	var bottomConstraint: NSLayoutConstraint?
+
 	/// setup the views
 	override func setupViews() {
 
@@ -68,6 +82,7 @@ class InformationView: BaseView {
 		scrollView.addSubview(stackView)
 
 		addSubview(scrollView)
+		addSubview(closeButton)
 	}
 
 	/// Setup the constraints
@@ -80,8 +95,8 @@ class InformationView: BaseView {
 			// Scrollview
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+//			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
 
 			// StackView
 			stackView.widthAnchor.constraint(
@@ -96,8 +111,27 @@ class InformationView: BaseView {
 			stackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
+			),
+
+			// Button
+			closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+			closeButton.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			closeButton.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			closeButton.bottomAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
+				constant: -ViewTraits.margin
 			)
 		])
+
+		bottomConstraint = scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+		bottomConstraint?.isActive = true
 	}
 
 	// MARK: Public Access
@@ -113,6 +147,17 @@ class InformationView: BaseView {
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+		}
+	}
+
+	var closeButtonIsHidden: Bool = true {
+		didSet {
+			closeButton.isHidden = closeButtonIsHidden
+			if closeButtonIsHidden {
+				bottomConstraint?.constant = 0
+			} else {
+				bottomConstraint?.constant = -ViewTraits.buttonHeight
+			}
 		}
 	}
 }

@@ -88,6 +88,10 @@ class TokenOverviewViewModel: Logging {
 	func noCode() {
 
 		logInfo("Provider selected: no code")
-		coordinator?.presentInformationPage(title: .holderTokenOverviewNoCode, body: .holderTokenOverviewNoCodeDetails)
+		coordinator?.presentInformationPage(
+			title: .holderTokenOverviewNoCode,
+			body: .holderTokenOverviewNoCodeDetails,
+			showBottomCloseButton: false
+		)
 	}
 }

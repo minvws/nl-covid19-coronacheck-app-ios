@@ -108,7 +108,7 @@ class CreateProofViewiewModel: Logging {
 						self?.handleTestProofsResponse(data)
 					case let .failure(networkError):
 						self?.showProgress = false
-						self?.logError("Can't fetch the IsM: \(networkError.localizedDescription)")
+						self?.logError("Can't fetch the ISM: \(networkError.localizedDescription)")
 				}
 			}
 		}
