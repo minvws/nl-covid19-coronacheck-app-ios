@@ -12,6 +12,9 @@ class AboutViewModel {
 	/// Dismissable Delegate
 	weak var coordinator: OpenUrlProtocol?
 
+	/// The configuration
+	weak var configuration: ConfigurationGeneralProtocol?
+
 	/// The title of the about page
 	@Bindable private(set) var title: String
 
@@ -24,9 +27,13 @@ class AboutViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: OpenUrlProtocol) {
+	///   - configuration: the configuration
+	init(
+		coordinator: OpenUrlProtocol,
+		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
+		self.configuration = configuration
 		self.title = .holderAboutTitle
 		self.message = .holderAboutText
 		self.link = .holderAboutLink
@@ -35,7 +42,7 @@ class AboutViewModel {
 	/// The user clicked on the next button
 	func linkTapped() {
 
-		if let url = URL(string: "https://coronacheck.nl/privacy") {
+		if let url = configuration?.getPrivacyPolicyURL() {
 			coordinator?.openUrl(url)
 		}
 	}

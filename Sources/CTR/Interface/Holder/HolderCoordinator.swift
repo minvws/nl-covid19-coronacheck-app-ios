@@ -326,7 +326,12 @@ extension HolderCoordinator: MenuDelegate {
 				openUrl(faqUrl)
 
 			case .about :
-				let destination = AboutViewController(viewModel: AboutViewModel(coordinator: self))
+				let destination = AboutViewController(
+					viewModel: AboutViewModel(
+						coordinator: self,
+						configuration: generalConfiguration
+					)
+				)
 				aboutNavigationContoller = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationContoller
 				
