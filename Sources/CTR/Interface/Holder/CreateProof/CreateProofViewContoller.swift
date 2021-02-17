@@ -6,13 +6,14 @@
 */
 
 import UIKit
-import MBProgressHUD
 
 class CreateProofViewController: BaseViewController {
 
 	private let viewModel: CreateProofViewiewModel
 
 	let sceneView = CreateProofView()
+
+	// MARK: Initializers
 
 	init(viewModel: CreateProofViewiewModel) {
 
@@ -27,6 +28,7 @@ class CreateProofViewController: BaseViewController {
 	}
 
 	// MARK: View lifecycle
+
 	override func loadView() {
 
 		view = sceneView
@@ -38,31 +40,12 @@ class CreateProofViewController: BaseViewController {
 
 		edgesForExtendedLayout = []
 
-		viewModel.$title.binding = {
-			self.sceneView.title = $0
-		}
-
-		viewModel.$message.binding = {
-			self.sceneView.message = $0
-		}
-
-		viewModel.$buttonTitle.binding = {
-			self.sceneView.primaryTitle = $0
-		}
+		viewModel.$title.binding = { self.sceneView.title = $0 }
+		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonClick()
-		}
-
-		viewModel.$showProgress.binding = {
-
-			if $0 {
-				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
-				self.sceneView.primaryButton.isEnabled = false
-			} else {
-				MBProgressHUD.hide(for: self.sceneView, animated: true)
-				self.sceneView.primaryButton.isEnabled = true
-			}
 		}
 	}
 }

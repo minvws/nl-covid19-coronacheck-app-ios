@@ -20,7 +20,14 @@ class ListResultsViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
+	/// The proof manager
 	weak var proofManager: ProofManaging?
+
+	/// The crypto manager
+	weak var cryptoManager: CryptoManaging?
+
+	/// The network manager
+	var networkManager: NetworkManaging?
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -28,16 +35,26 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var recentHeader: String
 	@Bindable private(set) var tooltip: String
 	@Bindable private(set) var showAlert: Bool = false
+	@Bindable private(set) var showError: String?
 	@Bindable private(set) var listItem: ListResultItem?
+	@Bindable private(set) var showProgress: Bool = false
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
-	init(coordinator: HolderCoordinatorDelegate, proofManager: ProofManaging) {
+	///   - cryptoManager: the crypto manager
+	///   - networkManager: the network manager
+	init(
+		coordinator: HolderCoordinatorDelegate,
+		proofManager: ProofManaging,
+		cryptoManager: CryptoManaging,
+		networkManager: NetworkManaging) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
+		self.cryptoManager = cryptoManager
+		self.networkManager = networkManager
 
 		self.title = .holderTestResultsNoResultsTitle
 		self.message = .holderTestResultsNoResultsText
@@ -85,6 +102,15 @@ class ListResultsViewModel: Logging {
 		self.listItem = nil
 	}
 
+	/// Show the scene when the test is already handled
+	private func reportAlreadyDone() {
+
+		self.title = .holderTestResultsAlreadyHandledTitle
+		self.message = .holderTestResultsAlreadyHandledText
+		self.buttonTitle = .holderTestResultsBackToMenuButton
+		self.listItem = nil
+	}
+
 	/// Show the screen for negative restults
 	/// - Parameter result: the negative result
 	private func reportTestResult(_ result: TestResult) {
@@ -122,7 +148,8 @@ class ListResultsViewModel: Logging {
 
 		if listItem != nil {
 			// Works for now with just one result
-			coordinator?.navigateToCreateProof()
+			//
+			createProof()
 		} else {
 			doDismiss()
 		}
@@ -141,4 +168,93 @@ class ListResultsViewModel: Logging {
 
 		coordinator?.navigateBackToStart()
 	}
+
+	// Create the proof
+	func createProof() {
+
+		showProgress = true
+
+		networkManager?.getNonce { [weak self] resultwrapper in
+
+			switch resultwrapper {
+				case let .success(envelope):
+
+					self?.cryptoManager?.setNonce(envelope.nonce)
+					self?.cryptoManager?.setStoken(envelope.stoken)
+					self?.fetchTestProof()
+				case let .failure(networkError):
+					self?.showProgress = false
+					self?.showError = "Can't fetch the nonce: \(networkError.localizedDescription)"
+					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
+			}
+		}
+	}
+
+	/// Fetch the proof
+	func fetchTestProof() {
+
+		if let icm = cryptoManager?.generateCommitmentMessage(),
+		   let icmDictionary = icm.convertToDictionary(),
+		   let stoken = cryptoManager?.getStoken(),
+		   let wrapper = proofManager?.getSignedWrapper() {
+
+			let dictionary: [String: AnyObject] = [
+				"test": generateString(object: wrapper) as AnyObject,
+				"stoken": stoken as AnyObject,
+				"icm": icmDictionary as AnyObject
+			]
+
+			networkManager?.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
+
+				switch resultwrapper {
+					case let .success(data):
+						self?.handleTestProofsResponse(data)
+					case let .failure(networkError):
+						self?.showProgress = false
+						self?.showError = "Can't fetch the ISM: \(networkError.localizedDescription)"
+						self?.logError("Can't fetch the ISM: \(networkError.localizedDescription)")
+				}
+			}
+		}
+	}
+
+	private func handleTestProofsResponse(_ data: Data?) {
+
+		if let unwrapped = data {
+			logDebug("ISM Response: \(String(decoding: unwrapped, as: UTF8.self))")
+			showProgress = false
+
+			do {
+				let ismError = try JSONDecoder().decode(ISMErrorResponse.self, from: unwrapped)
+				if ismError.code == 99994 {
+					reportAlreadyDone()
+				} else {
+					showError = "Server error \(ismError.status): \(ismError.code)"
+				}
+			} catch {
+				// not an error
+				cryptoManager?.setProofs(data)
+				proofManager?.removeTestWrapper()
+				if let message = cryptoManager?.generateQRmessage() {
+					print("message: \(message)")
+				}
+				coordinator?.navigateToCreateProof()
+			}
+		}
+	}
+
+	func generateString<T>(object: T) -> String where T: Codable {
+
+		if let data = try? JSONEncoder().encode(object),
+		   let convertedToString = String(data: data, encoding: .utf8) {
+			print("CTR: Converted to \(convertedToString)")
+			return convertedToString
+		}
+		return ""
+	}
+}
+
+struct ISMErrorResponse: Decodable {
+	let status: String
+	let code: Int
 }
