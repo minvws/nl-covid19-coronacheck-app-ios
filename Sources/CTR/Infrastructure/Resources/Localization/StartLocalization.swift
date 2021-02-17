@@ -26,7 +26,7 @@ extension String {
 
 	static var verifierStartLinkedMessage: String {
 
-		return Localization.string(for: "verifier.start.message.linked")
+		return Localization.string(for: "verifier.start.message.link")
 	}
 
 	static var verifierStartButtonTitle: String {

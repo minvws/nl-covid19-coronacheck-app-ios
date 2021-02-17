@@ -36,7 +36,7 @@ class ChooseProviderViewModel: Logging {
 	var loggingCategory: String = "ChooseProviderViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
+	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 
 	/// The proof manager
 	weak var proofManager: ProofManaging?
@@ -64,7 +64,7 @@ class ChooseProviderViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - openIdManager: the open ID manager
 	init(
-		coordinator: HolderCoordinatorDelegate,
+		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		openIdManager: OpenIdManaging) {
 
 		self.coordinator = coordinator

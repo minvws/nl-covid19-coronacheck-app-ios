@@ -147,6 +147,11 @@
 "holder.proof.text.at" = "om";
 "holder.proof.action" = "Naar mijn QR";
 
+/* MARK: - Holder About */
+"holder.about.title" = "Over deze app";
+"holder.about.text" = "CoronaCheck is ontwikkeld zodat evenementen, horeca en andere uitgaansgelegenheden veilig hun deuren kunnen openen. Met behulp van deze app komen alleen mensen met een geldig negatief testbewijs binnen. Zo trekt Nederland er langzaam maar zeker meer op uit.";
+"holder.about.link" = "Lees hier de privacy verklaring";
+
 /* MARK: - Verifier */
 
 /* MARK: - Holder Menu */
@@ -185,7 +190,7 @@
 "verifier.start.title" = "Scan QR-code";
 "verifier.start.header" = "Welkom";
 "verifier.start.message" = "Je kunt nu de QR-codes van bezoekers van jouw restaurant, event of uitgaans-gelegenheid scannen. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Bekijk scanhandleiding.";
-"verifier.start.message.linked" = "Bekijk scanhandleiding.";
+"verifier.start.message.link" = "Bekijk scanhandleiding.";
 "verifier.start.button.title" = "Start Scannen";
 
 /* MARK: - Verifier Scan Instructions */

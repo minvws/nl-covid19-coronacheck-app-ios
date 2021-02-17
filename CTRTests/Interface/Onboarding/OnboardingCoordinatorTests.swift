@@ -73,7 +73,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// When
 
 		// Then
-		XCTAssertEqual(sut?.onboardingPages.count, 5, "There should be 4 pages")
+		XCTAssertEqual(sut?.onboardingPages.count, 4, "There should be 4 pages")
 		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
 		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
 	}
