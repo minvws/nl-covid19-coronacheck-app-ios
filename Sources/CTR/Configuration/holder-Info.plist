@@ -32,11 +32,13 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NETWORK_CONFIGURATION</key>
 	<string>$(NETWORK_CONFIGURATION)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>De app will toegang tot de camera om de QR-code te scannen. </string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
