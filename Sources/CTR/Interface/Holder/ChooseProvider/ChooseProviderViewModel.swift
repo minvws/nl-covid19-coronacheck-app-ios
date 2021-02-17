@@ -141,7 +141,7 @@ class ChooseProviderViewModel: Logging {
 
 		logInfo("Provider selected: no DigiD")
 		if let url = URL(string: "https://digid.nl/aanvragen") {
-			coordinator?.openUrl(url)
+			coordinator?.openUrl(url, inApp: false)
 		}
 	}
 }

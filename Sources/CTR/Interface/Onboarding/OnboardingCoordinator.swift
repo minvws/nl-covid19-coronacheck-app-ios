@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import SafariServices
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
 	
@@ -89,9 +90,15 @@ class OnboardingCoordinator: Coordinator, Logging {
 extension OnboardingCoordinator: OpenUrlProtocol {
 
 	/// Open a url
-	func openUrl(_ url: URL) {
+	func openUrl(_ url: URL, inApp: Bool) {
 
-		UIApplication.shared.open(url)
+		if inApp {
+			let safariController = SFSafariViewController(url: url)
+			safariController.preferredControlTintColor = Theme.colors.primary
+			navigationController.present(safariController, animated: true)
+		} else {
+			UIApplication.shared.open(url)
+		}
 	}
 }
 
@@ -103,19 +110,7 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	/// - Parameter viewController: the presenting view controller
 	func showPrivacyPage(_ viewController: UIViewController) {
 
-		let privacyPolicyUrl = generalConfiguration.getPrivacyPolicyURL()
-		openUrl(privacyPolicyUrl)
-		
-//		let viewModel = PrivacyViewModel(
-//			coordinator: self,
-//			title: onboardingFactory.getPrivacyTitle(),
-//			message: onboardingFactory.getPrivacyMessage()
-//		)
-//		let privacyViewController = PrivacyViewController(viewModel: viewModel)
-//		let navigationController = UINavigationController(rootViewController: privacyViewController)
-//
-//		viewController.present(navigationController, animated: true, completion: nil)
-//		presentingViewController = viewController
+		openUrl( generalConfiguration.getPrivacyPolicyURL(), inApp: true)
 	}
 
 	/// Dismiss the presented viewcontroller

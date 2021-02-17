@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
 import UIKit
+import SafariServices
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 
@@ -201,11 +201,11 @@ extension VerifierCoordinator: MenuDelegate {
 
 			case .support:
 				let faqUrl = generalConfiguration.getVerifierFAQURL()
-				openUrl(faqUrl)
+				openUrl(faqUrl, inApp: true)
 
 			case .about :
 				let aboutUrl = generalConfiguration.getVerifierAboutAppURL()
-				openUrl(aboutUrl)
+				openUrl(aboutUrl, inApp: true)
 
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
@@ -241,9 +241,16 @@ extension VerifierCoordinator: MenuDelegate {
 extension VerifierCoordinator: OpenUrlProtocol {
 
 	/// Open a url
-	func openUrl(_ url: URL) {
+	/// Open a url
+	func openUrl(_ url: URL, inApp: Bool) {
 
-		UIApplication.shared.open(url)
+		if inApp {
+			let safariController = SFSafariViewController(url: url)
+			safariController.preferredControlTintColor = Theme.colors.primary
+			sidePanel?.selectedViewController?.present(safariController, animated: true)
+		} else {
+			UIApplication.shared.open(url)
+		}
 	}
 }
 

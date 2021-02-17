@@ -43,7 +43,7 @@ class AboutViewModel {
 	func linkTapped() {
 
 		if let url = configuration?.getPrivacyPolicyURL() {
-			coordinator?.openUrl(url)
+			coordinator?.openUrl(url, inApp: true)
 		}
 	}
 }

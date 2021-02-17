@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
 import UIKit
+import SafariServices
 
 protocol Dismissable: AnyObject {
 
@@ -17,7 +17,7 @@ protocol Dismissable: AnyObject {
 protocol OpenUrlProtocol: AnyObject {
 
 	/// Open a url
-	func openUrl(_ url: URL)
+	func openUrl(_ url: URL, inApp: Bool)
 }
 
 protocol HolderCoordinatorDelegate: AnyObject {
@@ -288,9 +288,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 extension HolderCoordinator: OpenUrlProtocol {
 
 	/// Open a url
-	func openUrl(_ url: URL) {
+	func openUrl(_ url: URL, inApp: Bool) {
 
-		UIApplication.shared.open(url)
+		if inApp {
+			let safariController = SFSafariViewController(url: url)
+			safariController.preferredControlTintColor = Theme.colors.primary
+			sidePanel?.selectedViewController?.present(safariController, animated: true)
+		} else {
+			UIApplication.shared.open(url)
+		}
 	}
 }
 
@@ -325,11 +331,11 @@ extension HolderCoordinator: MenuDelegate {
 
 			case .faq:
 				let faqUrl = generalConfiguration.getHolderFAQURL()
-				openUrl(faqUrl)
+				openUrl(faqUrl, inApp: true)
 
 			case .about :
 				let aboutUrl = generalConfiguration.getHolderAboutAppURL()
-				openUrl(aboutUrl)
+				openUrl(aboutUrl, inApp: true)
 //				let destination = AboutViewController(
 //					viewModel: AboutViewModel(
 //						coordinator: self,

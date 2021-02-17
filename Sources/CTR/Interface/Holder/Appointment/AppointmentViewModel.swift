@@ -49,7 +49,7 @@ class AppointmentViewModel: Logging {
 
 		logInfo("Clicked on read more about test appointment")
 		if let url = URL(string: "https://www.rijksoverheid.nl/coronatest") {
-			coordinator?.openUrl(url)
+			coordinator?.openUrl(url, inApp: false)
 		}
 	}
 
@@ -58,7 +58,7 @@ class AppointmentViewModel: Logging {
 
 		logInfo("Create appointment clicked")
 		if let url = URL(string: "https://coronatest.nl/") {
-			coordinator?.openUrl(url)
+			coordinator?.openUrl(url, inApp: false)
 		}
 	}
 }
