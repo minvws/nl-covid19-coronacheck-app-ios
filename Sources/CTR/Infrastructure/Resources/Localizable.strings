@@ -130,6 +130,8 @@
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
 "holder.testresults.pending.text" = "Het testresultaat is nog niet bekend. Probeer het later nog een.\n\nNeem voor vragen contact op met jouw testaanbieder.";
+"holder.testresults.already.title" = "Testresultaat is al opgehaald";
+"holder.testresults.already.text" = "Je testresultaat is al opgehaald en verwerkt in een QR-code.\n\nHeb je het idee dat dit niet klopt? Neem dan contact op met de testaanbieder.";
 "holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat";

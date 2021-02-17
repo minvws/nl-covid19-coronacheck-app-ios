@@ -7,6 +7,7 @@
 
 import UIKit
 import EasyTipView
+import MBProgressHUD
 
 class ListResultsViewController: BaseViewController {
 	
@@ -48,6 +49,12 @@ class ListResultsViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$showError.binding = {
+			if let error = $0 {
+				self.showError(error)
+			}
+		}
+
 		viewModel.$listItem.binding = {
 			if let item = $0 {
 				self.sceneView.resultView.isHidden = false
@@ -57,6 +64,17 @@ class ListResultsViewController: BaseViewController {
 
 			} else {
 				self.sceneView.resultView.isHidden = true
+			}
+		}
+
+		viewModel.$showProgress.binding = {
+
+			if $0 {
+				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
+				self.sceneView.primaryButton.isEnabled = false
+			} else {
+				MBProgressHUD.hide(for: self.sceneView, animated: true)
+				self.sceneView.primaryButton.isEnabled = true
 			}
 		}
 
@@ -133,6 +151,23 @@ class ListResultsViewController: BaseViewController {
 			UIAlertAction(
 				title: .holderTestResultsAlertCancel,
 				style: .cancel,
+				handler: nil
+			)
+		)
+		present(alertController, animated: true, completion: nil)
+	}
+
+	/// Show alert
+	private func showError(_ message: String) {
+
+		let alertController = UIAlertController(
+			title: .errorTitle,
+			message: message,
+			preferredStyle: .alert)
+		alertController.addAction(
+			UIAlertAction(
+				title: .ok,
+				style: .default,
 				handler: nil
 			)
 		)

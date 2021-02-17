@@ -227,12 +227,13 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = ListResultsViewController(
 			viewModel: ListResultsViewModel(
 				coordinator: self,
-				proofManager: proofManager
+				proofManager: proofManager,
+				cryptoManager: cryptoManager,
+				networkManager: networkManager
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)
 		navigationController = destination
-
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
 
@@ -242,9 +243,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = CreateProofViewController(
 			viewModel: CreateProofViewiewModel(
 				coordinator: self,
-				proofManager: proofManager,
-				cryptoManager: cryptoManager,
-				networkManager: networkManager
+				cryptoManager: cryptoManager
 			)
 		)
 

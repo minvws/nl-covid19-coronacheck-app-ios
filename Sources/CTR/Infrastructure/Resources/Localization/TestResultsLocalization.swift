@@ -29,6 +29,16 @@ extension String {
 		return Localization.string(for: "holder.testresults.pending.text")
 	}
 
+	static var holderTestResultsAlreadyHandledTitle: String {
+
+		return Localization.string(for: "holder.testresults.already.title")
+	}
+
+	static var holderTestResultsAlreadyHandledText: String {
+
+		return Localization.string(for: "holder.testresults.already.text")
+	}
+
 	static var holderTestResultsResultsButton: String {
 
 		return Localization.string(for: "holder.testresults.results.button")

@@ -14,48 +14,42 @@ class CreateProofViewiewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
-	weak var proofManager: ProofManaging?
-
+	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
-	/// The network manager
-	var networkManager: NetworkManaging?
-
+	/// The title on the page
 	@Bindable private(set) var title: String
+
+	/// The message on the page
 	@Bindable private(set) var message: NSAttributedString?
+
+	/// The title of the button
 	@Bindable private(set) var buttonTitle: String = .next
-	@Bindable private(set) var showProgress: Bool = false
 
 	/// DescriptionInitializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
 	///   - cryptoManager: the crypto manager
-	///   - networkManager: the network manager
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
-		cryptoManager: CryptoManaging,
-		networkManager: NetworkManaging) {
+		cryptoManager: CryptoManaging
+	) {
 
 		self.coordinator = coordinator
-		self.proofManager = proofManager
 		self.cryptoManager = cryptoManager
-		self.networkManager = networkManager
 
 		self.title = .holderCreateProofTitle
 		self.buttonTitle = .holderCreateProofAction
 
 		createMessage()
-		createProof()
 	}
 
 	/// Create the message
 	func createMessage() {
 
-		if let wrapper = proofManager?.getTestWrapper(),
-		   let dateString = wrapper.result?.sampleDate,
-		   let date = parseDateFormatter.date(from: dateString) {
+		if let credentials = cryptoManager?.readCredentials(),
+		   let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+			let date = Date(timeIntervalSince1970: sampleTimeStamp)
 
 			let printTime = printTimeFormatter.string(from: date)
 			let printDate = printDateFormatter.string(from: date)
@@ -63,95 +57,16 @@ class CreateProofViewiewModel: Logging {
 			let messageString = String(format: .holderCreateProofText, printOutput)
 			let attributedMessage = NSAttributedString(string: messageString)
 			message = attributedMessage.bold([printOutput, .holderCreateProofBold], with: Theme.fonts.bodyBold)
+		} else {
+			self.logError("Can't unwrap credentials")
 		}
 	}
 
-	// Create the proof
-	func createProof() {
-
-		showProgress = true
-
-		networkManager?.getNonce { [weak self] resultwrapper in
-
-			switch resultwrapper {
-				case let .success(envelope):
-
-					self?.cryptoManager?.setNonce(envelope.nonce)
-					self?.cryptoManager?.setStoken(envelope.stoken)
-					self?.fetchTestProof()
-				case let .failure(networkError):
-					self?.showProgress = false
-
-					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
-			}
-		}
-	}
-
-	/// Fetch the proof
-	func fetchTestProof() {
-
-		if let icm = cryptoManager?.generateCommitmentMessage(),
-		   let icmDictionary = icm.convertToDictionary(),
-		   let stoken = cryptoManager?.getStoken(),
-		   let wrapper = proofManager?.getSignedWrapper() {
-
-			let dictionary: [String: AnyObject] = [
-				"test": generateString(object: wrapper) as AnyObject,
-				"stoken": stoken as AnyObject,
-				"icm": icmDictionary as AnyObject
-			]
-
-			networkManager?.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
-
-				switch resultwrapper {
-					case let .success(data):
-						self?.handleTestProofsResponse(data)
-					case let .failure(networkError):
-						self?.showProgress = false
-						self?.logError("Can't fetch the ISM: \(networkError.localizedDescription)")
-				}
-			}
-		}
-	}
-
-	private func handleTestProofsResponse(_ data: Data?) {
-
-		if let unwrapped = data {
-
-			logDebug("ISM Response: \(String(decoding: unwrapped, as: UTF8.self))")
-		}
-		showProgress = false
-		cryptoManager?.setProofs(data)
-		proofManager?.removeTestWrapper()
-		if let message = cryptoManager?.generateQRmessage() {
-			print("message: \(message)")
-		}
-	}
-
-	func generateString<T>(object: T) -> String where T: Codable {
-
-		if let data = try? JSONEncoder().encode(object),
-		   let convertedToString = String(data: data, encoding: .utf8) {
-			print("CTR: Converted to \(convertedToString)")
-			return convertedToString
-		}
-		return ""
-	}
-
+	/// User clicked on the next button
 	func buttonClick() {
 
 		coordinator?.navigateBackToStart()
 	}
-
-	/// Formatter to parse
-	private lazy var parseDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-		return dateFormatter
-	}()
 
 	/// Formatter to print date
 	private lazy var printDateFormatter: DateFormatter = {
