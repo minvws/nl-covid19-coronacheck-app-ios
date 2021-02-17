@@ -2451,7 +2451,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
-				PROVISIONING_PROFILE_SPECIFIER = "Corona Check App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2540,7 +2540,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Corona Check Scanner App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Scanner App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2572,7 +2572,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Corona Check Scanner App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Scanner App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2856,7 +2856,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
-				PROVISIONING_PROFILE_SPECIFIER = "Corona Check App Store";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
