@@ -321,6 +321,10 @@ extension HolderCoordinator: MenuDelegate {
 				dashboardNavigationContoller?.popToRootViewController(animated: false)
 				sidePanel?.selectedViewController = dashboardNavigationContoller
 
+			case .faq:
+				let faqUrl = generalConfiguration.getHolderFAQURL()
+				openUrl(faqUrl)
+
 			case .about :
 				let destination = AboutViewController(viewModel: AboutViewModel(coordinator: self))
 				aboutNavigationContoller = UINavigationController(rootViewController: destination)
