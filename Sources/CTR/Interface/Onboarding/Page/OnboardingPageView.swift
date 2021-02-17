@@ -44,7 +44,7 @@ class OnboardingPageView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .leading
-		view.distribution = .fillEqually
+		view.distribution = .fill
 		view.spacing = ViewTraits.spacing
 		return view
 	}()

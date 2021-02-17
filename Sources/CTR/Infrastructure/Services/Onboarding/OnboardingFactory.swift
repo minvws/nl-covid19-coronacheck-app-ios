@@ -13,7 +13,6 @@ enum OnboardingStep: Int {
 	case safelyOnTheRoad
 	case yourQR
 	case validity
-	case safeSystem
 	case privacy
 }
 
@@ -86,12 +85,6 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				message: .holderOnboardingMessageValidity,
 				image: .onboardingValidity,
 				step: .validity
-			),
-			OnboardingPage(
-				title: .holderOnboardingTitleSecureSystem,
-				message: .holderOnboardingMessageSecureSystem,
-				image: .onboardingSecureSystem,
-				step: .safeSystem
 			),
 			OnboardingPage(
 				title: .holderOnboardingTitlePrivacy,
@@ -178,12 +171,12 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				image: .onboardingValidity,
 				step: .validity
 			),
-			OnboardingPage(
-				title: .verifierOnboardingTitleSecureSystem,
-				message: .verifierOnboardingMessageSecureSystem,
-				image: .onboardingSecureSystem,
-				step: .safeSystem
-			),
+//			OnboardingPage(
+//				title: .verifierOnboardingTitleSecureSystem,
+//				message: .verifierOnboardingMessageSecureSystem,
+//				image: .onboardingSecureSystem,
+//				step: .safeSystem
+//			),
 			OnboardingPage(
 				title: .verifierOnboardingTitlePrivacy,
 				message: .verifierOnboardingMessagePrivacy,

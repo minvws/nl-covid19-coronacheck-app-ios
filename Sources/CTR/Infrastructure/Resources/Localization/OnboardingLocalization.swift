@@ -41,16 +41,6 @@ extension String {
 		return Localization.string(for: "holder.onboarding.message.validity")
 	}
 
-	static var holderOnboardingTitleSecureSystem: String {
-
-		return Localization.string(for: "holder.onboarding.title.securesystem")
-	}
-
-	static var holderOnboardingMessageSecureSystem: String {
-
-		return Localization.string(for: "holder.onboarding.message.securesystem")
-	}
-
 	static var holderOnboardingTitlePrivacy: String {
 
 		return Localization.string(for: "holder.onboarding.title.privacy")
@@ -94,16 +84,6 @@ extension String {
 	static var verifierOnboardingMessageValidity: String {
 
 		return Localization.string(for: "verifier.onboarding.message.validity")
-	}
-
-	static var verifierOnboardingTitleSecureSystem: String {
-
-		return Localization.string(for: "verifier.onboarding.title.securesystem")
-	}
-
-	static var verifierOnboardingMessageSecureSystem: String {
-
-		return Localization.string(for: "verifier.onboarding.message.securesystem")
 	}
 
 	static var verifierOnboardingTitlePrivacy: String {
