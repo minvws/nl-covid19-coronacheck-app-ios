@@ -48,7 +48,11 @@ class OnboardingCoordinator: Coordinator, Logging {
 	/// The onboarding delegate
 	weak var onboardingDelegate: OnboardingDelegate?
 
+	/// The onboarding factory
 	var onboardingFactory: OnboardingFactoryProtocol
+
+	/// The general configuration
+	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 	
 	/// A presenting view controller
 	weak var presentingViewController: UIViewController?
@@ -80,6 +84,17 @@ class OnboardingCoordinator: Coordinator, Logging {
 	}
 }
 
+// MARK: - OpenUrlProtocol
+
+extension OnboardingCoordinator: OpenUrlProtocol {
+
+	/// Open a url
+	func openUrl(_ url: URL) {
+
+		UIApplication.shared.open(url)
+	}
+}
+
 // MARK: - OnboardingCoordinatorDelegate
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
@@ -87,17 +102,20 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	/// Show the privacy page
 	/// - Parameter viewController: the presenting view controller
 	func showPrivacyPage(_ viewController: UIViewController) {
+
+		let privacyPolicyUrl = generalConfiguration.getPrivacyPolicyURL()
+		openUrl(privacyPolicyUrl)
 		
-		let viewModel = PrivacyViewModel(
-			coordinator: self,
-			title: onboardingFactory.getPrivacyTitle(),
-			message: onboardingFactory.getPrivacyMessage()
-		)
-		let privacyViewController = PrivacyViewController(viewModel: viewModel)
-		let navigationController = UINavigationController(rootViewController: privacyViewController)
-		
-		viewController.present(navigationController, animated: true, completion: nil)
-		presentingViewController = viewController
+//		let viewModel = PrivacyViewModel(
+//			coordinator: self,
+//			title: onboardingFactory.getPrivacyTitle(),
+//			message: onboardingFactory.getPrivacyMessage()
+//		)
+//		let privacyViewController = PrivacyViewController(viewModel: viewModel)
+//		let navigationController = UINavigationController(rootViewController: privacyViewController)
+//
+//		viewController.present(navigationController, animated: true, completion: nil)
+//		presentingViewController = viewController
 	}
 
 	/// Dismiss the presented viewcontroller

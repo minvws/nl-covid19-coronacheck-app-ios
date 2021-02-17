@@ -283,6 +283,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 }
 
+// MARK: - OpenUrlProtocol
+
 extension HolderCoordinator: OpenUrlProtocol {
 
 	/// Open a url
@@ -326,14 +328,16 @@ extension HolderCoordinator: MenuDelegate {
 				openUrl(faqUrl)
 
 			case .about :
-				let destination = AboutViewController(
-					viewModel: AboutViewModel(
-						coordinator: self,
-						configuration: generalConfiguration
-					)
-				)
-				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-				sidePanel?.selectedViewController = aboutNavigationContoller
+				let aboutUrl = generalConfiguration.getHolderAboutAppURL()
+				openUrl(aboutUrl)
+//				let destination = AboutViewController(
+//					viewModel: AboutViewModel(
+//						coordinator: self,
+//						configuration: generalConfiguration
+//					)
+//				)
+//				aboutNavigationContoller = UINavigationController(rootViewController: destination)
+//				sidePanel?.selectedViewController = aboutNavigationContoller
 				
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
