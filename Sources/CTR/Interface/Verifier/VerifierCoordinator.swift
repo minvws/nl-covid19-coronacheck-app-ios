@@ -5,8 +5,8 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
 import UIKit
+import SafariServices
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 
@@ -46,6 +46,9 @@ class VerifierCoordinator: Coordinator, Logging {
 
 	/// The crypto manager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
+
+	/// The general configuration
+	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -195,6 +198,15 @@ extension VerifierCoordinator: MenuDelegate {
 			case .overview:
 				dashboardNavigationContoller?.popToRootViewController(animated: false)
 				sidePanel?.selectedViewController = dashboardNavigationContoller
+
+			case .support:
+				let faqUrl = generalConfiguration.getVerifierFAQURL()
+				openUrl(faqUrl, inApp: true)
+
+			case .about :
+				let aboutUrl = generalConfiguration.getVerifierAboutAppURL()
+				openUrl(aboutUrl, inApp: true)
+
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
 
@@ -219,9 +231,26 @@ extension VerifierCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .about, title: .verifierMenuAbout),
-			MenuItem(identifier: .feedback, title: .verifierMenuFeedback)
+			MenuItem(identifier: .about, title: .verifierMenuAbout)
 		]
+	}
+}
+
+// MARK: - OpenUrlProtocol
+
+extension VerifierCoordinator: OpenUrlProtocol {
+
+	/// Open a url
+	/// Open a url
+	func openUrl(_ url: URL, inApp: Bool) {
+
+		if inApp {
+			let safariController = SFSafariViewController(url: url)
+			safariController.preferredControlTintColor = Theme.colors.primary
+			sidePanel?.selectedViewController?.present(safariController, animated: true)
+		} else {
+			UIApplication.shared.open(url)
+		}
 	}
 }
 

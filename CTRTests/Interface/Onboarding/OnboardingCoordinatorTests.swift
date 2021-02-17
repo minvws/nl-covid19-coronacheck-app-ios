@@ -91,34 +91,34 @@ class OnboardingCoordinatorTests: XCTestCase {
 		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
 	}
 
-	/// Test the show privacy page call
-	func testShowPrivacyPage() {
+//	/// Test the show privacy page call
+//	func testShowPrivacyPage() {
+//
+//		// Given
+//		let viewControllerSpy = ViewControllerSpy()
+//
+//		// When
+//		sut?.showPrivacyPage(viewControllerSpy)
+//
+//		// Then
+//		XCTAssertTrue(viewControllerSpy.presentCalled, "The method should be called")
+//		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
+//	}
 
-		// Given
-		let viewControllerSpy = ViewControllerSpy()
-
-		// When
-		sut?.showPrivacyPage(viewControllerSpy)
-
-		// Then
-		XCTAssertTrue(viewControllerSpy.presentCalled, "The method should be called")
-		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
-	}
-
-	/// Test the dimiss call
-	func testDismiss() {
-
-		// Given
-		let viewControllerSpy = ViewControllerSpy()
-		sut?.showPrivacyPage(viewControllerSpy)
-
-		// When
-		sut?.dismiss()
-
-		// Then
-		XCTAssertTrue(viewControllerSpy.dismissCalled, "The method should be called")
-		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
-	}
+//	/// Test the dimiss call
+//	func testDismiss() {
+//
+//		// Given
+//		let viewControllerSpy = ViewControllerSpy()
+//		sut?.showPrivacyPage(viewControllerSpy)
+//
+//		// When
+//		sut?.dismiss()
+//
+//		// Then
+//		XCTAssertTrue(viewControllerSpy.dismissCalled, "The method should be called")
+//		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
+//	}
 
 	/// Test the finish onboarding call
 	func testFinishOnboarding() {
