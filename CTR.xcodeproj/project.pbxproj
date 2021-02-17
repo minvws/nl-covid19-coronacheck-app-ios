@@ -2060,7 +2060,7 @@
 			baseConfigurationReference = D8F0292D197EE38240619C59 /* Pods-Holder.ad hoc test.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = holder;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2173,7 +2173,7 @@
 			baseConfigurationReference = C52B817A1FF44934777E39AB /* Pods-Holder.ad hoc acc.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = holder;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2286,7 +2286,7 @@
 			baseConfigurationReference = 6CECB65DACA0F40C491AD0BA /* Pods-Holder.ad hoc prod.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = holder;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2399,7 +2399,7 @@
 			baseConfigurationReference = CE390580CC418D69BE5A2A68 /* Pods-Holder.app store.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = holder;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2419,7 +2419,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "Corona Check App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2454,7 +2454,7 @@
 			baseConfigurationReference = 3F5D985EBB118088FAF8DB9F /* Pods-Verifier.debug.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = verifier;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconVerifier;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -2488,7 +2488,7 @@
 			baseConfigurationReference = 2A6B0348B4A336DC36A81263 /* Pods-Verifier.release.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = verifier;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconVerifier;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2508,7 +2508,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Verifier Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "Corona Check Scanner App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2520,7 +2520,7 @@
 			baseConfigurationReference = 16372116B65A21309B19B451 /* Pods-Verifier.app store.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = verifier;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconVerifier;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2540,7 +2540,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Verifier Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "Corona Check Scanner App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2552,7 +2552,7 @@
 			baseConfigurationReference = DB431C25C758D824325EE9F9 /* Pods-Verifier.ad hoc test.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = verifier;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconVerifier;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2584,7 +2584,7 @@
 			baseConfigurationReference = 5CA74F6CB18D0B4DEB56FA8F /* Pods-Verifier.ad hoc prod.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = verifier;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconVerifier;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2616,7 +2616,7 @@
 			baseConfigurationReference = 5A871B0BD7C484BECD4B60E1 /* Pods-Verifier.ad hoc acc.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = verifier;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconVerifier;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2770,7 +2770,7 @@
 			baseConfigurationReference = D21529ECB2880EAE78EE03C6 /* Pods-Holder.debug.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = holder;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -2804,7 +2804,7 @@
 			baseConfigurationReference = 2B45CBAD1BBB10D4AB52A07C /* Pods-Holder.release.xcconfig */;
 			buildSettings = {
 				APP_FLAVOR = holder;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -2824,7 +2824,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "Corona Check App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

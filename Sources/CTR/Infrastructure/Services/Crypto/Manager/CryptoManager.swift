@@ -60,7 +60,7 @@ protocol CryptoManaging: AnyObject {
 
 	/// Read the crypto credentials
 	/// - Returns: the credentials
-	func readCredentials() -> CrypoAttributes? 
+	func readCredentials() -> CrypoAttributes?
 
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
