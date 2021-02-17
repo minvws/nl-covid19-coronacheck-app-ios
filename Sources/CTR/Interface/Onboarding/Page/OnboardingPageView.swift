@@ -19,6 +19,7 @@ class OnboardingPageView: BaseView {
 		// Margins
 		static let margin: CGFloat = UIDevice.current.isSmallScreen ? 0 : 20
 		static let spacing: CGFloat = UIDevice.current.isSmallScreen ? 10 : 40
+		static let imageMargin: CGFloat = 26
 	}
 	
 	/// The container for centering the image
@@ -44,7 +45,7 @@ class OnboardingPageView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .leading
-		view.distribution = .fillEqually
+		view.distribution = .fill
 		view.spacing = ViewTraits.spacing
 		return view
 	}()
@@ -102,15 +103,19 @@ class OnboardingPageView: BaseView {
 		
 		NSLayoutConstraint.activate([
 
+			// Container
+			imageContainerView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+
 			// Image
 			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
 			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
 			imageView.leadingAnchor.constraint(
 				equalTo: imageContainerView.leadingAnchor,
-				constant: ViewTraits.margin),
+				constant: ViewTraits.imageMargin
+			),
 			imageView.trailingAnchor.constraint(
 				equalTo: imageContainerView.trailingAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.imageMargin
 			)
 		])
 	}

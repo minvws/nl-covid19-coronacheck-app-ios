@@ -16,6 +16,14 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// Get the TTL for a QR
 	/// - Returns: TTL for a QR
 	func getQRTTL() -> TimeInterval
+
+	/// Get the URL for the holder faq
+	/// - Returns: the holder faq url
+	func getHolderFAQURL() -> URL
+
+	/// Get the URL for the privacy policy
+	/// - Returns: the privay policy url
+	func getPrivacyPolicyURL() -> URL
 }
 
 extension Configuration: ConfigurationGeneralProtocol {
@@ -36,5 +44,25 @@ extension Configuration: ConfigurationGeneralProtocol {
 			fatalError("Configuration: No QR TTL provided")
 		}
 		return value
+	}
+
+	/// Get the URL for the holder faq
+	/// - Returns: the holder faq uel
+	func getHolderFAQURL() -> URL {
+		guard let value = general["holderFAQURL"] as? String,
+			  let url = URL(string: value) else {
+			fatalError("Configuration: No Holder FAQ URL provided")
+		}
+		return url
+	}
+
+	/// Get the URL for the privacy policy
+	/// - Returns: the privay policy url
+	func getPrivacyPolicyURL() -> URL {
+		guard let value = general["privacyPolicyURL"] as? String,
+			  let url = URL(string: value) else {
+			fatalError("Configuration: No Holder FAQ URL provided")
+		}
+		return url
 	}
 }

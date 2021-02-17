@@ -13,7 +13,7 @@ class AppointmentViewModel: Logging {
 	var loggingCategory: String = "AppointmentViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
+	weak var coordinator: OpenUrlProtocol?
 
 	/// The header image
 	@Bindable private(set) var image: UIImage?
@@ -34,7 +34,7 @@ class AppointmentViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 
-	init(coordinator: HolderCoordinatorDelegate) {
+	init(coordinator: OpenUrlProtocol) {
 
 		self.coordinator = coordinator
 		self.title = .holderAppointmentTitle

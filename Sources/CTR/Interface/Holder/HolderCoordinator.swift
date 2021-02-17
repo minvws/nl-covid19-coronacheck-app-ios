@@ -14,6 +14,12 @@ protocol Dismissable: AnyObject {
 	func dismiss()
 }
 
+protocol OpenUrlProtocol: AnyObject {
+
+	/// Open a url
+	func openUrl(_ url: URL)
+}
+
 protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
@@ -48,9 +54,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - showBottomCloseButton: True if the bottom close button should be shown
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
-
-	/// Open a url
-	func openUrl(_ url: URL)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -93,6 +96,9 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
+
+	/// The about navigation controller
+	var aboutNavigationContoller: UINavigationController?
 
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -275,6 +281,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = UINavigationController(rootViewController: viewController)
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
+}
+
+extension HolderCoordinator: OpenUrlProtocol {
 
 	/// Open a url
 	func openUrl(_ url: URL) {
@@ -311,6 +320,21 @@ extension HolderCoordinator: MenuDelegate {
 			case .overview:
 				dashboardNavigationContoller?.popToRootViewController(animated: false)
 				sidePanel?.selectedViewController = dashboardNavigationContoller
+
+			case .faq:
+				let faqUrl = generalConfiguration.getHolderFAQURL()
+				openUrl(faqUrl)
+
+			case .about :
+				let destination = AboutViewController(
+					viewModel: AboutViewModel(
+						coordinator: self,
+						configuration: generalConfiguration
+					)
+				)
+				aboutNavigationContoller = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationContoller
+				
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
 
@@ -335,9 +359,7 @@ extension HolderCoordinator: MenuDelegate {
 
 		return [
 			MenuItem(identifier: .faq, title: .holderMenuFaq),
-			MenuItem(identifier: .settings, title: .holderMenuSettings),
-			MenuItem(identifier: .about, title: .holderMenuAbout),
-			MenuItem(identifier: .feedback, title: .holderMenuFeedback)
+			MenuItem(identifier: .about, title: .holderMenuAbout)
 		]
 	}
 }

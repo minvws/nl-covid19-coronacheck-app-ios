@@ -44,16 +44,14 @@
 "holder.menu.feedback" = "Geef ons feedback";
 
 /* MARK: - Holder Onboarding */
-"holder.onboarding.title.safely" = "Veilig op pad";
-"holder.onboarding.message.safely" = "We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
+"holder.onboarding.title.safely" = "Getest en wel op pad";
+"holder.onboarding.message.safely" = "Om zo veilig mogelijk op pad te kunnen is het belangrijk eerst een coronatest te doen. Alleen bij een negatieve test krijg je toegang tot de testevenementen van Fieldlab.\n";
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
-"holder.onboarding.message.yourqr" = "In deze app zet je jouw testuitslag om in een QR-code. Deze laat je scannen bij de ingang van het café, in de rij voor een event of bij andere uitgaansgelegenheden.";
-"holder.onboarding.title.validity" = "Uitslag geldt 2 dagen";
-"holder.onboarding.message.validity" = "Een negatieve testuitslag is 2 dagen geldig. Daarna niet meer. De QR-code verdwijnt dan automatisch uit de app. Nieuwe QR nodig? Laat je dan opnieuw op corona testen.";
-"holder.onboarding.title.securesystem" = "Een veilig systeem";
-"holder.onboarding.message.securesystem" = "Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
+"holder.onboarding.message.yourqr" = "Deze app maakt van jouw negatieve testresultaat een persoonlijke QR-code. Bij binnenkomst wordt deze QR-code gescand als bewijs dat je negatief getest bent.\n";
+"holder.onboarding.title.validity" = "Bewijs geldt 48 uur";
+"holder.onboarding.message.validity" = "Een negatief testresultaat is 48 uur geldig. In die periode is de kans dat je besmet raakt klein. Als je testresultaat afloopt verdwijnt de QR-code uit de app. Nieuwe QR-code nodig? Laat je opnieuw testen.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
-"holder.onboarding.message.privacy" = "Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.";
+"holder.onboarding.message.privacy" = "Deze app haalt alleen een negatief testresultaat op. En controleert of dit jouw resultaat is. Andere gegevens worden niet verwerkt of opgeslagen.\n";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app je gegevens";
@@ -149,6 +147,11 @@
 "holder.proof.text.at" = "om";
 "holder.proof.action" = "Naar mijn QR";
 
+/* MARK: - Holder About */
+"holder.about.title" = "Over deze app";
+"holder.about.text" = "CoronaCheck is ontwikkeld zodat evenementen, horeca en andere uitgaansgelegenheden veilig hun deuren kunnen openen. Met behulp van deze app komen alleen mensen met een geldig negatief testbewijs binnen. Zo trekt Nederland er langzaam maar zeker meer op uit.";
+"holder.about.link" = "Lees hier de privacy verklaring";
+
 /* MARK: - Verifier */
 
 /* MARK: - Holder Menu */
@@ -187,7 +190,7 @@
 "verifier.start.title" = "Scan QR-code";
 "verifier.start.header" = "Welkom";
 "verifier.start.message" = "Je kunt nu de QR-codes van bezoekers van jouw restaurant, event of uitgaans-gelegenheid scannen. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Bekijk scanhandleiding.";
-"verifier.start.message.linked" = "Bekijk scanhandleiding.";
+"verifier.start.message.link" = "Bekijk scanhandleiding.";
 "verifier.start.button.title" = "Start Scannen";
 
 /* MARK: - Verifier Scan Instructions */
