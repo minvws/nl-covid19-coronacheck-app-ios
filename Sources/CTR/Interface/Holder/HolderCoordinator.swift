@@ -240,6 +240,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		let destination = UINavigationController(rootViewController: viewController)
 		navigationController = destination
+		if #available(iOS 13.0, *) {
+			destination.isModalInPresentation = true
+		}
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
 
