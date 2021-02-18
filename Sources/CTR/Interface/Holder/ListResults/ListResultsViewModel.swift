@@ -144,7 +144,7 @@ class ListResultsViewModel: Logging {
 		return dateFormatter
 	}()
 
-	func buttonClick() {
+	func buttonTapped() {
 
 		if listItem != nil {
 			// Works for now with just one result

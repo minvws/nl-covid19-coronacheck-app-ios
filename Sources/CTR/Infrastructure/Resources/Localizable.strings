@@ -25,14 +25,15 @@
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "De app heeft een update nodig";
-"updateApp.content" = "Om de app te gebruiken heb je de laatste versie uit de store nodig.";
-"updateApp.button" = "Updaten";
+"updateApp.title" = "Update vereist";
+"updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
+"updateApp.button" = "Installeer update";
 
 /* MARK: - EndOfLife */
 "endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "CoronaTester is gestopt";
-"endOfLife.description" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
+"endOfLife.title" = "App buiten werking";
+"endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar Coronacheck.nl";
+"endOfLife.button" = "Ga naar CoronaCheck.nl";
 
 /* MARK: - Holder */
 
@@ -76,8 +77,9 @@
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.qr.title" = "Scan QR-code bij entree";
+"holder.dashboard.qr.title" = "Toon QR-code bij ingang";
 "holder.dashboard.qr.message" = "Geldig tot %@";
+"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>QR-code verloopt binnenkort</b>";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 
 /* MARK: - Holder Appointment */
@@ -101,7 +103,7 @@
 "holder.tokenoverview.title" = "Testresultaat ophalen";
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
-"holder.tokenoverview.nocode.details" = "Als je je bij een commerciële testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.  ";
+"holder.tokenoverview.nocode.details" = "Als je je bij een commerciële testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.";
 "holder.tokenoverview.code.title" = "SOB-FVDKT10-T2";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code";
 "holder.tokenoverview.qr.title" = "QR";
@@ -126,27 +128,26 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
-"holder.testresults.results.text" = "Je hebt 1 nieuw negatief testrestultaat (geen corona). Verwerk het testresultaat tot een bewijs in de vorrm van een QR-code.";
+"holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
 "holder.testresults.noresults.title" = "Er is geen negatief restresultaat";
-"holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan komen door:\n - Je testresultaat is nog niet verwerkt. Dit kan x uur duren.\n - Je hebt geen test gedaan.\n - Je test is positief. Je testaanbieder neemt dan contact met jou op.";
+"holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je testresultaat is nog niet verwerkt</li><li>Je test is langer dan 48 uur geleden uitgevoerd</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
-"holder.testresults.pending.text" = "Het testresultaat is nog niet bekend. Probeer het later nog een.\n\nNeem voor vragen contact op met jouw testaanbieder.";
+"holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testresultaat is al opgehaald";
-"holder.testresults.already.text" = "Je testresultaat is al opgehaald en verwerkt in een QR-code.\n\nHeb je het idee dat dit niet klopt? Neem dan contact op met de testaanbieder.";
+"holder.testresults.already.text" = "<p>Je testresultaat is al opgehaald en verwerkt in een QR-code.</p><p></p><p>Heb je het idee dat dit niet klopt? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
-"holder.testresults.alert.message" = "Als je nu stopt kan je later opnieuw inloogen met DigiD om je QR-code te maken.";
+"holder.testresults.alert.message" = "Je kan later vanaf Mijn overzicht opnieuw een QR-code maken.";
 "holder.testresults.alert.ok" = "Ja, Stop";
 "holder.testresults.alert.cancel" = "Nee, terug";
 
 /* MARK: - Holder Create Proof */
-"holder.proof.title" = "Van jouw testresultaat wordt nu een QR-code gemaakt";
-"holder.proof.text" = "In de QR-code wordt verwerkt dat je negatief getest bent (geen corona) op %@.\n\nIn deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.";
-"holder.proof.text.bold" = "negatief getest";
+"holder.proof.title" = "Van jouw testresultaat is een QR-code gemaakt";
+"holder.proof.text" = "<p>In de QR-code is verwerkt dat je <b>negatief getest</b> bent (geen corona) op <b>%@</b>.</p><p>In deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.</p>";
 "holder.proof.text.at" = "om";
 "holder.proof.action" = "Naar mijn QR";
 

@@ -25,4 +25,9 @@ extension String {
 
 		return Localization.string(for: "endOfLife.error.message")
 	}
+
+	static var endOfLifeButton: String {
+
+		return Localization.string(for: "endOfLife.button")
+	}
 }

@@ -255,7 +255,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				cryptoManager: cryptoManager
 			)
 		)
-
 		navigationController.pushViewController(viewController, animated: true)
 	}
 

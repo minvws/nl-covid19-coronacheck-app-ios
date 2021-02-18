@@ -45,7 +45,7 @@ class CreateProofViewController: BaseViewController {
 		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.buttonClick()
+			self?.viewModel.buttonTapped()
 		}
 	}
 }

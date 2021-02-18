@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
 
 /// Viewmodel for updating the application
 class AppUpdateViewModel {
@@ -24,6 +24,9 @@ class AppUpdateViewModel {
 
 	/// The action text
 	@Bindable fileprivate(set) var actionTitle: String
+
+	/// The action text
+	@Bindable fileprivate(set) var image: UIImage?
 
 	/// Flag if we can't open the app store
 	@Bindable fileprivate(set) var showCannotOpenAlert: Bool
@@ -44,6 +47,7 @@ class AppUpdateViewModel {
 		updateURL = versionInformation.appStoreURL
 		showCannotOpenAlert = false
 		errorMessage = .updateAppErrorMessage
+		self.image = .warning
 	}
 
 	/// User tapped on the update button
@@ -71,8 +75,10 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 		self.title = .endOfLifeTitle
 		self.message = .endOfLifeDescription
 		self.errorMessage = .endOfLifeErrorMessage
-		self.actionTitle = .learnMore
+		self.actionTitle = .endOfLifeButton
 		self.updateURL = versionInformation.informationURL
 		self.errorMessage = .endOfLifeErrorMessage
+		self.image = .warning
+		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
 }

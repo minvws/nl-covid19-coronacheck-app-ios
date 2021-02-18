@@ -79,7 +79,7 @@ class ListResultsViewController: BaseViewController {
 		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.buttonClick()
+			self?.viewModel.buttonTapped()
 		}
 
 		var preferences = EasyTipView.Preferences()
@@ -141,7 +141,7 @@ class ListResultsViewController: BaseViewController {
 		alertController.addAction(
 			UIAlertAction(
 				title: .holderTestResultsAlertOk,
-				style: .default,
+				style: .cancel,
 				handler: { _ in
 					self.viewModel.doDismiss()
 				}
@@ -150,7 +150,7 @@ class ListResultsViewController: BaseViewController {
 		alertController.addAction(
 			UIAlertAction(
 				title: .holderTestResultsAlertCancel,
-				style: .cancel,
+				style: .default,
 				handler: nil
 			)
 		)

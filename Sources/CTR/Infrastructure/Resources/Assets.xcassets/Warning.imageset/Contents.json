@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "graphic_app_notification.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

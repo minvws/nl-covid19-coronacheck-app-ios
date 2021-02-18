@@ -25,4 +25,6 @@ extension UIImage {
 
 	static var questionMark: UIImage? { return UIImage(named: "QuestionMark") }
 
+	static var warning: UIImage? { return UIImage(named: "Warning") }
+
 }

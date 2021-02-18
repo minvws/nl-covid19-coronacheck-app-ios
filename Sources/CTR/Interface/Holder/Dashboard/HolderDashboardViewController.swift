@@ -108,7 +108,7 @@ class HolderDashboardViewController: BaseViewController {
 		card.primaryTitle = cardInfo.actionTitle
 		card.backgroundImage = cardInfo.image
 		card.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.cardClicked(cardInfo.identifier)
+			self?.viewModel.cardTapped(cardInfo.identifier)
 		}
 	}
 

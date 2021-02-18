@@ -1,109 +1,109 @@
 {
   "images" : [
     {
-      "filename" : "VerivfierAppIcon20x20@2x-1.png",
+      "filename" : "App_icon_scanner_40pt-2.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "VerivfierAppIcon20x20@3x.png",
+      "filename" : "App_icon_scanner_60pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "VerivfierAppIcon29x29@2x-1.png",
+      "filename" : "App_icon_scanner_58pt-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "VerivfierAppIcon29x29@3x.png",
+      "filename" : "App_icon_scanner_87pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "VerivfierAppIcon40x40@2x-1.png",
+      "filename" : "Icon-81.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "VerivfierAppIcon40x40@3x.png",
+      "filename" : "App_icon_scanner_120pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "VerivfierAppIcon60x60@2x.png",
+      "filename" : "App_icon_scanner_120pt-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "VerivfierAppIcon60x60@3x.png",
+      "filename" : "App_icon_scanner_180pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "VerivfierAppIcon20x20.png",
+      "filename" : "App_icon_scanner_20pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "VerivfierAppIcon20x20@2x.png",
+      "filename" : "App_icon_scanner_40pt-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "VerivfierAppIcon29x29.png",
+      "filename" : "App_icon_scanner_29pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "VerivfierAppIcon29x29@2x.png",
+      "filename" : "App_icon_scanner_58pt.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "VerivfierAppIcon40x40.png",
+      "filename" : "App_icon_scanner_40pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "VerivfierAppIcon40x40@2x.png",
+      "filename" : "Icon-80.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "VerivfierAppIcon76x76.png",
+      "filename" : "App_icon_scanner_76pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "VerivfierAppIcon76x76@2x.png",
+      "filename" : "Icon-152.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "VerivfierAppIcon83.5x83.5@2x.png",
+      "filename" : "Icon-167.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "VerivfierAppIcon1024x1024.png",
+      "filename" : "App_icon_scanner_1024pt.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"

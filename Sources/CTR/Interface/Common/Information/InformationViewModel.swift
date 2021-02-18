@@ -38,7 +38,7 @@ class InformationViewModel {
 		self.showBottomCloseButton = showBottomCloseButton
 	}
 
-	/// The user clicked on the next button
+	/// The user tapped on the next button
 	func dismiss() {
 
 		// Notify the coordinator

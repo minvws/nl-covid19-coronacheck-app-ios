@@ -30,7 +30,7 @@ class PrivacyViewModel {
 		self.message = message
 	}
 
-	/// The user clicked on the next button
+	/// The user tapped on the next button
 	func dismiss() {
 
 		// Notify the coordinator
