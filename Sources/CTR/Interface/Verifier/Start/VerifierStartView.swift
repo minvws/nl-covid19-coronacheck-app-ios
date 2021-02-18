@@ -14,12 +14,20 @@ class VerifierStartView: BaseView {
 
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 212.0
 		static let messageLineHeight: CGFloat = 22
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let imageMargin: CGFloat = 26
 	}
+
+	/// The container for centering the image
+	private let imageContainerView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 
 	let imageView: UIImageView = {
 
@@ -50,13 +58,6 @@ class VerifierStartView: BaseView {
 		return button
 	}()
 
-	let containerView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
 	/// setup the views
 	override func setupViews() {
 
@@ -70,11 +71,11 @@ class VerifierStartView: BaseView {
 
 		super.setupViewHierarchy()
 
-		addSubview(imageView)
+		imageContainerView.addSubview(imageView)
+		addSubview(imageContainerView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(primaryButton)
-		addSubview(containerView)
 	}
 
 	/// Setup the constraints
@@ -82,22 +83,35 @@ class VerifierStartView: BaseView {
 
 		NSLayoutConstraint.activate([
 
+			// Container
+			imageContainerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			imageContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			imageContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+
 			// Image
-			imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: ViewTraits.margin),
-			imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 0.5),
+			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
+			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
 			imageView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
+				equalTo: imageContainerView.leadingAnchor,
+				constant: ViewTraits.imageMargin
 			),
 			imageView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				equalTo: imageContainerView.trailingAnchor,
+				constant: -ViewTraits.imageMargin
+			),
+			imageView.topAnchor.constraint(
+				equalTo: imageContainerView.topAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : ViewTraits.imageMargin
+			),
+			imageView.bottomAnchor.constraint(
+				equalTo: imageContainerView.bottomAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.imageMargin
 			),
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: imageView.bottomAnchor,
-				constant: ViewTraits.margin
+				equalTo: imageContainerView.bottomAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -109,7 +123,7 @@ class VerifierStartView: BaseView {
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.margin
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
 			),
 
 			// Message
@@ -125,7 +139,14 @@ class VerifierStartView: BaseView {
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
+			primaryButton.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			primaryButton.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin

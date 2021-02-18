@@ -14,8 +14,43 @@ extension String {
 		return Localization.string(for: "verifier.instructions.title")
 	}
 
-	static var verifierScanInstructionsMessage: String {
+	static var verifierScanInstructionsDistanceTitle: String {
 
-		return Localization.string(for: "verifier.instructions.message")
+		return Localization.string(for: "verifier.instructions.distance.title")
+	}
+
+	static var verifierScanInstructionsDistanceText: String {
+
+		return Localization.string(for: "verifier.instructions.distance.text")
+	}
+
+	static var verifierScanInstructionsScanTitle: String {
+
+		return Localization.string(for: "verifier.instructions.scan.title")
+	}
+
+	static var verifierScanInstructionsScanText: String {
+
+		return Localization.string(for: "verifier.instructions.scan.text")
+	}
+
+	static var verifierScanInstructionsAccessTitle: String {
+
+		return Localization.string(for: "verifier.instructions.access.title")
+	}
+
+	static var verifierScanInstructionsAccessText: String {
+
+		return Localization.string(for: "verifier.instructions.access.text")
+	}
+
+	static var verifierScanInstructionsDeniedTitle: String {
+
+		return Localization.string(for: "verifier.instructions.denied.title")
+	}
+
+	static var verifierScanInstructionsDeniedText: String {
+
+		return Localization.string(for: "verifier.instructions.denied.text")
 	}
 }

@@ -53,10 +53,6 @@ class VerifierStartViewModel: Logging {
 
 	func linkTapped(_ viewController: UIViewController) {
 
-		coordinator?.presentInformationPage(
-			title: .verifierScanInstructionsTitle,
-			body: .verifierScanInstructionsMessage,
-			showBottomCloseButton: true
-		)
+		coordinator?.navigateToScanInstruction()
 	}
 }
