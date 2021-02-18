@@ -57,10 +57,7 @@ class ScrolledStackView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			scrollView.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -ViewTraits.margin
-			),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
 			// StackView
 			stackView.widthAnchor.constraint(

@@ -66,33 +66,33 @@ extension String {
 		return Localization.string(for: "verifier.onboarding.message.safely")
 	}
 
-	static var verifierOnboardingTitleYourQR: String {
+	static var verifierOnboardingTitleScanQR: String {
 
-		return Localization.string(for: "verifier.onboarding.title.yourqr")
+		return Localization.string(for: "verifier.onboarding.title.scanqr")
 	}
 
-	static var verifierOnboardingMessageYourQR: String {
+	static var verifierOnboardingMessageScanQR: String {
 
-		return Localization.string(for: "verifier.onboarding.message.yourqr")
+		return Localization.string(for: "verifier.onboarding.message.scanqr")
 	}
 
-	static var verifierOnboardingTitleValidity: String {
+	static var verifierOnboardingTitleAccess: String {
 
-		return Localization.string(for: "verifier.onboarding.title.validity")
+		return Localization.string(for: "verifier.onboarding.title.access")
 	}
 
-	static var verifierOnboardingMessageValidity: String {
+	static var verifierOnboardingMessageAccess: String {
 
-		return Localization.string(for: "verifier.onboarding.message.validity")
+		return Localization.string(for: "verifier.onboarding.message.access")
 	}
 
-	static var verifierOnboardingTitlePrivacy: String {
+	static var verifierOnboardingTitleWho: String {
 
-		return Localization.string(for: "verifier.onboarding.title.privacy")
+		return Localization.string(for: "verifier.onboarding.title.who")
 	}
 
-	static var verifierOnboardingMessagePrivacy: String {
+	static var verifierOnboardingMessageWho: String {
 
-		return Localization.string(for: "verifier.onboarding.message.privacy")
+		return Localization.string(for: "verifier.onboarding.message.who")
 	}
 }

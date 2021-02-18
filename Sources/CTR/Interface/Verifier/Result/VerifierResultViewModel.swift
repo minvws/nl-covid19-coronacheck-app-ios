@@ -106,7 +106,7 @@ class VerifierResultViewModel: Logging {
 
 		title = .verifierResultDeniedTitle
 		message = .verifierResultDeniedMessage
-		linkedMessage = .verifierResultDeniedLink
+//		linkedMessage = .verifierResultDeniedLink
 	}
 
 	/// Dismiss ourselves

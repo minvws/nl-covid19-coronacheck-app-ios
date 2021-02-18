@@ -13,7 +13,6 @@ class InformationView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let messageLineHeight: CGFloat = 22
 		static let buttonHeight: CGFloat = 52
 
 		// Margins
@@ -146,7 +145,11 @@ class InformationView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			messageLabel.attributedText = .makeFromHtml(
+				text: message,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark
+			)
 		}
 	}
 

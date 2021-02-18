@@ -89,4 +89,3 @@ class TokenScanViewController: ScanViewController {
 		present(alertController, animated: true, completion: nil)
 	}
 }
-
