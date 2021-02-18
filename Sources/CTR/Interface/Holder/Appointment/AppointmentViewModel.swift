@@ -21,6 +21,9 @@ class AppointmentViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String
 
+	/// The header of the scene
+	@Bindable private(set) var header: String
+
 	/// The information body of the scene
 	@Bindable private(set) var body: String
 
@@ -38,6 +41,7 @@ class AppointmentViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.title = .holderAppointmentTitle
+		self.header = .holderAppointmentHeader
 		self.body = .holderAppointmentBody
 		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle

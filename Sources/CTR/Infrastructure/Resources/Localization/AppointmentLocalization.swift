@@ -14,6 +14,11 @@ extension String {
 		return Localization.string(for: "holder.appointment.title")
 	}
 
+	static var holderAppointmentHeader: String {
+
+		return Localization.string(for: "holder.appointment.header")
+	}
+
 	static var holderAppointmentBody: String {
 
 		return Localization.string(for: "holder.appointment.body")

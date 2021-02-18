@@ -40,6 +40,9 @@ class AppointmentViewController: BaseViewController {
 
 		viewModel.$title.binding = {
 			self.title = $0
+		}
+
+		viewModel.$header.binding = {
 			self.sceneView.title = $0
 		}
 

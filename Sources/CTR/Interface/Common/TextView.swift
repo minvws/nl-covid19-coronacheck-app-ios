@@ -105,16 +105,16 @@ class TextView: UITextView, UITextViewDelegate {
         return self
     }
     
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        switch interaction {
-        case .invokeDefaultAction:
-            linkHandlers.forEach { $0(URL) }
-        default:
-            return false
-        }
-        
-        return false
-    }
+	func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+		switch interaction {
+			case .invokeDefaultAction:
+				linkHandlers.forEach { $0(URL) }
+			default:
+				return false
+		}
+		
+		return false
+	}
     
     func textViewDidEndEditing(_ textView: UITextView) {
         textChangedHandlers.forEach { $0(textView.text) }

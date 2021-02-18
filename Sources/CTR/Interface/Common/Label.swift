@@ -82,4 +82,10 @@ class Label: UILabel {
         isHidden = text?.isEmpty == true
         return self
     }
+
+	@discardableResult
+	func asHTML() -> Self {
+		attributedText = .makeFromHtml(text: text, font: font, textColor: textColor, boldTextColor: Theme.colors.dark)
+		return self
+	}
 }
