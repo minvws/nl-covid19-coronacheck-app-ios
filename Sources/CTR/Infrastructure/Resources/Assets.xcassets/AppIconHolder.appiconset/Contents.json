@@ -1,109 +1,109 @@
 {
   "images" : [
     {
-      "filename" : "HolderAppIcon20x20@2x-1.png",
+      "filename" : "App_icon_holder_40pt.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "HolderAppIcon20x20@3x.png",
+      "filename" : "App_icon_holder_60pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
     },
     {
-      "filename" : "HolderAppIcon29x29@2x-1.png",
+      "filename" : "App_icon_holder_58pt.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "HolderAppIcon29x29@3x.png",
+      "filename" : "App_icon_holder_87pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
     },
     {
-      "filename" : "HolderAppIcon40x40@2x-1.png",
+      "filename" : "Icon-81.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "HolderAppIcon40x40@3x.png",
+      "filename" : "App_icon_holder_120pt-1.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
     },
     {
-      "filename" : "HolderAppIcon60x60@2x.png",
+      "filename" : "App_icon_holder_120pt.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
     },
     {
-      "filename" : "HolderAppIcon60x60@3x.png",
+      "filename" : "App_icon_holder_180pt.png",
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
     },
     {
-      "filename" : "HolderAppIcon20x20.png",
+      "filename" : "App_icon_holder_20pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "20x20"
     },
     {
-      "filename" : "HolderAppIcon20x20@2x.png",
+      "filename" : "App_icon_holder_40pt-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "20x20"
     },
     {
-      "filename" : "HolderAppIcon29x29.png",
+      "filename" : "App_icon_holder_29pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "29x29"
     },
     {
-      "filename" : "HolderAppIcon29x29@2x.png",
+      "filename" : "App_icon_holder_58pt-1.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "29x29"
     },
     {
-      "filename" : "HolderAppIcon40x40.png",
+      "filename" : "App_icon_holder_40pt-2.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "40x40"
     },
     {
-      "filename" : "HolderAppIcon40x40@2x.png",
+      "filename" : "Icon-80.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
     },
     {
-      "filename" : "HolderAppIcon76x76.png",
+      "filename" : "App_icon_holder_76pt.png",
       "idiom" : "ipad",
       "scale" : "1x",
       "size" : "76x76"
     },
     {
-      "filename" : "HolderAppIcon76x76@2x.png",
+      "filename" : "App_icon_holder_152pt.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "76x76"
     },
     {
-      "filename" : "HolderAppIcon83.5x83.5@2x.png",
+      "filename" : "Icon-167.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"
     },
     {
-      "filename" : "HolderAppIcon1024x1024.png",
+      "filename" : "App_icon_holder_1024pt.png",
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
