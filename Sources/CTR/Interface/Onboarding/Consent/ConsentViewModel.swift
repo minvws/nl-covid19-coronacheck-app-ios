@@ -47,7 +47,7 @@ class ConsentViewModel {
 
 	/// The user tapped on the privacy link
 	/// - Parameter viewController: the presenting view controller
-	func linkClicked(_ presentingViewController: UIViewController) {
+	func linkTapped(_ presentingViewController: UIViewController) {
 
 		coordinator?.showPrivacyPage(presentingViewController)
 	}

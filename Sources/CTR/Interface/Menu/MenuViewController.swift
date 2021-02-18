@@ -44,7 +44,7 @@ class MenuViewController: BaseViewController {
 				view.titleLabel.textColor = Theme.colors.secondary
 				view.titleLabel.font = Theme.fonts.title2
 				view.primaryButtonTappedCommand  = { [weak self] in
-					self?.viewModel.menuItemClicked(item.identifier)
+					self?.viewModel.menuItemTapped(item.identifier)
 				}
 				self.sceneView.topStackView.addArrangedSubview(view)
 			}
@@ -59,7 +59,7 @@ class MenuViewController: BaseViewController {
 				view.titleLabel.textColor = Theme.colors.secondary.withAlphaComponent(0.8)
 				view.titleLabel.font = Theme.fonts.bodyBold
 				view.primaryButtonTappedCommand  = { [weak self] in
-					self?.viewModel.menuItemClicked(item.identifier)
+					self?.viewModel.menuItemTapped(item.identifier)
 				}
 				self.sceneView.bottomStackView.addArrangedSubview(view)
 			}

@@ -19,11 +19,6 @@ extension String {
 		return Localization.string(for: "holder.proof.text")
 	}
 
-	static var holderCreateProofBold: String {
-
-		return Localization.string(for: "holder.proof.text.bold")
-	}
-
 	static var holderCreateProofAt: String {
 
 		return Localization.string(for: "holder.proof.text.at")

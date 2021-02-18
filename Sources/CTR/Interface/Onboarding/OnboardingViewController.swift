@@ -90,7 +90,7 @@ class OnboardingViewController: BaseViewController {
 		setupBackButton()
 	}
 	
-	/// Create a custom back button so we can catch the click on the back button.
+	/// Create a custom back button so we can catch the tapped on the back button.
 	private func setupBackButton() {
 		
 		navigationItem.hidesBackButton = true

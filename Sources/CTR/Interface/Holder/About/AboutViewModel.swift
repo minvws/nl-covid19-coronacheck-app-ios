@@ -39,7 +39,7 @@ class AboutViewModel {
 		self.link = .holderAboutLink
 	}
 
-	/// The user clicked on the next button
+	/// The user tapped on the next button
 	func linkTapped() {
 
 		if let url = configuration?.getPrivacyPolicyURL() {

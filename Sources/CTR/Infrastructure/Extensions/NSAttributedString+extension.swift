@@ -56,13 +56,21 @@ extension NSAttributedString {
 	}
 
 	func rangeOf(string: String) -> Range<String.Index>? {
+		
 		return self.string.range(of: string)
 	}
 }
 
 public extension NSAttributedString {
 
-	static func makeFromHtml(text: String?, font: UIFont, textColor: UIColor, boldTextColor: UIColor? = nil, textAlignment: NSTextAlignment = .left, lineHeight: CGFloat? = nil, underlineColor: UIColor? = nil) -> NSAttributedString {
+	static func makeFromHtml(
+		text: String?,
+		font: UIFont,
+		textColor: UIColor,
+		boldTextColor: UIColor? = nil,
+		textAlignment: NSTextAlignment = .left,
+		lineHeight: CGFloat? = 22,
+		underlineColor: UIColor? = nil) -> NSAttributedString {
 		let text = text ?? ""
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = textAlignment
@@ -94,9 +102,10 @@ public extension NSAttributedString {
 		}
 		let data: Data = text.data(using: .unicode) ?? Data(text.utf8)
 
-		if let attributedTitle = try? NSMutableAttributedString(data: data,
-																options: [.documentType: NSAttributedString.DocumentType.html],
-																documentAttributes: nil) {
+		if let attributedTitle = try? NSMutableAttributedString(
+			data: data,
+			options: [.documentType: NSAttributedString.DocumentType.html],
+			documentAttributes: nil) {
 
 			let fullRange = NSRange(location: 0, length: attributedTitle.length)
 			attributedTitle.addAttributes(attributes, range: fullRange)
@@ -130,7 +139,7 @@ public extension NSAttributedString {
 			let bulletFont = font.withSize(10)
 			let bulletAttributes: [NSAttributedString.Key: Any] = [
 				.font: bulletFont,
-				.foregroundColor: Theme.colors.primary,
+				.foregroundColor: Theme.colors.dark,
 				.baselineOffset: (font.xHeight - bulletFont.xHeight) / 2
 			]
 			let listBulletCharacter = "\u{25CF}"
@@ -142,7 +151,13 @@ public extension NSAttributedString {
 				foundRange = (currentText as NSString).range(of: "•", options: [], range: searchRange)
 				if foundRange.location != NSNotFound {
 					searchRange.location = foundRange.location + foundRange.length
-					attributedTitle.replaceCharacters(in: foundRange, with: NSAttributedString(string: listBulletCharacter, attributes: bulletAttributes))
+					attributedTitle.replaceCharacters(
+						in: foundRange,
+						with: NSAttributedString(
+							string: listBulletCharacter,
+							attributes: bulletAttributes
+						)
+					)
 				} else {
 					break
 				}

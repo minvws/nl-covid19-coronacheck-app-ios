@@ -13,6 +13,9 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome()
 
+	/// Show the scan instructions
+	func navigateToScanInstruction()
+
 	/// Navigate to the QR scanner
 	func navigateToScan()
 
@@ -26,6 +29,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - showBottomCloseButton: True if the bottom close button should be shown
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
+
 }
 
 class VerifierCoordinator: Coordinator, Logging {
@@ -118,6 +122,17 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
+	}
+
+	/// Show the scan instructions
+	func navigateToScanInstruction() {
+
+		let destination = ScanInstructionsViewController(
+			viewModel: ScanInstructionsViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the QR scanner

@@ -21,7 +21,7 @@ class CreateProofViewiewModel: Logging {
 	@Bindable private(set) var title: String
 
 	/// The message on the page
-	@Bindable private(set) var message: NSAttributedString?
+	@Bindable private(set) var message: String?
 
 	/// The title of the button
 	@Bindable private(set) var buttonTitle: String = .next
@@ -54,16 +54,14 @@ class CreateProofViewiewModel: Logging {
 			let printTime = printTimeFormatter.string(from: date)
 			let printDate = printDateFormatter.string(from: date)
 			let printOutput = "\(printDate) " + String.holderCreateProofAt + " \(printTime)"
-			let messageString = String(format: .holderCreateProofText, printOutput)
-			let attributedMessage = NSAttributedString(string: messageString)
-			message = attributedMessage.bold([printOutput, .holderCreateProofBold], with: Theme.fonts.bodyBold)
+			message = String(format: .holderCreateProofText, printOutput)
 		} else {
 			self.logError("Can't unwrap credentials")
 		}
 	}
 
-	/// User clicked on the next button
-	func buttonClick() {
+	/// User tapped on the next button
+	func buttonTapped() {
 
 		coordinator?.navigateBackToStart()
 	}

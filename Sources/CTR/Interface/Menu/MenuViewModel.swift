@@ -62,7 +62,7 @@ class MenuViewModel {
 		self.bottomMenu = delegate.getBottomMenuItems()
 	}
 
-	func menuItemClicked(_ identifier: MenuIdentifier) {
+	func menuItemTapped(_ identifier: MenuIdentifier) {
 
 		menuDelegate?.openMenuItem(identifier)
 	}

@@ -40,7 +40,7 @@ class QRImageView: BaseView {
 	/// The message label
 	private let messageLabel: Label = {
 
-		return Label(subhead: nil)
+		return Label(subhead: nil).multiline()
 	}()
 
 	/// Setup all the views
@@ -146,7 +146,12 @@ class QRImageView: BaseView {
 	/// The  message
 	var message: String? {
 		didSet {
-			messageLabel.text = message
+			messageLabel.attributedText = .makeFromHtml(
+				text: message,
+				font: Theme.fonts.subhead,
+				textColor: Theme.colors.dark,
+				textAlignment: .center
+			)
 		}
 	}
 

@@ -40,6 +40,9 @@ class AppointmentViewController: BaseViewController {
 
 		viewModel.$title.binding = {
 			self.title = $0
+		}
+
+		viewModel.$header.binding = {
 			self.sceneView.title = $0
 		}
 
@@ -54,7 +57,7 @@ class AppointmentViewController: BaseViewController {
 		viewModel.$image.binding = { self.sceneView.headerImage = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.buttonClick()
+			self?.viewModel.buttonTapped()
 		}
 	}
 
@@ -73,6 +76,6 @@ class AppointmentViewController: BaseViewController {
 	/// User tapped on the link
 	@objc func linkTapped() {
 
-		viewModel.linkedClick()
+		viewModel.linkedTapped()
 	}
 }

@@ -159,7 +159,7 @@ class MenuView: BaseView {
 //			),
 			bottomStackView.topAnchor.constraint(
 				equalTo: topStackView.bottomAnchor,
-				constant: ViewTraits.lineMarginBottom
+				constant: ViewTraits.lineMarginBottom * 2
 			),
 			bottomStackView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,

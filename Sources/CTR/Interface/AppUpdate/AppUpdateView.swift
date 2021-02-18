@@ -16,14 +16,55 @@ class AppUpdateView: BaseView {
 		static let buttonHeight: CGFloat = 50
 
 		// Margins
+		static let spacing: CGFloat = UIDevice.current.isSmallScreen ? 10 : 40
 		static let margin: CGFloat = 16.0
 		static let buttonOffset: CGFloat = 27.0
+		static let imageMargin: CGFloat = 26
 	}
+
+	/// The container for centering the image
+	private let imageContainerView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	/// The image view
+	private let imageView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .scaleAspectFit
+		return view
+	}()
+
+	private let stackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .center
+		view.distribution = .fill
+		view.spacing = ViewTraits.spacing
+		return view
+	}()
+
+	private let bottomStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .center
+		view.distribution = .fill
+		view.spacing = ViewTraits.margin
+		return view
+	}()
 
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(title2: nil).multiline()
+		return Label(title1: nil).multiline()
 	}()
 
 	/// The message label
@@ -35,7 +76,9 @@ class AppUpdateView: BaseView {
 	/// the update button
 	let primaryButton: Button = {
 
-		return Button(title: "Button 1", style: .primary)
+		let button = Button(title: "Button 1", style: .primary)
+		button.rounded = true
+		return button
 	}()
 
 	/// setup the views
@@ -43,14 +86,26 @@ class AppUpdateView: BaseView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		titleLabel.textAlignment = .center
+		messageLabel.textAlignment = .center
 	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		addSubview(titleLabel)
-		addSubview(messageLabel)
+
+		imageContainerView.addSubview(imageView)
+
+		bottomStackView.addArrangedSubview(titleLabel)
+		bottomStackView.addArrangedSubview(messageLabel)
+		bottomStackView.addArrangedSubview(UIView())
+
+		stackView.addArrangedSubview(imageContainerView)
+		stackView.addArrangedSubview(bottomStackView)
+		stackView.addArrangedSubview(UIView())
+
+		addSubview(stackView)
 		addSubview(primaryButton)
 	}
 
@@ -58,33 +113,36 @@ class AppUpdateView: BaseView {
 	override func setupViewConstraints() {
 
 		NSLayoutConstraint.activate([
-			// Title
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
+
+			// Container
+			imageContainerView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
+
+			// Image
+			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
+			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
+			imageView.leadingAnchor.constraint(
+				equalTo: imageContainerView.leadingAnchor,
+				constant: ViewTraits.imageMargin
 			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.margin
+			imageView.trailingAnchor.constraint(
+				equalTo: imageContainerView.trailingAnchor,
+				constant: -ViewTraits.imageMargin
 			),
 
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+			// StackView
+			stackView.topAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.topAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+			stackView.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			stackView.trailingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			messageLabel.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: -ViewTraits.margin
-			),
+			stackView.bottomAnchor.constraint(equalTo: primaryButton.topAnchor),
 
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
@@ -101,5 +159,28 @@ class AppUpdateView: BaseView {
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	// MARK: Public Access
+
+	/// The onboarding title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
+		}
+	}
+
+	/// The onboarding message
+	var message: String? {
+		didSet {
+			messageLabel.text = message
+		}
+	}
+
+	/// The onboarding mage
+	var image: UIImage? {
+		didSet {
+			imageView.image = image
+		}
 	}
 }

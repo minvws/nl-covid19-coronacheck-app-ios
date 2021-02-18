@@ -13,7 +13,9 @@ enum OnboardingStep: Int {
 	case safelyOnTheRoad
 	case yourQR
 	case validity
+	case access
 	case privacy
+	case who
 }
 
 struct OnboardingPage {
@@ -77,7 +79,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: .holderOnboardingTitleYourQR,
 				message: .holderOnboardingMessageYourQR,
-				image: .onboardingYourQR,
+				image: .onboardingSafely,
 				step: .yourQR
 			),
 			OnboardingPage(
@@ -90,7 +92,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				title: .holderOnboardingTitlePrivacy,
 				message: .holderOnboardingMessagePrivacy,
 				image: .onboardingPrivacy,
-				step: .privacy
+				step: .who
 			)
 		]
 
@@ -160,26 +162,20 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleYourQR,
-				message: .verifierOnboardingMessageYourQR,
+				title: .verifierOnboardingTitleScanQR,
+				message: .verifierOnboardingMessageScanQR,
 				image: .onboardingYourQR,
 				step: .yourQR
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleValidity,
-				message: .verifierOnboardingMessageValidity,
-				image: .onboardingValidity,
-				step: .validity
+				title: .verifierOnboardingTitleAccess,
+				message: .verifierOnboardingMessageAccess,
+				image: .onboardingPrivacy,
+				step: .access
 			),
-//			OnboardingPage(
-//				title: .verifierOnboardingTitleSecureSystem,
-//				message: .verifierOnboardingMessageSecureSystem,
-//				image: .onboardingSecureSystem,
-//				step: .safeSystem
-//			),
 			OnboardingPage(
-				title: .verifierOnboardingTitlePrivacy,
-				message: .verifierOnboardingMessagePrivacy,
+				title: .verifierOnboardingTitleWho,
+				message: .verifierOnboardingMessageWho,
 				image: .onboardingPrivacy,
 				step: .privacy
 			)

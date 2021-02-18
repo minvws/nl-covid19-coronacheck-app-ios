@@ -23,4 +23,14 @@ extension String {
 
 		return Localization.string(for: "holder.tokenscan.torch.accessibility")
 	}
+
+	static var holderTokenScanErrorTitle: String {
+
+		return Localization.string(for: "holder.tokenscan.error.title")
+	}
+
+	static var holderTokenScanErrorMessage: String {
+
+		return Localization.string(for: "holder.tokenscan.error.message")
+	}
 }

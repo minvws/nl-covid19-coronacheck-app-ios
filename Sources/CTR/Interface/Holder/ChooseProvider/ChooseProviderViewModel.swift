@@ -51,7 +51,7 @@ class ChooseProviderViewModel: Logging {
 	@Bindable private(set) var title: String
 
 	/// The sub title of the scene (differs from the page title)
-	@Bindable private(set) var subtitle: String
+	@Bindable private(set) var header: String
 
 	/// The information body of the scene
 	@Bindable private(set) var body: String
@@ -70,7 +70,7 @@ class ChooseProviderViewModel: Logging {
 		self.coordinator = coordinator
 		self.openIdManager = openIdManager
 		title = .holderChooseProviderTitle
-		subtitle = .holderChooseProviderSubtitle
+		header = .holderChooseProviderHeader
 		body = .holderChooseProviderMessage
 		image = .createBig
 		providers = [

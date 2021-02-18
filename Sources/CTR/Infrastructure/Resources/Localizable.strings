@@ -17,7 +17,7 @@
 "general.start" = "Beginnen";
 "general.edit" = "Wijzig";
 "general.done" = "Klaar";
-"general.ok" = "Oké";
+"general.ok" = "Ok";
 "general.tryAgain" = "Opnieuw proberen";
 "general.delete" = "Verwijderen";
 "general.error.title" = "Er ging iets mis";
@@ -25,14 +25,15 @@
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "De app heeft een update nodig";
-"updateApp.content" = "Om de app te gebruiken heb je de laatste versie uit de store nodig.";
-"updateApp.button" = "Updaten";
+"updateApp.title" = "Update vereist";
+"updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
+"updateApp.button" = "Installeer update";
 
 /* MARK: - EndOfLife */
 "endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "CoronaTester is gestopt";
-"endOfLife.description" = "Het Ministerie van Volksgezondheid, Welzijn en Sport heeft besloten dat de app niet meer nodig is.";
+"endOfLife.title" = "App buiten werking";
+"endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar Coronacheck.nl";
+"endOfLife.button" = "Ga naar CoronaCheck.nl";
 
 /* MARK: - Holder */
 
@@ -69,81 +70,84 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Wil je een restaurant, event of andere uitgaansgelegenheid bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
+"holder.dashboard.intro" = "Wil je een testevenement van Fieldlab bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
 "holder.dashboard.appointment.title" = "Maak een testafspraak";
-"holder.dashboard.appointment.message" = "Wil je een QR-code maken?\nLaat je dan eerst testen.";
+"holder.dashboard.appointment.message" = "Wil je een QR-code maken?\nLaat je dan eerst testen op corona.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
 "holder.dashboard.create.title" = "Maak een QR-code";
-"holder.dashboard.create.message" = "Heb je je testresultaat al? Laat je negatieve resultaat zien met jouw QR-code.";
+"holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.qr.title" = "Scan QR-code bij entree";
+"holder.dashboard.qr.title" = "Toon QR-code bij ingang";
 "holder.dashboard.qr.message" = "Geldig tot %@";
+"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>QR-code verloopt binnenkort</b>";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je uitje. Lees de meest gestelde vragen over een test plannen.";
-"holder.appointment.link" = "Lees de meest gestelde vragen over een test plannen.";
-"holder.appointment.title" = "Maak een testafpraak";
+"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
+"holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";
+"holder.appointment.title" = "Testafpraak maken";
+"holder.appointment.header" = "Maak een testafpraak";
 "holder.appointment.button.title" = "Maak een afpraak";
 
 /* MARK: - Holder Choose Provider */
-"holder.provider.title" = "Maak QR-Code";
-"holder.provider.subtitle" = "Waar ben je getest?";
-"holder.provider.message" = "Is je testresultaat bekend? Dan kan je er een QR-code van maken. Geef hieronder aan bij welke testlocatie je bent getest.";
+"holder.provider.title" = "QR-Code maken";
+"holder.provider.header" = "Waar ben je getest?";
+"holder.provider.message" = "Is je testresultaat negatief? Dan kan je er een QR-code van maken. Geef aan bij welke testlocatie je bent getest.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
-"holder.provider.commercial.title" = "Commerciele testlocatie";
+"holder.provider.commercial.title" = "Commerciële testlocatie";
 "holder.provider.commercial.subtitle" = "Log in met een unieke code";
 "holder.provider.nodigid" = "Ik heb geen DigiD";
 
 /* MARK: - Holder Token Overview */
 "holder.tokenoverview.title" = "Testresultaat ophalen";
-"holder.tokenoverview.text" = "Heb je je laten testen bij een commerciele testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
+"holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
-"holder.tokenoverview.nocode.details" = "Als je je bij een commerciele testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.  ";
+"holder.tokenoverview.nocode.details" = "Als je je bij een commerciële testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.";
 "holder.tokenoverview.code.title" = "SOB-FVDKT10-T2";
-"holder.tokenoverview.code.subtitle" = "Ik heb een code gekreken";
+"holder.tokenoverview.code.subtitle" = "Ik heb een code";
 "holder.tokenoverview.qr.title" = "QR";
-"holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code gekreken";
+"holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
 /* MARK: - Holder Token Scan */
 "holder.tokenscan.title" = "Scan QR-code";
 "holder.tokenscan.message" = "Richt je toestel op de QR-code die je van de testlocatie hebt gekregen.";
 "holder.tokenscan.torch.accessibility" = "Zet de zaklamp aan.";
+"holder.tokenscan.error.title" = "Ongeldige QR-code";
+"holder.tokenscan.error.message" = "Deze QR-code is niet geldig. Scan de QR-code die je van je testlocatie hebt gekregen.";
 
 /* MARK: - Holder Token entry */
 "holder.tokenentry.title" = "Code invullen";
 "holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen. Of klik op de link in je e-mail, als de testlocatie je gemaild heeft.";
 "holder.tokenentry.token.title" = "Unieke code";
-"holder.tokenentry.token.placeholder" = "Bijv SOB-FVDKT10-T2";
+"holder.tokenentry.token.placeholder" = "Bijv. SOB-FVDKT10-T2";
 "holder.tokenentry.verification.title" = "Verificatie code";
-"holder.tokenentry.verification.placeholder" = "0576";
-"holder.tokenentry.error.invalid.code" = "Deze code is ongeldig";
+"holder.tokenentry.verification.placeholder" = "Bijv. 0576";
+"holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
-"holder.testresults.results.text" = "Je hebt 1 nieuw negatief testrestultaat (geen corona). Verwerk het testresultaat tot een bewijs in de vorrm van een QR-code.";
+"holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
 "holder.testresults.noresults.title" = "Er is geen negatief restresultaat";
-"holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan komen door:\n - Je testresultaat is nog niet verwerkt. Dit kan x uur duren.\n - Je hebt geen test gedaan.\n - Je test is positief. Je testaanbieder neemt dan contact met jou op.";
+"holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je testresultaat is nog niet verwerkt</li><li>Je test is langer dan 48 uur geleden uitgevoerd</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
-"holder.testresults.pending.text" = "Het testresultaat is nog niet bekend. Probeer het later nog een.\n\nNeem voor vragen contact op met jouw testaanbieder.";
+"holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testresultaat is al opgehaald";
-"holder.testresults.already.text" = "Je testresultaat is al opgehaald en verwerkt in een QR-code.\n\nHeb je het idee dat dit niet klopt? Neem dan contact op met de testaanbieder.";
+"holder.testresults.already.text" = "<p>Je testresultaat is al opgehaald en verwerkt in een QR-code.</p><p></p><p>Heb je het idee dat dit niet klopt? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
-"holder.testresults.alert.message" = "Als je nu stopt kan je later opnieuw inloogen met DigiD om je QR-code te maken.";
+"holder.testresults.alert.message" = "Je kan later vanaf Mijn overzicht opnieuw een QR-code maken.";
 "holder.testresults.alert.ok" = "Ja, Stop";
 "holder.testresults.alert.cancel" = "Nee, terug";
 
 /* MARK: - Holder Create Proof */
-"holder.proof.title" = "Van jouw testresultaat wordt nu een QR-code gemaakt";
-"holder.proof.text" = "In de QR-code wordt verwerkt dat je negatief getest bent (geen corona) op %@.\n\nIn deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.";
-"holder.proof.text.bold" = "negatief getest";
+"holder.proof.title" = "Van jouw testresultaat is een QR-code gemaakt";
+"holder.proof.text" = "<p>In de QR-code is verwerkt dat je <b>negatief getest</b> bent (geen corona) op <b>%@</b>.</p><p>In deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.</p>";
 "holder.proof.text.at" = "om";
 "holder.proof.action" = "Naar mijn QR";
 
@@ -161,16 +165,14 @@
 "verifier.menu.feedback" = "Geef ons feedback";
 
 /* MARK: - Verifier Onboarding */
-"verifier.onboarding.title.safely" = "**Veilig op pad";
-"verifier.onboarding.message.safely" = "**We trekken er weer meer op uit. Doe vlak voor je uitje een coronatest en laat de negatieve testuitslag bij binnenkomst zien. Zo krijgen we corona samen onder controle.";
-"verifier.onboarding.title.yourqr" = "**Jouw QR-code op zak";
-"verifier.onboarding.message.yourqr" = "**In deze app zet je jouw testuitslag om in een QR-code. Deze laat je scannen bij de ingang van het café, in de rij voor een event of bij andere uitgaansgelegenheden.";
-"verifier.onboarding.title.validity" = "**Uitslag geldt 2 dagen";
-"verifier.onboarding.message.validity" = "**Een negatieve testuitslag is 2 dagen geldig. Daarna niet meer. De QR-code verdwijnt dan automatisch uit de app. Nieuwe QR nodig? Laat je dan opnieuw op corona testen.";
-"verifier.onboarding.title.securesystem" = "**Een veilig systeem";
-"verifier.onboarding.message.securesystem" = "**Er zijn zichtbare en onzichtbare maatregelen om fraude tegen te gaan. Je kan bijvoorbeeld geen schermopname maken om een QR-code door te sturen, en je kan niet met de QR-code van iemand anders naar binnen.";
-"verifier.onboarding.title.privacy" = "**Privacy staat voorop";
-"verifier.onboarding.message.privacy" = "**Deze app bewaart geen gebruikersdata of locatiegegevens. We delen deze ook niet met derden.";
+"verifier.onboarding.title.safely" = "Zo veilig mogelijk weer open";
+"verifier.onboarding.message.safely" = "Bezoekers van jouw zaak, gelegenheid of evenement moeten eerst een coronatest doen. Alleen met een negatief testresultaat mogen zij naar binnen. Een negatief testresultaat geldt 48 uur.";
+"verifier.onboarding.title.scanqr" = "Scan QR-code voor testresultaat";
+"verifier.onboarding.message.scanqr" = "In de CoronaCheck app maakt de bezoeker van haar testresultaat een QR-code. Met deze app scan jij de QR-codes en zie je wie er toegang krijgt. Bij een groen scherm mag de bezoeker naar binnen.";
+"verifier.onboarding.title.access" = "Toegang is anoniem";
+"verifier.onboarding.message.access" = "Bij het scannen van een QR-code worden geen persoonsgegevens verstuurd of opgeslagen. Als scanner zie je alleen of de bezoeker een geldig testresultaat heeft.";
+"verifier.onboarding.title.who" = "Voor wie is de scanner?";
+"verifier.onboarding.message.who" = "Met behulp van deze app kun je zo veilig mogelijk de deuren openen. Maar alleen als jouw zaak, evenement of uitgaansgelegen-heid onder de <u>aangewezen locaties</u> valt.";
 
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "**Zo gebruikt de app je gegevens";
@@ -189,27 +191,39 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
 "verifier.start.header" = "Welkom";
-"verifier.start.message" = "Je kunt nu de QR-codes van bezoekers van jouw restaurant, event of uitgaans-gelegenheid scannen. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Bekijk scanhandleiding.";
-"verifier.start.message.link" = "Bekijk scanhandleiding.";
-"verifier.start.button.title" = "Start Scannen";
+"verifier.start.message" = "Je kunt nu de QR-codes van bezoekers van jouw restaurant, event of uitgaans-gelegenheid scannen. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Zo werkt scannen.";
+"verifier.start.message.link" = "Zo werkt scannen.";
+"verifier.start.button.title" = "Start scannen";
 
 /* MARK: - Verifier Scan Instructions */
-"verifier.instructions.title" = "Scan instructies";
-"verifier.instructions.message" = "Stap 1\n\nStap2\n\nStap3\n\nyadayadaya";
+"verifier.instructions.title" = "Zo werkt scannen";
+"verifier.instructions.distance.title" = "1. Houd afstand";
+"verifier.instructions.distance.text" = "Vraag de bezoeker de QR-code te laten zien. De QR-code kan veilig op afstand uitgelezen worden. De telefoons hoeven elkaar dus niet te raken. ";
+"verifier.instructions.scan.title" = "2. Scan de QR-code";
+"verifier.instructions.scan.text" = "Richt de camera van jouw telefoon op de QR-code van de bezoeker. Pakt je telefoon de QR-code niet? Vraag de bezoeker de helderheid van zijn of haar telefoonscherm te verhogen en probeer het opnieuw.";
+"verifier.instructions.access.title" = "3. Groen scherm = toegang";
+"verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldig negatief testresultaat en mag naar binnen.";
+"verifier.instructions.denied.title" = "4. Rood scherm = geen toegang";
+"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.
+<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li>
+<li>Is de bezoeker wel negatief op corona getest in de afgelopen 48 uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li>
+<li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li>
+</ul>";
+}
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
-"verifier.scan.message" = "Richt je toestel op de QR-code van de persoon die naar binnen wil.";
+"verifier.scan.message" = "Richt je toestel op de QR-code op het scherm van de bezoeker.";
 "verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
 
 /* MARK: - Verifier Result */
-"verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.access.message" = "Geef toegang";
-"verifier.result.denied.title" = "Geen geldige QR-code";
-"verifier.result.denied.message" = "Weiger toegang.\nLees mogelijke oorzaken.";
-"verifier.result.denied.link" = "Lees mogelijke oorzaken.";
+"verifier.result.access.title" = "Geef toegang";
+"verifier.result.access.message" = "Deze bezoeker heeft een geldige QR-code (negatief testresultaat) en mag dus naar binnen.";
+"verifier.result.denied.title" = "Weiger toegang";
+"verifier.result.denied.message" = "De bezoeker heeft geen geldige QR-code en mag dus niet naar binnen.";
+"verifier.result.denied.link" = "Lees de mogelijke oorzaken.";
 "verifier.result.next" = "Scan volgende";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Geen geldige QR-code";
-"verifier.denied.message" = "Dit betekent NIET dat de persoon corona hoeft te hebben.\n\nWat kan het betekenen\n•	De QR-code is doorgestuurd\n•	De QR-code is vervalst\n•	Afgelopen 3 minuten is er meer dan 1 persoon naar binnen gegaan met deze QR-code\n\nEn nu?\nWeiger toegang zonder verdere verklaring om discussies te voorkomen.";
+"verifier.denied.message" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Wat kan het betekenen</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p><p><b>En nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck app een QR-code van maken.</p>";

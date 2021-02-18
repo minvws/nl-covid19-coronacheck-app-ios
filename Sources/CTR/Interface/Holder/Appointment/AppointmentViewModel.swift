@@ -21,6 +21,9 @@ class AppointmentViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String
 
+	/// The header of the scene
+	@Bindable private(set) var header: String
+
 	/// The information body of the scene
 	@Bindable private(set) var body: String
 
@@ -38,6 +41,7 @@ class AppointmentViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.title = .holderAppointmentTitle
+		self.header = .holderAppointmentHeader
 		self.body = .holderAppointmentBody
 		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle
@@ -45,18 +49,18 @@ class AppointmentViewModel: Logging {
 	}
 
 	/// The user wants more information
-	func linkedClick() {
+	func linkedTapped() {
 
-		logInfo("Clicked on read more about test appointment")
+		logInfo("Tapped on read more about test appointment")
 		if let url = URL(string: "https://www.rijksoverheid.nl/coronatest") {
 			coordinator?.openUrl(url, inApp: false)
 		}
 	}
 
 	/// The user wants to create an appointment
-	func buttonClick() {
+	func buttonTapped() {
 
-		logInfo("Create appointment clicked")
+		logInfo("Create appointment tapped")
 		if let url = URL(string: "https://coronatest.nl/") {
 			coordinator?.openUrl(url, inApp: false)
 		}

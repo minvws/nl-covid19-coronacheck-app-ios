@@ -18,6 +18,7 @@ class ResultView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let largeMargin: CGFloat = UIDevice.current.isSmallScreen ? 20 : 40.0
 	}
 
 	let imageView: UIImageView = {
@@ -37,7 +38,7 @@ class ResultView: BaseView {
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(headline: nil).multiline()
+		return Label(body: nil).multiline()
 	}()
 
 	/// the scan button
@@ -89,8 +90,7 @@ class ResultView: BaseView {
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: imageView.bottomAnchor,
-				constant: ViewTraits.margin
+				equalTo: imageView.bottomAnchor
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -102,17 +102,17 @@ class ResultView: BaseView {
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.margin
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
 			),
 
 			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.largeMargin
 			),
 			messageLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.largeMargin
 			),
 
 			// Button

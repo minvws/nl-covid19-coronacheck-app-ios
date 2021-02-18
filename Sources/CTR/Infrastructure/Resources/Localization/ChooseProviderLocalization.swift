@@ -14,9 +14,9 @@ extension String {
 		return Localization.string(for: "holder.provider.title")
 	}
 
-	static var holderChooseProviderSubtitle: String {
+	static var holderChooseProviderHeader: String {
 
-		return Localization.string(for: "holder.provider.subtitle")
+		return Localization.string(for: "holder.provider.header")
 	}
 
 	static var holderChooseProviderMessage: String {

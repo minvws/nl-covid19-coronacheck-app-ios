@@ -20,6 +20,15 @@ class TokenScanViewModel: Logging {
 	/// The message of the scene
 	@Bindable private(set) var message: String
 
+	/// The error title of the scene
+	@Bindable private(set) var errorTitle: String
+
+	/// The error message of the scene
+	@Bindable private(set) var errorMessage: String
+
+	/// Show the error?
+	@Bindable private(set) var showError: Bool
+
 	/// The accessibility message for the torch
 	@Bindable private(set) var torchAccessibility: String
 
@@ -35,6 +44,9 @@ class TokenScanViewModel: Logging {
 		self.title = .holderTokenScanTitle
 		self.message = .holderTokenScanMessage
 		self.torchAccessibility = .holderTokenScanTorchAccessibility
+		self.errorTitle = .holderTokenScanErrorTitle
+		self.errorMessage = .holderTokenScanErrorMessage
+		self.showError = false
 	}
 
 	/// Parse the scanned QR-code
@@ -46,7 +58,8 @@ class TokenScanViewModel: Logging {
 			self.logDebug("Response Object: \(object)")
 			coordinator?.navigateToTokenEntry(object)
 		} catch {
-			self.logError("error: \(error)")
+			self.logError("Token Scan Error: \(error)")
+			self.showError = true
 			self.startScanning = true
 		}
 	}

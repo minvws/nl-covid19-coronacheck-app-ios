@@ -40,7 +40,7 @@ class ChooseProviderViewController: BaseViewController {
 		super.viewDidLoad()
 
 		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$subtitle.binding = { self.sceneView.title = $0 }
+		viewModel.$header.binding = { self.sceneView.title = $0 }
 		viewModel.$body.binding = { self.sceneView.message = $0 }
 		viewModel.$image.binding = { self.sceneView.headerImage = $0 }
 		viewModel.$providers.binding = { providers in
