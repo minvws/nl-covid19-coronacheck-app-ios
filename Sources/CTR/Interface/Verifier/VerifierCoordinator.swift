@@ -14,7 +14,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToVerifierWelcome()
 
 	/// Show the scan instructions
-	func navigateToScanInstruction()
+	/// - Parameter present: present
+	func navigateToScanInstruction(present: Bool)
 
 	/// Navigate to the QR scanner
 	func navigateToScan()
@@ -124,14 +125,21 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 
 	/// Show the scan instructions
-	func navigateToScanInstruction() {
+	/// - Parameter present: present
+	func navigateToScanInstruction(present: Bool = false) {
 
 		let destination = ScanInstructionsViewController(
 			viewModel: ScanInstructionsViewModel(
-				coordinator: self
+				coordinator: self,
+				presented: present
 			)
 		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		if present {
+			let navigationController = UINavigationController(rootViewController: destination)
+			sidePanel?.selectedViewController?.present(navigationController, animated: true, completion: nil)
+		} else {
+			(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		}
 	}
 
 	/// Navigate to the QR scanner
