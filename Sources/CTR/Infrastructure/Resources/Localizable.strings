@@ -174,8 +174,8 @@
 "verifier.onboarding.message.who" = "Met behulp van deze app kun je zo veilig mogelijk de deuren openen. Maar alleen als jouw zaak, evenement of uitgaansgelegen-heid onder de <u>aangewezen locaties</u> valt.";
 
 /* MARK: - Verifier Consent */
-"verifier.consent.title" = "Zo gebruikt de app je gegevens";
-"verifier.consent.message" = "In de privacyverklaring staat hoe CoronaTestScanner jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"verifier.consent.title" = "Zo gebruikt de app gegevens";
+"verifier.consent.message" = "In de privacyverklaring staat hoe CoronaTest Scanner jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "verifier.consent.message.underlined" = "privacyverklaring";
 "verifier.consent.item.1" = "Een CoronaCheck QR-code is <b>niet te herleiden naar een persoon</b>";
 "verifier.consent.item.2" = "Als scanner weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
