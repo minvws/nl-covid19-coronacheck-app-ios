@@ -15,12 +15,33 @@ class HolderDashboardView: ScrolledStackView {
 		// Dimensions
 		static let messageLineHeight: CGFloat = 26
 		static let cardRatio: CGFloat = UIDevice.current.isSmallScreen ? 1.2 : 1.5
+
+		// Margin
+		static let margin: CGFloat = 10
 	}
 
 	/// The message label
 	private let messageLabel: Label = {
 
 		return Label(body: nil).multiline()
+	}()
+
+	/// The image view for the QR image
+	let largeQRimageView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		view.backgroundColor = .gray
+		return view
+	}()
+
+	let largeOverlay: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .white
+		view.isHidden = true
+		return view
 	}()
 
 	/// The QR Card
@@ -67,6 +88,9 @@ class HolderDashboardView: ScrolledStackView {
 		stackView.addArrangedSubview(expiredQRView)
 		stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
+
+		largeOverlay.embed(in: self)
+		addSubview(largeQRimageView)
 	}
 
 	/// Setup the constraints
@@ -84,6 +108,18 @@ class HolderDashboardView: ScrolledStackView {
 			createCard.widthAnchor.constraint(
 				equalTo: createCard.heightAnchor,
 				multiplier: ViewTraits.cardRatio
+			),
+
+			largeQRimageView.centerYAnchor.constraint(equalTo: centerYAnchor),
+			largeQRimageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
+			largeQRimageView.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			largeQRimageView.trailingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.trailingAnchor,
+				constant: -ViewTraits.margin
 			)
 		])
 	}

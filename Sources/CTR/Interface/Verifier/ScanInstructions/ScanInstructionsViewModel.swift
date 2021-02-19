@@ -19,6 +19,9 @@ class ScanInstructionsViewModel: Logging {
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String
+
+	/// Show the close button
+	@Bindable private(set) var showCloseButton: Bool
 	
 	/// The message of the scene
 	@Bindable private(set) var content: [(title: String, text: String, image: UIImage?)]
@@ -26,11 +29,12 @@ class ScanInstructionsViewModel: Logging {
 	/// Initialzier
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
-	///   - attributes: the decrypted attributes
-	init(coordinator: VerifierCoordinator) {
+	///   - presented: True if we are presented
+	init(coordinator: VerifierCoordinator, presented: Bool) {
 		
 		self.coordinator = coordinator
 		self.title = .verifierScanInstructionsTitle
+		self.showCloseButton = presented
 		self.content = [
 			(
 				title: .verifierScanInstructionsDistanceTitle,
@@ -53,5 +57,11 @@ class ScanInstructionsViewModel: Logging {
 				image: .redScreen
 			)
 		]
+	}
+
+	func dismiss() {
+
+		coordinator?.dismiss()
+		coordinator?.navigateToScan()
 	}
 }

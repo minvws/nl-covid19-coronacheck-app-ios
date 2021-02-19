@@ -15,6 +15,9 @@ class VerifierStartViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
+	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
+	private var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
+
 	// MARK: - Bindable properties
 
 	/// The title of the scene
@@ -48,11 +51,17 @@ class VerifierStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.navigateToScan()
+		if scanInstructionShown {
+			coordinator?.navigateToScan()
+		} else {
+
+			scanInstructionShown = true
+			coordinator?.navigateToScanInstruction(present: true)
+		}
 	}
 
 	func linkTapped(_ viewController: UIViewController) {
 
-		coordinator?.navigateToScanInstruction()
+		coordinator?.navigateToScanInstruction(present: false)
 	}
 }

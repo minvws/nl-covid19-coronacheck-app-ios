@@ -17,11 +17,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// login flow
 	var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
+	/// The previous brightness
+	var previousBrightness: CGFloat?
+
 	func application(
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
 		styleUI()
+		previousBrightness = UIScreen.main.brightness
 
 		if #available(iOS 13.0, *) {
 			// Use Scene lifecycle
@@ -97,7 +101,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Your additional URL handling (if any)
 
 		return false
-
 	}
 
+	func applicationDidEnterBackground(_ application: UIApplication) {
+		if let brightness = previousBrightness {
+			UIScreen.main.brightness = brightness
+		}
+	}
+
+	func applicationWillResignActive(_ application: UIApplication) {
+		if let brightness = previousBrightness {
+			UIScreen.main.brightness = brightness
+		}
+	}
+
+	func applicationWillTerminate(_ application: UIApplication) {
+		if let brightness = previousBrightness {
+			UIScreen.main.brightness = brightness
+		}
+	}
 }

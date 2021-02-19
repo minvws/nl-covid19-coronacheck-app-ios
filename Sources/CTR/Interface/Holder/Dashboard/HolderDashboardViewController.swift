@@ -51,8 +51,10 @@ class HolderDashboardViewController: BaseViewController {
 			if let value = $0 {
 				let image = self.generateQRCode(from: value)
 				self.sceneView.qrView.qrImage = image
+				self.sceneView.largeQRimageView.image = image
 			} else {
 				self.sceneView.qrView.qrImage = nil
+				self.sceneView.largeQRimageView.image = nil
 			}
 		}
 
@@ -61,6 +63,7 @@ class HolderDashboardViewController: BaseViewController {
 				self.sceneView.qrView.isHidden = false
 				// Scroll to top
 				self.sceneView.scrollView.setContentOffset(.zero, animated: true)
+				self.setupLink()
 			} else {
 				self.sceneView.qrView.isHidden = true
 			}
@@ -81,6 +84,14 @@ class HolderDashboardViewController: BaseViewController {
 		
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
+	}
+
+	/// Setup a gesture recognizer for underlined text
+	private func setupLink() {
+
+		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showLargeQR))
+		sceneView.qrView.addGestureRecognizer(tapGesture)
+		sceneView.qrView.isUserInteractionEnabled = true
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -126,5 +137,37 @@ class HolderDashboardViewController: BaseViewController {
 			}
 		}
 		return nil
+	}
+
+	// MARK: User interaction
+
+	/// User tapped on the link
+	@objc func showLargeQR() {
+
+		self.navigationController?.isNavigationBarHidden = true
+		sceneView.largeOverlay.isHidden = false
+		sceneView.largeQRimageView.isHidden = false
+		viewModel.setBrightness()
+
+		qrTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(largeQRTapped))
+		if let gesture = qrTapGestureRecognizer {
+			sceneView.addGestureRecognizer(gesture)
+			sceneView.isUserInteractionEnabled = true
+		}
+	}
+
+	/// The tap gesture recognizer on the qr image
+	var qrTapGestureRecognizer: UITapGestureRecognizer?
+
+	/// User tapped on the link
+	@objc func largeQRTapped() {
+
+		self.navigationController?.isNavigationBarHidden = false
+		sceneView.largeOverlay.isHidden = true
+		sceneView.largeQRimageView.isHidden = true
+		viewModel.setBrightness(reset: true)
+		if let gesture = qrTapGestureRecognizer {
+			sceneView.removeGestureRecognizer(gesture)
+		}
 	}
 }
