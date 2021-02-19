@@ -128,8 +128,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		return [
 			.holderConsentItemOne,
 			.holderConsentItemTwo,
-			.holderConsentItemThree,
-			.holderConsentItemFour
+			.holderConsentItemThree
 		]
 	}
 
@@ -213,8 +212,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 		return [
 			.verifierConsentItemOne,
 			.verifierConsentItemTwo,
-			.verifierConsentItemThree,
-			.verifierConsentItemFour
+			.verifierConsentItemThree
 		]
 	}
 

@@ -56,12 +56,11 @@
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app je gegevens";
-"holder.consent.message" = "In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "holder.consent.message.underlined" = "privacyverklaring";
-"holder.consent.item.1" = "Gebruik van CoronatTester is vrijwillig.";
-"holder.consent.item.2" = "Dit is een lorum ipsum regel.";
-"holder.consent.item.3" = "Je naam wordt niet gebruikt of bewaard.";
-"holder.consent.item.4" = "Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
+"holder.consent.item.1" = "De CoronaCheck QR-code is niet te herleiden naar jou als persoon";
+"holder.consent.item.2" = "De scanner weet alleen of jouw testbewijs geldig is. Niet wie je bent.";
+"holder.consent.item.3" = "CoronaCheck houdt geen locatie of GPS gegevens bij";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
 /* MARK: - Holder Privacy */
