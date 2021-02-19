@@ -79,7 +79,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: .holderOnboardingTitleYourQR,
 				message: .holderOnboardingMessageYourQR,
-				image: .onboardingSafely,
+				image: .onboardingYourQR,
 				step: .yourQR
 			),
 			OnboardingPage(

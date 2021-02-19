@@ -104,7 +104,8 @@ class ListResultsViewController: BaseViewController {
 	var tooltip: EasyTipView?
 
 	override func viewWillDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
+
+		super.viewWillDisappear(animated)
 		tooltip?.dismiss()
 	}
 

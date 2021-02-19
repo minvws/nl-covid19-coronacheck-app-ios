@@ -72,7 +72,7 @@
 "holder.dashboard.title" = "Mijn overzicht";
 "holder.dashboard.intro" = "Wil je een testevenement van Fieldlab bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
 "holder.dashboard.appointment.title" = "Maak een testafspraak";
-"holder.dashboard.appointment.message" = "Wil je een QR-code maken?\nLaat je dan eerst testen op corona.";
+"holder.dashboard.appointment.message" = "Wil je een QR-code maken? Laat je dan eerst testen op corona.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
@@ -95,7 +95,7 @@
 "holder.provider.message" = "Is je testresultaat negatief? Dan kan je er een QR-code van maken. Geef aan bij welke testlocatie je bent getest.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
-"holder.provider.commercial.title" = "Commerciële testlocatie";
+"holder.provider.commercial.title" = "Fieldlab testlocatie";
 "holder.provider.commercial.subtitle" = "Log in met een unieke code";
 "holder.provider.nodigid" = "Ik heb geen DigiD";
 

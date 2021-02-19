@@ -52,8 +52,8 @@ class AppointmentViewModel: Logging {
 	func linkedTapped() {
 
 		logInfo("Tapped on read more about test appointment")
-		if let url = URL(string: "https://www.rijksoverheid.nl/coronatest") {
-			coordinator?.openUrl(url, inApp: false)
+		if let url = URL(string: "https://coronacheck.nl/nl/faq-in-app.html") {
+			coordinator?.openUrl(url, inApp: true)
 		}
 	}
 
@@ -61,8 +61,8 @@ class AppointmentViewModel: Logging {
 	func buttonTapped() {
 
 		logInfo("Create appointment tapped")
-		if let url = URL(string: "https://coronatest.nl/") {
-			coordinator?.openUrl(url, inApp: false)
+		if let url = URL(string: "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app") {
+			coordinator?.openUrl(url, inApp: true)
 		}
 	}
 }
