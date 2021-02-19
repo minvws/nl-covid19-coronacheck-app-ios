@@ -9,7 +9,5 @@ import UIKit
 
 extension UIImage {
 
-	static var access: UIImage? { return UIImage(named: "access") }
-
-	static var denied: UIImage? { return UIImage(named: "denied") }
+	static var qrAnimation: UIImage? { return UIImage(named: "QRAnimation") }
 }

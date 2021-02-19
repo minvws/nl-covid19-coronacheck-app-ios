@@ -20,6 +20,7 @@ class ConsentView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let itemSpacing: CGFloat = 24.0
 	}
 
 	/// The scrollview
@@ -49,8 +50,8 @@ class ConsentView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .fill
-		view.distribution = .equalSpacing
-		view.spacing = ViewTraits.margin
+		view.distribution = .fill
+		view.spacing = ViewTraits.itemSpacing
 		return view
 	}()
 
@@ -186,14 +187,18 @@ class ConsentView: BaseView {
 	func addPrivacyItem(_ text: String) {
 
 		let label = Label(body: nil, textColor: Theme.colors.dark).multiline()
-		label.attributedText = text.setLineHeight(ViewTraits.messageLineHeight)
+		label.attributedText = .makeFromHtml(
+			text: text,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
 
 		let stack = HStack(
 			spacing: 16,
 			ImageView(imageName: "PrivacyItem").asIcon(),
 			label
 		)
-		.alignment(.top)
+		.alignment(.center)
 		itemStackView.addArrangedSubview(stack)
 	}
 }

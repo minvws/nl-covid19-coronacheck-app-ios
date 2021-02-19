@@ -56,12 +56,11 @@
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app je gegevens";
-"holder.consent.message" = "In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "holder.consent.message.underlined" = "privacyverklaring";
-"holder.consent.item.1" = "Gebruik van CoronatTester is vrijwillig.";
-"holder.consent.item.2" = "Dit is een lorum ipsum regel.";
-"holder.consent.item.3" = "Je naam wordt niet gebruikt of bewaard.";
-"holder.consent.item.4" = "Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
+"holder.consent.item.1" = "De CoronaCheck QR-code is <b>niet te herleiden naar jou als persoon</b>";
+"holder.consent.item.2" = "Als scanner weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
+"holder.consent.item.3" = "CoronaCheck houdt geen <b>locatie of GPS gegevens</b> bij";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
 /* MARK: - Holder Privacy */
@@ -72,7 +71,7 @@
 "holder.dashboard.title" = "Mijn overzicht";
 "holder.dashboard.intro" = "Wil je een testevenement van Fieldlab bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
 "holder.dashboard.appointment.title" = "Maak een testafspraak";
-"holder.dashboard.appointment.message" = "Wil je een QR-code maken?\nLaat je dan eerst testen op corona.";
+"holder.dashboard.appointment.message" = "Wil je een QR-code maken? Laat je dan eerst testen op corona.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
@@ -95,7 +94,7 @@
 "holder.provider.message" = "Is je testresultaat negatief? Dan kan je er een QR-code van maken. Geef aan bij welke testlocatie je bent getest.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
-"holder.provider.commercial.title" = "Commerciële testlocatie";
+"holder.provider.commercial.title" = "Fieldlab testlocatie";
 "holder.provider.commercial.subtitle" = "Log in met een unieke code";
 "holder.provider.nodigid" = "Ik heb geen DigiD";
 
@@ -175,14 +174,13 @@
 "verifier.onboarding.message.who" = "Met behulp van deze app kun je zo veilig mogelijk de deuren openen. Maar alleen als jouw zaak, evenement of uitgaansgelegen-heid onder de <u>aangewezen locaties</u> valt.";
 
 /* MARK: - Verifier Consent */
-"verifier.consent.title" = "**Zo gebruikt de app je gegevens";
-"verifier.consent.message" = "**In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"verifier.consent.title" = "Zo gebruikt de app je gegevens";
+"verifier.consent.message" = "In de privacyverklaring staat hoe CoronaTestScanner jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "verifier.consent.message.underlined" = "privacyverklaring";
-"verifier.consent.item.1" = "**Gebruik van CoronatTester is vrijwillig.";
-"verifier.consent.item.2" = "**Dit is een lorum ipsum regel.";
-"verifier.consent.item.3" = "**Je naam wordt niet gebruikt of bewaard.";
-"verifier.consent.item.4" = "**Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
-"verifier.consent.button" = "**Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
+"verifier.consent.item.1" = "Een CoronaCheck QR-code is <b>niet te herleiden naar een persoon</b>";
+"verifier.consent.item.2" = "Als scanner weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
+"verifier.consent.item.3" = "CoronaCheck Scanner houdt <b>geen locatie of GPS gegevens</b> bij";
+"verifier.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
 /* MARK: - Verifier Privacy */
 "verifier.privacy.message" = "** de privacy verklaring **";

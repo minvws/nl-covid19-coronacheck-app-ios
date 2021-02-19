@@ -34,6 +34,9 @@ struct CardInfo {
 
 	/// The optional background image
 	let image: UIImage?
+
+	/// The cut of the image
+	let imageRect: CGRect
 }
 
 class HolderDashboardViewModel: Logging {
@@ -118,14 +121,16 @@ class HolderDashboardViewModel: Logging {
 			title: .holderDashboardAppointmentTitle,
 			message: .holderDashboardAppointmentMessage,
 			actionTitle: .holderDashboardAppointmentAction,
-			image: .appointment
+			image: .appointment,
+			imageRect: CGRect(x: 0, y: 0, width: 0.77, height: 1)
 		)
 		self.createCard = CardInfo(
 			identifier: .create,
 			title: .holderDashboardCreateTitle,
 			message: .holderDashboardCreateMessage,
 			actionTitle: .holderDashboardCreatetAction,
-			image: .create
+			image: .create,
+			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 
 		self.addObserver()

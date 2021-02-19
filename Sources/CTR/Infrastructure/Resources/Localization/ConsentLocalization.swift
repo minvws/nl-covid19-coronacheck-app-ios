@@ -86,11 +86,6 @@ extension String {
 		return Localization.string(for: "verifier.consent.item.3")
 	}
 
-	static var verifierConsentItemFour: String {
-
-		return Localization.string(for: "verifier.consent.item.4")
-	}
-
 	static var verifierConsentButtonTitle: String {
 
 		return Localization.string(for: "verifier.consent.button")

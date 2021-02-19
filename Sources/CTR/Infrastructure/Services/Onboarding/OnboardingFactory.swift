@@ -79,7 +79,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: .holderOnboardingTitleYourQR,
 				message: .holderOnboardingMessageYourQR,
-				image: .onboardingSafely,
+				image: .onboardingYourQR,
 				step: .yourQR
 			),
 			OnboardingPage(
@@ -128,8 +128,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		return [
 			.holderConsentItemOne,
 			.holderConsentItemTwo,
-			.holderConsentItemThree,
-			.holderConsentItemFour
+			.holderConsentItemThree
 		]
 	}
 
@@ -213,8 +212,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 		return [
 			.verifierConsentItemOne,
 			.verifierConsentItemTwo,
-			.verifierConsentItemThree,
-			.verifierConsentItemFour
+			.verifierConsentItemThree
 		]
 	}
 

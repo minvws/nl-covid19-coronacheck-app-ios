@@ -98,6 +98,10 @@ class HolderDashboardViewController: BaseViewController {
 
 		super.viewWillAppear(animated)
 		viewModel.checkQRValidity()
+
+		if !sceneView.largeQRimageView.isHidden {
+			viewModel.setBrightness()
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -118,6 +122,7 @@ class HolderDashboardViewController: BaseViewController {
 		card.message = cardInfo.message
 		card.primaryTitle = cardInfo.actionTitle
 		card.backgroundImage = cardInfo.image
+		card.backgroundImageView.layer.contentsRect = cardInfo.imageRect
 		card.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.cardTapped(cardInfo.identifier)
 		}

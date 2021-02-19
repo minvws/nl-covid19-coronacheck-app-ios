@@ -17,6 +17,7 @@ class CreateProofView: BaseView {
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
 		static let imageRatio: CGFloat = 0.75
+		static let imageMargin: CGFloat = 26
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -24,6 +25,23 @@ class CreateProofView: BaseView {
 		static let titleTopMargin: CGFloat = 34.0
 		static let messageTopMargin: CGFloat = 24.0
 	}
+
+	/// The container for centering the image
+	private let imageContainerView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	let imageView: UIImageView = {
+
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.contentMode = .center
+		view.image = .qrAnimation
+		return view
+	}()
 
 	/// The title label
 	let titleLabel: Label = {
@@ -56,6 +74,8 @@ class CreateProofView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+		imageContainerView.addSubview(imageView)
+		addSubview(imageContainerView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(primaryButton)
@@ -68,9 +88,34 @@ class CreateProofView: BaseView {
 
 		NSLayoutConstraint.activate([
 
+			// Container
+			imageContainerView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			imageContainerView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			imageContainerView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
+
+			// Image
+			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
+			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
+			imageView.leadingAnchor.constraint(
+				equalTo: imageContainerView.leadingAnchor,
+				constant: ViewTraits.imageMargin
+			),
+			imageView.trailingAnchor.constraint(
+				equalTo: imageContainerView.trailingAnchor,
+				constant: -ViewTraits.imageMargin
+			),
+			imageView.topAnchor.constraint(
+				equalTo: imageContainerView.topAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : ViewTraits.imageMargin
+			),
+			imageView.bottomAnchor.constraint(
+				equalTo: imageContainerView.bottomAnchor,
+				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.imageMargin
+			),
+
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
+				equalTo: imageContainerView.bottomAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(

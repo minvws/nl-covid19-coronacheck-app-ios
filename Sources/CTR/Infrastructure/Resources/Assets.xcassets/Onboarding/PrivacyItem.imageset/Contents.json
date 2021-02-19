@@ -1,15 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "4_voor_wie.pdf",
+      "filename" : "shield.pdf",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }
