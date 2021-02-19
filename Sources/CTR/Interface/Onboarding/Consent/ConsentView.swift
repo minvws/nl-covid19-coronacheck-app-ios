@@ -187,7 +187,11 @@ class ConsentView: BaseView {
 	func addPrivacyItem(_ text: String) {
 
 		let label = Label(body: nil, textColor: Theme.colors.dark).multiline()
-		label.attributedText = text.setLineHeight(ViewTraits.messageLineHeight)
+		label.attributedText = .makeFromHtml(
+			text: text,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
 
 		let stack = HStack(
 			spacing: 16,

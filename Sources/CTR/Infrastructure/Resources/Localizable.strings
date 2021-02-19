@@ -58,9 +58,9 @@
 "holder.consent.title" = "Zo gebruikt de app je gegevens";
 "holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "holder.consent.message.underlined" = "privacyverklaring";
-"holder.consent.item.1" = "De CoronaCheck QR-code is niet te herleiden naar jou als persoon";
-"holder.consent.item.2" = "De scanner weet alleen of jouw testbewijs geldig is. Niet wie je bent.";
-"holder.consent.item.3" = "CoronaCheck houdt geen locatie of GPS gegevens bij";
+"holder.consent.item.1" = "De CoronaCheck QR-code is <b>niet te herleiden naar jou als persoon</b>";
+"holder.consent.item.2" = "Als scanner weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
+"holder.consent.item.3" = "CoronaCheck houdt geen <b>locatie of GPS gegevens</b> bij";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
 /* MARK: - Holder Privacy */
