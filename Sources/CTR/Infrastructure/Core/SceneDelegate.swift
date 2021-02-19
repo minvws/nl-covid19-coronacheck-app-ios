@@ -49,7 +49,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Called when the scene will move from an active state to an inactive state.
 		// This may occur due to temporary interruptions (ex. an incoming phone call).
 		if let brightness = previousBrightness {
-			print("sceneWillResignActive: Setting brightness to \(brightness)")
 			UIScreen.main.brightness = brightness
 		}
 	}
@@ -65,7 +64,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// to restore the scene back to its current state.
 
 		if let brightness = previousBrightness {
-			print("sceneDidEnterBackground: Setting brightness to \(brightness)")
 			UIScreen.main.brightness = brightness
 		}
 	}

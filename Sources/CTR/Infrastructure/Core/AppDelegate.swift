@@ -105,23 +105,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func applicationDidEnterBackground(_ application: UIApplication) {
 		if let brightness = previousBrightness {
-			print("applicationDidEnterBackground: Setting brightness to \(brightness)")
 			UIScreen.main.brightness = brightness
 		}
 	}
 
 	func applicationWillResignActive(_ application: UIApplication) {
 		if let brightness = previousBrightness {
-			print("applicationWillResignActive: Setting brightness to \(brightness)")
 			UIScreen.main.brightness = brightness
 		}
 	}
 
 	func applicationWillTerminate(_ application: UIApplication) {
 		if let brightness = previousBrightness {
-			print("applicationWillTerminate: Setting brightness to \(brightness)")
 			UIScreen.main.brightness = brightness
 		}
 	}
-
 }
