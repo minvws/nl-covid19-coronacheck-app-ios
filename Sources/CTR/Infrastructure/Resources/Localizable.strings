@@ -174,14 +174,13 @@
 "verifier.onboarding.message.who" = "Met behulp van deze app kun je zo veilig mogelijk de deuren openen. Maar alleen als jouw zaak, evenement of uitgaansgelegen-heid onder de <u>aangewezen locaties</u> valt.";
 
 /* MARK: - Verifier Consent */
-"verifier.consent.title" = "**Zo gebruikt de app je gegevens";
-"verifier.consent.message" = "**In de privacyverklaring staat hoe CoronaTester jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"verifier.consent.title" = "Zo gebruikt de app je gegevens";
+"verifier.consent.message" = "In de privacyverklaring staat hoe CoronaTestScanner jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
 "verifier.consent.message.underlined" = "privacyverklaring";
-"verifier.consent.item.1" = "**Gebruik van CoronatTester is vrijwillig.";
-"verifier.consent.item.2" = "**Dit is een lorum ipsum regel.";
-"verifier.consent.item.3" = "**Je naam wordt niet gebruikt of bewaard.";
-"verifier.consent.item.4" = "**Je GPS- of locatiegegevens worden niet gebruikt of bewaard.";
-"verifier.consent.button" = "**Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
+"verifier.consent.item.1" = "Een CoronaCheck QR-code is <b>niet te herleiden naar een persoon</b>";
+"verifier.consent.item.2" = "Als scanner weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
+"verifier.consent.item.3" = "CoronaCheck Scanner houdt <b>geen locatie of GPS gegevens</b> bij";
+"verifier.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
 
 /* MARK: - Verifier Privacy */
 "verifier.privacy.message" = "** de privacy verklaring **";
