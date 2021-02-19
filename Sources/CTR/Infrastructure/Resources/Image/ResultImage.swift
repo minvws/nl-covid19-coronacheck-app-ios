@@ -9,7 +9,7 @@ import UIKit
 
 extension UIImage {
 
-	static var access: UIImage? { return UIImage(named: "Access") }
+	static var access: UIImage? { return UIImage(named: "access") }
 
-	static var denied: UIImage? { return UIImage(named: "Denied") }
+	static var denied: UIImage? { return UIImage(named: "denied") }
 }
