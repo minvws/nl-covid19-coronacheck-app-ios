@@ -103,6 +103,11 @@ class ListResultsViewController: BaseViewController {
 
 	var tooltip: EasyTipView?
 
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		tooltip?.dismiss()
+	}
+
 	/// User tapped on the button
 	@objc private func closeButtonTapped() {
 
