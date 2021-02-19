@@ -32,13 +32,13 @@ class CardView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(title3: nil).multiline()
+		return Label(title3: nil, montserrat: true).multiline()
 	}()
 	
 	/// The message label
 	let messageLabel: Label = {
 		
-		return Label(body: nil).multiline()
+		return Label(bodyMedium: nil).multiline()
 	}()
 	
 	/// the scan button

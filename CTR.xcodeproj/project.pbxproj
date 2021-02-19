@@ -17,6 +17,8 @@
 		6D0022BA25DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
 		6D01C7E525DEBED9001E8BD2 /* ScanInstructionImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01C7E425DEBED9001E8BD2 /* ScanInstructionImage.swift */; };
 		6D01C7E625DEBED9001E8BD2 /* ScanInstructionImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01C7E425DEBED9001E8BD2 /* ScanInstructionImage.swift */; };
+		6D01C81125DEEAEE001E8BD2 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D01C81025DEEAEE001E8BD2 /* Montserrat-Bold.ttf */; };
+		6D01C81225DEEAEE001E8BD2 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6D01C81025DEEAEE001E8BD2 /* Montserrat-Bold.ttf */; };
 		6D01D8A225BFF8D700A4AB89 /* Configuration+DigiD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */; };
 		6D01D8C525C0262600A4AB89 /* OpenIdManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C425C0262600A4AB89 /* OpenIdManager.swift */; };
 		6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8C825C02E1A00A4AB89 /* Logging.swift */; };
@@ -373,6 +375,12 @@
 		6DE6FD8425C18BCA006602AC /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6FD8325C18BCA006602AC /* RemoteConfigManager.swift */; };
 		6DF96B6B25DA57100008662B /* ScanLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF96B6A25DA57100008662B /* ScanLocalization.swift */; };
 		6DF96B6C25DA57100008662B /* ScanLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF96B6A25DA57100008662B /* ScanLocalization.swift */; };
+		6DFB73A325DF053F003D6243 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6DFB73A225DF053F003D6243 /* Montserrat-SemiBold.ttf */; };
+		6DFB73A425DF053F003D6243 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6DFB73A225DF053F003D6243 /* Montserrat-SemiBold.ttf */; };
+		6DFB73C525DF8D71003D6243 /* ScanInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB73C425DF8D71003D6243 /* ScanInstructionsView.swift */; };
+		6DFB73C625DF8D71003D6243 /* ScanInstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB73C425DF8D71003D6243 /* ScanInstructionsView.swift */; };
+		6DFB73CB25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB73CA25DF8D89003D6243 /* ScanInstructionsViewModel.swift */; };
+		6DFB73CC25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB73CA25DF8D89003D6243 /* ScanInstructionsViewModel.swift */; };
 		6DFB8AFD25DD399700E7A1D8 /* AboutLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8AFC25DD399700E7A1D8 /* AboutLocalization.swift */; };
 		6DFB8AFE25DD399700E7A1D8 /* AboutLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8AFC25DD399700E7A1D8 /* AboutLocalization.swift */; };
 		6DFB8B0425DD3A6F00E7A1D8 /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8B0325DD3A6F00E7A1D8 /* AboutView.swift */; };
@@ -409,6 +417,7 @@
 		6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-acceptance.plist"; sourceTree = "<group>"; };
 		6D0022B825DBC3FA00E91084 /* configuration-production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-production.plist"; sourceTree = "<group>"; };
 		6D01C7E425DEBED9001E8BD2 /* ScanInstructionImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanInstructionImage.swift; sourceTree = "<group>"; };
+		6D01C81025DEEAEE001E8BD2 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Configuration+DigiD.swift"; sourceTree = "<group>"; };
 		6D01D8C425C0262600A4AB89 /* OpenIdManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenIdManager.swift; sourceTree = "<group>"; };
 		6D01D8C825C02E1A00A4AB89 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
@@ -605,6 +614,9 @@
 		6DE6FD7925C189A3006602AC /* RemoteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfiguration.swift; sourceTree = "<group>"; };
 		6DE6FD8325C18BCA006602AC /* RemoteConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
 		6DF96B6A25DA57100008662B /* ScanLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanLocalization.swift; sourceTree = "<group>"; };
+		6DFB73A225DF053F003D6243 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
+		6DFB73C425DF8D71003D6243 /* ScanInstructionsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanInstructionsView.swift; sourceTree = "<group>"; };
+		6DFB73CA25DF8D89003D6243 /* ScanInstructionsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanInstructionsViewModel.swift; sourceTree = "<group>"; };
 		6DFB8AFC25DD399700E7A1D8 /* AboutLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutLocalization.swift; sourceTree = "<group>"; };
 		6DFB8B0325DD3A6F00E7A1D8 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		6DFB8B0C25DD3A8C00E7A1D8 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
@@ -690,6 +702,15 @@
 				5A871B0BD7C484BECD4B60E1 /* Pods-Verifier.ad hoc acc.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		6D01C80F25DEEAD2001E8BD2 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				6DFB73A225DF053F003D6243 /* Montserrat-SemiBold.ttf */,
+				6D01C81025DEEAEE001E8BD2 /* Montserrat-Bold.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		6D01D8DF25C04FDB00A4AB89 /* Interface */ = {
@@ -798,9 +819,9 @@
 		6D3C352C25D41E38005D3259 /* CreateProof */ = {
 			isa = PBXGroup;
 			children = (
+				6D67D90D25D7E4AC00827277 /* CreateProofView.swift */,
 				6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */,
 				6D67D91325D7E4C700827277 /* CreateProofViewModel.swift */,
-				6D67D90D25D7E4AC00827277 /* CreateProofView.swift */,
 			);
 			path = CreateProof;
 			sourceTree = "<group>";
@@ -838,6 +859,8 @@
 			isa = PBXGroup;
 			children = (
 				6D4F6E7725DEB6F000557326 /* ScanInstructionsViewController.swift */,
+				6DFB73CA25DF8D89003D6243 /* ScanInstructionsViewModel.swift */,
+				6DFB73C425DF8D71003D6243 /* ScanInstructionsView.swift */,
 			);
 			path = ScanInstructions;
 			sourceTree = "<group>";
@@ -1292,8 +1315,9 @@
 			isa = PBXGroup;
 			children = (
 				6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */,
-				6D92848D25B5CB85009D4350 /* Colors.xcassets */,
 				6DF96B6225DA55510008662B /* Certificates */,
+				6D92848D25B5CB85009D4350 /* Colors.xcassets */,
+				6D01C80F25DEEAD2001E8BD2 /* Fonts */,
 				6D2023A525CAB74600CFCD14 /* Image */,
 				6D5D203925BF1C0A00DC2E27 /* Localizable.strings */,
 				6DC6CC6225C2B3C800060237 /* Localization */,
@@ -1497,8 +1521,10 @@
 				6D0022BA25DBC3FA00E91084 /* configuration-production.plist in Resources */,
 				6DD7D88E25D26D3A00B97B7F /* Colors.xcassets in Resources */,
 				6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */,
+				6D01C81225DEEAEE001E8BD2 /* Montserrat-Bold.ttf in Resources */,
 				326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6D4F6E4625DE9F3A00557326 /* splash_ministerie.png in Resources */,
+				6DFB73A425DF053F003D6243 /* Montserrat-SemiBold.ttf in Resources */,
 				6DD7D88F25D26D3A00B97B7F /* Localizable.strings in Resources */,
 				6DD7D89025D26D3A00B97B7F /* InfoPlist.strings in Resources */,
 				6DD7D89225D26D3A00B97B7F /* Assets.xcassets in Resources */,
@@ -1517,8 +1543,10 @@
 				6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */,
 				326E62C125D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6D5D203A25BF1C0A00DC2E27 /* Localizable.strings in Resources */,
+				6D01C81125DEEAEE001E8BD2 /* Montserrat-Bold.ttf in Resources */,
 				6D7F9CB825B6DBA60006F227 /* InfoPlist.strings in Resources */,
 				6D4F6E1225DE970600557326 /* holder_logo.png in Resources */,
+				6DFB73A325DF053F003D6243 /* Montserrat-SemiBold.ttf in Resources */,
 				6D4F6E4A25DE9F3D00557326 /* LaunchScreenHolder.storyboard in Resources */,
 				6DDEFAFD25AEDCAA00A6912A /* Assets.xcassets in Resources */,
 				6D33015A25CFE6BA00A98C1C /* nl-root.pem in Resources */,
@@ -1812,6 +1840,7 @@
 				6DD7D86725D26D3A00B97B7F /* OpenSSL.m in Sources */,
 				6DD19DD525D6D7A6001FDDDC /* InformationViewController.swift in Sources */,
 				6DFB8B0525DD3A6F00E7A1D8 /* AboutView.swift in Sources */,
+				6DFB73C625DF8D71003D6243 /* ScanInstructionsView.swift in Sources */,
 				6DD7D86825D26D3A00B97B7F /* OnboardingFactory.swift in Sources */,
 				6D80114D25D2C25C00D2EEAB /* ScrollViewWithHeader.swift in Sources */,
 				6DD7D86925D26D3A00B97B7F /* GeneralLocalization.swift in Sources */,
@@ -1861,6 +1890,7 @@
 				6D67D90F25D7E4AC00827277 /* CreateProofView.swift in Sources */,
 				6DD19DC025D66DF5001FDDDC /* ScrollView.swift in Sources */,
 				6DD7D88625D26D3A00B97B7F /* CardView.swift in Sources */,
+				6DFB73CC25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1982,6 +2012,7 @@
 				6DD19DD425D6D7A6001FDDDC /* InformationViewController.swift in Sources */,
 				6D80113C25D2B6AE00D2EEAB /* Placeholder.swift in Sources */,
 				6DFB8B0425DD3A6F00E7A1D8 /* AboutView.swift in Sources */,
+				6DFB73C525DF8D71003D6243 /* ScanInstructionsView.swift in Sources */,
 				6D33015625CFE68500A98C1C /* OpenSSL.m in Sources */,
 				6D7FFAED25C9B65E00B5482F /* OnboardingFactory.swift in Sources */,
 				6D80114C25D2C25C00D2EEAB /* ScrollViewWithHeader.swift in Sources */,
@@ -2031,6 +2062,7 @@
 				6D67D90E25D7E4AC00827277 /* CreateProofView.swift in Sources */,
 				6D9819E125D53CC6009A96D7 /* ScrollView.swift in Sources */,
 				6D27550A25D1201800164F2E /* CardView.swift in Sources */,
+				6DFB73CB25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2132,7 +2164,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2163,7 +2195,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2186,7 +2218,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				INFOPLIST_FILE = CTRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2245,7 +2277,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2276,7 +2308,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2299,7 +2331,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				INFOPLIST_FILE = CTRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2358,7 +2390,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2389,7 +2421,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2412,7 +2444,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				INFOPLIST_FILE = CTRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2471,7 +2503,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LOG_LEVEL = error;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2502,7 +2534,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2525,7 +2557,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				INFOPLIST_FILE = CTRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2557,7 +2589,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2591,7 +2623,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2623,7 +2655,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2655,7 +2687,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2687,7 +2719,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2719,7 +2751,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2784,7 +2816,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LOG_LEVEL = debug;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -2842,7 +2874,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LOG_LEVEL = error;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -2873,7 +2905,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2907,7 +2939,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2930,7 +2962,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				INFOPLIST_FILE = CTRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2953,7 +2985,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				INFOPLIST_FILE = CTRTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

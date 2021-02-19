@@ -26,6 +26,11 @@
 	<string>$(NETWORK_CONFIGURATION)</string>
 	<key>NSCameraUsageDescription</key>
 	<string>De app will toegang tot de camera om de QR-code te scannen. </string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Montserrat-SemiBold.ttf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

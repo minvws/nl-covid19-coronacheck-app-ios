@@ -28,13 +28,13 @@ class ListResultView: BaseView {
 	/// The header label
 	let headerLabel: Label = {
 
-		return Label(caption1: nil)
+		return Label(caption1SemiBold: nil)
 	}()
 
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(bodyBold: nil)
+		return Label(bodyMedium: nil)
 	}()
 
 	/// The message label

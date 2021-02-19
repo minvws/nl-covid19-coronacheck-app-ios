@@ -25,7 +25,7 @@ class ScanView: BaseView {
 	/// The message label
 	private let messageLabel: Label = {
 
-		return Label(body: nil).multiline()
+		return Label(bodySemiBold: nil).multiline()
 	}()
 
 	let cameraView: UIView = {

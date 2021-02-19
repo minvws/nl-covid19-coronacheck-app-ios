@@ -35,7 +35,6 @@ class VerifierResultViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 		viewModel.$primaryButtonTitle.binding = { self.sceneView.primaryTitle = $0 }
 

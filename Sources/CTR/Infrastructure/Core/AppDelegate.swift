@@ -39,7 +39,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Custom navigation bar appearance
 		UINavigationBar.appearance().barTintColor = .clear
 		UINavigationBar.appearance().titleTextAttributes = [
-			NSAttributedString.Key.foregroundColor: UIColor.darkText
+			NSAttributedString.Key.foregroundColor: Theme.colors.dark,
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
 		]
 		UINavigationBar.appearance().isTranslucent = true
 		UINavigationBar.appearance().shadowImage = UIImage()

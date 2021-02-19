@@ -190,8 +190,8 @@
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
-"verifier.start.header" = "Welkom";
-"verifier.start.message" = "Je kunt nu de QR-codes van bezoekers van jouw restaurant, event of uitgaans-gelegenheid scannen. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Zo werkt scannen.";
+"verifier.start.header" = "Aan de slag";
+"verifier.start.message" = "Scan nu de QR-codes van bezoekers van jouw restaurant, evenement of uitgaans-gelegenheid. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Zo werkt scannen.";
 "verifier.start.message.link" = "Zo werkt scannen.";
 "verifier.start.button.title" = "Start scannen";
 
@@ -204,12 +204,7 @@
 "verifier.instructions.access.title" = "3. Groen scherm = toegang";
 "verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldig negatief testresultaat en mag naar binnen.";
 "verifier.instructions.denied.title" = "4. Rood scherm = geen toegang";
-"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.
-<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li>
-<li>Is de bezoeker wel negatief op corona getest in de afgelopen 48 uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li>
-<li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li>
-</ul>";
-}
+"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li><li>Is de bezoeker wel negatief op corona getest in de afgelopen 48 uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li><li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li></ul>";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
@@ -217,11 +212,9 @@
 "verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
 
 /* MARK: - Verifier Result */
-"verifier.result.access.title" = "Geef toegang";
-"verifier.result.access.message" = "Deze bezoeker heeft een geldige QR-code (negatief testresultaat) en mag dus naar binnen.";
-"verifier.result.denied.title" = "Weiger toegang";
-"verifier.result.denied.message" = "De bezoeker heeft geen geldige QR-code en mag dus niet naar binnen.";
-"verifier.result.denied.link" = "Lees de mogelijke oorzaken.";
+"verifier.result.access.message" = "Deze bezoeker beschikt over een geldig negatief testbewijs.";
+"verifier.result.denied.message" = "Deze bezoeker beschikt niet over een geldig negatief testbewijs.";
+"verifier.result.denied.link" = "Lees de mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
 
 /* MARK: - Verifier Denied Instructions */

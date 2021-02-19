@@ -29,7 +29,7 @@ class AppointmentView: ScrollViewWithHeader {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title1: nil).multiline()
+		return Label(title1: nil, montserrat: true).multiline()
 	}()
 
 	/// The message label

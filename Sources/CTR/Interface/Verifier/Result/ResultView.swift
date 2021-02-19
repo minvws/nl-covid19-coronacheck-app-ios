@@ -29,16 +29,10 @@ class ResultView: BaseView {
 		return view
 	}()
 
-	/// The title label
-	private let titleLabel: Label = {
-
-		return Label(title1: nil).multiline()
-	}()
-
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(body: nil).multiline()
+		return Label(title3Medium: nil).multiline()
 	}()
 
 	/// the scan button
@@ -54,8 +48,7 @@ class ResultView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-		backgroundColor = .gray // Theme.colors.viewControllerBackground
-		titleLabel.textAlignment = .center
+		backgroundColor = Theme.colors.viewControllerBackground
 		messageLabel.textAlignment = .center
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
@@ -66,7 +59,6 @@ class ResultView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(imageView)
-		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(primaryButton)
 	}
@@ -88,24 +80,10 @@ class ResultView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Title
-			titleLabel.topAnchor.constraint(
+			// Message
+			messageLabel.topAnchor.constraint(
 				equalTo: imageView.bottomAnchor
 			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
-			),
-
-			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.largeMargin
@@ -129,13 +107,6 @@ class ResultView: BaseView {
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
-		}
-	}
-
-	/// The  title
-	var title: String? {
-		didSet {
-			titleLabel.text = title
 		}
 	}
 

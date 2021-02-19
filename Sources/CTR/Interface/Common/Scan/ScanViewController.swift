@@ -69,7 +69,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		super.viewWillAppear(animated)
 
 		// Force navigation title color to white
-		let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+		let textAttributes = [
+			NSAttributedString.Key.foregroundColor: UIColor.white,
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
+		]
 		navigationController?.navigationBar.titleTextAttributes = textAttributes
 		navigationController?.navigationBar.tintColor = .white
 	}
@@ -92,7 +95,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		}
 
 		// Reset navigation title color
-		let textAttributes = [NSAttributedString.Key.foregroundColor: Theme.colors.dark]
+		let textAttributes = [
+			NSAttributedString.Key.foregroundColor: Theme.colors.dark,
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
+		]
 		navigationController?.navigationBar.titleTextAttributes = textAttributes
 		navigationController?.navigationBar.tintColor = Theme.colors.dark
 	}

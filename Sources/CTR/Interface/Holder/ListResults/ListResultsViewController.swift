@@ -85,6 +85,7 @@ class ListResultsViewController: BaseViewController {
 		var preferences = EasyTipView.Preferences()
 		preferences.drawing.foregroundColor = Theme.colors.viewControllerBackground
 		preferences.drawing.backgroundColor = Theme.colors.dark
+		preferences.drawing.font = Theme.fonts.footnoteMontserrat
 		preferences.drawing.arrowPosition = .bottom
 
 		tooltip = EasyTipView(text: .holderTestResultsDisclaimer, preferences: preferences)

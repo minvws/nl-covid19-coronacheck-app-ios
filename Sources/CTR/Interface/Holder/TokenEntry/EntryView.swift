@@ -20,7 +20,7 @@ class EntryView: BaseView {
 	/// The header label
 	private let headerLabel: Label = {
 
-		return Label(caption1: nil)
+		return Label(caption1SemiBold: nil)
 	}()
 
 	let inputField: UITextField = {

@@ -34,13 +34,13 @@ class QRImageView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title3: nil)
+		return Label(title3: nil, montserrat: true)
 	}()
 
 	/// The message label
 	private let messageLabel: Label = {
 
-		return Label(subhead: nil).multiline()
+		return Label(subheadMedium: nil).multiline()
 	}()
 
 	/// Setup all the views

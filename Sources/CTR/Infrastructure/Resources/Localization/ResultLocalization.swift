@@ -9,19 +9,9 @@ import Foundation
 
 extension String {
 
-	static var verifierResultAccessTitle: String {
-
-		return Localization.string(for: "verifier.result.access.title")
-	}
-
 	static var verifierResultAccessMessage: String {
 
 		return Localization.string(for: "verifier.result.access.message")
-	}
-
-	static var verifierResultDeniedTitle: String {
-
-		return Localization.string(for: "verifier.result.denied.title")
 	}
 
 	static var verifierResultDeniedMessage: String {

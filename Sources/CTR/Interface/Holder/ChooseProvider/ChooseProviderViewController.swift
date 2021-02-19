@@ -77,7 +77,7 @@ class ChooseProviderViewController: BaseViewController {
 	/// Setup no diigid button
 	func setupNoDigidButton() {
 
-		let label = Label(bodyBold: .holderChooseProviderNoDigiD)
+		let label = Label(bodyMedium: .holderChooseProviderNoDigiD)
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noDidiDTapped))
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)

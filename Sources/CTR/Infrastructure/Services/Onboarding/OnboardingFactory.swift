@@ -164,7 +164,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: .verifierOnboardingTitleScanQR,
 				message: .verifierOnboardingMessageScanQR,
-				image: .onboardingYourQR,
+				image: .onboardingScan,
 				step: .yourQR
 			),
 			OnboardingPage(
@@ -176,7 +176,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: .verifierOnboardingTitleWho,
 				message: .verifierOnboardingMessageWho,
-				image: .onboardingPrivacy,
+				image: .onboardingWho,
 				step: .privacy
 			)
 		]

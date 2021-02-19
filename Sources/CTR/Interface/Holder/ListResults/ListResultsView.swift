@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import EasyTipView
 
 class ListResultsView: BaseView {
 
@@ -29,7 +28,7 @@ class ListResultsView: BaseView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(title1: nil).multiline()
+		return Label(title1: nil, montserrat: true).multiline()
 	}()
 
 	/// The message label

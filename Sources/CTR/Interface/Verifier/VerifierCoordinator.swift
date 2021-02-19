@@ -29,7 +29,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - showBottomCloseButton: True if the bottom close button should be shown
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
-
 }
 
 class VerifierCoordinator: Coordinator, Logging {
@@ -255,7 +254,6 @@ extension VerifierCoordinator: MenuDelegate {
 
 extension VerifierCoordinator: OpenUrlProtocol {
 
-	/// Open a url
 	/// Open a url
 	func openUrl(_ url: URL, inApp: Bool) {
 
