@@ -98,6 +98,10 @@ class HolderDashboardViewController: BaseViewController {
 
 		super.viewWillAppear(animated)
 		viewModel.checkQRValidity()
+
+		if !sceneView.largeQRimageView.isHidden {
+			viewModel.setBrightness()
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
