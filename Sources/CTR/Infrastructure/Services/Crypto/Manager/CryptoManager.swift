@@ -39,9 +39,9 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter stoken: the stoken
 	func setStoken(_ stoken: String)
 
-	/// Set the proofs
-	/// - Parameter proofs: the test proofs
-	func setProofs(_ proofs: Data?)
+	/// Set the signature message
+	/// - Parameter proofs: the signature message (signed proof)
+	func setIssuerSignatureMessage(_ signatureMessage: Data?)
 
 	/// Generate the commitment message
 	/// - Returns: commitment message
@@ -78,12 +78,12 @@ class CryptoManager: CryptoManaging, Logging {
 		var holderSecretKey: Data?
 		var nonce: String?
 		var stoken: String?
-		var proofs: Data?
-		var value: Data?
+		var ism: Data?
+		var credentials: Data?
 
 		/// Empty crypto data
 		static var empty: CryptoData {
-			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, proofs: nil, value: nil)
+			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, ism: nil, credentials: nil)
 		}
 	}
 
@@ -155,7 +155,7 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Returns: the credentials
 	func readCredentials() -> CrypoAttributes? {
 
-		if let cryptoDataValue = cryptoData.value,
+		if let cryptoDataValue = cryptoData.credentials,
 		   let response = ClmobileReadCredential(cryptoDataValue),
 		   let value = response.value {
 			do {
@@ -174,16 +174,16 @@ class CryptoManager: CryptoManaging, Logging {
 	func generateQRmessage() -> Data? {
 
 		guard let holderSecretKey = cryptoData.holderSecretKey,
-			  let ism = cryptoData.proofs else {
+			  let ism = cryptoData.ism else {
 			return nil
 		}
 
-		if let value = cryptoData.value {
+		if let value = cryptoData.credentials {
 			return createQRMessage(value, holderSecretKey: holderSecretKey)
 		} else {
 			let credentails = ClmobileCreateCredential(holderSecretKey, ism)
 			if let value = credentails?.value {
-				cryptoData.value = value
+				cryptoData.credentials = value
 				return createQRMessage(value, holderSecretKey: holderSecretKey)
 			} else {
 				logDebug("QR: \(String(describing: credentails?.error))")
@@ -193,9 +193,14 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
-	private func createQRMessage(_ value: Data?, holderSecretKey: Data) -> Data? {
+	/// Create the QR Message
+	/// - Parameters:
+	///   - credentials: the credentials
+	///   - holderSecretKey: the holder Secret Key
+	/// - Returns: QR Messaga as Data
+	private func createQRMessage(_ credentials: Data?, holderSecretKey: Data) -> Data? {
 
-		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, value)
+		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, credentials)
 		if let payload = disclosed?.value {
 			let message = String(decoding: payload, as: UTF8.self)
 			logDebug("QR message: \(message)")
@@ -218,11 +223,12 @@ class CryptoManager: CryptoManaging, Logging {
 		cryptoData.stoken = stoken
 	}
 
-	/// Set the proofs
-	/// - Parameter proofs: the test proofs
-	func setProofs(_ proofs: Data?) {
+	/// Set the signature message
+	/// - Parameter proofs: the signature message (signed proof)
+	func setIssuerSignatureMessage(_ signatureMessage: Data?) {
 
-		cryptoData.proofs = proofs
+		cryptoData.ism = signatureMessage
+		cryptoData.credentials = nil
 	}
 
 	/// Get the stoken
@@ -234,11 +240,11 @@ class CryptoManager: CryptoManaging, Logging {
 
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: True if valid
+	/// - Returns: Attributes if the QR is valid
 	func verifyQRMessage(_ message: String) -> Attributes? {
 
-		let proofAsn1 = message.data(using: .utf8)
-		if let result = ClmobileVerifyQREncoded(issuerPublicKey, proofAsn1) {
+		let proofAsn1QREncoded = message.data(using: .utf8)
+		if let result = ClmobileVerifyQREncoded(issuerPublicKey, proofAsn1QREncoded) {
 
 			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
 				self.logError("Error Proof: \(result.error)")

@@ -20,6 +20,9 @@ class ListResultsViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
+	/// The configuration
+	var configuration: ConfigurationGeneralProtocol
+
 	/// The proof manager
 	weak var proofManager: ProofManaging?
 
@@ -49,12 +52,14 @@ class ListResultsViewModel: Logging {
 		coordinator: HolderCoordinatorDelegate,
 		proofManager: ProofManaging,
 		cryptoManager: CryptoManaging,
-		networkManager: NetworkManaging) {
+		networkManager: NetworkManaging,
+		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
 		self.cryptoManager = cryptoManager
 		self.networkManager = networkManager
+		self.configuration = configuration
 
 		self.title = .holderTestResultsNoResultsTitle
 		self.message = .holderTestResultsNoResultsText
@@ -72,7 +77,7 @@ class ListResultsViewModel: Logging {
 			switch wrapper.status {
 				case .complete:
 					if let result = wrapper.result, result.negativeResult {
-						reportTestResult(result)
+						investigate(result)
 					} else {
 						reportNoTestResult()
 					}
@@ -81,6 +86,26 @@ class ListResultsViewModel: Logging {
 				default:
 					break
 			}
+		}
+	}
+
+	/// Investigate the result
+	/// - Parameter testResult: the test result
+	private func investigate(_ testResult: TestResult) {
+
+		var valid = false
+		let now = Date().timeIntervalSince1970
+		let validity = TimeInterval(configuration.getTestResultTTL())
+		if let sampleDate = parseDateFormatter.date(from: testResult.sampleDate) {
+			let sampleTimeStamp = sampleDate.timeIntervalSince1970
+			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
+				valid = true
+				reportTestResult(testResult)
+			}
+		}
+
+		if !valid {
+			reportNoTestResult()
 		}
 	}
 
@@ -227,13 +252,14 @@ class ListResultsViewModel: Logging {
 			do {
 				let ismError = try JSONDecoder().decode(ISMErrorResponse.self, from: unwrapped)
 				if ismError.code == 99994 {
+					proofManager?.removeTestWrapper()
 					reportAlreadyDone()
 				} else {
 					showError = "Server error \(ismError.status): \(ismError.code)"
 				}
 			} catch {
 				// not an error
-				cryptoManager?.setProofs(data)
+				cryptoManager?.setIssuerSignatureMessage(data)
 				proofManager?.removeTestWrapper()
 				if let message = cryptoManager?.generateQRmessage() {
 					print("message: \(message)")
@@ -255,6 +281,23 @@ class ListResultsViewModel: Logging {
 }
 
 struct ISMErrorResponse: Decodable {
+
+	/// The error status
 	let status: String
+
+	/// The error code
 	let code: Int
+
+	/*
+	## Error codes
+	99981 - Test is not in expected format
+	99982 - Test is empty
+	99983 - Test signature invalid
+	99991 - Test sample time in the future
+	99992 - Test sample time too old (48h)
+	99993 - Test result was not negative
+	99994 - Test result signed before
+	99995 - Unknown error creating signed test result
+	99996 - Session key no longer valid
+	*/
 }

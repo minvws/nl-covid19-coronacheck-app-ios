@@ -235,7 +235,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				proofManager: proofManager,
 				cryptoManager: cryptoManager,
-				networkManager: networkManager
+				networkManager: networkManager,
+				configuration: generalConfiguration
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)

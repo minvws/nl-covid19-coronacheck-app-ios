@@ -122,11 +122,11 @@ class ProofManager: ProofManaging, Logging {
 
 			switch response {
 				case let .success(wrapper):
-					print("iii")
-					if wrapper.0.status == .complete {
+					self.logDebug("We got \(wrapper.0.status) wrapper.")
+					if wrapper.0.status == .complete || wrapper.0.status == .pending {
 						self.proofData.testWrapper = wrapper.0
 						self.proofData.signedWrapper = wrapper.1
-				}
+					}
 					oncompletion(.success(wrapper.0))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
@@ -153,5 +153,6 @@ class ProofManager: ProofManaging, Logging {
 	func removeTestWrapper() {
 		
 		proofData.testWrapper = nil
+		proofData.signedWrapper = nil
 	}
 }
