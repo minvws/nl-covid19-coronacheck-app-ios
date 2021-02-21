@@ -96,7 +96,6 @@ class HolderDashboardViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
-	///   - proofManager: the proof manager
 	///   - configuration: the configuration
 	init(
 		coordinator: HolderCoordinatorDelegate,
