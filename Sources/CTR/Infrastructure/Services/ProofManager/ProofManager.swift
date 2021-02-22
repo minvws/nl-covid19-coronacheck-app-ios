@@ -14,6 +14,9 @@ class ProofManager: ProofManaging, Logging {
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 
+	/// The crypto manager
+	var cryptoManager: CryptoManaging = Services.cryptoManager
+
 	/// Structure to hold cryptography data
 	private struct ProofData: Codable {
 
@@ -100,6 +103,109 @@ class ProofManager: ProofManaging, Logging {
 		return nil
 	}
 
+	/// Create a nonce and a stoken
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchNonce(
+		oncompletion: @escaping (() -> Void),
+		onError: @escaping ((Error) -> Void)) {
+
+		networkManager.getNonce { [weak self] resultwrapper in
+
+			switch resultwrapper {
+				case let .success(envelope):
+					self?.cryptoManager.setNonce(envelope.nonce)
+					self?.cryptoManager.setStoken(envelope.stoken)
+					oncompletion()
+				case let .failure(networkError):
+					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
+					onError(networkError)
+			}
+		}
+	}
+
+	/// Fetch the signed Test Result
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchSignedTestResult(
+		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onError: @escaping ((Error) -> Void)) {
+
+		if let icm = cryptoManager.generateCommitmentMessage(),
+		   let icmDictionary = icm.convertToDictionary(),
+		   let stoken = cryptoManager.getStoken(),
+		   let wrapper = getSignedWrapper() {
+
+			let dictionary: [String: AnyObject] = [
+				"test": generateString(object: wrapper) as AnyObject,
+				"stoken": stoken as AnyObject,
+				"icm": icmDictionary as AnyObject
+			]
+
+			networkManager.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
+
+				switch resultwrapper {
+					case let .success(data):
+						self?.parseSignedTestResult(data, oncompletion: oncompletion)
+//						oncompletion(data)
+					case let .failure(networkError):
+
+						self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
+						onError(networkError)
+				}
+			}
+		}
+	}
+
+	private func parseSignedTestResult(_ data: Data, oncompletion: @escaping ((SignedTestResultState) -> Void)) {
+
+		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
+
+		/*
+		## Error codes
+		99981 - Test is not in expected format
+		99982 - Test is empty
+		99983 - Test signature invalid
+		99991 - Test sample time in the future
+		99992 - Test sample time too old (48h)
+		99993 - Test result was not negative
+		99994 - Test result signed before
+		99995 - Unknown error creating signed test result
+		99996 - Session key no longer valid
+		*/
+
+		do {
+			let ismError = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
+			switch ismError.code {
+				case 99991:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.tooNew)
+				case 99992:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.tooOld)
+				case 99993:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.notNegative)
+				case 99994:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.alreadySigned)
+				case 99995:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.unknown(nil))
+				default:
+					oncompletion(SignedTestResultState.unknown(nil))
+			}
+		} catch {
+			// Success, no error!
+			cryptoManager.setTestProof(data)
+			cryptoManager.createCredential()
+			removeTestWrapper()
+			oncompletion(SignedTestResultState.valid)
+		}
+	}
+
 	/// Get the test result for a token
 	/// - Parameters:
 	///   - token: the request token
@@ -154,5 +260,17 @@ class ProofManager: ProofManaging, Logging {
 		
 		proofData.testWrapper = nil
 		proofData.signedWrapper = nil
+	}
+
+	// MARK: - Helper methods
+
+	private func generateString<T>(object: T) -> String where T: Codable {
+
+		if let data = try? JSONEncoder().encode(object),
+		   let convertedToString = String(data: data, encoding: .utf8) {
+			logDebug("ProofManager: Convert to \(convertedToString)")
+			return convertedToString
+		}
+		return ""
 	}
 }

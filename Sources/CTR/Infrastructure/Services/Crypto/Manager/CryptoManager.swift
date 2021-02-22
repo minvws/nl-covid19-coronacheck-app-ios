@@ -41,11 +41,14 @@ protocol CryptoManaging: AnyObject {
 
 	/// Set the signature message
 	/// - Parameter proofs: the signature message (signed proof)
-	func setIssuerSignatureMessage(_ signatureMessage: Data?)
+	func setTestProof(_ proof: Data?)
 
 	/// Generate the commitment message
 	/// - Returns: commitment message
 	func generateCommitmentMessage() -> String?
+
+	/// Create the credential
+	func createCredential()
 
 	/// Generate the QR message
 	/// - Returns: the QR message
@@ -169,25 +172,27 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
+	/// Create the credential
+	func createCredential() {
+
+		guard let holderSecretKey = cryptoData.holderSecretKey,
+			  let ism = cryptoData.ism else {
+			return
+		}
+		let result = ClmobileCreateCredential(holderSecretKey, ism)
+		if let credential = result?.value {
+			cryptoData.credentials = credential
+		} else {
+			logError("Can't create credential: \(String(describing: result?.error))")
+		}
+	}
+
 	/// Generate the QR message
 	/// - Returns: the QR message
 	func generateQRmessage() -> Data? {
 
-		guard let holderSecretKey = cryptoData.holderSecretKey,
-			  let ism = cryptoData.ism else {
-			return nil
-		}
-
-		if let value = cryptoData.credentials {
-			return createQRMessage(value, holderSecretKey: holderSecretKey)
-		} else {
-			let credentails = ClmobileCreateCredential(holderSecretKey, ism)
-			if let value = credentails?.value {
-				cryptoData.credentials = value
-				return createQRMessage(value, holderSecretKey: holderSecretKey)
-			} else {
-				logDebug("QR: \(String(describing: credentails?.error))")
-			}
+		if let credential = cryptoData.credentials, let holderSecretKey = cryptoData.holderSecretKey {
+			return createQRMessage(credential, holderSecretKey: holderSecretKey)
 		}
 
 		return nil
@@ -195,12 +200,12 @@ class CryptoManager: CryptoManaging, Logging {
 
 	/// Create the QR Message
 	/// - Parameters:
-	///   - credentials: the credentials
+	///   - credential: the credential
 	///   - holderSecretKey: the holder Secret Key
 	/// - Returns: QR Messaga as Data
-	private func createQRMessage(_ credentials: Data?, holderSecretKey: Data) -> Data? {
+	private func createQRMessage(_ credential: Data?, holderSecretKey: Data) -> Data? {
 
-		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, credentials)
+		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, credential)
 		if let payload = disclosed?.value {
 			let message = String(decoding: payload, as: UTF8.self)
 			logDebug("QR message: \(message)")
@@ -224,10 +229,10 @@ class CryptoManager: CryptoManaging, Logging {
 	}
 
 	/// Set the signature message
-	/// - Parameter proofs: the signature message (signed proof)
-	func setIssuerSignatureMessage(_ signatureMessage: Data?) {
+	/// - Parameter proof: the signature message (signed proof)
+	func setTestProof(_ proof: Data?) {
 
-		cryptoData.ism = signatureMessage
+		cryptoData.ism = proof
 		cryptoData.credentials = nil
 	}
 
