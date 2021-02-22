@@ -13,6 +13,8 @@ class HolderDashboardViewController: BaseViewController {
 
 	let sceneView = HolderDashboardView()
 
+	var screenCaptureInProgress = false
+
 	// MARK: Initializers
 
 	init(viewModel: HolderDashboardViewModel) {
@@ -63,7 +65,7 @@ class HolderDashboardViewController: BaseViewController {
 				self.sceneView.qrView.isHidden = false
 				// Scroll to top
 				self.sceneView.scrollView.setContentOffset(.zero, animated: true)
-//				self.setupLink()
+				self.setupLink()
 			} else {
 				self.sceneView.qrView.isHidden = true
 			}
@@ -79,8 +81,11 @@ class HolderDashboardViewController: BaseViewController {
 
 		viewModel.$hideQRForCapture.binding = {
 
+			self.screenCaptureInProgress = $0
 			self.sceneView.hideQRImage = $0
-			self.largeQRTapped()
+			if $0 && !self.sceneView.largeQRimageView.isHidden {
+				self.largeQRTapped()
+			}
 		}
 
 		setupListeners()
@@ -177,6 +182,10 @@ class HolderDashboardViewController: BaseViewController {
 	/// User tapped on the link
 	@objc func showLargeQR() {
 
+		guard !screenCaptureInProgress else {
+			return
+		}
+
 		self.navigationController?.isNavigationBarHidden = true
 		sceneView.largeOverlay.isHidden = false
 		sceneView.largeQRimageView.isHidden = false
@@ -198,7 +207,6 @@ class HolderDashboardViewController: BaseViewController {
 		self.navigationController?.isNavigationBarHidden = false
 		sceneView.largeOverlay.isHidden = true
 		sceneView.largeQRimageView.isHidden = true
-		viewModel.setBrightness(reset: true)
 		if let gesture = qrTapGestureRecognizer {
 			sceneView.removeGestureRecognizer(gesture)
 		}
