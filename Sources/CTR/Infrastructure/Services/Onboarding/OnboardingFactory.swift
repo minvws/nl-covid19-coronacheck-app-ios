@@ -53,14 +53,6 @@ protocol OnboardingFactoryProtocol {
 
 	/// Get the consent Items
 	func getConsentItems() -> [String]
-
-	/// Get the privacy title
-	/// - Returns: the privacy title
-	func getPrivacyTitle() -> String
-
-	/// Get the privacy message
-	/// - Returns: the privacy message
-	func getPrivacyMessage() -> String
 }
 
 struct HolderOnboardingFactory: OnboardingFactoryProtocol {
@@ -131,20 +123,6 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			.holderConsentItemThree
 		]
 	}
-
-	/// Get the privacy title
-	/// - Returns: the privacy title
-	func getPrivacyTitle() -> String {
-
-		return .holderPrivacyTitle
-	}
-
-	/// Get the privacy message
-	/// - Returns: the privacy message
-	func getPrivacyMessage() -> String {
-
-		return .holderPrivacyMessage
-	}
 }
 
 struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
@@ -214,19 +192,5 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			.verifierConsentItemTwo,
 			.verifierConsentItemThree
 		]
-	}
-
-	/// Get the privacy title
-	/// - Returns: the privacy title
-	func getPrivacyTitle() -> String {
-
-		return .verifierPrivacyTitle
-	}
-
-	/// Get the privacy message
-	/// - Returns: the privacy message
-	func getPrivacyMessage() -> String {
-
-		return .verifierPrivacyMessage
 	}
 }
