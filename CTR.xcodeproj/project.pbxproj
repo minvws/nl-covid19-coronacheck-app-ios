@@ -127,7 +127,6 @@
 		6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */; };
 		6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */; };
 		6D68CB1525CC3D3C008FE2C8 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB1425CC3D3C008FE2C8 /* PrivacyViewController.swift */; };
-		6D68CB1925CC3ECE008FE2C8 /* PrivacyLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */; };
 		6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */; };
 		6D73052F25B876F000BA808C /* Issuers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D73052E25B876F000BA808C /* Issuers.swift */; };
 		6D79C2E825DDB246005DADE2 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79C2E725DDB246005DADE2 /* TextView.swift */; };
@@ -252,6 +251,11 @@
 		6DD23F9725E3D42F00CE4AEB /* ProofManagingSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */; };
 		6DD23F9C25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */; };
 		6DD23FA125E3D64600CE4AEB /* ListResultsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23FA025E3D64600CE4AEB /* ListResultsViewControllerTests.swift */; };
+		6DD23FAD25E3E74F00CE4AEB /* MenuViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23FAC25E3E74F00CE4AEB /* MenuViewModelTests.swift */; };
+		6DD23FB525E3EA8F00CE4AEB /* MenuViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23FB425E3EA8F00CE4AEB /* MenuViewControllerTests.swift */; };
+		6DD23FBB25E3EF1100CE4AEB /* HolderCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23FBA25E3EF1100CE4AEB /* HolderCoordinatorTests.swift */; };
+		6DD23FC325E3F07900CE4AEB /* ViewControllerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23FC225E3F07900CE4AEB /* ViewControllerSpy.swift */; };
+		6DD293A225E3F258000C676C /* VerifierCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD293A125E3F258000C676C /* VerifierCoordinatorTests.swift */; };
 		6DD43DA225CD1E160041D658 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA125CD1E160041D658 /* PrivacyView.swift */; };
 		6DD43DA625CD23F70041D658 /* GeneralLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */; };
 		6DD43DAB25CD25F70041D658 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */; };
@@ -268,7 +272,6 @@
 		6DD7D82325D26D3A00B97B7F /* Configuration+DigiD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */; };
 		6DD7D82425D26D3A00B97B7F /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDEFB4025AF13D000A6912A /* Coordinator.swift */; };
 		6DD7D82525D26D3A00B97B7F /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CBB25B6E3A50006F227 /* ScanViewController.swift */; };
-		6DD7D82625D26D3A00B97B7F /* PrivacyLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */; };
 		6DD7D82725D26D3A00B97B7F /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7F9CC725B6E6170006F227 /* ResultView.swift */; };
 		6DD7D82825D26D3A00B97B7F /* Envelope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAE8BD925CB242700AAF2A7 /* Envelope.swift */; };
 		6DD7D82925D26D3A00B97B7F /* JSONDecoder+Decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAE8BD725CB242700AAF2A7 /* JSONDecoder+Decoding.swift */; };
@@ -507,7 +510,6 @@
 		6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoManagerSpy.swift; sourceTree = "<group>"; };
 		6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralImage.swift; sourceTree = "<group>"; };
 		6D68CB1425CC3D3C008FE2C8 /* PrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyViewController.swift; sourceTree = "<group>"; };
-		6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyLocalization.swift; sourceTree = "<group>"; };
 		6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndOfLifeLocalization.swift; sourceTree = "<group>"; };
 		6D73052E25B876F000BA808C /* Issuers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Issuers.swift; sourceTree = "<group>"; };
 		6D79C2E725DDB246005DADE2 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -605,6 +607,11 @@
 		6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofManagingSpy.swift; sourceTree = "<group>"; };
 		6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationGeneralSpy.swift; sourceTree = "<group>"; };
 		6DD23FA025E3D64600CE4AEB /* ListResultsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListResultsViewControllerTests.swift; sourceTree = "<group>"; };
+		6DD23FAC25E3E74F00CE4AEB /* MenuViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModelTests.swift; sourceTree = "<group>"; };
+		6DD23FB425E3EA8F00CE4AEB /* MenuViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewControllerTests.swift; sourceTree = "<group>"; };
+		6DD23FBA25E3EF1100CE4AEB /* HolderCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolderCoordinatorTests.swift; sourceTree = "<group>"; };
+		6DD23FC225E3F07900CE4AEB /* ViewControllerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerSpy.swift; sourceTree = "<group>"; };
+		6DD293A125E3F258000C676C /* VerifierCoordinatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierCoordinatorTests.swift; sourceTree = "<group>"; };
 		6DD43DA125CD1E160041D658 /* PrivacyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralLocalization.swift; sourceTree = "<group>"; };
 		6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
@@ -729,6 +736,8 @@
 		6D01D8DF25C04FDB00A4AB89 /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				6DD23FB925E3EEF500CE4AEB /* Coordinators */,
+				6DD23FAB25E3E6E200CE4AEB /* Menu */,
 				6DC6CC3525C2A04F00060237 /* AppUpdate */,
 				6DD23F8825E3BE3600CE4AEB /* ListRestults */,
 				6D20239625CAB1FC00CFCD14 /* Onboarding */,
@@ -750,12 +759,13 @@
 		6D20239125CAB15500CFCD14 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				6DD23F9125E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift */,
 				6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */,
-				6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */,
 				6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */,
-				6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */,
+				6DD23F9125E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift */,
 				6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */,
+				6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */,
+				6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */,
+				6DD23FC225E3F07900CE4AEB /* ViewControllerSpy.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1156,7 +1166,6 @@
 				6D5D202D25BF189400DC2E27 /* MainLocalization.swift */,
 				6D5A7BF625D1622E0008B904 /* MenuLocalization.swift */,
 				6D7FFAF025C9B8CF00B5482F /* OnboardingLocalization.swift */,
-				6D68CB1825CC3ECE008FE2C8 /* PrivacyLocalization.swift */,
 				6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */,
 				6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */,
 				6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */,
@@ -1218,6 +1227,24 @@
 				6DD23FA025E3D64600CE4AEB /* ListResultsViewControllerTests.swift */,
 			);
 			path = ListRestults;
+			sourceTree = "<group>";
+		};
+		6DD23FAB25E3E6E200CE4AEB /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				6DD23FAC25E3E74F00CE4AEB /* MenuViewModelTests.swift */,
+				6DD23FB425E3EA8F00CE4AEB /* MenuViewControllerTests.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		6DD23FB925E3EEF500CE4AEB /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				6DD23FBA25E3EF1100CE4AEB /* HolderCoordinatorTests.swift */,
+				6DD293A125E3F258000C676C /* VerifierCoordinatorTests.swift */,
+			);
+			path = Coordinators;
 			sourceTree = "<group>";
 		};
 		6DD43DA925CD25DD0041D658 /* Privacy */ = {
@@ -1771,7 +1798,6 @@
 				6DD7D82425D26D3A00B97B7F /* Coordinator.swift in Sources */,
 				6D01C7E625DEBED9001E8BD2 /* ScanInstructionImage.swift in Sources */,
 				6DD7D82525D26D3A00B97B7F /* ScanViewController.swift in Sources */,
-				6DD7D82625D26D3A00B97B7F /* PrivacyLocalization.swift in Sources */,
 				6DD7D82725D26D3A00B97B7F /* ResultView.swift in Sources */,
 				6D58DCAE25D45E2B00A39155 /* ListResultsViewController.swift in Sources */,
 				6DD7D82825D26D3A00B97B7F /* Envelope.swift in Sources */,
@@ -1945,7 +1971,6 @@
 				6D01C7E525DEBED9001E8BD2 /* ScanInstructionImage.swift in Sources */,
 				6DDEFB4125AF13D000A6912A /* Coordinator.swift in Sources */,
 				6D7F9CBC25B6E3A50006F227 /* ScanViewController.swift in Sources */,
-				6D68CB1925CC3ECE008FE2C8 /* PrivacyLocalization.swift in Sources */,
 				6D7F9CC825B6E6170006F227 /* ResultView.swift in Sources */,
 				6DAE8BE425CB242700AAF2A7 /* Envelope.swift in Sources */,
 				6DFB8B1625DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */,
@@ -2107,16 +2132,21 @@
 				6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */,
 				6DD23F8A25E3BE8A00CE4AEB /* ListResultsViewModelTests.swift in Sources */,
 				6DD23F9C25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift in Sources */,
+				6DD293A225E3F258000C676C /* VerifierCoordinatorTests.swift in Sources */,
 				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
 				6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */,
 				6DD23F9225E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift in Sources */,
+				6DD23FC325E3F07900CE4AEB /* ViewControllerSpy.swift in Sources */,
 				6D68CACD25CC1610008FE2C8 /* NetworkManagerSpy.swift in Sources */,
 				6DC6CC4125C2A95C00060237 /* AppCoordinatorSpy.swift in Sources */,
+				6DD23FAD25E3E74F00CE4AEB /* MenuViewModelTests.swift in Sources */,
 				6D2023B825CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift in Sources */,
 				6D2023BC25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift in Sources */,
 				6DD23F9725E3D42F00CE4AEB /* ProofManagingSpy.swift in Sources */,
 				6D5E06CA25C1C54A008E2124 /* RemoteConfigApiClientTests.swift in Sources */,
+				6DD23FB525E3EA8F00CE4AEB /* MenuViewControllerTests.swift in Sources */,
 				6D33016E25CFF19000A98C1C /* CryptoUtilityTests.swift in Sources */,
+				6DD23FBB25E3EF1100CE4AEB /* HolderCoordinatorTests.swift in Sources */,
 				6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */,
 				6D6777FF25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift in Sources */,
 				6DC6CC3D25C2A6D400060237 /* AppUpdateViewControllerTests.swift in Sources */,

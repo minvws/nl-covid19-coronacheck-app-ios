@@ -57,7 +57,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		}
 	}
 
-	// MARK: Test
+	// MARK: - Tests
 
 	/// Test the content for pending result
 	func testContentPendingResult() {

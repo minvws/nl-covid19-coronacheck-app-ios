@@ -345,7 +345,11 @@ extension HolderCoordinator: MenuDelegate {
 //				)
 //				aboutNavigationContoller = UINavigationController(rootViewController: destination)
 //				sidePanel?.selectedViewController = aboutNavigationContoller
-				
+
+			case .privacy :
+				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
+				openUrl(privacyUrl, inApp: true)
+
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
 
@@ -370,7 +374,8 @@ extension HolderCoordinator: MenuDelegate {
 
 		return [
 			MenuItem(identifier: .faq, title: .holderMenuFaq),
-			MenuItem(identifier: .about, title: .holderMenuAbout)
+			MenuItem(identifier: .about, title: .holderMenuAbout),
+			MenuItem(identifier: .privacy, title: .holderMenuPrivacy)
 		]
 	}
 }

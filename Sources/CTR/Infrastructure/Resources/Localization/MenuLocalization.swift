@@ -35,6 +35,11 @@ extension String {
 
 		return Localization.string(for: "holder.menu.feedback")
 	}
+
+	static var holderMenuPrivacy: String {
+
+		return Localization.string(for: "holder.menu.privacy")
+	}
 }
 
 // MARK: - Verifier
@@ -59,5 +64,10 @@ extension String {
 	static var verifierMenuFeedback: String {
 
 		return Localization.string(for: "verifier.menu.feedback")
+	}
+
+	static var verifierMenuPrivacy: String {
+
+		return Localization.string(for: "verifier.menu.privacy")
 	}
 }

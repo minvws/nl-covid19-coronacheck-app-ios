@@ -29,6 +29,7 @@ enum MenuIdentifier {
 	case scan
 	case support
 	case settings
+	case privacy
 	case faq
 	case about
 	case feedback
@@ -46,10 +47,10 @@ class MenuViewModel {
 	weak var menuDelegate: MenuDelegate?
 
 	/// The top menu items
-	@Bindable private(set) var topMenu: [MenuItem]
+	@Bindable var topMenu: [MenuItem]
 
 	/// The bottom menu items
-	@Bindable private(set) var bottomMenu: [MenuItem]
+	@Bindable var bottomMenu: [MenuItem]
 
 	/// Initializer
 	/// - Parameters:

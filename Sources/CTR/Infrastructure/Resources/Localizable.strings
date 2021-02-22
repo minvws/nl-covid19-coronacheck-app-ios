@@ -43,6 +43,7 @@
 "holder.menu.faq" = "Meest gestelde vragen";
 "holder.menu.about" = "Over deze app";
 "holder.menu.feedback" = "Geef ons feedback";
+"holder.menu.privacy" = "Privacyverklaring";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Getest en wel op pad";
@@ -62,10 +63,6 @@
 "holder.consent.item.2" = "De scanner weet alleen of jouw testbewijs geldig is. <b>Niet wie je bent</b>.";
 "holder.consent.item.3" = "CoronaCheck houdt geen <b>locatie of GPS gegevens</b> bij";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
-
-/* MARK: - Holder Privacy */
-"holder.privacy.message" = "** de privacy verklaring **";
-"holder.privacy.title" = "Privacy verklaring";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
@@ -162,6 +159,7 @@
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.feedback" = "Geef ons feedback";
+"verifier.menu.privacy" = "Privacyverklaring";
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Zo veilig mogelijk weer open";
@@ -181,10 +179,6 @@
 "verifier.consent.item.2" = "Als scanner weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
 "verifier.consent.item.3" = "CoronaCheck Scanner houdt <b>geen locatie of GPS gegevens</b> bij";
 "verifier.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
-
-/* MARK: - Verifier Privacy */
-"verifier.privacy.message" = "** de privacy verklaring **";
-"verifier.privacy.title" = "Privacy verklaring";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
