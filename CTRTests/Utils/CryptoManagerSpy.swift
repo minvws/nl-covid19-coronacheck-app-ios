@@ -37,13 +37,17 @@ class CryptoManagerSpy: CryptoManaging {
 		self.stoken = stoken
 	}
 
-	func setIssuerSignatureMessage(_ signatureMessage: Data?) {
+	func setTestProof(_ signatureMessage: Data?) {
 
 		setProofsCalled = true
 		self.proofs = signatureMessage
 	}
 
 	func reset() {
+		// Nothing yet
+	}
+
+	func createCredential() {
 		// Nothing yet
 	}
 

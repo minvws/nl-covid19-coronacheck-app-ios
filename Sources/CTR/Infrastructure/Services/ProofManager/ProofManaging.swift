@@ -28,6 +28,22 @@ protocol ProofManaging: AnyObject {
 		provider: TestProvider,
 		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
 
+	/// Create a nonce and a stoken
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchNonce(
+		oncompletion: @escaping (() -> Void),
+		onError: @escaping ((Error) -> Void))
+
+	/// Fetch the signed Test Result
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchSignedTestResult(
+		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onError: @escaping ((Error) -> Void))
+
 	/// Get the provider for a test token
 	/// - Parameter token: the test token
 	/// - Returns: the test provider
@@ -187,4 +203,35 @@ struct TestType: Codable {
 		case identifier = "uuid"
 		case name
 	}
+}
+
+/// The state of the signed test result
+enum SignedTestResultState {
+
+	/// The test was already signed before (code 99994)
+	case alreadySigned
+
+	/// The test was not negative (code 99993)
+	case notNegative
+
+	/// The test was in future (code 99991)
+	case tooNew
+
+	/// The test is too old (code 99992)
+	case tooOld
+
+	/// The state is unknown
+	case unknown(Error?)
+
+	/// The signed test result is valid
+	case valid
+}
+
+struct SignedTestResultErrorResponse: Decodable {
+
+	/// The error status
+	let status: String
+
+	/// The error code
+	let code: Int
 }

@@ -234,8 +234,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ListResultsViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				cryptoManager: cryptoManager,
-				networkManager: networkManager,
 				configuration: generalConfiguration
 			)
 		)
