@@ -63,7 +63,7 @@ class HolderDashboardViewController: BaseViewController {
 				self.sceneView.qrView.isHidden = false
 				// Scroll to top
 				self.sceneView.scrollView.setContentOffset(.zero, animated: true)
-				self.setupLink()
+//				self.setupLink()
 			} else {
 				self.sceneView.qrView.isHidden = true
 			}
@@ -80,8 +80,11 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$hideQRForCapture.binding = {
 
 			self.sceneView.hideQRImage = $0
+			self.largeQRTapped()
 		}
-		
+
+		setupListeners()
+
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
@@ -94,20 +97,45 @@ class HolderDashboardViewController: BaseViewController {
 		sceneView.qrView.isUserInteractionEnabled = true
 	}
 
+	func setupListeners() {
+
+		// set observer for UIApplication.willEnterForegroundNotification
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(checkValidity),
+			name: UIApplication.willEnterForegroundNotification,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self, selector:
+				#selector(checkValidity),
+			name: UIApplication.didBecomeActiveNotification,
+			object: nil
+		)
+	}
+
+	@objc func checkValidity() {
+
+		viewModel.checkQRValidity()
+		if !sceneView.qrView.isHidden {
+			viewModel.setBrightness()
+		}
+	}
+
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		viewModel.checkQRValidity()
-
-		if !sceneView.largeQRimageView.isHidden {
-			viewModel.setBrightness()
-		}
+		checkValidity()
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
 
 		super.viewWillDisappear(animated)
 		viewModel.setBrightness(reset: true)
+	}
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
 	}
 
 	// MARK: Helper methods
