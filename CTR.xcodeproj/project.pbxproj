@@ -251,6 +251,7 @@
 		6DD23F9225E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23F9125E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift */; };
 		6DD23F9725E3D42F00CE4AEB /* ProofManagingSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */; };
 		6DD23F9C25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */; };
+		6DD23FA125E3D64600CE4AEB /* ListResultsViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD23FA025E3D64600CE4AEB /* ListResultsViewControllerTests.swift */; };
 		6DD43DA225CD1E160041D658 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA125CD1E160041D658 /* PrivacyView.swift */; };
 		6DD43DA625CD23F70041D658 /* GeneralLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */; };
 		6DD43DAB25CD25F70041D658 /* PrivacyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */; };
@@ -603,6 +604,7 @@
 		6DD23F9125E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderCoordinatorDelegateSpy.swift; sourceTree = "<group>"; };
 		6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProofManagingSpy.swift; sourceTree = "<group>"; };
 		6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationGeneralSpy.swift; sourceTree = "<group>"; };
+		6DD23FA025E3D64600CE4AEB /* ListResultsViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListResultsViewControllerTests.swift; sourceTree = "<group>"; };
 		6DD43DA125CD1E160041D658 /* PrivacyView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralLocalization.swift; sourceTree = "<group>"; };
 		6DD43DAA25CD25F70041D658 /* PrivacyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyViewModel.swift; sourceTree = "<group>"; };
@@ -1213,6 +1215,7 @@
 			isa = PBXGroup;
 			children = (
 				6DD23F8925E3BE8A00CE4AEB /* ListResultsViewModelTests.swift */,
+				6DD23FA025E3D64600CE4AEB /* ListResultsViewControllerTests.swift */,
 			);
 			path = ListRestults;
 			sourceTree = "<group>";
@@ -2099,6 +2102,7 @@
 				6D20238E25CAABB500CFCD14 /* OnboardingManagerTests.swift in Sources */,
 				6DD1156B25D01BE800DF6AF4 /* ConsentViewControllerTests.swift in Sources */,
 				6DC6CC3725C2A06B00060237 /* AppUpdateViewModelTests.swift in Sources */,
+				6DD23FA125E3D64600CE4AEB /* ListResultsViewControllerTests.swift in Sources */,
 				6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */,
 				6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */,
 				6DD23F8A25E3BE8A00CE4AEB /* ListResultsViewModelTests.swift in Sources */,

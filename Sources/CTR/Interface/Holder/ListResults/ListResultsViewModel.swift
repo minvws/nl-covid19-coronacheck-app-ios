@@ -31,10 +31,10 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var buttonTitle: String
 	@Bindable private(set) var recentHeader: String
 	@Bindable private(set) var tooltip: String
-	@Bindable private(set) var showAlert: Bool = false
-	@Bindable private(set) var showError: String?
+	@Bindable var showAlert: Bool = false
+	@Bindable var showError: String?
 	@Bindable var listItem: ListResultItem?
-	@Bindable private(set) var showProgress: Bool = false
+	@Bindable var showProgress: Bool = false
 
 	/// Initializer
 	/// - Parameters:
@@ -99,7 +99,7 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Show the screen for pending results
-	private func reportPendingResult() {
+	internal func reportPendingResult() {
 
 		title = .holderTestResultsPendingTitle
 		message = .holderTestResultsPendingText
@@ -108,7 +108,7 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Show the scene for no negative restults
-	private func reportNoTestResult() {
+	internal func reportNoTestResult() {
 
 		self.title = .holderTestResultsNoResultsTitle
 		self.message = .holderTestResultsNoResultsText
@@ -117,7 +117,7 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Show the scene when the test is already handled
-	private func reportAlreadyDone() {
+	internal func reportAlreadyDone() {
 
 		self.title = .holderTestResultsAlreadyHandledTitle
 		self.message = .holderTestResultsAlreadyHandledText
@@ -127,7 +127,7 @@ class ListResultsViewModel: Logging {
 
 	/// Show the screen for negative restults
 	/// - Parameter result: the negative result
-	private func reportTestResult(_ result: TestResult) {
+	internal func reportTestResult(_ result: TestResult) {
 
 		self.title = .holderTestResultsResultsTitle
 		self.message = .holderTestResultsResultsText
