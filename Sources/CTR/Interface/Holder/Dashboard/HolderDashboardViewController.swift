@@ -129,7 +129,7 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.preventScreenCapture()
 
 		// Check the brightness
-		if !sceneView.qrView.isHidden {
+		if !sceneView.largeQRimageView.isHidden {
 			viewModel.setBrightness()
 		}
 	}
@@ -211,6 +211,7 @@ class HolderDashboardViewController: BaseViewController {
 	/// User tapped on the link
 	@objc func largeQRTapped() {
 
+		viewModel.setBrightness(reset: true)
 		self.navigationController?.isNavigationBarHidden = false
 		sceneView.largeOverlay.isHidden = true
 		sceneView.largeQRimageView.isHidden = true
