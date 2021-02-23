@@ -70,7 +70,7 @@ platform :ios do
 
     increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
 
-    #deploy_holder_test
+    deploy_holder_test
 
     deploy_holder_acc
 
@@ -92,7 +92,7 @@ platform :ios do
 
     increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
 
-    #deploy_verifier_test
+    deploy_verifier_test
 
     deploy_verifier_acc
 
