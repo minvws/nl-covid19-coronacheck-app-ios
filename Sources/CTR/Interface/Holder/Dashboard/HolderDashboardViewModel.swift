@@ -83,8 +83,8 @@ class HolderDashboardViewModel: Logging {
 	/// Show an expired QR Message
 	@Bindable private(set) var showExpiredQR: Bool
 
-	/// Show a valid QR Message
-	@Bindable private(set) var hideQRForCapture: Bool
+	/// Hide for screen capture
+	@Bindable var hideQRForCapture: Bool
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -149,38 +149,38 @@ class HolderDashboardViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		if let credentials = cryptoManager?.readCredentials() {
-
-			let now = Date().timeIntervalSince1970
-			if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
-				let validity = TimeInterval(configuration.getTestResultTTL())
-				let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
-				if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
-					// valid
-					logDebug("Proof is valid until \(printDate)")
-
-					let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
-					if (sampleTimeStamp + validity - warningTTL) < now {
-						logDebug("Proof is expiring soon")
-					}
-//						showQRMessageExpiring(printDate)
-//					} else {
-						showQRMessageIsValid(printDate)
-//					}
-					startValidityTimer()
-				} else {
-
-					// expired
-					logDebug("Proof is no longer valid \(printDate)")
-					showQRMessageIsExpired()
-					validityTimer?.invalidate()
-					validityTimer = nil
-				}
-			}
-		} else {
+		guard let credentials = cryptoManager?.readCredentials() else {
 			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
+			return
+		}
+
+		let now = Date().timeIntervalSince1970
+		let validity = TimeInterval(configuration.getTestResultTTL())
+		if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+			let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
+			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
+				// valid
+				logDebug("Proof is valid until \(printDate)")
+
+				let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
+				if (sampleTimeStamp + validity - warningTTL) < now {
+					logDebug("Proof is expiring soon")
+				}
+				//						showQRMessageExpiring(printDate)
+				//					} else {
+				showQRMessageIsValid(printDate)
+				//					}
+				startValidityTimer()
+			} else {
+
+				// expired
+				logDebug("Proof is no longer valid \(printDate)")
+				showQRMessageIsExpired()
+				validityTimer?.invalidate()
+				validityTimer = nil
+			}
 		}
 	}
 
@@ -244,16 +244,6 @@ class HolderDashboardViewModel: Logging {
 		)
 	}
 
-	/// Formatter to parse
-	private lazy var parseDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-		return dateFormatter
-	}()
-
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
 		
@@ -262,15 +252,13 @@ class HolderDashboardViewModel: Logging {
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
 		return dateFormatter
 	}()
-
-	func qrTapped() {
-
-		logDebug("QR tapped")
-	}
 }
+
+// MARK: - capturedDidChangeNotification
 
 extension HolderDashboardViewModel {
 
+	/// Add an observer for the capturedDidChangeNotification
 	func addObserver() {
 		NotificationCenter.default.addObserver(
 			self,
@@ -278,7 +266,6 @@ extension HolderDashboardViewModel {
 			name: UIScreen.capturedDidChangeNotification,
 			object: nil
 		)
-
 	}
 
 	/// Prevent screen capture
@@ -289,7 +276,6 @@ extension HolderDashboardViewModel {
 			self.logWarning("Screen capture in progress")
 		} else {
 			hideQRForCapture = false
-			self.logWarning("Screen capture ended")
 		}
 	}
 }

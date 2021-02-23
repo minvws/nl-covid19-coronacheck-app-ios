@@ -24,7 +24,7 @@ class QRImageView: BaseView {
 	}
 
 	/// The image view for the QR image
-	private let imageView: UIImageView = {
+	internal let imageView: UIImageView = {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false

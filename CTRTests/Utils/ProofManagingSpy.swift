@@ -43,9 +43,10 @@ class ProofManagingSpy: ProofManaging {
 
 	func fetchTestResult(
 		_ token: RequestToken,
-		code: String?, provider: TestProvider,
+		code: String?,
+		provider: TestProvider,
 		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
-
+		
 		fetchTestResultCalled = true
 	}
 

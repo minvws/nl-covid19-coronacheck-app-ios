@@ -119,9 +119,16 @@ class HolderDashboardViewController: BaseViewController {
 		)
 	}
 
+	/// Check the validity of the scene
 	@objc func checkValidity() {
 
+		// Check the Validity of the QR
 		viewModel.checkQRValidity()
+
+		// Check if we are being recorded
+		viewModel.preventScreenCapture()
+
+		// Check the brightness
 		if !sceneView.qrView.isHidden {
 			viewModel.setBrightness()
 		}
