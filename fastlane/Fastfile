@@ -80,7 +80,7 @@ platform :ios do
     build_number = determine_build_number()
     increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
 
-    deploy_verifer_test
+    deploy_verifier_test
 
     inform_slack(
       default_payloads: [:git_author],
@@ -112,7 +112,7 @@ platform :ios do
     build_number = determine_build_number()
     increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
 
-    deploy_verifer_acc
+    deploy_verifier_acc
 
     inform_slack(
       default_payloads: [:git_author],
@@ -144,7 +144,7 @@ platform :ios do
     build_number = determine_build_number()
     increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
 
-    deploy_verifer_prod
+    deploy_verifier_prod
 
     inform_slack(
       default_payloads: [:git_author],
