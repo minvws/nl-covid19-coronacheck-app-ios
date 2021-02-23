@@ -15,7 +15,6 @@ struct NetworkConfiguration {
         let port: Int?
         let path: [String]
         let sslSignature: [Certificate.Signature]? // SSL pinning certificate, nil = no pinning
-        let tokenParams: [String: String]
     }
 
     let name: String
@@ -36,16 +35,14 @@ struct NetworkConfiguration {
             host: "api-ct.bananenhalen.nl",
             port: nil,
             path: [""],
-            sslSignature: nil,
-            tokenParams: [:]
+            sslSignature: nil
         ),
 		cdn: .init(
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
 			path: [""],
-			sslSignature: nil,
-			tokenParams: [:]
+			sslSignature: nil
 		)
     )
 
@@ -56,16 +53,14 @@ struct NetworkConfiguration {
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
 			path: [""],
-			sslSignature: nil,
-			tokenParams: [:]
+			sslSignature: nil
 		),
 		cdn: .init(
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
 			path: [""],
-			sslSignature: nil,
-			tokenParams: [:]
+			sslSignature: nil
 		)
     )
 
@@ -76,16 +71,14 @@ struct NetworkConfiguration {
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
 			path: ["v1"],
-			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
-			tokenParams: [:]
+			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
 			path: ["v1"],
-			sslSignature: nil, // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
-			tokenParams: [:]
+			sslSignature: nil // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
 		)
 	)
 
@@ -96,16 +89,14 @@ struct NetworkConfiguration {
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.bananenhalen.nl" : "verifier-api.acc.bananenhalen.nl",
 			port: nil,
 			path: ["v1"],
-			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature],
-			tokenParams: [:]
+			sslSignature: [Certificate.SSL.apiSignature, Certificate.SSL.apiV2Signature]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.bananenhalen.nl" : "verifier-api.acc.bananenhalen.nl",
 			port: nil,
 			path: ["v1"],
-			sslSignature: nil, // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
-			tokenParams: [:]
+			sslSignature: nil // [Certificate.SSL.cdnSignature, Certificate.SSL.cdnV2V3Signature],
 		)
 	)
 

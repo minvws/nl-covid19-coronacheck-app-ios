@@ -34,6 +34,36 @@ struct Certificate {
         
         return data.sha256.base64EncodedString()
     }
+
+	var commonName: String? {
+
+		var name: CFString?
+		let status = SecCertificateCopyCommonName(secCertificate, &name)
+
+		if status == OSStatus.zero, let name = name {
+			return name as String
+		}
+		return nil
+	}
+
+	var issuer: Data? {
+
+		if let data = SecCertificateCopyNormalizedIssuerSequence(secCertificate) {
+			return data as Data
+		}
+		return nil
+	}
+
+	var serialNumber: Data? {
+
+		var error: Unmanaged<CFError>?
+		let data = SecCertificateCopySerialNumberData(secCertificate, &error)
+
+		if let data = data {
+			return data as Data
+		}
+		return nil
+	}
 }
 
 extension Certificate {
