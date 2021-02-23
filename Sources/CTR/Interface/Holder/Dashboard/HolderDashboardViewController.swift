@@ -119,10 +119,17 @@ class HolderDashboardViewController: BaseViewController {
 		)
 	}
 
+	/// Check the validity of the scene
 	@objc func checkValidity() {
 
+		// Check the Validity of the QR
 		viewModel.checkQRValidity()
-		if !sceneView.qrView.isHidden {
+
+		// Check if we are being recorded
+		viewModel.preventScreenCapture()
+
+		// Check the brightness
+		if !sceneView.largeQRimageView.isHidden {
 			viewModel.setBrightness()
 		}
 	}
@@ -204,6 +211,7 @@ class HolderDashboardViewController: BaseViewController {
 	/// User tapped on the link
 	@objc func largeQRTapped() {
 
+		viewModel.setBrightness(reset: true)
 		self.navigationController?.isNavigationBarHidden = false
 		sceneView.largeOverlay.isHidden = true
 		sceneView.largeQRimageView.isHidden = true

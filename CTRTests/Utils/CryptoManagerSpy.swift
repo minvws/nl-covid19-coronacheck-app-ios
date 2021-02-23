@@ -17,6 +17,12 @@ class CryptoManagerSpy: CryptoManaging {
 	var stoken: String?
 	var proofs: Data?
 
+	var readCredentialsCalled = false
+	var crypoAttributes: CrypoAttributes?
+
+	var generateQRmessageCalled = false
+	var qrMessage: Data?
+
 	required init() {
 		// Nothing for this spy class
 	}
@@ -56,7 +62,9 @@ class CryptoManagerSpy: CryptoManaging {
 	}
 
 	func generateQRmessage() -> Data? {
-		return nil
+
+		generateQRmessageCalled = true
+		return qrMessage
 	}
 
 	func getStoken() -> String? {
@@ -68,6 +76,9 @@ class CryptoManagerSpy: CryptoManaging {
 	}
 
 	func readCredentials() -> CrypoAttributes? {
-		return nil
+
+		readCredentialsCalled = true
+
+		return crypoAttributes
 	}
 }
