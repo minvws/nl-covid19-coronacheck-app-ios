@@ -223,4 +223,47 @@ class ListResultsViewControllerTests: XCTestCase {
 		}
 		XCTAssertTrue(strongSut.sceneView.primaryButton.isEnabled, "Button should be enabled")
 	}
+
+	func testNextButtonNoItems() {
+
+		// Given
+		loadView()
+
+		// When
+		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
+	}
+
+	func testNextButtonWithItems() {
+
+		// Given
+		loadView()
+		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now")
+
+		// When
+		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+
+		// Then
+		XCTAssertFalse(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should not be called")
+		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 1 should be executed")
+	}
+
+	func testDisclaimer() {
+
+		// Given
+		loadView()
+		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now")
+
+		// When
+		sut?.sceneView.resultView.disclaimerButton.sendActions(for: .touchUpInside)
+
+		// Then
+		guard let tooltip = sut?.tooltip else {
+			XCTFail("Can't unwrap tooltip")
+			return
+		}
+		XCTAssertFalse(tooltip.isHidden, "Tooltip should be visible")
+	}
 }

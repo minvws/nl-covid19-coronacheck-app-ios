@@ -79,6 +79,7 @@ class ListResultsViewController: BaseViewController {
 		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
+			self?.tooltip?.dismiss()
 			self?.viewModel.buttonTapped()
 		}
 
@@ -112,6 +113,7 @@ class ListResultsViewController: BaseViewController {
 	/// User tapped on the button
 	@objc private func closeButtonTapped() {
 
+		tooltip?.dismiss()
 		viewModel.dismiss()
 	}
 
