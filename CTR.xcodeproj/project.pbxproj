@@ -61,6 +61,8 @@
 		6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */; };
 		6D27550A25D1201800164F2E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27550925D1201800164F2E /* CardView.swift */; };
 		6D27551225D1259D00164F2E /* DashboardLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27551125D1259D00164F2E /* DashboardLocalization.swift */; };
+		6D32BD1325E687DF00C4A4D2 /* EnlargedQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D037A2E25E66D59006C2BFA /* EnlargedQRView.swift */; };
+		6D32BD1725E687E300C4A4D2 /* EnlargedQRViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D037A2925E66D4C006C2BFA /* EnlargedQRViewModel.swift */; };
 		6D33015625CFE68500A98C1C /* OpenSSL.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D33015525CFE68500A98C1C /* OpenSSL.m */; };
 		6D33015A25CFE6BA00A98C1C /* nl-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 6D33015925CFE6BA00A98C1C /* nl-root.pem */; };
 		6D33015E25CFE70200A98C1C /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D33015D25CFE70200A98C1C /* openssl.framework */; };
@@ -1937,6 +1939,7 @@
 				6DD7D85325D26D3A00B97B7F /* Label.swift in Sources */,
 				6D67D92225D7F8CB00827277 /* TokenScanLocalization.swift in Sources */,
 				6DFB8AFE25DD399700E7A1D8 /* AboutLocalization.swift in Sources */,
+				6D32BD1325E687DF00C4A4D2 /* EnlargedQRView.swift in Sources */,
 				6DD7D85425D26D3A00B97B7F /* VerifierResultViewController.swift in Sources */,
 				6D67D8FF25D7D5DE00827277 /* ListResultsViewModel.swift in Sources */,
 				6D67D8F325D7D56200827277 /* ListResultView.swift in Sources */,
@@ -2008,6 +2011,7 @@
 				6DD19D7B25D5516F001FDDDC /* TokenEntryLocalization.swift in Sources */,
 				6D1E33AC25E633E80097E574 /* Animation.swift in Sources */,
 				6D58DCB225D45E7B00A39155 /* TestResultsLocalization.swift in Sources */,
+				6D32BD1725E687E300C4A4D2 /* EnlargedQRViewModel.swift in Sources */,
 				6DD7D87E25D26D3A00B97B7F /* Theme.swift in Sources */,
 				6DD7D87F25D26D3A00B97B7F /* UIEdgeInsets+Convenience.swift in Sources */,
 				6DD7D88025D26D3A00B97B7F /* Services.swift in Sources */,
