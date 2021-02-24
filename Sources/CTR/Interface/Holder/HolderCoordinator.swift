@@ -24,6 +24,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
+	/// Navigate to enlarged QR
+	func navigateToEnlargedQR()
+
 	/// Navigate to appointment
 	func navigateToAppointment()
 
@@ -166,6 +169,25 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
+	}
+
+	/// Navigate to enlarged QR
+	func navigateToEnlargedQR() {
+
+		let destination = EnlargedQRViewController(
+			viewModel: EnlargedQRViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager,
+				configuration: generalConfiguration
+			)
+		)
+		let navController = UINavigationController(rootViewController: destination)
+		navController.view.backgroundColor = .white
+		sidePanel?.selectedViewController?.present(
+			navController,
+			animated: true,
+			completion: nil
+		)
 	}
 
 	/// Navigate to appointment

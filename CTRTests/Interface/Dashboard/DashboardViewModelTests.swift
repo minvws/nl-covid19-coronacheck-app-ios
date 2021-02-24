@@ -165,4 +165,16 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
 	}
+
+	/// Test the navigat to enlarged QR scene
+	func testNavigateToEnlargedQR() {
+
+		// Given
+
+		// When
+		sut?.navigateToEnlargedQR()
+
+		// Then
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should be called")
+	}
 }
