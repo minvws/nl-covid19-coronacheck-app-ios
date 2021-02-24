@@ -205,6 +205,7 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.message" = "Deze bezoeker beschikt over een geldig negatief testbewijs.";
+"verifier.result.demo.message" = "Demo QR-code gescand";
 "verifier.result.denied.message" = "Deze bezoeker beschikt niet over een geldig negatief testbewijs.";
 "verifier.result.denied.link" = "Lees de mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";

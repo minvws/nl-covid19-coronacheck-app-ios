@@ -45,9 +45,12 @@ class VerifierResultViewController: BaseViewController {
 
 		viewModel.$allowAccess.binding = {
 
-			if $0 {
+			if $0 == .verified {
 				self.sceneView.imageView.image = .access
 				self.sceneView.backgroundColor = Theme.colors.access
+			} else if $0 == .demo {
+				self.sceneView.imageView.image = .access
+				self.sceneView.backgroundColor = Theme.colors.demo
 			} else {
 				self.sceneView.imageView.image = .denied
 				self.sceneView.backgroundColor = Theme.colors.denied
