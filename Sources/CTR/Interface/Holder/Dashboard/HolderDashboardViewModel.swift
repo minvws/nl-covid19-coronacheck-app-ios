@@ -184,18 +184,6 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	/// Adjust the brightness
-	/// - Parameter reset: True if we reset to previous value
-	func setBrightness(reset: Bool = false) {
-
-		let currentBrightness = UIScreen.main.brightness
-		if currentBrightness < 1 {
-			previousBrightness = currentBrightness
-		}
-
-		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
-	}
-
 	/// Show the QR message is valid
 	/// - Parameter printDate: valid until time
 	func showQRMessageIsValid(_ printDate: String) {
@@ -208,18 +196,18 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	/// Show the QR message is valid
-	/// - Parameter printDate: valid until time
-	func showQRMessageExpiring(_ printDate: String) {
-
-		if let message = self.cryptoManager?.generateQRmessage() {
-			qrMessage = message
-			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
-			// Todo, calculate the time remaining
-			showValidQR = true
-			showExpiredQR = false
-		}
-	}
+//	/// Show the QR message is valid
+//	/// - Parameter printDate: valid until time
+//	func showQRMessageExpiring(_ printDate: String) {
+//
+//		if let message = self.cryptoManager?.generateQRmessage() {
+//			qrMessage = message
+//			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
+//			// Todo, calculate the time remaining
+//			showValidQR = true
+//			showExpiredQR = false
+//		}
+//	}
 
 	/// Show the QR Message is expired
 	func showQRMessageIsExpired() {
@@ -242,6 +230,11 @@ class HolderDashboardViewModel: Logging {
 			userInfo: nil,
 			repeats: true
 		)
+	}
+
+	func navigateToEnlargedQR() {
+
+		coordinator?.navigateToEnlargedQR()
 	}
 
 	/// Formatter to print

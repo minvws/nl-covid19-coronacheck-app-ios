@@ -11,6 +11,7 @@ target 'Holder' do
   pod 'Sodium', '0.9.1'
   pod 'MBProgressHUD', '1.2.0'
   pod 'EasyTipView', '2.1'
+  pod 'lottie-ios', '3.2.1'
 
   target 'CTRTests' do
     inherit! :search_paths
@@ -32,5 +33,6 @@ target 'Verifier' do
   pod 'Sodium', '0.9.1'
   pod 'MBProgressHUD', '1.2.0'
   pod 'EasyTipView', '2.1'
+  pod 'lottie-ios', '3.2.1'
 
 end
