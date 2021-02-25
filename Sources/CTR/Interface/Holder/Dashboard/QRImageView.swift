@@ -21,6 +21,7 @@ class QRImageView: BaseView {
 		static let margin: CGFloat = 24.0
 		static let labelSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 20.0
 		static let imageSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 40.0
+		static let securityOffset: CGFloat = 30.0
 	}
 
 	/// The image view for the QR image
@@ -43,6 +44,22 @@ class QRImageView: BaseView {
 		return Label(subheadMedium: nil).multiline()
 	}()
 
+	/// The security features
+	let securityView: SecurityFeaturesView = {
+
+		let view = SecurityFeaturesView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.clipsToBounds = true
+		return view
+	}()
+
+	let containerView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
@@ -50,10 +67,11 @@ class QRImageView: BaseView {
 
 		// Fixed white background, no inverted QR in dark mode
 		backgroundColor = .white
+		containerView.backgroundColor = .white
 
 		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
-		layer.cornerRadius = ViewTraits.cornerRadius
+		containerView.layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
 	}
 
@@ -61,22 +79,25 @@ class QRImageView: BaseView {
 	func createShadow() {
 
 		// Shadow
-		layer.shadowColor = Theme.colors.shadow.cgColor
-		layer.shadowOpacity = ViewTraits.shadowOpacity
-		layer.shadowOffset = .zero
-		layer.shadowRadius = ViewTraits.shadowRadius
+		containerView.layer.shadowColor = Theme.colors.shadow.cgColor
+		containerView.layer.shadowOpacity = ViewTraits.shadowOpacity
+		containerView.layer.shadowOffset = .zero
+		containerView.layer.shadowRadius = ViewTraits.shadowRadius
 		// Cache Shadow
-		layer.shouldRasterize = true
-		layer.rasterizationScale = UIScreen.main.scale
+		containerView.layer.shouldRasterize = true
+		containerView.layer.rasterizationScale = UIScreen.main.scale
 	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(titleLabel)
-		addSubview(imageView)
-		addSubview(messageLabel)
+		containerView.addSubview(titleLabel)
+		containerView.addSubview(imageView)
+		containerView.addSubview(messageLabel)
+
+		addSubview(securityView)
+		addSubview(containerView)
 	}
 	/// Setup the constraints
 	override func setupViewConstraints() {
@@ -85,17 +106,34 @@ class QRImageView: BaseView {
 
 		NSLayoutConstraint.activate([
 
+			// Container
+			containerView.topAnchor.constraint(equalTo: topAnchor),
+			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			containerView.bottomAnchor.constraint(
+				equalTo: securityView.topAnchor,
+				constant: ViewTraits.securityOffset
+			),
+
+			// Security
+			securityView.bottomAnchor.constraint(
+				equalTo: bottomAnchor,
+				constant: ViewTraits.securityOffset
+			),
+			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
+				equalTo: containerView.topAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: containerView.leadingAnchor,
 				constant: ViewTraits.labelSidemargin
 			),
 			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: containerView.trailingAnchor,
 				constant: -ViewTraits.labelSidemargin
 			),
 			titleLabel.bottomAnchor.constraint(
@@ -105,11 +143,11 @@ class QRImageView: BaseView {
 
 			// QR View
 			imageView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: containerView.leadingAnchor,
 				constant: ViewTraits.imageSidemargin
 			),
 			imageView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: containerView.trailingAnchor,
 				constant: -ViewTraits.imageSidemargin
 			),
 			imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor),
@@ -120,15 +158,15 @@ class QRImageView: BaseView {
 
 			// Message
 			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: containerView.leadingAnchor,
 				constant: ViewTraits.labelSidemargin
 			),
 			messageLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
+				equalTo: containerView.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
 			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: containerView.trailingAnchor,
 				constant: -ViewTraits.labelSidemargin
 			)
 		])
@@ -167,5 +205,11 @@ class QRImageView: BaseView {
 		didSet {
 			imageView.isHidden = hideQRImage
 		}
+	}
+
+	/// Play the animation
+	func play() {
+
+		securityView.play()
 	}
 }

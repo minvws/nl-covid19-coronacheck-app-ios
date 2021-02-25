@@ -178,6 +178,8 @@ final class Colors {
 
 	var access: UIColor { return color(for: "AccessColor") }
 
+	var demo: UIColor { return color(for: "Demo") }
+
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

@@ -47,23 +47,23 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: commitment message
 	func generateCommitmentMessage() -> String?
 
-	/// Create the credential
-	func createCredential()
-
-	/// Generate the QR message
-	/// - Returns: the QR message
-	func generateQRmessage() -> Data?
-
 	/// Get the stoken
 	/// - Returns: the stoken
 	func getStoken() -> String?
 
-	/// Reset the vault
-	func reset()
+	/// Create the credential
+	func createCredential()
 
-	/// Read the crypto credentials
-	/// - Returns: the credentials
-	func readCredentials() -> CrypoAttributes?
+	/// Read the crypto credential
+	/// - Returns: the  the crypto attributes
+	func readCredential() -> CrypoAttributes?
+
+	/// Remove the credial
+	func removeCredential()
+
+	/// Generate the QR message
+	/// - Returns: the QR message
+	func generateQRmessage() -> Data?
 
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
@@ -82,11 +82,11 @@ class CryptoManager: CryptoManaging, Logging {
 		var nonce: String?
 		var stoken: String?
 		var ism: Data?
-		var credentials: Data?
+		var credential: Data?
 
 		/// Empty crypto data
 		static var empty: CryptoData {
-			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, ism: nil, credentials: nil)
+			return CryptoData(holderSecretKey: nil, nonce: nil, stoken: nil, ism: nil, credential: nil)
 		}
 	}
 
@@ -120,10 +120,35 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 	}
 
-	/// Reset the vault
-	func reset() {
+	// MARK: - Getters and Setters
 
-		cryptoData = .empty
+	/// Set the nonce
+	/// - Parameter nonce: the nonce
+	func setNonce(_ nonce: String) {
+
+		cryptoData.nonce = nonce
+	}
+
+	/// set the stoken
+	/// - Parameter stoken: the stoken
+	func setStoken(_ stoken: String) {
+
+		cryptoData.stoken = stoken
+	}
+
+	/// Set the signature message
+	/// - Parameter proof: the signature message (signed proof)
+	func setTestProof(_ proof: Data?) {
+
+		cryptoData.ism = proof
+		cryptoData.credential = nil
+	}
+
+	/// Get the stoken
+	/// - Returns: the stoken
+	func getStoken() -> String? {
+
+		return cryptoData.stoken
 	}
 
 	/// Read the public key
@@ -154,44 +179,13 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
-	/// Read the crypto credentials
-	/// - Returns: the credentials
-	func readCredentials() -> CrypoAttributes? {
-
-		if let cryptoDataValue = cryptoData.credentials,
-		   let response = ClmobileReadCredential(cryptoDataValue),
-		   let value = response.value {
-			do {
-				let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
-				return object
-			} catch {
-				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
-				return nil
-			}
-		}
-		return nil
-	}
-
-	/// Create the credential
-	func createCredential() {
-
-		guard let holderSecretKey = cryptoData.holderSecretKey,
-			  let ism = cryptoData.ism else {
-			return
-		}
-		let result = ClmobileCreateCredential(holderSecretKey, ism)
-		if let credential = result?.value {
-			cryptoData.credentials = credential
-		} else {
-			logError("Can't create credential: \(String(describing: result?.error))")
-		}
-	}
+	// MARK: - QR
 
 	/// Generate the QR message
 	/// - Returns: the QR message
 	func generateQRmessage() -> Data? {
 
-		if let credential = cryptoData.credentials, let holderSecretKey = cryptoData.holderSecretKey {
+		if let credential = cryptoData.credential, let holderSecretKey = cryptoData.holderSecretKey {
 			return createQRMessage(credential, holderSecretKey: holderSecretKey)
 		}
 
@@ -212,35 +206,6 @@ class CryptoManager: CryptoManaging, Logging {
 			return payload
 		}
 		return nil
-	}
-
-	/// Set the nonce
-	/// - Parameter nonce: the nonce
-	func setNonce(_ nonce: String) {
-
-		cryptoData.nonce = nonce
-	}
-
-	/// set the stoken
-	/// - Parameter stoken: the stoken
-	func setStoken(_ stoken: String) {
-
-		cryptoData.stoken = stoken
-	}
-
-	/// Set the signature message
-	/// - Parameter proof: the signature message (signed proof)
-	func setTestProof(_ proof: Data?) {
-
-		cryptoData.ism = proof
-		cryptoData.credentials = nil
-	}
-
-	/// Get the stoken
-	/// - Returns: the stoken
-	func getStoken() -> String? {
-
-		return cryptoData.stoken
 	}
 
 	/// Verify the QR message
@@ -265,5 +230,46 @@ class CryptoManager: CryptoManaging, Logging {
 			}
 		}
 		return nil
+	}
+
+	// MARK: - Credential
+
+	/// Read the crypto credential
+	/// - Returns: the crypto attributes
+	func readCredential() -> CrypoAttributes? {
+
+		if let cryptoDataValue = cryptoData.credential,
+		   let response = ClmobileReadCredential(cryptoDataValue),
+		   let value = response.value {
+			do {
+				let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
+				return object
+			} catch {
+				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+				return nil
+			}
+		}
+		return nil
+	}
+
+	/// Create the credential
+	func createCredential() {
+
+		guard let holderSecretKey = cryptoData.holderSecretKey,
+			  let ism = cryptoData.ism else {
+			return
+		}
+		let result = ClmobileCreateCredential(holderSecretKey, ism)
+		if let credential = result?.value {
+			cryptoData.credential = credential
+		} else {
+			logError("Can't create credential: \(String(describing: result?.error))")
+		}
+	}
+
+	/// Remove the credial
+	func removeCredential() {
+
+		cryptoData.credential = nil
 	}
 }

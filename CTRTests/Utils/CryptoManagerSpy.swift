@@ -17,8 +17,9 @@ class CryptoManagerSpy: CryptoManaging {
 	var stoken: String?
 	var proofs: Data?
 
-	var readCredentialsCalled = false
+	var readCredentialCalled = false
 	var crypoAttributes: CrypoAttributes?
+	var removeCredentialCalled = false
 
 	var generateQRmessageCalled = false
 	var qrMessage: Data?
@@ -49,14 +50,6 @@ class CryptoManagerSpy: CryptoManaging {
 		self.proofs = signatureMessage
 	}
 
-	func reset() {
-		// Nothing yet
-	}
-
-	func createCredential() {
-		// Nothing yet
-	}
-
 	func generateCommitmentMessage() -> String? {
 		return nil
 	}
@@ -75,9 +68,19 @@ class CryptoManagerSpy: CryptoManaging {
 		return nil
 	}
 
-	func readCredentials() -> CrypoAttributes? {
+	func removeCredential() {
 
-		readCredentialsCalled = true
+		crypoAttributes = nil
+		removeCredentialCalled = true
+	}
+
+	func createCredential() {
+		// Nothing yet
+	}
+
+	func readCredential() -> CrypoAttributes? {
+
+		readCredentialCalled = true
 
 		return crypoAttributes
 	}

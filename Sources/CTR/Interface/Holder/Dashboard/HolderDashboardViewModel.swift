@@ -149,7 +149,7 @@ class HolderDashboardViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credentials = cryptoManager?.readCredentials() else {
+		guard let credential = cryptoManager?.readCredential() else {
 			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
@@ -158,7 +158,7 @@ class HolderDashboardViewModel: Logging {
 
 		let now = Date().timeIntervalSince1970
 		let validity = TimeInterval(configuration.getTestResultTTL())
-		if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 			let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
 			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 				// valid
@@ -184,18 +184,6 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	/// Adjust the brightness
-	/// - Parameter reset: True if we reset to previous value
-	func setBrightness(reset: Bool = false) {
-
-		let currentBrightness = UIScreen.main.brightness
-		if currentBrightness < 1 {
-			previousBrightness = currentBrightness
-		}
-
-		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
-	}
-
 	/// Show the QR message is valid
 	/// - Parameter printDate: valid until time
 	func showQRMessageIsValid(_ printDate: String) {
@@ -208,18 +196,18 @@ class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	/// Show the QR message is valid
-	/// - Parameter printDate: valid until time
-	func showQRMessageExpiring(_ printDate: String) {
-
-		if let message = self.cryptoManager?.generateQRmessage() {
-			qrMessage = message
-			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
-			// Todo, calculate the time remaining
-			showValidQR = true
-			showExpiredQR = false
-		}
-	}
+//	/// Show the QR message is valid
+//	/// - Parameter printDate: valid until time
+//	func showQRMessageExpiring(_ printDate: String) {
+//
+//		if let message = self.cryptoManager?.generateQRmessage() {
+//			qrMessage = message
+//			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
+//			// Todo, calculate the time remaining
+//			showValidQR = true
+//			showExpiredQR = false
+//		}
+//	}
 
 	/// Show the QR Message is expired
 	func showQRMessageIsExpired() {
@@ -242,6 +230,19 @@ class HolderDashboardViewModel: Logging {
 			userInfo: nil,
 			repeats: true
 		)
+	}
+
+	/// User wants to see the large QR
+	func navigateToEnlargedQR() {
+
+		coordinator?.navigateToEnlargedQR()
+	}
+
+	/// User wants to close the expired QR
+	func closeExpiredRQ() {
+
+		cryptoManager?.removeCredential()
+		checkQRValidity()
 	}
 
 	/// Formatter to print

@@ -18,4 +18,8 @@ extension UIImage {
 	static var radio: UIImage? { return UIImage(named: "Radio") }
 
 	static var expiredQR: UIImage? { return UIImage(named: "ExpiredQR") }
+
+	static var securityBackground: UIImage? { return UIImage(named: "Houses") }
+
+	static var smallCross: UIImage? { return UIImage(named: "SmallCross") }
 }

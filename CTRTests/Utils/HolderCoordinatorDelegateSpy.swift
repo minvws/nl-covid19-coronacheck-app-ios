@@ -8,9 +8,10 @@
 import XCTest
 @testable import CTR
 
-class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate {
+class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
 
 	var navigateToAppointmentCalled = false
+	var navigateToEnlargedQRCalled = false
 	var navigateToChooseProviderCalled = false
 	var navigateToTokenOverviewCalled = false
 	var navigateToTokenScanCalled = false
@@ -19,6 +20,12 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate {
 	var navigateToCreateProofCalled = false
 	var navigateBackToStartCalled = false
 	var presentInformationPageCalled = false
+	var dismissCalled = false
+
+	func navigateToEnlargedQR() {
+
+		navigateToEnlargedQRCalled = true
+	}
 
 	func navigateToAppointment() {
 
@@ -63,5 +70,10 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate {
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
 
 		presentInformationPageCalled = true
+	}
+
+	func dismiss() {
+
+		dismissCalled = true
 	}
 }
