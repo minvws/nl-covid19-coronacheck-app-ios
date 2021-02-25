@@ -73,28 +73,6 @@ class VerifierResultViewController: BaseViewController {
 		viewModel.dismiss()
 	}
 
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
-
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
-		navigationItem.hidesBackButton = true
-		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
-	}
-
 	// MARK: Helper methods
 
 	/// Setup a gesture recognizer for underlined text
