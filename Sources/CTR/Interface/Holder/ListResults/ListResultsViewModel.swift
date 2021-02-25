@@ -56,7 +56,6 @@ class ListResultsViewModel: Logging {
 		self.recentHeader = .holderTestResultsRecent
 		self.tooltip = .holderTestResultsDisclaimer
 		self.listItem = nil
-		checkResult()
 	}
 
 	/// The te test result
@@ -75,6 +74,8 @@ class ListResultsViewModel: Logging {
 				default:
 					break
 			}
+		} else {
+			reportNoTestResult()
 		}
 	}
 

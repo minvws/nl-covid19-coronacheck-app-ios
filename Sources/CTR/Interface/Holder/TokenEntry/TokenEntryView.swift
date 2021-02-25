@@ -44,6 +44,7 @@ class TokenEntryView: ScrollView {
 
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.inputField.autocapitalizationType = .allCharacters
 		return view
 	}()
 
@@ -52,6 +53,7 @@ class TokenEntryView: ScrollView {
 
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.inputField.autocapitalizationType = .allCharacters
 		return view
 	}()
 
