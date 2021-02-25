@@ -23,7 +23,6 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (9.1.0)
   - OHHTTPStubs/Swift (9.1.0):
     - OHHTTPStubs/Default
-  - Sodium (0.9.1)
   - ViewControllerPresentationSpy (5.0.0)
 
 DEPENDENCIES:
@@ -33,7 +32,6 @@ DEPENDENCIES:
   - lottie-ios (= 3.2.1)
   - MBProgressHUD (= 1.2.0)
   - OHHTTPStubs/Swift (= 9.1.0)
-  - Sodium (= 0.9.1)
   - ViewControllerPresentationSpy (~> 5.0)
 
 SPEC REPOS:
@@ -44,7 +42,6 @@ SPEC REPOS:
     - lottie-ios
     - MBProgressHUD
     - OHHTTPStubs
-    - Sodium
     - ViewControllerPresentationSpy
 
 SPEC CHECKSUMS:
@@ -54,9 +51,8 @@ SPEC CHECKSUMS:
   lottie-ios: 106e92eaf11fbed0a76590b4cdb9b5ec26123ff7
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
-  Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
   ViewControllerPresentationSpy: 7cfa8ef8ec9fa197ea58ee6e9ac72bbe5442281b
 
-PODFILE CHECKSUM: b69f574c7b01cb25b1a4ba148f52fabb4e5307f2
+PODFILE CHECKSUM: 109ca4fb6bce9185e80209297866427db121626d
 
 COCOAPODS: 1.10.1

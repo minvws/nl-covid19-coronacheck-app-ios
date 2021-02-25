@@ -44,3 +44,8 @@ extension Data {
     }
     
 }
+
+public extension String {
+	
+	var bytes: [UInt8] { return [UInt8](self.utf8) }
+}
