@@ -47,5 +47,14 @@ class CreateProofViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonTapped()
 		}
+
+		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+	}
+
+	// MARK: - User Interaction
+
+	@objc func closeButtonTapped() {
+
+		viewModel.buttonTapped()
 	}
 }

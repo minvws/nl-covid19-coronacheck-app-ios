@@ -38,14 +38,15 @@ class TokenEntryViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
+	///   - scannedToken: the scanned token
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		proofManager: ProofManaging,
-		requestToken: RequestToken?) {
+		scannedToken: RequestToken?) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
-		self.requestToken = requestToken
+		self.requestToken = scannedToken
 
 		title = .holderTokenEntryTitle
 		message = .holderTokenEntryText
@@ -65,7 +66,7 @@ class TokenEntryViewModel: Logging {
 	func checkToken(_ text: String?) {
 
 		if let input = text, !input.isEmpty {
-			if let requestToken = createRequestToken(input) {
+			if let requestToken = createRequestToken(input.uppercased()) {
 				self.requestToken = requestToken
 				fetchResult(requestToken)
 				errorMessage = nil
@@ -78,7 +79,7 @@ class TokenEntryViewModel: Logging {
 	func checkVerification(_ text: String?) {
 
 		if let input = text, !input.isEmpty {
-			verificationCode = text
+			verificationCode = input.uppercased()
 			errorMessage = nil
 			if let token = requestToken {
 				fetchResult(token)
