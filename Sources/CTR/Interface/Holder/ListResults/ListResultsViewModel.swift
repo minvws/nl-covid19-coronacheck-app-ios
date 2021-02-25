@@ -56,7 +56,6 @@ class ListResultsViewModel: Logging {
 		self.recentHeader = .holderTestResultsRecent
 		self.tooltip = .holderTestResultsDisclaimer
 		self.listItem = nil
-		checkResult()
 	}
 
 	/// The te test result
@@ -75,6 +74,8 @@ class ListResultsViewModel: Logging {
 				default:
 					break
 			}
+		} else {
+			reportNoTestResult()
 		}
 	}
 
@@ -142,11 +143,8 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Formatter to parse
-	private lazy var parseDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+	private lazy var parseDateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
 		return dateFormatter
 	}()
 

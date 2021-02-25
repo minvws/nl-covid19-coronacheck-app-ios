@@ -47,8 +47,8 @@ class CreateProofViewModel: Logging {
 	/// Create the message
 	func createMessage() {
 
-		if let credentials = cryptoManager?.readCredentials(),
-		   let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+		if let credential = cryptoManager?.readCredential(),
+		   let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 			let date = Date(timeIntervalSince1970: sampleTimeStamp)
 
 			let printTime = printTimeFormatter.string(from: date)
@@ -56,7 +56,7 @@ class CreateProofViewModel: Logging {
 			let printOutput = "\(printDate) " + String.holderCreateProofAt + " \(printTime)"
 			message = String(format: .holderCreateProofText, printOutput)
 		} else {
-			self.logError("Can't unwrap credentials")
+			self.logError("Can't unwrap credential")
 		}
 	}
 

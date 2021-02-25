@@ -65,7 +65,7 @@ class MenuViewController: BaseViewController {
 			}
 		}
 
-		addCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .close)
+		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .close)
 	}
 
 	/// User tapped on the close button
@@ -78,7 +78,7 @@ class MenuViewController: BaseViewController {
 	/// - Parameters:
 	///   - action: the action when the users taps the close button
 	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
+	func addMenuCloseButton(
 		action: Selector?,
 		accessibilityLabel: String) {
 

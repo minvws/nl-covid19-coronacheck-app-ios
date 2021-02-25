@@ -103,7 +103,7 @@ class DashboardViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(cryptoManagerSpy.readCredentialsCalled, "Credentials should be checked")
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertNil(strongSut.qrMessage, "There should be no QR code")
 		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
@@ -129,7 +129,7 @@ class DashboardViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(cryptoManagerSpy.readCredentialsCalled, "Credentials should be checked")
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertNil(strongSut.qrMessage, "There should be no QR code")
 		XCTAssertNil(strongSut.validityTimer, "The timer should be nil")
@@ -158,7 +158,7 @@ class DashboardViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(cryptoManagerSpy.readCredentialsCalled, "Credentials should be checked")
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
@@ -176,5 +176,24 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should be called")
+	}
+
+	func testCloseExpiredRQ() {
+
+		// Given
+		let sampleTime = Date().timeIntervalSince1970 - 20
+		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			sampleTime: "\(sampleTime)",
+			testType: "testValidityCredentialExpired"
+		)
+		configSpy.testResultTTL = 10
+		sut?.checkQRValidity()
+
+		// When
+		sut?.closeExpiredRQ()
+
+		// Then
+		XCTAssertTrue(cryptoManagerSpy.removeCredentialCalled, "Credential should be removed")
+		XCTAssertNil(cryptoManagerSpy.crypoAttributes)
 	}
 }

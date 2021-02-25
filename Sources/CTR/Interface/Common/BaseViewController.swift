@@ -100,4 +100,28 @@ class BaseViewController: UIViewController {
 			argument: message
 		)
 	}
+
+	/// Add a close button to the navigation bar.
+	/// - Parameters:
+	///   - action: the action when the users taps the close button
+	///   - accessibilityLabel: the label for Voice Over
+	func addCloseButton(
+		action: Selector?,
+		accessibilityLabel: String) {
+
+		let button = UIBarButtonItem(
+			image: .cross,
+			style: .plain,
+			target: self,
+			action: action
+		)
+		button.accessibilityIdentifier = "CloseButton"
+		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityTraits = UIAccessibilityTraits.button
+		navigationItem.hidesBackButton = true
+		navigationItem.leftBarButtonItem = button
+		navigationController?.navigationItem.leftBarButtonItem = button
+		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
+	}
 }
+

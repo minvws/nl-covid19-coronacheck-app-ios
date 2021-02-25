@@ -248,7 +248,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				requestToken: token
+				scannedToken: token
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)

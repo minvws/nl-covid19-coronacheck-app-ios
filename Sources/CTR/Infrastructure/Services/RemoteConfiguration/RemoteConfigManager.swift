@@ -86,7 +86,6 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 			switch resultwrapper {
 				case let .success(remoteConfiguration):
-					strongSelf.logDebug("Updated remote configuration: \(remoteConfiguration)")
 					// Persist the remote configuration
 					strongSelf.storedConfiguration = remoteConfiguration
 					// Decide what to do

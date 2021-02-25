@@ -149,7 +149,7 @@ class HolderDashboardViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credentials = cryptoManager?.readCredentials() else {
+		guard let credential = cryptoManager?.readCredential() else {
 			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
@@ -158,7 +158,7 @@ class HolderDashboardViewModel: Logging {
 
 		let now = Date().timeIntervalSince1970
 		let validity = TimeInterval(configuration.getTestResultTTL())
-		if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 			let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
 			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 				// valid
@@ -232,9 +232,17 @@ class HolderDashboardViewModel: Logging {
 		)
 	}
 
+	/// User wants to see the large QR
 	func navigateToEnlargedQR() {
 
 		coordinator?.navigateToEnlargedQR()
+	}
+
+	/// User wants to close the expired QR
+	func closeExpiredRQ() {
+
+		cryptoManager?.removeCredential()
+		checkQRValidity()
 	}
 
 	/// Formatter to print
