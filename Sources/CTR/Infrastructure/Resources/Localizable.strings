@@ -122,6 +122,19 @@
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
+/* MARK: - Holder Birthday Entry */
+"holder.birthday.title" = "Wat is je geboortedatum?";
+"holder.birthday.text" = "Met je geboortedatum controleren we alleen of een testresultaat ook echt bij jou hoort. We nemen het niet op in je QR-code.";
+"holder.birthday.day" = "Dag";
+"holder.birthday.month" = "Maand";
+"holder.birthday.year" = "Jaar";
+"holder.birthday.button.title" = "Verstuur";
+"holder.birthday.dialog.title" = "Klopt je geboortedatum?";
+"holder.birthday.dialog.message" = "De ingevulde datum is <b>07-01-1988</b>. Je kan deze later niet meer aanpassen.";
+"holder.birthday.dialog.ok" = "Ja, klopt";
+"holder.birthday.dialog.cancel" = "Nee, pas aan";
+"holder.birthday.invalid" = "Dit is geen geldige datum";
+
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";

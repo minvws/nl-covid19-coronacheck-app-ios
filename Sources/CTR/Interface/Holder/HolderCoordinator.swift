@@ -42,6 +42,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken?)
 
+	/// Navigate to Birthday entry Scene
+	func navigateToBirthday()
+
 	/// Navigate to List Results Scene
 	func navigateToListResults()
 
@@ -193,12 +196,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to appointment
 	func navigateToAppointment() {
 
-		let destination = AppointmentViewController(
-			viewModel: AppointmentViewModel(
-				coordinator: self
-			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		navigateToBirthday()
+
+//		let destination = AppointmentViewController(
+//			viewModel: AppointmentViewModel(
+//				coordinator: self
+//			)
+//		)
+//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to choose provider
@@ -249,6 +254,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
+	/// Navigate to Birthday entry Scene
+	func navigateToBirthday() {
+
+		let destination = BirthdayViewController(
+			viewModel: BirthdayViewModel(
+				coordinator: self,
+				proofManager: proofManager
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
 	/// Navigate to List Results Scene
 	func navigateToListResults() {
 
@@ -271,7 +288,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func navigateToCreateProof() {
 		
 		let viewController = CreateProofViewController(
-			viewModel: CreateProofViewiewModel(
+			viewModel: CreateProofViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager
 			)
