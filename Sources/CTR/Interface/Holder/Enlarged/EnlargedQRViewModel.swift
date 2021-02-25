@@ -63,14 +63,14 @@ class EnlargedQRViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credentials = cryptoManager?.readCredentials() else {
+		guard let credential = cryptoManager?.readCredential() else {
 			coordinator?.dismiss()
 			return
 		}
 
 		let now = Date().timeIntervalSince1970
 		let validity = TimeInterval(configuration.getTestResultTTL())
-		if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 			let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
 			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 				// valid

@@ -180,7 +180,6 @@ final class Colors {
 
 	var demo: UIColor { return color(for: "Demo") }
 
-
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

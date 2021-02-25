@@ -23,11 +23,8 @@ class ListResultsViewModelTests: XCTestCase {
 	var configSpy = ConfigurationGeneralSpy()
 
 	/// Date parser
-	private lazy var parseDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+	private lazy var parseDateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
 		return dateFormatter
 	}()
 
