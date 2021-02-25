@@ -76,7 +76,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		XCTAssertNil(strongSut.sceneView.largeQRimageView.image, "There should be no image")
 	}
 
-	/// Helper method to setup valid credentials
+	/// Helper method to setup valid credential
 	func setupValidCredential() {
 
 		let sampleTime = Date().timeIntervalSince1970 - 20

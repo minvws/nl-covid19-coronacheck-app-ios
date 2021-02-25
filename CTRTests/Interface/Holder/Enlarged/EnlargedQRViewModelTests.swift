@@ -68,11 +68,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
-		XCTAssertTrue(cryptoManagerSpy.readCredentialsCalled, "Credentials should be checked")
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
 	}
@@ -92,7 +88,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		XCTAssertTrue(cryptoManagerSpy.readCredentialsCalled, "Credentials should be checked")
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
 	}
@@ -118,7 +114,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(cryptoManagerSpy.readCredentialsCalled, "Credentials should be checked")
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")

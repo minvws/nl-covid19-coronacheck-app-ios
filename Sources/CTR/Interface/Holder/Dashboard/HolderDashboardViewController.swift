@@ -74,12 +74,16 @@ class HolderDashboardViewController: BaseViewController {
 			
 			if $0 {
 				self.sceneView.expiredQRView.isHidden = false
+				self.sceneView.expiredQRView.closeButtonTappedCommand = { [weak self] in
+					self?.viewModel.closeExpiredRQ()
+				}
 			} else {
 				self.sceneView.expiredQRView.isHidden = true
 			}
 		}
 		
 		viewModel.$hideQRForCapture.binding = {
+			
 			self.screenCaptureInProgress = $0
 			self.sceneView.hideQRImage = $0
 		}

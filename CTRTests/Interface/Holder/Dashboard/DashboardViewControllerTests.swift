@@ -106,7 +106,7 @@ class DashboardViewControllerTests: XCTestCase {
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToChooseProviderCalled, "Coordinator delegate method should be called")
 	}
 
-	/// Helper method to setup valid credentials
+	/// Helper method to setup valid credential
 	func setupValidCredential() {
 
 		let sampleTime = Date().timeIntervalSince1970 - 20
@@ -272,5 +272,25 @@ class DashboardViewControllerTests: XCTestCase {
 		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 		XCTAssertEqual(strongSut.sceneView.qrView.securityView.currentAnimation, .cyclistRightToLeft, "Animation should match")
+	}
+
+	func testCloseExpiredRQ() {
+
+		// Given
+		let sampleTime = Date().timeIntervalSince1970 - 20
+		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			sampleTime: "\(sampleTime)",
+			testType: "testValidityCredentialExpired"
+		)
+		configSpy.testResultTTL = 10
+		loadView()
+		sut?.checkValidity()
+
+		// When
+		sut?.sceneView.expiredQRView.closeButtonTapped()
+
+		// Then
+		XCTAssertTrue(cryptoManagerSpy.removeCredentialCalled, "Credential should be removed")
+		XCTAssertNil(cryptoManagerSpy.crypoAttributes)
 	}
 }
