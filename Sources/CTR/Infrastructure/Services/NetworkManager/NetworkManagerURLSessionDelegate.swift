@@ -8,15 +8,6 @@
 import Foundation
 import Security
 
-/// The security strategy
-enum SecurityStrategy {
-
-	case none
-	case config // 1.3
-	case data // 1.4
-	case provider // 1.5
-}
-
 final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logging {
 
 	let loggingCategory = "NetworkManagerURLSessionDelegate"
@@ -44,41 +35,13 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
 		didReceive challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
-		guard securityStrategy != .none,
-			  challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-			  let serverTrust = challenge.protectionSpace.serverTrust else {
-
-			logDebug("No security strategy")
-			completionHandler(.performDefaultHandling, nil)
-			return
-		}
-
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
-		SecTrustSetPolicies(serverTrust, policies as CFTypeRef)
-		let certificateCount = SecTrustGetCertificateCount(serverTrust)
-
-		for index in 0 ..< certificateCount {
-
-			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
-				logDebug("serverCertificate: \(serverCertificate)")
-
-				let cert = Certificate(certificate: serverCertificate)
-				if let commonName = cert.commonName {
-					logDebug("commonName: \(commonName)")
-				}
-//				if let issuer = cert.issuer {
-//					logDebug("issuer: \(String(decoding: issuer, as: UTF8.self))")
-//				}
-
-				if let serialNumber = cert.serialNumber {
-					logDebug("serialNumber: \(serialNumber.base64EncodedString())")
-				}
-			}
-		}
-
-		// all good
-		logDebug("Certificate signature is good")
-		completionHandler(.useCredential, URLCredential(trust: serverTrust))
+		let checker = SecurityCheckerFactory.getSecurityChecker(
+			securityStrategy,
+			networkConfiguration: networkConfiguration,
+			challenge: challenge,
+			completionHandler: completionHandler
+		)
+		checker.check()
 
 		//		guard let localFingerprints = networkConfiguration.sslSignatures(forHost: challenge.protectionSpace.host),
 		//			  challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
@@ -113,28 +76,5 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
 		//		// all good
 		//		logDebug("Certificate signature is good")
 		//		completionHandler(.useCredential, URLCredential(trust: serverTrust))
-	}
-
-	func checkFqdnMatchesCN() {
-
-	}
-
-	func checkDistinguishedNameEndsWith() {
-
-	}
-
-	func checkFqdnEndsWith() {
-
-	}
-
-	func checkSubjectKeyIdentifier() {
-
-	}
-
-	func checkCertificates() {
-
-		
-
-
 	}
 }

@@ -21,6 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
      requiredCommonNameContent:(NSString *)requiredCommonNameContent
       requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffix;
 
+
+- (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
+
+- (nullable NSString *)getCommonName:(NSData *)certificateData;
+//- (NSString *)getSubjectAlternativeName:(NSData *)certificateData;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

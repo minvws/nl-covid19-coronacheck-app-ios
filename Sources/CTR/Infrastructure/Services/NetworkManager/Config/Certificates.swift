@@ -35,6 +35,14 @@ struct Certificate {
         return data.sha256.base64EncodedString()
     }
 
+	var data: Data {
+
+		let data = SecCertificateCopyData(secCertificate) as Data
+		let base64String = data.base64EncodedString()
+		let fullString = "-----BEGIN CERTIFICATE-----\n\(base64String)\n-----END CERTIFICATE-----"
+		return Data(fullString.utf8)
+	}
+
 	var commonName: String? {
 
 		var name: CFString?
