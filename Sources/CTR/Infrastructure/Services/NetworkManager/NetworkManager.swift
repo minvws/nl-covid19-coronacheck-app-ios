@@ -111,15 +111,21 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get a test result
 	/// - Parameters:
-	///   - providerUrl: the url of the test provider
+	///   - provider: the the test provider
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
 	func getTestResult(
-		providerUrl: URL,
+		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
+
+		guard let providerUrl = provider.resultURL else {
+			self.logError("No url provided for \(provider)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
 
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(token.token)",
@@ -132,7 +138,7 @@ class NetworkManager: NetworkManaging, Logging {
 			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 		}
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider)
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 	
@@ -369,8 +375,8 @@ class NetworkManager: NetworkManaging, Logging {
 //			logDebug("Response headers: \n\(headers)")
 			
 			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
-				if !body.starts(with: "{\"signature") {
-					logDebug("Resonse body: \n\(body)")
+				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
+					logDebug("Response body: \n\(body)")
 				}
 			}
 		} else if let error = error {

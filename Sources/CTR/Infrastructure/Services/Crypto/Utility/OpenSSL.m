@@ -60,7 +60,7 @@ void print_stack(STACK_OF(X509)* sk)
 
 @implementation OpenSSL
 
-- (nullable NSString *)getCommonName:(NSData *)certificateData {
+- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData {
 	BIO *certificateBlob = NULL;
 	X509 *certificate = NULL;
 
@@ -69,6 +69,15 @@ void print_stack(STACK_OF(X509)* sk)
 
 	if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
 		EXITOUT("Cannot parse certificateData");
+
+	int loc = X509_get_ext_by_NID(certificate, NID_subject_alt_name, -1);
+	if (loc >= 0) {
+		X509_EXTENSION * ext = X509_get_ext(certificate, loc);
+
+
+
+//		GENERAL_NAME* generalName = sk_GENERAL_NAME_value(subjectAltNames, i);
+	}
 
 errit:
 	BIO_free(certificateBlob);

@@ -12,6 +12,9 @@ class ErrorView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
+		// Dimension
+		static let imageSize: CGFloat = 12.0
+
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let messageTopMargin: CGFloat = 4.0
@@ -27,7 +30,7 @@ class ErrorView: BaseView {
 	/// The title label
 	private let errorLabel: Label = {
 
-		return Label(subhead: nil)
+		return Label(subhead: nil).multiline()
 	}()
 
 	override func setupViews() {
@@ -54,8 +57,8 @@ class ErrorView: BaseView {
 
 			// Header
 			errorImageView.leadingAnchor.constraint( equalTo: leadingAnchor),
-			errorImageView.widthAnchor.constraint(equalToConstant: 12),
-			errorImageView.heightAnchor.constraint(equalToConstant: 12),
+			errorImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageSize),
+			errorImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageSize),
 			errorImageView.centerYAnchor.constraint(equalTo: errorLabel.centerYAnchor),
 
 			// Title
@@ -65,10 +68,7 @@ class ErrorView: BaseView {
 				constant: 5
 			),
 			errorLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-			errorLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: 0 // -ViewTraits.messageTopMargin
-			)
+			errorLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 

@@ -24,9 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
 
-- (nullable NSString *)getCommonName:(NSData *)certificateData;
-//- (NSString *)getSubjectAlternativeName:(NSData *)certificateData;
-
+- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData;
 
 @end
 

@@ -9,12 +9,12 @@ import Foundation
 import Security
 
 /// The security strategy
-enum SecurityStrategy {
+enum SecurityStrategy: Equatable {
 
 	case none
 	case config // 1.3
 	case data // 1.4
-	case provider // 1.5
+	case provider(TestProvider) // 1.5
 }
 
 struct SecurityCheckerFactory {
@@ -25,14 +25,38 @@ struct SecurityCheckerFactory {
 		challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityChecker {
 
-		guard  strategy != .none else {
-			return SecurityCheckerNone(trustedCertificates: [], trustedNames: [], challenge: challenge, completionHandler: completionHandler)
+		guard strategy != .none else {
+			return SecurityCheckerNone(
+				trustedCertificates: [],
+				trustedNames: [],
+				challenge: challenge,
+				completionHandler: completionHandler
+			)
 		}
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
 		if networkConfiguration.name == "Development" {
 			trustedNames.append(TrustConfiguration.testNameContent)
 			trustedCertificates.append(TrustConfiguration.dstRootCAX3)
+		}
+
+		if strategy == .data {
+			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
+			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
+		}
+
+		if case let .provider(provider) = strategy {
+
+			if let host = provider.resultURL?.host {
+				trustedNames = [host]
+			}
+			if let certData = provider.getCertificateData() {
+				trustedCertificates.append(certData)
+			}
+			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
+			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
+
+			print("Setting up Security Checker for \(provider.name)")
 		}
 
 		return SecurityChecker(
@@ -130,23 +154,23 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
 				let serverCert = Certificate(certificate: serverCertificate)
 
+				if let name = serverCert.commonName {
+					if name.lowercased() == challenge.protectionSpace.host.lowercased() {
+						foundValidFullyQualifiedDomainName = true
+						logDebug("Host matched CN \(name)")
+					}
+					for trustedName in trustedNames {
+						if name.lowercased().hasSuffix(trustedName.lowercased()) {
+							foundValidCommonNameEndsWithTrustedName = true
+							logDebug("Found a valid name \(name)")
+						}
+					}
+				}
 				for trustedCertificate in trustedCertificates {
 
 					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
 						logDebug("Found a match with a trusted Certificate")
 						foundValidCertificate = true
-					}
-					if let name = serverCert.commonName {
-						for trustedName in trustedNames {
-							if name.lowercased().hasSuffix(trustedName.lowercased()) {
-								foundValidCommonNameEndsWithTrustedName = true
-								logDebug("Found a valid name \(name)")
-							}
-							if name.lowercased() == challenge.protectionSpace.host.lowercased() {
-								foundValidFullyQualifiedDomainName = true
-								logDebug("Host matched CN \(name)")
-							}
-						}
 					}
 				}
 			}
@@ -154,10 +178,10 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 
 		if foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName {
 			// all good
-			logDebug("Certificate signature is good")
+			logDebug("Certificate signature is good for \(challenge.protectionSpace.host)")
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 		} else {
-			logError("Invalid server trust")
+ 			logError("Invalid server trust")
 			completionHandler(.cancelAuthenticationChallenge, nil)
 		}
 	}

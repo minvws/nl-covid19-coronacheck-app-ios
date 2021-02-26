@@ -62,6 +62,14 @@ struct Certificate {
 		return nil
 	}
 
+	var subject: Data? {
+
+		if let subject = SecCertificateCopyNormalizedSubjectSequence(secCertificate) {
+			return subject as Data
+		}
+		return nil
+	}
+
 	var serialNumber: Data? {
 
 		var error: Unmanaged<CFError>?

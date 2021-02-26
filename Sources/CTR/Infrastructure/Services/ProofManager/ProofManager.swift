@@ -58,13 +58,13 @@ class ProofManager: ProofManaging, Logging {
 	/// Get the providers
 	func fetchCoronaTestProviders() {
 
-		#if DEBUG
-		if let lastFetchedTimestamp = providersFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - 3600, !proofData.testProviders.isEmpty {
-			// Don't fetch again within an hour
-				return
-		}
-		#endif
+//		#if DEBUG
+//		if let lastFetchedTimestamp = providersFetchedTimestamp,
+//		   lastFetchedTimestamp > Date() - 3600, !proofData.testProviders.isEmpty {
+//			// Don't fetch again within an hour
+//				return
+//		}
+//		#endif
 
 		networkManager.getTestProviders { [weak self] response in
 			self?.providersFetchedTimestamp = Date()
@@ -217,13 +217,13 @@ class ProofManager: ProofManaging, Logging {
 		provider: TestProvider,
 		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
 
-		guard let url = provider.resultURL else {
+		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
 			oncompletion(.failure(ProofError.invalidUrl))
 			return
 		}
 
-		networkManager.getTestResult(providerUrl: url, token: token, code: code) { response in
+		networkManager.getTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
 
 			switch response {

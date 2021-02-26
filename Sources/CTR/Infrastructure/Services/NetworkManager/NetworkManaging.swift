@@ -85,12 +85,12 @@ protocol NetworkManaging {
 
 	/// Get a test result
 	/// - Parameters:
-	///   - providerUrl: the url of the test provider
+	///   - provider: the the test provider
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
 	func getTestResult(
-		providerUrl: URL,
+		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
