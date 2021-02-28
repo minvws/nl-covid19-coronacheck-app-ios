@@ -33,7 +33,7 @@ class NetworkManager: NetworkManaging, Logging {
 			url: networkConfiguration.remoteConfigurationUrl,
 			method: .GET
 		)
-
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.config)
 		decodedSignedJSONData(request: urlRequest, completion: completion)
 	}
 
@@ -45,7 +45,7 @@ class NetworkManager: NetworkManaging, Logging {
 			url: networkConfiguration.nonceUrl,
 			method: .GET
 		)
-
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 		decodedSignedJSONData(request: urlRequest, completion: completion)
 	}
 
@@ -64,7 +64,7 @@ class NetworkManager: NetworkManaging, Logging {
 				method: .POST,
 				body: jsonData
 			)
-
+			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 			decodedSignedData(request: urlRequest, ignore400: true) { resultwrapper in
 				DispatchQueue.main.async {
 
@@ -85,11 +85,11 @@ class NetworkManager: NetworkManaging, Logging {
 			url: networkConfiguration.testProvidersUrl,
 			method: .GET
 		)
-
 		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 		decodedSignedJSONData(request: urlRequest, completion: open)
 	}
 
@@ -101,25 +101,31 @@ class NetworkManager: NetworkManaging, Logging {
 			url: networkConfiguration.testTypesUrl,
 			method: .GET
 		)
-
 		func open(result: Result<ArrayEnvelope<TestType>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 		decodedSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get a test result
 	/// - Parameters:
-	///   - providerUrl: the url of the test provider
+	///   - provider: the the test provider
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
 	func getTestResult(
-		providerUrl: URL,
+		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
+
+		guard let providerUrl = provider.resultURL else {
+			self.logError("No url provided for \(provider)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
 
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(token.token)",
@@ -132,7 +138,7 @@ class NetworkManager: NetworkManaging, Logging {
 			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 		}
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
-
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 	
@@ -272,7 +278,7 @@ class NetworkManager: NetworkManaging, Logging {
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse), NetworkError>) -> Void) {
-		data(request: request, ignore400: ignore400) { result in
+		data(request: request, ignore400: ignore400) { [self] result in
 
 			/// Decode to SignedResult
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
@@ -282,21 +288,22 @@ class NetworkManager: NetworkManaging, Logging {
 					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 					   let signatureData = Data(base64Encoded: signedResponse.signature) {
 
-						// Validate signature (on the base64 payload)
-						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
-							if valid {
-								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
-								DispatchQueue.main.async {
-									switch decodedResult {
-										case let .success(object):
-											completion(.success((object, signedResponse)))
-										case let .failure(responseError):
-											completion(.failure(responseError.asNetworkError))
+						if let checker = self.sessionDelegate?.checker {
+							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+								if valid {
+									let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+									DispatchQueue.main.async {
+										switch decodedResult {
+											case let .success(object):
+												completion(.success((object, signedResponse)))
+											case let .failure(responseError):
+												completion(.failure(responseError.asNetworkError))
+										}
 									}
+								} else {
+									self.logError("We got an invalid signature!")
+									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 								}
-							} else {
-								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 							}
 						}
 					}
@@ -369,8 +376,8 @@ class NetworkManager: NetworkManaging, Logging {
 //			logDebug("Response headers: \n\(headers)")
 			
 			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
-				if !body.starts(with: "{\"signature") {
-					logDebug("Resonse body: \n\(body)")
+				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
+					logDebug("Response body: \n\(body)")
 				}
 			}
 		} else if let error = error {
@@ -450,7 +457,7 @@ class NetworkManager: NetworkManaging, Logging {
 	
 	private let session: URLSession
 	// swiftlint:disable:next weak_delegate
-	private let sessionDelegate: URLSessionDelegate? // swiftlint ignore: this // hold on to delegate to prevent deallocation
+	private let sessionDelegate: NetworkManagerURLSessionDelegate? // swiftlint ignore: this // hold on to delegate to prevent deallocation
 	
 	private lazy var dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()

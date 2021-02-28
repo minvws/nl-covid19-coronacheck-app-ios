@@ -53,7 +53,7 @@ class NetworkSpy: NetworkManaging {
 	}
 
 	func getTestResult(
-		providerUrl: URL,
+		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {

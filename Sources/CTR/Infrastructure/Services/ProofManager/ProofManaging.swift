@@ -67,7 +67,7 @@ enum ProofError: Error {
 }
 
 /// The test providers
-struct TestProvider: Codable {
+struct TestProvider: Codable, Equatable {
 
 	/// The identifier of the provider
 	let identifier: String
@@ -81,6 +81,9 @@ struct TestProvider: Codable {
 	/// The publc key of the provider
 	let publicKey: String
 
+	/// The ssl certificate of the provider
+	let certificate: String
+
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -88,6 +91,15 @@ struct TestProvider: Codable {
 		case name
 		case resultURL = "result_url"
 		case publicKey = "public_key"
+		case certificate = "ssl_cert"
+	}
+
+	func getCertificateData() -> Data? {
+
+		if let base64DecodedString = certificate.base64Decoded() {
+			return Data(base64DecodedString.utf8)
+		}
+		return nil
 	}
 }
 
