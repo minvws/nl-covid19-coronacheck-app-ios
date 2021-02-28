@@ -23,7 +23,7 @@ struct SecurityCheckerFactory {
 		_ strategy: SecurityStrategy,
 		networkConfiguration: NetworkConfiguration,
 		challenge: URLAuthenticationChallenge,
-		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityChecker {
+		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 
 		guard strategy != .none else {
 			return SecurityCheckerNone(
@@ -35,7 +35,7 @@ struct SecurityCheckerFactory {
 		}
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
-		if networkConfiguration.name == "Development" {
+		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
 			trustedNames.append(TrustConfiguration.testNameContent)
 			trustedCertificates.append(TrustConfiguration.dstRootCAX3)
 		}
@@ -56,7 +56,12 @@ struct SecurityCheckerFactory {
 			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
 
-			print("Setting up Security Checker for \(provider.name)")
+			return SecurityCheckerProvider(
+				trustedCertificates: trustedCertificates,
+				trustedNames: trustedNames,
+				challenge: challenge,
+				completionHandler: completionHandler
+			)
 		}
 
 		return SecurityChecker(
@@ -65,46 +70,52 @@ struct SecurityCheckerFactory {
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
-
-//
-//		switch strategy {
-//			case .config, .data:
-//				return SecurityChecker(
-//					trustedCertificates: trustedCertificates,
-//					trustedNames: trustedNames,
-//					challenge: challenge,
-//					completionHandler: completionHandler
-//				)
-////			case .provider:
-////				return SecurityChecker(
-////					trustedCertificates: [
-////						TrustConfiguration.sdNRootCAG3,
-////						TrustConfiguration.sdNPrivateRoot,
-////						TrustConfiguration.sdNEVRootCA
-////					],
-////					trustedNames: [],
-////					challenge: challenge,
-////					completionHandler: completionHandler
-////				)
-//			default:
-//				return SecurityCheckerNone(
-//					trustedCertificates: [],
-//					trustedNames: [],
-//					challenge: challenge,
-//					completionHandler: completionHandler
-//				)
-//		}
 	}
 }
 
 protocol SecurityCheckerProtocol {
 
-	func check()
+	func checkSSL()
+}
+
+extension SecurityCheckerProtocol {
+
+	/// Compare the Subject Alternative Name
+	/// - Parameters:
+	///   - san: the subject alternative name
+	///   - name: the name to compare
+	/// - Returns: True if the san matches
+	func compareSan(_ san: String, name: String) -> Bool {
+
+		let sanNames = san.split(separator: ",")
+		for sanName in sanNames {
+			// SanName can be like DNS: *.domain.nl
+			let pattern = String(sanName)
+				.replacingOccurrences(of: "DNS:", with: "", options: .caseInsensitive)
+				.trimmingCharacters(in: .whitespacesAndNewlines)
+			if wildcardMatch(name, pattern: pattern) {
+				return true
+			}
+		}
+		return false
+	}
+
+	/// Wildcard matching
+	/// - Parameters:
+	///   - string: the string to check
+	///   - pattern: the pattern to match
+	/// - Returns: True if the string matches the pattern
+	func wildcardMatch(_ string: String, pattern: String) -> Bool {
+
+		let pred = NSPredicate(format: "self LIKE %@", pattern)
+		return !NSArray(object: string).filtered(using: pred).isEmpty
+	}
 }
 
 class SecurityCheckerNone: SecurityChecker {
 
-	override func check() {
+	override func checkSSL() {
+		
 		completionHandler(.performDefaultHandling, nil)
 	}
 }
@@ -131,7 +142,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		self.completionHandler = completionHandler
 	}
 
-	 func check() {
+	 func checkSSL() {
 
 		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
 			  let serverTrust = challenge.protectionSpace.serverTrust else {
@@ -166,6 +177,12 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 						}
 					}
 				}
+				if let san = openssl.getSubjectAlternativeName(serverCert.data), !foundValidFullyQualifiedDomainName {
+					if compareSan(san, name: challenge.protectionSpace.host.lowercased()) {
+						foundValidFullyQualifiedDomainName = true
+						logDebug("Host matched SAN \(san)")
+					}
+				}
 				for trustedCertificate in trustedCertificates {
 
 					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
@@ -182,6 +199,63 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 		} else {
  			logError("Invalid server trust")
+			completionHandler(.cancelAuthenticationChallenge, nil)
+		}
+	}
+}
+
+class SecurityCheckerProvider: SecurityChecker {
+
+	override func checkSSL() {
+
+		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+			  let serverTrust = challenge.protectionSpace.serverTrust else {
+
+			logDebug("No security strategy")
+			completionHandler(.performDefaultHandling, nil)
+			return
+		}
+
+		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+		SecTrustSetPolicies(serverTrust, policies as CFTypeRef)
+		let certificateCount = SecTrustGetCertificateCount(serverTrust)
+
+		var foundValidCertificate = false
+		var foundValidFullyQualifiedDomainName = false
+
+		for index in 0 ..< certificateCount {
+
+			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
+				let serverCert = Certificate(certificate: serverCertificate)
+
+				if let name = serverCert.commonName, !foundValidFullyQualifiedDomainName {
+					if name.lowercased() == challenge.protectionSpace.host.lowercased() {
+						foundValidFullyQualifiedDomainName = true
+						logDebug("Host matched CN \(name)")
+					}
+				}
+				if let san = openssl.getSubjectAlternativeName(serverCert.data), !foundValidFullyQualifiedDomainName {
+					if compareSan(san, name: challenge.protectionSpace.host.lowercased()) {
+						foundValidFullyQualifiedDomainName = true
+						logDebug("Host matched SAN \(san)")
+					}
+				}
+				for trustedCertificate in trustedCertificates {
+
+					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
+						logDebug("Found a match with a trusted Certificate")
+						foundValidCertificate = true
+					}
+				}
+			}
+		}
+
+		if foundValidCertificate && foundValidFullyQualifiedDomainName {
+			// all good
+			logDebug("Certificate signature is good for \(challenge.protectionSpace.host)")
+			completionHandler(.useCredential, URLCredential(trust: serverTrust))
+		} else {
+			logError("Invalid server trust")
 			completionHandler(.cancelAuthenticationChallenge, nil)
 		}
 	}

@@ -73,10 +73,26 @@ void print_stack(STACK_OF(X509)* sk)
 	int loc = X509_get_ext_by_NID(certificate, NID_subject_alt_name, -1);
 	if (loc >= 0) {
 		X509_EXTENSION * ext = X509_get_ext(certificate, loc);
+		BUF_MEM *bptr = NULL;
+		char *buf = NULL;
+		BIO *bio = BIO_new(BIO_s_mem());
+		if(!X509V3_EXT_print(bio, ext, 0, 0)){
 
+			EXITOUT("Cannot parse EXT");
+		}
 
+		BIO_flush(bio);
+		BIO_get_mem_ptr(bio, &bptr);
 
-//		GENERAL_NAME* generalName = sk_GENERAL_NAME_value(subjectAltNames, i);
+		// now bptr contains the strings of the key_usage, take
+		// care that bptr->data is NOT NULL terminated, so
+		// to print it well, let's do something..
+
+		buf = (char *)malloc( (bptr->length + 1)*sizeof(char) );
+		memcpy(buf, bptr->data, bptr->length);
+		buf[bptr->length] = '\0';
+		NSString *san = [NSString stringWithUTF8String:buf];
+		return san;
 	}
 
 errit:

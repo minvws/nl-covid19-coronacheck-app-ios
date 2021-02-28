@@ -41,7 +41,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
-		checker.check()
+		checker.checkSSL()
 
 		//		guard let localFingerprints = networkConfiguration.sslSignatures(forHost: challenge.protectionSpace.host),
 		//			  challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
