@@ -25,5 +25,9 @@ target 'Verifier' do
   use_frameworks!
 
   # Pods for Verifier
+  pod 'AppAuth', '1.4.0'
   pod 'CocoaLumberjack/Swift', '3.7.0'
+  pod 'MBProgressHUD', '1.2.0'
+  pod 'EasyTipView', '2.1'
+  pod 'lottie-ios', '3.2.1'
 end
