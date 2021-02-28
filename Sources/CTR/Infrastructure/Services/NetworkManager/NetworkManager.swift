@@ -278,7 +278,7 @@ class NetworkManager: NetworkManaging, Logging {
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse), NetworkError>) -> Void) {
-		data(request: request, ignore400: ignore400) { result in
+		data(request: request, ignore400: ignore400) { [self] result in
 
 			/// Decode to SignedResult
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
@@ -288,21 +288,22 @@ class NetworkManager: NetworkManaging, Logging {
 					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 					   let signatureData = Data(base64Encoded: signedResponse.signature) {
 
-						// Validate signature (on the base64 payload)
-						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
-							if valid {
-								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
-								DispatchQueue.main.async {
-									switch decodedResult {
-										case let .success(object):
-											completion(.success((object, signedResponse)))
-										case let .failure(responseError):
-											completion(.failure(responseError.asNetworkError))
+						if let checker = self.sessionDelegate?.checker {
+							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+								if valid {
+									let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+									DispatchQueue.main.async {
+										switch decodedResult {
+											case let .success(object):
+												completion(.success((object, signedResponse)))
+											case let .failure(responseError):
+												completion(.failure(responseError.asNetworkError))
+										}
 									}
+								} else {
+									self.logError("We got an invalid signature!")
+									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 								}
-							} else {
-								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 							}
 						}
 					}

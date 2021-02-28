@@ -27,14 +27,13 @@ struct SecurityCheckerFactory {
 
 		guard strategy != .none else {
 			return SecurityCheckerNone(
-				trustedCertificates: [],
-				trustedNames: [],
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
 		}
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
+		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
 		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
 			trustedNames.append(TrustConfiguration.testNameContent)
 			trustedCertificates.append(TrustConfiguration.dstRootCAX3)
@@ -55,10 +54,16 @@ struct SecurityCheckerFactory {
 			}
 			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
+			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
+			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
+			if networkConfiguration.name != "Production" {
+				trustedSigners.append(TrustConfiguration.zorgCspPrivateRootCertificate)
+			}
 
 			return SecurityCheckerProvider(
 				trustedCertificates: trustedCertificates,
 				trustedNames: trustedNames,
+				trustedSigners: trustedSigners,
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
@@ -67,15 +72,24 @@ struct SecurityCheckerFactory {
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
 			trustedNames: trustedNames,
+			trustedSigners: trustedSigners,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
 	}
 }
 
-protocol SecurityCheckerProtocol {
+protocol SecurityCheckerProtocol: SignatureValidating {
 
+	/// Check the SSL Connection
 	func checkSSL()
+
+	/// Validate a PKCS7 signature
+	/// - Parameters:
+	///   - signature: the signature to validate
+	///   - content: the signed content
+	/// - Returns: True if the signature is a valid PKCS7 Signature
+	func validate(signature: Data, content: Data) -> Bool
 }
 
 extension SecurityCheckerProtocol {
@@ -110,13 +124,39 @@ extension SecurityCheckerProtocol {
 		let pred = NSPredicate(format: "self LIKE %@", pattern)
 		return !NSArray(object: string).filtered(using: pred).isEmpty
 	}
+
+	/// Validate a PKCS7 Signature
+	/// - Parameters:
+	///   - data: the signed content
+	///   - signature: the PKCS7 Signature
+	///   - completion: Completion handler
+	func validate(data: Data, signature: Data, completion: @escaping (Bool) -> Void) {
+		DispatchQueue.global().async {
+			let result = validate(signature: signature, content: data)
+
+			DispatchQueue.main.async {
+				completion(result)
+			}
+		}
+	}
 }
 
 class SecurityCheckerNone: SecurityChecker {
 
+	/// Check the SSL Connection
 	override func checkSSL() {
 		
 		completionHandler(.performDefaultHandling, nil)
+	}
+
+	/// Validate a PKCS7 signature
+	/// - Parameters:
+	///   - signature: the signature to validate
+	///   - content: the signed content
+	/// - Returns: True if the signature is a valid PKCS7 Signature
+	override func validate(signature: Data, content: Data) -> Bool {
+
+		return true
 	}
 }
 
@@ -128,15 +168,18 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	var challenge: URLAuthenticationChallenge
 	var completionHandler: (URLSession.AuthChallengeDisposition, URLCredential?) -> Void
 	var trustedNames: [String]
+	var trustedSigners: [SigningCertificate]
 	var openssl = OpenSSL()
 
 	init(
-		trustedCertificates: [Data],
-		trustedNames: [String],
+		trustedCertificates: [Data] = [],
+		trustedNames: [String] = [],
+		trustedSigners: [SigningCertificate] = [],
 		challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
 		self.trustedCertificates = trustedCertificates
+		self.trustedSigners = trustedSigners
 		self.trustedNames = trustedNames
 		self.challenge = challenge
 		self.completionHandler = completionHandler
@@ -201,6 +244,24 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
  			logError("Invalid server trust")
 			completionHandler(.cancelAuthenticationChallenge, nil)
 		}
+	}
+
+	/// Validate a PKCS7 signature
+	/// - Parameters:
+	///   - signature: the signature to validate
+	///   - content: the signed content
+	/// - Returns: True if the signature is a valid PKCS7 Signature
+	func validate(signature: Data, content: Data) -> Bool {
+
+		for signer in trustedSigners {
+			if openssl.validatePKCS7Signature(
+				signature,
+				contentData: content,
+				certificateData: signer.getCertificateData()) {
+				return true
+			}
+		}
+		return false
 	}
 }
 

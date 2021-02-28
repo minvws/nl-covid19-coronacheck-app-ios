@@ -1182,7 +1182,6 @@
 				6DAE8BD425CB242700AAF2A7 /* Extensions */,
 				6DAE8BD325CB242700AAF2A7 /* NetworkManager.swift */,
 				6DAE8BD825CB242700AAF2A7 /* NetworkManagerURLSessionDelegate.swift */,
-				6DE1DF6025E8D3D30091FC21 /* SecurityStrategy.swift */,
 				6DAE8BD225CB242700AAF2A7 /* NetworkManaging.swift */,
 				6DC223DF25E7ED27006AF5A1 /* Security */,
 			);
@@ -1242,6 +1241,7 @@
 		6DC223DF25E7ED27006AF5A1 /* Security */ = {
 			isa = PBXGroup;
 			children = (
+				6DE1DF6025E8D3D30091FC21 /* SecurityStrategy.swift */,
 				6DC223D925E7EBA4006AF5A1 /* TrustConfiguration.swift */,
 			);
 			path = Security;

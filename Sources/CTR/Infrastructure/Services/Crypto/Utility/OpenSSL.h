@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
      requiredCommonNameContent:(NSString *)requiredCommonNameContent
       requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffix;
 
+- (BOOL)validatePKCS7Signature:(NSData *)signatureData
+				   contentData:(NSData *)contentData
+			   certificateData:(NSData *)certificateData;
 
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
 

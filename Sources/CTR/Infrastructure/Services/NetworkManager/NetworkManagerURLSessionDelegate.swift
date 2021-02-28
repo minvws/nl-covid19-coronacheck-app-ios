@@ -30,18 +30,20 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
 		securityStrategy = strategy
 	}
 
+	var checker: SecurityCheckerProtocol?
+
 	func urlSession(
 		_ session: URLSession,
 		didReceive challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
-		let checker = SecurityCheckerFactory.getSecurityChecker(
+		checker = SecurityCheckerFactory.getSecurityChecker(
 			securityStrategy,
 			networkConfiguration: networkConfiguration,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
-		checker.checkSSL()
+		checker?.checkSSL()
 
 		//		guard let localFingerprints = networkConfiguration.sslSignatures(forHost: challenge.protectionSpace.host),
 		//			  challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
