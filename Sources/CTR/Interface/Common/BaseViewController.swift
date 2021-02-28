@@ -124,4 +124,3 @@ class BaseViewController: UIViewController {
 		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
 	}
 }
-

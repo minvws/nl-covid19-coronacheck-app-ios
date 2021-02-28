@@ -34,7 +34,10 @@ protocol AppCoordinatorDelegate: AnyObject {
 	func openUrl(_ url: URL)
 }
 
-class AppCoordinator: Coordinator {
+class AppCoordinator: Coordinator, Logging {
+
+	/// The logging category
+	var loggingCategory: String = "AppCoordinator"
 
 	/// The UI Window
 	let window: UIWindow
