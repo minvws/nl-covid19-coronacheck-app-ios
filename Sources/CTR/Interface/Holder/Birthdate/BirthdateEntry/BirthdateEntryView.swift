@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BirthdayView: ScrollView {
+class BirthdateEntryView: ScrollView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -210,7 +210,11 @@ class BirthdayView: ScrollView {
 	/// The  message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			messageLabel.attributedText = .makeFromHtml(
+				text: message,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark
+			)
 		}
 	}
 

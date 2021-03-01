@@ -7,18 +7,12 @@
 
 import UIKit
 
-class BirthdayViewModel: Logging {
+class BirthdateEntryViewModel: Logging {
 
-	var loggingCategory: String = "BirthdayViewModel"
+	var loggingCategory: String = "BirthdateEntryViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
-
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
-	/// The message on the page
-	@Bindable private(set) var showDialog: Bool = false
+	weak var coordinator: (BirthdateCoordinatorDelegate & Dismissable)?
 
 	/// The title of the button
 	@Bindable private(set) var isButtonEnabled: Bool = false
@@ -31,12 +25,9 @@ class BirthdayViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
 	init(
-		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging
+		coordinator: (BirthdateCoordinatorDelegate & Dismissable)
 	) {
-
 		self.coordinator = coordinator
-		self.proofManager = proofManager
 	}
 
 	func sendButtonTapped() {
@@ -52,8 +43,9 @@ class BirthdayViewModel: Logging {
 		if let date = parseDateFormatter.date(from: dateString) {
 			logDebug("Birthdate : \(date)")
 			errorMessage = "\(date)"
+			coordinator?.navigateToBirthdayConfirmation(date)
 		} else {
-			errorMessage = .holderBirthdayInvaliddDate
+			errorMessage = .holderBirthdayEntryInvaliddDate
 		}
 	}
 
@@ -93,17 +85,22 @@ class BirthdayViewModel: Logging {
 		dateFormatter.dateFormat = "yyyy-M-d"
 		return dateFormatter
 	}()
+
+	func dismiss() {
+
+		coordinator?.dismiss()
+	}
 }
 
-class BirthdayViewController: BaseViewController {
+class BirthdateEntryViewController: BaseViewController {
 
-	private let viewModel: BirthdayViewModel
+	private let viewModel: BirthdateEntryViewModel
 
 	var tapGestureRecognizer: UITapGestureRecognizer?
 
-	let sceneView = BirthdayView()
+	let sceneView = BirthdateEntryView()
 
-	init(viewModel: BirthdayViewModel) {
+	init(viewModel: BirthdateEntryViewModel) {
 
 		self.viewModel = viewModel
 
@@ -146,20 +143,27 @@ class BirthdayViewController: BaseViewController {
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
+
+		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+	}
+
+	@objc func closeButtonTapped() {
+
+		viewModel.dismiss()
 	}
 
 	/// Setup all the content
 	func setupContent() {
 
-		sceneView.title = .holderBirthdayTitle
-		sceneView.message = .holderBirthdayText
-		sceneView.primaryTitle = .holderBirthdayButtonTitle
+		sceneView.title = .holderBirthdayEntryTitle
+		sceneView.message = .holderBirthdayEntryText
+		sceneView.primaryTitle = .holderBirthdayEntryButtonTitle
 		sceneView.primaryButton.isEnabled = false
-		sceneView.dayTitle = .holderBirthdayDay
+		sceneView.dayTitle = .holderBirthdayEntryDay
 		sceneView.dayEntryView.inputField.placeholder = "01"
-		sceneView.monthTitle = .holderBirthdayMonth
+		sceneView.monthTitle = .holderBirthdayEntryMonth
 		sceneView.monthEntryView.inputField.placeholder = "01"
-		sceneView.yearTitle = .holderBirthdayYear
+		sceneView.yearTitle = .holderBirthdayEntryYear
 		sceneView.yearEntryView.inputField.placeholder = "1990"
 	}
 
@@ -248,7 +252,7 @@ class BirthdayViewController: BaseViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension BirthdayViewController: UITextFieldDelegate {
+extension BirthdateEntryViewController: UITextFieldDelegate {
 
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 

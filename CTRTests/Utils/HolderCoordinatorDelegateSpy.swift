@@ -53,7 +53,7 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
 		navigateToTokenEntryCalled = true
 	}
 
-	func navigateToBirthday() {
+	func navigateToBirthdate() {
 
 		navigateToBirthdayCalled = true
 	}

@@ -43,7 +43,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func navigateToTokenEntry(_ token: RequestToken?)
 
 	/// Navigate to Birthday entry Scene
-	func navigateToBirthday()
+	func navigateToBirthdate()
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
@@ -196,14 +196,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to appointment
 	func navigateToAppointment() {
 
-		navigateToBirthday()
-
-//		let destination = AppointmentViewController(
-//			viewModel: AppointmentViewModel(
-//				coordinator: self
-//			)
-//		)
-//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		let destination = AppointmentViewController(
+			viewModel: AppointmentViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to choose provider
@@ -221,12 +219,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview() {
 
-		let destination = TokenOverviewViewController(
-			viewModel: TokenOverviewViewModel(
-				coordinator: self
+		if proofManager.getBirthDate() == nil {
+			// Fill in the birhtday if there is none on the commercial token flow.
+			navigateToBirthdate()
+		} else {
+
+			let destination = TokenOverviewViewController(
+				viewModel: TokenOverviewViewModel(
+					coordinator: self
+				)
 			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+			(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		}
 	}
 
 	/// Navigate to the token scanner
@@ -254,16 +258,16 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to Birthday entry Scene
-	func navigateToBirthday() {
+	/// Navigate to Birthdate Scene
+	func navigateToBirthdate() {
 
-		let destination = BirthdayViewController(
-			viewModel: BirthdayViewModel(
-				coordinator: self,
-				proofManager: proofManager
-			)
+		let coordinator = BirthdateCoordinator(
+			navigationController: navigationController,
+			presentingViewController: sidePanel?.selectedViewController,
+			birthdateSceneDelegate: self
 		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+
+		startChildCoordinator(coordinator)
 	}
 
 	/// Navigate to List Results Scene
@@ -442,5 +446,19 @@ extension HolderCoordinator: OnboardingDelegate {
 
 		// Navigate to Holder Start.
 		navigateToHolderStart()
+	}
+}
+
+// MARK: - BirthdateSceneDelegate
+
+extension HolderCoordinator: BirthdateSceneDelegate {
+
+	/// User confirmed the birthdate
+	func birthdateConfirmed() {
+
+		if let birthdateCoordinator = childCoordinators.first {
+			removeChildCoordinator(birthdateCoordinator)
+		}
+		navigateToTokenOverview()
 	}
 }

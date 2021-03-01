@@ -123,17 +123,21 @@
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
 /* MARK: - Holder Birthday Entry */
-"holder.birthday.title" = "Wat is je geboortedatum?";
-"holder.birthday.text" = "Met je geboortedatum controleren we alleen of een testresultaat ook echt bij jou hoort. We nemen het niet op in je QR-code.";
-"holder.birthday.day" = "Dag";
-"holder.birthday.month" = "Maand";
-"holder.birthday.year" = "Jaar";
-"holder.birthday.button.title" = "Verstuur";
-"holder.birthday.dialog.title" = "Klopt je geboortedatum?";
-"holder.birthday.dialog.message" = "De ingevulde datum is <b>07-01-1988</b>. Je kan deze later niet meer aanpassen.";
-"holder.birthday.dialog.ok" = "Ja, klopt";
-"holder.birthday.dialog.cancel" = "Nee, pas aan";
-"holder.birthday.invalid" = "Dit is geen geldige datum";
+"holder.birthday.entry.title" = "Snelle check: je geboortedatum";
+"holder.birthday.entry.text" = "<p>Wil je één keer je geboortedatum invullen, zoals die in je identiteitsbewijs staat? Let op: je kan deze later niet meer aanpassen.</p><p>Zo controleren we of een testresultaat ook echt bij jou hoort.</p>";
+"holder.birthday.entry.day" = "Dag";
+"holder.birthday.entry.month" = "Maand";
+"holder.birthday.entry.year" = "Jaar";
+"holder.birthday.entry.button.title" = "Bevestig";
+"holder.birthday.entry.invalid" = "Dit is geen geldige datum";
+
+/* MARK: - Holder Birthday Entry */
+"holder.birthday.confirmation.title" = "Controleer je geboortedatum";
+"holder.birthday.confirmation.text" = "<p>Komt <b>%@</b> overeen met de geboortedatum zoals deze in je identiteitsbewijs staat?</p><p>Je kan je geboortedatum later niet aanpassen.</p>";
+"holder.birthday.confirmation.confirm" = "%@ is mijn geboortedatum zoals in mijn identiteitsbewijs staat";
+"holder.birthday.confirmation.button.title" = "Bevestig";
+"holder.birthday.confirmation.adjust.title" = "Pas geboortedatum aan";
+"holder.birthday.confirmation.finished" = "Geboortedatum\ningesteld";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

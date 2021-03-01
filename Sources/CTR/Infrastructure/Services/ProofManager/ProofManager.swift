@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// The manager of all the test provider proof data
 class ProofManager: ProofManaging, Logging {
 
 	var loggingCategory: String = "ProofManager"
@@ -17,11 +18,8 @@ class ProofManager: ProofManaging, Logging {
 	/// The crypto manager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 
-	/// Structure to hold cryptography data
+	/// Structure to hold proof data
 	private struct ProofData: Codable {
-
-		/// The key of the holder
-		var testProviders: [TestProvider]
 
 		/// The key of the holder
 		var testTypes: [TestType]
@@ -34,7 +32,34 @@ class ProofManager: ProofManaging, Logging {
 
 		/// Empty crypto data
 		static var empty: ProofData {
-			return ProofData(testProviders: [], testTypes: [], testWrapper: nil, signedWrapper: nil)
+			return ProofData(testTypes: [], testWrapper: nil, signedWrapper: nil)
+		}
+	}
+
+	/// Structure to hold provider data
+	private struct ProviderData: Codable {
+
+		/// The key of the holder
+		var testProviders: [TestProvider]
+
+		/// Empty crypto data
+		static var empty: ProviderData {
+			return ProviderData(testProviders: [])
+		}
+	}
+
+	/// Structure to hold birthday data
+	private struct BirthdayData: Codable {
+
+		/// The birthdate
+		var birthdate: Date?
+
+		/// The checksum of the birthdate
+		var checksum: Int?
+
+		/// Empty crypto data
+		static var empty: BirthdayData {
+			return BirthdayData(birthdate: nil, checksum: nil)
 		}
 	}
 
@@ -43,9 +68,17 @@ class ProofManager: ProofManaging, Logging {
 		static let keychainService = "ProofManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
-	/// The crypto data stored in the keychain
+	/// The proof data stored in the keychain
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
 	private var proofData: ProofData = .empty
+
+	/// The provider data stored in the keychain
+	@Keychain(name: "providerData", service: Constants.keychainService, clearOnReinstall: true)
+	private var providerData: ProviderData = .empty
+
+	/// The birthday data stored in the keychain
+	@Keychain(name: "birthdayData", service: Constants.keychainService, clearOnReinstall: true)
+	private var birthdayData: BirthdayData = .empty
 
 	@UserDefaults(key: "providersFetchedTimestamp", defaultValue: nil)
 	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
@@ -71,7 +104,7 @@ class ProofManager: ProofManaging, Logging {
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
-					self?.proofData.testProviders = providers
+					self?.providerData.testProviders = providers
 				case let .failure(error):
 					self?.logError("Error getting the test providers: \(error)")
 			}
@@ -97,7 +130,7 @@ class ProofManager: ProofManaging, Logging {
 	/// - Returns: the test provider
 	func getTestProvider(_ token: RequestToken) -> TestProvider? {
 
-		for provider in proofData.testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
+		for provider in providerData.testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
 			return provider
 		}
 		return nil
@@ -260,6 +293,32 @@ class ProofManager: ProofManaging, Logging {
 		
 		proofData.testWrapper = nil
 		proofData.signedWrapper = nil
+	}
+
+	/// Get the birth date
+	func getBirthDate() -> Date? {
+		
+		return nil // birthdayData.birthdate
+	}
+
+	/// Set the birthdate
+	/// - Parameter date: the date
+	func setBirthDate(_ date: Date) {
+
+		logDebug("Todo: store Birthdate in proofmanager")
+		birthdayData.birthdate = date
+		calculateChecksum()
+	}
+
+	/// Get the birth date checksum
+	func getBirthDateChecksum() -> Int? {
+
+		return birthdayData.checksum
+	}
+
+	/// Calculate the checksum of the birthdate
+	func calculateChecksum() {
+		logDebug("Todo: Birthdate checksum calculation")
 	}
 
 	// MARK: - Helper methods

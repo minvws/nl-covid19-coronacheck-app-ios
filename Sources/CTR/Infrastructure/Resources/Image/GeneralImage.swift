@@ -27,4 +27,6 @@ extension UIImage {
 
 	static var warning: UIImage? { return UIImage(named: "Warning") }
 
+	static var check: UIImage? { return UIImage(named: "Check") }
+
 }
