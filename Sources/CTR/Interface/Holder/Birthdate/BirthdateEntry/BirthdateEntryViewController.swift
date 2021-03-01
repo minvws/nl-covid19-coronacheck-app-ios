@@ -7,91 +7,6 @@
 
 import UIKit
 
-class BirthdateEntryViewModel: Logging {
-
-	var loggingCategory: String = "BirthdateEntryViewModel"
-
-	/// Coordination Delegate
-	weak var coordinator: (BirthdateCoordinatorDelegate & Dismissable)?
-
-	/// The title of the button
-	@Bindable private(set) var isButtonEnabled: Bool = false
-
-	/// The error message
-	@Bindable private(set) var errorMessage: String?
-
-	/// DescriptionInitializer
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
-	init(
-		coordinator: (BirthdateCoordinatorDelegate & Dismissable)
-	) {
-		self.coordinator = coordinator
-	}
-
-	func sendButtonTapped() {
-		
-		guard let year = year, let month = month, let day = day,
-			  !year.isEmpty, !month.isEmpty, !day.isEmpty else {
-			isButtonEnabled = false
-			return
-		}
-
-		let dateString = "\(year)-\(month)-\(day)"
-
-		if let date = parseDateFormatter.date(from: dateString) {
-			logDebug("Birthdate : \(date)")
-			errorMessage = "\(date)"
-			coordinator?.navigateToBirthdayConfirmation(date)
-		} else {
-			errorMessage = .holderBirthdayEntryInvaliddDate
-		}
-	}
-
-	var day: String?
-	var month: String?
-	var year: String?
-
-	func setDay(_ input: String?) {
-
-		day = input
-		setButtonState()
-	}
-
-	func setMonth(_ input: String?) {
-		month = input
-		setButtonState()
-	}
-
-	func setYear(_ input: String?) {
-		year = input
-		setButtonState()
-	}
-
-	func setButtonState() {
-		guard let year = year, let month = month, let day = day,
-			  !year.isEmpty, !month.isEmpty, !day.isEmpty else {
-			isButtonEnabled = false
-			return
-		}
-		isButtonEnabled = true
-	}
-
-	private lazy var parseDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-M-d"
-		return dateFormatter
-	}()
-
-	func dismiss() {
-
-		coordinator?.dismiss()
-	}
-}
-
 class BirthdateEntryViewController: BaseViewController {
 
 	private let viewModel: BirthdateEntryViewModel
@@ -100,6 +15,24 @@ class BirthdateEntryViewController: BaseViewController {
 
 	let sceneView = BirthdateEntryView()
 
+	/// The month picker
+	let pickerView: UIPickerView = {
+
+		let picker = UIPickerView()
+		picker.backgroundColor = Theme.colors.viewControllerBackground
+		return picker
+	}()
+
+	/// The months for the picker
+	let months: [String] = [.january, .february, .march, .april, .may, .june,
+							.july, .august, .september, .october, .november, .december]
+
+	var activeInputField: UITextField?
+
+	// MARK: Initializer
+
+	/// The initalizer
+	/// - Parameter viewModel: the view model
 	init(viewModel: BirthdateEntryViewModel) {
 
 		self.viewModel = viewModel
@@ -162,13 +95,19 @@ class BirthdateEntryViewController: BaseViewController {
 		sceneView.dayTitle = .holderBirthdayEntryDay
 		sceneView.dayEntryView.inputField.placeholder = "01"
 		sceneView.monthTitle = .holderBirthdayEntryMonth
-		sceneView.monthEntryView.inputField.placeholder = "01"
+		sceneView.monthEntryView.inputField.placeholder = "januari"
 		sceneView.yearTitle = .holderBirthdayEntryYear
 		sceneView.yearEntryView.inputField.placeholder = "1990"
 	}
 
 	/// Setup the entry views
 	func setupEntryViews() {
+
+		let toolbar = UIToolbar.generateMonthPickerToolbar(
+			previousSelector: #selector(pickerPreviousAction),
+			nextSelector: #selector(pickerNextAction),
+			doneSelector: #selector(pickerDoneAction)
+		)
 
 		setupGestureRecognizer(view: sceneView)
 		sceneView.dayEntryView.inputField.delegate = self
@@ -178,12 +117,14 @@ class BirthdateEntryViewController: BaseViewController {
 			for: .editingChanged
 		)
 		sceneView.dayEntryView.inputField.tag = 0
-		sceneView.monthEntryView.inputField.delegate = self
-		sceneView.monthEntryView.inputField.addTarget(
-			self,
-			action: #selector(textFieldDidChange(_:)),
-			for: .editingChanged
-		)
+		sceneView.dayEntryView.inputField.inputAccessoryView = toolbar
+
+		sceneView.monthEntryView.inputField.inputView = pickerView
+		sceneView.monthEntryView.inputField.inputAccessoryView = toolbar
+		pickerView.delegate = self
+		pickerView.dataSource = self
+		sceneView.monthEntryView.inputField.tag = 1
+
 		sceneView.monthEntryView.inputField.tag = 1
 		sceneView.yearEntryView.inputField.delegate = self
 		sceneView.yearEntryView.inputField.addTarget(
@@ -192,6 +133,7 @@ class BirthdateEntryViewController: BaseViewController {
 			for: .editingChanged
 		)
 		sceneView.yearEntryView.inputField.tag = 2
+		sceneView.yearEntryView.inputField.inputAccessoryView = toolbar
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -203,6 +145,7 @@ class BirthdateEntryViewController: BaseViewController {
 			#selector(keyBoardWillShow(notification:)),
 			keyboardWillHide: #selector(keyBoardWillHide(notification:))
 		)
+		sceneView.dayEntryView.inputField.becomeFirstResponder()
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -254,26 +197,112 @@ class BirthdateEntryViewController: BaseViewController {
 
 extension BirthdateEntryViewController: UITextFieldDelegate {
 
-	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-
+	/// UITextFieldDelegate method
+	/// - Parameter textField: the textfield that did begin editing.
+	func textFieldDidBeginEditing(_ textField: UITextField) {
 		if textField.tag == 0 {
-			sceneView.monthEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.dayEntryView.inputField
 		} else if textField.tag == 1 {
-			sceneView.yearEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.monthEntryView.inputField
 		} else {
-			textField.resignFirstResponder()
+			activeInputField = sceneView.yearEntryView.inputField
 		}
-		return true
 	}
 
+	/// UITextFieldDelegate method
+	/// - Parameter textField: the textfield that did change
 	@objc func textFieldDidChange(_ textField: UITextField) {
 
 		if textField.tag == 0 {
+			activeInputField = sceneView.dayEntryView.inputField
 			viewModel.setDay(textField.text)
 		} else if textField.tag == 1 {
+			activeInputField = sceneView.monthEntryView.inputField
 			viewModel.setMonth(textField.text)
 		} else {
+			activeInputField = sceneView.yearEntryView.inputField
 			viewModel.setYear(textField.text)
 		}
+	}
+}
+
+// MARK: - UIPickerViewDataSource, UIPickerViewDelegate
+
+extension BirthdateEntryViewController: UIPickerViewDataSource, UIPickerViewDelegate {
+
+	/// UIPickerViewDataSource method
+	/// - Parameter pickerView: the picker view
+	/// - Returns: Number of components
+	func numberOfComponents(in pickerView: UIPickerView) -> Int {
+		1
+	}
+
+	/// UIPickerViewDataSource method
+	/// - Parameters:
+	///   - pickerView: the picker view
+	///   - component: the component
+	/// - Returns: number of rows in components
+	func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+
+		months.count
+	}
+
+	/// UIPickerViewDelegate method
+	/// - Parameters:
+	///   - pickerView: the picker view
+	///   - row: the row
+	///   - component: the component
+	/// - Returns: the tirle for the row in component
+	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+
+		return months[row]
+	}
+
+	/// UIPickerViewDelegate method
+	/// - Parameters:
+	///   - pickerView: the picker view
+	///   - row: the row
+	///   - component: the component
+	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+
+		sceneView.monthEntryView.inputField.text = months[row].lowercased()
+		viewModel.setMonth("\(row + 1)")
+	}
+
+	/// User tapped on the previous button
+	@objc func pickerPreviousAction() {
+
+		if activeInputField == sceneView.dayEntryView.inputField {
+			sceneView.yearEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.yearEntryView.inputField
+		} else if activeInputField == sceneView.monthEntryView.inputField {
+			sceneView.dayEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.dayEntryView.inputField
+		} else if activeInputField == sceneView.yearEntryView.inputField {
+			sceneView.monthEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.monthEntryView.inputField
+		}
+	}
+
+	/// User tapped on the next button
+	@objc func pickerNextAction() {
+
+		if activeInputField == sceneView.dayEntryView.inputField {
+			sceneView.monthEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.monthEntryView.inputField
+		} else if activeInputField == sceneView.monthEntryView.inputField {
+			sceneView.yearEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.yearEntryView.inputField
+		} else if activeInputField == sceneView.yearEntryView.inputField {
+			sceneView.dayEntryView.inputField.becomeFirstResponder()
+			activeInputField = sceneView.dayEntryView.inputField
+		}
+	}
+
+	/// User tapped on the done button
+	@objc func pickerDoneAction(_ pickerView: UIPickerView) {
+
+		activeInputField?.resignFirstResponder()
+		activeInputField = nil
 	}
 }

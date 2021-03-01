@@ -43,4 +43,64 @@ extension String {
 
 		return Localization.string(for: "holder.birthday.entry.invalid")
 	}
+
+	static var january: String {
+
+		return Localization.string(for: "holder.birthday.january")
+	}
+
+	static var february: String {
+
+		return Localization.string(for: "holder.birthday.february")
+	}
+
+	static var march: String {
+
+		return Localization.string(for: "holder.birthday.march")
+	}
+
+	static var april: String {
+
+		return Localization.string(for: "holder.birthday.april")
+	}
+
+	static var may: String {
+
+		return Localization.string(for: "holder.birthday.may")
+	}
+
+	static var june: String {
+
+		return Localization.string(for: "holder.birthday.june")
+	}
+
+	static var july: String {
+
+		return Localization.string(for: "holder.birthday.july")
+	}
+
+	static var august: String {
+
+		return Localization.string(for: "holder.birthday.august")
+	}
+
+	static var september: String {
+
+		return Localization.string(for: "holder.birthday.september")
+	}
+
+	static var october: String {
+
+		return Localization.string(for: "holder.birthday.october")
+	}
+
+	static var november: String {
+
+		return Localization.string(for: "holder.birthday.november")
+	}
+
+	static var december: String {
+
+		return Localization.string(for: "holder.birthday.december")
+	}
 }

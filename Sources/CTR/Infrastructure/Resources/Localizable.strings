@@ -123,21 +123,33 @@
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
 /* MARK: - Holder Birthday Entry */
-"holder.birthday.entry.title" = "Snelle check: je geboortedatum";
-"holder.birthday.entry.text" = "<p>Wil je één keer je geboortedatum invullen, zoals die in je identiteitsbewijs staat? Let op: je kan deze later niet meer aanpassen.</p><p>Zo controleren we of een testresultaat ook echt bij jou hoort.</p>";
+"holder.birthday.entry.title" = "Wat is je geboortedatum";
+"holder.birthday.entry.text" = "<p>We vragen je je geboortedatum in te vullen, zoals die op je identiteitsbewijs staat. Let op: je kan deze later niet meer aanpassen.</p><p>Zo controleren we of een testresultaat ook echt bij jou hoort.</p>";
 "holder.birthday.entry.day" = "Dag";
 "holder.birthday.entry.month" = "Maand";
 "holder.birthday.entry.year" = "Jaar";
 "holder.birthday.entry.button.title" = "Bevestig";
 "holder.birthday.entry.invalid" = "Dit is geen geldige datum";
+"holder.birthday.january" = "Januari";
+"holder.birthday.february" = "Februari";
+"holder.birthday.march" = "Maart";
+"holder.birthday.april" = "April";
+"holder.birthday.may" = "Mei";
+"holder.birthday.june" = "Juni";
+"holder.birthday.july" = "Juli";
+"holder.birthday.august" = "Augustus";
+"holder.birthday.september" = "September";
+"holder.birthday.october" = "Oktober";
+"holder.birthday.november" = "November";
+"holder.birthday.december" = "December";
 
-/* MARK: - Holder Birthday Entry */
+/* MARK: - Holder Birthday Confirmation */
 "holder.birthday.confirmation.title" = "Controleer je geboortedatum";
-"holder.birthday.confirmation.text" = "<p>Komt <b>%@</b> overeen met de geboortedatum zoals deze in je identiteitsbewijs staat?</p><p>Je kan je geboortedatum later niet aanpassen.</p>";
-"holder.birthday.confirmation.confirm" = "%@ is mijn geboortedatum zoals in mijn identiteitsbewijs staat";
+"holder.birthday.confirmation.text" = "<p>Komt <b>%@</b> overeen met de geboortedatum zoals deze op je identiteitsbewijs staat?</p><p>Je kan je geboortedatum later niet aanpassen.</p>";
+"holder.birthday.confirmation.confirm" = "%@ is de geboortedatum die op mijn identiteitsbewijs staat";
 "holder.birthday.confirmation.button.title" = "Bevestig";
 "holder.birthday.confirmation.adjust.title" = "Pas geboortedatum aan";
-"holder.birthday.confirmation.finished" = "Geboortedatum\ningesteld";
+"holder.birthday.confirmation.finished" = "Geboortedatum\ningevuld";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

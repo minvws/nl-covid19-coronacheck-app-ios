@@ -165,8 +165,8 @@ class BirthdateEntryView: ScrollView {
 			),
 
 			dayEntryView.widthAnchor.constraint(greaterThanOrEqualToConstant: 40),
-			monthEntryView.widthAnchor.constraint(greaterThanOrEqualToConstant: 40),
-			yearEntryView.widthAnchor.constraint(greaterThanOrEqualToConstant: 75),
+			monthEntryView.widthAnchor.constraint(greaterThanOrEqualToConstant: 80),
+			yearEntryView.widthAnchor.constraint(greaterThanOrEqualToConstant: 60),
 
 			errorView.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,

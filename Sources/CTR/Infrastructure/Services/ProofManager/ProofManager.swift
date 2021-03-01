@@ -298,14 +298,13 @@ class ProofManager: ProofManaging, Logging {
 	/// Get the birth date
 	func getBirthDate() -> Date? {
 		
-		return nil // birthdayData.birthdate
+		return birthdayData.birthdate
 	}
 
 	/// Set the birthdate
 	/// - Parameter date: the date
 	func setBirthDate(_ date: Date) {
 
-		logDebug("Todo: store Birthdate in proofmanager")
 		birthdayData.birthdate = date
 		calculateChecksum()
 	}
@@ -318,7 +317,13 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Calculate the checksum of the birthdate
 	func calculateChecksum() {
-		logDebug("Todo: Birthdate checksum calculation")
+
+		if let date = birthdayData.birthdate {
+			if let day = Calendar.current.ordinality(of: .day, in: .year, for: date) {
+				let dayModulo65 = day % 65
+				birthdayData.checksum = dayModulo65
+			}
+		}
 	}
 
 	// MARK: - Helper methods
@@ -332,4 +337,5 @@ class ProofManager: ProofManaging, Logging {
 		}
 		return ""
 	}
+
 }
