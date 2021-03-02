@@ -27,6 +27,12 @@ class EnlargedQRImageView: BaseView {
 		return view
 	}()
 
+	/// The title label
+	private let titleLabel: Label = {
+
+		return Label(subheadMedium: nil).multiline()
+	}()
+
 	/// The message label
 	private let messageLabel: Label = {
 
@@ -49,6 +55,7 @@ class EnlargedQRImageView: BaseView {
 
 		// Fixed white background, no inverted QR in dark mode
 		backgroundColor = .white
+		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
 	}
 	/// Setup the hierarchy
@@ -57,7 +64,8 @@ class EnlargedQRImageView: BaseView {
 
 		addSubview(securityView)
 		addSubview(largeQRimageView)
-		addSubview(messageLabel)
+		addSubview(titleLabel)
+//		addSubview(messageLabel)
 	}
 	/// Setup the constraints
 	override func setupViewConstraints() {
@@ -66,8 +74,19 @@ class EnlargedQRImageView: BaseView {
 
 		NSLayoutConstraint.activate([
 
+			// Message
+			titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			titleLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.labelSidemargin
+			),
+			titleLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.labelSidemargin
+			),
+
 			// QR View
-			largeQRimageView.topAnchor.constraint(equalTo: topAnchor),
+			largeQRimageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
 			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
 			largeQRimageView.leadingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.leadingAnchor,
@@ -78,19 +97,19 @@ class EnlargedQRImageView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Message
-			messageLabel.topAnchor.constraint(
-				equalTo: largeQRimageView.bottomAnchor,
-				constant: ViewTraits.messageMargin
-			),
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.labelSidemargin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.labelSidemargin
-			),
+//			// Message
+//			messageLabel.topAnchor.constraint(
+//				equalTo: largeQRimageView.bottomAnchor,
+//				constant: ViewTraits.messageMargin
+//			),
+//			messageLabel.leadingAnchor.constraint(
+//				equalTo: leadingAnchor,
+//				constant: ViewTraits.labelSidemargin
+//			),
+//			messageLabel.trailingAnchor.constraint(
+//				equalTo: trailingAnchor,
+//				constant: -ViewTraits.labelSidemargin
+//			),
 
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -113,6 +132,13 @@ class EnlargedQRImageView: BaseView {
 				textColor: Theme.colors.dark,
 				textAlignment: .center
 			)
+		}
+	}
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
 		}
 	}
 

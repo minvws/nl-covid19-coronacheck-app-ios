@@ -16,6 +16,7 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
 	var navigateToTokenOverviewCalled = false
 	var navigateToTokenScanCalled = false
 	var navigateToTokenEntryCalled = false
+	var navigateToBirthdayCalled = false
 	var navigateToListResultsCalled = false
 	var navigateToCreateProofCalled = false
 	var navigateBackToStartCalled = false
@@ -50,6 +51,11 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
 	func navigateToTokenEntry(_ token: RequestToken?) {
 
 		navigateToTokenEntryCalled = true
+	}
+
+	func navigateToBirthdate() {
+
+		navigateToBirthdayCalled = true
 	}
 
 	func navigateToListResults() {

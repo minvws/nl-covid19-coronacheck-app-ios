@@ -40,38 +40,38 @@
 /* MARK: - Holder Menu */
 "holder.menu.dashboard" = "Mijn overzicht";
 "holder.menu.settings" = "Instellingen";
-"holder.menu.faq" = "Meest gestelde vragen";
+"holder.menu.faq" = "Meestgestelde vragen";
 "holder.menu.about" = "Over deze app";
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
 
 /* MARK: - Holder Onboarding */
-"holder.onboarding.title.safely" = "Getest en wel op pad";
-"holder.onboarding.message.safely" = "Om zo veilig mogelijk op pad te kunnen is het belangrijk eerst een coronatest te doen. Alleen bij een negatieve test krijg je toegang tot de testevenementen van Fieldlab.\n";
+"holder.onboarding.title.safely" = "Alleen toegang na testen";
+"holder.onboarding.message.safely" = "Jouw veiligheid en die van anderen is belangrijk. Ook als je wat leuks gaat doen. Laat je daarom eerst testen. Met een negatief testresultaat (geen corona) krijg je toegang tot de testevenementen van Fieldlab.";
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
-"holder.onboarding.message.yourqr" = "Deze app maakt van jouw negatieve testresultaat een persoonlijke QR-code. Bij binnenkomst wordt deze QR-code gescand als bewijs dat je negatief getest bent.\n";
-"holder.onboarding.title.validity" = "Bewijs geldt 48 uur";
-"holder.onboarding.message.validity" = "Een negatief testresultaat is 48 uur geldig. In die periode is de kans dat je besmet raakt klein. Als je testresultaat afloopt verdwijnt de QR-code uit de app. Nieuwe QR-code nodig? Laat je opnieuw testen.";
+"holder.onboarding.message.yourqr" = "Ben je negatief getest (geen corona)? Dan kun je met deze app een persoonlijke QR-code maken. Dat is jouw testbewijs. De QR-code wordt gescand voordat je toegang krijgt.";
+"holder.onboarding.title.validity" = "Geldigheid van je bewijs";
+"holder.onboarding.message.validity" = "Een negatief testresultaat (geen corona) is geldig tot 48 uur na het moment van testen. De kans dat je in die tijd besmettelijk bent voor anderen is namelijk klein.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
-"holder.onboarding.message.privacy" = "Deze app haalt alleen een negatief testresultaat op. En controleert of dit jouw resultaat is. Andere gegevens worden niet verwerkt of opgeslagen.\n";
+"holder.onboarding.message.privacy" = "Deze app haalt alleen een negatief testresultaat (geen corona) op. En controleert of dit jouw resultaat is. Andere persoonsgegevens worden niet verwerkt of opgeslagen.";
 
 /* MARK: - Holder Consent */
-"holder.consent.title" = "Zo gebruikt de app je gegevens";
-"holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck jouw gegevens gebruikt. Dit zijn de belangrijkste punten.";
+"holder.consent.title" = "Zo gebruikt deze app jouw gegevens";
+"holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
 "holder.consent.message.underlined" = "privacyverklaring";
-"holder.consent.item.1" = "De CoronaCheck QR-code is <b>niet te herleiden naar jou</b> als persoon";
-"holder.consent.item.2" = "De scanner weet alleen of jouw testbewijs geldig is. <b>Niet wie je bent</b>.";
-"holder.consent.item.3" = "CoronaCheck houdt geen <b>locatie of GPS gegevens</b> bij";
-"holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app mijn gegevens gebruikt.";
+"holder.consent.item.1" = "Je naam wordt <b>niet gebruikt of bewaard</b>";
+"holder.consent.item.2" = "Je GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b>";
+"holder.consent.item.3" = "Anderen kunnen jou <b>niet terugvinden als gebruiker</b> van deze app";
+"holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app met gegevens omgaat";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Wil je een testevenement van Fieldlab bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
+"holder.dashboard.intro" = "Ga je een testevenement van Fieldlab bezoeken? Daar heb je een negatieve testuitslag voor nodig, in de vorm van een QR-code.";
 "holder.dashboard.appointment.title" = "Maak een testafspraak";
 "holder.dashboard.appointment.message" = "Wil je een QR-code maken? Laat je dan eerst testen op corona.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
 "holder.dashboard.create.title" = "Maak een QR-code";
-"holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
+"holder.dashboard.create.message" = "Zet jouw negatieve testresultaat om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
 "holder.dashboard.qr.title" = "Toon QR-code bij ingang";
 "holder.dashboard.qr.message" = "Geldig tot %@";
@@ -122,12 +122,41 @@
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
+/* MARK: - Holder Birthday Entry */
+"holder.birthday.entry.title" = "Wat is je geboortedatum";
+"holder.birthday.entry.text" = "<p>We vragen je je geboortedatum in te vullen, zoals die op je identiteitsbewijs staat. Let op: je kan deze later niet meer aanpassen.</p><p>Zo controleren we of een testresultaat ook echt bij jou hoort.</p>";
+"holder.birthday.entry.day" = "Dag";
+"holder.birthday.entry.month" = "Maand";
+"holder.birthday.entry.year" = "Jaar";
+"holder.birthday.entry.button.title" = "Bevestig";
+"holder.birthday.entry.invalid" = "Dit is geen geldige datum";
+"holder.birthday.january" = "Januari";
+"holder.birthday.february" = "Februari";
+"holder.birthday.march" = "Maart";
+"holder.birthday.april" = "April";
+"holder.birthday.may" = "Mei";
+"holder.birthday.june" = "Juni";
+"holder.birthday.july" = "Juli";
+"holder.birthday.august" = "Augustus";
+"holder.birthday.september" = "September";
+"holder.birthday.october" = "Oktober";
+"holder.birthday.november" = "November";
+"holder.birthday.december" = "December";
+
+/* MARK: - Holder Birthday Confirmation */
+"holder.birthday.confirmation.title" = "Controleer je geboortedatum";
+"holder.birthday.confirmation.text" = "<p>Komt <b>%@</b> overeen met de geboortedatum zoals deze op je identiteitsbewijs staat?</p><p>Je kan je geboortedatum later niet aanpassen.</p>";
+"holder.birthday.confirmation.confirm" = "%@ is de geboortedatum die op mijn identiteitsbewijs staat";
+"holder.birthday.confirmation.button.title" = "Bevestig";
+"holder.birthday.confirmation.adjust.title" = "Pas geboortedatum aan";
+"holder.birthday.confirmation.finished" = "Geboortedatum\ningevuld";
+
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
 "holder.testresults.noresults.title" = "Er is geen negatief restresultaat";
-"holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je testresultaat is nog niet verwerkt</li><li>Je test is langer dan 48 uur geleden uitgevoerd</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
+"holder.testresults.noresults.text" = "Er is geen negatief testresultaat (geen corona) beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je test is langer dan 48 uur geleden uitgevoerd</li><li>Je testresultaat is nog niet verwerkt</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";

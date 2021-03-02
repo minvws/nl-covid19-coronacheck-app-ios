@@ -168,7 +168,6 @@ class CryptoManager: CryptoManaging, Logging {
 			issuerPublicKey,
 			Data(nonce.bytes)
 		   ) {
-			let xxx = Data(nonce.bytes)
 			if let value = result.value, result.error.isEmpty {
 				let string = String(decoding: value, as: UTF8.self)
 				return string

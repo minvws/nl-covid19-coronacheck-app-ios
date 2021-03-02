@@ -9,13 +9,13 @@ import UIKit
 
 class CreateProofViewController: BaseViewController {
 
-	private let viewModel: CreateProofViewiewModel
+	private let viewModel: CreateProofViewModel
 
 	let sceneView = CreateProofView()
 
 	// MARK: Initializers
 
-	init(viewModel: CreateProofViewiewModel) {
+	init(viewModel: CreateProofViewModel) {
 
 		self.viewModel = viewModel
 

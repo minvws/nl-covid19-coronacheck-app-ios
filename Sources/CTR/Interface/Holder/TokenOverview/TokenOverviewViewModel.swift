@@ -60,12 +60,12 @@ class TokenOverviewViewModel: Logging {
 				identifier: .code,
 				name: .holderTokenOverviewCodeTitle,
 				subTitle: .holderTokenOverviewCodeText
-			)// ,
-//			TokenProvider(
-//				identifier: .qr,
-//				name: .holderTokenOverviewQRTitle,
-//				subTitle: .holderTokenOverviewQRText
-//			)
+			),
+			TokenProvider(
+				identifier: .qr,
+				name: .holderTokenOverviewQRTitle,
+				subTitle: .holderTokenOverviewQRText
+			)
 		]
 	}
 

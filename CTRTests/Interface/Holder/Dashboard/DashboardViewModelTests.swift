@@ -18,6 +18,8 @@ class DashboardViewModelTests: XCTestCase {
 
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	var proofManagerSpy = ProofManagingSpy()
+
 	/// The configuration spy
 	var configSpy = ConfigurationGeneralSpy()
 
@@ -26,11 +28,13 @@ class DashboardViewModelTests: XCTestCase {
 
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
+		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
 		sut = HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
 			configuration: configSpy
 		)
 	}
@@ -65,17 +69,20 @@ class DashboardViewModelTests: XCTestCase {
 	func testContent() {
 
 		// Given
+		proofManagerSpy.birthDate = Date()
 
 		// When
 		sut = HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
 			configuration: configSpy
 		)
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderDashboardTitle, "Title should match")
 		XCTAssertEqual(sut?.message, .holderDashboardIntro, "Message should match")
+		XCTAssertNil(sut?.qrSubTitle, "Subtitle should be nil")
 		XCTAssertEqual(sut?.qrTitle, .holderDashboardQRTitle, "QR Title should match")
 		XCTAssertEqual(sut?.expiredTitle, .holderDashboardQRExpired, "QR Expired title should match")
 		XCTAssertNotNil(sut?.appointmentCard, "The appointment card should not be nil")
@@ -149,6 +156,7 @@ class DashboardViewModelTests: XCTestCase {
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
 		configSpy.testResultTTL = 50
+		proofManagerSpy.birthDate = Date()
 
 		// When
 		sut?.checkQRValidity()
@@ -160,6 +168,7 @@ class DashboardViewModelTests: XCTestCase {
 		}
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
+		XCTAssertNotNil(strongSut.qrSubTitle, "Subtitle should be nil")
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
 		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")

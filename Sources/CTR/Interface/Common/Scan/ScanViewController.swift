@@ -25,6 +25,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	func setupScan() {
 
+		guard !Platform.isSimulator else {
+			return
+		}
+
 		sceneView.cameraView.backgroundColor = UIColor.black
 		captureSession = AVCaptureSession()
 
@@ -82,7 +86,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 		setupScan()
 
-		if captureSession?.isRunning == false {
+		if !Platform.isSimulator, captureSession?.isRunning == false {
 			captureSession.startRunning()
 		}
 	}
@@ -90,7 +94,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillDisappear(animated)
 
-		if captureSession?.isRunning == true {
+		if !Platform.isSimulator, captureSession?.isRunning == true {
 			captureSession.stopRunning()
 		}
 

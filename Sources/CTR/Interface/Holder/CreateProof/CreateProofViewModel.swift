@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CreateProofViewiewModel: Logging {
+class CreateProofViewModel: Logging {
 
 	var loggingCategory: String = "CreateProofViewiewModel"
 
