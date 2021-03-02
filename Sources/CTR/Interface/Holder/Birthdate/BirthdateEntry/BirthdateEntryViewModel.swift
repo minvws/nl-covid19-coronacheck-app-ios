@@ -23,10 +23,8 @@ class BirthdateEntryViewModel: Logging {
 	/// DescriptionInitializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
-	init(
-		coordinator: (BirthdateCoordinatorDelegate & Dismissable)
-	) {
+	init(coordinator: (BirthdateCoordinatorDelegate & Dismissable)) {
+		
 		self.coordinator = coordinator
 	}
 
@@ -59,11 +57,13 @@ class BirthdateEntryViewModel: Logging {
 	}
 
 	func setMonth(_ input: String?) {
+
 		month = input
 		setButtonState()
 	}
 
 	func setYear(_ input: String?) {
+
 		year = input
 		setButtonState()
 	}
@@ -78,6 +78,7 @@ class BirthdateEntryViewModel: Logging {
 	}
 
 	private lazy var parseDateFormatter: DateFormatter = {
+
 		let dateFormatter = DateFormatter()
 		dateFormatter.calendar = .current
 		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
