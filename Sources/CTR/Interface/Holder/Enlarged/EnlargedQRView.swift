@@ -65,7 +65,7 @@ class EnlargedQRImageView: BaseView {
 		addSubview(securityView)
 		addSubview(largeQRimageView)
 		addSubview(titleLabel)
-		addSubview(messageLabel)
+//		addSubview(messageLabel)
 	}
 	/// Setup the constraints
 	override func setupViewConstraints() {
@@ -97,19 +97,19 @@ class EnlargedQRImageView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Message
-			messageLabel.topAnchor.constraint(
-				equalTo: largeQRimageView.bottomAnchor,
-				constant: ViewTraits.messageMargin
-			),
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.labelSidemargin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.labelSidemargin
-			),
+//			// Message
+//			messageLabel.topAnchor.constraint(
+//				equalTo: largeQRimageView.bottomAnchor,
+//				constant: ViewTraits.messageMargin
+//			),
+//			messageLabel.leadingAnchor.constraint(
+//				equalTo: leadingAnchor,
+//				constant: ViewTraits.labelSidemargin
+//			),
+//			messageLabel.trailingAnchor.constraint(
+//				equalTo: trailingAnchor,
+//				constant: -ViewTraits.labelSidemargin
+//			),
 
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
