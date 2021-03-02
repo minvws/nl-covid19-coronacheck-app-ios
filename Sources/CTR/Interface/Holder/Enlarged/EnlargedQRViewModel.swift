@@ -18,6 +18,9 @@ class EnlargedQRViewModel: Logging {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
+	/// The proof manager
+	weak var proofManager: ProofManaging?
+
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol
 
@@ -26,6 +29,9 @@ class EnlargedQRViewModel: Logging {
 
 	/// A timer to keep sending pings
 	var validityTimer: Timer?
+
+	/// The message above the QR card
+	@Bindable private(set) var qrTitle: String?
 
 	/// The message below the QR card
 	@Bindable private(set) var qrSubTitle: String?
@@ -43,14 +49,17 @@ class EnlargedQRViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
+	///   - proofManager: the proof manager
 	///   - configuration: the configuration
 	init(
 		coordinator: Dismissable,
 		cryptoManager: CryptoManaging,
+		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
+		self.proofManager = proofManager
 		self.configuration = configuration
 
 		// Start by showing nothing
@@ -108,6 +117,9 @@ class EnlargedQRViewModel: Logging {
 			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 		}
+		if let birthdate = proofManager?.getBirthDate() {
+			qrTitle = printBirthDateFormatter.string(from: birthdate)
+		}
 	}
 
 	/// Start the validity timer, check every 10 seconds.
@@ -135,8 +147,18 @@ class EnlargedQRViewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
+		return dateFormatter
+	}()
+
+	/// Formatter to print
+	private lazy var printBirthDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
 }

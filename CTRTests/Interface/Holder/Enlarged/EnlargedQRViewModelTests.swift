@@ -18,6 +18,8 @@ class EnlargedQRViewModelTests: XCTestCase {
 
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	var proofManagerSpy = ProofManagingSpy()
+
 	/// The configuration spy
 	var configSpy = ConfigurationGeneralSpy()
 
@@ -26,11 +28,13 @@ class EnlargedQRViewModelTests: XCTestCase {
 
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
+		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
 		sut = EnlargedQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
 			configuration: configSpy
 		)
 	}
@@ -46,6 +50,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		sut = EnlargedQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
 			configuration: configSpy
 		)
 
@@ -94,7 +99,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValid() {
+	func testValidityCredentialValidNoBirthDate() {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
@@ -105,6 +110,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
 		configSpy.testResultTTL = 50
+		proofManagerSpy.birthDate = nil
 
 		// When
 		sut?.checkQRValidity()
@@ -119,6 +125,37 @@ class EnlargedQRViewModelTests: XCTestCase {
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
 		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
+		XCTAssertNil(strongSut.qrTitle, "Title should be nil")
+	}
+
+	/// Test the validity of the credential with valid credential
+	func testValidityCredentialValid() {
+
+		// Given
+		let sampleTime = Date().timeIntervalSince1970 - 20
+		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			sampleTime: "\(sampleTime)",
+			testType: "testValidityCredentialExpired"
+		)
+		let qrMessage = Data("testValidityCredentialValid".utf8)
+		cryptoManagerSpy.qrMessage = qrMessage
+		configSpy.testResultTTL = 50
+		proofManagerSpy.birthDate = Date()
+
+		// When
+		sut?.checkQRValidity()
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
+		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
+		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
+		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
+		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
+		XCTAssertNotNil(strongSut.qrTitle, "Title should not be nil")
 	}
 
 	/// Test the dismiss method

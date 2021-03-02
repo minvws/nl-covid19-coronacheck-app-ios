@@ -44,6 +44,7 @@ class EnlargedQRViewController: BaseViewController {
 
 		edgesForExtendedLayout = []
 
+		viewModel.$qrTitle.binding = { self.sceneView.title = $0 }
 		viewModel.$qrSubTitle.binding = { self.sceneView.message = $0 }
 
 		viewModel.$qrMessage.binding = {

@@ -182,6 +182,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: EnlargedQRViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
+				proofManager: proofManager,
 				configuration: generalConfiguration
 			)
 		)

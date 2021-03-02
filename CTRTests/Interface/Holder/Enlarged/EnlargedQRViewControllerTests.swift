@@ -18,6 +18,8 @@ class EnlargedQRViewControllerTests: XCTestCase {
 
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	var proofManagerSpy = ProofManagingSpy()
+
 	/// The configuration spy
 	var configSpy = ConfigurationGeneralSpy()
 
@@ -32,11 +34,13 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		super.setUp()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
+		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
 		viewModel = EnlargedQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
 			configuration: configSpy
 		)
 		sut = EnlargedQRViewController(viewModel: viewModel!)
@@ -87,6 +91,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
 		configSpy.testResultTTL = 50
+		proofManagerSpy.birthDate = Date()
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -106,6 +111,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		}
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
+		XCTAssertNotNil(strongSut.sceneView.title, "Title should not be nil")
 	}
 
 	/// Test the validity of the credential with expired credential
