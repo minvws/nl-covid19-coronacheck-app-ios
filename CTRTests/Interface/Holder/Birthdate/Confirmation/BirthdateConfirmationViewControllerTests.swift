@@ -4,14 +4,17 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-
+  
 import XCTest
 @testable import CTR
 
-class BirthdateConfirmationViewModelTests: XCTestCase {
+class BirthdateConfirmationViewControllerTests: XCTestCase {
+
+	// MARK: Subject under test
+	var sut: BirthdateConfirmationViewController?
 
 	/// Subject under test
-	var sut: BirthdateConfirmationViewModel?
+	var viewModel: BirthdateConfirmationViewModel?
 
 	/// The coordinator spy
 	var birthdateCoordinatorDelegateSpy = BirthdateCoordinatorDelegateSpy()
@@ -25,6 +28,8 @@ class BirthdateConfirmationViewModelTests: XCTestCase {
 	/// the date
 	var date = Date()
 
+	var window = UIWindow()
+
 	override func setUp() {
 		super.setUp()
 
@@ -32,43 +37,39 @@ class BirthdateConfirmationViewModelTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
-		sut = BirthdateConfirmationViewModel(
+		viewModel = BirthdateConfirmationViewModel(
 			coordinator: birthdateCoordinatorDelegateSpy,
 			proofManager: proofManagerSpy,
 			date: date
 		)
+
+		sut = BirthdateConfirmationViewController( viewModel: viewModel!)
+		window = UIWindow()
 	}
-	
-	// MARK: - Tests
 
-	/// Test all the default content
-	func testContent() {
+	override func tearDown() {
 
-		// Given
+		super.tearDown()
+	}
 
-		// When
-		sut = BirthdateConfirmationViewModel(
-			coordinator: birthdateCoordinatorDelegateSpy,
-			proofManager: proofManagerSpy,
-			date: date
-		)
+	func loadView() {
 
-		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
+		if let sut = sut {
+			window.addSubview(sut.view)
+			RunLoop.current.run(until: Date())
 		}
-		XCTAssertNotNil(strongSut.message, "Message should not be nil")
-		XCTAssertNotNil(strongSut.confirm, "Confirm should not be nil")
 	}
+
+	// MARK: - Tests
 
 	/// Test the dismiss method
 	func testDismiss() {
 
 		// Given
+		loadView()
 
 		// When
-		sut?.dismiss()
+		sut?.closeButtonTapped()
 
 		// Then
 		XCTAssertTrue(birthdateCoordinatorDelegateSpy.dismissCalled, "Method should be called")
@@ -78,25 +79,27 @@ class BirthdateConfirmationViewModelTests: XCTestCase {
 	func testPrimaryButtonTapped() {
 
 		// Given
+		loadView()
 
 		// When
-		sut?.primaryButtonTapped()
+		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(strongSut.showDialog, "Dialog should be shown")
+		XCTAssertFalse(strongSut.sceneView.confirmationView.isHidden, "Dialog should be shown")
 	}
 
 	/// Test the secondary button tapped method
 	func testSecondaryButtonTapped() {
 
 		// Given
+		loadView()
 
 		// When
-		sut?.secondaryButtonTapped()
+		sut?.sceneView.secondaryButton.sendActions(for: .touchUpInside)
 
 		// Then
 		XCTAssertTrue(birthdateCoordinatorDelegateSpy.navigateBackToBirthdayEntryCalled, "Delegate method should be called")
@@ -106,17 +109,38 @@ class BirthdateConfirmationViewModelTests: XCTestCase {
 	func testConfirmButtonTapped() {
 
 		// Given
+		loadView()
+		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// When
-		sut?.confirmButtonTapped()
+		sut?.sceneView.confirmationView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.showDialog, "Dialog should be removed")
+		XCTAssertFalse(strongSut.sceneView.confirmationView.isHidden, "Dialog should be shown")
 		XCTAssertTrue(proofManagerSpy.setBirthDateCalled, "Method should be called")
 		XCTAssertTrue(birthdateCoordinatorDelegateSpy.birthdateConfirmedCalled, "Delegate method should be called")
+	}
+
+	func testConsentButton() {
+
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+
+		// Given
+		let button = ConsentButton()
+		button.isSelected = true
+		strongSut.sceneView.primaryButton.isEnabled = false
+		
+		// When
+		sut?.consentValueChanged(button)
+
+		// Then
+		XCTAssertTrue(strongSut.sceneView.primaryButton.isEnabled, "button should be enable")
 	}
 }

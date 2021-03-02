@@ -209,6 +209,8 @@
 		6D9284D425B5DAD1009D4350 /* VerifierResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */; };
 		6D9317CC25ECCDD600554DA9 /* BirthdateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9317CB25ECCDD600554DA9 /* BirthdateCoordinator.swift */; };
 		6D9317CD25ECCDD600554DA9 /* BirthdateCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9317CB25ECCDD600554DA9 /* BirthdateCoordinator.swift */; };
+		6D960BD725EE7E3500776FE6 /* BirthdateConfirmationViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D960BD625EE7E3500776FE6 /* BirthdateConfirmationViewControllerTests.swift */; };
+		6D960BDC25EE7E6900776FE6 /* BirthdateCoordinatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D960BDB25EE7E6900776FE6 /* BirthdateCoordinatorSpy.swift */; };
 		6D9819D725D53A9C009A96D7 /* TokenOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819D625D53A9B009A96D7 /* TokenOverviewViewController.swift */; };
 		6D9819DC25D53C23009A96D7 /* TokenOverviewLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */; };
 		6D9819E125D53CC6009A96D7 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819E025D53CC6009A96D7 /* ScrollView.swift */; };
@@ -618,6 +620,8 @@
 		6D9284CF25B5DAAC009D4350 /* VerifierScanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierScanViewController.swift; sourceTree = "<group>"; };
 		6D9284D325B5DAD1009D4350 /* VerifierResultViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierResultViewController.swift; sourceTree = "<group>"; };
 		6D9317CB25ECCDD600554DA9 /* BirthdateCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdateCoordinator.swift; sourceTree = "<group>"; };
+		6D960BD625EE7E3500776FE6 /* BirthdateConfirmationViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdateConfirmationViewControllerTests.swift; sourceTree = "<group>"; };
+		6D960BDB25EE7E6900776FE6 /* BirthdateCoordinatorSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BirthdateCoordinatorSpy.swift; sourceTree = "<group>"; };
 		6D9819D625D53A9B009A96D7 /* TokenOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenOverviewViewController.swift; sourceTree = "<group>"; };
 		6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOverviewLocalization.swift; sourceTree = "<group>"; };
 		6D9819E025D53CC6009A96D7 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
@@ -1659,6 +1663,8 @@
 			isa = PBXGroup;
 			children = (
 				6DFA696325EE67A600310E15 /* BirthdateConfirmationViewModelTests.swift */,
+				6D960BD625EE7E3500776FE6 /* BirthdateConfirmationViewControllerTests.swift */,
+				6D960BDB25EE7E6900776FE6 /* BirthdateCoordinatorSpy.swift */,
 			);
 			path = Confirmation;
 			sourceTree = "<group>";
@@ -2390,9 +2396,11 @@
 				6DC3BEAD25E4E6C50079A3F2 /* DashboardViewModelTests.swift in Sources */,
 				6DD23FA125E3D64600CE4AEB /* ListResultsViewControllerTests.swift in Sources */,
 				6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */,
+				6D960BD725EE7E3500776FE6 /* BirthdateConfirmationViewControllerTests.swift in Sources */,
 				6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */,
 				6DD23F8A25E3BE8A00CE4AEB /* ListResultsViewModelTests.swift in Sources */,
 				6DD23F9C25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift in Sources */,
+				6D960BDC25EE7E6900776FE6 /* BirthdateCoordinatorSpy.swift in Sources */,
 				6DD293A225E3F258000C676C /* VerifierCoordinatorTests.swift in Sources */,
 				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
 				6DC3BEB525E4EF760079A3F2 /* DashboardViewControllerTests.swift in Sources */,
