@@ -50,6 +50,9 @@ class HolderDashboardViewModel: Logging {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
+	/// The proof manager
+	weak var proofManager: ProofManaging?
+
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol
 
@@ -68,8 +71,11 @@ class HolderDashboardViewModel: Logging {
 	/// The title of the QR card
 	@Bindable private(set) var qrTitle: String
 
-	/// The message below the QR card
+	/// The message below the title
 	@Bindable private(set) var qrSubTitle: String?
+
+	/// The message below the QR card
+	@Bindable private(set) var qrValidUntilTitle: String?
 
 	/// The message on the expired card
 	@Bindable private(set) var expiredTitle: String?
@@ -96,14 +102,17 @@ class HolderDashboardViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
+	///   - proofManager: the proof manager
 	///   - configuration: the configuration
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
+		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
+		self.proofManager = proofManager
 		self.configuration = configuration
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
@@ -188,11 +197,14 @@ class HolderDashboardViewModel: Logging {
 	/// - Parameter printDate: valid until time
 	func showQRMessageIsValid(_ printDate: String) {
 
-		if let message = self.cryptoManager?.generateQRmessage() {
+		if let message = cryptoManager?.generateQRmessage() {
 			qrMessage = message
-			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
+			qrValidUntilTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 			showExpiredQR = false
+		}
+		if let birthdate = proofManager?.getBirthDate() {
+			qrSubTitle = printBirthDateFormatter.string(from: birthdate)
 		}
 	}
 
@@ -249,8 +261,18 @@ class HolderDashboardViewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 		
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
+		return dateFormatter
+	}()
+
+	/// Formatter to print
+	private lazy var printBirthDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
 }

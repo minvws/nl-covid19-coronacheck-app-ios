@@ -89,7 +89,7 @@ class BirthdateEntryView: ScrollView {
 		stackView.axis = .horizontal
 		stackView.alignment = .leading
 		stackView.distribution = .fill
-		stackView.spacing = 40
+//		stackView.spacing = 40
 		return stackView
 	}()
 

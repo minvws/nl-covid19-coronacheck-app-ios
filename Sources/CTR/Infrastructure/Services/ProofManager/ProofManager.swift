@@ -303,7 +303,7 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Set the birthdate
 	/// - Parameter date: the date
-	func setBirthDate(_ date: Date) {
+	func setBirthDate(_ date: Date?) {
 
 		birthdayData.birthdate = date
 		calculateChecksum()
@@ -323,6 +323,8 @@ class ProofManager: ProofManaging, Logging {
 				let dayModulo65 = day % 65
 				birthdayData.checksum = dayModulo65
 			}
+		} else {
+			birthdayData.checksum = nil
 		}
 	}
 

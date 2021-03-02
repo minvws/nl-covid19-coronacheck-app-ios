@@ -18,6 +18,8 @@ class DashboardViewControllerTests: XCTestCase {
 
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	var proofManagerSpy = ProofManagingSpy()
+
 	/// The configuration spy
 	var configSpy = ConfigurationGeneralSpy()
 
@@ -32,11 +34,13 @@ class DashboardViewControllerTests: XCTestCase {
 		super.setUp()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
+		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
 		viewModel = HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
+			proofManager: proofManagerSpy,
 			configuration: configSpy
 		)
 		sut = HolderDashboardViewController(viewModel: viewModel!)
@@ -124,6 +128,7 @@ class DashboardViewControllerTests: XCTestCase {
 
 		// Given
 		setupValidCredential()
+		proofManagerSpy.birthDate = Date()
 		loadView()
 
 		// When
@@ -135,6 +140,29 @@ class DashboardViewControllerTests: XCTestCase {
 			return
 		}
 		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
+		XCTAssertNotNil(strongSut.sceneView.qrView.subTitle, "SubTitle should not be nil")
+		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
+		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
+	}
+
+	/// Test the validity of the credential with valid credential without a birthdate
+	func testValidityCredentialValidNoBirthDate() {
+
+		// Given
+		setupValidCredential()
+		proofManagerSpy.birthDate = nil
+		loadView()
+
+		// When
+		sut?.checkValidity()
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
+		XCTAssertNil(strongSut.sceneView.qrView.subTitle, "SubTitle should be nil")
 		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 	}

@@ -19,6 +19,8 @@ class QRImageView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 24.0
+		static let titleMargin: CGFloat = 4.0
+		static let subTitleMargin: CGFloat = 8.0
 		static let labelSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 20.0
 		static let imageSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 40.0
 		static let securityOffset: CGFloat = 30.0
@@ -36,6 +38,12 @@ class QRImageView: BaseView {
 	private let titleLabel: Label = {
 
 		return Label(title3: nil, montserrat: true)
+	}()
+
+	/// The sub title label
+	private let subTitleLabel: Label = {
+
+		return Label(subheadMedium: nil)
 	}()
 
 	/// The message label
@@ -70,6 +78,7 @@ class QRImageView: BaseView {
 		containerView.backgroundColor = .white
 
 		titleLabel.textAlignment = .center
+		subTitleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
 		containerView.layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
@@ -93,6 +102,7 @@ class QRImageView: BaseView {
 		super.setupViewHierarchy()
 
 		containerView.addSubview(titleLabel)
+		containerView.addSubview(subTitleLabel)
 		containerView.addSubview(imageView)
 		containerView.addSubview(messageLabel)
 
@@ -137,8 +147,22 @@ class QRImageView: BaseView {
 				constant: -ViewTraits.labelSidemargin
 			),
 			titleLabel.bottomAnchor.constraint(
+				equalTo: subTitleLabel.topAnchor,
+				constant: -ViewTraits.titleMargin
+			),
+
+			// SubTitle
+			subTitleLabel.leadingAnchor.constraint(
+				equalTo: containerView.leadingAnchor,
+				constant: ViewTraits.labelSidemargin
+			),
+			subTitleLabel.trailingAnchor.constraint(
+				equalTo: containerView.trailingAnchor,
+				constant: -ViewTraits.labelSidemargin
+			),
+			subTitleLabel.bottomAnchor.constraint(
 				equalTo: imageView.topAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.subTitleMargin
 			),
 
 			// QR View
@@ -178,6 +202,12 @@ class QRImageView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
+		}
+	}
+
+	var subTitle: String? {
+		didSet {
+			subTitleLabel.text = subTitle
 		}
 	}
 

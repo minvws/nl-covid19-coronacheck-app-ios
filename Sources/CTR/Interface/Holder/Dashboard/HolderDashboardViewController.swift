@@ -43,7 +43,8 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$title.binding = { self.title = $0 }
 		viewModel.$message.binding = { self.sceneView.message = $0 }
 		viewModel.$qrTitle.binding = { self.sceneView.qrView.title = $0 }
-		viewModel.$qrSubTitle.binding = { self.sceneView.qrView.message = $0 }
+		viewModel.$qrSubTitle.binding = { self.sceneView.qrView.subTitle = $0 }
+		viewModel.$qrValidUntilTitle.binding = { self.sceneView.qrView.message = $0 }
 		viewModel.$expiredTitle.binding = { self.sceneView.expiredQRView.title = $0 }
 		viewModel.$appointmentCard.binding = { self.styleCard(self.sceneView.appointmentCard, cardInfo: $0) }
 		viewModel.$createCard.binding = { self.styleCard(self.sceneView.createCard, cardInfo: $0) }

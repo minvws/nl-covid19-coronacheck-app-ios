@@ -65,7 +65,7 @@ protocol ProofManaging: AnyObject {
 
 	/// Set the birthdate
 	/// - Parameter date: the date
-	func setBirthDate(_ date: Date)
+	func setBirthDate(_ date: Date?)
 
 	/// Get the birth date checksum
 	func getBirthDateChecksum() -> Int?

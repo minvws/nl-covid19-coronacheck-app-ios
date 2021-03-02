@@ -81,6 +81,7 @@ extension BirthdateCoordinator: BirthdateCoordinatorDelegate {
 		)
 		navigationController = UINavigationController(rootViewController: destination)
 		presentingViewController?.present(navigationController, animated: true, completion: nil)
+//		presentingViewController?.show(destination, sender: presentingViewController)
 	}
 
 	/// Navigate to Birthday confirmation Scene
