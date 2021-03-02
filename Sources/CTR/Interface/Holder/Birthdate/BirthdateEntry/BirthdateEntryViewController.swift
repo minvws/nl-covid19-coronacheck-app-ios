@@ -145,11 +145,15 @@ class BirthdateEntryViewController: BaseViewController {
 			#selector(keyBoardWillShow(notification:)),
 			keyboardWillHide: #selector(keyBoardWillHide(notification:))
 		)
-		sceneView.dayEntryView.inputField.becomeFirstResponder()
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
+
+		if !UIDevice.current.isSmallScreen {
+			// On an iPhone SE do not auto show the keyboard, the title will scroll out of view.
+			sceneView.dayEntryView.inputField.becomeFirstResponder()
+		}
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -183,7 +187,7 @@ class BirthdateEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = true
-		sceneView.scrollView.contentInset.bottom = notification.getHeight()
+		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 20 // 20: Also show the error view.
 	}
 
 	@objc func keyBoardWillHide(notification: Notification) {
@@ -200,6 +204,8 @@ extension BirthdateEntryViewController: UITextFieldDelegate {
 	/// UITextFieldDelegate method
 	/// - Parameter textField: the textfield that did begin editing.
 	func textFieldDidBeginEditing(_ textField: UITextField) {
+		// Hide the error
+		self.sceneView.errorView.isHidden = true
 		if textField.tag == 0 {
 			activeInputField = sceneView.dayEntryView.inputField
 		} else if textField.tag == 1 {
@@ -255,6 +261,7 @@ extension BirthdateEntryViewController: UIPickerViewDataSource, UIPickerViewDele
 	/// - Returns: the tirle for the row in component
 	func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
 
+		activeInputField = sceneView.monthEntryView.inputField
 		return months[row]
 	}
 

@@ -88,8 +88,7 @@ class BirthdateEntryView: ScrollView {
 		stackView.translatesAutoresizingMaskIntoConstraints = false
 		stackView.axis = .horizontal
 		stackView.alignment = .leading
-		stackView.distribution = .fill
-//		stackView.spacing = 40
+		stackView.distribution = .equalSpacing
 		return stackView
 	}()
 
@@ -113,7 +112,7 @@ class BirthdateEntryView: ScrollView {
 		contentView.addSubview(messageLabel)
 		contentView.addSubview(entryStackView)
 		contentView.addSubview(errorView)
-		contentView.addSubview(primaryButton)
+		addSubview(primaryButton)
 	}
 
 	/// Setup the constraints
@@ -125,7 +124,7 @@ class BirthdateEntryView: ScrollView {
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
+				equalTo: contentView.topAnchor,
 				constant: ViewTraits.titleTopMargin
 			),
 			titleLabel.leadingAnchor.constraint(
