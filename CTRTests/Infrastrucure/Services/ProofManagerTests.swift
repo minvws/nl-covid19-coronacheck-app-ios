@@ -11,11 +11,14 @@ import XCTest
 class ProofManagerTests: XCTestCase {
 
 	var sut = ProofManager()
+	var cryptoSpy = CryptoManagerSpy()
 
 	override func setUp() {
 
 		super.setUp()
 		sut = ProofManager()
+		cryptoSpy = CryptoManagerSpy()
+		sut.cryptoManager = cryptoSpy
 	}
 
 	/// test the set birthdate with a date
@@ -77,5 +80,58 @@ class ProofManagerTests: XCTestCase {
 		XCTAssertEqual(sut.getBirthDateChecksum(), 4, "Checksum should match")
 		// Timestamp is march 7nd, 2021. That is the (31 + 28 + 10) = 69st day of the year.
 		// 69 mod 65 = 1.
+	}
+
+	/// Test the fetch issuers public keys
+	func testFetchIssuerPublicKeys() {
+
+		// Given
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = true
+
+		// When
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		} onError: { _ in
+			XCTFail("There should be no error")
+		}
+	}
+
+	/// Test the fetch issuers public keys with no repsonse
+	func testFetchIssuerPublicKeysNoResonse() {
+
+		// Given
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = false
+
+		// When
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		} onError: { _ in
+			XCTFail("There should be no error")
+		}
+	}
+
+	/// Test the fetch issuers public keys with an network error
+	func testFetchIssuerPublicKeysWithError() {
+
+		// Given
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = false
+		networkSpy.publicKeyError = NetworkError.invalidRequest
+
+		// When
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTFail("There should be no success")
+		} onError: { _ in
+
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		}
 	}
 }

@@ -18,6 +18,7 @@ class NetworkSpy: NetworkManaging {
 	var getPublicKeysCalled = false
 	var shouldReturnPublicKeys = false
 	var publicKeys: [IssuerPublicKey] = []
+	var publicKeyError: NetworkError?
 	//		var getTestResultsCalled = false
 	//		var getTestResultsIdentifier: String?
 	//		var getTestResultsWithISMCalled = false
@@ -68,6 +69,9 @@ class NetworkSpy: NetworkManaging {
 		getPublicKeysCalled = true
 		if shouldReturnPublicKeys {
 			completion(.success(publicKeys))
+		}
+		if let error = publicKeyError {
+			completion(.failure(error))
 		}
 	}
 }

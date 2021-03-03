@@ -41,20 +41,6 @@ class RemoteConfigManagerTests: XCTestCase {
 		}
 	}
 
-	class CryptoUtilitySpy: CryptoUtilityProtocol {
-		func validate(data: Data, signature: Data, completion: @escaping (Bool) -> Void) {
-
-		}
-
-		func signature(forData data: Data, key: Data) -> Data {
-			return Data()
-		}
-
-		func sha256(data: Data) -> String? {
-			return nil
-		}
-	}
-
 	// MARK: - Tests
 
 	/// Test the remote config manager update call no result from the api
