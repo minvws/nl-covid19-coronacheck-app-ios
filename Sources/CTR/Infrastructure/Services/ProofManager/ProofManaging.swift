@@ -12,18 +12,25 @@ protocol ProofManaging: AnyObject {
 	init()
 
 	/// Get the providers
-	func fetchCoronaTestProviders()
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchCoronaTestProviders(
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?)
 
 	/// Get the test types
 	func fetchTestTypes()
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
+	///   - ttl: the time to read from cache
 	///   - oncompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
-	oncompletion: (() -> Void)?,
-	onError: ((Error) -> Void)?)
+		ttl: TimeInterval,
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?)
 
 	/// Get the test result for a token
 	/// - Parameters:

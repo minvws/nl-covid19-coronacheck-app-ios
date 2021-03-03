@@ -116,9 +116,6 @@ class HolderCoordinator: Coordinator, Logging {
 	// Designated starter method
 	func start() {
 
-		// Load all the details for the proof manager
-		loadProofManager()
-
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
@@ -142,19 +139,6 @@ class HolderCoordinator: Coordinator, Logging {
 			// Start with the holder app
 			navigateToHolderStart()
 		}
-	}
-
-	/// Load all the details for the proof manager
-	func loadProofManager() {
-
-		// Fetch the test providers
-		proofManager.fetchCoronaTestProviders()
-
-		// Fetch the public keys from the issuer
-		proofManager.fetchIssuerPublicKeys(oncompletion: nil, onError: nil)
-
-		// Fetch the different test types
-		// proofManager.fetchTestTypes()
 	}
 }
 

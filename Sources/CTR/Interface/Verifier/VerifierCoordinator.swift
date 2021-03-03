@@ -50,7 +50,7 @@ class VerifierCoordinator: Coordinator, Logging {
 	
 	/// The crypto manager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
-	
+
 	/// The general configuration
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 	

@@ -19,6 +19,10 @@ protocol RemoteConfigManaging {
 	/// Update the remote configuration
 	/// - Parameter completion: completion handler
 	func update(completion: @escaping (UpdateState) -> Void)
+
+	/// Get the configuration
+	/// - Returns: the remote configuration
+	func getConfiguration() -> RemoteConfiguration
 }
 
 /// The version of the app
@@ -68,6 +72,9 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	@Keychain(name: "storedConfiguration", service: Constants.keychainService, clearOnReinstall: false)
 	private var storedConfiguration: RemoteConfiguration = .default
 
+	@UserDefaults(key: "lastFetchedTimestamp", defaultValue: nil)
+	var lastFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+
 	/// Initialize
 	required init() {
 
@@ -78,6 +85,13 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	/// - Parameter completion: completion handler
 	func update(completion: @escaping (UpdateState) -> Void) {
 
+		if let lastFetchedTimestamp = lastFetchedTimestamp,
+		   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL) {
+			logDebug("Remote config still within TTL")
+			completion(.noActionNeeded)
+			return
+		}
+
 		networkManager.getRemoteConfiguration { [weak self] resultwrapper in
 
 			guard let strongSelf = self else {
@@ -86,6 +100,8 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 			switch resultwrapper {
 				case let .success(remoteConfiguration):
+					// Update the last fetch time
+					self?.lastFetchedTimestamp = Date()
 					// Persist the remote configuration
 					strongSelf.storedConfiguration = remoteConfiguration
 					// Decide what to do
@@ -133,5 +149,12 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		let missingComponents = max(0, 3 - components.count)
 		components.append(contentsOf: Array(repeating: "0", count: missingComponents))
 		return components.joined(separator: ".")
+	}
+
+	/// Get the configuration
+	/// - Returns: the remote configuration
+	func getConfiguration() -> RemoteConfiguration {
+
+		return storedConfiguration
 	}
 }

@@ -39,7 +39,7 @@ class ProofManagingSpy: ProofManaging {
 		// Demanded by protocol
 	}
 
-	func fetchCoronaTestProviders() {
+	func fetchCoronaTestProviders(oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
 
 		fetchCoronaTestProvidersCalled = true
 	}
@@ -72,7 +72,7 @@ class ProofManagingSpy: ProofManaging {
 		}
 	}
 
-	func fetchIssuerPublicKeys(oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
+	func fetchIssuerPublicKeys(ttl: TimeInterval, oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
 
 		fetchIssuerPublicKeysCalled = true
 		if let error = issuerPublicKeyError {

@@ -69,6 +69,12 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$showError.binding = {
+			if $0 {
+				self.showError(.technicalErrorTitle, message: .technicalErrorText)
+			}
+		}
+
 		viewModel.$showVerification.binding = {
 			self.sceneView.verificationEntryView.isHidden = !$0
 			if $0 {

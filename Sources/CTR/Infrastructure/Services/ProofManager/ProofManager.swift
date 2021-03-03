@@ -92,7 +92,9 @@ class ProofManager: ProofManaging, Logging {
 	}
 
 	/// Get the providers
-	func fetchCoronaTestProviders() {
+	func fetchCoronaTestProviders(
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?) {
 
 		#if DEBUG
 		if let lastFetchedTimestamp = providersFetchedTimestamp,
@@ -103,14 +105,17 @@ class ProofManager: ProofManaging, Logging {
 		#endif
 
 		networkManager.getTestProviders { [weak self] response in
-			self?.providersFetchedTimestamp = Date()
+
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
 					self?.providerData.testProviders = providers
+					self?.providersFetchedTimestamp = Date()
+					oncompletion?()
 
 				case let .failure(error):
 					self?.logError("Error getting the test providers: \(error)")
+					onError?(error)
 			}
 		}
 	}
@@ -143,26 +148,28 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
+	///   - ttl: the time to read from cache
 	///   - oncompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
+		ttl: TimeInterval,
 		oncompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 
-		#if DEBUG
 		if let lastFetchedTimestamp = keysFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - 3600, cryptoManager.hasPublicKeys() {
-			// Don't fetch again within an hour
+		   lastFetchedTimestamp > Date() - ttl, cryptoManager.hasPublicKeys() {
+			logDebug("Issuer public keys still within TTL")
 			oncompletion?()
 			return
 		}
-		#endif
 
 		networkManager.getPublicKeys { [weak self] resultwrapper in
+
 			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
 			switch resultwrapper {
 				case let .success(keys):
 					self?.cryptoManager.setIssuerPublicKeys(keys)
+					self?.keysFetchedTimestamp = Date()
 					oncompletion?()
 
 				case let .failure(error):

@@ -30,7 +30,8 @@ class AppUpdateViewControllerTests: XCTestCase {
 				minVersionMessage: "AppUpdateViewControllerTests",
 				storeUrl: nil,
 				deactivated: nil,
-				informationURL: nil
+				informationURL: nil,
+				configTTL: 3600
 			)
 		)
 
