@@ -32,7 +32,7 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var recentHeader: String
 	@Bindable private(set) var tooltip: String
 	@Bindable var showAlert: Bool = false
-	@Bindable var showError: String?
+	@Bindable var showError: Bool = false
 	@Bindable var listItem: ListResultItem?
 	@Bindable var showProgress: Bool = false
 
@@ -185,28 +185,49 @@ class ListResultsViewModel: Logging {
 
 		showProgress = true
 
-		// Step 1: Fetch the nonce and stoken
-		proofManager?.fetchNonce(
+		// Step 1: Fetch the public keys
+		proofManager?.fetchIssuerPublicKeys(
 			oncompletion: { [weak self] in
 				self?.createProofStepTwo()
 			}, onError: { [weak self] error in
 				self?.showProgress = false
-				self?.showError = "Can't fetch the nonce: \(error.localizedDescription)"
+				self?.showError = true
+				self?.logError("Can't fetch the keys: \(error.localizedDescription)")
+			}
+		)
+	}
+
+	// Create the proof
+	func createProofStepTwo() {
+
+		showProgress = true
+
+		// Step 2: Fetch the nonce and stoken
+		proofManager?.fetchNonce(
+			oncompletion: { [weak self] in
+				self?.createProofStepThree()
+			}, onError: { [weak self] error in
+				self?.showProgress = false
+				self?.showError = true
 				self?.logError("Can't fetch the nonce: \(error.localizedDescription)")
 			}
 		)
 	}
 
 	/// Fetch the proof
-	func createProofStepTwo() {
+	func createProofStepThree() {
 
+		showProgress = true
+
+		// Step 3: Fetch the signed result
 		proofManager?.fetchSignedTestResult(
 			oncompletion: { [weak self] state in
 				self?.showProgress = false
 				self?.handleTestProofsResponse(state)
 			}, onError: { [weak self] error in
 				self?.showProgress = false
-				self?.showError = "Can't fetch the signed test result: \(error.localizedDescription)"
+				self?.showError = true
+				self?.logError("Can't fetch the ism: \(error.localizedDescription)")
 			}
 		)
 	}
@@ -223,7 +244,8 @@ class ListResultsViewModel: Logging {
 			case .notNegative, .tooOld, .tooNew:
 				reportNoTestResult()
 			default:
-				showError = "unknown server error"
+				logError("handleTestProofsResponse: unknown state: \(state)")
+				showError = true
 		}
 	}
 }

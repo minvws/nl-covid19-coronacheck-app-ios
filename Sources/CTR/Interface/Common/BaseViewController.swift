@@ -123,4 +123,22 @@ class BaseViewController: UIViewController {
 		navigationController?.navigationItem.leftBarButtonItem = button
 		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
 	}
+
+	/// Show alert
+	func showError(_ title: String = .errorTitle, message: String) {
+
+		let alertController = UIAlertController(
+			title: title,
+			message: message,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .ok,
+				style: .default,
+				handler: nil
+			)
+		)
+		present(alertController, animated: true, completion: nil)
+	}
 }

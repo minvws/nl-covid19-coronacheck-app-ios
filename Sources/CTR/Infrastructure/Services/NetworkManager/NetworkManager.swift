@@ -27,15 +27,6 @@ class NetworkManager: NetworkManaging, Logging {
 			delegate: sessionDelegate,
 			delegateQueue: nil)
 	}
-	
-	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void) {
-		let urlRequest = constructRequest(
-			url: networkConfiguration.remoteConfigurationUrl,
-			method: .GET
-		)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.config)
-		decodedSignedJSONData(request: urlRequest, completion: completion)
-	}
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
@@ -46,6 +37,35 @@ class NetworkManager: NetworkManaging, Logging {
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+		decodedSignedJSONData(request: urlRequest, completion: completion)
+	}
+
+	/// Get the public keys
+	/// - Parameter completion: completion handler
+	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.publicKeysUrl,
+			method: .GET
+		)
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+
+		func open(result: Result<ArrayEnvelope<IssuerPublicKey>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+		decodedSignedJSONData(request: urlRequest, completion: open)
+	}
+
+	/// Get the remote configuration
+	/// - Parameter completion: completion handler
+	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void) {
+		let urlRequest = constructRequest(
+			url: networkConfiguration.remoteConfigurationUrl,
+			method: .GET
+		)
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.config)
 		decodedSignedJSONData(request: urlRequest, completion: completion)
 	}
 

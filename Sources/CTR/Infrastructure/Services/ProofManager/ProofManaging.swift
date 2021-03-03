@@ -17,6 +17,14 @@ protocol ProofManaging: AnyObject {
 	/// Get the test types
 	func fetchTestTypes()
 
+	/// Fetch the issuer public keys
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchIssuerPublicKeys(
+	oncompletion: (() -> Void)?,
+	onError: ((Error) -> Void)?)
+
 	/// Get the test result for a token
 	/// - Parameters:
 	///   - token: the request token

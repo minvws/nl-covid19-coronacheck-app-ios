@@ -60,13 +60,17 @@ protocol NetworkManaging {
 	///   - validator: the signature validator
 	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
 
-	/// Get the remote configuration
-	/// - Parameter completion: completion handler
-    func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void)
-
 	/// Get the nonce
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void)
+
+	/// Get the public keys
+	/// - Parameter completion: completion handler
+	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void)
+
+	/// Get the remote configuration
+	/// - Parameter completion: completion handler
+    func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void)
 
 	/// - Parameters:
 	///   - dictionary: dictionary
