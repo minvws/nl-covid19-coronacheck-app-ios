@@ -41,33 +41,3 @@ extension String {
 		return Localization.string(for: "holder.menu.privacy")
 	}
 }
-
-// MARK: - Verifier
-
-extension String {
-
-	static var verifierMenuDashboard: String {
-
-		return Localization.string(for: "verifier.menu.dashboard")
-	}
-
-	static var verifierMenuSupport: String {
-
-		return Localization.string(for: "verifier.menu.support")
-	}
-
-	static var verifierMenuAbout: String {
-
-		return Localization.string(for: "verifier.menu.about")
-	}
-
-	static var verifierMenuFeedback: String {
-
-		return Localization.string(for: "verifier.menu.feedback")
-	}
-
-	static var verifierMenuPrivacy: String {
-
-		return Localization.string(for: "verifier.menu.privacy")
-	}
-}
