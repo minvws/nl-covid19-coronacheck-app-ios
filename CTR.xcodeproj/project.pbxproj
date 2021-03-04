@@ -238,6 +238,7 @@
 		6DB386EC25D17E9A00B2CD7C /* AppointmentLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */; };
 		6DB386F225D18EDF00B2CD7C /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */; };
 		6DB386F625D18EE800B2CD7C /* AppointmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */; };
+		6DB3C28B25F1283600B41B46 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DB3C28A25F1283600B41B46 /* Localizable.strings */; };
 		6DB6C72825EF6E7A00680287 /* CryptoManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C72725EF6E7A00680287 /* CryptoManaging.swift */; };
 		6DB6C72925EF6E7A00680287 /* CryptoManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB6C72725EF6E7A00680287 /* CryptoManaging.swift */; };
 		6DBC2F6725EFB8BE0039AE02 /* CryptoUtilitySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */; };
@@ -407,7 +408,6 @@
 		6DD7D88925D26D3A00B97B7F /* openssl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D33015D25CFE70200A98C1C /* openssl.framework */; };
 		6DD7D88A25D26D3A00B97B7F /* ctcl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D8865E625C7FBBB00DE661E /* ctcl.framework */; };
 		6DD7D88E25D26D3A00B97B7F /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6D92848D25B5CB85009D4350 /* Colors.xcassets */; };
-		6DD7D88F25D26D3A00B97B7F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D5D203925BF1C0A00DC2E27 /* Localizable.strings */; };
 		6DD7D89025D26D3A00B97B7F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6D7F9CB725B6DBA60006F227 /* InfoPlist.strings */; };
 		6DD7D89225D26D3A00B97B7F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DDEFAFC25AEDCAA00A6912A /* Assets.xcassets */; };
 		6DD7D89325D26D3A00B97B7F /* nl-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 6D33015925CFE6BA00A98C1C /* nl-root.pem */; };
@@ -640,6 +640,7 @@
 		6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentLocalization.swift; sourceTree = "<group>"; };
 		6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
 		6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentViewModel.swift; sourceTree = "<group>"; };
+		6DB3C28A25F1283600B41B46 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = Sources/CTR/Infrastructure/Resources/Localization/Verifier/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		6DB6C72725EF6E7A00680287 /* CryptoManaging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoManaging.swift; sourceTree = "<group>"; };
 		6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoUtilitySpy.swift; sourceTree = "<group>"; };
 		6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderLocalization.swift; sourceTree = "<group>"; };
@@ -1291,6 +1292,22 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		6DB3C27825F127CD00B41B46 /* Holder */ = {
+			isa = PBXGroup;
+			children = (
+				6D5D203925BF1C0A00DC2E27 /* Localizable.strings */,
+			);
+			path = Holder;
+			sourceTree = "<group>";
+		};
+		6DB3C27925F127DA00B41B46 /* Verifier */ = {
+			isa = PBXGroup;
+			children = (
+				6DB3C28A25F1283600B41B46 /* Localizable.strings */,
+			);
+			path = Verifier;
+			sourceTree = "<group>";
+		};
 		6DBFE49125D2DB5C00B3D006 /* ProofManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1353,6 +1370,7 @@
 				6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */,
 				6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */,
 				6DD43DA525CD23F70041D658 /* GeneralLocalization.swift */,
+				6DB3C27825F127CD00B41B46 /* Holder */,
 				6D5D203125BF190700DC2E27 /* Localization.swift */,
 				6D5D202D25BF189400DC2E27 /* MainLocalization.swift */,
 				6D5A7BF625D1622E0008B904 /* MenuLocalization.swift */,
@@ -1365,6 +1383,7 @@
 				6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */,
 				6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */,
 				6D67D92025D7F8CB00827277 /* TokenScanLocalization.swift */,
+				6DB3C27925F127DA00B41B46 /* Verifier */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -1566,7 +1585,6 @@
 				6D92848D25B5CB85009D4350 /* Colors.xcassets */,
 				6D01C80F25DEEAD2001E8BD2 /* Fonts */,
 				6D2023A525CAB74600CFCD14 /* Image */,
-				6D5D203925BF1C0A00DC2E27 /* Localizable.strings */,
 				6DC6CC6225C2B3C800060237 /* Localization */,
 			);
 			path = Resources;
@@ -1789,6 +1807,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6DB3C28B25F1283600B41B46 /* Localizable.strings in Resources */,
 				6D4F6E5F25DE9FF800557326 /* LaunchScreenVerifier.storyboard in Resources */,
 				6D4F6E3A25DE9F2B00557326 /* verifier_logo.png in Resources */,
 				6D0022BA25DBC3FA00E91084 /* configuration-production.plist in Resources */,
@@ -1798,7 +1817,6 @@
 				326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */,
 				6D4F6E4625DE9F3A00557326 /* splash_ministerie.png in Resources */,
 				6DFB73A425DF053F003D6243 /* Montserrat-SemiBold.ttf in Resources */,
-				6DD7D88F25D26D3A00B97B7F /* Localizable.strings in Resources */,
 				6DD7D89025D26D3A00B97B7F /* InfoPlist.strings in Resources */,
 				6DD7D89225D26D3A00B97B7F /* Assets.xcassets in Resources */,
 				6D1E337F25E62A510097E574 /* fietser_LR_335x256.json in Resources */,
