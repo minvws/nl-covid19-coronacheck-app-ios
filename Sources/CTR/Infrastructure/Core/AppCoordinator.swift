@@ -76,6 +76,9 @@ class AppCoordinator: Coordinator, Logging {
 		// Check if the app is the minimum version. If not, show the app update screen
 		updateConfiguration()
 
+		// Update the public keys.
+		updatePublicKeys()
+
 		// Set the root
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
@@ -107,6 +110,9 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// The remote config manager
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
+	/// The proof manager
+	var proofManager: ProofManaging = Services.proofManager
 
 	/// Update the configuration
 	func updateConfiguration() {
@@ -149,6 +155,13 @@ class AppCoordinator: Coordinator, Logging {
 		}
 		let updateController = AppUpdateViewController(viewModel: viewModel)
 		topController.present(updateController, animated: true)
+	}
+
+	func updatePublicKeys() {
+
+		// Fetch the public keys from the issuer
+		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL)
+		proofManager.fetchIssuerPublicKeys(ttl: ttl, oncompletion: nil, onError: nil)
 	}
 }
 

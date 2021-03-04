@@ -7,21 +7,14 @@
 */
 
 /* MARK: - General */
-"general.yes" = "Ja";
-"general.no" = "Nee";
-"general.save" = "Opslaan";
-"general.cancel" = "Annuleren";
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
 "general.next" = "Volgende";
-"general.start" = "Beginnen";
-"general.edit" = "Wijzig";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
-"general.tryAgain" = "Opnieuw proberen";
-"general.delete" = "Verwijderen";
 "general.error.title" = "Er ging iets mis";
-"general.learnMore" = "Lees meer";
+"general.error.technical.title" = "Technische fout";
+"general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -215,6 +208,7 @@
 "verifier.start.message" = "Scan nu de QR-codes van bezoekers van jouw restaurant, evenement of uitgaans-gelegenheid. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Zo werkt scannen.";
 "verifier.start.message.link" = "Zo werkt scannen.";
 "verifier.start.button.title" = "Start scannen";
+"verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 
 /* MARK: - Verifier Scan Instructions */
 "verifier.instructions.title" = "Zo werkt scannen";

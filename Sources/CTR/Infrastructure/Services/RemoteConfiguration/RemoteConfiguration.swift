@@ -24,6 +24,9 @@ protocol AppVersionInformation {
 
 	/// Is the app deactvated?
 	var appDeactivated: Bool? { get }
+
+	/// What is the TTL of the config
+	var configTTL: Int { get }
 }
 
 extension AppVersionInformation {
@@ -52,6 +55,9 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// Is the app deactvated?
 	let appDeactivated: Bool?
 
+	/// What is the TTL of the config
+	let configTTL: Int
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 		case minimumVersion = "iosMinimumVersion"
@@ -59,6 +65,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
+		case configTTL = "configTTL"
 	}
 
 	/// Initializer
@@ -68,18 +75,33 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	///   - storeUrl: The url to the appStore
 	///   - deactiviated: The deactivation String
 	///   - informationURL: The information url
-	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?, deactivated: Bool?, informationURL: URL?) {
+	///   - configTTL: The TTL of the config
+	init(
+		minVersion: String,
+		minVersionMessage: String?,
+		storeUrl: URL?,
+		deactivated: Bool?,
+		informationURL: URL?,
+		configTTL: Int) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
+		self.configTTL = configTTL
 	}
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
-		return RemoteConfiguration(minVersion: "1.0.0", minVersionMessage: nil, storeUrl: nil, deactivated: false, informationURL: nil)
+		return RemoteConfiguration(
+			minVersion: "1.0.0",
+			minVersionMessage: nil,
+			storeUrl: nil,
+			deactivated: false,
+			informationURL: nil,
+			configTTL: 3600
+		)
 	}
 }
 

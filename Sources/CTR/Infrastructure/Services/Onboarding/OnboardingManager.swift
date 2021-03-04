@@ -51,7 +51,7 @@ class OnboardingManager: OnboardingManaging, Logging {
 	private struct Constants {
 
 		/// The key chain service
-		static let keychainService = "OnboardingManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "OnboardingManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	// keychained onboardings data

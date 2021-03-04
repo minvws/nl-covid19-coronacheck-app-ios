@@ -116,10 +116,6 @@ class HolderCoordinator: Coordinator, Logging {
 	// Designated starter method
 	func start() {
 
-		// Fetch the details for the proof manager
-		proofManager.fetchCoronaTestProviders()
-		//		proofManager.fetchTestTypes()
-
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(

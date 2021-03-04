@@ -15,6 +15,10 @@ class NetworkSpy: NetworkManaging {
 	var getNonceCalled = false
 	var shouldReturnNonce = false
 	var nonceEnvelope: NonceEnvelope?
+	var getPublicKeysCalled = false
+	var shouldReturnPublicKeys = false
+	var publicKeys: [IssuerPublicKey] = []
+	var publicKeyError: NetworkError?
 	//		var getTestResultsCalled = false
 	//		var getTestResultsIdentifier: String?
 	//		var getTestResultsWithISMCalled = false
@@ -58,5 +62,16 @@ class NetworkSpy: NetworkManaging {
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
 		// Nothing yet
+	}
+
+	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void) {
+
+		getPublicKeysCalled = true
+		if shouldReturnPublicKeys {
+			completion(.success(publicKeys))
+		}
+		if let error = publicKeyError {
+			completion(.failure(error))
+		}
 	}
 }

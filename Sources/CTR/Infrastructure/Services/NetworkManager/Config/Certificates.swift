@@ -81,12 +81,3 @@ struct Certificate {
 		return nil
 	}
 }
-
-extension Certificate {
-    struct SSL {
-        static let apiSignature: Certificate.Signature = "BocmAzGnJAPZCfEF5pvPDTLhvSST/8bZIG0RvNZ3Bzk="
-		static let apiV2Signature: Certificate.Signature = "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo="
-		static let cdnSignature: Certificate.Signature = "PE+wuVq4swAy9DK4b1Nf4XLBhdD9OYZYN882GH+m9Cg="
-		static let cdnV2V3Signature: Certificate.Signature = "TSSRQUz+lWdG7Ezvps9vcuKKEylDL52KkHrEy12twVo="
-    }
-}

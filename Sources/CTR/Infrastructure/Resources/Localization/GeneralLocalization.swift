@@ -11,10 +11,6 @@ import UIKit
 extension String {
     
     /* MARK: - General */
-//    static var yes: String { return Localization.string(for: "yes") }
-//    static var no: String { return Localization.string(for: "no") }
-//    static var save: String { return Localization.string(for: "save") }
-//    static var cancel: String { return Localization.string(for: "cancel") }
 
 	static var close: String {
 
@@ -25,9 +21,6 @@ extension String {
 
 		return Localization.string(for: "general.next")
 	}
-//    static var start: String { return Localization.string(for: "start") }
-//    static var edit: String { return Localization.string(for: "edit") }
-//    static var selectDate: String { return Localization.string(for: "selectDate") }
 
 	static var done: String {
 
@@ -38,8 +31,6 @@ extension String {
 		
 		return Localization.string(for: "general.ok")
 	}
-//    static var tryAgain: String { return Localization.string(for: "tryAgain") }
-//    static var delete: String { return Localization.string(for: "delete") }
 
 	static var previous: String {
 
@@ -51,8 +42,14 @@ extension String {
 		return Localization.string(for: "general.error.title")
 	}
 
-	static var learnMore: String {
+	static var technicalErrorTitle: String {
 
-		return Localization.string(for: "general.learnMore")
+		return Localization.string(for: "general.error.technical.title")
 	}
+
+	static var technicalErrorText: String {
+
+		return Localization.string(for: "general.error.technical.text")
+	}
+
 }

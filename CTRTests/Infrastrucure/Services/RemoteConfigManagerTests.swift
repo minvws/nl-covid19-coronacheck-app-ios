@@ -41,20 +41,6 @@ class RemoteConfigManagerTests: XCTestCase {
 		}
 	}
 
-	class CryptoUtilitySpy: CryptoUtilityProtocol {
-		func validate(data: Data, signature: Data, completion: @escaping (Bool) -> Void) {
-
-		}
-
-		func signature(forData data: Data, key: Data) -> Data {
-			return Data()
-		}
-
-		func sha256(data: Data) -> String? {
-			return nil
-		}
-	}
-
 	// MARK: - Tests
 
 	/// Test the remote config manager update call no result from the api
@@ -65,6 +51,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		networkSpy.remoteConfig = nil
 		sut.networkManager = networkSpy
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
@@ -88,10 +75,12 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600
 		)
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
@@ -115,10 +104,12 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600
 		)
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
@@ -142,11 +133,13 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualBug",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
@@ -170,11 +163,13 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualMajor",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
@@ -198,11 +193,13 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
@@ -226,11 +223,13 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
 			storeUrl: nil,
 			deactivated: true,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in

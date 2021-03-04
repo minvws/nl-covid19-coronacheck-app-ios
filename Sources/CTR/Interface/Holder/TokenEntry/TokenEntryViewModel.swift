@@ -32,7 +32,12 @@ class TokenEntryViewModel: Logging {
 	@Bindable private(set) var verificationCodePlaceholder: String
 	@Bindable private(set) var showProgress: Bool = false
 	@Bindable private(set) var showVerification: Bool = false
+
+	/// An error message
 	@Bindable private(set) var errorMessage: String?
+
+	/// Show internet error
+	@Bindable private(set) var showError: Bool = false
 
 	/// Initializer
 	/// - Parameters:
@@ -56,19 +61,21 @@ class TokenEntryViewModel: Logging {
 		verificationCodePlaceholder = .holderTokenEntryVerificationPlaceholder
 
 		if let unwrappedToken = requestToken {
-			fetchResult(unwrappedToken)
+			fetchProviders(unwrappedToken)
 			self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
 		} else {
 			self.token = nil
 		}
 	}
 
+	/// Check the token
+	/// - Parameter text: the request token
 	func checkToken(_ text: String?) {
 
 		if let input = text, !input.isEmpty {
 			if let requestToken = createRequestToken(input.uppercased()) {
 				self.requestToken = requestToken
-				fetchResult(requestToken)
+				fetchProviders(requestToken)
 				errorMessage = nil
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
@@ -76,15 +83,43 @@ class TokenEntryViewModel: Logging {
 		}
 	}
 
+	/// Check the verification
+	/// - Parameter text: the verification text
 	func checkVerification(_ text: String?) {
 
 		if let input = text, !input.isEmpty {
 			verificationCode = input.uppercased()
 			errorMessage = nil
 			if let token = requestToken {
-				fetchResult(token)
+				fetchProviders(token)
 			}
 		}
+	}
+
+	/// Fetch the providers
+	/// - Parameter requestToken: the request token
+	func fetchProviders(_ requestToken: RequestToken) {
+
+		guard proofManager?.getTestProvider(requestToken) == nil else {
+			// only fetch providers if we do not have it.
+			fetchResult(requestToken)
+			return
+		}
+
+		showProgress = true
+
+		proofManager?.fetchCoronaTestProviders(
+			oncompletion: { [weak self] in
+
+				self?.showProgress = false
+				self?.fetchResult(requestToken)
+
+			}, onError: { [weak self] error in
+
+				self?.showProgress = false
+				self?.showError = true
+			}
+		)
 	}
 
 	/// Fetch a test result
@@ -123,8 +158,9 @@ class TokenEntryViewModel: Logging {
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self?.errorMessage = .holderTokenEntryErrorInvalidProvider
 					} else {
-					// For now, display the network error.
-					self?.errorMessage = error.localizedDescription
+						// For now, display the network error.
+						self?.errorMessage = error.localizedDescription
+						self?.showError = true
 					}
 			}
 		}

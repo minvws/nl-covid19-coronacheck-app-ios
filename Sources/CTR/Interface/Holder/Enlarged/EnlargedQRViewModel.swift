@@ -36,7 +36,7 @@ class EnlargedQRViewModel: Logging {
 	/// The message below the QR card
 	@Bindable private(set) var qrSubTitle: String?
 
-	/// The encrypted test proof
+	/// The cl signed test proof
 	@Bindable private(set) var qrMessage: Data?
 
 	/// Show a valid QR Message

@@ -188,7 +188,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.buttonTapped()
 
 		// Then
-		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 1 should be executed")
+		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")
 			return
@@ -251,14 +251,14 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step one with an error
-	func testStepOneNonceError() {
+	func testStepOneIssuerPublicKeysError() {
 
 		// Given
 		let error = NSError(
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.nonceError = error
+		proofManagingSpy.issuerPublicKeyError = error
 
 		// When
 		sut?.createProofStepOne()
@@ -269,18 +269,60 @@ class ListResultsViewModelTests: XCTestCase {
 			return
 		}
 
-		XCTAssertNotNil(strongSut.showError, "Error should not be nil")
+		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
-	func testStepOneNonceNoError() {
+	func testStepOneIssuerPublicKeysNoError() {
+
+		// Given
+		proofManagingSpy.shouldIssuerPublicKeyComplete = true
+
+		// When
+		sut?.createProofStepOne()
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+
+		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 2 should be called")
+		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
+	}
+
+	/// Test step two with an error
+	func testStepTwoNonceError() {
+
+		// Given
+		let error = NSError(
+			domain: NSURLErrorDomain,
+			code: URLError.notConnectedToInternet.rawValue
+		)
+		proofManagingSpy.nonceError = error
+
+		// When
+		sut?.createProofStepTwo()
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+
+		XCTAssertTrue(strongSut.showError, "Error should not be nil")
+		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
+	}
+
+	/// Test step one without an error
+	func testStepTwoNonceNoError() {
 
 		// Given
 		proofManagingSpy.shouldNonceComplete = true
 
 		// When
-		sut?.createProofStepOne()
+		sut?.createProofStepTwo()
 
 		// Then
 		guard let strongSut = sut else {
@@ -292,8 +334,8 @@ class ListResultsViewModelTests: XCTestCase {
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
-	/// Test step two with an error
-	func testStepTwoWithError() {
+	/// Test step three with an error
+	func testStepThreeWithError() {
 
 		// Given
 		let error = NSError(
@@ -303,7 +345,7 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.signedTestResultError = error
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		guard let strongSut = sut else {
@@ -311,19 +353,19 @@ class ListResultsViewModelTests: XCTestCase {
 			return
 		}
 
-		XCTAssertNotNil(strongSut.showError, "Error should not be nil")
+		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
-	/// Test step two with a valid result
-	func testStepTwoWithValidResult() {
+	/// Test step three with a valid result
+	func testStepThreeWithValidResult() {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
 		proofManagingSpy.signedTestResultState = .valid
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		guard let strongSut = sut else {
@@ -331,20 +373,20 @@ class ListResultsViewModelTests: XCTestCase {
 			return
 		}
 
-		XCTAssertNil(strongSut.showError, "Error should be nil")
+		XCTAssertFalse(strongSut.showError, "Error should be false")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToCreateProofCalled, "Delegate method should be called")
 	}
 
 	/// Test step two with an already signed result
-	func testStepTwoWithAlreadySignedResult() {
+	func testStepThreeWithAlreadySignedResult() {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
 		proofManagingSpy.signedTestResultState = .alreadySigned
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsAlreadyHandledTitle, "Title should match")
@@ -354,14 +396,14 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step two with a not negative  result
-	func testStepTwoWithNotNegativeResult() {
+	func testStepThreeWithNotNegativeResult() {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
 		proofManagingSpy.signedTestResultState = .notNegative
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
@@ -371,14 +413,14 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step two with a too new  result
-	func testStepTwoWithTooNewResult() {
+	func testStepThreeWithTooNewResult() {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
 		proofManagingSpy.signedTestResultState = .tooNew
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
@@ -388,14 +430,14 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step two with a too old  result
-	func testStepTwoWithTooOldResult() {
+	func testStepThreeWithTooOldResult() {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
 		proofManagingSpy.signedTestResultState = .tooOld
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
@@ -405,20 +447,20 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step two with a too old  result
-	func testStepTwoWithUnknownError() {
+	func testStepThreeWithUnknownError() {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
 		proofManagingSpy.signedTestResultState = .unknown(nil)
 
 		// When
-		sut?.createProofStepTwo()
+		sut?.createProofStepThree()
 
 		// Then
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertNotNil(strongSut.showError, "Error should not be nil")
+		XCTAssertTrue(strongSut.showError, "Error should be true")
 	}
 }

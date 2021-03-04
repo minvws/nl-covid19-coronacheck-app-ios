@@ -50,8 +50,8 @@ class ListResultsViewController: BaseViewController {
 		}
 
 		viewModel.$showError.binding = {
-			if let error = $0 {
-				self.showError(error)
+			if $0 {
+				self.showError(.technicalErrorTitle, message: .technicalErrorText)
 			}
 		}
 
@@ -116,7 +116,7 @@ class ListResultsViewController: BaseViewController {
 	}
 
 	/// User tapped on the button
-	@objc private func closeButtonTapped() {
+	@objc func closeButtonTapped() {
 
 		tooltip?.dismiss()
 		viewModel.dismiss()
@@ -141,23 +141,6 @@ class ListResultsViewController: BaseViewController {
 		alertController.addAction(
 			UIAlertAction(
 				title: .holderTestResultsAlertCancel,
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
-	}
-
-	/// Show alert
-	private func showError(_ message: String) {
-
-		let alertController = UIAlertController(
-			title: .errorTitle,
-			message: message,
-			preferredStyle: .alert)
-		alertController.addAction(
-			UIAlertAction(
-				title: .ok,
 				style: .default,
 				handler: nil
 			)

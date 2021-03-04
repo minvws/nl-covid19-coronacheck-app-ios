@@ -11,6 +11,9 @@ import XCTest
 class ProofManagingSpy: ProofManaging {
 
 	var fetchCoronaTestProvidersCalled = false
+	var fetchIssuerPublicKeysCalled = false
+	var issuerPublicKeyError: Error?
+	var shouldIssuerPublicKeyComplete = false
 	var fetchTestTypesCalled = false
 	var fetchTestResultCalled = false
 	var fetchNonceCalled = false
@@ -36,7 +39,7 @@ class ProofManagingSpy: ProofManaging {
 		// Demanded by protocol
 	}
 
-	func fetchCoronaTestProviders() {
+	func fetchCoronaTestProviders(oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
 
 		fetchCoronaTestProvidersCalled = true
 	}
@@ -65,6 +68,18 @@ class ProofManagingSpy: ProofManaging {
 		} else {
 			if shouldNonceComplete {
 				oncompletion()
+			}
+		}
+	}
+
+	func fetchIssuerPublicKeys(ttl: TimeInterval, oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
+
+		fetchIssuerPublicKeysCalled = true
+		if let error = issuerPublicKeyError {
+			onError?(error)
+		} else {
+			if shouldIssuerPublicKeyComplete {
+				oncompletion?()
 			}
 		}
 	}

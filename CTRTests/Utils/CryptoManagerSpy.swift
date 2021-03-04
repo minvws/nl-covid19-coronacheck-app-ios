@@ -13,6 +13,9 @@ class CryptoManagerSpy: CryptoManaging {
 	var setNonceCalled = false
 	var setStokenCalled = false
 	var setProofsCalled = false
+	var setIssuerPublicKeysCalled = false
+	var hasPublicKeysCalled = false
+	var keys: [IssuerPublicKey] = []
 	var nonce: String?
 	var stoken: String?
 	var proofs: Data?
@@ -48,6 +51,18 @@ class CryptoManagerSpy: CryptoManaging {
 
 		setProofsCalled = true
 		self.proofs = signatureMessage
+	}
+
+	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) {
+
+		setIssuerPublicKeysCalled = true
+		self.keys = keys
+	}
+
+	func hasPublicKeys() -> Bool {
+
+		hasPublicKeysCalled = true
+		return !keys.isEmpty
 	}
 
 	func generateCommitmentMessage() -> String? {

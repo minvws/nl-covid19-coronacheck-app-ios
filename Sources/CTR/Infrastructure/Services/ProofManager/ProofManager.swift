@@ -65,7 +65,7 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Array of constants
 	private struct Constants {
-		static let keychainService = "ProofManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "ProofManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	/// The proof data stored in the keychain
@@ -83,30 +83,39 @@ class ProofManager: ProofManaging, Logging {
 	@UserDefaults(key: "providersFetchedTimestamp", defaultValue: nil)
 	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 
+	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
+	private var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+
 	/// Initializer
 	required init() {
 		// Required by protocol
 	}
 
 	/// Get the providers
-	func fetchCoronaTestProviders() {
+	func fetchCoronaTestProviders(
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?) {
 
-//		#if DEBUG
-//		if let lastFetchedTimestamp = providersFetchedTimestamp,
-//		   lastFetchedTimestamp > Date() - 3600, !proofData.testProviders.isEmpty {
-//			// Don't fetch again within an hour
-//				return
-//		}
-//		#endif
+		#if DEBUG
+		if let lastFetchedTimestamp = providersFetchedTimestamp,
+		   lastFetchedTimestamp > Date() - 3600, !providerData.testProviders.isEmpty {
+			// Don't fetch again within an hour
+				return
+		}
+		#endif
 
 		networkManager.getTestProviders { [weak self] response in
-			self?.providersFetchedTimestamp = Date()
+
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
 					self?.providerData.testProviders = providers
+					self?.providersFetchedTimestamp = Date()
+					oncompletion?()
+
 				case let .failure(error):
 					self?.logError("Error getting the test providers: \(error)")
+					onError?(error)
 			}
 		}
 	}
@@ -119,6 +128,7 @@ class ProofManager: ProofManaging, Logging {
 			switch response {
 				case let .success(types):
 					self?.proofData.testTypes = types
+
 				case let .failure(error):
 					self?.logError("Error getting the test types: \(error)")
 			}
@@ -136,6 +146,39 @@ class ProofManager: ProofManaging, Logging {
 		return nil
 	}
 
+	/// Fetch the issuer public keys
+	/// - Parameters:
+	///   - ttl: the time to read from cache
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchIssuerPublicKeys(
+		ttl: TimeInterval,
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?) {
+
+		if let lastFetchedTimestamp = keysFetchedTimestamp,
+		   lastFetchedTimestamp > Date() - ttl, cryptoManager.hasPublicKeys() {
+			logDebug("Issuer public keys still within TTL")
+			oncompletion?()
+			return
+		}
+
+		networkManager.getPublicKeys { [weak self] resultwrapper in
+
+			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
+			switch resultwrapper {
+				case let .success(keys):
+					self?.cryptoManager.setIssuerPublicKeys(keys)
+					self?.keysFetchedTimestamp = Date()
+					oncompletion?()
+
+				case let .failure(error):
+					self?.logError("Error getting the test types: \(error)")
+					onError?(error)
+			}
+		}
+	}
+
 	/// Create a nonce and a stoken
 	/// - Parameters:
 	///   - oncompletion: completion handler
@@ -151,6 +194,7 @@ class ProofManager: ProofManaging, Logging {
 					self?.cryptoManager.setNonce(envelope.nonce)
 					self?.cryptoManager.setStoken(envelope.stoken)
 					oncompletion()
+
 				case let .failure(networkError):
 					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
 					onError(networkError)
@@ -182,9 +226,8 @@ class ProofManager: ProofManaging, Logging {
 				switch resultwrapper {
 					case let .success(data):
 						self?.parseSignedTestResult(data, oncompletion: oncompletion)
-//						oncompletion(data)
-					case let .failure(networkError):
 
+					case let .failure(networkError):
 						self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
 						onError(networkError)
 				}
@@ -215,18 +258,23 @@ class ProofManager: ProofManaging, Logging {
 				case 99991:
 					removeTestWrapper()
 					oncompletion(SignedTestResultState.tooNew)
+
 				case 99992:
 					removeTestWrapper()
 					oncompletion(SignedTestResultState.tooOld)
+
 				case 99993:
 					removeTestWrapper()
 					oncompletion(SignedTestResultState.notNegative)
+
 				case 99994:
 					removeTestWrapper()
 					oncompletion(SignedTestResultState.alreadySigned)
+
 				case 99995:
 					removeTestWrapper()
 					oncompletion(SignedTestResultState.unknown(nil))
+
 				default:
 					oncompletion(SignedTestResultState.unknown(nil))
 			}

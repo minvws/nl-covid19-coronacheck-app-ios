@@ -179,11 +179,11 @@ class ListResultsViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		viewModel?.showError = "testErrorDialog"
+		viewModel?.showError = true
 		// Then
 		alertVerifier.verify(
-			title: .errorTitle,
-			message: "testErrorDialog",
+			title: .technicalErrorTitle,
+			message: .technicalErrorText,
 			animated: true,
 			actions: [
 				.default(.ok)
@@ -247,7 +247,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should not be called")
-		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 1 should be executed")
+		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
 	}
 
 	func testDisclaimer() {
@@ -265,5 +265,16 @@ class ListResultsViewControllerTests: XCTestCase {
 			return
 		}
 		XCTAssertFalse(tooltip.isHidden, "Tooltip should be visible")
+	}
+
+	func testDismiss() {
+
+		// Given
+
+		// When
+		sut?.closeButtonTapped()
+
+		// Then
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
 	}
 }

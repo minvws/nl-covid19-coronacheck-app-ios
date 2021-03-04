@@ -11,9 +11,20 @@
 #include "Universe.objc.h"
 
 
+@class ClmobileAnnotatedPk;
 @class ClmobileCreateCredentialMessage;
 @class ClmobileResult;
 @class ClmobileVerifyResult;
+
+@interface ClmobileAnnotatedPk : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull id_;
+@property (nonatomic) NSData* _Nullable pkXml;
+@end
 
 @interface ClmobileCreateCredentialMessage : NSObject <goSeqRefInterface> {
 }
@@ -48,20 +59,22 @@
 @property (nonatomic) NSString* _Nonnull error;
 @end
 
-FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issuerPkXml, NSData* _Nullable issuerNonceBase64);
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issuerNonceBase64);
 
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCredential(NSData* _Nullable holderSkJson, NSData* _Nullable ccmJson);
 
-FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTime(NSData* _Nullable issuerPkXml, NSData* _Nullable credJson);
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTime(NSData* _Nullable credJson);
 
-FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTimeQrEncoded(NSData* _Nullable issuerPkXml, NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileDiscloseAllWithTimeQrEncoded(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
 
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileGenerateHolderSk(void);
 
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileLoadIssuerPks(NSData* _Nullable annotatedPksJson);
+
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileReadCredential(NSData* _Nullable credJson);
 
-FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerify(NSData* _Nullable issuerPkXml, NSData* _Nullable proofAsn1);
+FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerify(NSData* _Nullable proofAsn1);
 
-FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerifyQREncoded(NSData* _Nullable issuerPkXml, NSData* _Nullable proofQrEncodedAsn1);
+FOUNDATION_EXPORT ClmobileVerifyResult* _Nullable ClmobileVerifyQREncoded(NSData* _Nullable proofQrEncodedAsn1);
 
 #endif

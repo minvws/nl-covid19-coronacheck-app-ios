@@ -59,7 +59,7 @@ class HolderDashboardViewModel: Logging {
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
-	/// A timer to keep sending pings
+	/// A timer to keep refreshing the QR
 	var validityTimer: Timer?
 
 	/// The title of the scene
@@ -80,7 +80,7 @@ class HolderDashboardViewModel: Logging {
 	/// The message on the expired card
 	@Bindable private(set) var expiredTitle: String?
 
-	/// The encrypted test proof
+	/// The cl signee test proof
 	@Bindable private(set) var qrMessage: Data?
 
 	/// Show a valid QR Message
@@ -162,6 +162,8 @@ class HolderDashboardViewModel: Logging {
 			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
+			validityTimer?.invalidate()
+			validityTimer = nil
 			return
 		}
 

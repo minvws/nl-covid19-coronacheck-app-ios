@@ -8,70 +8,20 @@
 import Foundation
 import Ctcl
 
-struct NonceEnvelope: Codable {
-
-	let nonce: String
-	let stoken: String
-}
-
-struct CrypoAttributes: Codable {
-
-	let sampleTime: String
-	let testType: String
-}
-
-struct Attributes {
-
-	let cryptoAttributes: CrypoAttributes
-	let unixTimeStamp: Int64
-}
-
-protocol CryptoManaging: AnyObject {
-
-	init()
-
-	/// Set the nonce
-	/// - Parameter nonce: the nonce
-	func setNonce(_ nonce: String)
-
-	/// set the stoken
-	/// - Parameter stoken: the stoken
-	func setStoken(_ stoken: String)
-
-	/// Set the signature message
-	/// - Parameter proofs: the signature message (signed proof)
-	func setTestProof(_ proof: Data?)
-
-	/// Generate the commitment message
-	/// - Returns: commitment message
-	func generateCommitmentMessage() -> String?
-
-	/// Get the stoken
-	/// - Returns: the stoken
-	func getStoken() -> String?
-
-	/// Create the credential
-	func createCredential()
-
-	/// Read the crypto credential
-	/// - Returns: the  the crypto attributes
-	func readCredential() -> CrypoAttributes?
-
-	/// Remove the credial
-	func removeCredential()
-
-	/// Generate the QR message
-	/// - Returns: the QR message
-	func generateQRmessage() -> Data?
-
-	/// Verify the QR message
-	/// - Parameter message: the scanned QR code
-	/// - Returns: True if valid
-	func verifyQRMessage(_ message: String) -> Attributes?
-}
-
 /// The cryptography manager
 class CryptoManager: CryptoManaging, Logging {
+
+	/// Structure to hold key data
+	private struct KeyData: Codable {
+
+		/// The issuer public keys
+		var issuerPublicKeys: Data?
+
+		/// Empty key data
+		static var empty: KeyData {
+			return KeyData(issuerPublicKeys: nil)
+		}
+	}
 
 	/// Structure to hold cryptography data
 	private struct CryptoData: Codable {
@@ -91,21 +41,22 @@ class CryptoManager: CryptoManaging, Logging {
 
 	/// Array of constants
 	private struct Constants {
-		static let keychainService = "CryptoManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "CryptoManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	/// The crypto data stored in the keychain
 	@Keychain(name: "cryptoData", service: Constants.keychainService, clearOnReinstall: true)
 	private var cryptoData: CryptoData = .empty
 
-	/// The publc key of the issuer
-	private var issuerPublicKey: Data?
+	/// The key data stored in the keychain
+	@Keychain(name: "keyData", service: Constants.keychainService, clearOnReinstall: true)
+	private var keyData: KeyData = .empty
 
 	/// Initializer
 	required init() {
 
 		// Public Key
-		readPublicKey()
+		loadPublicKeys()
 
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = ClmobileGenerateHolderSk(),
@@ -150,12 +101,43 @@ class CryptoManager: CryptoManaging, Logging {
 		return cryptoData.stoken
 	}
 
-	/// Read the public key
-	func readPublicKey() {
+	/// Set the issuer public keys
+	/// - Parameter keys: the keys
+	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) {
 
-		if let content = FileReader(bundle: Bundle(for: type(of: self)), fileName: "issuerPk", fileType: "xml").read() {
-			issuerPublicKey = content.data(using: .utf8)
+		let keysAsString = generateString(object: keys)
+		let keysAsData = Data(keysAsString.bytes)
+		keyData.issuerPublicKeys = keysAsData
+		logInfo("Stored \(keys.count) issuer public keys in the keychain")
+		loadPublicKeys()
+	}
+
+	/// Generate a string from a codable object
+	/// - Parameter object: the object to flatten into a string
+	/// - Returns: flattend object
+	private func generateString<T>(object: T) -> String where T: Codable {
+
+		if let data = try? JSONEncoder().encode(object),
+		   let convertedToString = String(data: data, encoding: .utf8) {
+			logDebug("ProofManager: Convert to \(convertedToString)")
+			return convertedToString
 		}
+		return ""
+	}
+
+	/// Load the public keys
+	func loadPublicKeys() {
+
+		if let keysAsData = keyData.issuerPublicKeys {
+			ClmobileLoadIssuerPks(keysAsData)
+		}
+	}
+
+	/// Do we have public keys
+	/// - Returns: True if we do
+	func hasPublicKeys() -> Bool {
+
+		return keyData.issuerPublicKeys != nil
 	}
 
 	/// Generate the commitment message
@@ -163,11 +145,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func generateCommitmentMessage() -> String? {
 
 		if let nonce = cryptoData.nonce,
-		   let result = ClmobileCreateCommitmentMessage(
-			cryptoData.holderSecretKey,
-			issuerPublicKey,
-			Data(nonce.bytes)
-		   ) {
+		   let result = ClmobileCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
 			if let value = result.value, result.error.isEmpty {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
@@ -198,7 +176,11 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Returns: QR Messaga as Data
 	private func createQRMessage(_ credential: Data?, holderSecretKey: Data) -> Data? {
 
-		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(issuerPublicKey, holderSecretKey, credential)
+		guard hasPublicKeys() else {
+			return nil
+		}
+
+		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(holderSecretKey, credential)
 		if let payload = disclosed?.value {
 			let message = String(decoding: payload, as: UTF8.self)
 			logDebug("QR message: \(message)")
@@ -212,8 +194,12 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Returns: Attributes if the QR is valid
 	func verifyQRMessage(_ message: String) -> Attributes? {
 
+		guard hasPublicKeys() else {
+			return nil
+		}
+
 		let proofAsn1QREncoded = message.data(using: .utf8)
-		if let result = ClmobileVerifyQREncoded(issuerPublicKey, proofAsn1QREncoded) {
+		if let result = ClmobileVerifyQREncoded(proofAsn1QREncoded) {
 
 			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
 				self.logError("Error Proof: \(result.error)")
