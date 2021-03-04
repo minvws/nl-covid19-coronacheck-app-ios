@@ -63,11 +63,11 @@ class AppUpdateViewController: BaseViewController {
 				self.showCannotOpenUrl()
 			}
 		}
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$image.binding = { self.sceneView.image = $0 }
-		viewModel.$errorMessage.binding = { self.errorMessage = $0 }
-		viewModel.$actionTitle.binding = { self.sceneView.primaryButton.setTitle($0, for: .normal) }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
+		viewModel.$errorMessage.binding = { [weak self] in self?.errorMessage = $0 }
+		viewModel.$actionTitle.binding = { [weak self] in self?.sceneView.primaryButton.setTitle($0, for: .normal) }
 	}
 
 	/// User tapped on the button

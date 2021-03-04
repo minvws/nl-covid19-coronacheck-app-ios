@@ -59,12 +59,12 @@ class BirthdateEntryViewController: BaseViewController {
 
 		// Bindings
 
-		viewModel.$errorMessage.binding = {
+		viewModel.$errorMessage.binding = { [weak self] in
 			if let message = $0 {
-				self.sceneView.errorView.error = message
-				self.sceneView.errorView.isHidden = false
+				self?.sceneView.errorView.error = message
+				self?.sceneView.errorView.isHidden = false
 			} else {
-				self.sceneView.errorView.isHidden = true
+				self?.sceneView.errorView.isHidden = true
 			}
 		}
 
@@ -72,7 +72,7 @@ class BirthdateEntryViewController: BaseViewController {
 			self?.viewModel.sendButtonTapped()
 		}
 
-		viewModel.$isButtonEnabled.binding = { self.sceneView.primaryButton.isEnabled = $0 }
+		viewModel.$isButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
@@ -180,6 +180,8 @@ class BirthdateEntryViewController: BaseViewController {
 		if view != nil {
 			view.endEditing(true)
 		}
+
+		autoSelectFirstMonth()
 	}
 
 	// MARK: Keyboard
@@ -230,6 +232,33 @@ extension BirthdateEntryViewController: UITextFieldDelegate {
 			viewModel.setYear(textField.text)
 		}
 	}
+
+	/// UITextFieldDelegate method
+	/// - Parameters:
+	///   - textField: the textfield being editied
+	///   - range: the range of edited text
+	///   - string: the new text for the edited range
+	/// - Returns: True if we should replace the characters in the range with the new text
+	func textField(
+		_ textField: UITextField,
+		shouldChangeCharactersIn range: NSRange,
+		replacementString string: String) -> Bool {
+
+		guard let textFieldText = textField.text,
+			  let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+			return false
+		}
+		let substringToReplace = textFieldText[rangeOfTextToReplace]
+		let count = textFieldText.count - substringToReplace.count + string.count
+
+		if textField.tag == 0 {
+			return count <= 2
+		}
+		if textField.tag == 2 {
+			return count <= 4
+		}
+		return true
+	}
 }
 
 // MARK: - UIPickerViewDataSource, UIPickerViewDelegate
@@ -279,6 +308,8 @@ extension BirthdateEntryViewController: UIPickerViewDataSource, UIPickerViewDele
 	/// User tapped on the previous button
 	@objc func pickerPreviousAction() {
 
+		autoSelectFirstMonth()
+
 		if activeInputField == sceneView.dayEntryView.inputField {
 			sceneView.yearEntryView.inputField.becomeFirstResponder()
 			activeInputField = sceneView.yearEntryView.inputField
@@ -293,6 +324,8 @@ extension BirthdateEntryViewController: UIPickerViewDataSource, UIPickerViewDele
 
 	/// User tapped on the next button
 	@objc func pickerNextAction() {
+
+		autoSelectFirstMonth()
 
 		if activeInputField == sceneView.dayEntryView.inputField {
 			sceneView.monthEntryView.inputField.becomeFirstResponder()
@@ -309,7 +342,21 @@ extension BirthdateEntryViewController: UIPickerViewDataSource, UIPickerViewDele
 	/// User tapped on the done button
 	@objc func pickerDoneAction(_ pickerView: UIPickerView) {
 
+		autoSelectFirstMonth()
+
 		activeInputField?.resignFirstResponder()
 		activeInputField = nil
+	}
+
+	func autoSelectFirstMonth() {
+
+		guard activeInputField == sceneView.monthEntryView.inputField else {
+			return
+		}
+
+		if pickerView.selectedRow(inComponent: 0) == 0 {
+			sceneView.monthEntryView.inputField.text = months[0].lowercased()
+			viewModel.setMonth("1")
+		}
 	}
 }

@@ -38,47 +38,50 @@ class TokenEntryViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$token.binding = { token in
-			self.sceneView.tokenEntryView.inputField.text = token
+		viewModel.$title.binding = { [weak self] in  self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$token.binding = { [weak self] token in
+			self?.sceneView.tokenEntryView.inputField.text = token
 			if token == nil {
-				self.sceneView.tokenEntryView.inputField.becomeFirstResponder()
+				self?.sceneView.tokenEntryView.inputField.becomeFirstResponder()
 
 			}
 		}
-		viewModel.$tokenTitle.binding = { self.sceneView.tokenEntryView.header = $0 }
-		viewModel.$tokenPlaceholder.binding = { self.sceneView.tokenEntryView.inputField.placeholder = $0 }
-		viewModel.$verificationCodeTitle.binding = { self.sceneView.verificationEntryView.header = $0 }
-		viewModel.$verificationCodePlaceholder.binding = { self.sceneView.verificationEntryView.inputField.placeholder = $0 }
+		viewModel.$tokenTitle.binding = { [weak self] in self?.sceneView.tokenEntryView.header = $0 }
+		viewModel.$tokenPlaceholder.binding = { [weak self] in self?.sceneView.tokenEntryView.inputField.placeholder = $0 }
+		viewModel.$verificationCodeTitle.binding = { [weak self] in self?.sceneView.verificationEntryView.header = $0 }
+		viewModel.$verificationCodePlaceholder.binding = { [weak self] in self?.sceneView.verificationEntryView.inputField.placeholder = $0 }
 
-		viewModel.$showProgress.binding = {
+		viewModel.$showProgress.binding = { [weak self] in
+			guard let strongSelf = self else {
+				return
+			}
 			if $0 {
-				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
+				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
 			} else {
-				MBProgressHUD.hide(for: self.sceneView, animated: true)
+				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
 			}
 		}
 
-		viewModel.$errorMessage.binding = {
+		viewModel.$errorMessage.binding = { [weak self] in
 			if let message = $0 {
-				self.sceneView.errorView.error = message
-				self.sceneView.errorView.isHidden = false
+				self?.sceneView.errorView.error = message
+				self?.sceneView.errorView.isHidden = false
 			} else {
-				self.sceneView.errorView.isHidden = true
+				self?.sceneView.errorView.isHidden = true
 			}
 		}
 
-		viewModel.$showError.binding = {
+		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self.showError(.technicalErrorTitle, message: .technicalErrorText)
+				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
 			}
 		}
 
-		viewModel.$showVerification.binding = {
-			self.sceneView.verificationEntryView.isHidden = !$0
+		viewModel.$showVerification.binding = { [weak self] in
+			self?.sceneView.verificationEntryView.isHidden = !$0
 			if $0 {
-				self.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+				self?.sceneView.verificationEntryView.inputField.becomeFirstResponder()
 			}
 		}
 

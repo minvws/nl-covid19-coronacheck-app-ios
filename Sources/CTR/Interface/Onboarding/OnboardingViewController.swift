@@ -67,25 +67,28 @@ class OnboardingViewController: BaseViewController {
 		super.viewDidLoad()
 		
 		setupPageController()
-		viewModel.$pages.binding = {
-			self.currentIndex = 0
+		viewModel.$pages.binding = { [weak self] in
+
+			guard let strongSelf = self else {
+				return
+			}
+
+			strongSelf.currentIndex = 0
 			for page in $0 {
-				self.viewControllers.append(self.viewModel.getOnboardingStep(page))
+				strongSelf.viewControllers.append(strongSelf.viewModel.getOnboardingStep(page))
 			}
-			if let firstVC = self.viewControllers.first {
-				self.pageViewController?.setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
-				self.pageViewController?.didMove(toParent: self)
+			if let firstVC = strongSelf.viewControllers.first {
+				strongSelf.pageViewController?.setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
+				strongSelf.pageViewController?.didMove(toParent: self)
 			}
-			self.sceneView.pageControl.numberOfPages = $0.count
-			self.sceneView.pageControl.currentPage = 0
+			strongSelf.sceneView.pageControl.numberOfPages = $0.count
+			strongSelf.sceneView.pageControl.currentPage = 0
 		}
 		
 		sceneView.primaryButton.setTitle(.next, for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
-		viewModel.$enabled.binding = {
-			self.sceneView.primaryButton.isEnabled = $0
-		}
+		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		
 		setupBackButton()
 	}

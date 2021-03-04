@@ -146,7 +146,7 @@ class TokenEntryViewModel: Logging {
 						case .complete, .pending:
 							self?.coordinator?.navigateToListResults()
 						case .verificationRequired:
-							self?.showVerification = true
+							self?.handleVerificationRequired()
 						case .invalid:
 							self?.errorMessage = .holderTokenEntryErrorInvalidCode
 						default:
@@ -164,6 +164,16 @@ class TokenEntryViewModel: Logging {
 					}
 			}
 		}
+	}
+
+	/// Handle the verfication required response
+	func handleVerificationRequired() {
+
+		if showVerification {
+			// We are showing the verification entry, so this is a wrong verification code
+			errorMessage = .holderTokenEntryErrorInvalidCode
+		}
+		showVerification = true
 	}
 
 	/// Create a request token from a string

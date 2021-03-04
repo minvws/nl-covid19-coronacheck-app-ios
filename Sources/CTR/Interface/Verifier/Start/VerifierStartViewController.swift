@@ -35,25 +35,25 @@ class VerifierStartViewController: BaseViewController {
 
         super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$header.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$primaryButtonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.primaryButtonTapped()
 		}
 
-		viewModel.$linkedMessage.binding = {
+		viewModel.$linkedMessage.binding = { [weak self] in
 
-			self.sceneView.underline($0)
-			self.setupLink()
+			self?.sceneView.underline($0)
+			self?.setupLink()
 		}
 
-		viewModel.$showError.binding = {
+		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self.showError(.technicalErrorTitle, message: .verifierStartInternet)
+				self?.showError(.technicalErrorTitle, message: .verifierStartInternet)
 			}
 		}
 

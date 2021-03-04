@@ -37,15 +37,15 @@ class TokenOverviewViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
-		viewModel.$providers.binding = { providers in
+		viewModel.$providers.binding = { [weak self] providers in
 
 			for provider in providers {
-				self.setupProviderButton(provider)
+				self?.setupProviderButton(provider)
 			}
-			self.setupNoCodeButton()
+			self?.setupNoCodeButton()
 		}
 
 		// Only show an arrow as back button

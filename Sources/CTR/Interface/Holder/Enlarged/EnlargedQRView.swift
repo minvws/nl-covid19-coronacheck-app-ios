@@ -161,4 +161,10 @@ class EnlargedQRImageView: BaseView {
 
 		securityView.play()
 	}
+
+	/// Resume the animation
+	func resume() {
+
+		securityView.resume()
+	}
 }

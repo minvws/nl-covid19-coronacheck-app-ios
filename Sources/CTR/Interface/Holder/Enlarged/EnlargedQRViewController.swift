@@ -44,32 +44,32 @@ class EnlargedQRViewController: BaseViewController {
 
 		edgesForExtendedLayout = []
 
-		viewModel.$qrTitle.binding = { self.sceneView.title = $0 }
-		viewModel.$qrSubTitle.binding = { self.sceneView.message = $0 }
+		viewModel.$qrTitle.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$qrSubTitle.binding = { [weak self] in self?.sceneView.message = $0 }
 
-		viewModel.$qrMessage.binding = {
+		viewModel.$qrMessage.binding = { [weak self] in
 
 			if let value = $0 {
 				let image = value.generateQRCode()
-				self.sceneView.qrImage = image
+				self?.sceneView.qrImage = image
 			} else {
-				self.sceneView.qrImage = nil
+				self?.sceneView.qrImage = nil
 			}
 		}
 
-		viewModel.$showValidQR.binding = {
+		viewModel.$showValidQR.binding = { [weak self] in
 
 			if $0 {
-				self.sceneView.largeQRimageView.isHidden = false
+				self?.sceneView.largeQRimageView.isHidden = false
 			} else {
-				self.sceneView.largeQRimageView.isHidden = true
+				self?.sceneView.largeQRimageView.isHidden = true
 			}
 		}
 
-		viewModel.$hideQRForCapture.binding = {
+		viewModel.$hideQRForCapture.binding = { [weak self] in
 
-			self.screenCaptureInProgress = $0
-			self.sceneView.hideQRImage = $0
+			self?.screenCaptureInProgress = $0
+			self?.sceneView.hideQRImage = $0
 		}
 
 		setupListeners()
@@ -113,6 +113,8 @@ class EnlargedQRViewController: BaseViewController {
 		if !sceneView.largeQRimageView.isHidden {
 			viewModel.setBrightness()
 		}
+
+		sceneView.resume()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -126,9 +128,11 @@ class EnlargedQRViewController: BaseViewController {
 
 		super.viewWillDisappear(animated)
 		viewModel.setBrightness(reset: true)
+		viewModel.validityTimer?.invalidate()
+		viewModel.validityTimer = nil
 	}
 
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-	}
+//	deinit {
+//		NotificationCenter.default.removeObserver(self)
+//	}
 }

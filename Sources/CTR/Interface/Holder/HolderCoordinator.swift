@@ -184,7 +184,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		)
 		let navController = UINavigationController(rootViewController: destination)
 		navController.view.backgroundColor = .white
-		sidePanel?.selectedViewController?.present(
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
 			navController,
 			animated: true,
 			completion: nil
@@ -212,8 +213,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-
 	}
+
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview() {
 
@@ -348,6 +349,12 @@ extension HolderCoordinator: Dismissable {
 
 	func dismiss() {
 
+//		if let nav = sidePanel?.presentedViewController as? UINavigationController {
+////			nav.popViewController(animated: true)
+//			nav.viewControllers.first?.dismiss(animated: true, completion: nil)
+//		}
+
+//		dashboardNavigationContoller?.dismiss(animated: true, completion: nil)
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 }

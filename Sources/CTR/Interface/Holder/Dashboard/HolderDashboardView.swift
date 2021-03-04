@@ -110,6 +110,20 @@ class HolderDashboardView: ScrolledStackView {
 	/// Play the animation
 	func play() {
 
+		guard !qrView.isHidden else {
+			return
+		}
+
 		qrView.play()
+	}
+
+	/// Resume the animation
+	func resume() {
+
+		guard !qrView.isHidden else {
+			return
+		}
+
+		qrView.resume()
 	}
 }
