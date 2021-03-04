@@ -41,7 +41,7 @@ class CryptoManager: CryptoManaging, Logging {
 
 	/// Array of constants
 	private struct Constants {
-		static let keychainService = "CryptoManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "CryptoManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	/// The crypto data stored in the keychain
@@ -176,6 +176,10 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Returns: QR Messaga as Data
 	private func createQRMessage(_ credential: Data?, holderSecretKey: Data) -> Data? {
 
+		guard hasPublicKeys() else {
+			return nil
+		}
+
 		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(holderSecretKey, credential)
 		if let payload = disclosed?.value {
 			let message = String(decoding: payload, as: UTF8.self)
@@ -189,6 +193,10 @@ class CryptoManager: CryptoManaging, Logging {
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Attributes if the QR is valid
 	func verifyQRMessage(_ message: String) -> Attributes? {
+
+		guard hasPublicKeys() else {
+			return nil
+		}
 
 		let proofAsn1QREncoded = message.data(using: .utf8)
 		if let result = ClmobileVerifyQREncoded(proofAsn1QREncoded) {

@@ -208,6 +208,7 @@
 "verifier.start.message" = "Scan nu de QR-codes van bezoekers van jouw restaurant, evenement of uitgaans-gelegenheid. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. Zo werkt scannen.";
 "verifier.start.message.link" = "Zo werkt scannen.";
 "verifier.start.button.title" = "Start scannen";
+"verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 
 /* MARK: - Verifier Scan Instructions */
 "verifier.instructions.title" = "Zo werkt scannen";

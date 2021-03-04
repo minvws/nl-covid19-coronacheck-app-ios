@@ -56,7 +56,6 @@ class VerifierScanViewModel: Logging {
 			coordinator?.navigateToScanResult(attributes)
 		} else {
 			coordinator?.navigateToScanResult(Attributes(cryptoAttributes: CrypoAttributes(sampleTime: "", testType: ""), unixTimeStamp: 0))
-//			startScanning = true
 		}
 	}
 }

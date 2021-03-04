@@ -33,4 +33,9 @@ extension String {
 
 		return Localization.string(for: "verifier.start.button.title")
 	}
+
+	static var verifierStartInternet: String {
+
+		return Localization.string(for: "verifier.start.ontimeinternet")
+	}
 }

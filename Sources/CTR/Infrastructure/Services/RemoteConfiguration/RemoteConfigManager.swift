@@ -53,7 +53,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	let loggingCategory = "RemoteConfigManager"
 
 	private struct Constants {
-		static let keychainService = "RemoteConfigManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "RemoteConfigManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	/// The current app version supplier

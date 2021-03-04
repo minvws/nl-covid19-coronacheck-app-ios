@@ -67,6 +67,13 @@ class VerifierResultViewController: BaseViewController {
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		// Make the navbar the same color as the background.
+		navigationController?.navigationBar.backgroundColor = .clear
+	}
+
 	/// User tapped on the button
 	@objc private func closeButtonTapped() {
 

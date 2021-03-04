@@ -43,4 +43,13 @@ class Configuration {
 			}
 		}
 	}
+
+	func getEnvironment() -> String {
+
+		if let networkConfigurationValue = Bundle.main.infoDictionary?["NETWORK_CONFIGURATION"] as? String {
+			return networkConfigurationValue.lowercased()
+		} else {
+			return "test"
+		}
+	}
 }

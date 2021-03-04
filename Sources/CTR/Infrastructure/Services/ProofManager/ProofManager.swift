@@ -65,7 +65,7 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Array of constants
 	private struct Constants {
-		static let keychainService = "ProofManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "ProofManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
 	/// The proof data stored in the keychain
