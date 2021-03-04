@@ -40,10 +40,31 @@ class BirthdateEntryViewModel: Logging {
 		let dateString = "\(year)-\(month)-\(day)"
 		if let date = parseDateFormatter.date(from: dateString) {
 			logDebug("Birthdate : \(date)")
-			coordinator?.navigateToBirthdayConfirmation(date)
+			if validateBirthdate(date, year: year) {
+				coordinator?.navigateToBirthdayConfirmation(date)
+			} else {
+				errorMessage = .holderBirthdayEntryInvaliddDate
+			}
+
 		} else {
 			errorMessage = .holderBirthdayEntryInvaliddDate
 		}
+	}
+
+	func validateBirthdate(_ date: Date, year: String?) -> Bool {
+
+		let now = Date()
+		if date > now {
+			return false
+		}
+
+		if let year = year,
+		   let intYear = Int(year),
+		   intYear < 1900 {
+			return false
+		}
+
+		return true
 	}
 
 	var day: String?
