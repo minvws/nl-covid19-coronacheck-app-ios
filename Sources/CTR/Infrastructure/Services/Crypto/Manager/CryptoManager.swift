@@ -119,7 +119,6 @@ class CryptoManager: CryptoManaging, Logging {
 
 		if let data = try? JSONEncoder().encode(object),
 		   let convertedToString = String(data: data, encoding: .utf8) {
-			logDebug("ProofManager: Convert to \(convertedToString)")
 			return convertedToString
 		}
 		return ""

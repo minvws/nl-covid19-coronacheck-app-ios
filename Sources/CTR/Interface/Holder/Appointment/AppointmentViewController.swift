@@ -38,23 +38,16 @@ class AppointmentViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = {
-			self.title = $0
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$body.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$linkedBody.binding = { [weak self] in
+			self?.sceneView.underline($0)
+			self?.setupLink()
 		}
 
-		viewModel.$header.binding = {
-			self.sceneView.title = $0
-		}
-
-		viewModel.$body.binding = { self.sceneView.message = $0 }
-
-		viewModel.$linkedBody.binding = {
-			self.sceneView.underline($0)
-			self.setupLink()
-		}
-
-		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
-		viewModel.$image.binding = { self.sceneView.headerImage = $0 }
+		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+		viewModel.$image.binding = { [weak self] in self?.sceneView.headerImage = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonTapped()

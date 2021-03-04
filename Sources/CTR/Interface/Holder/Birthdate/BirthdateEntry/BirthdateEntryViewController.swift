@@ -59,12 +59,12 @@ class BirthdateEntryViewController: BaseViewController {
 
 		// Bindings
 
-		viewModel.$errorMessage.binding = {
+		viewModel.$errorMessage.binding = { [weak self] in
 			if let message = $0 {
-				self.sceneView.errorView.error = message
-				self.sceneView.errorView.isHidden = false
+				self?.sceneView.errorView.error = message
+				self?.sceneView.errorView.isHidden = false
 			} else {
-				self.sceneView.errorView.isHidden = true
+				self?.sceneView.errorView.isHidden = true
 			}
 		}
 
@@ -72,7 +72,7 @@ class BirthdateEntryViewController: BaseViewController {
 			self?.viewModel.sendButtonTapped()
 		}
 
-		viewModel.$isButtonEnabled.binding = { self.sceneView.primaryButton.isEnabled = $0 }
+		viewModel.$isButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")

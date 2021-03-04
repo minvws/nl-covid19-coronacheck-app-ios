@@ -12,7 +12,7 @@ import Foundation
 /// # Example use:
 /// ````
 /// @Bindable private(set) var title = "Add Contact"
-/// $title.binding = { titleLabel.text = $0 }
+/// $title.binding = { [weak self] in self?.titleLabel.text = $0 }
 /// ````
 ///
 /// - Tag: Bindable

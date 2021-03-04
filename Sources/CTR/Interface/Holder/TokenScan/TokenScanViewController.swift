@@ -39,23 +39,29 @@ class TokenScanViewController: ScanViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$errorTitle.binding = { self.errorTitle = $0 }
-		viewModel.$errorMessage.binding = { self.errorMessage = $0 }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$errorTitle.binding = { [weak self] in self?.errorTitle = $0 }
+		viewModel.$errorMessage.binding = { [weak self] in self?.errorMessage = $0 }
 
-		viewModel.$startScanning.binding = {
-			if $0, self.captureSession?.isRunning == false {
-				self.captureSession.startRunning()
+		viewModel.$startScanning.binding = { [weak self] in
+			if $0, self?.captureSession?.isRunning == false {
+				self?.captureSession.startRunning()
 			}
 		}
-		viewModel.$torchAccessibility.binding = {
-			self.addTorchButton(action: #selector(self.toggleTorch), accessibilityLabel: $0)
+		viewModel.$torchAccessibility.binding = { [weak self] in
+			guard let strongSelf = self else {
+				return
+			}
+			strongSelf.addTorchButton(action: #selector(strongSelf.toggleTorch), accessibilityLabel: $0)
 		}
-		viewModel.$showError.binding = {
+		viewModel.$showError.binding = { [weak self] in
+			guard let strongSelf = self else {
+				return
+			}
 			if $0 {
-				if let title = self.errorTitle, let message = self.errorMessage {
-					self.showError(title: title, message: message)
+				if let title = strongSelf.errorTitle, let message = strongSelf.errorMessage {
+					strongSelf.showError(title: title, message: message)
 				}
 			}
 		}

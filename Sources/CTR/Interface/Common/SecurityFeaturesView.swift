@@ -8,7 +8,9 @@
 import UIKit
 import Lottie
 
-class SecurityFeaturesView: BaseView {
+class SecurityFeaturesView: BaseView, Logging {
+
+	var loggingCategory: String = "SecurityFeaturesView"
 
 	/// The animation view
 	private let animationView: AnimationView = {
@@ -92,5 +94,16 @@ class SecurityFeaturesView: BaseView {
 	func play() {
 
 		playCurrentAnimation()
+	}
+
+	/// Resume the animation
+	func resume() {
+
+		if !animationView.isAnimationPlaying {
+			logDebug("Animation resuming")
+			animationView.play()
+		} else {
+			logDebug("Animation is playing!")
+		}
 	}
 }

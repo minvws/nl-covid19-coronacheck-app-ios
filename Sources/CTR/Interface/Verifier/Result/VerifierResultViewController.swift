@@ -35,32 +35,32 @@ class VerifierResultViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$primaryButtonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.dismiss()
 		}
 
-		viewModel.$allowAccess.binding = {
+		viewModel.$allowAccess.binding = { [weak self] in
 
 			if $0 == .verified {
-				self.sceneView.imageView.image = .access
-				self.sceneView.backgroundColor = Theme.colors.access
+				self?.sceneView.imageView.image = .access
+				self?.sceneView.backgroundColor = Theme.colors.access
 			} else if $0 == .demo {
-				self.sceneView.imageView.image = .access
-				self.sceneView.backgroundColor = Theme.colors.demo
+				self?.sceneView.imageView.image = .access
+				self?.sceneView.backgroundColor = Theme.colors.demo
 			} else {
-				self.sceneView.imageView.image = .denied
-				self.sceneView.backgroundColor = Theme.colors.denied
+				self?.sceneView.imageView.image = .denied
+				self?.sceneView.backgroundColor = Theme.colors.denied
 			}
 		}
 
-		viewModel.$linkedMessage.binding = {
+		viewModel.$linkedMessage.binding = { [weak self] in
 			if $0 != nil {
-				self.sceneView.underline($0)
-				self.setupLink()
+				self?.sceneView.underline($0)
+				self?.setupLink()
 			}
 		}
 

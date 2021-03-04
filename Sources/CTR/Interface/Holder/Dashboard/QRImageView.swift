@@ -242,4 +242,10 @@ class QRImageView: BaseView {
 
 		securityView.play()
 	}
+
+	/// Resume the animation
+	func resume() {
+
+		securityView.resume()
+	}
 }

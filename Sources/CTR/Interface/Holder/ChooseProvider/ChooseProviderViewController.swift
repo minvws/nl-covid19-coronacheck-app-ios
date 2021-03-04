@@ -39,14 +39,14 @@ class ChooseProviderViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$header.binding = { self.sceneView.title = $0 }
-		viewModel.$body.binding = { self.sceneView.message = $0 }
-		viewModel.$image.binding = { self.sceneView.headerImage = $0 }
-		viewModel.$providers.binding = { providers in
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$body.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$image.binding = { [weak self] in self?.sceneView.headerImage = $0 }
+		viewModel.$providers.binding = { [weak self] providers in
 
 			for provider in providers {
-				self.setupProviderButton(provider)
+				self?.setupProviderButton(provider)
 			}
 //			self.setupNoDigidButton()
 		}

@@ -40,14 +40,18 @@ class HolderDashboardViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
-		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$qrTitle.binding = { self.sceneView.qrView.title = $0 }
-		viewModel.$qrSubTitle.binding = { self.sceneView.qrView.subTitle = $0 }
-		viewModel.$qrValidUntilTitle.binding = { self.sceneView.qrView.message = $0 }
-		viewModel.$expiredTitle.binding = { self.sceneView.expiredQRView.title = $0 }
-		viewModel.$appointmentCard.binding = { self.styleCard(self.sceneView.appointmentCard, cardInfo: $0) }
-		viewModel.$createCard.binding = { self.styleCard(self.sceneView.createCard, cardInfo: $0) }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$qrTitle.binding = { [weak self] in self?.sceneView.qrView.title = $0 }
+		viewModel.$qrSubTitle.binding = { [weak self] in self?.sceneView.qrView.subTitle = $0 }
+		viewModel.$qrValidUntilTitle.binding = { [weak self] in self?.sceneView.qrView.message = $0 }
+		viewModel.$expiredTitle.binding = { [weak self] in self?.sceneView.expiredQRView.title = $0 }
+		viewModel.$appointmentCard.binding = { [weak self] in
+			guard let strongSelf = self else { return }
+			strongSelf.styleCard(strongSelf.sceneView.appointmentCard, cardInfo: $0) }
+		viewModel.$createCard.binding = { [weak self] in
+			guard let strongSelf = self else { return }
+			strongSelf.styleCard(strongSelf.sceneView.createCard, cardInfo: $0) }
 		
 		viewModel.$qrMessage.binding = {
 			
@@ -63,8 +67,6 @@ class HolderDashboardViewController: BaseViewController {
 			
 			if $0 {
 				self.sceneView.qrView.isHidden = false
-				// Scroll to top
-				self.sceneView.scrollView.setContentOffset(.zero, animated: true)
 				self.setupLink()
 			} else {
 				self.sceneView.qrView.isHidden = true
@@ -105,7 +107,6 @@ class HolderDashboardViewController: BaseViewController {
 	
 	func setupListeners() {
 		
-		// set observer for UIApplication.willEnterForegroundNotification
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(checkValidity),
@@ -128,6 +129,9 @@ class HolderDashboardViewController: BaseViewController {
 		
 		// Check if we are being recorded
 		viewModel.preventScreenCapture()
+
+		// Resume the animation
+		sceneView.resume()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -135,6 +139,9 @@ class HolderDashboardViewController: BaseViewController {
 		super.viewWillAppear(animated)
 		checkValidity()
 		sceneView.play()
+
+		// Scroll to top
+		sceneView.scrollView.setContentOffset(.zero, animated: false)
 	}
 	
 	deinit {

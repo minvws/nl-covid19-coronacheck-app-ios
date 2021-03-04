@@ -47,18 +47,18 @@ class BirthdateConfirmationViewController: BaseViewController {
 
 	func setupBinding() {
 
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$isButtonEnabled.binding = { self.sceneView.primaryButton.isEnabled = $0 }
-		viewModel.$confirm.binding = { self.sceneView.consent = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$isButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
+		viewModel.$confirm.binding = { [weak self] in self?.sceneView.consent = $0 }
 		self.sceneView.consentButton.valueChanged(self, action: #selector(consentValueChanged))
 
-		viewModel.$showDialog.binding = {
+		viewModel.$showDialog.binding = { [weak self] in
 			
-			if let window = self.view.window {
+			if let window = self?.view.window {
 				if $0 {
-					self.sceneView.confirmationView.embed(in: window)
+					self?.sceneView.confirmationView.embed(in: window)
 				} else {
-					self.sceneView.confirmationView.removeFromSuperview()
+					self?.sceneView.confirmationView.removeFromSuperview()
 				}
 			}
 		}

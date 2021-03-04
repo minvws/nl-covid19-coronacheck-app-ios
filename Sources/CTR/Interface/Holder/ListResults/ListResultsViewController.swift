@@ -39,42 +39,46 @@ class ListResultsViewController: BaseViewController {
 
 		edgesForExtendedLayout = []
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
-		viewModel.$showAlert.binding = {
+		viewModel.$showAlert.binding = { [weak self] in
 			if $0 {
-				self.showAlert()
+				self?.showAlert()
 			}
 		}
 
-		viewModel.$showError.binding = {
+		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self.showError(.technicalErrorTitle, message: .technicalErrorText)
+				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
 			}
 		}
 
-		viewModel.$listItem.binding = {
+		viewModel.$listItem.binding = { [weak self] in
 			if let item = $0 {
-				self.sceneView.resultView.isHidden = false
-				self.sceneView.resultView.header = .holderTestResultsRecent
-				self.sceneView.resultView.title = .holderTestResultsNegative
-				self.sceneView.resultView.message = item.date
+				self?.sceneView.resultView.isHidden = false
+				self?.sceneView.resultView.header = .holderTestResultsRecent
+				self?.sceneView.resultView.title = .holderTestResultsNegative
+				self?.sceneView.resultView.message = item.date
 
 			} else {
-				self.sceneView.resultView.isHidden = true
+				self?.sceneView.resultView.isHidden = true
 			}
 		}
 
-		viewModel.$showProgress.binding = {
+		viewModel.$showProgress.binding = { [weak self] in
+
+			guard let strongSelf = self else {
+				return
+			}
 
 			if $0 {
-				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
-				self.sceneView.primaryButton.isEnabled = false
+				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				strongSelf.sceneView.primaryButton.isEnabled = false
 			} else {
-				MBProgressHUD.hide(for: self.sceneView, animated: true)
-				self.sceneView.primaryButton.isEnabled = true
+				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
+				strongSelf.sceneView.primaryButton.isEnabled = true
 			}
 		}
 

@@ -44,8 +44,8 @@ class OnboardingPageViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$image.binding = { self.sceneView.image = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
 	}
 }

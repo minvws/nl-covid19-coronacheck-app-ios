@@ -22,13 +22,13 @@ class EnlargedQRViewModel: Logging {
 	weak var proofManager: ProofManaging?
 
 	/// The configuration
-	var configuration: ConfigurationGeneralProtocol
+	weak var configuration: ConfigurationGeneralProtocol?
 
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
-	/// A timer to keep sending pings
-	var validityTimer: Timer?
+	/// A timer to keep the QR refreshed
+	weak var validityTimer: Timer?
 
 	/// The message above the QR card
 	@Bindable private(set) var qrTitle: String?
@@ -72,7 +72,8 @@ class EnlargedQRViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credential = cryptoManager?.readCredential() else {
+		guard let credential = cryptoManager?.readCredential(),
+			  let configuration = configuration else {
 			coordinator?.dismiss()
 			return
 		}
@@ -122,15 +123,15 @@ class EnlargedQRViewModel: Logging {
 		}
 	}
 
-	/// Start the validity timer, check every 10 seconds.
+	/// Start the validity timer, check every 170 seconds.
 	func startValidityTimer() {
 
-		guard validityTimer == nil else {
+		guard validityTimer == nil, let configuration = configuration else {
 			return
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() - 30),
+			timeInterval: TimeInterval(configuration.getQRTTL() - 10),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
