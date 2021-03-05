@@ -70,7 +70,7 @@ class CreateProofViewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "d MMMM"
 		return dateFormatter
@@ -80,7 +80,7 @@ class CreateProofViewModel: Logging {
 	private lazy var printTimeFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "HH:mm"
 		return dateFormatter

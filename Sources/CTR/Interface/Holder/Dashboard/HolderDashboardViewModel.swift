@@ -56,6 +56,9 @@ class HolderDashboardViewModel: Logging {
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol
 
+	/// The proof validator
+	var proofValidator: ProofValidatorProtocol
+
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
@@ -141,6 +144,8 @@ class HolderDashboardViewModel: Logging {
 			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 
+		self.proofValidator = ProofValidator(configuration: configuration)
+
 		self.addObserver()
 	}
 
@@ -167,30 +172,28 @@ class HolderDashboardViewModel: Logging {
 			return
 		}
 
-		let now = Date().timeIntervalSince1970
-		let validity = TimeInterval(configuration.getTestResultTTL())
 		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
-			let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
-			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
-				// valid
-				logDebug("Proof is valid until \(printDate)")
 
-				let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
-				if (sampleTimeStamp + validity - warningTTL) < now {
-					logDebug("Proof is expiring soon")
-				}
-				//						showQRMessageExpiring(printDate)
-				//					} else {
-				showQRMessageIsValid(printDate)
-				//					}
-				startValidityTimer()
-			} else {
+			switch proofValidator.validate(sampleTimeStamp) {
+				case let .valid(validUntilDate):
+					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
+					logDebug("Proof is valid until \(validUntilDateString)")
+					showQRMessageIsValid(validUntilDateString)
+					startValidityTimer()
 
-				// expired
-				logDebug("Proof is no longer valid \(printDate)")
-				showQRMessageIsExpired()
-				validityTimer?.invalidate()
-				validityTimer = nil
+				//				case .expiring:
+				//				// Needs refactoring!!!!
+				//					let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
+				//				if (sampleTimeStamp + validity - warningTTL) < now {
+				//					logDebug("Proof is expiring soon")
+				//				}
+				//					showQRMessageExpiring(printDate)
+				//					break
+				case .expired:
+					logDebug("Proof is no longer valid")
+					showQRMessageIsExpired()
+					validityTimer?.invalidate()
+					validityTimer = nil
 			}
 		}
 	}
@@ -238,7 +241,7 @@ class HolderDashboardViewModel: Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() - 30),
+			timeInterval: TimeInterval(configuration.getQRTTL() - 10), // 10 second earlier, to prevent last second mismatches.
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
@@ -263,7 +266,7 @@ class HolderDashboardViewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 		
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
 		return dateFormatter
