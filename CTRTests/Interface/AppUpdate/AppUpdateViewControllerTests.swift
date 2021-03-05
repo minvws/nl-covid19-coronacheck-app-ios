@@ -31,7 +31,8 @@ class AppUpdateViewControllerTests: XCTestCase {
 				storeUrl: nil,
 				deactivated: nil,
 				informationURL: nil,
-				configTTL: 3600
+				configTTL: 3600,
+				maxValidityHours: 48
 			)
 		)
 

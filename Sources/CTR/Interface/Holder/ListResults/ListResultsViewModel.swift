@@ -186,7 +186,7 @@ class ListResultsViewModel: Logging {
 
 		showProgress = true
 
-		let ttl = TimeInterval(Services.remoteConfigManager.getConfiguration().configTTL)
+		let ttl = TimeInterval(Services.remoteConfigManager.getConfiguration().configTTL ?? 0)
 
 		// Step 1: Fetch the public keys
 		proofManager?.fetchIssuerPublicKeys(

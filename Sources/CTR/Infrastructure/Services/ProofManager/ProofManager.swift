@@ -156,12 +156,12 @@ class ProofManager: ProofManaging, Logging {
 		oncompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 
-		if let lastFetchedTimestamp = keysFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - ttl, cryptoManager.hasPublicKeys() {
-			logDebug("Issuer public keys still within TTL")
-			oncompletion?()
-			return
-		}
+//		if let lastFetchedTimestamp = keysFetchedTimestamp,
+//		   lastFetchedTimestamp > Date() - ttl, cryptoManager.hasPublicKeys() {
+//			logDebug("Issuer public keys still within TTL")
+//			oncompletion?()
+//			return
+//		}
 
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 

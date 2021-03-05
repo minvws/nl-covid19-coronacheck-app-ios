@@ -26,7 +26,10 @@ protocol AppVersionInformation {
 	var appDeactivated: Bool? { get }
 
 	/// What is the TTL of the config
-	var configTTL: Int { get }
+	var configTTL: Int? { get }
+
+	/// What is the TTL of a test
+	var maxValidityHours: Int? { get }
 }
 
 extension AppVersionInformation {
@@ -56,16 +59,21 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	let appDeactivated: Bool?
 
 	/// What is the TTL of the config
-	let configTTL: Int
+	let configTTL: Int?
+
+	/// What is the TTL of a test
+	var maxValidityHours: Int?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
+
 		case minimumVersion = "iosMinimumVersion"
 		case minimumVersionMessage = "iosMinimumVersionMessage"
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
+		case maxValidityHours = "maxValidityHours"
 	}
 
 	/// Initializer
@@ -76,13 +84,15 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	///   - deactiviated: The deactivation String
 	///   - informationURL: The information url
 	///   - configTTL: The TTL of the config
+	///   - maxValidityHours: The TTL of the test proof
 	init(
 		minVersion: String,
 		minVersionMessage: String?,
 		storeUrl: URL?,
 		deactivated: Bool?,
 		informationURL: URL?,
-		configTTL: Int) {
+		configTTL: Int?,
+		maxValidityHours: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -90,6 +100,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
 		self.configTTL = configTTL
+		self.maxValidityHours = maxValidityHours
 	}
 
 	/// Default remote configuration
@@ -100,7 +111,8 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 			storeUrl: nil,
 			deactivated: false,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 	}
 }
@@ -132,7 +144,9 @@ enum UpdateState: Equatable {
 					lhsVersion.minimumVersionMessage == rhsVersion.minimumVersionMessage &&
 					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
 					lhsVersion.informationURL == rhsVersion.informationURL &&
-					lhsVersion.appDeactivated == rhsVersion.appDeactivated
+					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
+					lhsVersion.configTTL == rhsVersion.configTTL &&
+					lhsVersion.maxValidityHours == rhsVersion.maxValidityHours
 		}
 	}
 }
