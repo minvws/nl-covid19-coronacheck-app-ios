@@ -160,7 +160,7 @@ class AppCoordinator: Coordinator, Logging {
 	func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL)
+		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
 		proofManager.fetchIssuerPublicKeys(ttl: ttl, oncompletion: nil, onError: nil)
 	}
 }

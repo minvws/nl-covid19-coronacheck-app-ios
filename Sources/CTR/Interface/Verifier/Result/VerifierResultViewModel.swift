@@ -31,6 +31,9 @@ class VerifierResultViewModel: Logging {
 
 	// MARK: - Bindable properties
 
+	/// The title of the scene
+	@Bindable private(set) var title: String = ""
+
 	/// The message of the scene
 	@Bindable private(set) var message: String = ""
 
@@ -113,6 +116,7 @@ class VerifierResultViewModel: Logging {
 	/// Show access allowed
 	private func showAccessAllowed() {
 
+		title = .verifierResultAccessTitle
 		message =  .verifierResultAccessMessage
 		linkedMessage = nil
 	}
@@ -120,6 +124,7 @@ class VerifierResultViewModel: Logging {
 	/// Show access denied
 	private func showAccessDenied() {
 
+		title = .verifierResultDeniedTitle
 		message = .verifierResultDeniedMessage
 //		linkedMessage = .verifierResultDeniedLink
 	}
@@ -127,6 +132,7 @@ class VerifierResultViewModel: Logging {
 	/// Show access allowed
 	private func showAccessDemo() {
 
+		title = .verifierResultDemoTitle
 		message =  .verifierResultDemoMessage
 		linkedMessage = nil
 	}

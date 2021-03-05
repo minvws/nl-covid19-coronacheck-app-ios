@@ -21,6 +21,9 @@ class EnlargedQRViewModel: Logging {
 	/// The proof manager
 	weak var proofManager: ProofManaging?
 
+	/// The proof validator
+	var proofValidator: ProofValidatorProtocol
+
 	/// The configuration
 	weak var configuration: ConfigurationGeneralProtocol?
 
@@ -66,33 +69,31 @@ class EnlargedQRViewModel: Logging {
 		self.showValidQR = false
 		self.hideQRForCapture = false
 
+		self.proofValidator = ProofValidator(configuration: configuration)
 		self.addObserver()
 	}
 
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credential = cryptoManager?.readCredential(),
-			  let configuration = configuration else {
+		guard let credential = cryptoManager?.readCredential() else {
 			coordinator?.dismiss()
 			return
 		}
 
-		let now = Date().timeIntervalSince1970
-		let validity = TimeInterval(configuration.getTestResultTTL())
 		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
-			let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
-			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
-				// valid
-				logDebug("Proof is valid until \(printDate)")
-				showQRMessageIsValid(printDate)
-				startValidityTimer()
-			} else {
-				// expired
-				logDebug("Proof is no longer valid \(printDate)")
-				validityTimer?.invalidate()
-				validityTimer = nil
-				coordinator?.dismiss()
+
+			switch proofValidator.validate(sampleTimeStamp) {
+				case let .valid(validUntilDate):
+					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
+					logDebug("Proof is valid until \(validUntilDateString)")
+					showQRMessageIsValid(validUntilDateString)
+					startValidityTimer()
+				case .expired:
+					logDebug("Proof is no longer valid")
+					validityTimer?.invalidate()
+					validityTimer = nil
+					coordinator?.dismiss()
 			}
 		}
 	}
@@ -148,7 +149,7 @@ class EnlargedQRViewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
 		return dateFormatter

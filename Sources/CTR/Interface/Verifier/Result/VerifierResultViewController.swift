@@ -35,6 +35,7 @@ class VerifierResultViewController: BaseViewController {
 
 		super.viewDidLoad()
 
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 

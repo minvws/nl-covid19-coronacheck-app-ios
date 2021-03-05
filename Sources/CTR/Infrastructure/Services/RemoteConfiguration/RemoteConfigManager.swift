@@ -86,7 +86,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	func update(completion: @escaping (UpdateState) -> Void) {
 
 		if let lastFetchedTimestamp = lastFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL) {
+		   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
 			logDebug("Remote config still within TTL")
 			completion(.noActionNeeded)
 			return

@@ -151,7 +151,7 @@ class ListResultsViewModel: Logging {
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
@@ -186,7 +186,7 @@ class ListResultsViewModel: Logging {
 
 		showProgress = true
 
-		let ttl = TimeInterval(Services.remoteConfigManager.getConfiguration().configTTL)
+		let ttl = TimeInterval(Services.remoteConfigManager.getConfiguration().configTTL ?? 0)
 
 		// Step 1: Fetch the public keys
 		proofManager?.fetchIssuerPublicKeys(

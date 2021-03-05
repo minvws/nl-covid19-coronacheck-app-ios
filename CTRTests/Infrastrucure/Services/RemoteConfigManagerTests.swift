@@ -76,7 +76,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			storeUrl: nil,
 			deactivated: nil,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -105,7 +106,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			storeUrl: nil,
 			deactivated: nil,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -134,7 +136,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			storeUrl: nil,
 			deactivated: nil,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
@@ -164,7 +167,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			storeUrl: nil,
 			deactivated: nil,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
@@ -194,7 +198,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			storeUrl: nil,
 			deactivated: nil,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
@@ -224,7 +229,8 @@ class RemoteConfigManagerTests: XCTestCase {
 			storeUrl: nil,
 			deactivated: true,
 			informationURL: nil,
-			configTTL: 3600
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy

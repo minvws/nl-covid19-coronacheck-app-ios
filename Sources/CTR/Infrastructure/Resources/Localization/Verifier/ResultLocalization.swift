@@ -9,9 +9,19 @@ import Foundation
 
 extension String {
 
+	static var verifierResultAccessTitle: String {
+
+		return Localization.string(for: "verifier.result.access.title")
+	}
+
 	static var verifierResultAccessMessage: String {
 
 		return Localization.string(for: "verifier.result.access.message")
+	}
+
+	static var verifierResultDeniedTitle: String {
+
+		return Localization.string(for: "verifier.result.denied.title")
 	}
 
 	static var verifierResultDeniedMessage: String {
@@ -22,6 +32,11 @@ extension String {
 	static var verifierResultDeniedLink: String {
 
 		return Localization.string(for: "verifier.result.denied.link")
+	}
+
+	static var verifierResultDemoTitle: String {
+
+		return Localization.string(for: "verifier.result.demo.title")
 	}
 
 	static var verifierResultDemoMessage: String {
