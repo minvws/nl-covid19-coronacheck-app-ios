@@ -124,12 +124,14 @@ class ListResultsViewControllerTests: XCTestCase {
 		// Given
 		loadView()
 		let result = TestResult(
-				unique: "test",
-				sampleDate: "2021-02-01T00:00:00+00:00",
-				testType: "test",
-				negativeResult: true
-			)
-
+			unique: "test",
+			sampleDate: "2021-02-01T00:00:00+00:00",
+			testType: "test",
+			negativeResult: true,
+			holder: nil,
+			checksum: nil
+		)
+		
 		// When
 		viewModel?.reportTestResult(result)
 

@@ -102,7 +102,7 @@ class BirthdateEntryViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 		dateFormatter.dateFormat = "yyyy-M-d"
 		return dateFormatter
 	}()

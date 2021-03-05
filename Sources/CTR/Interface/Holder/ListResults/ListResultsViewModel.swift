@@ -151,6 +151,7 @@ class ListResultsViewModel: Logging {
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
