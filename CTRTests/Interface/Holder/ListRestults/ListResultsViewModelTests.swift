@@ -76,7 +76,9 @@ class ListResultsViewModelTests: XCTestCase {
 				unique: "testCheckResultNotNegative",
 				sampleDate: "now",
 				testType: "test",
-				negativeResult: false
+				negativeResult: false,
+				holder: nil,
+				checksum: nil
 			),
 			status: .complete
 		)
@@ -103,7 +105,9 @@ class ListResultsViewModelTests: XCTestCase {
 				unique: "testCheckResultTooOld",
 				sampleDate: "2021-02-01T00:00:00+00:00",
 				testType: "test",
-				negativeResult: true
+				negativeResult: true,
+				holder: nil,
+				checksum: nil
 			),
 			status: .complete
 		)
@@ -132,7 +136,9 @@ class ListResultsViewModelTests: XCTestCase {
 				unique: "testCheckResultTooNew",
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
-				negativeResult: true
+				negativeResult: true,
+				holder: nil,
+				checksum: nil
 			),
 			status: .complete
 		)
@@ -161,7 +167,9 @@ class ListResultsViewModelTests: XCTestCase {
 				unique: "testCheckResultValid",
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
-				negativeResult: true
+				negativeResult: true,
+				holder: nil,
+				checksum: nil
 			),
 			status: .complete
 		)

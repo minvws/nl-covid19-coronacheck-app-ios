@@ -482,7 +482,7 @@ class NetworkManager: NetworkManaging, Logging {
 	private lazy var dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 		dateFormatter.dateFormat = "yyyy-MM-dd"
 		
 		return dateFormatter

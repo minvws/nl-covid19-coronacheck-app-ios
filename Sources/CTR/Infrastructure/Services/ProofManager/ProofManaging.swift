@@ -164,6 +164,12 @@ struct TestResult: Codable {
 	/// Is this a negative test result?
 	let negativeResult: Bool
 
+	/// The holder of the test
+	let holder: HolderTestCredentials?  // Version 2.0.
+
+	/// The checksum of the birth date
+	let checksum: Int? // Version 1.0
+
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -171,7 +177,22 @@ struct TestResult: Codable {
 		case sampleDate
 		case testType
 		case negativeResult
+		case holder
+		case checksum
 	}
+}
+
+/// The credentials of the the holder of the test
+struct HolderTestCredentials: Codable {
+
+	/// The first letter of the first name
+	let firstNameInitial: String
+
+	/// The first letter of the last name (no middle names)
+	let lastNameInitial: String
+
+	/// The day of birth (1- 31)
+	let birthDayOfMonth: Int
 }
 
 /// The state of a test

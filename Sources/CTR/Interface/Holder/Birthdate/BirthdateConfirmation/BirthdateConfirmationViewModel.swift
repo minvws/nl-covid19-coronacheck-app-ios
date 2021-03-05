@@ -89,6 +89,7 @@ class BirthdateConfirmationViewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "dd MMMM yyyy"
 		return dateFormatter
