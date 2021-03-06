@@ -38,13 +38,13 @@ class AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the verion information
-	init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation) {
+	init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation?) {
 
 		self.coordinator = coordinator
 		title = .updateAppTitle
-		message = versionInformation.minimumVersionMessage ?? .updateAppContent
+		message = versionInformation?.minimumVersionMessage ?? .updateAppContent
 		actionTitle = .updateAppButton
-		updateURL = versionInformation.appStoreURL
+		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
 		errorMessage = .updateAppErrorMessage
 		self.image = .warning
@@ -68,7 +68,7 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the verion information
-	override init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation) {
+	override init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation?) {
 
 		super.init(coordinator: coordinator, versionInformation: versionInformation)
 
@@ -76,9 +76,31 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 		self.message = .endOfLifeDescription
 		self.errorMessage = .endOfLifeErrorMessage
 		self.actionTitle = .endOfLifeButton
-		self.updateURL = versionInformation.informationURL
+		self.updateURL = versionInformation?.informationURL
 		self.errorMessage = .endOfLifeErrorMessage
 		self.image = .warning
 		self.updateURL = URL(string: "https://coronacheck.nl")
+	}
+}
+
+/// Viewmodel when the app is deactivated
+class InternetRequiredViewModel: AppUpdateViewModel {
+
+	/// Initializer
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	init(coordinator: AppCoordinatorDelegate) {
+
+		super.init(coordinator: coordinator, versionInformation: nil)
+
+		self.title = .internetRequiredTitle
+		self.message = .internetRequiredText
+		self.actionTitle = .internetRequiredButton
+	}
+
+	/// User tapped on the update button
+	override func actionButtonTapped() {
+
+		coordinator?.retry()
 	}
 }

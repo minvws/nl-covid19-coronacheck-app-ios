@@ -30,14 +30,22 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		var appVersion: String
 
-		init(version: String) {
+		var appBuild: String
+
+		init(version: String, build: String = "") {
 
 			appVersion = version
+			appBuild = build
 		}
 
 		func getCurrentVersion() -> String {
 
 			return appVersion
+		}
+
+		func getCurrentBuild() -> String {
+
+			return appBuild
 		}
 	}
 
@@ -57,7 +65,28 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.internetRequired, "State should match")
+
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the remote config manager update call no result from the api
+	func testRemoteConfigManagerUpdateNoResultFromApiWithinTTL() {
+
+		// Given
+		let expectation = self.expectation(description: "remote config no result from api")
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy.remoteConfig = nil
+		sut.networkManager = networkSpy
+		sut.lastFetchedTimestamp = Date()
+
+		// When
+		sut.update { state in
+
+			// Then
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -87,7 +116,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -117,7 +146,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -148,7 +177,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
+			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}
@@ -179,7 +208,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
+			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}
@@ -210,7 +239,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -241,7 +270,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
+			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}

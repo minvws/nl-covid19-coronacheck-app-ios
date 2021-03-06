@@ -124,6 +124,7 @@ class ProofManagerTests: XCTestCase {
 		sut.networkManager = networkSpy
 		networkSpy.shouldReturnPublicKeys = false
 		networkSpy.publicKeyError = NetworkError.invalidRequest
+		sut.keysFetchedTimestamp = nil
 
 		// When
 		sut.fetchIssuerPublicKeys(ttl: 10) {
@@ -132,6 +133,25 @@ class ProofManagerTests: XCTestCase {
 		} onError: { _ in
 
 			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		}
+	}
+
+	/// Test the fetch issuers public keys with an network error
+	func testFetchIssuerPublicKeysWithErrorWithinTTL() {
+
+		// Given
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = false
+		networkSpy.publicKeyError = NetworkError.invalidRequest
+		sut.keysFetchedTimestamp = Date()
+
+		// When
+		sut.fetchIssuerPublicKeys(ttl: 10) {
+			// Then
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		} onError: { _ in
+			XCTFail("There should be no error")
 		}
 	}
 }

@@ -84,7 +84,7 @@ class ProofManager: ProofManaging, Logging {
 	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
-	private var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+	var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 
 	/// Initializer
 	required init() {
@@ -156,13 +156,6 @@ class ProofManager: ProofManaging, Logging {
 		oncompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 
-//		if let lastFetchedTimestamp = keysFetchedTimestamp,
-//		   lastFetchedTimestamp > Date() - ttl, cryptoManager.hasPublicKeys() {
-//			logDebug("Issuer public keys still within TTL")
-//			oncompletion?()
-//			return
-//		}
-
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 
 			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
@@ -173,8 +166,15 @@ class ProofManager: ProofManaging, Logging {
 					oncompletion?()
 
 				case let .failure(error):
-					self?.logError("Error getting the test types: \(error)")
-					onError?(error)
+					self?.logError("Error getting the issuers public keys: \(error)")
+					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
+					   lastFetchedTimestamp > Date() - ttl {
+						self?.logDebug("Issuer public keys still within TTL")
+						oncompletion?()
+
+					} else {
+						onError?(error)
+					}
 			}
 		}
 	}
