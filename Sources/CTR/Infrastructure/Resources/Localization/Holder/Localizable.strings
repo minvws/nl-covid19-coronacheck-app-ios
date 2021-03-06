@@ -27,7 +27,17 @@
 "endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar Coronacheck.nl";
 "endOfLife.button" = "Ga naar CoronaCheck.nl";
 
+/* MARK: - Internet Requird */
+"internet.required.button" = "Probeer opnieuw";
+"internet.required.text" = "Om de app op te starten heb je internet nodig.";
+"internet.required.title" = "Je hebt geen internetverbinding";
+
 /* MARK: - Holder */
+
+/* MARK: - Holder Launch */
+"holder.launch.title" = "CoronaCheck";
+"holder.launch.text" = "We starten de app voor je op...";
+"holder.launch.version" = "App versie %@ (build %@)";
 
 /* MARK: - Holder Menu */
 "holder.menu.dashboard" = "Mijn overzicht";

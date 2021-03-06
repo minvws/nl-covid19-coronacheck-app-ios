@@ -116,37 +116,3 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		)
 	}
 }
-
-/// Should the app be updated?
-enum UpdateState: Equatable {
-
-	/// The app should be updated
-	case actionRequired(AppVersionInformation)
-
-	/// The app is fine.
-	case noActionNeeded
-
-	// MARK: Equatable
-
-	/// Equatable
-	/// - Parameters:
-	///   - lhs: the left hand side
-	///   - rhs: the right hand side
-	/// - Returns: True if both sides are equal
-	static func == (lhs: UpdateState, rhs: UpdateState) -> Bool {
-		switch (lhs, rhs) {
-			case (noActionNeeded, noActionNeeded):
-				return true
-			case (noActionNeeded, actionRequired), (actionRequired, noActionNeeded):
-				return false
-			case (let .actionRequired(lhsVersion), let .actionRequired(rhsVersion)):
-				return lhsVersion.minimumVersion == rhsVersion.minimumVersion &&
-					lhsVersion.minimumVersionMessage == rhsVersion.minimumVersionMessage &&
-					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
-					lhsVersion.informationURL == rhsVersion.informationURL &&
-					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
-					lhsVersion.configTTL == rhsVersion.configTTL &&
-					lhsVersion.maxValidityHours == rhsVersion.maxValidityHours
-		}
-	}
-}

@@ -27,9 +27,19 @@
 "endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar Coronacheck.nl";
 "endOfLife.button" = "Ga naar CoronaCheck.nl";
 
+/* MARK: - Internet Requird */
+"internet.required.button" = "Probeer opnieuw";
+"internet.required.text" = "Om de app op te starten heb je internet nodig.";
+"internet.required.title" = "Je hebt geen internetverbinding";
+
 /* MARK: - Verifier */
 
-/* MARK: - Holder Menu */
+/* MARK: - Verifier Launch */
+"verifier.launch.title" = "CoronaCheck Scanner";
+"verifier.launch.text" = "We starten de app voor je op...";
+"verifier.launch.version" = "App versie %@ (build %@)";
+
+/* MARK: - Verifier Menu */
 "verifier.menu.dashboard" = "Scan QR-code";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";

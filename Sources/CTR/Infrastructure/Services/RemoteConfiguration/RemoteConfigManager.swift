@@ -18,32 +18,11 @@ protocol RemoteConfigManaging {
 
 	/// Update the remote configuration
 	/// - Parameter completion: completion handler
-	func update(completion: @escaping (UpdateState) -> Void)
+	func update(completion: @escaping (LaunchState) -> Void)
 
 	/// Get the configuration
 	/// - Returns: the remote configuration
 	func getConfiguration() -> RemoteConfiguration
-}
-
-/// The version of the app
-protocol AppVersionSupplierProtocol {
-
-	/// Get the current version of the app
-	func getCurrentVersion() -> String
-}
-
-struct AppVersionSupplier: AppVersionSupplierProtocol {
-
-	/// Get the current version number of the app
-	/// - Returns: the current version number
-	func getCurrentVersion() -> String {
-
-		if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-			return version
-		}
-		// Default to 1.0.0
-		return "1.0.0"
-	}
 }
 
 /// The remote configuration mananger
@@ -83,37 +62,52 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// Update the remote configuration
 	/// - Parameter completion: completion handler
-	func update(completion: @escaping (UpdateState) -> Void) {
-
-		if let lastFetchedTimestamp = lastFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
-			logDebug("Remote config still within TTL")
-			completion(.noActionNeeded)
-			return
-		}
+	func update(completion: @escaping (LaunchState) -> Void) {
 
 		networkManager.getRemoteConfiguration { [weak self] resultwrapper in
 
-			guard let strongSelf = self else {
-				return
-			}
+			self?.handleResultWrapper(resultwrapper, completion: completion)
+		}
+	}
 
-			switch resultwrapper {
-				case let .success(remoteConfiguration):
-					// Update the last fetch time
-					self?.lastFetchedTimestamp = Date()
-					// Persist the remote configuration
-					strongSelf.storedConfiguration = remoteConfiguration
-					// Decide what to do
-					strongSelf.compare(remoteConfiguration, completion: completion)
+	/// Handle the resultwrapper response from the get remote configuration calll
+	/// - Parameters:
+	///   - resultWrapper: the result wrapper
+	///   - completion: completion handler
+	private func handleResultWrapper(
+		_ resultWrapper: Result<RemoteConfiguration, NetworkError>,
+		completion: @escaping (LaunchState) -> Void) {
 
-				case let .failure(networkError):
-					// Fallback to the last known remote configuration
-					strongSelf.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
-					strongSelf.logDebug("Using stored Configuration \(strongSelf.storedConfiguration)")
-					// Decide what to do
-					strongSelf.compare(strongSelf.storedConfiguration, completion: completion)
-			}
+		switch resultWrapper {
+			case let .success(remoteConfiguration):
+				// Update the last fetch time
+				lastFetchedTimestamp = Date()
+				// Persist the remote configuration
+				storedConfiguration = remoteConfiguration
+				// Decide what to do
+				compare(remoteConfiguration, completion: completion)
+
+			case let .failure(networkError):
+
+				// Fallback to the last known remote configuration
+				logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
+				logDebug("Using stored Configuration \(storedConfiguration)")
+
+				if let lastFetchedTimestamp = lastFetchedTimestamp,
+				   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
+					// We still got a remote configuration within the config TTL.
+					compare(storedConfiguration, completion: completion)
+				} else {
+					compare(storedConfiguration) { state in
+						switch state {
+							case .actionRequired:
+								// Deactiviated or update trumps no internet
+								completion(state)
+							default:
+								completion(.internetRequired)
+						}
+					}
+				}
 		}
 	}
 
@@ -123,7 +117,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	///   - completion: completion handler
 	private func compare(
 		_ remoteConfiguration: AppVersionInformation,
-		completion: @escaping (UpdateState) -> Void) {
+		completion: @escaping (LaunchState) -> Void) {
 
 		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)
 		let currentVersion = fullVersionString(self.appVersion)
