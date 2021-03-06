@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Config
-BASE_REPONAME=nl-covid19-coronatester-app-ios
+BASE_REPONAME=nl-covid19-coronacheck-app-ios
 
 # Helpers
 TIMESTAMP=`date '+%Y%m%d-%H%M%S'`
