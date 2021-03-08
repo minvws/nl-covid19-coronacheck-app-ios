@@ -24,11 +24,9 @@ protocol ProofManaging: AnyObject {
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
-	///   - ttl: the time to read from cache
 	///   - oncompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
-		ttl: TimeInterval,
 		oncompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?)
 

@@ -79,16 +79,13 @@ class VerifierStartViewModel: Logging {
 		coordinator?.navigateToScanInstruction(present: false)
 	}
 
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
 	/// The proof manager
 	var proofManager: ProofManaging = Services.proofManager
 
+	/// Update the public keys
 	func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
-		proofManager.fetchIssuerPublicKeys(ttl: ttl, oncompletion: nil, onError: nil)
+		proofManager.fetchIssuerPublicKeys(oncompletion: nil, onError: nil)
 	}
 }
