@@ -8,8 +8,46 @@ PODS:
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
   - EasyTipView (2.1.0)
+  - Firebase/CoreOnly (7.7.0):
+    - FirebaseCore (= 7.7.0)
+  - Firebase/Crashlytics (7.7.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 7.7.0)
+  - FirebaseCore (7.7.0):
+    - FirebaseCoreDiagnostics (~> 7.4)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Logger (~> 7.0)
+  - FirebaseCoreDiagnostics (7.7.0):
+    - GoogleDataTransport (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/Logger (~> 7.0)
+    - nanopb (~> 2.30907.0)
+  - FirebaseCrashlytics (7.7.0):
+    - FirebaseCore (~> 7.0)
+    - FirebaseInstallations (~> 7.0)
+    - GoogleDataTransport (~> 8.0)
+    - nanopb (~> 2.30907.0)
+    - PromisesObjC (~> 1.2)
+  - FirebaseInstallations (7.7.0):
+    - FirebaseCore (~> 7.0)
+    - GoogleUtilities/Environment (~> 7.0)
+    - GoogleUtilities/UserDefaults (~> 7.0)
+    - PromisesObjC (~> 1.2)
+  - GoogleDataTransport (8.2.0):
+    - nanopb (~> 2.30907.0)
+  - GoogleUtilities/Environment (7.2.2):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (7.2.2):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/UserDefaults (7.2.2):
+    - GoogleUtilities/Logger
   - lottie-ios (3.2.1)
   - MBProgressHUD (1.2.0)
+  - nanopb (2.30907.0):
+    - nanopb/decode (= 2.30907.0)
+    - nanopb/encode (= 2.30907.0)
+  - nanopb/decode (2.30907.0)
+  - nanopb/encode (2.30907.0)
   - OHHTTPStubs/Core (9.1.0)
   - OHHTTPStubs/Default (9.1.0):
     - OHHTTPStubs/Core
@@ -23,12 +61,14 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (9.1.0)
   - OHHTTPStubs/Swift (9.1.0):
     - OHHTTPStubs/Default
+  - PromisesObjC (1.2.12)
   - ViewControllerPresentationSpy (5.0.0)
 
 DEPENDENCIES:
   - AppAuth (= 1.4.0)
   - CocoaLumberjack/Swift (= 3.7.0)
   - EasyTipView (= 2.1)
+  - Firebase/Crashlytics
   - lottie-ios (= 3.2.1)
   - MBProgressHUD (= 1.2.0)
   - OHHTTPStubs/Swift (= 9.1.0)
@@ -39,20 +79,38 @@ SPEC REPOS:
     - AppAuth
     - CocoaLumberjack
     - EasyTipView
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCrashlytics
+    - FirebaseInstallations
+    - GoogleDataTransport
+    - GoogleUtilities
     - lottie-ios
     - MBProgressHUD
+    - nanopb
     - OHHTTPStubs
+    - PromisesObjC
     - ViewControllerPresentationSpy
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
   EasyTipView: a92b6edc377b81c5ac18e9fd35d5ee78e9409488
+  Firebase: cd2ab85eec8170dc260186159f21072ecb679ad5
+  FirebaseCore: ac35d680a0bf32319a59966a1478e0741536b97b
+  FirebaseCoreDiagnostics: 179bf3831213451c8addd036aca7fcf5492ec154
+  FirebaseCrashlytics: 47af228115805e190b566db12c028263531b8ce0
+  FirebaseInstallations: 42c86e7b02ff75b7f27f85833bf5dcb5f38a9774
+  GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
+  GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
   lottie-ios: 106e92eaf11fbed0a76590b4cdb9b5ec26123ff7
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
+  nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   ViewControllerPresentationSpy: 7cfa8ef8ec9fa197ea58ee6e9ac72bbe5442281b
 
-PODFILE CHECKSUM: 86a9e6d6db04d68a5081812dee52a5ab1c0221b4
+PODFILE CHECKSUM: 32739efb1c19f5dcfd5da63439914157f82c4dcd
 
 COCOAPODS: 1.10.1
