@@ -54,11 +54,13 @@ class EnlargedQRViewModel: Logging {
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
 	///   - configuration: the configuration
+	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: Dismissable,
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol) {
+		configuration: ConfigurationGeneralProtocol,
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
@@ -69,7 +71,7 @@ class EnlargedQRViewModel: Logging {
 		self.showValidQR = false
 		self.hideQRForCapture = false
 
-		self.proofValidator = ProofValidator(configuration: configuration)
+		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 		self.addObserver()
 	}
 

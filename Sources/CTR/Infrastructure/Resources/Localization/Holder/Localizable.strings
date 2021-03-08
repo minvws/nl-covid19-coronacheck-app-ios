@@ -53,7 +53,7 @@
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
 "holder.onboarding.message.yourqr" = "Ben je negatief getest (geen corona)? Dan kun je met deze app een persoonlijke QR-code maken. Dat is jouw testbewijs. De QR-code wordt gescand voordat je toegang krijgt.";
 "holder.onboarding.title.validity" = "Geldigheid van je bewijs";
-"holder.onboarding.message.validity" = "Een negatief testresultaat (geen corona) is geldig tot 48 uur na het moment van testen. De kans dat je in die tijd besmettelijk bent voor anderen is namelijk klein.";
+"holder.onboarding.message.validity" = "Een negatief testresultaat (geen corona) is geldig tot %@ uur na het moment van testen. De kans dat je in die tijd besmettelijk bent voor anderen is namelijk klein.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
 "holder.onboarding.message.privacy" = "Deze app haalt alleen een negatief testresultaat (geen corona) op. En controleert of dit jouw resultaat is. Andere persoonsgegevens worden niet verwerkt of opgeslagen.";
 
@@ -81,7 +81,7 @@
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
+"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is %@ uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.title" = "Testafspraak maken";
 "holder.appointment.header" = "Maak een testafspraak";
@@ -158,13 +158,13 @@
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
 "holder.testresults.noresults.title" = "Er is geen negatief restresultaat";
-"holder.testresults.noresults.text" = "Er is geen negatief testresultaat (geen corona) beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je test is langer dan 48 uur geleden uitgevoerd</li><li>Je testresultaat is nog niet verwerkt</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
+"holder.testresults.noresults.text" = "Er is geen negatief testresultaat (geen corona) beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je test is langer dan %@ uur geleden uitgevoerd</li><li>Je testresultaat is nog niet verwerkt</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testresultaat is al opgehaald";
 "holder.testresults.already.text" = "<p>Je testresultaat is al opgehaald en verwerkt in een QR-code.</p><p></p><p>Heb je het idee dat dit niet klopt? Neem dan contact op met de testlocatie.</p>";
-"holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
+"holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan %@ uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";

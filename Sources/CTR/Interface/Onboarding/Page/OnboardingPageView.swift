@@ -13,7 +13,9 @@ class OnboardingPageView: BaseView {
 	private struct ViewTraits {
 		
 		// Dimensions
-		static let titleLineHeight: CGFloat = 26
+		static let titleLineHeight: CGFloat = 32
+		static let titleKerning: CGFloat = -0.26
+		static let titleFontSize: CGFloat = 26
 		static let messageLineHeight: CGFloat = UIDevice.current.isSmallScreen ? 17 : 22
 		
 		// Margins
@@ -78,6 +80,7 @@ class OnboardingPageView: BaseView {
 		
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		titleLabel.font = titleLabel.font.withSize(ViewTraits.titleFontSize)
 	}
 	
 	/// Setup the hierarchy
@@ -86,9 +89,9 @@ class OnboardingPageView: BaseView {
 		super.setupViewHierarchy()
 		imageContainerView.addSubview(imageView)
 
+		bottomStackView.addArrangedSubview(UIView())
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.addArrangedSubview(messageLabel)
-		bottomStackView.addArrangedSubview(UIView())
 
 		stackView.addArrangedSubview(imageContainerView)
 		stackView.addArrangedSubview(bottomStackView)
@@ -99,7 +102,10 @@ class OnboardingPageView: BaseView {
 		
 		super.setupViewConstraints()
 
-		stackView.embed(in: self)
+		stackView.embed(
+			in: self,
+			insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+		)
 		
 		NSLayoutConstraint.activate([
 
@@ -125,15 +131,21 @@ class OnboardingPageView: BaseView {
 	/// The onboarding title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 		}
 	}
 	
 	/// The onboarding message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(text: message, font: Theme.fonts.body, textColor: Theme.colors.dark)
-//			message?.setLineHeight(ViewTraits.messageLineHeight)
+			messageLabel.attributedText = .makeFromHtml(
+				text: message,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark
+			)
 		}
 	}
 	

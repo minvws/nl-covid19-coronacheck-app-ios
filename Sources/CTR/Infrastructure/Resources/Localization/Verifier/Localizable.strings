@@ -48,7 +48,7 @@
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Zo veilig mogelijk weer open";
-"verifier.onboarding.message.safely" = "Bezoekers van jouw zaak, gelegenheid of evenement moeten eerst een coronatest doen. Alleen met een negatief testresultaat mogen zij naar binnen. Een negatief testresultaat geldt 48 uur.";
+"verifier.onboarding.message.safely" = "Bezoekers van jouw zaak, gelegenheid of evenement moeten eerst een coronatest doen. Alleen met een negatief testresultaat mogen zij naar binnen. Een negatief testresultaat geldt %@ uur.";
 "verifier.onboarding.title.scanqr" = "Scan QR-code voor testresultaat";
 "verifier.onboarding.message.scanqr" = "In de CoronaCheck app maakt de bezoeker van haar testresultaat een QR-code. Met deze app scan jij de QR-codes en zie je wie er toegang krijgt. Bij een groen scherm mag de bezoeker naar binnen.";
 "verifier.onboarding.title.access" = "Toegang is anoniem";
@@ -82,7 +82,7 @@
 "verifier.instructions.access.title" = "3. Groen scherm = toegang";
 "verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldig negatief testresultaat en mag naar binnen.";
 "verifier.instructions.denied.title" = "4. Rood scherm = geen toegang";
-"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li><li>Is de bezoeker wel negatief op corona getest in de afgelopen 48 uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li><li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li></ul>";
+"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li><li>Is de bezoeker wel negatief op corona getest in de afgelopen %@ uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li><li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li></ul>";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";

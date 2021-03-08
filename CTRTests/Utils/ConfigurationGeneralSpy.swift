@@ -10,12 +10,6 @@ import XCTest
 
 class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 
-	var testResultTTL = 172800
-
-	func getTestResultTTL() -> Int {
-		return testResultTTL
-	}
-
 	func getTestResultWarningTTL() -> Int {
 		return 10
 	}

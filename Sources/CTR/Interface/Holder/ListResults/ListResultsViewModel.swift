@@ -20,8 +20,7 @@ class ListResultsViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
-	/// The configuration
-	var configuration: ConfigurationGeneralProtocol
+	var maxValidity: Int
 
 	/// The proof manager
 	weak var proofManager: ProofManaging?
@@ -30,7 +29,7 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var buttonTitle: String
 	@Bindable private(set) var recentHeader: String
-	@Bindable private(set) var tooltip: String
+	@Bindable private(set) var tooltipText: String
 	@Bindable var showAlert: Bool = false
 	@Bindable var showError: Bool = false
 	@Bindable var listItem: ListResultItem?
@@ -40,21 +39,21 @@ class ListResultsViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
-	///   - configuration: the configuration
+	///   - maxValidity: the maximum validity of a test result
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol) {
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
-		self.configuration = configuration
+		self.maxValidity = maxValidity
 
 		self.title = .holderTestResultsNoResultsTitle
-		self.message = .holderTestResultsNoResultsText
+		self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
 		self.buttonTitle = .holderTestResultsBackToMenuButton
 		self.recentHeader = .holderTestResultsRecent
-		self.tooltip = .holderTestResultsDisclaimer
+		self.tooltipText = String(format: .holderTestResultsDisclaimer, String(maxValidity))
 		self.listItem = nil
 	}
 
@@ -85,7 +84,7 @@ class ListResultsViewModel: Logging {
 
 		var valid = false
 		let now = Date().timeIntervalSince1970
-		let validity = TimeInterval(configuration.getTestResultTTL())
+		let validity = TimeInterval(maxValidity * 60 * 60)
 		if let sampleDate = parseDateFormatter.date(from: testResult.sampleDate) {
 			let sampleTimeStamp = sampleDate.timeIntervalSince1970
 			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
@@ -112,7 +111,7 @@ class ListResultsViewModel: Logging {
 	internal func reportNoTestResult() {
 
 		self.title = .holderTestResultsNoResultsTitle
-		self.message = .holderTestResultsNoResultsText
+		self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
 		self.buttonTitle = .holderTestResultsBackToMenuButton
 		self.listItem = nil
 	}

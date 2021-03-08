@@ -30,7 +30,7 @@ class ScanInstructionsViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
 	///   - presented: True if we are presented
-	init(coordinator: VerifierCoordinator, presented: Bool) {
+	init(coordinator: VerifierCoordinator, presented: Bool, maxValidity: String) {
 		
 		self.coordinator = coordinator
 		self.title = .verifierScanInstructionsTitle
@@ -53,7 +53,7 @@ class ScanInstructionsViewModel: Logging {
 			),
 			(
 				title: .verifierScanInstructionsDeniedTitle,
-				text: .verifierScanInstructionsDeniedText,
+				text: String(format: .verifierScanInstructionsDeniedText, maxValidity),
 				image: .redScreen
 			)
 		]

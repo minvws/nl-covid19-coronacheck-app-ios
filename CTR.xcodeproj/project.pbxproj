@@ -1656,15 +1656,15 @@
 		6DDEFB3725AEE01A00A6912A /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				6DED4A6A25F61A8A0001CA7E /* Verifier */,
-				6DED4A6925F61A7E0001CA7E /* Holder */,
 				6DD9394225BD8CD80026F071 /* Configuration.swift */,
 				6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */,
 				6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */,
 				6DD9394625BD8D9A0026F071 /* Development */,
+				6DED4A6925F61A7E0001CA7E /* Holder */,
 				6DDEFB0125AEDCAA00A6912A /* holder-Info.plist */,
-				6DD7D89E25D26D3A00B97B7F /* verifier-Info.plist */,
 				6D7F9CB725B6DBA60006F227 /* InfoPlist.strings */,
+				6DED4A6A25F61A8A0001CA7E /* Verifier */,
+				6DD7D89E25D26D3A00B97B7F /* verifier-Info.plist */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";

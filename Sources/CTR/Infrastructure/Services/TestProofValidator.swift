@@ -10,8 +10,8 @@ import Foundation
 protocol ProofValidatorProtocol {
 
 	/// Initializer
-	/// - Parameter configuration: the configuration
-	init(configuration: ConfigurationGeneralProtocol)
+	/// - Parameter maxValidity: the maximum validity of a test in hours
+	init(maxValidity: Int)
 
 	/// Validate the proof
 	/// - Parameter sampleTimeStamp: the sample time stamp
@@ -33,14 +33,15 @@ enum ProofValidity {
 
 class ProofValidator: ProofValidatorProtocol, Logging {
 
-	/// Initializer
-	/// - Parameter configuration: the configuration
-	required init(configuration: ConfigurationGeneralProtocol) {
-		self.configuration = configuration
-	}
+	/// the maximum validity of a test in hours
+	var maxValidity: Int
 
-	/// The configuration
-	var configuration: ConfigurationGeneralProtocol = Configuration()
+	/// Initializer
+	/// - Parameter maxValidity: the maximum validity of a test in hours
+	required init(maxValidity: Int) {
+
+		self.maxValidity = maxValidity
+	}
 
 	/// Validate the proof
 	/// - Parameter sampleTimeStamp: the sample time stamp
@@ -48,7 +49,7 @@ class ProofValidator: ProofValidatorProtocol, Logging {
 	func validate(_ sampleTimeStamp: TimeInterval) -> ProofValidity {
 
 		let now = Date().timeIntervalSince1970
-		let validity = TimeInterval(configuration.getTestResultTTL())
+		let validity = TimeInterval(maxValidity * 60 * 60)
 		if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 
 			let validUntilDate = Date(timeIntervalSince1970: sampleTimeStamp + validity)

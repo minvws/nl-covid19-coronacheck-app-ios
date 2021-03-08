@@ -35,7 +35,8 @@ class VerifyResultViewModelTests: XCTestCase {
 					testType: "test"
 				),
 				unixTimeStamp: 0
-			)
+			),
+			maxValidity: 48
 		)
 	}
 

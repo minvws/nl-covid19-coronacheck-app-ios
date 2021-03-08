@@ -19,9 +19,6 @@ class ListResultsViewModelTests: XCTestCase {
 	/// The proof manager spy
 	var proofManagingSpy = ProofManagingSpy()
 
-	/// The configuration spy
-	var configSpy = ConfigurationGeneralSpy()
-
 	/// Date parser
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -33,11 +30,10 @@ class ListResultsViewModelTests: XCTestCase {
 		super.setUp()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		proofManagingSpy = ProofManagingSpy()
-		configSpy = ConfigurationGeneralSpy()
 		sut = ListResultsViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			proofManager: proofManagingSpy,
-			configuration: configSpy
+			maxValidity: 48
 		)
 	}
 
