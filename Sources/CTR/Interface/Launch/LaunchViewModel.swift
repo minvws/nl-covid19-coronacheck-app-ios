@@ -113,8 +113,7 @@ class LaunchViewModel: Logging {
 		isUpdatingIssuerPublicKeys = true
 
 		// Get the Config TTL
-		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
-		proofManager.fetchIssuerPublicKeys(ttl: ttl) { [weak self] in
+		proofManager.fetchIssuerPublicKeys { [weak self] in
 
 			self?.isUpdatingIssuerPublicKeys = false
 			self?.issuerPublicKeysStatus = .noActionNeeded

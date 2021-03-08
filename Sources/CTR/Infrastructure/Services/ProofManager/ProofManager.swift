@@ -12,6 +12,9 @@ class ProofManager: ProofManaging, Logging {
 
 	var loggingCategory: String = "ProofManager"
 
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 
@@ -148,13 +151,13 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
-	///   - ttl: the time to read from cache
 	///   - oncompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
-		ttl: TimeInterval,
 		oncompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
+
+		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
 
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 

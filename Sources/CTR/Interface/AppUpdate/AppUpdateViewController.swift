@@ -58,9 +58,9 @@ class AppUpdateViewController: BaseViewController {
 	private func setupBinding() {
 
 		// Binding
-		viewModel.$showCannotOpenAlert.binding = {
+		viewModel.$showCannotOpenAlert.binding = { [weak self] in
 			if $0 {
-				self.showCannotOpenUrl()
+				self?.showCannotOpenUrl()
 			}
 		}
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }

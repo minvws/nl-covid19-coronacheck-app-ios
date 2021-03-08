@@ -186,11 +186,8 @@ class ListResultsViewModel: Logging {
 
 		showProgress = true
 
-		let ttl = TimeInterval(Services.remoteConfigManager.getConfiguration().configTTL ?? 0)
-
 		// Step 1: Fetch the public keys
 		proofManager?.fetchIssuerPublicKeys(
-			ttl: ttl,
 			oncompletion: { [weak self] in
 				self?.createProofStepTwo()
 			}, onError: { [weak self] error in
