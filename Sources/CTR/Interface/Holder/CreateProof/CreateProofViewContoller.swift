@@ -9,13 +9,13 @@ import UIKit
 
 class CreateProofViewController: BaseViewController {
 
-	private let viewModel: CreateProofViewiewModel
+	private let viewModel: CreateProofViewModel
 
 	let sceneView = CreateProofView()
 
 	// MARK: Initializers
 
-	init(viewModel: CreateProofViewiewModel) {
+	init(viewModel: CreateProofViewModel) {
 
 		self.viewModel = viewModel
 
@@ -40,12 +40,21 @@ class CreateProofViewController: BaseViewController {
 
 		edgesForExtendedLayout = []
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonTapped()
 		}
+
+		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+	}
+
+	// MARK: - User Interaction
+
+	@objc func closeButtonTapped() {
+
+		viewModel.buttonTapped()
 	}
 }

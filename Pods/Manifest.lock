@@ -8,6 +8,7 @@ PODS:
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
   - EasyTipView (2.1.0)
+  - lottie-ios (3.2.1)
   - MBProgressHUD (1.2.0)
   - OHHTTPStubs/Core (9.1.0)
   - OHHTTPStubs/Default (9.1.0):
@@ -22,16 +23,15 @@ PODS:
   - OHHTTPStubs/OHPathHelpers (9.1.0)
   - OHHTTPStubs/Swift (9.1.0):
     - OHHTTPStubs/Default
-  - Sodium (0.9.1)
   - ViewControllerPresentationSpy (5.0.0)
 
 DEPENDENCIES:
   - AppAuth (= 1.4.0)
   - CocoaLumberjack/Swift (= 3.7.0)
   - EasyTipView (= 2.1)
+  - lottie-ios (= 3.2.1)
   - MBProgressHUD (= 1.2.0)
   - OHHTTPStubs/Swift (= 9.1.0)
-  - Sodium (= 0.9.1)
   - ViewControllerPresentationSpy (~> 5.0)
 
 SPEC REPOS:
@@ -39,20 +39,20 @@ SPEC REPOS:
     - AppAuth
     - CocoaLumberjack
     - EasyTipView
+    - lottie-ios
     - MBProgressHUD
     - OHHTTPStubs
-    - Sodium
     - ViewControllerPresentationSpy
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
   EasyTipView: a92b6edc377b81c5ac18e9fd35d5ee78e9409488
+  lottie-ios: 106e92eaf11fbed0a76590b4cdb9b5ec26123ff7
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
-  Sodium: 23d11554ecd556196d313cf6130d406dfe7ac6da
   ViewControllerPresentationSpy: 7cfa8ef8ec9fa197ea58ee6e9ac72bbe5442281b
 
-PODFILE CHECKSUM: 28b4ee47b4272325aa1444f9de29fde9b29591af
+PODFILE CHECKSUM: 86a9e6d6db04d68a5081812dee52a5ab1c0221b4
 
 COCOAPODS: 1.10.1

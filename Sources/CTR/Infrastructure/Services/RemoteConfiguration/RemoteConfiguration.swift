@@ -24,6 +24,12 @@ protocol AppVersionInformation {
 
 	/// Is the app deactvated?
 	var appDeactivated: Bool? { get }
+
+	/// What is the TTL of the config
+	var configTTL: Int? { get }
+
+	/// What is the TTL of a test
+	var maxValidityHours: Int? { get }
 }
 
 extension AppVersionInformation {
@@ -52,13 +58,22 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// Is the app deactvated?
 	let appDeactivated: Bool?
 
+	/// What is the TTL of the config
+	let configTTL: Int?
+
+	/// What is the TTL of a test
+	var maxValidityHours: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
+
 		case minimumVersion = "iosMinimumVersion"
 		case minimumVersionMessage = "iosMinimumVersionMessage"
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
+		case configTTL = "configTTL"
+		case maxValidityHours = "maxValidityHours"
 	}
 
 	/// Initializer
@@ -68,49 +83,36 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	///   - storeUrl: The url to the appStore
 	///   - deactiviated: The deactivation String
 	///   - informationURL: The information url
-	init(minVersion: String, minVersionMessage: String?, storeUrl: URL?, deactivated: Bool?, informationURL: URL?) {
+	///   - configTTL: The TTL of the config
+	///   - maxValidityHours: The TTL of the test proof
+	init(
+		minVersion: String,
+		minVersionMessage: String?,
+		storeUrl: URL?,
+		deactivated: Bool?,
+		informationURL: URL?,
+		configTTL: Int?,
+		maxValidityHours: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
+		self.configTTL = configTTL
+		self.maxValidityHours = maxValidityHours
 	}
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
-		return RemoteConfiguration(minVersion: "1.0.0", minVersionMessage: nil, storeUrl: nil, deactivated: false, informationURL: nil)
-	}
-}
-
-/// Should the app be updated?
-enum UpdateState: Equatable {
-
-	/// The app should be updated
-	case actionRequired(AppVersionInformation)
-
-	/// The app is fine.
-	case noActionNeeded
-
-	// MARK: Equatable
-
-	/// Equatable
-	/// - Parameters:
-	///   - lhs: the left hand side
-	///   - rhs: the right hand side
-	/// - Returns: True if both sides are equal
-	static func == (lhs: UpdateState, rhs: UpdateState) -> Bool {
-		switch (lhs, rhs) {
-			case (noActionNeeded, noActionNeeded):
-				return true
-			case (noActionNeeded, actionRequired), (actionRequired, noActionNeeded):
-				return false
-			case (let .actionRequired(lhsVersion), let .actionRequired(rhsVersion)):
-				return lhsVersion.minimumVersion == rhsVersion.minimumVersion &&
-					lhsVersion.minimumVersionMessage == rhsVersion.minimumVersionMessage &&
-					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
-					lhsVersion.informationURL == rhsVersion.informationURL &&
-					lhsVersion.appDeactivated == rhsVersion.appDeactivated
-		}
+		return RemoteConfiguration(
+			minVersion: "1.0.0",
+			minVersionMessage: nil,
+			storeUrl: nil,
+			deactivated: false,
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
+		)
 	}
 }

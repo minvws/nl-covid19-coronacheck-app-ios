@@ -11,9 +11,21 @@ import XCTest
 class AppCoordinatorSpy: AppCoordinatorDelegate {
 
 	var openUrlCalled = false
+	var handleLaunchStateCalled = false
+	var retryCalled = false
 
 	func openUrl(_ url: URL) {
 
 		openUrlCalled = true
+	}
+
+	func handleLaunchState(_ state: LaunchState) {
+
+		handleLaunchStateCalled = true
+	}
+
+	func retry() {
+
+		retryCalled = true
 	}
 }

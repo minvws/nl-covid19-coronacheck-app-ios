@@ -41,6 +41,24 @@ class EntryView: BaseView {
 		return view
 	}()
 
+	/// Setup all the views
+	override func setupViews() {
+
+		super.setupViews()
+		let tapGestureRecognizer = UITapGestureRecognizer(
+			target: self,
+			action: #selector(handleSingleTap(sender:))
+		)
+		self.addGestureRecognizer(tapGestureRecognizer)
+	}
+
+	/// User tapped on the view
+	/// - Parameter sender: the tapgesture
+	@objc func handleSingleTap(sender: UITapGestureRecognizer) {
+
+		inputField.becomeFirstResponder()
+	}
+
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 

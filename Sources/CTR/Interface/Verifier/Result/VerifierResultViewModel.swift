@@ -7,13 +7,21 @@
 
 import UIKit
 
+/// The access options
+enum AccessAction {
+
+	case verified
+	case denied
+	case demo
+}
+
 class VerifierResultViewModel: Logging {
 
 	/// The logging category
 	var loggingCategory: String = "VerifierResultViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: VerifierCoordinator?
+	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol = Configuration()
@@ -22,6 +30,9 @@ class VerifierResultViewModel: Logging {
 	var attributes: Attributes
 
 	// MARK: - Bindable properties
+
+	/// The title of the scene
+	@Bindable private(set) var title: String = ""
 
 	/// The message of the scene
 	@Bindable private(set) var message: String = ""
@@ -33,13 +44,13 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var primaryButtonTitle: String
 
 	/// Allow Access?
-	@Bindable private(set) var allowAccess: Bool = false
+	@Bindable private(set) var allowAccess: AccessAction = .denied
 
 	/// Initialzier
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
 	///   - attributes: the decrypted attributes
-	init(coordinator: VerifierCoordinator, attributes: Attributes) {
+	init(coordinator: (VerifierCoordinatorDelegate & Dismissable), attributes: Attributes) {
 
 		self.coordinator = coordinator
 		self.attributes = attributes
@@ -50,16 +61,23 @@ class VerifierResultViewModel: Logging {
 	}
 
 	/// Check the attributes
-	private func checkAttributes() {
+	internal func checkAttributes() {
+
+		guard !isDemoQR() else {
+			allowAccess = .demo
+			showAccessDemo()
+			return
+		}
 
 		/// The time is now!
 		let now = Date().timeIntervalSince1970
-		allowAccess = isQRTimeStampValid(now) && isSampleTimeValid(now)
-
-		if allowAccess {
+		if isQRTimeStampValid(now) && isSampleTimeValid(now) {
 			showAccessAllowed()
+			allowAccess = .verified
+
 		} else {
 			showAccessDenied()
+			allowAccess = .denied
 		}
 	}
 
@@ -75,6 +93,11 @@ class VerifierResultViewModel: Logging {
 		}
 		logInfo("Sample Timestamp is too old!")
 		return false
+	}
+
+	private func isDemoQR() -> Bool {
+
+		return attributes.cryptoAttributes.testType.lowercased() == "demo"
 	}
 
 	/// Is the QR timestamp stil valid
@@ -93,6 +116,7 @@ class VerifierResultViewModel: Logging {
 	/// Show access allowed
 	private func showAccessAllowed() {
 
+		title = .verifierResultAccessTitle
 		message =  .verifierResultAccessMessage
 		linkedMessage = nil
 	}
@@ -100,8 +124,17 @@ class VerifierResultViewModel: Logging {
 	/// Show access denied
 	private func showAccessDenied() {
 
+		title = .verifierResultDeniedTitle
 		message = .verifierResultDeniedMessage
 //		linkedMessage = .verifierResultDeniedLink
+	}
+
+	/// Show access allowed
+	private func showAccessDemo() {
+
+		title = .verifierResultDemoTitle
+		message =  .verifierResultDemoMessage
+		linkedMessage = nil
 	}
 
 	/// Dismiss ourselves

@@ -20,41 +20,35 @@ class ListResultsViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
+	/// The configuration
+	var configuration: ConfigurationGeneralProtocol
+
 	/// The proof manager
 	weak var proofManager: ProofManaging?
-
-	/// The crypto manager
-	weak var cryptoManager: CryptoManaging?
-
-	/// The network manager
-	var networkManager: NetworkManaging?
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var buttonTitle: String
 	@Bindable private(set) var recentHeader: String
 	@Bindable private(set) var tooltip: String
-	@Bindable private(set) var showAlert: Bool = false
-	@Bindable private(set) var showError: String?
-	@Bindable private(set) var listItem: ListResultItem?
-	@Bindable private(set) var showProgress: Bool = false
+	@Bindable var showAlert: Bool = false
+	@Bindable var showError: Bool = false
+	@Bindable var listItem: ListResultItem?
+	@Bindable var showProgress: Bool = false
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
-	///   - cryptoManager: the crypto manager
-	///   - networkManager: the network manager
+	///   - configuration: the configuration
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		proofManager: ProofManaging,
-		cryptoManager: CryptoManaging,
-		networkManager: NetworkManaging) {
+		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
-		self.cryptoManager = cryptoManager
-		self.networkManager = networkManager
+		self.configuration = configuration
 
 		self.title = .holderTestResultsNoResultsTitle
 		self.message = .holderTestResultsNoResultsText
@@ -62,7 +56,6 @@ class ListResultsViewModel: Logging {
 		self.recentHeader = .holderTestResultsRecent
 		self.tooltip = .holderTestResultsDisclaimer
 		self.listItem = nil
-		checkResult()
 	}
 
 	/// The te test result
@@ -72,7 +65,7 @@ class ListResultsViewModel: Logging {
 			switch wrapper.status {
 				case .complete:
 					if let result = wrapper.result, result.negativeResult {
-						reportTestResult(result)
+						investigate(result)
 					} else {
 						reportNoTestResult()
 					}
@@ -81,11 +74,33 @@ class ListResultsViewModel: Logging {
 				default:
 					break
 			}
+		} else {
+			reportNoTestResult()
+		}
+	}
+
+	/// Investigate the result
+	/// - Parameter testResult: the test result
+	private func investigate(_ testResult: TestResult) {
+
+		var valid = false
+		let now = Date().timeIntervalSince1970
+		let validity = TimeInterval(configuration.getTestResultTTL())
+		if let sampleDate = parseDateFormatter.date(from: testResult.sampleDate) {
+			let sampleTimeStamp = sampleDate.timeIntervalSince1970
+			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
+				valid = true
+				reportTestResult(testResult)
+			}
+		}
+
+		if !valid {
+			reportNoTestResult()
 		}
 	}
 
 	/// Show the screen for pending results
-	private func reportPendingResult() {
+	internal func reportPendingResult() {
 
 		title = .holderTestResultsPendingTitle
 		message = .holderTestResultsPendingText
@@ -94,7 +109,7 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Show the scene for no negative restults
-	private func reportNoTestResult() {
+	internal func reportNoTestResult() {
 
 		self.title = .holderTestResultsNoResultsTitle
 		self.message = .holderTestResultsNoResultsText
@@ -103,7 +118,7 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Show the scene when the test is already handled
-	private func reportAlreadyDone() {
+	internal func reportAlreadyDone() {
 
 		self.title = .holderTestResultsAlreadyHandledTitle
 		self.message = .holderTestResultsAlreadyHandledText
@@ -113,7 +128,7 @@ class ListResultsViewModel: Logging {
 
 	/// Show the screen for negative restults
 	/// - Parameter result: the negative result
-	private func reportTestResult(_ result: TestResult) {
+	internal func reportTestResult(_ result: TestResult) {
 
 		self.title = .holderTestResultsResultsTitle
 		self.message = .holderTestResultsResultsText
@@ -128,17 +143,15 @@ class ListResultsViewModel: Logging {
 	}
 
 	/// Formatter to parse
-	private lazy var parseDateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+	private lazy var parseDateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
 		return dateFormatter
 	}()
 
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
@@ -148,8 +161,7 @@ class ListResultsViewModel: Logging {
 
 		if listItem != nil {
 			// Works for now with just one result
-			//
-			createProof()
+			createProofStepOne()
 		} else {
 			doDismiss()
 		}
@@ -170,91 +182,74 @@ class ListResultsViewModel: Logging {
 	}
 
 	// Create the proof
-	func createProof() {
+	func createProofStepOne() {
 
 		showProgress = true
 
-		networkManager?.getNonce { [weak self] resultwrapper in
+		let ttl = TimeInterval(Services.remoteConfigManager.getConfiguration().configTTL ?? 0)
 
-			switch resultwrapper {
-				case let .success(envelope):
-
-					self?.cryptoManager?.setNonce(envelope.nonce)
-					self?.cryptoManager?.setStoken(envelope.stoken)
-					self?.fetchTestProof()
-				case let .failure(networkError):
-					self?.showProgress = false
-					self?.showError = "Can't fetch the nonce: \(networkError.localizedDescription)"
-					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
+		// Step 1: Fetch the public keys
+		proofManager?.fetchIssuerPublicKeys(
+			ttl: ttl,
+			oncompletion: { [weak self] in
+				self?.createProofStepTwo()
+			}, onError: { [weak self] error in
+				self?.showProgress = false
+				self?.showError = true
+				self?.logError("Can't fetch the keys: \(error.localizedDescription)")
 			}
-		}
+		)
+	}
+
+	// Create the proof
+	func createProofStepTwo() {
+
+		showProgress = true
+
+		// Step 2: Fetch the nonce and stoken
+		proofManager?.fetchNonce(
+			oncompletion: { [weak self] in
+				self?.createProofStepThree()
+			}, onError: { [weak self] error in
+				self?.showProgress = false
+				self?.showError = true
+				self?.logError("Can't fetch the nonce: \(error.localizedDescription)")
+			}
+		)
 	}
 
 	/// Fetch the proof
-	func fetchTestProof() {
+	func createProofStepThree() {
 
-		if let icm = cryptoManager?.generateCommitmentMessage(),
-		   let icmDictionary = icm.convertToDictionary(),
-		   let stoken = cryptoManager?.getStoken(),
-		   let wrapper = proofManager?.getSignedWrapper() {
+		showProgress = true
 
-			let dictionary: [String: AnyObject] = [
-				"test": generateString(object: wrapper) as AnyObject,
-				"stoken": stoken as AnyObject,
-				"icm": icmDictionary as AnyObject
-			]
-
-			networkManager?.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
-
-				switch resultwrapper {
-					case let .success(data):
-						self?.handleTestProofsResponse(data)
-					case let .failure(networkError):
-						self?.showProgress = false
-						self?.showError = "Can't fetch the ISM: \(networkError.localizedDescription)"
-						self?.logError("Can't fetch the ISM: \(networkError.localizedDescription)")
-				}
+		// Step 3: Fetch the signed result
+		proofManager?.fetchSignedTestResult(
+			oncompletion: { [weak self] state in
+				self?.showProgress = false
+				self?.handleTestProofsResponse(state)
+			}, onError: { [weak self] error in
+				self?.showProgress = false
+				self?.showError = true
+				self?.logError("Can't fetch the ism: \(error.localizedDescription)")
 			}
-		}
+		)
 	}
 
-	private func handleTestProofsResponse(_ data: Data?) {
+	/// Handle the results of step 2
+	/// - Parameter state: the signed test result state
+	private func handleTestProofsResponse(_ state: SignedTestResultState) {
 
-		if let unwrapped = data {
-			logDebug("ISM Response: \(String(decoding: unwrapped, as: UTF8.self))")
-			showProgress = false
-
-			do {
-				let ismError = try JSONDecoder().decode(ISMErrorResponse.self, from: unwrapped)
-				if ismError.code == 99994 {
-					reportAlreadyDone()
-				} else {
-					showError = "Server error \(ismError.status): \(ismError.code)"
-				}
-			} catch {
-				// not an error
-				cryptoManager?.setProofs(data)
-				proofManager?.removeTestWrapper()
-				if let message = cryptoManager?.generateQRmessage() {
-					print("message: \(message)")
-				}
+		switch state {
+			case .valid:
 				coordinator?.navigateToCreateProof()
-			}
+			case .alreadySigned:
+				reportAlreadyDone()
+			case .notNegative, .tooOld, .tooNew:
+				reportNoTestResult()
+			default:
+				logError("handleTestProofsResponse: unknown state: \(state)")
+				showError = true
 		}
 	}
-
-	func generateString<T>(object: T) -> String where T: Codable {
-
-		if let data = try? JSONEncoder().encode(object),
-		   let convertedToString = String(data: data, encoding: .utf8) {
-			print("CTR: Converted to \(convertedToString)")
-			return convertedToString
-		}
-		return ""
-	}
-}
-
-struct ISMErrorResponse: Decodable {
-	let status: String
-	let code: Int
 }

@@ -33,17 +33,19 @@ class VerifierScanViewController: ScanViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
-		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
-		viewModel.$startScanning.binding = {
-			if $0, self.captureSession?.isRunning == false {
-				self.captureSession.startRunning()
+		viewModel.$startScanning.binding = { [weak self] in
+			if $0, self?.captureSession?.isRunning == false {
+				self?.captureSession.startRunning()
 			}
 		}
-		viewModel.$torchAccessibility.binding = {
-			self.addTorchButton(action: #selector(self.toggleTorch), accessibilityLabel: $0)
+		viewModel.$torchAccessibility.binding = { [weak self] in
+
+			guard let strongSelf = self else { return }
+			strongSelf.addTorchButton(action: #selector(strongSelf.toggleTorch), accessibilityLabel: $0)
 		}
 
 		// Only show an arrow as back button

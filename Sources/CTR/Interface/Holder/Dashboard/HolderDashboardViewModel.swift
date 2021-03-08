@@ -50,13 +50,19 @@ class HolderDashboardViewModel: Logging {
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
+	/// The proof manager
+	weak var proofManager: ProofManaging?
+
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol
+
+	/// The proof validator
+	var proofValidator: ProofValidatorProtocol
 
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
-	/// A timer to keep sending pings
+	/// A timer to keep refreshing the QR
 	var validityTimer: Timer?
 
 	/// The title of the scene
@@ -68,13 +74,16 @@ class HolderDashboardViewModel: Logging {
 	/// The title of the QR card
 	@Bindable private(set) var qrTitle: String
 
-	/// The message below the QR card
+	/// The message below the title
 	@Bindable private(set) var qrSubTitle: String?
+
+	/// The message below the QR card
+	@Bindable private(set) var qrValidUntilTitle: String?
 
 	/// The message on the expired card
 	@Bindable private(set) var expiredTitle: String?
 
-	/// The encrypted test proof
+	/// The cl signee test proof
 	@Bindable private(set) var qrMessage: Data?
 
 	/// Show a valid QR Message
@@ -83,8 +92,8 @@ class HolderDashboardViewModel: Logging {
 	/// Show an expired QR Message
 	@Bindable private(set) var showExpiredQR: Bool
 
-	/// Show a valid QR Message
-	@Bindable private(set) var hideQRForCapture: Bool
+	/// Hide for screen capture
+	@Bindable var hideQRForCapture: Bool
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -101,10 +110,12 @@ class HolderDashboardViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
+		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
+		self.proofManager = proofManager
 		self.configuration = configuration
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
@@ -133,6 +144,8 @@ class HolderDashboardViewModel: Logging {
 			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 
+		self.proofValidator = ProofValidator(configuration: configuration)
+
 		self.addObserver()
 	}
 
@@ -150,77 +163,68 @@ class HolderDashboardViewModel: Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		if let credentials = cryptoManager?.readCredentials() {
-
-			let now = Date().timeIntervalSince1970
-			if let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
-				let validity = TimeInterval(configuration.getTestResultTTL())
-				let printDate = printDateFormatter.string(from: Date(timeIntervalSince1970: sampleTimeStamp + validity))
-				if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
-					// valid
-					logDebug("Proof is valid until \(printDate)")
-
-					let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
-					if (sampleTimeStamp + validity - warningTTL) < now {
-						logDebug("Proof is expiring soon")
-					}
-//						showQRMessageExpiring(printDate)
-//					} else {
-						showQRMessageIsValid(printDate)
-//					}
-					startValidityTimer()
-				} else {
-
-					// expired
-					logDebug("Proof is no longer valid \(printDate)")
-					showQRMessageIsExpired()
-					validityTimer?.invalidate()
-					validityTimer = nil
-				}
-			}
-		} else {
+		guard let credential = cryptoManager?.readCredential() else {
 			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
-		}
-	}
-
-	/// Adjust the brightness
-	/// - Parameter reset: True if we reset to previous value
-	func setBrightness(reset: Bool = false) {
-
-		let currentBrightness = UIScreen.main.brightness
-		if currentBrightness < 1 {
-			previousBrightness = currentBrightness
+			validityTimer?.invalidate()
+			validityTimer = nil
+			return
 		}
 
-		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
+		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
+
+			switch proofValidator.validate(sampleTimeStamp) {
+				case let .valid(validUntilDate):
+					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
+					logDebug("Proof is valid until \(validUntilDateString)")
+					showQRMessageIsValid(validUntilDateString)
+					startValidityTimer()
+
+				//				case .expiring:
+				//				// Needs refactoring!!!!
+				//					let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
+				//				if (sampleTimeStamp + validity - warningTTL) < now {
+				//					logDebug("Proof is expiring soon")
+				//				}
+				//					showQRMessageExpiring(printDate)
+				//					break
+				case .expired:
+					logDebug("Proof is no longer valid")
+					showQRMessageIsExpired()
+					validityTimer?.invalidate()
+					validityTimer = nil
+			}
+		}
 	}
 
 	/// Show the QR message is valid
 	/// - Parameter printDate: valid until time
 	func showQRMessageIsValid(_ printDate: String) {
 
-		if let message = self.cryptoManager?.generateQRmessage() {
+		if let message = cryptoManager?.generateQRmessage() {
 			qrMessage = message
-			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
+			qrValidUntilTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 			showExpiredQR = false
 		}
-	}
-
-	/// Show the QR message is valid
-	/// - Parameter printDate: valid until time
-	func showQRMessageExpiring(_ printDate: String) {
-
-		if let message = self.cryptoManager?.generateQRmessage() {
-			qrMessage = message
-			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
-			// Todo, calculate the time remaining
-			showValidQR = true
-			showExpiredQR = false
+		if let birthdate = proofManager?.getBirthDate() {
+			qrSubTitle = printBirthDateFormatter.string(from: birthdate)
 		}
 	}
+
+//	/// Show the QR message is valid
+//	/// - Parameter printDate: valid until time
+//	func showQRMessageExpiring(_ printDate: String) {
+//
+//		if let message = self.cryptoManager?.generateQRmessage() {
+//			qrMessage = message
+//			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
+//			// Todo, calculate the time remaining
+//			showValidQR = true
+//			showExpiredQR = false
+//		}
+//	}
 
 	/// Show the QR Message is expired
 	func showQRMessageIsExpired() {
@@ -237,7 +241,7 @@ class HolderDashboardViewModel: Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() - 30),
+			timeInterval: TimeInterval(configuration.getQRTTL() - 10), // 10 second earlier, to prevent last second mismatches.
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
@@ -245,33 +249,44 @@ class HolderDashboardViewModel: Logging {
 		)
 	}
 
-	/// Formatter to parse
-	private lazy var parseDateFormatter: DateFormatter = {
+	/// User wants to see the large QR
+	func navigateToEnlargedQR() {
 
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-		dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
-		return dateFormatter
-	}()
+		coordinator?.navigateToEnlargedQR()
+	}
+
+	/// User wants to close the expired QR
+	func closeExpiredRQ() {
+
+		cryptoManager?.removeCredential()
+		checkQRValidity()
+	}
 
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
 		
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
 		return dateFormatter
 	}()
 
-	func qrTapped() {
+	/// Formatter to print
+	private lazy var printBirthDateFormatter: DateFormatter = {
 
-		logDebug("QR tapped")
-	}
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.dateFormat = "dd-MM-yyyy"
+		return dateFormatter
+	}()
 }
+
+// MARK: - capturedDidChangeNotification
 
 extension HolderDashboardViewModel {
 
+	/// Add an observer for the capturedDidChangeNotification
 	func addObserver() {
 		NotificationCenter.default.addObserver(
 			self,
@@ -279,7 +294,6 @@ extension HolderDashboardViewModel {
 			name: UIScreen.capturedDidChangeNotification,
 			object: nil
 		)
-
 	}
 
 	/// Prevent screen capture
@@ -290,7 +304,6 @@ extension HolderDashboardViewModel {
 			self.logWarning("Screen capture in progress")
 		} else {
 			hideQRForCapture = false
-			self.logWarning("Screen capture ended")
 		}
 	}
 }

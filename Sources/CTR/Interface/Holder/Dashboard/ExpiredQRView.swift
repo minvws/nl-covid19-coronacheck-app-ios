@@ -16,6 +16,9 @@ class ExpiredQRView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 8
 		static let shadowOpacity: Float = 0.3
+		static let buttonSize: CGFloat = 40
+		static let imageWidth: CGFloat = 30
+		static let imageHeight: CGFloat = 32
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -35,12 +38,23 @@ class ExpiredQRView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
+	/// The close button
+	private let closeButton: UIButton = {
+
+		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.setImage(.smallCross, for: .normal)
+		return button
+	}()
+
+	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
 		view?.backgroundColor = .white
 		layer.cornerRadius = ViewTraits.cornerRadius
 		createShadow()
+		closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
 	}
 
 	/// Create the shadow around the view
@@ -62,6 +76,7 @@ class ExpiredQRView: BaseView {
 		super.setupViewHierarchy()
 		addSubview(expiredImageView)
 		addSubview(titleLabel)
+		addSubview(closeButton)
 	}
 
 	/// Setup the constraints
@@ -76,8 +91,8 @@ class ExpiredQRView: BaseView {
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			expiredImageView.widthAnchor.constraint(equalToConstant: 30),
-			expiredImageView.heightAnchor.constraint(equalToConstant: 32),
+			expiredImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageWidth),
+			expiredImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageHeight),
 			expiredImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
 
 			// Title
@@ -93,8 +108,19 @@ class ExpiredQRView: BaseView {
 			titleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.messageTopMargin
-			)
+			),
+
+			closeButton.topAnchor.constraint(equalTo: topAnchor),
+			closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+			closeButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonSize),
+			closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonSize)
 		])
+	}
+
+	/// User tapped on the close button
+	@objc func closeButtonTapped() {
+
+		closeButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -105,4 +131,7 @@ class ExpiredQRView: BaseView {
 			titleLabel.text = title
 		}
 	}
+
+	/// The user tapped on the close button
+	var closeButtonTappedCommand: (() -> Void)?
 }

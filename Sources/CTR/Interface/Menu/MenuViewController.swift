@@ -35,7 +35,7 @@ class MenuViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$topMenu.binding = { items in
+		viewModel.$topMenu.binding = { [weak self] items in
 
 			for item in items {
 
@@ -46,11 +46,11 @@ class MenuViewController: BaseViewController {
 				view.primaryButtonTappedCommand  = { [weak self] in
 					self?.viewModel.menuItemTapped(item.identifier)
 				}
-				self.sceneView.topStackView.addArrangedSubview(view)
+				self?.sceneView.topStackView.addArrangedSubview(view)
 			}
 		}
 
-		viewModel.$bottomMenu.binding = { items in
+		viewModel.$bottomMenu.binding = { [weak self] items in
 
 			for item in items {
 
@@ -61,11 +61,11 @@ class MenuViewController: BaseViewController {
 				view.primaryButtonTappedCommand  = { [weak self] in
 					self?.viewModel.menuItemTapped(item.identifier)
 				}
-				self.sceneView.bottomStackView.addArrangedSubview(view)
+				self?.sceneView.bottomStackView.addArrangedSubview(view)
 			}
 		}
 
-		addCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .close)
+		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .close)
 	}
 
 	/// User tapped on the close button
@@ -78,7 +78,7 @@ class MenuViewController: BaseViewController {
 	/// - Parameters:
 	///   - action: the action when the users taps the close button
 	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
+	func addMenuCloseButton(
 		action: Selector?,
 		accessibilityLabel: String) {
 

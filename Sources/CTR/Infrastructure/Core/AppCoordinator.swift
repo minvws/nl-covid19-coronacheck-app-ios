@@ -32,9 +32,19 @@ protocol AppCoordinatorDelegate: AnyObject {
 
 	/// Open a url
 	func openUrl(_ url: URL)
+
+	/// Handle the launch state
+	/// - Parameter state: the launch state
+	func handleLaunchState(_ state: LaunchState)
+
+	/// Retry loading the requirements
+	func retry()
 }
 
-class AppCoordinator: Coordinator {
+class AppCoordinator: Coordinator, Logging {
+
+	/// The logging category
+	var loggingCategory: String = "AppCoordinator"
 
 	/// The UI Window
 	let window: UIWindow
@@ -44,6 +54,12 @@ class AppCoordinator: Coordinator {
 
 	/// The navigation controller
 	var navigationController: UINavigationController
+
+	/// The remote config manager
+	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
+	/// The proof manager
+	private var proofManager: ProofManaging = Services.proofManager
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -70,12 +86,41 @@ class AppCoordinator: Coordinator {
 		// Setup Logging
 		LogHandler.setup()
 
-		// Check if the app is the minimum version. If not, show the app update screen
-		updateConfiguration()
+		// Start the launcher for update checks
+		startLauncher()
+	}
 
+	/// Retry loading the requirements
+	func retry() {
+
+		guard let topController = window.rootViewController else { return }
+
+		topController.dismiss(animated: true) {
+			((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
+		}
+	}
+
+	/// Launch the launcher 
+	private func startLauncher() {
+
+		let destination = LaunchViewController(
+			viewModel: LaunchViewModel(
+				coordinator: self,
+				versionSupplier: AppVersionSupplier(),
+				flavor: AppFlavor.flavor,
+				remoteConfigManager: remoteConfigManager,
+				proofManager: proofManager
+			)
+		)
 		// Set the root
 		window.rootViewController = navigationController
 		window.makeKeyAndVisible()
+
+		navigationController.pushViewController(destination, animated: false)
+	}
+
+	/// Start the real application
+	private func startApplication() {
 
 		switch AppFlavor.flavor {
 			case .holder:
@@ -86,66 +131,68 @@ class AppCoordinator: Coordinator {
 	}
 
 	/// Start the app as a holder
-	func startAsHolder() {
+	private func startAsHolder() {
 
 		let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
 		startChildCoordinator(coordinator)
 	}
 
 	/// Start the app as a verifiier
-	func startAsVerifier() {
+	private func startAsVerifier() {
 
 		let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
 		startChildCoordinator(coordinator)
 	}
 
-	/// flag for updating configuration
-	private var isUpdatingConfiguration = false
+	/// Handle the launch state
+	/// - Parameter state: the launch state
+	func handleLaunchState(_ state: LaunchState) {
 
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+		switch state {
+			case .noActionNeeded:
+				startApplication()
 
-	/// Update the configuration
-	func updateConfiguration() {
+			case .internetRequired:
+				showInternetRequired()
 
-		// Execute once.
-		guard !isUpdatingConfiguration else {
-			return
-		}
-
-		isUpdatingConfiguration = true
-
-		remoteConfigManager.update { [unowned self] updateState in
-			switch updateState {
-				case .actionRequired(let versionInformation):
-					showActionRequired(with: versionInformation)
-				case .noActionNeeded:
-					break
-			}
-
-			isUpdatingConfiguration = false
+			case let .actionRequired(versionInformation):
+				showActionRequired(with: versionInformation)
 		}
 	}
 
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
 	private func showActionRequired(with versionInformation: AppVersionInformation) {
+		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
+		if versionInformation.isDeactivated {
+			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)
+		}
+		navigateToAppUpdate(with: viewModel)
+	}
+
+	private func showInternetRequired() {
+
+		let viewModel = InternetRequiredViewModel(coordinator: self)
+		navigateToAppUpdate(with: viewModel)
+	}
+
+	/// Show the Action Required View
+	/// - Parameter versionInformation: the version information
+	private func navigateToAppUpdate(with viewModel: AppUpdateViewModel) {
 
 		guard var topController = window.rootViewController else { return }
 
 		while let newTopController = topController.presentedViewController {
 			topController = newTopController
 		}
-
 		guard !(topController is AppUpdateViewController) else { return }
-
-		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
-
-		if versionInformation.isDeactivated {
-			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)
-		}
 		let updateController = AppUpdateViewController(viewModel: viewModel)
-		topController.present(updateController, animated: true)
+
+		if topController is UINavigationController {
+			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
+		} else {
+			topController.present(updateController, animated: true)
+		}
 	}
 }
 

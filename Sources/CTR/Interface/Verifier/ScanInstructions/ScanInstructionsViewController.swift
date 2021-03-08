@@ -35,39 +35,39 @@ class ScanInstructionsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
-		viewModel.$showCloseButton.binding = {
-
+		viewModel.$showCloseButton.binding = { [weak self] in
+			guard let strongSelf = self else { return }
 			if $0 {
-				self.addCloseButton(
-					action: #selector(self.closeButtonTapped),
+				strongSelf.addCloseButton(
+					action: #selector(strongSelf.closeButtonTapped),
 					accessibilityLabel: .close
 				)
 			}
 		}
 
-		viewModel.$content.binding = { list in
+		viewModel.$content.binding = { [weak self] list in
 
 			for item in list {
 				if let image = item.image {
 					let view = UIImageView(image: image)
 					view.translatesAutoresizingMaskIntoConstraints = false
 					view.contentMode = .center
-					self.sceneView.stackView.addArrangedSubview(view)
-					self.sceneView.stackView.setCustomSpacing(32, after: view)
+					self?.sceneView.stackView.addArrangedSubview(view)
+					self?.sceneView.stackView.setCustomSpacing(32, after: view)
 				}
 				let label = Label(title3: item.title, montserrat: true)
-				self.sceneView.stackView.addArrangedSubview(label)
-				self.sceneView.stackView.setCustomSpacing(8, after: label)
+				self?.sceneView.stackView.addArrangedSubview(label)
+				self?.sceneView.stackView.setCustomSpacing(8, after: label)
 				let bodyLabel = Label(body: nil).multiline()
 				bodyLabel.attributedText = .makeFromHtml(
 					text: item.text,
 					font: Theme.fonts.body,
 					textColor: Theme.colors.dark
 				)
-				self.sceneView.stackView.addArrangedSubview(bodyLabel)
-				self.sceneView.stackView.setCustomSpacing(56, after: bodyLabel)
+				self?.sceneView.stackView.addArrangedSubview(bodyLabel)
+				self?.sceneView.stackView.setCustomSpacing(56, after: bodyLabel)
 			}
 		}
 
@@ -77,27 +77,5 @@ class ScanInstructionsViewController: BaseViewController {
 	@objc private func closeButtonTapped() {
 
 		viewModel.dismiss()
-	}
-
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
-
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
-		navigationItem.hidesBackButton = true
-		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
 	}
 }

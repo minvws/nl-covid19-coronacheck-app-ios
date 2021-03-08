@@ -13,9 +13,19 @@ class CryptoManagerSpy: CryptoManaging {
 	var setNonceCalled = false
 	var setStokenCalled = false
 	var setProofsCalled = false
+	var setIssuerPublicKeysCalled = false
+	var hasPublicKeysCalled = false
+	var keys: [IssuerPublicKey] = []
 	var nonce: String?
 	var stoken: String?
 	var proofs: Data?
+
+	var readCredentialCalled = false
+	var crypoAttributes: CrypoAttributes?
+	var removeCredentialCalled = false
+
+	var generateQRmessageCalled = false
+	var qrMessage: Data?
 
 	required init() {
 		// Nothing for this spy class
@@ -37,14 +47,22 @@ class CryptoManagerSpy: CryptoManaging {
 		self.stoken = stoken
 	}
 
-	func setProofs(_ proofs: Data?) {
+	func setTestProof(_ signatureMessage: Data?) {
 
 		setProofsCalled = true
-		self.proofs = proofs
+		self.proofs = signatureMessage
 	}
 
-	func reset() {
-		// Nothing yet
+	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) {
+
+		setIssuerPublicKeysCalled = true
+		self.keys = keys
+	}
+
+	func hasPublicKeys() -> Bool {
+
+		hasPublicKeysCalled = true
+		return !keys.isEmpty
 	}
 
 	func generateCommitmentMessage() -> String? {
@@ -52,7 +70,9 @@ class CryptoManagerSpy: CryptoManaging {
 	}
 
 	func generateQRmessage() -> Data? {
-		return nil
+
+		generateQRmessageCalled = true
+		return qrMessage
 	}
 
 	func getStoken() -> String? {
@@ -63,7 +83,20 @@ class CryptoManagerSpy: CryptoManaging {
 		return nil
 	}
 
-	func readCredentials() -> CrypoAttributes? {
-		return nil
+	func removeCredential() {
+
+		crypoAttributes = nil
+		removeCredentialCalled = true
+	}
+
+	func createCredential() {
+		// Nothing yet
+	}
+
+	func readCredential() -> CrypoAttributes? {
+
+		readCredentialCalled = true
+
+		return crypoAttributes
 	}
 }

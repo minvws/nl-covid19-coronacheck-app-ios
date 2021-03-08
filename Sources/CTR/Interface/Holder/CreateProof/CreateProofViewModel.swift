@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CreateProofViewiewModel: Logging {
+class CreateProofViewModel: Logging {
 
 	var loggingCategory: String = "CreateProofViewiewModel"
 
@@ -47,8 +47,8 @@ class CreateProofViewiewModel: Logging {
 	/// Create the message
 	func createMessage() {
 
-		if let credentials = cryptoManager?.readCredentials(),
-		   let sampleTimeStamp = TimeInterval(credentials.sampleTime) {
+		if let credential = cryptoManager?.readCredential(),
+		   let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 			let date = Date(timeIntervalSince1970: sampleTimeStamp)
 
 			let printTime = printTimeFormatter.string(from: date)
@@ -56,7 +56,7 @@ class CreateProofViewiewModel: Logging {
 			let printOutput = "\(printDate) " + String.holderCreateProofAt + " \(printTime)"
 			message = String(format: .holderCreateProofText, printOutput)
 		} else {
-			self.logError("Can't unwrap credentials")
+			self.logError("Can't unwrap credential")
 		}
 	}
 
@@ -70,6 +70,7 @@ class CreateProofViewiewModel: Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "d MMMM"
 		return dateFormatter
@@ -79,6 +80,7 @@ class CreateProofViewiewModel: Logging {
 	private lazy var printTimeFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "HH:mm"
 		return dateFormatter

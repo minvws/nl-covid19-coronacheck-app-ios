@@ -20,21 +20,24 @@ struct Path {
 }
 
 struct Endpoint {
-
-    // MARK: - API
-
+	
+	// MARK: - API
+	
 	/// Endpoint for the nonce
 	static let nonce = Path(components: "holder", "nonce")
-
+	
+	/// Endpoint for the public keys
+	static let publicKeys = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "public_keys")
+	
 	/// Endpoint for the remote configuration
 	static let remoteConfiguration = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "config")
-
+	
 	/// Endpoint for test providers
 	static let testProviders = Path(components: "holder", "config_ctp")
-
+	
 	/// Endpoint for test results as ism
 	static let testResultIsm = Path(components: "holder", "get_test_ism")
-
+	
 	/// Endpoint for test types
 	static let testTypes = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "test_types")
 }

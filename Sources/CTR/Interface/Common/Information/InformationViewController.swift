@@ -44,9 +44,9 @@ class InformationViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$showBottomCloseButton.binding = { self.sceneView.closeButtonIsHidden = !$0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$showBottomCloseButton.binding = { [weak self] in self?.sceneView.closeButtonIsHidden = !$0 }
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
 		sceneView.closeButton.touchUpInside(self, action: #selector(closeButtonTapped))
@@ -56,27 +56,5 @@ class InformationViewController: BaseViewController {
 	@objc private func closeButtonTapped() {
 
 		viewModel.dismiss()
-	}
-
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
-
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
-		navigationItem.hidesBackButton = true
-		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
 	}
 }

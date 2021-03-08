@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// The manager of all the test provider proof data
 class ProofManager: ProofManaging, Logging {
 
 	var loggingCategory: String = "ProofManager"
@@ -14,11 +15,11 @@ class ProofManager: ProofManaging, Logging {
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 
-	/// Structure to hold cryptography data
-	private struct ProofData: Codable {
+	/// The crypto manager
+	var cryptoManager: CryptoManaging = Services.cryptoManager
 
-		/// The key of the holder
-		var testProviders: [TestProvider]
+	/// Structure to hold proof data
+	private struct ProofData: Codable {
 
 		/// The key of the holder
 		var testTypes: [TestType]
@@ -31,21 +32,59 @@ class ProofManager: ProofManaging, Logging {
 
 		/// Empty crypto data
 		static var empty: ProofData {
-			return ProofData(testProviders: [], testTypes: [], testWrapper: nil, signedWrapper: nil)
+			return ProofData(testTypes: [], testWrapper: nil, signedWrapper: nil)
+		}
+	}
+
+	/// Structure to hold provider data
+	private struct ProviderData: Codable {
+
+		/// The key of the holder
+		var testProviders: [TestProvider]
+
+		/// Empty crypto data
+		static var empty: ProviderData {
+			return ProviderData(testProviders: [])
+		}
+	}
+
+	/// Structure to hold birthday data
+	private struct BirthdayData: Codable {
+
+		/// The birthdate
+		var birthdate: Date?
+
+		/// The checksum of the birthdate
+		var checksum: Int?
+
+		/// Empty crypto data
+		static var empty: BirthdayData {
+			return BirthdayData(birthdate: nil, checksum: nil)
 		}
 	}
 
 	/// Array of constants
 	private struct Constants {
-		static let keychainService = "ProofManager\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
+		static let keychainService = "ProofManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
 	}
 
-	/// The crypto data stored in the keychain
+	/// The proof data stored in the keychain
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
 	private var proofData: ProofData = .empty
 
+	/// The provider data stored in the keychain
+	@Keychain(name: "providerData", service: Constants.keychainService, clearOnReinstall: true)
+	private var providerData: ProviderData = .empty
+
+	/// The birthday data stored in the keychain
+	@Keychain(name: "birthdayData", service: Constants.keychainService, clearOnReinstall: true)
+	private var birthdayData: BirthdayData = .empty
+
 	@UserDefaults(key: "providersFetchedTimestamp", defaultValue: nil)
 	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
+	var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 
 	/// Initializer
 	required init() {
@@ -53,24 +92,30 @@ class ProofManager: ProofManaging, Logging {
 	}
 
 	/// Get the providers
-	func fetchCoronaTestProviders() {
+	func fetchCoronaTestProviders(
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?) {
 
 		#if DEBUG
 		if let lastFetchedTimestamp = providersFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - 3600, !proofData.testProviders.isEmpty {
+		   lastFetchedTimestamp > Date() - 3600, !providerData.testProviders.isEmpty {
 			// Don't fetch again within an hour
 				return
 		}
 		#endif
 
 		networkManager.getTestProviders { [weak self] response in
-			self?.providersFetchedTimestamp = Date()
+
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
-					self?.proofData.testProviders = providers
+					self?.providerData.testProviders = providers
+					self?.providersFetchedTimestamp = Date()
+					oncompletion?()
+
 				case let .failure(error):
 					self?.logError("Error getting the test providers: \(error)")
+					onError?(error)
 			}
 		}
 	}
@@ -83,6 +128,7 @@ class ProofManager: ProofManaging, Logging {
 			switch response {
 				case let .success(types):
 					self?.proofData.testTypes = types
+
 				case let .failure(error):
 					self?.logError("Error getting the test types: \(error)")
 			}
@@ -94,10 +140,151 @@ class ProofManager: ProofManaging, Logging {
 	/// - Returns: the test provider
 	func getTestProvider(_ token: RequestToken) -> TestProvider? {
 
-		for provider in proofData.testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
+		for provider in providerData.testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
 			return provider
 		}
 		return nil
+	}
+
+	/// Fetch the issuer public keys
+	/// - Parameters:
+	///   - ttl: the time to read from cache
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchIssuerPublicKeys(
+		ttl: TimeInterval,
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?) {
+
+		networkManager.getPublicKeys { [weak self] resultwrapper in
+
+			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
+			switch resultwrapper {
+				case let .success(keys):
+					self?.cryptoManager.setIssuerPublicKeys(keys)
+					self?.keysFetchedTimestamp = Date()
+					oncompletion?()
+
+				case let .failure(error):
+					self?.logError("Error getting the issuers public keys: \(error)")
+					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
+					   lastFetchedTimestamp > Date() - ttl {
+						self?.logDebug("Issuer public keys still within TTL")
+						oncompletion?()
+
+					} else {
+						onError?(error)
+					}
+			}
+		}
+	}
+
+	/// Create a nonce and a stoken
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchNonce(
+		oncompletion: @escaping (() -> Void),
+		onError: @escaping ((Error) -> Void)) {
+
+		networkManager.getNonce { [weak self] resultwrapper in
+
+			switch resultwrapper {
+				case let .success(envelope):
+					self?.cryptoManager.setNonce(envelope.nonce)
+					self?.cryptoManager.setStoken(envelope.stoken)
+					oncompletion()
+
+				case let .failure(networkError):
+					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
+					onError(networkError)
+			}
+		}
+	}
+
+	/// Fetch the signed Test Result
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchSignedTestResult(
+		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onError: @escaping ((Error) -> Void)) {
+
+		if let icm = cryptoManager.generateCommitmentMessage(),
+		   let icmDictionary = icm.convertToDictionary(),
+		   let stoken = cryptoManager.getStoken(),
+		   let wrapper = getSignedWrapper() {
+
+			let dictionary: [String: AnyObject] = [
+				"test": generateString(object: wrapper) as AnyObject,
+				"stoken": stoken as AnyObject,
+				"icm": icmDictionary as AnyObject
+			]
+
+			networkManager.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
+
+				switch resultwrapper {
+					case let .success(data):
+						self?.parseSignedTestResult(data, oncompletion: oncompletion)
+
+					case let .failure(networkError):
+						self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
+						onError(networkError)
+				}
+			}
+		}
+	}
+
+	private func parseSignedTestResult(_ data: Data, oncompletion: @escaping ((SignedTestResultState) -> Void)) {
+
+		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
+
+		/*
+		## Error codes
+		99981 - Test is not in expected format
+		99982 - Test is empty
+		99983 - Test signature invalid
+		99991 - Test sample time in the future
+		99992 - Test sample time too old (48h)
+		99993 - Test result was not negative
+		99994 - Test result signed before
+		99995 - Unknown error creating signed test result
+		99996 - Session key no longer valid
+		*/
+
+		do {
+			let ismError = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
+			switch ismError.code {
+				case 99991:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.tooNew)
+
+				case 99992:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.tooOld)
+
+				case 99993:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.notNegative)
+
+				case 99994:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.alreadySigned)
+
+				case 99995:
+					removeTestWrapper()
+					oncompletion(SignedTestResultState.unknown(nil))
+
+				default:
+					oncompletion(SignedTestResultState.unknown(nil))
+			}
+		} catch {
+			// Success, no error!
+			cryptoManager.setTestProof(data)
+			cryptoManager.createCredential()
+			removeTestWrapper()
+			oncompletion(SignedTestResultState.valid)
+		}
 	}
 
 	/// Get the test result for a token
@@ -111,22 +298,22 @@ class ProofManager: ProofManaging, Logging {
 		provider: TestProvider,
 		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
 
-		guard let url = provider.resultURL else {
+		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
 			oncompletion(.failure(ProofError.invalidUrl))
 			return
 		}
 
-		networkManager.getTestResult(providerUrl: url, token: token, code: code) { response in
+		networkManager.getTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
 
 			switch response {
 				case let .success(wrapper):
-					print("iii")
-					if wrapper.0.status == .complete {
+					self.logDebug("We got \(wrapper.0.status) wrapper.")
+					if wrapper.0.status == .complete || wrapper.0.status == .pending {
 						self.proofData.testWrapper = wrapper.0
 						self.proofData.signedWrapper = wrapper.1
-				}
+					}
 					oncompletion(.success(wrapper.0))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
@@ -153,5 +340,52 @@ class ProofManager: ProofManaging, Logging {
 	func removeTestWrapper() {
 		
 		proofData.testWrapper = nil
+		proofData.signedWrapper = nil
 	}
+
+	/// Get the birth date
+	func getBirthDate() -> Date? {
+		
+		return birthdayData.birthdate
+	}
+
+	/// Set the birthdate
+	/// - Parameter date: the date
+	func setBirthDate(_ date: Date?) {
+
+		birthdayData.birthdate = date
+		calculateChecksum()
+	}
+
+	/// Get the birth date checksum
+	func getBirthDateChecksum() -> Int? {
+
+		return birthdayData.checksum
+	}
+
+	/// Calculate the checksum of the birthdate
+	func calculateChecksum() {
+
+		if let date = birthdayData.birthdate {
+			if let day = Calendar.current.ordinality(of: .day, in: .year, for: date) {
+				let dayModulo65 = day % 65
+				birthdayData.checksum = dayModulo65
+			}
+		} else {
+			birthdayData.checksum = nil
+		}
+	}
+
+	// MARK: - Helper methods
+
+	private func generateString<T>(object: T) -> String where T: Codable {
+
+		if let data = try? JSONEncoder().encode(object),
+		   let convertedToString = String(data: data, encoding: .utf8) {
+			logDebug("ProofManager: Convert to \(convertedToString)")
+			return convertedToString
+		}
+		return ""
+	}
+
 }

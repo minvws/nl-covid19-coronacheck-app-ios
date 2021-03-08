@@ -24,6 +24,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
+	/// Navigate to enlarged QR
+	func navigateToEnlargedQR()
+
 	/// Navigate to appointment
 	func navigateToAppointment()
 
@@ -38,6 +41,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken?)
+
+	/// Navigate to Birthday entry Scene
+	func navigateToBirthdate()
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
@@ -110,10 +116,6 @@ class HolderCoordinator: Coordinator, Logging {
 	// Designated starter method
 	func start() {
 
-		// Fetch the details for the proof manager
-		proofManager.fetchCoronaTestProviders()
-		//		proofManager.fetchTestTypes()
-
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
@@ -158,6 +160,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
+				proofManager: proofManager,
 				configuration: generalConfiguration
 			)
 		)
@@ -166,6 +169,27 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
+	}
+
+	/// Navigate to enlarged QR
+	func navigateToEnlargedQR() {
+
+		let destination = EnlargedQRViewController(
+			viewModel: EnlargedQRViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager,
+				proofManager: proofManager,
+				configuration: generalConfiguration
+			)
+		)
+		let navController = UINavigationController(rootViewController: destination)
+		navController.view.backgroundColor = .white
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
+			navController,
+			animated: true,
+			completion: nil
+		)
 	}
 
 	/// Navigate to appointment
@@ -189,17 +213,23 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-
 	}
+
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview() {
 
-		let destination = TokenOverviewViewController(
-			viewModel: TokenOverviewViewModel(
-				coordinator: self
+		if proofManager.getBirthDate() == nil {
+			// Fill in the birhtday if there is none on the commercial token flow.
+			navigateToBirthdate()
+		} else {
+
+			let destination = TokenOverviewViewController(
+				viewModel: TokenOverviewViewModel(
+					coordinator: self
+				)
 			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+			(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		}
 	}
 
 	/// Navigate to the token scanner
@@ -221,10 +251,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				requestToken: token
+				scannedToken: token
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
+	/// Navigate to Birthdate Scene
+	func navigateToBirthdate() {
+
+		let coordinator = BirthdateCoordinator(
+			navigationController: navigationController,
+			presentingViewController: sidePanel?.selectedViewController,
+			birthdateSceneDelegate: self
+		)
+
+		startChildCoordinator(coordinator)
 	}
 
 	/// Navigate to List Results Scene
@@ -234,8 +276,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ListResultsViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				cryptoManager: cryptoManager,
-				networkManager: networkManager
+				configuration: generalConfiguration
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)
@@ -250,7 +291,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func navigateToCreateProof() {
 		
 		let viewController = CreateProofViewController(
-			viewModel: CreateProofViewiewModel(
+			viewModel: CreateProofViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager
 			)
@@ -308,6 +349,12 @@ extension HolderCoordinator: Dismissable {
 
 	func dismiss() {
 
+//		if let nav = sidePanel?.presentedViewController as? UINavigationController {
+////			nav.popViewController(animated: true)
+//			nav.viewControllers.first?.dismiss(animated: true, completion: nil)
+//		}
+
+//		dashboardNavigationContoller?.dismiss(animated: true, completion: nil)
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 }
@@ -346,7 +393,11 @@ extension HolderCoordinator: MenuDelegate {
 //				)
 //				aboutNavigationContoller = UINavigationController(rootViewController: destination)
 //				sidePanel?.selectedViewController = aboutNavigationContoller
-				
+
+			case .privacy :
+				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
+				openUrl(privacyUrl, inApp: true)
+
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
 
@@ -371,7 +422,8 @@ extension HolderCoordinator: MenuDelegate {
 
 		return [
 			MenuItem(identifier: .faq, title: .holderMenuFaq),
-			MenuItem(identifier: .about, title: .holderMenuAbout)
+			MenuItem(identifier: .about, title: .holderMenuAbout),
+			MenuItem(identifier: .privacy, title: .holderMenuPrivacy)
 		]
 	}
 }
@@ -399,5 +451,19 @@ extension HolderCoordinator: OnboardingDelegate {
 
 		// Navigate to Holder Start.
 		navigateToHolderStart()
+	}
+}
+
+// MARK: - BirthdateSceneDelegate
+
+extension HolderCoordinator: BirthdateSceneDelegate {
+
+	/// User confirmed the birthdate
+	func birthdateConfirmed() {
+
+		if let birthdateCoordinator = childCoordinators.first {
+			removeChildCoordinator(birthdateCoordinator)
+		}
+		navigateToTokenOverview()
 	}
 }

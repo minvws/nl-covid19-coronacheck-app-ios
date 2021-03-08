@@ -47,26 +47,24 @@ class ConsentViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$underlinedText.binding = {
-			self.sceneView.underline($0)
-			self.setupLink()
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$underlinedText.binding = { [weak self] in
+			self?.sceneView.underline($0)
+			self?.setupLink()
 		}
 
-		viewModel.$isContinueButtonEnabled.binding = { self.sceneView.primaryButton.isEnabled = $0 }
+		viewModel.$isContinueButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		sceneView.primaryButton.setTitle(.next, for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 
-		viewModel.$consentText.binding = {
-			self.sceneView.consent = $0
-		}
+		viewModel.$consentText.binding = { [weak self] in self?.sceneView.consent = $0 }
 		self.sceneView.consentButton.valueChanged(self, action: #selector(consentValueChanged))
 
-		viewModel.$summary.binding = {
+		viewModel.$summary.binding = { [weak self] in
 
 			for item in $0 {
-				self.sceneView.addPrivacyItem(item)
+				self?.sceneView.addPrivacyItem(item)
 			}
 		}
 	}

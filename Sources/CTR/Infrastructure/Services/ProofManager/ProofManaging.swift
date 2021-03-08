@@ -12,10 +12,25 @@ protocol ProofManaging: AnyObject {
 	init()
 
 	/// Get the providers
-	func fetchCoronaTestProviders()
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchCoronaTestProviders(
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?)
 
 	/// Get the test types
 	func fetchTestTypes()
+
+	/// Fetch the issuer public keys
+	/// - Parameters:
+	///   - ttl: the time to read from cache
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchIssuerPublicKeys(
+		ttl: TimeInterval,
+		oncompletion: (() -> Void)?,
+		onError: ((Error) -> Void)?)
 
 	/// Get the test result for a token
 	/// - Parameters:
@@ -27,6 +42,22 @@ protocol ProofManaging: AnyObject {
 		code: String?,
 		provider: TestProvider,
 		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
+
+	/// Create a nonce and a stoken
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchNonce(
+		oncompletion: @escaping (() -> Void),
+		onError: @escaping ((Error) -> Void))
+
+	/// Fetch the signed Test Result
+	/// - Parameters:
+	///   - oncompletion: completion handler
+	///   - onError: error handler
+	func fetchSignedTestResult(
+		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onError: @escaping ((Error) -> Void))
 
 	/// Get the provider for a test token
 	/// - Parameter token: the test token
@@ -43,6 +74,16 @@ protocol ProofManaging: AnyObject {
 
 	/// Remove the test wrapper
 	func removeTestWrapper()
+
+	/// Get the birth date
+	func getBirthDate() -> Date?
+
+	/// Set the birthdate
+	/// - Parameter date: the date
+	func setBirthDate(_ date: Date?)
+
+	/// Get the birth date checksum
+	func getBirthDateChecksum() -> Int?
 }
 
 enum ProofError: Error {
@@ -51,7 +92,7 @@ enum ProofError: Error {
 }
 
 /// The test providers
-struct TestProvider: Codable {
+struct TestProvider: Codable, Equatable {
 
 	/// The identifier of the provider
 	let identifier: String
@@ -65,6 +106,9 @@ struct TestProvider: Codable {
 	/// The publc key of the provider
 	let publicKey: String
 
+	/// The ssl certificate of the provider
+	let certificate: String
+
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -72,6 +116,15 @@ struct TestProvider: Codable {
 		case name
 		case resultURL = "result_url"
 		case publicKey = "public_key"
+		case certificate = "ssl_cert"
+	}
+
+	func getCertificateData() -> Data? {
+
+		if let base64DecodedString = certificate.base64Decoded() {
+			return Data(base64DecodedString.utf8)
+		}
+		return nil
 	}
 }
 
@@ -111,6 +164,12 @@ struct TestResult: Codable {
 	/// Is this a negative test result?
 	let negativeResult: Bool
 
+	/// The holder of the test
+	let holder: HolderTestCredentials?  // Version 2.0.
+
+	/// The checksum of the birth date
+	let checksum: Int? // Version 1.0
+
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -118,7 +177,22 @@ struct TestResult: Codable {
 		case sampleDate
 		case testType
 		case negativeResult
+		case holder
+		case checksum
 	}
+}
+
+/// The credentials of the the holder of the test
+struct HolderTestCredentials: Codable {
+
+	/// The first letter of the first name
+	let firstNameInitial: String
+
+	/// The first letter of the last name (no middle names)
+	let lastNameInitial: String
+
+	/// The day of birth (1- 31)
+	let birthDayOfMonth: Int
 }
 
 /// The state of a test
@@ -187,4 +261,35 @@ struct TestType: Codable {
 		case identifier = "uuid"
 		case name
 	}
+}
+
+/// The state of the signed test result
+enum SignedTestResultState {
+
+	/// The test was already signed before (code 99994)
+	case alreadySigned
+
+	/// The test was not negative (code 99993)
+	case notNegative
+
+	/// The test was in future (code 99991)
+	case tooNew
+
+	/// The test is too old (code 99992)
+	case tooOld
+
+	/// The state is unknown
+	case unknown(Error?)
+
+	/// The signed test result is valid
+	case valid
+}
+
+struct SignedTestResultErrorResponse: Decodable {
+
+	/// The error status
+	let status: String
+
+	/// The error code
+	let code: Int
 }

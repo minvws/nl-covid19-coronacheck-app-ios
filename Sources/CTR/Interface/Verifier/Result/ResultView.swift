@@ -18,21 +18,27 @@ class ResultView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let largeMargin: CGFloat = UIDevice.current.isSmallScreen ? 20 : 40.0
+		static let imageMargin: CGFloat = 70.0
 	}
 
 	let imageView: UIImageView = {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .center
+		view.contentMode = .scaleAspectFit
 		return view
+	}()
+
+	/// The title label
+	let titleLabel: Label = {
+
+		return Label(title1: nil, montserrat: true).multiline()
 	}()
 
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(title3Medium: nil).multiline()
+		return Label(bodyMedium: nil).multiline()
 	}()
 
 	/// the scan button
@@ -49,6 +55,7 @@ class ResultView: BaseView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
@@ -59,6 +66,7 @@ class ResultView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(imageView)
+		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(primaryButton)
 	}
@@ -73,24 +81,39 @@ class ResultView: BaseView {
 			imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
 			imageView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.imageMargin
 			),
 			imageView.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.imageMargin
+			),
+
+			// Title
+			titleLabel.topAnchor.constraint(
+				equalTo: imageView.bottomAnchor,
+				constant: ViewTraits.imageMargin
+			),
+			titleLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			titleLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 
 			// Message
 			messageLabel.topAnchor.constraint(
-				equalTo: imageView.bottomAnchor
+				equalTo: titleLabel.bottomAnchor,
+				constant: ViewTraits.margin
 			),
 			messageLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
-				constant: ViewTraits.largeMargin
+				constant: ViewTraits.margin
 			),
 			messageLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
-				constant: -ViewTraits.largeMargin
+				constant: -ViewTraits.margin
 			),
 
 			// Button
@@ -107,6 +130,13 @@ class ResultView: BaseView {
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
 		}
 	}
 

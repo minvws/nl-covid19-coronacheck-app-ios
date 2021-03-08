@@ -39,46 +39,51 @@ class ListResultsViewController: BaseViewController {
 
 		edgesForExtendedLayout = []
 
-		viewModel.$title.binding = { self.sceneView.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$buttonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
-		viewModel.$showAlert.binding = {
+		viewModel.$showAlert.binding = { [weak self] in
 			if $0 {
-				self.showAlert()
+				self?.showAlert()
 			}
 		}
 
-		viewModel.$showError.binding = {
-			if let error = $0 {
-				self.showError(error)
+		viewModel.$showError.binding = { [weak self] in
+			if $0 {
+				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
 			}
 		}
 
-		viewModel.$listItem.binding = {
+		viewModel.$listItem.binding = { [weak self] in
 			if let item = $0 {
-				self.sceneView.resultView.isHidden = false
-				self.sceneView.resultView.header = .holderTestResultsRecent
-				self.sceneView.resultView.title = .holderTestResultsNegative
-				self.sceneView.resultView.message = item.date
+				self?.sceneView.resultView.isHidden = false
+				self?.sceneView.resultView.header = .holderTestResultsRecent
+				self?.sceneView.resultView.title = .holderTestResultsNegative
+				self?.sceneView.resultView.message = item.date
 
 			} else {
-				self.sceneView.resultView.isHidden = true
+				self?.sceneView.resultView.isHidden = true
 			}
 		}
 
-		viewModel.$showProgress.binding = {
+		viewModel.$showProgress.binding = { [weak self] in
+
+			guard let strongSelf = self else {
+				return
+			}
 
 			if $0 {
-				MBProgressHUD.showAdded(to: self.sceneView, animated: true)
-				self.sceneView.primaryButton.isEnabled = false
+				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				strongSelf.sceneView.primaryButton.isEnabled = false
 			} else {
-				MBProgressHUD.hide(for: self.sceneView, animated: true)
-				self.sceneView.primaryButton.isEnabled = true
+				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
+				strongSelf.sceneView.primaryButton.isEnabled = true
 			}
 		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
+			self?.tooltip?.dismiss()
 			self?.viewModel.buttonTapped()
 		}
 
@@ -109,33 +114,16 @@ class ListResultsViewController: BaseViewController {
 		tooltip?.dismiss()
 	}
 
-	/// User tapped on the button
-	@objc private func closeButtonTapped() {
-
-		viewModel.dismiss()
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		viewModel.checkResult()
 	}
 
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
+	/// User tapped on the button
+	@objc func closeButtonTapped() {
 
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
-		navigationItem.hidesBackButton = true
-		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
-		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
+		tooltip?.dismiss()
+		viewModel.dismiss()
 	}
 
 	/// Show alert
@@ -157,23 +145,6 @@ class ListResultsViewController: BaseViewController {
 		alertController.addAction(
 			UIAlertAction(
 				title: .holderTestResultsAlertCancel,
-				style: .default,
-				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
-	}
-
-	/// Show alert
-	private func showError(_ message: String) {
-
-		let alertController = UIAlertController(
-			title: .errorTitle,
-			message: message,
-			preferredStyle: .alert)
-		alertController.addAction(
-			UIAlertAction(
-				title: .ok,
 				style: .default,
 				handler: nil
 			)

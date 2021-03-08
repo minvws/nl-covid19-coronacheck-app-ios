@@ -15,6 +15,9 @@ class VerifierStartViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
+	/// The crypto manager
+	weak var cryptoManager: CryptoManaging?
+
 	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
 	private var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
 
@@ -35,12 +38,17 @@ class VerifierStartViewModel: Logging {
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
+	/// The title of the button
+	@Bindable private(set) var showError: Bool = false
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: VerifierCoordinator) {
+	///   - cryptoManager: the crypto manager
+	init(coordinator: VerifierCoordinator, cryptoManager: CryptoManaging) {
 
 		self.coordinator = coordinator
+		self.cryptoManager = cryptoManager
 
 		primaryButtonTitle = .verifierStartButtonTitle
 		title = .verifierStartTitle
@@ -52,7 +60,13 @@ class VerifierStartViewModel: Logging {
 	func primaryButtonTapped() {
 
 		if scanInstructionShown {
-			coordinator?.navigateToScan()
+
+			if let crypto = cryptoManager, crypto.hasPublicKeys() {
+				coordinator?.navigateToScan()
+			} else {
+				updatePublicKeys()
+				showError = true
+			}
 		} else {
 
 			scanInstructionShown = true
@@ -63,5 +77,18 @@ class VerifierStartViewModel: Logging {
 	func linkTapped(_ viewController: UIViewController) {
 
 		coordinator?.navigateToScanInstruction(present: false)
+	}
+
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
+	/// The proof manager
+	var proofManager: ProofManaging = Services.proofManager
+
+	func updatePublicKeys() {
+
+		// Fetch the public keys from the issuer
+		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
+		proofManager.fetchIssuerPublicKeys(ttl: ttl, oncompletion: nil, onError: nil)
 	}
 }

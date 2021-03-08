@@ -44,8 +44,8 @@ class PrivacyViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
 	}
@@ -54,27 +54,5 @@ class PrivacyViewController: BaseViewController {
 	@objc private func closeButtonTapped() {
 
 		viewModel.dismiss()
-	}
-
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
-
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
-		navigationItem.hidesBackButton = true
-		navigationItem.rightBarButtonItem = button
-		navigationController?.navigationItem.rightBarButtonItem = button
 	}
 }

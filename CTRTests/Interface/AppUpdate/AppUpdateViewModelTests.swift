@@ -25,7 +25,9 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersionMessage: "test message",
 			storeUrl: URL(string: "https://apple.com"),
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -60,7 +62,9 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersionMessage: nil,
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 
 		// When
@@ -101,7 +105,9 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersionMessage: "test",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -127,7 +133,9 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersionMessage: nil,
 			storeUrl: nil,
 			deactivated: true,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 
 		// When
@@ -151,7 +159,9 @@ class AppUpdateViewModelTests: XCTestCase {
 			minVersionMessage: nil,
 			storeUrl: nil,
 			deactivated: true,
-			informationURL: URL(string: "https://apple.com")
+			informationURL: URL(string: "https://apple.com"),
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 
 		// When

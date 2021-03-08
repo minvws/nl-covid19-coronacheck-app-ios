@@ -46,12 +46,12 @@ class AboutViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { self.title = $0 }
-		viewModel.$message.binding = { self.sceneView.message = $0 }
+		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
-		viewModel.$link.binding = {
-			self.sceneView.link($0)
-			self.setupLink()
+		viewModel.$link.binding = { [weak self] in
+			self?.sceneView.link($0)
+			self?.setupLink()
 		}
 	}
 

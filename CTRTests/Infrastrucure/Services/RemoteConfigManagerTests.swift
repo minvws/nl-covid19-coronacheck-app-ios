@@ -30,28 +30,22 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		var appVersion: String
 
-		init(version: String) {
+		var appBuild: String
+
+		init(version: String, build: String = "") {
 
 			appVersion = version
+			appBuild = build
 		}
 
 		func getCurrentVersion() -> String {
 
 			return appVersion
 		}
-	}
 
-	class CryptoUtilitySpy: CryptoUtilityProtocol {
-		func validate(data: Data, signature: Data, completion: @escaping (Bool) -> Void) {
+		func getCurrentBuild() -> String {
 
-		}
-
-		func signature(forData data: Data, key: Data) -> Data {
-			return Data()
-		}
-
-		func sha256(data: Data) -> String? {
-			return nil
+			return appBuild
 		}
 	}
 
@@ -65,12 +59,34 @@ class RemoteConfigManagerTests: XCTestCase {
 		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		networkSpy.remoteConfig = nil
 		sut.networkManager = networkSpy
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.internetRequired, "State should match")
+
+			expectation.fulfill()
+		}
+		waitForExpectations(timeout: 10, handler: nil)
+	}
+
+	/// Test the remote config manager update call no result from the api
+	func testRemoteConfigManagerUpdateNoResultFromApiWithinTTL() {
+
+		// Given
+		let expectation = self.expectation(description: "remote config no result from api")
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy.remoteConfig = nil
+		sut.networkManager = networkSpy
+		sut.lastFetchedTimestamp = Date()
+
+		// When
+		sut.update { state in
+
+			// Then
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -88,16 +104,19 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -115,16 +134,19 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -142,17 +164,20 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualBug",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
+			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}
@@ -170,17 +195,20 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualMajor",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
+			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}
@@ -198,17 +226,20 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
 			storeUrl: nil,
 			deactivated: nil,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.noActionNeeded, "State should match")
+			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
 
 			expectation.fulfill()
 		}
@@ -226,17 +257,20 @@ class RemoteConfigManagerTests: XCTestCase {
 			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
 			storeUrl: nil,
 			deactivated: true,
-			informationURL: nil
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48
 		)
 		networkSpy.remoteConfig = configuration
 		sut.networkManager = networkSpy
 		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+		sut.lastFetchedTimestamp = nil
 
 		// When
 		sut.update { state in
 
 			// Then
-			XCTAssertEqual(state, UpdateState.actionRequired(configuration))
+			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
 
 			expectation.fulfill()
 		}

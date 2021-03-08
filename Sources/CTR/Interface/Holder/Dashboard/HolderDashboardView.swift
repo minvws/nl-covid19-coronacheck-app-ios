@@ -26,24 +26,6 @@ class HolderDashboardView: ScrolledStackView {
 		return Label(body: nil).multiline()
 	}()
 
-	/// The image view for the QR image
-	let largeQRimageView: UIImageView = {
-
-		let view = UIImageView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isHidden = true
-		view.backgroundColor = .gray
-		return view
-	}()
-
-	let largeOverlay: UIView = {
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .white
-		view.isHidden = true
-		return view
-	}()
-
 	/// The QR Card
 	let qrView: QRImageView = {
 
@@ -88,9 +70,6 @@ class HolderDashboardView: ScrolledStackView {
 		stackView.addArrangedSubview(expiredQRView)
 		stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
-
-		largeOverlay.embed(in: self)
-		addSubview(largeQRimageView)
 	}
 
 	/// Setup the constraints
@@ -108,18 +87,6 @@ class HolderDashboardView: ScrolledStackView {
 			createCard.widthAnchor.constraint(
 				equalTo: createCard.heightAnchor,
 				multiplier: ViewTraits.cardRatio
-			),
-
-			largeQRimageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-			largeQRimageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
-			largeQRimageView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			largeQRimageView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
 			)
 		])
 	}
@@ -138,5 +105,25 @@ class HolderDashboardView: ScrolledStackView {
 		didSet {
 			qrView.hideQRImage = hideQRImage
 		}
+	}
+
+	/// Play the animation
+	func play() {
+
+		guard !qrView.isHidden else {
+			return
+		}
+
+		qrView.play()
+	}
+
+	/// Resume the animation
+	func resume() {
+
+		guard !qrView.isHidden else {
+			return
+		}
+
+		qrView.resume()
 	}
 }

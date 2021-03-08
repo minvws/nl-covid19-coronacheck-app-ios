@@ -35,61 +35,50 @@ class VerifierResultViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$message.binding = { self.sceneView.message = $0 }
-		viewModel.$primaryButtonTitle.binding = { self.sceneView.primaryTitle = $0 }
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.dismiss()
 		}
 
-		viewModel.$allowAccess.binding = {
+		viewModel.$allowAccess.binding = { [weak self] in
 
-			if $0 {
-				self.sceneView.imageView.image = .access
-				self.sceneView.backgroundColor = Theme.colors.access
+			if $0 == .verified {
+				self?.sceneView.imageView.image = .access
+				self?.sceneView.backgroundColor = Theme.colors.access
+			} else if $0 == .demo {
+				self?.sceneView.imageView.image = .access
+				self?.sceneView.backgroundColor = Theme.colors.demo
 			} else {
-				self.sceneView.imageView.image = .denied
-				self.sceneView.backgroundColor = Theme.colors.denied
+				self?.sceneView.imageView.image = .denied
+				self?.sceneView.backgroundColor = Theme.colors.denied
 			}
 		}
 
-		viewModel.$linkedMessage.binding = {
+		viewModel.$linkedMessage.binding = { [weak self] in
 			if $0 != nil {
-				self.sceneView.underline($0)
-				self.setupLink()
+				self?.sceneView.underline($0)
+				self?.setupLink()
 			}
 		}
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
 	}
 
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		// Make the navbar the same color as the background.
+		navigationController?.navigationBar.backgroundColor = .clear
+	}
+
 	/// User tapped on the button
 	@objc private func closeButtonTapped() {
 
 		viewModel.dismiss()
-	}
-
-	/// Add a close button to the navigation bar.
-	/// - Parameters:
-	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCloseButton(
-		action: Selector?,
-		accessibilityLabel: String) {
-
-		let button = UIBarButtonItem(
-			image: .cross,
-			style: .plain,
-			target: self,
-			action: action
-		)
-		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
-		navigationItem.hidesBackButton = true
-		navigationItem.leftBarButtonItem = button
-		navigationController?.navigationItem.leftBarButtonItem = button
 	}
 
 	// MARK: Helper methods
