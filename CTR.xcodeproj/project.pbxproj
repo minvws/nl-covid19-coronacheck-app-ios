@@ -447,6 +447,8 @@
 		6DE1DF6225E8D3D30091FC21 /* SecurityStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE1DF6025E8D3D30091FC21 /* SecurityStrategy.swift */; };
 		6DE6FD7A25C189A3006602AC /* RemoteConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6FD7925C189A3006602AC /* RemoteConfiguration.swift */; };
 		6DE6FD8425C18BCA006602AC /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE6FD8325C18BCA006602AC /* RemoteConfigManager.swift */; };
+		6DED4A7125F61AB00001CA7E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DED4A7025F61AB00001CA7E /* GoogleService-Info.plist */; };
+		6DED4A7525F61AB70001CA7E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6DED4A6B25F61A9B0001CA7E /* GoogleService-Info.plist */; };
 		6DF96B6C25DA57100008662B /* ScanLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF96B6A25DA57100008662B /* ScanLocalization.swift */; };
 		6DFA691B25EE251500310E15 /* ProofManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA691A25EE251500310E15 /* ProofManagerTests.swift */; };
 		6DFA692025EE312700310E15 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFA691F25EE312600310E15 /* Platform.swift */; };
@@ -740,6 +742,8 @@
 		6DE1DF6025E8D3D30091FC21 /* SecurityStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecurityStrategy.swift; sourceTree = "<group>"; };
 		6DE6FD7925C189A3006602AC /* RemoteConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfiguration.swift; sourceTree = "<group>"; };
 		6DE6FD8325C18BCA006602AC /* RemoteConfigManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
+		6DED4A6B25F61A9B0001CA7E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6DED4A7025F61AB00001CA7E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6DF96B6A25DA57100008662B /* ScanLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanLocalization.swift; sourceTree = "<group>"; };
 		6DFA691A25EE251500310E15 /* ProofManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofManagerTests.swift; sourceTree = "<group>"; };
 		6DFA691F25EE312600310E15 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
@@ -1652,6 +1656,8 @@
 		6DDEFB3725AEE01A00A6912A /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				6DED4A6A25F61A8A0001CA7E /* Verifier */,
+				6DED4A6925F61A7E0001CA7E /* Holder */,
 				6DD9394225BD8CD80026F071 /* Configuration.swift */,
 				6D01D8A125BFF8D700A4AB89 /* Configuration+DigiD.swift */,
 				6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */,
@@ -1702,6 +1708,22 @@
 				6DE6FD7925C189A3006602AC /* RemoteConfiguration.swift */,
 			);
 			path = RemoteConfiguration;
+			sourceTree = "<group>";
+		};
+		6DED4A6925F61A7E0001CA7E /* Holder */ = {
+			isa = PBXGroup;
+			children = (
+				6DED4A6B25F61A9B0001CA7E /* GoogleService-Info.plist */,
+			);
+			path = Holder;
+			sourceTree = "<group>";
+		};
+		6DED4A6A25F61A8A0001CA7E /* Verifier */ = {
+			isa = PBXGroup;
+			children = (
+				6DED4A7025F61AB00001CA7E /* GoogleService-Info.plist */,
+			);
+			path = Verifier;
 			sourceTree = "<group>";
 		};
 		6DF96B6225DA55510008662B /* Certificates */ = {
@@ -1772,6 +1794,7 @@
 				6DD7D88825D26D3A00B97B7F /* Frameworks */,
 				6DD7D88C25D26D3A00B97B7F /* Resources */,
 				798D92CF7009C3086268AB57 /* [CP] Embed Pods Frameworks */,
+				6DED4A7F25F61CE60001CA7E /* Run Script Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -1792,6 +1815,7 @@
 				6DDEFAED25AEDCA800A6912A /* Frameworks */,
 				6DDEFAEE25AEDCA800A6912A /* Resources */,
 				1B13907590113F1FF49C3AD5 /* [CP] Embed Pods Frameworks */,
+				6DED4A9825F627E60001CA7E /* Run Script Crashlytics */,
 			);
 			buildRules = (
 			);
@@ -1868,6 +1892,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DB3C28B25F1283600B41B46 /* Localizable.strings in Resources */,
+				6DED4A7125F61AB00001CA7E /* GoogleService-Info.plist in Resources */,
 				6D4F6E5F25DE9FF800557326 /* LaunchScreenVerifier.storyboard in Resources */,
 				6D4F6E3A25DE9F2B00557326 /* verifier_logo.png in Resources */,
 				6D0022BA25DBC3FA00E91084 /* configuration-production.plist in Resources */,
@@ -1902,6 +1927,7 @@
 				6D4F6E4A25DE9F3D00557326 /* LaunchScreenHolder.storyboard in Resources */,
 				6DDEFAFD25AEDCAA00A6912A /* Assets.xcassets in Resources */,
 				6D33015A25CFE6BA00A98C1C /* nl-root.pem in Resources */,
+				6DED4A7525F61AB70001CA7E /* GoogleService-Info.plist in Resources */,
 				6D1E337E25E62A510097E574 /* fietser_LR_335x256.json in Resources */,
 				6D4F6E1725DE972C00557326 /* splash_ministerie.png in Resources */,
 				6DD9394825BD8DAF0026F071 /* configuration-development.plist in Resources */,
@@ -2011,6 +2037,46 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		6DED4A7F25F61CE60001CA7E /* Run Script Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Run Script Crashlytics";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		6DED4A9825F627E60001CA7E /* Run Script Crashlytics */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}",
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Run Script Crashlytics";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
 		798D92CF7009C3086268AB57 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3014,6 +3080,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 7;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				DISPLAY_NAME = "Scanner Dev";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3026,7 +3093,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Production;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3343,7 +3410,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Test;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;
