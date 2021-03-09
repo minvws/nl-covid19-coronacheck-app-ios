@@ -85,7 +85,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
@@ -114,7 +114,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
@@ -145,7 +145,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
@@ -411,7 +411,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
@@ -428,7 +428,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
@@ -445,7 +445,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}

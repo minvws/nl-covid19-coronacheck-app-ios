@@ -86,7 +86,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.sceneView.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.sceneView.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.sceneView.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.sceneView.primaryTitle, .holderTestResultsBackToMenuButton, "Button title should match")
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")

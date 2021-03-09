@@ -72,6 +72,12 @@ public extension NSAttributedString {
 		textAlignment: NSTextAlignment = .left,
 		lineHeight: CGFloat = 22,
 		underlineColor: UIColor? = nil) -> NSAttributedString {
+
+		guard !ProcessInfo.processInfo.isTesting else {
+
+			return NSAttributedString(string: text ?? "")
+		}
+
 		let text = text ?? ""
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = textAlignment
