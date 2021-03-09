@@ -2697,7 +2697,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2810,7 +2810,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2923,7 +2923,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3036,7 +3036,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3092,7 +3092,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3127,7 +3127,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3159,7 +3159,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3191,7 +3191,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3223,7 +3223,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3255,7 +3255,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/verifier-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3409,7 +3409,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3444,7 +3444,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "Sources/CTR/Configuration/holder-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
