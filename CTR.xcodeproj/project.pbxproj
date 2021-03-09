@@ -96,6 +96,7 @@
 		6D33016825CFE90200A98C1C /* CryptoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33016725CFE90200A98C1C /* CryptoUtility.swift */; };
 		6D33016E25CFF19000A98C1C /* CryptoUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33016D25CFF19000A98C1C /* CryptoUtilityTests.swift */; };
 		6D33018825CFFFC500A98C1C /* ConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33018725CFFFC500A98C1C /* ConsentViewController.swift */; };
+		6D39858625F75673000994CC /* VerifiyResultViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D39858525F75673000994CC /* VerifiyResultViewControllerTests.swift */; };
 		6D3C353125D41E65005D3259 /* CreateProofViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */; };
 		6D3C353225D41E65005D3259 /* CreateProofViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */; };
 		6D42BECA25F3A6B6005E628E /* InternetRequiredLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D42BEC925F3A6B6005E628E /* InternetRequiredLocalization.swift */; };
@@ -555,6 +556,7 @@
 		6D33016725CFE90200A98C1C /* CryptoUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoUtility.swift; sourceTree = "<group>"; };
 		6D33016D25CFF19000A98C1C /* CryptoUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtilityTests.swift; sourceTree = "<group>"; };
 		6D33018725CFFFC500A98C1C /* ConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentViewController.swift; sourceTree = "<group>"; };
+		6D39858525F75673000994CC /* VerifiyResultViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifiyResultViewControllerTests.swift; sourceTree = "<group>"; };
 		6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProofViewContoller.swift; sourceTree = "<group>"; };
 		6D42BEC925F3A6B6005E628E /* InternetRequiredLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternetRequiredLocalization.swift; sourceTree = "<group>"; };
 		6D42BECF25F3C01F005E628E /* LaunchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewModel.swift; sourceTree = "<group>"; };
@@ -964,6 +966,7 @@
 		6D32BD2225E6A54D00C4A4D2 /* Result */ = {
 			isa = PBXGroup;
 			children = (
+				6D39858525F75673000994CC /* VerifiyResultViewControllerTests.swift */,
 				6D32BD2425E6A5AF00C4A4D2 /* VerifyResultViewModelTests.swift */,
 			);
 			path = Result;
@@ -2572,6 +2575,7 @@
 				6DC6CC4125C2A95C00060237 /* AppCoordinatorSpy.swift in Sources */,
 				6DD23FAD25E3E74F00CE4AEB /* MenuViewModelTests.swift in Sources */,
 				6D2023B825CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift in Sources */,
+				6D39858625F75673000994CC /* VerifiyResultViewControllerTests.swift in Sources */,
 				6D2023BC25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift in Sources */,
 				6DD23F9725E3D42F00CE4AEB /* ProofManagingSpy.swift in Sources */,
 				6DFA691B25EE251500310E15 /* ProofManagerTests.swift in Sources */,

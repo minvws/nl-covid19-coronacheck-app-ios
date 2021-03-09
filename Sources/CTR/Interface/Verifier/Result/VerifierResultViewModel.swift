@@ -41,7 +41,7 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var message: String = ""
 
 	/// The linked message of the scene
-	@Bindable private(set) var linkedMessage: String?
+	@Bindable var linkedMessage: String?
 
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
