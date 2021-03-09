@@ -12,6 +12,11 @@ class EntryView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
+		// Dimensions
+		static let headerHeight: CGFloat = 38.0
+		static let inputHeight: CGFloat = 52.0
+		static let lineHeight: CGFloat = 1.0
+
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let headerMargin: CGFloat = 10.0
@@ -77,19 +82,18 @@ class EntryView: BaseView {
 
 			// Header
 			headerLabel.topAnchor.constraint(equalTo: topAnchor),
+			headerLabel.heightAnchor.constraint(equalToConstant: ViewTraits.headerHeight),
 			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
 			headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-			headerLabel.bottomAnchor.constraint(
-				equalTo: inputField.topAnchor,
-				constant: -ViewTraits.headerMargin
-			),
+			headerLabel.bottomAnchor.constraint(equalTo: inputField.topAnchor),
 
 			inputField.leadingAnchor.constraint(equalTo: leadingAnchor),
 			inputField.trailingAnchor.constraint(equalTo: trailingAnchor),
 			inputField.bottomAnchor.constraint(equalTo: lineView.topAnchor),
+			inputField.heightAnchor.constraint(equalToConstant: ViewTraits.inputHeight),
 
 			// Line
-			lineView.heightAnchor.constraint(equalToConstant: 1),
+			lineView.heightAnchor.constraint(equalToConstant: ViewTraits.lineHeight),
 			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			lineView.bottomAnchor.constraint(equalTo: bottomAnchor)
