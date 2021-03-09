@@ -119,13 +119,13 @@ class ListResultsViewModelTests: XCTestCase {
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
 
-	/// Test the check result method with a too old test result
+	/// Test the check result method with a too new test result
 	func testCheckResultTooNew() {
 
 		// Given
 		let now = Date().timeIntervalSince1970 + 200
 
-		let tooOldWrapper = TestResultWrapper(
+		let tooNewWrapper = TestResultWrapper(
 			providerIdentifier: "testCheckResultTooNew",
 			protocolVersion: "1.0",
 			result: TestResult(
@@ -138,7 +138,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooOldWrapper
+		proofManagingSpy.testResultWrapper = tooNewWrapper
 
 		// When
 		sut?.checkResult()
@@ -150,13 +150,13 @@ class ListResultsViewModelTests: XCTestCase {
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
 
-	/// Test the check result method with a too old test result
-	func testCheckResultValid() {
+	/// Test the check result method with a valid test result
+	func testCheckResultValidProtocolVersionOne() {
 
 		// Given
 		let now = Date().timeIntervalSince1970 - 200
 
-		let tooOldWrapper = TestResultWrapper(
+		let validProtocolOne = TestResultWrapper(
 			providerIdentifier: "testCheckResultValid",
 			protocolVersion: "1.0",
 			result: TestResult(
@@ -169,7 +169,44 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooOldWrapper
+		proofManagingSpy.testResultWrapper = validProtocolOne
+
+		// When
+		sut?.checkResult()
+
+		// Then
+		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
+		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
+		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
+		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultValid", "Identifier should match")
+	}
+
+	/// Test the check result method with a valid test result
+	func testCheckResultValidProtocolVersionTwo() {
+
+		// Given
+		let now = Date().timeIntervalSince1970 - 200
+
+		let validProtocolTwo = TestResultWrapper(
+			providerIdentifier: "testCheckResultValid",
+			protocolVersion: "2.0",
+			result: TestResult(
+				unique: "testCheckResultValid",
+				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
+				testType: "test",
+				negativeResult: true,
+				holder: HolderTestCredentials(
+					firstNameInitial: "T",
+					lastNameInitial: "T",
+					birthDay: "1",
+					birthMonth: "1"
+				),
+				checksum: nil
+			),
+			status: .complete
+		)
+		proofManagingSpy.testResultWrapper = validProtocolTwo
 
 		// When
 		sut?.checkResult()

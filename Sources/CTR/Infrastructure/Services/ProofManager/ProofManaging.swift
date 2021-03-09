@@ -189,8 +189,11 @@ struct HolderTestCredentials: Codable {
 	/// The first letter of the last name (no middle names)
 	let lastNameInitial: String
 
-	/// The day of birth (1- 31)
-	let birthDayOfMonth: Int
+	/// The day of birth (1- 31) as String
+	let birthDay: String
+
+	/// The month of birth (1- 12) as String
+	let birthMonth: String
 }
 
 /// The state of a test
