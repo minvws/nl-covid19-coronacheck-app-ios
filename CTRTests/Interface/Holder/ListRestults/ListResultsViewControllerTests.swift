@@ -20,9 +20,6 @@ class ListResultsViewControllerTests: XCTestCase {
 	/// The proof manager spy
 	var proofManagingSpy = ProofManagingSpy()
 
-	/// The configuration spy
-	var configSpy = ConfigurationGeneralSpy()
-
 	var viewModel: ListResultsViewModel?
 
 	var window = UIWindow()
@@ -33,12 +30,11 @@ class ListResultsViewControllerTests: XCTestCase {
 		super.setUp()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		proofManagingSpy = ProofManagingSpy()
-		configSpy = ConfigurationGeneralSpy()
 
 		viewModel = ListResultsViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			proofManager: proofManagingSpy,
-			configuration: configSpy
+			maxValidity: 48
 		)
 		sut = ListResultsViewController( viewModel: viewModel!)
 		window = UIWindow()
@@ -90,7 +86,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertEqual(sut?.sceneView.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.sceneView.message, .holderTestResultsNoResultsText, "Message should match")
+		XCTAssertEqual(sut?.sceneView.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.sceneView.primaryTitle, .holderTestResultsBackToMenuButton, "Button title should match")
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")

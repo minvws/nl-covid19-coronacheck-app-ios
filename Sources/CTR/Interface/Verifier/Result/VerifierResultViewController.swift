@@ -76,7 +76,7 @@ class VerifierResultViewController: BaseViewController {
 	}
 
 	/// User tapped on the button
-	@objc private func closeButtonTapped() {
+	@objc func closeButtonTapped() {
 
 		viewModel.dismiss()
 	}

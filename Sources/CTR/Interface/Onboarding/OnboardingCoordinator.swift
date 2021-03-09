@@ -62,12 +62,13 @@ class OnboardingCoordinator: Coordinator, Logging {
 	init(
 		navigationController: UINavigationController,
 		onboardingDelegate: OnboardingDelegate,
-		factory: OnboardingFactoryProtocol) {
+		factory: OnboardingFactoryProtocol,
+		maxValidity: String) {
 		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate
 		onboardingFactory = factory
-		onboardingPages = onboardingFactory.create()
+		onboardingPages = onboardingFactory.create(maxValidity: maxValidity)
 	}
 	
 	/// The onboarding pages

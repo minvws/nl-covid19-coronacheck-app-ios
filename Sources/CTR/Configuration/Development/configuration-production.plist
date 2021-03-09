@@ -4,8 +4,6 @@
 <dict>
 	<key>general</key>
 	<dict>
-		<key>testresultTTL</key>
-		<integer>172800</integer>
 		<key>testresultWarningTTL</key>
 		<integer>21600</integer>
 		<key>QRTTL</key>

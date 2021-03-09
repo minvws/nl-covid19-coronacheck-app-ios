@@ -37,12 +37,12 @@ class AppointmentViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 
-	init(coordinator: OpenUrlProtocol) {
+	init(coordinator: OpenUrlProtocol, maxValidity: String) {
 
 		self.coordinator = coordinator
 		self.title = .holderAppointmentTitle
 		self.header = .holderAppointmentHeader
-		self.body = .holderAppointmentBody
+		self.body = String(format: .holderAppointmentBody, maxValidity)
 		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle
 		self.image = UIImage.appointment

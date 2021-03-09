@@ -94,6 +94,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
@@ -113,6 +116,10 @@ class HolderCoordinator: Coordinator, Logging {
 		self.window = window
 	}
 
+	var maxValidity: Int {
+		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
+	}
+
 	// Designated starter method
 	func start() {
 
@@ -121,7 +128,8 @@ class HolderCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			startChildCoordinator(coordinator)
 
@@ -130,7 +138,8 @@ class HolderCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
@@ -161,7 +170,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
-				configuration: generalConfiguration
+				configuration: generalConfiguration,
+				maxValidity: maxValidity
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
@@ -179,7 +189,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
-				configuration: generalConfiguration
+				configuration: generalConfiguration,
+				maxValidity: maxValidity
 			)
 		)
 		let navController = UINavigationController(rootViewController: destination)
@@ -197,7 +208,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let destination = AppointmentViewController(
 			viewModel: AppointmentViewModel(
-				coordinator: self
+				coordinator: self,
+				maxValidity: String(maxValidity)
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -276,7 +288,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ListResultsViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				configuration: generalConfiguration
+				maxValidity: maxValidity
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)

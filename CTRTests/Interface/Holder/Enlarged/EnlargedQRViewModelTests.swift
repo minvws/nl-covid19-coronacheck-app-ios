@@ -35,7 +35,8 @@ class EnlargedQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			maxValidity: 48
 		)
 	}
 
@@ -51,7 +52,8 @@ class EnlargedQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			maxValidity: 48
 		)
 
 		// Then
@@ -82,12 +84,12 @@ class EnlargedQRViewModelTests: XCTestCase {
 	func testValidityCredentialExpired() {
 
 		// Given
-		let sampleTime = Date().timeIntervalSince1970 - 20
+		let sampleTime = Date().timeIntervalSince1970 - 3608
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)
-		configSpy.testResultTTL = 10
+		sut?.proofValidator = ProofValidator(maxValidity: 1)
 
 		// When
 		sut?.checkQRValidity()
@@ -109,7 +111,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		configSpy.testResultTTL = 50
+		sut?.proofValidator = ProofValidator(maxValidity: 1)
 		proofManagerSpy.birthDate = nil
 
 		// When
@@ -139,7 +141,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		configSpy.testResultTTL = 50
+		sut?.proofValidator = ProofValidator(maxValidity: 1)
 		proofManagerSpy.birthDate = Date()
 
 		// When

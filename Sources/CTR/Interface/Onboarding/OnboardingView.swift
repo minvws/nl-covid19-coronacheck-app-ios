@@ -90,13 +90,8 @@ class OnboardingView: BaseView {
 
 			// ImageContainer
 			containerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
-			containerView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin),
-			containerView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
+			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			// Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),

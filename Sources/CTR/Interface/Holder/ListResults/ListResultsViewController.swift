@@ -87,13 +87,16 @@ class ListResultsViewController: BaseViewController {
 			self?.viewModel.buttonTapped()
 		}
 
-		var preferences = EasyTipView.Preferences()
-		preferences.drawing.foregroundColor = Theme.colors.viewControllerBackground
-		preferences.drawing.backgroundColor = Theme.colors.dark
-		preferences.drawing.font = Theme.fonts.footnoteMontserrat
-		preferences.drawing.arrowPosition = .bottom
+		viewModel.$tooltipText.binding = { [weak self] in
 
-		tooltip = EasyTipView(text: .holderTestResultsDisclaimer, preferences: preferences)
+			var preferences = EasyTipView.Preferences()
+			preferences.drawing.foregroundColor = Theme.colors.viewControllerBackground
+			preferences.drawing.backgroundColor = Theme.colors.dark
+			preferences.drawing.font = Theme.fonts.footnoteMontserrat
+			preferences.drawing.arrowPosition = .bottom
+
+			self?.tooltip = EasyTipView(text: $0, preferences: preferences)
+		}
 
 		sceneView.resultView.disclaimerButtonTappedCommand = {
 

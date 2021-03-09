@@ -26,6 +26,9 @@ class VerifierResultViewModel: Logging {
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol = Configuration()
 
+	/// The proof validator
+	var proofValidator: ProofValidatorProtocol
+
 	/// The scanned attributes
 	var attributes: Attributes
 
@@ -38,7 +41,7 @@ class VerifierResultViewModel: Logging {
 	@Bindable private(set) var message: String = ""
 
 	/// The linked message of the scene
-	@Bindable private(set) var linkedMessage: String?
+	@Bindable var linkedMessage: String?
 
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
@@ -50,10 +53,12 @@ class VerifierResultViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
 	///   - attributes: the decrypted attributes
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable), attributes: Attributes) {
+	///   - maxValidity: the maximum validity of a test in hours
+	init(coordinator: (VerifierCoordinatorDelegate & Dismissable), attributes: Attributes, maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.attributes = attributes
+		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
 		primaryButtonTitle = .verifierResultButtonTitle
 
@@ -87,11 +92,15 @@ class VerifierResultViewModel: Logging {
 	private func isSampleTimeValid(_ now: TimeInterval) -> Bool {
 
 		if let sampleTimeStamp = TimeInterval(attributes.cryptoAttributes.sampleTime) {
-			if (sampleTimeStamp + TimeInterval(configuration.getTestResultTTL())) > now && sampleTimeStamp < now {
-				return true
+			switch proofValidator.validate(sampleTimeStamp) {
+				case .valid:
+					return true
+				case .expired:
+					logInfo("Sample Timestamp is too old!")
+					return false
 			}
 		}
-		logInfo("Sample Timestamp is too old!")
+		logInfo("no Sample Timestamp")
 		return false
 	}
 

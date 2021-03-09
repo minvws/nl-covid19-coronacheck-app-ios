@@ -107,11 +107,13 @@ class HolderDashboardViewModel: Logging {
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
 	///   - configuration: the configuration
+	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol) {
+		configuration: ConfigurationGeneralProtocol,
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
@@ -144,7 +146,7 @@ class HolderDashboardViewModel: Logging {
 			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 
-		self.proofValidator = ProofValidator(configuration: configuration)
+		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
 		self.addObserver()
 	}

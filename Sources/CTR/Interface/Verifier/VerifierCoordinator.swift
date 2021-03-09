@@ -53,6 +53,9 @@ class VerifierCoordinator: Coordinator, Logging {
 
 	/// The general configuration
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
+
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -62,6 +65,10 @@ class VerifierCoordinator: Coordinator, Logging {
 	
 	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
+
+	var maxValidity: Int {
+		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
+	}
 	
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -78,7 +85,8 @@ class VerifierCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			startChildCoordinator(coordinator)
 			
@@ -87,7 +95,8 @@ class VerifierCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
@@ -132,7 +141,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let destination = ScanInstructionsViewController(
 			viewModel: ScanInstructionsViewModel(
 				coordinator: self,
-				presented: present
+				presented: present,
+				maxValidity: String(maxValidity)
 			)
 		)
 		if present {
@@ -163,7 +173,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				attributes: attributes
+				attributes: attributes,
+				maxValidity: maxValidity
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
