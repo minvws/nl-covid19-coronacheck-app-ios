@@ -58,11 +58,10 @@ class TokenOverviewViewController: BaseViewController {
 	/// - Parameter provider: the provider
 	func setupProviderButton(_ provider: TokenProvider) {
 
-		let button = ButtonWithSubtitle()
+		let button = ButtonWithTitleImageSubtitle()
 		button.isUserInteractionEnabled = true
-		button.title = provider.name
+		button.icon = provider.icon
 		button.subtitle = provider.subTitle
-		button.titleLabel.font = Theme.fonts.caption1
 		button.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.providerSelected(provider.identifier)
 		}

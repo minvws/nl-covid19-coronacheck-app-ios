@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ButtonWithSubtitle: BaseView {
+class ButtonWithTitleImageSubtitle: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -18,22 +18,24 @@ class ButtonWithSubtitle: BaseView {
 		static let shadowOpacity: Float = 0.2
 
 		// Margins
-		static let textMargin: CGFloat = 2.0
+		static let textMargin: CGFloat = 18.0
 		static let margin: CGFloat = 20.0
-		static let topMargin: CGFloat = 18.0
+		static let topMargin: CGFloat = 16.0
 		static let leadingMargin: CGFloat = 16.0
 	}
 
-	/// The title label
-	let titleLabel: Label = {
+	/// The icon view
+	let iconView: UIImageView  = {
 
-		return Label(calloutSemiBold: nil)
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 
 	/// The sub title label
 	let subTitleLabel: Label = {
 
-		return Label(subhead: nil).multiline()
+		return Label(body: nil)
 	}()
 
 	/// The disclosure image
@@ -81,7 +83,7 @@ class ButtonWithSubtitle: BaseView {
 
 		super.setupViewHierarchy()
 		addSubview(disclosureView)
-		addSubview(titleLabel)
+		addSubview(iconView)
 		addSubview(subTitleLabel)
 		button.embed(in: self)
 		bringSubviewToFront(button)
@@ -95,16 +97,16 @@ class ButtonWithSubtitle: BaseView {
 		NSLayoutConstraint.activate([
 
 			// Title
-			titleLabel.topAnchor.constraint(
+			iconView.topAnchor.constraint(
 				equalTo: topAnchor,
 				constant: ViewTraits.topMargin
 			),
-			titleLabel.leadingAnchor.constraint(
+			iconView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.leadingMargin
 			),
-			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
-			titleLabel.bottomAnchor.constraint(
+//			iconView.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
+			iconView.bottomAnchor.constraint(
 				equalTo: subTitleLabel.topAnchor,
 				constant: -ViewTraits.textMargin
 			),
@@ -142,10 +144,9 @@ class ButtonWithSubtitle: BaseView {
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
 
-	/// The  title
-	var title: String? {
+	var icon: UIImage? {
 		didSet {
-			titleLabel.text = title
+			iconView.image = icon
 		}
 	}
 

@@ -97,6 +97,8 @@
 		6D33016E25CFF19000A98C1C /* CryptoUtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33016D25CFF19000A98C1C /* CryptoUtilityTests.swift */; };
 		6D33018825CFFFC500A98C1C /* ConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33018725CFFFC500A98C1C /* ConsentViewController.swift */; };
 		6D39858625F75673000994CC /* VerifiyResultViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D39858525F75673000994CC /* VerifiyResultViewControllerTests.swift */; };
+		6D39859A25F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D39859925F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift */; };
+		6D39859B25F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D39859925F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift */; };
 		6D3C353125D41E65005D3259 /* CreateProofViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */; };
 		6D3C353225D41E65005D3259 /* CreateProofViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */; };
 		6D42BECA25F3A6B6005E628E /* InternetRequiredLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D42BEC925F3A6B6005E628E /* InternetRequiredLocalization.swift */; };
@@ -557,6 +559,7 @@
 		6D33016D25CFF19000A98C1C /* CryptoUtilityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoUtilityTests.swift; sourceTree = "<group>"; };
 		6D33018725CFFFC500A98C1C /* ConsentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentViewController.swift; sourceTree = "<group>"; };
 		6D39858525F75673000994CC /* VerifiyResultViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifiyResultViewControllerTests.swift; sourceTree = "<group>"; };
+		6D39859925F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonWithTitleImageSubtitleView.swift; sourceTree = "<group>"; };
 		6D3C353025D41E65005D3259 /* CreateProofViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProofViewContoller.swift; sourceTree = "<group>"; };
 		6D42BEC925F3A6B6005E628E /* InternetRequiredLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternetRequiredLocalization.swift; sourceTree = "<group>"; };
 		6D42BECF25F3C01F005E628E /* LaunchViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewModel.swift; sourceTree = "<group>"; };
@@ -1196,6 +1199,7 @@
 				6D92849925B5CBC0009D4350 /* BaseViewController.swift */,
 				6D92849A25B5CBC0009D4350 /* Button.swift */,
 				6D195DCB25D7CBD000E2F626 /* ButtonWithSubtitleView.swift */,
+				6D39859925F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift */,
 				6D27550925D1201800164F2E /* CardView.swift */,
 				6D67780425CEAECF00F6F2D1 /* ConsentButton.swift */,
 				6D46F05B25D915980056871B /* ErrorView.swift */,
@@ -2312,6 +2316,7 @@
 				6DB3C31125F12D6100B41B46 /* DashboardLocalization.swift in Sources */,
 				6D195DCD25D7CBD000E2F626 /* ButtonWithSubtitleView.swift in Sources */,
 				6D037A2525E66B8B006C2BFA /* Data+QR.swift in Sources */,
+				6D39859B25F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift in Sources */,
 				6DD7D87425D26D3A00B97B7F /* KeychainItem.swift in Sources */,
 				6DD7D87525D26D3A00B97B7F /* CryptoUtility.swift in Sources */,
 				6D67D8DD25D7D1F100827277 /* TokenEntryViewModel.swift in Sources */,
@@ -2512,6 +2517,7 @@
 				6DAE8BDA25CB242700AAF2A7 /* Certificates.swift in Sources */,
 				6D67D8DC25D7D1F100827277 /* TokenEntryViewModel.swift in Sources */,
 				6D5D203225BF190700DC2E27 /* Localization.swift in Sources */,
+				6D39859A25F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift in Sources */,
 				6DC6CCE425C2F7D100060237 /* KeychainItem.swift in Sources */,
 				6D33016825CFE90200A98C1C /* CryptoUtility.swift in Sources */,
 				6DE1DF6125E8D3D30091FC21 /* SecurityStrategy.swift in Sources */,
@@ -3414,7 +3420,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NETWORK_CONFIGURATION = Test;
+				NETWORK_CONFIGURATION = ACC;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;

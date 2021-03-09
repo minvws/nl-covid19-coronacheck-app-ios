@@ -29,19 +29,9 @@ extension String {
 		return Localization.string(for: "holder.tokenoverview.nocode.details")
 	}
 
-	static var holderTokenOverviewCodeTitle: String {
-
-		return Localization.string(for: "holder.tokenoverview.code.title")
-	}
-
 	static var holderTokenOverviewCodeText: String {
 
 		return Localization.string(for: "holder.tokenoverview.code.subtitle")
-	}
-
-	static var holderTokenOverviewQRTitle: String {
-
-		return Localization.string(for: "holder.tokenoverview.qr.title")
 	}
 
 	static var holderTokenOverviewQRText: String {

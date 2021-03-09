@@ -42,8 +42,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken?)
 
-	/// Navigate to Birthday entry Scene
-	func navigateToBirthdate()
+//	/// Navigate to Birthday entry Scene
+//	func navigateToBirthdate()
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
@@ -230,18 +230,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview() {
 
-		if proofManager.getBirthDate() == nil {
-			// Fill in the birhtday if there is none on the commercial token flow.
-			navigateToBirthdate()
-		} else {
-
-			let destination = TokenOverviewViewController(
-				viewModel: TokenOverviewViewModel(
-					coordinator: self
-				)
+		let destination = TokenOverviewViewController(
+			viewModel: TokenOverviewViewModel(
+				coordinator: self
 			)
-			(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-		}
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the token scanner
@@ -269,17 +263,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to Birthdate Scene
-	func navigateToBirthdate() {
-
-		let coordinator = BirthdateCoordinator(
-			navigationController: navigationController,
-			presentingViewController: sidePanel?.selectedViewController,
-			birthdateSceneDelegate: self
-		)
-
-		startChildCoordinator(coordinator)
-	}
+//	/// Navigate to Birthdate Scene
+//	func navigateToBirthdate() {
+//
+//		let coordinator = BirthdateCoordinator(
+//			navigationController: navigationController,
+//			presentingViewController: sidePanel?.selectedViewController,
+//			birthdateSceneDelegate: self
+//		)
+//
+//		startChildCoordinator(coordinator)
+//	}
 
 	/// Navigate to List Results Scene
 	func navigateToListResults() {

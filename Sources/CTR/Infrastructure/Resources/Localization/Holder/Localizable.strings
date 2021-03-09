@@ -88,7 +88,7 @@
 "holder.appointment.button.title" = "Maak een afspraak";
 
 /* MARK: - Holder Choose Provider */
-"holder.provider.title" = "QR-Code maken";
+"holder.provider.title" = "QR-code maken";
 "holder.provider.header" = "Waar ben je getest?";
 "holder.provider.message" = "Is je testresultaat negatief? Dan kan je er een QR-code van maken. Geef aan bij welke testlocatie je bent getest.";
 "holder.provider.ggd.title" = "GGD";
@@ -102,9 +102,7 @@
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
 "holder.tokenoverview.nocode.details" = "Als je je bij een commerciële testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.";
-"holder.tokenoverview.code.title" = "SOB-FVDKT10-T2";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code";
-"holder.tokenoverview.qr.title" = "QR";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
 /* MARK: - Holder Token Scan */
