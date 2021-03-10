@@ -12,6 +12,12 @@ class ListResultView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
+		// Dimensions
+		static let titleLineHeight: CGFloat = 22
+		static let titleKerning: CGFloat = -0.41
+		static let messageLineHeight: CGFloat = 18
+		static let messageKerning: CGFloat = -0.24
+
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let messageTopMargin: CGFloat = 4.0
@@ -39,6 +45,12 @@ class ListResultView: BaseView {
 
 	/// The message label
 	let messageLabel: Label = {
+
+		return Label(subhead: nil)
+	}()
+
+	/// The info label
+	let infoLabel: Label = {
 
 		return Label(subhead: nil)
 	}()
@@ -80,8 +92,18 @@ class ListResultView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
-		disclaimerButton.addTarget(self, action: #selector(disclaimerButtonTapped), for: .touchUpInside)
-		selectButton.addTarget(self, action: #selector(selectButtonTapped), for: .touchUpInside)
+		infoLabel.textColor = Theme.colors.launchGray
+		messageLabel.textColor = Theme.colors.launchGray
+		disclaimerButton.addTarget(
+			self,
+			action: #selector(disclaimerButtonTapped),
+			for: .touchUpInside
+		)
+		selectButton.addTarget(
+			self,
+			action: #selector(selectButtonTapped),
+			for: .touchUpInside
+		)
 	}
 
 	/// Setup the hierarchy
@@ -94,6 +116,7 @@ class ListResultView: BaseView {
 		addSubview(selectImageView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
+		addSubview(infoLabel)
 		addSubview(bottomLineView)
 		addSubview(selectButton)
 	}
@@ -165,6 +188,20 @@ class ListResultView: BaseView {
 				constant: -ViewTraits.margin
 			),
 			messageLabel.bottomAnchor.constraint(
+				equalTo: infoLabel.topAnchor,
+				constant: -ViewTraits.messageTopMargin
+			),
+
+			// Message
+			infoLabel.leadingAnchor.constraint(
+				equalTo: selectImageView.trailingAnchor,
+				constant: ViewTraits.margin
+			),
+			infoLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			infoLabel.bottomAnchor.constraint(
 				equalTo: bottomLineView.topAnchor,
 				constant: -ViewTraits.margin
 			),
@@ -229,14 +266,30 @@ class ListResultView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 		}
 	}
 
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.text = message
+			messageLabel.attributedText = message?.setLineHeight(
+				ViewTraits.messageLineHeight,
+				kerning: ViewTraits.messageKerning
+			)
+		}
+	}
+
+	/// The info
+	var info: String? {
+		didSet {
+			infoLabel.attributedText = info?.setLineHeight(
+				ViewTraits.messageLineHeight,
+				kerning: ViewTraits.messageKerning
+			)
 		}
 	}
 

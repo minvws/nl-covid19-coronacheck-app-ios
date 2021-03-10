@@ -61,6 +61,7 @@ class ListResultsViewController: BaseViewController {
 				self?.sceneView.resultView.header = .holderTestResultsRecent
 				self?.sceneView.resultView.title = .holderTestResultsNegative
 				self?.sceneView.resultView.message = item.date
+				self?.sceneView.resultView.info = item.holder
 
 			} else {
 				self?.sceneView.resultView.isHidden = true

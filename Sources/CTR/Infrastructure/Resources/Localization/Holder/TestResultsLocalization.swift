@@ -74,6 +74,11 @@ extension String {
 		return Localization.string(for: "holder.testresults.negative")
 	}
 
+	static var holderTestResultsIdentity: String {
+
+		return Localization.string(for: "holder.testresults.identity")
+	}
+
 	static var holderTestResultsAlertTitle: String {
 
 		return Localization.string(for: "holder.testresults.alert.title")
@@ -92,5 +97,65 @@ extension String {
 	static var holderTestResultsAlertCancel: String {
 
 		return Localization.string(for: "holder.testresults.alert.cancel")
+	}
+
+	static var shortJanuary: String {
+
+		return Localization.string(for: "holder.testresults.january")
+	}
+
+	static var shortFebruary: String {
+
+		return Localization.string(for: "holder.testresults.february")
+	}
+
+	static var shortMarch: String {
+
+		return Localization.string(for: "holder.testresults.march")
+	}
+
+	static var shortApril: String {
+
+		return Localization.string(for: "holder.testresults.april")
+	}
+
+	static var shortMay: String {
+
+		return Localization.string(for: "holder.testresults.may")
+	}
+
+	static var shortJune: String {
+
+		return Localization.string(for: "holder.testresults.june")
+	}
+
+	static var shortJuly: String {
+
+		return Localization.string(for: "holder.testresults.july")
+	}
+
+	static var shortAugust: String {
+
+		return Localization.string(for: "holder.testresults.august")
+	}
+
+	static var shortSeptember: String {
+
+		return Localization.string(for: "holder.testresults.september")
+	}
+
+	static var shortOctober: String {
+
+		return Localization.string(for: "holder.testresults.october")
+	}
+
+	static var shortNovember: String {
+
+		return Localization.string(for: "holder.testresults.november")
+	}
+
+	static var shortDecember: String {
+
+		return Localization.string(for: "holder.testresults.december")
 	}
 }

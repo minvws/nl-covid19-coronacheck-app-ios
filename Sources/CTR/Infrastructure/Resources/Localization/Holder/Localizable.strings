@@ -164,11 +164,24 @@
 "holder.testresults.already.text" = "<p>Je testresultaat is al opgehaald en verwerkt in een QR-code.</p><p></p><p>Heb je het idee dat dit niet klopt? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan %@ uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
-"holder.testresults.negative" = "Negatief testresultaat";
+"holder.testresults.negative" = "Negatief testresultaat (geen corona)";
+"holder.testresults.identity" = "Identificatie gegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.testresults.alert.message" = "Je kan later vanaf Mijn overzicht opnieuw een QR-code maken.";
 "holder.testresults.alert.ok" = "Ja, Stop";
 "holder.testresults.alert.cancel" = "Nee, terug";
+"holder.testresults.january" = "JAN";
+"holder.testresults.february" = "FEB";
+"holder.testresults.march" = "MAR";
+"holder.testresults.april" = "APR";
+"holder.testresults.may" = "MEI";
+"holder.testresults.june" = "JUN";
+"holder.testresults.july" = "JUL";
+"holder.testresults.august" = "AUG";
+"holder.testresults.september" = "SEP";
+"holder.testresults.october" = "OKT";
+"holder.testresults.november" = "NOV";
+"holder.testresults.december" = "DEC";
 
 /* MARK: - Holder Create Proof */
 "holder.proof.title" = "Van jouw testresultaat is een QR-code gemaakt";

@@ -238,7 +238,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now")
+		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now", holder: "CC 10 MAR")
 
 		// When
 		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
@@ -252,7 +252,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now")
+		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now", holder: "CC 10 MAR")
 
 		// When
 		sut?.sceneView.resultView.disclaimerButton.sendActions(for: .touchUpInside)

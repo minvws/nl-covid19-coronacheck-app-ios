@@ -15,6 +15,9 @@ class AppointmentViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: OpenUrlProtocol?
 
+	/// The general configuration
+	var generalConfiguration: ConfigurationGeneralProtocol
+
 	/// The header image
 	@Bindable private(set) var image: UIImage?
 
@@ -37,24 +40,24 @@ class AppointmentViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 
-	init(coordinator: OpenUrlProtocol, maxValidity: String) {
+	init(coordinator: OpenUrlProtocol, maxValidity: String, configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
+		self.generalConfiguration = configuration
+
 		self.title = .holderAppointmentTitle
 		self.header = .holderAppointmentHeader
 		self.body = String(format: .holderAppointmentBody, maxValidity)
 		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle
-		self.image = UIImage.appointment
+		self.image = UIImage.appointmentBig
 	}
 
 	/// The user wants more information
 	func linkedTapped() {
 
 		logInfo("Tapped on read more about test appointment")
-		if let url = URL(string: "https://coronacheck.nl/nl/faq-in-app.html") {
-			coordinator?.openUrl(url, inApp: true)
-		}
+		coordinator?.openUrl(generalConfiguration.getHolderFAQURL(), inApp: true)
 	}
 
 	/// The user wants to create an appointment

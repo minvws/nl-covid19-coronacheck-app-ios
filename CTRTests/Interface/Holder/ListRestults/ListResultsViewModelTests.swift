@@ -223,7 +223,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testButtonTappedListItemNotNil() {
 
 		// Given
-		sut?.listItem = ListResultItem(identifier: "test", date: "test")
+		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
 
 		// When
 		sut?.buttonTapped()
@@ -259,7 +259,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testDismissListItemNotNil() {
 
 		// Given
-		sut?.listItem = ListResultItem(identifier: "test", date: "test")
+		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
 
 		// When
 		sut?.dismiss()
@@ -503,5 +503,40 @@ class ListResultsViewModelTests: XCTestCase {
 			return
 		}
 		XCTAssertTrue(strongSut.showError, "Error should be true")
+	}
+
+	/// Test the display of the identity
+	func testIdentity() {
+
+		// Given
+		let examples: [String: HolderTestCredentials] = [
+			"RP 27 JAN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
+			"RP 27 FEB": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
+			"RP 27 MAR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
+			"RP 27 APR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
+			"RP 27 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
+			"RP 27 JUN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
+			"RP 27 JUL": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
+			"RP 27 AUG": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
+			"RP 27 SEP": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
+			"RP 27 OKT": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
+			"RP 27 NOV": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
+			"RP 27 DEC": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
+			"RP 05 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
+			"RP X MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
+			"RP X X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
+			"RP 27 X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
+			"RP 27 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
+			"RP 0 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
+		]
+
+		examples.forEach { expectedResult, holder in
+
+			// When
+			let result = sut?.getDisplayIdentity(holder)
+
+			// Then
+			XCTAssertEqual(expectedResult, result, "Display Indentity should match")
+		}
 	}
 }

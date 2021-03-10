@@ -11,6 +11,7 @@ struct ListResultItem {
 
 	let identifier: String
 	let date: String
+	let holder: String
 }
 
 class ListResultsViewModel: Logging {
@@ -132,13 +133,15 @@ class ListResultsViewModel: Logging {
 		self.title = .holderTestResultsResultsTitle
 		self.message = .holderTestResultsResultsText
 		self.buttonTitle = .holderTestResultsResultsButton
-		let date = parseDateFormatter.date(from: result.sampleDate)
-		let dateString = printDateFormatter.string(from: date!)
+		if let date = parseDateFormatter.date(from: result.sampleDate) {
+			let dateString = printDateFormatter.string(from: date).capitalizingFirstLetter()
 
-		self.listItem = ListResultItem(
-			identifier: result.unique,
-			date: dateString
-		)
+			self.listItem = ListResultItem(
+				identifier: result.unique,
+				date: dateString,
+				holder: String(format: .holderTestResultsIdentity, getDisplayIdentity(result.holder))
+			)
+		}
 	}
 
 	/// Formatter to parse
@@ -200,7 +203,9 @@ class ListResultsViewModel: Logging {
 	// Create the proof
 	func createProofStepTwo() {
 
-		showProgress = true
+		if !showProgress {
+			showProgress = true
+		}
 
 		// Step 2: Fetch the nonce and stoken
 		proofManager?.fetchNonce(
@@ -217,7 +222,9 @@ class ListResultsViewModel: Logging {
 	/// Fetch the proof
 	func createProofStepThree() {
 
-		showProgress = true
+		if !showProgress {
+			showProgress = true
+		}
 
 		// Step 3: Fetch the signed result
 		proofManager?.fetchSignedTestResult(
@@ -248,4 +255,40 @@ class ListResultsViewModel: Logging {
 				showError = true
 		}
 	}
+
+	/// Get a display version of the holder identity
+	/// - Parameter holder: the holder identiy
+	/// - Returns: the display version
+	func getDisplayIdentity(_ holder: HolderTestCredentials?) -> String {
+
+		guard let holder = holder else {
+			return ""
+		}
+
+		var output = ""
+		output.append(holder.firstNameInitial)
+		output.append(holder.lastNameInitial)
+		output.append(" ")
+		if let value = Int(holder.birthDay), value > 0 {
+			let formatter = NumberFormatter()
+			formatter.minimumIntegerDigits = 2
+			if let day = formatter.string(from: NSNumber(value: value)) {
+				output.append(day)
+			}
+		} else {
+			output.append(holder.birthDay)
+		}
+		output.append(" ")
+
+		if let value = Int(holder.birthMonth), value <= months.count, value > 0 {
+			output.append(months[value - 1])
+		} else {
+			output.append(holder.birthMonth)
+		}
+
+		return output
+	}
+
+	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
+							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 }
