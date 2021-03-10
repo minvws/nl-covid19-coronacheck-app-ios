@@ -122,35 +122,6 @@
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
-/* MARK: - Holder Birthday Entry */
-"holder.birthday.entry.title" = "Wat is je geboortedatum";
-"holder.birthday.entry.text" = "<p>We vragen je je geboortedatum in te vullen, zoals die op je identiteitsbewijs staat. Let op: je kan deze later niet meer aanpassen.</p><p>Zo controleren we of een testresultaat ook echt bij jou hoort.</p>";
-"holder.birthday.entry.day" = "Dag";
-"holder.birthday.entry.month" = "Maand";
-"holder.birthday.entry.year" = "Jaar";
-"holder.birthday.entry.button.title" = "Bevestig";
-"holder.birthday.entry.invalid" = "Dit is geen geldige datum";
-"holder.birthday.january" = "Januari";
-"holder.birthday.february" = "Februari";
-"holder.birthday.march" = "Maart";
-"holder.birthday.april" = "April";
-"holder.birthday.may" = "Mei";
-"holder.birthday.june" = "Juni";
-"holder.birthday.july" = "Juli";
-"holder.birthday.august" = "Augustus";
-"holder.birthday.september" = "September";
-"holder.birthday.october" = "Oktober";
-"holder.birthday.november" = "November";
-"holder.birthday.december" = "December";
-
-/* MARK: - Holder Birthday Confirmation */
-"holder.birthday.confirmation.title" = "Controleer je geboortedatum";
-"holder.birthday.confirmation.text" = "<p>Komt <b>%@</b> overeen met de geboortedatum zoals deze op je identiteitsbewijs staat?</p><p>Je kan je geboortedatum later niet aanpassen.</p>";
-"holder.birthday.confirmation.confirm" = "%@ is de geboortedatum die op mijn identiteitsbewijs staat";
-"holder.birthday.confirmation.button.title" = "Bevestig";
-"holder.birthday.confirmation.adjust.title" = "Pas geboortedatum aan";
-"holder.birthday.confirmation.finished" = "Geboortedatum\ningevuld";
-
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
@@ -182,12 +153,6 @@
 "holder.testresults.october" = "OKT";
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
-
-/* MARK: - Holder Create Proof */
-"holder.proof.title" = "Van jouw testresultaat is een QR-code gemaakt";
-"holder.proof.text" = "<p>In de QR-code is verwerkt dat je <b>negatief getest</b> bent (geen corona) op <b>%@</b>.</p><p>In deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.</p>";
-"holder.proof.text.at" = "om";
-"holder.proof.action" = "Naar mijn QR";
 
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";

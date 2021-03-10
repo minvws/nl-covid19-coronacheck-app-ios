@@ -87,6 +87,8 @@ protocol ProofManaging: AnyObject {
 enum ProofError: Error {
 
 	case invalidUrl
+
+	case missingParams
 }
 
 /// The test providers

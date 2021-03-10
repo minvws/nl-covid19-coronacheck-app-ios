@@ -416,7 +416,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		XCTAssertFalse(strongSut.showError, "Error should be false")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToCreateProofCalled, "Delegate method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
 	}
 
 	/// Test step two with an already signed result

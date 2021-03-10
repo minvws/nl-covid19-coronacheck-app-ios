@@ -245,7 +245,8 @@ class ListResultsViewModel: Logging {
 
 		switch state {
 			case .valid:
-				coordinator?.navigateToCreateProof()
+				// TODO: Announcement
+				coordinator?.navigateBackToStart()
 			case .alreadySigned:
 				reportAlreadyDone()
 			case .notNegative, .tooOld, .tooNew:

@@ -42,14 +42,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken?)
 
-//	/// Navigate to Birthday entry Scene
-//	func navigateToBirthdate()
-
 	/// Navigate to List Results Scene
 	func navigateToListResults()
-
-	/// Navigate to create proof
-	func navigateToCreateProof()
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
@@ -263,46 +257,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-//	/// Navigate to Birthdate Scene
-//	func navigateToBirthdate() {
-//
-//		let coordinator = BirthdateCoordinator(
-//			navigationController: navigationController,
-//			presentingViewController: sidePanel?.selectedViewController,
-//			birthdateSceneDelegate: self
-//		)
-//
-//		startChildCoordinator(coordinator)
-//	}
-
 	/// Navigate to List Results Scene
 	func navigateToListResults() {
 
-		let viewController = ListResultsViewController(
+		let destination = ListResultsViewController(
 			viewModel: ListResultsViewModel(
 				coordinator: self,
 				proofManager: proofManager,
 				maxValidity: maxValidity
 			)
 		)
-		let destination = UINavigationController(rootViewController: viewController)
-		navigationController = destination
-		if #available(iOS 13.0, *) {
-			destination.isModalInPresentation = true
-		}
-		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
-	}
-
-	/// Navigate to create proof
-	func navigateToCreateProof() {
-		
-		let viewController = CreateProofViewController(
-			viewModel: CreateProofViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager
-			)
-		)
-		navigationController.pushViewController(viewController, animated: true)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the start fo the holder flow
@@ -457,19 +422,5 @@ extension HolderCoordinator: OnboardingDelegate {
 
 		// Navigate to Holder Start.
 		navigateToHolderStart()
-	}
-}
-
-// MARK: - BirthdateSceneDelegate
-
-extension HolderCoordinator: BirthdateSceneDelegate {
-
-	/// User confirmed the birthdate
-	func birthdateConfirmed() {
-
-		if let birthdateCoordinator = childCoordinators.first {
-			removeChildCoordinator(birthdateCoordinator)
-		}
-		navigateToTokenOverview()
 	}
 }
