@@ -203,7 +203,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = AppointmentViewController(
 			viewModel: AppointmentViewModel(
 				coordinator: self,
-				maxValidity: String(maxValidity)
+				maxValidity: String(maxValidity),
+				configuration: generalConfiguration
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
