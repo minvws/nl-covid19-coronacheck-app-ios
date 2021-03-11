@@ -31,6 +31,10 @@ class VerifyResultViewModelTests: XCTestCase {
 			coordinator: verifyCoordinatorDelegateSpy,
 			attributes: Attributes(
 				cryptoAttributes: CrypoAttributes(
+					birthDay: nil,
+					birthMonth: nil,
+					firstNameInitial: nil,
+					lastNameInitial: nil,
 					sampleTime: "test",
 					testType: "test"
 				),
@@ -48,6 +52,10 @@ class VerifyResultViewModelTests: XCTestCase {
 		// Given
 		sut?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "test",
 				testType: "demo"
 			),
@@ -69,6 +77,10 @@ class VerifyResultViewModelTests: XCTestCase {
 		// Given
 		sut?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "test",
 				testType: "pcr"
 			),
@@ -92,6 +104,10 @@ class VerifyResultViewModelTests: XCTestCase {
 		// Given
 		sut?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "\(timeStamp40SecAgo)",
 				testType: "pcr"
 			),
