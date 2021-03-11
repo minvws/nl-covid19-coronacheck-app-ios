@@ -19,6 +19,8 @@ class ResultView: BaseView {
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let imageMargin: CGFloat = 70.0
+		static let verifiedMessageMargin: CGFloat = UIDevice.current.isSmallScreen ? 95.0 : 108.0
+		static let identityTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 20.0
 	}
 
 	let imageView: UIImageView = {
@@ -38,7 +40,15 @@ class ResultView: BaseView {
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(bodyMedium: nil).multiline()
+		return Label(title3Medium: nil).multiline()
+	}()
+
+	let identityView: IdentityView = {
+
+		let view = IdentityView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
+		return view
 	}()
 
 	/// the scan button
@@ -49,6 +59,8 @@ class ResultView: BaseView {
 		button.rounded = true
 		return button
 	}()
+
+	var messageTopConstraint: NSLayoutConstraint?
 
 	/// setup the views
 	override func setupViews() {
@@ -68,6 +80,7 @@ class ResultView: BaseView {
 		addSubview(imageView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
+		addSubview(identityView)
 		addSubview(primaryButton)
 	}
 
@@ -77,7 +90,7 @@ class ResultView: BaseView {
 		NSLayoutConstraint.activate([
 
 			// Image
-			imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: ViewTraits.margin),
+			imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
 			imageView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -91,7 +104,7 @@ class ResultView: BaseView {
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: imageView.bottomAnchor,
-				constant: ViewTraits.imageMargin
+				constant: 2 * ViewTraits.margin
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -102,11 +115,13 @@ class ResultView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Message
-			messageLabel.topAnchor.constraint(
+			identityView.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.identityTopMargin
 			),
+			identityView.centerXAnchor.constraint(equalTo: centerXAnchor),
+
+			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
@@ -125,7 +140,15 @@ class ResultView: BaseView {
 				constant: -ViewTraits.margin
 			)
 		])
+
+		messageTopConstraint = messageLabel.topAnchor.constraint(
+			equalTo: titleLabel.bottomAnchor,
+			constant: 2 * ViewTraits.margin
+		)
+		messageTopConstraint?.isActive = true
 	}
+
+	// MARK: Public Access
 
 	var primaryTitle: String = "" {
 		didSet {
@@ -166,8 +189,13 @@ class ResultView: BaseView {
 		primaryButtonTappedCommand?()
 	}
 
-	// MARK: Public Access
-
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	func setupForVerified() {
+
+		identityView.isHidden = false
+		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
+		messageLabel.font = Theme.fonts.body
+	}
 }

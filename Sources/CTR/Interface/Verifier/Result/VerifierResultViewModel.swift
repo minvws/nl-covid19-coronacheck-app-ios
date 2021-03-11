@@ -40,6 +40,9 @@ class VerifierResultViewModel: Logging {
 	/// The message of the scene
 	@Bindable private(set) var message: String = ""
 
+	/// The identity of the holder
+	@Bindable private(set) var identity: [(String, String)] = []
+
 	/// The linked message of the scene
 	@Bindable var linkedMessage: String?
 
@@ -54,7 +57,10 @@ class VerifierResultViewModel: Logging {
 	///   - coordinator: the dismissable delegae
 	///   - attributes: the decrypted attributes
 	///   - maxValidity: the maximum validity of a test in hours
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable), attributes: Attributes, maxValidity: Int) {
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		attributes: Attributes,
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.attributes = attributes
@@ -80,11 +86,25 @@ class VerifierResultViewModel: Logging {
 			showAccessAllowed()
 			allowAccess = .verified
 
+			let holder = HolderTestCredentials(
+				firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
+				lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
+				birthDay: attributes.cryptoAttributes.birthDay ?? "",
+				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
+			)
+			let mapping = holder.mapIdentity(months: months)
+			for element in mapping {
+				identity.append(("", element.isEmpty ? "_" : element))
+			}
+
 		} else {
 			showAccessDenied()
 			allowAccess = .denied
 		}
 	}
+
+	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
+							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 
 	/// Is the sample time still valid
 	/// - Parameter now: the now time stamp
@@ -127,7 +147,7 @@ class VerifierResultViewModel: Logging {
 
 		title = .verifierResultAccessTitle
 		message =  .verifierResultAccessMessage
-		linkedMessage = nil
+		linkedMessage = .verifierResultAccessLink
 	}
 
 	/// Show access denied
@@ -135,7 +155,7 @@ class VerifierResultViewModel: Logging {
 
 		title = .verifierResultDeniedTitle
 		message = .verifierResultDeniedMessage
-//		linkedMessage = .verifierResultDeniedLink
+		linkedMessage = .verifierResultDeniedLink
 	}
 
 	/// Show access allowed
@@ -155,10 +175,10 @@ class VerifierResultViewModel: Logging {
 	func linkTapped() {
 
 		logDebug("Tapped on link")
-		coordinator?.presentInformationPage(
-			title: .verifierDeniedTitle,
-			body: .verifierDeniedMessage,
-			showBottomCloseButton: true
-		)
+//		coordinator?.presentInformationPage(
+//			title: .verifierDeniedTitle,
+//			body: .verifierDeniedMessage,
+//			showBottomCloseButton: true
+//		)
 	}
 }

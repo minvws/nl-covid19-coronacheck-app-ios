@@ -91,13 +91,26 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.access.message" = "De bezoeker heeft een geldig negatief testbewijs (geen corona).";
+"verifier.result.access.message" = "Check of de identificatie gegevens overeenkomen met gegevens op het identiteitsbewijs. Lees meer.";
+"verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.demo.message" = "";
 "verifier.result.denied.title" = "Ongeldige QR-code";
-"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs.";
-"verifier.result.denied.link" = "Lees de mogelijke oorzaken";
+"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs. Lees mogelijke oorzaken.";
+"verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
+"holder.testresults.january" = "JAN";
+"holder.testresults.february" = "FEB";
+"holder.testresults.march" = "MAR";
+"holder.testresults.april" = "APR";
+"holder.testresults.may" = "MEI";
+"holder.testresults.june" = "JUN";
+"holder.testresults.july" = "JUL";
+"holder.testresults.august" = "AUG";
+"holder.testresults.september" = "SEP";
+"holder.testresults.october" = "OKT";
+"holder.testresults.november" = "NOV";
+"holder.testresults.december" = "DEC";
 
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Controleer gegevens";

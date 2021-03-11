@@ -49,6 +49,9 @@ class VerifierResultViewController: BaseViewController {
 			if $0 == .verified {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.backgroundColor = Theme.colors.access
+
+				self?.sceneView.setupForVerified()
+
 			} else if $0 == .demo {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.backgroundColor = Theme.colors.demo
@@ -56,6 +59,11 @@ class VerifierResultViewController: BaseViewController {
 				self?.sceneView.imageView.image = .denied
 				self?.sceneView.backgroundColor = Theme.colors.denied
 			}
+		}
+
+		viewModel.$identity.binding = { [weak self] in
+
+			self?.sceneView.identityView.elements = $0
 		}
 
 		viewModel.$linkedMessage.binding = { [weak self] in

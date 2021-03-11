@@ -19,6 +19,11 @@ extension String {
 		return Localization.string(for: "verifier.result.access.message")
 	}
 
+	static var verifierResultAccessLink: String {
+
+		return Localization.string(for: "verifier.result.access.link")
+	}
+
 	static var verifierResultDeniedTitle: String {
 
 		return Localization.string(for: "verifier.result.denied.title")
