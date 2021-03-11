@@ -15,7 +15,7 @@
 #import <openssl/x509_vfy.h>
 #import <Security/Security.h>
 
-#define __DEBUG
+//#define __DEBUG
 
 #ifdef __DEBUG
 #warning "Warning: DEBUGing compiled in"

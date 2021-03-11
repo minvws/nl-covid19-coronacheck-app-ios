@@ -31,6 +31,10 @@ class VerifyResultViewControllerTests: XCTestCase {
 			coordinator: verifyCoordinatorDelegateSpy,
 			attributes: Attributes(
 				cryptoAttributes: CrypoAttributes(
+					birthDay: nil,
+					birthMonth: nil,
+					firstNameInitial: nil,
+					lastNameInitial: nil,
 					sampleTime: "test",
 					testType: "test"
 				),
@@ -63,6 +67,10 @@ class VerifyResultViewControllerTests: XCTestCase {
 		// Given
 		viewModel?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "test",
 				testType: "demo"
 			),
@@ -90,6 +98,10 @@ class VerifyResultViewControllerTests: XCTestCase {
 		// Given
 		viewModel?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "test",
 				testType: "pcr"
 			),
@@ -117,6 +129,10 @@ class VerifyResultViewControllerTests: XCTestCase {
 		let timeStamp48HoursAgo = Date().timeIntervalSince1970 - (48 * 60 * 60) - 40
 		viewModel?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "\(timeStamp48HoursAgo)",
 				testType: "pcr"
 			),
@@ -144,6 +160,10 @@ class VerifyResultViewControllerTests: XCTestCase {
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
 		viewModel?.attributes = Attributes(
 			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
 				sampleTime: "\(timeStamp40SecAgo)",
 				testType: "pcr"
 			),

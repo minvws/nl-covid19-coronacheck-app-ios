@@ -41,6 +41,7 @@ enum HTTPHeaderKey: String {
     case contentType = "Content-Type"
     case acceptedContentType = "Accept"
 	case authorization = "Authorization"
+	case tokenProtocolVersion = "CoronaCheck-Protocol-Version"
 }
 
 enum HTTPContentType: String {

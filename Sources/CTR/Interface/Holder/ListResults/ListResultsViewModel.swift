@@ -11,6 +11,7 @@ struct ListResultItem {
 
 	let identifier: String
 	let date: String
+	let holder: String
 }
 
 class ListResultsViewModel: Logging {
@@ -29,7 +30,6 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var buttonTitle: String
 	@Bindable private(set) var recentHeader: String
-	@Bindable private(set) var tooltipText: String
 	@Bindable var showAlert: Bool = false
 	@Bindable var showError: Bool = false
 	@Bindable var listItem: ListResultItem?
@@ -53,7 +53,6 @@ class ListResultsViewModel: Logging {
 		self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
 		self.buttonTitle = .holderTestResultsBackToMenuButton
 		self.recentHeader = .holderTestResultsRecent
-		self.tooltipText = String(format: .holderTestResultsDisclaimer, String(maxValidity))
 		self.listItem = nil
 	}
 
@@ -132,13 +131,15 @@ class ListResultsViewModel: Logging {
 		self.title = .holderTestResultsResultsTitle
 		self.message = .holderTestResultsResultsText
 		self.buttonTitle = .holderTestResultsResultsButton
-		let date = parseDateFormatter.date(from: result.sampleDate)
-		let dateString = printDateFormatter.string(from: date!)
+		if let date = parseDateFormatter.date(from: result.sampleDate) {
+			let dateString = printDateFormatter.string(from: date).capitalizingFirstLetter()
 
-		self.listItem = ListResultItem(
-			identifier: result.unique,
-			date: dateString
-		)
+			self.listItem = ListResultItem(
+				identifier: result.unique,
+				date: dateString,
+				holder: String(format: .holderTestResultsIdentity, getDisplayIdentity(result.holder))
+			)
+		}
 	}
 
 	/// Formatter to parse
@@ -180,6 +181,11 @@ class ListResultsViewModel: Logging {
 		coordinator?.navigateBackToStart()
 	}
 
+	func disclaimerTapped() {
+
+		coordinator?.navigateToAboutTestResult()
+	}
+
 	// Create the proof
 	func createProofStepOne() {
 
@@ -200,7 +206,9 @@ class ListResultsViewModel: Logging {
 	// Create the proof
 	func createProofStepTwo() {
 
-		showProgress = true
+		if !showProgress {
+			showProgress = true
+		}
 
 		// Step 2: Fetch the nonce and stoken
 		proofManager?.fetchNonce(
@@ -217,7 +225,9 @@ class ListResultsViewModel: Logging {
 	/// Fetch the proof
 	func createProofStepThree() {
 
-		showProgress = true
+		if !showProgress {
+			showProgress = true
+		}
 
 		// Step 3: Fetch the signed result
 		proofManager?.fetchSignedTestResult(
@@ -238,7 +248,8 @@ class ListResultsViewModel: Logging {
 
 		switch state {
 			case .valid:
-				coordinator?.navigateToCreateProof()
+				// TODO: Announcement
+				coordinator?.navigateBackToStart()
 			case .alreadySigned:
 				reportAlreadyDone()
 			case .notNegative, .tooOld, .tooNew:
@@ -248,4 +259,25 @@ class ListResultsViewModel: Logging {
 				showError = true
 		}
 	}
+
+	/// Get a display version of the holder identity
+	/// - Parameter holder: the holder identiy
+	/// - Returns: the display version
+	func getDisplayIdentity(_ holder: HolderTestCredentials?) -> String {
+
+		guard let holder = holder else {
+			return ""
+		}
+
+		let parts = holder.mapIdentity(months: months)
+		var output = ""
+		for part in parts {
+			output.append(part)
+			output.append(" ")
+		}
+		return output.trimmingCharacters(in: .whitespaces)
+	}
+
+	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
+							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 }

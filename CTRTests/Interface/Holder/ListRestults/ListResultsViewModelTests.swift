@@ -119,13 +119,13 @@ class ListResultsViewModelTests: XCTestCase {
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
 
-	/// Test the check result method with a too old test result
+	/// Test the check result method with a too new test result
 	func testCheckResultTooNew() {
 
 		// Given
 		let now = Date().timeIntervalSince1970 + 200
 
-		let tooOldWrapper = TestResultWrapper(
+		let tooNewWrapper = TestResultWrapper(
 			providerIdentifier: "testCheckResultTooNew",
 			protocolVersion: "1.0",
 			result: TestResult(
@@ -138,7 +138,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooOldWrapper
+		proofManagingSpy.testResultWrapper = tooNewWrapper
 
 		// When
 		sut?.checkResult()
@@ -150,13 +150,13 @@ class ListResultsViewModelTests: XCTestCase {
 		XCTAssertNil(sut?.listItem, "Selected item should be nil")
 	}
 
-	/// Test the check result method with a too old test result
-	func testCheckResultValid() {
+	/// Test the check result method with a valid test result
+	func testCheckResultValidProtocolVersionOne() {
 
 		// Given
 		let now = Date().timeIntervalSince1970 - 200
 
-		let tooOldWrapper = TestResultWrapper(
+		let validProtocolOne = TestResultWrapper(
 			providerIdentifier: "testCheckResultValid",
 			protocolVersion: "1.0",
 			result: TestResult(
@@ -169,7 +169,44 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooOldWrapper
+		proofManagingSpy.testResultWrapper = validProtocolOne
+
+		// When
+		sut?.checkResult()
+
+		// Then
+		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
+		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
+		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
+		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultValid", "Identifier should match")
+	}
+
+	/// Test the check result method with a valid test result
+	func testCheckResultValidProtocolVersionTwo() {
+
+		// Given
+		let now = Date().timeIntervalSince1970 - 200
+
+		let validProtocolTwo = TestResultWrapper(
+			providerIdentifier: "testCheckResultValid",
+			protocolVersion: "2.0",
+			result: TestResult(
+				unique: "testCheckResultValid",
+				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
+				testType: "test",
+				negativeResult: true,
+				holder: HolderTestCredentials(
+					firstNameInitial: "T",
+					lastNameInitial: "T",
+					birthDay: "1",
+					birthMonth: "1"
+				),
+				checksum: nil
+			),
+			status: .complete
+		)
+		proofManagingSpy.testResultWrapper = validProtocolTwo
 
 		// When
 		sut?.checkResult()
@@ -186,7 +223,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testButtonTappedListItemNotNil() {
 
 		// Given
-		sut?.listItem = ListResultItem(identifier: "test", date: "test")
+		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
 
 		// When
 		sut?.buttonTapped()
@@ -222,7 +259,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testDismissListItemNotNil() {
 
 		// Given
-		sut?.listItem = ListResultItem(identifier: "test", date: "test")
+		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
 
 		// When
 		sut?.dismiss()
@@ -379,7 +416,7 @@ class ListResultsViewModelTests: XCTestCase {
 
 		XCTAssertFalse(strongSut.showError, "Error should be false")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToCreateProofCalled, "Delegate method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
 	}
 
 	/// Test step two with an already signed result
@@ -466,5 +503,40 @@ class ListResultsViewModelTests: XCTestCase {
 			return
 		}
 		XCTAssertTrue(strongSut.showError, "Error should be true")
+	}
+
+	/// Test the display of the identity
+	func testIdentity() {
+
+		// Given
+		let examples: [String: HolderTestCredentials] = [
+			"R P 27 JAN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
+			"R P 27 FEB": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
+			"R P 27 MAR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
+			"R P 27 APR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
+			"R P 27 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
+			"R P 27 JUN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
+			"R P 27 JUL": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
+			"R P 27 AUG": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
+			"R P 27 SEP": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
+			"R P 27 OKT": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
+			"R P 27 NOV": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
+			"R P 27 DEC": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
+			"R P 05 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
+			"R P X MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
+			"R P X X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
+			"R P 27 X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
+			"R P 27 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
+			"R P 0 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
+		]
+
+		examples.forEach { expectedResult, holder in
+
+			// When
+			let result = sut?.getDisplayIdentity(holder)
+
+			// Then
+			XCTAssertEqual(expectedResult, result, "Display Indentity should match")
+		}
 	}
 }

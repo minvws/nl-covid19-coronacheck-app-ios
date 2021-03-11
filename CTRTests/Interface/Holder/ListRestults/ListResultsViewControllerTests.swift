@@ -238,7 +238,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now")
+		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now", holder: "CC 10 MAR")
 
 		// When
 		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
@@ -252,17 +252,13 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now")
+		viewModel?.listItem = ListResultItem(identifier: "testNextButtonWithItems", date: "Now", holder: "CC 10 MAR")
 
 		// When
 		sut?.sceneView.resultView.disclaimerButton.sendActions(for: .touchUpInside)
 
 		// Then
-		guard let tooltip = sut?.tooltip else {
-			XCTFail("Can't unwrap tooltip")
-			return
-		}
-		XCTAssertFalse(tooltip.isHidden, "Tooltip should be visible")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToAboutTestResultCalled, "Delegate method should be called")
 	}
 
 	func testDismiss() {

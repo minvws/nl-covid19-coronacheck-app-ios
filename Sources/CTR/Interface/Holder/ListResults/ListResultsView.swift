@@ -15,6 +15,7 @@ class ListResultsView: BaseView {
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
 		static let titleLineHeight: CGFloat = 26
+		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
 		static let imageRatio: CGFloat = 0.75
 
@@ -141,7 +142,10 @@ class ListResultsView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 		}
 	}
 

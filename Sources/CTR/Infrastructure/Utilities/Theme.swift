@@ -44,6 +44,10 @@ class Fonts {
         font(textStyle: .headline) // Size 17 points
     }
 
+	var headlineBold: UIFont {
+		font(textStyle: .headline, isBold: true) // Size 17 points
+	}
+
     var body: UIFont {
         font(textStyle: .body) // Size 17 points
     }

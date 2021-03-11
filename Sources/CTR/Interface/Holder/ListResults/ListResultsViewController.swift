@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import EasyTipView
 import MBProgressHUD
 
 class ListResultsViewController: BaseViewController {
@@ -61,6 +60,7 @@ class ListResultsViewController: BaseViewController {
 				self?.sceneView.resultView.header = .holderTestResultsRecent
 				self?.sceneView.resultView.title = .holderTestResultsNegative
 				self?.sceneView.resultView.message = item.date
+				self?.sceneView.resultView.info = item.holder
 
 			} else {
 				self?.sceneView.resultView.isHidden = true
@@ -83,41 +83,23 @@ class ListResultsViewController: BaseViewController {
 		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.tooltip?.dismiss()
+
 			self?.viewModel.buttonTapped()
 		}
 
-		viewModel.$tooltipText.binding = { [weak self] in
+		sceneView.resultView.disclaimerButtonTappedCommand = { [weak self] in
 
-			var preferences = EasyTipView.Preferences()
-			preferences.drawing.foregroundColor = Theme.colors.viewControllerBackground
-			preferences.drawing.backgroundColor = Theme.colors.dark
-			preferences.drawing.font = Theme.fonts.footnoteMontserrat
-			preferences.drawing.arrowPosition = .bottom
-
-			self?.tooltip = EasyTipView(text: $0, preferences: preferences)
+			self?.viewModel.disclaimerTapped()
 		}
 
-		sceneView.resultView.disclaimerButtonTappedCommand = {
-
-			self.tooltip?.show(forView: self.sceneView.resultView.disclaimerButton)
-		}
-
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCustomBackButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
 
-	var tooltip: EasyTipView?
-
-	override func viewWillDisappear(_ animated: Bool) {
-
-		super.viewWillDisappear(animated)
-		tooltip?.dismiss()
-	}
-
 	override func viewWillAppear(_ animated: Bool) {
+
 		super.viewWillAppear(animated)
 		viewModel.checkResult()
 	}
@@ -125,7 +107,6 @@ class ListResultsViewController: BaseViewController {
 	/// User tapped on the button
 	@objc func closeButtonTapped() {
 
-		tooltip?.dismiss()
 		viewModel.dismiss()
 	}
 

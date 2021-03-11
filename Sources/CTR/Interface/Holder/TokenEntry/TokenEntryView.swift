@@ -16,12 +16,13 @@ class TokenEntryView: ScrollView {
 		static let buttonHeight: CGFloat = 52
 		static let buttonWidth: CGFloat = 212.0
 		static let titleLineHeight: CGFloat = 26
+		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
 
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let buttonMargin: CGFloat = 54.0
-		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
+		static let titleTopMargin: CGFloat = 24.0
 		static let messageTopMargin: CGFloat = 24.0
 		static let entryMargin: CGFloat = 16.0
 		static let errorMargin: CGFloat = 8.0
@@ -89,7 +90,7 @@ class TokenEntryView: ScrollView {
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
+				equalTo: contentView.topAnchor,
 				constant: ViewTraits.titleTopMargin
 			),
 			titleLabel.leadingAnchor.constraint(
@@ -161,7 +162,10 @@ class TokenEntryView: ScrollView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 		}
 	}
 

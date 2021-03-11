@@ -125,6 +125,10 @@ class DashboardViewModelTests: XCTestCase {
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			firstNameInitial: nil,
+			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)
@@ -152,6 +156,10 @@ class DashboardViewModelTests: XCTestCase {
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			firstNameInitial: nil,
+			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)
@@ -194,6 +202,10 @@ class DashboardViewModelTests: XCTestCase {
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			firstNameInitial: nil,
+			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)

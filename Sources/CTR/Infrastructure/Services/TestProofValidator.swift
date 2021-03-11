@@ -50,6 +50,7 @@ class ProofValidator: ProofValidatorProtocol, Logging {
 
 		let now = Date().timeIntervalSince1970
 		let validity = TimeInterval(maxValidity * 60 * 60)
+		logDebug("Checking with \(maxValidity) hours")
 		if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 
 			let validUntilDate = Date(timeIntervalSince1970: sampleTimeStamp + validity)
