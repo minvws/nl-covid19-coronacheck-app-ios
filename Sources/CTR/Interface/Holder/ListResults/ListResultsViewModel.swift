@@ -183,6 +183,11 @@ class ListResultsViewModel: Logging {
 		coordinator?.navigateBackToStart()
 	}
 
+	func disclaimerTapped() {
+
+		coordinator?.navigateToAboutTestResult()
+	}
+
 	// Create the proof
 	func createProofStepOne() {
 
@@ -266,28 +271,13 @@ class ListResultsViewModel: Logging {
 			return ""
 		}
 
+		let parts = holder.mapIdentity(months: months)
 		var output = ""
-		output.append(holder.firstNameInitial)
-		output.append(holder.lastNameInitial)
-		output.append(" ")
-		if let value = Int(holder.birthDay), value > 0 {
-			let formatter = NumberFormatter()
-			formatter.minimumIntegerDigits = 2
-			if let day = formatter.string(from: NSNumber(value: value)) {
-				output.append(day)
-			}
-		} else {
-			output.append(holder.birthDay)
+		for part in parts {
+			output.append(part)
+			output.append(" ")
 		}
-		output.append(" ")
-
-		if let value = Int(holder.birthMonth), value <= months.count, value > 0 {
-			output.append(months[value - 1])
-		} else {
-			output.append(holder.birthMonth)
-		}
-
-		return output
+		return output.trimmingCharacters(in: .whitespaces)
 	}
 
 	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,

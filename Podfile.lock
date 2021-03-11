@@ -8,27 +8,27 @@ PODS:
   - CocoaLumberjack/Swift (3.7.0):
     - CocoaLumberjack/Core
   - EasyTipView (2.1.0)
-  - Firebase/CoreOnly (7.7.0):
-    - FirebaseCore (= 7.7.0)
-  - Firebase/Crashlytics (7.7.0):
+  - Firebase/CoreOnly (7.8.0):
+    - FirebaseCore (= 7.8.0)
+  - Firebase/Crashlytics (7.8.0):
     - Firebase/CoreOnly
-    - FirebaseCrashlytics (~> 7.7.0)
-  - FirebaseCore (7.7.0):
+    - FirebaseCrashlytics (~> 7.8.0)
+  - FirebaseCore (7.8.0):
     - FirebaseCoreDiagnostics (~> 7.4)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
-  - FirebaseCoreDiagnostics (7.7.0):
+  - FirebaseCoreDiagnostics (7.8.0):
     - GoogleDataTransport (~> 8.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/Logger (~> 7.0)
     - nanopb (~> 2.30907.0)
-  - FirebaseCrashlytics (7.7.0):
+  - FirebaseCrashlytics (7.8.0):
     - FirebaseCore (~> 7.0)
     - FirebaseInstallations (~> 7.0)
     - GoogleDataTransport (~> 8.0)
     - nanopb (~> 2.30907.0)
     - PromisesObjC (~> 1.2)
-  - FirebaseInstallations (7.7.0):
+  - FirebaseInstallations (7.8.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
@@ -62,6 +62,7 @@ PODS:
   - OHHTTPStubs/Swift (9.1.0):
     - OHHTTPStubs/Default
   - PromisesObjC (1.2.12)
+  - SheetPresentation (1.0.0)
   - ViewControllerPresentationSpy (5.0.0)
 
 DEPENDENCIES:
@@ -72,6 +73,7 @@ DEPENDENCIES:
   - lottie-ios (= 3.2.1)
   - MBProgressHUD (= 1.2.0)
   - OHHTTPStubs/Swift (= 9.1.0)
+  - SheetPresentation (= 1.0.0)
   - ViewControllerPresentationSpy (~> 5.0)
 
 SPEC REPOS:
@@ -91,17 +93,18 @@ SPEC REPOS:
     - nanopb
     - OHHTTPStubs
     - PromisesObjC
+    - SheetPresentation
     - ViewControllerPresentationSpy
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   CocoaLumberjack: e8955b9d337ac307103b0a34fd141c32f27e53c5
   EasyTipView: a92b6edc377b81c5ac18e9fd35d5ee78e9409488
-  Firebase: cd2ab85eec8170dc260186159f21072ecb679ad5
-  FirebaseCore: ac35d680a0bf32319a59966a1478e0741536b97b
-  FirebaseCoreDiagnostics: 179bf3831213451c8addd036aca7fcf5492ec154
-  FirebaseCrashlytics: 47af228115805e190b566db12c028263531b8ce0
-  FirebaseInstallations: 42c86e7b02ff75b7f27f85833bf5dcb5f38a9774
+  Firebase: 1e0d6610f21bdd131231525d7ee78f7f9e64e606
+  FirebaseCore: 049029df3096e5c118917029be7da75ee16f3b1b
+  FirebaseCoreDiagnostics: 066f996579cf097bdad3d7dc9a918d6b9e129c50
+  FirebaseCrashlytics: d07e61d85aabc7d38a68f94ff99995f8557ea8d0
+  FirebaseInstallations: 7f7ed0e7e27fb51f57291e1876e2ddb1524126c1
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
   lottie-ios: 106e92eaf11fbed0a76590b4cdb9b5ec26123ff7
@@ -109,8 +112,9 @@ SPEC CHECKSUMS:
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   OHHTTPStubs: 90eac6d8f2c18317baeca36698523dc67c513831
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  SheetPresentation: 80685f750eee91449f45bd84f0f07b3190a11973
   ViewControllerPresentationSpy: 7cfa8ef8ec9fa197ea58ee6e9ac72bbe5442281b
 
-PODFILE CHECKSUM: 32739efb1c19f5dcfd5da63439914157f82c4dcd
+PODFILE CHECKSUM: fb145d69a91fb4e86021f441ee1062b6b1c0e53e
 
 COCOAPODS: 1.10.1

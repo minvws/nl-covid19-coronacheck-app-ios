@@ -154,6 +154,13 @@
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
 
+/* MARK: - Holder Test Results About */
+"holder.testresults.about.title" = "Over het testresultaat";
+"holder.testresults.about.section.one" = "Met je testresultaat worden de testdatum en jouw identificatie gegevens opgehaald.";
+"holder.testresults.about.section.two" = "Je identificatie gegevens bestaan uit de eerste letter van je voornaam (1), de eerste letter van je achternaam (2), je geboortedag (3), en geboortemaand (4).";
+"holder.testresults.about.section.three" = "Kloppen jouw identificatie gegevens niet met je identiteitsbewijs?";
+"holder.testresults.about.section.four" = "Neem contact op met je testlocatie om je identificatie gegevens te laten aanpassen.";
+
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.about.text" = "CoronaCheck is ontwikkeld zodat evenementen, horeca en andere uitgaansgelegenheden veilig hun deuren kunnen openen. Met behulp van deze app komen alleen mensen met een geldig negatief testbewijs binnen. Zo trekt Nederland er langzaam maar zeker meer op uit.";

@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import SheetPresentation
 
 protocol Dismissable: AnyObject {
 
@@ -44,6 +45,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
+
+	/// Navigate to About test Result Scene
+	func navigateToAboutTestResult()
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
@@ -102,6 +106,8 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The about navigation controller
 	var aboutNavigationContoller: UINavigationController?
+
+	let sheetPresentationManager = SheetPresentationManager()
 
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -269,6 +275,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
+	/// Navigate to About test Result Scene
+	func navigateToAboutTestResult() {
+
+		let destination = AboutTestResultViewController(
+			viewModel: AboutTestResultViewModel(
+				coordinator: self,
+				proofManager: proofManager
+			)
+		)
+		destination.transitioningDelegate = sheetPresentationManager
+		destination.modalPresentationStyle = .custom
+		let navController = UINavigationController(rootViewController: destination)
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
+			navController,
+			animated: true,
+			completion: nil
+		)
 	}
 
 	/// Navigate to the start fo the holder flow

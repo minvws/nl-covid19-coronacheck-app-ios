@@ -9,6 +9,7 @@ import UIKit
 import EasyTipView
 import MBProgressHUD
 
+
 class ListResultsViewController: BaseViewController {
 	
 	private let viewModel: ListResultsViewModel
@@ -49,11 +50,11 @@ class ListResultsViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$showError.binding = { [weak self] in
-			if $0 {
-				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
-			}
-		}
+//		viewModel.$showError.binding = { [weak self] in
+//			if $0 {
+//				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
+//			}
+//		}
 
 		viewModel.$listItem.binding = { [weak self] in
 			if let item = $0 {
@@ -99,9 +100,11 @@ class ListResultsViewController: BaseViewController {
 			self?.tooltip = EasyTipView(text: $0, preferences: preferences)
 		}
 
-		sceneView.resultView.disclaimerButtonTappedCommand = {
+		sceneView.resultView.disclaimerButtonTappedCommand = { [weak self] in
 
-			self.tooltip?.show(forView: self.sceneView.resultView.disclaimerButton)
+			self?.viewModel.disclaimerTapped()
+
+//			self.tooltip?.show(forView: self.sceneView.resultView.disclaimerButton)
 		}
 
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
