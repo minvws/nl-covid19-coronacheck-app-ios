@@ -347,12 +347,6 @@ extension HolderCoordinator: Dismissable {
 
 	func dismiss() {
 
-//		if let nav = sidePanel?.presentedViewController as? UINavigationController {
-////			nav.popViewController(animated: true)
-//			nav.viewControllers.first?.dismiss(animated: true, completion: nil)
-//		}
-
-//		dashboardNavigationContoller?.dismiss(animated: true, completion: nil)
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 }
