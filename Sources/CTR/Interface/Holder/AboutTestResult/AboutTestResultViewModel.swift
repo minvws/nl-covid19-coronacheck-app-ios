@@ -50,7 +50,7 @@ class AboutTestResultViewModel: Logging {
 		var output: [(String, String)] = []
 		let parts = holder.mapIdentity(months: months)
 		for (index, part) in parts.enumerated() {
-			output.append(("\(index)", part))
+			output.append(("\(index + 1)", part))
 		}
 		return output
 	}

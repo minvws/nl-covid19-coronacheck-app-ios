@@ -40,7 +40,7 @@ class ListResultView: BaseView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(bodyMedium: nil)
+		return Label(bodyMedium: nil).multiline()
 	}()
 
 	/// The message label
@@ -155,7 +155,7 @@ class ListResultView: BaseView {
 			),
 			selectImageView.topAnchor.constraint(
 				equalTo: topLineView.bottomAnchor,
-				constant: 30
+				constant: 19
 			),
 			selectImageView.widthAnchor.constraint(equalToConstant: 20),
 			selectImageView.heightAnchor.constraint(equalToConstant: 20),
@@ -163,11 +163,11 @@ class ListResultView: BaseView {
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topLineView.bottomAnchor,
-				constant: ViewTraits.margin
+				constant: 16
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: selectImageView.trailingAnchor,
-				constant: ViewTraits.margin
+				constant: 16
 			),
 			titleLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor,

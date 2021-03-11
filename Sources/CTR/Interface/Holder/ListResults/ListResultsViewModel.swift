@@ -30,7 +30,6 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var buttonTitle: String
 	@Bindable private(set) var recentHeader: String
-	@Bindable private(set) var tooltipText: String
 	@Bindable var showAlert: Bool = false
 	@Bindable var showError: Bool = false
 	@Bindable var listItem: ListResultItem?
@@ -54,7 +53,6 @@ class ListResultsViewModel: Logging {
 		self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
 		self.buttonTitle = .holderTestResultsBackToMenuButton
 		self.recentHeader = .holderTestResultsRecent
-		self.tooltipText = String(format: .holderTestResultsDisclaimer, String(maxValidity))
 		self.listItem = nil
 	}
 

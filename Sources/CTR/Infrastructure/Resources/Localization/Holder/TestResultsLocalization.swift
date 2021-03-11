@@ -59,11 +59,6 @@ extension String {
 		return Localization.string(for: "holder.testresults.back.button")
 	}
 
-	static var holderTestResultsDisclaimer: String {
-
-		return Localization.string(for: "holder.testresults.disclaimer")
-	}
-
 	static var holderTestResultsRecent: String {
 
 		return Localization.string(for: "holder.testresults.recent")

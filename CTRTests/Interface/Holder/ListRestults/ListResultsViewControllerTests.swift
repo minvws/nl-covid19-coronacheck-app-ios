@@ -258,11 +258,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		sut?.sceneView.resultView.disclaimerButton.sendActions(for: .touchUpInside)
 
 		// Then
-		guard let tooltip = sut?.tooltip else {
-			XCTFail("Can't unwrap tooltip")
-			return
-		}
-		XCTAssertFalse(tooltip.isHidden, "Tooltip should be visible")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToAboutTestResultCalled, "Delegate method should be called")
 	}
 
 	func testDismiss() {

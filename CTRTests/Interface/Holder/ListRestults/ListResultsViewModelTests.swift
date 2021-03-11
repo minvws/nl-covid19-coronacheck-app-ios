@@ -510,24 +510,24 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		let examples: [String: HolderTestCredentials] = [
-			"RP 27 JAN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
-			"RP 27 FEB": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
-			"RP 27 MAR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
-			"RP 27 APR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
-			"RP 27 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
-			"RP 27 JUN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
-			"RP 27 JUL": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
-			"RP 27 AUG": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
-			"RP 27 SEP": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
-			"RP 27 OKT": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
-			"RP 27 NOV": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
-			"RP 27 DEC": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
-			"RP 05 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
-			"RP X MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
-			"RP X X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
-			"RP 27 X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
-			"RP 27 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
-			"RP 0 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
+			"R P 27 JAN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
+			"R P 27 FEB": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
+			"R P 27 MAR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
+			"R P 27 APR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
+			"R P 27 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
+			"R P 27 JUN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
+			"R P 27 JUL": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
+			"R P 27 AUG": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
+			"R P 27 SEP": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
+			"R P 27 OKT": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
+			"R P 27 NOV": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
+			"R P 27 DEC": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
+			"R P 05 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
+			"R P X MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
+			"R P X X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
+			"R P 27 X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
+			"R P 27 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
+			"R P 0 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
 		]
 
 		examples.forEach { expectedResult, holder in
