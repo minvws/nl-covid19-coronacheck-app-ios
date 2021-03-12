@@ -286,8 +286,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				proofManager: proofManager
 			)
 		)
-		destination.transitioningDelegate = sheetPresentationManager
-		destination.modalPresentationStyle = .custom
+//		destination.transitioningDelegate = sheetPresentationManager
+//		destination.modalPresentationStyle = .custom
 		let navController = UINavigationController(rootViewController: destination)
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(

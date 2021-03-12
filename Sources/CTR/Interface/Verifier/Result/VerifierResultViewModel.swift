@@ -42,6 +42,7 @@ class VerifierResultViewModel: Logging {
 
 	/// The identity of the holder
 	@Bindable private(set) var identity: [(String, String)] = []
+	@Bindable private(set) var checkIdentity: [(String, String)] = []
 
 	/// The linked message of the scene
 	@Bindable var linkedMessage: String?
@@ -93,8 +94,9 @@ class VerifierResultViewModel: Logging {
 				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
 			)
 			let mapping = holder.mapIdentity(months: months)
-			for element in mapping {
+			for (index, element) in mapping.enumerated() {
 				identity.append(("", element.isEmpty ? "_" : element))
+				checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
 			}
 
 		} else {
@@ -175,10 +177,62 @@ class VerifierResultViewModel: Logging {
 	func linkTapped() {
 
 		logDebug("Tapped on link")
-//		coordinator?.presentInformationPage(
-//			title: .verifierDeniedTitle,
-//			body: .verifierDeniedMessage,
-//			showBottomCloseButton: true
-//		)
+
+		switch allowAccess {
+			case .verified:
+				showVerifiedInfo()
+			case .denied:
+				showDeniedInfo()
+
+			default:
+				logDebug("No link for type \(allowAccess)")
+		}
+	}
+
+	func showVerifiedInfo() {
+
+		let label = Label(body: nil).multiline()
+		label.attributedText = .makeFromHtml(
+			text: .verifierResultCheckMessageOne,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		let label2 = Label(body: nil).multiline()
+		label2.attributedText = .makeFromHtml(
+			text: .verifierResultCheckMessageTwo,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		let identityView = IdentityView()
+		identityView.elements = checkIdentity
+
+		coordinator?.displayContent(
+			title: .verifierResultCheckTitle,
+			content: [(label, 16), (label2, 16), (identityView, 0)]
+		)
+	}
+
+	func showDeniedInfo() {
+
+		let label = Label(body: nil).multiline()
+		label.attributedText = .makeFromHtml(
+			text: .verifierDeniedMessageOne,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		let label2 = Label(body: nil).multiline()
+		label2.attributedText = .makeFromHtml(
+			text: .verifierDeniedMessageTwo,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		coordinator?.displayContent(
+			title: .verifierDeniedTitle,
+			content: [(label, 16), (label2, 0)]
+		)
 	}
 }

@@ -71,6 +71,8 @@
 		6D2023B825CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023B725CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift */; };
 		6D2023BC25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023BB25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift */; };
 		6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */; };
+		6D2604F525FAB57F0055851F /* CheckResultLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */; };
+		6D2604F625FAB57F0055851F /* CheckResultLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */; };
 		6D27550A25D1201800164F2E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27550925D1201800164F2E /* CardView.swift */; };
 		6D27551225D1259D00164F2E /* DashboardLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27551125D1259D00164F2E /* DashboardLocalization.swift */; };
 		6D2DD3F025ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */; };
@@ -236,6 +238,12 @@
 		6D9D3ABE25FA29AA0031DA5D /* TestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3ABC25FA29AA0031DA5D /* TestType.swift */; };
 		6D9D3B0E25FA3E2F0031DA5D /* clcore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9D3B0D25FA3E2F0031DA5D /* clcore.framework */; };
 		6D9D3B0F25FA3E2F0031DA5D /* clcore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9D3B0D25FA3E2F0031DA5D /* clcore.framework */; };
+		6D9D3B2A25FA7D180031DA5D /* DisplayContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3B2925FA7D180031DA5D /* DisplayContentViewModel.swift */; };
+		6D9D3B2B25FA7D180031DA5D /* DisplayContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3B2925FA7D180031DA5D /* DisplayContentViewModel.swift */; };
+		6D9D3B3325FA7E040031DA5D /* DisplayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3B3225FA7E040031DA5D /* DisplayContentView.swift */; };
+		6D9D3B3425FA7E040031DA5D /* DisplayContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3B3225FA7E040031DA5D /* DisplayContentView.swift */; };
+		6D9D3B3925FA7ED30031DA5D /* DisplayContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3B3825FA7ED30031DA5D /* DisplayContentViewController.swift */; };
+		6D9D3B3A25FA7ED30031DA5D /* DisplayContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3B3825FA7ED30031DA5D /* DisplayContentViewController.swift */; };
 		6DA08BBF25DBA91400A13187 /* ScanInstructionsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */; };
 		6DA08BC525DBAF1300A13187 /* DeniedInstructionsLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */; };
 		6DAACCFD25CEB9EB00D3C320 /* UIView+Embed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DAACCFC25CEB9EB00D3C320 /* UIView+Embed.swift */; };
@@ -534,6 +542,7 @@
 		6D2023B725CAB7E200CFCD14 /* OnboardingPageViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingPageViewControllerTests.swift; sourceTree = "<group>"; };
 		6D2023BB25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorySpy.swift; sourceTree = "<group>"; };
 		6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorTests.swift; sourceTree = "<group>"; };
+		6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckResultLocalization.swift; sourceTree = "<group>"; };
 		6D27550925D1201800164F2E /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		6D27551125D1259D00164F2E /* DashboardLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardLocalization.swift; sourceTree = "<group>"; };
 		6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Generator.swift"; sourceTree = "<group>"; };
@@ -655,6 +664,9 @@
 		6D9D3AB625FA297E0031DA5D /* SignedTestResultState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignedTestResultState.swift; sourceTree = "<group>"; };
 		6D9D3ABC25FA29AA0031DA5D /* TestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestType.swift; sourceTree = "<group>"; };
 		6D9D3B0D25FA3E2F0031DA5D /* clcore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = clcore.framework; sourceTree = "<group>"; };
+		6D9D3B2925FA7D180031DA5D /* DisplayContentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayContentViewModel.swift; sourceTree = "<group>"; };
+		6D9D3B3225FA7E040031DA5D /* DisplayContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayContentView.swift; sourceTree = "<group>"; };
+		6D9D3B3825FA7ED30031DA5D /* DisplayContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayContentViewController.swift; sourceTree = "<group>"; };
 		6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanInstructionsLocalization.swift; sourceTree = "<group>"; };
 		6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeniedInstructionsLocalization.swift; sourceTree = "<group>"; };
 		6DAACCFC25CEB9EB00D3C320 /* UIView+Embed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Embed.swift"; sourceTree = "<group>"; };
@@ -1186,6 +1198,7 @@
 		6D92849825B5CBC0009D4350 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				6D9D3B3E25FA7FBB0031DA5D /* DisplayContent */,
 				6D92849B25B5CBC0009D4350 /* BaseView.swift */,
 				6D92849925B5CBC0009D4350 /* BaseViewController.swift */,
 				6D92849A25B5CBC0009D4350 /* Button.swift */,
@@ -1262,6 +1275,16 @@
 				6D67D8DB25D7D1F100827277 /* TokenEntryViewModel.swift */,
 			);
 			path = TokenEntry;
+			sourceTree = "<group>";
+		};
+		6D9D3B3E25FA7FBB0031DA5D /* DisplayContent */ = {
+			isa = PBXGroup;
+			children = (
+				6D9D3B3225FA7E040031DA5D /* DisplayContentView.swift */,
+				6D9D3B3825FA7ED30031DA5D /* DisplayContentViewController.swift */,
+				6D9D3B2925FA7D180031DA5D /* DisplayContentViewModel.swift */,
+			);
+			path = DisplayContent;
 			sourceTree = "<group>";
 		};
 		6DAE8BCC25CB242700AAF2A7 /* NetworkManager */ = {
@@ -1343,6 +1366,7 @@
 			isa = PBXGroup;
 			children = (
 				6DA08BC325DBAF1300A13187 /* DeniedInstructionsLocalization.swift */,
+				6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */,
 				6DB3C28A25F1283600B41B46 /* Localizable.strings */,
 				6D18FBAB25DA79A40041770B /* ResultLocalization.swift */,
 				6DA08BBD25DBA91400A13187 /* ScanInstructionsLocalization.swift */,
@@ -2130,7 +2154,10 @@
 				6DD7D82F25D26D3A00B97B7F /* CryptoManager.swift in Sources */,
 				6DD7D83025D26D3A00B97B7F /* ImageView.swift in Sources */,
 				6DD7D83125D26D3A00B97B7F /* HolderDashboardView.swift in Sources */,
+				6D9D3B2B25FA7D180031DA5D /* DisplayContentViewModel.swift in Sources */,
 				6DFA692125EE312700310E15 /* Platform.swift in Sources */,
+				6D9D3B3425FA7E040031DA5D /* DisplayContentView.swift in Sources */,
+				6D9D3B3A25FA7ED30031DA5D /* DisplayContentViewController.swift in Sources */,
 				6DD7D83225D26D3A00B97B7F /* OnboardingView.swift in Sources */,
 				6DD7D83325D26D3A00B97B7F /* RemoteConfigManager.swift in Sources */,
 				6DD7D83425D26D3A00B97B7F /* SidePanelController.swift in Sources */,
@@ -2230,6 +2257,7 @@
 				6DB6C72925EF6E7A00680287 /* CryptoManaging.swift in Sources */,
 				6D164D6125F376BF00A86409 /* LaunchViewController.swift in Sources */,
 				6DD7D86A25D26D3A00B97B7F /* NetworkManager.swift in Sources */,
+				6D2604F625FAB57F0055851F /* CheckResultLocalization.swift in Sources */,
 				6DD7D86B25D26D3A00B97B7F /* GeneralImage.swift in Sources */,
 				6DD7D86C25D26D3A00B97B7F /* VerifierCoordinator.swift in Sources */,
 				6D9D3A9A25FA28E00031DA5D /* TestResult.swift in Sources */,
@@ -2331,7 +2359,10 @@
 				6DB3C2ED25F12D4400B41B46 /* ScanInstructionsLocalization.swift in Sources */,
 				6DFA692025EE312700310E15 /* Platform.swift in Sources */,
 				6D5A7BE825D147CC0008B904 /* HolderDashboardView.swift in Sources */,
+				6D9D3B2A25FA7D180031DA5D /* DisplayContentViewModel.swift in Sources */,
 				6D02446C25D3BDD200EF8D32 /* TestResultsLocalization.swift in Sources */,
+				6D9D3B3325FA7E040031DA5D /* DisplayContentView.swift in Sources */,
+				6D9D3B3925FA7ED30031DA5D /* DisplayContentViewController.swift in Sources */,
 				6D7FFAD925C9A43100B5482F /* OnboardingView.swift in Sources */,
 				6DE6FD8425C18BCA006602AC /* RemoteConfigManager.swift in Sources */,
 				6DB3C2CA25F12CCE00B41B46 /* HolderOnboardingLocalization.swift in Sources */,
@@ -2431,6 +2462,7 @@
 				6DAE8BDF25CB242700AAF2A7 /* NetworkManager.swift in Sources */,
 				6D9819D725D53A9C009A96D7 /* TokenOverviewViewController.swift in Sources */,
 				6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */,
+				6D2604F525FAB57F0055851F /* CheckResultLocalization.swift in Sources */,
 				6D014A5825F26B2E0014BAC4 /* LaunchImage.swift in Sources */,
 				6DD19DC525D67FB6001FDDDC /* Configuration+General.swift in Sources */,
 				6D9D3A9925FA28E00031DA5D /* TestResult.swift in Sources */,
