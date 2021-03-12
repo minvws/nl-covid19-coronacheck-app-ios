@@ -14,8 +14,13 @@ extension String {
 		return Localization.string(for: "verifier.denied.title")
 	}
 
-	static var verifierDeniedMessage: String {
+	static var verifierDeniedMessageOne: String {
 
-		return Localization.string(for: "verifier.denied.message")
+		return Localization.string(for: "verifier.denied.message.one")
+	}
+
+	static var verifierDeniedMessageTwo: String {
+
+		return Localization.string(for: "verifier.denied.message.two")
 	}
 }

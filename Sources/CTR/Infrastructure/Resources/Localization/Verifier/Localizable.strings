@@ -91,13 +91,26 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.access.message" = "De bezoeker heeft een geldig negatief testbewijs (geen corona).";
+"verifier.result.access.message" = "Check of de identificatie gegevens overeenkomen met gegevens op het identiteitsbewijs. Lees meer.";
+"verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.demo.message" = "";
 "verifier.result.denied.title" = "Ongeldige QR-code";
-"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs.";
-"verifier.result.denied.link" = "Lees de mogelijke oorzaken";
+"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs. Lees mogelijke oorzaken.";
+"verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
+"holder.testresults.january" = "JAN";
+"holder.testresults.february" = "FEB";
+"holder.testresults.march" = "MAR";
+"holder.testresults.april" = "APR";
+"holder.testresults.may" = "MEI";
+"holder.testresults.june" = "JUN";
+"holder.testresults.july" = "JUL";
+"holder.testresults.august" = "AUG";
+"holder.testresults.september" = "SEP";
+"holder.testresults.october" = "OKT";
+"holder.testresults.november" = "NOV";
+"holder.testresults.december" = "DEC";
 
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Controleer gegevens";
@@ -106,4 +119,5 @@
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Geen geldige QR-code";
-"verifier.denied.message" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Wat kan het betekenen</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p><p><b>En nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck app een QR-code van maken.</p>";
+"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Wat kan het betekenen</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p>";
+"verifier.denied.message.two" = "<p><b>En nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck app een QR-code van maken.</p>";

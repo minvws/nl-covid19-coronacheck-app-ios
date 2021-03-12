@@ -95,7 +95,6 @@ class InformationView: BaseView {
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-//			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
 
 			// StackView
 			stackView.widthAnchor.constraint(
@@ -109,6 +108,14 @@ class InformationView: BaseView {
 			),
 			stackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
+				constant: -ViewTraits.margin
+			),
+			stackView.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			stackView.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 

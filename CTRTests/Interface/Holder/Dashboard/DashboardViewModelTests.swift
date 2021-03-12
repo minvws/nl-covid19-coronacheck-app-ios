@@ -95,7 +95,7 @@ class DashboardViewModelTests: XCTestCase {
 		}
 		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
-		XCTAssertFalse(strongSut.hideQRForCapture, "Hide QR should not be shown")
+		XCTAssertFalse(strongSut.hideForCapture, "Hide QR should not be shown")
 	}
 
 	/// Test the validity of the credential without credential

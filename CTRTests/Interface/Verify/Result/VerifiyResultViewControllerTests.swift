@@ -207,6 +207,6 @@ class VerifyResultViewControllerTests: XCTestCase {
 		sut?.linkTapped()
 		
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.presentInformationPageCalled, "Method should be called")
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.displayContentCalled, "Method should be called")
 	}
 }

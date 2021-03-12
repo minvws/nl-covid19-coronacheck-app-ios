@@ -93,7 +93,7 @@ class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var showExpiredQR: Bool
 
 	/// Hide for screen capture
-	@Bindable var hideQRForCapture: Bool
+	@Bindable var hideForCapture: Bool
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -127,7 +127,7 @@ class HolderDashboardViewModel: Logging {
 		// Start by showing nothing
 		self.showValidQR = false
 		self.showExpiredQR = false
-		self.hideQRForCapture = false
+		self.hideForCapture = false
 
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
@@ -302,10 +302,10 @@ extension HolderDashboardViewModel {
 	@objc func preventScreenCapture() {
 
 		if UIScreen.main.isCaptured {
-			hideQRForCapture = true
+			hideForCapture = true
 			self.logWarning("Screen capture in progress")
 		} else {
-			hideQRForCapture = false
+			hideForCapture = false
 		}
 	}
 }

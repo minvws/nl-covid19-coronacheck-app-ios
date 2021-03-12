@@ -252,7 +252,7 @@ class DashboardViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// When
-		viewModel?.hideQRForCapture = true
+		viewModel?.hideForCapture = true
 
 		// Then
 		guard let strongSut = sut else {
@@ -272,7 +272,7 @@ class DashboardViewControllerTests: XCTestCase {
 		setupValidCredential()
 		loadView()
 		sut?.checkValidity()
-		viewModel?.hideQRForCapture = true
+		viewModel?.hideForCapture = true
 
 		// When
 		sut?.showLargeQR()
