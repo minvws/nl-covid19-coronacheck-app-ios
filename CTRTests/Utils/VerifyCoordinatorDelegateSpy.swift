@@ -37,7 +37,7 @@ class VerifyCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 		navigateToScanResultCalled = true
 	}
 
-	func displayContent(title: String, content: Content) {
+	func displayContent(title: String, content: [Content]) {
 
 		displayContentCalled = true
 	}

@@ -6,33 +6,36 @@
 */
 
 import UIKit
-typealias Content = [(view: UIView, customSpacing: CGFloat)]
+typealias Content = (view: UIView, customSpacing: CGFloat)
 
-class DisplayContentViewModel: Logging {
-
-	var loggingCategory: String = "DisplayContentViewModel"
+class DisplayContentViewModel: PreventableScreenCapture {
 
 	/// Coordination Delegate
 	weak var coordinator: (Dismissable)?
 
+	/// The title of the scene
 	@Bindable private (set) var title: String
 
-	@Bindable private (set) var content: Content = []
+	/// The array of content
+	@Bindable private (set) var content: [Content] = []
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
+	///   - title: the title of the scene
+	///   - content: an array of content
 	init(
 		coordinator: Dismissable,
 		title: String,
-		content: Content) {
+		content: [Content]) {
 
 		self.coordinator = coordinator
 		self.content = content
 		self.title = title
+		super.init()
 	}
 
+	/// User wants to dismiss the scene
 	func dismiss() {
 
 		coordinator?.dismiss()

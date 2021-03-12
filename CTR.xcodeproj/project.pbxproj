@@ -73,6 +73,8 @@
 		6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */; };
 		6D2604F525FAB57F0055851F /* CheckResultLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */; };
 		6D2604F625FAB57F0055851F /* CheckResultLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */; };
+		6D2604FB25FB488D0055851F /* PreventableScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604FA25FB488D0055851F /* PreventableScreenCapture.swift */; };
+		6D2604FC25FB488D0055851F /* PreventableScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604FA25FB488D0055851F /* PreventableScreenCapture.swift */; };
 		6D27550A25D1201800164F2E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27550925D1201800164F2E /* CardView.swift */; };
 		6D27551225D1259D00164F2E /* DashboardLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27551125D1259D00164F2E /* DashboardLocalization.swift */; };
 		6D2DD3F025ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */; };
@@ -543,6 +545,7 @@
 		6D2023BB25CAB86900CFCD14 /* OnboardingCoordinatorySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorySpy.swift; sourceTree = "<group>"; };
 		6D2023C525CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCoordinatorTests.swift; sourceTree = "<group>"; };
 		6D2604F425FAB57F0055851F /* CheckResultLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckResultLocalization.swift; sourceTree = "<group>"; };
+		6D2604FA25FB488D0055851F /* PreventableScreenCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreventableScreenCapture.swift; sourceTree = "<group>"; };
 		6D27550925D1201800164F2E /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		6D27551125D1259D00164F2E /* DashboardLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardLocalization.swift; sourceTree = "<group>"; };
 		6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Generator.swift"; sourceTree = "<group>"; };
@@ -1198,7 +1201,6 @@
 		6D92849825B5CBC0009D4350 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6D9D3B3E25FA7FBB0031DA5D /* DisplayContent */,
 				6D92849B25B5CBC0009D4350 /* BaseView.swift */,
 				6D92849925B5CBC0009D4350 /* BaseViewController.swift */,
 				6D92849A25B5CBC0009D4350 /* Button.swift */,
@@ -1206,12 +1208,14 @@
 				6D39859925F780A2000994CC /* ButtonWithTitleImageSubtitleView.swift */,
 				6D27550925D1201800164F2E /* CardView.swift */,
 				6D67780425CEAECF00F6F2D1 /* ConsentButton.swift */,
+				6D9D3B3E25FA7FBB0031DA5D /* DisplayContent */,
 				6D46F05B25D915980056871B /* ErrorView.swift */,
 				6D97233A25FA24B7008D93AA /* IdentityView.swift */,
 				6DD1156225D0137600DF6AF4 /* ImageView.swift */,
 				6DD19DD925D6DCF2001FDDDC /* Information */,
 				6D7F9CCB25B6E6590006F227 /* Label.swift */,
 				6D80113B25D2B6AE00D2EEAB /* Placeholder.swift */,
+				6D2604FA25FB488D0055851F /* PreventableScreenCapture.swift */,
 				6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */,
 				6D67D93C25D81FD700827277 /* Scan */,
 				6D82260925D7C142000B60F9 /* ScrolledStackView.swift */,
@@ -2165,6 +2169,7 @@
 				6DD7D83625D26D3A00B97B7F /* HolderDashboardViewModel.swift in Sources */,
 				6DD7D83725D26D3A00B97B7F /* OnboardingViewController.swift in Sources */,
 				6DBFE49425D2DB7A00B3D006 /* ProofManager.swift in Sources */,
+				6D2604FC25FB488D0055851F /* PreventableScreenCapture.swift in Sources */,
 				6D42BECB25F3A6B6005E628E /* InternetRequiredLocalization.swift in Sources */,
 				6D164D7F25F37FF500A86409 /* LaunchState.swift in Sources */,
 				6D9819F425D54FBA009A96D7 /* TokenEntryViewController.swift in Sources */,
@@ -2370,6 +2375,7 @@
 				6DD1159625D022B000DF6AF4 /* SidePanelController.swift in Sources */,
 				6DAE8BE125CB242700AAF2A7 /* Encodable+AnyEncodable.swift in Sources */,
 				6D5A7BEC25D147D90008B904 /* HolderDashboardViewModel.swift in Sources */,
+				6D2604FB25FB488D0055851F /* PreventableScreenCapture.swift in Sources */,
 				6D42BECA25F3A6B6005E628E /* InternetRequiredLocalization.swift in Sources */,
 				6D164D7E25F37FF500A86409 /* LaunchState.swift in Sources */,
 				6D6777DA25CD60FC00F6F2D1 /* OnboardingViewController.swift in Sources */,

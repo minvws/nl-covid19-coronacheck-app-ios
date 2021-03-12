@@ -29,7 +29,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title
 	///   - content: the content
-	func displayContent(title: String, content: Content)
+	func displayContent(title: String, content: [Content])
 }
 
 class VerifierCoordinator: Coordinator, Logging {
@@ -158,29 +158,29 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to the QR scanner
 	func navigateToScan() {
 
-		navigateToScanResult(
-			Attributes(
-				cryptoAttributes:
-					CrypoAttributes(
-						birthDay: "27",
-						birthMonth: "5",
-						firstNameInitial: nil, //"R",
-						lastNameInitial: "P",
-						sampleTime: "1615467990",
-						testType: "PCR"
-					),
-				unixTimeStamp: Int64(Date().timeIntervalSince1970)
+//		navigateToScanResult(
+//			Attributes(
+//				cryptoAttributes:
+//					CrypoAttributes(
+//						birthDay: "27",
+//						birthMonth: "5",
+//						firstNameInitial: nil, //"R",
+//						lastNameInitial: "P",
+//						sampleTime: "1615467990",
+//						testType: "PCR"
+//					),
+//				unixTimeStamp: Int64(Date().timeIntervalSince1970)
+//			)
+//		)
+
+		let destination = VerifierScanViewController(
+			viewModel: VerifierScanViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager
 			)
 		)
 
-//		let destination = VerifierScanViewController(
-//			viewModel: VerifierScanViewModel(
-//				coordinator: self,
-//				cryptoManager: cryptoManager
-//			)
-//		)
-//
-//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 	
 	/// Navigate to the scan result
@@ -201,7 +201,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// - Parameters:
 	///   - title: the title
 	///   - content: the content
-	func displayContent(title: String, content: Content) {
+	func displayContent(title: String, content: [Content]) {
 
 		let viewController = DisplayContentViewController(
 			viewModel: DisplayContentViewModel(

@@ -15,7 +15,7 @@ enum AccessAction {
 	case demo
 }
 
-class VerifierResultViewModel: Logging {
+class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	/// The logging category
 	var loggingCategory: String = "VerifierResultViewModel"
@@ -65,9 +65,10 @@ class VerifierResultViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.attributes = attributes
-		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
+		proofValidator = ProofValidator(maxValidity: maxValidity)
 		primaryButtonTitle = .verifierResultButtonTitle
+		super.init()
 
 		checkAttributes()
 	}

@@ -165,7 +165,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// When
-		viewModel?.hideQRForCapture = true
+		viewModel?.hideForCapture = true
 
 		// Then
 		guard let strongSut = sut else {

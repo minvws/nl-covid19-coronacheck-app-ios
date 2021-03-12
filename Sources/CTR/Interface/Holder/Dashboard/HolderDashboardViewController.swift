@@ -85,7 +85,7 @@ class HolderDashboardViewController: BaseViewController {
 			}
 		}
 		
-		viewModel.$hideQRForCapture.binding = { [weak self] in
+		viewModel.$hideForCapture.binding = { [weak self] in
 			
 			self?.screenCaptureInProgress = $0
 			self?.sceneView.hideQRImage = $0

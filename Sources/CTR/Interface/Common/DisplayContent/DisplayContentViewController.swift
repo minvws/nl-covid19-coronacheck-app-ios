@@ -55,6 +55,11 @@ class DisplayContentViewController: BaseViewController {
 				self?.sceneView.stackView.setCustomSpacing(spacing, after: view)
 			}
 		}
+
+		viewModel.$hideForCapture.binding = { [weak self] in
+
+			self?.sceneView.isHidden = $0
+		}
 	}
 
 	/// User tapped on the button

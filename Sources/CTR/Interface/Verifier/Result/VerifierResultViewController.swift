@@ -73,6 +73,11 @@ class VerifierResultViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$hideForCapture.binding = { [weak self] in
+
+			self?.sceneView.isHidden = $0
+		}
+
 		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
 	}
 
