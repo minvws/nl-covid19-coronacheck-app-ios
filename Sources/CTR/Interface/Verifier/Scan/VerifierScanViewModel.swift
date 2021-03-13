@@ -16,7 +16,7 @@ class VerifierScanViewModel: Logging {
 	weak var cryptoManager: CryptoManaging?
 
 	/// Coordination Delegate
-	weak var coordinator: VerifierCoordinatorDelegate?
+	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
 	// MARK: - Bindable properties
 
@@ -37,7 +37,7 @@ class VerifierScanViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: VerifierCoordinatorDelegate,
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		cryptoManager: CryptoManaging) {
 
 		self.coordinator = coordinator
@@ -70,5 +70,10 @@ class VerifierScanViewModel: Logging {
 				)
 			)
 		}
+	}
+
+	func dismiss() {
+
+		coordinator?.dismiss()
 	}
 }

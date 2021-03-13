@@ -41,7 +41,7 @@ class DisplayContentViewController: BaseViewController {
 
 		super.viewDidLoad()
 		setupBindings()
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	/// Setup the bindings to the view model

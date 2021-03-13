@@ -48,7 +48,7 @@ class InformationViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$showBottomCloseButton.binding = { [weak self] in self?.sceneView.closeButtonIsHidden = !$0 }
 
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCloseButton(action: #selector(closeButtonTapped))
 		sceneView.closeButton.touchUpInside(self, action: #selector(closeButtonTapped))
 	}
 

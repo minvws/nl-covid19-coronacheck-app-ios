@@ -47,7 +47,7 @@ class PrivacyViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	/// User tapped on the button

@@ -46,7 +46,7 @@ class AboutTestResultViewController: BaseViewController {
 
 		viewModel.$identity.binding = { [weak self] in self?.identityView.elements = $0 }
 
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	func setupContent() {

@@ -74,7 +74,7 @@ class EnlargedQRViewController: BaseViewController {
 
 		setupListeners()
 
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	/// User tapped on the button

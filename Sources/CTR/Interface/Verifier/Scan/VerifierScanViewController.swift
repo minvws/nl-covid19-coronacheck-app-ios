@@ -47,7 +47,12 @@ class VerifierScanViewController: ScanViewController {
 			guard let strongSelf = self else { return }
 			strongSelf.addTorchButton(action: #selector(strongSelf.toggleTorch), accessibilityLabel: $0)
 		}
-
+		
+		addCloseButton(
+			action: #selector(closeButtonTapped),
+			backgroundColor: .clear,
+			tintColor: .white
+		)
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
@@ -55,5 +60,11 @@ class VerifierScanViewController: ScanViewController {
 	override func found(code: String) {
 
 		viewModel.parseQRMessage(code)
+	}
+
+	/// User tapped on the button
+	@objc func closeButtonTapped() {
+
+		viewModel.dismiss()
 	}
 }

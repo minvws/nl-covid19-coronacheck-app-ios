@@ -78,7 +78,7 @@ class VerifierResultViewController: BaseViewController {
 			self?.sceneView.isHidden = $0
 		}
 
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
