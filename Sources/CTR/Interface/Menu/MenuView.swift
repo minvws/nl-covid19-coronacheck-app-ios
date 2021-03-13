@@ -106,10 +106,18 @@ class MenuView: BaseView {
 		return view
 	}()
 
+	/// The bottom label
+	let bottomLabel: Label = {
+
+		return Label(body: nil)
+	}()
+
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.primary
+		bottomLabel.textColor = Theme.colors.secondary
+		bottomLabel.font = Theme.fonts.subheadMontserrat
 	}
 
 	/// Setup the hierarchy
@@ -119,6 +127,7 @@ class MenuView: BaseView {
 		addSubview(topStackView)
 //		addSubview(lineView)
 		addSubview(bottomStackView)
+		addSubview(bottomLabel)
 	}
 
 	/// Setup the constraints
@@ -168,7 +177,19 @@ class MenuView: BaseView {
 			bottomStackView.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
-			)
+			),
+
+			bottomLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+			bottomLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
 		])
+	}
+
+	// MARK: Public Access
+
+	/// The bottomText
+	var bottomText: String? {
+		didSet {
+			bottomLabel.text = bottomText
+		}
 	}
 }

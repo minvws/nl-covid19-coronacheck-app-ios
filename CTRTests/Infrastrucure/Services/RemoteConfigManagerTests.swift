@@ -24,31 +24,6 @@ class RemoteConfigManagerTests: XCTestCase {
 		super.tearDown()
 	}
 
-	// MARK: - TestDoubles
-
-	class AppVersionSupplierSpy: AppVersionSupplierProtocol {
-
-		var appVersion: String
-
-		var appBuild: String
-
-		init(version: String, build: String = "") {
-
-			appVersion = version
-			appBuild = build
-		}
-
-		func getCurrentVersion() -> String {
-
-			return appVersion
-		}
-
-		func getCurrentBuild() -> String {
-
-			return appBuild
-		}
-	}
-
 	// MARK: - Tests
 
 	/// Test the remote config manager update call no result from the api

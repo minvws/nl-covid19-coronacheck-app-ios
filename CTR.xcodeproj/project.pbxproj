@@ -36,6 +36,7 @@
 		6D037A2F25E66D59006C2BFA /* EnlargedQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D037A2E25E66D59006C2BFA /* EnlargedQRView.swift */; };
 		6D037A3725E67603006C2BFA /* EnlargedQRViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D037A3625E67603006C2BFA /* EnlargedQRViewModelTests.swift */; };
 		6D037A3C25E67645006C2BFA /* EnlargedQRViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D037A3B25E67645006C2BFA /* EnlargedQRViewControllerTests.swift */; };
+		6D044C5F25FCD4650004812D /* AppVersionSupplierSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D044C5E25FCD4650004812D /* AppVersionSupplierSpy.swift */; };
 		6D164D4D25F374ED00A86409 /* AppVersionSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D164D4C25F374ED00A86409 /* AppVersionSupplier.swift */; };
 		6D164D4E25F374ED00A86409 /* AppVersionSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D164D4C25F374ED00A86409 /* AppVersionSupplier.swift */; };
 		6D164D5925F3758700A86409 /* LaunchLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D164D5825F3758700A86409 /* LaunchLocalization.swift */; };
@@ -523,6 +524,7 @@
 		6D037A2E25E66D59006C2BFA /* EnlargedQRView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnlargedQRView.swift; sourceTree = "<group>"; };
 		6D037A3625E67603006C2BFA /* EnlargedQRViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnlargedQRViewModelTests.swift; sourceTree = "<group>"; };
 		6D037A3B25E67645006C2BFA /* EnlargedQRViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnlargedQRViewControllerTests.swift; sourceTree = "<group>"; };
+		6D044C5E25FCD4650004812D /* AppVersionSupplierSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVersionSupplierSpy.swift; sourceTree = "<group>"; };
 		6D164D4C25F374ED00A86409 /* AppVersionSupplier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppVersionSupplier.swift; sourceTree = "<group>"; };
 		6D164D5825F3758700A86409 /* LaunchLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchLocalization.swift; sourceTree = "<group>"; };
 		6D164D7325F378B200A86409 /* LaunchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
@@ -926,6 +928,7 @@
 		6D20239125CAB15500CFCD14 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				6D044C5E25FCD4650004812D /* AppVersionSupplierSpy.swift */,
 				6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */,
 				6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */,
 				6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */,
@@ -2566,6 +2569,7 @@
 				6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */,
 				6D32BD2525E6A5AF00C4A4D2 /* VerifyResultViewModelTests.swift in Sources */,
 				6D6777FF25CEA4D100F6F2D1 /* OnboardingViewControllerTests.swift in Sources */,
+				6D044C5F25FCD4650004812D /* AppVersionSupplierSpy.swift in Sources */,
 				6DC6CC3D25C2A6D400060237 /* AppUpdateViewControllerTests.swift in Sources */,
 				6D037A3725E67603006C2BFA /* EnlargedQRViewModelTests.swift in Sources */,
 			);

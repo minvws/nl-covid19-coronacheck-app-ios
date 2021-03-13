@@ -52,4 +52,8 @@ extension String {
 		return Localization.string(for: "general.error.technical.text")
 	}
 
+	static var menuVersion: String {
+
+		return Localization.string(for: "general.menu.version")
+	}
 }

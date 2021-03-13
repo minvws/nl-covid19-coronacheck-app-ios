@@ -38,7 +38,8 @@ class HolderCoordinatorTests: XCTestCase {
 		}
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
-				delegate: strongSut
+				delegate: strongSut,
+				versionSupplier: AppVersionSupplier()
 			)
 		)
 		sut?.sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
