@@ -161,7 +161,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
-				delegate: self
+				delegate: self,
+				versionSupplier: AppVersionSupplier()
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
