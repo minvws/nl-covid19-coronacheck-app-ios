@@ -261,6 +261,10 @@ class HolderDashboardViewModel: Logging {
 		cryptoManager?.removeCredential()
 		checkQRValidity()
 	}
+    
+	func start() {
+		coordinator?.navigateBackToStart()
+	}
 
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {

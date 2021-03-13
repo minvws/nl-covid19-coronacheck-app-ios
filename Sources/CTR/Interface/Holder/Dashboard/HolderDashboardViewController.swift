@@ -35,6 +35,12 @@ class HolderDashboardViewController: BaseViewController {
 		
 		view = sceneView
 	}
+    
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		
+		viewModel.start()
+	}
 	
 	override func viewDidLoad() {
 		

@@ -301,6 +301,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart() {
+		childCoordinators.forEach {
+			removeChildCoordinator($0)
+		}
 
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 		(sidePanel?.selectedViewController as? UINavigationController)?.popToRootViewController(animated: true)
