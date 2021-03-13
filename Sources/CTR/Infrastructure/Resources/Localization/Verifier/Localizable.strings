@@ -91,7 +91,7 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.access.message" = "Check of de identificatie gegevens overeenkomen met gegevens op het identiteitsbewijs. Lees meer.";
+"verifier.result.access.message" = "Controleer of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs. Lees meer.";
 "verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.demo.message" = "";
@@ -115,7 +115,7 @@
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Controleer gegevens";
 "verifier.result.check.section.one" = "Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs.";
-"verifier.result.check.section.two" = "Een identificatie gegeven bestaat uit de eerste letter van de bezoekers voornaam (1), de eerste letter van de achternaam (2), de geboortedag (3) en geboortemaand (4).";
+"verifier.result.check.section.two" = "De gegevens bestaan uit: (1) de eerste letter van de voornaam, (2) de eerste letter van de achternaam, (3) de geboortedag en (4) de geboortemaand. ";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Geen geldige QR-code";

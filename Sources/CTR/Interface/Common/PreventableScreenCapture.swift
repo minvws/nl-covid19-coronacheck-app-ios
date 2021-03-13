@@ -28,21 +28,24 @@ class PreventableScreenCapture {
 
 	/// Add  observesr to prevent screen capture
 	func addObservers() {
+
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(preventScreenCapture),
 			name: UIScreen.capturedDidChangeNotification,
 			object: nil
 		)
+
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(preventScreenCapture),
 			name: UIApplication.willEnterForegroundNotification,
 			object: nil
 		)
+		
 		NotificationCenter.default.addObserver(
-			self, selector:
-				#selector(preventScreenCapture),
+			self,
+			selector: #selector(preventScreenCapture),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)

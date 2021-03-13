@@ -40,10 +40,7 @@ class ScanInstructionsViewController: BaseViewController {
 		viewModel.$showCloseButton.binding = { [weak self] in
 			guard let strongSelf = self else { return }
 			if $0 {
-				strongSelf.addCloseButton(
-					action: #selector(strongSelf.closeButtonTapped),
-					accessibilityLabel: .close
-				)
+				strongSelf.addCloseButton(action: #selector(strongSelf.closeButtonTapped))
 			}
 		}
 
