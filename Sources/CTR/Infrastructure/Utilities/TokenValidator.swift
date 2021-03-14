@@ -48,6 +48,9 @@ class TokenValidator: TokenValidatorProtocol {
 	/// - Returns: True if this is a valid token
 	private func luhnModN(_ token: String) -> Bool {
 
+		// for more detail,
+		// see https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
+
 		let tokenArray = Array(token)
 		var factor = 1
 		var sum = 0
