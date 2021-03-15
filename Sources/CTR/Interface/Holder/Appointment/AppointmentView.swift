@@ -73,6 +73,7 @@ class AppointmentView: ScrollViewWithHeader {
 	override func setupViews() {
 
 		super.setupViews()
+		headerImageView.backgroundColor = Theme.colors.appointment
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 

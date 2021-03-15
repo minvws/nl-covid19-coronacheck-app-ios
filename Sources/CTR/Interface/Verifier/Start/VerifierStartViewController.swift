@@ -57,7 +57,7 @@ class VerifierStartViewController: BaseViewController {
 			}
 		}
 
-		sceneView.imageView.image = .onboardingScan
+		sceneView.imageView.image = .scanStart
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
     }
