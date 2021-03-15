@@ -40,6 +40,15 @@ class HolderDashboardViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
+		setupBindings()
+		setupListeners()
+
+		// Only show an arrow as back button
+		styleBackButton(buttonText: "")
+	}
+
+	private func setupBindings() {
+
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$expiredTitle.binding = { [weak self] in self?.sceneView.expiredQRView.title = $0 }
@@ -79,14 +88,9 @@ class HolderDashboardViewController: BaseViewController {
 
 			self?.sceneView.hideQRImage = $0
 		}
-
-		setupListeners()
-
-		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
 	}
 
-	func setupListeners() {
+	private func setupListeners() {
 
 		NotificationCenter.default.addObserver(
 			self,

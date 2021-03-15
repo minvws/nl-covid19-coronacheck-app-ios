@@ -87,6 +87,11 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 					logDebug("Proof is valid until \(validUntilDateString)")
 					showQRMessageIsValid(validUntilDateString)
 					startValidityTimer()
+				case let .expiring(validUntilDate, _):
+					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
+					logDebug("Proof is valid until \(validUntilDateString)")
+					showQRMessageIsValid(validUntilDateString)
+					startValidityTimer()
 				case .expired:
 					logDebug("Proof is no longer valid")
 					validityTimer?.invalidate()

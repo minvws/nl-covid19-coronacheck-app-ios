@@ -212,7 +212,7 @@ class DashboardViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "Valid QR should be shown")
+		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "QR card should be shown")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should be called")
 	}
@@ -233,7 +233,7 @@ class DashboardViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "Valid QR should be shown")
+		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "QR Card should be hidden")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 	}
 

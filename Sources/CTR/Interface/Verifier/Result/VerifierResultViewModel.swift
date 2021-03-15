@@ -113,7 +113,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		if let sampleTimeStamp = TimeInterval(attributes.cryptoAttributes.sampleTime) {
 			switch proofValidator.validate(sampleTimeStamp) {
-				case .valid:
+				case .valid, .expiring:
 					return true
 				case .expired:
 					logInfo("Sample Timestamp is too old!")

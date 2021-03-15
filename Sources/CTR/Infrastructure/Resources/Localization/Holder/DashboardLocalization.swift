@@ -78,4 +78,14 @@ extension String {
 
 		return Localization.string(for: "holder.dashboard.qr.expired")
 	}
+
+	static var hour: String {
+
+		return Localization.string(for: "holder.dashboard.qr.hour")
+	}
+
+	static var minute: String {
+
+		return Localization.string(for: "holder.dashboard.qr.minute")
+	}
 }

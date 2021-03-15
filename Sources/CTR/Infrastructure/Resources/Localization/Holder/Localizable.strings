@@ -80,8 +80,10 @@
 "holder.dashboard.qr.action" = "Bekijk QR";
 "holder.dashboard.qr.subtitle" = "Laat QR-code\nzien bij ingang";
 "holder.dashboard.qr.message" = "Geldig tot %@";
-"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>QR-code verloopt in %@ %@</b>";
+"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>Verloopt in %@</b>";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
+"holder.dashboard.qr.hour" = "uur";
+"holder.dashboard.qr.minute" = "min";
 
 /* MARK: - Holder Appointment */
 "holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is %@ uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
