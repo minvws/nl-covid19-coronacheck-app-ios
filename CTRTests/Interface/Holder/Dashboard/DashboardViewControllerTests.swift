@@ -78,10 +78,8 @@ class DashboardViewControllerTests: XCTestCase {
 		}
 		XCTAssertEqual(strongSut.title, .holderDashboardTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .holderDashboardIntro, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.qrView.title, .holderDashboardQRTitle, "QR Title should match")
 		XCTAssertEqual(strongSut.sceneView.expiredQRView.title, .holderDashboardQRExpired, "QR Expired title should match")
-		XCTAssertTrue(strongSut.sceneView.qrView.isHidden, "Valid QR should not be shown")
-		XCTAssertNil(strongSut.sceneView.qrView.imageView.image, "There should be no image")
+		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "Valid QR should not be shown")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 	}
 
@@ -133,7 +131,6 @@ class DashboardViewControllerTests: XCTestCase {
 
 		// Given
 		setupValidCredential()
-		proofManagerSpy.birthDate = Date()
 		loadView()
 
 		// When
@@ -144,31 +141,11 @@ class DashboardViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.qrView.subTitle, "SubTitle should not be nil")
-		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
-	}
-
-	/// Test the validity of the credential with valid credential without a birthdate
-	func testValidityCredentialValidNoBirthDate() {
-
-		// Given
-		setupValidCredential()
-		proofManagerSpy.birthDate = nil
-		loadView()
-
-		// When
-		sut?.checkValidity()
-
-		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
-		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
-		XCTAssertNil(strongSut.sceneView.qrView.subTitle, "SubTitle should be nil")
-		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
+		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "Valid QR should be shown")
+		XCTAssertNotNil(strongSut.sceneView.qrCardView.message, "SubTitle should not be nil")
+		XCTAssertNotNil(strongSut.sceneView.qrCardView.title, "Title should not be nil")
+		XCTAssertNotNil(strongSut.sceneView.qrCardView.time, "Time should not be nil")
+		XCTAssertNotNil(strongSut.sceneView.qrCardView.identity, "Identity should not be nil")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 	}
 
@@ -196,8 +173,7 @@ class DashboardViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(strongSut.sceneView.qrView.isHidden, "Valid QR should not be shown")
-		XCTAssertNil(strongSut.sceneView.qrView.imageView.image, "There should be no image")
+		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should be shown")
 	}
 
@@ -216,8 +192,7 @@ class DashboardViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertTrue(strongSut.sceneView.qrView.isHidden, "Valid QR should not be shown")
-		XCTAssertNil(strongSut.sceneView.qrView.imageView.image, "There should be no image")
+		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "Valid QR should not be shown")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 	}
 
@@ -230,15 +205,14 @@ class DashboardViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// When
-		sut?.showLargeQR()
+		sut?.sceneView.qrCardView.primaryButtonTapped()
 
 		// Then
 		guard let strongSut = sut else {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
+		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "QR card should be shown")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should be called")
 	}
@@ -259,56 +233,8 @@ class DashboardViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
-		XCTAssertTrue(strongSut.sceneView.qrView.imageView.isHidden, "The image should be hidden")
+		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "QR Card should be hidden")
 		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
-	}
-
-	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValidShowLargeQRWithScreenCapture() {
-
-		// Given
-		setupValidCredential()
-		loadView()
-		sut?.checkValidity()
-		viewModel?.hideForCapture = true
-
-		// When
-		sut?.showLargeQR()
-
-		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
-		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
-		XCTAssertTrue(strongSut.sceneView.qrView.imageView.isHidden, "The image should be hidden")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
-		XCTAssertFalse(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should not be called")
-	}
-
-	/// Test the security features
-	func testSecurityFeaturesAnimation() {
-
-		// Given
-		setupValidCredential()
-		loadView()
-		sut?.checkValidity()
-
-		// When
-		sut?.sceneView.qrView.securityView.primaryButton.sendActions(for: .touchUpInside)
-
-		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
-		XCTAssertFalse(strongSut.sceneView.qrView.isHidden, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.qrView.imageView.image, "There should be an image")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
-		XCTAssertEqual(strongSut.sceneView.qrView.securityView.currentAnimation, .cyclistRightToLeft, "Animation should match")
 	}
 
 	func testCloseExpiredRQ() {

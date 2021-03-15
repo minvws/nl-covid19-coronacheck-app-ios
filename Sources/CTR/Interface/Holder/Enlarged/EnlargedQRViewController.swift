@@ -131,8 +131,4 @@ class EnlargedQRViewController: BaseViewController {
 		viewModel.validityTimer?.invalidate()
 		viewModel.validityTimer = nil
 	}
-
-//	deinit {
-//		NotificationCenter.default.removeObserver(self)
-//	}
 }

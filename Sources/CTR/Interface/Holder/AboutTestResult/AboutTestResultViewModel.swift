@@ -48,13 +48,10 @@ class AboutTestResultViewModel: Logging {
 		}
 
 		var output: [(String, String)] = []
-		let parts = holder.mapIdentity(months: months)
+		let parts = holder.mapIdentity(months: String.shortMonths)
 		for (index, part) in parts.enumerated() {
 			output.append(("\(index + 1)", part))
 		}
 		return output
 	}
-
-	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
-							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 }

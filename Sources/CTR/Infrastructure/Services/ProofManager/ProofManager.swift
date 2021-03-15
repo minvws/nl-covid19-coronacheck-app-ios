@@ -79,10 +79,6 @@ class ProofManager: ProofManaging, Logging {
 	@Keychain(name: "providerData", service: Constants.keychainService, clearOnReinstall: true)
 	private var providerData: ProviderData = .empty
 
-	/// The birthday data stored in the keychain
-	@Keychain(name: "birthdayData", service: Constants.keychainService, clearOnReinstall: true)
-	private var birthdayData: BirthdayData = .empty
-
 	@UserDefaults(key: "providersFetchedTimestamp", defaultValue: nil)
 	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 
@@ -347,39 +343,6 @@ class ProofManager: ProofManaging, Logging {
 		
 		proofData.testWrapper = nil
 		proofData.signedWrapper = nil
-	}
-
-	/// Get the birth date
-	func getBirthDate() -> Date? {
-		
-		return birthdayData.birthdate
-	}
-
-	/// Set the birthdate
-	/// - Parameter date: the date
-	func setBirthDate(_ date: Date?) {
-
-		birthdayData.birthdate = date
-		calculateChecksum()
-	}
-
-	/// Get the birth date checksum
-	func getBirthDateChecksum() -> Int? {
-
-		return birthdayData.checksum
-	}
-
-	/// Calculate the checksum of the birthdate
-	func calculateChecksum() {
-
-		if let date = birthdayData.birthdate {
-			if let day = Calendar.current.ordinality(of: .day, in: .year, for: date) {
-				let dayModulo65 = day % 65
-				birthdayData.checksum = dayModulo65
-			}
-		} else {
-			birthdayData.checksum = nil
-		}
 	}
 
 	// MARK: - Helper methods

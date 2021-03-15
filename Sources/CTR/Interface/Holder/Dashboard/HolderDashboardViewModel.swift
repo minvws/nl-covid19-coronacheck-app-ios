@@ -15,6 +15,9 @@ enum CardIdentifier {
 
 	/// Create a QR code
 	case create
+
+	/// The QR code card
+	case qrcode
 }
 
 /// The card information
@@ -37,6 +40,34 @@ struct CardInfo {
 
 	/// The cut of the image
 	let imageRect: CGRect
+}
+
+/// The card information for QR
+struct QRCardInfo {
+
+	/// The identifier of the card
+	let identifier: CardIdentifier
+
+	/// The title of the card
+	let title: String
+
+	/// The message of the card
+	let message: String
+
+	/// The identiry of the holder
+	let holder: String
+
+	/// The title on the action button of the card
+	let actionTitle: String
+
+	/// The optional background image
+	let image: UIImage?
+
+	/// The cut of the image
+	let imageRect: CGRect
+
+	/// the valid until date
+	let validUntil: String
 }
 
 class HolderDashboardViewModel: Logging {
@@ -71,20 +102,8 @@ class HolderDashboardViewModel: Logging {
 	/// The introduction message of the scene
 	@Bindable private(set) var message: String
 
-	/// The title of the QR card
-	@Bindable private(set) var qrTitle: String
-
-	/// The message below the title
-	@Bindable private(set) var qrSubTitle: String?
-
-	/// The message below the QR card
-	@Bindable private(set) var qrValidUntilTitle: String?
-
 	/// The message on the expired card
 	@Bindable private(set) var expiredTitle: String?
-
-	/// The cl signee test proof
-	@Bindable private(set) var qrMessage: Data?
 
 	/// Show a valid QR Message
 	@Bindable private(set) var showValidQR: Bool
@@ -100,6 +119,9 @@ class HolderDashboardViewModel: Logging {
 
 	/// The create QR Card information
 	@Bindable private(set) var createCard: CardInfo
+
+	/// The create QR Card information
+	@Bindable private(set) var qrCard: QRCardInfo?
 
 	/// Initializer
 	/// - Parameters:
@@ -121,7 +143,6 @@ class HolderDashboardViewModel: Logging {
 		self.configuration = configuration
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
-		self.qrTitle = .holderDashboardQRTitle
 		self.expiredTitle = .holderDashboardQRExpired
 
 		// Start by showing nothing
@@ -155,10 +176,13 @@ class HolderDashboardViewModel: Logging {
 	/// - Parameter identifier: the identifier of the card
 	func cardTapped(_ identifier: CardIdentifier) {
 
-		if identifier == CardIdentifier.appointment {
-			coordinator?.navigateToAppointment()
-		} else if identifier == CardIdentifier.create {
-			coordinator?.navigateToChooseProvider()
+		switch identifier {
+			case .appointment:
+				coordinator?.navigateToAppointment()
+			case .create:
+				coordinator?.navigateToChooseProvider()
+			case .qrcode:
+				coordinator?.navigateToEnlargedQR()
 		}
 	}
 
@@ -166,7 +190,6 @@ class HolderDashboardViewModel: Logging {
 	@objc func checkQRValidity() {
 
 		guard let credential = cryptoManager?.readCredential() else {
-			qrMessage = nil
 			showValidQR = false
 			showExpiredQR = false
 			validityTimer?.invalidate()
@@ -176,22 +199,25 @@ class HolderDashboardViewModel: Logging {
 
 		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 
+			let holder = HolderTestCredentials(
+				firstNameInitial: credential.firstNameInitial ?? "",
+				lastNameInitial: credential.lastNameInitial ?? "",
+				birthDay: credential.birthDay ?? "",
+				birthMonth: credential.birthMonth ?? ""
+			)
 			switch proofValidator.validate(sampleTimeStamp) {
 				case let .valid(validUntilDate):
-					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
-					logDebug("Proof is valid until \(validUntilDateString)")
-					showQRMessageIsValid(validUntilDateString)
+
+					showQRMessageIsValid(validUntilDate, holder: holder)
 					startValidityTimer()
 
-				//				case .expiring:
-				//				// Needs refactoring!!!!
-				//					let warningTTL = TimeInterval(configuration.getTestResultWarningTTL())
-				//				if (sampleTimeStamp + validity - warningTTL) < now {
-				//					logDebug("Proof is expiring soon")
-				//				}
-				//					showQRMessageExpiring(printDate)
-				//					break
+				case let .expiring(validUntilDate, timeLeft):
+
+					showQRMessageIsExpiring(validUntilDate, timeLeft: timeLeft, holder: holder)
+					startValidityTimer()
+
 				case .expired:
+
 					logDebug("Proof is no longer valid")
 					showQRMessageIsExpired()
 					validityTimer?.invalidate()
@@ -201,32 +227,50 @@ class HolderDashboardViewModel: Logging {
 	}
 
 	/// Show the QR message is valid
-	/// - Parameter printDate: valid until time
-	func showQRMessageIsValid(_ printDate: String) {
+	/// - Parameter validUntil: valid until time
+	func showQRMessageIsValid(_ validUntil: Date, holder: HolderTestCredentials) {
 
-		if let message = cryptoManager?.generateQRmessage() {
-			qrMessage = message
-			qrValidUntilTitle = String(format: .holderDashboardQRMessage, printDate)
-			showValidQR = true
-			showExpiredQR = false
-		}
-		if let birthdate = proofManager?.getBirthDate() {
-			qrSubTitle = printBirthDateFormatter.string(from: birthdate)
-		}
+		let validUntilDateString = printDateFormatter.string(from: validUntil)
+		logDebug("Proof is valid until \(validUntilDateString)")
+
+		let identity = holder.mapIdentity(months: String.shortMonths).map({ $0.isEmpty ? "_" : $0 }).joined(separator: " ")
+		qrCard = QRCardInfo(
+			identifier: .qrcode,
+			title: .holderDashboardQRTitle,
+			message: .holderDashboardQRSubTitle,
+			holder: identity,
+			actionTitle: .holderDashboardQRAction,
+			image: .myQR,
+			imageRect: CGRect(x: 0, y: 0, width: 0.84, height: 0.9),
+			validUntil: String(format: .holderDashboardQRMessage, validUntilDateString)
+		)
+
+		showValidQR = true
+		showExpiredQR = false
 	}
 
-//	/// Show the QR message is valid
-//	/// - Parameter printDate: valid until time
-//	func showQRMessageExpiring(_ printDate: String) {
-//
-//		if let message = self.cryptoManager?.generateQRmessage() {
-//			qrMessage = message
-//			qrSubTitle = String(format: .holderDashboardQRExpiring, printDate)
-//			// Todo, calculate the time remaining
-//			showValidQR = true
-//			showExpiredQR = false
-//		}
-//	}
+	/// Show the QR message is valid
+	/// - Parameter validUntil: valid until time
+	func showQRMessageIsExpiring(_ validUntil: Date, timeLeft: TimeInterval, holder: HolderTestCredentials) {
+
+		let validUntilDateString = printDateFormatter.string(from: validUntil)
+		logDebug("Proof is valid until \(validUntilDateString), expiring in \(timeLeft)")
+
+		let identity = holder.mapIdentity(months: String.shortMonths).map({ $0.isEmpty ? "_" : $0 }).joined(separator: " ")
+		qrCard = QRCardInfo(
+			identifier: .qrcode,
+			title: .holderDashboardQRTitle,
+			message: .holderDashboardQRSubTitle,
+			holder: identity,
+			actionTitle: .holderDashboardQRAction,
+			image: .myQR,
+			imageRect: CGRect(x: 0, y: 0, width: 0.84, height: 0.9),
+			validUntil: String(format: .holderDashboardQRExpiring, validUntilDateString, timeLeft.stringTime)
+		)
+
+		showValidQR = true
+		showExpiredQR = false
+	}
 
 	/// Show the QR Message is expired
 	func showQRMessageIsExpired() {
@@ -243,18 +287,12 @@ class HolderDashboardViewModel: Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() - 10), // 10 second earlier, to prevent last second mismatches.
+			timeInterval: TimeInterval(60),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
 			repeats: true
 		)
-	}
-
-	/// User wants to see the large QR
-	func navigateToEnlargedQR() {
-
-		coordinator?.navigateToEnlargedQR()
 	}
 
 	/// User wants to close the expired QR
@@ -270,16 +308,7 @@ class HolderDashboardViewModel: Logging {
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
-		dateFormatter.dateFormat = "E d MMMM HH:mm"
-		return dateFormatter
-	}()
-
-	/// Formatter to print
-	private lazy var printBirthDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
+		dateFormatter.dateFormat = "EEEE '<br>' d MMMM HH:mm"
 		return dateFormatter
 	}()
 }
@@ -306,6 +335,30 @@ extension HolderDashboardViewModel {
 			self.logWarning("Screen capture in progress")
 		} else {
 			hideForCapture = false
+		}
+	}
+}
+
+extension TimeInterval {
+
+	private var minutes: Int {
+
+		return (Int(self) / 60 ) % 60
+	}
+
+	private var hours: Int {
+
+		return Int(self) / 3600
+	}
+
+	var stringTime: String {
+
+		if hours != 0 {
+			return "\(hours) \(String.hour) \(minutes) \(String.minute)"
+		} else if minutes != 0 {
+			return "\(minutes) \(String.minute)"
+		} else {
+			return  ""
 		}
 	}
 }

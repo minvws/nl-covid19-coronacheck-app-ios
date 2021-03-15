@@ -96,7 +96,6 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
 		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
-		proofManagerSpy.birthDate = Date()
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -116,7 +115,6 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		}
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
-		XCTAssertNotNil(strongSut.sceneView.title, "Title should not be nil")
 	}
 
 	/// Test the validity of the credential with expired credential
