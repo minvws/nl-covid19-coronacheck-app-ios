@@ -54,6 +54,16 @@ extension String {
 		return Localization.string(for: "holder.dashboard.qr.title")
 	}
 
+	static var holderDashboardQRSubTitle: String {
+
+		return Localization.string(for: "holder.dashboard.qr.subtitle")
+	}
+
+	static var holderDashboardQRAction: String {
+
+		return Localization.string(for: "holder.dashboard.qr.action")
+	}
+
 	static var holderDashboardQRMessage: String {
 
 		return Localization.string(for: "holder.dashboard.qr.message")

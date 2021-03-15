@@ -24,4 +24,6 @@ extension UIImage {
 	static var securityBackground: UIImage? { return UIImage(named: "Houses") }
 
 	static var smallCross: UIImage? { return UIImage(named: "SmallCross") }
+
+	static var myQR: UIImage? { return UIImage(named: "MyQR") }
 }

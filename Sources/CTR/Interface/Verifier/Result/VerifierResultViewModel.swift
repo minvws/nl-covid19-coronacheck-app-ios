@@ -94,7 +94,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 				birthDay: attributes.cryptoAttributes.birthDay ?? "",
 				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
 			)
-			let mapping = holder.mapIdentity(months: months)
+			let mapping = holder.mapIdentity(months: String.shortMonths)
 			for (index, element) in mapping.enumerated() {
 				identity.append(("", element.isEmpty ? "_" : element))
 				checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
@@ -105,9 +105,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			allowAccess = .denied
 		}
 	}
-
-	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
-							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 
 	/// Is the sample time still valid
 	/// - Parameter now: the now time stamp

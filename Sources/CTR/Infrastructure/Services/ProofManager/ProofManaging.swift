@@ -72,16 +72,6 @@ protocol ProofManaging: AnyObject {
 
 	/// Remove the test wrapper
 	func removeTestWrapper()
-
-	/// Get the birth date
-	func getBirthDate() -> Date?
-
-	/// Set the birthdate
-	/// - Parameter date: the date
-	func setBirthDate(_ date: Date?)
-
-	/// Get the birth date checksum
-	func getBirthDateChecksum() -> Int?
 }
 
 enum ProofError: Error {

@@ -117,9 +117,9 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 		}
-		if let birthdate = proofManager?.getBirthDate() {
-			qrTitle = printBirthDateFormatter.string(from: birthdate)
-		}
+//		if let birthdate = proofManager?.getBirthDate() {
+//			qrTitle = printBirthDateFormatter.string(from: birthdate)
+//		}
 	}
 
 	/// Start the validity timer, check every 170 seconds.
@@ -150,15 +150,6 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
-		return dateFormatter
-	}()
-
-	/// Formatter to print
-	private lazy var printBirthDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
 }

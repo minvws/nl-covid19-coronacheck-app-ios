@@ -269,7 +269,7 @@ class ListResultsViewModel: Logging {
 			return ""
 		}
 
-		let parts = holder.mapIdentity(months: months)
+		let parts = holder.mapIdentity(months: String.shortMonths)
 		var output = ""
 		for part in parts {
 			output.append(part)
@@ -277,7 +277,4 @@ class ListResultsViewModel: Logging {
 		}
 		return output.trimmingCharacters(in: .whitespaces)
 	}
-
-	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
-							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 }

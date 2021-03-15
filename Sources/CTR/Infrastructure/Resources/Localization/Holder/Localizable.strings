@@ -76,9 +76,11 @@
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Zet jouw negatieve testresultaat om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.qr.title" = "Toon QR-code bij ingang";
+"holder.dashboard.qr.title" = "Mijn QR-code";
+"holder.dashboard.qr.action" = "Bekijk QR";
+"holder.dashboard.qr.subtitle" = "Laat QR-code\nzien bij ingang";
 "holder.dashboard.qr.message" = "Geldig tot %@";
-"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>QR-code verloopt binnenkort</b>";
+"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>QR-code verloopt in %@ %@</b>";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 
 /* MARK: - Holder Appointment */
