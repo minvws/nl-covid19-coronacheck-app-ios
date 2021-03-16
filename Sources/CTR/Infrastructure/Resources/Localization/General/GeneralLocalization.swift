@@ -57,4 +57,3 @@ extension String {
 		return Localization.string(for: "general.menu.version")
 	}
 }
-

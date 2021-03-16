@@ -7,7 +7,6 @@
 
 import UIKit
 import SafariServices
-import SheetPresentation
 
 protocol Dismissable: AnyObject {
 
@@ -106,8 +105,6 @@ class HolderCoordinator: Coordinator, Logging {
 
 	/// The about navigation controller
 	var aboutNavigationContoller: UINavigationController?
-
-	let sheetPresentationManager = SheetPresentationManager()
 
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -287,8 +284,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				proofManager: proofManager
 			)
 		)
-//		destination.transitioningDelegate = sheetPresentationManager
-//		destination.modalPresentationStyle = .custom
+
 		let navController = UINavigationController(rootViewController: destination)
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(

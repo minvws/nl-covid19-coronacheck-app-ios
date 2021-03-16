@@ -7,7 +7,6 @@
 
 import UIKit
 import SafariServices
-import SheetPresentation
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
@@ -65,8 +64,6 @@ class VerifierCoordinator: Coordinator, Logging {
 	
 	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
-
-	var sheetPresentationManager = SheetPresentationManager()
 
 	var maxValidity: Int {
 		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
@@ -213,21 +210,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		)
 		let destination = UINavigationController(rootViewController: viewController)
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
-
-		//		let presentationManager = SheetPresentationManager(
-		//			options: SheetPresentationOptions(
-		//				cornerOptions: SheetPresentationOptions.CornerOptions.roundAllCorners(radius: 10),
-		//				dimmingViewAlpha: 0.5,
-		//				edgeInsets: UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0),
-		//				ignoredEdgesForMargins: [DirectionalViewEdge.bottom, DirectionalViewEdge.leading, DirectionalViewEdge.trailing],
-		//				presentationLayout: PresentationLayout(horizontalLayout: .fill, verticalLayout: .automatic(alignment: .bottom)),
-		//				animationBehavior: .system
-		//			)
-		//		)
-		//
-		//		destination.transitioningDelegate = presentationManager
-		//		destination.modalPresentationStyle = .custom
-		//		sheetPresentationManager = presentationManager
 	}
 }
 
