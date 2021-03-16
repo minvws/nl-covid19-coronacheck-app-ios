@@ -36,7 +36,9 @@ class VerifyResultViewModelTests: XCTestCase {
 					firstNameInitial: nil,
 					lastNameInitial: nil,
 					sampleTime: "test",
-					testType: "test"
+					testType: "test",
+					specimen: "0",
+					paperProof: "0"
 				),
 				unixTimeStamp: 0
 			),
@@ -57,7 +59,9 @@ class VerifyResultViewModelTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "test",
-				testType: "demo"
+				testType: "test",
+				specimen: "1",
+				paperProof: "0"
 			),
 			unixTimeStamp: 0
 		)
@@ -82,7 +86,9 @@ class VerifyResultViewModelTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "test",
-				testType: "pcr"
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "0"
 			),
 			unixTimeStamp: 0
 		)
@@ -109,9 +115,69 @@ class VerifyResultViewModelTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "\(timeStamp40SecAgo)",
-				testType: "pcr"
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "0"
 			),
 			unixTimeStamp: Int64(timeStamp40SecAgo)
+		)
+
+		// When
+		sut?.checkAttributes()
+
+		// Then
+		XCTAssertEqual(sut?.allowAccess, .verified, "Type should be verified")
+		XCTAssertEqual(sut?.title, .verifierResultAccessTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+	}
+
+	/// Func test expired unit time stamp
+	func testExpiredTimeStamp() {
+
+		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
+
+		// Given
+		sut?.attributes = Attributes(
+			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				sampleTime: "\(timeStamp310SecAgo)",
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "0"
+			),
+			unixTimeStamp: Int64(timeStamp310SecAgo)
+		)
+
+		// When
+		sut?.checkAttributes()
+
+		// Then
+		XCTAssertEqual(sut?.allowAccess, .denied, "Type should be denied")
+		XCTAssertEqual(sut?.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .verifierResultDeniedMessage, "Message should match")
+	}
+
+	/// Func test expired unit time stamp, but paperproof
+	func testExpiredUnixTimeStampButPaperProof() {
+
+		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
+
+		// Given
+		sut?.attributes = Attributes(
+			cryptoAttributes: CrypoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				sampleTime: "\(timeStamp310SecAgo)",
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "1"
+			),
+			unixTimeStamp: Int64(timeStamp310SecAgo)
 		)
 
 		// When
@@ -136,9 +202,23 @@ class VerifyResultViewModelTests: XCTestCase {
 	}
 
 	/// Test the link tapped method
-	func testLinkTapped() {
+	func testLinkTappedDenied() {
 
 		// Given
+		sut?.allowAccess = .denied
+
+		// When
+		sut?.linkTapped()
+
+		// Then
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.displayContentCalled, "Method should be called")
+	}
+
+	/// Test the link tapped method
+	func testLinkTappedAllowed() {
+
+		// Given
+		sut?.allowAccess = .verified
 
 		// When
 		sut?.linkTapped()

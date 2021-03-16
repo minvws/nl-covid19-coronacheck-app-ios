@@ -36,7 +36,9 @@ class VerifyResultViewControllerTests: XCTestCase {
 					firstNameInitial: nil,
 					lastNameInitial: nil,
 					sampleTime: "test",
-					testType: "test"
+					testType: "test",
+					specimen: "0",
+					paperProof: "0"
 				),
 				unixTimeStamp: 0
 			),
@@ -72,7 +74,9 @@ class VerifyResultViewControllerTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "test",
-				testType: "demo"
+				testType: "pcr",
+				specimen: "1",
+				paperProof: "0"
 			),
 			unixTimeStamp: 0
 		)
@@ -103,7 +107,9 @@ class VerifyResultViewControllerTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "test",
-				testType: "pcr"
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "0"
 			),
 			unixTimeStamp: 0
 		)
@@ -134,7 +140,9 @@ class VerifyResultViewControllerTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "\(timeStamp48HoursAgo)",
-				testType: "pcr"
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "0"
 			),
 			unixTimeStamp: Int64(Date().timeIntervalSince1970)
 		)
@@ -165,7 +173,9 @@ class VerifyResultViewControllerTests: XCTestCase {
 				firstNameInitial: nil,
 				lastNameInitial: nil,
 				sampleTime: "\(timeStamp40SecAgo)",
-				testType: "pcr"
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "0"
 			),
 			unixTimeStamp: Int64(timeStamp40SecAgo)
 		)

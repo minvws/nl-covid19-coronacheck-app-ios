@@ -34,7 +34,7 @@
 - (nonnull instancetype)init;
 // skipped field CreateCredentialMessage.IssueSignatureMessage with unsupported type: *github.com/privacybydesign/gabi.IssueSignatureMessage
 
-// skipped field CreateCredentialMessage.Attributes with unsupported type: map[string]string
+// skipped field CreateCredentialMessage.Attributes with unsupported type: map[string][]byte
 
 @end
 

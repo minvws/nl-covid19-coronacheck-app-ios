@@ -91,7 +91,9 @@ class EnlargedQRViewControllerTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
@@ -128,7 +130,9 @@ class EnlargedQRViewControllerTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
 		loadView()
