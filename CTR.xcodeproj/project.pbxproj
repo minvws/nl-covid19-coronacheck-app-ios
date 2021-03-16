@@ -3414,7 +3414,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Test;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;

@@ -116,9 +116,9 @@
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Controleer gegevens";
 "verifier.result.check.section.one" = "Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs.";
-"verifier.result.check.section.two" = "De gegevens bestaan uit: (1) de eerste letter van de voornaam, (2) de eerste letter van de achternaam, (3) de geboortedag en (4) de geboortemaand. ";
+"verifier.result.check.section.two" = "Een identificatie gegeven bestaat uit de eerste letter van de bezoekers voornaam (1), de eerste letter van de achternaam (2), de geboortedag (3) en geboortemaand (4).";
 
 /* MARK: - Verifier Denied Instructions */
-"verifier.denied.title" = "Geen geldige QR-code";
+"verifier.denied.title" = "Ongeldige QR-code";
 "verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Wat kan het betekenen</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p>";
-"verifier.denied.message.two" = "<p><b>En nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck app een QR-code van maken.</p>";
+"verifier.denied.message.two" = "<p><b>Wat nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck-app een QR-code van maken.</p>";
