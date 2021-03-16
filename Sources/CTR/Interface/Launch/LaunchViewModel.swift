@@ -103,6 +103,7 @@ class LaunchViewModel: Logging {
 		}
 	}
 
+	/// Update the Issuer Public keys
 	func updateKeys() {
 
 		// Execute once.
@@ -112,7 +113,7 @@ class LaunchViewModel: Logging {
 
 		isUpdatingIssuerPublicKeys = true
 
-		// Get the Config TTL
+		// Fetch the issuer Public keys
 		proofManager.fetchIssuerPublicKeys { [weak self] in
 
 			self?.isUpdatingIssuerPublicKeys = false
@@ -127,6 +128,7 @@ class LaunchViewModel: Logging {
 		}
 	}
 
+	/// Handle the state of the updates
 	func handleState() {
 
 		guard let configStatus = configStatus,

@@ -168,7 +168,7 @@ class ProofManager: ProofManaging, Logging {
 					self?.logError("Error getting the issuers public keys: \(error)")
 					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
 					   lastFetchedTimestamp > Date() - ttl {
-						self?.logDebug("Issuer public keys still within TTL")
+						self?.logInfo("Issuer public keys still within TTL")
 						oncompletion?()
 
 					} else {

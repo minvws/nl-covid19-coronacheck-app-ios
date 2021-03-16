@@ -13,6 +13,7 @@ class AppCoordinatorSpy: AppCoordinatorDelegate {
 	var openUrlCalled = false
 	var handleLaunchStateCalled = false
 	var retryCalled = false
+	var launchState: LaunchState?
 
 	func openUrl(_ url: URL) {
 
@@ -22,6 +23,7 @@ class AppCoordinatorSpy: AppCoordinatorDelegate {
 	func handleLaunchState(_ state: LaunchState) {
 
 		handleLaunchStateCalled = true
+		launchState = state
 	}
 
 	func retry() {
