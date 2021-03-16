@@ -51,7 +51,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	@Bindable private(set) var primaryButtonTitle: String
 
 	/// Allow Access?
-	@Bindable private(set) var allowAccess: AccessAction = .denied
+	@Bindable var allowAccess: AccessAction = .denied
 
 	/// Initialzier
 	/// - Parameters:
@@ -76,7 +76,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 
-		guard !isDemoQR() else {
+		guard !attributes.cryptoAttributes.isSpecimen else {
 			allowAccess = .demo
 			showAccessDemo()
 			return
@@ -124,15 +124,15 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return false
 	}
 
-	private func isDemoQR() -> Bool {
-
-		return attributes.cryptoAttributes.testType.lowercased() == "demo"
-	}
-
 	/// Is the QR timestamp stil valid
 	/// - Parameter now: the now timestamp
 	/// - Returns: True if the QR time stamp is still valid
 	private func isQRTimeStampValid(_ now: TimeInterval) -> Bool {
+
+		guard !attributes.cryptoAttributes.isPaperProof else {
+			logInfo("this is a paper proof, ignore QR Timestamp")
+			return true
+		}
 
 		if TimeInterval(attributes.unixTimeStamp) + configuration.getQRTTL() > now  &&
 			TimeInterval(attributes.unixTimeStamp) <= now {

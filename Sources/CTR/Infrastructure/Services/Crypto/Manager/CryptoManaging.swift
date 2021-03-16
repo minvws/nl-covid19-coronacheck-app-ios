@@ -21,6 +21,30 @@ struct CrypoAttributes: Codable {
 	let lastNameInitial: String?
 	let sampleTime: String
 	let testType: String
+	let specimen: String?
+	let paperProof: String?
+
+	enum CodingKeys: String, CodingKey {
+
+		case birthDay
+		case birthMonth
+		case firstNameInitial
+		case lastNameInitial
+		case sampleTime
+		case testType
+		case specimen = "isSpecimen"
+		case paperProof = "isPaperProof"
+	}
+
+	var isPaperProof: Bool {
+
+		return paperProof == "1"
+	}
+
+	var isSpecimen: Bool {
+
+		return specimen == "1"
+	}
 }
 
 struct Attributes {

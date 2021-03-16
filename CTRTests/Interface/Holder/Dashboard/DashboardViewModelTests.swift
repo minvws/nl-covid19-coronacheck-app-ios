@@ -127,7 +127,9 @@ class DashboardViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		sut?.proofValidator = ProofValidator(maxValidity: 1)
 
@@ -157,7 +159,9 @@ class DashboardViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
@@ -200,7 +204,9 @@ class DashboardViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		sut?.proofValidator = ProofValidator(maxValidity: 1)
 		sut?.checkQRValidity()
