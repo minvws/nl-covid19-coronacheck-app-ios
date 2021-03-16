@@ -119,11 +119,12 @@
 
 /* MARK: - Holder Token entry */
 "holder.tokenentry.title" = "Code invullen";
-"holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen. Of klik op de link in je e-mail, als de testlocatie je gemaild heeft.";
+"holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen.";
 "holder.tokenentry.token.title" = "Unieke code";
 "holder.tokenentry.token.placeholder" = "Bijv. SOB-FVDKT10-T2";
 "holder.tokenentry.verification.title" = "Verificatie code";
-"holder.tokenentry.verification.placeholder" = "Bijv. 0576";
+"holder.tokenentry.verification.placeholder" = "0576";
+"holder.tokenentry.verification.info" = "Je krijgt een code in een sms of e-mail";
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
