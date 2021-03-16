@@ -28,13 +28,7 @@ class TokenEntryViewModel: Logging {
 	/// 2.0: Initials + Birthday/month
 	let highestKnownProtocolVersion = "2.0"
 
-	@Bindable private(set) var title: String
-	@Bindable private(set) var message: String
-	@Bindable private(set) var tokenTitle: String
 	@Bindable private(set) var token: String?
-	@Bindable private(set) var tokenPlaceholder: String
-	@Bindable private(set) var verificationCodeTitle: String
-	@Bindable private(set) var verificationCodePlaceholder: String
 	@Bindable private(set) var showProgress: Bool = false
 	@Bindable private(set) var showVerification: Bool = false
 
@@ -57,13 +51,6 @@ class TokenEntryViewModel: Logging {
 		self.coordinator = coordinator
 		self.proofManager = proofManager
 		self.requestToken = scannedToken
-
-		title = .holderTokenEntryTitle
-		message = .holderTokenEntryText
-		tokenTitle = .holderTokenEntryTokenTitle
-		tokenPlaceholder = .holderTokenEntryTokenPlaceholder
-		verificationCodeTitle = .holderTokenEntryVerificationTitle
-		verificationCodePlaceholder = .holderTokenEntryVerificationPlaceholder
 
 		if let unwrappedToken = requestToken {
 			fetchProviders(unwrappedToken)

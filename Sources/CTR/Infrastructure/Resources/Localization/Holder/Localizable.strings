@@ -106,8 +106,10 @@
 "holder.tokenoverview.title" = "Testresultaat ophalen";
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
-"holder.tokenoverview.nocode.details" = "Als je je bij een commerciële testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.";
+"holder.tokenoverview.nocode.details" = "Je krijgt van de testlocatie een QR-code of een code met cijfers en letters. \n\nHeb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie. \n\nHet kan zijn dat je je opnieuw moet laten testen.";
+"holder.tokenoverview.code.title" = "SOB-FVDKT10-T2";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code";
+"holder.tokenoverview.qr.title" = "QR";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
 /* MARK: - Holder Token Scan */
@@ -119,10 +121,11 @@
 
 /* MARK: - Holder Token entry */
 "holder.tokenentry.title" = "Code invullen";
-"holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen. Of klik op de link in je e-mail, als de testlocatie je gemaild heeft.";
+"holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen.";
 "holder.tokenentry.token.title" = "Unieke code";
 "holder.tokenentry.token.placeholder" = "Bijv. SOB-FVDKT10-T2";
-"holder.tokenentry.verification.title" = "Verificatie code";
+"holder.tokenentry.verification.info" = "Je krijgt een code in een sms of e-mail";
+"holder.tokenentry.verification.title" = "Verificatiecode";
 "holder.tokenentry.verification.placeholder" = "Bijv. 0576";
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
@@ -140,7 +143,7 @@
 "holder.testresults.already.text" = "<p>Je testresultaat is al opgehaald en verwerkt in een QR-code.</p><p></p><p>Heb je het idee dat dit niet klopt? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.recent" = "Recente testresultaten";
 "holder.testresults.negative" = "Negatief testresultaat (geen corona)";
-"holder.testresults.identity" = "Identificatie gegevens: %@";
+"holder.testresults.identity" = "Identificatiegegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.testresults.alert.message" = "Je kan later vanaf Mijn overzicht opnieuw een QR-code maken.";
 "holder.testresults.alert.ok" = "Ja, Stop";
@@ -160,11 +163,12 @@
 
 /* MARK: - Holder Test Results About */
 "holder.testresults.about.title" = "Over het testresultaat";
-"holder.testresults.about.section.one" = "Met je testresultaat worden de testdatum en jouw identificatie gegevens opgehaald.";
-"holder.testresults.about.section.two" = "Je identificatie gegevens bestaan uit de eerste letter van je voornaam (1), de eerste letter van je achternaam (2), je geboortedag (3), en geboortemaand (4).";
-"holder.testresults.about.section.three" = "Kloppen jouw identificatie gegevens niet met je identiteitsbewijs?";
-"holder.testresults.about.section.four" = "Neem contact op met je testlocatie om je identificatie gegevens te laten aanpassen.";
+"holder.testresults.about.section.one" = "In een testresultaat staan alleen de testdatum en jouw gegevens. 
 
+Je gegevens bestaan uit: (1) de eerste letter van je voornaam, (2) de eerste letter van je achternaam, (3) je geboortedag en (4) geboortemaand.";
+"holder.testresults.about.section.two" = "Je gegevens bestaan uit: (1) de eerste letter van je voornaam, (2) de eerste letter van je achternaam, (3) je geboortedag en (4) geboortemaand.";
+"holder.testresults.about.section.three" = "Zijn deze gegevens anders dan op je identiteitsbewijs?";
+"holder.testresults.about.section.four" = "Neem contact op met je testlocatie. Zij kunnen je gegevens aanpassen. ";
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
 "holder.about.text" = "CoronaCheck is ontwikkeld zodat evenementen, horeca en andere uitgaansgelegenheden veilig hun deuren kunnen openen. Met behulp van deze app komen alleen mensen met een geldig negatief testbewijs binnen. Zo trekt Nederland er langzaam maar zeker meer op uit.";

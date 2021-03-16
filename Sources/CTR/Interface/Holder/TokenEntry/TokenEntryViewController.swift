@@ -38,8 +38,21 @@ class TokenEntryViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		viewModel.$title.binding = { [weak self] in  self?.sceneView.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		setupContent()
+		setupBinding()
+
+		setupGestureRecognizer(view: sceneView)
+		sceneView.tokenEntryView.inputField.delegate = self
+		sceneView.tokenEntryView.inputField.tag = 0
+		sceneView.verificationEntryView.inputField.delegate = self
+		sceneView.verificationEntryView.inputField.tag = 1
+
+			// Only show an arrow as back button
+		styleBackButton(buttonText: "")
+	}
+
+	func setupBinding() {
+
 		viewModel.$token.binding = { [weak self] token in
 			self?.sceneView.tokenEntryView.inputField.text = token
 			if token == nil {
@@ -47,10 +60,6 @@ class TokenEntryViewController: BaseViewController {
 
 			}
 		}
-		viewModel.$tokenTitle.binding = { [weak self] in self?.sceneView.tokenEntryView.header = $0 }
-		viewModel.$tokenPlaceholder.binding = { [weak self] in self?.sceneView.tokenEntryView.inputField.placeholder = $0 }
-		viewModel.$verificationCodeTitle.binding = { [weak self] in self?.sceneView.verificationEntryView.header = $0 }
-		viewModel.$verificationCodePlaceholder.binding = { [weak self] in self?.sceneView.verificationEntryView.inputField.placeholder = $0 }
 
 		viewModel.$showProgress.binding = { [weak self] in
 			guard let strongSelf = self else {
@@ -84,15 +93,17 @@ class TokenEntryViewController: BaseViewController {
 				self?.sceneView.verificationEntryView.inputField.becomeFirstResponder()
 			}
 		}
+	}
 
-		setupGestureRecognizer(view: sceneView)
-		sceneView.tokenEntryView.inputField.delegate = self
-		sceneView.tokenEntryView.inputField.tag = 0
-		sceneView.verificationEntryView.inputField.delegate = self
-		sceneView.verificationEntryView.inputField.tag = 1
+	func setupContent() {
 
-			// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+		sceneView.title = .holderTokenEntryTitle
+		sceneView.message = .holderTokenEntryText
+		sceneView.tokenEntryView.header = .holderTokenEntryTokenTitle
+		sceneView.tokenEntryView.inputField.placeholder = .holderTokenEntryTokenPlaceholder
+		sceneView.verificationEntryView.header = .holderTokenEntryVerificationTitle
+		sceneView.verificationEntryView.inputField.placeholder = .holderTokenEntryVerificationPlaceholder
+		sceneView.verificationEntryView.info = .holderTokenEntryVerificationInfo
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
