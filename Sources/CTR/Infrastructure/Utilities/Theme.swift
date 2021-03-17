@@ -188,6 +188,8 @@ final class Colors {
 
 	var tileGray: UIColor { return color(for: "TileGreyColor") }
 
+	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
+
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

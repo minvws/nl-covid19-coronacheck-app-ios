@@ -9,25 +9,6 @@ import UIKit
 
 class BaseViewController: UIViewController {
 
-	// MARK: Object lifecycle
-	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-
-		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-		setup()
-	}
-
-	required init?(coder aDecoder: NSCoder) {
-
-		super.init(coder: aDecoder)
-		setup()
-	}
-
-	// MARK: Setup
-	func setup() {
-
-		// Subclasses should implement this method
-	}
-
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 
 		if #available(iOS 13.0, *) {
