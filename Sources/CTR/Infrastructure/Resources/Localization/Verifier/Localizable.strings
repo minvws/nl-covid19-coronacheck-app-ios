@@ -18,7 +18,7 @@
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "Update vereist";
+"updateApp.title" = "Tijd voor een update";
 "updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
 "updateApp.button" = "Installeer update";
 

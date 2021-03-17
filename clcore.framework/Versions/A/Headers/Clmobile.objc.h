@@ -52,7 +52,7 @@
 
 @end
 
-FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issuerNonceBase64);
+FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCommitmentMessage(NSData* _Nullable holderSkJson, NSData* _Nullable issuerNonceMessageBase64);
 
 FOUNDATION_EXPORT ClmobileResult* _Nullable ClmobileCreateCredential(NSData* _Nullable holderSkJson, NSData* _Nullable ccmJson);
 
