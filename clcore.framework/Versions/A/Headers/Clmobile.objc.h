@@ -12,7 +12,6 @@
 
 
 @class ClmobileAnnotatedPk;
-@class ClmobileCreateCredentialMessage;
 @class ClmobileResult;
 @class ClmobileVerifyResult;
 
@@ -24,18 +23,6 @@
 - (nonnull instancetype)init;
 @property (nonatomic) NSString* _Nonnull id_;
 @property (nonatomic) NSData* _Nullable pkXml;
-@end
-
-@interface ClmobileCreateCredentialMessage : NSObject <goSeqRefInterface> {
-}
-@property(strong, readonly) _Nonnull id _ref;
-
-- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
-// skipped field CreateCredentialMessage.IssueSignatureMessage with unsupported type: *github.com/privacybydesign/gabi.IssueSignatureMessage
-
-// skipped field CreateCredentialMessage.Attributes with unsupported type: map[string][]byte
-
 @end
 
 @interface ClmobileResult : NSObject <goSeqRefInterface> {
