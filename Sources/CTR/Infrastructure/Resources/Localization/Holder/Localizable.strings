@@ -96,7 +96,7 @@
 
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "QR-code maken";
-"holder.provider.header" = "Waar ben je getest?";
+"holder.provider.header" = "QR-code maken";
 "holder.provider.message" = "Bewijst je test dat je op dat moment geen corona hebt? Dan kan je van het testresultaat een QR-code maken.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
@@ -106,7 +106,7 @@
 
 /* MARK: - Holder Token Overview */
 "holder.tokenoverview.title" = "Testresultaat ophalen";
-"holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een code gekregen of een QR-code.";
+"holder.tokenoverview.text" = "Om je testresultaat op te halen heb je een code nodig.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
 "holder.tokenoverview.nocode.details" = "Je krijgt van de testlocatie een QR-code of een code met cijfers en letters. \n\nHeb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie. \n\nHet kan zijn dat je je opnieuw moet laten testen.";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code";
