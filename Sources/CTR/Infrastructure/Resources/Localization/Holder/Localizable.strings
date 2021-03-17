@@ -88,7 +88,7 @@
 "holder.banner.newqr.message" = "<u>Lees hier</u> welke informatie in de QR-code staat.";
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is aan de deur.\n";
+"holder.appointment.body" = "Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is aan de deur.";
 "holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.title" = "Testafspraak maken";
 "holder.appointment.header" = "Maak een testafspraak";

@@ -43,7 +43,7 @@ class AppointmentViewController: BaseViewController {
 		viewModel.$body.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$linkedBody.binding = { [weak self] in
 			self?.sceneView.underline($0)
-			self?.setupLink()
+//			self?.setupLink()
 		}
 
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
