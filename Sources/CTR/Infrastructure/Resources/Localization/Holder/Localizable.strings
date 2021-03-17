@@ -111,9 +111,7 @@
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
 "holder.tokenoverview.nocode.details" = "Je krijgt van de testlocatie een QR-code of een code met cijfers en letters. \n\nHeb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie. \n\nHet kan zijn dat je je opnieuw moet laten testen.";
-"holder.tokenoverview.code.title" = "SOB-FVDKT10-T2";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code";
-"holder.tokenoverview.qr.title" = "QR";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
 /* MARK: - Holder Token Scan */
@@ -127,7 +125,7 @@
 "holder.tokenentry.title" = "Code invullen";
 "holder.tokenentry.text" = "Vul de code in die je van je testlocatie hebt gekregen.";
 "holder.tokenentry.token.title" = "Unieke code";
-"holder.tokenentry.token.placeholder" = "Bijv. SOB-FVDKT10-T2";
+"holder.tokenentry.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
 "holder.tokenentry.verification.info" = "Je krijgt een code in een sms of e-mail";
 "holder.tokenentry.verification.title" = "Verificatiecode";
 "holder.tokenentry.verification.placeholder" = "Bijv. 0576";
