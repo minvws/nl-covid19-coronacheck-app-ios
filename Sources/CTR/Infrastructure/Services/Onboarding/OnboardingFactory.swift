@@ -137,13 +137,13 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 		let pages = [
 			OnboardingPage(
 				title: .verifierOnboardingTitleSafely,
-				message: String(format: .verifierOnboardingMessageSafely, maxValidity),
+				message: .verifierOnboardingMessageSafely,
 				image: .onboardingSafely,
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
 				title: .verifierOnboardingTitleScanQR,
-				message: .verifierOnboardingMessageScanQR,
+				message: String(format: .verifierOnboardingMessageScanQR, maxValidity),
 				image: .onboardingScan,
 				step: .yourQR
 			),
