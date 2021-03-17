@@ -100,7 +100,7 @@
 "holder.provider.message" = "Bewijst je test dat je op dat moment geen corona hebt? Dan kan je van het testresultaat een QR-code maken.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
-"holder.provider.commercial.title" = "Testenvoortoegang.nl";
+"holder.provider.commercial.title" = "Testen voor toegang";
 "holder.provider.commercial.subtitle" = "Vul je code in";
 "holder.provider.nodigid" = "Ik heb geen DigiD";
 
