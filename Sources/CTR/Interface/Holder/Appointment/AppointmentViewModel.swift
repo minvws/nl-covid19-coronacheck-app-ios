@@ -47,7 +47,7 @@ class AppointmentViewModel: Logging {
 
 		self.title = .holderAppointmentTitle
 		self.header = .holderAppointmentHeader
-		self.body = String(format: .holderAppointmentBody, maxValidity)
+		self.body = String(format: .holderAppointmentBody, maxValidity, maxValidity)
 		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle
 		self.image = UIImage.appointmentBig

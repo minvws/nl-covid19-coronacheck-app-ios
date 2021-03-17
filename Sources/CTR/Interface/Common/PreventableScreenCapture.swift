@@ -54,11 +54,10 @@ class PreventableScreenCapture {
 	/// Prevent screen capture
 	@objc func preventScreenCapture() {
 
-		// TODO: Reeable preventScreenCapture
-//		if UIScreen.main.isCaptured {
-//			hideForCapture = true
-//		} else {
-//			hideForCapture = false
-//		}
+		if UIScreen.main.isCaptured {
+			hideForCapture = true
+		} else {
+			hideForCapture = false
+		}
 	}
 }
