@@ -7,6 +7,12 @@
 
 import UIKit
 
+extension Notification.Name {
+
+	/// a valid qr has been created
+	static let qrCreated = Notification.Name("nl.rijksoverheid.ctr.qrcreated")
+}
+
 struct ListResultItem {
 
 	let identifier: String
@@ -20,6 +26,8 @@ class ListResultsViewModel: Logging {
 
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
+
+	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
 	var maxValidity: Int
 
@@ -248,13 +256,17 @@ class ListResultsViewModel: Logging {
 
 		switch state {
 			case .valid:
-				// TODO: Announcement
+
+				notificationCenter.post(name: .qrCreated, object: nil)
 				coordinator?.navigateBackToStart()
 			case .alreadySigned:
+
 				reportAlreadyDone()
 			case .notNegative, .tooOld, .tooNew:
+
 				reportNoTestResult()
 			default:
+				
 				logError("handleTestProofsResponse: unknown state: \(state)")
 				showError = true
 		}

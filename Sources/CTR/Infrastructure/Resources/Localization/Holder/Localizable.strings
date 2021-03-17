@@ -85,6 +85,10 @@
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 
+/* MARK: - Holder Banner */
+"holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
+"holder.banner.newqr.message" = "<u>Lees hier</u> welke informatie in de QR-code is verwerkt.";
+
 /* MARK: - Holder Appointment */
 "holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is %@ uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";

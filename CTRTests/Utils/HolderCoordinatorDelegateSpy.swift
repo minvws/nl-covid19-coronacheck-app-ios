@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
+class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
 	var navigateToAppointmentCalled = false
 	var navigateToEnlargedQRCalled = false
@@ -21,6 +21,7 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
 	var navigateBackToStartCalled = false
 	var presentInformationPageCalled = false
 	var dismissCalled = false
+	var openUrlCalled = false
 
 	func navigateToEnlargedQR() {
 
@@ -75,5 +76,10 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable {
 	func dismiss() {
 
 		dismissCalled = true
+	}
+
+	func openUrl(_ url: URL, inApp: Bool) {
+
+		openUrlCalled = true
 	}
 }

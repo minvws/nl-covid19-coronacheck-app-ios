@@ -76,7 +76,7 @@ class HolderDashboardViewModel: Logging {
 	var loggingCategory: String = "HolderDashboardViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
+	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
@@ -89,6 +89,12 @@ class HolderDashboardViewModel: Logging {
 
 	/// The proof validator
 	var proofValidator: ProofValidatorProtocol
+
+	/// The banner manager
+	var bannerManager: BannerManaging = BannerManager.shared
+
+	/// the notification center
+	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
 	/// The previous brightness
 	var previousBrightness: CGFloat?
@@ -131,7 +137,7 @@ class HolderDashboardViewModel: Logging {
 	///   - configuration: the configuration
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
-		coordinator: HolderCoordinatorDelegate,
+		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
@@ -311,6 +317,22 @@ class HolderDashboardViewModel: Logging {
 		dateFormatter.dateFormat = "EEEE '<br>' d MMMM HH:mm"
 		return dateFormatter
 	}()
+
+	@objc func showBanner() {
+
+		bannerManager.showBanner(
+			title: .holderBannerNewQRTitle,
+			message: .holderBannerNewQRMessage,
+			icon: UIImage.alert,
+			callback: { [weak self] in
+
+				if let url = self?.configuration.getHolderFAQURL() {
+
+					self?.coordinator?.openUrl(url, inApp: true)
+				}
+			}
+		)
+	}
 }
 
 // MARK: - capturedDidChangeNotification
@@ -319,10 +341,17 @@ extension HolderDashboardViewModel {
 
 	/// Add an observer for the capturedDidChangeNotification
 	func addObserver() {
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(preventScreenCapture),
 			name: UIScreen.capturedDidChangeNotification,
+			object: nil
+		)
+
+		notificationCenter.addObserver(
+			self,
+			selector: #selector(showBanner),
+			name: .qrCreated,
 			object: nil
 		)
 	}
