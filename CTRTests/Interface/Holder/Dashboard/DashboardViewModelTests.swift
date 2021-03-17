@@ -91,7 +91,6 @@ class DashboardViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
 		XCTAssertFalse(strongSut.hideForCapture, "Hide QR should not be shown")
 	}
@@ -112,7 +111,7 @@ class DashboardViewModelTests: XCTestCase {
 		}
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
+		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
 	}
 
@@ -144,7 +143,7 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertNil(strongSut.validityTimer, "The timer should be nil")
-		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
+		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
 		XCTAssertTrue(strongSut.showExpiredQR, "Expired QR should be shown")
 	}
 
@@ -178,7 +177,6 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertNotNil(strongSut.qrCard, "Subtitle should be nil")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
-		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
 	}
 

@@ -70,7 +70,7 @@ struct QRCardInfo {
 	let validUntil: String
 }
 
-class HolderDashboardViewModel: Logging {
+class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 	/// The logging category
 	var loggingCategory: String = "HolderDashboardViewModel"
@@ -111,14 +111,8 @@ class HolderDashboardViewModel: Logging {
 	/// The message on the expired card
 	@Bindable private(set) var expiredTitle: String?
 
-	/// Show a valid QR Message
-	@Bindable private(set) var showValidQR: Bool
-
 	/// Show an expired QR Message
 	@Bindable private(set) var showExpiredQR: Bool
-
-	/// Hide for screen capture
-	@Bindable var hideForCapture: Bool
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -152,9 +146,7 @@ class HolderDashboardViewModel: Logging {
 		self.expiredTitle = .holderDashboardQRExpired
 
 		// Start by showing nothing
-		self.showValidQR = false
 		self.showExpiredQR = false
-		self.hideForCapture = false
 
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
@@ -175,6 +167,7 @@ class HolderDashboardViewModel: Logging {
 
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
+		super.init()
 		self.addObserver()
 	}
 
@@ -196,7 +189,7 @@ class HolderDashboardViewModel: Logging {
 	@objc func checkQRValidity() {
 
 		guard let credential = cryptoManager?.readCredential() else {
-			showValidQR = false
+			qrCard = nil
 			showExpiredQR = false
 			validityTimer?.invalidate()
 			validityTimer = nil
@@ -251,7 +244,6 @@ class HolderDashboardViewModel: Logging {
 			validUntil: String(format: .holderDashboardQRMessage, validUntilDateString)
 		)
 
-		showValidQR = true
 		showExpiredQR = false
 	}
 
@@ -274,14 +266,25 @@ class HolderDashboardViewModel: Logging {
 			validUntil: String(format: .holderDashboardQRExpiring, validUntilDateString, timeLeft.stringTime)
 		)
 
-		showValidQR = true
 		showExpiredQR = false
+
+		// Cut off at the cut off time
+		if timeLeft < 60 {
+			validityTimer?.invalidate()
+			validityTimer = Timer.scheduledTimer(
+				timeInterval: timeLeft,
+				target: self,
+				selector: (#selector(checkQRValidity)),
+				userInfo: nil,
+				repeats: true
+			)
+		}
 	}
 
 	/// Show the QR Message is expired
 	func showQRMessageIsExpired() {
 
-		showValidQR = false
+		qrCard = nil
 		showExpiredQR = true
 	}
 
@@ -327,7 +330,6 @@ class HolderDashboardViewModel: Logging {
 			callback: { [weak self] in
 
 				if let url = self?.configuration.getHolderFAQURL() {
-
 					self?.coordinator?.openUrl(url, inApp: true)
 				}
 			}
@@ -335,18 +337,12 @@ class HolderDashboardViewModel: Logging {
 	}
 }
 
-// MARK: - capturedDidChangeNotification
+// MARK: - qrCreated
 
 extension HolderDashboardViewModel {
 
-	/// Add an observer for the capturedDidChangeNotification
+	/// Add an observer for the qrCreated
 	func addObserver() {
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(preventScreenCapture),
-			name: UIScreen.capturedDidChangeNotification,
-			object: nil
-		)
 
 		notificationCenter.addObserver(
 			self,
@@ -354,17 +350,6 @@ extension HolderDashboardViewModel {
 			name: .qrCreated,
 			object: nil
 		)
-	}
-
-	/// Prevent screen capture
-	@objc func preventScreenCapture() {
-
-		if UIScreen.main.isCaptured {
-			hideForCapture = true
-			self.logWarning("Screen capture in progress")
-		} else {
-			hideForCapture = false
-		}
 	}
 }
 
@@ -387,7 +372,7 @@ extension TimeInterval {
 		} else if minutes != 0 {
 			return "\(minutes) \(String.minute)"
 		} else {
-			return  ""
+			return  "1 \(String.minute)"
 		}
 	}
 }

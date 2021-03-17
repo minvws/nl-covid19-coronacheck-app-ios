@@ -3127,7 +3127,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NETWORK_CONFIGURATION = Test;
+				NETWORK_CONFIGURATION = Production;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3444,7 +3444,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				NETWORK_CONFIGURATION = Test;
+				NETWORK_CONFIGURATION = Production;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;
