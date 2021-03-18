@@ -2719,7 +2719,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck Test";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2735,7 +2735,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR TEST";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2833,7 +2833,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck ACC";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2849,7 +2849,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR ACC";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2947,7 +2947,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck PROD";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2963,7 +2963,7 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR PROD";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -3061,7 +3061,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3117,7 +3117,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				DISPLAY_NAME = "Scanner Dev";
@@ -3140,7 +3140,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -3154,7 +3154,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = Scanner;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3173,7 +3173,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Scanner App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -3187,7 +3187,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = Scanner;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3206,7 +3206,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Scanner App Store";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "App Store";
 		};
@@ -3220,7 +3220,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "Scanner Test";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3236,10 +3236,10 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Verifier Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Verifier Ad Hoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Ad Hoc Test";
 		};
@@ -3253,7 +3253,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "Scanner PROD";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3269,10 +3269,10 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Verifier Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Verifier Ad Hoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Ad Hoc Prod";
 		};
@@ -3286,7 +3286,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "Scanner ACC";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3302,10 +3302,10 @@
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "CoronaTester Verifier Ad Hoc";
+				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Verifier Ad Hoc";
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = "Ad Hoc Acc";
 		};
@@ -3441,7 +3441,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				DISPLAY_NAME = "CoronaCheck D";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3477,7 +3477,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (

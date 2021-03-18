@@ -25,7 +25,7 @@ platform :ios do
       app_name: "CTR",
       device: "iPhone 12",
       workspace: "CTR.xcworkspace",
-      scheme: "CoronaTester",
+      scheme: "CoronaCheck",
       reinstall_app: true,
       app_identifier: "nl.rijksoverheid.ctr",
       skip_slack: true
@@ -156,7 +156,7 @@ platform :ios do
 
     setup_ci(provider: "travis", force: true)
     prepare_certificate
-    install_provisioning_profile(path: "fastlane/profiles/CoronaTester_Ad_Hoc.mobileprovision")
+    install_provisioning_profile(path: "fastlane/profiles/CoronaCheck_Ad_Hoc.mobileprovision")
   
     prepare
     dependencies
@@ -166,7 +166,7 @@ platform :ios do
 
     setup_ci(provider: "travis", force: true)
     prepare_certificate
-    install_provisioning_profile(path: "fastlane/profiles/CoronaTester_Verifier_Ad_Hoc.mobileprovision")
+    install_provisioning_profile(path: "fastlane/profiles/CoronaCheck_Verifier_Ad_Hoc.mobileprovision")
 
     prepare
     dependencies
@@ -200,12 +200,12 @@ platform :ios do
 
   private_lane :deploy_holder_test do
     build_ios_app(
-      scheme: "CoronaTester",
+      scheme: "CoronaCheck",
       configuration: "Ad Hoc Test",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+          "nl.rijksoverheid.ctr" => "CoronaCheck Ad Hoc"
         }
       }
     )
@@ -223,7 +223,7 @@ platform :ios do
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaTester Verifier Ad Hoc"
+          "nl.rijksoverheid.ctr.verifier" => "CoronaCheck Verifier Ad Hoc"
         }
       }
     )
@@ -236,12 +236,12 @@ platform :ios do
 
   private_lane :deploy_holder_acc do
     build_ios_app(
-      scheme: "CoronaTester",
+      scheme: "CoronaCheck",
       configuration: "Ad Hoc Acc",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+          "nl.rijksoverheid.ctr" => "CoronaCheck Ad Hoc"
         }
       }
     )
@@ -259,7 +259,7 @@ platform :ios do
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaTester Verifier Ad Hoc"
+          "nl.rijksoverheid.ctr.verifier" => "CoronaCheck Verifier Ad Hoc"
         }
       }
     )
@@ -272,12 +272,12 @@ platform :ios do
 
   private_lane :deploy_holder_prod do
     build_ios_app(
-      scheme: "CoronaTester",
+      scheme: "CoronaCheck",
       configuration: "Ad Hoc Prod",
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr" => "CoronaTester Ad Hoc"
+          "nl.rijksoverheid.ctr" => "CoronaCheck Ad Hoc"
         }
       }
     )
@@ -295,7 +295,7 @@ platform :ios do
       export_options: {
         method: "ad-hoc",
         provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaTester Verifier Ad Hoc"
+          "nl.rijksoverheid.ctr.verifier" => "CoronaCheck Verifier Ad Hoc"
         }
       }
     )
