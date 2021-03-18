@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -39,6 +39,8 @@
 	<true/>
 	<key>NETWORK_CONFIGURATION</key>
 	<string>$(NETWORK_CONFIGURATION)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>De app will toegang tot de camera om de QR-code te scannen. </string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Bold.ttf</string>
