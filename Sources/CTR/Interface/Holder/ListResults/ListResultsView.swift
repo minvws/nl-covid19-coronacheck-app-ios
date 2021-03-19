@@ -56,6 +56,7 @@ class ListResultsView: ScrolledStackView {
 	}()
 
 	private let spacer: UIView = {
+
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = Theme.colors.viewControllerBackground
@@ -119,7 +120,7 @@ class ListResultsView: ScrolledStackView {
 
 			// Primary button
 			primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor),
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
