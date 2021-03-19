@@ -191,7 +191,7 @@ class QRCardView: BaseView {
 			),
 
 			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
