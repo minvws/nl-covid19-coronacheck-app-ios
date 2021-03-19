@@ -34,7 +34,7 @@ class ListResultView: BaseView {
 	/// The header label
 	let headerLabel: Label = {
 
-		return Label(caption1SemiBold: nil)
+		return Label(caption1SemiBold: nil).multiline()
 	}()
 
 	/// The title label
@@ -46,13 +46,13 @@ class ListResultView: BaseView {
 	/// The message label
 	let messageLabel: Label = {
 
-		return Label(subhead: nil)
+		return Label(subhead: nil).multiline()
 	}()
 
 	/// The info label
 	let infoLabel: Label = {
 
-		return Label(subhead: nil)
+		return Label(subhead: nil).multiline()
 	}()
 
 	let disclaimerButton: UIButton = {
