@@ -104,8 +104,12 @@ class CardView: BaseView {
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
 			),
+//			primaryButton.widthAnchor.constraint(
+//				equalTo: widthAnchor,
+//				multiplier: ViewTraits.buttonRatio
+//			),
 			primaryButton.widthAnchor.constraint(
-				equalTo: widthAnchor,
+				greaterThanOrEqualTo: widthAnchor,
 				multiplier: ViewTraits.buttonRatio
 			),
 			primaryButton.bottomAnchor.constraint(
@@ -139,6 +143,10 @@ class CardView: BaseView {
 			messageLabel.widthAnchor.constraint(
 				equalTo: widthAnchor,
 				multiplier: ViewTraits.messageRatio
+			),
+			messageLabel.bottomAnchor.constraint(
+				equalTo: primaryButton.topAnchor,
+				constant: -40
 			)
 		])
 	}

@@ -1662,6 +1662,7 @@
 		6DDEFB3425AEDFD500A6912A /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				6D92848925B5CB12009D4350 /* AppCoordinator.swift */,
 				6DE6FD5B25C16497006602AC /* AppUpdate */,
 				6D92849825B5CBC0009D4350 /* Common */,
 				6D9284AD25B5D037009D4350 /* Holder */,
@@ -1676,7 +1677,6 @@
 		6DDEFB3525AEDFF200A6912A /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				6D92848925B5CB12009D4350 /* AppCoordinator.swift */,
 				6DDEFAF325AEDCA800A6912A /* AppDelegate.swift */,
 				6DDEFAF525AEDCA800A6912A /* SceneDelegate.swift */,
 			);

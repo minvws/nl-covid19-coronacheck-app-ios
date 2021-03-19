@@ -60,16 +60,12 @@ class TokenOverviewViewModel: Logging {
 				identifier: .code,
 				icon: .tokenExample,
 				subTitle: .holderTokenOverviewCodeText
-			) // ,
-//			TokenProvider(
-//				identifier: .qr,
-//				icon: .miniQR,
-//				subTitle: .holderTokenOverviewQRText
-//			)
-
-//			<key>NSCameraUsageDescription</key>
-//			<string>De app wil toegang tot de camera om de QR-code te scannen. </string>
-
+			),
+			TokenProvider(
+				identifier: .qr,
+				icon: .miniQR,
+				subTitle: .holderTokenOverviewQRText
+			)
 		]
 	}
 
