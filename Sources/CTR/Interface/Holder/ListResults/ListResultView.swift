@@ -131,12 +131,10 @@ class ListResultView: BaseView {
 			// Header
 			headerLabel.centerYAnchor.constraint(equalTo: disclaimerButton.centerYAnchor),
 			headerLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
+				equalTo: leadingAnchor
 			),
 			headerLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				equalTo: trailingAnchor
 			),
 			headerLabel.bottomAnchor.constraint(
 				equalTo: topLineView.topAnchor,
@@ -150,8 +148,7 @@ class ListResultView: BaseView {
 
 			// Select Image
 			selectImageView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
+				equalTo: leadingAnchor
 			),
 			selectImageView.topAnchor.constraint(
 				equalTo: topLineView.bottomAnchor,
@@ -170,8 +167,7 @@ class ListResultView: BaseView {
 				constant: 16
 			),
 			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				equalTo: trailingAnchor
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
@@ -184,8 +180,7 @@ class ListResultView: BaseView {
 				constant: ViewTraits.margin
 			),
 			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				equalTo: trailingAnchor
 			),
 			messageLabel.bottomAnchor.constraint(
 				equalTo: infoLabel.topAnchor,
@@ -198,8 +193,7 @@ class ListResultView: BaseView {
 				constant: ViewTraits.margin
 			),
 			infoLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
+				equalTo: trailingAnchor
 			),
 			infoLabel.bottomAnchor.constraint(
 				equalTo: bottomLineView.topAnchor,

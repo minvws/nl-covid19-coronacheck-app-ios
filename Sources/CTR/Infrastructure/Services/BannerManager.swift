@@ -28,8 +28,6 @@ class BannerManager: BannerManaging {
 
 	var bannerView: BannerView?
 
-	static let snackbarHeight: CGFloat = 146
-
 	var callback: (() -> Void)?
 
 	/// Show a banner
@@ -114,7 +112,6 @@ class BannerManager: BannerManaging {
 			view.widthAnchor.constraint(
 				equalTo: window.widthAnchor
 			),
-			view.heightAnchor.constraint(equalToConstant: Self.snackbarHeight),
 			view.centerXAnchor.constraint(equalTo: window.centerXAnchor),
 			view.topAnchor.constraint(equalTo: window.topAnchor)
 		])

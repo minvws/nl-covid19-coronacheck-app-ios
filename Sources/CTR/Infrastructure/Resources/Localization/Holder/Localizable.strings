@@ -133,7 +133,7 @@
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat. Op het moment van de test had je geen corona. Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
-"holder.testresults.results.button" = "Maak QR-code van testresultaat";
+"holder.testresults.results.button" = "Maak QR-code";
 "holder.testresults.noresults.title" = "Er is geen negatief testresultaat";
 "holder.testresults.noresults.text" = "Er is geen negatief testresultaat beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je test is langer dan %@ uur geleden uitgevoerd</li><li>Je testresultaat is nog niet verwerkt";
 "holder.testresults.back.button" = "Naar mijn overzicht";

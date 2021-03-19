@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TokenOverviewView: ScrollView {
+class TokenOverviewView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -40,7 +40,7 @@ class TokenOverviewView: ScrollView {
 	}()
 
 	/// The stackview for the content
-	let stackView: UIStackView = {
+	let optionStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -51,64 +51,19 @@ class TokenOverviewView: ScrollView {
 		return view
 	}()
 
+	override func setupViews() {
+		
+		super.setupViews()
+		backgroundColor = Theme.colors.viewControllerBackground
+	}
+
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		contentView.addSubview(titleLabel)
-		contentView.addSubview(messageLabel)
-		contentView.addSubview(stackView)
-	}
-
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-
-			// Title
-			titleLabel.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.titleTopMargin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.messageTopMargin
-			),
-
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// StackView
-			stackView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.stackMargin
-			),
-			stackView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			)
-		])
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(optionStackView)
 	}
 
 	// MARK: Public Access

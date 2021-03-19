@@ -27,7 +27,7 @@ class ButtonWithSubtitle: BaseView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(calloutSemiBold: nil)
+		return Label(calloutSemiBold: nil).multiline()
 	}()
 
 	/// The sub title label
