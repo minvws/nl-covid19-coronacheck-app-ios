@@ -53,7 +53,7 @@ class VerifierStartViewController: BaseViewController {
 
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(.technicalErrorTitle, message: .verifierStartInternet)
+				self?.showError(.errorTitle, message: .verifierStartInternet)
 			}
 		}
 

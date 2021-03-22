@@ -12,7 +12,6 @@
 "general.done" = "Klaar";
 "general.ok" = "Ok";
 "general.error.title" = "Er ging iets mis";
-"general.error.technical.title" = "Technische fout";
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 "general.menu.version" = "App versie %@ (%@)";
 

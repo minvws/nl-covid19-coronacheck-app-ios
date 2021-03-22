@@ -180,7 +180,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		viewModel?.showError = true
 		// Then
 		alertVerifier.verify(
-			title: .technicalErrorTitle,
+			title: .errorTitle,
 			message: .technicalErrorText,
 			animated: true,
 			actions: [
