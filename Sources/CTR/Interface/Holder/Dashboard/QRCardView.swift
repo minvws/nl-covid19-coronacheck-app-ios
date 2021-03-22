@@ -29,13 +29,13 @@ class QRCardView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(title3: nil, montserrat: true)
+		return Label(title3: nil, montserrat: true).multiline()
 	}()
 
 	/// The time label
 	let identityLabel: Label = {
 
-		return Label(subhead: nil)
+		return Label(subhead: nil).multiline()
 	}()
 
 	/// The time label
@@ -121,7 +121,7 @@ class QRCardView: BaseView {
 			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
-			
+
 			// Title
 			titleLabel.topAnchor.constraint(
 				equalTo: topAnchor,
@@ -130,9 +130,6 @@ class QRCardView: BaseView {
 			titleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
-			),
-			titleLabel.heightAnchor.constraint(
-				equalToConstant: ViewTraits.titleLineHeight
 			),
 			titleLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
@@ -152,9 +149,6 @@ class QRCardView: BaseView {
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			identityLabel.heightAnchor.constraint(
-				equalToConstant: 18
-			),
 			identityLabel.bottomAnchor.constraint(
 				equalTo: timeLabel.topAnchor,
 				constant: -24
@@ -173,12 +167,9 @@ class QRCardView: BaseView {
 			// Time
 			blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			blurView.heightAnchor.constraint(
-				equalToConstant: 72
-			),
 			blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			blurView.topAnchor.constraint(equalTo: timeLabel.topAnchor, constant: 102),
-			
+			blurView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 40),
+
 			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: blurView.leadingAnchor,
@@ -194,8 +185,13 @@ class QRCardView: BaseView {
 				constant: 19
 			),
 
+			messageLabel.bottomAnchor.constraint(
+				equalTo: bottomAnchor,
+				constant: -19
+			),
+
 			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.margin

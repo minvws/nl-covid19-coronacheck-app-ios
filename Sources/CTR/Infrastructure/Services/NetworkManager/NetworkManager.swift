@@ -159,7 +159,9 @@ class NetworkManager: NetworkManaging, Logging {
 			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 		}
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		// TODO: Re-enable SecurityStrategy
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 	

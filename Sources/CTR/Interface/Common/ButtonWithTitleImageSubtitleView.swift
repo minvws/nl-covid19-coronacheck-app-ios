@@ -35,7 +35,7 @@ class ButtonWithTitleImageSubtitle: BaseView {
 	/// The sub title label
 	let subTitleLabel: Label = {
 
-		return Label(body: nil)
+		return Label(body: nil).multiline()
 	}()
 
 	/// The disclosure image

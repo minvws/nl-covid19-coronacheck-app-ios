@@ -75,7 +75,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		// Force navigation title color to white
 		let textAttributes = [
 			NSAttributedString.Key.foregroundColor: UIColor.white,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
 		]
 		navigationController?.navigationBar.titleTextAttributes = textAttributes
 		navigationController?.navigationBar.tintColor = .white

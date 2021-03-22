@@ -12,7 +12,7 @@ class MenuItemView: BaseView {
 	/// The message label
 	let titleLabel: Label = {
 
-		return Label(body: nil)
+		return Label(body: nil).multiline()
 	}()
 
 	let primaryButton: UIButton = {
@@ -109,7 +109,7 @@ class MenuView: BaseView {
 	/// The bottom label
 	let bottomLabel: Label = {
 
-		return Label(body: nil)
+		return Label(body: nil).multiline()
 	}()
 
 	override func setupViews() {
@@ -118,6 +118,7 @@ class MenuView: BaseView {
 		backgroundColor = Theme.colors.primary
 		bottomLabel.textColor = Theme.colors.secondary
 		bottomLabel.font = Theme.fonts.subheadMontserrat
+		bottomLabel.textAlignment = .right
 	}
 
 	/// Setup the hierarchy
@@ -180,7 +181,8 @@ class MenuView: BaseView {
 			),
 
 			bottomLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-			bottomLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10)
+			bottomLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+			bottomLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
 		])
 	}
 

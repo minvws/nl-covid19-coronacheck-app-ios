@@ -122,9 +122,6 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 		}
-//		if let birthdate = proofManager?.getBirthDate() {
-//			qrTitle = printBirthDateFormatter.string(from: birthdate)
-//		}
 	}
 
 	/// Start the validity timer, check every 170 seconds.

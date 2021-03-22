@@ -79,14 +79,14 @@ class HolderDashboardView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 
 			// CardViews
-			appointmentCard.widthAnchor.constraint(
-				equalTo: appointmentCard.heightAnchor,
-				multiplier: ViewTraits.cardRatio
-			),
-			createCard.widthAnchor.constraint(
-				equalTo: createCard.heightAnchor,
-				multiplier: ViewTraits.cardRatio
-			)
+//			appointmentCard.widthAnchor.constraint(
+//				equalTo: appointmentCard.heightAnchor,
+//				multiplier: ViewTraits.cardRatio
+//			),
+//			createCard.widthAnchor.constraint(
+//				equalTo: createCard.heightAnchor,
+//				multiplier: ViewTraits.cardRatio
+//			)
 		])
 	}
 

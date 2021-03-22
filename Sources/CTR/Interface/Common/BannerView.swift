@@ -119,7 +119,8 @@ class BannerView: BaseView {
 			messageLabel.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: 4
-			)
+			),
+			messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
 		])
 	}
 
