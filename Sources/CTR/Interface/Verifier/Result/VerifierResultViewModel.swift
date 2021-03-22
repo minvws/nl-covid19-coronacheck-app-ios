@@ -107,22 +107,21 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			showAccessDenied()
 			allowAccess = .denied
 		}
-//		if (configuration as? Configuration)?.getEnvironment() != "production" {
-			debugInfo = [
-				"Debug information",
-				"Now: \(printDateFormatter.string(from: Date(timeIntervalSince1970: now)))",
-				"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
-				"---------------------",
-				"isSampleTimeValid: \(isSampleTimeValid(now))",
-				"TTL: \(proofValidator.maxValidity) hours",
-				"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
-				"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
-				"---------------------",
-				"isQRTimeStampValid: \(isQRTimeStampValid(now))",
-				"TTL: \(configuration.getQRTTL()) seconds",
-				"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
-			]
-//		}
+
+		debugInfo = [
+			"QR Information",
+			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: now)))",
+			"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
+			"---------------------",
+			"isSampleTimeValid: \(isSampleTimeValid(now))",
+			"TTL: \(proofValidator.maxValidity) hours",
+			"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
+			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
+			"---------------------",
+			"isQRTimeStampValid: \(isQRTimeStampValid(now))",
+			"TTL: \(configuration.getQRTTL()) seconds",
+			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
+		]
 	}
 
 	/// Formatter to print
@@ -163,10 +162,12 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			return true
 		}
 
-		if TimeInterval(attributes.unixTimeStamp) + configuration.getQRTTL() > now  &&
-			TimeInterval(attributes.unixTimeStamp) <= now {
+		let absoluteQRTimeDifference = abs(now - TimeInterval(attributes.unixTimeStamp))
+		if absoluteQRTimeDifference < configuration.getQRTTL() {
+			logDebug("QR Timestamp within period: \(absoluteQRTimeDifference)")
 			return true
 		}
+
 		logInfo("QR Timestamp is too old!")
 		return false
 	}

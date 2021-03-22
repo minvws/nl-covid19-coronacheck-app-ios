@@ -139,7 +139,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() - 10),
+			timeInterval: TimeInterval(configuration.getQRTTL() / 2),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,

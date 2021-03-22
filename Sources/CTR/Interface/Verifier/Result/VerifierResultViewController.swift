@@ -119,6 +119,7 @@ class VerifierResultViewController: BaseViewController {
 	private func setupDebugLink() {
 
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(debugLinkTapped))
+		tapGesture.numberOfTapsRequired = 3
 		sceneView.imageView.addGestureRecognizer(tapGesture)
 		sceneView.imageView.isUserInteractionEnabled = true
 	}
