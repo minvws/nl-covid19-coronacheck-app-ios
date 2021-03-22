@@ -9,6 +9,8 @@ import Foundation
 
 protocol ProofValidatorProtocol {
 
+	var maxValidity: Int { get }
+
 	/// Initializer
 	/// - Parameter maxValidity: the maximum validity of a test in hours
 	init(maxValidity: Int)
