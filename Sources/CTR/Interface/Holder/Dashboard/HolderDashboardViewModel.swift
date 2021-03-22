@@ -160,7 +160,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			identifier: .create,
 			title: .holderDashboardCreateTitle,
 			message: .holderDashboardCreateMessage,
-			actionTitle: .holderDashboardCreatetAction,
+			actionTitle: .holderDashboardCreateAction,
 			image: .create,
 			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
@@ -193,6 +193,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			showExpiredQR = false
 			validityTimer?.invalidate()
 			validityTimer = nil
+			setupCreateCard()
 			return
 		}
 
@@ -223,6 +224,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 					validityTimer = nil
 			}
 		}
+		setupCreateCard()
 	}
 
 	/// Show the QR message is valid
@@ -333,6 +335,18 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 					self?.coordinator?.openUrl(url, inApp: true)
 				}
 			}
+		)
+	}
+
+	func setupCreateCard() {
+
+		self.createCard = CardInfo(
+			identifier: .create,
+			title: qrCard == nil ? .holderDashboardCreateTitle : .holderDashboardChangeTitle,
+			message: .holderDashboardCreateMessage,
+			actionTitle: qrCard == nil ? .holderDashboardCreateAction : .holderDashboardChangeAction,
+			image: .create,
+			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 	}
 }

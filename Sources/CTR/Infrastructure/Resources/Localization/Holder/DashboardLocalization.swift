@@ -44,9 +44,19 @@ extension String {
 		return Localization.string(for: "holder.dashboard.create.message")
 	}
 
-	static var holderDashboardCreatetAction: String {
+	static var holderDashboardCreateAction: String {
 
 		return Localization.string(for: "holder.dashboard.create.action")
+	}
+
+	static var holderDashboardChangeTitle: String {
+
+		return Localization.string(for: "holder.dashboard.change.title")
+	}
+
+	static var holderDashboardChangeAction: String {
+
+		return Localization.string(for: "holder.dashboard.change.action")
 	}
 
 	static var holderDashboardQRTitle: String {

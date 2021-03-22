@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import ViewControllerPresentationSpy
 
 class EnlargedQRViewControllerTests: XCTestCase {
 
@@ -197,5 +198,31 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
 		XCTAssertEqual(strongSut.sceneView.securityView.currentAnimation, .cyclistRightToLeft, "Animation should match")
+	}
+
+	/// Test showing the alert dialog for screen shots
+	func testAlertDialog() {
+
+		// Given
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		NotificationCenter.default.post(
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil,
+			userInfo: nil
+		)
+
+		// Then
+		alertVerifier.verify(
+			title: .holderEnlargedScreenshotTitle,
+			message: .holderEnlargedScreenshotMessage,
+			animated: true,
+			actions: [
+				.default(.ok)
+			],
+			presentingViewController: sut
+		)
 	}
 }

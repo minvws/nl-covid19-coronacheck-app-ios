@@ -113,6 +113,8 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
+		XCTAssertEqual(strongSut.createCard.title, .holderDashboardCreateTitle, "The title of the create card should match")
+		XCTAssertEqual(strongSut.createCard.actionTitle, .holderDashboardCreateAction, "The action title of the create card should match")
 	}
 
 	/// Test the validity of the credential with expired credential
@@ -145,6 +147,8 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertNil(strongSut.validityTimer, "The timer should be nil")
 		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
 		XCTAssertTrue(strongSut.showExpiredQR, "Expired QR should be shown")
+		XCTAssertEqual(strongSut.createCard.title, .holderDashboardCreateTitle, "The title of the create card should match")
+		XCTAssertEqual(strongSut.createCard.actionTitle, .holderDashboardCreateAction, "The action title of the create card should match")
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -178,6 +182,8 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertNotNil(strongSut.qrCard, "Subtitle should be nil")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
+		XCTAssertEqual(strongSut.createCard.title, .holderDashboardChangeTitle, "The title of the create card should match")
+		XCTAssertEqual(strongSut.createCard.actionTitle, .holderDashboardChangeAction, "The action title of the create card should match")
 	}
 
 	/// Test the navigat to enlarged QR scene

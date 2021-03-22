@@ -74,6 +74,8 @@
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Zet jouw negatieve testresultaat om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
+"holder.dashboard.change.title" = "Vervang je QR-code";
+"holder.dashboard.change.action" = "Vervang QR-code";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.action" = "Bekijk QR";
 "holder.dashboard.qr.subtitle" = "Laat QR-code zien bij ingang";
@@ -82,6 +84,10 @@
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
+
+/* MARK: - Holder Enlarged */
+"holder.enlarged.screenshot.title" = "Schermafbeelding is geen geldig toegangsbewijs";
+"holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code uit de app is een geldig toegangsbewijs.";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";

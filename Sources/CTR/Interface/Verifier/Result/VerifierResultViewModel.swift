@@ -50,6 +50,9 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
+	/// The debug info
+	@Bindable private(set) var debugInfo: [String] = []
+
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
 
@@ -104,7 +107,32 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			showAccessDenied()
 			allowAccess = .denied
 		}
+
+		debugInfo = [
+			"QR Information",
+			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: now)))",
+			"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
+			"---------------------",
+			"isSampleTimeValid: \(isSampleTimeValid(now))",
+			"TTL: \(proofValidator.maxValidity) hours",
+			"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
+			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
+			"---------------------",
+			"isQRTimeStampValid: \(isQRTimeStampValid(now))",
+			"TTL: \(configuration.getQRTTL()) seconds",
+			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
+		]
 	}
+
+	/// Formatter to print
+	private lazy var printDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "E d MMMM HH:mm:ss"
+		return dateFormatter
+	}()
 
 	/// Is the sample time still valid
 	/// - Parameter now: the now time stamp
@@ -134,10 +162,12 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			return true
 		}
 
-		if TimeInterval(attributes.unixTimeStamp) + configuration.getQRTTL() > now  &&
-			TimeInterval(attributes.unixTimeStamp) <= now {
+		let absoluteQRTimeDifference = abs(now - TimeInterval(attributes.unixTimeStamp))
+		if absoluteQRTimeDifference < configuration.getQRTTL() {
+			logDebug("QR Timestamp within period: \(absoluteQRTimeDifference)")
 			return true
 		}
+
 		logInfo("QR Timestamp is too old!")
 		return false
 	}
