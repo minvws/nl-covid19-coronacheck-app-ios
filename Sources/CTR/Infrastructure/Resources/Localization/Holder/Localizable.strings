@@ -85,6 +85,10 @@
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 
+/* MARK: - Holder Enlarged */
+"holder.enlarged.screenshot.title" = "Schermafbeelding is geen geldig toegangsbewijs";
+"holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code uit de app is een geldig toegangsbewijs.";
+
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
 "holder.banner.newqr.message" = "<u>Lees hier</u> welke informatie in de QR-code staat.";

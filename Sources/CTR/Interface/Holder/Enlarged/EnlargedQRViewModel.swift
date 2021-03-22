@@ -27,6 +27,9 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	/// The configuration
 	weak var configuration: ConfigurationGeneralProtocol?
 
+	/// the notification center
+	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
@@ -44,6 +47,9 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 	/// Show a valid QR Message
 	@Bindable private(set) var showValidQR: Bool
+
+	/// Show a warning for a screenshot
+	@Bindable private(set) var showScreenshotWarning: Bool = false
 
 	/// Initializer
 	/// - Parameters:
@@ -69,6 +75,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 		super.init()
+		addObserver()
 	}
 
 	/// Check the QR Validity
@@ -154,4 +161,21 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 		dateFormatter.dateFormat = "E d MMMM HH:mm"
 		return dateFormatter
 	}()
+
+	/// Add an observer for the userDidTakeScreenshotNotification notification
+	func addObserver() {
+
+		notificationCenter.addObserver(
+			self,
+			selector: #selector(handleScreenShot),
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil
+		)
+	}
+
+	/// handle a screen shot taken
+	@objc func handleScreenShot() {
+
+		showScreenshotWarning = true
+	}
 }

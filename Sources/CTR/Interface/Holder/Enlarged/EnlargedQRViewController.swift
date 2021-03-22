@@ -72,6 +72,16 @@ class EnlargedQRViewController: BaseViewController {
 			self?.sceneView.hideQRImage = $0
 		}
 
+		viewModel.$showScreenshotWarning.binding = { [weak self] in
+
+			if $0 {
+				self?.showError(
+					.holderEnlargedScreenshotTitle,
+					message: .holderEnlargedScreenshotMessage
+				)
+			}
+		}
+
 		setupListeners()
 
 		addCloseButton(action: #selector(closeButtonTapped))

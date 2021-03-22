@@ -495,6 +495,8 @@
 		6DFB8B0E25DD3A8C00E7A1D8 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8B0C25DD3A8C00E7A1D8 /* AboutViewController.swift */; };
 		6DFB8B1625DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */; };
 		6DFB8B1725DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */; };
+		6DFF55872608AD0A0048E801 /* EnlargedLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */; };
+		6DFF55882608AD0A0048E801 /* EnlargedLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */; };
 		73D58E6DFFEE382E514E72CF /* Pods_Holder.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADD6B34807F79CE655DF49FD /* Pods_Holder.framework */; };
 		84CD5BDAA7C195764D4E067C /* Pods_Verifier.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D349E9414A0F4E1FBA41D445 /* Pods_Verifier.framework */; };
 /* End PBXBuildFile section */
@@ -794,6 +796,7 @@
 		6DFB8B0325DD3A6F00E7A1D8 /* AboutView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		6DFB8B0C25DD3A8C00E7A1D8 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
+		6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnlargedLocalization.swift; sourceTree = "<group>"; };
 		9B11B62DA3FFAAD3B4ADD8D6 /* Pods_CTRTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CTRTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B9A10D4630F99A110DAFAFE /* Pods-CTRTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.release.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.release.xcconfig"; sourceTree = "<group>"; };
 		A6572CC961F0DA0DAE6D71C8 /* Pods-CTRTests.ad hoc acc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTRTests.ad hoc acc.xcconfig"; path = "Target Support Files/Pods-CTRTests/Pods-CTRTests.ad hoc acc.xcconfig"; sourceTree = "<group>"; };
@@ -1405,6 +1408,7 @@
 				6D97233125FA19B6008D93AA /* AboutTestResultsLocalization.swift */,
 				6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */,
 				6D27551125D1259D00164F2E /* DashboardLocalization.swift */,
+				6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */,
 				6DB3C33225F1301E00B41B46 /* HolderConsentLocalization.swift */,
 				6DB3C32925F12FF600B41B46 /* HolderMenuLocalization.swift */,
 				6DB3C2C925F12CCE00B41B46 /* HolderOnboardingLocalization.swift */,
@@ -2209,6 +2213,7 @@
 				6D8E65F226010F5B00F79CFE /* BannerLocalization.swift in Sources */,
 				6DD7D82F25D26D3A00B97B7F /* CryptoManager.swift in Sources */,
 				6DD7D83025D26D3A00B97B7F /* ImageView.swift in Sources */,
+				6DFF55882608AD0A0048E801 /* EnlargedLocalization.swift in Sources */,
 				6DD7D83125D26D3A00B97B7F /* HolderDashboardView.swift in Sources */,
 				6D9D3B2B25FA7D180031DA5D /* DisplayContentViewModel.swift in Sources */,
 				6DFA692125EE312700310E15 /* Platform.swift in Sources */,
@@ -2420,6 +2425,7 @@
 				6D8E65F126010F5B00F79CFE /* BannerLocalization.swift in Sources */,
 				6DB3C2ED25F12D4400B41B46 /* ScanInstructionsLocalization.swift in Sources */,
 				6DFA692025EE312700310E15 /* Platform.swift in Sources */,
+				6DFF55872608AD0A0048E801 /* EnlargedLocalization.swift in Sources */,
 				6D5A7BE825D147CC0008B904 /* HolderDashboardView.swift in Sources */,
 				6D9D3B2A25FA7D180031DA5D /* DisplayContentViewModel.swift in Sources */,
 				6D02446C25D3BDD200EF8D32 /* TestResultsLocalization.swift in Sources */,

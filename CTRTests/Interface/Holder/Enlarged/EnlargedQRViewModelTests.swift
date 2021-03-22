@@ -151,4 +151,24 @@ class EnlargedQRViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
 	}
+
+	/// Test taking a screenshot
+	func testScreenshot() {
+
+		// Given
+
+		// When
+		NotificationCenter.default.post(
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil,
+			userInfo: nil
+		)
+
+		// Then
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+		XCTAssertTrue(strongSut.showScreenshotWarning, "Valid QR should be shown")
+	}
 }
