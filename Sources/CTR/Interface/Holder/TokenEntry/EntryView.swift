@@ -14,18 +14,24 @@ class EntryView: BaseView {
 
 		// Dimensions
 		static let headerHeight: CGFloat = 38.0
+		static let infoHeight: CGFloat = 27.0
 		static let inputHeight: CGFloat = 52.0
 		static let lineHeight: CGFloat = 1.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let headerMargin: CGFloat = 10.0
 	}
 
 	/// The header label
 	private let headerLabel: Label = {
 
 		return Label(caption1SemiBold: nil)
+	}()
+
+	/// The info label
+	private let infoLabel: Label = {
+
+		return Label(subhead: nil)
 	}()
 
 	let inputField: UITextField = {
@@ -46,6 +52,8 @@ class EntryView: BaseView {
 		return view
 	}()
 
+	var infoConstraint: NSLayoutConstraint?
+
 	/// Setup all the views
 	override func setupViews() {
 
@@ -55,6 +63,8 @@ class EntryView: BaseView {
 			action: #selector(handleSingleTap(sender:))
 		)
 		self.addGestureRecognizer(tapGestureRecognizer)
+		infoLabel.textColor = Theme.colors.launchGray
+		infoLabel.isHidden = true
 	}
 
 	/// User tapped on the view
@@ -69,6 +79,7 @@ class EntryView: BaseView {
 
 		super.setupViewHierarchy()
 		addSubview(headerLabel)
+		addSubview(infoLabel)
 		addSubview(inputField)
 		addSubview(lineView)
 	}
@@ -85,7 +96,12 @@ class EntryView: BaseView {
 			headerLabel.heightAnchor.constraint(equalToConstant: ViewTraits.headerHeight),
 			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
 			headerLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-			headerLabel.bottomAnchor.constraint(equalTo: inputField.topAnchor),
+
+			// Info
+			infoLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			infoLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+			infoLabel.bottomAnchor.constraint(equalTo: inputField.topAnchor),
+			infoLabel.heightAnchor.constraint(equalToConstant: ViewTraits.infoHeight),
 
 			inputField.leadingAnchor.constraint(equalTo: leadingAnchor),
 			inputField.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -98,6 +114,9 @@ class EntryView: BaseView {
 			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			lineView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
+
+		infoConstraint = headerLabel.bottomAnchor.constraint(equalTo: inputField.topAnchor)
+		infoConstraint?.isActive = true
 	}
 
 	// MARK: Public Access
@@ -106,6 +125,15 @@ class EntryView: BaseView {
 	var header: String? {
 		didSet {
 			headerLabel.text = header
+		}
+	}
+
+	/// The info
+	var info: String? {
+		didSet {
+			infoLabel.text = info
+			infoConstraint?.constant = info == nil ? 0 : -ViewTraits.infoHeight
+			infoLabel.isHidden = info == nil
 		}
 	}
 }

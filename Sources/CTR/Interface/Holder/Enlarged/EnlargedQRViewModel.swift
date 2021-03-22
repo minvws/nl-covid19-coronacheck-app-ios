@@ -27,6 +27,9 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	/// The configuration
 	weak var configuration: ConfigurationGeneralProtocol?
 
+	/// the notification center
+	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
@@ -44,6 +47,9 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 	/// Show a valid QR Message
 	@Bindable private(set) var showValidQR: Bool
+
+	/// Show a warning for a screenshot
+	@Bindable private(set) var showScreenshotWarning: Bool = false
 
 	/// Initializer
 	/// - Parameters:
@@ -69,6 +75,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 		super.init()
+		addObserver()
 	}
 
 	/// Check the QR Validity
@@ -83,6 +90,11 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 			switch proofValidator.validate(sampleTimeStamp) {
 				case let .valid(validUntilDate):
+					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
+					logDebug("Proof is valid until \(validUntilDateString)")
+					showQRMessageIsValid(validUntilDateString)
+					startValidityTimer()
+				case let .expiring(validUntilDate, _):
 					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
 					logDebug("Proof is valid until \(validUntilDateString)")
 					showQRMessageIsValid(validUntilDateString)
@@ -117,9 +129,6 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 		}
-		if let birthdate = proofManager?.getBirthDate() {
-			qrTitle = printBirthDateFormatter.string(from: birthdate)
-		}
 	}
 
 	/// Start the validity timer, check every 170 seconds.
@@ -130,7 +139,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() - 10),
+			timeInterval: TimeInterval(configuration.getQRTTL() / 2),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
@@ -153,12 +162,20 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
-	/// Formatter to print
-	private lazy var printBirthDateFormatter: DateFormatter = {
+	/// Add an observer for the userDidTakeScreenshotNotification notification
+	func addObserver() {
 
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
-		return dateFormatter
-	}()
+		notificationCenter.addObserver(
+			self,
+			selector: #selector(handleScreenShot),
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil
+		)
+	}
+
+	/// handle a screen shot taken
+	@objc func handleScreenShot() {
+
+		showScreenshotWarning = true
+	}
 }

@@ -70,7 +70,6 @@ class DashboardViewModelTests: XCTestCase {
 	func testContent() {
 
 		// Given
-		proofManagerSpy.birthDate = Date()
 
 		// When
 		sut = HolderDashboardViewModel(
@@ -84,8 +83,7 @@ class DashboardViewModelTests: XCTestCase {
 		// Then
 		XCTAssertEqual(sut?.title, .holderDashboardTitle, "Title should match")
 		XCTAssertEqual(sut?.message, .holderDashboardIntro, "Message should match")
-		XCTAssertNil(sut?.qrSubTitle, "Subtitle should be nil")
-		XCTAssertEqual(sut?.qrTitle, .holderDashboardQRTitle, "QR Title should match")
+		XCTAssertNil(sut?.qrCard, "QR card should be nil")
 		XCTAssertEqual(sut?.expiredTitle, .holderDashboardQRExpired, "QR Expired title should match")
 		XCTAssertNotNil(sut?.appointmentCard, "The appointment card should not be nil")
 		XCTAssertNotNil(sut?.createCard, "The create card should not be nil")
@@ -93,7 +91,6 @@ class DashboardViewModelTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
 		XCTAssertFalse(strongSut.hideForCapture, "Hide QR should not be shown")
 	}
@@ -114,9 +111,10 @@ class DashboardViewModelTests: XCTestCase {
 		}
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertNil(strongSut.qrMessage, "There should be no QR code")
-		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
+		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
+		XCTAssertEqual(strongSut.createCard.title, .holderDashboardCreateTitle, "The title of the create card should match")
+		XCTAssertEqual(strongSut.createCard.actionTitle, .holderDashboardCreateAction, "The action title of the create card should match")
 	}
 
 	/// Test the validity of the credential with expired credential
@@ -130,7 +128,9 @@ class DashboardViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		sut?.proofValidator = ProofValidator(maxValidity: 1)
 
@@ -144,10 +144,11 @@ class DashboardViewModelTests: XCTestCase {
 		}
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertNil(strongSut.qrMessage, "There should be no QR code")
 		XCTAssertNil(strongSut.validityTimer, "The timer should be nil")
-		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
+		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
 		XCTAssertTrue(strongSut.showExpiredQR, "Expired QR should be shown")
+		XCTAssertEqual(strongSut.createCard.title, .holderDashboardCreateTitle, "The title of the create card should match")
+		XCTAssertEqual(strongSut.createCard.actionTitle, .holderDashboardCreateAction, "The action title of the create card should match")
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -161,12 +162,13 @@ class DashboardViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
 		sut?.proofValidator = ProofValidator(maxValidity: 1)
-		proofManagerSpy.birthDate = Date()
 
 		// When
 		sut?.checkQRValidity()
@@ -177,12 +179,11 @@ class DashboardViewModelTests: XCTestCase {
 			return
 		}
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
-		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
-		XCTAssertNotNil(strongSut.qrSubTitle, "Subtitle should be nil")
-		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
+		XCTAssertNotNil(strongSut.qrCard, "Subtitle should be nil")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
-		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
+		XCTAssertEqual(strongSut.createCard.title, .holderDashboardChangeTitle, "The title of the create card should match")
+		XCTAssertEqual(strongSut.createCard.actionTitle, .holderDashboardChangeAction, "The action title of the create card should match")
 	}
 
 	/// Test the navigat to enlarged QR scene
@@ -191,7 +192,7 @@ class DashboardViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut?.navigateToEnlargedQR()
+		sut?.cardTapped(.qrcode)
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should be called")
@@ -207,7 +208,9 @@ class DashboardViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		sut?.proofValidator = ProofValidator(maxValidity: 1)
 		sut?.checkQRValidity()

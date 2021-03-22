@@ -7,7 +7,7 @@
 
 import UIKit
 
-class OnboardingPageView: BaseView {
+class OnboardingPageView: ScrolledStackView {
 	
 	/// The display constants
 	private struct ViewTraits {
@@ -38,17 +38,6 @@ class OnboardingPageView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
-		return view
-	}()
-
-	private let stackView: UIStackView = {
-
-		let view = UIStackView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
-		view.alignment = .leading
-		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
 		return view
 	}()
 
@@ -87,45 +76,14 @@ class OnboardingPageView: BaseView {
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
-		imageContainerView.addSubview(imageView)
 
-		bottomStackView.addArrangedSubview(UIView())
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.addArrangedSubview(messageLabel)
 
-		stackView.addArrangedSubview(imageContainerView)
+		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
 	}
-	
-	/// Setup the constraints
-	override func setupViewConstraints() {
-		
-		super.setupViewConstraints()
 
-		stackView.embed(
-			in: self,
-			insets: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-		)
-		
-		NSLayoutConstraint.activate([
-
-			// Container
-			imageContainerView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
-
-			// Image
-			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
-			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
-			imageView.leadingAnchor.constraint(
-				equalTo: imageContainerView.leadingAnchor,
-				constant: ViewTraits.imageMargin
-			),
-			imageView.trailingAnchor.constraint(
-				equalTo: imageContainerView.trailingAnchor,
-				constant: -ViewTraits.imageMargin
-			)
-		])
-	}
-	
 	// MARK: Public Access
 	
 	/// The onboarding title

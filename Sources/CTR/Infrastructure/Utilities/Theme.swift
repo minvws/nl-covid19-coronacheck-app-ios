@@ -56,6 +56,14 @@ class Fonts {
 		font(textStyle: .body, customFont: "Montserrat-Bold") // Size 17 points
 	}
 
+	var bodyMontserratFixed: UIFont {
+
+		if let font = UIFont(name: "Montserrat-Bold", size: 17) {
+			return font
+		}
+		return .systemFont(ofSize: 17)
+	}
+
     var bodyBold: UIFont {
         font(textStyle: .body, isBold: true) // Size 17 points
     }
@@ -185,6 +193,10 @@ final class Colors {
 	var demo: UIColor { return color(for: "Demo") }
 
 	var launchGray: UIColor { return color(for: "LaunchGray") }
+
+	var tileGray: UIColor { return color(for: "TileGreyColor") }
+
+	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
 
     // MARK: - Private
 

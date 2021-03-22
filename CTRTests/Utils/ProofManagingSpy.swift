@@ -29,11 +29,6 @@ class ProofManagingSpy: ProofManaging {
 	var signedTestResultError: Error?
 	var shouldSignedTestResultComplete = false
 	var signedTestResultState = SignedTestResultState.valid
-	var getBirthDateCalled = false
-	var birthDate: Date?
-	var getBirthDateChecksumCalled = false
-	var checksum: Int?
-	var setBirthDateCalled = false
 
 	required init() {
 		// Demanded by protocol
@@ -119,23 +114,5 @@ class ProofManagingSpy: ProofManaging {
 	func removeTestWrapper() {
 
 		removeTestWrapperCalled = true
-	}
-
-	func getBirthDate() -> Date? {
-
-		getBirthDateCalled = true
-		return birthDate
-	}
-
-	func getBirthDateChecksum() -> Int? {
-
-		getBirthDateChecksumCalled = true
-		return checksum
-	}
-
-	func setBirthDate(_ date: Date?) {
-
-		setBirthDateCalled = true
-		birthDate = date
 	}
 }

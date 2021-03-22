@@ -9,6 +9,8 @@ import Foundation
 
 protocol ProofValidatorProtocol {
 
+	var maxValidity: Int { get }
+
 	/// Initializer
 	/// - Parameter maxValidity: the maximum validity of a test in hours
 	init(maxValidity: Int)
@@ -25,7 +27,7 @@ enum ProofValidity {
 	case valid(Date)
 
 	/// The proof is expiring
-//	case expiring
+	case expiring(Date, TimeInterval)
 
 	/// The proof is expired
 	case expired
@@ -50,10 +52,17 @@ class ProofValidator: ProofValidatorProtocol, Logging {
 
 		let now = Date().timeIntervalSince1970
 		let validity = TimeInterval(maxValidity * 60 * 60)
+		let warningPeriod = TimeInterval(6 * 60 * 60)
 		logDebug("Checking with \(maxValidity) hours")
 		if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 
 			let validUntilDate = Date(timeIntervalSince1970: sampleTimeStamp + validity)
+			let timeLeft = sampleTimeStamp + validity - now
+			logDebug("timeLeft: \(timeLeft), warningPeriod: \(warningPeriod)")
+
+			if timeLeft < warningPeriod {
+				return .expiring(validUntilDate, timeLeft)
+			}
 			return .valid(validUntilDate)
 		} else {
 			

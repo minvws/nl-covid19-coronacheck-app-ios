@@ -65,17 +65,17 @@ class TokenOverviewViewController: BaseViewController {
 		button.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.providerSelected(provider.identifier)
 		}
-		self.sceneView.stackView.addArrangedSubview(button)
+		self.sceneView.optionStackView.addArrangedSubview(button)
 	}
 
 	/// Setup no diigid button
 	func setupNoCodeButton() {
 
-		let label = Label(bodyBold: .holderTokenOverviewNoCode)
+		let label = Label(bodyBold: .holderTokenOverviewNoCode).multiline()
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noCodeTapped))
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)
-		label.heightAnchor.constraint(equalToConstant: 40).isActive = true
+		label.heightAnchor.constraint(greaterThanOrEqualToConstant: 40).isActive = true
 		sceneView.stackView.addArrangedSubview(label)
 	}
 

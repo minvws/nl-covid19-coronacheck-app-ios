@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ListResultsView: BaseView {
+class ListResultsView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -18,6 +18,7 @@ class ListResultsView: BaseView {
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
 		static let imageRatio: CGFloat = 0.75
+		static let gradientHeight: CGFloat = 30.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -54,6 +55,28 @@ class ListResultsView: BaseView {
 		return view
 	}()
 
+	private let spacer: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground
+		return view
+	}()
+
+	private let footerBackground: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground
+		return view
+	}()
+
+	let footerGradientView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	override func setupViews() {
 
 		super.setupViews()
@@ -65,10 +88,13 @@ class ListResultsView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		addSubview(titleLabel)
-		addSubview(messageLabel)
-		addSubview(resultView)
-		addSubview(primaryButton)
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(resultView)
+		stackView.addArrangedSubview(spacer)
+		addSubview(footerGradientView)
+		footerBackground.addSubview(primaryButton)
+		addSubview(footerBackground)
 	}
 
 	/// Setup the constraints
@@ -78,44 +104,23 @@ class ListResultsView: BaseView {
 
 		NSLayoutConstraint.activate([
 
-			// Title
-			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.messageTopMargin
-			),
+			// Spacer
+			spacer.heightAnchor.constraint(equalToConstant: 2 * ViewTraits.buttonHeight),
 
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
+			// Footer background
+			footerGradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerGradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			footerGradientView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
+			footerGradientView.heightAnchor.constraint(equalToConstant: ViewTraits.gradientHeight),
 
-			// Result
-			resultView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.margin
-			),
-			resultView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			resultView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			// Footer background
+			footerBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
+			footerBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-			// Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			// Primary button
+			primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
@@ -135,6 +140,26 @@ class ListResultsView: BaseView {
 	@objc func primaryButtonTapped() {
 
 		primaryButtonTappedCommand?()
+	}
+
+	private func setFooterGradient() {
+
+		footerGradientView.backgroundColor = .clear
+		let gradient = CAGradientLayer()
+		gradient.frame = footerGradientView.bounds
+		gradient.colors = [
+			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
+			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
+			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+		]
+		footerGradientView.layer.insertSublayer(gradient, at: 0)
+	}
+
+	override func layoutSubviews() {
+
+		super.layoutSubviews()
+
+		setFooterGradient()
 	}
 
 	// MARK: Public Access

@@ -27,11 +27,10 @@ class HolderDashboardView: ScrolledStackView {
 	}()
 
 	/// The QR Card
-	let qrView: QRImageView = {
+	let qrCardView: QRCardView = {
 
-		let view = QRImageView()
+		let view = QRCardView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isHidden = true
 		return view
 	}()
 
@@ -66,7 +65,7 @@ class HolderDashboardView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(messageLabel)
-		stackView.addArrangedSubview(qrView)
+		stackView.addArrangedSubview(qrCardView)
 		stackView.addArrangedSubview(expiredQRView)
 		stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
@@ -80,14 +79,14 @@ class HolderDashboardView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 
 			// CardViews
-			appointmentCard.widthAnchor.constraint(
-				equalTo: appointmentCard.heightAnchor,
-				multiplier: ViewTraits.cardRatio
-			),
-			createCard.widthAnchor.constraint(
-				equalTo: createCard.heightAnchor,
-				multiplier: ViewTraits.cardRatio
-			)
+//			appointmentCard.widthAnchor.constraint(
+//				equalTo: appointmentCard.heightAnchor,
+//				multiplier: ViewTraits.cardRatio
+//			),
+//			createCard.widthAnchor.constraint(
+//				equalTo: createCard.heightAnchor,
+//				multiplier: ViewTraits.cardRatio
+//			)
 		])
 	}
 
@@ -103,27 +102,9 @@ class HolderDashboardView: ScrolledStackView {
 	/// Hide the QR Image
 	var hideQRImage: Bool = false {
 		didSet {
-			qrView.hideQRImage = hideQRImage
+			if qrCardView.time != nil {
+				qrCardView.isHidden = hideQRImage
+			}
 		}
-	}
-
-	/// Play the animation
-	func play() {
-
-		guard !qrView.isHidden else {
-			return
-		}
-
-		qrView.play()
-	}
-
-	/// Resume the animation
-	func resume() {
-
-		guard !qrView.isHidden else {
-			return
-		}
-
-		qrView.resume()
 	}
 }
