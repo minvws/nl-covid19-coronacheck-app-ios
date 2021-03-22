@@ -58,13 +58,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v2"]
+			path: ["v1"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v2"]
+			path: ["v1"]
 		)
 	)
 
