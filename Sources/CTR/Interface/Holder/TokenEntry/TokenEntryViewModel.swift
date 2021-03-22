@@ -40,8 +40,6 @@ class TokenEntryViewModel: Logging {
 	/// Show internet error
 	@Bindable private(set) var showError: Bool = false
 
-	let useTokenValidator = false
-
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -177,11 +175,9 @@ class TokenEntryViewModel: Logging {
 	/// - Returns: the request token
 	func createRequestToken(_ input: String) -> RequestToken? {
 
-		if useTokenValidator {
-			// Check the validity of the input
-			guard tokenValidator.validate(input) else {
-				return nil
-			}
+		// Check the validity of the input
+		guard tokenValidator.validate(input) else {
+			return nil
 		}
 
 		let parts = input.split(separator: "-")
