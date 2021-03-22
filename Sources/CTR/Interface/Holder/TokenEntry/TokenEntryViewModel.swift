@@ -121,7 +121,7 @@ class TokenEntryViewModel: Logging {
 	private func fetchResult(_ requestToken: RequestToken) {
 
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
-			errorMessage = .holderTokenEntryErrorInvalidProvider
+			errorMessage = .holderTokenEntryErrorInvalidCode
 			return
 		}
 
@@ -150,7 +150,7 @@ class TokenEntryViewModel: Logging {
 				case let .failure(error):
 
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self?.errorMessage = .holderTokenEntryErrorInvalidProvider
+						self?.errorMessage = .holderTokenEntryErrorInvalidCode
 					} else {
 						// For now, display the network error.
 						self?.errorMessage = error.localizedDescription
