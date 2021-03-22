@@ -83,7 +83,7 @@ class TokenEntryViewController: BaseViewController {
 
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
+				self?.showError(.errorTitle, message: .technicalErrorText)
 			}
 		}
 

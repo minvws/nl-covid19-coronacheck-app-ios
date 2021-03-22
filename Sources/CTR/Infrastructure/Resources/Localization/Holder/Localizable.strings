@@ -12,7 +12,6 @@
 "general.done" = "Klaar";
 "general.ok" = "Ok";
 "general.error.title" = "Er ging iets mis";
-"general.error.technical.title" = "Technische fout";
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 "general.menu.version" = "App versie %@ (%@)";
 
@@ -134,7 +133,6 @@
 "holder.tokenentry.verification.title" = "Verificatiecode";
 "holder.tokenentry.verification.placeholder" = "Bijv. 0576";
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
-"holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

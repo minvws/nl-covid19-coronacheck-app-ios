@@ -20,6 +20,8 @@ class TokenEntryViewModel: Logging {
 	/// The request token
 	var requestToken: RequestToken?
 
+	var tokenValidator: TokenValidatorProtocol = TokenValidator()
+
 	/// The verification code
 	var verificationCode: String?
 
@@ -119,7 +121,7 @@ class TokenEntryViewModel: Logging {
 	private func fetchResult(_ requestToken: RequestToken) {
 
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
-			errorMessage = .holderTokenEntryErrorInvalidProvider
+			errorMessage = .holderTokenEntryErrorInvalidCode
 			return
 		}
 
@@ -148,7 +150,7 @@ class TokenEntryViewModel: Logging {
 				case let .failure(error):
 
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self?.errorMessage = .holderTokenEntryErrorInvalidProvider
+						self?.errorMessage = .holderTokenEntryErrorInvalidCode
 					} else {
 						// For now, display the network error.
 						self?.errorMessage = error.localizedDescription
@@ -172,6 +174,11 @@ class TokenEntryViewModel: Logging {
 	/// - Parameter token: the input string
 	/// - Returns: the request token
 	func createRequestToken(_ input: String) -> RequestToken? {
+
+		// Check the validity of the input
+		guard tokenValidator.validate(input) else {
+			return nil
+		}
 
 		let parts = input.split(separator: "-")
 		if parts.count >= 2 {
