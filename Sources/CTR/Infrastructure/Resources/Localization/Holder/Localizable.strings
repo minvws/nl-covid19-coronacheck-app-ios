@@ -74,6 +74,8 @@
 "holder.dashboard.create.title" = "Maak een QR-code";
 "holder.dashboard.create.message" = "Zet jouw negatieve testresultaat om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
+"holder.dashboard.change.title" = "Vervang je QR-code";
+"holder.dashboard.change.action" = "Vervang QR-code";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.action" = "Bekijk QR";
 "holder.dashboard.qr.subtitle" = "Laat QR-code zien bij ingang";
