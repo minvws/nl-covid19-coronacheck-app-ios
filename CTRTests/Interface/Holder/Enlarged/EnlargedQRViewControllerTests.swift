@@ -17,8 +17,10 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	/// The coordinator spy
 	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 
+	/// The crypto manager spy
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	/// The proof manager spy
 	var proofManagerSpy = ProofManagingSpy()
 
 	/// The configuration spy
@@ -77,7 +79,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertEqual(strongSut.sceneView.message, nil, "Message should match")
+		XCTAssertEqual(strongSut.title, .holderEnlargedTitle, "Title should match")
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should not be shown")
 		XCTAssertNil(strongSut.sceneView.largeQRimageView.image, "There should be no image")
 	}
@@ -142,7 +144,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
 	/// Test the validity of the credential without credential
@@ -156,10 +158,10 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
-	/// Test the validity of the credential with valid credential
+	/// Test the validity of the credential with valid credential while screencapturing
 	func testValidityCredentialValidWithScreenCapture() {
 
 		// Given

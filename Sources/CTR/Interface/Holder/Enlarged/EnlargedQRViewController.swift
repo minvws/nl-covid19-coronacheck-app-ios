@@ -41,11 +41,13 @@ class EnlargedQRViewController: BaseViewController {
 		super.viewDidLoad()
 
 		sceneView.backgroundColor = .white
+		title = .holderEnlargedTitle
 
-		edgesForExtendedLayout = []
+		setupBinding()
+		setupListeners()
+	}
 
-		viewModel.$qrTitle.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$qrSubTitle.binding = { [weak self] in self?.sceneView.message = $0 }
+	func setupBinding() {
 
 		viewModel.$qrMessage.binding = { [weak self] in
 
@@ -81,16 +83,6 @@ class EnlargedQRViewController: BaseViewController {
 				)
 			}
 		}
-
-		setupListeners()
-
-		addCloseButton(action: #selector(closeButtonTapped))
-	}
-
-	/// User tapped on the button
-	@objc private func closeButtonTapped() {
-
-		viewModel.dismiss()
 	}
 
 	func setupListeners() {

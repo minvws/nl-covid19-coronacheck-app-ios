@@ -191,14 +191,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				maxValidity: maxValidity
 			)
 		)
-		let navController = UINavigationController(rootViewController: destination)
-		navController.view.backgroundColor = .white
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
-			navController,
-			animated: true,
-			completion: nil
-		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to appointment
