@@ -17,7 +17,7 @@ class CardView: BaseView {
 		static let titleLineHeight: CGFloat = 28
 		static let messageLineHeight: CGFloat = 22
 		static let cornerRadius: CGFloat = 15
-		static let messageRatio: CGFloat = UIDevice.current.isSmallScreen ? 0.8 : 0.75
+		static let messageRatio: CGFloat = UIDevice.current.isSmallScreen ? 1 : 0.75
 		static let buttonRatio: CGFloat = 0.5
 		static let shadowRadius: CGFloat = 8
 		static let shadowOpacity: Float = 0.3
@@ -27,6 +27,7 @@ class CardView: BaseView {
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 24.0
 		static let bottomMargin: CGFloat = 24.0
+		static let buttonMargin: CGFloat = 32.0
 	}
 	
 	/// The title label
@@ -74,6 +75,9 @@ class CardView: BaseView {
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
+
+		titleLabel.backgroundColor = .orange
+		messageLabel.backgroundColor = .gray
 	}
 	
 	/// Setup the hierarchy
@@ -104,10 +108,6 @@ class CardView: BaseView {
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
 			),
-//			primaryButton.widthAnchor.constraint(
-//				equalTo: widthAnchor,
-//				multiplier: ViewTraits.buttonRatio
-//			),
 			primaryButton.widthAnchor.constraint(
 				greaterThanOrEqualTo: widthAnchor,
 				multiplier: ViewTraits.buttonRatio
@@ -141,12 +141,12 @@ class CardView: BaseView {
 				constant: ViewTraits.margin
 			),
 			messageLabel.widthAnchor.constraint(
-				equalTo: widthAnchor,
+				equalTo: titleLabel.widthAnchor,
 				multiplier: ViewTraits.messageRatio
 			),
 			messageLabel.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: -40
+				constant: -ViewTraits.buttonMargin
 			)
 		])
 	}

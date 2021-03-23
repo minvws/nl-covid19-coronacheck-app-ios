@@ -63,9 +63,6 @@ struct QRCardInfo {
 	/// The optional background image
 	let image: UIImage?
 
-	/// The cut of the image
-	let imageRect: CGRect
-
 	/// the valid until date
 	let validUntil: String
 }
@@ -161,7 +158,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			title: .holderDashboardCreateTitle,
 			message: .holderDashboardCreateMessage,
 			actionTitle: .holderDashboardCreateAction,
-			image: .create,
+			image: .createBig,
 			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 
@@ -242,7 +239,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			holder: identity,
 			actionTitle: .holderDashboardQRAction,
 			image: .myQR,
-			imageRect: CGRect(x: 0, y: 0, width: 0.84, height: 0.9),
 			validUntil: String(format: .holderDashboardQRMessage, validUntilDateString)
 		)
 
@@ -264,7 +260,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			holder: identity,
 			actionTitle: .holderDashboardQRAction,
 			image: .myQR,
-			imageRect: CGRect(x: 0, y: 0, width: 0.84, height: 0.9),
 			validUntil: String(format: .holderDashboardQRExpiring, validUntilDateString, timeLeft.stringTime)
 		)
 
