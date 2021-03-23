@@ -14,8 +14,6 @@ class EnlargedQRImageView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 10.0
-		static let labelSidemargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 20.0
-		static let messageMargin: CGFloat = UIDevice.current.isSmallScreen ? 5.0 : 24.0
 		static let securityMargin: CGFloat = 38.0
 	}
 
@@ -25,18 +23,6 @@ class EnlargedQRImageView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
-	}()
-
-	/// The title label
-	private let titleLabel: Label = {
-
-		return Label(subheadMedium: nil).multiline()
-	}()
-
-	/// The message label
-	private let messageLabel: Label = {
-
-		return Label(subheadMedium: nil).multiline()
 	}()
 
 	/// The security features
@@ -54,9 +40,6 @@ class EnlargedQRImageView: BaseView {
 		super.setupViews()
 
 		// Fixed white background, no inverted QR in dark mode
-		backgroundColor = .white
-		titleLabel.textAlignment = .center
-		messageLabel.textAlignment = .center
 	}
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
@@ -64,8 +47,6 @@ class EnlargedQRImageView: BaseView {
 
 		addSubview(securityView)
 		addSubview(largeQRimageView)
-		addSubview(titleLabel)
-//		addSubview(messageLabel)
 	}
 	/// Setup the constraints
 	override func setupViewConstraints() {
@@ -74,19 +55,11 @@ class EnlargedQRImageView: BaseView {
 
 		NSLayoutConstraint.activate([
 
-			// Message
-			titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.labelSidemargin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.labelSidemargin
-			),
-
 			// QR View
-			largeQRimageView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+			largeQRimageView.topAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.topAnchor,
+				constant: ViewTraits.margin
+			),
 			largeQRimageView.heightAnchor.constraint(equalTo: largeQRimageView.widthAnchor),
 			largeQRimageView.leadingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.leadingAnchor,
@@ -96,20 +69,6 @@ class EnlargedQRImageView: BaseView {
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-
-//			// Message
-//			messageLabel.topAnchor.constraint(
-//				equalTo: largeQRimageView.bottomAnchor,
-//				constant: ViewTraits.messageMargin
-//			),
-//			messageLabel.leadingAnchor.constraint(
-//				equalTo: leadingAnchor,
-//				constant: ViewTraits.labelSidemargin
-//			),
-//			messageLabel.trailingAnchor.constraint(
-//				equalTo: trailingAnchor,
-//				constant: -ViewTraits.labelSidemargin
-//			),
 
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -122,25 +81,6 @@ class EnlargedQRImageView: BaseView {
 	}
 
 	// MARK: Public Access
-
-	/// The  message
-	var message: String? {
-		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.subhead,
-				textColor: Theme.colors.dark,
-				textAlignment: .center
-			)
-		}
-	}
-
-	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.text = title
-		}
-	}
 
 	/// The qr  image
 	var qrImage: UIImage? {
