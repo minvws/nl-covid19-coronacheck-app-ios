@@ -143,6 +143,7 @@ class HolderDashboardViewController: BaseViewController {
 		card.primaryTitle = cardInfo.actionTitle
 		card.backgroundImage = cardInfo.image
 		card.backgroundImageView.layer.contentsRect = cardInfo.imageRect
+		card.color = cardInfo.backgroundColor
 		card.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.cardTapped(cardInfo.identifier)
 		}
@@ -158,7 +159,6 @@ class HolderDashboardViewController: BaseViewController {
 		card.message = cardInfo.message
 		card.primaryTitle = cardInfo.actionTitle
 		card.backgroundImage = cardInfo.image
-//		card.backgroundImageView.layer.contentsRect = cardInfo.imageRect
 		card.time = cardInfo.validUntil
 		card.identity = cardInfo.holder
 		card.primaryButtonTappedCommand = { [weak self] in

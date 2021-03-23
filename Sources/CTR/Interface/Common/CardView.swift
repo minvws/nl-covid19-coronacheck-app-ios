@@ -41,6 +41,13 @@ class CardView: BaseView {
 		
 		return Label(bodyMedium: nil).multiline()
 	}()
+
+	let gradientView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 	
 	/// the scan button
 	private let primaryButton: Button = {
@@ -56,7 +63,6 @@ class CardView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .bottomRight
-		view.clipsToBounds = true
 		return view
 	}()
 	
@@ -75,17 +81,16 @@ class CardView: BaseView {
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
-
-		titleLabel.backgroundColor = .orange
-		messageLabel.backgroundColor = .gray
 	}
 	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
-		
-		addSubview(backgroundImageView)
+
+		backgroundImageView.embed(in: self)
+		gradientView.embed(in: self)
+
 		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(primaryButton)
@@ -95,13 +100,7 @@ class CardView: BaseView {
 	override func setupViewConstraints() {
 		
 		NSLayoutConstraint.activate([
-			
-			// BackgroundImage
-			backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
-			
+
 			// Primary Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
@@ -150,6 +149,34 @@ class CardView: BaseView {
 			)
 		])
 	}
+
+	private func setupGradient() {
+
+		guard let color = color else {
+			return
+		}
+
+		gradientView.backgroundColor = .clear
+		let gradient = CAGradientLayer()
+		gradient.frame = gradientView.bounds
+		// horizontal
+		gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
+		gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
+		// 100% at midway
+		gradient.colors = [
+			color.withAlphaComponent(1.0).cgColor,
+			color.withAlphaComponent(1.0).cgColor,
+			color.withAlphaComponent(0.0).cgColor
+		]
+		gradientView.layer.insertSublayer(gradient, at: 0)
+	}
+
+	override func layoutSubviews() {
+
+		super.layoutSubviews()
+
+		setupGradient()
+	}
 	
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
@@ -183,6 +210,13 @@ class CardView: BaseView {
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+
+	var color: UIColor? {
+		didSet {
+			backgroundColor = color
+			setupGradient()
 		}
 	}
 	

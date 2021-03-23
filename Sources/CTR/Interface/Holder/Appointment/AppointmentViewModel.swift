@@ -50,7 +50,7 @@ class AppointmentViewModel: Logging {
 		self.body = String(format: .holderAppointmentBody, maxValidity, maxValidity)
 		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle
-		self.image = UIImage.appointmentBig
+		self.image = UIImage.appointment
 	}
 
 	/// The user wants more information

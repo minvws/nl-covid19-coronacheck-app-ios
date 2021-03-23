@@ -47,7 +47,6 @@ class HolderDashboardView: ScrolledStackView {
 
 		let view = CardView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.appointment
 		return view
 	}()
 
@@ -56,7 +55,6 @@ class HolderDashboardView: ScrolledStackView {
 
 		let view = CardView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.create
 		return view
 	}()
 
@@ -69,25 +67,6 @@ class HolderDashboardView: ScrolledStackView {
 		stackView.addArrangedSubview(expiredQRView)
 		stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
-	}
-
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-
-			// CardViews
-//			appointmentCard.widthAnchor.constraint(
-//				equalTo: appointmentCard.heightAnchor,
-//				multiplier: ViewTraits.cardRatio
-//			),
-//			createCard.widthAnchor.constraint(
-//				equalTo: createCard.heightAnchor,
-//				multiplier: ViewTraits.cardRatio
-//			)
-		])
 	}
 
 	// MARK: Public Access

@@ -38,6 +38,9 @@ struct CardInfo {
 	/// The optional background image
 	let image: UIImage?
 
+	/// The background color
+	let backgroundColor: UIColor?
+
 	/// The cut of the image
 	let imageRect: CGRect
 }
@@ -151,15 +154,17 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			message: .holderDashboardAppointmentMessage,
 			actionTitle: .holderDashboardAppointmentAction,
 			image: .appointment,
-			imageRect: CGRect(x: 0, y: 0, width: 0.77, height: 1)
+			backgroundColor: Theme.colors.appointment,
+			imageRect: CGRect(x: 0, y: 0, width: 0.7, height: 0.72)
 		)
 		self.createCard = CardInfo(
 			identifier: .create,
 			title: .holderDashboardCreateTitle,
 			message: .holderDashboardCreateMessage,
 			actionTitle: .holderDashboardCreateAction,
-			image: .createBig,
-			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
+			image: .create,
+			backgroundColor: Theme.colors.create,
+			imageRect: CGRect(x: 0, y: 0, width: 0.77, height: 1)
 		)
 
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
@@ -341,7 +346,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			message: .holderDashboardCreateMessage,
 			actionTitle: qrCard == nil ? .holderDashboardCreateAction : .holderDashboardChangeAction,
 			image: .create,
-			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
+			backgroundColor: Theme.colors.create,
+			imageRect: CGRect(x: 0, y: 0, width: 0.77, height: 1)
 		)
 	}
 }
