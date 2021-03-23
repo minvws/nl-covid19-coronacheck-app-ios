@@ -15,6 +15,10 @@ struct NonceEnvelope: Codable {
 
 struct CrypoAttributes: Codable {
 
+	let birthDay: String?
+	let birthMonth: String?
+	let firstNameInitial: String?
+	let lastNameInitial: String?
 	let sampleTime: String
 	let testType: String
 }

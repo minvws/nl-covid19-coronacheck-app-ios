@@ -15,7 +15,7 @@ enum AccessAction {
 	case demo
 }
 
-class VerifierResultViewModel: Logging {
+class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	/// The logging category
 	var loggingCategory: String = "VerifierResultViewModel"
@@ -25,6 +25,9 @@ class VerifierResultViewModel: Logging {
 
 	/// The configuration
 	var configuration: ConfigurationGeneralProtocol = Configuration()
+
+	/// The proof validator
+	var proofValidator: ProofValidatorProtocol
 
 	/// The scanned attributes
 	var attributes: Attributes
@@ -37,8 +40,12 @@ class VerifierResultViewModel: Logging {
 	/// The message of the scene
 	@Bindable private(set) var message: String = ""
 
+	/// The identity of the holder
+	@Bindable private(set) var identity: [(String, String)] = []
+	@Bindable private(set) var checkIdentity: [(String, String)] = []
+
 	/// The linked message of the scene
-	@Bindable private(set) var linkedMessage: String?
+	@Bindable var linkedMessage: String?
 
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
@@ -50,12 +57,18 @@ class VerifierResultViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
 	///   - attributes: the decrypted attributes
-	init(coordinator: (VerifierCoordinatorDelegate & Dismissable), attributes: Attributes) {
+	///   - maxValidity: the maximum validity of a test in hours
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		attributes: Attributes,
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.attributes = attributes
 
+		proofValidator = ProofValidator(maxValidity: maxValidity)
 		primaryButtonTitle = .verifierResultButtonTitle
+		super.init()
 
 		checkAttributes()
 	}
@@ -75,11 +88,26 @@ class VerifierResultViewModel: Logging {
 			showAccessAllowed()
 			allowAccess = .verified
 
+			let holder = HolderTestCredentials(
+				firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
+				lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
+				birthDay: attributes.cryptoAttributes.birthDay ?? "",
+				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
+			)
+			let mapping = holder.mapIdentity(months: months)
+			for (index, element) in mapping.enumerated() {
+				identity.append(("", element.isEmpty ? "_" : element))
+				checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
+			}
+
 		} else {
 			showAccessDenied()
 			allowAccess = .denied
 		}
 	}
+
+	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
+							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 
 	/// Is the sample time still valid
 	/// - Parameter now: the now time stamp
@@ -87,11 +115,15 @@ class VerifierResultViewModel: Logging {
 	private func isSampleTimeValid(_ now: TimeInterval) -> Bool {
 
 		if let sampleTimeStamp = TimeInterval(attributes.cryptoAttributes.sampleTime) {
-			if (sampleTimeStamp + TimeInterval(configuration.getTestResultTTL())) > now && sampleTimeStamp < now {
-				return true
+			switch proofValidator.validate(sampleTimeStamp) {
+				case .valid:
+					return true
+				case .expired:
+					logInfo("Sample Timestamp is too old!")
+					return false
 			}
 		}
-		logInfo("Sample Timestamp is too old!")
+		logInfo("no Sample Timestamp")
 		return false
 	}
 
@@ -118,7 +150,7 @@ class VerifierResultViewModel: Logging {
 
 		title = .verifierResultAccessTitle
 		message =  .verifierResultAccessMessage
-		linkedMessage = nil
+		linkedMessage = .verifierResultAccessLink
 	}
 
 	/// Show access denied
@@ -126,7 +158,7 @@ class VerifierResultViewModel: Logging {
 
 		title = .verifierResultDeniedTitle
 		message = .verifierResultDeniedMessage
-//		linkedMessage = .verifierResultDeniedLink
+		linkedMessage = .verifierResultDeniedLink
 	}
 
 	/// Show access allowed
@@ -146,10 +178,62 @@ class VerifierResultViewModel: Logging {
 	func linkTapped() {
 
 		logDebug("Tapped on link")
-		coordinator?.presentInformationPage(
+
+		switch allowAccess {
+			case .verified:
+				showVerifiedInfo()
+			case .denied:
+				showDeniedInfo()
+
+			default:
+				logDebug("No link for type \(allowAccess)")
+		}
+	}
+
+	func showVerifiedInfo() {
+
+		let label = Label(body: nil).multiline()
+		label.attributedText = .makeFromHtml(
+			text: .verifierResultCheckMessageOne,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		let label2 = Label(body: nil).multiline()
+		label2.attributedText = .makeFromHtml(
+			text: .verifierResultCheckMessageTwo,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		let identityView = IdentityView()
+		identityView.elements = checkIdentity
+
+		coordinator?.displayContent(
+			title: .verifierResultCheckTitle,
+			content: [(label, 16), (label2, 16), (identityView, 0)]
+		)
+	}
+
+	func showDeniedInfo() {
+
+		let label = Label(body: nil).multiline()
+		label.attributedText = .makeFromHtml(
+			text: .verifierDeniedMessageOne,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		let label2 = Label(body: nil).multiline()
+		label2.attributedText = .makeFromHtml(
+			text: .verifierDeniedMessageTwo,
+			font: Theme.fonts.body,
+			textColor: Theme.colors.dark
+		)
+
+		coordinator?.displayContent(
 			title: .verifierDeniedTitle,
-			body: .verifierDeniedMessage,
-			showBottomCloseButton: true
+			content: [(label, 16), (label2, 0)]
 		)
 	}
 }

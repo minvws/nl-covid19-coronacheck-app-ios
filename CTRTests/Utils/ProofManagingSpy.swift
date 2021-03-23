@@ -72,7 +72,7 @@ class ProofManagingSpy: ProofManaging {
 		}
 	}
 
-	func fetchIssuerPublicKeys(ttl: TimeInterval, oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
+	func fetchIssuerPublicKeys(oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
 
 		fetchIssuerPublicKeysCalled = true
 		if let error = issuerPublicKeyError {

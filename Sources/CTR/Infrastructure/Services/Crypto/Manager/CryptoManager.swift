@@ -6,7 +6,7 @@
 */
 
 import Foundation
-import Ctcl
+import Clcore
 
 /// The cryptography manager
 class CryptoManager: CryptoManaging, Logging {

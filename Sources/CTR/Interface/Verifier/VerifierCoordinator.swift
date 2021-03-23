@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import SheetPresentation
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
@@ -23,13 +24,12 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
 	func navigateToScanResult(_ attributes: Attributes)
-	
-	/// Show an information page
+
+	/// Display content
 	/// - Parameters:
-	///   - title: the title of the page
-	///   - body: the body of the page
-	///   - showBottomCloseButton: True if the bottom close button should be shown
-	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
+	///   - title: the title
+	///   - content: the content
+	func displayContent(title: String, content: [Content])
 }
 
 class VerifierCoordinator: Coordinator, Logging {
@@ -53,6 +53,9 @@ class VerifierCoordinator: Coordinator, Logging {
 
 	/// The general configuration
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
+
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -62,6 +65,12 @@ class VerifierCoordinator: Coordinator, Logging {
 	
 	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
+
+	var sheetPresentationManager = SheetPresentationManager()
+
+	var maxValidity: Int {
+		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
+	}
 	
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
@@ -78,7 +87,8 @@ class VerifierCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			startChildCoordinator(coordinator)
 			
@@ -87,7 +97,8 @@ class VerifierCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
@@ -107,7 +118,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
-				delegate: self
+				delegate: self,
+				versionSupplier: AppVersionSupplier()
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
@@ -132,7 +144,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let destination = ScanInstructionsViewController(
 			viewModel: ScanInstructionsViewModel(
 				coordinator: self,
-				presented: present
+				presented: present,
+				maxValidity: String(maxValidity)
 			)
 		)
 		if present {
@@ -145,14 +158,29 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	/// Navigate to the QR scanner
 	func navigateToScan() {
-		
+
+//		navigateToScanResult(
+//			Attributes(
+//				cryptoAttributes:
+//					CrypoAttributes(
+//						birthDay: "27",
+//						birthMonth: "5",
+//						firstNameInitial: nil, //"R",
+//						lastNameInitial: "P",
+//						sampleTime: "1615467990",
+//						testType: "PCR"
+//					),
+//				unixTimeStamp: Int64(Date().timeIntervalSince1970)
+//			)
+//		)
+
 		let destination = VerifierScanViewController(
 			viewModel: VerifierScanViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager
 			)
 		)
-		
+
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 	
@@ -163,29 +191,43 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				attributes: attributes
+				attributes: attributes,
+				maxValidity: maxValidity
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
-	
-	/// Show an information page
+
+	/// Display content
 	/// - Parameters:
-	///   - title: the title of the page
-	///   - body: the body of the page
-	///   - showBottomCloseButton: True if the bottom close button should be shown
-	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
-		
-		let viewController = InformationViewController(
-			viewModel: InformationViewModel(
+	///   - title: the title
+	///   - content: the content
+	func displayContent(title: String, content: [Content]) {
+
+		let viewController = DisplayContentViewController(
+			viewModel: DisplayContentViewModel(
 				coordinator: self,
 				title: title,
-				message: body,
-				showBottomCloseButton: showBottomCloseButton
+				content: content
 			)
 		)
 		let destination = UINavigationController(rootViewController: viewController)
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+
+		//		let presentationManager = SheetPresentationManager(
+		//			options: SheetPresentationOptions(
+		//				cornerOptions: SheetPresentationOptions.CornerOptions.roundAllCorners(radius: 10),
+		//				dimmingViewAlpha: 0.5,
+		//				edgeInsets: UIEdgeInsets(top: 100, left: 0, bottom: 0, right: 0),
+		//				ignoredEdgesForMargins: [DirectionalViewEdge.bottom, DirectionalViewEdge.leading, DirectionalViewEdge.trailing],
+		//				presentationLayout: PresentationLayout(horizontalLayout: .fill, verticalLayout: .automatic(alignment: .bottom)),
+		//				animationBehavior: .system
+		//			)
+		//		)
+		//
+		//		destination.transitioningDelegate = presentationManager
+		//		destination.modalPresentationStyle = .custom
+		//		sheetPresentationManager = presentationManager
 	}
 }
 

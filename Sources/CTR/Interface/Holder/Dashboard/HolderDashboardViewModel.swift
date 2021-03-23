@@ -93,7 +93,7 @@ class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var showExpiredQR: Bool
 
 	/// Hide for screen capture
-	@Bindable var hideQRForCapture: Bool
+	@Bindable var hideForCapture: Bool
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -107,11 +107,13 @@ class HolderDashboardViewModel: Logging {
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
 	///   - configuration: the configuration
+	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol) {
+		configuration: ConfigurationGeneralProtocol,
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
@@ -125,7 +127,7 @@ class HolderDashboardViewModel: Logging {
 		// Start by showing nothing
 		self.showValidQR = false
 		self.showExpiredQR = false
-		self.hideQRForCapture = false
+		self.hideForCapture = false
 
 		self.appointmentCard = CardInfo(
 			identifier: .appointment,
@@ -144,7 +146,7 @@ class HolderDashboardViewModel: Logging {
 			imageRect: CGRect(x: 0, y: 0, width: 0.65, height: 1)
 		)
 
-		self.proofValidator = ProofValidator(configuration: configuration)
+		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
 		self.addObserver()
 	}
@@ -300,10 +302,10 @@ extension HolderDashboardViewModel {
 	@objc func preventScreenCapture() {
 
 		if UIScreen.main.isCaptured {
-			hideQRForCapture = true
+			hideForCapture = true
 			self.logWarning("Screen capture in progress")
 		} else {
-			hideQRForCapture = false
+			hideForCapture = false
 		}
 	}
 }

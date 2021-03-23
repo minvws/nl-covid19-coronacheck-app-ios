@@ -12,7 +12,7 @@ extension NSAttributedString {
 	/// Set the line height
 	/// - Parameter lineHeight: the line height
 	/// - Returns: attributed string
-	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left) -> NSAttributedString {
+	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping
@@ -22,7 +22,8 @@ extension NSAttributedString {
 		let attrString = NSMutableAttributedString(attributedString: self)
 		attrString.addAttributes(
 			[
-				.paragraphStyle: paragraphStyle
+				.paragraphStyle: paragraphStyle,
+				.kern: kerning
 			],
 			range: _NSRange(
 				location: 0,
@@ -34,8 +35,8 @@ extension NSAttributedString {
 
 	/// bold a part of the text
 	/// - Parameters:
-	///   - underlined: the part to underline
-	///   - color: the color to underline with
+	///   - bold: the part to bold
+	///   - color: the color to bold with
 	/// - Returns: attributed string
 	func bold(_ bolds: [String], with font: UIFont) -> NSAttributedString {
 
@@ -69,12 +70,19 @@ public extension NSAttributedString {
 		textColor: UIColor,
 		boldTextColor: UIColor? = nil,
 		textAlignment: NSTextAlignment = .left,
-		lineHeight: CGFloat? = 22,
+		lineHeight: CGFloat = 22,
 		underlineColor: UIColor? = nil) -> NSAttributedString {
+
+		guard !ProcessInfo.processInfo.isTesting else {
+
+			return NSAttributedString(string: text ?? "")
+		}
+
 		let text = text ?? ""
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = textAlignment
 		paragraphStyle.paragraphSpacing = 8
+		paragraphStyle.minimumLineHeight = lineHeight
 
 		let listParagraphStyle = NSMutableParagraphStyle()
 
@@ -94,7 +102,8 @@ public extension NSAttributedString {
 
 		var attributes: [Key: Any] = [
 			.foregroundColor: textColor,
-			.paragraphStyle: paragraphStyle
+			.paragraphStyle: paragraphStyle,
+			.kern: -0.41
 		]
 		if let underlineColor = underlineColor {
 			attributes[.underlineColor] = underlineColor

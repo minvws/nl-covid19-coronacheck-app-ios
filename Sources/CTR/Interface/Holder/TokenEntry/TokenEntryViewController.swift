@@ -141,7 +141,7 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = true
-		sceneView.scrollView.contentInset.bottom = notification.getHeight()
+		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 30 // 30: Also show the error view.
 	}
 
 	@objc func keyBoardWillHide(notification: Notification) {

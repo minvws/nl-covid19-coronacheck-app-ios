@@ -9,10 +9,6 @@ import Foundation
 
 protocol ConfigurationGeneralProtocol: AnyObject {
 
-	/// Get the TTL for a test result
-	/// - Returns: TTL for a test result
-	func getTestResultTTL() -> Int
-
 	/// Get the TTL for a test result warning
 	/// - Returns: TTL for a test result warning
 	func getTestResultWarningTTL() -> Int
@@ -45,15 +41,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 // MARK: - ConfigurationGeneralProtocol
 
 extension Configuration: ConfigurationGeneralProtocol {
-
-	/// Get the TTL for a test result
-	/// - Returns: TTL for a test result
-	func getTestResultTTL() -> Int {
-		guard let value = general["testresultTTL"] as? Int else {
-			fatalError("Configuration: No Test Restult TTL provided")
-		}
-		return value
-	}
 
 	/// Get the TTL for a test result warning
 	/// - Returns: TTL for a test result warning

@@ -14,6 +14,7 @@
 "general.error.title" = "Er ging iets mis";
 "general.error.technical.title" = "Technische fout";
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
+"general.menu.version" = "App versie %@ (%@)";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -48,7 +49,7 @@
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Zo veilig mogelijk weer open";
-"verifier.onboarding.message.safely" = "Bezoekers van jouw zaak, gelegenheid of evenement moeten eerst een coronatest doen. Alleen met een negatief testresultaat mogen zij naar binnen. Een negatief testresultaat geldt 48 uur.";
+"verifier.onboarding.message.safely" = "Bezoekers van jouw zaak, gelegenheid of evenement moeten eerst een coronatest doen. Alleen met een negatief testresultaat mogen zij naar binnen. Een negatief testresultaat geldt %@ uur.";
 "verifier.onboarding.title.scanqr" = "Scan QR-code voor testresultaat";
 "verifier.onboarding.message.scanqr" = "In de CoronaCheck app maakt de bezoeker van haar testresultaat een QR-code. Met deze app scan jij de QR-codes en zie je wie er toegang krijgt. Bij een groen scherm mag de bezoeker naar binnen.";
 "verifier.onboarding.title.access" = "Toegang is anoniem";
@@ -82,7 +83,7 @@
 "verifier.instructions.access.title" = "3. Groen scherm = toegang";
 "verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldig negatief testresultaat en mag naar binnen.";
 "verifier.instructions.denied.title" = "4. Rood scherm = geen toegang";
-"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li><li>Is de bezoeker wel negatief op corona getest in de afgelopen 48 uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li><li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li></ul>";
+"verifier.instructions.denied.text" = "Rood scherm? De QR-code van de bezoeker is <u>niet</u> geldig. De bezoeker kan geen toegang krijgen. Bij een rood scherm mag de bezoeker <u>nooit</u> binnengelaten worden. Dit brengt andere bezoekers in gevaar.<ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck app laat zien. Een schermafbeelding of kopie van een QR-code geeft altijd een rood scherm.</li><li>Is de bezoeker wel negatief op corona getest in de afgelopen %@ uur? Dan kan er van dat testresultaat een bewijs gemaakt worden in de CoronaCheck app.</li><li>Heeft de bezoeker geen test gedaan? Stuur hem of haar naar een snelteststraat in de buurt om een nieuwe test te doen.</li></ul>";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
@@ -91,14 +92,33 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.access.message" = "De bezoeker heeft een geldig negatief testbewijs (geen corona).";
+"verifier.result.access.message" = "Controleer of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs. Lees meer.";
+"verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.demo.message" = "";
 "verifier.result.denied.title" = "Ongeldige QR-code";
-"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs.";
-"verifier.result.denied.link" = "Lees de mogelijke oorzaken";
+"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs. Lees mogelijke oorzaken.";
+"verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
+"holder.testresults.january" = "JAN";
+"holder.testresults.february" = "FEB";
+"holder.testresults.march" = "MAR";
+"holder.testresults.april" = "APR";
+"holder.testresults.may" = "MEI";
+"holder.testresults.june" = "JUN";
+"holder.testresults.july" = "JUL";
+"holder.testresults.august" = "AUG";
+"holder.testresults.september" = "SEP";
+"holder.testresults.october" = "OKT";
+"holder.testresults.november" = "NOV";
+"holder.testresults.december" = "DEC";
+
+/* MARK: - Verifier Check Result */
+"verifier.result.check.title" = "Controleer gegevens";
+"verifier.result.check.section.one" = "Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs.";
+"verifier.result.check.section.two" = "De gegevens bestaan uit: (1) de eerste letter van de voornaam, (2) de eerste letter van de achternaam, (3) de geboortedag en (4) de geboortemaand. ";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Geen geldige QR-code";
-"verifier.denied.message" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Wat kan het betekenen</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p><p><b>En nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck app een QR-code van maken.</p>";
+"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Wat kan het betekenen</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p>";
+"verifier.denied.message.two" = "<p><b>En nu?</b><br>Weiger toegang en verzoek de bezoeker eerst een test te doen. Als het testresultaat bekend is kan de bezoeker er in de CoronaCheck app een QR-code van maken.</p>";

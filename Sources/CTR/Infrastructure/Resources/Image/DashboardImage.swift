@@ -11,6 +11,8 @@ extension UIImage {
 
 	static var appointment: UIImage? { return UIImage(named: "Appointment") }
 
+	static var appointmentBig: UIImage? { return UIImage(named: "AppointmentBig") }
+
 	static var create: UIImage? { return UIImage(named: "CreateQR") }
 
 	static var createBig: UIImage? { return UIImage(named: "CreateQRBig") }

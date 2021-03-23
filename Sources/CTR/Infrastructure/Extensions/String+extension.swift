@@ -65,7 +65,7 @@ extension String {
 	/// Set the line height
 	/// - Parameter lineHeight: the line height
 	/// - Returns: attributed string
-	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left) -> NSAttributedString {
+	func setLineHeight(_ lineHeight: CGFloat = 20.0, alignment: NSTextAlignment = .left, kerning: CGFloat = 0.0) -> NSAttributedString {
 
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byWordWrapping
@@ -75,9 +75,25 @@ extension String {
 		let attrString = NSAttributedString(
 			string: self,
 			attributes: [
-				.paragraphStyle: paragraphStyle
+				.paragraphStyle: paragraphStyle,
+				.kern: kerning
 			]
 		)
 		return attrString
+	}
+}
+
+// See https://www.hackingwithswift.com/example-code/strings/how-to-capitalize-the-first-letter-of-a-string
+
+extension String {
+
+	func capitalizingFirstLetter() -> String {
+
+		return prefix(1).capitalized + dropFirst()
+	}
+
+	mutating func capitalizeFirstLetter() {
+
+		self = self.capitalizingFirstLetter()
 	}
 }

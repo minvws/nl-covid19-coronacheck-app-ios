@@ -10,4 +10,8 @@ import UIKit
 extension UIImage {
 
 	static var qrAnimation: UIImage? { return UIImage(named: "QRAnimation") }
+
+	static var tokenExample: UIImage? { return UIImage(named: "TokenExample") }
+
+	static var miniQR: UIImage? { return UIImage(named: "MiniQR") }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import AppAuth
+import Firebase
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,6 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		styleUI()
 		previousBrightness = UIScreen.main.brightness
+
+		if Configuration().getEnvironment() != "production", !ProcessInfo.processInfo.isTesting {
+			FirebaseApp.configure()
+		}
 
 		if #available(iOS 13.0, *) {
 			// Use Scene lifecycle

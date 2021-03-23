@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import SheetPresentation
 
 protocol Dismissable: AnyObject {
 
@@ -42,14 +43,11 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token entry scene
 	func navigateToTokenEntry(_ token: RequestToken?)
 
-	/// Navigate to Birthday entry Scene
-	func navigateToBirthdate()
-
 	/// Navigate to List Results Scene
 	func navigateToListResults()
 
-	/// Navigate to create proof
-	func navigateToCreateProof()
+	/// Navigate to About test Result Scene
+	func navigateToAboutTestResult()
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
@@ -94,6 +92,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
@@ -106,11 +107,17 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The about navigation controller
 	var aboutNavigationContoller: UINavigationController?
 
+	let sheetPresentationManager = SheetPresentationManager()
+
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
 
 		self.navigationController = navigationController
 		self.window = window
+	}
+
+	var maxValidity: Int {
+		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
 	}
 
 	// Designated starter method
@@ -121,7 +128,8 @@ class HolderCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			startChildCoordinator(coordinator)
 
@@ -130,7 +138,8 @@ class HolderCoordinator: Coordinator, Logging {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				maxValidity: String(maxValidity)
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
@@ -152,7 +161,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
-				delegate: self
+				delegate: self,
+				versionSupplier: AppVersionSupplier()
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
@@ -161,7 +171,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
-				configuration: generalConfiguration
+				configuration: generalConfiguration,
+				maxValidity: maxValidity
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
@@ -179,7 +190,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
-				configuration: generalConfiguration
+				configuration: generalConfiguration,
+				maxValidity: maxValidity
 			)
 		)
 		let navController = UINavigationController(rootViewController: destination)
@@ -197,7 +209,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let destination = AppointmentViewController(
 			viewModel: AppointmentViewModel(
-				coordinator: self
+				coordinator: self,
+				maxValidity: String(maxValidity),
+				configuration: generalConfiguration
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -218,18 +232,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the token overview scene
 	func navigateToTokenOverview() {
 
-		if proofManager.getBirthDate() == nil {
-			// Fill in the birhtday if there is none on the commercial token flow.
-			navigateToBirthdate()
-		} else {
-
-			let destination = TokenOverviewViewController(
-				viewModel: TokenOverviewViewModel(
-					coordinator: self
-				)
+		let destination = TokenOverviewViewController(
+			viewModel: TokenOverviewViewModel(
+				coordinator: self
 			)
-			(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-		}
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the token scanner
@@ -257,46 +265,37 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to Birthdate Scene
-	func navigateToBirthdate() {
-
-		let coordinator = BirthdateCoordinator(
-			navigationController: navigationController,
-			presentingViewController: sidePanel?.selectedViewController,
-			birthdateSceneDelegate: self
-		)
-
-		startChildCoordinator(coordinator)
-	}
-
 	/// Navigate to List Results Scene
 	func navigateToListResults() {
 
-		let viewController = ListResultsViewController(
+		let destination = ListResultsViewController(
 			viewModel: ListResultsViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				configuration: generalConfiguration
+				maxValidity: maxValidity
 			)
 		)
-		let destination = UINavigationController(rootViewController: viewController)
-		navigationController = destination
-		if #available(iOS 13.0, *) {
-			destination.isModalInPresentation = true
-		}
-		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to create proof
-	func navigateToCreateProof() {
-		
-		let viewController = CreateProofViewController(
-			viewModel: CreateProofViewModel(
+	/// Navigate to About test Result Scene
+	func navigateToAboutTestResult() {
+
+		let destination = AboutTestResultViewController(
+			viewModel: AboutTestResultViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager
+				proofManager: proofManager
 			)
 		)
-		navigationController.pushViewController(viewController, animated: true)
+//		destination.transitioningDelegate = sheetPresentationManager
+//		destination.modalPresentationStyle = .custom
+		let navController = UINavigationController(rootViewController: destination)
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
+			navController,
+			animated: true,
+			completion: nil
+		)
 	}
 
 	/// Navigate to the start fo the holder flow
@@ -349,12 +348,6 @@ extension HolderCoordinator: Dismissable {
 
 	func dismiss() {
 
-//		if let nav = sidePanel?.presentedViewController as? UINavigationController {
-////			nav.popViewController(animated: true)
-//			nav.viewControllers.first?.dismiss(animated: true, completion: nil)
-//		}
-
-//		dashboardNavigationContoller?.dismiss(animated: true, completion: nil)
 		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
 	}
 }
@@ -451,19 +444,5 @@ extension HolderCoordinator: OnboardingDelegate {
 
 		// Navigate to Holder Start.
 		navigateToHolderStart()
-	}
-}
-
-// MARK: - BirthdateSceneDelegate
-
-extension HolderCoordinator: BirthdateSceneDelegate {
-
-	/// User confirmed the birthdate
-	func birthdateConfirmed() {
-
-		if let birthdateCoordinator = childCoordinators.first {
-			removeChildCoordinator(birthdateCoordinator)
-		}
-		navigateToTokenOverview()
 	}
 }

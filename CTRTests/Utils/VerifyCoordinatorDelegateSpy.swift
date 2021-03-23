@@ -14,7 +14,7 @@ class VerifyCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 	var navigateToScanInstructionCalled = false
 	var navigateToScanCalled = false
 	var navigateToScanResultCalled = false
-	var presentInformationPageCalled = false
+	var displayContentCalled = false
 	var dismissCalled = false
 
 	func navigateToVerifierWelcome() {
@@ -37,9 +37,9 @@ class VerifyCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 		navigateToScanResultCalled = true
 	}
 
-	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
+	func displayContent(title: String, content: [Content]) {
 
-		presentInformationPageCalled = true
+		displayContentCalled = true
 	}
 
 	func dismiss() {

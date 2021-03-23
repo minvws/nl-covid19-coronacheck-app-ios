@@ -12,6 +12,9 @@ class ProofManager: ProofManaging, Logging {
 
 	var loggingCategory: String = "ProofManager"
 
+	/// The remote config manager
+	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 
@@ -148,13 +151,13 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
-	///   - ttl: the time to read from cache
 	///   - oncompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
-		ttl: TimeInterval,
 		oncompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
+
+		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
 
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 
@@ -210,27 +213,30 @@ class ProofManager: ProofManaging, Logging {
 		oncompletion: @escaping ((SignedTestResultState) -> Void),
 		onError: @escaping ((Error) -> Void)) {
 
-		if let icm = cryptoManager.generateCommitmentMessage(),
-		   let icmDictionary = icm.convertToDictionary(),
-		   let stoken = cryptoManager.getStoken(),
-		   let wrapper = getSignedWrapper() {
+		guard let icm = cryptoManager.generateCommitmentMessage(),
+			  let icmDictionary = icm.convertToDictionary(),
+			  let stoken = cryptoManager.getStoken(),
+			  let wrapper = getSignedWrapper() else {
 
-			let dictionary: [String: AnyObject] = [
-				"test": generateString(object: wrapper) as AnyObject,
-				"stoken": stoken as AnyObject,
-				"icm": icmDictionary as AnyObject
-			]
+			onError(ProofError.missingParams)
+			return
+		}
 
-			networkManager.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
+		let dictionary: [String: AnyObject] = [
+			"test": generateString(object: wrapper) as AnyObject,
+			"stoken": stoken as AnyObject,
+			"icm": icmDictionary as AnyObject
+		]
 
-				switch resultwrapper {
-					case let .success(data):
-						self?.parseSignedTestResult(data, oncompletion: oncompletion)
+		networkManager.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
 
-					case let .failure(networkError):
-						self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
-						onError(networkError)
-				}
+			switch resultwrapper {
+				case let .success(data):
+					self?.parseSignedTestResult(data, oncompletion: oncompletion)
+
+				case let .failure(networkError):
+					self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
+					onError(networkError)
 			}
 		}
 	}

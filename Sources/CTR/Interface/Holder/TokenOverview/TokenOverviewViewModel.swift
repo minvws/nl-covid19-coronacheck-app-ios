@@ -5,7 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
 
 /// The identty of a provider
 enum TokenIdentifier: String {
@@ -24,7 +24,7 @@ struct TokenProvider {
 	let identifier: TokenIdentifier
 
 	/// The name
-	let name: String
+	let icon: UIImage?
 
 	/// The subtite
 	let subTitle: String
@@ -58,12 +58,12 @@ class TokenOverviewViewModel: Logging {
 		providers = [
 			TokenProvider(
 				identifier: .code,
-				name: .holderTokenOverviewCodeTitle,
+				icon: .tokenExample,
 				subTitle: .holderTokenOverviewCodeText
 			),
 			TokenProvider(
 				identifier: .qr,
-				name: .holderTokenOverviewQRTitle,
+				icon: .miniQR,
 				subTitle: .holderTokenOverviewQRText
 			)
 		]

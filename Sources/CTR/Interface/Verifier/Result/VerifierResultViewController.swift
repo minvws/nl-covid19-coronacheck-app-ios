@@ -49,6 +49,9 @@ class VerifierResultViewController: BaseViewController {
 			if $0 == .verified {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.backgroundColor = Theme.colors.access
+
+				self?.sceneView.setupForVerified()
+
 			} else if $0 == .demo {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.backgroundColor = Theme.colors.demo
@@ -58,6 +61,11 @@ class VerifierResultViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$identity.binding = { [weak self] in
+
+			self?.sceneView.identityView.elements = $0
+		}
+
 		viewModel.$linkedMessage.binding = { [weak self] in
 			if $0 != nil {
 				self?.sceneView.underline($0)
@@ -65,7 +73,12 @@ class VerifierResultViewController: BaseViewController {
 			}
 		}
 
-		addCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .close)
+		viewModel.$hideForCapture.binding = { [weak self] in
+
+			self?.sceneView.isHidden = $0
+		}
+
+		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +89,7 @@ class VerifierResultViewController: BaseViewController {
 	}
 
 	/// User tapped on the button
-	@objc private func closeButtonTapped() {
+	@objc func closeButtonTapped() {
 
 		viewModel.dismiss()
 	}

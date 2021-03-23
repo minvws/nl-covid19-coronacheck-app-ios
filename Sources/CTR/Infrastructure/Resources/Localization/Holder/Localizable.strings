@@ -14,6 +14,7 @@
 "general.error.title" = "Er ging iets mis";
 "general.error.technical.title" = "Technische fout";
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
+"general.menu.version" = "App versie %@ (%@)";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -53,7 +54,7 @@
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
 "holder.onboarding.message.yourqr" = "Ben je negatief getest (geen corona)? Dan kun je met deze app een persoonlijke QR-code maken. Dat is jouw testbewijs. De QR-code wordt gescand voordat je toegang krijgt.";
 "holder.onboarding.title.validity" = "Geldigheid van je bewijs";
-"holder.onboarding.message.validity" = "Een negatief testresultaat (geen corona) is geldig tot 48 uur na het moment van testen. De kans dat je in die tijd besmettelijk bent voor anderen is namelijk klein.";
+"holder.onboarding.message.validity" = "Een negatief testresultaat (geen corona) is geldig tot %@ uur na het moment van testen. De kans dat je in die tijd besmettelijk bent voor anderen is namelijk klein.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
 "holder.onboarding.message.privacy" = "Deze app haalt alleen een negatief testresultaat (geen corona) op. En controleert of dit jouw resultaat is. Andere persoonsgegevens worden niet verwerkt of opgeslagen.";
 
@@ -81,14 +82,14 @@
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is 48 uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
+"holder.appointment.body" = "Om een QR-code te maken moet je je eerst laten testen. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is %@ uur geldig vanaf het moment dat je negatief getest bent. Plan je test dus kort voor je evenement. Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.title" = "Testafspraak maken";
 "holder.appointment.header" = "Maak een testafspraak";
 "holder.appointment.button.title" = "Maak een afspraak";
 
 /* MARK: - Holder Choose Provider */
-"holder.provider.title" = "QR-Code maken";
+"holder.provider.title" = "QR-code maken";
 "holder.provider.header" = "Waar ben je getest?";
 "holder.provider.message" = "Is je testresultaat negatief? Dan kan je er een QR-code van maken. Geef aan bij welke testlocatie je bent getest.";
 "holder.provider.ggd.title" = "GGD";
@@ -102,9 +103,7 @@
 "holder.tokenoverview.text" = "Heb je je laten testen bij een commerciële testlocatie? Dan heb je een unieke code gekregen of een QR-code.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
 "holder.tokenoverview.nocode.details" = "Als je je bij een commerciële testlocatie hebt laten testen krijg je een code gemaild of op papier. De code kan een QR-code zijn of een code met cijfers en letters.\n\nHeb je geen code gekregen? Of ben je code kwijt geraakt? Neem dan contact op met je testlocatie.\n\nHet kan zijn dat je je opnieuw moet laten testen.";
-"holder.tokenoverview.code.title" = "SOB-FVDKT10-T2";
 "holder.tokenoverview.code.subtitle" = "Ik heb een code";
-"holder.tokenoverview.qr.title" = "QR";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
 /* MARK: - Holder Token Scan */
@@ -124,59 +123,43 @@
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
 
-/* MARK: - Holder Birthday Entry */
-"holder.birthday.entry.title" = "Wat is je geboortedatum";
-"holder.birthday.entry.text" = "<p>We vragen je je geboortedatum in te vullen, zoals die op je identiteitsbewijs staat. Let op: je kan deze later niet meer aanpassen.</p><p>Zo controleren we of een testresultaat ook echt bij jou hoort.</p>";
-"holder.birthday.entry.day" = "Dag";
-"holder.birthday.entry.month" = "Maand";
-"holder.birthday.entry.year" = "Jaar";
-"holder.birthday.entry.button.title" = "Bevestig";
-"holder.birthday.entry.invalid" = "Dit is geen geldige datum";
-"holder.birthday.january" = "Januari";
-"holder.birthday.february" = "Februari";
-"holder.birthday.march" = "Maart";
-"holder.birthday.april" = "April";
-"holder.birthday.may" = "Mei";
-"holder.birthday.june" = "Juni";
-"holder.birthday.july" = "Juli";
-"holder.birthday.august" = "Augustus";
-"holder.birthday.september" = "September";
-"holder.birthday.october" = "Oktober";
-"holder.birthday.november" = "November";
-"holder.birthday.december" = "December";
-
-/* MARK: - Holder Birthday Confirmation */
-"holder.birthday.confirmation.title" = "Controleer je geboortedatum";
-"holder.birthday.confirmation.text" = "<p>Komt <b>%@</b> overeen met de geboortedatum zoals deze op je identiteitsbewijs staat?</p><p>Je kan je geboortedatum later niet aanpassen.</p>";
-"holder.birthday.confirmation.confirm" = "%@ is de geboortedatum die op mijn identiteitsbewijs staat";
-"holder.birthday.confirmation.button.title" = "Bevestig";
-"holder.birthday.confirmation.adjust.title" = "Pas geboortedatum aan";
-"holder.birthday.confirmation.finished" = "Geboortedatum\ningevuld";
-
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
 "holder.testresults.results.text" = "Je hebt 1 nieuw negatief testresultaat (geen corona). Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code van testresultaat";
 "holder.testresults.noresults.title" = "Er is geen negatief restresultaat";
-"holder.testresults.noresults.text" = "Er is geen negatief testresultaat (geen corona) beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je test is langer dan 48 uur geleden uitgevoerd</li><li>Je testresultaat is nog niet verwerkt</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
+"holder.testresults.noresults.text" = "Er is geen negatief testresultaat (geen corona) beschikbaar. Dit kan het volgende betekenen:<ul><li>Je hebt nog geen test gedaan</li><li>Je test is langer dan %@ uur geleden uitgevoerd</li><li>Je testresultaat is nog niet verwerkt</li><li>Je uitslag is niet negatief. In dit geval neemt de testlocatie contact op met jou.</li></ul>";
 "holder.testresults.back.button" = "Terug naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testresultaat nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testresultaat is al opgehaald";
 "holder.testresults.already.text" = "<p>Je testresultaat is al opgehaald en verwerkt in een QR-code.</p><p></p><p>Heb je het idee dat dit niet klopt? Neem dan contact op met de testlocatie.</p>";
-"holder.testresults.disclaimer" = "Alleen testresultaten die niet ouder zijn dan 48 uur kun je gebruiken om een QR-code van te maken.";
 "holder.testresults.recent" = "Recente testresultaten";
-"holder.testresults.negative" = "Negatief testresultaat";
+"holder.testresults.negative" = "Negatief testresultaat (geen corona)";
+"holder.testresults.identity" = "Identificatie gegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.testresults.alert.message" = "Je kan later vanaf Mijn overzicht opnieuw een QR-code maken.";
 "holder.testresults.alert.ok" = "Ja, Stop";
 "holder.testresults.alert.cancel" = "Nee, terug";
+"holder.testresults.january" = "JAN";
+"holder.testresults.february" = "FEB";
+"holder.testresults.march" = "MAR";
+"holder.testresults.april" = "APR";
+"holder.testresults.may" = "MEI";
+"holder.testresults.june" = "JUN";
+"holder.testresults.july" = "JUL";
+"holder.testresults.august" = "AUG";
+"holder.testresults.september" = "SEP";
+"holder.testresults.october" = "OKT";
+"holder.testresults.november" = "NOV";
+"holder.testresults.december" = "DEC";
 
-/* MARK: - Holder Create Proof */
-"holder.proof.title" = "Van jouw testresultaat is een QR-code gemaakt";
-"holder.proof.text" = "<p>In de QR-code is verwerkt dat je <b>negatief getest</b> bent (geen corona) op <b>%@</b>.</p><p>In deze app is alleen de anonieme QR-code zichtbaar, zonder verdere testinformatie.</p>";
-"holder.proof.text.at" = "om";
-"holder.proof.action" = "Naar mijn QR";
+/* MARK: - Holder Test Results About */
+"holder.testresults.about.title" = "Over het testresultaat";
+"holder.testresults.about.section.one" = "Met je testresultaat worden de testdatum en jouw identificatie gegevens opgehaald.";
+"holder.testresults.about.section.two" = "Je identificatie gegevens bestaan uit de eerste letter van je voornaam (1), de eerste letter van je achternaam (2), je geboortedag (3), en geboortemaand (4).";
+"holder.testresults.about.section.three" = "Kloppen jouw identificatie gegevens niet met je identiteitsbewijs?";
+"holder.testresults.about.section.four" = "Neem contact op met je testlocatie om je identificatie gegevens te laten aanpassen.";
 
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";

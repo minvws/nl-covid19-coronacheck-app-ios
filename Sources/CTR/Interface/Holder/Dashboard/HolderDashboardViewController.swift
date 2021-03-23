@@ -53,42 +53,42 @@ class HolderDashboardViewController: BaseViewController {
 			guard let strongSelf = self else { return }
 			strongSelf.styleCard(strongSelf.sceneView.createCard, cardInfo: $0) }
 		
-		viewModel.$qrMessage.binding = {
+		viewModel.$qrMessage.binding = { [weak self] in
 			
 			if let value = $0 {
 				let image = value.generateQRCode()
-				self.sceneView.qrView.qrImage = image
+				self?.sceneView.qrView.qrImage = image
 			} else {
-				self.sceneView.qrView.qrImage = nil
+				self?.sceneView.qrView.qrImage = nil
 			}
 		}
 		
-		viewModel.$showValidQR.binding = {
+		viewModel.$showValidQR.binding = { [weak self] in
 			
 			if $0 {
-				self.sceneView.qrView.isHidden = false
-				self.setupLink()
+				self?.sceneView.qrView.isHidden = false
+				self?.setupLink()
 			} else {
-				self.sceneView.qrView.isHidden = true
+				self?.sceneView.qrView.isHidden = true
 			}
 		}
 		
-		viewModel.$showExpiredQR.binding = {
+		viewModel.$showExpiredQR.binding = { [weak self] in
 			
 			if $0 {
-				self.sceneView.expiredQRView.isHidden = false
-				self.sceneView.expiredQRView.closeButtonTappedCommand = { [weak self] in
+				self?.sceneView.expiredQRView.isHidden = false
+				self?.sceneView.expiredQRView.closeButtonTappedCommand = { [weak self] in
 					self?.viewModel.closeExpiredRQ()
 				}
 			} else {
-				self.sceneView.expiredQRView.isHidden = true
+				self?.sceneView.expiredQRView.isHidden = true
 			}
 		}
 		
-		viewModel.$hideQRForCapture.binding = {
+		viewModel.$hideForCapture.binding = { [weak self] in
 			
-			self.screenCaptureInProgress = $0
-			self.sceneView.hideQRImage = $0
+			self?.screenCaptureInProgress = $0
+			self?.sceneView.hideQRImage = $0
 		}
 		
 		setupListeners()

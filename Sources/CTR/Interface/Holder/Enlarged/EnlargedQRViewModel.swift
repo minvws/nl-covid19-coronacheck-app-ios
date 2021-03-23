@@ -7,7 +7,7 @@
   
 import UIKit
 
-class EnlargedQRViewModel: Logging {
+class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 	/// The logging category
 	var loggingCategory: String = "EnlargedQRViewModel"
@@ -45,20 +45,19 @@ class EnlargedQRViewModel: Logging {
 	/// Show a valid QR Message
 	@Bindable private(set) var showValidQR: Bool
 
-	/// Hide for screen capture
-	@Bindable var hideQRForCapture: Bool
-
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
 	///   - configuration: the configuration
+	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: Dismissable,
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol) {
+		configuration: ConfigurationGeneralProtocol,
+		maxValidity: Int) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
@@ -67,10 +66,9 @@ class EnlargedQRViewModel: Logging {
 
 		// Start by showing nothing
 		self.showValidQR = false
-		self.hideQRForCapture = false
 
-		self.proofValidator = ProofValidator(configuration: configuration)
-		self.addObserver()
+		self.proofValidator = ProofValidator(maxValidity: maxValidity)
+		super.init()
 	}
 
 	/// Check the QR Validity
@@ -163,30 +161,4 @@ class EnlargedQRViewModel: Logging {
 		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
-}
-
-// MARK: - capturedDidChangeNotification
-
-extension EnlargedQRViewModel {
-
-	/// Add an observer for the capturedDidChangeNotification
-	func addObserver() {
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(preventScreenCapture),
-			name: UIScreen.capturedDidChangeNotification,
-			object: nil
-		)
-	}
-
-	/// Prevent screen capture
-	@objc func preventScreenCapture() {
-
-		if UIScreen.main.isCaptured {
-			hideQRForCapture = true
-			self.logWarning("Screen capture in progress")
-		} else {
-			hideQRForCapture = false
-		}
-	}
 }

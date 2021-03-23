@@ -91,7 +91,7 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.shouldReturnPublicKeys = true
 
 		// When
-		sut.fetchIssuerPublicKeys(ttl: 10) {
+		sut.fetchIssuerPublicKeys {
 			// Then
 			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
 		} onError: { _ in
@@ -108,7 +108,7 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.shouldReturnPublicKeys = false
 
 		// When
-		sut.fetchIssuerPublicKeys(ttl: 10) {
+		sut.fetchIssuerPublicKeys {
 			// Then
 			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
 		} onError: { _ in
@@ -127,7 +127,7 @@ class ProofManagerTests: XCTestCase {
 		sut.keysFetchedTimestamp = nil
 
 		// When
-		sut.fetchIssuerPublicKeys(ttl: 10) {
+		sut.fetchIssuerPublicKeys {
 			// Then
 			XCTFail("There should be no success")
 		} onError: { _ in
@@ -147,7 +147,7 @@ class ProofManagerTests: XCTestCase {
 		sut.keysFetchedTimestamp = Date()
 
 		// When
-		sut.fetchIssuerPublicKeys(ttl: 10) {
+		sut.fetchIssuerPublicKeys {
 			// Then
 			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
 		} onError: { _ in

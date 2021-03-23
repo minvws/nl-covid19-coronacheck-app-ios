@@ -107,7 +107,9 @@ class BaseViewController: UIViewController {
 	///   - accessibilityLabel: the label for Voice Over
 	func addCloseButton(
 		action: Selector?,
-		accessibilityLabel: String) {
+		accessibilityLabel: String = .close,
+		backgroundColor: UIColor = Theme.colors.viewControllerBackground,
+		tintColor: UIColor = Theme.colors.dark) {
 
 		let button = UIBarButtonItem(
 			image: .cross,
@@ -116,6 +118,30 @@ class BaseViewController: UIViewController {
 			action: action
 		)
 		button.accessibilityIdentifier = "CloseButton"
+		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityTraits = UIAccessibilityTraits.button
+		button.tintColor = tintColor
+		navigationItem.hidesBackButton = true
+		navigationItem.leftBarButtonItem = button
+		navigationController?.navigationItem.leftBarButtonItem = button
+		navigationController?.navigationBar.backgroundColor = backgroundColor
+	}
+
+	/// Add a close button to the navigation bar.
+	/// - Parameters:
+	///   - action: the action when the users taps the close button
+	///   - accessibilityLabel: the label for Voice Over
+	func addCustomBackButton(
+		action: Selector?,
+		accessibilityLabel: String) {
+
+		let button = UIBarButtonItem(
+			image: .backArrow,
+			style: .plain,
+			target: self,
+			action: action
+		)
+		button.accessibilityIdentifier = "BackButton"
 		button.accessibilityLabel = accessibilityLabel
 		button.accessibilityTraits = UIAccessibilityTraits.button
 		navigationItem.hidesBackButton = true

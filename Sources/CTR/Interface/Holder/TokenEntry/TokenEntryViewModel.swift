@@ -23,6 +23,11 @@ class TokenEntryViewModel: Logging {
 	/// The verification code
 	var verificationCode: String?
 
+	/// The current highest known protocol version
+	/// 1.0: Checksum
+	/// 2.0: Initials + Birthday/month
+	let highestKnownProtocolVersion = "2.0"
+
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var tokenTitle: String
@@ -188,7 +193,7 @@ class TokenEntryViewModel: Logging {
 				let tokenPart = String(parts[1])
 				return RequestToken(
 					token: tokenPart,
-					protocolVersion: "1.0",
+					protocolVersion: highestKnownProtocolVersion,
 					providerIdentifier: identifierPart
 				)
 			}

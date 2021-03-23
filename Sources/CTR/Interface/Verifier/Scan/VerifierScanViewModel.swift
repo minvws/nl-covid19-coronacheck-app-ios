@@ -16,7 +16,7 @@ class VerifierScanViewModel: Logging {
 	weak var cryptoManager: CryptoManaging?
 
 	/// Coordination Delegate
-	weak var coordinator: VerifierCoordinatorDelegate?
+	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
 	// MARK: - Bindable properties
 
@@ -37,7 +37,7 @@ class VerifierScanViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: VerifierCoordinatorDelegate,
+		coordinator: (VerifierCoordinatorDelegate & Dismissable),
 		cryptoManager: CryptoManaging) {
 
 		self.coordinator = coordinator
@@ -55,7 +55,25 @@ class VerifierScanViewModel: Logging {
 		if let attributes = cryptoManager?.verifyQRMessage(message) {
 			coordinator?.navigateToScanResult(attributes)
 		} else {
-			coordinator?.navigateToScanResult(Attributes(cryptoAttributes: CrypoAttributes(sampleTime: "", testType: ""), unixTimeStamp: 0))
+			coordinator?.navigateToScanResult(
+				Attributes(
+					cryptoAttributes:
+						CrypoAttributes(
+							birthDay: nil,
+							birthMonth: nil,
+							firstNameInitial: nil,
+							lastNameInitial: nil,
+							sampleTime: "",
+							testType: ""
+						),
+					unixTimeStamp: 0
+				)
+			)
 		}
+	}
+
+	func dismiss() {
+
+		coordinator?.dismiss()
 	}
 }

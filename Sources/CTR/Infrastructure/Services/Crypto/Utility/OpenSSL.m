@@ -15,7 +15,7 @@
 #import <openssl/x509_vfy.h>
 #import <Security/Security.h>
 
-#define __DEBUG
+//#define __DEBUG
 
 #ifdef __DEBUG
 #warning "Warning: DEBUGing compiled in"
@@ -92,6 +92,7 @@ void print_stack(STACK_OF(X509)* sk)
 		memcpy(buf, bptr->data, bptr->length);
 		buf[bptr->length] = '\0';
 		NSString *san = [NSString stringWithUTF8String:buf];
+		if (buf) free(buf);
 		return san;
 	}
 

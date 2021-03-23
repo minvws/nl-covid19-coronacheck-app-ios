@@ -16,13 +16,15 @@ class AppointmentView: ScrollViewWithHeader {
 		static let buttonHeight: CGFloat = 52
 		static let buttonWidth: CGFloat = 212.0
 		static let titleLineHeight: CGFloat = 26
+		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
 		static let imageRatio: CGFloat = 0.75
+		static let gradientHeight: CGFloat = 30.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let buttonMargin: CGFloat = 54.0
-		static let titleTopMargin: CGFloat = 34.0
+		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
 		static let messageTopMargin: CGFloat = 24.0
 	}
 
@@ -46,11 +48,31 @@ class AppointmentView: ScrollViewWithHeader {
 		return button
 	}()
 
+	private let spacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground
+		return view
+	}()
+
+	private let footerBackground: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground
+		return view
+	}()
+
+	let footerGradientView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
-		headerImageView.backgroundColor = Theme.colors.appointment
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -60,7 +82,10 @@ class AppointmentView: ScrollViewWithHeader {
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(primaryButton)
+		contentView.addSubview(spacer)
+		addSubview(footerGradientView)
+		footerBackground.addSubview(primaryButton)
+		addSubview(footerBackground)
 	}
 
 	/// Setup the constraints
@@ -98,16 +123,43 @@ class AppointmentView: ScrollViewWithHeader {
 				constant: -ViewTraits.margin
 			),
 
-			// Primary Button
-			primaryButton.topAnchor.constraint(
+			// Spacer
+			spacer.topAnchor.constraint(
 				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.buttonMargin
+				constant: ViewTraits.margin
 			),
+			spacer.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			spacer.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			spacer.heightAnchor.constraint(equalToConstant: 2 * ViewTraits.buttonHeight),
+			spacer.bottomAnchor.constraint(
+				equalTo: contentView.bottomAnchor,
+				constant: -ViewTraits.margin
+			),
+
+			// Footer background
+			footerGradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerGradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			footerGradientView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
+			footerGradientView.heightAnchor.constraint(equalToConstant: ViewTraits.gradientHeight),
+
+			// Footer background
+			footerBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
+			footerBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
+			footerBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+			// Primary button
+			primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor),
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
 			primaryButton.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
@@ -119,12 +171,35 @@ class AppointmentView: ScrollViewWithHeader {
 		primaryButtonTappedCommand?()
 	}
 
+	private func setFooterGradient() {
+
+		footerGradientView.backgroundColor = .clear
+		let gradient = CAGradientLayer()
+		gradient.frame = footerGradientView.bounds
+		gradient.colors = [
+			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
+			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
+			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+		]
+		footerGradientView.layer.insertSublayer(gradient, at: 0)
+	}
+
+	override func layoutSubviews() {
+
+		super.layoutSubviews()
+
+		setFooterGradient()
+	}
+
 	// MARK: Public Access
 
-	/// The  title
+	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 		}
 	}
 
@@ -144,17 +219,19 @@ class AppointmentView: ScrollViewWithHeader {
 			return
 		}
 
-		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
+		let attributedUnderlined = messageText.underline(
+			underlined: underlinedText,
+			with: Theme.colors.iosBlue
+		)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 	}
 
+	/// The title of the primary button
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}
 	}
-
-	// MARK: Public Access
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?

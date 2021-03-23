@@ -13,7 +13,7 @@ class ButtonWithSubtitle: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
-		static let cornerRadius: CGFloat = 15
+		static let cornerRadius: CGFloat = 9
 		static let shadowRadius: CGFloat = 6
 		static let shadowOpacity: Float = 0.2
 

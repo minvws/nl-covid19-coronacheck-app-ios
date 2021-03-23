@@ -11,6 +11,8 @@ target 'Holder' do
   pod 'MBProgressHUD', '1.2.0'
   pod 'EasyTipView', '2.1'
   pod 'lottie-ios', '3.2.1'
+  pod 'Firebase/Crashlytics'
+  pod 'SheetPresentation', '1.0.0' 
 
   target 'CTRTests' do
     inherit! :search_paths
@@ -30,4 +32,6 @@ target 'Verifier' do
   pod 'MBProgressHUD', '1.2.0'
   pod 'EasyTipView', '2.1'
   pod 'lottie-ios', '3.2.1'
+  pod 'Firebase/Crashlytics'
+  pod 'SheetPresentation', '1.0.0'
 end

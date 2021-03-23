@@ -41,7 +41,8 @@ class DashboardViewControllerTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			maxValidity: 48
 		)
 		sut = HolderDashboardViewController(viewModel: viewModel!)
 		window = UIWindow()
@@ -115,12 +116,16 @@ class DashboardViewControllerTests: XCTestCase {
 
 		let sampleTime = Date().timeIntervalSince1970 - 20
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			firstNameInitial: nil,
+			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		configSpy.testResultTTL = 50
+		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -171,12 +176,16 @@ class DashboardViewControllerTests: XCTestCase {
 	func testValidityCredentialExpired() {
 
 		// Given
-		let sampleTime = Date().timeIntervalSince1970 - 20
+		let sampleTime = Date().timeIntervalSince1970 - 3608
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			firstNameInitial: nil,
+			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)
-		configSpy.testResultTTL = 10
+		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
 		loadView()
 
 		// When
@@ -243,7 +252,7 @@ class DashboardViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// When
-		viewModel?.hideQRForCapture = true
+		viewModel?.hideForCapture = true
 
 		// Then
 		guard let strongSut = sut else {
@@ -263,7 +272,7 @@ class DashboardViewControllerTests: XCTestCase {
 		setupValidCredential()
 		loadView()
 		sut?.checkValidity()
-		viewModel?.hideQRForCapture = true
+		viewModel?.hideForCapture = true
 
 		// When
 		sut?.showLargeQR()
@@ -305,12 +314,16 @@ class DashboardViewControllerTests: XCTestCase {
 	func testCloseExpiredRQ() {
 
 		// Given
-		let sampleTime = Date().timeIntervalSince1970 - 20
+		let sampleTime = Date().timeIntervalSince1970 - 3608
 		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			firstNameInitial: nil,
+			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
 			testType: "testValidityCredentialExpired"
 		)
-		configSpy.testResultTTL = 10
+		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
 		loadView()
 		sut?.checkValidity()
 
