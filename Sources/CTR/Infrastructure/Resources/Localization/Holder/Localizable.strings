@@ -134,6 +134,8 @@
 "holder.tokenentry.verification.title" = "Verificatiecode";
 "holder.tokenentry.verification.placeholder" = "Bijv. 0576";
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
+"holder.tokenentry.retry.title" = "Stuur opnieuw";
+"holder.tokenentry.retry.countdown" = "Stuur opnieuw in %@";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";

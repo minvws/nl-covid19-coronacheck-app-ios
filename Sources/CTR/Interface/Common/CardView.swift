@@ -46,6 +46,8 @@ class CardView: BaseView {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.clipsToBounds = true
+		view.layer.cornerRadius = ViewTraits.cornerRadius
 		return view
 	}()
 	
@@ -63,6 +65,8 @@ class CardView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .bottomRight
+		view.clipsToBounds = true
+		view.layer.cornerRadius = ViewTraits.cornerRadius
 		return view
 	}()
 	

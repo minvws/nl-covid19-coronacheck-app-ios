@@ -13,7 +13,7 @@ class Button: UIButton {
     enum ButtonType {
         case primary
         case secondary
-//        case tertiary
+        case tertiary
 //        case warning
 //        case info
     }
@@ -108,6 +108,11 @@ class Button: UIButton {
 				backgroundColor = Theme.colors.secondary
 				setTitleColor(Theme.colors.dark, for: .normal)
 				self.titleLabel?.font = Theme.fonts.subheadBold
+			case .tertiary:
+				backgroundColor = .clear
+				setTitleColor(Theme.colors.primary, for: .normal)
+				setTitleColor(Theme.colors.dark, for: .disabled)
+				self.titleLabel?.font = Theme.fonts.bodyMedium
 		}
 
 		tintColor = Theme.colors.viewControllerBackground
