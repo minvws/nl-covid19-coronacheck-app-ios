@@ -35,7 +35,21 @@ class TokenValidator: TokenValidatorProtocol {
 
 		let codeSplit = token.components(separatedBy: "-")
 
+		// Hard Rules for Token (XXX-YYYYYYYYY-Z2)
 		guard codeSplit.count == 3 else {
+
+			return false
+		}
+		guard codeSplit[0].count == 3 else {
+
+			return false
+		}
+		guard codeSplit[2].count == 2 else {
+
+			return false
+		}
+		guard codeSplit[2].last == "2" else {
+
 			return false
 		}
 

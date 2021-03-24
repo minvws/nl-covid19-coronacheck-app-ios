@@ -57,7 +57,9 @@ class TokenValidatorTests: XCTestCase {
 			"",
 			"T-E-S-T",
 			"T--T",
-			"ZZZ-AAAAA-A2"
+			"ZZZ-AAAAA-A2",
+			"ZZZ-32X4RUBC2TYBX6-UU2",
+			"ZZZ-32X4RUBC2TYBX6-U3"
 		]
 
 		for token in invalidTokens {
