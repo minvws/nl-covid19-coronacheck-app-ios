@@ -105,10 +105,25 @@ class TokenEntryViewController: BaseViewController {
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			guard let selfStrong = self else { return }
-			selfStrong.viewModel.nextButtonPressed(
-				selfStrong.sceneView.tokenEntryView.inputField.text,
-				verificationInput: selfStrong.sceneView.verificationEntryView.inputField.text
+			guard let strongSelf = self else { return }
+			strongSelf.viewModel.nextButtonPressed(
+				strongSelf.sceneView.tokenEntryView.inputField.text,
+				verificationInput: strongSelf.sceneView.verificationEntryView.inputField.text
+			)
+		}
+
+		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+
+			self?.sceneView.secondaryTitle = $0
+			self?.sceneView.secondaryButton.isHidden = $0 == nil
+		}
+		viewModel.$secondaryButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
+		sceneView.secondaryButtonTappedCommand = { [weak self] in
+			guard let strongSelf = self else { return }
+			strongSelf.sceneView.verificationEntryView.inputField.text = nil
+			strongSelf.viewModel.nextButtonPressed(
+				strongSelf.sceneView.tokenEntryView.inputField.text,
+				verificationInput: nil
 			)
 		}
 	}
@@ -175,7 +190,7 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = true
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 100
+		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 130
 		sceneView.bottomConstraint?.constant = -notification.getHeight() - 10
 	}
 

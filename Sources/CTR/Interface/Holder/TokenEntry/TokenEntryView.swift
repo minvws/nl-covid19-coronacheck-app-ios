@@ -78,11 +78,22 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		return Label(subhead: nil).multiline()
 	}()
 
+	/// the secondary button
+	let secondaryButton: Button = {
+
+		let button = Button(title: "Button 1", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
 		stackView.distribution = .fill
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
 	/// Setup the hierarchy
@@ -98,6 +109,24 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(errorView)
 		stackView.setCustomSpacing(0, after: errorView)
 		stackView.addArrangedSubview(textLabel)
+		stackView.setCustomSpacing(16, after: textLabel)
+		stackView.addArrangedSubview(secondaryButton)
+	}
+
+	override func setNeedsUpdateConstraints() {
+
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+
+			secondaryButton.heightAnchor.constraint(equalToConstant: 40)
+		])
+	}
+
+	/// User tapped on the primary button
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -125,4 +154,13 @@ class TokenEntryView: ScrolledStackWithButtonView {
 			textLabel.text = text
 		}
 	}
+
+	var secondaryTitle: String? {
+		didSet {
+			secondaryButton.setTitle(secondaryTitle, for: .normal)
+		}
+	}
+
+	/// The user tapped on the secondary button
+	var secondaryButtonTappedCommand: (() -> Void)?
 }

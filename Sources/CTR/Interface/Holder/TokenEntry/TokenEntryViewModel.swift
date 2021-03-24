@@ -31,6 +31,9 @@ class TokenEntryViewModel: Logging {
 	/// 2.0: Initials + Birthday/month
 	let highestKnownProtocolVersion = "2.0"
 
+	/// A timer to enable resending of the verification code
+	var resendTimer: Timer?
+
 	@Bindable private(set) var token: String?
 	@Bindable private(set) var showProgress: Bool = false
 	@Bindable private(set) var showVerification: Bool = false
@@ -40,6 +43,12 @@ class TokenEntryViewModel: Logging {
 
 	/// An error message
 	@Bindable private(set) var errorMessage: String?
+
+	/// The title for the secondary button
+	@Bindable private(set) var secondaryButtonTitle: String?
+
+	/// Is the secondary button enabled?
+	@Bindable private(set) var secondaryButtonEnabled: Bool = false
 
 	/// Show internet error
 	@Bindable private(set) var showError: Bool = false
@@ -197,9 +206,42 @@ class TokenEntryViewModel: Logging {
 		if showVerification {
 			// We are showing the verification entry, so this is a wrong verification code
 			errorMessage = .holderTokenEntryErrorInvalidCode
+			startTimer()
 		}
 		showVerification = true
 		enableNextButton = false
+	}
+
+	var counter = 10
+
+	func startTimer() {
+
+		guard resendTimer == nil else {
+			return
+		}
+
+		resendTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(1),
+			target: self,
+			selector: (#selector(resendButtonState)),
+			userInfo: nil,
+			repeats: true
+		)
+	}
+
+	@objc func resendButtonState() {
+
+		if counter > 0 {
+			secondaryButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(counter)")
+			secondaryButtonEnabled = false
+			counter -= 1
+		} else {
+			counter = 10
+			resendTimer?.invalidate()
+			resendTimer = nil
+			secondaryButtonTitle = .holderTokenEntryRetryTitle
+			secondaryButtonEnabled = true
+		}
 	}
 
 	/// Create a request token from a string

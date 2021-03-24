@@ -1293,6 +1293,7 @@
 				6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */,
 				6D67D93C25D81FD700827277 /* Scan */,
 				6D82260925D7C142000B60F9 /* ScrolledStackView.swift */,
+				6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */,
 				6D9819E025D53CC6009A96D7 /* ScrollView.swift */,
 				6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */,
 				6D1E33A125E62E810097E574 /* SecurityFeaturesView.swift */,
@@ -1349,7 +1350,6 @@
 			children = (
 				6D67D8CF25D7D15600827277 /* EntryView.swift */,
 				6D67D8D525D7D17700827277 /* TokenEntryView.swift */,
-				6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */,
 				6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */,
 				6D67D8DB25D7D1F100827277 /* TokenEntryViewModel.swift */,
 			);
