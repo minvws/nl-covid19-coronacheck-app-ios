@@ -323,7 +323,6 @@ extension HolderCoordinator: OpenUrlProtocol {
 
 		if inApp {
 			let safariController = SFSafariViewController(url: url)
-			safariController.preferredControlTintColor = Theme.colors.primary
 			sidePanel?.selectedViewController?.present(safariController, animated: true)
 		} else {
 			UIApplication.shared.open(url)

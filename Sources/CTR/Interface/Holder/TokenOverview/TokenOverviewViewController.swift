@@ -71,7 +71,7 @@ class TokenOverviewViewController: BaseViewController {
 	/// Setup no diigid button
 	func setupNoCodeButton() {
 
-		let label = Label(bodyBold: .holderTokenOverviewNoCode).multiline()
+		let label = Label(bodyMedium: .holderTokenOverviewNoCode, textColor: Theme.colors.primary).multiline()
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noCodeTapped))
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)
