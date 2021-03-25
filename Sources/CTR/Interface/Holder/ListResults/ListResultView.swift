@@ -134,7 +134,7 @@ class ListResultView: BaseView {
 				equalTo: leadingAnchor
 			),
 			headerLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor
+				equalTo: disclaimerButton.leadingAnchor
 			),
 			headerLabel.bottomAnchor.constraint(
 				equalTo: topLineView.topAnchor,
