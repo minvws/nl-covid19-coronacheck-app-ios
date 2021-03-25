@@ -8,6 +8,8 @@
 		<integer>21600</integer>
 		<key>QRTTL</key>
 		<integer>180</integer>
+		<key>QRRefresh</key>
+		<integer>10</integer>
 		<key>holderAboutURL</key>
 		<string>https://coronacheck.nl/nl/over-de-app-in-app</string>
 		<key>holderFAQURL</key>

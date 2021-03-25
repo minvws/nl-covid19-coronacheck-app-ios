@@ -16,8 +16,10 @@ class EnlargedQRViewModelTests: XCTestCase {
 	/// The coordinator spy
 	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 
+	/// The crypto manager spy
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	/// The proof manager spy
 	var proofManagerSpy = ProofManagingSpy()
 
 	/// The configuration spy
@@ -77,7 +79,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
 	/// Test the validity of the credential with expired credential
@@ -91,7 +93,9 @@ class EnlargedQRViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		sut?.proofValidator = ProofValidator(maxValidity: 1)
 
@@ -101,41 +105,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
-	}
-
-	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValidNoBirthDate() {
-
-		// Given
-		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
-			birthDay: nil,
-			birthMonth: nil,
-			firstNameInitial: nil,
-			lastNameInitial: nil,
-			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
-		)
-		let qrMessage = Data("testValidityCredentialValid".utf8)
-		cryptoManagerSpy.qrMessage = qrMessage
-		sut?.proofValidator = ProofValidator(maxValidity: 1)
-		proofManagerSpy.birthDate = nil
-
-		// When
-		sut?.checkQRValidity()
-
-		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
-		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
-		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
-		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
-		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
-		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
-		XCTAssertNil(strongSut.qrTitle, "Title should be nil")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -149,12 +119,13 @@ class EnlargedQRViewModelTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		sut?.proofValidator = ProofValidator(maxValidity: 1)
-		proofManagerSpy.birthDate = Date()
+		sut?.proofValidator = ProofValidator(maxValidity: 40)
 
 		// When
 		sut?.checkQRValidity()
@@ -169,18 +140,25 @@ class EnlargedQRViewModelTests: XCTestCase {
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
 		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.qrTitle, "Title should not be nil")
 	}
 
-	/// Test the dismiss method
-	func testDismiss() {
+	/// Test taking a screenshot
+	func testScreenshot() {
 
 		// Given
 
 		// When
-		sut?.dismiss()
+		NotificationCenter.default.post(
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil,
+			userInfo: nil
+		)
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		guard let strongSut = sut else {
+			XCTFail("Can't unwrap sut")
+			return
+		}
+		XCTAssertTrue(strongSut.showScreenshotWarning, "Valid QR should be shown")
 	}
 }

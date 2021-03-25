@@ -43,6 +43,18 @@ class ResultView: BaseView {
 		return Label(title3Medium: nil).multiline()
 	}()
 
+	/// The debug label
+	let debugLabel: Label = {
+
+		let label = Label(subhead: nil).multiline()
+		label.isHidden = true
+		label.layer.borderWidth = 2
+		label.layer.borderColor = Theme.colors.dark.cgColor
+		label.backgroundColor = Theme.colors.lightBackground.withAlphaComponent(0.7)
+		label.textColor = Theme.colors.dark
+		return label
+	}()
+
 	let identityView: IdentityView = {
 
 		let view = IdentityView()
@@ -82,6 +94,7 @@ class ResultView: BaseView {
 		addSubview(messageLabel)
 		addSubview(identityView)
 		addSubview(primaryButton)
+		addSubview(debugLabel)
 	}
 
 	/// Setup the constraints
@@ -100,6 +113,11 @@ class ResultView: BaseView {
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.imageMargin
 			),
+
+			// Debug
+			debugLabel.topAnchor.constraint(equalTo: imageView.topAnchor),
+			debugLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			debugLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			// Title
 			titleLabel.topAnchor.constraint(

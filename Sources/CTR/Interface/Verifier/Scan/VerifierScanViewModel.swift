@@ -64,7 +64,9 @@ class VerifierScanViewModel: Logging {
 							firstNameInitial: nil,
 							lastNameInitial: nil,
 							sampleTime: "",
-							testType: ""
+							testType: "",
+							specimen: "0",
+							paperProof: "0"
 						),
 					unixTimeStamp: 0
 				)

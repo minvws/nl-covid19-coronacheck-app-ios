@@ -72,7 +72,7 @@ class ChooseProviderViewModel: Logging {
 		title = .holderChooseProviderTitle
 		header = .holderChooseProviderHeader
 		body = .holderChooseProviderMessage
-		image = .createBig
+		image = .create
 		providers = [
 			DisplayProvider(
 				identifier: .commercial,

@@ -153,4 +153,22 @@ extension String {
 
 		return Localization.string(for: "holder.testresults.december")
 	}
+
+	static var shortMonths: [String] {
+
+		return [
+			.shortJanuary,
+			.shortFebruary,
+			.shortMarch,
+			.shortApril,
+			.shortMay,
+			.shortJune,
+			.shortJuly,
+			.shortAugust,
+			.shortSeptember,
+			.shortOctober,
+			.shortNovember,
+			.shortDecember
+		]
+	}
 }

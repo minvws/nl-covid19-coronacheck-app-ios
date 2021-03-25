@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import ViewControllerPresentationSpy
 
 class EnlargedQRViewControllerTests: XCTestCase {
 
@@ -16,8 +17,10 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	/// The coordinator spy
 	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 
+	/// The crypto manager spy
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	/// The proof manager spy
 	var proofManagerSpy = ProofManagingSpy()
 
 	/// The configuration spy
@@ -76,7 +79,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 			XCTFail("Can't unwrap sut")
 			return
 		}
-		XCTAssertEqual(strongSut.sceneView.message, nil, "Message should match")
+		XCTAssertEqual(strongSut.title, .holderEnlargedTitle, "Title should match")
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should not be shown")
 		XCTAssertNil(strongSut.sceneView.largeQRimageView.image, "There should be no image")
 	}
@@ -91,12 +94,13 @@ class EnlargedQRViewControllerTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
 		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
-		proofManagerSpy.birthDate = Date()
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -116,7 +120,6 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		}
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
-		XCTAssertNotNil(strongSut.sceneView.title, "Title should not be nil")
 	}
 
 	/// Test the validity of the credential with expired credential
@@ -130,7 +133,9 @@ class EnlargedQRViewControllerTests: XCTestCase {
 			firstNameInitial: nil,
 			lastNameInitial: nil,
 			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired"
+			testType: "testValidityCredentialExpired",
+			specimen: "0",
+			paperProof: "0"
 		)
 		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
 		loadView()
@@ -139,7 +144,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
 	/// Test the validity of the credential without credential
@@ -153,10 +158,10 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
-	/// Test the validity of the credential with valid credential
+	/// Test the validity of the credential with valid credential while screencapturing
 	func testValidityCredentialValidWithScreenCapture() {
 
 		// Given
@@ -195,5 +200,31 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
 		XCTAssertEqual(strongSut.sceneView.securityView.currentAnimation, .cyclistRightToLeft, "Animation should match")
+	}
+
+	/// Test showing the alert dialog for screen shots
+	func testAlertDialog() {
+
+		// Given
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		NotificationCenter.default.post(
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil,
+			userInfo: nil
+		)
+
+		// Then
+		alertVerifier.verify(
+			title: .holderEnlargedScreenshotTitle,
+			message: .holderEnlargedScreenshotMessage,
+			animated: true,
+			actions: [
+				.default(.ok)
+			],
+			presentingViewController: sut
+		)
 	}
 }

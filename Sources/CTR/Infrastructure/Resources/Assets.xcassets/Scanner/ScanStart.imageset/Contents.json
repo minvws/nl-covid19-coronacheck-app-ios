@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "scanner_aan_de_slag.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}

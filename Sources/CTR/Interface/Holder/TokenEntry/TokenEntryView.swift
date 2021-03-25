@@ -46,6 +46,9 @@ class TokenEntryView: ScrollView {
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.inputField.autocapitalizationType = .allCharacters
+		if #available(iOS 12.0, *) {
+			view.inputField.textContentType = .oneTimeCode
+		}
 		return view
 	}()
 

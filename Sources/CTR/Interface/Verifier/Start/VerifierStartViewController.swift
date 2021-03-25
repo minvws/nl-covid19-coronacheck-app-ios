@@ -53,11 +53,11 @@ class VerifierStartViewController: BaseViewController {
 
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(.technicalErrorTitle, message: .verifierStartInternet)
+				self?.showError(.errorTitle, message: .verifierStartInternet)
 			}
 		}
 
-		sceneView.imageView.image = .onboardingScan
+		sceneView.imageView.image = .scanStart
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
     }

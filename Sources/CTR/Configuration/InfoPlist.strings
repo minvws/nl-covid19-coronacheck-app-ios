@@ -1,9 +1,0 @@
-/* 
-  InfoPlist.strings
-  CTR
-
-  Created by Rool Paap on 19/01/2021.
-  
-*/
-
-NSCameraUsageDescription = "Deze app wil graag toegang tot de camera om QR codes te kunnen scannen";

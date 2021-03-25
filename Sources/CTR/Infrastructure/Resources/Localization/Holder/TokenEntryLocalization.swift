@@ -39,13 +39,13 @@ extension String {
 		return Localization.string(for: "holder.tokenentry.verification.placeholder")
 	}
 
+	static var holderTokenEntryVerificationInfo: String {
+
+		return Localization.string(for: "holder.tokenentry.verification.info")
+	}
+
 	static var holderTokenEntryErrorInvalidCode: String {
 
 		return Localization.string(for: "holder.tokenentry.error.invalid.code")
-	}
-
-	static var holderTokenEntryErrorInvalidProvider: String {
-
-		return Localization.string(for: "holder.tokenentry.error.invalid.provider")
 	}
 }

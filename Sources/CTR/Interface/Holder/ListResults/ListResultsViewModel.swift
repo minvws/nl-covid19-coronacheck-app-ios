@@ -7,6 +7,12 @@
 
 import UIKit
 
+extension Notification.Name {
+
+	/// a valid qr has been created
+	static let qrCreated = Notification.Name("nl.rijksoverheid.ctr.qrcreated")
+}
+
 struct ListResultItem {
 
 	let identifier: String
@@ -20,6 +26,8 @@ class ListResultsViewModel: Logging {
 
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
+
+	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
 	var maxValidity: Int
 
@@ -248,13 +256,17 @@ class ListResultsViewModel: Logging {
 
 		switch state {
 			case .valid:
-				// TODO: Announcement
+
+				notificationCenter.post(name: .qrCreated, object: nil)
 				coordinator?.navigateBackToStart()
 			case .alreadySigned:
+
 				reportAlreadyDone()
 			case .notNegative, .tooOld, .tooNew:
+
 				reportNoTestResult()
 			default:
+				
 				logError("handleTestProofsResponse: unknown state: \(state)")
 				showError = true
 		}
@@ -269,7 +281,7 @@ class ListResultsViewModel: Logging {
 			return ""
 		}
 
-		let parts = holder.mapIdentity(months: months)
+		let parts = holder.mapIdentity(months: String.shortMonths)
 		var output = ""
 		for part in parts {
 			output.append(part)
@@ -277,7 +289,4 @@ class ListResultsViewModel: Logging {
 		}
 		return output.trimmingCharacters(in: .whitespaces)
 	}
-
-	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
-							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
 }

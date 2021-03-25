@@ -49,7 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UINavigationBar.appearance().barTintColor = .clear
 		UINavigationBar.appearance().titleTextAttributes = [
 			NSAttributedString.Key.foregroundColor: Theme.colors.dark,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserrat
+			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
 		]
 		UINavigationBar.appearance().isTranslucent = true
 		UINavigationBar.appearance().shadowImage = UIImage()

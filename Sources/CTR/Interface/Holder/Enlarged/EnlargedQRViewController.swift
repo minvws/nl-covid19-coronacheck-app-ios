@@ -41,11 +41,13 @@ class EnlargedQRViewController: BaseViewController {
 		super.viewDidLoad()
 
 		sceneView.backgroundColor = .white
+		title = .holderEnlargedTitle
 
-		edgesForExtendedLayout = []
+		setupBinding()
+		setupListeners()
+	}
 
-		viewModel.$qrTitle.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$qrSubTitle.binding = { [weak self] in self?.sceneView.message = $0 }
+	func setupBinding() {
 
 		viewModel.$qrMessage.binding = { [weak self] in
 
@@ -72,15 +74,15 @@ class EnlargedQRViewController: BaseViewController {
 			self?.sceneView.hideQRImage = $0
 		}
 
-		setupListeners()
+		viewModel.$showScreenshotWarning.binding = { [weak self] in
 
-		addCloseButton(action: #selector(closeButtonTapped))
-	}
-
-	/// User tapped on the button
-	@objc private func closeButtonTapped() {
-
-		viewModel.dismiss()
+			if $0 {
+				self?.showError(
+					.holderEnlargedScreenshotTitle,
+					message: .holderEnlargedScreenshotMessage
+				)
+			}
+		}
 	}
 
 	func setupListeners() {
@@ -131,8 +133,4 @@ class EnlargedQRViewController: BaseViewController {
 		viewModel.validityTimer?.invalidate()
 		viewModel.validityTimer = nil
 	}
-
-//	deinit {
-//		NotificationCenter.default.removeObserver(self)
-//	}
 }

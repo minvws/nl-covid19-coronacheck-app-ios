@@ -96,6 +96,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 				if let lastFetchedTimestamp = lastFetchedTimestamp,
 				   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
 					// We still got a remote configuration within the config TTL.
+					logInfo("Remote Configuration still within TTL")
 					compare(storedConfiguration, completion: completion)
 				} else {
 					compare(storedConfiguration) { state in

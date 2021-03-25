@@ -50,8 +50,11 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
+	/// The debug info
+	@Bindable private(set) var debugInfo: [String] = []
+
 	/// Allow Access?
-	@Bindable private(set) var allowAccess: AccessAction = .denied
+	@Bindable var allowAccess: AccessAction = .denied
 
 	/// Initialzier
 	/// - Parameters:
@@ -76,7 +79,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 
-		guard !isDemoQR() else {
+		guard !attributes.cryptoAttributes.isSpecimen else {
 			allowAccess = .demo
 			showAccessDemo()
 			return
@@ -94,7 +97,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 				birthDay: attributes.cryptoAttributes.birthDay ?? "",
 				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
 			)
-			let mapping = holder.mapIdentity(months: months)
+			let mapping = holder.mapIdentity(months: String.shortMonths)
 			for (index, element) in mapping.enumerated() {
 				identity.append(("", element.isEmpty ? "_" : element))
 				checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
@@ -104,10 +107,32 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			showAccessDenied()
 			allowAccess = .denied
 		}
+
+		debugInfo = [
+			"QR Information",
+			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: now)))",
+			"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
+			"---------------------",
+			"isSampleTimeValid: \(isSampleTimeValid(now))",
+			"TTL: \(proofValidator.maxValidity) hours",
+			"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
+			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
+			"---------------------",
+			"isQRTimeStampValid: \(isQRTimeStampValid(now))",
+			"TTL: \(configuration.getQRGracePeriod()) seconds",
+			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
+		]
 	}
 
-	var months: [String] = [.shortJanuary, .shortFebruary, .shortMarch, .shortApril, .shortMay, .shortJune,
-							.shortJuly, .shortAugust, .shortSeptember, .shortOctober, .shortNovember, .shortDecember]
+	/// Formatter to print
+	private lazy var printDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "E d MMMM HH:mm:ss"
+		return dateFormatter
+	}()
 
 	/// Is the sample time still valid
 	/// - Parameter now: the now time stamp
@@ -116,7 +141,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		if let sampleTimeStamp = TimeInterval(attributes.cryptoAttributes.sampleTime) {
 			switch proofValidator.validate(sampleTimeStamp) {
-				case .valid:
+				case .valid, .expiring:
 					return true
 				case .expired:
 					logInfo("Sample Timestamp is too old!")
@@ -127,20 +152,22 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return false
 	}
 
-	private func isDemoQR() -> Bool {
-
-		return attributes.cryptoAttributes.testType.lowercased() == "demo"
-	}
-
 	/// Is the QR timestamp stil valid
 	/// - Parameter now: the now timestamp
 	/// - Returns: True if the QR time stamp is still valid
 	private func isQRTimeStampValid(_ now: TimeInterval) -> Bool {
 
-		if TimeInterval(attributes.unixTimeStamp) + configuration.getQRTTL() > now  &&
-			TimeInterval(attributes.unixTimeStamp) <= now {
+		guard !attributes.cryptoAttributes.isPaperProof else {
+			logInfo("this is a paper proof, ignore QR Timestamp")
 			return true
 		}
+
+		let absoluteQRTimeDifference = abs(now - TimeInterval(attributes.unixTimeStamp))
+		if absoluteQRTimeDifference < configuration.getQRGracePeriod() {
+			logDebug("QR Timestamp within period: \(absoluteQRTimeDifference)")
+			return true
+		}
+
 		logInfo("QR Timestamp is too old!")
 		return false
 	}

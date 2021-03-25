@@ -53,6 +53,9 @@ class Button: UIButton {
         self.setTitle(title, for: .normal)
         self.title = title
         self.titleLabel?.font = Theme.fonts.bodySemiBold
+		// multiline
+//		self.titleLabel?.lineBreakMode = .byWordWrapping
+		self.titleLabel?.numberOfLines = 0
 
         self.layer.cornerRadius = 5
         self.clipsToBounds = true
@@ -105,18 +108,8 @@ class Button: UIButton {
 				backgroundColor = Theme.colors.secondary
 				setTitleColor(Theme.colors.dark, for: .normal)
 				self.titleLabel?.font = Theme.fonts.subheadBold
-			//			case .tertiary:
-			//				backgroundColor = Theme.colors.tertiary
-			//				setTitleColor(Theme.colors.primary, for: .normal)
-			//        case .warning:
-			//            backgroundColor = Theme.colors.warning
-			//            setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
-			//        case .info:
-			//            backgroundColor = .clear
-			//            setTitleColor(Theme.colors.primary, for: .normal)
 		}
-		
-		//        contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
+
 		tintColor = Theme.colors.viewControllerBackground
 	}
 
