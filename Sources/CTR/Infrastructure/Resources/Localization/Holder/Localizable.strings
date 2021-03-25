@@ -52,7 +52,7 @@
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
 "holder.onboarding.message.yourqr" = "Bewijst je test dat je op dat moment geen corona hebt? Dan kun je in deze app een persoonlijke QR-code maken. Dat is jouw testbewijs. De QR-code wordt gescand voordat je toegang krijgt.";
 "holder.onboarding.title.validity" = "Geldigheid van je bewijs";
-"holder.onboarding.message.validity" = "Wil je toegang krijgen tot een bepaalde sociale, culturele of sportieve activiteit? Zorg dat jouw QR-code binnen %& uur na het moment van testen aan de deur gescand is. Als je testbewijs verloopt verdwijnt de QR-code uit de app. Nieuwe QR-code nodig? Laat je opnieuw testen.";
+"holder.onboarding.message.validity" = "Wil je toegang krijgen tot een bepaalde sociale, culturele of sportieve activiteit? Zorg dat jouw QR-code binnen %@ uur na het moment van testen aan de deur gescand is. Als je testbewijs verloopt verdwijnt de QR-code uit de app. Nieuwe QR-code nodig? Laat je opnieuw testen.";
 "holder.onboarding.title.privacy" = "Privacy staat voorop";
 "holder.onboarding.message.privacy" = "In jouw QR-code staat alleen wanneer je negatief getest bent.";
 
