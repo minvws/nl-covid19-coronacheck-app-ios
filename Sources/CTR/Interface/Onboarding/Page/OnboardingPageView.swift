@@ -15,22 +15,10 @@ class OnboardingPageView: ScrolledStackView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
-		static let titleFontSize: CGFloat = 26
-		static let messageLineHeight: CGFloat = UIDevice.current.isSmallScreen ? 17 : 22
 		
 		// Margins
-		static let margin: CGFloat = UIDevice.current.isSmallScreen ? 0 : 20
-		static let spacing: CGFloat = UIDevice.current.isSmallScreen ? 10 : 40
-		static let imageMargin: CGFloat = 26
+		static let spacing: CGFloat = 24
 	}
-	
-	/// The container for centering the image
-	private let imageContainerView: UIView = {
-		
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
 	
 	/// The image view
 	private let imageView: UIImageView = {
@@ -48,7 +36,7 @@ class OnboardingPageView: ScrolledStackView {
 		view.axis = .vertical
 		view.alignment = .leading
 		view.distribution = .fill
-		view.spacing = ViewTraits.margin
+		view.spacing = ViewTraits.spacing
 		return view
 	}()
 
@@ -69,7 +57,6 @@ class OnboardingPageView: ScrolledStackView {
 		
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
-		titleLabel.font = titleLabel.font.withSize(ViewTraits.titleFontSize)
 	}
 	
 	/// Setup the hierarchy
@@ -82,6 +69,15 @@ class OnboardingPageView: ScrolledStackView {
 
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
+	}
+
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+
+			imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor, multiplier: 0.38)
+		])
 	}
 
 	// MARK: Public Access
@@ -112,5 +108,9 @@ class OnboardingPageView: ScrolledStackView {
 		didSet {
 			imageView.image = image
 		}
+	}
+
+	func hideImage() {
+		imageView.isHidden = true
 	}
 }

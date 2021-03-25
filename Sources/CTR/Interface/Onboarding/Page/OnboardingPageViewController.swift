@@ -48,4 +48,12 @@ class OnboardingPageViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
 	}
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+
+		if UIDevice.current.isSmallScreen {
+			sceneView.hideImage()
+		}
+	}
 }
