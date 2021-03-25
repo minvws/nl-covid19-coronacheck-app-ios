@@ -69,6 +69,12 @@ class ConsentViewController: BaseViewController {
 		}
 	}
 
+	override func viewDidAppear(_ animated: Bool) {
+
+		super.viewDidAppear(animated)
+		sceneView.lineView.isHidden = !sceneView.scrollView.canScroll()
+	}
+
 	/// Setup a gesture recognizer for underlined text
 	private func setupLink() {
 
@@ -95,5 +101,14 @@ class ConsentViewController: BaseViewController {
 		if sceneView.primaryButton.isEnabled {
 			viewModel.primaryButtonTapped()
 		}
+	}
+}
+
+extension UIScrollView {
+
+	func canScroll() -> Bool {
+
+		let totalHeight = contentSize.height
+		return totalHeight > frame.size.height
 	}
 }

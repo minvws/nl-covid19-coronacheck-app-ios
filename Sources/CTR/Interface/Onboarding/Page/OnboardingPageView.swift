@@ -15,6 +15,7 @@ class OnboardingPageView: ScrolledStackView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
+		static let imageHeightPercentage: CGFloat = 0.38
 		
 		// Margins
 		static let spacing: CGFloat = 24
@@ -76,7 +77,10 @@ class OnboardingPageView: ScrolledStackView {
 
 		NSLayoutConstraint.activate([
 
-			imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor, multiplier: 0.38)
+			imageView.heightAnchor.constraint(
+				lessThanOrEqualTo: heightAnchor,
+				multiplier: ViewTraits.imageHeightPercentage
+			)
 		])
 	}
 

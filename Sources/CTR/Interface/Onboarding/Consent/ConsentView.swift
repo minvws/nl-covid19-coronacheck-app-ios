@@ -13,18 +13,22 @@ class ConsentView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
+		static let shadowRadius: CGFloat = 6
+		static let shadowOpacity: Float = 0.2
 		static let buttonHeight: CGFloat = 52
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
+		static let gradientHeight: CGFloat = 15.0
 		static let buttonWidth: CGFloat = 182.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let bottomMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 	}
 
 	/// The scrollview
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 
 		let view = UIScrollView(frame: .zero)
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -75,6 +79,15 @@ class ConsentView: BaseView {
 		return button
 	}()
 
+	let lineView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.line
+		view.isHidden = true
+		return view
+	}()
+
 	let consentButton: ConsentButton = {
 
 		let button = ConsentButton()
@@ -102,6 +115,7 @@ class ConsentView: BaseView {
 		scrollView.addSubview(stackView)
 
 		addSubview(scrollView)
+		addSubview(lineView)
 		addSubview(primaryButton)
 	}
 
@@ -118,7 +132,7 @@ class ConsentView: BaseView {
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			scrollView.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.bottomMargin
 			),
 
 			// StackView
@@ -135,6 +149,15 @@ class ConsentView: BaseView {
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
+
+			// Line
+			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			lineView.bottomAnchor.constraint(
+				equalTo: primaryButton.topAnchor,
+				constant: -ViewTraits.bottomMargin
+			),
+			lineView.heightAnchor.constraint(equalToConstant: 1),
 
 			// Primary Button
 			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
