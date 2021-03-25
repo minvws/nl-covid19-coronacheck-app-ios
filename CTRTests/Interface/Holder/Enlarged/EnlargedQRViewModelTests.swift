@@ -16,8 +16,10 @@ class EnlargedQRViewModelTests: XCTestCase {
 	/// The coordinator spy
 	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 
+	/// The crypto manager spy
 	var cryptoManagerSpy = CryptoManagerSpy()
 
+	/// The proof manager spy
 	var proofManagerSpy = ProofManagingSpy()
 
 	/// The configuration spy
@@ -77,7 +79,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
 	/// Test the validity of the credential with expired credential
@@ -103,7 +105,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -123,7 +125,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		sut?.proofValidator = ProofValidator(maxValidity: 1)
+		sut?.proofValidator = ProofValidator(maxValidity: 40)
 
 		// When
 		sut?.checkQRValidity()
@@ -138,18 +140,6 @@ class EnlargedQRViewModelTests: XCTestCase {
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
 		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")
-	}
-
-	/// Test the dismiss method
-	func testDismiss() {
-
-		// Given
-
-		// When
-		sut?.dismiss()
-
-		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.dismissCalled, "Method should be called")
 	}
 
 	/// Test taking a screenshot

@@ -49,8 +49,13 @@ extension String {
 		return Localization.string(for: "holder.tokenentry.error.invalid.code")
 	}
 
-	static var holderTokenEntryErrorInvalidProvider: String {
+	static var holderTokenEntryRetryTitle: String {
 
-		return Localization.string(for: "holder.tokenentry.error.invalid.provider")
+		return Localization.string(for: "holder.tokenentry.retry.title")
+	}
+
+	static var holderTokenEntryRetryCountdown: String {
+
+		return Localization.string(for: "holder.tokenentry.retry.countdown")
 	}
 }

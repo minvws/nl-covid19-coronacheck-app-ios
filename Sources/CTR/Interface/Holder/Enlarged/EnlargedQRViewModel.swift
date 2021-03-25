@@ -13,7 +13,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	var loggingCategory: String = "EnlargedQRViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: Dismissable?
+	weak var coordinator: HolderCoordinatorDelegate?
 
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
@@ -36,12 +36,6 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	/// A timer to keep the QR refreshed
 	weak var validityTimer: Timer?
 
-	/// The message above the QR card
-	@Bindable private(set) var qrTitle: String?
-
-	/// The message below the QR card
-	@Bindable private(set) var qrSubTitle: String?
-
 	/// The cl signed test proof
 	@Bindable private(set) var qrMessage: Data?
 
@@ -59,7 +53,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	///   - configuration: the configuration
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
-		coordinator: Dismissable,
+		coordinator: HolderCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
@@ -82,7 +76,7 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	@objc func checkQRValidity() {
 
 		guard let credential = cryptoManager?.readCredential() else {
-			coordinator?.dismiss()
+			coordinator?.navigateBackToStart()
 			return
 		}
 
@@ -90,20 +84,18 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 
 			switch proofValidator.validate(sampleTimeStamp) {
 				case let .valid(validUntilDate):
-					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
-					logDebug("Proof is valid until \(validUntilDateString)")
-					showQRMessageIsValid(validUntilDateString)
+					logDebug("Proof is valid until \(validUntilDate)")
+					showQRMessageIsValid()
 					startValidityTimer()
 				case let .expiring(validUntilDate, _):
-					let validUntilDateString = printDateFormatter.string(from: validUntilDate)
-					logDebug("Proof is valid until \(validUntilDateString)")
-					showQRMessageIsValid(validUntilDateString)
+					logDebug("Proof is valid until \(validUntilDate)")
+					showQRMessageIsValid()
 					startValidityTimer()
 				case .expired:
 					logDebug("Proof is no longer valid")
 					validityTimer?.invalidate()
 					validityTimer = nil
-					coordinator?.dismiss()
+					coordinator?.navigateBackToStart()
 			}
 		}
 	}
@@ -121,17 +113,15 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 	}
 
 	/// Show the QR message is valid
-	/// - Parameter printDate: valid until time
-	func showQRMessageIsValid(_ printDate: String) {
+	func showQRMessageIsValid() {
 
 		if let message = self.cryptoManager?.generateQRmessage() {
 			qrMessage = message
-			qrSubTitle = String(format: .holderDashboardQRMessage, printDate)
 			showValidQR = true
 		}
 	}
 
-	/// Start the validity timer, check every 170 seconds.
+	/// Start the validity timer, check every 90 seconds.
 	func startValidityTimer() {
 
 		guard validityTimer == nil, let configuration = configuration else {
@@ -139,28 +129,13 @@ class EnlargedQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRTTL() / 2),
+			timeInterval: TimeInterval(configuration.getQRRefreshPeriod()),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
 			repeats: true
 		)
 	}
-
-	func dismiss() {
-
-		coordinator?.dismiss()
-	}
-
-	/// Formatter to print
-	private lazy var printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
-		dateFormatter.locale = Locale(identifier: "nl_NL")
-		dateFormatter.dateFormat = "E d MMMM HH:mm"
-		return dateFormatter
-	}()
 
 	/// Add an observer for the userDidTakeScreenshotNotification notification
 	func addObserver() {

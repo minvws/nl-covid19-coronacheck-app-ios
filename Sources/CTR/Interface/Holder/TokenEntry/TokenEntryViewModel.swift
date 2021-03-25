@@ -20,6 +20,9 @@ class TokenEntryViewModel: Logging {
 	/// The request token
 	var requestToken: RequestToken?
 
+	/// The token validator
+	var tokenValidator: TokenValidatorProtocol = TokenValidator()
+
 	/// The verification code
 	var verificationCode: String?
 
@@ -28,12 +31,24 @@ class TokenEntryViewModel: Logging {
 	/// 2.0: Initials + Birthday/month
 	let highestKnownProtocolVersion = "2.0"
 
+	/// A timer to enable resending of the verification code
+	var resendTimer: Timer?
+
 	@Bindable private(set) var token: String?
 	@Bindable private(set) var showProgress: Bool = false
 	@Bindable private(set) var showVerification: Bool = false
 
+	/// True if we should enable the next button
+	@Bindable private(set) var enableNextButton: Bool = false
+
 	/// An error message
 	@Bindable private(set) var errorMessage: String?
+
+	/// The title for the secondary button
+	@Bindable private(set) var secondaryButtonTitle: String?
+
+	/// Is the secondary button enabled?
+	@Bindable private(set) var secondaryButtonEnabled: Bool = false
 
 	/// Show internet error
 	@Bindable private(set) var showError: Bool = false
@@ -60,30 +75,57 @@ class TokenEntryViewModel: Logging {
 		}
 	}
 
-	/// Check the token
-	/// - Parameter text: the request token
-	func checkToken(_ text: String?) {
+	/// Check the next button state
+	/// - Parameters:
+	///   - tokenInput: the token input
+	///   - verificationInput: the verification input
+	func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
-		if let input = text, !input.isEmpty {
-			if let requestToken = createRequestToken(input.uppercased()) {
+		errorMessage = nil
+		guard let tokenInput = tokenInput else {
+			enableNextButton = false
+			return
+		}
+
+		if !tokenInput.isEmpty { // && !showVerification {
+
+			let validToken = tokenValidator.validate(tokenInput)
+			enableNextButton = validToken
+			showVerification = validToken && showVerification
+			return
+		}
+
+		if let verification = verificationInput, verification.isEmpty {
+			enableNextButton = false
+			return
+		}
+
+		enableNextButton = true
+	}
+
+	/// User tapped the next button
+	/// - Parameters:
+	///   - tokenInput: the token input
+	///   - verificationInput: the verification input
+	func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
+
+		guard let tokenInput = tokenInput else {
+			return
+		}
+
+		if let verification = verificationInput, !verification.isEmpty {
+			verificationCode = verification.uppercased()
+			errorMessage = nil
+			if let token = requestToken {
+				fetchProviders(token)
+			}
+		} else {
+			if let requestToken = createRequestToken(tokenInput.uppercased()) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken)
 				errorMessage = nil
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
-			}
-		}
-	}
-
-	/// Check the verification
-	/// - Parameter text: the verification text
-	func checkVerification(_ text: String?) {
-
-		if let input = text, !input.isEmpty {
-			verificationCode = input.uppercased()
-			errorMessage = nil
-			if let token = requestToken {
-				fetchProviders(token)
 			}
 		}
 	}
@@ -119,7 +161,7 @@ class TokenEntryViewModel: Logging {
 	private func fetchResult(_ requestToken: RequestToken) {
 
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
-			errorMessage = .holderTokenEntryErrorInvalidProvider
+			errorMessage = .holderTokenEntryErrorInvalidCode
 			return
 		}
 
@@ -148,7 +190,7 @@ class TokenEntryViewModel: Logging {
 				case let .failure(error):
 
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self?.errorMessage = .holderTokenEntryErrorInvalidProvider
+						self?.errorMessage = .holderTokenEntryErrorInvalidCode
 					} else {
 						// For now, display the network error.
 						self?.errorMessage = error.localizedDescription
@@ -164,14 +206,53 @@ class TokenEntryViewModel: Logging {
 		if showVerification {
 			// We are showing the verification entry, so this is a wrong verification code
 			errorMessage = .holderTokenEntryErrorInvalidCode
+			startTimer()
 		}
 		showVerification = true
+		enableNextButton = false
+	}
+
+	var counter = 10
+
+	func startTimer() {
+
+		guard resendTimer == nil else {
+			return
+		}
+
+		resendTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(1),
+			target: self,
+			selector: (#selector(resendButtonState)),
+			userInfo: nil,
+			repeats: true
+		)
+	}
+
+	@objc func resendButtonState() {
+
+		if counter > 0 {
+			secondaryButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(counter)")
+			secondaryButtonEnabled = false
+			counter -= 1
+		} else {
+			counter = 10
+			resendTimer?.invalidate()
+			resendTimer = nil
+			secondaryButtonTitle = .holderTokenEntryRetryTitle
+			secondaryButtonEnabled = true
+		}
 	}
 
 	/// Create a request token from a string
 	/// - Parameter token: the input string
 	/// - Returns: the request token
 	func createRequestToken(_ input: String) -> RequestToken? {
+
+		// Check the validity of the input
+		guard tokenValidator.validate(input) else {
+			return nil
+		}
 
 		let parts = input.split(separator: "-")
 		if parts.count >= 2 {

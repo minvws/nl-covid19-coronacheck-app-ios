@@ -191,14 +191,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				maxValidity: maxValidity
 			)
 		)
-		let navController = UINavigationController(rootViewController: destination)
-		navController.view.backgroundColor = .white
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
-			navController,
-			animated: true,
-			completion: nil
-		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to appointment
@@ -330,7 +323,6 @@ extension HolderCoordinator: OpenUrlProtocol {
 
 		if inApp {
 			let safariController = SFSafariViewController(url: url)
-			safariController.preferredControlTintColor = Theme.colors.primary
 			sidePanel?.selectedViewController?.present(safariController, animated: true)
 		} else {
 			UIApplication.shared.open(url)

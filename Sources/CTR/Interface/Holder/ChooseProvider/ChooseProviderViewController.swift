@@ -48,7 +48,7 @@ class ChooseProviderViewController: BaseViewController {
 			for provider in providers {
 				self?.setupProviderButton(provider)
 			}
-//			self.setupNoDigidButton()
+//			self?.setupNoDigidButton()
 		}
 
 		// Only show an arrow as back button
@@ -77,7 +77,7 @@ class ChooseProviderViewController: BaseViewController {
 	/// Setup no diigid button
 	func setupNoDigidButton() {
 
-		let label = Label(bodyMedium: .holderChooseProviderNoDigiD)
+		let label = Label(bodyMedium: .holderChooseProviderNoDigiD, textColor: Theme.colors.primary).multiline()
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noDidiDTapped))
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)

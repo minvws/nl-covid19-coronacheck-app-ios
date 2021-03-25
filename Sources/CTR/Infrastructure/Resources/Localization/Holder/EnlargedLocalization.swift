@@ -18,4 +18,9 @@ extension String {
 
 		return Localization.string(for: "holder.enlarged.screenshot.message")
 	}
+
+	static var holderEnlargedTitle: String {
+
+		return Localization.string(for: "holder.enlarged.title")
+	}
 }

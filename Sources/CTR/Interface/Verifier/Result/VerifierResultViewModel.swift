@@ -119,7 +119,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
 			"---------------------",
 			"isQRTimeStampValid: \(isQRTimeStampValid(now))",
-			"TTL: \(configuration.getQRTTL()) seconds",
+			"TTL: \(configuration.getQRGracePeriod()) seconds",
 			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
 		]
 	}
@@ -163,7 +163,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		}
 
 		let absoluteQRTimeDifference = abs(now - TimeInterval(attributes.unixTimeStamp))
-		if absoluteQRTimeDifference < configuration.getQRTTL() {
+		if absoluteQRTimeDifference < configuration.getQRGracePeriod() {
 			logDebug("QR Timestamp within period: \(absoluteQRTimeDifference)")
 			return true
 		}

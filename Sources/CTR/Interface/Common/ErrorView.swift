@@ -8,55 +8,56 @@
 import UIKit
 
 class ErrorView: BaseView {
-
+	
 	/// The display constants
 	private struct ViewTraits {
-
+		
 		// Dimension
 		static let imageSize: CGFloat = 12.0
 		static let errorKerning: CGFloat = -0.24
-
+		
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let messageTopMargin: CGFloat = 4.0
 		static let fontOffset: CGFloat = 2.0
 	}
-
+	
 	/// The error image
 	private let errorImageView: UIImageView = {
 		let view = UIImageView(image: .error)
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.tintColor = Theme.colors.error  
 		return view
 	}()
-
+	
 	/// The title label
 	private let errorLabel: Label = {
-
+		
 		return Label(subhead: nil).multiline()
 	}()
-
+	
 	override func setupViews() {
-
+		
 		super.setupViews()
 		view?.backgroundColor = .clear
 		errorLabel.textColor = Theme.colors.error
 	}
-
+	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
-
+		
 		super.setupViewHierarchy()
 		addSubview(errorImageView)
 		addSubview(errorLabel)
 	}
-
+	
 	/// Setup the constraints
 	override func setupViewConstraints() {
-
+		
 		super.setupViewConstraints()
-
+		
 		NSLayoutConstraint.activate([
-
+			
 			// Header
 			errorImageView.leadingAnchor.constraint( equalTo: leadingAnchor),
 			errorImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageSize),
@@ -65,7 +66,7 @@ class ErrorView: BaseView {
 				equalTo: errorLabel.centerYAnchor,
 				constant: ViewTraits.fontOffset
 			),
-
+			
 			// Title
 			errorLabel.topAnchor.constraint(equalTo: topAnchor),
 			errorLabel.leadingAnchor.constraint(
@@ -76,9 +77,9 @@ class ErrorView: BaseView {
 			errorLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
-
+	
 	// MARK: Public Access
-
+	
 	/// The header
 	var error: String? {
 		didSet {

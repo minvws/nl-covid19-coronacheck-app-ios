@@ -57,7 +57,7 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.tokenEntryView.inputField.text = token
 			if token == nil {
 				self?.sceneView.tokenEntryView.inputField.becomeFirstResponder()
-
+				self?.sceneView.primaryButton.isEnabled = false
 			}
 		}
 
@@ -76,6 +76,7 @@ class TokenEntryViewController: BaseViewController {
 			if let message = $0 {
 				self?.sceneView.errorView.error = message
 				self?.sceneView.errorView.isHidden = false
+				self?.sceneView.textLabel.isHidden = true
 			} else {
 				self?.sceneView.errorView.isHidden = true
 			}
@@ -83,15 +84,47 @@ class TokenEntryViewController: BaseViewController {
 
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(.technicalErrorTitle, message: .technicalErrorText)
+				self?.showError(.errorTitle, message: .technicalErrorText)
 			}
 		}
 
 		viewModel.$showVerification.binding = { [weak self] in
-			self?.sceneView.verificationEntryView.isHidden = !$0
-			if $0 {
-				self?.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+
+			guard let strongSelf = self else { return }
+
+			strongSelf.sceneView.verificationEntryView.isHidden = !$0
+			if strongSelf.sceneView.errorView.isHidden {
+				strongSelf.sceneView.textLabel.isHidden = !$0
 			}
+			if $0 {
+				strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+			}
+		}
+
+		viewModel.$enableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
+
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+
+			guard let strongSelf = self else { return }
+			strongSelf.viewModel.nextButtonPressed(
+				strongSelf.sceneView.tokenEntryView.inputField.text,
+				verificationInput: strongSelf.sceneView.verificationEntryView.inputField.text
+			)
+		}
+
+		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+
+			self?.sceneView.secondaryTitle = $0
+			self?.sceneView.secondaryButton.isHidden = $0 == nil
+		}
+		viewModel.$secondaryButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
+		sceneView.secondaryButtonTappedCommand = { [weak self] in
+			guard let strongSelf = self else { return }
+			strongSelf.sceneView.verificationEntryView.inputField.text = nil
+			strongSelf.viewModel.nextButtonPressed(
+				strongSelf.sceneView.tokenEntryView.inputField.text,
+				verificationInput: nil
+			)
 		}
 	}
 
@@ -102,8 +135,9 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.tokenEntryView.header = .holderTokenEntryTokenTitle
 		sceneView.tokenEntryView.inputField.placeholder = .holderTokenEntryTokenPlaceholder
 		sceneView.verificationEntryView.header = .holderTokenEntryVerificationTitle
+		sceneView.text = .holderTokenEntryVerificationInfo
 		sceneView.verificationEntryView.inputField.placeholder = .holderTokenEntryVerificationPlaceholder
-		sceneView.verificationEntryView.info = .holderTokenEntryVerificationInfo
+		sceneView.primaryTitle = .next
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -118,7 +152,11 @@ class TokenEntryViewController: BaseViewController {
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
+
 		super.viewDidAppear(animated)
+
+		// fix scrolling size (https://developer.apple.com/forums/thread/126841)
+		sceneView.scrollView.contentSize = sceneView.stackView.frame.size
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -152,13 +190,15 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = true
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 30 // 30: Also show the error view.
+		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 130
+		sceneView.bottomConstraint?.constant = -notification.getHeight() - 10
 	}
 
 	@objc func keyBoardWillHide(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = false
 		sceneView.scrollView.contentInset.bottom = 0.0
+		sceneView.bottomConstraint?.constant = -20
 	}
 }
 
@@ -172,13 +212,23 @@ extension TokenEntryViewController: UITextFieldDelegate {
 		return true
 	}
 
-	func textFieldDidEndEditing(_ textField: UITextField) {
+	func textField(
+		_ textField: UITextField,
+		shouldChangeCharactersIn range: NSRange,
+		replacementString string: String) -> Bool {
 
-		if textField.tag == 0 {
-			viewModel.checkToken(textField.text)
-		} else {
-			viewModel.checkVerification(textField.text)
+		if let text = textField.text,
+		   let textRange = Range(range, in: text) {
+			let updatedText = text.replacingCharacters(in: textRange, with: string)
+
+			if textField.tag == 0 {
+				viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
+			} else {
+				viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
+			}
 		}
+
+		return true
 	}
 }
 

@@ -168,7 +168,7 @@ class DashboardViewModelTests: XCTestCase {
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		sut?.proofValidator = ProofValidator(maxValidity: 1)
+		sut?.proofValidator = ProofValidator(maxValidity: 40)
 
 		// When
 		sut?.checkQRValidity()

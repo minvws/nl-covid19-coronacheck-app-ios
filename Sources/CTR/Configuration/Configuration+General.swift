@@ -13,9 +13,13 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// - Returns: TTL for a test result warning
 	func getTestResultWarningTTL() -> Int
 
-	/// Get the TTL for a QR
+	/// Get the Grace Period for a QR
 	/// - Returns: TTL for a QR
-	func getQRTTL() -> TimeInterval
+	func getQRGracePeriod() -> TimeInterval
+
+	/// Get the Refresh Period for a QR
+	/// - Returns: TTL for a QR
+	func getQRRefreshPeriod() -> TimeInterval
 
 	/// Get the URL for the privacy policy
 	/// - Returns: the privay policy url
@@ -53,9 +57,18 @@ extension Configuration: ConfigurationGeneralProtocol {
 
 	/// Get the TTL for a QR
 	/// - Returns: TTL for a QR
-	func getQRTTL() -> TimeInterval {
+	func getQRGracePeriod() -> TimeInterval {
 		guard let value = general["QRTTL"] as? TimeInterval else {
-			fatalError("Configuration: No QR TTL provided")
+			fatalError("Configuration: No QR Grace Period provided")
+		}
+		return value
+	}
+
+	/// Get the Refresh Period for a QR
+	/// - Returns: TTL for a QR
+	func getQRRefreshPeriod() -> TimeInterval {
+		guard let value = general["QRRefresh"] as? TimeInterval else {
+			fatalError("Configuration: No QR Refresh Period provided")
 		}
 		return value
 	}

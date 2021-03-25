@@ -42,11 +42,6 @@ extension String {
 		return Localization.string(for: "general.error.title")
 	}
 
-	static var technicalErrorTitle: String {
-
-		return Localization.string(for: "general.error.technical.title")
-	}
-
 	static var technicalErrorText: String {
 
 		return Localization.string(for: "general.error.technical.text")

@@ -12,8 +12,7 @@
 "general.done" = "Klaar";
 "general.ok" = "Ok";
 "general.error.title" = "Er ging iets mis";
-"general.error.technical.title" = "Technische fout";
-"general.error.technical.text" = "Dat komt door een technische fout.";
+"general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 "general.menu.version" = "App versie %@ (%@)";
 
 /* MARK: - Update App */
@@ -86,8 +85,9 @@
 "holder.dashboard.qr.minute" = "min";
 
 /* MARK: - Holder Enlarged */
-"holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
-"holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
+"holder.enlarged.screenshot.title" = "Schermafbeelding is geen geldig toegangsbewijs";
+"holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code uit de app is een geldig toegangsbewijs.";
+"holder.enlarged.title" = "Mijn QR-code";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
@@ -134,7 +134,8 @@
 "holder.tokenentry.verification.title" = "Verificatiecode";
 "holder.tokenentry.verification.placeholder" = "Bijv. 0576";
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
-"holder.tokenentry.error.invalid.provider" = "Deze provider wordt nog niet ondersteund.";
+"holder.tokenentry.retry.title" = "Stuur opnieuw";
+"holder.tokenentry.retry.countdown" = "Stuur opnieuw in %@";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Jouw negatieve testresultaten";
