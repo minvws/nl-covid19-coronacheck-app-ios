@@ -113,7 +113,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(secondaryButton)
 	}
 
-	override func setNeedsUpdateConstraints() {
+	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
 
@@ -157,6 +157,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 
+	/// The title of the secondary button
 	var secondaryTitle: String? {
 		didSet {
 			secondaryButton.setTitle(secondaryTitle, for: .normal)

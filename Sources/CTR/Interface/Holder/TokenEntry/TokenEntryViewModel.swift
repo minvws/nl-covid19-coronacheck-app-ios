@@ -207,20 +207,25 @@ class TokenEntryViewModel: Logging {
 		if showVerification {
 			// We are showing the verification entry, so this is a wrong verification code
 			errorMessage = .holderTokenEntryErrorInvalidCode
-			startTimer()
 		}
+		resetCounter()
+		startTimer()
 		showVerification = true
 		enableNextButton = false
 	}
 
 	var counter = 10
 
+	func resetCounter() {
+		counter = 10
+	}
+
 	func startTimer() {
 
 		guard resendTimer == nil else {
 			return
 		}
-
+		// Show immediately, and repeat every second
 		resendTimer = Timer.scheduledTimer(
 			timeInterval: TimeInterval(1),
 			target: self,
@@ -228,6 +233,7 @@ class TokenEntryViewModel: Logging {
 			userInfo: nil,
 			repeats: true
 		)
+		resendTimer?.fire()
 	}
 
 	@objc func resendButtonState() {
