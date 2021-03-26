@@ -65,6 +65,8 @@ class QRCardView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .bottomRight
 		view.clipsToBounds = true
+		view.layer.cornerRadius = ViewTraits.cornerRadius
+		view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 		return view
 	}()
 
@@ -73,6 +75,8 @@ class QRCardView: BaseView {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+		view.layer.cornerRadius = ViewTraits.cornerRadius
+		view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 		return view
 	}()
 	
@@ -93,6 +97,7 @@ class QRCardView: BaseView {
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
+		
 	}
 	
 	/// Setup the hierarchy
