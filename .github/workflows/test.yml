@@ -12,7 +12,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Run SwiftLint for changes in this pull request
-      uses: norio-nomura/action-swiftlint@3.1.0
+      uses: norio-nomura/action-swiftlint@3.2.1
       with:
         args: --force-exclude
       env:
