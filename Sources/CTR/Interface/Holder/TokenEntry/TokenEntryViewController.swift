@@ -93,6 +93,7 @@ class TokenEntryViewController: BaseViewController {
 			guard let strongSelf = self else { return }
 
 			strongSelf.sceneView.verificationEntryView.isHidden = !$0
+			strongSelf.sceneView.secondaryButton.isHidden = !$0
 			if strongSelf.sceneView.errorView.isHidden {
 				strongSelf.sceneView.textLabel.isHidden = !$0
 			}
@@ -115,7 +116,6 @@ class TokenEntryViewController: BaseViewController {
 		viewModel.$secondaryButtonTitle.binding = { [weak self] in
 
 			self?.sceneView.secondaryTitle = $0
-			self?.sceneView.secondaryButton.isHidden = $0 == nil
 		}
 		viewModel.$secondaryButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
@@ -190,7 +190,7 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = true
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 130
+		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 160
 		sceneView.bottomConstraint?.constant = -notification.getHeight() - 10
 	}
 
