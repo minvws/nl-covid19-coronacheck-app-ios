@@ -7,28 +7,17 @@
 
 import UIKit
 
-class AppUpdateView: BaseView {
+class AppUpdateView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
 
 		// Dimensions
-		static let buttonHeight: CGFloat = 50
+		static let imageHeightPercentage: CGFloat = 0.50
 
 		// Margins
-		static let spacing: CGFloat = UIDevice.current.isSmallScreen ? 10 : 40
-		static let margin: CGFloat = 16.0
-		static let buttonOffset: CGFloat = 27.0
-		static let imageMargin: CGFloat = 26
+		static let spacing: CGFloat = 24
 	}
-
-	/// The container for centering the image
-	private let imageContainerView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
 
 	/// The image view
 	private let imageView: UIImageView = {
@@ -39,17 +28,6 @@ class AppUpdateView: BaseView {
 		return view
 	}()
 
-	private let stackView: UIStackView = {
-
-		let view = UIStackView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
-		view.alignment = .center
-		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
-		return view
-	}()
-
 	private let bottomStackView: UIStackView = {
 
 		let view = UIStackView()
@@ -57,7 +35,7 @@ class AppUpdateView: BaseView {
 		view.axis = .vertical
 		view.alignment = .center
 		view.distribution = .fill
-		view.spacing = ViewTraits.margin
+		view.spacing = ViewTraits.spacing
 		return view
 	}()
 
@@ -73,12 +51,11 @@ class AppUpdateView: BaseView {
 		return Label(body: nil).multiline()
 	}()
 
-	/// the update button
-	let primaryButton: Button = {
-
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
-		return button
+	private let spacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
 	}()
 
 	/// setup the views
@@ -95,70 +72,32 @@ class AppUpdateView: BaseView {
 
 		super.setupViewHierarchy()
 
-		imageContainerView.addSubview(imageView)
-
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.addArrangedSubview(messageLabel)
-		bottomStackView.addArrangedSubview(UIView())
 
-		stackView.addArrangedSubview(imageContainerView)
+		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
-		stackView.addArrangedSubview(UIView())
-
-		addSubview(stackView)
-		addSubview(primaryButton)
+		stackView.addArrangedSubview(spacer)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
+		super.setupViewConstraints()
+
 		NSLayoutConstraint.activate([
 
-			// Container
-			imageContainerView.widthAnchor.constraint(equalTo: stackView.widthAnchor),
-
 			// Image
-			imageView.centerXAnchor.constraint(equalTo: imageContainerView.centerXAnchor),
-			imageView.centerYAnchor.constraint(equalTo: imageContainerView.centerYAnchor),
-			imageView.leadingAnchor.constraint(
-				equalTo: imageContainerView.leadingAnchor,
-				constant: ViewTraits.imageMargin
-			),
-			imageView.trailingAnchor.constraint(
-				equalTo: imageContainerView.trailingAnchor,
-				constant: -ViewTraits.imageMargin
+			imageView.heightAnchor.constraint(
+				equalTo: heightAnchor,
+				multiplier: ViewTraits.imageHeightPercentage
 			),
 
-			// StackView
-			stackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.leadingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.trailingAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			stackView.bottomAnchor.constraint(equalTo: primaryButton.topAnchor),
-
-			// Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
-			primaryButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.buttonOffset
-			),
-			primaryButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.buttonOffset
-			),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			// Spacer
+			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor)
 		])
+
+		setupPrimaryButton(useFullWidth: true)
 	}
 
 	// MARK: Public Access
@@ -182,5 +121,14 @@ class AppUpdateView: BaseView {
 		didSet {
 			imageView.image = image
 		}
+	}
+
+	/// Hide the image
+	func hideImage() {
+
+		imageView.isHidden = true
+		let view = UIView()
+		stackView.insertArrangedSubview(view, at: 0)
+		stackView.setCustomSpacing(60, after: view)
 	}
 }

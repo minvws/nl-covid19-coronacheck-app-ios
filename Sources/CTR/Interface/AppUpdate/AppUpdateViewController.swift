@@ -91,4 +91,13 @@ class AppUpdateViewController: BaseViewController {
 		)
 		present(alertController, animated: true, completion: nil)
 	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+
+		if UIDevice.current.isSmallScreen {
+			sceneView.hideImage()
+		}
+	}
 }

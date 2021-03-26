@@ -20,6 +20,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let buttonMargin: CGFloat = 36.0
 	}
 
 	/// the footer background
@@ -45,9 +46,6 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		button.rounded = true
 		return button
 	}()
-
-	/// bottom contraint for keyboard changes.
-	var bottomConstraint: NSLayoutConstraint?
 
 	/// Setup all the views
 	override func setupViews() {
@@ -84,14 +82,37 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 			// Footer background
 			footerBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
 			footerBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
-			footerBackground.bottomAnchor.constraint(equalTo: bottomAnchor),
+			footerBackground.bottomAnchor.constraint(equalTo: bottomAnchor)
+		])
+	}
+
+	func setupPrimaryButton(useFullWidth: Bool = false) {
+
+		NSLayoutConstraint.activate([
 
 			// Primary button
 			primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor),
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth)
+			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
+		if useFullWidth {
+			NSLayoutConstraint.activate([
+
+				primaryButton.leadingAnchor.constraint(
+					equalTo: leadingAnchor,
+					constant: ViewTraits.buttonMargin
+				),
+				primaryButton.trailingAnchor.constraint(
+					equalTo: trailingAnchor,
+					constant: -ViewTraits.buttonMargin
+				)
+			])
+		} else {
+			NSLayoutConstraint.activate([
+
+				primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth)
+			])
+		}
 
 		bottomConstraint = primaryButton.bottomAnchor.constraint(
 			equalTo: safeAreaLayoutGuide.bottomAnchor,
@@ -123,12 +144,12 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	override func layoutSubviews() {
 
 		super.layoutSubviews()
-
 		setFooterGradient()
 	}
 
 	// MARK: Public Access
 
+	/// The title for the primary button
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
@@ -137,4 +158,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// bottom contraint for keyboard changes.
+	var bottomConstraint: NSLayoutConstraint?
 }
