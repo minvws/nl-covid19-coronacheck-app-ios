@@ -223,14 +223,16 @@ class CryptoManager: CryptoManaging, Logging {
 	func readCredential() -> CrypoAttributes? {
 
 		if let cryptoDataValue = cryptoData.credential,
-		   let response = ClmobileReadCredential(cryptoDataValue),
-		   let value = response.value {
-			do {
-				let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
-				return object
-			} catch {
-				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
-				return nil
+		   let response = ClmobileReadCredential(cryptoDataValue) {
+			if let value = response.value {
+				do {
+					let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
+					return object
+				} catch {
+					self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+				}
+			} else {
+				logError("Can't read credential: \(String(describing: response.error))")
 			}
 		}
 		return nil
