@@ -51,7 +51,7 @@ class ConsentButton: UIButton {
 
 	fileprivate func setup() {
 		clipsToBounds = true
-		contentEdgeInsets = .topBottom(17) + .left(52) + .right(16)
+		contentEdgeInsets = .topBottom(17) + .left(68) + .right(16)
 
 		layer.cornerRadius = 8
 

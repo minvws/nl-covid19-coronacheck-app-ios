@@ -121,6 +121,8 @@ class TokenEntryView: ScrolledStackWithButtonView {
 
 			secondaryButton.heightAnchor.constraint(equalToConstant: 40)
 		])
+
+		setupPrimaryButton()
 	}
 
 	/// User tapped on the primary button

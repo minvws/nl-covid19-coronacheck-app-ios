@@ -161,6 +161,7 @@ class TokenEntryViewModel: Logging {
 	private func fetchResult(_ requestToken: RequestToken) {
 
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
+			showProgress = false
 			errorMessage = .holderTokenEntryErrorInvalidCode
 			return
 		}
