@@ -97,7 +97,6 @@ class QRCardView: BaseView {
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
-		
 	}
 	
 	/// Setup the hierarchy
