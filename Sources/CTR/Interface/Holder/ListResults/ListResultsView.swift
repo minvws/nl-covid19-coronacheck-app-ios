@@ -152,6 +152,7 @@ class ListResultsView: ScrolledStackView {
 			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
 			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
 		]
+		footerGradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		footerGradientView.layer.insertSublayer(gradient, at: 0)
 	}
 

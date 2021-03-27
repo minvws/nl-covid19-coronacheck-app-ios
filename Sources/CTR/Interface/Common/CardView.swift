@@ -172,6 +172,7 @@ class CardView: BaseView {
 			color.withAlphaComponent(1.0).cgColor,
 			color.withAlphaComponent(0.0).cgColor
 		]
+		gradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		gradientView.layer.insertSublayer(gradient, at: 0)
 	}
 
