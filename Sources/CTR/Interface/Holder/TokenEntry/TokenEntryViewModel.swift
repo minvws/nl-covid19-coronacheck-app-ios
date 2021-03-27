@@ -134,14 +134,7 @@ class TokenEntryViewModel: Logging {
 	/// - Parameter requestToken: the request token
 	func fetchProviders(_ requestToken: RequestToken) {
 
-		guard proofManager?.getTestProvider(requestToken) == nil else {
-			// only fetch providers if we do not have it.
-			fetchResult(requestToken)
-			return
-		}
-
 		showProgress = true
-
 		proofManager?.fetchCoronaTestProviders(
 			oncompletion: { [weak self] in
 
