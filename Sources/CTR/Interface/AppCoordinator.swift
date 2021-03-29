@@ -5,28 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
 import UIKit
-
-/// The Application flavor
-enum AppFlavor: String {
-	
-	/// We are a holder
-	case holder
-	
-	/// We are a verifier
-	case verifier
-	
-	/// The flavor of the app
-	static var flavor: AppFlavor {
-		
-		if let value = Bundle.main.infoDictionary?["APP_FLAVOR"] as? String,
-		   let fls = AppFlavor(rawValue: value ) {
-			return fls
-		}
-		return .holder
-	}
-}
 
 protocol AppCoordinatorDelegate: AnyObject {
 
@@ -88,6 +67,7 @@ class AppCoordinator: Coordinator, Logging {
 
 		// Start the launcher for update checks
 		startLauncher()
+		addObservers()
 	}
 
 	/// Retry loading the requirements
@@ -98,6 +78,16 @@ class AppCoordinator: Coordinator, Logging {
 		topController.dismiss(animated: true) {
 			((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
 		}
+	}
+
+	func addObservers() {
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(onApplicationDidEnterBackground),
+			name: UIApplication.didEnterBackgroundNotification,
+			object: nil
+		)
 	}
 
 	/// Launch the launcher 
@@ -192,6 +182,25 @@ class AppCoordinator: Coordinator, Logging {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
 		} else {
 			topController.present(updateController, animated: true)
+		}
+	}
+
+	/// Handle the event the application did enter the background
+	@objc func onApplicationDidEnterBackground() {
+
+		/// Show the snapshot (logo) view to hide sensitive data
+		let shapshotViewController = SnapshotViewController(
+			viewModel: SnapshotViewModel(
+				versionSupplier: AppVersionSupplier(),
+				flavor: AppFlavor.flavor
+			)
+		)
+		shapshotViewController.modalPresentationStyle = .fullScreen
+		guard let topController = window.rootViewController else { return }
+		if topController is UINavigationController {
+			(topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
+		} else {
+			topController.present(shapshotViewController, animated: true)
 		}
 	}
 }

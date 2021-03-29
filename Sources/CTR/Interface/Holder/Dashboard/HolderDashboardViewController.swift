@@ -68,6 +68,12 @@ class HolderDashboardViewController: BaseViewController {
 				strongSelf.sceneView.qrCardView.isHidden = false
 				strongSelf.styleQRCard(strongSelf.sceneView.qrCardView, cardInfo: cardInfo)
 			} else {
+				// hide for capture checks the time,
+				// set to nil to prevent showing qr card.
+				strongSelf.sceneView.qrCardView.time = nil
+				strongSelf.sceneView.qrCardView.title = nil
+				strongSelf.sceneView.qrCardView.identity = nil
+				strongSelf.sceneView.qrCardView.message = nil
 				strongSelf.sceneView.qrCardView.isHidden = true
 			}
 		}
@@ -99,8 +105,8 @@ class HolderDashboardViewController: BaseViewController {
 			object: nil
 		)
 		NotificationCenter.default.addObserver(
-			self, selector:
-				#selector(checkValidity),
+			self,
+			selector: #selector(checkValidity),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
