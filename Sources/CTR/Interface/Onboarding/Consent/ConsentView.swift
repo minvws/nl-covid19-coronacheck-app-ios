@@ -160,9 +160,9 @@ class ConsentView: BaseView {
 			lineView.heightAnchor.constraint(equalToConstant: 1),
 
 			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
+			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin

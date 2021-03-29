@@ -201,7 +201,7 @@ class QRCardView: BaseView {
 				constant: -ViewTraits.margin
 			),
 			primaryButton.widthAnchor.constraint(
-				equalTo: widthAnchor,
+				greaterThanOrEqualTo: widthAnchor,
 				multiplier: ViewTraits.buttonRatio
 			),
 			primaryButton.bottomAnchor.constraint(

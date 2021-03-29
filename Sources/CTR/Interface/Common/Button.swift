@@ -14,8 +14,6 @@ class Button: UIButton {
         case primary
         case secondary
         case tertiary
-//        case warning
-//        case info
     }
 
     var style = ButtonType.primary {
@@ -54,7 +52,7 @@ class Button: UIButton {
         self.title = title
         self.titleLabel?.font = Theme.fonts.bodySemiBold
 		// multiline
-//		self.titleLabel?.lineBreakMode = .byWordWrapping
+		self.titleLabel?.lineBreakMode = .byWordWrapping
 		self.titleLabel?.numberOfLines = 0
 
         self.layer.cornerRadius = 5
@@ -89,7 +87,18 @@ class Button: UIButton {
 
         super.layoutSubviews()
         updateRoundedCorners()
+		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
     }
+
+	override var intrinsicContentSize: CGSize {
+		let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
+		let insets = contentEdgeInsets
+
+		return CGSize(
+			width: size.width + insets.left + insets.right,
+			height: size.height + insets.top + insets.bottom
+		)
+	}
 
     // MARK: - Private
 
@@ -114,7 +123,7 @@ class Button: UIButton {
 				setTitleColor(Theme.colors.dark, for: .disabled)
 				self.titleLabel?.font = Theme.fonts.bodyMedium
 		}
-
+		contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
 		tintColor = Theme.colors.viewControllerBackground
 	}
 

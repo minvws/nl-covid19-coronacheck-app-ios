@@ -92,9 +92,8 @@ class CardView: BaseView {
 		
 		super.setupViewHierarchy()
 
-		backgroundImageView.embed(in: self)
+		addSubview(backgroundImageView)
 		gradientView.embed(in: self)
-
 		addSubview(titleLabel)
 		addSubview(messageLabel)
 		addSubview(primaryButton)
@@ -105,8 +104,13 @@ class CardView: BaseView {
 		
 		NSLayoutConstraint.activate([
 
+			// Background image
+			backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
 			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.margin
@@ -114,6 +118,9 @@ class CardView: BaseView {
 			primaryButton.widthAnchor.constraint(
 				greaterThanOrEqualTo: widthAnchor,
 				multiplier: ViewTraits.buttonRatio
+			),
+			primaryButton.widthAnchor.constraint(
+				lessThanOrEqualTo: widthAnchor
 			),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
