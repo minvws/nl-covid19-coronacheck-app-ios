@@ -162,7 +162,7 @@ class CardView: BaseView {
 				multiplier: ViewTraits.messageRatio
 			),
 			messageLabel.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
+				lessThanOrEqualTo: primaryButton.topAnchor,
 				constant: -ViewTraits.buttonMargin
 			)
 		])
