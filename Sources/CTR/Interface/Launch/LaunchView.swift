@@ -96,6 +96,7 @@ class LaunchView: BaseView {
 		messageLabel.textColor = Theme.colors.launchGray
 		versionLabel.textColor = Theme.colors.launchGray
 		backgroundColor = Theme.colors.viewControllerBackground
+		versionLabel.textAlignment = .center
 	}
 
 	/// Setup the hierarchy
@@ -162,14 +163,16 @@ class LaunchView: BaseView {
 			// Message
 			messageLabel.centerYAnchor.constraint(equalTo: messageContainer.centerYAnchor),
 			messageLabel.trailingAnchor.constraint(equalTo: messageContainer.trailingAnchor),
+			messageLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
 
 			// Version
 			versionLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+			versionLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
 			versionLabel.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.titleMargin
 			),
-			versionLabel.heightAnchor.constraint(equalToConstant: ViewTraits.margin)
+			versionLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.margin)
 		])
 	}
 

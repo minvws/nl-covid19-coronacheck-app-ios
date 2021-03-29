@@ -137,7 +137,7 @@ class VerifierStartView: BaseView {
 			),
 
 			// Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
