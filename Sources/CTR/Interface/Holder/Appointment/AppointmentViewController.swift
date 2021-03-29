@@ -71,4 +71,30 @@ class AppointmentViewController: BaseViewController {
 
 		viewModel.linkedTapped()
 	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		checkImage()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.checkImage()
+		}
+	}
+
+	func checkImage() {
+
+//		if UIDevice.current.isSmallScreen || UIDevice.current.isLandscape {
+//			sceneView.hideImage()
+//		} else {
+//			sceneView.showImage()
+//		}
+	}
 }

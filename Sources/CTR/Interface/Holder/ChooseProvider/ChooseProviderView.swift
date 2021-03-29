@@ -107,11 +107,11 @@ class ChooseProviderView: ScrollViewWithHeader {
 				constant: ViewTraits.stackviewTopMargin
 			),
 			stackView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			stackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 			stackView.bottomAnchor.constraint(

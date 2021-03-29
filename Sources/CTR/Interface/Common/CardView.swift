@@ -18,9 +18,9 @@ class CardView: BaseView {
 		static let messageLineHeight: CGFloat = 22
 		static let cornerRadius: CGFloat = 15
 		static let messageRatio: CGFloat = UIDevice.current.isSmallScreen ? 1 : 0.75
-		static let buttonRatio: CGFloat = 0.5
-		static let shadowRadius: CGFloat = 8
-		static let shadowOpacity: Float = 0.3
+		static let buttonRatio: CGFloat = UIDevice.current.isLandscape ? 0.3 : 0.5
+		static let shadowRadius: CGFloat = 6
+		static let shadowOpacity: Float = 0.4
 		
 		// Margins
 		static let textMargin: CGFloat = 16.0
@@ -40,6 +40,15 @@ class CardView: BaseView {
 	let messageLabel: Label = {
 		
 		return Label(bodyMedium: nil).multiline()
+	}()
+
+	let contentView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.clipsToBounds = true
+		view.layer.cornerRadius = ViewTraits.cornerRadius
+		return view
 	}()
 
 	let gradientView: UIView = {
@@ -82,6 +91,7 @@ class CardView: BaseView {
 		layer.shadowOpacity = ViewTraits.shadowOpacity
 		layer.shadowOffset = .zero
 		layer.shadowRadius = ViewTraits.shadowRadius
+
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
@@ -92,11 +102,13 @@ class CardView: BaseView {
 		
 		super.setupViewHierarchy()
 
-		addSubview(backgroundImageView)
-		gradientView.embed(in: self)
-		addSubview(titleLabel)
-		addSubview(messageLabel)
-		addSubview(primaryButton)
+		contentView.embed(in: self)
+
+		contentView.addSubview(backgroundImageView)
+		contentView.addSubview(gradientView)
+		contentView.addSubview(titleLabel)
+		contentView.addSubview(messageLabel)
+		contentView.addSubview(primaryButton)
 	}
 	
 	/// Setup the constraints
@@ -105,39 +117,44 @@ class CardView: BaseView {
 		NSLayoutConstraint.activate([
 
 			// Background image
-			backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			backgroundImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			backgroundImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+			backgroundImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+
+			gradientView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+			gradientView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+			gradientView.topAnchor.constraint(equalTo: contentView.topAnchor),
+			gradientView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
 
 			// Primary Button
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			primaryButton.widthAnchor.constraint(
-				greaterThanOrEqualTo: widthAnchor,
+				greaterThanOrEqualTo: contentView.widthAnchor,
 				multiplier: ViewTraits.buttonRatio
 			),
 			primaryButton.widthAnchor.constraint(
-				lessThanOrEqualTo: widthAnchor
+				lessThanOrEqualTo: contentView.widthAnchor
 			),
 			primaryButton.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
+				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.bottomMargin
 			),
 			
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
+				equalTo: contentView.topAnchor,
 				constant: ViewTraits.topMargin
 			),
 			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 			titleLabel.bottomAnchor.constraint(
@@ -147,7 +164,7 @@ class CardView: BaseView {
 			
 			// Message
 			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			messageLabel.widthAnchor.constraint(
@@ -169,7 +186,7 @@ class CardView: BaseView {
 
 		gradientView.backgroundColor = .clear
 		let gradient = CAGradientLayer()
-		gradient.frame = gradientView.bounds
+		gradient.frame = contentView.bounds
 		// horizontal
 		gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
 		gradient.endPoint = CGPoint(x: 1.0, y: 0.5)

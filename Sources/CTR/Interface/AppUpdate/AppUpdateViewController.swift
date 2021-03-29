@@ -33,11 +33,6 @@ class AppUpdateViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-	/// Show always in portrait
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-
 	// MARK: View lifecycle
 	override func loadView() {
 
