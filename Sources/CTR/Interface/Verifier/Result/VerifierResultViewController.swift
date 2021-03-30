@@ -13,6 +13,8 @@ class VerifierResultViewController: BaseViewController {
 
 	let sceneView = ResultView()
 
+	var previousOrientation: UIInterfaceOrientation?
+
 	init(viewModel: VerifierResultViewModel) {
 
 		self.viewModel = viewModel
@@ -97,6 +99,15 @@ class VerifierResultViewController: BaseViewController {
 		super.viewWillAppear(animated)
 		// Make the navbar the same color as the background.
 		navigationController?.navigationBar.backgroundColor = .clear
+
+		previousOrientation = OrientationUtility.currentOrientation()
+		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+	}
+
+	override func viewWillDisappear(_ animated: Bool) {
+
+		super.viewWillDisappear(animated)
+		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 
 	/// User tapped on the button

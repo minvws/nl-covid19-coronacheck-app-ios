@@ -64,8 +64,6 @@
 		6D18FBC925DAAECB0041770B /* StartLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18FBC725DAAECB0041770B /* StartLocalization.swift */; };
 		6D18FBCE25DAB0380041770B /* VerifierResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18FBCD25DAB0380041770B /* VerifierResultViewModel.swift */; };
 		6D18FBCF25DAB0380041770B /* VerifierResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18FBCD25DAB0380041770B /* VerifierResultViewModel.swift */; };
-		6D18FBD425DAB0930041770B /* VerifierStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18FBD325DAB0930041770B /* VerifierStartView.swift */; };
-		6D18FBD525DAB0930041770B /* VerifierStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D18FBD325DAB0930041770B /* VerifierStartView.swift */; };
 		6D195DCC25D7CBD000E2F626 /* ButtonWithSubtitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D195DCB25D7CBD000E2F626 /* ButtonWithSubtitleView.swift */; };
 		6D195DCD25D7CBD000E2F626 /* ButtonWithSubtitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D195DCB25D7CBD000E2F626 /* ButtonWithSubtitleView.swift */; };
 		6D1E337E25E62A510097E574 /* fietser_LR_335x256.json in Resources */ = {isa = PBXBuildFile; fileRef = 6D1E337C25E62A510097E574 /* fietser_LR_335x256.json */; };
@@ -89,6 +87,8 @@
 		6D2604FC25FB488D0055851F /* PreventableScreenCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2604FA25FB488D0055851F /* PreventableScreenCapture.swift */; };
 		6D27550A25D1201800164F2E /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27550925D1201800164F2E /* CardView.swift */; };
 		6D27551225D1259D00164F2E /* DashboardLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27551125D1259D00164F2E /* DashboardLocalization.swift */; };
+		6D283A4F26131DBE00E9208E /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D283A4E26131DBE00E9208E /* ScrollView.swift */; };
+		6D283A5026131DBE00E9208E /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D283A4E26131DBE00E9208E /* ScrollView.swift */; };
 		6D2DD3F025ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */; };
 		6D2DD3F125ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */; };
 		6D30870A25F9124000158F74 /* AboutTestResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D30870925F9124000158F74 /* AboutTestResultViewController.swift */; };
@@ -239,7 +239,6 @@
 		6D97234825FA24EF008D93AA /* AboutTestResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D97234625FA24EF008D93AA /* AboutTestResultViewModel.swift */; };
 		6D9819D725D53A9C009A96D7 /* TokenOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819D625D53A9B009A96D7 /* TokenOverviewViewController.swift */; };
 		6D9819DC25D53C23009A96D7 /* TokenOverviewLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */; };
-		6D9819E125D53CC6009A96D7 /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819E025D53CC6009A96D7 /* ScrollView.swift */; };
 		6D9819ED25D54EB4009A96D7 /* TokenEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */; };
 		6D9819F425D54FBA009A96D7 /* TokenEntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */; };
 		6D9819F825D54FBE009A96D7 /* TokenOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819D625D53A9B009A96D7 /* TokenOverviewViewController.swift */; };
@@ -287,7 +286,7 @@
 		6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */; };
 		6DB1E96425DEB88800F43C71 /* ScanInstructionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F6E7725DEB6F000557326 /* ScanInstructionsViewController.swift */; };
 		6DB386EC25D17E9A00B2CD7C /* AppointmentLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */; };
-		6DB386F225D18EDF00B2CD7C /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */; };
+		6DB386F225D18EDF00B2CD7C /* HeaderTitleMessageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F125D18EDF00B2CD7C /* HeaderTitleMessageButtonView.swift */; };
 		6DB386F625D18EE800B2CD7C /* AppointmentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */; };
 		6DB3C28B25F1283600B41B46 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DB3C28A25F1283600B41B46 /* Localizable.strings */; };
 		6DB3C2CA25F12CCE00B41B46 /* HolderOnboardingLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB3C2C925F12CCE00B41B46 /* HolderOnboardingLocalization.swift */; };
@@ -352,7 +351,6 @@
 		6DD1159225D0229700DF6AF4 /* CustomSidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1159125D0229700DF6AF4 /* CustomSidePanelController.swift */; };
 		6DD1159625D022B000DF6AF4 /* SidePanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1159525D022B000DF6AF4 /* SidePanelController.swift */; };
 		6DD19D7A25D5516F001FDDDC /* TokenEntryLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */; };
-		6DD19DC025D66DF5001FDDDC /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9819E025D53CC6009A96D7 /* ScrollView.swift */; };
 		6DD19DC525D67FB6001FDDDC /* Configuration+General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */; };
 		6DD19DCF25D6AD71001FDDDC /* Configuration+General.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19DC425D67FB6001FDDDC /* Configuration+General.swift */; };
 		6DD19DD425D6D7A6001FDDDC /* InformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD19DD325D6D7A6001FDDDC /* InformationViewController.swift */; };
@@ -457,7 +455,7 @@
 		6DD7D87225D26D3A00B97B7F /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5D203125BF190700DC2E27 /* Localization.swift */; };
 		6DD7D87425D26D3A00B97B7F /* KeychainItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC6CCE225C2F7D100060237 /* KeychainItem.swift */; };
 		6DD7D87525D26D3A00B97B7F /* CryptoUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33016725CFE90200A98C1C /* CryptoUtility.swift */; };
-		6DD7D87725D26D3A00B97B7F /* AppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */; };
+		6DD7D87725D26D3A00B97B7F /* HeaderTitleMessageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB386F125D18EDF00B2CD7C /* HeaderTitleMessageButtonView.swift */; };
 		6DD7D87825D26D3A00B97B7F /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D92849B25B5CBC0009D4350 /* BaseView.swift */; };
 		6DD7D87925D26D3A00B97B7F /* ConsentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D33018725CFFFC500A98C1C /* ConsentViewController.swift */; };
 		6DD7D87A25D26D3A00B97B7F /* ConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC4CBB225D11BDC00986F9E /* ConsentView.swift */; };
@@ -574,7 +572,6 @@
 		6D18FBB425DA7E9B0041770B /* ResultImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultImage.swift; sourceTree = "<group>"; };
 		6D18FBC725DAAECB0041770B /* StartLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartLocalization.swift; sourceTree = "<group>"; };
 		6D18FBCD25DAB0380041770B /* VerifierResultViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierResultViewModel.swift; sourceTree = "<group>"; };
-		6D18FBD325DAB0930041770B /* VerifierStartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierStartView.swift; sourceTree = "<group>"; };
 		6D195DCB25D7CBD000E2F626 /* ButtonWithSubtitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonWithSubtitleView.swift; sourceTree = "<group>"; };
 		6D1E337C25E62A510097E574 /* fietser_LR_335x256.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fietser_LR_335x256.json; sourceTree = "<group>"; };
 		6D1E337D25E62A510097E574 /* fietser_RL_335x256.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = fietser_RL_335x256.json; sourceTree = "<group>"; };
@@ -591,6 +588,7 @@
 		6D2604FA25FB488D0055851F /* PreventableScreenCapture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreventableScreenCapture.swift; sourceTree = "<group>"; };
 		6D27550925D1201800164F2E /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		6D27551125D1259D00164F2E /* DashboardLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardLocalization.swift; sourceTree = "<group>"; };
+		6D283A4E26131DBE00E9208E /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Generator.swift"; sourceTree = "<group>"; };
 		6D30870925F9124000158F74 /* AboutTestResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTestResultViewController.swift; sourceTree = "<group>"; };
 		6D32BD2425E6A5AF00C4A4D2 /* VerifyResultViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyResultViewModelTests.swift; sourceTree = "<group>"; };
@@ -703,7 +701,6 @@
 		6D97234625FA24EF008D93AA /* AboutTestResultViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutTestResultViewModel.swift; sourceTree = "<group>"; };
 		6D9819D625D53A9B009A96D7 /* TokenOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenOverviewViewController.swift; sourceTree = "<group>"; };
 		6D9819DB25D53C23009A96D7 /* TokenOverviewLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenOverviewLocalization.swift; sourceTree = "<group>"; };
-		6D9819E025D53CC6009A96D7 /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		6D9819EC25D54EB4009A96D7 /* TokenEntryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenEntryViewController.swift; sourceTree = "<group>"; };
 		6D9A58A525DFCDB400382C24 /* QRImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRImage.swift; sourceTree = "<group>"; };
 		6D9D3A9225FA28A50031DA5D /* TestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProvider.swift; sourceTree = "<group>"; };
@@ -735,7 +732,7 @@
 		6DAE8BD925CB242700AAF2A7 /* Envelope.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Envelope.swift; sourceTree = "<group>"; };
 		6DB080AB25BB0F4800A56B22 /* APIClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClientTests.swift; sourceTree = "<group>"; };
 		6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentLocalization.swift; sourceTree = "<group>"; };
-		6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentView.swift; sourceTree = "<group>"; };
+		6DB386F125D18EDF00B2CD7C /* HeaderTitleMessageButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderTitleMessageButtonView.swift; sourceTree = "<group>"; };
 		6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppointmentViewModel.swift; sourceTree = "<group>"; };
 		6DB3C28A25F1283600B41B46 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = Sources/CTR/Infrastructure/Resources/Localization/Verifier/Localizable.strings; sourceTree = SOURCE_ROOT; };
 		6DB3C2C925F12CCE00B41B46 /* HolderOnboardingLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderOnboardingLocalization.swift; sourceTree = "<group>"; };
@@ -1151,7 +1148,6 @@
 		6D47C5C825DA7169004C24C7 /* Start */ = {
 			isa = PBXGroup;
 			children = (
-				6D18FBD325DAB0930041770B /* VerifierStartView.swift */,
 				6D9284B325B5D08D009D4350 /* VerifierStartViewController.swift */,
 				6D80816825DAB57F009FFA27 /* VerifierStartViewModel.swift */,
 			);
@@ -1180,7 +1176,6 @@
 		6D5A7BF125D148E20008B904 /* Appointment */ = {
 			isa = PBXGroup;
 			children = (
-				6DB386F125D18EDF00B2CD7C /* AppointmentView.swift */,
 				6D5A7BF225D148FB0008B904 /* AppointmentViewController.swift */,
 				6DB386F525D18EE800B2CD7C /* AppointmentViewModel.swift */,
 			);
@@ -1301,6 +1296,7 @@
 		6D92849825B5CBC0009D4350 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				6D283A4E26131DBE00E9208E /* ScrollView.swift */,
 				6D8E65FC2601130B00F79CFE /* BannerView.swift */,
 				6D92849B25B5CBC0009D4350 /* BaseView.swift */,
 				6D92849925B5CBC0009D4350 /* BaseViewController.swift */,
@@ -1311,6 +1307,7 @@
 				6D67780425CEAECF00F6F2D1 /* ConsentButton.swift */,
 				6D9D3B3E25FA7FBB0031DA5D /* DisplayContent */,
 				6D46F05B25D915980056871B /* ErrorView.swift */,
+				6DB386F125D18EDF00B2CD7C /* HeaderTitleMessageButtonView.swift */,
 				6D97233A25FA24B7008D93AA /* IdentityView.swift */,
 				6DD1156225D0137600DF6AF4 /* ImageView.swift */,
 				6DD19DD925D6DCF2001FDDDC /* Information */,
@@ -1320,9 +1317,8 @@
 				6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */,
 				6D67D93C25D81FD700827277 /* Scan */,
 				6D82260925D7C142000B60F9 /* ScrolledStackView.swift */,
-				6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */,
 				6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */,
-				6D9819E025D53CC6009A96D7 /* ScrollView.swift */,
+				6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */,
 				6D1E33A125E62E810097E574 /* SecurityFeaturesView.swift */,
 				6D79C2E725DDB246005DADE2 /* TextView.swift */,
 			);
@@ -2240,6 +2236,7 @@
 				6DD7D81825D26D3A00B97B7F /* AppointmentViewModel.swift in Sources */,
 				6D9819F825D54FBE009A96D7 /* TokenOverviewViewController.swift in Sources */,
 				6DB3C30D25F12D5E00B41B46 /* HolderOnboardingLocalization.swift in Sources */,
+				6D283A5026131DBE00E9208E /* ScrollView.swift in Sources */,
 				6DD7D81925D26D3A00B97B7F /* UserDefaults.swift in Sources */,
 				6DBFE4BE25D2F8A300B3D006 /* ProofManaging.swift in Sources */,
 				6DD7D81A25D26D3A00B97B7F /* DashboardImage.swift in Sources */,
@@ -2266,7 +2263,6 @@
 				6DFB8B1725DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */,
 				6DD7D82925D26D3A00B97B7F /* JSONDecoder+Decoding.swift in Sources */,
 				6D47C5C325DA5C4A004C24C7 /* VerifierScanViewModel.swift in Sources */,
-				6D18FBD525DAB0930041770B /* VerifierStartView.swift in Sources */,
 				6DD7D82A25D26D3A00B97B7F /* AppDelegate.swift in Sources */,
 				6DD7D82B25D26D3A00B97B7F /* OnboardingImage.swift in Sources */,
 				6DD7D82C25D26D3A00B97B7F /* MenuView.swift in Sources */,
@@ -2417,7 +2413,7 @@
 				6DD7D87425D26D3A00B97B7F /* KeychainItem.swift in Sources */,
 				6DD7D87525D26D3A00B97B7F /* CryptoUtility.swift in Sources */,
 				6D67D8DD25D7D1F100827277 /* TokenEntryViewModel.swift in Sources */,
-				6DD7D87725D26D3A00B97B7F /* AppointmentView.swift in Sources */,
+				6DD7D87725D26D3A00B97B7F /* HeaderTitleMessageButtonView.swift in Sources */,
 				6DE1DF6225E8D3D30091FC21 /* SecurityStrategy.swift in Sources */,
 				6DD7D87825D26D3A00B97B7F /* BaseView.swift in Sources */,
 				6DB3C30125F12D5500B41B46 /* TokenOverviewLocalization.swift in Sources */,
@@ -2445,7 +2441,6 @@
 				6D97233C25FA24B7008D93AA /* IdentityView.swift in Sources */,
 				6DD7D88425D26D3A00B97B7F /* String+Data.swift in Sources */,
 				6DD7D88525D26D3A00B97B7F /* SignatureConfiguration.swift in Sources */,
-				6DD19DC025D66DF5001FDDDC /* ScrollView.swift in Sources */,
 				6DB89363261301D600C52A7C /* OrientationUtility.swift in Sources */,
 				6DD7D88625D26D3A00B97B7F /* CardView.swift in Sources */,
 				6DFB73CC25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */,
@@ -2459,6 +2454,7 @@
 				6DB386F625D18EE800B2CD7C /* AppointmentViewModel.swift in Sources */,
 				6DC6CCE325C2F7D100060237 /* UserDefaults.swift in Sources */,
 				6DBFE4BD25D2F8A300B3D006 /* ProofManaging.swift in Sources */,
+				6D283A4F26131DBE00E9208E /* ScrollView.swift in Sources */,
 				6D5A7C0325D174470008B904 /* DashboardImage.swift in Sources */,
 				6D92849525B5CB96009D4350 /* Haptic.swift in Sources */,
 				6D7C909425CA9D2600AEC5DE /* OnboardingManager.swift in Sources */,
@@ -2484,7 +2480,6 @@
 				6DFB8B1625DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */,
 				6DAE8BE225CB242700AAF2A7 /* JSONDecoder+Decoding.swift in Sources */,
 				6D47C5C225DA5C4A004C24C7 /* VerifierScanViewModel.swift in Sources */,
-				6D18FBD425DAB0930041770B /* VerifierStartView.swift in Sources */,
 				6DDEFAF425AEDCA800A6912A /* AppDelegate.swift in Sources */,
 				6D7FFADD25C9A6EB00B5482F /* OnboardingImage.swift in Sources */,
 				6D5A7BFB25D172450008B904 /* MenuView.swift in Sources */,
@@ -2636,7 +2631,7 @@
 				6DC6CCE425C2F7D100060237 /* KeychainItem.swift in Sources */,
 				6D33016825CFE90200A98C1C /* CryptoUtility.swift in Sources */,
 				6DE1DF6125E8D3D30091FC21 /* SecurityStrategy.swift in Sources */,
-				6DB386F225D18EDF00B2CD7C /* AppointmentView.swift in Sources */,
+				6DB386F225D18EDF00B2CD7C /* HeaderTitleMessageButtonView.swift in Sources */,
 				6D67D8D625D7D17700827277 /* TokenEntryView.swift in Sources */,
 				6DB3C2F125F12D4800B41B46 /* ScanLocalization.swift in Sources */,
 				6D67D8F825D7D59E00827277 /* ListResultsView.swift in Sources */,
@@ -2664,7 +2659,6 @@
 				6D97233B25FA24B7008D93AA /* IdentityView.swift in Sources */,
 				6DC6CCF025C3039C00060237 /* String+Data.swift in Sources */,
 				6D33016425CFE72D00A98C1C /* SignatureConfiguration.swift in Sources */,
-				6D9819E125D53CC6009A96D7 /* ScrollView.swift in Sources */,
 				6DB89362261301D600C52A7C /* OrientationUtility.swift in Sources */,
 				6D27550A25D1201800164F2E /* CardView.swift in Sources */,
 				6DFB73CB25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */,
@@ -3241,7 +3235,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.2;
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Test;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = "$(TARGET_NAME)";

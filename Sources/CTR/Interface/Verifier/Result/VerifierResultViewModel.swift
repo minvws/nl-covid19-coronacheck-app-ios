@@ -79,14 +79,16 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 
+		/// The time is now!
+		let now = Date().timeIntervalSince1970
+		setDebugInformation(now)
+
 		guard !attributes.cryptoAttributes.isSpecimen else {
 			allowAccess = .demo
 			showAccessDemo()
 			return
 		}
 
-		/// The time is now!
-		let now = Date().timeIntervalSince1970
 		if isQRTimeStampValid(now) && isSampleTimeValid(now) {
 			showAccessAllowed()
 			allowAccess = .verified
@@ -107,18 +109,23 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			showAccessDenied()
 			allowAccess = .denied
 		}
+	}
+
+	/// Set the debug information
+	/// - Parameter timestamp: the timestamp used for validation
+	func setDebugInformation(_ timestamp: TimeInterval) {
 
 		debugInfo = [
 			"QR Information",
-			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: now)))",
+			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: timestamp)))",
 			"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
 			"---------------------",
-			"isSampleTimeValid: \(isSampleTimeValid(now))",
+			"isSampleTimeValid: \(isSampleTimeValid(timestamp))",
 			"TTL: \(proofValidator.maxValidity) hours",
 			"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
 			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
 			"---------------------",
-			"isQRTimeStampValid: \(isQRTimeStampValid(now))",
+			"isQRTimeStampValid: \(isQRTimeStampValid(timestamp))",
 			"TTL: \(configuration.getQRGracePeriod()) seconds",
 			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
 		]

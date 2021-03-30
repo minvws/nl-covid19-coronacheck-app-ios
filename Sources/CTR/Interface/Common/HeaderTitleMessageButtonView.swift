@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppointmentView: ScrolledStackWithHeaderView {
+class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -71,8 +71,6 @@ class AppointmentView: ScrolledStackWithHeaderView {
 	override func setupViews() {
 
 		super.setupViews()
-		headerImageView.backgroundColor = Theme.colors.appointment
-		stackView.backgroundColor = Theme.colors.appointment
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
