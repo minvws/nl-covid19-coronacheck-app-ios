@@ -109,7 +109,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(errorView)
 		stackView.setCustomSpacing(0, after: errorView)
 		stackView.addArrangedSubview(textLabel)
-		stackView.setCustomSpacing(16, after: textLabel)
+		stackView.setCustomSpacing(8, after: textLabel)
 		stackView.addArrangedSubview(secondaryButton)
 	}
 

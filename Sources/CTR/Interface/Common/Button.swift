@@ -113,17 +113,19 @@ class Button: UIButton {
 					backgroundColor = Theme.colors.tertiary
 					setTitleColor(Theme.colors.gray, for: .normal)
 				}
+				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
 			case .secondary:
 				backgroundColor = Theme.colors.secondary
 				setTitleColor(Theme.colors.dark, for: .normal)
 				self.titleLabel?.font = Theme.fonts.subheadBold
+				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
 			case .tertiary:
 				backgroundColor = .clear
-				setTitleColor(Theme.colors.primary, for: .normal)
-				setTitleColor(Theme.colors.dark, for: .disabled)
+				setTitleColor(Theme.colors.iosBlue, for: .normal)
+				setTitleColor(Theme.colors.tileGray, for: .disabled)
 				self.titleLabel?.font = Theme.fonts.bodyMedium
+				
 		}
-		contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
 		tintColor = Theme.colors.viewControllerBackground
 	}
 
