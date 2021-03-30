@@ -47,6 +47,12 @@ class VerifierScanViewController: ScanViewController {
 			guard let strongSelf = self else { return }
 			strongSelf.addTorchButton(action: #selector(strongSelf.toggleTorch), accessibilityLabel: $0)
 		}
+
+		viewModel.$showPermissionWarning.binding = { [weak self] in
+			if $0 {
+				self?.showPermissionError()
+			}
+		}
 		
 		addCloseButton(
 			action: #selector(closeButtonTapped),
@@ -66,5 +72,32 @@ class VerifierScanViewController: ScanViewController {
 	@objc func closeButtonTapped() {
 
 		viewModel.dismiss()
+	}
+
+	/// Show alert
+	func showPermissionError() {
+
+		let alertController = UIAlertController(
+			title: .verifierScanPermissionTitle,
+			message: .verifierScanPermissionMessage,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .verifierScanPermissionSettings,
+				style: .default,
+				handler: { [weak self] _ in
+					self?.viewModel.gotoSettings()
+				}
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .cancel,
+				style: .cancel,
+				handler: nil
+			)
+		)
+		present(alertController, animated: true, completion: nil)
 	}
 }

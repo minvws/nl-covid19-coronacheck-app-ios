@@ -6,6 +6,7 @@
  */
 
 /* MARK: - General */
+"general.cancel" = "Annuleer";
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
 "general.next" = "Volgende";
@@ -86,10 +87,12 @@
 "verifier.scan.title" = "Scan QR-code";
 "verifier.scan.message" = "Richt je toestel op de QR-code op het scherm van de bezoeker.";
 "verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
+"verifier.scan.permission.title" = "Geen camera toegang";
+"verifier.scan.permission.message" = "De app will toegang tot de camera om de QR-code te scannen.";
+"verifier.scan.permission.settings" = "Naar instellingen";
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
-/* MARK: - Verifier Result */
 "verifier.result.access.message" = "Controleer of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs. Lees meer.";
 "verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
