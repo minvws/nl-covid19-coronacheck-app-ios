@@ -197,7 +197,7 @@ class TokenEntryViewModel: Logging {
 	/// Handle the verfication required response
 	func handleVerificationRequired() {
 
-		if showVerification {
+		if let code = verificationCode, !code.isEmpty {
 			// We are showing the verification entry, so this is a wrong verification code
 			errorMessage = .holderTokenEntryErrorInvalidCode
 		}

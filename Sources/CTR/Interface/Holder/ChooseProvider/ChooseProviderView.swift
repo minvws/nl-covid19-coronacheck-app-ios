@@ -52,6 +52,7 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 	override func setupViews() {
 
 		super.setupViews()
+		backgroundColor = Theme.colors.viewControllerBackground
 		headerImageView.backgroundColor = Theme.colors.create
 		stackView.backgroundColor = Theme.colors.create
 	}
