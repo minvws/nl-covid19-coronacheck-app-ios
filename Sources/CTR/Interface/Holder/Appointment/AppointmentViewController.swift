@@ -11,7 +11,7 @@ class AppointmentViewController: BaseViewController {
 
 	private let viewModel: AppointmentViewModel
 
-	let sceneView = AppointmentView()
+	let sceneView = HeaderTitleMessageButtonView()
 
 	// MARK: Initializers
 
@@ -47,7 +47,11 @@ class AppointmentViewController: BaseViewController {
 		}
 
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
-		viewModel.$image.binding = { [weak self] in self?.sceneView.headerImage = $0 }
+		viewModel.$image.binding = { [weak self] in
+			self?.sceneView.headerImage = $0
+			self?.sceneView.headerImageView.backgroundColor = Theme.colors.appointment
+			self?.sceneView.stackView.backgroundColor = Theme.colors.appointment
+		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonTapped()
@@ -70,5 +74,32 @@ class AppointmentViewController: BaseViewController {
 	@objc func linkTapped() {
 
 		viewModel.linkedTapped()
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		checkImage()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.checkImage()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	func checkImage() {
+
+		if UIDevice.current.isLandscape {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

@@ -18,9 +18,10 @@ class CardView: BaseView {
 		static let messageLineHeight: CGFloat = 22
 		static let cornerRadius: CGFloat = 15
 		static let messageRatio: CGFloat = UIDevice.current.isSmallScreen ? 1 : 0.75
-		static let buttonRatio: CGFloat = 0.5
-		static let shadowRadius: CGFloat = 8
-		static let shadowOpacity: Float = 0.3
+		static let buttonRatioLandscape: CGFloat = 0.3
+		static let buttonRatioPortrait: CGFloat = 0.5
+		static let shadowRadius: CGFloat = 6
+		static let shadowOpacity: Float = 0.4
 		
 		// Margins
 		static let textMargin: CGFloat = 16.0
@@ -40,6 +41,15 @@ class CardView: BaseView {
 	let messageLabel: Label = {
 		
 		return Label(bodyMedium: nil).multiline()
+	}()
+
+	let contentView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.clipsToBounds = true
+		view.layer.cornerRadius = ViewTraits.cornerRadius
+		return view
 	}()
 
 	let gradientView: UIView = {
@@ -69,6 +79,9 @@ class CardView: BaseView {
 		view.layer.cornerRadius = ViewTraits.cornerRadius
 		return view
 	}()
+
+	var buttonWidthConstraintPortrait: NSLayoutConstraint?
+	var buttonWidthConstraintLandscape: NSLayoutConstraint?
 	
 	/// setup the views
 	override func setupViews() {
@@ -82,6 +95,7 @@ class CardView: BaseView {
 		layer.shadowOpacity = ViewTraits.shadowOpacity
 		layer.shadowOffset = .zero
 		layer.shadowRadius = ViewTraits.shadowRadius
+
 		// Cache Shadow
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
@@ -92,11 +106,13 @@ class CardView: BaseView {
 		
 		super.setupViewHierarchy()
 
-		addSubview(backgroundImageView)
-		gradientView.embed(in: self)
-		addSubview(titleLabel)
-		addSubview(messageLabel)
-		addSubview(primaryButton)
+		contentView.embed(in: self)
+		backgroundImageView.embed(in: contentView)
+		gradientView.embed(in: contentView)
+
+		contentView.addSubview(titleLabel)
+		contentView.addSubview(messageLabel)
+		contentView.addSubview(primaryButton)
 	}
 	
 	/// Setup the constraints
@@ -104,40 +120,31 @@ class CardView: BaseView {
 		
 		NSLayoutConstraint.activate([
 
-			// Background image
-			backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
 			// Primary Button
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			primaryButton.widthAnchor.constraint(
-				greaterThanOrEqualTo: widthAnchor,
-				multiplier: ViewTraits.buttonRatio
-			),
-			primaryButton.widthAnchor.constraint(
-				lessThanOrEqualTo: widthAnchor
+				lessThanOrEqualTo: contentView.widthAnchor
 			),
 			primaryButton.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
+				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.bottomMargin
 			),
 			
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
+				equalTo: contentView.topAnchor,
 				constant: ViewTraits.topMargin
 			),
 			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 			titleLabel.bottomAnchor.constraint(
@@ -147,7 +154,7 @@ class CardView: BaseView {
 			
 			// Message
 			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			messageLabel.widthAnchor.constraint(
@@ -155,10 +162,24 @@ class CardView: BaseView {
 				multiplier: ViewTraits.messageRatio
 			),
 			messageLabel.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
+				lessThanOrEqualTo: primaryButton.topAnchor,
 				constant: -ViewTraits.buttonMargin
 			)
 		])
+
+		primaryButton.setContentHuggingPriority(.defaultHigh, for: .vertical)
+
+		buttonWidthConstraintPortrait = primaryButton.widthAnchor.constraint(
+			greaterThanOrEqualTo: contentView.widthAnchor,
+			multiplier: ViewTraits.buttonRatioPortrait
+		)
+		buttonWidthConstraintPortrait?.isActive = true
+
+		buttonWidthConstraintLandscape = primaryButton.widthAnchor.constraint(
+			greaterThanOrEqualTo: contentView.widthAnchor,
+			multiplier: ViewTraits.buttonRatioLandscape
+		)
+		buttonWidthConstraintLandscape?.isActive = false
 	}
 
 	private func setupGradient() {
@@ -169,7 +190,7 @@ class CardView: BaseView {
 
 		gradientView.backgroundColor = .clear
 		let gradient = CAGradientLayer()
-		gradient.frame = gradientView.bounds
+		gradient.frame = contentView.bounds
 		// horizontal
 		gradient.startPoint = CGPoint(x: 0.0, y: 0.5)
 		gradient.endPoint = CGPoint(x: 1.0, y: 0.5)
@@ -188,6 +209,7 @@ class CardView: BaseView {
 		super.layoutSubviews()
 
 		setupGradient()
+		checkLayout()
 	}
 	
 	/// User tapped on the primary button
@@ -236,4 +258,16 @@ class CardView: BaseView {
 	
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// Check the layout
+	func checkLayout() {
+
+		if UIDevice.current.isLandscape {
+			buttonWidthConstraintLandscape?.isActive = true
+			buttonWidthConstraintPortrait?.isActive = false
+		} else {
+			buttonWidthConstraintLandscape?.isActive = false
+			buttonWidthConstraintPortrait?.isActive = true
+		}
+	}
 }

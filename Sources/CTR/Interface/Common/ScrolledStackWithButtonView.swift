@@ -74,14 +74,14 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 
 			// Footer background
-			footerGradientView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			footerGradientView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			footerGradientView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			footerGradientView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			footerGradientView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
 			footerGradientView.heightAnchor.constraint(equalToConstant: ViewTraits.gradientHeight),
 
 			// Footer background
-			footerBackground.leadingAnchor.constraint(equalTo: leadingAnchor),
-			footerBackground.trailingAnchor.constraint(equalTo: trailingAnchor),
+			footerBackground.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			footerBackground.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			footerBackground.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
@@ -99,11 +99,11 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 			NSLayoutConstraint.activate([
 
 				primaryButton.leadingAnchor.constraint(
-					equalTo: leadingAnchor,
+					equalTo: safeAreaLayoutGuide.leadingAnchor,
 					constant: ViewTraits.buttonMargin
 				),
 				primaryButton.trailingAnchor.constraint(
-					equalTo: trailingAnchor,
+					equalTo: safeAreaLayoutGuide.trailingAnchor,
 					constant: -ViewTraits.buttonMargin
 				)
 			])

@@ -5755,24 +5755,6 @@
 			};
 			name = "Ad Hoc Test";
 		};
-		231F793DEAF0CF3723D264809105B1BD /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		232125477BCBA7978A9535BC92ECCBD5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B92EFC0507CF3908DE674F5318DF9AE3 /* Pods-Holder.debug.xcconfig */;
@@ -6017,6 +5999,22 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = "Ad Hoc Test";
+		};
+		2E74EA87A35660C938E9C79DB98B76A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B97368672583B1FD033228BBDA528D0 /* Firebase.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		2ED2F37C01BBBB111BD44D4978CEE3CA /* App Store */ = {
 			isa = XCBuildConfiguration;
@@ -7090,24 +7088,6 @@
 			};
 			name = "Ad Hoc Acc";
 		};
-		6A6A201B0C92F241F2D0FD30CC3461AD /* Ad Hoc Acc */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Ad Hoc Acc";
-		};
 		6DF1F0E39B90C45E628AA470F2D969B9 /* Ad Hoc Acc */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 58A77F1EC4DFC1ABF3E3F0F31F754742 /* OHHTTPStubs.release.xcconfig */;
@@ -7493,6 +7473,23 @@
 			};
 			name = "Ad Hoc Prod";
 		};
+		82EA7B9A3B4A68C3D981AC6FD69AE06C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		830B4903872ED6B92D88179DCA94DE24 /* App Store */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -7834,23 +7831,6 @@
 			};
 			name = Release;
 		};
-		9820B7EA4A6D451A6BF5266301A0C301 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3B97368672583B1FD033228BBDA528D0 /* Firebase.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		9B8D71AA76EEDD4D926E8330E6E1311A /* App Store */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9E0584078C09761BD3A51D9E6F87E3E4 /* nanopb.release.xcconfig */;
@@ -8025,6 +8005,23 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = "Ad Hoc Prod";
+		};
+		A69C286167B20DF951ECF5F6E42DFFA2 /* App Store */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "App Store";
 		};
 		AB78A47A6BFE21A122E53E25D298340E /* Ad Hoc Prod */ = {
 			isa = XCBuildConfiguration;
@@ -8601,6 +8598,23 @@
 			};
 			name = "Ad Hoc Acc";
 		};
+		C4F80B16FE75FB68587AA9ADB161E3DC /* Ad Hoc Test */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad Hoc Test";
+		};
 		C950DB1170101C198FF57D74E006377F /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C8088F29D2A4D91970D0CEA869704BF1 /* Pods-Verifier.release.xcconfig */;
@@ -8673,6 +8687,23 @@
 			};
 			name = "Ad Hoc Acc";
 		};
+		CDD4378AE78AF6A84A7F2EEA6F5C62DD /* Ad Hoc Acc */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad Hoc Acc";
+		};
 		D0F568312C6C301232889AB8F8D03487 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BB3ED8E80A5B28E285794BDB143B198D /* Pods-Holder.release.xcconfig */;
@@ -8710,24 +8741,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
-		};
-		D146091484658DF129B8DF4FC6CE743C /* Ad Hoc Prod */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Ad Hoc Prod";
 		};
 		D1FF7A5245543B2A47D86913C374916A /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
@@ -8798,24 +8811,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = "Ad Hoc Prod";
-		};
-		DB33445016336DB25730EED4D57F1A90 /* App Store */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "App Store";
 		};
 		E160658F0B52DF5B0713814CAA032C7D /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -9225,24 +9220,6 @@
 			};
 			name = "Ad Hoc Prod";
 		};
-		F440BA20C70C41C4965CB5EF8AD006A6 /* Ad Hoc Test */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = "Ad Hoc Test";
-		};
 		F52E6CDCF343AB01226AE7210DB76BE4 /* Ad Hoc Test */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9E0584078C09761BD3A51D9E6F87E3E4 /* nanopb.release.xcconfig */;
@@ -9312,6 +9289,23 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
+		};
+		FFA654562B6B6150D08175707F2E8A36 /* Ad Hoc Prod */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BA7E9BE23752C1BF44C49E8BF1AF0AE /* Firebase.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Ad Hoc Prod";
 		};
 /* End XCBuildConfiguration section */
 
@@ -9488,12 +9482,12 @@
 		D872906D916B004185344E129B8DB294 /* Build configuration list for PBXAggregateTarget "Firebase" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6A6A201B0C92F241F2D0FD30CC3461AD /* Ad Hoc Acc */,
-				D146091484658DF129B8DF4FC6CE743C /* Ad Hoc Prod */,
-				F440BA20C70C41C4965CB5EF8AD006A6 /* Ad Hoc Test */,
-				DB33445016336DB25730EED4D57F1A90 /* App Store */,
-				9820B7EA4A6D451A6BF5266301A0C301 /* Debug */,
-				231F793DEAF0CF3723D264809105B1BD /* Release */,
+				CDD4378AE78AF6A84A7F2EEA6F5C62DD /* Ad Hoc Acc */,
+				FFA654562B6B6150D08175707F2E8A36 /* Ad Hoc Prod */,
+				C4F80B16FE75FB68587AA9ADB161E3DC /* Ad Hoc Test */,
+				A69C286167B20DF951ECF5F6E42DFFA2 /* App Store */,
+				2E74EA87A35660C938E9C79DB98B76A1 /* Debug */,
+				82EA7B9A3B4A68C3D981AC6FD69AE06C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

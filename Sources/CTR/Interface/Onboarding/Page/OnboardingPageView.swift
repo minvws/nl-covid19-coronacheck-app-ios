@@ -114,7 +114,15 @@ class OnboardingPageView: ScrolledStackView {
 		}
 	}
 
+	/// Hide the image
 	func hideImage() {
+
 		imageView.isHidden = true
+	}
+
+	/// Show the image
+	func showImage() {
+		
+		imageView.isHidden = false
 	}
 }

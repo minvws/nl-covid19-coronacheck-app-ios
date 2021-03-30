@@ -22,4 +22,10 @@ extension UIDevice {
 		let bottom = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
 		return bottom > 0
 	}
+
+	var isLandscape: Bool {
+
+		let orientation = UIApplication.shared.statusBarOrientation
+		return orientation.isLandscape
+	}
 }

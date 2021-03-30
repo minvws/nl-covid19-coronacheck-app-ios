@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseProviderView: ScrollViewWithHeader {
+class ChooseProviderView: ScrolledStackWithHeaderView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -16,11 +16,9 @@ class ChooseProviderView: ScrollViewWithHeader {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
-		static let imageRatio: CGFloat = 0.75
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 54.0
 		static let titleTopMargin: CGFloat = 34.0
 		static let messageTopMargin: CGFloat = 24.0
 		static let spacing: CGFloat = 24.0
@@ -40,7 +38,7 @@ class ChooseProviderView: ScrollViewWithHeader {
 	}()
 
 	/// The stackview for the content
-	let stackView: UIStackView = {
+	let innerStackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -55,6 +53,7 @@ class ChooseProviderView: ScrollViewWithHeader {
 
 		super.setupViews()
 		headerImageView.backgroundColor = Theme.colors.create
+		stackView.backgroundColor = Theme.colors.create
 	}
 
 	/// Setup the hierarchy
@@ -63,7 +62,7 @@ class ChooseProviderView: ScrollViewWithHeader {
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(stackView)
+		contentView.addSubview(innerStackView)
 	}
 
 	/// Setup the constraints
@@ -102,19 +101,19 @@ class ChooseProviderView: ScrollViewWithHeader {
 			),
 
 			// StackView
-			stackView.topAnchor.constraint(
+			innerStackView.topAnchor.constraint(
 				equalTo: messageLabel.bottomAnchor,
 				constant: ViewTraits.stackviewTopMargin
 			),
-			stackView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+			innerStackView.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			stackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+			innerStackView.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			stackView.bottomAnchor.constraint(
+			innerStackView.bottomAnchor.constraint(
 				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
@@ -138,5 +137,25 @@ class ChooseProviderView: ScrollViewWithHeader {
 		didSet {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
 		}
+	}
+
+	/// The header image
+	var headerImage: UIImage? {
+		didSet {
+			headerImageView.image = headerImage
+		}
+	}
+
+	/// Hide the header image
+	func hideImage() {
+
+		headerImageView.isHidden = true
+
+	}
+
+	/// Show the header image
+	func showImage() {
+
+		headerImageView.isHidden = false
 	}
 }

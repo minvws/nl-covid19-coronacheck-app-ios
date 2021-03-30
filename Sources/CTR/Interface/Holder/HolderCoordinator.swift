@@ -191,6 +191,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				maxValidity: maxValidity
 			)
 		)
+		destination.modalPresentationStyle = .fullScreen
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 

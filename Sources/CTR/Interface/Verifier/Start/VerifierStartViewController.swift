@@ -11,7 +11,7 @@ class VerifierStartViewController: BaseViewController {
 
 	private let viewModel: VerifierStartViewModel
 
-	let sceneView = VerifierStartView()
+	let sceneView = HeaderTitleMessageButtonView()
 
 	init(viewModel: VerifierStartViewModel) {
 
@@ -57,7 +57,7 @@ class VerifierStartViewController: BaseViewController {
 			}
 		}
 
-		sceneView.imageView.image = .scanStart
+		sceneView.headerImage = .scanStart
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
     }
@@ -78,5 +78,32 @@ class VerifierStartViewController: BaseViewController {
 	@objc func linkTapped() {
 
 		viewModel.linkTapped(self)
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		checkImage()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.checkImage()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	func checkImage() {
+
+		if UIDevice.current.isLandscape {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }
