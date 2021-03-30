@@ -1332,7 +1332,6 @@
 			isa = PBXGroup;
 			children = (
 				6D30870825F9121900158F74 /* AboutTestResult */,
-				6DFB8B0225DD3A2A00E7A1D8 /* About */,
 				6D5A7BF125D148E20008B904 /* Appointment */,
 				6D80114125D2BF7100D2EEAB /* ChooseProvider */,
 				6DD1158425D021D900DF6AF4 /* Dashboard */,
@@ -1725,6 +1724,7 @@
 		6DDEFB3425AEDFD500A6912A /* Interface */ = {
 			isa = PBXGroup;
 			children = (
+				6DFB8B0225DD3A2A00E7A1D8 /* About */,
 				6D92848925B5CB12009D4350 /* AppCoordinator.swift */,
 				6DE6FD5B25C16497006602AC /* AppUpdate */,
 				6D92849825B5CBC0009D4350 /* Common */,

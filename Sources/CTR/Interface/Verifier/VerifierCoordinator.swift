@@ -55,6 +55,9 @@ class VerifierCoordinator: Coordinator, Logging {
 
 	/// The remote config manager
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+
+	/// The version supplier
+	var versionSupplier = AppVersionSupplier()
 	
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
@@ -64,6 +67,9 @@ class VerifierCoordinator: Coordinator, Logging {
 	
 	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
+
+	/// The about navigation controller
+	var aboutNavigationContoller: UINavigationController?
 
 	var maxValidity: Int {
 		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
@@ -116,7 +122,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
 				delegate: self,
-				versionSupplier: AppVersionSupplier()
+				versionSupplier: versionSupplier
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
@@ -251,8 +257,14 @@ extension VerifierCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 				
 			case .about :
-				let aboutUrl = generalConfiguration.getVerifierAboutAppURL()
-				openUrl(aboutUrl, inApp: true)
+				let destination = AboutViewController(
+					viewModel: AboutViewModel(
+						versionSupplier: versionSupplier,
+						flavor: AppFlavor.flavor
+					)
+				)
+				aboutNavigationContoller = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationContoller
 				
 			case .privacy :
 				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
