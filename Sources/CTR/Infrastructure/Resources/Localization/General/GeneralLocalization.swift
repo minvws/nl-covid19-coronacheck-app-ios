@@ -51,4 +51,9 @@ extension String {
 
 		return Localization.string(for: "general.menu.version")
 	}
+
+	static var cancel: String {
+
+		return Localization.string(for: "general.cancel")
+	}
 }

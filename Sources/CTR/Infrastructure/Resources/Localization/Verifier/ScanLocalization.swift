@@ -23,4 +23,19 @@ extension String {
 
 		return Localization.string(for: "verifier.scan.torch.accessibility")
 	}
+
+	static var verifierScanPermissionTitle: String {
+
+		return Localization.string(for: "verifier.scan.permission.title")
+	}
+
+	static var verifierScanPermissionMessage: String {
+
+		return Localization.string(for: "verifier.scan.permission.message")
+	}
+
+	static var verifierScanPermissionSettings: String {
+
+		return Localization.string(for: "verifier.scan.permission.settings")
+	}
 }

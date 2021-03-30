@@ -6,6 +6,7 @@
  */
 
 /* MARK: - General */
+"general.cancel" = "Annuleer";
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
 "general.next" = "Volgende";
