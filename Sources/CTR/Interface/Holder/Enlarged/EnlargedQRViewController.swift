@@ -15,6 +15,8 @@ class EnlargedQRViewController: BaseViewController {
 
 	var screenCaptureInProgress = false
 
+	var previousOrientation: UIInterfaceOrientation?
+
 	// MARK: Initializers
 
 	init(viewModel: EnlargedQRViewModel) {
@@ -27,10 +29,6 @@ class EnlargedQRViewController: BaseViewController {
 	required init?(coder: NSCoder) {
 
 		fatalError("init(coder:) has not been implemented")
-	}
-
-	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-		return .portrait
 	}
 
 	// MARK: View lifecycle
@@ -128,6 +126,9 @@ class EnlargedQRViewController: BaseViewController {
 		super.viewWillAppear(animated)
 		checkValidity()
 		sceneView.play()
+
+		previousOrientation = OrientationUtility.currentOrientation()
+		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
@@ -136,5 +137,6 @@ class EnlargedQRViewController: BaseViewController {
 		viewModel.setBrightness(reset: true)
 		viewModel.validityTimer?.invalidate()
 		viewModel.validityTimer = nil
+		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 }

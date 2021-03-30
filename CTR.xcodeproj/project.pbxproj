@@ -317,6 +317,8 @@
 		6DB892FD2611AE5A00C52A7C /* SnapshotViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB892FC2611AE5A00C52A7C /* SnapshotViewControllerTests.swift */; };
 		6DB8934126122C1900C52A7C /* ScrolledStackWithHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */; };
 		6DB8934226122C1900C52A7C /* ScrolledStackWithHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */; };
+		6DB89362261301D600C52A7C /* OrientationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB89361261301D600C52A7C /* OrientationUtility.swift */; };
+		6DB89363261301D600C52A7C /* OrientationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB89361261301D600C52A7C /* OrientationUtility.swift */; };
 		6DBC2F6725EFB8BE0039AE02 /* CryptoUtilitySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */; };
 		6DBFE47A25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */; };
 		6DBFE48025D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
@@ -744,6 +746,7 @@
 		6DB892F32611AB9300C52A7C /* SnapshotViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotViewModelTests.swift; sourceTree = "<group>"; };
 		6DB892FC2611AE5A00C52A7C /* SnapshotViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotViewControllerTests.swift; sourceTree = "<group>"; };
 		6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrolledStackWithHeaderView.swift; sourceTree = "<group>"; };
+		6DB89361261301D600C52A7C /* OrientationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationUtility.swift; sourceTree = "<group>"; };
 		6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoUtilitySpy.swift; sourceTree = "<group>"; };
 		6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderLocalization.swift; sourceTree = "<group>"; };
 		6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewModel.swift; sourceTree = "<group>"; };
@@ -1290,6 +1293,7 @@
 				6D92849225B5CB96009D4350 /* Theme.swift */,
 				6D12745B25FD51CD001B9515 /* TokenValidator.swift */,
 				6DC6CCE125C2F7D100060237 /* UserDefaults.swift */,
+				6DB89361261301D600C52A7C /* OrientationUtility.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -2442,6 +2446,7 @@
 				6DD7D88425D26D3A00B97B7F /* String+Data.swift in Sources */,
 				6DD7D88525D26D3A00B97B7F /* SignatureConfiguration.swift in Sources */,
 				6DD19DC025D66DF5001FDDDC /* ScrollView.swift in Sources */,
+				6DB89363261301D600C52A7C /* OrientationUtility.swift in Sources */,
 				6DD7D88625D26D3A00B97B7F /* CardView.swift in Sources */,
 				6DFB73CC25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */,
 			);
@@ -2660,6 +2665,7 @@
 				6DC6CCF025C3039C00060237 /* String+Data.swift in Sources */,
 				6D33016425CFE72D00A98C1C /* SignatureConfiguration.swift in Sources */,
 				6D9819E125D53CC6009A96D7 /* ScrollView.swift in Sources */,
+				6DB89362261301D600C52A7C /* OrientationUtility.swift in Sources */,
 				6D27550A25D1201800164F2E /* CardView.swift in Sources */,
 				6DFB73CB25DF8D89003D6243 /* ScanInstructionsViewModel.swift in Sources */,
 			);
@@ -3560,7 +3566,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.3;
-				NETWORK_CONFIGURATION = ACC;
+				NETWORK_CONFIGURATION = Test;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;
