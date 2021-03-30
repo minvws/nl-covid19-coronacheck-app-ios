@@ -15,7 +15,6 @@ class ScrolledStackWithHeaderView: BaseView {
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 16.0
-		static let spacing: CGFloat = 32.0
 	}
 
 	/// The scrollview
@@ -27,7 +26,7 @@ class ScrolledStackWithHeaderView: BaseView {
 	}()
 
 	/// The stackview for the content
-	let outerStackView: UIStackView = {
+	let stackView: UIStackView = {
 
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -60,10 +59,10 @@ class ScrolledStackWithHeaderView: BaseView {
 
 		super.setupViewHierarchy()
 
-		outerStackView.addArrangedSubview(headerImageView)
-		outerStackView.addArrangedSubview(contentView)
+		stackView.addArrangedSubview(headerImageView)
+		stackView.addArrangedSubview(contentView)
 
-		scrollView.addSubview(outerStackView)
+		scrollView.addSubview(stackView)
 		addSubview(scrollView)
 	}
 
@@ -81,19 +80,19 @@ class ScrolledStackWithHeaderView: BaseView {
 			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
 			// Outer StackView
-			outerStackView.widthAnchor.constraint(
+			stackView.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor),
-			outerStackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			outerStackView.topAnchor.constraint(
+			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			stackView.topAnchor.constraint(
 				equalTo: scrollView.topAnchor,
 				constant: ViewTraits.topMargin
 			),
-			outerStackView.bottomAnchor.constraint(
+			stackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
 
-			contentView.widthAnchor.constraint(equalTo: outerStackView.widthAnchor)
+			contentView.widthAnchor.constraint(equalTo: stackView.widthAnchor)
 		])
 	}
 }

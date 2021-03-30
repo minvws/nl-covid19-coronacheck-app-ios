@@ -18,12 +18,10 @@ class AppointmentView: ScrolledStackWithHeaderView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
-		static let imageRatio: CGFloat = 0.75
 		static let gradientHeight: CGFloat = 30.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let buttonMargin: CGFloat = 54.0
 		static let titleTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 34.0
 		static let messageTopMargin: CGFloat = 24.0
 	}
@@ -74,7 +72,7 @@ class AppointmentView: ScrolledStackWithHeaderView {
 
 		super.setupViews()
 		headerImageView.backgroundColor = Theme.colors.appointment
-		outerStackView.backgroundColor = Theme.colors.appointment
+		stackView.backgroundColor = Theme.colors.appointment
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -246,12 +244,16 @@ class AppointmentView: ScrolledStackWithHeaderView {
 		}
 	}
 
+	/// Hide the header image
 	func hideImage() {
+
 		headerImageView.isHidden = true
 
 	}
 
+	/// Show the header image
 	func showImage() {
+
 		headerImageView.isHidden = false
 	}
 }

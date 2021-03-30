@@ -71,7 +71,7 @@ class ChooseProviderViewController: BaseViewController {
 				presentingViewController: self
 			)
 		}
-		self.sceneView.stackView.addArrangedSubview(button)
+		self.sceneView.innerStackView.addArrangedSubview(button)
 	}
 
 	/// Setup no diigid button
@@ -82,7 +82,7 @@ class ChooseProviderViewController: BaseViewController {
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)
 		label.heightAnchor.constraint(equalToConstant: 40).isActive = true
-		sceneView.stackView.addArrangedSubview(label)
+		sceneView.innerStackView.addArrangedSubview(label)
 	}
 
 	// MARK: User interaction
@@ -91,5 +91,32 @@ class ChooseProviderViewController: BaseViewController {
 	@objc func noDidiDTapped() {
 
 		viewModel.noDidiD()
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		checkImage()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.checkImage()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	func checkImage() {
+
+		if UIDevice.current.isLandscape {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }
