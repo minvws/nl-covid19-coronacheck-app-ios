@@ -14,6 +14,7 @@ class AppUpdateView: ScrolledStackWithButtonView {
 
 		// Dimensions
 		static let imageHeightPercentage: CGFloat = 0.50
+		static let topSpacerHeight: CGFloat = 60
 
 		// Margins
 		static let spacing: CGFloat = 24
@@ -51,6 +52,14 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		return Label(body: nil).multiline()
 	}()
 
+	private let topSpacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		view.isHidden = true
+		return view
+	}()
+
 	private let spacer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -75,6 +84,7 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.addArrangedSubview(messageLabel)
 
+		stackView.addArrangedSubview(topSpacer)
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
 		stackView.addArrangedSubview(spacer)
@@ -94,7 +104,9 @@ class AppUpdateView: ScrolledStackWithButtonView {
 			),
 
 			// Spacer
-			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor)
+			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor),
+
+			topSpacer.heightAnchor.constraint(equalToConstant: ViewTraits.topSpacerHeight)
 		])
 
 		setupPrimaryButton(useFullWidth: true)
@@ -127,8 +139,13 @@ class AppUpdateView: ScrolledStackWithButtonView {
 	func hideImage() {
 
 		imageView.isHidden = true
-		let view = UIView()
-		stackView.insertArrangedSubview(view, at: 0)
-		stackView.setCustomSpacing(60, after: view)
+		topSpacer.isHidden = false
+	}
+
+	/// Show the image
+	func showImage() {
+
+		imageView.isHidden = false
+		topSpacer.isHidden = true
 	}
 }
