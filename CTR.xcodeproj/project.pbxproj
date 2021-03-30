@@ -317,6 +317,8 @@
 		6DB892EC2611AA2C00C52A7C /* AppFlavor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB892EA2611AA2C00C52A7C /* AppFlavor.swift */; };
 		6DB892F42611AB9300C52A7C /* SnapshotViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB892F32611AB9300C52A7C /* SnapshotViewModelTests.swift */; };
 		6DB892FD2611AE5A00C52A7C /* SnapshotViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB892FC2611AE5A00C52A7C /* SnapshotViewControllerTests.swift */; };
+		6DB8934126122C1900C52A7C /* ScrolledStackWithHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */; };
+		6DB8934226122C1900C52A7C /* ScrolledStackWithHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */; };
 		6DBC2F6725EFB8BE0039AE02 /* CryptoUtilitySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */; };
 		6DBFE47A25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */; };
 		6DBFE48025D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
@@ -744,6 +746,7 @@
 		6DB892EA2611AA2C00C52A7C /* AppFlavor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppFlavor.swift; sourceTree = "<group>"; };
 		6DB892F32611AB9300C52A7C /* SnapshotViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotViewModelTests.swift; sourceTree = "<group>"; };
 		6DB892FC2611AE5A00C52A7C /* SnapshotViewControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotViewControllerTests.swift; sourceTree = "<group>"; };
+		6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrolledStackWithHeaderView.swift; sourceTree = "<group>"; };
 		6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoUtilitySpy.swift; sourceTree = "<group>"; };
 		6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderLocalization.swift; sourceTree = "<group>"; };
 		6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewModel.swift; sourceTree = "<group>"; };
@@ -1316,6 +1319,7 @@
 				6D7F9C9D25B6BAE80006F227 /* QRCodeView.swift */,
 				6D67D93C25D81FD700827277 /* Scan */,
 				6D82260925D7C142000B60F9 /* ScrolledStackView.swift */,
+				6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */,
 				6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */,
 				6D9819E025D53CC6009A96D7 /* ScrollView.swift */,
 				6D80114B25D2C25C00D2EEAB /* ScrollViewWithHeader.swift */,
@@ -2379,6 +2383,7 @@
 				6DB3C2FD25F12D5200B41B46 /* TokenScanLocalization.swift in Sources */,
 				6DD7D86925D26D3A00B97B7F /* GeneralLocalization.swift in Sources */,
 				6D8E66132601E1D700F79CFE /* NotificationCenter.swift in Sources */,
+				6DB8934226122C1900C52A7C /* ScrolledStackWithHeaderView.swift in Sources */,
 				6D9A58A725DFCDB400382C24 /* QRImage.swift in Sources */,
 				6DB6C72925EF6E7A00680287 /* CryptoManaging.swift in Sources */,
 				6D8E65F8260110C200F79CFE /* BannerImage.swift in Sources */,
@@ -2597,6 +2602,7 @@
 				6D9A58A625DFCDB400382C24 /* QRImage.swift in Sources */,
 				6DB6C72825EF6E7A00680287 /* CryptoManaging.swift in Sources */,
 				6D8E66122601E1D700F79CFE /* NotificationCenter.swift in Sources */,
+				6DB8934126122C1900C52A7C /* ScrolledStackWithHeaderView.swift in Sources */,
 				6DD43DA625CD23F70041D658 /* GeneralLocalization.swift in Sources */,
 				6DAE8BDF25CB242700AAF2A7 /* NetworkManager.swift in Sources */,
 				6D8E65F7260110C200F79CFE /* BannerImage.swift in Sources */,

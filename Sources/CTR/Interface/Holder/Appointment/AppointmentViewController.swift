@@ -86,15 +86,16 @@ class AppointmentViewController: BaseViewController {
 
 		coordinator.animate { [weak self] _ in
 			self?.checkImage()
+			self?.sceneView.setNeedsLayout()
 		}
 	}
 
 	func checkImage() {
 
-//		if UIDevice.current.isSmallScreen || UIDevice.current.isLandscape {
-//			sceneView.hideImage()
-//		} else {
-//			sceneView.showImage()
-//		}
+		if UIDevice.current.isLandscape {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

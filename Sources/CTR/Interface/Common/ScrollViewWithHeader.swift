@@ -36,7 +36,7 @@ class ScrollViewWithHeader: BaseView {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .scaleAspectFill
+		view.contentMode = .center
 		view.clipsToBounds = true
 		return view
 	}()
@@ -65,8 +65,8 @@ class ScrollViewWithHeader: BaseView {
 		NSLayoutConstraint.activate([
 
 			// Scroll
-			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
 
@@ -74,13 +74,9 @@ class ScrollViewWithHeader: BaseView {
 			contentView.widthAnchor.constraint( equalTo: scrollView.widthAnchor),
 
 			// Header image
-			headerImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			headerImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-			headerImageView.heightAnchor.constraint(
-				equalTo: headerImageView.widthAnchor,
-				multiplier: ViewTraits.imageRatio
-			)
+			headerImageView.widthAnchor.constraint(equalTo: widthAnchor),
+			headerImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			headerImageView.topAnchor.constraint(equalTo: contentView.topAnchor)
 		])
 	}
 
@@ -91,5 +87,15 @@ class ScrollViewWithHeader: BaseView {
 		didSet {
 			headerImageView.image = headerImage
 		}
+	}
+
+	func hideImage() {
+
+		headerImageView.isHidden = true
+	}
+
+	func showImage() {
+
+		headerImageView.isHidden = false
 	}
 }

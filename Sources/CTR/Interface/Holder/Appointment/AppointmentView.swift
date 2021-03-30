@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AppointmentView: ScrollViewWithHeader {
+class AppointmentView: ScrolledStackWithHeaderView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -74,6 +74,7 @@ class AppointmentView: ScrollViewWithHeader {
 
 		super.setupViews()
 		headerImageView.backgroundColor = Theme.colors.appointment
+		outerStackView.backgroundColor = Theme.colors.appointment
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -237,4 +238,20 @@ class AppointmentView: ScrollViewWithHeader {
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// The header image
+	var headerImage: UIImage? {
+		didSet {
+			headerImageView.image = headerImage
+		}
+	}
+
+	func hideImage() {
+		headerImageView.isHidden = true
+
+	}
+
+	func showImage() {
+		headerImageView.isHidden = false
+	}
 }
