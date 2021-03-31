@@ -9,6 +9,7 @@
 "general.cancel" = "Annuleer";
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
+"general.back" = "Terug";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";

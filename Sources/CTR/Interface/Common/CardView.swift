@@ -182,6 +182,14 @@ class CardView: BaseView {
 		buttonWidthConstraintLandscape?.isActive = false
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	private func setupGradient() {
 
 		guard let color = color else {

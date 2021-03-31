@@ -37,6 +37,7 @@ class BaseViewController: UIViewController {
 			target: nil,
 			action: nil
 		)
+		backbutton.accessibilityLabel = .back
 
 		navigationController?.navigationBar.backIndicatorImage = .backArrow
 		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
