@@ -203,6 +203,14 @@ class QRCardView: BaseView {
 		setupViewConstraintsForBottomBehaviour()
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	func setupViewConstraintsForBottomBehaviour() {
 
 		if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {

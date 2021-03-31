@@ -166,6 +166,14 @@ class ResultView: BaseView {
 		messageTopConstraint?.isActive = true
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	// MARK: Public Access
 
 	var primaryTitle: String = "" {

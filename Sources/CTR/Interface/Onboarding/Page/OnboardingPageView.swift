@@ -84,6 +84,13 @@ class OnboardingPageView: ScrolledStackView {
 		])
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		titleLabel.accessibilityTraits = .header
+	}
+
 	// MARK: Public Access
 	
 	/// The onboarding title

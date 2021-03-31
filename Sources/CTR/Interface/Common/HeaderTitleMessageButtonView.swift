@@ -162,6 +162,13 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 			)
 		])
 	}
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
 
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {

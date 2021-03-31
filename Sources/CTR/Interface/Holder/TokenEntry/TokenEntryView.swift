@@ -125,6 +125,14 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		setupPrimaryButton()
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	/// User tapped on the primary button
 	@objc func secondaryButtonTapped() {
 

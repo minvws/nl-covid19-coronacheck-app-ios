@@ -112,6 +112,14 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		setupPrimaryButton(useFullWidth: true)
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	// MARK: Public Access
 
 	/// The onboarding title
