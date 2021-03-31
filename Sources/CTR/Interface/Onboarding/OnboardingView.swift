@@ -104,6 +104,15 @@ class OnboardingView: BaseView {
 		])
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Ribbon view
+		ribbonView.isAccessibilityElement = true
+		ribbonView.accessibilityLabel = .government
+	}
+
 	override func layoutSubviews() {
 		
 		super.layoutSubviews()
