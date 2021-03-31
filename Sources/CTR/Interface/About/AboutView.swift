@@ -17,7 +17,6 @@ class AboutView: ScrolledStackView {
 		static let messageLineKerning: CGFloat = -0.41
 		static let versionLineHeight: CGFloat = 18
 		static let versionLineKerning: CGFloat = -0.24
-
 	}
 
 	/// The message label
@@ -70,5 +69,4 @@ class AboutView: ScrolledStackView {
 			)
 		}
 	}
-
 }

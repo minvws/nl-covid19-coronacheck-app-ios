@@ -20,6 +20,8 @@ class AboutViewModel {
 	/// The link of the about page
 	@Bindable private(set) var version: String
 
+	// MARK: - Initializer
+
 	/// Initializer
 	/// - Parameters:
 	///   - versionSupplier: the version supplier

@@ -12,6 +12,8 @@ class InformationViewModel {
 	/// Dismissable Delegate
 	weak var coordinator: Dismissable?
 
+	// MARK: - Bindable
+
 	/// The title of the information page
 	@Bindable private(set) var title: String
 
@@ -21,11 +23,14 @@ class InformationViewModel {
 	/// Show Bottom Close Button
 	@Bindable private(set) var showBottomCloseButton: Bool
 
+	// MARK: - Initializer
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - onboardingInfo: the container with onboarding info
-	///   - numberOfPages: the total number of pages
+	///   - title: The title of the page
+	///   - message: The message of the page
+	///   - showBottomCloseButton: True if we want to show a close button at the bottom
 	init(
 		coordinator: Dismissable,
 		title: String,
@@ -37,6 +42,8 @@ class InformationViewModel {
 		self.message = message
 		self.showBottomCloseButton = showBottomCloseButton
 	}
+
+	// MARK: - Methods
 
 	/// The user tapped on the next button
 	func dismiss() {
