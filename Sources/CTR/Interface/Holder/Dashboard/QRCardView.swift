@@ -179,19 +179,9 @@ class QRCardView: BaseView {
 				equalTo: blurView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: primaryButton.leadingAnchor,
-				constant: -10
-			),
-
 			messageLabel.topAnchor.constraint(
 				equalTo: blurView.topAnchor,
 				constant: 19
-			),
-
-			messageLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -19
 			),
 
 			// Primary Button
@@ -209,6 +199,37 @@ class QRCardView: BaseView {
 				constant: -16
 			)
 		])
+
+		setupViewConstraintsForBottomBehaviour()
+	}
+
+	func setupViewConstraintsForBottomBehaviour() {
+
+		if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
+			// Larger font size -> Show message above button
+			NSLayoutConstraint.activate([
+				messageLabel.trailingAnchor.constraint(
+					equalTo: blurView.trailingAnchor,
+					constant: -ViewTraits.margin
+				),
+				messageLabel.bottomAnchor.constraint(
+					equalTo: primaryButton.topAnchor,
+					constant: -19
+				)
+			])
+		} else {
+			// Normal font size -> Show message next to button
+			NSLayoutConstraint.activate([
+				messageLabel.trailingAnchor.constraint(
+					equalTo: primaryButton.leadingAnchor,
+					constant: -10
+				),
+				messageLabel.bottomAnchor.constraint(
+					equalTo: bottomAnchor,
+					constant: -19
+				)
+			])
+		}
 	}
 	
 	/// User tapped on the primary button
