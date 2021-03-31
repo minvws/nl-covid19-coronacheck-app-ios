@@ -94,6 +94,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The remote config manager
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 
+	/// The version supplier
+	var versionSupplier = AppVersionSupplier()
+
 	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
@@ -159,7 +162,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
 				delegate: self,
-				versionSupplier: AppVersionSupplier()
+				versionSupplier: versionSupplier
 			)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
@@ -365,16 +368,14 @@ extension HolderCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 
 			case .about :
-				let aboutUrl = generalConfiguration.getHolderAboutAppURL()
-				openUrl(aboutUrl, inApp: true)
-//				let destination = AboutViewController(
-//					viewModel: AboutViewModel(
-//						coordinator: self,
-//						configuration: generalConfiguration
-//					)
-//				)
-//				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-//				sidePanel?.selectedViewController = aboutNavigationContoller
+				let destination = AboutViewController(
+					viewModel: AboutViewModel(
+						versionSupplier: versionSupplier,
+						flavor: AppFlavor.flavor
+					)
+				)
+				aboutNavigationContoller = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationContoller
 
 			case .privacy :
 				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()

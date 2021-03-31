@@ -25,10 +25,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// - Returns: the privay policy url
 	func getPrivacyPolicyURL() -> URL
 
-	/// Get the URL for the holder about url
-	/// - Returns: the holder about url
-	func getHolderAboutAppURL() -> URL
-
 	/// Get the URL for the holder faq
 	/// - Returns: the holder faq uel
 	func getHolderFAQURL() -> URL
@@ -79,16 +75,6 @@ extension Configuration: ConfigurationGeneralProtocol {
 		guard let value = general["privacyPolicyURL"] as? String,
 			  let url = URL(string: value) else {
 			fatalError("Configuration: No Privacy Policy URL provided")
-		}
-		return url
-	}
-
-	/// Get the URL for the holder about url
-	/// - Returns: the holder about url
-	func getHolderAboutAppURL() -> URL {
-		guard let value = general["holderAboutURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Holder About URL provided")
 		}
 		return url
 	}

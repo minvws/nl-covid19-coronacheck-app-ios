@@ -43,28 +43,6 @@ class AboutViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-
-		viewModel.$link.binding = { [weak self] in
-			self?.sceneView.link($0)
-			self?.setupLink()
-		}
-	}
-
-	// MARK: Helper methods
-
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.linkLabel.addGestureRecognizer(tapGesture)
-		sceneView.linkLabel.isUserInteractionEnabled = true
-	}
-
-	// MARK: User interaction
-
-	/// User tapped on the link
-	@objc func linkTapped() {
-
-		viewModel.linkTapped()
+		viewModel.$version.binding = { [weak self] in self?.sceneView.version = $0 }
 	}
 }
