@@ -77,6 +77,6 @@ class LaunchViewControllerTests: XCTestCase {
 		XCTAssertEqual(strongSut.sceneView.title, .holderLaunchTitle, "Text should match")
 		XCTAssertEqual(strongSut.sceneView.message, .holderLaunchText, "Text should match")
 		XCTAssertNotNil(strongSut.sceneView.version, "Version should not be nil")
-		XCTAssertNotNil(strongSut.sceneView.appIcon, "Version should not be nil")
+		XCTAssertNotNil(strongSut.sceneView.appIcon, "AppIcon should not be nil")
 	}
 }
