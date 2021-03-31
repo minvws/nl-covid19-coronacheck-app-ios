@@ -59,6 +59,7 @@ class SecurityFeaturesView: BaseView, Logging {
 		addSubview(animationView)
 		addSubview(primaryButton)
 	}
+
 	/// Setup the constraints
 	override func setupViewConstraints() {
 

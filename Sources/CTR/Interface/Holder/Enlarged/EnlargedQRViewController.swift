@@ -44,6 +44,7 @@ class EnlargedQRViewController: BaseViewController {
 
 		sceneView.backgroundColor = .white
 		title = .holderEnlargedTitle
+		sceneView.accessibilityDescription = .holderEnlargedTitle
 
 		setupBinding()
 		setupListeners()
