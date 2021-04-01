@@ -133,10 +133,16 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.title = .holderTokenEntryTitle
 		sceneView.message = .holderTokenEntryText
 		sceneView.tokenEntryView.header = .holderTokenEntryTokenTitle
-		sceneView.tokenEntryView.inputField.placeholder = .holderTokenEntryTokenPlaceholder
+		sceneView.tokenEntryView.inputField.attributedPlaceholder = NSAttributedString(
+			string: .holderTokenEntryTokenPlaceholder,
+			attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+		)
 		sceneView.verificationEntryView.header = .holderTokenEntryVerificationTitle
 		sceneView.text = .holderTokenEntryVerificationInfo
-		sceneView.verificationEntryView.inputField.placeholder = .holderTokenEntryVerificationPlaceholder
+		sceneView.verificationEntryView.inputField.attributedPlaceholder = NSAttributedString(
+			string: .holderTokenEntryVerificationPlaceholder,
+			attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+		)
 		sceneView.primaryTitle = .next
 	}
 

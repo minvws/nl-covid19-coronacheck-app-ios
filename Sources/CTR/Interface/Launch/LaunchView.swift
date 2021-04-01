@@ -93,8 +93,8 @@ class LaunchView: BaseView {
 
 		super.setupViews()
 		titleLabel.textAlignment = .center
-		messageLabel.textColor = Theme.colors.launchGray
-		versionLabel.textColor = Theme.colors.launchGray
+		messageLabel.textColor = Theme.colors.grey1
+		versionLabel.textColor = Theme.colors.grey1
 		backgroundColor = Theme.colors.viewControllerBackground
 		versionLabel.textAlignment = .center
 	}

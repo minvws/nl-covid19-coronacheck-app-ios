@@ -122,7 +122,7 @@ class Button: UIButton {
 			case .tertiary:
 				backgroundColor = .clear
 				setTitleColor(Theme.colors.iosBlue, for: .normal)
-				setTitleColor(Theme.colors.tileGray, for: .disabled)
+				setTitleColor(Theme.colors.grey2, for: .disabled)
 				self.titleLabel?.font = Theme.fonts.bodyMedium
 				
 		}

@@ -86,7 +86,7 @@ class QRCardView: BaseView {
 		super.setupViews()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-		identityLabel.textColor = Theme.colors.tileGray
+		identityLabel.textColor = Theme.colors.grey2
 		backgroundColor = Theme.colors.viewControllerBackground
 		
 		// Shadow

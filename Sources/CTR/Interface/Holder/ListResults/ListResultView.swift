@@ -92,8 +92,8 @@ class ListResultView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
-		infoLabel.textColor = Theme.colors.launchGray
-		messageLabel.textColor = Theme.colors.launchGray
+		infoLabel.textColor = Theme.colors.grey1
+		messageLabel.textColor = Theme.colors.grey1
 		disclaimerButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
