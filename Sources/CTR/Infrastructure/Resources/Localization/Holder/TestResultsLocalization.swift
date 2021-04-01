@@ -94,6 +94,11 @@ extension String {
 		return Localization.string(for: "holder.testresults.alert.cancel")
 	}
 
+	static var holderTestResultsDisclaimerAccessibility: String {
+
+		return Localization.string(for: "holder.testresults.disclaimer.accessibility")
+	}
+
 	static var shortJanuary: String {
 
 		return Localization.string(for: "holder.testresults.january")
