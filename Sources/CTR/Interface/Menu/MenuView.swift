@@ -46,6 +46,15 @@ class MenuItemView: BaseView {
 		primaryButton.embed(in: self)
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		titleLabel.isAccessibilityElement = false
+
+	}
+
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
@@ -56,6 +65,14 @@ class MenuItemView: BaseView {
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
+			primaryButton.accessibilityLabel = title
+		}
+	}
 }
 
 class MenuView: ScrolledStackView {

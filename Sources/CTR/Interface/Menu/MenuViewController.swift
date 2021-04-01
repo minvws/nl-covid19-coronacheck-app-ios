@@ -40,7 +40,7 @@ class MenuViewController: BaseViewController {
 			for item in items {
 
 				let view = MenuItemView()
-				view.titleLabel.text = item.title
+				view.title = item.title
 				view.titleLabel.textColor = Theme.colors.secondary
 				view.titleLabel.font = Theme.fonts.title3Montserrat
 				view.primaryButtonTappedCommand  = { [weak self] in
@@ -55,7 +55,7 @@ class MenuViewController: BaseViewController {
 			for item in items {
 
 				let view = MenuItemView()
-				view.titleLabel.text = item.title
+				view.title = item.title
 				view.titleLabel.textColor = Theme.colors.secondary.withAlphaComponent(0.8)
 				view.titleLabel.font = Theme.fonts.subheadMontserrat
 				view.primaryButtonTappedCommand  = { [weak self] in
