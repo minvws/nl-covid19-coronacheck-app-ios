@@ -23,7 +23,7 @@ struct TestResult: Codable {
 	let negativeResult: Bool
 
 	/// The holder of the test
-	let holder: HolderTestCredentials?  // Version 2.0.
+	let holder: TestHolderIdentity?  // Version 2.0.
 
 	/// The checksum of the birth date
 	let checksum: Int? // Version 1.0

@@ -34,6 +34,7 @@ class HolderDashboardView: ScrolledStackView {
 		return view
 	}()
 
+	/// the small expired QR view
 	let expiredQRView: ExpiredQRView = {
 
 		let view = ExpiredQRView()

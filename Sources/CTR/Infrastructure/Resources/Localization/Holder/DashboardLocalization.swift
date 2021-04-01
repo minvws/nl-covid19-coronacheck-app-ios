@@ -79,9 +79,19 @@ extension String {
 		return Localization.string(for: "holder.dashboard.qr.message")
 	}
 
+	static var holderDashboardQRMessageAccessibility: String {
+
+		return Localization.string(for: "holder.dashboard.qr.message.accessibility")
+	}
+
 	static var holderDashboardQRExpiring: String {
 
 		return Localization.string(for: "holder.dashboard.qr.expiring")
+	}
+
+	static var holderDashboardQRExpiringAccessibility: String {
+
+		return Localization.string(for: "holder.dashboard.qr.expiring.accessibility")
 	}
 
 	static var holderDashboardQRExpired: String {
@@ -97,5 +107,15 @@ extension String {
 	static var minute: String {
 
 		return Localization.string(for: "holder.dashboard.qr.minute")
+	}
+
+	static var longMinutes: String {
+
+		return Localization.string(for: "holder.dashboard.qr.minutes.long")
+	}
+
+	static var longMinute: String {
+
+		return Localization.string(for: "holder.dashboard.qr.minute.long")
 	}
 }

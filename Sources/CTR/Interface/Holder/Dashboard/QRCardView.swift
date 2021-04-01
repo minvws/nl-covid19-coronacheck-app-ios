@@ -207,8 +207,12 @@ class QRCardView: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
+
 		// Title
 		titleLabel.accessibilityTraits = .header
+
+		// Time
+		timeLabel.accessibilityTraits = .updatesFrequently
 	}
 
 	func setupViewConstraintsForBottomBehaviour() {
@@ -278,6 +282,13 @@ class QRCardView: BaseView {
 				textColor: Theme.colors.dark,
 				lineHeight: 17.0
 			)
+		}
+	}
+
+	/// The accessibility string for the time
+	var timeAccessibility: String? {
+		didSet {
+			timeLabel.accessibilityLabel = timeAccessibility
 		}
 	}
 

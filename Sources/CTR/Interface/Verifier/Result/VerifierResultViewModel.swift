@@ -93,7 +93,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			showAccessAllowed()
 			allowAccess = .verified
 
-			let holder = HolderTestCredentials(
+			let holder = TestHolderIdentity(
 				firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
 				lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
 				birthDay: attributes.cryptoAttributes.birthDay ?? "",
