@@ -196,7 +196,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: HolderTestCredentials(
+				holder: TestHolderIdentity(
 					firstNameInitial: "T",
 					lastNameInitial: "T",
 					birthDay: "1",
@@ -509,25 +509,25 @@ class ListResultsViewModelTests: XCTestCase {
 	func testIdentity() {
 
 		// Given
-		let examples: [String: HolderTestCredentials] = [
-			"R P 27 JAN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
-			"R P 27 FEB": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
-			"R P 27 MAR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
-			"R P 27 APR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
-			"R P 27 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
-			"R P 27 JUN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
-			"R P 27 JUL": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
-			"R P 27 AUG": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
-			"R P 27 SEP": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
-			"R P 27 OKT": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
-			"R P 27 NOV": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
-			"R P 27 DEC": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
-			"R P 05 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
-			"R P X MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
-			"R P X X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
-			"R P 27 X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
-			"R P 27 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
-			"R P 0 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
+		let examples: [String: TestHolderIdentity] = [
+			"R P 27 JAN": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
+			"R P 27 FEB": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
+			"R P 27 MAR": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
+			"R P 27 APR": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
+			"R P 27 MEI": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
+			"R P 27 JUN": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
+			"R P 27 JUL": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
+			"R P 27 AUG": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
+			"R P 27 SEP": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
+			"R P 27 OKT": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
+			"R P 27 NOV": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
+			"R P 27 DEC": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
+			"R P 05 MEI": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
+			"R P X MEI": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
+			"R P X X": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
+			"R P 27 X": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
+			"R P 27 0": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
+			"R P 0 0": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
 		]
 
 		examples.forEach { expectedResult, holder in

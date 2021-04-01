@@ -184,7 +184,7 @@ final class Colors {
 
 	var line: UIColor { return color(for: "LineColor") }
 
-	var error: UIColor { return color(for: "ErrorColor") }
+	var utilityError: UIColor { return color(for: "UtilityError") }
 
 	var denied: UIColor { return color(for: "DeniedColor") }
 
