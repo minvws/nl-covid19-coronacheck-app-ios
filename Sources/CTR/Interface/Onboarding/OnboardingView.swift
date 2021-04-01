@@ -44,8 +44,8 @@ class OnboardingView: BaseView {
 		let view = UIPageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isUserInteractionEnabled = false
-		view.pageIndicatorTintColor = Theme.colors.gray.withAlphaComponent(0.3)
-		view.currentPageIndicatorTintColor = Theme.colors.gray
+		view.pageIndicatorTintColor = Theme.colors.tileGray
+		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 	
