@@ -165,6 +165,7 @@ class HolderDashboardViewController: BaseViewController {
 		card.primaryTitle = cardInfo.actionTitle
 		card.backgroundImage = cardInfo.image
 		card.time = cardInfo.validUntil
+		card.timeAccessibility = cardInfo.validUntilAccessibility
 		card.identity = cardInfo.holder
 		card.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.cardTapped(cardInfo.identifier)

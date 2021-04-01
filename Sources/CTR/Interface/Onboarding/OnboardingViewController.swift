@@ -104,6 +104,7 @@ class OnboardingViewController: BaseViewController {
 		// Increase the hit area, move the button 5 px to the left
 		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
+		button.accessibilityLabel = .back
 		
 		backButton = UIBarButtonItem(customView: button)
 	}

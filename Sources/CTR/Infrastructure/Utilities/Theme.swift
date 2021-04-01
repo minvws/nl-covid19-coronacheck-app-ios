@@ -184,17 +184,17 @@ final class Colors {
 
 	var line: UIColor { return color(for: "LineColor") }
 
-	var error: UIColor { return color(for: "ErrorColor") }
+	var utilityError: UIColor { return color(for: "UtilityError") }
 
 	var denied: UIColor { return color(for: "DeniedColor") }
 
 	var access: UIColor { return color(for: "AccessColor") }
 
-	var demo: UIColor { return color(for: "Demo") }
+	var grey1: UIColor { return color(for: "Grey1") }
 
-	var launchGray: UIColor { return color(for: "LaunchGray") }
+	var grey2: UIColor { return color(for: "Grey2") }
 
-	var tileGray: UIColor { return color(for: "TileGreyColor") }
+	var grey4: UIColor { return color(for: "Grey4") }
 
 	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
 

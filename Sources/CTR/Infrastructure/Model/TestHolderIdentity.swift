@@ -8,7 +8,7 @@
 import Foundation
 
 /// The credentials of the the holder of the test
-struct HolderTestCredentials: Codable {
+struct TestHolderIdentity: Codable {
 
 	/// The first letter of the first name
 	let firstNameInitial: String
@@ -23,7 +23,7 @@ struct HolderTestCredentials: Codable {
 	let birthMonth: String
 }
 
-extension HolderTestCredentials {
+extension TestHolderIdentity {
 
 	/// Map the identity of the holder
 	/// - Parameter months: the months

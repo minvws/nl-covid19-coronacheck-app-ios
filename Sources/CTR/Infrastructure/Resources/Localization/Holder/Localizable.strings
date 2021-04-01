@@ -9,12 +9,14 @@
 "general.cancel" = "Annuleer";
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
+"general.back" = "Terug";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
 "general.error.title" = "Er ging iets mis";
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 "general.menu.version" = "App versie %@ (%@)";
+"general.government" = "Rijksoverheid";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -80,10 +82,14 @@
 "holder.dashboard.qr.action" = "Bekijk QR";
 "holder.dashboard.qr.subtitle" = "Laat QR-code zien bij ingang";
 "holder.dashboard.qr.message" = "Geldig tot %@";
+"holder.dashboard.qr.message.accessibility" = "Geldig tot %@ %@.";
 "holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>Verloopt in %@</b>";
+"holder.dashboard.qr.expiring.accessibility" = "Geldig tot %@ %@. Verloopt in %@";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
+"holder.dashboard.qr.minute.long" = "minuut";
+"holder.dashboard.qr.minutes.long" = "minuten";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Schermafbeelding is geen geldig toegangsbewijs";

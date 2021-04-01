@@ -55,7 +55,7 @@ class VerifierResultViewController: BaseViewController {
 
 			} else if $0 == .demo {
 				self?.sceneView.imageView.image = .access
-				self?.sceneView.backgroundColor = Theme.colors.demo
+				self?.sceneView.backgroundColor = Theme.colors.grey4
 			} else {
 				self?.sceneView.imageView.image = .denied
 				self?.sceneView.backgroundColor = Theme.colors.denied

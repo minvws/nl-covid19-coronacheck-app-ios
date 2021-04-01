@@ -253,8 +253,8 @@
 		6D9D3A9425FA28A50031DA5D /* TestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9225FA28A50031DA5D /* TestProvider.swift */; };
 		6D9D3A9925FA28E00031DA5D /* TestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9825FA28E00031DA5D /* TestResult.swift */; };
 		6D9D3A9A25FA28E00031DA5D /* TestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9825FA28E00031DA5D /* TestResult.swift */; };
-		6D9D3A9F25FA28F80031DA5D /* HolderTestCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9E25FA28F80031DA5D /* HolderTestCredentials.swift */; };
-		6D9D3AA025FA28F80031DA5D /* HolderTestCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9E25FA28F80031DA5D /* HolderTestCredentials.swift */; };
+		6D9D3A9F25FA28F80031DA5D /* TestHolderIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9E25FA28F80031DA5D /* TestHolderIdentity.swift */; };
+		6D9D3AA025FA28F80031DA5D /* TestHolderIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3A9E25FA28F80031DA5D /* TestHolderIdentity.swift */; };
 		6D9D3AA525FA29260031DA5D /* RequestToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3AA425FA29260031DA5D /* RequestToken.swift */; };
 		6D9D3AA625FA29260031DA5D /* RequestToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3AA425FA29260031DA5D /* RequestToken.swift */; };
 		6D9D3AAB25FA29410031DA5D /* TestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D9D3AAA25FA29410031DA5D /* TestState.swift */; };
@@ -714,7 +714,7 @@
 		6D9A58A525DFCDB400382C24 /* QRImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRImage.swift; sourceTree = "<group>"; };
 		6D9D3A9225FA28A50031DA5D /* TestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProvider.swift; sourceTree = "<group>"; };
 		6D9D3A9825FA28E00031DA5D /* TestResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestResult.swift; sourceTree = "<group>"; };
-		6D9D3A9E25FA28F80031DA5D /* HolderTestCredentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderTestCredentials.swift; sourceTree = "<group>"; };
+		6D9D3A9E25FA28F80031DA5D /* TestHolderIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestHolderIdentity.swift; sourceTree = "<group>"; };
 		6D9D3AA425FA29260031DA5D /* RequestToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestToken.swift; sourceTree = "<group>"; };
 		6D9D3AAA25FA29410031DA5D /* TestState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestState.swift; sourceTree = "<group>"; };
 		6D9D3AB025FA29630031DA5D /* TestResultWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestResultWrapper.swift; sourceTree = "<group>"; };
@@ -1809,7 +1809,7 @@
 				6D1E33AA25E633E80097E574 /* Animation.swift */,
 				6DB892EA2611AA2C00C52A7C /* AppFlavor.swift */,
 				6DDEFB4025AF13D000A6912A /* Coordinator.swift */,
-				6D9D3A9E25FA28F80031DA5D /* HolderTestCredentials.swift */,
+				6D9D3A9E25FA28F80031DA5D /* TestHolderIdentity.swift */,
 				6DD9395425BD924F0026F071 /* HTTP.swift */,
 				6D164D7D25F37FF500A86409 /* LaunchState.swift */,
 				6D8E66112601E1D700F79CFE /* NotificationCenter.swift */,
@@ -2309,7 +2309,7 @@
 				6D42BECB25F3A6B6005E628E /* InternetRequiredLocalization.swift in Sources */,
 				6D164D7F25F37FF500A86409 /* LaunchState.swift in Sources */,
 				6D9819F425D54FBA009A96D7 /* TokenEntryViewController.swift in Sources */,
-				6D9D3AA025FA28F80031DA5D /* HolderTestCredentials.swift in Sources */,
+				6D9D3AA025FA28F80031DA5D /* TestHolderIdentity.swift in Sources */,
 				6DD7D83925D26D3A00B97B7F /* Button.swift in Sources */,
 				6D18FBC925DAAECB0041770B /* StartLocalization.swift in Sources */,
 				6DD7D83A25D26D3A00B97B7F /* VerifierStartViewController.swift in Sources */,
@@ -2528,7 +2528,7 @@
 				6D42BECA25F3A6B6005E628E /* InternetRequiredLocalization.swift in Sources */,
 				6D164D7E25F37FF500A86409 /* LaunchState.swift in Sources */,
 				6D6777DA25CD60FC00F6F2D1 /* OnboardingViewController.swift in Sources */,
-				6D9D3A9F25FA28F80031DA5D /* HolderTestCredentials.swift in Sources */,
+				6D9D3A9F25FA28F80031DA5D /* TestHolderIdentity.swift in Sources */,
 				6D164D5925F3758700A86409 /* LaunchLocalization.swift in Sources */,
 				6DBFE49325D2DB7A00B3D006 /* ProofManager.swift in Sources */,
 				6D92849D25B5CBC0009D4350 /* Button.swift in Sources */,

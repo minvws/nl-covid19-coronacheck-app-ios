@@ -37,6 +37,11 @@ extension String {
 		return Localization.string(for: "general.previous")
 	}
 
+	static var back: String {
+
+		return Localization.string(for: "general.back")
+	}
+
 	static var errorTitle: String {
 
 		return Localization.string(for: "general.error.title")
@@ -55,5 +60,10 @@ extension String {
 	static var cancel: String {
 
 		return Localization.string(for: "general.cancel")
+	}
+
+	static var government: String {
+
+		return Localization.string(for: "general.government")
 	}
 }

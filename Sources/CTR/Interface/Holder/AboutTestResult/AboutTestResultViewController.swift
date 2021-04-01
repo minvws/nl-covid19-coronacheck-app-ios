@@ -51,6 +51,7 @@ class AboutTestResultViewController: BaseViewController {
 
 	func setupContent() {
 		let title = Label(title1: .holderAboutTestResultsTitle, montserrat: true).multiline()
+		title.accessibilityTraits = .header
 		self.sceneView.stackView.addArrangedSubview(title)
 		self.sceneView.stackView.setCustomSpacing(24, after: title)
 

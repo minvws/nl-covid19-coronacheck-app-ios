@@ -20,6 +20,7 @@ class BaseView: UIView {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+		setupAccessibility()
 	}
 
 	/// Required initializer
@@ -31,6 +32,7 @@ class BaseView: UIView {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+		setupAccessibility()
 	}
 
 	/// Setup all the views
@@ -47,6 +49,12 @@ class BaseView: UIView {
 
 	/// Setup all the constraints
 	func setupViewConstraints() {
+
+		// Base view doesn't need to do any setup
+	}
+
+	/// Setup all the accessibility traits
+	func setupAccessibility() {
 
 		// Base view doesn't need to do any setup
 	}

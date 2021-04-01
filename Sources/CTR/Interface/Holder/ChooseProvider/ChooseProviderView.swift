@@ -121,6 +121,14 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 		])
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	// MARK: Public Access
 
 	/// The title

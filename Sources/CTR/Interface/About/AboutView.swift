@@ -36,7 +36,7 @@ class AboutView: ScrolledStackView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
-		versionLabel.textColor = Theme.colors.launchGray
+		versionLabel.textColor = Theme.colors.grey1
 	}
 
 	/// Setup the hierarchy

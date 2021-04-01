@@ -86,7 +86,7 @@ class QRCardView: BaseView {
 		super.setupViews()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-		identityLabel.textColor = Theme.colors.tileGray
+		identityLabel.textColor = Theme.colors.grey2
 		backgroundColor = Theme.colors.viewControllerBackground
 		
 		// Shadow
@@ -203,6 +203,18 @@ class QRCardView: BaseView {
 		setupViewConstraintsForBottomBehaviour()
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		// Title
+		titleLabel.accessibilityTraits = .header
+
+		// Time
+		timeLabel.accessibilityTraits = .updatesFrequently
+	}
+
 	func setupViewConstraintsForBottomBehaviour() {
 
 		if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
@@ -270,6 +282,13 @@ class QRCardView: BaseView {
 				textColor: Theme.colors.dark,
 				lineHeight: 17.0
 			)
+		}
+	}
+
+	/// The accessibility string for the time
+	var timeAccessibility: String? {
+		didSet {
+			timeLabel.accessibilityLabel = timeAccessibility
 		}
 	}
 

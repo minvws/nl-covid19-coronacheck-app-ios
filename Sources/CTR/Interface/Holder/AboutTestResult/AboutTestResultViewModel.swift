@@ -41,7 +41,7 @@ class AboutTestResultViewModel: Logging {
 	/// Get a display version of the holder identity
 	/// - Parameter holder: the holder identiy
 	/// - Returns: the display version
-	func getDisplayIdentity(_ holder: HolderTestCredentials?) -> [(String, String)] {
+	func getDisplayIdentity(_ holder: TestHolderIdentity?) -> [(String, String)] {
 
 		guard let holder = holder else {
 			return []

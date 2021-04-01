@@ -275,7 +275,7 @@ class ListResultsViewModel: Logging {
 	/// Get a display version of the holder identity
 	/// - Parameter holder: the holder identiy
 	/// - Returns: the display version
-	func getDisplayIdentity(_ holder: HolderTestCredentials?) -> String {
+	func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
 
 		guard let holder = holder else {
 			return ""
