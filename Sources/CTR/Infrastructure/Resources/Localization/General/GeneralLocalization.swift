@@ -71,4 +71,9 @@ extension String {
 
 		return Localization.string(for: "general.loading")
 	}
+
+	static var notification: String {
+
+		return Localization.string(for: "general.notification")
+	}
 }

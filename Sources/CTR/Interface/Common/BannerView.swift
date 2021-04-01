@@ -124,6 +124,18 @@ class BannerView: BaseView {
 		])
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		titleLabel.accessibilityTraits = .header
+		closeButton.accessibilityLabel = .close
+		bannerImageView.accessibilityTraits = .staticText
+		bannerImageView.accessibilityLabel = .notification
+		accessibilityElements = [bannerImageView, titleLabel, messageLabel, closeButton]
+	}
+
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
