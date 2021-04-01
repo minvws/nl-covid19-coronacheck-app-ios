@@ -17,6 +17,7 @@
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
+"general.loading" = "Laden";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";

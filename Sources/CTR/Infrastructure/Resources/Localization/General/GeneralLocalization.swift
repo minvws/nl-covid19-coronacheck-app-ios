@@ -66,4 +66,9 @@ extension String {
 
 		return Localization.string(for: "general.government")
 	}
+
+	static var loading: String {
+
+		return Localization.string(for: "general.loading")
+	}
 }
