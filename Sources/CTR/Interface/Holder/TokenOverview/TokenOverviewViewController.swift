@@ -76,6 +76,7 @@ class TokenOverviewViewController: BaseViewController {
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)
 		label.heightAnchor.constraint(greaterThanOrEqualToConstant: 40).isActive = true
+		label.accessibilityTraits = .button
 		sceneView.stackView.addArrangedSubview(label)
 	}
 

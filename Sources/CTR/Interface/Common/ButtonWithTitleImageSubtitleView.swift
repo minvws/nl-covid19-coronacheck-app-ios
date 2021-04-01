@@ -133,6 +133,16 @@ class ButtonWithTitleImageSubtitle: BaseView {
 		])
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		subTitleLabel.isAccessibilityElement = false
+		disclosureView.isAccessibilityElement = false
+		iconView.isAccessibilityElement = false
+	}
+
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
@@ -154,6 +164,7 @@ class ButtonWithTitleImageSubtitle: BaseView {
 	var subtitle: String? {
 		didSet {
 			subTitleLabel.text = subtitle
+			button.accessibilityLabel = subtitle
 		}
 	}
 }
