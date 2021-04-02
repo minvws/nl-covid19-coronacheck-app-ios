@@ -97,7 +97,7 @@ class OnboardingViewController: BaseViewController {
 		button.setTitle(.previous, for: .normal)
 		button.setTitleColor(Theme.colors.dark, for: .normal)
 		button.setTitleColor(Theme.colors.gray, for: .highlighted)
-		button.titleLabel?.font = Theme.fonts.bodyBold
+		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.setImage(.backArrow, for: .normal)
 		// Add a little spacing between the image and the title, shift the tilte 5 px right
 		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)

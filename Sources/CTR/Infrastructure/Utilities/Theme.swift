@@ -68,6 +68,10 @@ class Fonts {
         font(textStyle: .body, isBold: true) // Size 17 points
     }
 
+	var bodyBoldFixed: UIFont {
+		return .boldSystemFont(ofSize: 17)
+	}
+
 	var bodySemiBold: UIFont {
 		font(textStyle: .body, isSemiBold: true) // Size 17 points
 	}
