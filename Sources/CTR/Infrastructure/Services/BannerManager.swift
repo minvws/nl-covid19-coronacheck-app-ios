@@ -42,7 +42,6 @@ class BannerManager: BannerManaging {
 		}
 		self.callback = callback
 
-		//		resetTimer()
 		if title != bannerView?.title && message != bannerView?.message {
 			bannerView?.removeFromSuperview()
 
@@ -51,15 +50,14 @@ class BannerManager: BannerManaging {
 			window.bringSubviewToFront(view)
 			bannerView = view
 			setupViewConstraints(forView: view, window: window)
-			//			animateVisible(view: view, inWindow: window)
 
 			if message != nil && callback != nil {
 				setupLink(view)
 			}
 
 			UIAccessibility.post(
-				notification: .announcement,
-				argument: title
+				notification: .screenChanged,
+				argument: bannerView
 			)
 		}
 	}

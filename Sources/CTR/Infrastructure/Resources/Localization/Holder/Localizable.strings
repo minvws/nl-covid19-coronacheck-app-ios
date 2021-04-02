@@ -17,6 +17,11 @@
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
+"general.loading" = "Bezig met laden";
+"general.notification" = "Let op!";
+"general.menu.open" = "Open zijmenu";
+"general.menu.close" = "Sluit zijmenu";
+"general.list.accessibility" = "%@ van %@";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -98,7 +103,8 @@
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
-"holder.banner.newqr.message" = "<u>Lees hier</u> welke informatie in de QR-code staat.";
+"holder.banner.newqr.message" = "Lees hier welke informatie in de QR-code staat.";
+"holder.banner.newqr.message.link" = "Lees hier";
 
 /* MARK: - Holder Appointment */
 "holder.appointment.body" = "Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatief testresultaat kan je een QR-code maken.\n\nJe QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is aan de deur.";
@@ -174,6 +180,8 @@
 "holder.testresults.october" = "OKT";
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
+"holder.testresults.disclaimer.accessibility" = "Meer informatie over testresultaten";
+
 
 /* MARK: - Holder Test Results About */
 "holder.testresults.about.title" = "Over het testresultaat";

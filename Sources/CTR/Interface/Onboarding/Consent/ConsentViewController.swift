@@ -58,8 +58,9 @@ class ConsentViewController: BaseViewController {
 
 		viewModel.$summary.binding = { [weak self] in
 
-			for item in $0 {
-				self?.sceneView.addPrivacyItem(item)
+			let total = $0.count
+			for (index, item) in $0.enumerated() {
+				self?.sceneView.addPrivacyItem(item, number: index + 1, total: total)
 			}
 		}
 	}

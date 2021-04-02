@@ -66,4 +66,29 @@ extension String {
 
 		return Localization.string(for: "general.government")
 	}
+
+	static var loading: String {
+
+		return Localization.string(for: "general.loading")
+	}
+
+	static var notification: String {
+
+		return Localization.string(for: "general.notification")
+	}
+
+	static var openMenu: String {
+
+		return Localization.string(for: "general.menu.open")
+	}
+
+	static var closeMenu: String {
+
+		return Localization.string(for: "general.menu.close")
+	}
+
+	static var listAccessibility: String {
+
+		return Localization.string(for: "general.list.accessibility")
+	}
 }
