@@ -207,6 +207,7 @@ class ResultView: BaseView {
 
 		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.dark)
 		messageLabel.attributedText = attributedUnderlined
+		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
 	/// User tapped on the primary button

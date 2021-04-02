@@ -1316,7 +1316,6 @@
 		6D92849825B5CBC0009D4350 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				6D283A4E26131DBE00E9208E /* ScrollView.swift */,
 				6D8E65FC2601130B00F79CFE /* BannerView.swift */,
 				6D92849B25B5CBC0009D4350 /* BaseView.swift */,
 				6D92849925B5CBC0009D4350 /* BaseViewController.swift */,
@@ -1339,7 +1338,9 @@
 				6D82260925D7C142000B60F9 /* ScrolledStackView.swift */,
 				6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */,
 				6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */,
+				6D283A4E26131DBE00E9208E /* ScrollView.swift */,
 				6D1E33A125E62E810097E574 /* SecurityFeaturesView.swift */,
+				6DD1159025D0228700DF6AF4 /* SidePanel */,
 				6D79C2E725DDB246005DADE2 /* TextView.swift */,
 			);
 			path = Common;
@@ -1356,7 +1357,6 @@
 				6D9284B725B5D22B009D4350 /* HolderCoordinator.swift */,
 				6DDEFB3A25AEE03B00A6912A /* Launch */,
 				6D02446225D3231B00EF8D32 /* ListResults */,
-				6DD1159025D0228700DF6AF4 /* SidePanel */,
 				6D9819EB25D54B1C009A96D7 /* TokenEntry */,
 				6D9819D525D53A5F009A96D7 /* TokenOverview */,
 				6D67D91925D7F44700827277 /* TokenScan */,

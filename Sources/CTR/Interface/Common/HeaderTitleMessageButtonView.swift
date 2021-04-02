@@ -230,6 +230,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 			with: Theme.colors.iosBlue
 		)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
+		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
 	/// The title of the primary button

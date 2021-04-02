@@ -70,7 +70,7 @@ class MenuViewController: BaseViewController {
 			self?.sceneView.bottomText = $0
 		}
 
-		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .close)
+		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .closeMenu)
 	}
 
 	override func viewDidAppear(_ animated: Bool) {

@@ -50,7 +50,7 @@ class MenuItemView: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-
+		
 		titleLabel.isAccessibilityElement = false
 
 	}

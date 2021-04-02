@@ -39,7 +39,7 @@ class CustomSidePanelController: SidePanelController {
 				action: #selector(showSidePanel))
 			navItem.leftBarButtonItem = button
             navItem.leftBarButtonItem?.accessibilityIdentifier = "OpenMenuButton"
-			navItem.leftBarButtonItem?.accessibilityLabel = .close
+			navItem.leftBarButtonItem?.accessibilityLabel = .openMenu
 		}
 		super.updateSelectedViewcontroller()
 	}

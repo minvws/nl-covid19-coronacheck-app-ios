@@ -205,6 +205,7 @@ class ConsentView: BaseView {
 
 		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
+		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
 	var consent: String? {
@@ -215,7 +216,7 @@ class ConsentView: BaseView {
 
 	/// Add a privacy item
 	/// - Parameter text: the privacy text
-	func addPrivacyItem(_ text: String) {
+	func addPrivacyItem(_ text: String, number: Int, total: Int) {
 
 		let label = Label(body: nil, textColor: Theme.colors.dark).multiline()
 		label.attributedText = .makeFromHtml(
@@ -223,6 +224,7 @@ class ConsentView: BaseView {
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
+		label.accessibilityHint = String(format: .listAccessibility, "\(number)", "\(total)")
 
 		let stack = HStack(
 			spacing: 16,
