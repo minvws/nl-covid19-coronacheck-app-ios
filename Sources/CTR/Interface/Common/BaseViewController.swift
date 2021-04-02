@@ -44,7 +44,7 @@ class BaseViewController: UIViewController {
 
 		backbutton.setTitleTextAttributes(
 			[
-				NSAttributedString.Key.font: Theme.fonts.bodyBold,
+				NSAttributedString.Key.font: Theme.fonts.bodyBoldFixed,
 				NSAttributedString.Key.foregroundColor: Theme.colors.dark
 			],
 			for: .normal
