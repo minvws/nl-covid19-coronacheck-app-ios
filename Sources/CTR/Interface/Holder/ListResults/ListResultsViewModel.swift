@@ -152,12 +152,14 @@ class ListResultsViewModel: Logging {
 
 	/// Formatter to parse
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
+
 		let dateFormatter = ISO8601DateFormatter()
 		return dateFormatter
 	}()
 
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
+
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
 		dateFormatter.locale = Locale(identifier: "nl_NL")
@@ -264,6 +266,7 @@ class ListResultsViewModel: Logging {
 				reportAlreadyDone()
 			case .notNegative, .tooOld, .tooNew:
 
+				// Todo: Replace this with specific error messages.
 				reportNoTestResult()
 			default:
 				
