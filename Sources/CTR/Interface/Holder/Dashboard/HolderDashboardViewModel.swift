@@ -190,7 +190,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 		guard let credential = cryptoManager?.readCredential() else {
 			qrCard = nil
-			showExpiredQR = false
 			validityTimer?.invalidate()
 			validityTimer = nil
 			setupCreateCard()
@@ -207,16 +206,19 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			)
 			switch proofValidator.validate(sampleTimeStamp) {
 				case let .valid(validUntilDate):
-
+					showExpiredQR = false
 					showQRMessageIsValid(validUntilDate, holder: holder)
 					startValidityTimer()
 
 				case let .expiring(validUntilDate, timeLeft):
-
+					showExpiredQR = false
 					showQRMessageIsExpiring(validUntilDate, timeLeft: timeLeft, holder: holder)
 					startValidityTimer()
 
 				case .expired:
+
+					// Clear the cache
+					cryptoManager?.removeCredential()
 
 					logDebug("Proof is no longer valid")
 					showQRMessageIsExpired()
@@ -248,8 +250,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			validUntilAccessibility: accessibiliyValidUntilString,
 			holder: holder
 		)
-
-		showExpiredQR = false
 	}
 
 	/// Show the QR message is valid, but expiring
@@ -276,9 +276,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			validUntilAccessibility: accessibiliyValidUntilString,
 			holder: holder
 		)
-
-		showExpiredQR = false
-
+		
 		// Cut off at the cut off time
 		if timeLeft < 60 {
 			validityTimer?.invalidate()
@@ -345,7 +343,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// User wants to close the expired QR
 	func closeExpiredRQ() {
 
-		cryptoManager?.removeCredential()
+		showExpiredQR = false
 		checkQRValidity()
 	}
 

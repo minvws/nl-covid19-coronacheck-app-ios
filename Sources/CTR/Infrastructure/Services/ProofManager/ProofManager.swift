@@ -51,21 +51,6 @@ class ProofManager: ProofManaging, Logging {
 		}
 	}
 
-	/// Structure to hold birthday data
-	private struct BirthdayData: Codable {
-
-		/// The birthdate
-		var birthdate: Date?
-
-		/// The checksum of the birthdate
-		var checksum: Int?
-
-		/// Empty crypto data
-		static var empty: BirthdayData {
-			return BirthdayData(birthdate: nil, checksum: nil)
-		}
-	}
-
 	/// Array of constants
 	private struct Constants {
 		static let keychainService = "ProofManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
@@ -88,6 +73,8 @@ class ProofManager: ProofManaging, Logging {
 	/// Initializer
 	required init() {
 		// Required by protocol
+
+		removeTestWrapper()
 	}
 
 	/// Get the providers
@@ -255,27 +242,23 @@ class ProofManager: ProofManaging, Logging {
 		99996 - Session key no longer valid
 		*/
 
+		removeTestWrapper()
 		do {
 			let ismError = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
 			switch ismError.code {
 				case 99991:
-					removeTestWrapper()
 					oncompletion(SignedTestResultState.tooNew)
 
 				case 99992:
-					removeTestWrapper()
 					oncompletion(SignedTestResultState.tooOld)
 
 				case 99993:
-					removeTestWrapper()
 					oncompletion(SignedTestResultState.notNegative)
 
 				case 99994:
-					removeTestWrapper()
 					oncompletion(SignedTestResultState.alreadySigned)
 
 				case 99995:
-					removeTestWrapper()
 					oncompletion(SignedTestResultState.unknown(nil))
 
 				default:
@@ -285,7 +268,6 @@ class ProofManager: ProofManaging, Logging {
 			// Success, no error!
 			cryptoManager.setTestProof(data)
 			cryptoManager.createCredential()
-			removeTestWrapper()
 			oncompletion(SignedTestResultState.valid)
 		}
 	}
