@@ -64,7 +64,7 @@ class VerifyResultViewControllerTests: XCTestCase {
 	// MARK: - Tests
 	
 	/// Test all the demo content
-	func testDemo() {
+	func testDemo() throws {
 		
 		// Given
 		viewModel?.attributes = Attributes(
@@ -86,10 +86,7 @@ class VerifyResultViewControllerTests: XCTestCase {
 		viewModel?.checkAttributes()
 		
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDemoTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDemoMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
@@ -97,7 +94,7 @@ class VerifyResultViewControllerTests: XCTestCase {
 	}
 	
 	/// Test all the denied content
-	func testDenied() {
+	func testDenied() throws {
 		
 		// Given
 		viewModel?.attributes = Attributes(
@@ -119,17 +116,14 @@ class VerifyResultViewControllerTests: XCTestCase {
 		viewModel?.checkAttributes()
 		
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.imageView.image, .denied, "Image should match")
 	}
 	
 	/// Test all the denied content
-	func testDenied48hours() {
+	func testDenied48hours() throws {
 		
 		// Given
 		let timeStamp48HoursAgo = Date().timeIntervalSince1970 - (48 * 60 * 60) - 40
@@ -152,17 +146,14 @@ class VerifyResultViewControllerTests: XCTestCase {
 		viewModel?.checkAttributes()
 		
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.imageView.image, .denied, "Image should match")
 	}
 	
 	/// Test all the verified content
-	func testVerified() {
+	func testVerified() throws {
 		
 		// Given
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
@@ -186,10 +177,7 @@ class VerifyResultViewControllerTests: XCTestCase {
 		viewModel?.checkAttributes()
 		
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .verifierResultAccessTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")

@@ -67,7 +67,7 @@ class DashboardViewModelTests: XCTestCase {
 	}
 
 	/// Test all the default content
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -87,16 +87,13 @@ class DashboardViewModelTests: XCTestCase {
 		XCTAssertEqual(sut?.expiredTitle, .holderDashboardQRExpired, "QR Expired title should match")
 		XCTAssertNotNil(sut?.appointmentCard, "The appointment card should not be nil")
 		XCTAssertNotNil(sut?.createCard, "The create card should not be nil")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showExpiredQR, "Expired QR should not be shown")
 		XCTAssertFalse(strongSut.hideForCapture, "Hide QR should not be shown")
 	}
 
 	/// Test the validity of the credential without credential
-	func testValidityNoCredential() {
+	func testValidityNoCredential() throws {
 
 		// Given
 		cryptoManagerSpy.crypoAttributes = nil
@@ -105,10 +102,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertNil(strongSut.qrCard, "Valid QR should not be shown")
@@ -118,7 +112,7 @@ class DashboardViewModelTests: XCTestCase {
 	}
 
 	/// Test the validity of the credential with expired credential
-	func testValidityCredentialExpired() {
+	func testValidityCredentialExpired() throws {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
@@ -138,10 +132,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
 		XCTAssertNil(strongSut.validityTimer, "The timer should be nil")
@@ -152,7 +143,7 @@ class DashboardViewModelTests: XCTestCase {
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValid() {
+	func testValidityCredentialValid() throws {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
@@ -174,10 +165,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertNotNil(strongSut.qrCard, "Subtitle should be nil")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")

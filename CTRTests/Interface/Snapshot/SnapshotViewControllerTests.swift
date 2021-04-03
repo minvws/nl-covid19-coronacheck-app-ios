@@ -48,7 +48,7 @@ class SnapshotViewControllerTests: XCTestCase {
 	// MARK: Test
 
 	/// Test all the content without consent
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -56,11 +56,7 @@ class SnapshotViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .holderLaunchTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.appIcon, .holderAppIcon, "Icon should match")
 	}

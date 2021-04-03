@@ -24,7 +24,7 @@ class AboutViewModelTests: XCTestCase {
 	// MARK: Tests
 
 	/// Test the initializer for the holder
-	func testInitHolder() {
+	func testInitHolder() throws {
 
 		// Given
 
@@ -35,18 +35,14 @@ class AboutViewModelTests: XCTestCase {
 		)
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.title, .holderAboutTitle, "Title should match")
 		XCTAssertEqual(strongSut.message, .holderAboutText, "Message should match")
 		XCTAssertTrue(strongSut.version.contains("testInitHolder"), "Version should match")
 	}
 
 	/// Test the initializer for the verifier
-	func testInitVerifier() {
+	func testInitVerifier() throws {
 
 		// Given
 
@@ -57,11 +53,7 @@ class AboutViewModelTests: XCTestCase {
 		)
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.title, .verifierAboutTitle, "Title should match")
 		XCTAssertEqual(strongSut.message, .verifierAboutText, "Message should match")
 		XCTAssertFalse(strongSut.version.contains("testInitVerifier"), "Version should match") // verifier version not in target

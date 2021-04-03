@@ -45,7 +45,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test all the default content
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -59,10 +59,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showValidQR, "Valid QR should not be shown")
 		XCTAssertFalse(strongSut.hideForCapture, "Hide QR should not be shown")
 	}
@@ -109,7 +106,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValid() {
+	func testValidityCredentialValid() throws {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
@@ -131,10 +128,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
 		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
@@ -143,7 +137,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 	}
 
 	/// Test taking a screenshot
-	func testScreenshot() {
+	func testScreenshot() throws {
 
 		// Given
 
@@ -155,10 +149,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showScreenshotWarning, "Valid QR should be shown")
 	}
 }

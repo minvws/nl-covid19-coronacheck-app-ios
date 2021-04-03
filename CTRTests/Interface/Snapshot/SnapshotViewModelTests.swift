@@ -28,7 +28,7 @@ class SnapshotViewModelTests: XCTestCase {
 	// MARK: Tests
 
 	/// Test the initializer for the holder
-	func testInitHolder() {
+	func testInitHolder() throws {
 
 		// Given
 
@@ -39,10 +39,7 @@ class SnapshotViewModelTests: XCTestCase {
 		)
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.title, .holderLaunchTitle, "Title should match")
 		XCTAssertEqual(strongSut.appIcon, .holderAppIcon, "Icon should match")
 		XCTAssertTrue(strongSut.version.contains("1.0.0"))
@@ -50,7 +47,7 @@ class SnapshotViewModelTests: XCTestCase {
 	}
 
 	/// Test the initializer for the verifier
-	func testInitVerifier() {
+	func testInitVerifier() throws {
 
 		// Given
 
@@ -61,10 +58,7 @@ class SnapshotViewModelTests: XCTestCase {
 		)
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.title, .verifierLaunchTitle, "Title should match")
 		XCTAssertEqual(strongSut.appIcon, .verifierAppIcon, "Icon should match")
 	}
