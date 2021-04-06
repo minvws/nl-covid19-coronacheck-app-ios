@@ -11,19 +11,19 @@ import Foundation
 enum SignedTestResultState {
 
 	/// The test was already signed before (code 99994)
-	case alreadySigned
+	case alreadySigned(SignedTestResultErrorResponse)
 
 	/// The test was not negative (code 99993)
-	case notNegative
+	case notNegative(SignedTestResultErrorResponse)
 
 	/// The test was in future (code 99991)
-	case tooNew
+	case tooNew(SignedTestResultErrorResponse)
 
 	/// The test is too old (code 99992)
-	case tooOld
+	case tooOld(SignedTestResultErrorResponse)
 
 	/// The state is unknown
-	case unknown(Error?)
+	case unknown(SignedTestResultErrorResponse)
 
 	/// The signed test result is valid
 	case valid

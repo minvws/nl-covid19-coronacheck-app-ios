@@ -40,6 +40,7 @@ class ListResultsViewModel: Logging {
 	@Bindable private(set) var recentHeader: String
 	@Bindable var showAlert: Bool = false
 	@Bindable var showError: Bool = false
+	@Bindable var errorMessage: String?
 	@Bindable var listItem: ListResultItem?
 	@Bindable var showProgress: Bool = false
 
@@ -71,7 +72,7 @@ class ListResultsViewModel: Logging {
 			switch wrapper.status {
 				case .complete:
 					if let result = wrapper.result, result.negativeResult {
-						investigate(result)
+						reportTestResult(result)
 					} else {
 						reportNoTestResult()
 					}
@@ -81,26 +82,6 @@ class ListResultsViewModel: Logging {
 					break
 			}
 		} else {
-			reportNoTestResult()
-		}
-	}
-
-	/// Investigate the result
-	/// - Parameter testResult: the test result
-	private func investigate(_ testResult: TestResult) {
-
-		var valid = false
-		let now = Date().timeIntervalSince1970
-		let validity = TimeInterval(maxValidity * 60 * 60)
-		if let sampleDate = parseDateFormatter.date(from: testResult.sampleDate) {
-			let sampleTimeStamp = sampleDate.timeIntervalSince1970
-			if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
-				valid = true
-				reportTestResult(testResult)
-			}
-		}
-
-		if !valid {
 			reportNoTestResult()
 		}
 	}
@@ -264,14 +245,18 @@ class ListResultsViewModel: Logging {
 			case .alreadySigned:
 
 				reportAlreadyDone()
-			case .notNegative, .tooOld, .tooNew:
+			case .notNegative:
 
-				// Todo: Replace this with specific error messages.
 				reportNoTestResult()
-			default:
-				
-				logError("handleTestProofsResponse: unknown state: \(state)")
-				showError = true
+
+			case let .tooOld(signedTestResultErrorResponse):
+				errorMessage = String(format: .technicalErrorCustom, "\(signedTestResultErrorResponse.code)")
+
+			case let .tooNew(signedTestResultErrorResponse):
+				errorMessage = String(format: .technicalErrorCustom, "\(signedTestResultErrorResponse.code)")
+
+			case let .unknown(signedTestResultErrorResponse):
+				errorMessage = String(format: .technicalErrorCustom, "\(signedTestResultErrorResponse.code)")
 		}
 	}
 

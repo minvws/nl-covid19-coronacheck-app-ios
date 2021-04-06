@@ -247,22 +247,19 @@ class ProofManager: ProofManaging, Logging {
 			let ismError = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
 			switch ismError.code {
 				case 99991:
-					oncompletion(SignedTestResultState.tooNew)
+					oncompletion(SignedTestResultState.tooNew(ismError))
 
 				case 99992:
-					oncompletion(SignedTestResultState.tooOld)
+					oncompletion(SignedTestResultState.tooOld(ismError))
 
 				case 99993:
-					oncompletion(SignedTestResultState.notNegative)
+					oncompletion(SignedTestResultState.notNegative(ismError))
 
 				case 99994:
-					oncompletion(SignedTestResultState.alreadySigned)
-
-				case 99995:
-					oncompletion(SignedTestResultState.unknown(nil))
+					oncompletion(SignedTestResultState.alreadySigned(ismError))
 
 				default:
-					oncompletion(SignedTestResultState.unknown(nil))
+					oncompletion(SignedTestResultState.unknown(ismError))
 			}
 		} catch {
 			// Success, no error!
