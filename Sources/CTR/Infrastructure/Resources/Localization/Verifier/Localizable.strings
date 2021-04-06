@@ -103,7 +103,6 @@
 "verifier.result.access.message" = "Controleer of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs. Lees meer.";
 "verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
-"verifier.result.demo.message" = "";
 "verifier.result.denied.title" = "Ongeldige QR-code";
 "verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs. Lees mogelijke oorzaken.";
 "verifier.result.denied.link" = "Lees mogelijke oorzaken";

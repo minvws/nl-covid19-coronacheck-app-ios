@@ -85,29 +85,34 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		guard !attributes.cryptoAttributes.isSpecimen else {
 			allowAccess = .demo
+			setHolderIdentity()
 			showAccessDemo()
 			return
 		}
 
 		if isQRTimeStampValid(now) && isSampleTimeValid(now) {
-			showAccessAllowed()
 			allowAccess = .verified
-
-			let holder = TestHolderIdentity(
-				firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
-				lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
-				birthDay: attributes.cryptoAttributes.birthDay ?? "",
-				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
-			)
-			let mapping = holder.mapIdentity(months: String.shortMonths)
-			for (index, element) in mapping.enumerated() {
-				identity.append(("", element.isEmpty ? "_" : element))
-				checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
-			}
+			setHolderIdentity()
+			showAccessAllowed()
 
 		} else {
 			showAccessDenied()
 			allowAccess = .denied
+		}
+	}
+
+	func setHolderIdentity() {
+
+		let holder = TestHolderIdentity(
+			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
+			lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
+			birthDay: attributes.cryptoAttributes.birthDay ?? "",
+			birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
+		)
+		let mapping = holder.mapIdentity(months: String.shortMonths)
+		for (index, element) in mapping.enumerated() {
+			identity.append(("", element.isEmpty ? "_" : element))
+			checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
 		}
 	}
 
@@ -199,8 +204,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessDemo() {
 
 		title = .verifierResultDemoTitle
-		message =  .verifierResultDemoMessage
-		linkedMessage = nil
+		message =  .verifierResultAccessMessage
+		linkedMessage = .verifierResultAccessLink
 	}
 
 	/// Dismiss ourselves
@@ -211,16 +216,11 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	func linkTapped() {
 
-		logDebug("Tapped on link")
-
 		switch allowAccess {
-			case .verified:
+			case .verified, .demo:
 				showVerifiedInfo()
 			case .denied:
 				showDeniedInfo()
-
-			default:
-				logDebug("No link for type \(allowAccess)")
 		}
 	}
 

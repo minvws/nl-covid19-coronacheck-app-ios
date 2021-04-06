@@ -88,7 +88,7 @@ class VerifyResultViewControllerTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDemoMessage, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
 		
 	}
@@ -206,5 +206,18 @@ class VerifyResultViewControllerTests: XCTestCase {
 		
 		// Then
 		XCTAssertTrue(verifyCoordinatorDelegateSpy.displayContentCalled, "Method should be called")
+	}
+
+	/// Test the link tapped method
+	func testDebugLinkTapped() throws {
+
+		// Given
+
+		// When
+		sut?.debugLinkTapped()
+
+		// Then
+		let strongSut = try XCTUnwrap(sut)
+		XCTAssertFalse(strongSut.sceneView.debugLabel.isHidden, "View should be visible")
 	}
 }

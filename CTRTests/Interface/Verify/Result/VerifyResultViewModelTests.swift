@@ -72,7 +72,7 @@ class VerifyResultViewModelTests: XCTestCase {
 		// Then
 		XCTAssertEqual(sut?.allowAccess, .demo, "Type should be demo")
 		XCTAssertEqual(sut?.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultDemoMessage, "Message should match")
+		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
 	}
 
 	/// Func test denied

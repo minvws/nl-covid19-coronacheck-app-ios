@@ -168,10 +168,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 //					CrypoAttributes(
 //						birthDay: "27",
 //						birthMonth: "5",
-//						firstNameInitial: nil, //"R",
+//						firstNameInitial: nil, // "R",
 //						lastNameInitial: "P",
-//						sampleTime: "1615467990",
-//						testType: "PCR"
+//						sampleTime: "1617689091",
+//						testType: "PCR",
+//						specimen: "1",
+//						paperProof: "0"
 //					),
 //				unixTimeStamp: Int64(Date().timeIntervalSince1970)
 //			)
