@@ -48,7 +48,7 @@ class ConsentViewControllerTests: XCTestCase {
 	// MARK: Test
 
 	/// Test all the content without consent
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -56,11 +56,7 @@ class ConsentViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .holderConsentTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .holderConsentMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.consent, .holderConsentButtonTitle, "Consent should match")
@@ -81,7 +77,7 @@ class ConsentViewControllerTests: XCTestCase {
 	}
 
 	/// Test the user tapped on the consent button
-	func testConsentGivenTrue() {
+	func testConsentGivenTrue() throws {
 
 		// Given
 		loadView()
@@ -92,16 +88,12 @@ class ConsentViewControllerTests: XCTestCase {
 		sut?.consentValueChanged(button)
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.viewModel.isContinueButtonEnabled, "Button should be enabled")
 	}
 
 	/// Test the user tapped on the consent button
-	func testConsentGivenFalse() {
+	func testConsentGivenFalse() throws {
 
 		// Given
 		loadView()
@@ -112,11 +104,7 @@ class ConsentViewControllerTests: XCTestCase {
 		sut?.consentValueChanged(button)
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.viewModel.isContinueButtonEnabled, "Button should not be enabled")
 	}
 

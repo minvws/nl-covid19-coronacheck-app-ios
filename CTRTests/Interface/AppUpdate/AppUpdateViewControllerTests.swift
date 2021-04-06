@@ -64,14 +64,9 @@ class AppUpdateViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
-		XCTAssertEqual(strongSut.sceneView.titleLabel.text, .updateAppTitle, "Text should match")
-		XCTAssertEqual(strongSut.sceneView.messageLabel.text, "AppUpdateViewControllerTests", "Text should match")
-		XCTAssertEqual(strongSut.sceneView.primaryButton.titleLabel?.text, .updateAppButton, "Text should match")
+		XCTAssertEqual(sut?.sceneView.titleLabel.text, .updateAppTitle, "Text should match")
+		XCTAssertEqual(sut?.sceneView.messageLabel.text, "AppUpdateViewControllerTests", "Text should match")
+		XCTAssertEqual(sut?.sceneView.primaryButton.titleLabel?.text, .updateAppButton, "Text should match")
 	}
 
 	/// Test showing the alert (should happen if no url is provided)

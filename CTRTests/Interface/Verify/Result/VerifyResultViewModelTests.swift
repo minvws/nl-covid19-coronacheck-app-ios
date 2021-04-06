@@ -29,18 +29,21 @@ class VerifyResultViewModelTests: XCTestCase {
 
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			attributes: Attributes(
-				cryptoAttributes: CrypoAttributes(
-					birthDay: nil,
-					birthMonth: nil,
-					firstNameInitial: nil,
-					lastNameInitial: nil,
-					sampleTime: "test",
-					testType: "test",
-					specimen: "0",
-					paperProof: "0"
+			cryptoResults: CryptoResult(
+				attributes: Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "test",
+						testType: "test",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: 0
 				),
-				unixTimeStamp: 0
+				errorMessage: nil
 			),
 			maxValidity: 48
 		)
@@ -52,18 +55,22 @@ class VerifyResultViewModelTests: XCTestCase {
 	func testDemo() {
 
 		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "test",
-				testType: "test",
-				specimen: "1",
-				paperProof: "0"
-			),
-			unixTimeStamp: 0
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "test",
+						testType: "pcr",
+						specimen: "1",
+						paperProof: "0"
+					),
+					unixTimeStamp: 0
+				),
+			errorMessage: nil
 		)
 
 		// When
@@ -72,25 +79,29 @@ class VerifyResultViewModelTests: XCTestCase {
 		// Then
 		XCTAssertEqual(sut?.allowAccess, .demo, "Type should be demo")
 		XCTAssertEqual(sut?.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultDemoMessage, "Message should match")
+		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
 	}
 
 	/// Func test denied
 	func testDenied() {
 
 		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "test",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: 0
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "test",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: 0
+				),
+			errorMessage: nil
 		)
 
 		// When
@@ -105,21 +116,24 @@ class VerifyResultViewModelTests: XCTestCase {
 	/// Func test allowd
 	func testAllow() {
 
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
-
 		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp40SecAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: Int64(timeStamp40SecAgo)
+		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp40SecAgo)
+				),
+			errorMessage: nil
 		)
 
 		// When
@@ -134,22 +148,25 @@ class VerifyResultViewModelTests: XCTestCase {
 	/// Func test allowed, qr time just within the grace period
 	func testAllowWithInGracePeriod() {
 
+		// Given
 		let timeStamp175SecFromNow = Date().timeIntervalSince1970 + 175 // QR Time
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40 // Sample Time
-
-		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp40SecAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: Int64(timeStamp175SecFromNow)
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp175SecFromNow)
+				),
+			errorMessage: nil
 		)
 
 		// When
@@ -164,22 +181,25 @@ class VerifyResultViewModelTests: XCTestCase {
 	/// Func test denied, just outside the grace period
 	func testDeniedOutsideInGracePeriod() {
 
+		// Given
 		let timeStamp185SecFromNow = Date().timeIntervalSince1970 + 185 // QR Time
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40 // Sample Time
-
-		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp40SecAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: Int64(timeStamp185SecFromNow)
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp185SecFromNow)
+				),
+			errorMessage: nil
 		)
 
 		// When
@@ -194,23 +214,25 @@ class VerifyResultViewModelTests: XCTestCase {
 	/// Func test expired unit time stamp
 	func testExpiredTimeStamp() {
 
-		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
-
 		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp310SecAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: Int64(timeStamp310SecAgo)
+		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp310SecAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp310SecAgo)
+				),
+			errorMessage: nil
 		)
-
 		// When
 		sut?.checkAttributes()
 
@@ -223,21 +245,24 @@ class VerifyResultViewModelTests: XCTestCase {
 	/// Func test expired unit time stamp, but paperproof
 	func testExpiredUnixTimeStampButPaperProof() {
 
-		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
-
 		// Given
-		sut?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp310SecAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "1"
-			),
-			unixTimeStamp: Int64(timeStamp310SecAgo)
+		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp310SecAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "1"
+					),
+					unixTimeStamp: Int64(timeStamp310SecAgo)
+				),
+			errorMessage: nil
 		)
 
 		// When

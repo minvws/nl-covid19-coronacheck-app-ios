@@ -44,11 +44,6 @@ extension String {
 		return Localization.string(for: "verifier.result.demo.title")
 	}
 
-	static var verifierResultDemoMessage: String {
-
-		return Localization.string(for: "verifier.result.demo.message")
-	}
-
 	static var verifierResultButtonTitle: String {
 
 		return Localization.string(for: "verifier.result.next")

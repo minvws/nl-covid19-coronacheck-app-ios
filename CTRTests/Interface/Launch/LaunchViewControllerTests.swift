@@ -61,7 +61,7 @@ class LaunchViewControllerTests: XCTestCase {
 	// MARK: Test
 
 	/// Test all the content
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -69,11 +69,7 @@ class LaunchViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, .holderLaunchTitle, "Text should match")
 		XCTAssertEqual(strongSut.sceneView.message, .holderLaunchText, "Text should match")
 		XCTAssertNotNil(strongSut.sceneView.version, "Version should not be nil")

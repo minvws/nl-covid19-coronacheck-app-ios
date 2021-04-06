@@ -22,7 +22,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ attributes: Attributes)
+	func navigateToScanResult(_ scanResult: CryptoResult)
 
 	/// Display content
 	/// - Parameters:
@@ -161,40 +161,46 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	/// Navigate to the QR scanner
 	func navigateToScan() {
-
-//		navigateToScanResult(
-//			Attributes(
-//				cryptoAttributes:
-//					CrypoAttributes(
-//						birthDay: "27",
-//						birthMonth: "5",
-//						firstNameInitial: nil, //"R",
-//						lastNameInitial: "P",
-//						sampleTime: "1615467990",
-//						testType: "PCR"
-//					),
-//				unixTimeStamp: Int64(Date().timeIntervalSince1970)
-//			)
-//		)
-
+		
+		//		navigateToScanResult(
+		//			CryptoResult(
+		//				attributes:
+		//					Attributes(
+		//						cryptoAttributes:
+		//							CrypoAttributes(
+		//								birthDay: "27",
+		//								birthMonth: "5",
+		//								firstNameInitial: nil, // "R",
+		//								lastNameInitial: "P",
+		//								sampleTime: "1617689091",
+		//								testType: "PCR",
+		//								specimen: "1",
+		//								paperProof: "0"
+		//							),
+		//						unixTimeStamp: Int64(Date().timeIntervalSince1970)
+		//					),
+		//				errorMessage: nil
+		//			)
+		//		)
+		
 		let destination = VerifierScanViewController(
 			viewModel: VerifierScanViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager
 			)
 		)
-
+		
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 	
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ attributes: Attributes) {
+	func navigateToScanResult(_ cryptoResults: CryptoResult) {
 		
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				attributes: attributes,
+				cryptoResults: cryptoResults,
 				maxValidity: maxValidity
 			)
 		)

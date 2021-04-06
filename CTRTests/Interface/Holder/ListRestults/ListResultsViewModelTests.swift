@@ -220,7 +220,7 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test tap on the next button with an item selected
-	func testButtonTappedListItemNotNil() {
+	func testButtonTappedListItemNotNil() throws {
 
 		// Given
 		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
@@ -230,15 +230,12 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
 
 	/// Test tap on the next button with no item selected
-	func testButtonTappedListItemNil() {
+	func testButtonTappedListItemNil() throws {
 
 		// Given
 		sut?.listItem = nil
@@ -248,15 +245,12 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
 
 	/// Test tap on the close button with an item selected
-	func testDismissListItemNotNil() {
+	func testDismissListItemNotNil() throws {
 
 		// Given
 		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
@@ -266,15 +260,12 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(proofManagingSpy.fetchNonceCalled, "Step 1 should be not executed")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showAlert, "Alert should be shown")
 	}
 
 	/// Test tap on the close button with no item selected
-	func testDismissListItemNil() {
+	func testDismissListItemNil() throws {
 
 		// Given
 		sut?.listItem = nil
@@ -284,15 +275,12 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
 
 	/// Test step one with an error
-	func testStepOneIssuerPublicKeysError() {
+	func testStepOneIssuerPublicKeysError() throws {
 
 		// Given
 		let error = NSError(
@@ -305,17 +293,14 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepOne()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
-	func testStepOneIssuerPublicKeysNoError() {
+	func testStepOneIssuerPublicKeysNoError() throws {
 
 		// Given
 		proofManagingSpy.shouldIssuerPublicKeyComplete = true
@@ -324,17 +309,14 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepOne()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 2 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
 	/// Test step two with an error
-	func testStepTwoNonceError() {
+	func testStepTwoNonceError() throws {
 
 		// Given
 		let error = NSError(
@@ -347,17 +329,14 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepTwo()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
-	func testStepTwoNonceNoError() {
+	func testStepTwoNonceNoError() throws {
 
 		// Given
 		proofManagingSpy.shouldNonceComplete = true
@@ -366,17 +345,14 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepTwo()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(proofManagingSpy.fetchSignedTestResultCalled, "Step 2 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
 	/// Test step three with an error
-	func testStepThreeWithError() {
+	func testStepThreeWithError() throws {
 
 		// Given
 		let error = NSError(
@@ -389,17 +365,14 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepThree()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step three with a valid result
-	func testStepThreeWithValidResult() {
+	func testStepThreeWithValidResult() throws {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
@@ -409,10 +382,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepThree()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertFalse(strongSut.showError, "Error should be false")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
@@ -488,7 +458,7 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step two with a too old  result
-	func testStepThreeWithUnknownError() {
+	func testStepThreeWithUnknownError() throws {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
@@ -498,10 +468,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.createProofStepThree()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showError, "Error should be true")
 	}
 

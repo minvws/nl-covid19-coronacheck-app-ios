@@ -32,7 +32,7 @@ class VerifyCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 		navigateToScanCalled = true
 	}
 
-	func navigateToScanResult(_ attributes: Attributes) {
+	func navigateToScanResult(_ cryptoResult: CryptoResult) {
 
 		navigateToScanResultCalled = true
 	}

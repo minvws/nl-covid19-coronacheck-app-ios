@@ -29,13 +29,10 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 
-	func testOpenMenuItem() {
+	func testOpenMenuItem() throws {
 
 		// Given
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
 				delegate: strongSut,

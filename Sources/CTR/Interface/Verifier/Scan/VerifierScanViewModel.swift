@@ -52,25 +52,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let attributes = cryptoManager?.verifyQRMessage(message) {
-			theCoordinator?.navigateToScanResult(attributes)
-		} else {
-			theCoordinator?.navigateToScanResult(
-				Attributes(
-					cryptoAttributes:
-						CrypoAttributes(
-							birthDay: nil,
-							birthMonth: nil,
-							firstNameInitial: nil,
-							lastNameInitial: nil,
-							sampleTime: "",
-							testType: "",
-							specimen: "0",
-							paperProof: "0"
-						),
-					unixTimeStamp: 0
-				)
-			)
+		if let cryptoResults = cryptoManager?.verifyQRMessage(message) {
+			theCoordinator?.navigateToScanResult(cryptoResults)
 		}
 	}
 

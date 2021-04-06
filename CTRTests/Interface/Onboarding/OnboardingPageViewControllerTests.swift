@@ -55,7 +55,7 @@ class OnboardingPageViewControllerTests: XCTestCase {
 	// MARK: Test
 
 	/// Test all the content without consent
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -63,11 +63,7 @@ class OnboardingPageViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, page.title, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, page.message, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.image, page.image, "Image should match")
