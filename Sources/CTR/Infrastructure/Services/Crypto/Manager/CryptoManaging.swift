@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias CryptoResult = (attributes: Attributes?, errorMessage: String?)
+
 struct NonceEnvelope: Codable {
 
 	let nonce: String
@@ -121,6 +123,6 @@ protocol CryptoManaging: AnyObject {
 
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: True if valid
-	func verifyQRMessage(_ message: String) -> Attributes?
+	/// - Returns: Attributes if the QR is valid or error string if not
+	func verifyQRMessage(_ message: String) -> CryptoResult
 }

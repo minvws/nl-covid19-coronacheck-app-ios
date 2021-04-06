@@ -79,8 +79,8 @@ class CryptoManagerSpy: CryptoManaging {
 		return stoken
 	}
 
-	func verifyQRMessage(_ message: String) -> Attributes? {
-		return nil
+	func verifyQRMessage(_ message: String) -> CryptoResult {
+		return CryptoResult(nil, nil)
 	}
 
 	func removeCredential() {

@@ -190,11 +190,11 @@ class CryptoManager: CryptoManaging, Logging {
 
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: Attributes if the QR is valid
-	func verifyQRMessage(_ message: String) -> Attributes? {
+	/// - Returns: Attributes if the QR is valid or error string if not
+	func verifyQRMessage(_ message: String) -> CryptoResult {
 
 		guard hasPublicKeys() else {
-			return nil
+			return (attributes: nil, errorMessage: "no public keys")
 		}
 
 		let proofAsn1QREncoded = message.data(using: .utf8)
@@ -202,18 +202,18 @@ class CryptoManager: CryptoManaging, Logging {
 
 			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
 				self.logError("Error Proof: \(result.error)")
-				return nil
+				return (attributes: nil, errorMessage: result.error)
 			}
 
 			do {
 				let object = try JSONDecoder().decode(CrypoAttributes.self, from: attributesJson)
-				return Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds)
+				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
 			} catch {
 				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
-				return nil
+				return (attributes: nil, errorMessage: error.localizedDescription)
 			}
 		}
-		return nil
+		return (attributes: nil, errorMessage: "could not verify QR")
 	}
 
 	// MARK: - Credential

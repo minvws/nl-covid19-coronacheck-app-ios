@@ -29,18 +29,21 @@ class VerifyResultViewControllerTests: XCTestCase {
 		
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			attributes: Attributes(
-				cryptoAttributes: CrypoAttributes(
-					birthDay: nil,
-					birthMonth: nil,
-					firstNameInitial: nil,
-					lastNameInitial: nil,
-					sampleTime: "test",
-					testType: "test",
-					specimen: "0",
-					paperProof: "0"
+			cryptoResults: CryptoResult(
+				attributes: Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "test",
+						testType: "test",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: 0
 				),
-				unixTimeStamp: 0
+				errorMessage: nil
 			),
 			maxValidity: 48
 		)
@@ -67,18 +70,22 @@ class VerifyResultViewControllerTests: XCTestCase {
 	func testDemo() throws {
 		
 		// Given
-		viewModel?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "test",
-				testType: "pcr",
-				specimen: "1",
-				paperProof: "0"
-			),
-			unixTimeStamp: 0
+		viewModel?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "test",
+						testType: "pcr",
+						specimen: "1",
+						paperProof: "0"
+					),
+					unixTimeStamp: 0
+				),
+			errorMessage: nil
 		)
 		loadView()
 		
@@ -97,18 +104,22 @@ class VerifyResultViewControllerTests: XCTestCase {
 	func testDenied() throws {
 		
 		// Given
-		viewModel?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "test",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: 0
+		viewModel?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "test",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: 0
+				),
+			errorMessage: nil
 		)
 		loadView()
 		
@@ -127,18 +138,22 @@ class VerifyResultViewControllerTests: XCTestCase {
 		
 		// Given
 		let timeStamp48HoursAgo = Date().timeIntervalSince1970 - (48 * 60 * 60) - 40
-		viewModel?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp48HoursAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: Int64(Date().timeIntervalSince1970)
+		viewModel?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp48HoursAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(Date().timeIntervalSince1970)
+				),
+			errorMessage: nil
 		)
 		loadView()
 		
@@ -157,20 +172,23 @@ class VerifyResultViewControllerTests: XCTestCase {
 		
 		// Given
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
-		viewModel?.attributes = Attributes(
-			cryptoAttributes: CrypoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "\(timeStamp40SecAgo)",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "0"
-			),
-			unixTimeStamp: Int64(timeStamp40SecAgo)
+		viewModel?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "0",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp40SecAgo)
+				),
+			errorMessage: nil
 		)
-		
 		loadView()
 		
 		// When

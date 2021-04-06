@@ -30,7 +30,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	var proofValidator: ProofValidatorProtocol
 
 	/// The scanned attributes
-	var attributes: Attributes
+	var cryptoResults: (attributes: Attributes?, errorMessage: String?)
 
 	// MARK: - Bindable properties
 
@@ -59,15 +59,15 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Initialzier
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
-	///   - attributes: the decrypted attributes
+	///   - scanResults: the decrypted attributes
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		attributes: Attributes,
+		cryptoResults: (Attributes?, String?),
 		maxValidity: Int) {
 
 		self.coordinator = coordinator
-		self.attributes = attributes
+		self.cryptoResults = cryptoResults
 
 		proofValidator = ProofValidator(maxValidity: maxValidity)
 		primaryButtonTitle = .verifierResultButtonTitle
@@ -83,25 +83,32 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		let now = Date().timeIntervalSince1970
 		setDebugInformation(now)
 
-		guard !attributes.cryptoAttributes.isSpecimen else {
-			allowAccess = .demo
-			setHolderIdentity()
-			showAccessDemo()
+		guard let attributes = cryptoResults.attributes else {
+			showAccessDenied()
+			allowAccess = .denied
 			return
 		}
 
-		if isQRTimeStampValid(now) && isSampleTimeValid(now) {
+		if attributes.cryptoAttributes.isSpecimen {
+
+			allowAccess = .demo
+			setHolderIdentity(attributes)
+			showAccessDemo()
+
+		} else if isQRTimeStampValid(now, attributes: attributes) && isSampleTimeValid(now, attributes: attributes) {
+
 			allowAccess = .verified
-			setHolderIdentity()
+			setHolderIdentity(attributes)
 			showAccessAllowed()
 
 		} else {
+
 			showAccessDenied()
 			allowAccess = .denied
 		}
 	}
 
-	func setHolderIdentity() {
+	func setHolderIdentity(_ attributes: Attributes) {
 
 		let holder = TestHolderIdentity(
 			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
@@ -120,20 +127,30 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// - Parameter timestamp: the timestamp used for validation
 	func setDebugInformation(_ timestamp: TimeInterval) {
 
-		debugInfo = [
-			"QR Information",
-			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: timestamp)))",
-			"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
-			"---------------------",
-			"isSampleTimeValid: \(isSampleTimeValid(timestamp))",
-			"TTL: \(proofValidator.maxValidity) hours",
-			"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
-			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
-			"---------------------",
-			"isQRTimeStampValid: \(isQRTimeStampValid(timestamp))",
-			"TTL: \(configuration.getQRGracePeriod()) seconds",
-			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
-		]
+		if let attributes = cryptoResults.attributes {
+
+			debugInfo = [
+				"QR Information",
+				"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: timestamp)))",
+				"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
+				"---------------------",
+				"isSampleTimeValid: \(isSampleTimeValid(timestamp, attributes: attributes))",
+				"TTL: \(proofValidator.maxValidity) hours",
+				"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
+				"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
+				"---------------------",
+				"isQRTimeStampValid: \(isQRTimeStampValid(timestamp, attributes: attributes))",
+				"TTL: \(configuration.getQRGracePeriod()) seconds",
+				"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
+			]
+		} else {
+			if let message = cryptoResults.errorMessage {
+				debugInfo = [
+					"QR Information",
+					"Error: \(message)"
+				]
+			}
+		}
 	}
 
 	/// Formatter to print
@@ -149,7 +166,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Is the sample time still valid
 	/// - Parameter now: the now time stamp
 	/// - Returns: True if the sample time stamp is still valid
-	private func isSampleTimeValid(_ now: TimeInterval) -> Bool {
+	private func isSampleTimeValid(_ now: TimeInterval, attributes: Attributes) -> Bool {
 
 		if let sampleTimeStamp = TimeInterval(attributes.cryptoAttributes.sampleTime) {
 			switch proofValidator.validate(sampleTimeStamp) {
@@ -167,7 +184,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Is the QR timestamp stil valid
 	/// - Parameter now: the now timestamp
 	/// - Returns: True if the QR time stamp is still valid
-	private func isQRTimeStampValid(_ now: TimeInterval) -> Bool {
+	private func isQRTimeStampValid(_ now: TimeInterval, attributes: Attributes) -> Bool {
 
 		guard !attributes.cryptoAttributes.isPaperProof else {
 			logInfo("this is a paper proof, ignore QR Timestamp")
