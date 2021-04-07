@@ -139,6 +139,7 @@ class OnboardingViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageCtrl.view)
 		self.addChild(pageCtrl)
 		pageCtrl.didMove(toParent: self)
+		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
 	}
 	
 	/// User tapped on the button
@@ -155,8 +156,21 @@ class OnboardingViewController: BaseViewController {
 				let nextVC = viewControllers[index]
 				self.pageViewController?.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
 				currentIndex = index
+				UIAccessibility.post(notification: .screenChanged, argument: nextVC)
 			}
 		}
+	}
+
+	/// User tapped on the page control
+	@objc func valueChanged() {
+
+		let index = sceneView.pageControl.currentPage
+		let direction = index > currentIndex ?? 0 ? UIPageViewController.NavigationDirection.forward : UIPageViewController.NavigationDirection.reverse
+
+		let nextVC = viewControllers[index]
+		self.pageViewController?.setViewControllers([nextVC], direction: direction, animated: true, completion: nil)
+		currentIndex = index
+		UIAccessibility.post(notification: .screenChanged, argument: nextVC)
 	}
 }
 

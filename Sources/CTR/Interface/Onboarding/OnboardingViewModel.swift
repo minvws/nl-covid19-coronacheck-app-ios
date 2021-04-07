@@ -40,6 +40,7 @@ class OnboardingViewModel {
 				onboardingInfo: info
 			)
 		)
+		viewController.isAccessibilityElement = true
 		return viewController
 	}
 	
