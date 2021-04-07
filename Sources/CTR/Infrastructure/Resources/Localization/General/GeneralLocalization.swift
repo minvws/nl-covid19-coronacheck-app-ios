@@ -52,6 +52,11 @@ extension String {
 		return Localization.string(for: "general.error.technical.text")
 	}
 
+	static var technicalErrorCustom: String {
+
+		return Localization.string(for: "general.error.technical.custom")
+	}
+
 	static var menuVersion: String {
 
 		return Localization.string(for: "general.menu.version")

@@ -113,10 +113,12 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
+		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
+		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
+		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultTooOld", "Identifier should match")
+
 	}
 
 	/// Test the check result method with a too new test result
@@ -144,10 +146,11 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
+		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
+		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
+		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultTooNew", "Identifier should match")
 	}
 
 	/// Test the check result method with a valid test result
@@ -394,12 +397,15 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .alreadySigned
+		proofManagingSpy.signedTestResultState = SignedTestResultState.alreadySigned(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNil(sut?.errorMessage, "Error should be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsAlreadyHandledTitle, "Title should match")
 		XCTAssertEqual(sut?.message, .holderTestResultsAlreadyHandledText, "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -411,12 +417,15 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .notNegative
+		proofManagingSpy.signedTestResultState = SignedTestResultState.notNegative(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNil(sut?.errorMessage, "Error should be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -428,12 +437,15 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .tooNew
+		proofManagingSpy.signedTestResultState = SignedTestResultState.tooNew(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -445,12 +457,15 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .tooOld
+		proofManagingSpy.signedTestResultState = SignedTestResultState.tooOld(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -462,14 +477,15 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .unknown(nil)
+		proofManagingSpy.signedTestResultState = SignedTestResultState.unknown(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.showError, "Error should be true")
+		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
 	}
 
 	/// Test the display of the identity

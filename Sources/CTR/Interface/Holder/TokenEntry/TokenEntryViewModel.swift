@@ -136,7 +136,7 @@ class TokenEntryViewModel: Logging {
 
 		showProgress = true
 		proofManager?.fetchCoronaTestProviders(
-			oncompletion: { [weak self] in
+			onCompletion: { [weak self] in
 
 				self?.showProgress = false
 				self?.fetchResult(requestToken)
