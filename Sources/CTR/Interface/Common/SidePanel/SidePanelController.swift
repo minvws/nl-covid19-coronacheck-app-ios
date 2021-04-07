@@ -132,7 +132,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		}, completion: { completed  in
             guard completed else { return }
             self.overlayMainView.isHidden = true
-            self.sidePanelIsVisible = true
+            self.sidePanelIsVisible = false
 		})
 	}
 
