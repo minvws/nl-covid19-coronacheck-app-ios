@@ -57,6 +57,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.inputField.autocapitalizationType = .allCharacters
+		view.inputField.keyboardType = .numberPad
 		if #available(iOS 12.0, *) {
 			view.inputField.textContentType = .oneTimeCode
 		}
