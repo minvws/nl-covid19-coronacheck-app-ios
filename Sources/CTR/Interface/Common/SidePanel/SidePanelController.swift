@@ -35,18 +35,22 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	fileprivate weak var mainView: UIView? // hosts the selectedViewController's view
 	fileprivate weak var overlayMainView: UIView! // obscures the selectedViewController when the menu opens
 
+    var sidePanelClosedConstraints: [NSLayoutConstraint]!
+    var sidePanelRegularOpenConstraints: [NSLayoutConstraint]!
+    var sidePanelCompactOpenConstraints: [NSLayoutConstraint]!
+
     /// State
 	fileprivate var hasLeftSwipeGestureStarted = false
 	fileprivate var shouldHideSidePanelOnPanGestureCompletion = true
+    fileprivate var sidePanelIsVisible = false
 
 	open func updateSelectedViewController() {
         setupLeftBarButtonItem()
 
-        if let svc = selectedViewController,
-           let mainView = self.mainView {
-            addChild(svc)
-            mainView.addSubview(svc.view)
-            svc.didMove(toParent: self)
+        if let selectedViewController = selectedViewController, let mainView = mainView {
+            addChild(selectedViewController)
+            mainView.addSubview(selectedViewController.view)
+            selectedViewController.didMove(toParent: self)
             hideSidePanel()
         }
     }
@@ -69,9 +73,14 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
         // Add and configure sideController as a child VC:
 		addChild(sideController)
-		sideController.view.autoresizingMask = UIView.AutoresizingMask()
-		sideController.view.frame = sidePanelView.bounds
-		sidePanelView.addSubview(sideController.view)
+        sidePanelView.addSubview(sideController.view)
+        sideController.view.translatesAutoresizingMaskIntoConstraints = false
+        sidePanelView.addConstraints([
+            sideController.view.leadingAnchor.constraint(equalTo: sidePanelView.leadingAnchor),
+            sideController.view.trailingAnchor.constraint(equalTo: sidePanelView.trailingAnchor),
+            sideController.view.topAnchor.constraint(equalTo: sidePanelView.topAnchor),
+            sideController.view.bottomAnchor.constraint(equalTo: sidePanelView.bottomAnchor)
+        ])
 		sideController.didMove(toParent: self)
 
         setupGestureRecognisers()
@@ -95,6 +104,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		}
 
 		let frame = sidePanelView.frame
+        let sidePanelWidth = sidePanelView.frame.width
 		switch panGestureRecognizer.state {
 			case .changed:
 				let panTranslation = panGestureRecognizer.translation(in: self.view)
@@ -115,23 +125,28 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 	@objc func hideSidePanel() {
 
-		let frame = sidePanelView.frame
 		UIView.animate(withDuration: animationSpeed, animations: {
-			self.sidePanelView.frame = CGRect(x: 0 - frame.width, y: frame.minY, width: frame.width, height: frame.height)
+            self.updateSidePanelConstraints(isVisible: false, verticalSizeClass: self.view.traitCollection.verticalSizeClass, superview: self.view)
+
 			self.overlayMainView.alpha = 0
-		}, completion: { finished  in
-			self.overlayMainView.isHidden = true
+		}, completion: { completed  in
+            guard completed else { return }
+            self.overlayMainView.isHidden = true
+            self.sidePanelIsVisible = true
 		})
 	}
 
 	@objc func showSidePanel() {
 
-		let frame = sidePanelView.frame
 		overlayMainView.isHidden = false
 		UIView.animate(withDuration: animationSpeed, animations: {
-			self.sidePanelView.frame = CGRect(x: 0, y: frame.minY, width: frame.width, height: frame.height)
+            self.updateSidePanelConstraints(isVisible: true, verticalSizeClass: self.view.traitCollection.verticalSizeClass, superview: self.view)
+
 			self.overlayMainView.alpha = 0.1
-		})
+        }, completion: { completed in
+            guard completed else { return }
+            self.sidePanelIsVisible = true
+        })
 	}
 
 	@objc func handleSwipeGesture(_ gestureRecognizer: UISwipeGestureRecognizer) {
@@ -173,17 +188,34 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideSidePanel))
 		overlayView.addGestureRecognizer(tapGesture)
 
-		let sideView = UIView(frame: CGRect(x: 0 - sidePanelWidth, y: 0, width: sidePanelWidth, height: view.bounds.height))
-		view.addSubview(sideView)
+		let sidePanelView = UIView()
+        sidePanelView.translatesAutoresizingMaskIntoConstraints = false
+		view.addSubview(sidePanelView)
+
+        initializeSwappableSidePanelConstraints(sidePanelView: sidePanelView, superView: view)
+
+        // Set constant constraints:
+        view.addConstraints([
+            sidePanelView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            sidePanelView.heightAnchor.constraint(equalTo: view.heightAnchor)
+        ])
+
+        // Set appropriate swappable constraints:
+        updateSidePanelConstraints(isVisible: false, verticalSizeClass: view.traitCollection.verticalSizeClass, superview: view)
 
 		self.mainView = mainView
 		self.overlayMainView = overlayView
-		sidePanelView = sideView
+        self.sidePanelView = sidePanelView
 		self.view = view
 	}
 
+    // MARK: - UITraitEnvironment
 
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateSidePanelConstraints(isVisible: sidePanelIsVisible, verticalSizeClass: traitCollection.verticalSizeClass, superview: view)
+    }
 
+    // MARK: - Private functions
 
     private func setupGestureRecognisers() {
         let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
@@ -193,5 +225,50 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         panGesture.delegate = self
         self.view.addGestureRecognizer(panGesture)
+    }
+
+    /// See `updateSidePanelConstraints` - here we setup the constraints which can be swapped.
+    /// Note: takes `superview` as a parameter to prevent infinite-loop
+    /// when calling from `loadView` (when referencing `self.view`).
+    private func initializeSwappableSidePanelConstraints(sidePanelView: UIView, superView: UIView) {
+        sidePanelClosedConstraints = [
+            sidePanelView.rightAnchor.constraint(equalTo: superView.leftAnchor),
+            sidePanelView.widthAnchor.constraint(equalTo: superView.widthAnchor, multiplier: sidePanelFractionalWidthForRegularSizeClass, constant: 1)
+        ]
+
+        sidePanelRegularOpenConstraints = [
+            sidePanelView.leftAnchor.constraint(equalTo: superView.leftAnchor, constant: 0),
+            sidePanelView.widthAnchor.constraint(equalTo: superView.widthAnchor, multiplier: sidePanelFractionalWidthForRegularSizeClass, constant: 1)
+        ]
+
+        sidePanelCompactOpenConstraints = [
+            sidePanelView.leftAnchor.constraint(equalTo: superView.leftAnchor, constant: 0),
+            sidePanelView.widthAnchor.constraint(equalTo: superView.widthAnchor, multiplier: sidePanelFractionalWidthForCompactSizeClass, constant: 1)
+        ]
+    }
+
+    /// Applies one of three sets of constraints to the Side Panel to adopt on one of three layout states:
+    /// - is visible, with a regular vertical size class
+    /// - is visible, with a compact vertical size class
+    /// - is hidden
+    ///
+    /// Note: takes `superview` as a parameter to prevent infinite-loop
+    /// when calling from `loadView` (when referencing `self.view`).
+    private func updateSidePanelConstraints(isVisible: Bool, verticalSizeClass: UIUserInterfaceSizeClass, superview: UIView) {
+        superview.removeConstraints(sidePanelClosedConstraints)
+        superview.removeConstraints(sidePanelRegularOpenConstraints)
+        superview.removeConstraints(sidePanelCompactOpenConstraints)
+
+        switch (isVisible, verticalSizeClass) {
+            case (true, .regular): // visible, portrait
+                superview.addConstraints(sidePanelRegularOpenConstraints)
+            case (true, .compact): // visible, landscape
+                superview.addConstraints(sidePanelCompactOpenConstraints)
+            default: // hidden, portrait/landscape (or else size class is `.unspecified`)
+                superview.addConstraints(sidePanelClosedConstraints)
+        }
+
+        superview.setNeedsLayout()
+        superview.layoutIfNeeded()
     }
 }
