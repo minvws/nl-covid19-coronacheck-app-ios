@@ -33,8 +33,8 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	fileprivate weak var mainView: UIView?
 	fileprivate weak var overlayMainView: UIView!
 	fileprivate var hasLeftSwipeGestureStarted = false
-	fileprivate var shouldHideSidePanel = false
 
+	fileprivate var shouldHideSidePanelOnPanGestureCompletion = true
 
 	open func updateSelectedViewController() {
         setupLeftBarButtonItem()
@@ -98,12 +98,12 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 				if panTranslation.x <= 0 && abs(panTranslation.x) < frame.width {
 					sidePanelView.frame = CGRect(x: panTranslation.x, y: frame.minY, width: frame.width, height: frame.height)
 				}
-				shouldHideSidePanel = abs(panTranslation.x) > sidePanelWidth / 2 || speed < -75.0
+				shouldHideSidePanelOnPanGestureCompletion = abs(panTranslation.x) > sidePanelWidth / 2 || speed < -75.0
 				let alpha = 0.1 * (frame.width + frame.minX) / frame.width
 				overlayMainView.alpha = alpha
 			case .ended:
 				hasLeftSwipeGestureStarted = false
-				shouldHideSidePanel ? hideSidePanel() : showSidePanel()
+				shouldHideSidePanelOnPanGestureCompletion ? hideSidePanel() : showSidePanel()
 			default:
 				break
 		}
