@@ -69,13 +69,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		sidePanelView.addSubview(sideController.view)
 		sideController.didMove(toParent: self)
 
-		let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
-		leftSwipeGesture.direction = .left
-		self.view.addGestureRecognizer(leftSwipeGesture)
-
-		let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-		panGesture.delegate = self
-		self.view.addGestureRecognizer(panGesture)
+        setupGestureRecognisers()
 	}
 
 	open func gestureRecognizer(
@@ -182,4 +176,14 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 		fatalError("init(coder:) has not been implemented")
 	}
+
+    private func setupGestureRecognisers() {
+        let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
+        leftSwipeGesture.direction = .left
+        self.view.addGestureRecognizer(leftSwipeGesture)
+
+        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+        panGesture.delegate = self
+        self.view.addGestureRecognizer(panGesture)
+    }
 }
