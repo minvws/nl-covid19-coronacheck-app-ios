@@ -397,7 +397,9 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.alreadySigned(SignedTestResultErrorResponse(status: "test", code: 1))
+		proofManagingSpy.signedTestResultState = SignedTestResultState.alreadySigned(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
@@ -415,7 +417,9 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.notNegative(SignedTestResultErrorResponse(status: "test", code: 1))
+		proofManagingSpy.signedTestResultState = SignedTestResultState.notNegative(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
@@ -433,7 +437,9 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.tooNew(SignedTestResultErrorResponse(status: "test", code: 1))
+		proofManagingSpy.signedTestResultState = SignedTestResultState.tooNew(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
@@ -451,7 +457,9 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.tooOld(SignedTestResultErrorResponse(status: "test", code: 1))
+		proofManagingSpy.signedTestResultState = SignedTestResultState.tooOld(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()
@@ -469,7 +477,9 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Given
 		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.unknown(SignedTestResultErrorResponse(status: "test", code: 1))
+		proofManagingSpy.signedTestResultState = SignedTestResultState.unknown(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		)
 
 		// When
 		sut?.createProofStepThree()

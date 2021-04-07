@@ -3261,7 +3261,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.2;
-				NETWORK_CONFIGURATION = Test;
+				NETWORK_CONFIGURATION = Development;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3586,7 +3586,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.3;
-				NETWORK_CONFIGURATION = Production;
+				NETWORK_CONFIGURATION = Development;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;

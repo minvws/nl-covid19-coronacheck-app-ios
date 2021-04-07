@@ -34,7 +34,7 @@ class ProofManagingSpy: ProofManaging {
 		// Demanded by protocol
 	}
 
-	func fetchCoronaTestProviders(oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
+	func fetchCoronaTestProviders(onCompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
 
 		fetchCoronaTestProvidersCalled = true
 	}
@@ -48,13 +48,13 @@ class ProofManagingSpy: ProofManaging {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
+		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
 		
 		fetchTestResultCalled = true
 	}
 
 	func fetchNonce(
-		oncompletion: @escaping (() -> Void),
+		onCompletion: @escaping (() -> Void),
 		onError: @escaping ((Error) -> Void)) {
 
 		fetchNonceCalled = true
@@ -62,25 +62,25 @@ class ProofManagingSpy: ProofManaging {
 			onError(error)
 		} else {
 			if shouldNonceComplete {
-				oncompletion()
+				onCompletion()
 			}
 		}
 	}
 
-	func fetchIssuerPublicKeys(oncompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
+	func fetchIssuerPublicKeys(onCompletion: (() -> Void)?, onError: ((Error) -> Void)?) {
 
 		fetchIssuerPublicKeysCalled = true
 		if let error = issuerPublicKeyError {
 			onError?(error)
 		} else {
 			if shouldIssuerPublicKeyComplete {
-				oncompletion?()
+				onCompletion?()
 			}
 		}
 	}
 
 	func fetchSignedTestResult(
-		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onCompletion: @escaping ((SignedTestResultState) -> Void),
 		onError: @escaping ((Error) -> Void)) {
 
 		fetchSignedTestResultCalled = true
@@ -88,7 +88,7 @@ class ProofManagingSpy: ProofManaging {
 			onError(error)
 		} else {
 			if shouldSignedTestResultComplete {
-				oncompletion(signedTestResultState)
+				onCompletion(signedTestResultState)
 			}
 		}
 	}
