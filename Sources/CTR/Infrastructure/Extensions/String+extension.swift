@@ -44,6 +44,25 @@ extension String {
 		return attributedText
 	}
 
+	/// Underline a part of the text
+	/// - Parameters:
+	///   - underlined: the part to underline
+	/// - Returns: attributed string
+	func underlineAsLink(underlined: String) -> NSAttributedString {
+
+		let underlineRange = (self as NSString).range(of: underlined)
+		let attributes: [NSAttributedString.Key: Any] = [
+			//			.underlineStyle: NSUnderlineStyle.single.rawValue,
+			//			.foregroundColor: color,
+			.link: underlined
+		]
+		let attributedText = NSMutableAttributedString(
+			string: self
+		)
+		attributedText.addAttributes(attributes, range: underlineRange)
+		return attributedText
+	}
+
 	/// Change the color a part of the text
 	/// - Parameters:
 	///   - text: the part to color

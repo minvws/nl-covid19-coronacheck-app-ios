@@ -225,10 +225,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 			return
 		}
 
-		let attributedUnderlined = messageText.underline(
-			underlined: underlinedText,
-			with: Theme.colors.iosBlue
-		)
+		let attributedUnderlined = messageText.underlineAsLink(underlined: underlinedText)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
