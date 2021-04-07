@@ -143,6 +143,11 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		super.init(nibName: nil, bundle: Bundle.main)
 	}
 
+    required public init?(coder aDecoder: NSCoder) {
+
+        fatalError("init(coder:) has not been implemented")
+    }
+
 	override open func loadView() {
 
 		let view = UIView(frame: UIScreen.main.bounds)
@@ -170,10 +175,8 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		self.view = view
 	}
 
-	required public init?(coder aDecoder: NSCoder) {
 
-		fatalError("init(coder:) has not been implemented")
-	}
+
 
     private func setupGestureRecognisers() {
         let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
