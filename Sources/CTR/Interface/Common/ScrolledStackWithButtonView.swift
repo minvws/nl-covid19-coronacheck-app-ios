@@ -24,10 +24,10 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
 
 	/// the footer background
-	private let footerBackground: UIView = {
+	let footerBackground: UIView = {
+		
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
 		return view
 	}()
 
@@ -52,7 +52,8 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		super.setupViews()
 		stackView.spacing = ViewTraits.spacing
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		view?.backgroundColor = color
+		footerBackground.backgroundColor = color
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -134,9 +135,9 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		let gradient = CAGradientLayer()
 		gradient.frame = footerGradientView.bounds
 		gradient.colors = [
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+			color.withAlphaComponent(0.0).cgColor,
+			color.withAlphaComponent(0.5).cgColor,
+			color.withAlphaComponent(1.0).cgColor
 		]
 		footerGradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		footerGradientView.layer.insertSublayer(gradient, at: 0)
@@ -162,4 +163,13 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 	/// bottom contraint for keyboard changes.
 	var bottomConstraint: NSLayoutConstraint?
+
+	/// The color to use
+	var color: UIColor = Theme.colors.viewControllerBackground {
+		didSet {
+			setFooterGradient()
+			backgroundColor = color
+			footerBackground.backgroundColor = color
+		}
+	}
 }
