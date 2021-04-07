@@ -86,6 +86,6 @@ class VerifierStartViewModel: Logging {
 	func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		proofManager.fetchIssuerPublicKeys(oncompletion: nil, onError: nil)
+		proofManager.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 	}
 }

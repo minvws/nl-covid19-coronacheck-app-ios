@@ -13,10 +13,10 @@ protocol ProofManaging: AnyObject {
 
 	/// Get the providers
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchCoronaTestProviders(
-		oncompletion: (() -> Void)?,
+		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?)
 
 	/// Get the test types
@@ -24,37 +24,37 @@ protocol ProofManaging: AnyObject {
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
-		oncompletion: (() -> Void)?,
+		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?)
 
 	/// Get the test result for a token
 	/// - Parameters:
 	///   - token: the request token
 	///   - code: the verification code
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	func fetchTestResult(
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
+		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
 
 	/// Create a nonce and a stoken
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchNonce(
-		oncompletion: @escaping (() -> Void),
+		onCompletion: @escaping (() -> Void),
 		onError: @escaping ((Error) -> Void))
 
 	/// Fetch the signed Test Result
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchSignedTestResult(
-		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onCompletion: @escaping ((SignedTestResultState) -> Void),
 		onError: @escaping ((Error) -> Void))
 
 	/// Get the provider for a test token

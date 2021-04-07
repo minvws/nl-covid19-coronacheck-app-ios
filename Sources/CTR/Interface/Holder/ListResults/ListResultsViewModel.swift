@@ -184,7 +184,7 @@ class ListResultsViewModel: Logging {
 
 		// Step 1: Fetch the public keys
 		proofManager?.fetchIssuerPublicKeys(
-			oncompletion: { [weak self] in
+			onCompletion: { [weak self] in
 				self?.createProofStepTwo()
 			}, onError: { [weak self] error in
 				self?.showProgress = false
@@ -203,7 +203,7 @@ class ListResultsViewModel: Logging {
 
 		// Step 2: Fetch the nonce and stoken
 		proofManager?.fetchNonce(
-			oncompletion: { [weak self] in
+			onCompletion: { [weak self] in
 				self?.createProofStepThree()
 			}, onError: { [weak self] error in
 				self?.showProgress = false
@@ -222,7 +222,7 @@ class ListResultsViewModel: Logging {
 
 		// Step 3: Fetch the signed result
 		proofManager?.fetchSignedTestResult(
-			oncompletion: { [weak self] state in
+			onCompletion: { [weak self] state in
 				self?.showProgress = false
 				self?.handleTestProofsResponse(state)
 			}, onError: { [weak self] error in
