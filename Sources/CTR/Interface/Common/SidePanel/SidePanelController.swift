@@ -9,6 +9,7 @@ import UIKit
 
 open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
+    /// The current VC displayed in the main pane
 	open var selectedViewController: UIViewController? {
 		didSet {
 			guard oldValue != self.selectedViewController else {
@@ -22,6 +23,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		}
 	}
 
+    /// The hamburger menu:
 	let sideController: UIViewController
 
     /// The width of the panel as a fraction of the screen:
@@ -29,11 +31,12 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     open var sidePanelFractionalWidthForCompactSizeClass: CGFloat = 0.4
 	open var animationSpeed: Double = 0.4
 
-	internal weak var sidePanelView: UIView!
-	fileprivate weak var mainView: UIView?
-	fileprivate weak var overlayMainView: UIView!
-	fileprivate var hasLeftSwipeGestureStarted = false
+	internal weak var sidePanelView: UIView! // hosts the sideController's view
+	fileprivate weak var mainView: UIView? // hosts the selectedViewController's view
+	fileprivate weak var overlayMainView: UIView! // obscures the selectedViewController when the menu opens
 
+    /// State
+	fileprivate var hasLeftSwipeGestureStarted = false
 	fileprivate var shouldHideSidePanelOnPanGestureCompletion = true
 
 	open func updateSelectedViewController() {
@@ -64,6 +67,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		super.viewDidLoad()
 		updateSelectedViewController()
 
+        // Add and configure sideController as a child VC:
 		addChild(sideController)
 		sideController.view.autoresizingMask = UIView.AutoresizingMask()
 		sideController.view.frame = sidePanelView.bounds
