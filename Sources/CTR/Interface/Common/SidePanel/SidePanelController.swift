@@ -18,7 +18,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 			oldValue?.view.removeFromSuperview()
 			oldValue?.willMove(toParent: nil)
 			oldValue?.removeFromParent()
-			updateSelectedViewcontroller()
+			updateSelectedViewController()
 		}
 	}
 
@@ -32,7 +32,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	fileprivate var hasLeftSwipeGestureStarted = false
 	fileprivate var shouldHideSidePanel = false
 
-	func updateSelectedViewcontroller() {
+	func updateSelectedViewController() {
 		
 		let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
 		if let navItem = mainViewController?.navigationItem,
@@ -61,7 +61,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	override open func viewDidLoad() {
 
 		super.viewDidLoad()
-		updateSelectedViewcontroller()
+		updateSelectedViewController()
 
 		addChild(sideController)
 		sideController.view.autoresizingMask = UIView.AutoresizingMask()
