@@ -73,14 +73,6 @@ class MenuViewController: BaseViewController {
 		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .closeMenu)
 	}
 
-	override func viewDidAppear(_ animated: Bool) {
-
-		super.viewDidAppear(animated)
-
-		// fix scrolling size (https://developer.apple.com/forums/thread/126841)
-		sceneView.scrollView.contentSize = sceneView.stackView.frame.size
-	}
-
 	/// User tapped on the close button
 	@objc func clossButtonTapped() {
 
