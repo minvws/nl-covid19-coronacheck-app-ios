@@ -23,7 +23,10 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	}
 
 	let sideController: UIViewController
-	open var sidePanelWidth: CGFloat = 320.0
+
+    /// The width of the panel as a fraction of the screen:
+    open var sidePanelFractionalWidthForRegularSizeClass: CGFloat = 0.75
+    open var sidePanelFractionalWidthForCompactSizeClass: CGFloat = 0.4
 	open var animationSpeed: Double = 0.4
 
 	internal weak var sidePanelView: UIView!

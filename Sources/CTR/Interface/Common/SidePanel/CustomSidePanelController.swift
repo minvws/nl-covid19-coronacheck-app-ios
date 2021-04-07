@@ -10,12 +10,6 @@ import UIKit
 /// A customized version of the SidePanelController
 class CustomSidePanelController: SidePanelController {
 
-	/// The width of the panel, 75% of the screen
-	override var sidePanelWidth: CGFloat {
-		get { return 0.75 * UIScreen.main.bounds.width }
-		set { super.sidePanelWidth = newValue }
-	}
-
 	/// The open and close animation speed, 0.3 seconds
 	override var animationSpeed: Double {
 		get { return 0.3 }
