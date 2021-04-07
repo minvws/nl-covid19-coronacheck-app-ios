@@ -79,14 +79,14 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Get the providers
 	func fetchCoronaTestProviders(
-		oncompletion: (() -> Void)?,
+		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 
 		#if DEBUG
 		if let lastFetchedTimestamp = providersFetchedTimestamp,
 		   lastFetchedTimestamp > Date() - 3600, !providerData.testProviders.isEmpty {
 			// Don't fetch again within an hour
-			oncompletion?()
+			onCompletion?()
 			return
 		}
 		#endif
@@ -98,7 +98,7 @@ class ProofManager: ProofManaging, Logging {
 				case let .success(providers):
 					self?.providerData.testProviders = providers
 					self?.providersFetchedTimestamp = Date()
-					oncompletion?()
+					onCompletion?()
 
 				case let .failure(error):
 					self?.logError("Error getting the test providers: \(error)")
@@ -135,10 +135,10 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Fetch the issuer public keys
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchIssuerPublicKeys(
-		oncompletion: (() -> Void)?,
+		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 
 		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
@@ -150,14 +150,14 @@ class ProofManager: ProofManaging, Logging {
 				case let .success(keys):
 					self?.cryptoManager.setIssuerPublicKeys(keys)
 					self?.keysFetchedTimestamp = Date()
-					oncompletion?()
+					onCompletion?()
 
 				case let .failure(error):
 					self?.logError("Error getting the issuers public keys: \(error)")
 					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
 					   lastFetchedTimestamp > Date() - ttl {
 						self?.logInfo("Issuer public keys still within TTL")
-						oncompletion?()
+						onCompletion?()
 
 					} else {
 						onError?(error)
@@ -168,10 +168,10 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Create a nonce and a stoken
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchNonce(
-		oncompletion: @escaping (() -> Void),
+		onCompletion: @escaping (() -> Void),
 		onError: @escaping ((Error) -> Void)) {
 
 		networkManager.getNonce { [weak self] resultwrapper in
@@ -180,7 +180,7 @@ class ProofManager: ProofManaging, Logging {
 				case let .success(envelope):
 					self?.cryptoManager.setNonce(envelope.nonce)
 					self?.cryptoManager.setStoken(envelope.stoken)
-					oncompletion()
+					onCompletion()
 
 				case let .failure(networkError):
 					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
@@ -191,10 +191,10 @@ class ProofManager: ProofManaging, Logging {
 
 	/// Fetch the signed Test Result
 	/// - Parameters:
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	///   - onError: error handler
 	func fetchSignedTestResult(
-		oncompletion: @escaping ((SignedTestResultState) -> Void),
+		onCompletion: @escaping ((SignedTestResultState) -> Void),
 		onError: @escaping ((Error) -> Void)) {
 
 		guard let icm = cryptoManager.generateCommitmentMessage(),
@@ -216,7 +216,7 @@ class ProofManager: ProofManaging, Logging {
 
 			switch resultwrapper {
 				case let .success(data):
-					self?.parseSignedTestResult(data, oncompletion: oncompletion)
+					self?.parseSignedTestResult(data, onCompletion: onCompletion)
 
 				case let .failure(networkError):
 					self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
@@ -225,50 +225,20 @@ class ProofManager: ProofManaging, Logging {
 		}
 	}
 
-	private func parseSignedTestResult(_ data: Data, oncompletion: @escaping ((SignedTestResultState) -> Void)) {
+	private func parseSignedTestResult(_ data: Data, onCompletion: @escaping ((SignedTestResultState) -> Void)) {
 
 		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
 
-		/*
-		## Error codes
-		99981 - Test is not in expected format
-		99982 - Test is empty
-		99983 - Test signature invalid
-		99991 - Test sample time in the future
-		99992 - Test sample time too old (48h)
-		99993 - Test result was not negative
-		99994 - Test result signed before
-		99995 - Unknown error creating signed test result
-		99996 - Session key no longer valid
-		*/
-
 		removeTestWrapper()
 		do {
-			let ismError = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
-			switch ismError.code {
-				case 99991:
-					oncompletion(SignedTestResultState.tooNew)
+			let ismResponse = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
+			onCompletion(ismResponse.asSignedTestResultState())
 
-				case 99992:
-					oncompletion(SignedTestResultState.tooOld)
-
-				case 99993:
-					oncompletion(SignedTestResultState.notNegative)
-
-				case 99994:
-					oncompletion(SignedTestResultState.alreadySigned)
-
-				case 99995:
-					oncompletion(SignedTestResultState.unknown(nil))
-
-				default:
-					oncompletion(SignedTestResultState.unknown(nil))
-			}
 		} catch {
 			// Success, no error!
 			cryptoManager.setTestProof(data)
 			cryptoManager.createCredential()
-			oncompletion(SignedTestResultState.valid)
+			onCompletion(SignedTestResultState.valid)
 		}
 	}
 
@@ -276,16 +246,16 @@ class ProofManager: ProofManaging, Logging {
 	/// - Parameters:
 	///   - token: the request token
 	///   - code: the verification code
-	///   - oncompletion: completion handler
+	///   - onCompletion: completion handler
 	func fetchTestResult(
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		oncompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
+		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
 
 		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
-			oncompletion(.failure(ProofError.invalidUrl))
+			onCompletion(.failure(ProofError.invalidUrl))
 			return
 		}
 
@@ -299,10 +269,10 @@ class ProofManager: ProofManaging, Logging {
 						self.proofData.testWrapper = wrapper.0
 						self.proofData.signedWrapper = wrapper.1
 					}
-					oncompletion(.success(wrapper.0))
+					onCompletion(.success(wrapper.0))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
-					oncompletion(.failure(error))
+					onCompletion(.failure(error))
 			}
 		}
 	}

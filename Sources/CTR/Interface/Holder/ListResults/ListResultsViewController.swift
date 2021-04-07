@@ -54,6 +54,12 @@ class ListResultsViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$errorMessage.binding = { [weak self] in
+			if let message = $0 {
+				self?.showError(.errorTitle, message: message)
+			}
+		}
+
 		viewModel.$listItem.binding = { [weak self] in
 			if let item = $0 {
 				self?.sceneView.resultView.isHidden = false

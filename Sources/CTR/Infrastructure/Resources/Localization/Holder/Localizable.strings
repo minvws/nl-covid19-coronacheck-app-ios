@@ -15,6 +15,7 @@
 "general.ok" = "Ok";
 "general.error.title" = "Er ging iets mis";
 "general.error.technical.text" = "Excuus, er is een technische fout opgetreden";
+"general.error.technical.custom" = "Excuus, er is een technische fout opgetreden (%@)";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
 "general.loading" = "Bezig met laden";
