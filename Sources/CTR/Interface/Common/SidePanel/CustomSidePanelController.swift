@@ -26,7 +26,7 @@ class CustomSidePanelController: SidePanelController {
 	fileprivate var menuIsOpen = false
 
 	/// Added hamburger icon with accessibility
-	override func updateSelectedViewController() {
+	override func setupLeftBarButtonItem() {
 
 		let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
 		if let navItem = mainViewController?.navigationItem,
@@ -41,7 +41,6 @@ class CustomSidePanelController: SidePanelController {
             navItem.leftBarButtonItem?.accessibilityIdentifier = "OpenMenuButton"
 			navItem.leftBarButtonItem?.accessibilityLabel = .openMenu
 		}
-		super.updateSelectedViewController()
 	}
 
 	/// Added extra check to prevent opening menu with a slide left when the menu is closed

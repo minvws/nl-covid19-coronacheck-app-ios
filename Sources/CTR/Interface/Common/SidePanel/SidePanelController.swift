@@ -32,24 +32,28 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	fileprivate var hasLeftSwipeGestureStarted = false
 	fileprivate var shouldHideSidePanel = false
 
-	func updateSelectedViewController() {
-		
-		let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
-		if let navItem = mainViewController?.navigationItem,
-		   navItem.leftBarButtonItem == nil {
-			let button = self.leftButton()
-			button.addTarget(self, action: #selector(showSidePanel), for: .touchUpInside)
-			navItem.leftBarButtonItem = UIBarButtonItem(customView: button)
-		}
 
-		if let svc = selectedViewController,
-		   let mainView = self.mainView {
-			addChild(svc)
-			mainView.addSubview(svc.view)
-			svc.didMove(toParent: self)
-			hideSidePanel()
-		}
-	}
+	open func updateSelectedViewController() {
+        setupLeftBarButtonItem()
+
+        if let svc = selectedViewController,
+           let mainView = self.mainView {
+            addChild(svc)
+            mainView.addSubview(svc.view)
+            svc.didMove(toParent: self)
+            hideSidePanel()
+        }
+    }
+
+    open func setupLeftBarButtonItem() {
+        let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
+        if let navItem = mainViewController?.navigationItem,
+           navItem.leftBarButtonItem == nil {
+            let button = self.leftButton()
+            button.addTarget(self, action: #selector(showSidePanel), for: .touchUpInside)
+            navItem.leftBarButtonItem = UIBarButtonItem(customView: button)
+        }
+    }
 
 	open func leftButton() -> UIButton {
 
