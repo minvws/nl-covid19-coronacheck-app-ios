@@ -49,18 +49,12 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
         if let navItem = mainViewController?.navigationItem,
            navItem.leftBarButtonItem == nil {
-            let button = self.leftButton()
+            let button = UIButton(type: .system)
+            button.setTitle("Menu", for: UIControl.State())
             button.addTarget(self, action: #selector(showSidePanel), for: .touchUpInside)
             navItem.leftBarButtonItem = UIBarButtonItem(customView: button)
         }
     }
-
-	open func leftButton() -> UIButton {
-
-		let button = UIButton(type: .system)
-		button.setTitle("Menu", for: UIControl.State())
-		return button
-	}
 
 	override open func viewDidLoad() {
 
