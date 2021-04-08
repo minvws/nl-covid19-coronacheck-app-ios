@@ -196,7 +196,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
         // Set constant constraints:
         view.addConstraints([
-            sidePanelView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            sidePanelView.topAnchor.constraint(equalTo: view.topAnchor),
             sidePanelView.heightAnchor.constraint(equalTo: view.heightAnchor)
         ])
 
