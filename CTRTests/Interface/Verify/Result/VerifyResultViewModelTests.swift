@@ -274,16 +274,28 @@ class VerifyResultViewModelTests: XCTestCase {
 		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
 	}
 
+    /// Test the dismiss method
+    func testDismiss() {
+
+        // Given
+
+        // When
+        sut?.dismiss()
+
+        // Then
+        XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToVerifierWelcomeCalled, "Method should be called")
+    }
+
 	/// Test the dismiss method
-	func testDismiss() {
+	func testScanAgain() {
 
 		// Given
 
 		// When
-		sut?.dismiss()
+		sut?.scanAgain()
 
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToScanCalled, "Method should be called")
 	}
 
 	/// Test the link tapped method

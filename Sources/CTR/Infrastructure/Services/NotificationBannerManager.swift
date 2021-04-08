@@ -90,7 +90,7 @@ class NotificationBannerManager: NotificationBannerManaging {
 
 		if content.message != nil && self.callback != nil {
 			setupLink(view)
-			bannerView?.underline(content.link)
+			view.underline(content.link)
 		}
 		view.primaryButtonTappedCommand = { [weak self] in
 			self?.hideBanner()
@@ -117,7 +117,12 @@ class NotificationBannerManager: NotificationBannerManaging {
 	/// Hide the banner
 	func hideBanner() {
 
+		guard bannerView != nil else {
+			return
+		}
+
 		bannerView?.removeFromSuperview()
+		currentContent = nil
 		bannerView = nil
 	}
 

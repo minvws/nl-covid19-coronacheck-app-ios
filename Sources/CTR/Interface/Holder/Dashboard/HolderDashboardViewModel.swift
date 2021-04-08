@@ -175,6 +175,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// - Parameter identifier: the identifier of the card
 	func cardTapped(_ identifier: CardIdentifier) {
 
+		bannerManager.hideBanner()
 		switch identifier {
 			case .appointment:
 				coordinator?.navigateToAppointment()

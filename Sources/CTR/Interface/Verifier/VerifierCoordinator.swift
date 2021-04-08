@@ -187,7 +187,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 		)
 		
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+        (sidePanel?.selectedViewController as? UINavigationController)?.setViewControllers([destination], animated: true)
 	}
 	
 	/// Navigate to the scan result
