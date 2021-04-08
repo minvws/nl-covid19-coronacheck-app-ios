@@ -91,7 +91,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	var proofValidator: ProofValidatorProtocol
 
 	/// The banner manager
-	var bannerManager: BannerManaging = BannerManager.shared
+	var bannerManager: NotificationBannerManaging = NotificationBannerManager.shared
 
 	/// the notification center
 	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
@@ -379,10 +379,12 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	@objc func showBanner() {
 
 		bannerManager.showBanner(
-			title: .holderBannerNewQRTitle,
-			message: .holderBannerNewQRMessage,
-//			link: .holderBannerNewQRMessageLink,
-			icon: UIImage.alert,
+			content: NotificationBannerContent(
+				title: .holderBannerNewQRTitle,
+				message: .holderBannerNewQRMessage,
+				link: .holderBannerNewQRMessageLink,
+				icon: UIImage.alert
+			),
 			callback: { [weak self] in
 
 				if let url = self?.configuration.getHolderFAQURL() {

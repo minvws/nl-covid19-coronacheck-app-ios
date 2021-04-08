@@ -65,8 +65,11 @@ class TokenEntryViewController: BaseViewController {
 			guard let strongSelf = self else {
 				return
 			}
+
 			if $0 {
-				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				let hud = MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				hud.accessibilityLabel = .loading
+				UIAccessibility.post(notification: .screenChanged, argument: hud)
 			} else {
 				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
 			}
@@ -92,6 +95,8 @@ class TokenEntryViewController: BaseViewController {
 
 			guard let strongSelf = self else { return }
 
+			let wasHidden = strongSelf.sceneView.verificationEntryView.isHidden
+
 			strongSelf.sceneView.verificationEntryView.isHidden = !$0
 			strongSelf.sceneView.secondaryButton.isHidden = !$0
 			if strongSelf.sceneView.errorView.isHidden {
@@ -99,6 +104,11 @@ class TokenEntryViewController: BaseViewController {
 			}
 			if $0 {
 				strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+			}
+
+			if wasHidden && $0 {
+				// Only post once
+				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
 			}
 		}
 

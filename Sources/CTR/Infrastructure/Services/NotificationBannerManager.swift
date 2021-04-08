@@ -7,53 +7,65 @@
 
 import UIKit
 
-protocol BannerManaging {
+protocol NotificationBannerManaging {
 
 	/// Show a banner
 	/// - Parameters:
-	///   - title: the title
-	///   - message: the message
-	///   - icon: the icon
-	func showBanner(title: String, message: String?, icon: UIImage?, callback: (() -> Void)?)
+	///   - content: the banner content
+	///   - callback: the optional callback when the banner is tapped
+	func showBanner(content: NotificationBannerContent, callback: (() -> Void)?)
 
 	/// Hide the banner
 	func hideBanner()
 }
 
+struct NotificationBannerContent: Equatable {
+
+	/// The title of the banner
+	let title: String
+
+	/// The message of the banner
+	let message: String?
+
+	/// The linked part of the banner
+	let link: String?
+
+	/// The icon to display on the banner
+	let icon: UIImage?
+}
+
 /// The banner manager
-class BannerManager: BannerManaging {
+class NotificationBannerManager: NotificationBannerManaging {
 
 	/// Singleton instance
-	static let shared = BannerManager()
+	static let shared = NotificationBannerManager()
 
 	var bannerView: BannerView?
 
 	var callback: (() -> Void)?
 
+	var currentContent: NotificationBannerContent?
+
 	/// Show a banner
 	/// - Parameters:
-	///   - title: the title
-	///   - message: the message
-	///   - icon: the icon
-	func showBanner(title: String, message: String?, icon: UIImage?, callback: (() -> Void)?) {
+	///   - content: the banner content
+	///   - callback: the optional callback when the banner is tapped
+	func showBanner(content: NotificationBannerContent, callback: (() -> Void)?) {
 
 		guard let window: UIWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
 			return
 		}
-		self.callback = callback
+		if content != currentContent {
 
-		if title != bannerView?.title && message != bannerView?.message {
-			bannerView?.removeFromSuperview()
+			self.callback = callback
+			self.currentContent = content
+			self.bannerView?.removeFromSuperview()
 
-			let view = createBannerView(title: title, message: message, icon: icon)
+			let view = createBannerView(content)
 			window.addSubview(view)
 			window.bringSubviewToFront(view)
-			bannerView = view
+			self.bannerView = view
 			setupViewConstraints(forView: view, window: window)
-
-			if message != nil && callback != nil {
-				setupLink(view)
-			}
 
 			UIAccessibility.post(
 				notification: .screenChanged,
@@ -68,13 +80,18 @@ class BannerManager: BannerManaging {
 	///   - message: the message of the banner
 	///   - icon: the icon of the banner
 	/// - Returns: the banner view
-	private func createBannerView(title: String, message: String?, icon: UIImage?) -> BannerView {
+	private func createBannerView(_ content: NotificationBannerContent) -> BannerView {
 
 		let view = BannerView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.title = title
-		view.message = message
-		view.icon = icon
+		view.title = content.title
+		view.message = content.message
+		view.icon = content.icon
+
+		if content.message != nil && self.callback != nil {
+			setupLink(view)
+			bannerView?.underline(content.link)
+		}
 		view.primaryButtonTappedCommand = { [weak self] in
 			self?.hideBanner()
 		}
@@ -85,8 +102,8 @@ class BannerManager: BannerManaging {
 	private func setupLink(_ view: BannerView) {
 
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		view.messageLabel.addGestureRecognizer(tapGesture)
-		view.messageLabel.isUserInteractionEnabled = true
+		view.messageTextView.addGestureRecognizer(tapGesture)
+		view.messageTextView.isUserInteractionEnabled = true
 	}
 
 	// MARK: User interaction

@@ -218,8 +218,8 @@
 		6D8E65F8260110C200F79CFE /* BannerImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E65F6260110C200F79CFE /* BannerImage.swift */; };
 		6D8E65FD2601130B00F79CFE /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E65FC2601130B00F79CFE /* BannerView.swift */; };
 		6D8E65FE2601130B00F79CFE /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E65FC2601130B00F79CFE /* BannerView.swift */; };
-		6D8E6606260130E900F79CFE /* BannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E6605260130E900F79CFE /* BannerManager.swift */; };
-		6D8E6607260130E900F79CFE /* BannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E6605260130E900F79CFE /* BannerManager.swift */; };
+		6D8E6606260130E900F79CFE /* NotificationBannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E6605260130E900F79CFE /* NotificationBannerManager.swift */; };
+		6D8E6607260130E900F79CFE /* NotificationBannerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E6605260130E900F79CFE /* NotificationBannerManager.swift */; };
 		6D8E66122601E1D700F79CFE /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E66112601E1D700F79CFE /* NotificationCenter.swift */; };
 		6D8E66132601E1D700F79CFE /* NotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E66112601E1D700F79CFE /* NotificationCenter.swift */; };
 		6D92848A25B5CB12009D4350 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D92848925B5CB12009D4350 /* AppCoordinator.swift */; };
@@ -690,7 +690,7 @@
 		6D8E65F026010F5B00F79CFE /* BannerLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerLocalization.swift; sourceTree = "<group>"; };
 		6D8E65F6260110C200F79CFE /* BannerImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerImage.swift; sourceTree = "<group>"; };
 		6D8E65FC2601130B00F79CFE /* BannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
-		6D8E6605260130E900F79CFE /* BannerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerManager.swift; sourceTree = "<group>"; };
+		6D8E6605260130E900F79CFE /* NotificationBannerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationBannerManager.swift; sourceTree = "<group>"; };
 		6D8E66112601E1D700F79CFE /* NotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCenter.swift; sourceTree = "<group>"; };
 		6D92848925B5CB12009D4350 /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		6D92848D25B5CB85009D4350 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -1234,7 +1234,7 @@
 			isa = PBXGroup;
 			children = (
 				6D164D4C25F374ED00A86409 /* AppVersionSupplier.swift */,
-				6D8E6605260130E900F79CFE /* BannerManager.swift */,
+				6D8E6605260130E900F79CFE /* NotificationBannerManager.swift */,
 				6D8865F425C8001100DE661E /* Crypto */,
 				6DAE8BCC25CB242700AAF2A7 /* NetworkManager */,
 				6D7C909225CA9CF800AEC5DE /* Onboarding */,
@@ -2345,7 +2345,7 @@
 				6D0B244725FF4842009C605E /* QRCardView.swift in Sources */,
 				6DD7D84B25D26D3A00B97B7F /* VerifierScanViewController.swift in Sources */,
 				6D18FBCF25DAB0380041770B /* VerifierResultViewModel.swift in Sources */,
-				6D8E6607260130E900F79CFE /* BannerManager.swift in Sources */,
+				6D8E6607260130E900F79CFE /* NotificationBannerManager.swift in Sources */,
 				6DD7D84C25D26D3A00B97B7F /* AppUpdateViewModel.swift in Sources */,
 				6DD7D84D25D26D3A00B97B7F /* CustomSidePanelController.swift in Sources */,
 				6DC91CA525D9299800B74973 /* ExpiredQRView.swift in Sources */,
@@ -2564,7 +2564,7 @@
 				6D0B244625FF4842009C605E /* QRCardView.swift in Sources */,
 				6D18FBCE25DAB0380041770B /* VerifierResultViewModel.swift in Sources */,
 				6DD1159225D0229700DF6AF4 /* CustomSidePanelController.swift in Sources */,
-				6D8E6606260130E900F79CFE /* BannerManager.swift in Sources */,
+				6D8E6606260130E900F79CFE /* NotificationBannerManager.swift in Sources */,
 				6DD19DE425D6DD9C001FDDDC /* InformationView.swift in Sources */,
 				6DC91CA425D9299800B74973 /* ExpiredQRView.swift in Sources */,
 				6DB3C2E525F12D3D00B41B46 /* DeniedInstructionsLocalization.swift in Sources */,
