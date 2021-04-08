@@ -43,7 +43,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.viewModel.dismiss()
+			self?.viewModel.scanAgain()
 		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
