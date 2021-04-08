@@ -35,9 +35,9 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	fileprivate weak var mainView: UIView? // hosts the selectedViewController's view
 	fileprivate weak var overlayMainView: UIView! // obscures the selectedViewController when the menu opens
 
-    var sidePanelClosedConstraints: [NSLayoutConstraint]!
-    var sidePanelRegularOpenConstraints: [NSLayoutConstraint]!
-    var sidePanelCompactOpenConstraints: [NSLayoutConstraint]!
+    var sidePanelClosedConstraints: [NSLayoutConstraint]?
+    var sidePanelRegularOpenConstraints: [NSLayoutConstraint]?
+    var sidePanelCompactOpenConstraints: [NSLayoutConstraint]?
 
     /// State
 	fileprivate var hasLeftSwipeGestureStarted = false
@@ -255,6 +255,11 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     /// Note: takes `superview` as a parameter to prevent infinite-loop
     /// when calling from `loadView` (when referencing `self.view`).
     private func updateSidePanelConstraints(isVisible: Bool, verticalSizeClass: UIUserInterfaceSizeClass, superview: UIView) {
+        guard let sidePanelClosedConstraints = sidePanelClosedConstraints,
+              let sidePanelRegularOpenConstraints = sidePanelRegularOpenConstraints,
+              let sidePanelCompactOpenConstraints = sidePanelCompactOpenConstraints
+        else { return }
+
         superview.removeConstraints(sidePanelClosedConstraints)
         superview.removeConstraints(sidePanelRegularOpenConstraints)
         superview.removeConstraints(sidePanelCompactOpenConstraints)
@@ -269,6 +274,5 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         }
 
         superview.setNeedsLayout()
-
     }
 }
