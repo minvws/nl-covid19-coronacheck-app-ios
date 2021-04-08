@@ -1234,9 +1234,9 @@
 			isa = PBXGroup;
 			children = (
 				6D164D4C25F374ED00A86409 /* AppVersionSupplier.swift */,
-				6D8E6605260130E900F79CFE /* NotificationBannerManager.swift */,
 				6D8865F425C8001100DE661E /* Crypto */,
 				6DAE8BCC25CB242700AAF2A7 /* NetworkManager */,
+				6D8E6605260130E900F79CFE /* NotificationBannerManager.swift */,
 				6D7C909225CA9CF800AEC5DE /* Onboarding */,
 				6D01D8C425C0262600A4AB89 /* OpenIdManager.swift */,
 				6DBFE49125D2DB5C00B3D006 /* ProofManager */,

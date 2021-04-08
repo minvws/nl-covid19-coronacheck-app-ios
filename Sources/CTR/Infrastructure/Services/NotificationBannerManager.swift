@@ -117,7 +117,12 @@ class NotificationBannerManager: NotificationBannerManaging {
 	/// Hide the banner
 	func hideBanner() {
 
+		guard bannerView != nil else {
+			return
+		}
+
 		bannerView?.removeFromSuperview()
+		currentContent = nil
 		bannerView = nil
 	}
 
