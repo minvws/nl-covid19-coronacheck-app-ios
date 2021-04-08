@@ -66,7 +66,7 @@ class SecurityFeaturesView: BaseView, Logging {
 		super.setupViewConstraints()
 
 		backgroundImageView.embed(in: self)
-		animationView.embed(in: self)
+		animationView.embed(in: self, insets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0))
 		primaryButton.embed(in: self)
 	}
 
