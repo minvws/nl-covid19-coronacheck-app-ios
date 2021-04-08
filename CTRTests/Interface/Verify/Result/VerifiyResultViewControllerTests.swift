@@ -199,7 +199,6 @@ class VerifyResultViewControllerTests: XCTestCase {
 		XCTAssertEqual(strongSut.sceneView.title, .verifierResultAccessTitle, "Title should match")
 		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
 		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
-		
 	}
 	
 	/// Test the dismiss method
@@ -211,8 +210,20 @@ class VerifyResultViewControllerTests: XCTestCase {
 		sut?.closeButtonTapped()
 		
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.dismissCalled, "Method should be called")
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToVerifierWelcomeCalled, "Method should be called")
 	}
+
+    func testPrimaryButtonTapped() {
+
+        // Given
+        loadView()
+
+        // When
+        sut?.sceneView.primaryButtonTapped()
+
+        // Then
+        XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToScanCalled, "Method should be called")
+    }
 	
 	/// Test the link tapped method
 	func testLinkTapped() {

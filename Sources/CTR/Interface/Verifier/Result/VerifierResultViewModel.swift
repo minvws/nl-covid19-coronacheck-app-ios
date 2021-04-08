@@ -228,8 +228,13 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Dismiss ourselves
 	func dismiss() {
 
-		coordinator?.dismiss()
+		coordinator?.navigateToVerifierWelcome()
 	}
+
+    func scanAgain() {
+
+        coordinator?.navigateToScan()
+    }
 
 	func linkTapped() {
 

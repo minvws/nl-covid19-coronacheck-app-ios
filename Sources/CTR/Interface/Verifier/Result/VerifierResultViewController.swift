@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VerifierResultViewController: BaseViewController {
+class VerifierResultViewController: BaseViewController, Logging {
 
 	private let viewModel: VerifierResultViewModel
 
@@ -43,7 +43,7 @@ class VerifierResultViewController: BaseViewController {
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.viewModel.dismiss()
+			self?.viewModel.scanAgain()
 		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
@@ -77,7 +77,11 @@ class VerifierResultViewController: BaseViewController {
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
-			self?.sceneView.isHidden = $0
+            #if DEBUG
+            self?.logDebug("Skipping hiding of result because in DEBUG mode")
+            #else
+            self?.sceneView.isHidden = $0
+            #endif
 		}
 
 		viewModel.$debugInfo.binding = { [weak self] in
