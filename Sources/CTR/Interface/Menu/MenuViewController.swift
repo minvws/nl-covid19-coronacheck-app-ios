@@ -65,11 +65,6 @@ class MenuViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$version.binding = { [weak self] in
-
-			self?.sceneView.bottomText = $0
-		}
-
 		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .closeMenu)
 	}
 
