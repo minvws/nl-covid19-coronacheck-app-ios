@@ -84,8 +84,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		setDebugInformation(now)
 
 		guard let attributes = cryptoResults.attributes else {
-			showAccessDenied()
 			allowAccess = .denied
+			showAccessDenied()
 			return
 		}
 
@@ -103,8 +103,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		} else {
 
-			showAccessDenied()
 			allowAccess = .denied
+			showAccessDenied()
 		}
 	}
 

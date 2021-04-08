@@ -50,16 +50,16 @@ class VerifierResultViewController: BaseViewController {
 
 			if $0 == .verified {
 				self?.sceneView.imageView.image = .access
-				self?.sceneView.backgroundColor = Theme.colors.access
+				self?.sceneView.actionColor = Theme.colors.access
 				self?.sceneView.setupForVerified()
 
 			} else if $0 == .demo {
 				self?.sceneView.imageView.image = .access
-				self?.sceneView.backgroundColor = Theme.colors.grey4
+				self?.sceneView.actionColor = Theme.colors.grey4
 				self?.sceneView.setupForVerified()
 			} else {
 				self?.sceneView.imageView.image = .denied
-				self?.sceneView.backgroundColor = Theme.colors.denied
+				self?.sceneView.actionColor = Theme.colors.denied
 			}
 		}
 
@@ -103,6 +103,7 @@ class VerifierResultViewController: BaseViewController {
 
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+		sceneView.scrollView.contentSize = sceneView.stackView.frame.size
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {

@@ -24,10 +24,10 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}
 
 	/// the footer background
-	private let footerBackground: UIView = {
+	let footerBackground: UIView = {
+		
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
 		return view
 	}()
 
@@ -52,7 +52,8 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		super.setupViews()
 		stackView.spacing = ViewTraits.spacing
-		view?.backgroundColor = Theme.colors.viewControllerBackground
+		view?.backgroundColor = actionColor
+		footerBackground.backgroundColor = actionColor
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -114,11 +115,11 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 			])
 		}
 
-		bottomConstraint = primaryButton.bottomAnchor.constraint(
+		bottomButtonConstraint = primaryButton.bottomAnchor.constraint(
 			equalTo: safeAreaLayoutGuide.bottomAnchor,
 			constant: -ViewTraits.margin
 		)
-		bottomConstraint?.isActive = true
+		bottomButtonConstraint?.isActive = true
 	}
 
 	/// User tapped on the primary button
@@ -134,9 +135,9 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		let gradient = CAGradientLayer()
 		gradient.frame = footerGradientView.bounds
 		gradient.colors = [
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+			actionColor.withAlphaComponent(0.0).cgColor,
+			actionColor.withAlphaComponent(0.5).cgColor,
+			actionColor.withAlphaComponent(1.0).cgColor
 		]
 		footerGradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		footerGradientView.layer.insertSublayer(gradient, at: 0)
@@ -161,5 +162,14 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	var primaryButtonTappedCommand: (() -> Void)?
 
 	/// bottom contraint for keyboard changes.
-	var bottomConstraint: NSLayoutConstraint?
+	var bottomButtonConstraint: NSLayoutConstraint?
+
+	/// The color to use for the backgrounds and gradient. Defaults to Theme.colors.viewControllerBackground
+	var actionColor: UIColor = Theme.colors.viewControllerBackground {
+		didSet {
+			setFooterGradient()
+			backgroundColor = actionColor
+			footerBackground.backgroundColor = actionColor
+		}
+	}
 }
