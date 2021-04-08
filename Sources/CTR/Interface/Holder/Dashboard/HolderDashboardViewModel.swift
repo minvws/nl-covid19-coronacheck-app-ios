@@ -178,7 +178,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		bannerManager.hideBanner()
 		switch identifier {
 			case .appointment:
-				coordinator?.navigateToAppointment()
+				NotificationCenter.default.post(name: .qrCreated, object: nil)
+//				coordinator?.navigateToAppointment()
 			case .create:
 				coordinator?.navigateToChooseProvider()
 			case .qrcode:
