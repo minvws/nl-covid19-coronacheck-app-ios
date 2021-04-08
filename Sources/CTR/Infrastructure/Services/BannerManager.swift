@@ -11,10 +11,12 @@ protocol BannerManaging {
 
 	/// Show a banner
 	/// - Parameters:
-	///   - title: the title
-	///   - message: the message
-	///   - icon: the icon
-	func showBanner(title: String, message: String?, icon: UIImage?, callback: (() -> Void)?)
+	///   - title: the title of the banner
+	///   - message: the message of the banner
+	///   - link: the linked part of the message
+	///   - icon: the icon of the banner
+	///   - callback: the callback when the linked part is tapped
+	func showBanner(title: String, message: String?, link: String?, icon: UIImage?, callback: (() -> Void)?)
 
 	/// Hide the banner
 	func hideBanner()
@@ -32,10 +34,12 @@ class BannerManager: BannerManaging {
 
 	/// Show a banner
 	/// - Parameters:
-	///   - title: the title
-	///   - message: the message
-	///   - icon: the icon
-	func showBanner(title: String, message: String?, icon: UIImage?, callback: (() -> Void)?) {
+	///   - title: the title of the banner
+	///   - message: the message of the banner
+	///   - link: the linked part of the message
+	///   - icon: the icon of the banner
+	///   - callback: the callback when the linked part is tapped
+	func showBanner(title: String, message: String?, link: String?, icon: UIImage?, callback: (() -> Void)?) {
 
 		guard let window: UIWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
 			return
@@ -53,6 +57,7 @@ class BannerManager: BannerManaging {
 
 			if message != nil && callback != nil {
 				setupLink(view)
+				bannerView?.underline(link)
 			}
 
 			UIAccessibility.post(

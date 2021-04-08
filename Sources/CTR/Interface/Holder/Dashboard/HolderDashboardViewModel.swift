@@ -381,7 +381,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		bannerManager.showBanner(
 			title: .holderBannerNewQRTitle,
 			message: .holderBannerNewQRMessage,
-//			link: .holderBannerNewQRMessageLink,
+			link: .holderBannerNewQRMessageLink,
 			icon: UIImage.alert,
 			callback: { [weak self] in
 

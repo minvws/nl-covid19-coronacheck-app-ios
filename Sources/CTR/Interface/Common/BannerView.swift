@@ -151,16 +151,26 @@ class BannerView: BaseView {
 		}
 	}
 
-	/// The message
+	/// The  message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.footnote,
-				textColor: Theme.colors.secondary,
-				lineHeight: 18
-			)
+			messageLabel.text = message
 		}
+	}
+
+	/// Underline part ot the message
+	/// - Parameter text: the text to underline
+	func underline(_ text: String?) {
+
+		guard let underlinedText = text,
+			  let messageText = message else {
+			return
+		}
+
+		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: UIColor.white)
+		messageLabel.attributedText = attributedUnderlined
+		messageLabel.accessibilityTraits = [.staticText, .link]
+		messageLabel.tintColor = .red
 	}
 
 	/// The icon
