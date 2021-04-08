@@ -56,7 +56,7 @@ class MenuViewModel {
 	/// - Parameters:
 	///   - menuDelegate: the menu delegate
 
-	init(delegate: MenuDelegate, versionSupplier: AppVersionSupplierProtocol) {
+	init(delegate: MenuDelegate) {
 
 		self.menuDelegate = delegate
 		self.topMenu = delegate.getTopMenuItems()
