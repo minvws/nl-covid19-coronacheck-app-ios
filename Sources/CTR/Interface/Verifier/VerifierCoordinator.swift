@@ -120,10 +120,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	func navigateToVerifierWelcome() {
 		
 		let menu = MenuViewController(
-			viewModel: MenuViewModel(
-				delegate: self,
-				versionSupplier: versionSupplier
-			)
+            viewModel: MenuViewModel(delegate: self)
 		)
 		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
 		

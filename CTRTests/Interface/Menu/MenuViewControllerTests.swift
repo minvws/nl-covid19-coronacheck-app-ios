@@ -16,8 +16,6 @@ class MenuViewControllerTests: XCTestCase {
 	/// The coordinator spy
 	var menuDelegateSpy = MenuDelegateSpy()
 
-	var appVersionSupplierSpy = AppVersionSupplierSpy(version: "MenuViewControllerTests", build: "Test")
-
 	var viewModel: MenuViewModel?
 
 	var window = UIWindow()
@@ -27,8 +25,7 @@ class MenuViewControllerTests: XCTestCase {
 		super.setUp()
 
 		menuDelegateSpy = MenuDelegateSpy()
-		appVersionSupplierSpy = AppVersionSupplierSpy(version: "MenuViewControllerTests", build: "Test")
-		viewModel = MenuViewModel(delegate: menuDelegateSpy, versionSupplier: appVersionSupplierSpy)
+		viewModel = MenuViewModel(delegate: menuDelegateSpy)
 		sut = MenuViewController(viewModel: viewModel!)
 	}
 
@@ -59,8 +56,6 @@ class MenuViewControllerTests: XCTestCase {
 		// Then
 		XCTAssertEqual(sut?.sceneView.topStackView.arrangedSubviews.count, items.count, "There should be two top menu items")
 		XCTAssertEqual(sut?.sceneView.bottomStackView.arrangedSubviews.count, 0, "There should be no bottom menu items")
-		XCTAssertTrue(appVersionSupplierSpy.getCurrentVersionCalled, "Version should be called")
-		XCTAssertTrue(appVersionSupplierSpy.getCurrentBuildCalled, "Build should be called")
 	}
 
 	func testBotomMenu() {
