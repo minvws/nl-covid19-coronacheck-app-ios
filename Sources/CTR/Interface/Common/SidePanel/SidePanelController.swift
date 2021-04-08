@@ -127,7 +127,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 		UIView.animate(withDuration: animationSpeed, animations: {
             self.updateSidePanelConstraints(isVisible: false, verticalSizeClass: self.view.traitCollection.verticalSizeClass, superview: self.view)
-
+            self.view.layoutIfNeeded()
 			self.overlayMainView.alpha = 0
 		}, completion: { completed  in
             guard completed else { return }
@@ -141,7 +141,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 		overlayMainView.isHidden = false
 		UIView.animate(withDuration: animationSpeed, animations: {
             self.updateSidePanelConstraints(isVisible: true, verticalSizeClass: self.view.traitCollection.verticalSizeClass, superview: self.view)
-
+            self.view.layoutIfNeeded()
 			self.overlayMainView.alpha = 0.1
         }, completion: { completed in
             guard completed else { return }
@@ -269,6 +269,6 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         }
 
         superview.setNeedsLayout()
-        superview.layoutIfNeeded()
+
     }
 }
