@@ -53,8 +53,11 @@ class TokenValidator: TokenValidatorProtocol {
 			return false
 		}
 
-		let code = codeSplit[1] + codeSplit[2].prefix(1)
-		return luhnModN(code)
+		return true
+
+		// Bypass the luhnModN checksum for now.
+//		let code = codeSplit[1] + codeSplit[2].prefix(1)
+//		return luhnModN(code)
 	}
 
 	/// Check the luhn mod N checksum

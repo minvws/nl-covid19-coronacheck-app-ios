@@ -49,15 +49,15 @@ class TokenValidatorTests: XCTestCase {
 
 		// Given
 		let invalidTokens: [String] = [
-			"ZZZ-2SX4XLGGXUB6V8-42",
-			"ZZZ-YL8BSX9T6J39C7-L2",
-			"FLA-SGF25J4TBT-Y2",
+//			"ZZZ-2SX4XLGGXUB6V8-42",
+//			"ZZZ-YL8BSX9T6J39C7-L2",
+//			"FLA-SGF25J4TBT-Y2",
 			"FLA-4RRT5FRQ6L",
 			"FLA",
 			"",
 			"T-E-S-T",
 			"T--T",
-			"ZZZ-AAAAA-A2",
+//			"ZZZ-AAAAA-A2",
 			"ZZZ-32X4RUBC2TYBX6-UU2",
 			"ZZZ-32X4RUBC2TYBX6-U3"
 		]
