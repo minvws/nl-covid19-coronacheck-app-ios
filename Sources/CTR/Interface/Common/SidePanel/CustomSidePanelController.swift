@@ -10,12 +10,6 @@ import UIKit
 /// A customized version of the SidePanelController
 class CustomSidePanelController: SidePanelController {
 
-	/// The width of the panel, 75% of the screen
-	override var sidePanelWidth: CGFloat {
-		get { return 0.75 * UIScreen.main.bounds.width }
-		set { super.sidePanelWidth = newValue }
-	}
-
 	/// The open and close animation speed, 0.3 seconds
 	override var animationSpeed: Double {
 		get { return 0.3 }
@@ -26,7 +20,7 @@ class CustomSidePanelController: SidePanelController {
 	fileprivate var menuIsOpen = false
 
 	/// Added hamburger icon with accessibility
-	override func updateSelectedViewcontroller() {
+	override func setupLeftBarButtonItem() {
 
 		let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
 		if let navItem = mainViewController?.navigationItem,
@@ -41,7 +35,6 @@ class CustomSidePanelController: SidePanelController {
             navItem.leftBarButtonItem?.accessibilityIdentifier = "OpenMenuButton"
 			navItem.leftBarButtonItem?.accessibilityLabel = .openMenu
 		}
-		super.updateSelectedViewcontroller()
 	}
 
 	/// Added extra check to prevent opening menu with a slide left when the menu is closed
