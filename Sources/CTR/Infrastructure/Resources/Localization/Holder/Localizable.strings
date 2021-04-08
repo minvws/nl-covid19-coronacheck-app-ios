@@ -130,7 +130,7 @@
 "holder.tokenoverview.title" = "Testuitslag ophalen";
 "holder.tokenoverview.text" = "Om je testuitslag op te halen heb je een unieke code nodig.";
 "holder.tokenoverview.nocode" = "Ik heb geen code";
-"holder.tokenoverview.nocode.details" = "Je krijgt van de testlocatie een code met cijfers en letters. \n\nHeb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie. \n\nHet kan zijn dat je je opnieuw moet laten testen.";
+"holder.tokenoverview.nocode.details" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 "holder.tokenoverview.code.subtitle" = "Ik heb een unieke code";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
@@ -163,7 +163,7 @@
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code omgezet.</p><p></p><p>
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code omgezet.</p><p>
 Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.recent" = "Opgehaalde testuitslagen";
 "holder.testresults.negative" = "Negatieve testuitslag";
