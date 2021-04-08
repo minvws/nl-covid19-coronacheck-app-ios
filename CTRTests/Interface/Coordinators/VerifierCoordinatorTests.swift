@@ -34,10 +34,7 @@ class VerifierCoordinatorTests: XCTestCase {
 		// Given
 		let strongSut = try XCTUnwrap(sut)
 		let menu = MenuViewController(
-			viewModel: MenuViewModel(
-				delegate: strongSut,
-				versionSupplier: AppVersionSupplier()
-			)
+            viewModel: MenuViewModel(delegate: strongSut)
 		)
 		sut?.sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
 

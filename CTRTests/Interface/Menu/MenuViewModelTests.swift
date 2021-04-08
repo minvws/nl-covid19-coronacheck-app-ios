@@ -16,14 +16,11 @@ class MenuViewModelTests: XCTestCase {
 	/// The coordinator spy
 	var menuDelegateSpy = MenuDelegateSpy()
 
-	var appVersionSupplierSpy = AppVersionSupplierSpy(version: "MenuViewModelTests", build: "Test")
-
 	override func setUp() {
 
 		super.setUp()
 		menuDelegateSpy = MenuDelegateSpy()
-		appVersionSupplierSpy = AppVersionSupplierSpy(version: "MenuViewModelTests", build: "Test")
-		sut = MenuViewModel(delegate: menuDelegateSpy, versionSupplier: appVersionSupplierSpy)
+		sut = MenuViewModel(delegate: menuDelegateSpy)
 	}
 
 	// MARK: - Tests
@@ -34,13 +31,11 @@ class MenuViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = MenuViewModel(delegate: menuDelegateSpy, versionSupplier: appVersionSupplierSpy)
+		sut = MenuViewModel(delegate: menuDelegateSpy)
 
 		// Then
 		XCTAssertTrue(menuDelegateSpy.getTopMenuItemsCalled, "Menu should fetch the top menu items")
 		XCTAssertTrue(menuDelegateSpy.getBottomMenuItemsCalled, "Menu should fetch the bottom menu items")
-		XCTAssertTrue(appVersionSupplierSpy.getCurrentVersionCalled, "Version should be called")
-		XCTAssertTrue(appVersionSupplierSpy.getCurrentBuildCalled, "Build should be called")
 	}
 
 	/// Test the close menu method
