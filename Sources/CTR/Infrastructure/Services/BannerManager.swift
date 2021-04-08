@@ -90,8 +90,8 @@ class BannerManager: BannerManaging {
 	private func setupLink(_ view: BannerView) {
 
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		view.messageLabel.addGestureRecognizer(tapGesture)
-		view.messageLabel.isUserInteractionEnabled = true
+		view.messageTextView.addGestureRecognizer(tapGesture)
+		view.messageTextView.isUserInteractionEnabled = true
 	}
 
 	// MARK: User interaction

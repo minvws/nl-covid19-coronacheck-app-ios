@@ -52,8 +52,6 @@ extension String {
 
 		let underlineRange = (self as NSString).range(of: underlined)
 		let attributes: [NSAttributedString.Key: Any] = [
-			//			.underlineStyle: NSUnderlineStyle.single.rawValue,
-			//			.foregroundColor: color,
 			.link: underlined
 		]
 		let attributedText = NSMutableAttributedString(
