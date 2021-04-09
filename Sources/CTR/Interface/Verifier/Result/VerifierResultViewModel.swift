@@ -89,18 +89,16 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			return
 		}
 
-		if attributes.cryptoAttributes.isSpecimen {
+		if isQRTimeStampValid(now, attributes: attributes) && isSampleTimeValid(now, attributes: attributes) {
 
-			allowAccess = .demo
 			setHolderIdentity(attributes)
-			showAccessDemo()
-
-		} else if isQRTimeStampValid(now, attributes: attributes) && isSampleTimeValid(now, attributes: attributes) {
-
-			allowAccess = .verified
-			setHolderIdentity(attributes)
-			showAccessAllowed()
-
+			if attributes.cryptoAttributes.isSpecimen {
+				allowAccess = .demo
+				showAccessDemo()
+			} else {
+				allowAccess = .verified
+				showAccessAllowed()
+			}
 		} else {
 
 			allowAccess = .denied

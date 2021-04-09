@@ -68,7 +68,42 @@ class VerifierResultViewControllerTests: XCTestCase {
 	
 	/// Test all the demo content
 	func testDemo() throws {
+
+		// Given
+		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
+		viewModel?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "1",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp40SecAgo)
+				),
+			errorMessage: nil
+		)
+		loadView()
 		
+		// When
+		viewModel?.checkAttributes()
+		
+		// Then
+		let strongSut = try XCTUnwrap(sut)
+		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDemoTitle, "Title should match")
+		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
+		
+	}
+
+	/// Test all the demo content
+	func testDemoFaultTime() throws {
+
 		// Given
 		viewModel?.cryptoResults = CryptoResult(
 			attributes:
@@ -88,16 +123,16 @@ class VerifierResultViewControllerTests: XCTestCase {
 			errorMessage: nil
 		)
 		loadView()
-		
+
 		// When
 		viewModel?.checkAttributes()
-		
+
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
-		
+		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
+		XCTAssertEqual(strongSut.sceneView.imageView.image, .denied, "Image should match")
+
 	}
 	
 	/// Test all the denied content
