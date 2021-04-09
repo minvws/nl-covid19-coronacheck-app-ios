@@ -134,4 +134,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 		return self.orientationLock
 	}
+
+	// MARK: 3rd Party Keyboard
+
+	func application(
+		_ application: UIApplication,
+		shouldAllowExtensionPointIdentifier extensionPointIdentifier: UIApplication.ExtensionPointIdentifier) -> Bool {
+
+		// Reject 3rd Party Keyboards.
+		return extensionPointIdentifier != .keyboard
+	}
 }
