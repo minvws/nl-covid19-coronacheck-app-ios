@@ -90,21 +90,31 @@ class OnboardingViewController: BaseViewController {
 	
 	/// Create a custom back button so we can catch the tapped on the back button.
 	private func setupBackButton() {
-		
+
+		// hide the original back button
 		navigationItem.hidesBackButton = true
-		
+
+		// Create a button with a back arrow and a .previous title
 		let button = UIButton(type: .custom)
 		button.setTitle(.previous, for: .normal)
 		button.setTitleColor(Theme.colors.dark, for: .normal)
 		button.setTitleColor(Theme.colors.gray, for: .highlighted)
 		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.setImage(.backArrow, for: .normal)
+
 		// Add a little spacing between the image and the title, shift the tilte 5 px right
 		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
 		// Increase the hit area, move the button 5 px to the left
 		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
+
+		// Handle touches
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
+
+		// Accessibility
 		button.accessibilityLabel = .back
+
+		// Make sure the text won't be truncated if the user opts for bold texts
+		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
 		
 		backButton = UIBarButtonItem(customView: button)
 	}
