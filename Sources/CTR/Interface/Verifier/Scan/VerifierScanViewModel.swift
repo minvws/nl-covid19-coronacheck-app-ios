@@ -59,6 +59,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	func dismiss() {
 
-		theCoordinator?.dismiss()
+		theCoordinator?.navigateToVerifierWelcome()
 	}
 }
