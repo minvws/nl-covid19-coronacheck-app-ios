@@ -572,7 +572,6 @@
 		3C195CCA2620876F002F0387 /* QCOMockPopoverPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCOMockPopoverPresentationController.m; sourceTree = "<group>"; };
 		3C195CCB2620876F002F0387 /* DismissalVerifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissalVerifier.swift; sourceTree = "<group>"; };
 		3C195CCC2620876F002F0387 /* ClosureContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClosureContainer.swift; sourceTree = "<group>"; };
-		3C195CDC262088B1002F0387 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
 		6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-acceptance.plist"; sourceTree = "<group>"; };
 		6D0022B825DBC3FA00E91084 /* configuration-production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-production.plist"; sourceTree = "<group>"; };
 		6D014A3F25F23BFA0014BAC4 /* TestProofValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProofValidator.swift; sourceTree = "<group>"; };
@@ -1757,7 +1756,6 @@
 				6DB080A925BB0EF300A56B22 /* Infrastrucure */,
 				6D01D8DF25C04FDB00A4AB89 /* Interface */,
 				6D20239125CAB15500CFCD14 /* Utils */,
-				3C195CDC262088B1002F0387 /* BridgingHeader.h */,
 			);
 			path = CTRTests;
 			sourceTree = "<group>";
@@ -2839,7 +2837,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.CTRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CTRTests/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR";
@@ -2952,7 +2949,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.CTRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CTRTests/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR";
@@ -3066,7 +3062,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.CTRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CTRTests/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR";
@@ -3179,7 +3174,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.CTRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CTRTests/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR";
@@ -3589,7 +3583,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.CTRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CTRTests/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR";
@@ -3612,7 +3605,6 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.CTRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = CTRTests/BridgingHeader.h;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR";
