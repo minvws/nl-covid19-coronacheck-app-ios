@@ -34,6 +34,8 @@
 		3C195CD42620876F002F0387 /* QCOMockPopoverPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C195CCA2620876F002F0387 /* QCOMockPopoverPresentationController.m */; };
 		3C195CD52620876F002F0387 /* DismissalVerifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C195CCB2620876F002F0387 /* DismissalVerifier.swift */; };
 		3C195CD62620876F002F0387 /* ClosureContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C195CCC2620876F002F0387 /* ClosureContainer.swift */; };
+		3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CD826208813002F0387 /* OHHTTPStubs */; };
+		3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CDA26208813002F0387 /* OHHTTPStubsSwift */; };
 		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B925DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
@@ -897,6 +899,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */,
+				3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1993,6 +1997,10 @@
 				6DDEFB0825AEDCAA00A6912A /* PBXTargetDependency */,
 			);
 			name = CTRTests;
+			packageProductDependencies = (
+				3C195CD826208813002F0387 /* OHHTTPStubs */,
+				3C195CDA26208813002F0387 /* OHHTTPStubsSwift */,
+			);
 			productName = CoronaTesterTests;
 			productReference = 6DDEFB0625AEDCAA00A6912A /* CTRTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -2032,6 +2040,7 @@
 				3C195C8226207DA4002F0387 /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 				3C195C8526207E00002F0387 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */,
 			);
 			productRefGroup = 6DDEFAF125AEDCA800A6912A /* Products */;
 			projectDirPath = "";
@@ -3700,6 +3709,14 @@
 				minimumVersion = 7.10.0;
 			};
 		};
+		3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AliSoftware/OHHTTPStubs";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3772,6 +3789,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
+		};
+		3C195CD826208813002F0387 /* OHHTTPStubs */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */;
+			productName = OHHTTPStubs;
+		};
+		3C195CDA26208813002F0387 /* OHHTTPStubsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */;
+			productName = OHHTTPStubsSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
