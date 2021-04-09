@@ -83,7 +83,7 @@ class VerifierStartViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		checkImage()
+		layoutForOrientation()
 	}
 
 	// Rotation
@@ -93,12 +93,13 @@ class VerifierStartViewController: BaseViewController {
 		with coordinator: UIViewControllerTransitionCoordinator) {
 
 		coordinator.animate { [weak self] _ in
-			self?.checkImage()
+			self?.layoutForOrientation()
 			self?.sceneView.setNeedsLayout()
 		}
 	}
 
-	func checkImage() {
+	/// Layout for different orientations
+	func layoutForOrientation() {
 
 		if UIDevice.current.isLandscape {
 			sceneView.hideImage()

@@ -47,7 +47,7 @@ class OnboardingPageViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		checkImage()
+		layoutForOrientation()
 	}
 
 	// Rotation
@@ -57,13 +57,16 @@ class OnboardingPageViewController: BaseViewController {
 		with coordinator: UIViewControllerTransitionCoordinator) {
 
 		coordinator.animate { [weak self] _ in
-			self?.checkImage()
+			self?.layoutForOrientation()
+			self?.sceneView.setNeedsLayout()
 		}
 	}
 
-	func checkImage() {
+	/// Layout for different orientations
+	func layoutForOrientation() {
 
 		if UIDevice.current.isSmallScreen || UIDevice.current.isLandscape {
+			// Also hide the image on small devices 
 			sceneView.hideImage()
 		} else {
 			sceneView.showImage()
