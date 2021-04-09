@@ -8,13 +8,13 @@
 import XCTest
 @testable import CTR
 
-class VerifyResultViewModelTests: XCTestCase {
+class VerifierResultViewModelTests: XCTestCase {
 
 	/// Subject under test
 	var sut: VerifierResultViewModel?
 
 	/// The coordinator spy
-	var verifyCoordinatorDelegateSpy = VerifyCoordinatorDelegateSpy()
+	var verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 
 	/// Date parser
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
@@ -25,7 +25,7 @@ class VerifyResultViewModelTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		verifyCoordinatorDelegateSpy = VerifyCoordinatorDelegateSpy()
+		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,

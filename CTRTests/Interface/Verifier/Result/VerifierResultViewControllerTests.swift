@@ -8,13 +8,13 @@
 import XCTest
 @testable import CTR
 
-class VerifyResultViewControllerTests: XCTestCase {
+class VerifierResultViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
 	var sut: VerifierResultViewController?
 	
 	/// The coordinator spy
-	var verifyCoordinatorDelegateSpy = VerifyCoordinatorDelegateSpy()
+	var verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 	
 	/// The view model
 	var viewModel: VerifierResultViewModel?
@@ -25,7 +25,7 @@ class VerifyResultViewControllerTests: XCTestCase {
 	override func setUp() {
 		
 		super.setUp()
-		verifyCoordinatorDelegateSpy = VerifyCoordinatorDelegateSpy()
+		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,

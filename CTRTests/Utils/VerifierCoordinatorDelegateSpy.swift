@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class VerifyCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
+class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 
 	var navigateToVerifierWelcomeCalled = false
 	var navigateToScanInstructionCalled = false
