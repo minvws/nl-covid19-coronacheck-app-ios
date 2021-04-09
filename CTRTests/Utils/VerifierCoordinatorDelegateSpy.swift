@@ -8,7 +8,7 @@
 import XCTest
 @testable import CTR
 
-class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
+class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
 	var navigateToVerifierWelcomeCalled = false
 	var navigateToScanInstructionCalled = false
@@ -16,6 +16,7 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 	var navigateToScanResultCalled = false
 	var displayContentCalled = false
 	var dismissCalled = false
+    var openURLCalled = false
 
 	func navigateToVerifierWelcome() {
 
@@ -46,4 +47,8 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, Dismissable {
 
 		dismissCalled = true
 	}
+
+    func openUrl(_ url: URL, inApp: Bool) {
+        openURLCalled = true
+    }
 }
