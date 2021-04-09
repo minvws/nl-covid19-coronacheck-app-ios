@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -858,13 +858,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		2AA686B9ED54FFE475502A40 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 		6D01C80F25DEEAD2001E8BD2 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1640,7 +1633,6 @@
 				6DDEFAF225AEDCA800A6912A /* CTR */,
 				6DDEFB0925AEDCAA00A6912A /* CTRTests */,
 				6DDEFAF125AEDCA800A6912A /* Products */,
-				2AA686B9ED54FFE475502A40 /* Pods */,
 				24D22EDDC156812B48895190 /* Frameworks */,
 			);
 			sourceTree = "<group>";
