@@ -3,13 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		326E62C125D45DBF0072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
 		326E62C225D45DBF0072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
 		326E62C325D45DC00072CB8E /* demo-root.pem in Resources */ = {isa = PBXBuildFile; fileRef = 326E62C025D45DBF0072CB8E /* demo-root.pem */; };
+		3C195C7A26207D40002F0387 /* AppAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C7926207D40002F0387 /* AppAuth */; };
+		3C195C7C26207D40002F0387 /* AppAuthCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C7B26207D40002F0387 /* AppAuthCore */; };
+		3C195C7F26207D7B002F0387 /* CocoaLumberjackSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C7E26207D7B002F0387 /* CocoaLumberjackSwift */; };
+		3C195C8126207D7B002F0387 /* CocoaLumberjack in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C8026207D7B002F0387 /* CocoaLumberjack */; };
+		3C195C8426207DA4002F0387 /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C8326207DA4002F0387 /* MBProgressHUD */; };
+		3C195C8726207E00002F0387 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C8626207E00002F0387 /* Lottie */; };
+		3C195C8A26207F0D002F0387 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C8926207F0D002F0387 /* FirebaseCrashlytics */; };
 		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B925DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
@@ -834,8 +841,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C195C8126207D7B002F0387 /* CocoaLumberjack in Frameworks */,
+				3C195C7A26207D40002F0387 /* AppAuth in Frameworks */,
 				6D9D3B0E25FA3E2F0031DA5D /* clcore.framework in Frameworks */,
+				3C195C8426207DA4002F0387 /* MBProgressHUD in Frameworks */,
 				6D33015E25CFE70200A98C1C /* openssl.framework in Frameworks */,
+				3C195C7C26207D40002F0387 /* AppAuthCore in Frameworks */,
+				3C195C8A26207F0D002F0387 /* FirebaseCrashlytics in Frameworks */,
+				3C195C7F26207D7B002F0387 /* CocoaLumberjackSwift in Frameworks */,
+				3C195C8726207E00002F0387 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1870,6 +1884,15 @@
 			dependencies = (
 			);
 			name = Holder;
+			packageProductDependencies = (
+				3C195C7926207D40002F0387 /* AppAuth */,
+				3C195C7B26207D40002F0387 /* AppAuthCore */,
+				3C195C7E26207D7B002F0387 /* CocoaLumberjackSwift */,
+				3C195C8026207D7B002F0387 /* CocoaLumberjack */,
+				3C195C8326207DA4002F0387 /* MBProgressHUD */,
+				3C195C8626207E00002F0387 /* Lottie */,
+				3C195C8926207F0D002F0387 /* FirebaseCrashlytics */,
+			);
 			productName = CoronaTester;
 			productReference = 6DDEFAF025AEDCA800A6912A /* CTR.app */;
 			productType = "com.apple.product-type.application";
@@ -1921,6 +1944,13 @@
 				nl,
 			);
 			mainGroup = 6DDEFAE725AEDCA800A6912A;
+			packageReferences = (
+				3C195C7826207D40002F0387 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */,
+				3C195C7D26207D7B002F0387 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */,
+				3C195C8226207DA4002F0387 /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
+				3C195C8526207E00002F0387 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 6DDEFAF125AEDCA800A6912A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -3536,6 +3566,87 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3C195C7826207D40002F0387 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/openid/AppAuth-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+		3C195C7D26207D7B002F0387 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CocoaLumberjack/CocoaLumberjack";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.7.2;
+			};
+		};
+		3C195C8226207DA4002F0387 /* XCRemoteSwiftPackageReference "MBProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jdg/MBProgressHUD";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
+			};
+		};
+		3C195C8526207E00002F0387 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.1;
+			};
+		};
+		3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.10.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3C195C7926207D40002F0387 /* AppAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C7826207D40002F0387 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */;
+			productName = AppAuth;
+		};
+		3C195C7B26207D40002F0387 /* AppAuthCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C7826207D40002F0387 /* XCRemoteSwiftPackageReference "AppAuth-iOS" */;
+			productName = AppAuthCore;
+		};
+		3C195C7E26207D7B002F0387 /* CocoaLumberjackSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C7D26207D7B002F0387 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
+			productName = CocoaLumberjackSwift;
+		};
+		3C195C8026207D7B002F0387 /* CocoaLumberjack */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C7D26207D7B002F0387 /* XCRemoteSwiftPackageReference "CocoaLumberjack" */;
+			productName = CocoaLumberjack;
+		};
+		3C195C8326207DA4002F0387 /* MBProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C8226207DA4002F0387 /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
+			productName = MBProgressHUD;
+		};
+		3C195C8626207E00002F0387 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C8526207E00002F0387 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+		3C195C8926207F0D002F0387 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DDEFAE825AEDCA800A6912A /* Project object */;
 }
