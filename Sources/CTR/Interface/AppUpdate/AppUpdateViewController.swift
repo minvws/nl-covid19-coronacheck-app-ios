@@ -90,7 +90,7 @@ class AppUpdateViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		checkImage()
+		layoutForOrientation()
 	}
 
 	// Rotation
@@ -100,13 +100,15 @@ class AppUpdateViewController: BaseViewController {
 		with coordinator: UIViewControllerTransitionCoordinator) {
 
 		coordinator.animate { [weak self] _ in
-			self?.checkImage()
+			self?.layoutForOrientation()
 		}
 	}
 
-	func checkImage() {
+	/// Layout for different orientations
+	func layoutForOrientation() {
 
 		if UIDevice.current.isSmallScreen || UIDevice.current.isLandscape {
+			// Also hide on small screens
 			sceneView.hideImage()
 		} else {
 			sceneView.showImage()

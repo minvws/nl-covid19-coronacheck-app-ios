@@ -204,4 +204,17 @@ class LaunchView: BaseView {
 			appIconView.image = appIcon
 		}
 	}
+
+	/// Hide the header image
+	func hideImage() {
+
+		appIconView.isHidden = true
+
+	}
+
+	/// Show the header image
+	func showImage() {
+
+		appIconView.isHidden = false
+	}
 }
