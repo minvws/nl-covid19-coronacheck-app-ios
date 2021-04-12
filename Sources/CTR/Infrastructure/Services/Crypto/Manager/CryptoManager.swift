@@ -126,17 +126,18 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	/// Load the public keys
 	@discardableResult func loadPublicKeys() -> Bool {
-		
-		if let keysAsData = keyData.issuerPublicKeys {
-			
-			if let result = ClmobileLoadIssuerPks(keysAsData) {
-				if !result.error.isEmpty {
-					logError("Error loading public keys: \(result.error)")
-					return false
-				}
-			}
+
+		guard let keysAsData = keyData.issuerPublicKeys,
+			  let result = ClmobileLoadIssuerPks(keysAsData) else {
+
+			return false
 		}
-		return true
+
+		if !result.error.isEmpty {
+			logError("Error loading public keys: \(result.error)")
+		}
+
+		return result.error.isEmpty
 	}
 	
 	/// Do we have public keys

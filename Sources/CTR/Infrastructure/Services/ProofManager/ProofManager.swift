@@ -145,16 +145,12 @@ class ProofManager: ProofManaging, Logging {
 		
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 			
-			guard let strongSelf = self else {
-				return
-			}
-			
 			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
 			switch resultwrapper {
 				case let .success(keys):
 					
-					if strongSelf.cryptoManager.setIssuerPublicKeys(keys) {
-						strongSelf.keysFetchedTimestamp = Date()
+					if let manager = self?.cryptoManager, manager.setIssuerPublicKeys(keys) {
+						self?.keysFetchedTimestamp = Date()
 						onCompletion?()
 					} else {
 						// Loading of the public keys into the CL Library failed.
@@ -163,10 +159,10 @@ class ProofManager: ProofManaging, Logging {
 					}
 				case let .failure(error):
 					
-					strongSelf.logError("Error getting the issuers public keys: \(error)")
+					self?.logError("Error getting the issuers public keys: \(error)")
 					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
 					   lastFetchedTimestamp > Date() - ttl {
-						strongSelf.logInfo("Issuer public keys still within TTL")
+						self?.logInfo("Issuer public keys still within TTL")
 						onCompletion?()
 						
 					} else {
