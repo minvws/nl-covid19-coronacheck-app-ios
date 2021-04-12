@@ -73,6 +73,9 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
 
+	/// The forced information manager
+	var forcedInformationManager: ForcedInformationManaging = Services.forcedInformationManager
+
 	/// The proof manager
 	var proofManager: ProofManaging = Services.proofManager
 
@@ -143,6 +146,9 @@ class HolderCoordinator: Coordinator, Logging {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
+		} else if forcedInformationManager.needsUpdating {
+
+
 		} else {
 
 			// Start with the holder app

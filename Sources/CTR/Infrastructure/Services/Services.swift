@@ -10,6 +10,7 @@ import Foundation
 /// Global container for the different services used in the app
 final class Services {
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
+	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
 	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
@@ -21,6 +22,13 @@ final class Services {
 	static func use(_ cryptoManager: CryptoManaging.Type) {
 
 		cryptoManagingType = cryptoManager
+	}
+
+	/// Override the [ForcedInformationManaging](x-source-tag://ForcedInformationManaging) type that will be instantiated
+	/// - parameter forcedInformationManager: The type conforming to [ForcedInformationManaging](x-source-tag://ForcedInformationManaging) to be used as the global forcedInformationManager
+	static func use(_ forcedInformationManager: ForcedInformationManaging.Type) {
+
+		forcedInformationManagingType = forcedInformationManager
 	}
 
     /// Override the [NetworkManaging](x-source-tag://NetworkManaging) type that will be instantiated
@@ -81,6 +89,8 @@ final class Services {
     }()
 
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
+
+	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
 
