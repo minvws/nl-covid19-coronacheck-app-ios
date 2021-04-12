@@ -7,41 +7,6 @@
 
 import UIKit
 
-class ForcedInformationViewModel {
-
-	// MARK: - Bindable variables
-
-	@Bindable private(set) var title: String
-
-	@Bindable private(set) var highlights: String
-
-	@Bindable private(set) var content: String
-
-	@Bindable private(set) var primaryButtonTitle: String
-
-	@Bindable private(set) var secondaryButtonTitle: String?
-
-	// MARK: - Initializer
-
-	/// Initializer
-	/// - Parameters:
-	///   - delegate: the coordinator delegate
-	///   - consent: the consent
-	init(_ delegate: ForcedInformationCoordinatorDelegate, consent: ForcedInformationConsent) {
-
-		self.title = consent.title
-		self.highlights = consent.highlight
-		self.content = consent.content
-
-		if consent.mustGiveConsent {
-			primaryButtonTitle = "Rolus: Akkoord"
-			secondaryButtonTitle = "Rolus: Niet akkoord"
-		} else {
-			primaryButtonTitle = .next
-		}
-	}
-}
-
 class ForcedInformationViewController: BaseViewController {
 
 	/// The model
@@ -74,18 +39,58 @@ class ForcedInformationViewController: BaseViewController {
 
 		super.viewDidLoad()
 
+		setupContent()
 		setupBindings()
+		setupButtons()
 
 		navigationItem.hidesBackButton = true
 	}
 
+	/// setup the bindings
 	func setupBindings() {
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$highlights.binding = { [weak self] in self?.sceneView.highlight = $0 }
-		viewModel.$content.binding = { [weak self] in self?.sceneView.content = $0 }
+		viewModel.$enableSecondaryButton.binding = { [weak self] in
+			if $0 {
+				self?.sceneView.showSecondaryButton()
+			} else {
+				self?.sceneView.hideSecondaryButton()
+			}
+		}
 
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
-		viewModel.$secondaryButtonTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 ?? "" }
+		viewModel.$showErrorDialog.binding = { [weak self] in
+			if $0 {
+				self?.showErrorDialog()
+			}
+		}
+	}
+
+	/// Setup the content
+	func setupContent() {
+
+		sceneView.title = viewModel.title
+		sceneView.highlight = viewModel.highlights
+		sceneView.content = viewModel.content
+		sceneView.primaryTitle = viewModel.primaryActionTitle
+		sceneView.secondaryTitle = viewModel.secondaryActionTitle ?? ""
+	}
+
+	/// Setup the buttons
+	func setupButtons() {
+
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+
+			self?.viewModel.primaryButtonTapped()
+		}
+
+		sceneView.secondaryButtonTappedCommand = { [weak self] in
+
+			self?.viewModel.secondaryButtonTapped()
+		}
+	}
+
+	/// Show the error dialog
+	func showErrorDialog() {
+
+		showError(viewModel.errortitle, message: viewModel.errorMessage)
 	}
 }

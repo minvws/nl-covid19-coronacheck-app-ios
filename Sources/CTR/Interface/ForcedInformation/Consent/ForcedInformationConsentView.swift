@@ -14,15 +14,11 @@ class ForcedInformationConsentView: BaseView {
 
 		// Dimensions
 		static let cornerRadius: CGFloat = 10.0
-//		static let shadowRadius: CGFloat = 6
-//		static let shadowOpacity: Float = 0.2
 		static let buttonHeight: CGFloat = 52
 		static let titleLineHeight: CGFloat = 26
-//		static let messageLineHeight: CGFloat = 22
-//		static let gradientHeight: CGFloat = 15.0
 		static let buttonWidth: CGFloat = 182.0
-//
-//		// Margins
+
+		// Margins
 		static let margin: CGFloat = 20.0
 		static let bottomMargin: CGFloat = 8.0
 		static let spacing: CGFloat = 24.0
@@ -109,6 +105,9 @@ class ForcedInformationConsentView: BaseView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+
+		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
 	/// Setup the hierarchy
@@ -202,7 +201,6 @@ class ForcedInformationConsentView: BaseView {
 		// Default disabled, the primary button to the top of the secondary button
 		primaryButtonToSecondaryButtonConstraint = primaryButton.bottomAnchor.constraint(equalTo: secondaryButton.topAnchor)
 		primaryButtonToSecondaryButtonConstraint?.isActive = false
-
 	}
 
 	/// Setup all the accessibility traits
@@ -211,6 +209,20 @@ class ForcedInformationConsentView: BaseView {
 		super.setupAccessibility()
 		// Title
 		titleLabel.accessibilityTraits = .header
+	}
+
+	// MARK: - Interaction
+
+	/// User tapped on the primary button
+	@objc func primaryButtonTapped() {
+
+		primaryButtonTappedCommand?()
+	}
+
+	/// User tapped on the primary button
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonTappedCommand?()
 	}
 
 	// MARK: - Public Access
@@ -244,24 +256,40 @@ class ForcedInformationConsentView: BaseView {
 		}
 	}
 
+	/// The title for the primary button
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}
 	}
 
-	var secondaryTitle: String = "" {
+	/// The title for the secondary button
+	var secondaryTitle: String? {
 		didSet {
-			if secondaryTitle.isEmpty {
-				secondaryButton.isHidden = true
-				primaryButtonToBottomConstraint?.isActive = true
-			} else {
-				secondaryButton.setTitle(secondaryTitle, for: .normal)
-				secondaryButton.isHidden = false
-				primaryButtonToBottomConstraint?.isActive = false
-				primaryButtonToSecondaryButtonConstraint?.isActive = true
-				setNeedsLayout()
-			}
+			secondaryButton.setTitle(secondaryTitle, for: .normal)
 		}
 	}
+
+	/// Show the secondary button
+	func showSecondaryButton() {
+
+		secondaryButton.isHidden = false
+		primaryButtonToBottomConstraint?.isActive = false
+		primaryButtonToSecondaryButtonConstraint?.isActive = true
+		setNeedsLayout()
+	}
+
+	/// Hide the secondary button
+	func hideSecondaryButton() {
+
+		secondaryButton.isHidden = true
+		primaryButtonToBottomConstraint?.isActive = true
+		setNeedsLayout()
+	}
+
+	/// The user tapped on the primary button
+	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// The user tapped on the secondary button
+	var secondaryButtonTappedCommand: (() -> Void)?
 }

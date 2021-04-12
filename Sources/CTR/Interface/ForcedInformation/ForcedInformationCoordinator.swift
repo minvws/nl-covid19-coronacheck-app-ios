@@ -70,10 +70,10 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 		let viewController = ForcedInformationViewController(
 			viewModel: ForcedInformationViewModel(
 				self,
-				consent: ForcedInformationConsent(
-					title: "Rolus: title",
-					highlight: "Rolus: highlights",
-					content: "Rolus: content",
+				forcedInformationConsent: ForcedInformationConsent(
+					title: .newTermsTitle,
+					highlight: .newTermsHighlights,
+					content: .newTermsDescription,
 					mustGiveConsent: true
 				)
 			)
