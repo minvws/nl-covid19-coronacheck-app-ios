@@ -1,6 +1,0 @@
-framework module ViewControllerPresentationSpy {
-  umbrella header "ViewControllerPresentationSpy-umbrella.h"
-
-  export *
-  module * { export * }
-}
