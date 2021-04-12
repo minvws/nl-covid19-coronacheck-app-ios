@@ -21,21 +21,51 @@ or alternatively using `brew install fastlane`
 fastlane ios test_ci
 ```
 Run tests for integration purposes
-### ios deploy
+### ios deploy_test_ci
 ```
-fastlane ios deploy
+fastlane ios deploy_test_ci
 ```
-Build and deploy via Firebase
-### ios deploy_holder_ci
+Build and deploy the apps for Test via Firebase from CI
+### ios deploy_acc_ci
 ```
-fastlane ios deploy_holder_ci
+fastlane ios deploy_acc_ci
 ```
-Build and deploy the holder app via Firebase from CI
-### ios deploy_verifier_ci
+Build and deploy the apps for Acc via Firebase from CI
+### ios deploy_prod_ci
 ```
-fastlane ios deploy_verifier_ci
+fastlane ios deploy_prod_ci
 ```
-Build and deploy the verifier app via Firebase from CI
+Build and deploy the apps for Prod via Firebase from CI
+### ios deploy_holder_test_ci
+```
+fastlane ios deploy_holder_test_ci
+```
+Build and deploy the Holder app for Test via Firebase from CI
+### ios deploy_verifier_test_ci
+```
+fastlane ios deploy_verifier_test_ci
+```
+Build and deploy the Verifier app for Test via Firebase from CI
+### ios deploy_holder_acc_ci
+```
+fastlane ios deploy_holder_acc_ci
+```
+Build and deploy the Holder app for Acc via Firebase from CI
+### ios deploy_verifier_acc_ci
+```
+fastlane ios deploy_verifier_acc_ci
+```
+Build and deploy the Verifier app for Acc via Firebase from CI
+### ios deploy_holder_prod_ci
+```
+fastlane ios deploy_holder_prod_ci
+```
+Build and deploy the Holder app for Prod via Firebase from CI
+### ios deploy_verifier_prod_ci
+```
+fastlane ios deploy_verifier_prod_ci
+```
+Build and deploy the Verifier app for Prod via Firebase from CI
 
 ----
 

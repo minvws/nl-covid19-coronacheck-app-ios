@@ -6,8 +6,8 @@
 */
 
 import XCTest
-@testable import CTR
 import ViewControllerPresentationSpy
+@testable import CTR
 
 class EnlargedQRViewControllerTests: XCTestCase {
 

@@ -6,6 +6,7 @@
 */
 
 import CocoaLumberjack
+import CocoaLumberjackSwift
 import Foundation
 
 public protocol Logging {
