@@ -147,7 +147,13 @@ class HolderCoordinator: Coordinator, Logging {
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
 		} else if forcedInformationManager.needsUpdating {
-
+			// Show Forced Information
+			let coordinator = ForcedInformationCoordinator(
+				navigationController: navigationController,
+				forcedInformationManager: forcedInformationManager,
+				delegate: self
+			)
+			startChildCoordinator(coordinator)
 
 		} else {
 
@@ -439,5 +445,24 @@ extension HolderCoordinator: OnboardingDelegate {
 
 		// Navigate to Holder Start.
 		navigateToHolderStart()
+	}
+}
+
+// MARK: - ForcedInformationDelegate
+
+extension HolderCoordinator: ForcedInformationDelegate {
+
+	/// The user finished the forced information
+	func finishForcedInformation() {
+
+		logDebug("HolderCoordinator: finishForcedInformation")
+
+		// Remove childCoordinator
+		if let forcedInformationCoordinator = childCoordinators.first {
+			removeChildCoordinator(forcedInformationCoordinator)
+		}
+
+		// Navigate to start
+		start()
 	}
 }

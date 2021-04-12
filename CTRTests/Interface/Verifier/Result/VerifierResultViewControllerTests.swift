@@ -11,13 +11,13 @@ import XCTest
 class VerifierResultViewControllerTests: XCTestCase {
 	
 	// MARK: Subject under test
-	var sut: VerifierResultViewController?
+	var sut: VerifierResultViewController!
 	
 	/// The coordinator spy
 	var verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 	
 	/// The view model
-	var viewModel: VerifierResultViewModel?
+	var viewModel: VerifierResultViewModel!
 	
 	var window = UIWindow()
 	
@@ -70,7 +70,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDemo() throws {
 		
 		// Given
-		viewModel?.cryptoResults = CryptoResult(
+		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
 					cryptoAttributes: CrypoAttributes(
@@ -90,7 +90,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		viewModel?.checkAttributes()
+		viewModel.checkAttributes()
 		
 		// Then
 		let strongSut = try XCTUnwrap(sut)
@@ -104,7 +104,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDenied() throws {
 		
 		// Given
-		viewModel?.cryptoResults = CryptoResult(
+		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
 					cryptoAttributes: CrypoAttributes(
@@ -124,7 +124,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		viewModel?.checkAttributes()
+		viewModel.checkAttributes()
 		
 		// Then
 		let strongSut = try XCTUnwrap(sut)
