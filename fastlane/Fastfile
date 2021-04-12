@@ -19,12 +19,11 @@ platform :ios do
   desc "Run tests for integration purposes"
   lane :test_ci do
     prepare
-    dependencies
 
     run_tests(
       app_name: "CTR",
       device: "iPhone 12",
-      workspace: "CTR.xcworkspace",
+      project: "CTR.xcodeproj",
       scheme: "CoronaCheck",
       reinstall_app: true,
       app_identifier: "nl.rijksoverheid.ctr",
@@ -159,7 +158,6 @@ platform :ios do
     install_provisioning_profile(path: "fastlane/profiles/CoronaCheck_Ad_Hoc.mobileprovision")
   
     prepare
-    dependencies
   end
 
   private_lane :deploy_verifier do
@@ -169,7 +167,6 @@ platform :ios do
     install_provisioning_profile(path: "fastlane/profiles/CoronaCheck_Verifier_Ad_Hoc.mobileprovision")
 
     prepare
-    dependencies
   end
 
   private_lane :prepare_certificate do
@@ -184,14 +181,6 @@ platform :ios do
 
   private_lane :prepare do
     xcversion(version: "12.4")
-  end
-
-  private_lane :dependencies do 
-    cocoapods(
-      clean_install: true,
-      podfile: "./Podfile",
-      silent: true
-    )
   end
 
   private_lane :determine_build_number do |options|
