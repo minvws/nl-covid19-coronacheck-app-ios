@@ -29,7 +29,9 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     /// The width of the panel as a fraction of the screen:
     open var sidePanelFractionalWidthForRegularSizeClass: CGFloat = 0.75
     open var sidePanelFractionalWidthForCompactSizeClass: CGFloat = 0.4
-	open var animationSpeed: Double = 0.4
+
+    /// The open and close animation speed, 0.3 seconds
+    var animationSpeed: Double = 0.3
 
 	internal weak var sidePanelView: UIView! // hosts the sideController's view
 	fileprivate weak var mainView: UIView? // hosts the selectedViewController's view
@@ -42,6 +44,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     /// State
 	fileprivate var hasLeftSwipeGestureStarted = false
 	fileprivate var shouldHideSidePanelOnPanGestureCompletion = true
+    /// Flag to indicate if menu is open or not
     fileprivate var sidePanelIsVisible = false
 
 	open func updateSelectedViewController() {
@@ -58,11 +61,16 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     open func setupLeftBarButtonItem() {
         let mainViewController = (selectedViewController as? UINavigationController)?.topViewController ?? selectedViewController
         if let navItem = mainViewController?.navigationItem,
-           navItem.leftBarButtonItem == nil {
-            let button = UIButton(type: .system)
-            button.setTitle("Menu", for: UIControl.State())
-            button.addTarget(self, action: #selector(showSidePanel), for: .touchUpInside)
-            navItem.leftBarButtonItem = UIBarButtonItem(customView: button)
+            navItem.leftBarButtonItem == nil {
+            let hamburger = UIImage.hamburger
+            let button = UIBarButtonItem(
+                image: hamburger,
+                style: .plain,
+                target: self,
+                action: #selector(showSidePanel))
+            navItem.leftBarButtonItem = button
+            navItem.leftBarButtonItem?.accessibilityIdentifier = "OpenMenuButton"
+            navItem.leftBarButtonItem?.accessibilityLabel = .openMenu
         }
     }
 
@@ -98,7 +106,10 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	}
 
 	@objc func handlePan(_ panGestureRecognizer: UIPanGestureRecognizer) {
-
+        // check to prevent opening menu with a slide left when the menu is closed
+        guard sidePanelIsVisible else {
+            return
+        }
 		guard hasLeftSwipeGestureStarted else {
 			return
 		}
@@ -133,6 +144,14 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
             guard completed else { return }
             self.overlayMainView.isHidden = true
             self.sidePanelIsVisible = false
+
+            self.view.disableAllGestureRecognisers()
+
+            if let mainViewController = (self.selectedViewController as? UINavigationController)?.topViewController ?? self.selectedViewController {
+                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: mainViewController)
+            }
+            
+            self.sidePanelView.accessibilityViewIsModal = false
 		})
 	}
 
@@ -146,6 +165,12 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         }, completion: { completed in
             guard completed else { return }
             self.sidePanelIsVisible = true
+
+            self.view.enableAllGestureRecognisers()
+
+            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: self.sideController)
+
+            self.sidePanelView.accessibilityViewIsModal = true
         })
 	}
 
@@ -274,5 +299,19 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         }
 
         superview.setNeedsLayout()
+    }
+}
+
+private extension UIView {
+    func disableAllGestureRecognisers() {
+        gestureRecognizers?.forEach({ gestureRecognizer in
+            gestureRecognizer.isEnabled = false
+        })
+    }
+
+    func enableAllGestureRecognisers() {
+        gestureRecognizers?.forEach({ gestureRecognizer in
+            gestureRecognizer.isEnabled = true
+        })
     }
 }
