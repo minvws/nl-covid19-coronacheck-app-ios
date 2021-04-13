@@ -9,7 +9,7 @@
 import XCTest
 import ViewControllerPresentationSpy
 
-class ForcedInformationConsentViewControllerTests: XCTestCase {
+class ForcedInformationConsentVCTests: XCTestCase {
 
 	var sut: ForcedInformationConsentViewController!
 

@@ -8,13 +8,12 @@
 import Foundation
 import Security
 
-final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logging {
-
-	let loggingCategory = "NetworkManagerURLSessionDelegate"
+final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 
 	/// The network configuration
 	private let networkConfiguration: NetworkConfiguration
 
+	/// The security strategy, defaults to none.
 	private (set) var securityStrategy: SecurityStrategy = .none
 
 	/// Initialise session delegate with certificate used for SSL pinning
@@ -30,8 +29,14 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
 		securityStrategy = strategy
 	}
 
+	/// The security checker (certificate ssl check, PKSC7 signature check)
 	var checker: SecurityCheckerProtocol?
 
+	/// URLSessionDelegate method
+	/// - Parameters:
+	///   - session: the current url session
+	///   - challenge: the authentication challenge
+	///   - completionHandler: completion handler
 	func urlSession(
 		_ session: URLSession,
 		didReceive challenge: URLAuthenticationChallenge,
@@ -44,39 +49,5 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate, Logg
 			completionHandler: completionHandler
 		)
 		checker?.checkSSL()
-
-		//		guard let localFingerprints = networkConfiguration.sslSignatures(forHost: challenge.protectionSpace.host),
-		//			  challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-		//			  let serverTrust = challenge.protectionSpace.serverTrust else {
-		//
-		//			logDebug("No pinning of certificate")
-		//			completionHandler(.performDefaultHandling, nil)
-		//			return
-		//		}
-		//
-		//		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
-		//		SecTrustSetPolicies(serverTrust, policies as CFTypeRef)
-		//
-		//		let certificateCount = SecTrustGetCertificateCount(serverTrust)
-		//
-		//		guard
-		//			SecTrustEvaluateWithError(serverTrust, nil),
-		//			certificateCount > 0,
-		//			let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, certificateCount - 1), // get topmost certificate in chain
-		//			let fingerprint = Certificate(certificate: serverCertificate).signature else {
-		//			logError("Invalid server trust")
-		//			completionHandler(.cancelAuthenticationChallenge, nil)
-		//			return
-		//		}
-		//
-		//		guard localFingerprints.contains(fingerprint) else {
-		//			logError("Certificate signatures don't match")
-		//			completionHandler(.cancelAuthenticationChallenge, nil)
-		//			return
-		//		}
-		//
-		//		// all good
-		//		logDebug("Certificate signature is good")
-		//		completionHandler(.useCredential, URLCredential(trust: serverTrust))
 	}
 }

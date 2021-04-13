@@ -47,28 +47,55 @@ class VerifierResultViewControllerTests: XCTestCase {
 			),
 			maxValidity: 48
 		)
-		sut = VerifierResultViewController(viewModel: viewModel!)
+		sut = VerifierResultViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
-	
-	override func tearDown() {
-		
-		super.tearDown()
-	}
-	
+
 	func loadView() {
-		
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+        window.addSubview(sut.view)
+        RunLoop.current.run(until: Date())
 	}
 	
 	// MARK: - Tests
 	
 	/// Test all the demo content
 	func testDemo() throws {
+
+		// Given
+		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
+    
+		viewModel.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "1",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp40SecAgo)
+				),
+			errorMessage: nil
+		)
+		loadView()
 		
+		// When
+		viewModel.checkAttributes()
+		
+		// Then
+		XCTAssertEqual(sut.sceneView.title, .verifierResultDemoTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .verifierResultAccessMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.imageView.image, .access, "Image should match")
+		
+	}
+
+	/// Test all the demo content
+	func testDemoFaultTime() throws {
+
 		// Given
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
@@ -88,16 +115,15 @@ class VerifierResultViewControllerTests: XCTestCase {
 			errorMessage: nil
 		)
 		loadView()
-		
+
 		// When
 		viewModel.checkAttributes()
 		
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
-		
+		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
+
 	}
 	
 	/// Test all the denied content
@@ -127,10 +153,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 		
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.imageView.image, .denied, "Image should match")
+		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
 	}
 	
 	/// Test all the denied content
@@ -138,7 +163,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		
 		// Given
 		let timeStamp48HoursAgo = Date().timeIntervalSince1970 - (48 * 60 * 60) - 40
-		viewModel?.cryptoResults = CryptoResult(
+		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
 					cryptoAttributes: CrypoAttributes(
@@ -158,13 +183,12 @@ class VerifierResultViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		viewModel?.checkAttributes()
+		viewModel.checkAttributes()
 		
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.imageView.image, .denied, "Image should match")
+		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
 	}
 	
 	/// Test all the verified content
@@ -172,7 +196,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		
 		// Given
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
-		viewModel?.cryptoResults = CryptoResult(
+		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
 					cryptoAttributes: CrypoAttributes(
@@ -192,13 +216,12 @@ class VerifierResultViewControllerTests: XCTestCase {
 		loadView()
 		
 		// When
-		viewModel?.checkAttributes()
+		viewModel.checkAttributes()
 		
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .verifierResultAccessTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultAccessMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.imageView.image, .access, "Image should match")
+		XCTAssertEqual(sut.sceneView.title, .verifierResultAccessTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .verifierResultAccessMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.imageView.image, .access, "Image should match")
 	}
 	
 	/// Test the dismiss method
@@ -207,7 +230,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Given
 		
 		// When
-		sut?.closeButtonTapped()
+		sut.closeButtonTapped()
 		
 		// Then
 		XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToVerifierWelcomeCalled, "Method should be called")
@@ -219,7 +242,7 @@ class VerifierResultViewControllerTests: XCTestCase {
         loadView()
 
         // When
-        sut?.sceneView.primaryButtonTapped()
+        sut.sceneView.primaryButtonTapped()
 
         // Then
         XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToScanCalled, "Method should be called")
@@ -231,7 +254,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Given
 		
 		// When
-		sut?.linkTapped()
+		sut.linkTapped()
 		
 		// Then
 		XCTAssertTrue(verifyCoordinatorDelegateSpy.displayContentCalled, "Method should be called")
@@ -243,10 +266,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Given
 
 		// When
-		sut?.debugLinkTapped()
+		sut.debugLinkTapped()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.sceneView.debugLabel.isHidden, "View should be visible")
+		XCTAssertFalse(sut.sceneView.debugLabel.isHidden, "View should be visible")
 	}
 }

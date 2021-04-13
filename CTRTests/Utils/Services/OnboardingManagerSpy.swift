@@ -56,5 +56,3 @@ class OnboardingManagerSpy: OnboardingManaging {
 		invokedResetCount += 1
 	}
 }
-
-
