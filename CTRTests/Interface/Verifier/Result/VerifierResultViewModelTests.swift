@@ -55,6 +55,38 @@ class VerifierResultViewModelTests: XCTestCase {
 	func testDemo() {
 
 		// Given
+		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
+		sut?.cryptoResults = CryptoResult(
+			attributes:
+				Attributes(
+					cryptoAttributes: CrypoAttributes(
+						birthDay: nil,
+						birthMonth: nil,
+						firstNameInitial: nil,
+						lastNameInitial: nil,
+						sampleTime: "\(timeStamp40SecAgo)",
+						testType: "pcr",
+						specimen: "1",
+						paperProof: "0"
+					),
+					unixTimeStamp: Int64(timeStamp40SecAgo)
+				),
+			errorMessage: nil
+		)
+
+		// When
+		sut?.checkAttributes()
+
+		// Then
+		XCTAssertEqual(sut?.allowAccess, .demo, "Type should be demo")
+		XCTAssertEqual(sut?.title, .verifierResultDemoTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+	}
+
+	/// Func test the demo qr
+	func testDemoButFaultyTime() {
+
+		// Given
 		sut?.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
@@ -77,9 +109,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .demo, "Type should be demo")
-		XCTAssertEqual(sut?.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+		XCTAssertEqual(sut?.allowAccess, .denied, "Type should be denied")
+		XCTAssertEqual(sut?.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .verifierResultDeniedMessage, "Message should match")
 	}
 
 	/// Func test denied
