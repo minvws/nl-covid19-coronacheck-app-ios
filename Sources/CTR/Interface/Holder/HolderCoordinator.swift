@@ -6,19 +6,6 @@
 */
 
 import UIKit
-import SafariServices
-
-protocol Dismissable: AnyObject {
-
-	/// Dismiss the presented viewcontroller
-	func dismiss()
-}
-
-protocol OpenUrlProtocol: AnyObject {
-
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool)
-}
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
@@ -60,27 +47,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 }
 // swiftlint:enable class_delegate_protocol
 
-class HolderCoordinator: Coordinator, Logging {
-
-	var loggingCategory: String = "HolderCoordinator"
-
-	/// The UI Window
-	private var window: UIWindow
-
-	/// The side panel controller
-	var sidePanel: SidePanelController?
-
-	/// The onboardings manager
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-
-	/// The forced information manager
-	var forcedInformationManager: ForcedInformationManaging = Services.forcedInformationManager
+class HolderCoordinator: SharedCoordinator {
 
 	/// The proof manager
 	var proofManager: ProofManaging = Services.proofManager
-
-	/// The crypto manager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
 
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
@@ -88,43 +58,11 @@ class HolderCoordinator: Coordinator, Logging {
 	/// The open ID manager
 	var openIdManager: OpenIdManaging = Services.openIdManager
 
-	/// The general configuration
-	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	/// The version supplier
-	var versionSupplier = AppVersionSupplier()
-
-	/// The Child Coordinators
-	var childCoordinators: [Coordinator] = []
-
-	/// The navigation controller
-	var navigationController: UINavigationController
-
-	/// The dashboard navigation controller
-	var dashboardNavigationContoller: UINavigationController?
-
-	/// The about navigation controller
-	var aboutNavigationContoller: UINavigationController?
-
-	/// Initiatilzer
-	init(navigationController: UINavigationController, window: UIWindow) {
-
-		self.navigationController = navigationController
-		self.window = window
-	}
-
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
-	}
-
 	// Designated starter method
-	func start() {
+	override func start() {
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
@@ -329,32 +267,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 }
 
-// MARK: - OpenUrlProtocol
-
-extension HolderCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
-	}
-}
-
-// MARK: - Dismissable
-
-extension HolderCoordinator: Dismissable {
-
-	func dismiss() {
-
-		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
-	}
-}
-
 // MARK: - MenuDelegate
 
 extension HolderCoordinator: MenuDelegate {
@@ -419,52 +331,5 @@ extension HolderCoordinator: MenuDelegate {
 			MenuItem(identifier: .about, title: .holderMenuAbout),
 			MenuItem(identifier: .privacy, title: .holderMenuPrivacy)
 		]
-	}
-}
-
-// MARK: - OnboardingDelegate
-
-extension HolderCoordinator: OnboardingDelegate {
-
-	/// User has seen all the onboarding pages
-	func finishOnboarding() {
-
-		onboardingManager.finishOnboarding()
-	}
-
-	/// The onboarding is finished
-	func consentGiven() {
-
-		// Mark as complete
-		onboardingManager.consentGiven()
-		// Also mark as complet for forced information
-		forcedInformationManager.consentGiven()
-
-		// Remove child coordinator
-		if let onboardingCoorinator = childCoordinators.first {
-			removeChildCoordinator(onboardingCoorinator)
-		}
-
-		// Navigate to Start.
-		start()
-	}
-}
-
-// MARK: - ForcedInformationDelegate
-
-extension HolderCoordinator: ForcedInformationDelegate {
-
-	/// The user finished the forced information
-	func finishForcedInformation() {
-
-		logDebug("HolderCoordinator: finishForcedInformation")
-
-		// Remove childCoordinator
-		if let forcedInformationCoordinator = childCoordinators.first {
-			removeChildCoordinator(forcedInformationCoordinator)
-		}
-
-		// Navigate to start
-		start()
 	}
 }

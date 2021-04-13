@@ -551,6 +551,8 @@
 		6DFB8B1625DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */; };
 		6DFB8B1725DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */; };
 		6DFCC7292625A83E0019FC9F /* ForcedInformationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFCC7282625A83E0019FC9F /* ForcedInformationManagerTests.swift */; };
+		6DFCC7382625B5060019FC9F /* SharedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFCC7302625B4840019FC9F /* SharedCoordinator.swift */; };
+		6DFCC7392625B5070019FC9F /* SharedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFCC7302625B4840019FC9F /* SharedCoordinator.swift */; };
 		6DFF55872608AD0A0048E801 /* EnlargedLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */; };
 		6DFF55882608AD0A0048E801 /* EnlargedLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */; };
 		6DFF563F2608F1560048E801 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6DFF56422608F1560048E801 /* InfoPlist.strings */; };
@@ -885,6 +887,7 @@
 		6DFB8B0C25DD3A8C00E7A1D8 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewModel.swift; sourceTree = "<group>"; };
 		6DFCC7282625A83E0019FC9F /* ForcedInformationManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForcedInformationManagerTests.swift; sourceTree = "<group>"; };
+		6DFCC7302625B4840019FC9F /* SharedCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCoordinator.swift; sourceTree = "<group>"; };
 		6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnlargedLocalization.swift; sourceTree = "<group>"; };
 		6DFF56412608F1560048E801 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1841,9 +1844,9 @@
 			isa = PBXGroup;
 			children = (
 				6DFB8B0225DD3A2A00E7A1D8 /* About */,
-				6D92848925B5CB12009D4350 /* AppCoordinator.swift */,
 				6DE6FD5B25C16497006602AC /* AppUpdate */,
 				6D92849825B5CBC0009D4350 /* Common */,
+				6DFCC73D2625B8EE0019FC9F /* Coordinator */,
 				6DC24193262433E0001457B3 /* ForcedInformation */,
 				6D9284AD25B5D037009D4350 /* Holder */,
 				6D164D7225F3789400A86409 /* Launch */,
@@ -1998,6 +2001,15 @@
 				6DFB8B1525DD3AA900E7A1D8 /* AboutViewModel.swift */,
 			);
 			path = About;
+			sourceTree = "<group>";
+		};
+		6DFCC73D2625B8EE0019FC9F /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				6D92848925B5CB12009D4350 /* AppCoordinator.swift */,
+				6DFCC7302625B4840019FC9F /* SharedCoordinator.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2304,6 +2316,7 @@
 				6DD7D81A25D26D3A00B97B7F /* DashboardImage.swift in Sources */,
 				6D9D3AB825FA297E0031DA5D /* SignedTestResultState.swift in Sources */,
 				6DD7D81B25D26D3A00B97B7F /* Haptic.swift in Sources */,
+				6DFCC7382625B5060019FC9F /* SharedCoordinator.swift in Sources */,
 				6DD7D81C25D26D3A00B97B7F /* OnboardingManager.swift in Sources */,
 				6DD19DDF25D6DD8F001FDDDC /* InformationViewModel.swift in Sources */,
 				6DD7D81E25D26D3A00B97B7F /* AppCoordinator.swift in Sources */,
@@ -2530,6 +2543,7 @@
 				6D7C909425CA9D2600AEC5DE /* OnboardingManager.swift in Sources */,
 				6D9D3AB725FA297E0031DA5D /* SignedTestResultState.swift in Sources */,
 				6DD19DDE25D6DD8F001FDDDC /* InformationViewModel.swift in Sources */,
+				6DFCC7392625B5070019FC9F /* SharedCoordinator.swift in Sources */,
 				6D164D4D25F374ED00A86409 /* AppVersionSupplier.swift in Sources */,
 				6D92848A25B5CB12009D4350 /* AppCoordinator.swift in Sources */,
 				6D037A2A25E66D4C006C2BFA /* EnlargedQRViewModel.swift in Sources */,
