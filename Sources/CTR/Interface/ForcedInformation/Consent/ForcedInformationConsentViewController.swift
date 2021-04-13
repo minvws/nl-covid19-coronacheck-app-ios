@@ -49,7 +49,7 @@ class ForcedInformationViewController: BaseViewController {
 	/// setup the bindings
 	func setupBindings() {
 
-		viewModel.$enableSecondaryButton.binding = { [weak self] in
+		viewModel.$useSecondaryButton.binding = { [weak self] in
 			if $0 {
 				self?.sceneView.showSecondaryButton()
 			} else {
@@ -91,6 +91,6 @@ class ForcedInformationViewController: BaseViewController {
 	/// Show the error dialog
 	func showErrorDialog() {
 
-		showError(viewModel.errortitle, message: viewModel.errorMessage)
+		showError(viewModel.errorTitle, message: viewModel.errorMessage)
 	}
 }

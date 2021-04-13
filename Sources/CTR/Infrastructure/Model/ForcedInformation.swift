@@ -34,7 +34,7 @@ struct ForcedInformationConsent {
 	let content: String
 
 	/// True if consent must be given, False if consent is not required
-	let mustGiveConsent: Bool
+	let consentMandatory: Bool
 }
 
 struct ForcedInformation {

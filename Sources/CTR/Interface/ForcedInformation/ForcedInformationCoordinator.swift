@@ -13,9 +13,6 @@ enum ForcedInformationResult {
 	/// The user gave consent
 	case consentAgreed
 
-	/// The user did not gave consent
-	case consentNotAgreed
-
 	/// The user viewed the content
 	case consentViewed
 }
@@ -34,6 +31,7 @@ protocol ForcedInformationDelegate: AnyObject {
 }
 
 class ForcedInformationCoordinator: Coordinator, Logging {
+
 	/// The category for logging
 	var loggingCategory: String = "ForcedInformationCoordinator"
 
@@ -64,21 +62,24 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 		self.delegate = delegate
 	}
 
+	/// Start the scene
 	func start() {
 
 		logInfo("Starting Forced Information Flow")
-		let viewController = ForcedInformationViewController(
-			viewModel: ForcedInformationViewModel(
-				self,
-				forcedInformationConsent: ForcedInformationConsent(
-					title: .newTermsTitle,
-					highlight: .newTermsHighlights,
-					content: .newTermsDescription,
-					mustGiveConsent: true
+
+		if let forcedInformationConsent = forcedInformationManager.getConsent() {
+			let viewController = ForcedInformationViewController(
+				viewModel: ForcedInformationViewModel(
+					self,
+					forcedInformationConsent: forcedInformationConsent
 				)
 			)
-		)
-		navigationController.viewControllers = [viewController]
+			navigationController.viewControllers = [viewController]
+		} else {
+
+			// no consent required
+			delegate?.finishForcedInformation()
+		}
 	}
 }
 
@@ -93,14 +94,12 @@ extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate {
 		switch result {
 			case .consentAgreed:
 				logInfo("ForcedInformationCoordinator: Consent was given")
+				forcedInformationManager.consentGiven()
 				delegate?.finishForcedInformation()
-
-			case .consentNotAgreed:
-				// Just for the record.
-				logInfo("ForcedInformationCoordinator: Consent was not given")
 
 			case .consentViewed:
 				logInfo("ForcedInformationCoordinator: Consent was viewed")
+				forcedInformationManager.consentGiven()
 				delegate?.finishForcedInformation()
 		}
 	}

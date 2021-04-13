@@ -340,6 +340,8 @@
 		6DB89362261301D600C52A7C /* OrientationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB89361261301D600C52A7C /* OrientationUtility.swift */; };
 		6DB89363261301D600C52A7C /* OrientationUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB89361261301D600C52A7C /* OrientationUtility.swift */; };
 		6DBC2F6725EFB8BE0039AE02 /* CryptoUtilitySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */; };
+		6DBECC8426258B6100DF63B1 /* ForcedInformationManagerSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBECC8326258B6100DF63B1 /* ForcedInformationManagerSpy.swift */; };
+		6DBECC942625902A00DF63B1 /* ForcedInformationDelegateSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBECC932625902A00DF63B1 /* ForcedInformationDelegateSpy.swift */; };
 		6DBFE47A25D2C60B00B3D006 /* ChooseProviderLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */; };
 		6DBFE48025D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
 		6DBFE48125D2DA3300B3D006 /* ChooseProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */; };
@@ -374,6 +376,7 @@
 		6DC8F284262494D600C190E6 /* ForcedInformationConsentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC8F282262494D600C190E6 /* ForcedInformationConsentViewModel.swift */; };
 		6DC8F28E2624956C00C190E6 /* ForcedInformationLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC8F28D2624956C00C190E6 /* ForcedInformationLocalization.swift */; };
 		6DC8F28F2624956C00C190E6 /* ForcedInformationLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC8F28D2624956C00C190E6 /* ForcedInformationLocalization.swift */; };
+		6DC8F29B262588A000C190E6 /* ForcedInformationCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC8F29A262588A000C190E6 /* ForcedInformationCoordinatorTests.swift */; };
 		6DC91CA425D9299800B74973 /* ExpiredQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC91CA325D9299800B74973 /* ExpiredQRView.swift */; };
 		6DC91CA525D9299800B74973 /* ExpiredQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DC91CA325D9299800B74973 /* ExpiredQRView.swift */; };
 		6DD1155D25D00EB200DF6AF4 /* VerifierConsentLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD1155C25D00EB200DF6AF4 /* VerifierConsentLocalization.swift */; };
@@ -788,6 +791,8 @@
 		6DB8934026122C1900C52A7C /* ScrolledStackWithHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrolledStackWithHeaderView.swift; sourceTree = "<group>"; };
 		6DB89361261301D600C52A7C /* OrientationUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationUtility.swift; sourceTree = "<group>"; };
 		6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CryptoUtilitySpy.swift; sourceTree = "<group>"; };
+		6DBECC8326258B6100DF63B1 /* ForcedInformationManagerSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForcedInformationManagerSpy.swift; sourceTree = "<group>"; };
+		6DBECC932625902A00DF63B1 /* ForcedInformationDelegateSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForcedInformationDelegateSpy.swift; sourceTree = "<group>"; };
 		6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderLocalization.swift; sourceTree = "<group>"; };
 		6DBFE47F25D2DA3300B3D006 /* ChooseProviderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewModel.swift; sourceTree = "<group>"; };
 		6DBFE48825D2DA4A00B3D006 /* ChooseProviderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseProviderViewController.swift; sourceTree = "<group>"; };
@@ -810,6 +815,7 @@
 		6DC6CCEF25C3039C00060237 /* String+Data.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Data.swift"; sourceTree = "<group>"; };
 		6DC8F282262494D600C190E6 /* ForcedInformationConsentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForcedInformationConsentViewModel.swift; sourceTree = "<group>"; };
 		6DC8F28D2624956C00C190E6 /* ForcedInformationLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForcedInformationLocalization.swift; sourceTree = "<group>"; };
+		6DC8F29A262588A000C190E6 /* ForcedInformationCoordinatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForcedInformationCoordinatorTests.swift; sourceTree = "<group>"; };
 		6DC91CA325D9299800B74973 /* ExpiredQRView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpiredQRView.swift; sourceTree = "<group>"; };
 		6DD1155C25D00EB200DF6AF4 /* VerifierConsentLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierConsentLocalization.swift; sourceTree = "<group>"; };
 		6DD1156225D0137600DF6AF4 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
@@ -960,6 +966,7 @@
 				6D3A06CF261445CE004E6843 /* About */,
 				6DC6CC3525C2A04F00060237 /* AppUpdate */,
 				6DD23FB925E3EEF500CE4AEB /* Coordinators */,
+				6DC8F2972625885400C190E6 /* ForcedInformation */,
 				6D32BD2325E6A55B00C4A4D2 /* Holder */,
 				6D0CE15B2600962A00D6EC0D /* Launch */,
 				6DD23FAB25E3E6E200CE4AEB /* Menu */,
@@ -1048,17 +1055,11 @@
 		6D20239125CAB15500CFCD14 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				6DC6CC4025C2A95C00060237 /* AppCoordinatorSpy.swift */,
 				6D044C5E25FCD4650004812D /* AppVersionSupplierSpy.swift */,
 				6DD23F9B25E3D45100CE4AEB /* ConfigurationGeneralSpy.swift */,
-				6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */,
-				6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */,
-				6DD23F9125E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift */,
+				6DBECC8D26258C4A00DF63B1 /* CoordinatorDelegate */,
 				6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */,
-				6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */,
-				6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */,
-				6D0CE1642600994C00D6EC0D /* RemoteConfigManagingSpy.swift */,
-				6D32BD2C25E6A6A400C4A4D2 /* VerifierCoordinatorDelegateSpy.swift */,
+				6DBECC8F26258C7400DF63B1 /* Services */,
 				6DD23FC225E3F07900CE4AEB /* ViewControllerSpy.swift */,
 			);
 			path = Utils;
@@ -1559,6 +1560,30 @@
 			path = Snapshot;
 			sourceTree = "<group>";
 		};
+		6DBECC8D26258C4A00DF63B1 /* CoordinatorDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				6DBECC932625902A00DF63B1 /* ForcedInformationDelegateSpy.swift */,
+				6DC6CC4025C2A95C00060237 /* AppCoordinatorSpy.swift */,
+				6DD23F9125E3D3FC00CE4AEB /* HolderCoordinatorDelegateSpy.swift */,
+				6D32BD2C25E6A6A400C4A4D2 /* VerifierCoordinatorDelegateSpy.swift */,
+			);
+			path = CoordinatorDelegate;
+			sourceTree = "<group>";
+		};
+		6DBECC8F26258C7400DF63B1 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6D68CAD025CC164C008FE2C8 /* CryptoManagerSpy.swift */,
+				6DBC2F6625EFB8BE0039AE02 /* CryptoUtilitySpy.swift */,
+				6DBECC8326258B6100DF63B1 /* ForcedInformationManagerSpy.swift */,
+				6D68CACC25CC1610008FE2C8 /* NetworkManagerSpy.swift */,
+				6DD23F9625E3D42F00CE4AEB /* ProofManagingSpy.swift */,
+				6D0CE1642600994C00D6EC0D /* RemoteConfigManagingSpy.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		6DBFE49125D2DB5C00B3D006 /* ProofManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1624,6 +1649,13 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
+		6DC8F2972625885400C190E6 /* ForcedInformation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ForcedInformation;
+			sourceTree = "<group>";
+		};
 		6DD1158425D021D900DF6AF4 /* Dashboard */ = {
 			isa = PBXGroup;
 			children = (
@@ -1686,6 +1718,7 @@
 		6DD23FB925E3EEF500CE4AEB /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				6DC8F29A262588A000C190E6 /* ForcedInformationCoordinatorTests.swift */,
 				6DD23FBA25E3EF1100CE4AEB /* HolderCoordinatorTests.swift */,
 				6DD293A125E3F258000C676C /* VerifierCoordinatorTests.swift */,
 			);
@@ -2707,6 +2740,7 @@
 				6DC3BEAD25E4E6C50079A3F2 /* DashboardViewModelTests.swift in Sources */,
 				6D0CE1602600971800D6EC0D /* LaunchViewModelTests.swift in Sources */,
 				6DD23FA125E3D64600CE4AEB /* ListResultsViewControllerTests.swift in Sources */,
+				6DBECC942625902A00DF63B1 /* ForcedInformationDelegateSpy.swift in Sources */,
 				6D3A06D1261445E5004E6843 /* AboutViewControllerTests.swift in Sources */,
 				6D0FD4C926037EEF00187946 /* AppointmentViewControllerTests.swift in Sources */,
 				6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */,
@@ -2716,8 +2750,10 @@
 				6DD293A225E3F258000C676C /* VerifierCoordinatorTests.swift in Sources */,
 				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
 				6DB892FD2611AE5A00C52A7C /* SnapshotViewControllerTests.swift in Sources */,
+				6DC8F29B262588A000C190E6 /* ForcedInformationCoordinatorTests.swift in Sources */,
 				6D12746325FE39D6001B9515 /* TokenValidatorTests.swift in Sources */,
 				6D0FD4C126037D9200187946 /* AppointmentViewModelTests.swift in Sources */,
+				6DBECC8426258B6100DF63B1 /* ForcedInformationManagerSpy.swift in Sources */,
 				6DC3BEB525E4EF760079A3F2 /* DashboardViewControllerTests.swift in Sources */,
 				6D037A3C25E67645006C2BFA /* EnlargedQRViewControllerTests.swift in Sources */,
 				6D5E06D025C1CD09008E2124 /* RemoteConfigManagerTests.swift in Sources */,

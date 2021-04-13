@@ -52,6 +52,7 @@ class ForcedInformationConsentView: BaseView {
 		return Label(title1: nil, montserrat: true).multiline()
 	}()
 
+	/// The view containing the hightlight
 	private let highlightView: UIView = {
 
 		let view = UIView()
@@ -90,6 +91,7 @@ class ForcedInformationConsentView: BaseView {
 		return button
 	}()
 
+	/// The line above the buttons
 	let lineView: UIView = {
 
 		let view = UIView()

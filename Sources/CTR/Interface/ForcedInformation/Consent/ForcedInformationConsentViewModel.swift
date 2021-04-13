@@ -27,7 +27,7 @@ class ForcedInformationViewModel {
 	private(set) var secondaryActionTitle: String?
 
 	/// The title of the eror
-	private(set) var errortitle: String = .newTermsErrorTitle
+	private(set) var errorTitle: String = .newTermsErrorTitle
 
 	/// The message of the eror
 	private(set) var errorMessage: String = .newTermsErrorMessage
@@ -37,8 +37,8 @@ class ForcedInformationViewModel {
 	/// Show the error dialog?
 	@Bindable private(set) var showErrorDialog: Bool = false
 
-	/// Enable the secondary button?
-	@Bindable private(set) var enableSecondaryButton: Bool = false
+	/// Use the secondary button?
+	@Bindable private(set) var useSecondaryButton: Bool = false
 
 	// MARK: - Private variables
 
@@ -64,21 +64,24 @@ class ForcedInformationViewModel {
 		self.highlights = consent.highlight
 		self.content = consent.content
 
-		if consent.mustGiveConsent {
+		if consent.consentMandatory {
 			primaryActionTitle = .newTermsAgree
 			secondaryActionTitle = .newTermsDisagree
-			enableSecondaryButton = true
+			useSecondaryButton = true
 		} else {
 			primaryActionTitle = .next
 			secondaryActionTitle = nil
-			enableSecondaryButton = false
+			useSecondaryButton = false
 		}
 	}
 
+	// MARK: - Actions
+
 	/// The user tapped the primary button
 	func primaryButtonTapped() {
-
-		if consent.mustGiveConsent {
+		
+		// Notifify coordinator delegate
+		if consent.consentMandatory {
 			coordinator?.didFinishConsent(ForcedInformationResult.consentAgreed)
 		} else {
 			coordinator?.didFinishConsent(ForcedInformationResult.consentViewed)
@@ -88,7 +91,9 @@ class ForcedInformationViewModel {
 	/// The user tapped the secondary button
 	func secondaryButtonTapped() {
 
-		coordinator?.didFinishConsent(ForcedInformationResult.consentNotAgreed)
+		// Show Error
+		errorTitle = .newTermsErrorTitle
+		errorMessage = .newTermsErrorMessage
 		showErrorDialog = true
 	}
 }

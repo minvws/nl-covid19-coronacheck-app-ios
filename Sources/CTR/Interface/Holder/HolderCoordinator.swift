@@ -437,14 +437,16 @@ extension HolderCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
+		// Also mark as complet for forced information
+		forcedInformationManager.consentGiven()
 
 		// Remove child coordinator
 		if let onboardingCoorinator = childCoordinators.first {
 			removeChildCoordinator(onboardingCoorinator)
 		}
 
-		// Navigate to Holder Start.
-		navigateToHolderStart()
+		// Navigate to Start.
+		start()
 	}
 }
 
