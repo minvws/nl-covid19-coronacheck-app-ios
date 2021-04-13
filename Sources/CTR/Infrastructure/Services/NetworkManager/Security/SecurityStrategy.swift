@@ -141,6 +141,7 @@ extension SecurityCheckerProtocol {
 	}
 }
 
+/// Check nothing. Allow every connection. Used for testing.
 class SecurityCheckerNone: SecurityChecker {
 
 	/// Check the SSL Connection
@@ -160,6 +161,7 @@ class SecurityCheckerNone: SecurityChecker {
 	}
 }
 
+/// Security check for backend communication
 class SecurityChecker: SecurityCheckerProtocol, Logging {
 
 	var loggingCategory: String = "SecurityCheckerConfig"
@@ -185,6 +187,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		self.completionHandler = completionHandler
 	}
 
+	/// Check the SSL Connection
 	 func checkSSL() {
 
 		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
@@ -265,8 +268,10 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	}
 }
 
+/// TestProvider security. Allows more certificates than alllowed for backend stuff
 class SecurityCheckerProvider: SecurityChecker {
 
+	/// Check the SSL Connection
 	override func checkSSL() {
 
 		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,

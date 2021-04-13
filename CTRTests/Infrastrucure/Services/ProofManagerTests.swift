@@ -49,7 +49,7 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
 		} onError: { _ in
 			XCTFail("There should be no error")
 		}
@@ -71,7 +71,27 @@ class ProofManagerTests: XCTestCase {
 			XCTFail("There should be no success")
 		} onError: { _ in
 
-			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+		}
+	}
+
+	/// Test the fetch issuers public keys with invalid keys error
+	func testFetchIssuerPublicKeysWithInvalidKeysError() {
+
+		// Given
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = true
+		// Trigger invalid keys
+		cryptoSpy.issuerPublicKeysAreValid = false
+
+		// When
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTFail("There should be no success")
+		} onError: { _ in
+
+			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
 		}
 	}
 
@@ -88,7 +108,7 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
 		} onError: { _ in
 			XCTFail("There should be no error")
 		}
