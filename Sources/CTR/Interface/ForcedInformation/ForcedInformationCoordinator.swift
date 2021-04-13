@@ -92,12 +92,15 @@ extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate {
 
 		switch result {
 			case .consentAgreed:
-				logDebug("Consent was given")
+				logInfo("ForcedInformationCoordinator: Consent was given")
 				delegate?.finishForcedInformation()
+
 			case .consentNotAgreed:
-				logDebug("Consent was not given")
+				// Just for the record.
+				logInfo("ForcedInformationCoordinator: Consent was not given")
+
 			case .consentViewed:
-				logDebug("Consent was viewed")
+				logInfo("ForcedInformationCoordinator: Consent was viewed")
 				delegate?.finishForcedInformation()
 		}
 	}

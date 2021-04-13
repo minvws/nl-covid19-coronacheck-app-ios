@@ -20,8 +20,10 @@ class ForcedInformationConsentView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let bottomMargin: CGFloat = 8.0
+		static let bottomMargin: CGFloat = 32.0
 		static let spacing: CGFloat = 24.0
+		static let contentSpacing: CGFloat = 40.0
+		static let singleButtonBottomMargin: CGFloat = UIDevice.current.hasNotch ? 10 : 32
 	}
 
 	/// The scrollview
@@ -93,7 +95,6 @@ class ForcedInformationConsentView: BaseView {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = Theme.colors.line
-		view.isHidden = true
 		return view
 	}()
 
@@ -127,9 +128,18 @@ class ForcedInformationConsentView: BaseView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(highlightView)
+		stackView.setCustomSpacing(ViewTraits.contentSpacing, after: highlightView)
 		stackView.addArrangedSubview(contentLabel)
 
-		scrollView.addSubview(stackView)
+		stackView.embed(
+			in: scrollView,
+			insets: UIEdgeInsets(
+				top: ViewTraits.margin,
+				left: ViewTraits.margin,
+				bottom: ViewTraits.margin,
+				right: ViewTraits.margin
+			)
+		)
 
 		addSubview(scrollView)
 		addSubview(lineView)
@@ -159,14 +169,6 @@ class ForcedInformationConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			stackView.topAnchor.constraint(
-				equalTo: scrollView.topAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
 
 			// Line
 			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -182,19 +184,17 @@ class ForcedInformationConsentView: BaseView {
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
 
+			// Secondary Button
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			secondaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			secondaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
-			secondaryButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
-				constant: -ViewTraits.margin
-			)
+			secondaryButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
 		])
 
 		// Default enabled, the primary button to the bottom of the view
 		primaryButtonToBottomConstraint = primaryButton.bottomAnchor.constraint(
 			equalTo: safeAreaLayoutGuide.bottomAnchor,
-			constant: -ViewTraits.margin
+			constant: -ViewTraits.singleButtonBottomMargin
 		)
 		primaryButtonToBottomConstraint?.isActive = true
 
