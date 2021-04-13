@@ -68,8 +68,8 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 		logInfo("Starting Forced Information Flow")
 
 		if let forcedInformationConsent = forcedInformationManager.getConsent() {
-			let viewController = ForcedInformationViewController(
-				viewModel: ForcedInformationViewModel(
+			let viewController = ForcedInformationConsentViewController(
+				viewModel: ForcedInformationConsentViewModel(
 					self,
 					forcedInformationConsent: forcedInformationConsent
 				)

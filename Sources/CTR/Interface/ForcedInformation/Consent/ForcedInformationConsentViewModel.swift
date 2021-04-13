@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ForcedInformationViewModel {
+class ForcedInformationConsentViewModel {
 
 	// MARK: - Content variables
 
