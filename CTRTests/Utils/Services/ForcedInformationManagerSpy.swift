@@ -39,4 +39,12 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 		invokedConsentGiven = true
 		invokedConsentGivenCount += 1
 	}
+
+	var invokedReset = false
+	var invokedResetCount = 0
+
+	func reset() {
+		invokedReset = true
+		invokedResetCount += 1
+	}
 }

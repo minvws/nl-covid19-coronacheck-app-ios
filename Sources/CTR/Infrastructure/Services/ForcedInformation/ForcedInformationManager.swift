@@ -21,6 +21,9 @@ protocol ForcedInformationManaging {
 
 	/// Give consent
 	func consentGiven()
+
+	/// Reset the manager
+	func reset()
 }
 
 class ForcedInformationManager: ForcedInformationManaging {
@@ -80,5 +83,11 @@ class ForcedInformationManager: ForcedInformationManaging {
 	func consentGiven() {
 
 		data.lastSeenVersion = information.version
+	}
+
+	/// Reset the manager
+	func reset() {
+
+		$data.clearData()
 	}
 }
