@@ -9,7 +9,8 @@
 import XCTest
 import ViewControllerPresentationSpy
 
-class ForcedInformationConsentVCTests: XCTestCase {
+// swiftlint:disable:next type_name
+class ForcedInformationConsentViewControllerTests: XCTestCase {
 
 	var sut: ForcedInformationConsentViewController!
 
