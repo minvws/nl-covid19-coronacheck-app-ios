@@ -90,65 +90,84 @@ class AppCoordinator: Coordinator, Logging {
 		)
 	}
 
-	/// Launch the launcher 
-	private func startLauncher() {
+    /// Handle the launch state
+    /// - Parameter state: the launch state
+    func handleLaunchState(_ state: LaunchState) {
+        
+        switch state {
+        case .noActionNeeded:
+            startApplication()
+            
+        case .internetRequired:
+            showInternetRequired()
 
-		let destination = LaunchViewController(
-			viewModel: LaunchViewModel(
-				coordinator: self,
-				versionSupplier: AppVersionSupplier(),
-				flavor: AppFlavor.flavor,
-				remoteConfigManager: remoteConfigManager,
-				proofManager: proofManager
-			)
-		)
-		// Set the root
-		window.rootViewController = navigationController
-		window.makeKeyAndVisible()
+        case let .actionRequired(versionInformation):
+            showActionRequired(with: versionInformation)
+        }
+    }
 
-		navigationController.pushViewController(destination, animated: false)
-	}
+    /// Handle the event the application did enter the background
+    @objc func onApplicationDidEnterBackground() {
 
-	/// Start the real application
-	private func startApplication() {
+        /// Show the snapshot (logo) view to hide sensitive data
+        let shapshotViewController = SnapshotViewController(
+            viewModel: SnapshotViewModel(
+                versionSupplier: AppVersionSupplier(),
+                flavor: AppFlavor.flavor
+            )
+        )
+        shapshotViewController.modalPresentationStyle = .fullScreen
+        guard let topController = window.rootViewController else { return }
+        if topController is UINavigationController {
+            (topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
+        } else {
+            topController.present(shapshotViewController, animated: true)
+        }
+    }
 
-		switch AppFlavor.flavor {
-			case .holder:
-				startAsHolder()
-			default:
-				startAsVerifier()
-		}
-	}
+    /// Launch the launcher
+    private func startLauncher() {
 
-	/// Start the app as a holder
-	private func startAsHolder() {
+        let destination = LaunchViewController(
+            viewModel: LaunchViewModel(
+                coordinator: self,
+                versionSupplier: AppVersionSupplier(),
+                flavor: AppFlavor.flavor,
+                remoteConfigManager: remoteConfigManager,
+                proofManager: proofManager
+            )
+        )
+        // Set the root
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
 
-		let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(coordinator)
-	}
+        navigationController.pushViewController(destination, animated: false)
+    }
 
-	/// Start the app as a verifiier
-	private func startAsVerifier() {
+    /// Start the real application
+    private func startApplication() {
 
-		let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(coordinator)
-	}
+        switch AppFlavor.flavor {
+            case .holder:
+                startAsHolder()
+            default:
+                startAsVerifier()
+        }
+    }
 
-	/// Handle the launch state
-	/// - Parameter state: the launch state
-	func handleLaunchState(_ state: LaunchState) {
+    /// Start the app as a holder
+    private func startAsHolder() {
 
-		switch state {
-			case .noActionNeeded:
-				startApplication()
+        let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
+        startChildCoordinator(coordinator)
+    }
 
-			case .internetRequired:
-				showInternetRequired()
+    /// Start the app as a verifiier
+    private func startAsVerifier() {
 
-			case let .actionRequired(versionInformation):
-				showActionRequired(with: versionInformation)
-		}
-	}
+        let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
+        startChildCoordinator(coordinator)
+    }
 
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
@@ -182,25 +201,6 @@ class AppCoordinator: Coordinator, Logging {
 			(topController as? UINavigationController)?.viewControllers.last?.present(updateController, animated: true)
 		} else {
 			topController.present(updateController, animated: true)
-		}
-	}
-
-	/// Handle the event the application did enter the background
-	@objc func onApplicationDidEnterBackground() {
-
-		/// Show the snapshot (logo) view to hide sensitive data
-		let shapshotViewController = SnapshotViewController(
-			viewModel: SnapshotViewModel(
-				versionSupplier: AppVersionSupplier(),
-				flavor: AppFlavor.flavor
-			)
-		)
-		shapshotViewController.modalPresentationStyle = .fullScreen
-		guard let topController = window.rootViewController else { return }
-		if topController is UINavigationController {
-			(topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
-		} else {
-			topController.present(shapshotViewController, animated: true)
 		}
 	}
 }
