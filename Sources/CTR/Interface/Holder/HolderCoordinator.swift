@@ -114,7 +114,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 		)
-		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,

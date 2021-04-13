@@ -84,7 +84,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let menu = MenuViewController(
             viewModel: MenuViewModel(delegate: self)
 		)
-		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 		
 		let dashboardViewController = VerifierStartViewController(
 			viewModel: VerifierStartViewModel(
