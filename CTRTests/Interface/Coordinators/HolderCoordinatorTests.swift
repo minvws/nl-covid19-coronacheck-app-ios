@@ -35,7 +35,7 @@ class HolderCoordinatorTests: XCTestCase {
 		let menu = MenuViewController(
             viewModel: MenuViewModel(delegate: sut)
 		)
-		sut.sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sut.sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 
 		let viewControllerSpy = ViewControllerSpy()
 		sut.sidePanel?.selectedViewController = viewControllerSpy
