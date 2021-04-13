@@ -70,42 +70,6 @@ class AppCoordinator: Coordinator, Logging {
 		addObservers()
 	}
 
-	/// Retry loading the requirements
-	func retry() {
-
-		guard let topController = window.rootViewController else { return }
-
-		topController.dismiss(animated: true) {
-			((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
-		}
-	}
-
-	func addObservers() {
-
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(onApplicationDidEnterBackground),
-			name: UIApplication.didEnterBackgroundNotification,
-			object: nil
-		)
-	}
-
-    /// Handle the launch state
-    /// - Parameter state: the launch state
-    func handleLaunchState(_ state: LaunchState) {
-        
-        switch state {
-        case .noActionNeeded:
-            startApplication()
-            
-        case .internetRequired:
-            showInternetRequired()
-
-        case let .actionRequired(versionInformation):
-            showActionRequired(with: versionInformation)
-        }
-    }
-
     /// Handle the event the application did enter the background
     @objc func onApplicationDidEnterBackground() {
 
@@ -123,6 +87,16 @@ class AppCoordinator: Coordinator, Logging {
         } else {
             topController.present(shapshotViewController, animated: true)
         }
+    }
+
+    private func addObservers() {
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onApplicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
     }
 
     /// Launch the launcher
@@ -214,4 +188,30 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 		UIApplication.shared.open(url)
 	}
+
+    /// Handle the launch state
+    /// - Parameter state: the launch state
+    func handleLaunchState(_ state: LaunchState) {
+
+        switch state {
+        case .noActionNeeded:
+            startApplication()
+
+        case .internetRequired:
+            showInternetRequired()
+
+        case let .actionRequired(versionInformation):
+            showActionRequired(with: versionInformation)
+        }
+    }
+
+    /// Retry loading the requirements
+    func retry() {
+
+        guard let topController = window.rootViewController else { return }
+
+        topController.dismiss(animated: true) {
+            ((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
+        }
+    }
 }
