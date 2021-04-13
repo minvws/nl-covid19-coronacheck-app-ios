@@ -70,34 +70,7 @@ class AppCoordinator: Coordinator, Logging {
 		addObservers()
 	}
 
-    /// Handle the event the application did enter the background
-    @objc func onApplicationDidEnterBackground() {
-
-        /// Show the snapshot (logo) view to hide sensitive data
-        let shapshotViewController = SnapshotViewController(
-            viewModel: SnapshotViewModel(
-                versionSupplier: AppVersionSupplier(),
-                flavor: AppFlavor.flavor
-            )
-        )
-        shapshotViewController.modalPresentationStyle = .fullScreen
-        guard let topController = window.rootViewController else { return }
-        if topController is UINavigationController {
-            (topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
-        } else {
-            topController.present(shapshotViewController, animated: true)
-        }
-    }
-
-    private func addObservers() {
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(onApplicationDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
-            object: nil
-        )
-    }
+    // MARK: - private
 
     /// Launch the launcher
     private func startLauncher() {
@@ -213,5 +186,40 @@ extension AppCoordinator: AppCoordinatorDelegate {
         topController.dismiss(animated: true) {
             ((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
         }
+    }
+}
+
+
+// MARK: - Notification observations
+
+extension AppCoordinator {
+
+    /// Handle the event the application did enter the background
+    @objc func onApplicationDidEnterBackground() {
+
+        /// Show the snapshot (logo) view to hide sensitive data
+        let shapshotViewController = SnapshotViewController(
+            viewModel: SnapshotViewModel(
+                versionSupplier: AppVersionSupplier(),
+                flavor: AppFlavor.flavor
+            )
+        )
+        shapshotViewController.modalPresentationStyle = .fullScreen
+        guard let topController = window.rootViewController else { return }
+        if topController is UINavigationController {
+            (topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
+        } else {
+            topController.present(shapshotViewController, animated: true)
+        }
+    }
+
+    private func addObservers() {
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onApplicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
     }
 }
