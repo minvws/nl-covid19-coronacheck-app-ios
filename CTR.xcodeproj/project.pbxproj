@@ -2162,7 +2162,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run\"\n";
+			shellScript = "if command -v \"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" > /dev/null; then\n\"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nelse \n\"${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run\"\nfi\n";
 		};
 		6DED4A9825F627E60001CA7E /* Run Script Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2182,7 +2182,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run\"\n\n";
+			shellScript = "if command -v \"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\" > /dev/null; then\n\"${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\nelse \n\"${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
