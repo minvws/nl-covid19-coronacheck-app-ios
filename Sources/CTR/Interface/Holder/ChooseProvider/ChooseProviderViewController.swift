@@ -114,7 +114,7 @@ class ChooseProviderViewController: BaseViewController {
 	/// Layout for different orientations
 	func layoutForOrientation() {
 
-		if UIDevice.current.isLandscape {
+		if traitCollection.verticalSizeClass == .compact {
 			sceneView.hideImage()
 		} else {
 			sceneView.showImage()

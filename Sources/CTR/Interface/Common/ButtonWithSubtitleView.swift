@@ -143,7 +143,7 @@ class ButtonWithSubtitle: BaseView {
 
 	func setAccessibilityLabel() {
 
-		button.accessibilityLabel = "\(title ?? "") \(subtitle ?? "")"
+		button.accessibilityLabel = "\(title ?? ""). \(subtitle ?? "")"
 	}
 
 	/// User tapped on the primary button

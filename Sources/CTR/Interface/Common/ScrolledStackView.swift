@@ -72,6 +72,14 @@ class ScrolledStackView: BaseView {
 			stackView.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
+			),
+			stackView.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			stackView.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
+				constant: -ViewTraits.margin
 			)
 		])
 	}

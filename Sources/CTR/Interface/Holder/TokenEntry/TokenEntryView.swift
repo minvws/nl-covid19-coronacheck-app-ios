@@ -89,6 +89,13 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		return button
 	}()
 
+	private let spacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
@@ -112,6 +119,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(textLabel)
 		stackView.setCustomSpacing(8, after: textLabel)
 		stackView.addArrangedSubview(secondaryButton)
+		stackView.addArrangedSubview(spacer)
 	}
 
 	override func setupViewConstraints() {
@@ -120,7 +128,8 @@ class TokenEntryView: ScrolledStackWithButtonView {
 
 		NSLayoutConstraint.activate([
 
-			secondaryButton.heightAnchor.constraint(equalToConstant: 40)
+			secondaryButton.heightAnchor.constraint(equalToConstant: 40),
+			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
 
 		setupPrimaryButton()
