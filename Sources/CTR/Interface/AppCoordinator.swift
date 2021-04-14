@@ -9,12 +9,9 @@ import UIKit
 
 protocol AppCoordinatorDelegate: AnyObject {
 
-	/// Open a url
 	func openUrl(_ url: URL)
 
-	/// Handle the launch state
-	/// - Parameter state: the launch state
-	func handleLaunchState(_ state: LaunchState)
+    func handleLaunchState(_ state: LaunchState)
 
 	/// Retry loading the requirements
 	func retry()
@@ -22,22 +19,16 @@ protocol AppCoordinatorDelegate: AnyObject {
 
 class AppCoordinator: Coordinator, Logging {
 
-	/// The logging category
 	var loggingCategory: String = "AppCoordinator"
 
-	/// The UI Window
 	let window: UIWindow
 
-	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
-	/// The navigation controller
 	var navigationController: UINavigationController
 
-	/// The remote config manager
 	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 
-	/// The proof manager
 	private var proofManager: ProofManaging = Services.proofManager
 
 	/// For use with iOS 13 and higher
@@ -70,7 +61,7 @@ class AppCoordinator: Coordinator, Logging {
 		addObservers()
 	}
 
-    // MARK: - private
+    // MARK: - Private functions
 
     /// Launch the launcher
     private func startLauncher() {
@@ -156,7 +147,6 @@ class AppCoordinator: Coordinator, Logging {
 
 extension AppCoordinator: AppCoordinatorDelegate {
 
-	/// Open a url
 	func openUrl(_ url: URL) {
 
 		UIApplication.shared.open(url)
