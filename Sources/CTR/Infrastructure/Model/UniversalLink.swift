@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum UniversalLink {
+enum UniversalLink: Equatable {
     case redeemHolderToken(requestToken: RequestToken)
 
-    init?(userActivity: NSUserActivity) {
+    init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor) {
         // Only the holder app currently supports universal links
-        guard AppFlavor.flavor == .holder else { return nil }
+        guard appFlavor == .holder else { return nil }
 
         guard
             let url = userActivity.webpageURL,
@@ -21,8 +21,6 @@ enum UniversalLink {
         else {
             return nil
         }
-
-        // TODO should we check `userActivity.activityType == NSUserActivityTypeBrowsingWeb`?
 
         guard let requestToken = RequestToken(input: fragment) else {
             return nil

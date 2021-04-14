@@ -8,7 +8,7 @@
 import Foundation
 
 /// The request token to fetch a test result form a commercial tester
-struct RequestToken: Codable {
+struct RequestToken: Codable, Equatable {
 
     /// The current highest known protocol version
     /// 1.0: Checksum
