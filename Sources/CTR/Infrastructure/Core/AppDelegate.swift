@@ -69,10 +69,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: - Open URL
 
-	func application(
-		_ app: UIApplication,
-		open url: URL,
-		options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+    /// For handling __Deep Links__ only, - not relevant for Universal Links.
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
 		// Incoming url
 		print("CTR: AppDelegate -> url = \(url)")
@@ -91,8 +92,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		// Your additional URL handling (if any)
 
-		return false
+		return true
 	}
+
+    /// Entry point for Universal links in iOS 11/12 only (see SceneDelegate for iOS 13+)
+    /// Used for both running and cold-booted apps
+    func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+
+        // Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return false }
+
+        // Parse an activity from the userActivity
+        guard let universalLink = UniversalLink(userActivity: userActivity) else { return false }
+
+        return appCoordinator?.receive(universalLink: universalLink) ?? false
+    }
 
 	func applicationDidEnterBackground(_ application: UIApplication) {
 		if let brightness = previousBrightness {

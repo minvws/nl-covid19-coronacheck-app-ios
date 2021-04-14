@@ -27,6 +27,8 @@
 		3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CD826208813002F0387 /* OHHTTPStubs */; };
 		3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CDA26208813002F0387 /* OHHTTPStubsSwift */; };
 		3C195CE7262090E5002F0387 /* ViewControllerPresentationSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C195CE4262090BD002F0387 /* ViewControllerPresentationSpy.framework */; };
+		3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
+		3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B925DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
@@ -560,6 +562,8 @@
 /* Begin PBXFileReference section */
 		326E62C025D45DBF0072CB8E /* demo-root.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = "demo-root.pem"; sourceTree = "<group>"; };
 		3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ViewControllerPresentationSpy.xcodeproj; path = "Vendor/ViewControllerPresentationSpy-main/Source/ViewControllerPresentationSpy.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		3C42A0622625B85600774E46 /* CTR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CTR.entitlements; sourceTree = "<group>"; };
+		3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLink.swift; sourceTree = "<group>"; };
 		6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-acceptance.plist"; sourceTree = "<group>"; };
 		6D0022B825DBC3FA00E91084 /* configuration-production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-production.plist"; sourceTree = "<group>"; };
 		6D014A3F25F23BFA0014BAC4 /* TestProofValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestProofValidator.swift; sourceTree = "<group>"; };
@@ -1692,6 +1696,7 @@
 		6DDEFAE725AEDCA800A6912A = {
 			isa = PBXGroup;
 			children = (
+				3C42A0622625B85600774E46 /* CTR.entitlements */,
 				6DDEFAF225AEDCA800A6912A /* CTR */,
 				6DDEFB0925AEDCAA00A6912A /* CTRTests */,
 				6DDEFAF125AEDCA800A6912A /* Products */,
@@ -1828,6 +1833,7 @@
 				6D9D3AB025FA29630031DA5D /* TestResultWrapper.swift */,
 				6D9D3AAA25FA29410031DA5D /* TestState.swift */,
 				6D9D3ABC25FA29AA0031DA5D /* TestType.swift */,
+				3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2321,6 +2327,7 @@
 				6D9D3AA625FA29260031DA5D /* RequestToken.swift in Sources */,
 				6DF96B6C25DA57100008662B /* ScanLocalization.swift in Sources */,
 				6DB3C33425F1301E00B41B46 /* HolderConsentLocalization.swift in Sources */,
+				3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */,
 				6D1E33A325E62E810097E574 /* SecurityFeaturesView.swift in Sources */,
 				6DD7D86225D26D3A00B97B7F /* String+Dictionary.swift in Sources */,
 				6D12745D25FD51CD001B9515 /* TokenValidator.swift in Sources */,
@@ -2539,6 +2546,7 @@
 				6D9D3AA525FA29260031DA5D /* RequestToken.swift in Sources */,
 				6DAE8BE025CB242700AAF2A7 /* Codable+UserInfo.swift in Sources */,
 				6DB3C33325F1301E00B41B46 /* HolderConsentLocalization.swift in Sources */,
+				3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */,
 				6D54AAF025C8532200D92212 /* String+Dictionary.swift in Sources */,
 				6D164D7425F378B200A86409 /* LaunchView.swift in Sources */,
 				6D12745C25FD51CD001B9515 /* TokenValidator.swift in Sources */,
@@ -2779,6 +2787,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 20;
@@ -2889,6 +2898,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 20;
@@ -2999,6 +3009,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 20;
@@ -3110,6 +3121,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 20;
@@ -3475,6 +3487,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 20;
@@ -3510,6 +3523,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIconHolder;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 20;
