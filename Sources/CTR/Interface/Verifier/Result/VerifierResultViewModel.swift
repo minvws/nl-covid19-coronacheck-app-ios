@@ -32,6 +32,12 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The scanned attributes
 	var cryptoResults: (attributes: Attributes?, errorMessage: String?)
 
+	/// A timer auto close the scene
+	private var autoCloseTimer: Timer?
+
+	/// The identity with title numbers
+	private var identityWithTitles: [(String, String)] = []
+
 	// MARK: - Bindable properties
 
 	/// The title of the scene
@@ -42,7 +48,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	/// The identity of the holder
 	@Bindable private(set) var identity: [(String, String)] = []
-	@Bindable private(set) var checkIdentity: [(String, String)] = []
 
 	/// The linked message of the scene
 	@Bindable var linkedMessage: String?
@@ -74,6 +79,23 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		super.init()
 
 		checkAttributes()
+		startAutoCloseTimer()
+	}
+
+	override func addObservers() {
+		super.addObservers()
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(autoCloseScene),
+			name: UIApplication.didEnterBackgroundNotification,
+			object: nil
+		)
+	}
+
+	deinit {
+		autoCloseTimer?.invalidate()
+		autoCloseTimer = nil
 	}
 
 	/// Check the attributes
@@ -99,6 +121,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 				allowAccess = .verified
 				showAccessAllowed()
 			}
+
 		} else {
 
 			allowAccess = .denied
@@ -117,7 +140,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		let mapping = holder.mapIdentity(months: String.shortMonths)
 		for (index, element) in mapping.enumerated() {
 			identity.append(("", element.isEmpty ? "_" : element))
-			checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
+			identityWithTitles.append(("\(index + 1)", element.isEmpty ? "_" : element))
 		}
 	}
 
@@ -226,11 +249,13 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Dismiss ourselves
 	func dismiss() {
 
+		stopAutoCloseTimer()
 		coordinator?.navigateToVerifierWelcome()
 	}
 
     func scanAgain() {
 
+		stopAutoCloseTimer()
         coordinator?.navigateToScan()
     }
 
@@ -261,7 +286,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		)
 
 		let identityView = IdentityView()
-		identityView.elements = checkIdentity
+		identityView.elements = identityWithTitles
 
 		coordinator?.displayContent(
 			title: .verifierResultCheckTitle,
@@ -289,5 +314,37 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			title: .verifierDeniedTitle,
 			content: [(label, 16), (label2, 0)]
 		)
+	}
+
+	// MARK: - AutoCloseTimer
+
+	/// Start the auto close timer, close after 180 seconds
+	private func startAutoCloseTimer() {
+
+		guard autoCloseTimer == nil else {
+			return
+		}
+
+		autoCloseTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(180),
+			target: self,
+			selector: (#selector(autoCloseScene)),
+			userInfo: nil,
+			repeats: true
+		)
+	}
+
+	private func stopAutoCloseTimer() {
+
+		autoCloseTimer?.invalidate()
+		autoCloseTimer = nil
+	}
+
+	@objc private func autoCloseScene() {
+
+		autoCloseTimer?.invalidate()
+		autoCloseTimer = nil
+		logInfo("Auto closing the result view")
+		dismiss()
 	}
 }
