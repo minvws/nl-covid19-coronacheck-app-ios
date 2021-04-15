@@ -26,7 +26,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 		coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
 		viewModel = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: ForcedInformationConsentFactory.consentWithoutMandatoryConsent
+			forcedInformationConsent: .consentWithoutMandatoryConsent
 		)
 
 		sut = ForcedInformationConsentViewController(viewModel: viewModel)
@@ -46,7 +46,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 	func testContentWithoutMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsentFactory.consentWithoutMandatoryConsent
+		let consent = ForcedInformationConsent.consentWithoutMandatoryConsent
 
 		// When
 		loadView()
@@ -64,7 +64,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 	func testContentWithMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsentFactory.consentWithMandatoryConsent
+		let consent = ForcedInformationConsent.consentWithMandatoryConsent
 		viewModel = ForcedInformationConsentViewModel(
 			coordinatorSpy,
 			forcedInformationConsent: consent

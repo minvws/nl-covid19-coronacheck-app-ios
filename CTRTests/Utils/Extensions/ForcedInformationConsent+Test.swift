@@ -7,7 +7,7 @@
 
 @testable import CTR
 
-class ForcedInformationConsentFactory {
+extension ForcedInformationConsent {
 
 	static var consentWithoutMandatoryConsent = ForcedInformationConsent(
 		title: "test title without mandatory consent",

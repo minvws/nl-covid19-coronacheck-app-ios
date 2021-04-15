@@ -22,7 +22,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: ForcedInformationConsentFactory.consentWithoutMandatoryConsent
+			forcedInformationConsent: .consentWithoutMandatoryConsent
 		)
 	}
 
@@ -30,7 +30,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testContentWithMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsentFactory.consentWithMandatoryConsent
+		let consent = ForcedInformationConsent.consentWithMandatoryConsent
 
 		// When
 		sut = ForcedInformationConsentViewModel(
@@ -51,7 +51,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testContentWithoutMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsentFactory.consentWithoutMandatoryConsent
+		let consent = ForcedInformationConsent.consentWithoutMandatoryConsent
 
 		// When
 		sut = ForcedInformationConsentViewModel(
@@ -72,7 +72,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testPrimaryButtonWithMandatoryConsent() {
 		
 		// Given
-		let consent = ForcedInformationConsentFactory.consentWithMandatoryConsent
+		let consent = ForcedInformationConsent.consentWithMandatoryConsent
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
 			forcedInformationConsent: consent
@@ -90,7 +90,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testPrimaryButtonWithoutMandatoryConsent() {
 
 		// Given
-		let consent = ForcedInformationConsentFactory.consentWithoutMandatoryConsent
+		let consent = ForcedInformationConsent.consentWithoutMandatoryConsent
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
 			forcedInformationConsent: consent
