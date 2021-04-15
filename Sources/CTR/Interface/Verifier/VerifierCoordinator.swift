@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import SafariServices
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
@@ -31,59 +30,13 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func displayContent(title: String, content: [Content])
 }
 
-class VerifierCoordinator: Coordinator, Logging {
-	
-	var loggingCategory: String = "VerifierCoordinator"
-	
-	/// The UI Window
-	private var window: UIWindow
-	
-	/// The side panel controller
-	var sidePanel: SidePanelController?
-	
-	/// The onboardings manager
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-	
+class VerifierCoordinator: SharedCoordinator {
+
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
-	
-	/// The crypto manager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
 
-	/// The general configuration
-	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	/// The version supplier
-	var versionSupplier = AppVersionSupplier()
-	
-	/// The Child Coordinators
-	var childCoordinators: [Coordinator] = []
-	
-	/// The navigation controller
-	var navigationController: UINavigationController
-	
-	/// The dashboard navigation controller
-	var dashboardNavigationContoller: UINavigationController?
-
-	/// The about navigation controller
-	var aboutNavigationContoller: UINavigationController?
-
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
-	}
-	
-	/// Initiatilzer
-	init(navigationController: UINavigationController, window: UIWindow) {
-		
-		self.navigationController = navigationController
-		self.window = window
-	}
-	
 	// Designated starter method
-	func start() {
+	override func start() {
 		
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
@@ -105,6 +58,15 @@ class VerifierCoordinator: Coordinator, Logging {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
+		} else if forcedInformationManager.needsUpdating {
+			// Show Forced Information
+			let coordinator = ForcedInformationCoordinator(
+				navigationController: navigationController,
+				forcedInformationManager: forcedInformationManager,
+				delegate: self
+			)
+			startChildCoordinator(coordinator)
+
 		} else {
 			
 			navigateToVerifierWelcome()
@@ -222,20 +184,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 }
 
-// MARK: - Dismissable
-
-extension VerifierCoordinator: Dismissable {
-	
-	func dismiss() {
-		
-		if sidePanel?.selectedViewController?.presentedViewController != nil {
-			sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
-		} else {
-			(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: false)
-		}
-	}
-}
-
 // MARK: - MenuDelegate
 
 extension VerifierCoordinator: MenuDelegate {
@@ -300,47 +248,5 @@ extension VerifierCoordinator: MenuDelegate {
 			MenuItem(identifier: .about, title: .verifierMenuAbout),
 			MenuItem(identifier: .privacy, title: .verifierMenuPrivacy)
 		]
-	}
-}
-
-// MARK: - OpenUrlProtocol
-
-extension VerifierCoordinator: OpenUrlProtocol {
-	
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool) {
-		
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
-	}
-}
-
-// MARK: - OnboardingDelegate
-
-extension VerifierCoordinator: OnboardingDelegate {
-	
-	/// User has seen all the onboarding pages
-	func finishOnboarding() {
-		
-		onboardingManager.finishOnboarding()
-	}
-	
-	/// The onboarding is finished
-	func consentGiven() {
-		
-		// Mark as complete
-		onboardingManager.consentGiven()
-		
-		// Remove child coordinator
-		if let onboardingCoorinator = childCoordinators.first {
-			removeChildCoordinator(onboardingCoorinator)
-		}
-		
-		// Navigate to Verifier Welcome.
-		navigateToVerifierWelcome()
 	}
 }
