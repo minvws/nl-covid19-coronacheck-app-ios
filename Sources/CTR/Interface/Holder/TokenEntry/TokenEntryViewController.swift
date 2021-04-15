@@ -206,7 +206,8 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 
 		tapGestureRecognizer?.isEnabled = true
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + 160
+		let offset: CGFloat = traitCollection.verticalSizeClass == .compact ? 90 : 160
+		sceneView.scrollView.contentInset.bottom = notification.getHeight() + offset
 		let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
 		sceneView.bottomButtonConstraint?.constant = -notification.getHeight() + buttonOffset
 	}

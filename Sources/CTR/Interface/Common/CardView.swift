@@ -270,7 +270,7 @@ class CardView: BaseView {
 	/// Check the layout
 	func checkLayout() {
 
-		if UIDevice.current.isLandscape {
+		if traitCollection.verticalSizeClass == .compact {
 			buttonWidthConstraintLandscape?.isActive = true
 			buttonWidthConstraintPortrait?.isActive = false
 		} else {

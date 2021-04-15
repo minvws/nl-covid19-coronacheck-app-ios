@@ -65,7 +65,7 @@ class OnboardingPageViewController: BaseViewController {
 	/// Layout for different orientations
 	func layoutForOrientation() {
 
-		if UIDevice.current.isSmallScreen || UIDevice.current.isLandscape {
+		if UIDevice.current.isSmallScreen || traitCollection.verticalSizeClass == .compact {
 			// Also hide the image on small devices 
 			sceneView.hideImage()
 		} else {

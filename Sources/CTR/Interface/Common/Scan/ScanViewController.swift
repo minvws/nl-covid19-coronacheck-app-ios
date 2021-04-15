@@ -56,7 +56,11 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			captureSession.addOutput(metadataOutput)
 
 			metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-			metadataOutput.metadataObjectTypes = [.qr]
+			if Configuration().getEnvironment() == "test" {
+				metadataOutput.metadataObjectTypes = [.qr, .aztec]
+			} else {
+				metadataOutput.metadataObjectTypes = [.qr]
+			}
 		} else {
 			failed()
 			return

@@ -72,7 +72,7 @@
 "verifier.onboarding.title.access" = "Toegang is anoniem";
 "verifier.onboarding.message.access" = "Bij het scannen van een QR-code worden geen persoonsgegevens verstuurd of opgeslagen. Als controleur zie je alleen of de bezoeker een geldige negatieve testuitslag heeft.";
 "verifier.onboarding.title.who" = "Voor wie is de scanner?";
-"verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw sociale, culturele of sportieve activiteit onder de <u>aangewezen locaties</u> valt.";
+"verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw sociale, culturele of sportieve activiteit onder de aangewezen locaties valt.";
 
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Zo gebruikt de app gegevens";
