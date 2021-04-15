@@ -2,31 +2,51 @@ name: test
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   swiftlint:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
+    
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Run SwiftLint for changes in this pull request
-      uses: norio-nomura/action-swiftlint@3.2.1
-      with:
-        args: --force-exclude
-      env:
-        DIFF_BASE: ${{ github.base_ref }}
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Bundler dependencies
+        run: |
+          bundle install
+          
+      - name: Install SwiftLint via Cocoapods
+        # Unorthadox hack to acquire cocoapods, until "norio-nomura/action-swiftlint@3.2.1" is fixed.
+        run: |
+          echo "platform :ios, '11.0'" > Podfile
+          echo "install! 'cocoapods', :integrate_targets => false" >> Podfile
+          echo "pod 'SwiftLint'" >> Podfile
+          pod install 
+          Pods/SwiftLint/swiftlint --quiet --strict --config=./.swiftlint.yml
+
+    # - name: Run SwiftLint for changes in this pull request
+    #   uses: norio-nomura/action-swiftlint@3.2.1
+    #   with:
+    #     args: --force-exclude
+    #   env:
+    #     DIFF_BASE: ${{ github.base_ref }}
+
   test:
     runs-on: macOS-latest
     timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Build and test
-      env:
-        SLACK_URL: ${{ secrets.SLACK_URL }}
-      run: |
-        bundle install
-        bundle exec fastlane ios test_ci
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Bundler dependencies
+        run: |
+          bundle install
+          
+      - name: Build and test
+        env:
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+        run: |
+          bundle exec fastlane ios test_ci

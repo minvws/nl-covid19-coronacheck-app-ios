@@ -8,7 +8,12 @@
 import Foundation
 
 /// The request token to fetch a test result form a commercial tester
-struct RequestToken: Codable {
+struct RequestToken: Codable, Equatable {
+
+    /// The current highest known protocol version
+    /// 1.0: Checksum
+    /// 2.0: Initials + Birthday/month
+    static let highestKnownProtocolVersion = "2.0"
 
 	/// The request token
 	let token: String
@@ -26,4 +31,28 @@ struct RequestToken: Codable {
 		case protocolVersion
 		case providerIdentifier
 	}
+
+    init(token: String, protocolVersion: String, providerIdentifier: String) {
+        self.token = token
+        self.protocolVersion = protocolVersion
+        self.providerIdentifier = providerIdentifier
+    }
+
+    init?(input: String, tokenValidator: TokenValidatorProtocol = TokenValidator()) {
+        // Check the validity of the input
+        guard tokenValidator.validate(input) else {
+            return nil
+        }
+
+        let parts = input.split(separator: "-")
+        guard parts.count >= 2, parts[0].count == 3 else { return nil }
+
+        let identifierPart = String(parts[0])
+        let tokenPart = String(parts[1])
+        self = RequestToken(
+            token: tokenPart,
+            protocolVersion: type(of: self).highestKnownProtocolVersion,
+            providerIdentifier: identifierPart
+        )
+    }
 }

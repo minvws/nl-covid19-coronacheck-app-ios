@@ -47,7 +47,7 @@ class ConsentView: BaseView {
 		return view
 	}()
 
-	/// The stack view for the privacy hightlight items
+	/// The stack view for the privacy highlight items
 	let itemStackView: UIStackView = {
 
 		let view = UIStackView()

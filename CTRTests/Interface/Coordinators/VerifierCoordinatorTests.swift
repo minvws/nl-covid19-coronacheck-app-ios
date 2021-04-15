@@ -10,9 +10,9 @@ import XCTest
 
 class VerifierCoordinatorTests: XCTestCase {
 
-	var sut: VerifierCoordinator?
+	var sut: VerifierCoordinator!
 
-	var navigationSpy = NavigationControllerSpy()
+	var navigationSpy: NavigationControllerSpy!
 
 	var window = UIWindow()
 
@@ -32,19 +32,71 @@ class VerifierCoordinatorTests: XCTestCase {
 	func testOpenMenuItem() throws {
 
 		// Given
-		let strongSut = try XCTUnwrap(sut)
 		let menu = MenuViewController(
-            viewModel: MenuViewModel(delegate: strongSut)
+            viewModel: MenuViewModel(delegate: sut)
 		)
-		sut?.sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sut.sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 
 		let viewControllerSpy = ViewControllerSpy()
-		sut?.sidePanel?.selectedViewController = viewControllerSpy
+		sut.sidePanel?.selectedViewController = viewControllerSpy
 
 		// When
-		sut?.openMenuItem(.privacy)
+		sut.openMenuItem(.privacy)
 
 		// Then
 		XCTAssertTrue(viewControllerSpy.presentCalled, "Method should be called")
+	}
+
+	func testStartForcedInformation() {
+
+		// Given
+		let onboardingSpy = OnboardingManagerSpy()
+		onboardingSpy.stubbedNeedsOnboarding = false
+		onboardingSpy.stubbedNeedsConsent = false
+		sut.onboardingManager = onboardingSpy
+
+		let forcedInformationSpy = ForcedInformationManagerSpy()
+		forcedInformationSpy.stubbedNeedsUpdating = true
+		forcedInformationSpy.stubbedGetConsentResult = ForcedInformationConsent(
+			title: "test",
+			highlight: "test",
+			content: "test",
+			consentMandatory: false
+		)
+		sut.forcedInformationManager = forcedInformationSpy
+
+		// When
+		sut.start()
+
+		// Then
+		XCTAssertFalse(sut.childCoordinators.isEmpty)
+		XCTAssertTrue(sut.childCoordinators.first is ForcedInformationCoordinator)
+	}
+
+	func testFinishForcedInformation() {
+
+		// Given
+		let onboardingSpy = OnboardingManagerSpy()
+		onboardingSpy.stubbedNeedsOnboarding = false
+		onboardingSpy.stubbedNeedsConsent = false
+		sut.onboardingManager = onboardingSpy
+
+		let forcedInformationSpy = ForcedInformationManagerSpy()
+		forcedInformationSpy.stubbedNeedsUpdating = false
+		sut.forcedInformationManager = forcedInformationSpy
+
+		sut.childCoordinators = [
+			ForcedInformationCoordinator(
+				navigationController: navigationSpy,
+				forcedInformationManager: ForcedInformationManagerSpy(),
+				delegate: sut
+			)
+		]
+
+		// When
+		sut.finishForcedInformation()
+
+		// Then
+		XCTAssertTrue(sut.childCoordinators.isEmpty)
 	}
 }

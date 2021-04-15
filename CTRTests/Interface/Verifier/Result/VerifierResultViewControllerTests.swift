@@ -97,7 +97,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDemoFaultTime() throws {
 
 		// Given
-		viewModel?.cryptoResults = CryptoResult(
+		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
 					cryptoAttributes: CrypoAttributes(
@@ -117,13 +117,12 @@ class VerifierResultViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		viewModel?.checkAttributes()
-
+		viewModel.checkAttributes()
+		
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.imageView.image, .denied, "Image should match")
+		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
 
 	}
 	

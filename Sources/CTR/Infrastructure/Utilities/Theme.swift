@@ -202,6 +202,8 @@ final class Colors {
 
 	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
 
+	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
+
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {

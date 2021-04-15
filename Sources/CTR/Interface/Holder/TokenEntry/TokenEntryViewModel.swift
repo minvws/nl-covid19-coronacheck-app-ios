@@ -26,11 +26,6 @@ class TokenEntryViewModel: Logging {
 	/// The verification code
 	var verificationCode: String?
 
-	/// The current highest known protocol version
-	/// 1.0: Checksum
-	/// 2.0: Initials + Birthday/month
-	let highestKnownProtocolVersion = "2.0"
-
 	/// A timer to enable resending of the verification code
 	var resendTimer: Timer?
 
@@ -248,24 +243,6 @@ class TokenEntryViewModel: Logging {
 	/// - Parameter token: the input string
 	/// - Returns: the request token
 	func createRequestToken(_ input: String) -> RequestToken? {
-
-		// Check the validity of the input
-		guard tokenValidator.validate(input) else {
-			return nil
-		}
-
-		let parts = input.split(separator: "-")
-		if parts.count >= 2 {
-			if parts[0].count == 3 {
-				let identifierPart = String(parts[0])
-				let tokenPart = String(parts[1])
-				return RequestToken(
-					token: tokenPart,
-					protocolVersion: highestKnownProtocolVersion,
-					providerIdentifier: identifierPart
-				)
-			}
-		}
-		return nil
+        RequestToken(input: input, tokenValidator: tokenValidator)
 	}
 }
