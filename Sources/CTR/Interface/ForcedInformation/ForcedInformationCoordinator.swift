@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import SafariServices
 
 /// The resulting actions in this scene
 enum ForcedInformationResult {
@@ -17,7 +18,7 @@ enum ForcedInformationResult {
 	case consentViewed
 }
 
-protocol ForcedInformationCoordinatorDelegate: AnyObject {
+protocol ForcedInformationCoordinatorDelegate: OpenUrlProtocol {
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene
@@ -101,6 +102,20 @@ extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate {
 				logInfo("ForcedInformationCoordinator: Consent was viewed")
 				forcedInformationManager.consentGiven()
 				delegate?.finishForcedInformation()
+		}
+	}
+
+	/// Open a url
+	/// - Parameters:
+	///   - url: The url to open
+	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
+	func openUrl(_ url: URL, inApp: Bool) {
+
+		if inApp {
+			let safariController = SFSafariViewController(url: url)
+			navigationController.present(safariController, animated: true)
+		} else {
+			UIApplication.shared.open(url)
 		}
 	}
 }

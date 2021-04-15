@@ -62,19 +62,16 @@ class ForcedInformationConsentView: BaseView {
 		return view
 	}()
 
-	/// The highlight label
 	private let highlightLabel: Label = {
 
 		return Label(body: nil).multiline()
 	}()
 
-	/// The content label
-	private let contentLabel: Label = {
+	let contentTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 
-	/// the primart button
 	let primaryButton: Button = {
 
 		let button = Button(title: "Button 1", style: .primary)
@@ -131,7 +128,7 @@ class ForcedInformationConsentView: BaseView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(highlightView)
 		stackView.setCustomSpacing(ViewTraits.contentSpacing, after: highlightView)
-		stackView.addArrangedSubview(contentLabel)
+		stackView.addArrangedSubview(contentTextView)
 
 		stackView.embed(
 			in: scrollView,
@@ -250,11 +247,7 @@ class ForcedInformationConsentView: BaseView {
 	/// The content
 	var content: String? {
 		didSet {
-			contentLabel.attributedText = .makeFromHtml(
-				text: content,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			contentTextView.html(content)
 		}
 	}
 

@@ -94,4 +94,9 @@ class ForcedInformationConsentViewModel {
 		errorMessage = .newTermsErrorMessage
 		showErrorDialog = true
 	}
+
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
+	}
 }

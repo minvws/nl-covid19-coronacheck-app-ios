@@ -45,8 +45,8 @@
 
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"new.terms.highlights" = "<b>Dit is wat er is veranderd</b><br\><ul><li>Als je een buitenlandse reis wil maken worden er aanvullende medische Corona gegevens opgehaald</li><li>tempor incididunt ut labore et dolore magna aliqua.</li><li>Ut enim ad minim veniam, quis nostrud exercitation ullamco</li></ul>";
-"new.terms.description" = "<b>1: Lorem ipsum dolor sit amet</b><br\>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+"new.terms.highlights" = "<b>Dit is wat er is veranderd</b><br\><ul><li> Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner app voor ID-controle</li></ul>";
+"new.terms.description" = "Je kunt de volledige privacy verklaring <a href=\"https://coronacheck.nl/nl/privacy-in-app\">hier lezen</a>";
 "new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
 "new.terms.error.message" = "Je hebt geen toegang de CoronaCheck-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
 "new.terms.agree" = "Akkoord";

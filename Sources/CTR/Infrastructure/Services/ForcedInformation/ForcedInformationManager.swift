@@ -57,7 +57,7 @@ class ForcedInformationManager: ForcedInformationManaging {
 			title: .newTermsTitle,
 			highlight: .newTermsHighlights,
 			content: .newTermsDescription,
-			consentMandatory: false
+			consentMandatory: true
 		),
 		version: 1
 	)
