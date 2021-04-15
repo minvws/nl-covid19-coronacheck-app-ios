@@ -68,4 +68,23 @@ class UniversalLinkTests: XCTestCase {
         // Assert
         XCTAssertNil(link)
     }
+
+    func test_rejectsUserActivity_ifNotOfType_NSUserActivityTypeBrowsingWeb() {
+
+        // Arrange
+        let activity = NSUserActivity(activityType: "Other")
+        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+
+        let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
+            token: "YYYYYYYYYYYY",
+            protocolVersion: "2.0",
+            providerIdentifier: "XXX"
+        ))
+
+        // Act
+        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
+
+        // Assert
+        XCTAssertNil(link)
+    }
 }

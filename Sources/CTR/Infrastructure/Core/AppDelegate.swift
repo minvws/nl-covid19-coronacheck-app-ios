@@ -99,9 +99,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// Used for both running and cold-booted apps
     func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
 
-        // Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
-        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return false }
-
         // Parse an activity from the userActivity
         guard let universalLink = UniversalLink(userActivity: userActivity) else { return false }
 

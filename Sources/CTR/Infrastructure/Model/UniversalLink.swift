@@ -11,6 +11,10 @@ enum UniversalLink: Equatable {
     case redeemHolderToken(requestToken: RequestToken)
 
     init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor) {
+
+        // Apple's docs specify to only handle universal links "with the activityType set to NSUserActivityTypeBrowsingWeb"
+        guard userActivity.activityType == NSUserActivityTypeBrowsingWeb else { return nil }
+
         // Only the holder app currently supports universal links
         guard appFlavor == .holder else { return nil }
 
