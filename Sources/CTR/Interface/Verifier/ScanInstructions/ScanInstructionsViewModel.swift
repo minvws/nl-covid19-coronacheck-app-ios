@@ -13,7 +13,7 @@ class ScanInstructionsViewModel: Logging {
 	var loggingCategory: String = "ScanInstructionsViewModel"
 	
 	/// Coordination Delegate
-	weak var coordinator: VerifierCoordinator?
+	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
 	
 	// MARK: - Bindable properties
 	
@@ -30,7 +30,10 @@ class ScanInstructionsViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the dismissable delegae
 	///   - presented: True if we are presented
-	init(coordinator: VerifierCoordinator, presented: Bool, maxValidity: String) {
+	init(
+		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
+		presented: Bool,
+		maxValidity: String) {
 		
 		self.coordinator = coordinator
 		self.title = .verifierScanInstructionsTitle
@@ -63,5 +66,10 @@ class ScanInstructionsViewModel: Logging {
 
 		coordinator?.dismiss()
 		coordinator?.navigateToScan()
+	}
+
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
 	}
 }

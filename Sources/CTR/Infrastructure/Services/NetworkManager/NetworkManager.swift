@@ -178,7 +178,7 @@ class NetworkManager: NetworkManaging, Logging {
 		var request = URLRequest(
 			url: url,
 			cachePolicy: .useProtocolCachePolicy,
-			timeoutInterval: 10)
+			timeoutInterval: 30)
 		request.httpMethod = method.rawValue
 		
 		let defaultHeaders = [

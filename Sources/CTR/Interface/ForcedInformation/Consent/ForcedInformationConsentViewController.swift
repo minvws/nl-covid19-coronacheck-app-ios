@@ -41,7 +41,7 @@ class ForcedInformationConsentViewController: BaseViewController {
 
 		setupContent()
 		setupBindings()
-		setupButtons()
+		setupActions()
 
 		navigationItem.hidesBackButton = true
 	}
@@ -75,7 +75,7 @@ class ForcedInformationConsentViewController: BaseViewController {
 	}
 
 	/// Setup the buttons
-	func setupButtons() {
+	func setupActions() {
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
@@ -85,6 +85,11 @@ class ForcedInformationConsentViewController: BaseViewController {
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.secondaryButtonTapped()
+		}
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
 		}
 	}
 

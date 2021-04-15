@@ -57,17 +57,16 @@ class ScanInstructionsViewController: BaseViewController {
 				let label = Label(title3: item.title, montserrat: true)
 				self?.sceneView.stackView.addArrangedSubview(label)
 				self?.sceneView.stackView.setCustomSpacing(8, after: label)
-				let bodyLabel = Label(body: nil).multiline()
-				bodyLabel.attributedText = .makeFromHtml(
-					text: item.text,
-					font: Theme.fonts.body,
-					textColor: Theme.colors.dark
-				)
-				self?.sceneView.stackView.addArrangedSubview(bodyLabel)
-				self?.sceneView.stackView.setCustomSpacing(56, after: bodyLabel)
+
+				let content = TextView(htmlText: item.text)
+				content.linkTouched { [weak self] url in
+					print("tapped on \(url)")
+					self?.viewModel.openUrl(url)
+				}
+				self?.sceneView.stackView.addArrangedSubview(content)
+				self?.sceneView.stackView.setCustomSpacing(56, after: content)
 			}
 		}
-
 	}
 
 	/// User tapped on the button

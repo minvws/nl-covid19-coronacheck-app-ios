@@ -61,8 +61,8 @@ class TextView: UITextView, UITextViewDelegate {
         textContainer.lineFragmentPadding = 0
         textContainerInset = .zero
         linkTextAttributes = [
-            .foregroundColor: Theme.colors.primary,
-            .underlineColor: UIColor.clear]
+            .foregroundColor: Theme.colors.iosBlue,
+            .underlineColor: Theme.colors.iosBlue]
     }
     
     override var intrinsicContentSize: CGSize {

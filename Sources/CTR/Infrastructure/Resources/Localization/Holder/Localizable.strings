@@ -13,11 +13,11 @@
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
-"general.error.title" = "Er ging iets mis";
+"general.error.title" = "Sorry, er ging iets mis";
 "general.error.technical.text" = "Dat komt door een technische fout.";
-"general.error.technical.custom" = "Excuus, er is een technische fout opgetreden (%@)";
-"general.error.nointernet.title" = "Je hebt geen internet verbinding";
-"general.error.nointernet.text" = "Controleer je verbinding en probeer het opnieuw.";
+"general.error.technical.custom" = "Dat komt door een technische fout (%@)";
+"general.error.nointernet.title" = "Geen internetverbinding";
+"general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
 "general.loading" = "Bezig met laden";
@@ -45,10 +45,10 @@
 
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"new.terms.highlights" = "<b>Dit is wat er is veranderd</b><br\><ul><li>Als je een buitenlandse reis wil maken worden er aanvullende medische Corona gegevens opgehaald</li><li>tempor incididunt ut labore et dolore magna aliqua.</li><li>Ut enim ad minim veniam, quis nostrud exercitation ullamco</li></ul>";
-"new.terms.description" = "<b>1: Lorem ipsum dolor sit amet</b><br\>consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+"new.terms.highlights" = "<b>Dit is wat er is veranderd</b><br\><ul><li> Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner app voor ID-controle</li></ul>";
+"new.terms.description" = "Je kunt de volledige privacy verklaring <a href=\"https://coronacheck.nl/nl/privacy-in-app\">hier lezen</a>.";
 "new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
-"new.terms.error.message" = "Je hebt geen toegang de CoronaCheck app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
+"new.terms.error.message" = "Je hebt geen toegang de CoronaCheck-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
 "new.terms.agree" = "Akkoord";
 "new.terms.disagree" = "Niet akkoord";
 
@@ -67,30 +67,30 @@
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang na testen";
-"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Ook als je wat leuks gaat doen. Laat je daarom eerst testen. Blijkt uit de test dat je geen corona hebt (negatieve testuitslag)? Dan krijg je toegang tot bepaalde sociale, culturele of sportieve activiteiten.";
+"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Laat je daarom testen als je bepaalde sociale, culturele of sportieve activiteiten bezoekt. Ook als je al gevaccineerd bent. Blijkt uit de test dat je geen corona hebt (negatieve testuitslag)? Dan krijg je toegang.";
 "holder.onboarding.title.yourqr" = "Jouw QR-code op zak";
 "holder.onboarding.message.yourqr" = "Als uit de test blijkt dat je geen corona hebt kun je in deze app een persoonlijke QR-code maken. Dat is jouw testbewijs. De QR-code wordt gescand om toegang te krijgen.";
 "holder.onboarding.title.validity" = "Geldigheid van je bewijs";
-"holder.onboarding.message.validity" = "Wil je toegang krijgen tot een bepaalde sociale, culturele of sportieve activiteit? Zorg dat jouw QR-code binnen %@ uur na het moment van testen aan de deur gescand is. Als je testbewijs verloopt verdwijnt de QR-code uit de app. Nieuwe QR-code nodig? Laat je opnieuw testen.";
-"holder.onboarding.title.privacy" = "Privacy staat voorop";
-"holder.onboarding.message.privacy" = "In jouw QR-code staat alleen wanneer je negatief getest bent.";
+"holder.onboarding.message.validity" = "Wil je toegang krijgen tot een bepaalde sociale, culturele of sportieve activiteit? Zorg dat jouw QR-code binnen %@ uur na het moment van testen gescand is bij de ingang. Als je testbewijs verloopt verdwijnt de QR-code uit de app.";
+"holder.onboarding.title.privacy" = "Zo min mogelijk gegevens";
+"holder.onboarding.message.privacy" = "In jouw QR-code staan alleen je negatieve testuitslag (geen corona), het tijdstip van de test en minimale gegevens: de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Dit is ter controle, om zeker te zijn dat de testuitslag bij jou hoort.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt deze app jouw gegevens";
 "holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
-"holder.consent.message.underlined" = "Privacyverklaring";
+"holder.consent.message.underlined" = "privacyverklaring";
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
 "holder.consent.item.2" = "Je GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b>";
-"holder.consent.item.3" = "In de QR-code staat alleen <b>wanneer </b> je negatief getest bent ";
-"holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrepen. Voor het verwerken van mijn persoonsgegevens geef ik toestemming.";
+"holder.consent.item.3" = "In de QR-code staan minimale <b>persoonsgegevens</b>";
+"holder.consent.button" = "Ik heb de privacyverklaring gelezen en geef toestemming voor het verwerken van mijn persoonsgegevens.";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Wil je een bepaalde sociale, culturele of sportieve locatie bezoeken? Dan heb je een negatieve testuitslag nodig, in de vorm van een QR-code.";
-"holder.dashboard.appointment.title" = "Maak een testafspraak";
+"holder.dashboard.intro" = "Voor toegang tot een pilot-event heb je een negatieve testuitslag nodig. Daar maak je een QR-code van. Laat bij de ingang de QR-code én je identiteitsbewijs zien.";
+"holder.dashboard.appointment.title" = "Testafspraak maken";
 "holder.dashboard.appointment.message" = "Wil je een QR-code maken? Laat je dan eerst testen op corona.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
-"holder.dashboard.create.title" = "Maak een QR-code";
+"holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
 "holder.dashboard.change.title" = "Vervang je QR-code";
@@ -119,10 +119,10 @@
 "holder.banner.newqr.message.link" = "Lees hier";
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.\n\nJe QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is aan de deur.";
+"holder.appointment.body" = "Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.\n\nJe QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is bij de ingang.";
 "holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.title" = "Testafspraak maken";
-"holder.appointment.header" = "Maak een testafspraak";
+"holder.appointment.header" = "Testafspraak maken";
 "holder.appointment.button.title" = "Maak een afspraak";
 
 /* MARK: - Holder Choose Provider */
@@ -161,10 +161,11 @@
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.retry.title" = "Stuur opnieuw";
 "holder.tokenentry.retry.countdown" = "Stuur opnieuw in %@";
+"holder.tokenentry.next" = "Haal testuitslag op";
 
 /* MARK: - Holder Test Results */
-"holder.testresults.results.title" = "Jouw negatieve testuitslagen";
-"holder.testresults.results.text" = "Je hebt 1 nieuwe negatieve testuitslag. Op het moment van de test had je geen corona. Maak van dit resultaat een QR-code. Dat is jouw bewijs.";
+"holder.testresults.results.title" = "Controleer je testuitslag";
+"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Op het moment van testen had je geen corona.<br\><br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs. ";
 "holder.testresults.results.button" = "Maak QR-code";
 "holder.testresults.noresults.title" = "Geen negatieve testuitslag";
 "holder.testresults.noresults.text" = "Er is geen negatieve testuitslag beschikbaar.";
@@ -172,7 +173,7 @@
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code omgezet.</p><p>
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code omgezet.</p><p></p><p>
 Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.recent" = "Opgehaalde testuitslagen";
 "holder.testresults.negative" = "Negatieve testuitslag";
@@ -198,7 +199,7 @@ Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 
 /* MARK: - Holder Test Results About */
 "holder.testresults.about.title" = "Over de testuitslag";
-"holder.testresults.about.section.one" = "In een testuitslag staan de uitslag, de testdatum en jouw gegevens.";
+"holder.testresults.about.section.one" = "In een testuitslag staan de uitslag, het tijdstip van de test en minimale gegevens van jou.";
 "holder.testresults.about.section.two" = "Je gegevens bestaan uit: (1) de eerste letter van je voornaam, (2) de eerste letter van je achternaam, (3) je geboortedag en (4) geboortemaand.";
 "holder.testresults.about.section.three" = "Zijn deze gegevens anders dan op je identiteitsbewijs?";
 "holder.testresults.about.section.four" = "Neem contact op met je testlocatie. Zij kunnen je gegevens aanpassen. ";

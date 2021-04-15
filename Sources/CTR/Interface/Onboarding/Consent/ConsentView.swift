@@ -112,7 +112,15 @@ class ConsentView: BaseView {
 		stackView.addArrangedSubview(itemStackView)
 		stackView.addArrangedSubview(consentButton)
 
-		scrollView.addSubview(stackView)
+		stackView.embed(
+			in: scrollView,
+			insets: UIEdgeInsets(
+				top: ViewTraits.margin,
+				left: ViewTraits.margin,
+				bottom: ViewTraits.margin,
+				right: ViewTraits.margin
+			)
+		)
 
 		addSubview(scrollView)
 		addSubview(lineView)
@@ -141,14 +149,6 @@ class ConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			stackView.topAnchor.constraint(
-				equalTo: scrollView.topAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
 
 			// Line
 			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),

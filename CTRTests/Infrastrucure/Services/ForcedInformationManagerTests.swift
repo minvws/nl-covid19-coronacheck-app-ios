@@ -57,7 +57,7 @@ class ForcedInformationManagerTests: XCTestCase {
 			title: .newTermsTitle,
 			highlight: .newTermsHighlights,
 			content: .newTermsDescription,
-			consentMandatory: false
+			consentMandatory: true
 		)
 
 		// When

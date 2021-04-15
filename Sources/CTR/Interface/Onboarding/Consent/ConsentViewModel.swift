@@ -12,10 +12,11 @@ class ConsentViewModel {
 	/// Coordination Delegate
 	weak var coordinator: OnboardingCoordinatorDelegate?
 
-	/// The onboarding factory for all texts.
+	/// The onboarding factory for all content.
 	var factory: OnboardingFactoryProtocol
 
-	/// Is the button enabled?
+	// MARK: - Bindable variables
+
 	@Bindable private(set) var isContinueButtonEnabled: Bool
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -26,6 +27,7 @@ class ConsentViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
+	///   - factory: The factory for onboarding content
 	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol) {
 
 		self.coordinator = coordinator
