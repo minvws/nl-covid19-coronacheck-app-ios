@@ -158,6 +158,8 @@ class HolderCoordinator: Coordinator, Logging {
 
         switch universalLink {
             case .redeemHolderToken(let requestToken):
+
+                // TODO: Handle this in follow-up PR
 //                // Do it on the next runloop:
 //                DispatchQueue.main.async { [self] in
 //                    navigateToTokenEntry(requestToken)
