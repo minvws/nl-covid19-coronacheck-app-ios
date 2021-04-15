@@ -63,7 +63,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	/// Initialzier
 	/// - Parameters:
-	///   - coordinator: the dismissable delegae
+	///   - coordinator: the dismissable delegate
 	///   - scanResults: the decrypted attributes
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
@@ -316,7 +316,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	// MARK: - AutoCloseTimer
 
-	/// Start the auto close timer, close after 180 seconds
+	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
 	private func startAutoCloseTimer() {
 
 		guard autoCloseTimer == nil else {
@@ -324,7 +324,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		}
 
 		autoCloseTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(180),
+			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
 			target: self,
 			selector: (#selector(autoCloseScene)),
 			userInfo: nil,
