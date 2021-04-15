@@ -8,7 +8,7 @@
 @testable import CTR
 import XCTest
 
-class ForcedInformationCoordinatorDelegateSpy: ForcedInformationCoordinatorDelegate {
+class ForcedInformationCoordinatorDelegateSpy: ForcedInformationCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedDidFinishConsent = false
 	var invokedDidFinishConsentCount = 0

@@ -18,7 +18,7 @@ enum ForcedInformationResult {
 	case consentViewed
 }
 
-protocol ForcedInformationCoordinatorDelegate: OpenUrlProtocol {
+protocol ForcedInformationCoordinatorDelegate: AnyObject {
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene
@@ -27,7 +27,7 @@ protocol ForcedInformationCoordinatorDelegate: OpenUrlProtocol {
 
 protocol ForcedInformationDelegate: AnyObject {
 
-	/// The forced infomration flow is finished
+	/// The forced information flow is finished
 	func finishForcedInformation()
 }
 
@@ -48,7 +48,7 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 	/// The forced information delegate
 	weak var delegate: ForcedInformationDelegate?
 
-	/// Initiatilzer
+	/// Initiailzer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	///   - forcedInformationManager: the forced information manager
@@ -84,9 +84,9 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 	}
 }
 
-// MARK: - ForcedInformationCoordinatorDelegate
+// MARK: - ForcedInformationCoordinatorDelegate & OpenUrlProtocol
 
-extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate {
+extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate, OpenUrlProtocol {
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene

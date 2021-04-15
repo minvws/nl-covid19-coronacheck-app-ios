@@ -44,7 +44,7 @@ class ForcedInformationConsentViewModel {
 	private var consent: ForcedInformationConsent
 
 	/// Coordination Delegate
-	weak private var coordinator: ForcedInformationCoordinatorDelegate?
+	weak private var coordinator: (ForcedInformationCoordinatorDelegate & OpenUrlProtocol)?
 
 	// MARK: - Initializer
 
@@ -52,7 +52,9 @@ class ForcedInformationConsentViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - consent: the consent
-	init(_ coordinator: ForcedInformationCoordinatorDelegate, forcedInformationConsent: ForcedInformationConsent) {
+	init(
+		_ coordinator: (ForcedInformationCoordinatorDelegate & OpenUrlProtocol),
+		forcedInformationConsent: ForcedInformationConsent) {
 
 		self.coordinator = coordinator
 		self.consent = forcedInformationConsent
