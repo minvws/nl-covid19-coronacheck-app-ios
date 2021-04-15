@@ -47,9 +47,9 @@ class RequestTokenTests: XCTestCase {
         XCTAssertEqual(tokenValidatorSpy.invokedValidateParameters?.token, input)
     }
 
-    func test_falselyValidParameters_shouldNotCrash() {
+    func `test_falselyValidParameters_shouldNotCrash`() {
         // Arrange
-        let input = "XXX-YYY" // not enough components
+        let input = "XXX" // not enough components
 
         tokenValidatorSpy.stubbedValidateResult = true // bug in validator! 🪳
 
