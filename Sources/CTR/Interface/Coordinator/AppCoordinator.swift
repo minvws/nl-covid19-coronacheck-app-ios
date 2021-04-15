@@ -157,14 +157,14 @@ extension AppCoordinator: AppCoordinatorDelegate {
     func handleLaunchState(_ state: LaunchState) {
 
         switch state {
-        case .noActionNeeded:
-            startApplication()
+            case .noActionNeeded:
+                startApplication()
 
-        case .internetRequired:
-            showInternetRequired()
+            case .internetRequired:
+                showInternetRequired()
 
-        case let .actionRequired(versionInformation):
-            showActionRequired(with: versionInformation)
+            case let .actionRequired(versionInformation):
+                showActionRequired(with: versionInformation)
         }
     }
 
@@ -178,7 +178,6 @@ extension AppCoordinator: AppCoordinatorDelegate {
         }
     }
 }
-
 
 // MARK: - Notification observations
 

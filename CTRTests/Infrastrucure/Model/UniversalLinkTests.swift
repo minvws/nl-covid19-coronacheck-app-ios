@@ -6,7 +6,6 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-
 import Foundation
 import XCTest
 @testable import CTR
@@ -47,7 +46,7 @@ class UniversalLinkTests: XCTestCase {
 
         // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z_") //invalid token in URL fragment
+        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z_") // invalid token in URL fragment
 
         // Act
         let link = UniversalLink(userActivity: activity, appFlavor: .holder)
@@ -60,7 +59,7 @@ class UniversalLinkTests: XCTestCase {
 
         // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#Xsdfsdf") //invalid token in URL fragment
+        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#Xsdfsdf") // invalid token in URL fragment
 
         // Act
         let link = UniversalLink(userActivity: activity, appFlavor: .holder)
