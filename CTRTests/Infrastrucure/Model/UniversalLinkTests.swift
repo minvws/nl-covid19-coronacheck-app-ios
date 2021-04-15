@@ -14,20 +14,27 @@ import XCTest
 class UniversalLinkTests: XCTestCase {
 
     func test_validHolderURL_withValidFragment_inHolderApp_createsLink() {
+
+        // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
-
-        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
 
         let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
             token: "YYYYYYYYYYYY",
             protocolVersion: "2.0",
             providerIdentifier: "XXX"
         ))
+
+        // Act
+        let link = UniversalLink(userActivity: activity, appFlavor: .holder)
+
+        // Assert
         XCTAssertEqual(link, expected)
     }
 
     func test_validHolderURL_inVerifierApp_doesNotCreateLink() {
+
+        // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
 
@@ -37,20 +44,28 @@ class UniversalLinkTests: XCTestCase {
     }
 
     func test_validHolderURL_withInvalidFragment1_doesNotCreateLink() {
+
+        // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z_") //invalid token in URL fragment
 
+        // Act
         let link = UniversalLink(userActivity: activity, appFlavor: .holder)
 
+        // Assert
         XCTAssertNil(link)
     }
 
     func test_validHolderURL_withInvalidFragment2_doesNotCreateLink() {
+
+        // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#Xsdfsdf") //invalid token in URL fragment
 
+        // Act
         let link = UniversalLink(userActivity: activity, appFlavor: .holder)
 
+        // Assert
         XCTAssertNil(link)
     }
 }
