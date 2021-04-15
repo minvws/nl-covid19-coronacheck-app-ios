@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	/// The previous brightness
 	var previousBrightness: CGFloat?
 
+    /// set orientations you want to be allowed in this property by default
+    var orientationLock = UIInterfaceOrientationMask.all
+
 	func application(
 		_ application: UIApplication,
 		didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -40,23 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 
 		return true
-	}
-
-	/// Setup the apperance of the navigation bar
-	func styleUI() {
-
-		// Custom navigation bar appearance
-		UINavigationBar.appearance().barTintColor = .clear
-		UINavigationBar.appearance().titleTextAttributes = [
-			NSAttributedString.Key.foregroundColor: Theme.colors.dark,
-			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
-		]
-		UINavigationBar.appearance().isTranslucent = true
-		UINavigationBar.appearance().shadowImage = UIImage()
-		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-		UINavigationBar.appearance().backgroundColor = .clear
-
-		UINavigationBar.appearance().tintColor = Theme.colors.dark
 	}
 
 	// MARK: UISceneSession Lifecycle
@@ -83,10 +69,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: - Open URL
 
-	func application(
-		_ app: UIApplication,
-		open url: URL,
-		options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+    /// For handling __Deep Links__ only, - not relevant for Universal Links.
+    func application(
+        _ app: UIApplication,
+        open url: URL,
+        options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
 		// Incoming url
 		print("CTR: AppDelegate -> url = \(url)")
@@ -108,6 +95,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return false
 	}
 
+    /// Entry point for Universal links in iOS 11/12 only (see SceneDelegate for iOS 13+)
+    /// Used for both running and cold-booted apps
+    func application(_: UIApplication, continue userActivity: NSUserActivity, restorationHandler _: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+
+        // Parse an activity from the userActivity
+        guard let universalLink = UniversalLink(userActivity: userActivity) else { return false }
+
+        return appCoordinator?.receive(universalLink: universalLink) ?? false
+    }
+
 	func applicationDidEnterBackground(_ application: UIApplication) {
 		if let brightness = previousBrightness {
 			UIScreen.main.brightness = brightness
@@ -128,9 +125,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	// MARK: Orientation
 
-	/// set orientations you want to be allowed in this property by default
-	var orientationLock = UIInterfaceOrientationMask.all
-
 	func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 		return self.orientationLock
 	}
@@ -144,4 +138,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Reject 3rd Party Keyboards.
 		return extensionPointIdentifier != .keyboard
 	}
+
+    // MARK: - Private
+
+    /// Setup the appearance of the navigation bar
+    private func styleUI() {
+
+        // Custom navigation bar appearance
+        UINavigationBar.appearance().barTintColor = .clear
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: Theme.colors.dark,
+            NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
+        ]
+        UINavigationBar.appearance().isTranslucent = true
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().backgroundColor = .clear
+
+        UINavigationBar.appearance().tintColor = Theme.colors.dark
+    }
 }

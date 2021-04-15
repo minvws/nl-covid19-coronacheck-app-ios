@@ -99,6 +99,24 @@ class HolderCoordinator: SharedCoordinator {
 			navigateToHolderStart()
 		}
 	}
+
+    // MARK: - Universal Links
+
+    /// Try to consume the Activity
+    /// returns: bool indicating whether it was possible.
+    func consume(universalLink: UniversalLink) -> Bool {
+
+        switch universalLink {
+            case .redeemHolderToken(let requestToken):
+
+                // Handled in the follow-up PR
+//                // Do it on the next runloop:
+//                DispatchQueue.main.async { [self] in
+//                    navigateToTokenEntry(requestToken)
+//                }
+            return true
+        }
+    }
 }
 
 // MARK: - HolderCoordinatorDelegate

@@ -9,12 +9,9 @@ import UIKit
 
 protocol AppCoordinatorDelegate: AnyObject {
 
-	/// Open a url
 	func openUrl(_ url: URL)
 
-	/// Handle the launch state
-	/// - Parameter state: the launch state
-	func handleLaunchState(_ state: LaunchState)
+    func handleLaunchState(_ state: LaunchState)
 
 	/// Retry loading the requirements
 	func retry()
@@ -22,22 +19,16 @@ protocol AppCoordinatorDelegate: AnyObject {
 
 class AppCoordinator: Coordinator, Logging {
 
-	/// The logging category
 	var loggingCategory: String = "AppCoordinator"
 
-	/// The UI Window
 	let window: UIWindow
 
-	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
-	/// The navigation controller
 	var navigationController: UINavigationController
 
-	/// The remote config manager
 	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 
-	/// The proof manager
 	private var proofManager: ProofManaging = Services.proofManager
 
 	/// For use with iOS 13 and higher
@@ -70,85 +61,51 @@ class AppCoordinator: Coordinator, Logging {
 		addObservers()
 	}
 
-	/// Retry loading the requirements
-	func retry() {
+    // MARK: - Private functions
 
-		guard let topController = window.rootViewController else { return }
+    /// Launch the launcher
+    private func startLauncher() {
 
-		topController.dismiss(animated: true) {
-			((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
-		}
-	}
+        let destination = LaunchViewController(
+            viewModel: LaunchViewModel(
+                coordinator: self,
+                versionSupplier: AppVersionSupplier(),
+                flavor: AppFlavor.flavor,
+                remoteConfigManager: remoteConfigManager,
+                proofManager: proofManager
+            )
+        )
+        // Set the root
+        window.rootViewController = navigationController
+        window.makeKeyAndVisible()
 
-	func addObservers() {
+        navigationController.pushViewController(destination, animated: false)
+    }
 
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(onApplicationDidEnterBackground),
-			name: UIApplication.didEnterBackgroundNotification,
-			object: nil
-		)
-	}
+    /// Start the real application
+    private func startApplication() {
 
-	/// Launch the launcher 
-	private func startLauncher() {
+        switch AppFlavor.flavor {
+            case .holder:
+                startAsHolder()
+            default:
+                startAsVerifier()
+        }
+    }
 
-		let destination = LaunchViewController(
-			viewModel: LaunchViewModel(
-				coordinator: self,
-				versionSupplier: AppVersionSupplier(),
-				flavor: AppFlavor.flavor,
-				remoteConfigManager: remoteConfigManager,
-				proofManager: proofManager
-			)
-		)
-		// Set the root
-		window.rootViewController = navigationController
-		window.makeKeyAndVisible()
+    /// Start the app as a holder
+    private func startAsHolder() {
 
-		navigationController.pushViewController(destination, animated: false)
-	}
+        let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
+        startChildCoordinator(coordinator)
+    }
 
-	/// Start the real application
-	private func startApplication() {
+    /// Start the app as a verifiier
+    private func startAsVerifier() {
 
-		switch AppFlavor.flavor {
-			case .holder:
-				startAsHolder()
-			default:
-				startAsVerifier()
-		}
-	}
-
-	/// Start the app as a holder
-	private func startAsHolder() {
-
-		let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(coordinator)
-	}
-
-	/// Start the app as a verifiier
-	private func startAsVerifier() {
-
-		let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
-		startChildCoordinator(coordinator)
-	}
-
-	/// Handle the launch state
-	/// - Parameter state: the launch state
-	func handleLaunchState(_ state: LaunchState) {
-
-		switch state {
-			case .noActionNeeded:
-				startApplication()
-
-			case .internetRequired:
-				showInternetRequired()
-
-			case let .actionRequired(versionInformation):
-				showActionRequired(with: versionInformation)
-		}
-	}
+        let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
+        startChildCoordinator(coordinator)
+    }
 
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
@@ -184,34 +141,74 @@ class AppCoordinator: Coordinator, Logging {
 			topController.present(updateController, animated: true)
 		}
 	}
-
-	/// Handle the event the application did enter the background
-	@objc func onApplicationDidEnterBackground() {
-
-		/// Show the snapshot (logo) view to hide sensitive data
-		let shapshotViewController = SnapshotViewController(
-			viewModel: SnapshotViewModel(
-				versionSupplier: AppVersionSupplier(),
-				flavor: AppFlavor.flavor
-			)
-		)
-		shapshotViewController.modalPresentationStyle = .fullScreen
-		guard let topController = window.rootViewController else { return }
-		if topController is UINavigationController {
-			(topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
-		} else {
-			topController.present(shapshotViewController, animated: true)
-		}
-	}
 }
 
 // MARK: - AppCoordinatorDelegate
 
 extension AppCoordinator: AppCoordinatorDelegate {
 
-	/// Open a url
 	func openUrl(_ url: URL) {
 
 		UIApplication.shared.open(url)
 	}
+
+    /// Handle the launch state
+    /// - Parameter state: the launch state
+    func handleLaunchState(_ state: LaunchState) {
+
+        switch state {
+            case .noActionNeeded:
+                startApplication()
+
+            case .internetRequired:
+                showInternetRequired()
+
+            case let .actionRequired(versionInformation):
+                showActionRequired(with: versionInformation)
+        }
+    }
+
+    /// Retry loading the requirements
+    func retry() {
+
+        guard let topController = window.rootViewController else { return }
+
+        topController.dismiss(animated: true) {
+            ((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
+        }
+    }
+}
+
+// MARK: - Notification observations
+
+extension AppCoordinator {
+
+    /// Handle the event the application did enter the background
+    @objc func onApplicationDidEnterBackground() {
+
+        /// Show the snapshot (logo) view to hide sensitive data
+        let shapshotViewController = SnapshotViewController(
+            viewModel: SnapshotViewModel(
+                versionSupplier: AppVersionSupplier(),
+                flavor: AppFlavor.flavor
+            )
+        )
+        shapshotViewController.modalPresentationStyle = .fullScreen
+        guard let topController = window.rootViewController else { return }
+        if topController is UINavigationController {
+            (topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
+        } else {
+            topController.present(shapshotViewController, animated: true)
+        }
+    }
+
+    private func addObservers() {
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(onApplicationDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+    }
 }
