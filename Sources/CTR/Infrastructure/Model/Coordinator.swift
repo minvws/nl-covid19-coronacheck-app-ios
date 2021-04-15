@@ -82,9 +82,4 @@ extension Coordinator {
         // else, maybe this coordinator would like to consume the universal link:
         return handled || consume(universalLink: universalLink)
     }
-
-    /// Override point for coordinators which wish to deal with universal links.
-    func consume(universalLink: UniversalLink) -> Bool {
-        return false
-    }
 }

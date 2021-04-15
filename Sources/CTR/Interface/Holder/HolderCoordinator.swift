@@ -96,8 +96,7 @@ class HolderCoordinator: SharedCoordinator {
 
     /// Try to consume the Activity
     /// returns: bool indicating whether it was possible.
-    func consume(universalLink: UniversalLink) -> Bool {
-
+    override func consume(universalLink: UniversalLink) -> Bool {
         switch universalLink {
             case .redeemHolderToken(let requestToken):
 
