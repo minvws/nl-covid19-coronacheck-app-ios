@@ -58,4 +58,9 @@ extension String {
 
 		return Localization.string(for: "holder.tokenentry.retry.countdown")
 	}
+
+	static var holderTokenEntryNext: String {
+
+		return Localization.string(for: "holder.tokenentry.next")
+	}
 }

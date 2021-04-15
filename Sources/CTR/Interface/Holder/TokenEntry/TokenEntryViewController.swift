@@ -153,7 +153,7 @@ class TokenEntryViewController: BaseViewController {
 			string: .holderTokenEntryVerificationPlaceholder,
 			attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
 		)
-		sceneView.primaryTitle = .next
+		sceneView.primaryTitle = .holderTokenEntryNext
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
