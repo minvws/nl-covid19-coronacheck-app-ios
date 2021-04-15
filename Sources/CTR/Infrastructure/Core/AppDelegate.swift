@@ -92,7 +92,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		// Your additional URL handling (if any)
 
-		return true
+		return false 
 	}
 
     /// Entry point for Universal links in iOS 11/12 only (see SceneDelegate for iOS 13+)
