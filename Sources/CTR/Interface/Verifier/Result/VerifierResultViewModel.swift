@@ -83,6 +83,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	}
 
 	override func addObservers() {
+
+		// super will handle the PreventableScreenCapture observers
 		super.addObservers()
 
 		NotificationCenter.default.addObserver(
@@ -94,8 +96,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	}
 
 	deinit {
-		autoCloseTimer?.invalidate()
-		autoCloseTimer = nil
+
+		stopAutoCloseTimer()
 	}
 
 	/// Check the attributes
@@ -184,7 +186,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
-	/// Is the sample time still valid
+	/// Is the sample time still valid?
 	/// - Parameter now: the now time stamp
 	/// - Returns: True if the sample time stamp is still valid
 	private func isSampleTimeValid(_ now: TimeInterval, attributes: Attributes) -> Bool {
@@ -202,7 +204,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return false
 	}
 
-	/// Is the QR timestamp stil valid
+	/// Is the QR timestamp stil valid?
 	/// - Parameter now: the now timestamp
 	/// - Returns: True if the QR time stamp is still valid
 	private func isQRTimeStampValid(_ now: TimeInterval, attributes: Attributes) -> Bool {
@@ -222,7 +224,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return false
 	}
 
-	/// Show access allowed
 	private func showAccessAllowed() {
 
 		title = .verifierResultAccessTitle
@@ -230,7 +231,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		linkedMessage = .verifierResultAccessLink
 	}
 
-	/// Show access denied
 	private func showAccessDenied() {
 
 		title = .verifierResultDeniedTitle
@@ -238,7 +238,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		linkedMessage = .verifierResultDeniedLink
 	}
 
-	/// Show access allowed
 	private func showAccessDemo() {
 
 		title = .verifierResultDemoTitle
@@ -246,7 +245,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		linkedMessage = .verifierResultAccessLink
 	}
 
-	/// Dismiss ourselves
 	func dismiss() {
 
 		stopAutoCloseTimer()
@@ -342,9 +340,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	@objc private func autoCloseScene() {
 
-		autoCloseTimer?.invalidate()
-		autoCloseTimer = nil
 		logInfo("Auto closing the result view")
+		stopAutoCloseTimer()
 		dismiss()
 	}
 }
