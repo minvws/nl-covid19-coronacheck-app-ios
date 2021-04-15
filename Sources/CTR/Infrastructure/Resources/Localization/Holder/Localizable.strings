@@ -69,7 +69,7 @@
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt deze app jouw gegevens";
 "holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
-"holder.consent.message.underlined" = "Privacyverklaring";
+"holder.consent.message.underlined" = "privacyverklaring";
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
 "holder.consent.item.2" = "Je GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b>";
 "holder.consent.item.3" = "In de QR-code staat alleen <b>wanneer </b> je negatief getest bent ";
