@@ -15,20 +15,6 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 
 	var coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
 
-	var consentWithoutMandatoryConsent = ForcedInformationConsent(
-		title: "test title without mandatory consent",
-		highlight: "test highlight without mandatory consent",
-		content: "test content without mandatory consent",
-		consentMandatory: false
-	)
-
-	var consentWithMandatoryConsent = ForcedInformationConsent(
-		title: "test title with mandatory consent",
-		highlight: "test highlight with mandatory consent",
-		content: "test content with mandatory consent",
-		consentMandatory: true
-	)
-
 	override func setUp() {
 
 		super.setUp()
@@ -36,7 +22,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithoutMandatoryConsent
+			forcedInformationConsent: ForcedInformationConsentFactory.consentWithoutMandatoryConsent
 		)
 	}
 
@@ -44,17 +30,18 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testContentWithMandatoryConsent() {
 
 		// Given
+		let consent = ForcedInformationConsentFactory.consentWithMandatoryConsent
 
 		// When
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithMandatoryConsent
+			forcedInformationConsent: consent
 		)
 
 		// Then
-		XCTAssertEqual(sut.title, consentWithMandatoryConsent.title)
-		XCTAssertEqual(sut.highlights, consentWithMandatoryConsent.highlight)
-		XCTAssertEqual(sut.content, consentWithMandatoryConsent.content)
+		XCTAssertEqual(sut.title, consent.title)
+		XCTAssertEqual(sut.highlights, consent.highlight)
+		XCTAssertEqual(sut.content, consent.content)
 		XCTAssertEqual(sut.primaryActionTitle, String.newTermsAgree)
 		XCTAssertEqual(sut.secondaryActionTitle, String.newTermsDisagree)
 		XCTAssertTrue(sut.useSecondaryButton)
@@ -64,17 +51,18 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testContentWithoutMandatoryConsent() {
 
 		// Given
+		let consent = ForcedInformationConsentFactory.consentWithoutMandatoryConsent
 
 		// When
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithoutMandatoryConsent
+			forcedInformationConsent: consent
 		)
 
 		// Then
-		XCTAssertEqual(sut.title, consentWithoutMandatoryConsent.title)
-		XCTAssertEqual(sut.highlights, consentWithoutMandatoryConsent.highlight)
-		XCTAssertEqual(sut.content, consentWithoutMandatoryConsent.content)
+		XCTAssertEqual(sut.title, consent.title)
+		XCTAssertEqual(sut.highlights, consent.highlight)
+		XCTAssertEqual(sut.content, consent.content)
 		XCTAssertEqual(sut.primaryActionTitle, String.next)
 		XCTAssertNil(sut.secondaryActionTitle)
 		XCTAssertFalse(sut.useSecondaryButton)
@@ -84,9 +72,10 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testPrimaryButtonWithMandatoryConsent() {
 		
 		// Given
+		let consent = ForcedInformationConsentFactory.consentWithMandatoryConsent
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithMandatoryConsent
+			forcedInformationConsent: consent
 		)
 
 		// When
@@ -101,9 +90,10 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 	func testPrimaryButtonWithoutMandatoryConsent() {
 
 		// Given
+		let consent = ForcedInformationConsentFactory.consentWithoutMandatoryConsent
 		sut = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithoutMandatoryConsent
+			forcedInformationConsent: consent
 		)
 
 		// When

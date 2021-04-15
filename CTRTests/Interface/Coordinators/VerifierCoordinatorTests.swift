@@ -12,7 +12,7 @@ class VerifierCoordinatorTests: XCTestCase {
 
 	var sut: VerifierCoordinator!
 
-	var navigationSpy = NavigationControllerSpy()
+	var navigationSpy: NavigationControllerSpy!
 
 	var window = UIWindow()
 

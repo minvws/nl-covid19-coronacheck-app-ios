@@ -12,7 +12,7 @@ protocol ForcedInformationManaging {
 	// Initialize
 	init()
 
-	/// Do we need updating? True if we do
+	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool { get }
 
 	/// Get the consent
@@ -28,18 +28,13 @@ protocol ForcedInformationManaging {
 
 class ForcedInformationManager: ForcedInformationManaging {
 
-	// Initialize
-	required init() {
-		// Required by protocol
-	}
-
-	/// The onboarding data to persist
+	/// The forced information data to persist
 	private struct ForcedInformationData: Codable {
 
-		/// The last seen version
+		/// The last seen / accepted version by the user
 		var lastSeenVersion: Int
 
-		/// Empty crypto data
+		/// The default empty data, version equals 0
 		static var empty: ForcedInformationData {
 			return ForcedInformationData(lastSeenVersion: 0)
 		}
@@ -55,13 +50,8 @@ class ForcedInformationManager: ForcedInformationManaging {
 	@Keychain(name: "data", service: Constants.keychainService, clearOnReinstall: true)
 	private var data: ForcedInformationData = .empty
 
-	/// Do we need updating? True if we do
-	var needsUpdating: Bool {
-		return data.lastSeenVersion < information.version
-	}
-
-	/// the forced information
-	var information: ForcedInformation = ForcedInformation(
+	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
+	private var information: ForcedInformation = ForcedInformation(
 		pages: [],
 		consent: ForcedInformationConsent(
 			title: .newTermsTitle,
@@ -72,20 +62,32 @@ class ForcedInformationManager: ForcedInformationManaging {
 		version: 1
 	)
 
-	/// Get the consent
+	// MARK: - ForcedInformationManaging
+
+	// Initialize
+	required init() {
+		// Required by protocol
+	}
+
+	/// Do we need show any updates? True if we do
+	var needsUpdating: Bool {
+		return data.lastSeenVersion < information.version
+	}
+
+	/// Is there any consent that needs to be displayed?
 	/// - Returns: optional consent
 	func getConsent() -> ForcedInformationConsent? {
 
 		return information.consent
 	}
 
-	/// Give consent
+	/// User has given consent, update the version
 	func consentGiven() {
 
 		data.lastSeenVersion = information.version
 	}
 
-	/// Reset the manager
+	/// Reset the manager, clear all the data
 	func reset() {
 
 		$data.clearData()

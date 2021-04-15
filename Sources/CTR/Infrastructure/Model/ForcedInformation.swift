@@ -22,7 +22,7 @@ struct ForcedInformationPage {
 	let content: String
 }
 
-struct ForcedInformationConsent {
+struct ForcedInformationConsent: Equatable {
 
 	/// The title of the  forced information consent
 	let title: String

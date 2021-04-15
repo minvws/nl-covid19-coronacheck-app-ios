@@ -12,11 +12,11 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 
 	var sut: ForcedInformationCoordinator!
 
-	var navigationSpy = NavigationControllerSpy()
+	var navigationSpy: NavigationControllerSpy!
 
-	var managerSpy = ForcedInformationManagerSpy()
+	var managerSpy: ForcedInformationManagerSpy!
 
-	var delegateSpy = ForcedInformationDelegateSpy()
+	var delegateSpy: ForcedInformationDelegateSpy!
 
 	override func setUp() {
 

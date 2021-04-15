@@ -17,47 +17,33 @@ protocol Dismissable: AnyObject {
 protocol OpenUrlProtocol: AnyObject {
 
 	/// Open a url
+	/// - Parameters:
+	///   - url: The url to open
+	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
 	func openUrl(_ url: URL, inApp: Bool)
 }
 
+/// The shared base class for the holder and verifier coordinator.
 class SharedCoordinator: Coordinator, Logging {
 
 	var loggingCategory: String = "SharedCoordinator"
 
-	/// The UI Window
 	var window: UIWindow
 
-	/// The side panel controller
+	/// The side panel controller that holds both the menu and the main view
 	var sidePanel: SidePanelController?
 
-	/// The onboardings manager
 	var onboardingManager: OnboardingManaging = Services.onboardingManager
-
-	/// The forced information manager
 	var forcedInformationManager: ForcedInformationManaging = Services.forcedInformationManager
-
-	/// The crypto manager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
-
-	/// The general configuration
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-
-	/// The remote config manager
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	/// The version supplier
 	var versionSupplier = AppVersionSupplier()
-
-	/// The Child Coordinators
 	var childCoordinators: [Coordinator] = []
 
-	/// The navigation controller
+	// Navigation controllers for each of the flows from the menu
 	var navigationController: UINavigationController
-
-	/// The dashboard navigation controller
 	var dashboardNavigationContoller: UINavigationController?
-
-	/// The about navigation controller
 	var aboutNavigationContoller: UINavigationController?
 
 	var maxValidity: Int {
@@ -97,6 +83,9 @@ extension SharedCoordinator: Dismissable {
 extension SharedCoordinator: OpenUrlProtocol {
 
 	/// Open a url
+	/// - Parameters:
+	///   - url: The url to open
+	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		if inApp {

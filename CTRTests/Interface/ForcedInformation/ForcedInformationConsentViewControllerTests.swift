@@ -14,21 +14,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 
 	var sut: ForcedInformationConsentViewController!
 
-	var coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
-
-	var consentWithoutMandatoryConsent = ForcedInformationConsent(
-		title: "test title without mandatory consent",
-		highlight: "test highlight without mandatory consent",
-		content: "test content without mandatory consent",
-		consentMandatory: false
-	)
-
-	var consentWithMandatoryConsent = ForcedInformationConsent(
-		title: "test title with mandatory consent",
-		highlight: "test highlight with mandatory consent",
-		content: "test content with mandatory consent",
-		consentMandatory: true
-	)
+	var coordinatorSpy: ForcedInformationCoordinatorDelegateSpy!
 
 	var viewModel: ForcedInformationConsentViewModel!
 
@@ -40,7 +26,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 		coordinatorSpy = ForcedInformationCoordinatorDelegateSpy()
 		viewModel = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithoutMandatoryConsent
+			forcedInformationConsent: ForcedInformationConsentFactory.consentWithoutMandatoryConsent
 		)
 
 		sut = ForcedInformationConsentViewController(viewModel: viewModel)
@@ -60,26 +46,28 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 	func testContentWithoutMandatoryConsent() {
 
 		// Given
+		let consent = ForcedInformationConsentFactory.consentWithoutMandatoryConsent
 
 		// When
 		loadView()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, consentWithoutMandatoryConsent.title)
-		XCTAssertEqual(sut.sceneView.highlight, consentWithoutMandatoryConsent.highlight)
-		XCTAssertEqual(sut.sceneView.content, consentWithoutMandatoryConsent.content)
+		XCTAssertEqual(sut.sceneView.title, consent.title)
+		XCTAssertEqual(sut.sceneView.highlight, consent.highlight)
+		XCTAssertEqual(sut.sceneView.content, consent.content)
 		XCTAssertEqual(sut.sceneView.primaryTitle, String.next)
 		XCTAssertEqual(sut.sceneView.secondaryTitle, "")
 		XCTAssertTrue(sut.sceneView.secondaryButton.isHidden)
 	}
 
 	/// Test the content with the mandatory consent
-	func testContentWitMandatoryConsent() {
+	func testContentWithMandatoryConsent() {
 
 		// Given
+		let consent = ForcedInformationConsentFactory.consentWithMandatoryConsent
 		viewModel = ForcedInformationConsentViewModel(
 			coordinatorSpy,
-			forcedInformationConsent: consentWithMandatoryConsent
+			forcedInformationConsent: consent
 		)
 
 		sut = ForcedInformationConsentViewController(viewModel: viewModel)
@@ -88,9 +76,9 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, consentWithMandatoryConsent.title)
-		XCTAssertEqual(sut.sceneView.highlight, consentWithMandatoryConsent.highlight)
-		XCTAssertEqual(sut.sceneView.content, consentWithMandatoryConsent.content)
+		XCTAssertEqual(sut.sceneView.title, consent.title)
+		XCTAssertEqual(sut.sceneView.highlight, consent.highlight)
+		XCTAssertEqual(sut.sceneView.content, consent.content)
 
 		XCTAssertEqual(sut.sceneView.primaryTitle, String.newTermsAgree)
 		XCTAssertEqual(sut.sceneView.secondaryTitle, String.newTermsDisagree)

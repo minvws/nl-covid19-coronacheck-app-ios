@@ -9,30 +9,28 @@ import Foundation
 
 class ForcedInformationConsentViewModel {
 
-	// MARK: - Content variables
+	// MARK: - Bindable variables
 
 	/// The title of the scene
-	private(set) var title: String
+	@Bindable private(set) var title: String
 
 	/// The highlights of the scene
-	private(set) var highlights: String
+	@Bindable private(set) var highlights: String
 
 	/// The content of the scene
-	private(set) var content: String
+	@Bindable private(set) var content: String
 
 	/// The title of the primary action
-	private(set) var primaryActionTitle: String
+	@Bindable private(set) var primaryActionTitle: String
 
 	/// The title of the secondary action
-	private(set) var secondaryActionTitle: String?
+	@Bindable private(set) var secondaryActionTitle: String?
 
 	/// The title of the eror
-	private(set) var errorTitle: String = .newTermsErrorTitle
+	@Bindable private(set) var errorTitle: String = .newTermsErrorTitle
 
 	/// The message of the eror
-	private(set) var errorMessage: String = .newTermsErrorMessage
-
-	// MARK: - Bindable variables
+	@Bindable private(set) var errorMessage: String = .newTermsErrorMessage
 
 	/// Show the error dialog?
 	@Bindable private(set) var showErrorDialog: Bool = false

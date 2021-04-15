@@ -11,7 +11,7 @@ import XCTest
 class ForcedInformationManagerTests: XCTestCase {
 
 	// MARK: - Setup
-	var sut = ForcedInformationManager()
+	var sut: ForcedInformationManager!
 
 	override func setUp() {
 
@@ -50,18 +50,20 @@ class ForcedInformationManagerTests: XCTestCase {
 		XCTAssertFalse(sut.needsUpdating)
 	}
 
-	func testGetConsent() throws {
+	func testGetConsent() {
 
 		// Given
+		let expectedConsent = ForcedInformationConsent(
+			title: .newTermsTitle,
+			highlight: .newTermsHighlights,
+			content: .newTermsDescription,
+			consentMandatory: false
+		)
 
 		// When
-		let consent = sut.getConsent()
+		let actualConsent = sut.getConsent()
 
 		// Then
-		let unwrappedConsent = try XCTUnwrap(consent)
-		XCTAssertEqual(unwrappedConsent.title, .newTermsTitle)
-		XCTAssertEqual(unwrappedConsent.highlight, .newTermsHighlights)
-		XCTAssertEqual(unwrappedConsent.content, .newTermsDescription)
-		XCTAssertFalse(unwrappedConsent.consentMandatory)
+		XCTAssertEqual(actualConsent, expectedConsent)
 	}
 }

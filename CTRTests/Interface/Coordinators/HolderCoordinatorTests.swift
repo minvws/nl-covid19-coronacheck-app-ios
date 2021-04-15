@@ -12,7 +12,7 @@ class HolderCoordinatorTests: XCTestCase {
 
 	var sut: HolderCoordinator!
 
-	var navigationSpy = NavigationControllerSpy()
+	var navigationSpy: NavigationControllerSpy!
 
 	var window = UIWindow()
 
