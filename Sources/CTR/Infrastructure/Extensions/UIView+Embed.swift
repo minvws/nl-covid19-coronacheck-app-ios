@@ -182,36 +182,32 @@ extension UIView {
 
 extension UIView {
 
-	/// Wraps the reciever in a new container view, making constraints to all four sides.
+	/// Wraps the receiver in a new container view, making constraints to all four sides.
 	/// - parameter insets: The insets that should be applied to the constraints
-	/// # See also
-	/// [embed(in:)](x-source-tag://Embed)
 	func withInsets(_ insets: UIEdgeInsets) -> UIView {
+
 		let containingView = UIView(frame: .zero)
 		embed(in: containingView, insets: insets)
 		return containingView
 	}
 
-	/// Wraps the reciever in a new container view, making constraints to all four sides of the container's ReadableContentGuide.
+	/// Wraps the receiver in a new container view, making constraints to all four sides of the container's ReadableContentGuide.
 	/// - parameter insets: The insets that should be applied to the constraints
-	/// # See also
-	/// [embed(in:)](x-source-tag://Embed)
 	func wrappedInReadableContentGuide(insets: UIEdgeInsets = .zero) -> UIView {
+
 		let containingView = UIView(frame: .zero)
 		containingView.preservesSuperviewLayoutMargins = true
 		embed(in: containingView.readableContentGuide, insets: insets)
 		return containingView
 	}
 
-	/// Wraps the reciever in a new container view, making constraints to all four sides of the container's readableWidth container.
+	/// Wraps the receiver in a new container view, making constraints to all four sides of the container's readableWidth container.
 	/// - parameter insets: The insets that should be applied to the constraints
-	/// # See also
-	/// [embed(in:)](x-source-tag://Embed)
 	func wrappedInReadableWidth(insets: UIEdgeInsets = .zero) -> UIView {
+
 		let containingView = UIView(frame: .zero)
 		containingView.preservesSuperviewLayoutMargins = true
 		embed(in: containingView.readableWidth, insets: insets)
 		return containingView
 	}
-
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// Styled UILabel subclass providing convenience initialization for each text style support in the [Theme](x-source-tag://Theme)
+/// Styled UILabel subclass providing convenience initialization for each text style support in the Theme
 class Label: UILabel {
     
 	init(_ text: String?, font: UIFont = Theme.fonts.body, textColor: UIColor = Theme.colors.dark) {
