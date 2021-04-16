@@ -25,9 +25,6 @@ struct TestResult: Codable {
 	/// The holder of the test
 	let holder: TestHolderIdentity?  // Version 2.0.
 
-	/// The checksum of the birth date
-	let checksum: Int? // Version 1.0
-
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -36,6 +33,5 @@ struct TestResult: Codable {
 		case testType
 		case negativeResult
 		case holder
-		case checksum
 	}
 }

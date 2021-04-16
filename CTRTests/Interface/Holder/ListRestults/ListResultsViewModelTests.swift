@@ -73,8 +73,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: "now",
 				testType: "test",
 				negativeResult: false,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -102,8 +101,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: "2021-02-01T00:00:00+00:00",
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -135,8 +133,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -167,8 +164,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -204,8 +200,7 @@ class ListResultsViewModelTests: XCTestCase {
 					lastNameInitial: "T",
 					birthDay: "1",
 					birthMonth: "1"
-				),
-				checksum: nil
+				)
 			),
 			status: .complete
 		)
