@@ -45,8 +45,8 @@
 
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"new.terms.highlights" = "<b>Dit is wat er is veranderd</b><br\><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg hoe de app te gebruiken</li><li>Toestemming cameragebruik</li></ul>";
-"new.terms.description" = "Je kunt de volledige gebruikers verklaring <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden\">hier lezen</a>.";
+"new.terms.highlights" = "<b>Dit is veranderd</b><br\><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
+"new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersverklaring.";
 "new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
 "new.terms.error.message" = "Je hebt geen toegang de CoronaCheck Scanner-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
 "new.terms.agree" = "Akkoord";
