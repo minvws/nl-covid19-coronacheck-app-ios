@@ -188,8 +188,6 @@ public extension NSAttributedString {
 					attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: startRange)
 					previousParagraphIsListStart = true
 				} else if previousParagraphIsListStart {
-//					attributedTitle.removeAttribute(.paragraphStyle, range: range)
-//					attributedTitle.addAttribute(.paragraphStyle, value: listParagraphStyle, range: range)
 					previousParagraphIsListStart = false
 				}
 			}
