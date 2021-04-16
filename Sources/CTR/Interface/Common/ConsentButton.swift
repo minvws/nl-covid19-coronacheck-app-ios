@@ -35,8 +35,8 @@ class ConsentButton: UIButton {
 
 		icon.tintColor = Theme.colors.primary
 
-		icon.contentMode = .top
-		icon.snap(to: .left, of: self, insets: .left(16) + .top(32))
+		icon.contentMode = .center
+		icon.snap(to: .left, of: self, insets: .left(16))
 
 		isSelected = selected
 

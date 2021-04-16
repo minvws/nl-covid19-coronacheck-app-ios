@@ -55,18 +55,6 @@ class AppointmentViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
-	/// Test the tap on the link
-	func testLinkTapped() {
-
-		// Given
-
-		// When
-		sut?.linkTapped()
-
-		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.openUrlCalled, "Delegate should be called")
-	}
-
 	/// Test the tap on the button
 	func testButtonTapped() {
 

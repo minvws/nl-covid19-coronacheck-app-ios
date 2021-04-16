@@ -41,10 +41,6 @@ class AppointmentViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$body.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$linkedBody.binding = { [weak self] in
-			self?.sceneView.underline($0)
-//			self?.setupLink()
-		}
 
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 		viewModel.$image.binding = { [weak self] in
@@ -56,25 +52,14 @@ class AppointmentViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonTapped()
 		}
+
+		sceneView.contentTextView.linkTouched { [weak self] _ in
+
+			self?.viewModel.linkedTapped()
+		}
 	}
 
 	// MARK: Helper methods
-
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-		sceneView.messageLabel.isUserInteractionEnabled = true
-	}
-
-	// MARK: User interaction
-
-	/// User tapped on the link
-	@objc func linkTapped() {
-
-		viewModel.linkedTapped()
-	}
 
 	override func viewWillAppear(_ animated: Bool) {
 

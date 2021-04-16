@@ -32,6 +32,7 @@
 		3C6C394626283F0100CC7433 /* TokenValidatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */; };
 		3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
+		3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF42A292628B51100AAC3B2 /* Nimble */; };
 		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B925DBC3FA00E91084 /* configuration-production.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B825DBC3FA00E91084 /* configuration-production.plist */; };
@@ -939,6 +940,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C195CE7262090E5002F0387 /* ViewControllerPresentationSpy.framework in Frameworks */,
+				3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */,
 				3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */,
 				3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */,
 			);
@@ -2118,6 +2120,7 @@
 			packageProductDependencies = (
 				3C195CD826208813002F0387 /* OHHTTPStubs */,
 				3C195CDA26208813002F0387 /* OHHTTPStubsSwift */,
+				3CF42A292628B51100AAC3B2 /* Nimble */,
 			);
 			productName = CoronaTesterTests;
 			productReference = 6DDEFB0625AEDCAA00A6912A /* CTRTests.xctest */;
@@ -2159,6 +2162,7 @@
 				3C195C8526207E00002F0387 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */,
+				3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */,
 			);
 			productRefGroup = 6DDEFAF125AEDCA800A6912A /* Products */;
 			projectDirPath = "";
@@ -3864,6 +3868,14 @@
 				minimumVersion = 9.1.0;
 			};
 		};
+		3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Quick/Nimble";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3946,6 +3958,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */;
 			productName = OHHTTPStubsSwift;
+		};
+		3CF42A292628B51100AAC3B2 /* Nimble */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */;
+			productName = Nimble;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
