@@ -10,6 +10,12 @@ import MBProgressHUD
 
 class TokenEntryViewController: BaseViewController {
 
+	/// Used for identifying textFields via the UITextField.tag value
+	private enum TextFieldTag: Int {
+		case tokenEntry = 0
+		case verificationEntry = 1
+	}
+
 	private let viewModel: TokenEntryViewModel
 
 	var tapGestureRecognizer: UITapGestureRecognizer?
@@ -23,8 +29,8 @@ class TokenEntryViewController: BaseViewController {
 		super.init(nibName: nil, bundle: nil)
 	}
 
+	@available(*, unavailable)
 	required init?(coder: NSCoder) {
-
 		fatalError("init(coder:) has not been implemented")
 	}
 
@@ -43,11 +49,11 @@ class TokenEntryViewController: BaseViewController {
 
 		setupGestureRecognizer(view: sceneView)
 		sceneView.tokenEntryView.inputField.delegate = self
-		sceneView.tokenEntryView.inputField.tag = 0
+		sceneView.tokenEntryView.inputField.tag = TextFieldTag.tokenEntry.rawValue
 		sceneView.verificationEntryView.inputField.delegate = self
-		sceneView.verificationEntryView.inputField.tag = 1
+		sceneView.verificationEntryView.inputField.tag = TextFieldTag.verificationEntry.rawValue
 
-			// Only show an arrow as back button
+		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
 
@@ -239,10 +245,14 @@ extension TokenEntryViewController: UITextFieldDelegate {
 		   let textRange = Range(range, in: text) {
 			let updatedText = text.replacingCharacters(in: textRange, with: string)
 
-			if textField.tag == 0 {
+			switch textField.tag {
+			case TextFieldTag.tokenEntry.rawValue:
 				viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
-			} else {
+
+			case TextFieldTag.verificationEntry.rawValue:
 				viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
+
+			default: break
 			}
 		}
 
