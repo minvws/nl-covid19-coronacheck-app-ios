@@ -117,12 +117,7 @@ class ForcedInformationConsentView: BaseView {
 
 		highlightLabel.embed(
 			in: highlightView,
-			insets: UIEdgeInsets(
-				top: ViewTraits.margin,
-				left: ViewTraits.margin,
-				bottom: ViewTraits.margin,
-				right: ViewTraits.margin
-			)
+			insets: UIEdgeInsets.all(ViewTraits.margin)
 		)
 
 		stackView.addArrangedSubview(titleLabel)
@@ -132,12 +127,7 @@ class ForcedInformationConsentView: BaseView {
 
 		stackView.embed(
 			in: scrollView,
-			insets: UIEdgeInsets(
-				top: ViewTraits.margin,
-				left: ViewTraits.margin,
-				bottom: ViewTraits.margin,
-				right: ViewTraits.margin
-			)
+			insets: UIEdgeInsets.all(ViewTraits.margin)
 		)
 
 		addSubview(scrollView)
