@@ -34,7 +34,7 @@ class ForcedInformationConsentView: BaseView {
 		return view
 	}()
 
-	/// The stackview for the content
+	/// The stack view for the content
 	private let stackView: UIStackView = {
 
 		let view = UIStackView()

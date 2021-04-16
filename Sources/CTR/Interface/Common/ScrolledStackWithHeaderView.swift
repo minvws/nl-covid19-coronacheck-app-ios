@@ -17,7 +17,6 @@ class ScrolledStackWithHeaderView: BaseView {
 		static let topMargin: CGFloat = 16.0
 	}
 
-	/// The scrollview
 	let scrollView: UIScrollView = {
 
 		let view = UIScrollView(frame: .zero)
@@ -25,7 +24,7 @@ class ScrolledStackWithHeaderView: BaseView {
 		return view
 	}()
 
-	/// The stackview for the content
+	/// The stackView for the content
 	let stackView: UIStackView = {
 
 		let view = UIStackView()
@@ -45,7 +44,6 @@ class ScrolledStackWithHeaderView: BaseView {
 		return view
 	}()
 
-	/// The header image
 	let headerImageView: UIImageView = {
 
 		let view = UIImageView()
@@ -91,6 +89,8 @@ class ScrolledStackWithHeaderView: BaseView {
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
+			stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+			stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
 
 			contentView.widthAnchor.constraint(equalTo: stackView.widthAnchor)
 		])

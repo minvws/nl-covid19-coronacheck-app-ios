@@ -93,7 +93,8 @@ extension String {
 			string: self,
 			attributes: [
 				.paragraphStyle: paragraphStyle,
-				.kern: kerning
+				.kern: kerning,
+				.foregroundColor: Theme.colors.dark
 			]
 		)
 		return attrString
