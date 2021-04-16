@@ -36,7 +36,7 @@ class TokenEntryViewModel {
 
 	private let proofManager: ProofManaging?
 
-	private var requestToken: RequestToken? // TODO this can be `let` once the internal setter is refactored
+	private var requestToken: RequestToken?
 
 	private let tokenValidator: TokenValidatorProtocol
 
