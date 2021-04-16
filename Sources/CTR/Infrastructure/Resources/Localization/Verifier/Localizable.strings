@@ -81,7 +81,7 @@
 "verifier.consent.item.1" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b>";
 "verifier.consent.item.2" = "Als controleur weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
 "verifier.consent.item.3" = "GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b> ";
-"verifier.consent.button" = "Ik heb de gebruiksvoorwaarden gelezen en begrijp hoe de app gegevens gebruikt.";
+"verifier.consent.button" = "Ik ga akkoord met de gebruiksvoorwaarden.";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";

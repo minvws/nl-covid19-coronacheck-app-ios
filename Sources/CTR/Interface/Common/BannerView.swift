@@ -66,8 +66,11 @@ class BannerView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = .clear
-		titleLabel.textColor = Theme.colors.secondary
-		closeButton.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
+		closeButton.addTarget(
+			self,
+			action: #selector(primaryButtonTapped),
+			for: .touchUpInside
+		)
 		backgroundColor = Theme.colors.bannerBackgroundColor
 		closeButton.backgroundColor = Theme.colors.bannerBackgroundColor
 	}
@@ -154,7 +157,10 @@ class BannerView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(kerning: ViewTraits.titleKerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				kerning: ViewTraits.titleKerning,
+				textColor: Theme.colors.secondary
+			)
 		}
 	}
 
