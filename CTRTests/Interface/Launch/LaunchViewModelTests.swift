@@ -83,14 +83,14 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.launchState = .noActionNeeded
-		proofManagerSpy.shouldIssuerPublicKeyComplete = true
+		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.fetchIssuerPublicKeysCalled, "Method should be called")
+		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
 		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
 		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.noActionNeeded, "State should match")
 	}
@@ -100,14 +100,14 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.launchState = .internetRequired
-		proofManagerSpy.shouldIssuerPublicKeyComplete = true
+		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.fetchIssuerPublicKeysCalled, "Method should be called")
+		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
 		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
 		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.internetRequired, "State should match")
 	}
@@ -121,14 +121,14 @@ class LaunchViewModelTests: XCTestCase {
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagerSpy.issuerPublicKeyError = error
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.fetchIssuerPublicKeysCalled, "Method should be called")
+		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
 		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
 		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.internetRequired, "State should match")
 	}
@@ -142,14 +142,14 @@ class LaunchViewModelTests: XCTestCase {
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagerSpy.issuerPublicKeyError = error
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.fetchIssuerPublicKeysCalled, "Method should be called")
+		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
 		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
 		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.internetRequired, "State should match")
 	}
@@ -160,14 +160,14 @@ class LaunchViewModelTests: XCTestCase {
 		// Given
 		let remoteConfig = remoteConfigSpy.getConfiguration()
 		remoteConfigSpy.launchState = .actionRequired(remoteConfig)
-		proofManagerSpy.shouldIssuerPublicKeyComplete = true
+		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.fetchIssuerPublicKeysCalled, "Method should be called")
+		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
 		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
 		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.actionRequired(remoteConfig), "State should match")
 	}
