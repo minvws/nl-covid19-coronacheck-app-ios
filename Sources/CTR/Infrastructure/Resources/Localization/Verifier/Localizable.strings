@@ -62,7 +62,7 @@
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.feedback" = "Geef ons feedback";
-"verifier.menu.privacy" = "Privacyverklaring";
+"verifier.menu.privacy" = "Gebruiksvoorwaarden";
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
@@ -76,12 +76,12 @@
 
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Zo gebruikt de app gegevens";
-"verifier.consent.message" = "In de privacyverklaring staat hoe CoronaCheck Scanner gegevens gebruikt. Dit zijn de belangrijkste punten:";
-"verifier.consent.message.underlined" = "privacyverklaring";
+"verifier.consent.message" = "In de gebruiksvoorwaarden staat hoe CoronaCheck Scanner gegevens gebruikt. Dit zijn de belangrijkste punten:";
+"verifier.consent.message.underlined" = "gebruiksvoorwaarden";
 "verifier.consent.item.1" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b>";
 "verifier.consent.item.2" = "Als controleur weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
 "verifier.consent.item.3" = "GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b> ";
-"verifier.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app gegevens gebruikt.";
+"verifier.consent.button" = "Ik heb de gebruiksvoorwaarden gelezen en begrijp hoe de app gegevens gebruikt.";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
