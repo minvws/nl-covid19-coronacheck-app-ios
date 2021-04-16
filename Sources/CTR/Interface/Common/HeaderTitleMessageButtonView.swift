@@ -38,6 +38,13 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 		return Label(body: nil).multiline()
 	}()
 
+	let contentTextView: TextView = {
+
+		let view = TextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// the update button
 	private let primaryButton: Button = {
 
@@ -80,6 +87,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
+		contentView.addSubview(contentTextView)
 		contentView.addSubview(spacer)
 		addSubview(footerGradientView)
 		footerBackground.addSubview(primaryButton)
@@ -107,23 +115,23 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 				constant: -ViewTraits.margin
 			),
 			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
+				equalTo: contentTextView.topAnchor,
 				constant: -ViewTraits.messageTopMargin
 			),
 
-			// Message
-			messageLabel.leadingAnchor.constraint(
+			// Content
+			contentTextView.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.trailingAnchor.constraint(
+			contentTextView.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 
 			// Spacer
 			spacer.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
+				equalTo: contentTextView.bottomAnchor,
 				constant: ViewTraits.margin
 			),
 			spacer.leadingAnchor.constraint(
@@ -212,22 +220,8 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 	/// The  message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			contentTextView.html(message)
 		}
-	}
-
-	/// Underline part ot the message
-	/// - Parameter text: the text to underline
-	func underline(_ text: String?) {
-
-		guard let underlinedText = text,
-			  let messageText = message else {
-			return
-		}
-
-		let attributedUnderlined = messageText.underlineAsLink(underlined: underlinedText)
-		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
-		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
 	/// The title of the primary button
