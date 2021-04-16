@@ -48,7 +48,7 @@
 "new.terms.highlights" = "<b>Dit is veranderd</b><br\><ul><li> Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner-app voor ID-controle</li></ul>";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/privacy-in-app\">hier</a> de volledige privacyverklaring.";
 "new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
-"new.terms.error.message" = "Je hebt geen toegang de CoronaCheck-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
+"new.terms.error.message" = "Zonder akkoord met de bijgewerkte voorwaarden heb je geen toegang tot de CoronaCheck-app.";
 "new.terms.agree" = "Akkoord";
 "new.terms.disagree" = "Niet akkoord";
 
@@ -93,7 +93,7 @@
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.change.title" = "Vervang je QR-code";
+"holder.dashboard.change.title" = "QR-code vervangen";
 "holder.dashboard.change.action" = "Vervang QR-code";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.action" = "Bekijk QR";
@@ -165,7 +165,7 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";
-"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Op het moment van testen had je geen corona.<br\><br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs. ";
+"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Op het moment van testen had je geen corona.<br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs. ";
 "holder.testresults.results.button" = "Maak QR-code";
 "holder.testresults.noresults.title" = "Geen negatieve testuitslag";
 "holder.testresults.noresults.text" = "Er is geen negatieve testuitslag beschikbaar.";
