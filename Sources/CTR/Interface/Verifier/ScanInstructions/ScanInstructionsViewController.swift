@@ -37,12 +37,12 @@ class ScanInstructionsViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
-		viewModel.$showCloseButton.binding = { [weak self] in
-			guard let strongSelf = self else { return }
-			if $0 {
-				strongSelf.addCloseButton(action: #selector(strongSelf.closeButtonTapped))
-			}
-		}
+//		viewModel.$showCloseButton.binding = { [weak self] in
+//			guard let strongSelf = self else { return }
+//			if $0 {
+//				strongSelf.addCloseButton(action: #selector(strongSelf.closeButtonTapped))
+//			}
+//		}
 
 		viewModel.$content.binding = { [weak self] list in
 

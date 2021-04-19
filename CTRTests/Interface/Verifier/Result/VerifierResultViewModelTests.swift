@@ -315,7 +315,7 @@ class VerifierResultViewModelTests: XCTestCase {
         sut?.dismiss()
 
         // Then
-        XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToVerifierWelcomeCalled, "Method should be called")
+        XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome, "Method should be called")
     }
 
 	/// Test the dismiss method
@@ -327,7 +327,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.scanAgain()
 
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToScanCalled, "Method should be called")
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToScan, "Method should be called")
 	}
 
 	/// Test the link tapped method
@@ -340,7 +340,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.linkTapped()
 
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.displayContentCalled, "Method should be called")
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedDisplayContent, "Method should be called")
 	}
 
 	/// Test the link tapped method
@@ -353,6 +353,6 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.linkTapped()
 
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.displayContentCalled, "Method should be called")
+		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedDisplayContent, "Method should be called")
 	}
 }

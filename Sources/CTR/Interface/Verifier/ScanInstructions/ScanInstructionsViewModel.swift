@@ -13,31 +13,26 @@ class ScanInstructionsViewModel: Logging {
 	var loggingCategory: String = "ScanInstructionsViewModel"
 	
 	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
+	weak var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
 	// MARK: - Bindable properties
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String
-
-	/// Show the close button
-	@Bindable private(set) var showCloseButton: Bool
 	
 	/// The message of the scene
 	@Bindable private(set) var content: [(title: String, text: String, image: UIImage?)]
 	
 	/// Initialzier
 	/// - Parameters:
-	///   - coordinator: the dismissable delegae
+	///   - coordinator: the verifier coordinator delegate
 	///   - presented: True if we are presented
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
-		presented: Bool,
+		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		maxValidity: String) {
 		
 		self.coordinator = coordinator
 		self.title = .verifierScanInstructionsTitle
-		self.showCloseButton = presented
 		self.content = [
 			(
 				title: .verifierScanInstructionsDistanceTitle,
@@ -64,12 +59,12 @@ class ScanInstructionsViewModel: Logging {
 
 	func dismiss() {
 
-		coordinator?.dismiss()
-		coordinator?.navigateToScan()
+//		coordinator?.dismiss()
+//		coordinator?.navigateToScan()
 	}
 
 	func openUrl(_ url: URL) {
 
-		coordinator?.openUrl(url, inApp: true)
+//		coordinator?.openUrl(url, inApp: true)
 	}
 }
