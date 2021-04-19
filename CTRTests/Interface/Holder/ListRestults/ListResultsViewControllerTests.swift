@@ -227,7 +227,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should not be called")
-		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
+		XCTAssertTrue(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be executed")
 	}
 
 	func testDisclaimer() {

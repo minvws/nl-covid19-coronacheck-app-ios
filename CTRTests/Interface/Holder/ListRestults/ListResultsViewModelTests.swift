@@ -49,7 +49,7 @@ class ListResultsViewModelTests: XCTestCase {
 			result: nil,
 			status: .pending
 		)
-		proofManagingSpy.testResultWrapper = pendingWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = pendingWrapper
 
 		// When
 		sut?.checkResult()
@@ -78,7 +78,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = notNegativeWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = notNegativeWrapper
 
 		// When
 		sut?.checkResult()
@@ -107,7 +107,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooOldWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = tooOldWrapper
 
 		// When
 		sut?.checkResult()
@@ -140,7 +140,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooNewWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = tooNewWrapper
 
 		// When
 		sut?.checkResult()
@@ -172,7 +172,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = validProtocolOne
+		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolOne
 
 		// When
 		sut?.checkResult()
@@ -209,7 +209,7 @@ class ListResultsViewModelTests: XCTestCase {
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = validProtocolTwo
+		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolTwo
 
 		// When
 		sut?.checkResult()
@@ -232,7 +232,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.buttonTapped()
 
 		// Then
-		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
+		XCTAssertTrue(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be executed")
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
@@ -262,7 +262,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.dismiss()
 
 		// Then
-		XCTAssertFalse(proofManagingSpy.fetchNonceCalled, "Step 1 should be not executed")
+		XCTAssertFalse(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be not executed")
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showAlert, "Alert should be shown")
 	}
@@ -290,7 +290,7 @@ class ListResultsViewModelTests: XCTestCase {
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.issuerPublicKeyError = error
+        proofManagingSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 
 		// When
 		sut?.createProofStepOne()
@@ -306,7 +306,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepOneIssuerPublicKeysNoError() throws {
 
 		// Given
-		proofManagingSpy.shouldIssuerPublicKeyComplete = true
+		proofManagingSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 
 		// When
 		sut?.createProofStepOne()
@@ -314,7 +314,7 @@ class ListResultsViewModelTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 
-		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 2 should be called")
+		XCTAssertTrue(proofManagingSpy.invokedFetchNonce, "Step 2 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
@@ -326,7 +326,7 @@ class ListResultsViewModelTests: XCTestCase {
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.nonceError = error
+		proofManagingSpy.stubbedFetchNonceOnErrorResult = (error, ())
 
 		// When
 		sut?.createProofStepTwo()
@@ -342,7 +342,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepTwoNonceNoError() throws {
 
 		// Given
-		proofManagingSpy.shouldNonceComplete = true
+		proofManagingSpy.shouldInvokeFetchNonceOnCompletion = true
 
 		// When
 		sut?.createProofStepTwo()
@@ -350,7 +350,7 @@ class ListResultsViewModelTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 
-		XCTAssertTrue(proofManagingSpy.fetchSignedTestResultCalled, "Step 2 should be called")
+		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 3 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
@@ -362,7 +362,7 @@ class ListResultsViewModelTests: XCTestCase {
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.signedTestResultError = error
+		proofManagingSpy.stubbedFetchSignedTestResultOnErrorResult = (error, ())
 
 		// When
 		sut?.createProofStepThree()
@@ -378,8 +378,7 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithValidResult() throws {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .valid
+		proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.valid, ())
 
 		// When
 		sut?.createProofStepThree()
@@ -396,10 +395,9 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithAlreadySignedResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.alreadySigned(
-			response: SignedTestResultErrorResponse(status: "test", code: 1)
-		)
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.alreadySigned(
+            response: SignedTestResultErrorResponse(status: "test", code: 1)
+        ), ())
 
 		// When
 		sut?.createProofStepThree()
@@ -416,10 +414,9 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithNotNegativeResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.notNegative(
-			response: SignedTestResultErrorResponse(status: "test", code: 1)
-		)
+		proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.notNegative(
+            response: SignedTestResultErrorResponse(status: "test", code: 1)
+        ), ())
 
 		// When
 		sut?.createProofStepThree()
@@ -436,10 +433,9 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithTooNewResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.tooNew(
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.tooNew(
 			response: SignedTestResultErrorResponse(status: "test", code: 1)
-		)
+		), ())
 
 		// When
 		sut?.createProofStepThree()
@@ -456,10 +452,9 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithTooOldResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.tooOld(
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.tooOld(
 			response: SignedTestResultErrorResponse(status: "test", code: 1)
-		)
+		), ())
 
 		// When
 		sut?.createProofStepThree()
@@ -476,10 +471,9 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithUnknownError() throws {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = SignedTestResultState.unknown(
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.unknown(
 			response: SignedTestResultErrorResponse(status: "test", code: 1)
-		)
+		), ())
 
 		// When
 		sut?.createProofStepThree()
