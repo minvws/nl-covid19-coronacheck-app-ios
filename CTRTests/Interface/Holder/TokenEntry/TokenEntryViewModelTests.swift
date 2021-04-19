@@ -1,10 +1,10 @@
 //
 /*
-* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
-*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
-*
-*  SPDX-License-Identifier: EUPL-1.2
-*/
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
 // swiftlint:disable type_body_length
 
 import Foundation
@@ -22,7 +22,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-		
+
         holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
         proofManagerSpy = ProofManagingSpy()
         tokenValidatorSpy = TokenValidatorSpy()
@@ -58,25 +58,25 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showError) == false
     }
 
-	func test_withoutInitialRequestToken_makesNoCallToProofManager() {
+    func test_withoutInitialRequestToken_makesNoCallToProofManager() {
         sut = TokenEntryViewModel(coordinator: holderCoordinatorSpy, proofManager: proofManagerSpy, requestToken: nil, tokenValidator: tokenValidatorSpy)
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
-	}
+        expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
+    }
 
-	// MARK: - Handle Input
-	// `func handleInput(_ tokenInput: String?, verificationInput: String?) `
+    // MARK: - Handle Input
+    // `func handleInput(_ tokenInput: String?, verificationInput: String?) `
 
-	func test_handleInput_withNilTokenInput_disablesNextButton() {
-		// Arrange
+    func test_handleInput_withNilTokenInput_disablesNextButton() {
+        // Arrange
         sut = TokenEntryViewModel(coordinator: holderCoordinatorSpy, proofManager: proofManagerSpy, requestToken: nil, tokenValidator: tokenValidatorSpy)
 
-		// Act
-		sut.handleInput(nil, verificationInput: nil)
+        // Act
+        sut.handleInput(nil, verificationInput: nil)
 
-		// Assert
-		expect(self.sut.enableNextButton) == false
+        // Assert
+        expect(self.sut.enableNextButton) == false
         expect(self.sut.errorMessage).to(beNil())
-	}
+    }
 
     func test_handleInput_withInvalidToken_disablesNextButtonAndHidesVerification() {
         // Arrange
