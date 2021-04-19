@@ -262,7 +262,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.dismiss()
 
 		// Then
-		XCTAssertFalse(proofManagingSpy.invokedFetchNonce, "Step 1 should be not executed")
+		XCTAssertFalse(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be not executed")
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showAlert, "Alert should be shown")
 	}
@@ -350,7 +350,7 @@ class ListResultsViewModelTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 
-		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 2 should be called")
+		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 3 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 

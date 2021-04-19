@@ -128,7 +128,7 @@ class ProofManagingSpy: ProofManaging {
 
     var invokedGetTestWrapper = false
     var invokedGetTestWrapperCount = 0
-    var stubbedGetTestWrapperResult: TestResultWrapper!
+    var stubbedGetTestWrapperResult: TestResultWrapper?
 
     func getTestWrapper() -> TestResultWrapper? {
         invokedGetTestWrapper = true
@@ -138,7 +138,7 @@ class ProofManagingSpy: ProofManaging {
 
     var invokedGetSignedWrapper = false
     var invokedGetSignedWrapperCount = 0
-    var stubbedGetSignedWrapperResult: SignedResponse!
+    var stubbedGetSignedWrapperResult: SignedResponse?
 
     func getSignedWrapper() -> SignedResponse? {
         invokedGetSignedWrapper = true
