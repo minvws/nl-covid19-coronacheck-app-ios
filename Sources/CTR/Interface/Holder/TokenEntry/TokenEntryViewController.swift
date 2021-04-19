@@ -246,13 +246,14 @@ extension TokenEntryViewController: UITextFieldDelegate {
 			let updatedText = text.replacingCharacters(in: textRange, with: string)
 
 			switch textField.tag {
-			case TextFieldTag.tokenEntry.rawValue:
-				viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
+                case TextFieldTag.tokenEntry.rawValue:
+                    viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
 
-			case TextFieldTag.verificationEntry.rawValue:
-				viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
+                case TextFieldTag.verificationEntry.rawValue:
+                    viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
 
-			default: break
+                default:
+                    break
 			}
 		}
 
