@@ -9,20 +9,12 @@ import UIKit
 
 class VerifierStartViewModel: Logging {
 
-	/// The logging category
 	var loggingCategory: String = "VerifierStartViewModel"
 
-	/// Coordination Delegate
-	weak var coordinator: VerifierCoordinatorDelegate?
-
-	/// The crypto manager
-	weak var cryptoManager: CryptoManaging?
-
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
-	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
-	var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
+	weak private var coordinator: VerifierCoordinatorDelegate?
+	weak private var cryptoManager: CryptoManaging?
+	weak private var proofManager: ProofManaging?
+	private var userSettings: UserSettingsProtocol
 
 	// MARK: - Bindable properties
 
@@ -46,14 +38,17 @@ class VerifierStartViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
+	///   - userSettings: the user managed settings
 	init(
 		coordinator: VerifierCoordinatorDelegate,
 		cryptoManager: CryptoManaging,
-		proofManager: ProofManaging) {
+		proofManager: ProofManaging,
+		userSettings: UserSettingsProtocol = UserSettings()) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
+		self.userSettings = userSettings
 
 		primaryButtonTitle = .verifierStartButtonTitle
 		title = .verifierStartTitle
@@ -63,7 +58,7 @@ class VerifierStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		if scanInstructionShown {
+		if userSettings.scanInstructionShown {
 
 			if let crypto = cryptoManager, crypto.hasPublicKeys() {
 				coordinator?.navigateToScan()
@@ -73,7 +68,7 @@ class VerifierStartViewModel: Logging {
 			}
 		} else {
 
-			scanInstructionShown = true
+			userSettings.scanInstructionShown = true
 			coordinator?.navigateToScanInstruction(present: true)
 		}
 	}

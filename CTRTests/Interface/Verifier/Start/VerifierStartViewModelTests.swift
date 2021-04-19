@@ -17,6 +17,7 @@ class VerifierStartViewModelTests: XCTestCase {
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var proofManagerSpy: ProofManagingSpy!
 	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
 
@@ -24,11 +25,13 @@ class VerifierStartViewModelTests: XCTestCase {
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		proofManagerSpy = ProofManagingSpy()
+		userSettingsSpy = UserSettingsSpy()
 
 		sut = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy
+			proofManager: proofManagerSpy,
+			userSettings: userSettingsSpy
 		)
 	}
 
@@ -65,20 +68,20 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_noScanInstructionsShown() {
 
 		// Given
-		sut.scanInstructionShown = false
+		userSettingsSpy.stubbedScanInstructionShown = false
 
 		// When
 		sut.primaryButtonTapped()
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.navigateToScanInstructionCalled) == true
-		expect(self.sut.scanInstructionShown) == true
+		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
 	func test_primaryButtonTapped_scanInstructionsShown_havePublicKeys() {
 
 		// Given
-		sut.scanInstructionShown = true
+		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.keys = [IssuerPublicKey(identifier: "test", publicKey: "test")]
 
 		// When
@@ -91,7 +94,7 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_scanInstructionsShown_noPublicKeys() {
 
 		// Given
-		sut.scanInstructionShown = true
+		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.keys = []
 
 		// When
