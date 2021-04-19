@@ -255,7 +255,7 @@ class QRCardView: BaseView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 	

@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// login flow
 	var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
-	/// The previous brightness
 	var previousBrightness: CGFloat?
 
     /// set orientations you want to be allowed in this property by default

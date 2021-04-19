@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// The Application flavor
+/// The Application flavor, used to determine if we are a holder or a verifier
 enum AppFlavor: String {
 	
 	/// We are a holder

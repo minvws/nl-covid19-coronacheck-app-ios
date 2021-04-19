@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// A wrapper arround a test result.
+/// A wrapper around a test result.
 struct TestResultWrapper: Codable {
 
 	/// The provider identifier

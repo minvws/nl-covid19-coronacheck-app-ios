@@ -33,8 +33,6 @@ struct OrientationUtility {
 		UINavigationController.attemptRotationToDeviceOrientation()
 	}
 
-	/// Get hte current orientation
-	/// - Returns: the current orientation
 	static func currentOrientation() -> UIInterfaceOrientation {
 
 		UIApplication.shared.statusBarOrientation

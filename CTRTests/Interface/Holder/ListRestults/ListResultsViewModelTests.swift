@@ -73,8 +73,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: "now",
 				testType: "test",
 				negativeResult: false,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -102,8 +101,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: "2021-02-01T00:00:00+00:00",
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -135,8 +133,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -167,8 +164,7 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
@@ -204,8 +200,7 @@ class ListResultsViewModelTests: XCTestCase {
 					lastNameInitial: "T",
 					birthDay: "1",
 					birthMonth: "1"
-				),
-				checksum: nil
+				)
 			),
 			status: .complete
 		)
@@ -262,7 +257,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.dismiss()
 
 		// Then
-		XCTAssertFalse(proofManagingSpy.invokedFetchNonce, "Step 1 should be not executed")
+		XCTAssertFalse(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be not executed")
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showAlert, "Alert should be shown")
 	}
@@ -350,7 +345,7 @@ class ListResultsViewModelTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 
-		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 2 should be called")
+		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 3 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 

@@ -160,6 +160,7 @@ public final class LogHandler: Logging {
 	}
 
 	public static func logFiles() -> [URL] {
+
 		guard let fileLogger = DDLog.allLoggers.first(where: { $0 is DDFileLogger }) as? DDFileLogger else {
 			#if DEBUG
 			assertionFailure("File Logger Not Found")

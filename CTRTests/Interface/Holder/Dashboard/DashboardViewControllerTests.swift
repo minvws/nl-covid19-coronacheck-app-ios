@@ -7,24 +7,22 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class DashboardViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: HolderDashboardViewController?
+	var sut: HolderDashboardViewController!
 
-	/// The coordinator spy
-	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
+	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 
-	var cryptoManagerSpy = CryptoManagerSpy()
+	var cryptoManagerSpy: CryptoManagerSpy!
 
-	var proofManagerSpy = ProofManagingSpy()
+	var proofManagerSpy: ProofManagingSpy!
 
-	/// The configuration spy
-	var configSpy = ConfigurationGeneralSpy()
+	var configSpy: ConfigurationGeneralSpy!
 
-	/// The view model
-	var viewModel: HolderDashboardViewModel?
+	var viewModel: HolderDashboardViewModel!
 
 	var window = UIWindow()
 
@@ -48,23 +46,16 @@ class DashboardViewControllerTests: XCTestCase {
 		window = UIWindow()
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-	}
-
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
 
 	/// Test all the default content
-	func testContent() throws {
+	func testContent() {
 
 		// Given
 
@@ -72,12 +63,14 @@ class DashboardViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .holderDashboardTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .holderDashboardIntro, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.expiredQRView.title, .holderDashboardQRExpired, "QR Expired title should match")
-		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "Valid QR should not be shown")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
+		expect(self.sut.title)
+			.to(equal(.holderDashboardTitle), description: "Title should match")
+		expect(self.sut.sceneView.message)
+			.to(equal(.holderDashboardIntro), description: "Message should match")
+		expect(self.sut.sceneView.expiredQRView.title)
+			.to(equal(.holderDashboardQRExpired), description: "QR Expired title should match")
+		expect(self.sut.sceneView.qrCardView.isHidden) == true
+		expect(self.sut.sceneView.expiredQRView.isHidden) == true
 	}
 
 	/// Test tapping on the appointment card
@@ -87,10 +80,11 @@ class DashboardViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.appointmentCard.primaryButtonTapped()
+		sut.sceneView.appointmentCard.primaryButtonTapped()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToAppointmentCalled, "Coordinator delegate method should be called")
+		expect(self.holderCoordinatorDelegateSpy.navigateToAppointmentCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.navigateToChooseProviderCalled) == false
 	}
 
 	/// Test tapping on the create qr card
@@ -100,10 +94,11 @@ class DashboardViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.createCard.primaryButtonTapped()
+		sut.sceneView.createCard.primaryButtonTapped()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToChooseProviderCalled, "Coordinator delegate method should be called")
+		expect(self.holderCoordinatorDelegateSpy.navigateToChooseProviderCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.navigateToAppointmentCalled) == false
 	}
 
 	/// Helper method to setup valid credential
@@ -122,31 +117,34 @@ class DashboardViewControllerTests: XCTestCase {
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
 		cryptoManagerSpy.qrMessage = qrMessage
-		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
+		viewModel.proofValidator = ProofValidator(maxValidity: 1)
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValid() throws {
+	func testValidityCredentialValid() {
 
 		// Given
 		setupValidCredential()
 		loadView()
 
 		// When
-		sut?.checkValidity()
+		sut.checkValidity()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "Valid QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.qrCardView.message, "SubTitle should not be nil")
-		XCTAssertNotNil(strongSut.sceneView.qrCardView.title, "Title should not be nil")
-		XCTAssertNotNil(strongSut.sceneView.qrCardView.time, "Time should not be nil")
-		XCTAssertNotNil(strongSut.sceneView.qrCardView.identity, "Identity should not be nil")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
+		expect(self.sut.sceneView.qrCardView.isHidden) == false
+		expect(self.sut.sceneView.qrCardView.message)
+			.toNot(beNil())
+		expect(self.sut.sceneView.qrCardView.title)
+			.toNot(beNil())
+		expect(self.sut.sceneView.qrCardView.time)
+			.toNot(beNil())
+		expect(self.sut.sceneView.qrCardView.identity)
+			.toNot(beNil())
+		expect(self.sut.sceneView.expiredQRView.isHidden) == true
 	}
 
 	/// Test the validity of the credential with expired credential
-	func testValidityCredentialExpired() throws {
+	func testValidityCredentialExpired() {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
@@ -160,67 +158,63 @@ class DashboardViewControllerTests: XCTestCase {
 			specimen: "0",
 			paperProof: "0"
 		)
-		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
+		viewModel.proofValidator = ProofValidator(maxValidity: 1)
 		loadView()
 
 		// When
-		sut?.checkValidity()
+		sut.checkValidity()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "Valid QR should not be shown")
-		XCTAssertFalse(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should be shown")
+		expect(self.sut.sceneView.qrCardView.isHidden) == true
+		expect(self.sut.sceneView.expiredQRView.isHidden) == false
 	}
 
 	/// Test the validity of the credential without credential
-	func testValidityNoCredential() throws {
+	func testValidityNoCredential() {
 
 		// Given
 		cryptoManagerSpy.crypoAttributes = nil
 		loadView()
 
 		// When
-		sut?.checkValidity()
+		sut.checkValidity()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "Valid QR should not be shown")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
+		expect(self.sut.sceneView.qrCardView.isHidden) == true
+		expect(self.sut.sceneView.expiredQRView.isHidden) == true
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValidTapQR() throws {
+	func testValidityCredentialValidTapQR() {
 
 		// Given
 		setupValidCredential()
 		loadView()
-		sut?.checkValidity()
+		sut.checkValidity()
 
 		// When
-		sut?.sceneView.qrCardView.primaryButtonTapped()
+		sut.sceneView.qrCardView.primaryButtonTapped()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.sceneView.qrCardView.isHidden, "QR card should be shown")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled, "Delegate method should be called")
+		expect(self.sut.sceneView.qrCardView.isHidden) == false
+		expect(self.sut.sceneView.expiredQRView.isHidden) == true
+		expect(self.holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled) == true
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValidWithScreenCapture() throws {
+	func testValidityCredentialValidWithScreenCapture() {
 
 		// Given
 		setupValidCredential()
 		loadView()
-		sut?.checkValidity()
+		sut.checkValidity()
 
 		// When
-		viewModel?.hideForCapture = true
+		viewModel.hideForCapture = true
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.sceneView.qrCardView.isHidden, "QR Card should be hidden")
-		XCTAssertTrue(strongSut.sceneView.expiredQRView.isHidden, "Expired QR should not be shown")
+		expect(self.sut.sceneView.qrCardView.isHidden) == true
+		expect(self.sut.sceneView.expiredQRView.isHidden) == true
 	}
 
 	func testCloseExpiredRQ() {
@@ -237,15 +231,16 @@ class DashboardViewControllerTests: XCTestCase {
 			specimen: "0",
 			paperProof: "0"
 		)
-		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
+		viewModel.proofValidator = ProofValidator(maxValidity: 1)
 		loadView()
-		sut?.checkValidity()
+		sut.checkValidity()
 
 		// When
 		sut?.sceneView.expiredQRView.closeButtonTapped()
 
 		// Then
-		XCTAssertTrue(cryptoManagerSpy.removeCredentialCalled, "Credential should be removed")
-		XCTAssertNil(cryptoManagerSpy.crypoAttributes)
+		expect(self.cryptoManagerSpy.removeCredentialCalled) == true
+		expect(self.cryptoManagerSpy.crypoAttributes)
+			.to(beNil())
 	}
 }

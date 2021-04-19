@@ -115,8 +115,6 @@
 		6D283A5026131DBE00E9208E /* ScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D283A4E26131DBE00E9208E /* ScrollView.swift */; };
 		6D283A7F261345B100E9208E /* ScanPermissionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D283A7E261345B100E9208E /* ScanPermissionViewModel.swift */; };
 		6D283A80261345B100E9208E /* ScanPermissionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D283A7E261345B100E9208E /* ScanPermissionViewModel.swift */; };
-		6D2DD3F025ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */; };
-		6D2DD3F125ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */; };
 		6D30870A25F9124000158F74 /* AboutTestResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D30870925F9124000158F74 /* AboutTestResultViewController.swift */; };
 		6D30870B25F9124000158F74 /* AboutTestResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D30870925F9124000158F74 /* AboutTestResultViewController.swift */; };
 		6D32BD1325E687DF00C4A4D2 /* EnlargedQRView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D037A2E25E66D59006C2BFA /* EnlargedQRView.swift */; };
@@ -652,7 +650,6 @@
 		6D27551125D1259D00164F2E /* DashboardLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DashboardLocalization.swift; sourceTree = "<group>"; };
 		6D283A4E26131DBE00E9208E /* ScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollView.swift; sourceTree = "<group>"; };
 		6D283A7E261345B100E9208E /* ScanPermissionViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanPermissionViewModel.swift; sourceTree = "<group>"; };
-		6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIToolbar+Generator.swift"; sourceTree = "<group>"; };
 		6D30870925F9124000158F74 /* AboutTestResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTestResultViewController.swift; sourceTree = "<group>"; };
 		6D32BD2425E6A5AF00C4A4D2 /* VerifierResultViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifierResultViewModelTests.swift; sourceTree = "<group>"; };
 		6D32BD2C25E6A6A400C4A4D2 /* VerifierCoordinatorDelegateSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierCoordinatorDelegateSpy.swift; sourceTree = "<group>"; };
@@ -1809,7 +1806,6 @@
 				6DAACD0925CEBAA200D3C320 /* UIEdgeInsets+Convenience.swift */,
 				6DFB73EC25DFA32D003D6243 /* UINavigationController+Style.swift */,
 				6D5E06B925C19627008E2124 /* UIStackView+Axis.swift */,
-				6D2DD3EF25ED19D7006F1A74 /* UIToolbar+Generator.swift */,
 				6DAACCFC25CEB9EB00D3C320 /* UIView+Embed.swift */,
 				6D7F9CDB25B704000006F227 /* UIViewController+Keyboard.swift */,
 				6DD9395825BD963A0026F071 /* URLRequest+Utils.swift */,
@@ -2415,7 +2411,6 @@
 				6DD7D83C25D26D3A00B97B7F /* Logging.swift in Sources */,
 				6DD7D83D25D26D3A00B97B7F /* UIStackView+Axis.swift in Sources */,
 				6D164D5A25F3758700A86409 /* LaunchLocalization.swift in Sources */,
-				6D2DD3F125ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */,
 				6DD7D83F25D26D3A00B97B7F /* HolderDashboardViewController.swift in Sources */,
 				6DD7D84025D26D3A00B97B7F /* HolderCoordinator.swift in Sources */,
 				6D9D3AAC25FA29410031DA5D /* TestState.swift in Sources */,
@@ -2640,7 +2635,6 @@
 				6D67D8C125D7CFDE00827277 /* TokenOverviewView.swift in Sources */,
 				6DFB8B0D25DD3A8C00E7A1D8 /* AboutViewController.swift in Sources */,
 				6D01D8C925C02E1A00A4AB89 /* Logging.swift in Sources */,
-				6D2DD3F025ED19D7006F1A74 /* UIToolbar+Generator.swift in Sources */,
 				6D5E06BA25C19627008E2124 /* UIStackView+Axis.swift in Sources */,
 				6DD1158D25D0226900DF6AF4 /* HolderDashboardViewController.swift in Sources */,
 				6D9284B825B5D22B009D4350 /* HolderCoordinator.swift in Sources */,
@@ -2966,7 +2960,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck Test";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2978,7 +2972,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR TEST";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
@@ -3077,7 +3071,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck ACC";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3089,7 +3083,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR ACC";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
@@ -3188,7 +3182,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck PROD";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3201,7 +3195,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOG_LEVEL = error;
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR PROD";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
@@ -3300,7 +3294,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3312,7 +3306,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck App Store";
@@ -3352,7 +3346,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 22;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				DISPLAY_NAME = "Scanner Dev";
@@ -3365,7 +3359,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				NETWORK_CONFIGURATION = Development;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_MODULE_NAME = CTR;
@@ -3387,7 +3381,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = Scanner;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3399,7 +3393,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Scanner App Store";
@@ -3418,7 +3412,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = Scanner;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3430,7 +3424,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Scanner App Store";
@@ -3449,7 +3443,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "Scanner Test";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3461,7 +3455,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Verifier Ad Hoc";
@@ -3480,7 +3474,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "Scanner PROD";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3493,7 +3487,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOG_LEVEL = error;
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Verifier Ad Hoc";
@@ -3512,7 +3506,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "Scanner ACC";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3524,7 +3518,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.verifier;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Verifier Ad Hoc";
@@ -3666,7 +3660,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 22;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				DISPLAY_NAME = "CoronaCheck D";
@@ -3679,7 +3673,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				NETWORK_CONFIGURATION = Development;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
@@ -3702,7 +3696,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20;
+				CURRENT_PROJECT_VERSION = 22;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3714,7 +3708,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck App Store";

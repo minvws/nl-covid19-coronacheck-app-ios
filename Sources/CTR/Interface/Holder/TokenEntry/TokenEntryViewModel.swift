@@ -114,16 +114,16 @@ class TokenEntryViewModel {
             return
         }
 
-        if let verification = verificationInput, !verification.isEmpty {
-            verificationCode = verification.uppercased()
-
-            if let token = requestToken {
-                fetchProviders(token)
-            }
-        } else {
-            if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
-                self.requestToken = requestToken
-                fetchProviders(requestToken)
+		if let verification = verificationInput, !verification.isEmpty {
+			verificationCode = verification.uppercased()
+			errorMessage = nil
+			if let token = requestToken {
+				fetchProviders(token)
+			}
+		} else {
+			if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
+				self.requestToken = requestToken
+				fetchProviders(requestToken)
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
 			}

@@ -8,21 +8,25 @@
 import Foundation
 
 @propertyWrapper struct UserDefaults<T: Codable> {
+
     let key: String
     let defaultValue: T
     
     init(wrappedValue: T, key: String) {
+
         self.key = key
         self.defaultValue = wrappedValue
     }
     
     init(key: String, defaultValue: T) {
+
         self.key = key
         self.defaultValue = defaultValue
     }
     
     // JSONDecoder/Encoder doesn't like fragments
     private struct Wrapped: Codable {
+		
         let value: T
     }
     

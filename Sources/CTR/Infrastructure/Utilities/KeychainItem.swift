@@ -26,6 +26,7 @@ class KeychainItem<T: Codable> {
 	}
 
 	var exists: Bool {
+		
 		var query = baseQuery()
 		query[kSecMatchLimit as String] = kSecMatchLimitOne
 		query[kSecReturnAttributes as String] = kCFBooleanTrue
@@ -50,20 +51,24 @@ class KeychainItem<T: Codable> {
 	private let service: String?
 
 	init(name: String, service: String?) {
+
 		self.name = name
 		self.service = service
 	}
 
 	func clearData() {
+
 		value = nil
 	}
 
 	// JSONDecoder/Encoder doesn't like fragments
 	private struct Wrapped: Codable {
+
 		let value: T
 	}
 
 	fileprivate func read() throws -> T {
+
 		var query = baseQuery()
 		query[kSecMatchLimit as String] = kSecMatchLimitOne
 		query[kSecReturnAttributes as String] = kCFBooleanTrue
@@ -100,6 +105,7 @@ class KeychainItem<T: Codable> {
 	}
 
 	fileprivate func store(value: T?) throws {
+
 		guard let value = value else {
 			if exists {
 				// Delete the existing item from the keychain.
@@ -152,6 +158,7 @@ class KeychainItem<T: Codable> {
 	}
 
 	private func baseQuery() -> [String: AnyObject] {
+
 		var query = [String: AnyObject]()
 		query[kSecClass as String] = kSecClassGenericPassword
 		if let service = service {
@@ -188,10 +195,12 @@ class CachedKeychainItem<T: Codable>: KeychainItem<T> {
 
 // MARK: - Property Wrapper
 @propertyWrapper struct Keychain<T: Codable> {
+
 	let projectedValue: CachedKeychainItem<T>
 	private let defaultValue: T
 
 	init(wrappedValue: T, name: String, service: String? = nil, clearOnReinstall: Bool = false) {
+
 		projectedValue = .init(name: name, service: service)
 		self.defaultValue = wrappedValue
 

@@ -8,6 +8,7 @@
 import Foundation
 
 enum UniversalLink: Equatable {
+	
     case redeemHolderToken(requestToken: RequestToken)
 
     init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor) {

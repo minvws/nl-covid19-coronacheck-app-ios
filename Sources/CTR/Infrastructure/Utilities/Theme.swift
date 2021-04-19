@@ -207,6 +207,7 @@ final class Colors {
     // MARK: - Private
 
     private func color(for name: String) -> UIColor {
+		
         let bundle = Bundle(for: Colors.self)
         if let color = UIColor(named: name, in: bundle, compatibleWith: nil) {
             return color
