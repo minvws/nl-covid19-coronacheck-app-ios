@@ -89,7 +89,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let dashboardViewController = VerifierStartViewController(
 			viewModel: VerifierStartViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager
+				cryptoManager: cryptoManager,
+				proofManager: proofManager
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)

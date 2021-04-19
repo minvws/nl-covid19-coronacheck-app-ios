@@ -13,13 +13,16 @@ class VerifierStartViewModel: Logging {
 	var loggingCategory: String = "VerifierStartViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	weak var coordinator: VerifierCoordinatorDelegate?
 
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
+	/// The proof manager
+	weak var proofManager: ProofManaging?
+
 	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
-	private var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
+	var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
 
 	// MARK: - Bindable properties
 
@@ -32,9 +35,6 @@ class VerifierStartViewModel: Logging {
 	/// The message of the scene
 	@Bindable private(set) var message: String
 
-	/// The linked message of the scene
-	@Bindable private(set) var linkedMessage: String
-
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
@@ -45,16 +45,20 @@ class VerifierStartViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
-	init(coordinator: VerifierCoordinator, cryptoManager: CryptoManaging) {
+	///   - proofManager: the proof manager
+	init(
+		coordinator: VerifierCoordinatorDelegate,
+		cryptoManager: CryptoManaging,
+		proofManager: ProofManaging) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
+		self.proofManager = proofManager
 
 		primaryButtonTitle = .verifierStartButtonTitle
 		title = .verifierStartTitle
 		header = .verifierStartHeader
 		message = .verifierStartMessage
-		linkedMessage = .verifierStartLinkedMessage
 	}
 
 	func primaryButtonTapped() {
@@ -74,18 +78,15 @@ class VerifierStartViewModel: Logging {
 		}
 	}
 
-	func linkTapped(_ viewController: UIViewController) {
+	func linkTapped() {
 
 		coordinator?.navigateToScanInstruction(present: false)
 	}
 
-	/// The proof manager
-	var proofManager: ProofManaging = Services.proofManager
-
 	/// Update the public keys
-	func updatePublicKeys() {
+	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		proofManager.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		proofManager?.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 	}
 }

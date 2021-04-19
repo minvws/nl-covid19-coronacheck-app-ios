@@ -24,11 +24,6 @@ extension String {
 		return Localization.string(for: "verifier.start.message")
 	}
 
-	static var verifierStartLinkedMessage: String {
-
-		return Localization.string(for: "verifier.start.message.link")
-	}
-
 	static var verifierStartButtonTitle: String {
 
 		return Localization.string(for: "verifier.start.button.title")

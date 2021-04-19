@@ -53,7 +53,7 @@ class VerifierStartViewController: BaseViewController {
 
 		sceneView.contentTextView.linkTouched { [weak self] _ in
 
-			self?.linkTapped()
+			self?.viewModel.linkTapped()
 		}
 
 		sceneView.headerImage = .scanStart
@@ -62,12 +62,6 @@ class VerifierStartViewController: BaseViewController {
     }
 
 	// MARK: User interaction
-
-	/// User tapped on the link
-	@objc func linkTapped() {
-
-		viewModel.linkTapped(self)
-	}
 
 	override func viewWillAppear(_ animated: Bool) {
 
