@@ -32,12 +32,6 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 		return Label(title1: nil, montserrat: true).multiline()
 	}()
 
-	/// The message label
-	let messageLabel: Label = {
-
-		return Label(body: nil).multiline()
-	}()
-
 	let contentTextView: TextView = {
 
 		let view = TextView()
@@ -86,7 +80,6 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
-		contentView.addSubview(messageLabel)
 		contentView.addSubview(contentTextView)
 		contentView.addSubview(spacer)
 		addSubview(footerGradientView)
