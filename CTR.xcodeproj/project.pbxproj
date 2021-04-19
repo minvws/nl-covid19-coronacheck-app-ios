@@ -33,6 +33,7 @@
 		3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF42A292628B51100AAC3B2 /* Nimble */; };
+		3CF42A302628B67D00AAC3B2 /* TokenEntryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF42A2F2628B67D00AAC3B2 /* TokenEntryViewModelTests.swift */; };
 		3CFB83B6262DB4B80012C5C2 /* Fakes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFB83B5262DB4B80012C5C2 /* Fakes.swift */; };
 		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
@@ -596,6 +597,7 @@
 		3C6C394126283EA900CC7433 /* RequestTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTokenTests.swift; sourceTree = "<group>"; };
 		3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenValidatorSpy.swift; sourceTree = "<group>"; };
 		3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLink.swift; sourceTree = "<group>"; };
+		3CF42A2F2628B67D00AAC3B2 /* TokenEntryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryViewModelTests.swift; sourceTree = "<group>"; };
 		3CFB83B5262DB4B80012C5C2 /* Fakes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fakes.swift; sourceTree = "<group>"; };
 		6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-acceptance.plist"; sourceTree = "<group>"; };
 		6D0022B825DBC3FA00E91084 /* configuration-production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-production.plist"; sourceTree = "<group>"; };
@@ -984,6 +986,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		3CF42A2C2628B66C00AAC3B2 /* TokenEntry */ = {
+			isa = PBXGroup;
+			children = (
+				3CF42A2F2628B67D00AAC3B2 /* TokenEntryViewModelTests.swift */,
+			);
+			path = TokenEntry;
+			sourceTree = "<group>";
+		};
 		6D01C80F25DEEAD2001E8BD2 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1158,6 +1168,7 @@
 		6D32BD2325E6A55B00C4A4D2 /* Holder */ = {
 			isa = PBXGroup;
 			children = (
+				3CF42A2C2628B66C00AAC3B2 /* TokenEntry */,
 				6D0FD4BF26037CEA00187946 /* Appointment */,
 				6DC3BEAB25E4E6A40079A3F2 /* Dashboard */,
 				6D037A4025E67649006C2BFA /* Enlarged */,
@@ -2844,6 +2855,7 @@
 				6D037A3725E67603006C2BFA /* EnlargedQRViewModelTests.swift in Sources */,
 				3CFB83B6262DB4B80012C5C2 /* Fakes.swift in Sources */,
 				3C6C393D2627658400CC7433 /* UniversalLinkTests.swift in Sources */,
+				3CF42A302628B67D00AAC3B2 /* TokenEntryViewModelTests.swift in Sources */,
 				3C6C394426283EA900CC7433 /* RequestTokenTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
