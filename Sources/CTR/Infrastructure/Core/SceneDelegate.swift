@@ -13,7 +13,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
 
-	/// The previous brightness
 	var previousBrightness: CGFloat?
 
     /// If your app is __not__ running, the system delivers

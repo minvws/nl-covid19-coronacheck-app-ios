@@ -11,6 +11,7 @@ import CommonCrypto
 extension String {
     
     var sha256: String {
+		
         let str = cString(using: .utf8)
         let strLen = CUnsignedInt(lengthOfBytes(using: .utf8))
         let digestLen = Int(CC_SHA256_DIGEST_LENGTH)
@@ -33,6 +34,7 @@ extension String {
 extension String {
 
 	func base64Decoded() -> String? {
+
 		var st = self
 		if self.count % 4 <= 2 {
 			st += String(repeating: "=", count: (self.count % 4))
@@ -45,6 +47,7 @@ extension String {
 extension Data {
     
     var sha256: Data {
+
         var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
         
         withUnsafeBytes {

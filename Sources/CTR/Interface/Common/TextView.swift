@@ -11,10 +11,6 @@ import UIKit
 /// Auto expands to fit its content.
 /// By default the content is not editable or selectable.
 /// Can listen to selected links and updated text.
-///
-/// # See also:
-/// [linkTouched(handler:)](x-source-tag://TextView.linkTouched),
-/// [textChanged(handler:)](x-source-tag://TextView.textChanged)
 class TextView: UITextView, UITextViewDelegate {
     
     private var linkHandlers = [(URL) -> Void]()
@@ -85,7 +81,6 @@ class TextView: UITextView, UITextViewDelegate {
     /// Add a listener for selected links. Calling this method will set `isSelectable` to `true`
     ///
     /// - parameter handler: The closure to be called when the user selects a link
-    /// - Tag: TextView.linkTouched
     @discardableResult
     func linkTouched(handler: @escaping (URL) -> Void) -> Self {
         isSelectable = true
@@ -96,7 +91,6 @@ class TextView: UITextView, UITextViewDelegate {
     /// Add a listener for updated text. Calling this method will set `isSelectable` and `isEditable` to `true`
     ///
     /// - parameter handler: The closure to be called when the text is updated
-    /// - Tag: TextView.textChanged
     @discardableResult
     func textChanged(handler: @escaping (String?) -> Void) -> Self {
         isSelectable = true

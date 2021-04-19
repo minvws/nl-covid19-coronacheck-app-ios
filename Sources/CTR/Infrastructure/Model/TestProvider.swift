@@ -19,7 +19,7 @@ struct TestProvider: Codable, Equatable {
 	/// The url of the provider to fetch the result
 	let resultURL: URL?
 
-	/// The publc key of the provider
+	/// The public key of the provider
 	let publicKey: String
 
 	/// The ssl certificate of the provider
@@ -35,7 +35,7 @@ struct TestProvider: Codable, Equatable {
 		case certificate = "ssl_cert"
 	}
 
-	/// Get the certifficate data
+	/// Get the certificate data
 	/// - Returns: Certificate as Data
 	func getCertificateData() -> Data? {
 
