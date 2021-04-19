@@ -23,10 +23,10 @@ protocol ProofValidatorProtocol {
 
 enum ProofValidity {
 
-	/// The proof is still valid
+	/// The proof is still valid (expiration date)
 	case valid(Date)
 
-	/// The proof is expiring
+	/// The proof is expiring (expiration date, time left to expiration)
 	case expiring(Date, TimeInterval)
 
 	/// The proof is expired

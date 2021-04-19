@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// the what's new pages content for the forced information
 struct ForcedInformationPage {
 
 	/// The image of a forced information page
@@ -22,6 +23,7 @@ struct ForcedInformationPage {
 	let content: String
 }
 
+/// The content for the consent part of the forced information
 struct ForcedInformationConsent: Equatable {
 
 	/// The title of the  forced information consent
@@ -37,6 +39,7 @@ struct ForcedInformationConsent: Equatable {
 	let consentMandatory: Bool
 }
 
+/// A struct to use for combining all the content needed for forced information
 struct ForcedInformation {
 
 	/// An array of additional onboarding pages

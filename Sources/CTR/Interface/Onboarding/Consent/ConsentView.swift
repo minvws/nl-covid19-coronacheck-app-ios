@@ -114,12 +114,7 @@ class ConsentView: BaseView {
 
 		stackView.embed(
 			in: scrollView,
-			insets: UIEdgeInsets(
-				top: ViewTraits.margin,
-				left: ViewTraits.margin,
-				bottom: ViewTraits.margin,
-				right: ViewTraits.margin
-			)
+			insets: UIEdgeInsets.all(ViewTraits.margin)
 		)
 
 		addSubview(scrollView)

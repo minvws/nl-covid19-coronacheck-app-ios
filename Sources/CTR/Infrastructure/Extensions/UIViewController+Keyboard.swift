@@ -30,8 +30,7 @@ extension UIViewController {
 			object: nil
 		)
 	}
-	
-	/// Unsubscribe to keyboard events
+
 	func unSubscribeToKeyboardEvents() {
 		
 		// Remove Keyboard listeners

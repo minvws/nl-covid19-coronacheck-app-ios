@@ -10,8 +10,7 @@ import UIKit
 extension Data {
 
 	/// Generate a QR image
-	/// - Parameter data: the data to embed
-	/// - Returns: QR image
+	/// - Returns: QR image of the data
 	func generateQRCode() -> UIImage? {
 
 		if let filter = CIFilter(name: "CIQRCodeGenerator") {

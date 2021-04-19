@@ -11,7 +11,7 @@ extension String {
 
 	/// Underline a part of the text
 	/// - Parameter underlined: the part to underline
-	/// - Returns: attibuted string
+	/// - Returns: attributed string
 	func underline(underlined: String) -> NSAttributedString {
 
 		let underlineRange = (self as NSString).range(of: underlined)
