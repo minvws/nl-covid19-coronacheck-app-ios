@@ -62,8 +62,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.linkTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 	}
 
@@ -76,8 +76,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
 			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
@@ -92,8 +92,8 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
 			.to(equal(.userTappedProceedToScan), description: "Result should match")
 	}
 

@@ -156,8 +156,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 		let destination = ScanInstructionsViewController(
 			viewModel: ScanInstructionsViewModel(
-				coordinator: self,
-				maxValidity: String(maxValidity)
+				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)

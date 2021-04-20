@@ -31,10 +31,7 @@ class ScanInstructionsViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the verifier coordinator delegate
-	///   - maxValidity: The max time in hours that a test result / test proof is valid
-	init(
-		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
-		maxValidity: String) {
+	init(coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)) {
 		
 		self.coordinator = coordinator
 		self.title = .verifierScanInstructionsTitle
@@ -53,7 +50,7 @@ class ScanInstructionsViewModel: Logging {
 				image: .greenScreen
 			), (
 				title: .verifierScanInstructionsDeniedTitle,
-				text: String(format: .verifierScanInstructionsDeniedText, maxValidity),
+				text: .verifierScanInstructionsDeniedText,
 				image: .redScreen
 			)
 		]

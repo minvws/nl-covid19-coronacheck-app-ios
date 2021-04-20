@@ -18,16 +18,28 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedNavigateToVerifierWelcomeCount += 1
 	}
 
-	var invokedDidFinish = false
-	var invokedDidFinishCount = 0
-	var invokedDidFinishParameters: (result: VerifierStartResult, Void)?
-	var invokedDidFinishParametersList = [(result: VerifierStartResult, Void)]()
+	var invokedDidFinishVerifierStartResult = false
+	var invokedDidFinishVerifierStartResultCount = 0
+	var invokedDidFinishVerifierStartResultParameters: (result: VerifierStartResult, Void)?
+	var invokedDidFinishVerifierStartResultParametersList = [(result: VerifierStartResult, Void)]()
 
 	func didFinish(_ result: VerifierStartResult) {
-		invokedDidFinish = true
-		invokedDidFinishCount += 1
-		invokedDidFinishParameters = (result, ())
-		invokedDidFinishParametersList.append((result, ()))
+		invokedDidFinishVerifierStartResult = true
+		invokedDidFinishVerifierStartResultCount += 1
+		invokedDidFinishVerifierStartResultParameters = (result, ())
+		invokedDidFinishVerifierStartResultParametersList.append((result, ()))
+	}
+
+	var invokedDidFinishScanInstructionsResult = false
+	var invokedDidFinishScanInstructionsResultCount = 0
+	var invokedDidFinishScanInstructionsResultParameters: (result: ScanInstructionsResult, Void)?
+	var invokedDidFinishScanInstructionsResultParametersList = [(result: ScanInstructionsResult, Void)]()
+
+	func didFinish(_ result: ScanInstructionsResult) {
+		invokedDidFinishScanInstructionsResult = true
+		invokedDidFinishScanInstructionsResultCount += 1
+		invokedDidFinishScanInstructionsResultParameters = (result, ())
+		invokedDidFinishScanInstructionsResultParametersList.append((result, ()))
 	}
 
 	var invokedNavigateToScan = false
