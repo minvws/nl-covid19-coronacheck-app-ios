@@ -38,7 +38,10 @@ jobs:
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
       - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
-        run: xcrun simctl boot "iPhone 12 (14.4) [" || true
+        # when changing below, also change the device name in the Fastfile too: 
+        run: | 
+          xcrun simctl boot "iPhone 12" || true
+          xcrun simctl list devices 14.4
       
       - name: Checkout
         uses: actions/checkout@v2
