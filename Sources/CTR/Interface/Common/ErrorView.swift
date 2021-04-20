@@ -18,12 +18,12 @@ class ErrorView: BaseView {
 		
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let messageTopMargin: CGFloat = 4.0
 		static let fontOffset: CGFloat = 2.0
 	}
 	
 	/// The error image
 	private let errorImageView: UIImageView = {
+		
 		let view = UIImageView(image: .error)
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.tintColor = Theme.colors.utilityError
@@ -40,7 +40,6 @@ class ErrorView: BaseView {
 		
 		super.setupViews()
 		view?.backgroundColor = .clear
-		errorLabel.textColor = Theme.colors.utilityError
 	}
 	
 	/// Setup the hierarchy
@@ -83,7 +82,10 @@ class ErrorView: BaseView {
 	/// The header
 	var error: String? {
 		didSet {
-			errorLabel.attributedText = error?.setLineHeight(kerning: ViewTraits.errorKerning)
+			errorLabel.attributedText = error?.setLineHeight(
+				kerning: ViewTraits.errorKerning,
+				textColor: Theme.colors.utilityError
+			)
 		}
 	}
 }
