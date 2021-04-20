@@ -41,6 +41,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Checkout LFS resources
+        run: |
+          git lfs install
+          git lfs pull
+
       - name: Install Bundler dependencies
         run: |
           bundle install
