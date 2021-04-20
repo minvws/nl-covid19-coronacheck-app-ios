@@ -237,6 +237,8 @@
 		6D80816A25DAB57F009FFA27 /* VerifierStartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D80816825DAB57F009FFA27 /* VerifierStartViewModel.swift */; };
 		6D82260A25D7C142000B60F9 /* ScrolledStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D82260925D7C142000B60F9 /* ScrolledStackView.swift */; };
 		6D82260B25D7C142000B60F9 /* ScrolledStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D82260925D7C142000B60F9 /* ScrolledStackView.swift */; };
+		6D84277C262ED2A800E66EE7 /* HolderUrlLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D84277B262ED2A800E66EE7 /* HolderUrlLocalization.swift */; };
+		6D84277D262ED2A800E66EE7 /* HolderUrlLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D84277B262ED2A800E66EE7 /* HolderUrlLocalization.swift */; };
 		6D8E65F126010F5B00F79CFE /* BannerLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E65F026010F5B00F79CFE /* BannerLocalization.swift */; };
 		6D8E65F226010F5B00F79CFE /* BannerLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E65F026010F5B00F79CFE /* BannerLocalization.swift */; };
 		6D8E65F7260110C200F79CFE /* BannerImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8E65F6260110C200F79CFE /* BannerImage.swift */; };
@@ -746,6 +748,7 @@
 		6D80114225D2C00E00D2EEAB /* ChooseProviderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseProviderView.swift; sourceTree = "<group>"; };
 		6D80816825DAB57F009FFA27 /* VerifierStartViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierStartViewModel.swift; sourceTree = "<group>"; };
 		6D82260925D7C142000B60F9 /* ScrolledStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrolledStackView.swift; sourceTree = "<group>"; };
+		6D84277B262ED2A800E66EE7 /* HolderUrlLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HolderUrlLocalization.swift; sourceTree = "<group>"; };
 		6D8E65F026010F5B00F79CFE /* BannerLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerLocalization.swift; sourceTree = "<group>"; };
 		6D8E65F6260110C200F79CFE /* BannerImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerImage.swift; sourceTree = "<group>"; };
 		6D8E65FC2601130B00F79CFE /* BannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
@@ -1569,6 +1572,7 @@
 				6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */,
 				6DB3C33225F1301E00B41B46 /* HolderConsentLocalization.swift */,
 				6DB3C32925F12FF600B41B46 /* HolderMenuLocalization.swift */,
+				6D84277B262ED2A800E66EE7 /* HolderUrlLocalization.swift */,
 				6DB3C2C925F12CCE00B41B46 /* HolderOnboardingLocalization.swift */,
 				6D5D203925BF1C0A00DC2E27 /* Localizable.strings */,
 				6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */,
@@ -2387,6 +2391,7 @@
 				6D58DCAE25D45E2B00A39155 /* ListResultsViewController.swift in Sources */,
 				6DD7D82825D26D3A00B97B7F /* Envelope.swift in Sources */,
 				6DFB8B1725DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */,
+				6D84277D262ED2A800E66EE7 /* HolderUrlLocalization.swift in Sources */,
 				6DD7D82925D26D3A00B97B7F /* JSONDecoder+Decoding.swift in Sources */,
 				6D47C5C325DA5C4A004C24C7 /* VerifierScanViewModel.swift in Sources */,
 				6DD7D82A25D26D3A00B97B7F /* AppDelegate.swift in Sources */,
@@ -2614,6 +2619,7 @@
 				6DAE8BE425CB242700AAF2A7 /* Envelope.swift in Sources */,
 				6DFB8B1625DD3AA900E7A1D8 /* AboutViewModel.swift in Sources */,
 				6DAE8BE225CB242700AAF2A7 /* JSONDecoder+Decoding.swift in Sources */,
+				6D84277C262ED2A800E66EE7 /* HolderUrlLocalization.swift in Sources */,
 				6D47C5C225DA5C4A004C24C7 /* VerifierScanViewModel.swift in Sources */,
 				6DDEFAF425AEDCA800A6912A /* AppDelegate.swift in Sources */,
 				6D7FFADD25C9A6EB00B5482F /* OnboardingImage.swift in Sources */,
@@ -3692,7 +3698,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.5;
-				NETWORK_CONFIGURATION = Development;
+				NETWORK_CONFIGURATION = ACC;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;

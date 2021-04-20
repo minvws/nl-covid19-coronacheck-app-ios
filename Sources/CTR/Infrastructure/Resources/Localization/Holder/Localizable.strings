@@ -65,6 +65,9 @@
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
 
+/* MARK: - URL */
+"holder.url.faq" = "https://coronacheck.nl/nl/faq-in-app";
+
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang na testen";
 "holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Laat je daarom testen als je bepaalde sociale, culturele of sportieve activiteiten bezoekt. Ook als je al gevaccineerd bent. Blijkt uit de test dat je geen corona hebt (negatieve testuitslag)? Dan krijg je toegang.";
@@ -120,7 +123,6 @@
 
 /* MARK: - Holder Appointment */
 "holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.</p><p>Je QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is bij de ingang.</p>";
-"holder.appointment.link" = "Lees de meestgestelde vragen over een test plannen.";
 "holder.appointment.title" = "Testafspraak maken";
 "holder.appointment.header" = "Testafspraak maken";
 "holder.appointment.button.title" = "Maak een afspraak";

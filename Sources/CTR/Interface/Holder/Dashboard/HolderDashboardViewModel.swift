@@ -388,8 +388,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			),
 			callback: { [weak self] in
 
-				if let url = self?.configuration.getHolderFAQURL() {
-					self?.coordinator?.openUrl(url, inApp: true)
+				if let faqUrl = URL(string: .holderUrlFAQ) {
+					self?.coordinator?.openUrl(faqUrl, inApp: true)
 				}
 			}
 		)

@@ -30,10 +30,6 @@ class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 		return URL(string: "https:coronacheck.nl")!
 	}
 
-	func getHolderFAQURL() -> URL {
-		return URL(string: "https:coronacheck.nl")!
-	}
-
 	func getVerifierFAQURL() -> URL {
 		return URL(string: "https:coronacheck.nl")!
 	}

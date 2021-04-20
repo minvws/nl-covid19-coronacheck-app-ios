@@ -163,8 +163,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = AppointmentViewController(
 			viewModel: AppointmentViewModel(
 				coordinator: self,
-				maxValidity: String(maxValidity),
-				configuration: generalConfiguration
+				maxValidity: String(maxValidity)
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -297,7 +296,10 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationContoller
 
 			case .faq:
-				let faqUrl = generalConfiguration.getHolderFAQURL()
+				guard let faqUrl = URL(string: .holderUrlFAQ) else {
+					logError("No holder FAQ url")
+					return
+				}
 				openUrl(faqUrl, inApp: true)
 
 			case .about :
