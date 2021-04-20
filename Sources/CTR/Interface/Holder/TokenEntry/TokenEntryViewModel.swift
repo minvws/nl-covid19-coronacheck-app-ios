@@ -19,7 +19,7 @@ class TokenEntryViewModel {
 	@Bindable private(set) var enableNextButton: Bool = false
 
 	/// An error message
-	@Bindable private(set) var errorMessage: String?
+    @Bindable private(set) var errorMessage: String?
 
 	/// The title for the secondary button
 	@Bindable private(set) var secondaryButtonTitle: String?
@@ -107,11 +107,12 @@ class TokenEntryViewModel {
 	/// - Parameters:
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
-	func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
+    func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
+        errorMessage = nil
 
-		guard let tokenInput = tokenInput else {
-			return
-		}
+        guard let tokenInput = tokenInput else {
+            return
+        }
 
 		if let verification = verificationInput, !verification.isEmpty {
 			verificationCode = verification.uppercased()
@@ -123,7 +124,6 @@ class TokenEntryViewModel {
 			if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken)
-				errorMessage = nil
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
 			}
@@ -194,7 +194,7 @@ class TokenEntryViewModel {
 		}
 	}
 
-	/// Handle the verfication required response
+	/// Handle the verification required response
 	private func handleVerificationRequired() {
 
 		if let code = verificationCode, !code.isEmpty {

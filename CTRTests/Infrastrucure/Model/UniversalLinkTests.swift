@@ -74,12 +74,6 @@ class UniversalLinkTests: XCTestCase {
         let activity = NSUserActivity(activityType: "Other")
         activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
 
-        let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
-            token: "YYYYYYYYYYYY",
-            protocolVersion: "2.0",
-            providerIdentifier: "XXX"
-        ))
-
         // Act
         let link = UniversalLink(userActivity: activity, appFlavor: .holder)
 
