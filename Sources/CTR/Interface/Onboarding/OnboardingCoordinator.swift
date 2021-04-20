@@ -110,7 +110,13 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	/// - Parameter viewController: the presenting view controller
 	func showPrivacyPage(_ viewController: UIViewController) {
 
-		openUrl( generalConfiguration.getPrivacyPolicyURL(), inApp: true)
+		if AppFlavor.flavor == .holder {
+			openUrl( generalConfiguration.getPrivacyPolicyURL(), inApp: true)
+		} else {
+			if let verifierPrivacyUrl = URL(string: "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app") {
+				openUrl(verifierPrivacyUrl, inApp: true)
+			}
+		}
 	}
 
 	/// Dismiss the presented viewcontroller
