@@ -68,7 +68,7 @@
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
 "verifier.onboarding.message.safely" = "Bezoekers van bepaalde sociale, culturele of sportieve activiteiten moeten eerst een coronatest doen. Ook als zij gevaccineerd zijn. Bezoekers krijgen alleen toegang als uit de test blijkt dat ze geen corona hebben.";
 "verifier.onboarding.title.scanqr" = "Scan QR-code voor toegang";
-"verifier.onboarding.message.scanqr" = "In de CoronaCheck-app maken bezoekers van hun testuitslag een QR-code. Daarna scan je met deze app de QR-codes en zie je wie toegang mag krijgen. Bij een groen scherm mogen bezoekers naar binnen. De QR-code moet binnen %@ uur na het moment van testen gescand zijn.";
+"verifier.onboarding.message.scanqr" = "De bezoeker laat een QR-code zien. Dat is het testbewijs. Met deze app scan je de QR-code van de bezoeker. De QR-code moet binnen %@ uur na het moment van testen gescand zijn.";
 "verifier.onboarding.title.access" = "Controle van identiteitsbewijs";
 "verifier.onboarding.message.access" = "Groen scherm? Vraag de bezoeker een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Zo weet je zeker dat de testuitslag van de bezoeker is en kun je toegang geven.";
 "verifier.onboarding.title.who" = "Voor wie is de scanner?";
@@ -80,8 +80,8 @@
 "verifier.consent.message.underlined" = "gebruikersvoorwaarden";
 "verifier.consent.item.1" = "In de QR-code staan <b>minimale gegevens</b> van de bezoeker";
 "verifier.consent.item.2" = "Deze gegevens mag je alleen gebruiken voor <b>controle van het testbewijs</b>";
-"verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b>";
-"verifier.consent.button" = "Ik heb de gebruikersvoorwaarden gelezen en ga hiermee akkoord";
+"verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b> ";
+"verifier.consent.button" = "Ik heb de gebruikersvoorwaarden gelezen en ga hiermee akkoord.";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
