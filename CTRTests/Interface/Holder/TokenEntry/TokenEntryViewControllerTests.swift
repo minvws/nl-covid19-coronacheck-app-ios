@@ -29,9 +29,8 @@ class TokenEntryViewControllerTests: XCTestCase {
         sut = TokenEntryViewController(viewModel: viewModelSpy)
     }
 
-    func testTrialTest() {
-
-        assertSnapshot(matching: sut, as: .image)
+    func test_initialState_withoutRequestToken() {
+        sut.assertImage()
     }
 }
 
