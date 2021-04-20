@@ -9,11 +9,33 @@ import UIKit
 
 class TokenEntryViewModel {
 
+    fileprivate enum DisplayMode {
+        case inputToken
+        case inputTokenWithVerificationCode
+        case inputVerificationCode
+    }
+    private var verificationCodeIsKnownToBeRequired = false
+
+    // Applies the outcome of a decision about the new DisplayMode
+    // i.e. does not make any decisions
+    private func update(displayMode newDisplayMode: DisplayMode) {
+        switch newDisplayMode {
+            case .inputToken:
+                shouldShowTokenEntryField = true
+                shouldShowVerificationEntryField = false
+            case .inputTokenWithVerificationCode:
+                shouldShowTokenEntryField = true
+                shouldShowVerificationEntryField = true
+            case .inputVerificationCode:
+                shouldShowTokenEntryField = false
+                shouldShowVerificationEntryField = true
+        }
+    }
 	// MARK: - Bindables
 
 	@Bindable private(set) var token: String?
 	@Bindable private(set) var showProgress: Bool = false
-	@Bindable private(set) var showVerification: Bool = false
+	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 
 	/// True if we should enable the next button
 	@Bindable private(set) var enableNextButton: Bool = false
@@ -48,6 +70,8 @@ class TokenEntryViewModel {
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
 
+    private let wasInitializedWithARequestToken: Bool
+
 	// MARK: - Initializer
 
 	/// - Parameters:
@@ -66,10 +90,14 @@ class TokenEntryViewModel {
         self.tokenValidator = tokenValidator
 
 		if let unwrappedToken = requestToken {
-			fetchProviders(unwrappedToken)
-			self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
+            self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
+            self.wasInitializedWithARequestToken = true
+            update(displayMode: .inputToken)
+            fetchProviders(unwrappedToken)
 		} else {
-			self.token = nil
+            self.token = nil
+            self.wasInitializedWithARequestToken = false
+            self.update(displayMode: .inputToken)
 		}
 	}
 
@@ -87,11 +115,17 @@ class TokenEntryViewModel {
 			return
 		}
 
-		if !tokenInput.isEmpty { // && !showVerification {
+		if !tokenInput.isEmpty {
 
 			let validToken = tokenValidator.validate(tokenInput)
 			enableNextButton = validToken
-			showVerification = validToken && showVerification
+
+            update(
+                displayMode: calculateDisplayMode(
+                    tokenIsValid: validToken,
+                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired
+                )
+            )
 			return
 		}
 
@@ -203,8 +237,15 @@ class TokenEntryViewModel {
 		}
 		resetCountdownCounter()
 		startResendTimer()
-		showVerification = true
+        verificationCodeIsKnownToBeRequired = true
 		enableNextButton = false
+
+        update(
+            displayMode: calculateDisplayMode(
+                tokenIsValid: true, // presumably
+                verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired
+            )
+        )
 	}
 
 	// MARK: Resend SMS Countdown
@@ -250,4 +291,16 @@ extension TokenEntryViewModel: Logging {
 	var loggingCategory: String {
 		return "TokenEntryViewModel"
 	}
+}
+
+private func calculateDisplayMode(
+    tokenIsValid: Bool,
+    verificationCodeIsKnownToBeRequired: Bool
+) -> TokenEntryViewModel.DisplayMode {
+
+    if tokenIsValid && verificationCodeIsKnownToBeRequired {
+        return .inputTokenWithVerificationCode
+    } else {
+        return .inputToken
+    }
 }
