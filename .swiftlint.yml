@@ -42,8 +42,8 @@ identifier_name:
     warning: 2
     error: 2
   max_length:
-    warning: 50
-    error: 60
+    warning: 100
+    error: 100
 function_parameter_count:
   warning: 7
 reporter: "xcode"
