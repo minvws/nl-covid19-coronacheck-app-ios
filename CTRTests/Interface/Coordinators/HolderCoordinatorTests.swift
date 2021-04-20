@@ -29,24 +29,6 @@ class HolderCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 
-	func testOpenMenuItem() {
-
-		// Given
-		let menu = MenuViewController(
-            viewModel: MenuViewModel(delegate: sut)
-		)
-		sut.sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
-
-		let viewControllerSpy = ViewControllerSpy()
-		sut.sidePanel?.selectedViewController = viewControllerSpy
-
-		// When
-		sut.openMenuItem(.privacy)
-
-		// Then
-		XCTAssertTrue(viewControllerSpy.presentCalled)
-	}
-
 	func testStartForcedInformation() {
 
 		// Given

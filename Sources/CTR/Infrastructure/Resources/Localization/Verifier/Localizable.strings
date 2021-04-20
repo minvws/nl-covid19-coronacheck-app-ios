@@ -64,6 +64,10 @@
 "verifier.menu.feedback" = "Geef ons feedback";
 "verifier.menu.privacy" = "Gebruiksvoorwaarden";
 
+/* MARK: - URL */
+"verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
+"verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
+
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
 "verifier.onboarding.message.safely" = "Bezoekers van bepaalde sociale, culturele of sportieve activiteiten moeten eerst een coronatest doen. Ook als zij gevaccineerd zijn. Bezoekers krijgen alleen toegang als uit de test blijkt dat ze geen corona hebben.";

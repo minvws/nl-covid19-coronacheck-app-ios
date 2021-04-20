@@ -25,10 +25,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// - Returns: TTL for a QR
 	func getQRRefreshPeriod() -> TimeInterval
 
-	/// Get the URL for the privacy policy
-	/// - Returns: the privay policy url
-	func getPrivacyPolicyURL() -> URL
-
 	/// Get the URL for the holder faq
 	/// - Returns: the holder faq uel
 	func getVerifierFAQURL() -> URL
@@ -72,16 +68,6 @@ extension Configuration: ConfigurationGeneralProtocol {
 			fatalError("Configuration: No QR Refresh Period provided")
 		}
 		return value
-	}
-
-	/// Get the URL for the privacy policy
-	/// - Returns: the privacy policy url
-	func getPrivacyPolicyURL() -> URL {
-		guard let value = general["privacyPolicyURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Privacy Policy URL provided")
-		}
-		return url
 	}
 
 	/// Get the URL for the verifier faq

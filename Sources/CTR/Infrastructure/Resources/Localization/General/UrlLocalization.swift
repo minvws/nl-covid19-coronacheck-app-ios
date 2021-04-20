@@ -26,3 +26,15 @@ extension String {
 		return Localization.string(for: "holder.url.privacy")
 	}
 }
+
+// MARK: - Verifier
+
+extension String {
+
+	static var verifierUrlPrivacy: String {
+
+		return Localization.string(for: "verifier.url.privacy")
+	}
+}
+
+

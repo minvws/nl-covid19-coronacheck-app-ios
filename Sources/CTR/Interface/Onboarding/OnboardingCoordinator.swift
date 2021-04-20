@@ -12,7 +12,7 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 
 	func showPrivacyPage()
 	
-	/// Dismiss the presented viewcontroller
+	/// Dismiss the presented viewController
 	func dismiss()
 	
 	/// The onboarding is finished
@@ -106,14 +106,22 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	
 	func showPrivacyPage() {
 
-		guard let privacyUrl = URL(string: .holderUrlPrivacy) else {
-			logError("No holder privacy url")
+		let urlString: String
+
+		if AppFlavor.flavor == .holder {
+			urlString = .holderUrlPrivacy
+		} else {
+			urlString = .verifierUrlPrivacy
+		}
+
+		guard let privacyUrl = URL(string: urlString) else {
+			logError("No privacy url for \(urlString)")
 			return
 		}
 		openUrl(privacyUrl, inApp: true)
 	}
 
-	/// Dismiss the presented viewcontroller
+	/// Dismiss the presented viewController
 	func dismiss() {
 		
 		presentingViewController?.dismiss(animated: true, completion: nil)
