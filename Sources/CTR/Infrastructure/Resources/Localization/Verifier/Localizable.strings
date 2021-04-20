@@ -46,7 +46,7 @@
 /* MARK: - New Terms */
 "new.terms.title" = "Onze voorwaarden zijn vernieuwd";
 "new.terms.highlights" = "<b>Dit is veranderd</b><br\><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
-"new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersverklaring.";
+"new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
 "new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
 "new.terms.error.message" = "Je hebt geen toegang de CoronaCheck Scanner-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
 "new.terms.agree" = "Akkoord";
@@ -62,7 +62,7 @@
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.feedback" = "Geef ons feedback";
-"verifier.menu.privacy" = "Gebruiksvoorwaarden";
+"verifier.menu.privacy" = "Gebruikersvoorwaarden";
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
