@@ -309,8 +309,8 @@ extension HolderCoordinator: MenuDelegate {
 						flavor: AppFlavor.flavor
 					)
 				)
-				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-				sidePanel?.selectedViewController = aboutNavigationContoller
+				aboutNavigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .privacy :
 				guard let privacyUrl = URL(string: .holderUrlPrivacy) else {

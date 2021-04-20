@@ -41,5 +41,3 @@ extension String {
 		return Localization.string(for: "verifier.url.privacy")
 	}
 }
-
-
