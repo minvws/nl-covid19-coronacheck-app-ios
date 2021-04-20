@@ -38,6 +38,7 @@ class SharedCoordinator: Coordinator, Logging {
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	var proofManager: ProofManaging = Services.proofManager
 	var versionSupplier = AppVersionSupplier()
 	var childCoordinators: [Coordinator] = []
 

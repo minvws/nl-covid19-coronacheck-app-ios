@@ -49,16 +49,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 class HolderCoordinator: SharedCoordinator {
 
-	/// The proof manager
-	var proofManager: ProofManaging = Services.proofManager
-
-	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
-
-	/// The open ID manager
 	var openIdManager: OpenIdManaging = Services.openIdManager
-
-	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
 	// Designated starter method
