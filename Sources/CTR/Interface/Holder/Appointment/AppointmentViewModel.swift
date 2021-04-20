@@ -54,7 +54,7 @@ class AppointmentViewModel: Logging {
 	func buttonTapped() {
 
 		logInfo("Create appointment tapped")
-		if let url = URL(string: "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app") {
+		if let url = URL(string: .holderUrlAppointment) {
 			coordinator?.openUrl(url, inApp: true)
 		}
 	}

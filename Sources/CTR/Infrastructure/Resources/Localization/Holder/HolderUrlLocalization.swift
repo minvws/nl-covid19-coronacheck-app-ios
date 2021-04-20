@@ -15,4 +15,9 @@ extension String {
 		
 		return Localization.string(for: "holder.url.faq")
 	}
+
+	static var holderUrlAppointment: String {
+
+		return Localization.string(for: "holder.url.appointment")
+	}
 }
