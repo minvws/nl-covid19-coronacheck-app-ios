@@ -18,6 +18,9 @@ class ScrolledStackView: BaseView {
 		static let spacing: CGFloat = 32.0
 	}
 
+	/// bottom constraint for scroll view
+	var bottomScrollViewConstraint: NSLayoutConstraint?
+
 	/// The scrollview
 	let scrollView: UIScrollView = {
 
@@ -57,7 +60,6 @@ class ScrolledStackView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
 			// StackView
 			stackView.widthAnchor.constraint(
@@ -82,5 +84,8 @@ class ScrolledStackView: BaseView {
 				constant: -ViewTraits.margin
 			)
 		])
+
+		bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+		bottomScrollViewConstraint?.isActive = true
 	}
 }

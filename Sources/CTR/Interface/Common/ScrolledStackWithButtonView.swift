@@ -23,6 +23,15 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		static let buttonMargin: CGFloat = 36.0
 	}
 
+	/// The line above the button
+	let lineView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.line
+		return view
+	}()
+
 	/// the footer background
 	let footerBackground: UIView = {
 		
@@ -62,6 +71,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		super.setupViewHierarchy()
 
+		addSubview(lineView)
 		addSubview(footerGradientView)
 		footerBackground.addSubview(primaryButton)
 		addSubview(footerBackground)
@@ -73,6 +83,12 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
+
+			// Line
+			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			lineView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
+			lineView.heightAnchor.constraint(equalToConstant: 1),
 
 			// Footer background
 			footerGradientView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
@@ -176,6 +192,14 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 			setFooterGradient()
 			backgroundColor = actionColor
 			footerBackground.backgroundColor = actionColor
+		}
+	}
+
+	/// Show the line view and hide the gradient. 
+	var showLineView: Bool = false {
+		didSet {
+			footerGradientView.isHidden = showLineView
+			lineView.isHidden = !showLineView
 		}
 	}
 }
