@@ -7,12 +7,21 @@
 
 import UIKit
 
-class ScanInstructionsView: ScrolledStackView {
+class ScanInstructionsView: ScrolledStackWithButtonView {
 
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .fill
+	}
+
+	/// Setup the constraints
+	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
+		setupPrimaryButton(useFullWidth: false)
+
+		topButtonConstraint?.constant = 32
 	}
 }

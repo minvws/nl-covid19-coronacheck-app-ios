@@ -16,6 +16,10 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameter result: the result of the start scene
 	func didFinish(_ result: VerifierStartResult)
 
+	/// The user finished the instruction scene
+	/// - Parameter result: the result of the instruction scene
+	func didFinish(_ result: ScanInstructionsResult)
+
 	func navigateToScan()
 
 	/// Navigate to the scan result
@@ -108,6 +112,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			case .userTappedProceedToScanInstructions:
 				navigateToScanInstruction()
 		}
+	}
+
+	/// The user finished the instruction scene
+	/// - Parameter result: the result of the instruction scene
+	func didFinish(_ result: ScanInstructionsResult) {
+
+		navigateToScan()
 	}
 	
 	/// Navigate to the scan result

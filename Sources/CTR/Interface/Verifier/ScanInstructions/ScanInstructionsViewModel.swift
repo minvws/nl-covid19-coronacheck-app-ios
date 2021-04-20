@@ -7,26 +7,31 @@
 
 import UIKit
 
+enum ScanInstructionsResult {
+
+	// The user has read the scan instructions and pressed next
+	case scanInstructionsCompleted
+}
+
 class ScanInstructionsViewModel: Logging {
-	
-	/// The logging category
-	var loggingCategory: String = "ScanInstructionsViewModel"
-	
+
 	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
+	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
 	
 	// MARK: - Bindable properties
 	
 	/// The title of the scene
 	@Bindable private(set) var title: String
 	
-	/// The message of the scene
+	/// The content of the scene
 	@Bindable private(set) var content: [(title: String, text: String, image: UIImage?)]
-	
-	/// Initialzier
+
+	// MARK: - Initializer
+
+	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the verifier coordinator delegate
-	///   - presented: True if we are presented
+	///   - maxValidity: The max time in hours that a test result / test proof is valid
 	init(
 		coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol),
 		maxValidity: String) {
@@ -38,18 +43,15 @@ class ScanInstructionsViewModel: Logging {
 				title: .verifierScanInstructionsDistanceTitle,
 				text: .verifierScanInstructionsDistanceText,
 				image: nil
-			),
-			(
+			), (
 				title: .verifierScanInstructionsScanTitle,
 				text: .verifierScanInstructionsScanText,
 				image: nil
-			),
-			(
+			), (
 				title: .verifierScanInstructionsAccessTitle,
 				text: .verifierScanInstructionsAccessText,
 				image: .greenScreen
-			),
-			(
+			), (
 				title: .verifierScanInstructionsDeniedTitle,
 				text: String(format: .verifierScanInstructionsDeniedText, maxValidity),
 				image: .redScreen
@@ -57,14 +59,15 @@ class ScanInstructionsViewModel: Logging {
 		]
 	}
 
-	func dismiss() {
+	// MARK: - User Interaction
 
-//		coordinator?.dismiss()
-//		coordinator?.navigateToScan()
+	func primaryButtonTapped() {
+
+		coordinator?.didFinish(.scanInstructionsCompleted)
 	}
 
-	func openUrl(_ url: URL) {
+	func linkTapped(_ url: URL) {
 
-//		coordinator?.openUrl(url, inApp: true)
+		coordinator?.openUrl(url, inApp: true)
 	}
 }

@@ -37,41 +37,39 @@ class ScanInstructionsViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
-//		viewModel.$showCloseButton.binding = { [weak self] in
-//			guard let strongSelf = self else { return }
-//			if $0 {
-//				strongSelf.addCloseButton(action: #selector(strongSelf.closeButtonTapped))
-//			}
-//		}
-
 		viewModel.$content.binding = { [weak self] list in
 
-			for item in list {
-				if let image = item.image {
-					let view = UIImageView(image: image)
-					view.translatesAutoresizingMaskIntoConstraints = false
-					view.contentMode = .center
-					self?.sceneView.stackView.addArrangedSubview(view)
-					self?.sceneView.stackView.setCustomSpacing(32, after: view)
-				}
-				let label = Label(title3: item.title, montserrat: true)
-				self?.sceneView.stackView.addArrangedSubview(label)
-				self?.sceneView.stackView.setCustomSpacing(8, after: label)
+			self?.setupContent(list)
+		}
 
-				let content = TextView(htmlText: item.text)
-				content.linkTouched { [weak self] url in
-					print("tapped on \(url)")
-					self?.viewModel.openUrl(url)
-				}
-				self?.sceneView.stackView.addArrangedSubview(content)
-				self?.sceneView.stackView.setCustomSpacing(56, after: content)
-			}
+		sceneView.primaryTitle = .verifierStartButtonTitle
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+
+			self?.viewModel.primaryButtonTapped()
 		}
 	}
 
-	/// User tapped on the button
-	@objc private func closeButtonTapped() {
+	private func setupContent(_ list: [(title: String, text: String, image: UIImage?)]) {
 
-		viewModel.dismiss()
+		for item in list {
+			if let image = item.image {
+				let view = UIImageView(image: image)
+				view.translatesAutoresizingMaskIntoConstraints = false
+				view.contentMode = .center
+				sceneView.stackView.addArrangedSubview(view)
+				sceneView.stackView.setCustomSpacing(32, after: view)
+			}
+			let label = Label(title3: item.title, montserrat: true)
+			sceneView.stackView.addArrangedSubview(label)
+			sceneView.stackView.setCustomSpacing(8, after: label)
+
+			let content = TextView(htmlText: item.text)
+			content.linkTouched { [weak self] url in
+				print("tapped on \(url)")
+				self?.viewModel.linkTapped(url)
+			}
+			sceneView.stackView.addArrangedSubview(content)
+			sceneView.stackView.setCustomSpacing(56, after: content)
+		}
 	}
 }

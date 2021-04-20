@@ -92,10 +92,10 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 
 			// Primary button
-			primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor),
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
+
 		if useFullWidth {
 			NSLayoutConstraint.activate([
 
@@ -114,6 +114,9 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 				primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth)
 			])
 		}
+
+		topButtonConstraint = primaryButton.topAnchor.constraint(equalTo: footerBackground.topAnchor)
+		topButtonConstraint?.isActive = true
 
 		bottomButtonConstraint = primaryButton.bottomAnchor.constraint(
 			equalTo: safeAreaLayoutGuide.bottomAnchor,
@@ -161,8 +164,11 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
 
-	/// bottom contraint for keyboard changes.
+	/// bottom constraint for keyboard changes.
 	var bottomButtonConstraint: NSLayoutConstraint?
+
+	/// top constraint for keyboard changes.
+	var topButtonConstraint: NSLayoutConstraint?
 
 	/// The color to use for the backgrounds and gradient. Defaults to Theme.colors.viewControllerBackground
 	var actionColor: UIColor = Theme.colors.viewControllerBackground {

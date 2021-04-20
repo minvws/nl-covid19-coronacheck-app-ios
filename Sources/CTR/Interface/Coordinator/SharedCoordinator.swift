@@ -89,7 +89,13 @@ extension SharedCoordinator: OpenUrlProtocol {
 	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
 	func openUrl(_ url: URL, inApp: Bool) {
 
-		if inApp {
+		var shouldOpenInApp = inApp
+		if url.scheme == "tel" {
+			// Do not open phone numbers in app, doesn't work & will crash.
+			shouldOpenInApp = false
+		}
+
+		if shouldOpenInApp {
 			let safariController = SFSafariViewController(url: url)
 			sidePanel?.selectedViewController?.present(safariController, animated: true)
 		} else {
