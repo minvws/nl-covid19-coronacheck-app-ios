@@ -16,8 +16,6 @@
 		<string>https://coronacheck.nl/nl/faq-in-app</string>
 		<key>privacyPolicyURL</key>
 		<string>https://coronacheck.nl/nl/privacy-in-app</string>
-		<key>verifierAboutURL</key>
-		<string>https://coronacheck.nl/nl/over-de-scanner-app-in-app</string>
 		<key>verifierFAQURL</key>
 		<string>https://coronacheck.nl/nl/faq-scanner-in-app</string>
 	</dict>

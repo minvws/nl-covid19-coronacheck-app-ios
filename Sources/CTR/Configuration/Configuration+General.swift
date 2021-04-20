@@ -33,10 +33,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// - Returns: the holder faq uel
 	func getHolderFAQURL() -> URL
 
-	/// Get the URL for the verifier about url
-	/// - Returns: the verifier about url
-	func getVerifierAboutAppURL() -> URL
-
 	/// Get the URL for the holder faq
 	/// - Returns: the holder faq uel
 	func getVerifierFAQURL() -> URL
@@ -98,16 +94,6 @@ extension Configuration: ConfigurationGeneralProtocol {
 		guard let value = general["holderFAQURL"] as? String,
 			  let url = URL(string: value) else {
 			fatalError("Configuration: No Holder FAQ URL provided")
-		}
-		return url
-	}
-
-	/// Get the URL for the verifier about url
-	/// - Returns: the verifier about url
-	func getVerifierAboutAppURL() -> URL {
-		guard let value = general["verifierAboutURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Verifier About URL provided")
 		}
 		return url
 	}
