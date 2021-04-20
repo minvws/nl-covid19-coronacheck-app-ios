@@ -37,7 +37,9 @@ jobs:
     timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
-
+      - name: Prestart the simulator # https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
+        run: xcrun simctl boot "iPhone 12 (14.4) [" || true
+      
       - name: Checkout
         uses: actions/checkout@v2
 
