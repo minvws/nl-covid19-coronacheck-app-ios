@@ -45,6 +45,9 @@ jobs:
         run: |
           git lfs install
           git lfs pull
+          git lfs checkout
+          git checkout .
+          ls -la CTRTests/Interface/Holder/TokenEntry/__Snapshots__
 
       - name: Install Bundler dependencies
         run: |
