@@ -67,21 +67,21 @@
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
 "verifier.onboarding.message.safely" = "Bezoekers van bepaalde sociale, culturele of sportieve activiteiten moeten eerst een coronatest doen. Ook als zij gevaccineerd zijn. Bezoekers krijgen alleen toegang als uit de test blijkt dat ze geen corona hebben.";
-"verifier.onboarding.title.scanqr" = "Scan QR-code voor testuitslag";
+"verifier.onboarding.title.scanqr" = "Scan QR-code voor toegang";
 "verifier.onboarding.message.scanqr" = "In de CoronaCheck-app maken bezoekers van hun testuitslag een QR-code. Daarna scan je met deze app de QR-codes en zie je wie toegang mag krijgen. Bij een groen scherm mogen bezoekers naar binnen. De QR-code moet binnen %@ uur na het moment van testen gescand zijn.";
-"verifier.onboarding.title.access" = "Toegang is anoniem";
-"verifier.onboarding.message.access" = "Bij het scannen van een QR-code worden geen persoonsgegevens verstuurd of opgeslagen. Als controleur zie je alleen of de bezoeker een geldige negatieve testuitslag heeft.";
+"verifier.onboarding.title.access" = "Controle van identiteitsbewijs";
+"verifier.onboarding.message.access" = "Groen scherm? Vraag de bezoeker een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Zo weet je zeker dat de testuitslag van de bezoeker is en kun je toegang geven.";
 "verifier.onboarding.title.who" = "Voor wie is de scanner?";
 "verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw sociale, culturele of sportieve activiteit onder de aangewezen locaties valt.";
 
 /* MARK: - Verifier Consent */
-"verifier.consent.title" = "Zo gebruikt de app gegevens";
-"verifier.consent.message" = "In de gebruiksvoorwaarden staat hoe CoronaCheck Scanner gegevens gebruikt. Dit zijn de belangrijkste punten:";
-"verifier.consent.message.underlined" = "gebruiksvoorwaarden";
-"verifier.consent.item.1" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b>";
-"verifier.consent.item.2" = "Als controleur weet je alleen <b>of een testbewijs geldig is.</b> Niet wie de bezoeker is.";
-"verifier.consent.item.3" = "GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b> ";
-"verifier.consent.button" = "Ik ga akkoord met de gebruiksvoorwaarden.";
+"verifier.consent.title" = "Voorwaarden voor gebruik";
+"verifier.consent.message" = "In de gebruikersvoorwaarden staat hoe CoronaCheck Scanner werkt en wat je rechten zijn.";
+"verifier.consent.message.underlined" = "gebruikersvoorwaarden";
+"verifier.consent.item.1" = "In de QR-code staan <b>minimale gegevens</b> van de bezoeker";
+"verifier.consent.item.2" = "Deze gegevens mag je alleen gebruiken voor <b>controle van het testbewijs</b>";
+"verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b>";
+"verifier.consent.button" = "Ik heb de gebruikersvoorwaarden gelezen en ga hiermee akkoord";
 
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
