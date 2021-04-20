@@ -31,6 +31,11 @@ extension String {
 
 extension String {
 
+	static var verifierUrlFAQ: String {
+
+		return Localization.string(for: "verifier.url.faq")
+	}
+
 	static var verifierUrlPrivacy: String {
 
 		return Localization.string(for: "verifier.url.privacy")
