@@ -25,12 +25,4 @@ class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 	func getQRRefreshPeriod() -> TimeInterval {
 		return 10
 	}
-
-	func getPrivacyPolicyURL() -> URL {
-		return URL(string: "https:coronacheck.nl")!
-	}
-
-	func getVerifierFAQURL() -> URL {
-		return URL(string: "https:coronacheck.nl")!
-	}
 }

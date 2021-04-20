@@ -24,10 +24,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// Get the Refresh Period for a QR
 	/// - Returns: TTL for a QR
 	func getQRRefreshPeriod() -> TimeInterval
-
-	/// Get the URL for the holder faq
-	/// - Returns: the holder faq uel
-	func getVerifierFAQURL() -> URL
 }
 
 // MARK: - ConfigurationGeneralProtocol
@@ -68,15 +64,5 @@ extension Configuration: ConfigurationGeneralProtocol {
 			fatalError("Configuration: No QR Refresh Period provided")
 		}
 		return value
-	}
-
-	/// Get the URL for the verifier faq
-	/// - Returns: the verifier faq url
-	func getVerifierFAQURL() -> URL {
-		guard let value = general["verifierFAQURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Verifier FAQ URL provided")
-		}
-		return url
 	}
 }
