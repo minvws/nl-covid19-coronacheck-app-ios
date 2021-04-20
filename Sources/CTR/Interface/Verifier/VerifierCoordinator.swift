@@ -218,8 +218,9 @@ extension VerifierCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = aboutNavigationContoller
 				
 			case .privacy :
-				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
-				openUrl(privacyUrl, inApp: true)
+				if let verifierPrivacyUrl = URL(string: "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app") {
+					openUrl(verifierPrivacyUrl, inApp: true)
+				}
 				
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
