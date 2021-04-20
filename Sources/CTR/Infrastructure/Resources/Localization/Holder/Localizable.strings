@@ -66,8 +66,9 @@
 "holder.menu.privacy" = "Privacyverklaring";
 
 /* MARK: - URL */
-"holder.url.faq" = "https://coronacheck.nl/nl/faq-in-app";
 "holder.url.appointment" = "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app";
+"holder.url.faq" = "https://coronacheck.nl/nl/faq-in-app";
+"holder.url.privacy" = "https://coronacheck.nl/nl/privacy-in-app";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang na testen";

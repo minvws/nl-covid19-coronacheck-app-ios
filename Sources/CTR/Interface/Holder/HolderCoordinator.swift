@@ -313,7 +313,10 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = aboutNavigationContoller
 
 			case .privacy :
-				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
+				guard let privacyUrl = URL(string: .holderUrlPrivacy) else {
+					logError("No holder privacy url")
+					return
+				}
 				openUrl(privacyUrl, inApp: true)
 
 			default:

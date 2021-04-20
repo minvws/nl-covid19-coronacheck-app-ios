@@ -20,4 +20,9 @@ extension String {
 
 		return Localization.string(for: "holder.url.appointment")
 	}
+
+	static var holderUrlPrivacy: String {
+
+		return Localization.string(for: "holder.url.privacy")
+	}
 }
