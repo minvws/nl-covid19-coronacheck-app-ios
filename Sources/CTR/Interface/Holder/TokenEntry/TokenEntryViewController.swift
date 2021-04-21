@@ -59,6 +59,16 @@ class TokenEntryViewController: BaseViewController {
 
 	func setupBinding() {
 
+        viewModel.$title.binding = { [weak self] title in
+            guard let strongSelf = self else { return }
+            strongSelf.sceneView.title = title
+        }
+
+        viewModel.$message.binding = { [weak self] message in
+            guard let strongSelf = self else { return }
+            strongSelf.sceneView.message = message
+        }
+
 		viewModel.$token.binding = { [weak self] token in
 			self?.sceneView.tokenEntryView.inputField.text = token
 			if token == nil {
@@ -68,9 +78,7 @@ class TokenEntryViewController: BaseViewController {
 		}
 
 		viewModel.$showProgress.binding = { [weak self] in
-			guard let strongSelf = self else {
-				return
-			}
+            guard let strongSelf = self else { return }
 
 			if $0 {
 				let hud = MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
@@ -96,6 +104,12 @@ class TokenEntryViewController: BaseViewController {
 				self?.showError(.errorTitle, message: .technicalErrorText)
 			}
 		}
+
+        viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
+            guard let strongSelf = self else { return }
+
+            strongSelf.sceneView.tokenEntryView.isHidden = !$0
+        }
 
 		viewModel.$shouldShowVerificationEntryField.binding = { [weak self]  in
 
@@ -148,8 +162,6 @@ class TokenEntryViewController: BaseViewController {
 
 	func setupContent() {
 
-		sceneView.title = .holderTokenEntryTitle
-		sceneView.message = .holderTokenEntryText
 		sceneView.tokenEntryView.header = .holderTokenEntryTokenTitle
 		sceneView.tokenEntryView.inputField.attributedPlaceholder = NSAttributedString(
 			string: .holderTokenEntryTokenPlaceholder,

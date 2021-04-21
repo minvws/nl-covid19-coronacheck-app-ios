@@ -161,10 +161,16 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 
-	/// The  message
+	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+            if let message = message {
+                messageLabel.attributedText = message.setLineHeight(ViewTraits.messageLineHeight)
+                messageLabel.isHidden = false
+            }
+            else {
+                messageLabel.isHidden = true
+            }
 		}
 	}
 
