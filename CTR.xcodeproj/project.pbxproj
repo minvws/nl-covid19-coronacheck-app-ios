@@ -27,13 +27,15 @@
 		3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CD826208813002F0387 /* OHHTTPStubs */; };
 		3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CDA26208813002F0387 /* OHHTTPStubsSwift */; };
 		3C195CE7262090E5002F0387 /* ViewControllerPresentationSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C195CE4262090BD002F0387 /* ViewControllerPresentationSpy.framework */; };
-		3C6C393D2627658400CC7433 /* UniversalLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C393C2627658400CC7433 /* UniversalLinkTests.swift */; };
-		3C6C394426283EA900CC7433 /* RequestTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C394126283EA900CC7433 /* RequestTokenTests.swift */; };
+		3C565B0F262ECBBB00E17DD7 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 3C565B0E262ECBBB00E17DD7 /* SnapshotTesting */; };
+		3C565B21262ECE0200E17DD7 /* UniversalLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */; };
+		3C565B22262ECE0200E17DD7 /* RequestTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */; };
 		3C6C394626283F0100CC7433 /* TokenValidatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */; };
 		3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF42A292628B51100AAC3B2 /* Nimble */; };
-		3CF42A302628B67D00AAC3B2 /* TokenEntryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF42A2F2628B67D00AAC3B2 /* TokenEntryViewModelTests.swift */; };
+		3CF42A302628B67D00AAC3B2 /* TokenEntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF42A2F2628B67D00AAC3B2 /* TokenEntryTests.swift */; };
+		3CF8F772262ED730005CE5D2 /* SnapshotTesting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF8F771262ED730005CE5D2 /* SnapshotTesting.swift */; };
 		3CFB83B6262DB4B80012C5C2 /* Fakes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFB83B5262DB4B80012C5C2 /* Fakes.swift */; };
 		6D0022B325DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
 		6D0022B425DBC2C000E91084 /* configuration-acceptance.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */; };
@@ -207,7 +209,6 @@
 		6D68CB0F25CC25D3008FE2C8 /* GeneralImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB0E25CC25D3008FE2C8 /* GeneralImage.swift */; };
 		6D68CB1525CC3D3C008FE2C8 /* PrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D68CB1425CC3D3C008FE2C8 /* PrivacyViewController.swift */; };
 		6D6CFEB225C41E8D00DA9404 /* EndOfLifeLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6CFEB125C41E8D00DA9404 /* EndOfLifeLocalization.swift */; };
-		6D70FE04262D8C39009A7A99 /* VerifierStartViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D70FE03262D8C39009A7A99 /* VerifierStartViewModelTests.swift */; };
 		6D79C2E825DDB246005DADE2 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79C2E725DDB246005DADE2 /* TextView.swift */; };
 		6D79C2E925DDB246005DADE2 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D79C2E725DDB246005DADE2 /* TextView.swift */; };
 		6D7C908A25CA86FE00AEC5DE /* String+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D7C908825CA86FE00AEC5DE /* String+extension.swift */; };
@@ -597,11 +598,12 @@
 		326E62C025D45DBF0072CB8E /* demo-root.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = "demo-root.pem"; sourceTree = "<group>"; };
 		3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ViewControllerPresentationSpy.xcodeproj; path = "Vendor/ViewControllerPresentationSpy-main/Source/ViewControllerPresentationSpy.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		3C42A0622625B85600774E46 /* CTR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CTR.entitlements; sourceTree = "<group>"; };
-		3C6C393C2627658400CC7433 /* UniversalLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLinkTests.swift; sourceTree = "<group>"; };
-		3C6C394126283EA900CC7433 /* RequestTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTokenTests.swift; sourceTree = "<group>"; };
+		3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalLinkTests.swift; sourceTree = "<group>"; };
+		3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTokenTests.swift; sourceTree = "<group>"; };
 		3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenValidatorSpy.swift; sourceTree = "<group>"; };
 		3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLink.swift; sourceTree = "<group>"; };
-		3CF42A2F2628B67D00AAC3B2 /* TokenEntryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryViewModelTests.swift; sourceTree = "<group>"; };
+		3CF42A2F2628B67D00AAC3B2 /* TokenEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryTests.swift; sourceTree = "<group>"; };
+		3CF8F771262ED730005CE5D2 /* SnapshotTesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTesting.swift; sourceTree = "<group>"; };
 		3CFB83B5262DB4B80012C5C2 /* Fakes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fakes.swift; sourceTree = "<group>"; };
 		6D0022B225DBC2C000E91084 /* configuration-acceptance.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-acceptance.plist"; sourceTree = "<group>"; };
 		6D0022B825DBC3FA00E91084 /* configuration-production.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "configuration-production.plist"; sourceTree = "<group>"; };
@@ -949,6 +951,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C565B0F262ECBBB00E17DD7 /* SnapshotTesting in Frameworks */,
 				3C195CE7262090E5002F0387 /* ViewControllerPresentationSpy.framework in Frameworks */,
 				3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */,
 				3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */,
@@ -985,11 +988,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		3C6C39392627655B00CC7433 /* Model */ = {
+		3C565B1E262ECE0200E17DD7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3C6C394126283EA900CC7433 /* RequestTokenTests.swift */,
-				3C6C393C2627658400CC7433 /* UniversalLinkTests.swift */,
+				3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */,
+				3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -997,7 +1000,7 @@
 		3CF42A2C2628B66C00AAC3B2 /* TokenEntry */ = {
 			isa = PBXGroup;
 			children = (
-				3CF42A2F2628B67D00AAC3B2 /* TokenEntryViewModelTests.swift */,
+				3CF42A2F2628B67D00AAC3B2 /* TokenEntryTests.swift */,
 			);
 			path = TokenEntry;
 			sourceTree = "<group>";
@@ -1112,8 +1115,9 @@
 				3CFB83B5262DB4B80012C5C2 /* Fakes.swift */,
 				6D20239225CAB15E00CFCD14 /* NavigationControllerSpy.swift */,
 				6DBECC8F26258C7400DF63B1 /* Services */,
-				3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */,
 				6DD23FC225E3F07900CE4AEB /* ViewControllerSpy.swift */,
+				3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */,
+				3CF8F771262ED730005CE5D2 /* SnapshotTesting.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1545,8 +1549,8 @@
 		6DB080A925BB0EF300A56B22 /* Infrastrucure */ = {
 			isa = PBXGroup;
 			children = (
+				3C565B1E262ECE0200E17DD7 /* Model */,
 				6D33016B25CFF0EE00A98C1C /* Crypto */,
-				3C6C39392627655B00CC7433 /* Model */,
 				6DB080AA25BB0F0500A56B22 /* Services */,
 				6D12746125FE39B7001B9515 /* Utilities */,
 			);
@@ -2152,6 +2156,7 @@
 				3C195CD826208813002F0387 /* OHHTTPStubs */,
 				3C195CDA26208813002F0387 /* OHHTTPStubsSwift */,
 				3CF42A292628B51100AAC3B2 /* Nimble */,
+				3C565B0E262ECBBB00E17DD7 /* SnapshotTesting */,
 			);
 			productName = CoronaTesterTests;
 			productReference = 6DDEFB0625AEDCAA00A6912A /* CTRTests.xctest */;
@@ -2194,6 +2199,7 @@
 				3C195C8826207F0D002F0387 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */,
 				3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */,
+				3C565B0D262ECBBA00E17DD7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			productRefGroup = 6DDEFAF125AEDCA800A6912A /* Products */;
 			projectDirPath = "";
@@ -2837,6 +2843,7 @@
 				6DD23FA125E3D64600CE4AEB /* ListResultsViewControllerTests.swift in Sources */,
 				6DBECC942625902A00DF63B1 /* ForcedInformationDelegateSpy.swift in Sources */,
 				6D3A06D1261445E5004E6843 /* AboutViewControllerTests.swift in Sources */,
+				3CF8F772262ED730005CE5D2 /* SnapshotTesting.swift in Sources */,
 				6D0FD4C926037EEF00187946 /* AppointmentViewControllerTests.swift in Sources */,
 				6D2023C625CABC8A00CFCD14 /* OnboardingCoordinatorTests.swift in Sources */,
 				6D68CAD125CC164C008FE2C8 /* CryptoManagerSpy.swift in Sources */,
@@ -2846,6 +2853,7 @@
 				6DB080AC25BB0F4800A56B22 /* APIClientTests.swift in Sources */,
 				6DBECCA92625966100DF63B1 /* ForcedInformationCoordinatorDelegateSpy.swift in Sources */,
 				6DB892FD2611AE5A00C52A7C /* SnapshotViewControllerTests.swift in Sources */,
+				3C565B21262ECE0200E17DD7 /* UniversalLinkTests.swift in Sources */,
 				6DC8F29B262588A000C190E6 /* ForcedInformationCoordinatorTests.swift in Sources */,
 				6D12746325FE39D6001B9515 /* TokenValidatorTests.swift in Sources */,
 				6D0FD4C126037D9200187946 /* AppointmentViewModelTests.swift in Sources */,
@@ -2874,6 +2882,7 @@
 				6DD23FB525E3EA8F00CE4AEB /* MenuViewControllerTests.swift in Sources */,
 				6D33016E25CFF19000A98C1C /* CryptoUtilityTests.swift in Sources */,
 				6DD23FBB25E3EF1100CE4AEB /* HolderCoordinatorTests.swift in Sources */,
+				3C565B22262ECE0200E17DD7 /* RequestTokenTests.swift in Sources */,
 				6DFCC7292625A83E0019FC9F /* ForcedInformationManagerTests.swift in Sources */,
 				6D3A06D926144770004E6843 /* LaunchViewControllerTests.swift in Sources */,
 				6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */,
@@ -2885,10 +2894,7 @@
 				6DC6CC3D25C2A6D400060237 /* AppUpdateViewControllerTests.swift in Sources */,
 				6D037A3725E67603006C2BFA /* EnlargedQRViewModelTests.swift in Sources */,
 				3CFB83B6262DB4B80012C5C2 /* Fakes.swift in Sources */,
-				6D70FE04262D8C39009A7A99 /* VerifierStartViewModelTests.swift in Sources */,
-				3C6C393D2627658400CC7433 /* UniversalLinkTests.swift in Sources */,
-				3CF42A302628B67D00AAC3B2 /* TokenEntryViewModelTests.swift in Sources */,
-				3C6C394426283EA900CC7433 /* RequestTokenTests.swift in Sources */,
+				3CF42A302628B67D00AAC3B2 /* TokenEntryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3904,6 +3910,14 @@
 				minimumVersion = 9.1.0;
 			};
 		};
+		3C565B0D262ECBBA00E17DD7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.2;
+			};
+		};
 		3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Quick/Nimble";
@@ -3994,6 +4008,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */;
 			productName = OHHTTPStubsSwift;
+		};
+		3C565B0E262ECBBB00E17DD7 /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3C565B0D262ECBBA00E17DD7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
 		};
 		3CF42A292628B51100AAC3B2 /* Nimble */ = {
 			isa = XCSwiftPackageProductDependency;

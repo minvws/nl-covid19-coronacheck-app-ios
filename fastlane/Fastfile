@@ -22,7 +22,7 @@ platform :ios do
 
     run_tests(
       app_name: "CTR",
-      device: "iPhone 12 (14.4) [",
+      device: "iPhone 12",
       project: "CTR.xcodeproj",
       scheme: "CoronaCheck",
       reinstall_app: true,

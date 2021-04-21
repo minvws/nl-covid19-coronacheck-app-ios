@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import SnapshotTesting
 
 class ScanInstructionsViewControllerTests: XCTestCase {
 
@@ -48,6 +49,8 @@ class ScanInstructionsViewControllerTests: XCTestCase {
 		expect(self.sut.title) == .verifierScanInstructionsTitle
 		expect(self.sut.sceneView.stackView.arrangedSubviews)
 			.to(haveCount(10), description: "There should be 10 items")
+
+        sut.assertImage()
 	}
 
 	func test_primaryButtonTapped() {

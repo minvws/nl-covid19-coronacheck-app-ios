@@ -171,6 +171,15 @@
           "revision": "5d66f7ba25daf4f94100e7022febf3c75e37a6c7",
           "version": "1.4.2"
         }
+      },
+      {
+        "package": "SnapshotTesting",
+        "repositoryURL": "https://github.com/pointfreeco/swift-snapshot-testing",
+        "state": {
+          "branch": null,
+          "revision": "c466812aa2e22898f27557e2e780d3aad7a27203",
+          "version": "1.8.2"
+        }
       }
     ]
   },
