@@ -11,7 +11,9 @@ import Foundation
 import XCTest
 import Nimble
 @testable import CTR
+import SnapshotTesting
 
+/// (Experimentally) combines TokenEntryViewModel tests and TokenEntryViewController snapshot tests
 class TokenEntryViewModelTests: XCTestCase {
 
     private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
@@ -41,6 +43,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.secondaryButtonTitle).to(beNil())
         expect(self.sut.secondaryButtonEnabled) == false
         expect(self.sut.showError) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_initialState_withRequestToken() {
@@ -56,6 +60,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.secondaryButtonTitle).to(beNil())
         expect(self.sut.secondaryButtonEnabled) == false
         expect(self.sut.showError) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_withoutInitialRequestToken_makesNoCallToProofManager() {
@@ -76,6 +82,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.enableNextButton) == false
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_handleInput_withInvalidToken_disablesNextButtonAndHidesVerification() {
@@ -94,6 +102,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.showVerification) == false
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_handleInput_withValidToken_hidingVerification_enablesNextButtonAndHidesVerification() {
@@ -112,6 +122,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == true
         expect(self.sut.showVerification) == false
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_handleInput_withEmptyTokenInput_withEmptyVerificationInput_disablesNextButton() {
@@ -128,6 +140,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
 
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_handleInput_withEmptyTokenInput_withNonemptyVerificationInput_enablesNextButton() {
@@ -144,6 +158,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == true
 
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     // MARK: - Next Button Pressed
@@ -158,6 +174,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     // MARK: - nextButtonPressed withNonemptyVerificationInput
@@ -172,6 +190,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_fetchesProviders() {
@@ -185,6 +205,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
         expect(self.sut.errorMessage).to(beNil())
         expect(self.sut.showProgress) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_success_stopsProgress() {
@@ -201,6 +223,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showProgress) == false
 
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_failure_stopsProgressAndShowsError() {
@@ -220,6 +244,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showError) == true
 
         expect(self.proofManagerSpy.invokedGetTestProvider) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withUnidentifiableTestProvider_showsErrorMessage() {
@@ -235,6 +261,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.showProgress) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_startsProgress() {
@@ -250,6 +278,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.errorMessage).to(beNil())
         expect(self.sut.showProgress) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
@@ -269,6 +299,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == validToken
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code) == verificationInput
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
@@ -287,6 +319,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
@@ -305,6 +339,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_showsErrorAndResetsUIForVerification() {
@@ -328,6 +364,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showVerification) == true
         expect(self.sut.showVerification) == true
         expect(self.sut.enableNextButton) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_invalid_showsError() {
@@ -345,6 +383,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_unknown_showsError() {
@@ -363,6 +403,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.errorMessage) == "Unhandled: unknown"
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
@@ -381,6 +423,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_failure_showsError() {
@@ -400,6 +444,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.errorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
         expect(self.sut.showError) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     // MARK: - nextButtonPressed withEmptyVerificationInput
@@ -417,6 +463,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidTokenInput
 
         expect(self.sut.errorMessage) == String.holderTokenEntryErrorInvalidCode
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withLowercaseTokenInput_createsTokenWithUppercaseInput() {
@@ -433,6 +481,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validLowercaseToken.uppercased()
         expect(self.sut.showProgress) == true
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_callsFetchProviders() {
@@ -447,6 +497,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_success_stopsProgress() {
@@ -463,6 +515,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showProgress) == false
 
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_failure_stopsProgressAndShowsError() {
@@ -482,6 +536,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showError) == true
 
         expect(self.proofManagerSpy.invokedGetTestProvider) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
@@ -497,6 +553,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.showProgress) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_startsProgress() {
@@ -512,6 +570,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.errorMessage).to(beNil())
         expect(self.sut.showProgress) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
@@ -529,6 +589,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
@@ -545,6 +607,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
@@ -561,6 +625,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_codeIsEmpty_resetsUIForVerification() {
@@ -581,6 +647,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showVerification) == true
         expect(self.sut.showVerification) == true
         expect(self.sut.enableNextButton) == false
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_invalid_showsError() {
@@ -597,6 +665,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_unknown_showsError() {
@@ -613,6 +683,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.errorMessage) == "Unhandled: unknown"
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
@@ -629,6 +701,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_failure_showsError() {
@@ -646,6 +720,8 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.sut.errorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
         expect(self.sut.showError) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     func test_handleInput_withValidToken_showingVerification_enablesNextButtonAndShowsVerification() {
@@ -670,6 +746,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == true
         expect(self.sut.showVerification) == true
         expect(self.sut.errorMessage).to(beNil())
+
+        TokenEntryViewController(viewModel: sut).assertImage()
     }
 
     // MARK: - Sugar
