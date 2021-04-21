@@ -9,12 +9,10 @@ import UIKit
 import SafariServices
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
+
+	func showPrivacyPage()
 	
-	/// Show the privacy page
-	/// - Parameter viewController: the presenting viewcontroller
-	func showPrivacyPage(_ viewController: UIViewController)
-	
-	/// Dismiss the presented viewcontroller
+	/// Dismiss the presented viewController
 	func dismiss()
 	
 	/// The onboarding is finished
@@ -106,14 +104,24 @@ extension OnboardingCoordinator: OpenUrlProtocol {
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	
-	/// Show the privacy page
-	/// - Parameter viewController: the presenting view controller
-	func showPrivacyPage(_ viewController: UIViewController) {
+	func showPrivacyPage() {
 
-		openUrl( generalConfiguration.getPrivacyPolicyURL(), inApp: true)
+		let urlString: String
+
+		if AppFlavor.flavor == .holder {
+			urlString = .holderUrlPrivacy
+		} else {
+			urlString = .verifierUrlPrivacy
+		}
+
+		guard let privacyUrl = URL(string: urlString) else {
+			logError("No privacy url for \(urlString)")
+			return
+		}
+		openUrl(privacyUrl, inApp: true)
 	}
 
-	/// Dismiss the presented viewcontroller
+	/// Dismiss the presented viewController
 	func dismiss() {
 		
 		presentingViewController?.dismiss(animated: true, completion: nil)

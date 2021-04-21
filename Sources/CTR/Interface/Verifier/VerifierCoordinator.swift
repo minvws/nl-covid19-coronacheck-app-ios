@@ -216,7 +216,10 @@ extension VerifierCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationContoller
 				
 			case .support:
-				let faqUrl = generalConfiguration.getVerifierFAQURL()
+				guard let faqUrl = URL(string: .verifierUrlFAQ) else {
+					logError("No verifier faq url")
+					return
+				}
 				openUrl(faqUrl, inApp: true)
 				
 			case .about :
@@ -226,11 +229,14 @@ extension VerifierCoordinator: MenuDelegate {
 						flavor: AppFlavor.flavor
 					)
 				)
-				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-				sidePanel?.selectedViewController = aboutNavigationContoller
+				aboutNavigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationController
 				
 			case .privacy :
-				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
+				guard let privacyUrl = URL(string: .verifierUrlPrivacy) else {
+					logError("No holder privacy url")
+					return
+				}
 				openUrl(privacyUrl, inApp: true)
 				
 			default:

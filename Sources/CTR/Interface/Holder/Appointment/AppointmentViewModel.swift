@@ -15,9 +15,6 @@ class AppointmentViewModel: Logging {
 	/// Coordination Delegate
 	weak var coordinator: OpenUrlProtocol?
 
-	/// The general configuration
-	var generalConfiguration: ConfigurationGeneralProtocol
-
 	/// The header image
 	@Bindable private(set) var image: UIImage?
 
@@ -30,41 +27,34 @@ class AppointmentViewModel: Logging {
 	/// The information body of the scene
 	@Bindable private(set) var body: String
 
-	/// The underlined and linked part of the body
-	@Bindable private(set) var linkedBody: String
-
 	/// The title on the button
 	@Bindable private(set) var buttonTitle: String
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-
-	init(coordinator: OpenUrlProtocol, maxValidity: String, configuration: ConfigurationGeneralProtocol) {
+	///   - maxValidity: the maximum validity of a test result
+	init(coordinator: OpenUrlProtocol, maxValidity: String) {
 
 		self.coordinator = coordinator
-		self.generalConfiguration = configuration
 
 		self.title = .holderAppointmentTitle
 		self.header = .holderAppointmentHeader
 		self.body = String(format: .holderAppointmentBody, maxValidity, maxValidity)
-		self.linkedBody = .holderAppointmentLink
 		self.buttonTitle = .holderAppointmentButtonTitle
 		self.image = UIImage.appointment
 	}
 
-	/// The user wants more information
-	func linkedTapped() {
+	func openUrl(_ url: URL) {
 
-		logInfo("Tapped on read more about test appointment")
-		coordinator?.openUrl(generalConfiguration.getHolderFAQURL(), inApp: true)
+		coordinator?.openUrl(url, inApp: true)
 	}
 
 	/// The user wants to create an appointment
 	func buttonTapped() {
 
 		logInfo("Create appointment tapped")
-		if let url = URL(string: "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app") {
+		if let url = URL(string: .holderUrlAppointment) {
 			coordinator?.openUrl(url, inApp: true)
 		}
 	}
