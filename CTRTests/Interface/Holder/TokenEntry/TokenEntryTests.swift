@@ -799,7 +799,33 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    // MARK: - DisplayMode: inputVerificationCode (hiding tokenEntry field)
+    // MARK: - Skipping the entry when no verification is needed:
+
+    func test_withInitialRequestToken_whenNoVerificationIsRequired_shouldHideTheInputFields() {
+        // Arrange
+        proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+        proofManagerSpy.stubbedGetTestProviderResult = .fake
+        proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+        proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+
+        // Act
+        sut = mockedViewModel(withRequestToken: .fake)
+
+        // Assert
+        expect(self.sut.showProgress) == false
+        expect(self.sut.shouldShowTokenEntryField) == false
+        expect(self.sut.shouldShowVerificationEntryField) == false
+        expect(self.sut.enableNextButton) == false
+        expect(self.sut.message).to(beNil())
+        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.secondaryButtonTitle).to(beNil())
+        expect(self.sut.secondaryButtonEnabled) == false
+        expect(self.sut.showError) == false
+
+        expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+
+        TokenEntryViewController(viewModel: sut).assertImage()
+    }
 
     // MARK: - Sugar
 

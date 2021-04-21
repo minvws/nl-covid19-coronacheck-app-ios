@@ -35,7 +35,20 @@ class TokenEntryViewModel {
 //        }
 //    }
 
-    private var verificationCodeIsKnownToBeRequired = false
+    private var verificationCodeIsKnownToBeRequired = false {
+        didSet {
+            update(
+                inputMode: calculateInputMode(
+                    tokenValidityIndicator: true,
+                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
+                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
+                    isInProgress: showProgress,
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted
+                )
+            )
+        }
+    }
 
     // Applies the outcome of a decision about the new InputMode
     // i.e. does not make any decisions
@@ -66,8 +79,7 @@ class TokenEntryViewModel {
                 if wasInitializedWithARequestToken {
                     title = "Testresultaat ophalen" // TODO
                     message = "Vul jouw verficatie code in.." // TODO
-                }
-                else {
+                } else {
                     title = .holderTokenEntryTitle
                     message = .holderTokenEntryText
                 }
@@ -88,7 +100,8 @@ class TokenEntryViewModel {
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
                     isInProgress: showProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted
                 )
             )
         }
@@ -136,6 +149,23 @@ class TokenEntryViewModel {
 
     private var hasEverPressedNextButton: Bool = false
 
+    // Hopefully can remove this after a refactor.
+    // Indicates that we've forwarded to the coordinator and there's nothing left to do
+    private var screenHasCompleted: Bool = false {
+        didSet {
+            update(
+                inputMode: calculateInputMode(
+                    tokenValidityIndicator: true,
+                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
+                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
+                    isInProgress: showProgress,
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted
+                )
+            )
+        }
+    }
+
 	// MARK: - Initializer
 
 	/// - Parameters:
@@ -158,14 +188,6 @@ class TokenEntryViewModel {
 		if let unwrappedToken = requestToken {
             self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
             self.wasInitializedWithARequestToken = true
-//            update(
-//                inputMode: calculateInputMode(
-//                    tokenValidityIndicator: nil,
-//                    wasInitialisedWithARefreshToken: true,
-//                    verificationCodeIsKnownToBeRequired: false,
-//                    isInProgress: false
-//                )
-//            )
 
             fetchProviders(unwrappedToken)
 		} else {
@@ -178,7 +200,8 @@ class TokenEntryViewModel {
                     wasInitialisedWithARefreshToken: false,
                     verificationCodeIsKnownToBeRequired: false,
                     isInProgress: false,
-                    hasEverPressedNextButton: hasEverPressedNextButton
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted
                 )
             )
 		}
@@ -209,7 +232,8 @@ class TokenEntryViewModel {
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
                     isInProgress: showProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted
                 )
             )
 			return
@@ -232,8 +256,7 @@ class TokenEntryViewModel {
 
         if wasInitializedWithARequestToken {
             nextButtonPressedDuringInitialRequestTokenFlow(tokenInput, verificationInput: verificationInput)
-        }
-        else {
+        } else {
             nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
         }
 	}
@@ -309,7 +332,8 @@ class TokenEntryViewModel {
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
                     isInProgress: false,
-                    hasEverPressedNextButton: hasEverPressedNextButton)
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted)
             )
 
 			return
@@ -328,7 +352,8 @@ class TokenEntryViewModel {
 				case let .success(wrapper):
 					switch wrapper.status {
 						case .complete, .pending:
-							self?.coordinator?.navigateToListResults()
+                            self?.screenHasCompleted = true
+                            self?.coordinator?.navigateToListResults()
 						case .verificationRequired:
 							self?.handleVerificationRequired()
 						case .invalid:
@@ -361,16 +386,6 @@ class TokenEntryViewModel {
 		startResendTimer()
         verificationCodeIsKnownToBeRequired = true
 		enableNextButton = false
-
-        update(
-            inputMode: calculateInputMode(
-                tokenValidityIndicator: true,
-                wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                isInProgress: showProgress,
-                hasEverPressedNextButton: hasEverPressedNextButton
-            )
-        )
 	}
 
 	// MARK: Resend SMS Countdown
@@ -423,11 +438,14 @@ private func calculateInputMode(
     wasInitialisedWithARefreshToken: Bool,
     verificationCodeIsKnownToBeRequired: Bool,
     isInProgress: Bool,
-    hasEverPressedNextButton: Bool
+    hasEverPressedNextButton: Bool,
+    screenHasCompleted: Bool
 ) -> TokenEntryViewModel.InputMode {
 
     if wasInitialisedWithARefreshToken {
-        if isInProgress && !hasEverPressedNextButton {
+        if screenHasCompleted {
+            return .none
+        } else if isInProgress && !hasEverPressedNextButton {
             return .none
         } else {
             return .inputVerificationCode
