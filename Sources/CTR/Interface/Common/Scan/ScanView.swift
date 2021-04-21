@@ -135,7 +135,11 @@ class ScanView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight, alignment: .center)
+			messageLabel.attributedText = message?.setLineHeight(
+				ViewTraits.messageLineHeight,
+				alignment: .center,
+				textColor: .white
+			)
 		}
 	}
 }
