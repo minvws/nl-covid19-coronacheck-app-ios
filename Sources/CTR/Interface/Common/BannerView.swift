@@ -47,10 +47,18 @@ class BannerView: BaseView {
 		return Label(bodySemiBold: nil).multiline()
 	}()
 
-	/// The message label
-	let messageLabel: Label = {
+	/// The message text view
+	let messageTextView: UITextView = {
 
-		return Label(footnote: nil).multiline()
+		let view = UITextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isScrollEnabled = false
+		view.isEditable = false
+		view.isSelectable = false
+		view.textContainer.lineFragmentPadding = 0
+		view.backgroundColor = nil
+		view.textContainerInset = .zero
+		return view
 	}()
 
 	/// Setup all the views
@@ -58,9 +66,11 @@ class BannerView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = .clear
-		titleLabel.textColor = Theme.colors.secondary
-		messageLabel.textColor = Theme.colors.secondary
-		closeButton.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
+		closeButton.addTarget(
+			self,
+			action: #selector(primaryButtonTapped),
+			for: .touchUpInside
+		)
 		backgroundColor = Theme.colors.bannerBackgroundColor
 		closeButton.backgroundColor = Theme.colors.bannerBackgroundColor
 	}
@@ -71,7 +81,7 @@ class BannerView: BaseView {
 		super.setupViewHierarchy()
 		addSubview(bannerImageView)
 		addSubview(titleLabel)
-		addSubview(messageLabel)
+		addSubview(messageTextView)
 		addSubview(closeButton)
 	}
 
@@ -111,17 +121,29 @@ class BannerView: BaseView {
 			titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
 
 			// Message
-			messageLabel.leadingAnchor.constraint(
+			messageTextView.leadingAnchor.constraint(
 				equalTo: bannerImageView.trailingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
-			messageLabel.topAnchor.constraint(
+			messageTextView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
+			messageTextView.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: 4
 			),
-			messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
+			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
 		])
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		titleLabel.accessibilityTraits = .header
+		closeButton.accessibilityLabel = .close
+		bannerImageView.accessibilityTraits = .staticText
+		bannerImageView.accessibilityLabel = .notification
+		accessibilityElements = [bannerImageView, titleLabel, messageTextView, closeButton]
 	}
 
 	/// User tapped on the primary button
@@ -135,20 +157,50 @@ class BannerView: BaseView {
 	/// The title
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(kerning: ViewTraits.titleKerning)
+			titleLabel.attributedText = title?.setLineHeight(
+				kerning: ViewTraits.titleKerning,
+				textColor: Theme.colors.secondary
+			)
 		}
 	}
 
-	/// The message
+	/// The  message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.footnote,
-				textColor: Theme.colors.secondary,
-				lineHeight: 18
-			)
+			messageTextView.text = message
 		}
+	}
+
+	/// Underline part ot the message
+	/// - Parameter text: the text to underline
+	func underline(_ text: String?) {
+
+		guard let underlinedText = text,
+			  let messageText = message else {
+			return
+		}
+
+		let output = NSMutableAttributedString(
+			string: messageText,
+			attributes: [
+				NSAttributedString.Key.font: Theme.fonts.footnote,
+				NSAttributedString.Key.foregroundColor: Theme.colors.secondary
+			]
+		)
+
+		if let range = output.string.range(of: underlinedText) {
+			let attributes: [NSAttributedString.Key: Any] = [
+				.link: underlinedText,
+				.underlineStyle: NSUnderlineStyle.single.rawValue
+			]
+			output.addAttributes(attributes, range: NSRange(range, in: output.string))
+		}
+
+		messageTextView.attributedText = output
+		messageTextView.linkTextAttributes = [
+			.foregroundColor: Theme.colors.secondary,
+			.underlineColor: Theme.colors.secondary
+		]
 	}
 
 	/// The icon

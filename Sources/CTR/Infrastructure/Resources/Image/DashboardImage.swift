@@ -11,7 +11,11 @@ extension UIImage {
 
 	static var appointment: UIImage? { return UIImage(named: "Appointment") }
 
+	static var appointmentTile: UIImage? { return UIImage(named: "AppointmentTile") }
+
 	static var create: UIImage? { return UIImage(named: "CreateQR") }
+
+	static var createTile: UIImage? { return UIImage(named: "CreateTile") }
 
 	static var radio: UIImage? { return UIImage(named: "Radio") }
 

@@ -10,6 +10,10 @@ import XCTest
 
 class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 
+	func getAutoCloseTime() -> TimeInterval {
+		return 10
+	}
+
 	func getTestResultWarningTTL() -> Int {
 		return 10
 	}
@@ -23,10 +27,6 @@ class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 	}
 
 	func getPrivacyPolicyURL() -> URL {
-		return URL(string: "https:coronacheck.nl")!
-	}
-
-	func getHolderAboutAppURL() -> URL {
 		return URL(string: "https:coronacheck.nl")!
 	}
 

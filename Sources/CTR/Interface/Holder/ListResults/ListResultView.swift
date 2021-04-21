@@ -23,6 +23,14 @@ class ListResultView: BaseView {
 		static let messageTopMargin: CGFloat = 4.0
 	}
 
+	let accessibilityView: UIView = {
+
+		let view = UIView()
+		view.backgroundColor = .clear
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// The select image
 	let selectImageView: UIImageView = {
 		let view = UIImageView(image: .radio)
@@ -64,14 +72,6 @@ class ListResultView: BaseView {
 		return button
 	}()
 
-	let selectButton: UIButton = {
-
-		let button = UIButton()
-		button.setTitle("?", for: .normal)
-		button.translatesAutoresizingMaskIntoConstraints = false
-		return button
-	}()
-
 	let topLineView: UIView = {
 
 		let view = UIView()
@@ -92,16 +92,11 @@ class ListResultView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
-		infoLabel.textColor = Theme.colors.launchGray
-		messageLabel.textColor = Theme.colors.launchGray
+		infoLabel.textColor = Theme.colors.grey1
+		messageLabel.textColor = Theme.colors.grey1
 		disclaimerButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
-			for: .touchUpInside
-		)
-		selectButton.addTarget(
-			self,
-			action: #selector(selectButtonTapped),
 			for: .touchUpInside
 		)
 	}
@@ -118,7 +113,7 @@ class ListResultView: BaseView {
 		addSubview(messageLabel)
 		addSubview(infoLabel)
 		addSubview(bottomLineView)
-		addSubview(selectButton)
+		addSubview(accessibilityView)
 	}
 
 	/// Setup the constraints
@@ -134,7 +129,7 @@ class ListResultView: BaseView {
 				equalTo: leadingAnchor
 			),
 			headerLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor
+				equalTo: disclaimerButton.leadingAnchor
 			),
 			headerLabel.bottomAnchor.constraint(
 				equalTo: topLineView.topAnchor,
@@ -206,20 +201,6 @@ class ListResultView: BaseView {
 			bottomLineView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			bottomLineView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-			// Select Button
-			selectButton.topAnchor.constraint(
-				equalTo: topLineView.topAnchor
-			),
-			selectButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor
-			),
-			selectButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor
-			),
-			selectButton.bottomAnchor.constraint(
-				equalTo: bottomLineView.bottomAnchor
-			),
-
 			// Disclaimer button
 			disclaimerButton.topAnchor.constraint(
 				equalTo: topAnchor
@@ -232,20 +213,41 @@ class ListResultView: BaseView {
 			),
 			disclaimerButton.bottomAnchor.constraint(
 				equalTo: topLineView.bottomAnchor
-			)
+			),
+
+			// AccessibilityView
+			accessibilityView.topAnchor.constraint(equalTo: topLineView.topAnchor),
+			accessibilityView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			accessibilityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			accessibilityView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 
-	/// User tapped on the primary button
-	@objc func selectButtonTapped() {
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
 
-		selectButtonTappedCommand?()
+		super.setupAccessibility()
+
+		headerLabel.accessibilityTraits = .header
+		disclaimerButton.accessibilityLabel = .holderTestResultsDisclaimerAccessibility
+
+		accessibilityView.isAccessibilityElement = true
+		titleLabel.isAccessibilityElement = false
+		messageLabel.isAccessibilityElement = false
+		infoLabel.isAccessibilityElement = false
+
+		accessibilityElements = [headerLabel, disclaimerButton, accessibilityView]
 	}
 
 	/// User tapped on the primary button
 	@objc func disclaimerButtonTapped() {
 
 		disclaimerButtonTappedCommand?()
+	}
+
+	func setAccessibilityLabel() {
+
+		accessibilityView.accessibilityLabel = "\(title ?? "") \(message ?? "") \(info ?? "")"
 	}
 
 	// MARK: Public Access
@@ -264,6 +266,7 @@ class ListResultView: BaseView {
 				ViewTraits.titleLineHeight,
 				kerning: ViewTraits.titleKerning
 			)
+			setAccessibilityLabel()
 		}
 	}
 
@@ -274,6 +277,7 @@ class ListResultView: BaseView {
 				ViewTraits.messageLineHeight,
 				kerning: ViewTraits.messageKerning
 			)
+			setAccessibilityLabel()
 		}
 	}
 
@@ -284,12 +288,10 @@ class ListResultView: BaseView {
 				ViewTraits.messageLineHeight,
 				kerning: ViewTraits.messageKerning
 			)
+			setAccessibilityLabel()
 		}
 	}
 
 	/// The user tapped on the primary button
 	var disclaimerButtonTappedCommand: (() -> Void)?
-
-	/// The user tapped on the primary button
-	var selectButtonTappedCommand: (() -> Void)?
 }

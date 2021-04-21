@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import SafariServices
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
@@ -22,7 +21,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ attributes: Attributes)
+	func navigateToScanResult(_ scanResult: CryptoResult)
 
 	/// Display content
 	/// - Parameters:
@@ -31,53 +30,13 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func displayContent(title: String, content: [Content])
 }
 
-class VerifierCoordinator: Coordinator, Logging {
-	
-	var loggingCategory: String = "VerifierCoordinator"
-	
-	/// The UI Window
-	private var window: UIWindow
-	
-	/// The side panel controller
-	var sidePanel: SidePanelController?
-	
-	/// The onboardings manager
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-	
+class VerifierCoordinator: SharedCoordinator {
+
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
-	
-	/// The crypto manager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
 
-	/// The general configuration
-	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	
-	/// The Child Coordinators
-	var childCoordinators: [Coordinator] = []
-	
-	/// The navigation controller
-	var navigationController: UINavigationController
-	
-	/// The dashboard navigation controller
-	var dashboardNavigationContoller: UINavigationController?
-
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
-	}
-	
-	/// Initiatilzer
-	init(navigationController: UINavigationController, window: UIWindow) {
-		
-		self.navigationController = navigationController
-		self.window = window
-	}
-	
 	// Designated starter method
-	func start() {
+	override func start() {
 		
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
@@ -99,6 +58,15 @@ class VerifierCoordinator: Coordinator, Logging {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
+		} else if forcedInformationManager.needsUpdating {
+			// Show Forced Information
+			let coordinator = ForcedInformationCoordinator(
+				navigationController: navigationController,
+				forcedInformationManager: forcedInformationManager,
+				delegate: self
+			)
+			startChildCoordinator(coordinator)
+
 		} else {
 			
 			navigateToVerifierWelcome()
@@ -114,17 +82,15 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	func navigateToVerifierWelcome() {
 		
 		let menu = MenuViewController(
-			viewModel: MenuViewModel(
-				delegate: self,
-				versionSupplier: AppVersionSupplier()
-			)
+            viewModel: MenuViewModel(delegate: self)
 		)
-		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 		
 		let dashboardViewController = VerifierStartViewController(
 			viewModel: VerifierStartViewModel(
 				coordinator: self,
-				cryptoManager: cryptoManager
+				cryptoManager: cryptoManager,
+				proofManager: proofManager
 			)
 		)
 		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
@@ -155,40 +121,46 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	/// Navigate to the QR scanner
 	func navigateToScan() {
-
-//		navigateToScanResult(
-//			Attributes(
-//				cryptoAttributes:
-//					CrypoAttributes(
-//						birthDay: "27",
-//						birthMonth: "5",
-//						firstNameInitial: nil, //"R",
-//						lastNameInitial: "P",
-//						sampleTime: "1615467990",
-//						testType: "PCR"
-//					),
-//				unixTimeStamp: Int64(Date().timeIntervalSince1970)
-//			)
-//		)
-
+		
+		//		navigateToScanResult(
+		//			CryptoResult(
+		//				attributes:
+		//					Attributes(
+		//						cryptoAttributes:
+		//							CrypoAttributes(
+		//								birthDay: "27",
+		//								birthMonth: "5",
+		//								firstNameInitial: nil, // "R",
+		//								lastNameInitial: "P",
+		//								sampleTime: "1617689091",
+		//								testType: "PCR",
+		//								specimen: "1",
+		//								paperProof: "0"
+		//							),
+		//						unixTimeStamp: Int64(Date().timeIntervalSince1970)
+		//					),
+		//				errorMessage: nil
+		//			)
+		//		)
+		
 		let destination = VerifierScanViewController(
 			viewModel: VerifierScanViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager
 			)
 		)
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		
+        (sidePanel?.selectedViewController as? UINavigationController)?.setViewControllers([destination], animated: true)
 	}
 	
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ attributes: Attributes) {
+	func navigateToScanResult(_ cryptoResults: CryptoResult) {
 		
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				attributes: attributes,
+				cryptoResults: cryptoResults,
 				maxValidity: maxValidity
 			)
 		)
@@ -210,20 +182,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		)
 		let destination = UINavigationController(rootViewController: viewController)
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
-	}
-}
-
-// MARK: - Dismissable
-
-extension VerifierCoordinator: Dismissable {
-	
-	func dismiss() {
-		
-		if sidePanel?.selectedViewController?.presentedViewController != nil {
-			sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
-		} else {
-			(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: false)
-		}
 	}
 }
 
@@ -251,8 +209,14 @@ extension VerifierCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 				
 			case .about :
-				let aboutUrl = generalConfiguration.getVerifierAboutAppURL()
-				openUrl(aboutUrl, inApp: true)
+				let destination = AboutViewController(
+					viewModel: AboutViewModel(
+						versionSupplier: versionSupplier,
+						flavor: AppFlavor.flavor
+					)
+				)
+				aboutNavigationContoller = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationContoller
 				
 			case .privacy :
 				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
@@ -285,48 +249,5 @@ extension VerifierCoordinator: MenuDelegate {
 			MenuItem(identifier: .about, title: .verifierMenuAbout),
 			MenuItem(identifier: .privacy, title: .verifierMenuPrivacy)
 		]
-	}
-}
-
-// MARK: - OpenUrlProtocol
-
-extension VerifierCoordinator: OpenUrlProtocol {
-	
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool) {
-		
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			safariController.preferredControlTintColor = Theme.colors.primary
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
-	}
-}
-
-// MARK: - OnboardingDelegate
-
-extension VerifierCoordinator: OnboardingDelegate {
-	
-	/// User has seen all the onboarding pages
-	func finishOnboarding() {
-		
-		onboardingManager.finishOnboarding()
-	}
-	
-	/// The onboarding is finished
-	func consentGiven() {
-		
-		// Mark as complete
-		onboardingManager.consentGiven()
-		
-		// Remove child coordinator
-		if let onboardingCoorinator = childCoordinators.first {
-			removeChildCoordinator(onboardingCoorinator)
-		}
-		
-		// Navigate to Verifier Welcome.
-		navigateToVerifierWelcome()
 	}
 }

@@ -33,11 +33,6 @@ class AppUpdateViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-	/// Show always in portrait
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-
 	// MARK: View lifecycle
 	override func loadView() {
 
@@ -90,5 +85,33 @@ class AppUpdateViewController: BaseViewController {
 				handler: nil)
 		)
 		present(alertController, animated: true, completion: nil)
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		layoutForOrientation()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+		}
+	}
+
+	/// Layout for different orientations
+	func layoutForOrientation() {
+
+		if UIDevice.current.isSmallScreen || traitCollection.verticalSizeClass == .compact {
+			// Also hide on small screens
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

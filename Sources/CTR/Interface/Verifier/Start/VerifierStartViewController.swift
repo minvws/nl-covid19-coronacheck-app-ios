@@ -11,7 +11,7 @@ class VerifierStartViewController: BaseViewController {
 
 	private let viewModel: VerifierStartViewModel
 
-	let sceneView = VerifierStartView()
+	let sceneView = HeaderTitleMessageButtonView()
 
 	init(viewModel: VerifierStartViewModel) {
 
@@ -45,38 +45,49 @@ class VerifierStartViewController: BaseViewController {
 			self?.viewModel.primaryButtonTapped()
 		}
 
-		viewModel.$linkedMessage.binding = { [weak self] in
-
-			self?.sceneView.underline($0)
-			self?.setupLink()
-		}
-
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
 				self?.showError(.errorTitle, message: .verifierStartInternet)
 			}
 		}
 
-		sceneView.imageView.image = .scanStart
+		sceneView.contentTextView.linkTouched { [weak self] _ in
+
+			self?.viewModel.linkTapped()
+		}
+
+		sceneView.headerImage = .scanStart
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
     }
 
-	// MARK: Helper methods
-
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-		sceneView.messageLabel.isUserInteractionEnabled = true
-	}
-
 	// MARK: User interaction
 
-	/// User tapped on the link
-	@objc func linkTapped() {
+	override func viewWillAppear(_ animated: Bool) {
 
-		viewModel.linkTapped(self)
+		super.viewWillAppear(animated)
+		layoutForOrientation()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	/// Layout for different orientations
+	func layoutForOrientation() {
+
+		if traitCollection.verticalSizeClass == .compact {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

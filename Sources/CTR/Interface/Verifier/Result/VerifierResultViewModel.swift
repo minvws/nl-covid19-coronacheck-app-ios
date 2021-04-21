@@ -30,7 +30,13 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	var proofValidator: ProofValidatorProtocol
 
 	/// The scanned attributes
-	var attributes: Attributes
+	var cryptoResults: (attributes: Attributes?, errorMessage: String?)
+
+	/// A timer auto close the scene
+	private var autoCloseTimer: Timer?
+
+	/// The identity with title numbers
+	private var identityWithTitles: [(String, String)] = []
 
 	// MARK: - Bindable properties
 
@@ -42,7 +48,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	/// The identity of the holder
 	@Bindable private(set) var identity: [(String, String)] = []
-	@Bindable private(set) var checkIdentity: [(String, String)] = []
 
 	/// The linked message of the scene
 	@Bindable var linkedMessage: String?
@@ -58,70 +63,117 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	/// Initialzier
 	/// - Parameters:
-	///   - coordinator: the dismissable delegae
-	///   - attributes: the decrypted attributes
+	///   - coordinator: the dismissable delegate
+	///   - scanResults: the decrypted attributes
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		attributes: Attributes,
+		cryptoResults: (Attributes?, String?),
 		maxValidity: Int) {
 
 		self.coordinator = coordinator
-		self.attributes = attributes
+		self.cryptoResults = cryptoResults
 
 		proofValidator = ProofValidator(maxValidity: maxValidity)
 		primaryButtonTitle = .verifierResultButtonTitle
 		super.init()
 
 		checkAttributes()
+		startAutoCloseTimer()
+	}
+
+	override func addObservers() {
+
+		// super will handle the PreventableScreenCapture observers
+		super.addObservers()
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(autoCloseScene),
+			name: UIApplication.didEnterBackgroundNotification,
+			object: nil
+		)
+	}
+
+	deinit {
+
+		stopAutoCloseTimer()
 	}
 
 	/// Check the attributes
 	internal func checkAttributes() {
 
-		guard !attributes.cryptoAttributes.isSpecimen else {
-			allowAccess = .demo
-			showAccessDemo()
+		/// The time is now!
+		let now = Date().timeIntervalSince1970
+		setDebugInformation(now)
+
+		guard let attributes = cryptoResults.attributes else {
+			allowAccess = .denied
+			showAccessDenied()
 			return
 		}
 
-		/// The time is now!
-		let now = Date().timeIntervalSince1970
-		if isQRTimeStampValid(now) && isSampleTimeValid(now) {
-			showAccessAllowed()
-			allowAccess = .verified
+		if isQRTimeStampValid(now, attributes: attributes) && isSampleTimeValid(now, attributes: attributes) {
 
-			let holder = HolderTestCredentials(
-				firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
-				lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
-				birthDay: attributes.cryptoAttributes.birthDay ?? "",
-				birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
-			)
-			let mapping = holder.mapIdentity(months: String.shortMonths)
-			for (index, element) in mapping.enumerated() {
-				identity.append(("", element.isEmpty ? "_" : element))
-				checkIdentity.append(("\(index + 1)", element.isEmpty ? "_" : element))
+			setHolderIdentity(attributes)
+			if attributes.cryptoAttributes.isSpecimen {
+				allowAccess = .demo
+				showAccessDemo()
+			} else {
+				allowAccess = .verified
+				showAccessAllowed()
 			}
 
 		} else {
-			showAccessDenied()
-			allowAccess = .denied
-		}
 
-		debugInfo = [
-			"QR Information",
-			"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: now)))",
-			"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
-			"---------------------",
-			"isSampleTimeValid: \(isSampleTimeValid(now))",
-			"TTL: \(proofValidator.maxValidity) hours",
-			"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
-			"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
-			"---------------------",
-			"isQRTimeStampValid: \(isQRTimeStampValid(now))",
-			"TTL: \(configuration.getQRGracePeriod()) seconds",
-			"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
-		]
+			allowAccess = .denied
+			showAccessDenied()
+		}
+	}
+
+	func setHolderIdentity(_ attributes: Attributes) {
+
+		let holder = TestHolderIdentity(
+			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
+			lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
+			birthDay: attributes.cryptoAttributes.birthDay ?? "",
+			birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
+		)
+		let mapping = holder.mapIdentity(months: String.shortMonths)
+		for (index, element) in mapping.enumerated() {
+			identity.append(("", element.isEmpty ? "_" : element))
+			identityWithTitles.append(("\(index + 1)", element.isEmpty ? "_" : element))
+		}
+	}
+
+	/// Set the debug information
+	/// - Parameter timestamp: the timestamp used for validation
+	func setDebugInformation(_ timestamp: TimeInterval) {
+
+		if let attributes = cryptoResults.attributes {
+
+			debugInfo = [
+				"QR Information",
+				"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: timestamp)))",
+				"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
+				"---------------------",
+				"isSampleTimeValid: \(isSampleTimeValid(timestamp, attributes: attributes))",
+				"TTL: \(proofValidator.maxValidity) hours",
+				"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
+				"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
+				"---------------------",
+				"isQRTimeStampValid: \(isQRTimeStampValid(timestamp, attributes: attributes))",
+				"TTL: \(configuration.getQRGracePeriod()) seconds",
+				"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
+			]
+		} else {
+			if let message = cryptoResults.errorMessage {
+				debugInfo = [
+					"QR Information",
+					"Error: \(message)"
+				]
+			}
+		}
 	}
 
 	/// Formatter to print
@@ -134,10 +186,10 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
-	/// Is the sample time still valid
+	/// Is the sample time still valid?
 	/// - Parameter now: the now time stamp
 	/// - Returns: True if the sample time stamp is still valid
-	private func isSampleTimeValid(_ now: TimeInterval) -> Bool {
+	private func isSampleTimeValid(_ now: TimeInterval, attributes: Attributes) -> Bool {
 
 		if let sampleTimeStamp = TimeInterval(attributes.cryptoAttributes.sampleTime) {
 			switch proofValidator.validate(sampleTimeStamp) {
@@ -152,10 +204,10 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return false
 	}
 
-	/// Is the QR timestamp stil valid
+	/// Is the QR timestamp stil valid?
 	/// - Parameter now: the now timestamp
 	/// - Returns: True if the QR time stamp is still valid
-	private func isQRTimeStampValid(_ now: TimeInterval) -> Bool {
+	private func isQRTimeStampValid(_ now: TimeInterval, attributes: Attributes) -> Bool {
 
 		guard !attributes.cryptoAttributes.isPaperProof else {
 			logInfo("this is a paper proof, ignore QR Timestamp")
@@ -172,7 +224,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		return false
 	}
 
-	/// Show access allowed
 	private func showAccessAllowed() {
 
 		title = .verifierResultAccessTitle
@@ -180,7 +231,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		linkedMessage = .verifierResultAccessLink
 	}
 
-	/// Show access denied
 	private func showAccessDenied() {
 
 		title = .verifierResultDeniedTitle
@@ -188,32 +238,32 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		linkedMessage = .verifierResultDeniedLink
 	}
 
-	/// Show access allowed
 	private func showAccessDemo() {
 
 		title = .verifierResultDemoTitle
-		message =  .verifierResultDemoMessage
-		linkedMessage = nil
+		message =  .verifierResultAccessMessage
+		linkedMessage = .verifierResultAccessLink
 	}
 
-	/// Dismiss ourselves
 	func dismiss() {
 
-		coordinator?.dismiss()
+		stopAutoCloseTimer()
+		coordinator?.navigateToVerifierWelcome()
 	}
+
+    func scanAgain() {
+
+		stopAutoCloseTimer()
+        coordinator?.navigateToScan()
+    }
 
 	func linkTapped() {
 
-		logDebug("Tapped on link")
-
 		switch allowAccess {
-			case .verified:
+			case .verified, .demo:
 				showVerifiedInfo()
 			case .denied:
 				showDeniedInfo()
-
-			default:
-				logDebug("No link for type \(allowAccess)")
 		}
 	}
 
@@ -234,7 +284,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		)
 
 		let identityView = IdentityView()
-		identityView.elements = checkIdentity
+		identityView.elements = identityWithTitles
 
 		coordinator?.displayContent(
 			title: .verifierResultCheckTitle,
@@ -262,5 +312,36 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			title: .verifierDeniedTitle,
 			content: [(label, 16), (label2, 0)]
 		)
+	}
+
+	// MARK: - AutoCloseTimer
+
+	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
+	private func startAutoCloseTimer() {
+
+		guard autoCloseTimer == nil else {
+			return
+		}
+
+		autoCloseTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
+			target: self,
+			selector: (#selector(autoCloseScene)),
+			userInfo: nil,
+			repeats: true
+		)
+	}
+
+	private func stopAutoCloseTimer() {
+
+		autoCloseTimer?.invalidate()
+		autoCloseTimer = nil
+	}
+
+	@objc private func autoCloseScene() {
+
+		logInfo("Auto closing the result view")
+		stopAutoCloseTimer()
+		dismiss()
 	}
 }

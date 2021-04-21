@@ -6,8 +6,8 @@
 */
 
 import XCTest
-@testable import CTR
 import ViewControllerPresentationSpy
+@testable import CTR
 
 class EnlargedQRViewControllerTests: XCTestCase {
 
@@ -67,7 +67,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test all the default content
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -75,10 +75,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.title, .holderEnlargedTitle, "Title should match")
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should not be shown")
 		XCTAssertNil(strongSut.sceneView.largeQRimageView.image, "There should be no image")
@@ -104,7 +101,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	}
 
 	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValid() {
+	func testValidityCredentialValid() throws {
 
 		// Given
 		setupValidCredential()
@@ -114,10 +111,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
 	}
@@ -162,7 +156,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	}
 
 	/// Test the validity of the credential with valid credential while screencapturing
-	func testValidityCredentialValidWithScreenCapture() {
+	func testValidityCredentialValidWithScreenCapture() throws {
 
 		// Given
 		setupValidCredential()
@@ -173,16 +167,13 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		viewModel?.hideForCapture = true
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should not be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
 	}
 
 	/// Test the security features
-	func testSecurityFeaturesAnimation() {
+	func testSecurityFeaturesAnimation() throws {
 
 		// Given
 		setupValidCredential()
@@ -193,10 +184,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
 		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
 		XCTAssertEqual(strongSut.sceneView.securityView.currentAnimation, .cyclistRightToLeft, "Animation should match")

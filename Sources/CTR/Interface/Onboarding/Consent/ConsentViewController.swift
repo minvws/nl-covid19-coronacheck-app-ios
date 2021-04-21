@@ -32,11 +32,6 @@ class ConsentViewController: BaseViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 
-	/// Show always in portrait
-	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-		return .portrait
-	}
-
 	// MARK: View lifecycle
 	override func loadView() {
 
@@ -63,10 +58,17 @@ class ConsentViewController: BaseViewController {
 
 		viewModel.$summary.binding = { [weak self] in
 
-			for item in $0 {
-				self?.sceneView.addPrivacyItem(item)
+			let total = $0.count
+			for (index, item) in $0.enumerated() {
+				self?.sceneView.addPrivacyItem(item, number: index + 1, total: total)
 			}
 		}
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+
+		super.viewDidAppear(animated)
+		sceneView.lineView.isHidden = !sceneView.scrollView.canScroll()
 	}
 
 	/// Setup a gesture recognizer for underlined text
@@ -95,5 +97,14 @@ class ConsentViewController: BaseViewController {
 		if sceneView.primaryButton.isEnabled {
 			viewModel.primaryButtonTapped()
 		}
+	}
+}
+
+extension UIScrollView {
+
+	func canScroll() -> Bool {
+
+		let totalHeight = contentSize.height
+		return totalHeight > frame.size.height
 	}
 }

@@ -13,9 +13,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
 
-	/// The previous brightness
 	var previousBrightness: CGFloat?
 
+    /// If your app is __not__ running, the system delivers
+    /// the Universal Link to this delegate method after launch:
 	func scene(
 		_ scene: UIScene,
 		willConnectTo session: UISceneSession,
@@ -30,7 +31,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		appCoordinator = AppCoordinator(scene: windowScene, navigationController: UINavigationController())
 		appCoordinator?.start()
+
+        // Possibly we launched via a Universal Link. If so, pass it to the AppCoordinator:
+        if let userActivity = connectionOptions.userActivities.first,
+           let activity = UniversalLink(userActivity: userActivity) {
+            appCoordinator?.receive(universalLink: activity)
+        }
 	}
+
+    /// If your app was __already running__ (or suspended in memory), this delegate
+    /// callback will receive the UserActivity when a universal link is tapped:
+    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+        guard let activity = UniversalLink(userActivity: userActivity) else { return }
+        appCoordinator?.receive(universalLink: activity)
+    }
 
 	func sceneDidDisconnect(_ scene: UIScene) {
 		// Called as the scene is being released by the system.

@@ -7,17 +7,16 @@
 
 import UIKit
 
-class TokenEntryView: ScrollView {
+class TokenEntryView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
 
 		// Dimensions
-		static let buttonHeight: CGFloat = 52
-		static let buttonWidth: CGFloat = 212.0
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
+		static let gradientHeight: CGFloat = 30.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -58,6 +57,7 @@ class TokenEntryView: ScrollView {
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.inputField.autocapitalizationType = .allCharacters
+		view.inputField.keyboardType = .numberPad
 		if #available(iOS 12.0, *) {
 			view.inputField.textContentType = .oneTimeCode
 		}
@@ -73,91 +73,80 @@ class TokenEntryView: ScrollView {
 		return view
 	}()
 
+	/// The message label
+	let textLabel: Label = {
+
+		return Label(subhead: nil).multiline()
+	}()
+
+	/// the secondary button
+	let secondaryButton: Button = {
+
+		let button = Button(title: "Button 1", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
+	private let spacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
+	}()
+
+	/// Setup all the views
+	override func setupViews() {
+
+		super.setupViews()
+		stackView.distribution = .fill
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
+	}
+
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		contentView.addSubview(titleLabel)
-		contentView.addSubview(messageLabel)
-		contentView.addSubview(tokenEntryView)
-		contentView.addSubview(verificationEntryView)
-		contentView.addSubview(errorView)
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(tokenEntryView)
+		stackView.setCustomSpacing(0, after: tokenEntryView)
+		stackView.addArrangedSubview(verificationEntryView)
+		stackView.setCustomSpacing(8, after: verificationEntryView)
+		stackView.addArrangedSubview(errorView)
+		stackView.setCustomSpacing(0, after: errorView)
+		stackView.addArrangedSubview(textLabel)
+		stackView.setCustomSpacing(8, after: textLabel)
+		stackView.addArrangedSubview(secondaryButton)
+		stackView.addArrangedSubview(spacer)
 	}
 
-	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
 
-			// Title
-			titleLabel.topAnchor.constraint(
-				equalTo: contentView.topAnchor,
-				constant: ViewTraits.titleTopMargin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.messageTopMargin
-			),
-
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			tokenEntryView.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			tokenEntryView.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			tokenEntryView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.margin
-			),
-
-			verificationEntryView.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			verificationEntryView.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			verificationEntryView.topAnchor.constraint(
-				equalTo: tokenEntryView.bottomAnchor,
-				constant: ViewTraits.entryMargin
-			),
-
-			errorView.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			errorView.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			errorView.topAnchor.constraint(
-				equalTo: verificationEntryView.bottomAnchor,
-				constant: ViewTraits.errorMargin
-			)
+			secondaryButton.heightAnchor.constraint(equalToConstant: 40),
+			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
+
+		setupPrimaryButton()
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
+	/// User tapped on the primary button
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -178,4 +167,21 @@ class TokenEntryView: ScrollView {
 			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
 		}
 	}
+
+	/// The  message
+	var text: String? {
+		didSet {
+			textLabel.text = text
+		}
+	}
+
+	/// The title of the secondary button
+	var secondaryTitle: String? {
+		didSet {
+			secondaryButton.setTitle(secondaryTitle, for: .normal)
+		}
+	}
+
+	/// The user tapped on the secondary button
+	var secondaryButtonTappedCommand: (() -> Void)?
 }

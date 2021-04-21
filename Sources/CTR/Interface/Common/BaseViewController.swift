@@ -37,13 +37,14 @@ class BaseViewController: UIViewController {
 			target: nil,
 			action: nil
 		)
+		backbutton.accessibilityLabel = .back
 
 		navigationController?.navigationBar.backIndicatorImage = .backArrow
 		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
 
 		backbutton.setTitleTextAttributes(
 			[
-				NSAttributedString.Key.font: Theme.fonts.bodyBold,
+				NSAttributedString.Key.font: Theme.fonts.bodyBoldFixed,
 				NSAttributedString.Key.foregroundColor: Theme.colors.dark
 			],
 			for: .normal

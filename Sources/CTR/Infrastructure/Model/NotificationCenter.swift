@@ -7,6 +7,7 @@
 
 import Foundation
 
+// A protocol for the notification center so it is mockable.
 protocol NotificationCenterProtocol {
 
 	func addObserver(

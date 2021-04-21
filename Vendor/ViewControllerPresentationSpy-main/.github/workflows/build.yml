@@ -1,0 +1,44 @@
+name: Build
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    name: Build without tests
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        run-config:
+          - { project: 'Source/ViewControllerPresentationSpy.xcodeproj', scheme: 'ViewControllerPresentationSpy-tvOS', sdk: 'appletvsimulator', destination: 'platform=tvOS Simulator,OS=latest,name=Apple TV' }
+          - { project: 'ObjCSample/ObjCSampleViewControllerPresentationSpy.xcodeproj', scheme: 'ObjCSampleViewControllerPresentationSpy', sdk: 'iphonesimulator', destination: 'platform=iOS Simulator,OS=latest,name=iPhone 8' }
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+      - name: Show current version of Xcode
+        run: xcodebuild -version
+      - name: Build
+        run: set -o pipefail && xcodebuild build -project '${{ matrix.run-config['project'] }}' -scheme '${{ matrix.run-config['scheme'] }}' -sdk '${{ matrix.run-config['sdk'] }}' -destination '${{ matrix.run-config['destination'] }}' | xcpretty
+
+  test:
+    name: Build & test
+    runs-on: macos-latest
+    env:
+      project: 'SwiftSample/SwiftSampleViewControllerPresentationSpy.xcodeproj'
+      scheme: 'SwiftSampleViewControllerPresentationSpy'
+      sdk: 'iphonesimulator'
+      destination: 'platform=iOS Simulator,OS=latest,name=iPad Air (4th generation)'
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+      - name: Show current version of Xcode
+        run: xcodebuild -version
+      - name: Build & test
+        run: set -o pipefail && xcodebuild test -project '${{ env.project }}' -scheme '${{ env.scheme }}' -sdk '${{ env.sdk }}' -destination '${{ env.destination }}' | xcpretty
+
+  podspec:
+    name: Pod Spec Lint
+    runs-on: macos-latest
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v2
+      - name: Lint the pod spec
+        run: pod spec lint --quick

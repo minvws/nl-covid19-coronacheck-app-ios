@@ -20,11 +20,6 @@ extension String {
 
 		return Localization.string(for: "holder.about.text")
 	}
-
-	static var holderAboutLink: String {
-
-		return Localization.string(for: "holder.about.link")
-	}
 }
 
 // MARK: Verifier
@@ -39,10 +34,5 @@ extension String {
 	static var verifierAboutText: String {
 
 		return Localization.string(for: "verifier.about.text")
-	}
-
-	static var verifierAboutLink: String {
-
-		return Localization.string(for: "verifier.about.link")
 	}
 }

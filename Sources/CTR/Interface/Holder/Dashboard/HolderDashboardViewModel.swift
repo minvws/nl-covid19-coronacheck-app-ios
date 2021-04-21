@@ -40,9 +40,6 @@ struct CardInfo {
 
 	/// The background color
 	let backgroundColor: UIColor?
-
-	/// The cut of the image
-	let imageRect: CGRect
 }
 
 /// The card information for QR
@@ -68,6 +65,9 @@ struct QRCardInfo {
 
 	/// the valid until date
 	let validUntil: String
+
+	/// the valid until date pronounced
+	let validUntilAccessibility: String
 }
 
 class HolderDashboardViewModel: PreventableScreenCapture, Logging {
@@ -91,7 +91,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	var proofValidator: ProofValidatorProtocol
 
 	/// The banner manager
-	var bannerManager: BannerManaging = BannerManager.shared
+	var bannerManager: NotificationBannerManaging = NotificationBannerManager.shared
 
 	/// the notification center
 	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
@@ -153,18 +153,16 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			title: .holderDashboardAppointmentTitle,
 			message: .holderDashboardAppointmentMessage,
 			actionTitle: .holderDashboardAppointmentAction,
-			image: .appointment,
-			backgroundColor: Theme.colors.appointment,
-			imageRect: CGRect(x: 0, y: 0, width: 0.7, height: 0.72)
+			image: .appointmentTile,
+			backgroundColor: Theme.colors.appointment
 		)
 		self.createCard = CardInfo(
 			identifier: .create,
 			title: .holderDashboardCreateTitle,
 			message: .holderDashboardCreateMessage,
 			actionTitle: .holderDashboardCreateAction,
-			image: .create,
-			backgroundColor: Theme.colors.create,
-			imageRect: CGRect(x: 0, y: 0, width: 0.77, height: 1)
+			image: .createTile,
+			backgroundColor: Theme.colors.create
 		)
 
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
@@ -177,6 +175,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// - Parameter identifier: the identifier of the card
 	func cardTapped(_ identifier: CardIdentifier) {
 
+		bannerManager.hideBanner()
 		switch identifier {
 			case .appointment:
 				coordinator?.navigateToAppointment()
@@ -192,7 +191,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 		guard let credential = cryptoManager?.readCredential() else {
 			qrCard = nil
-			showExpiredQR = false
 			validityTimer?.invalidate()
 			validityTimer = nil
 			setupCreateCard()
@@ -201,7 +199,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
 
-			let holder = HolderTestCredentials(
+			let holder = TestHolderIdentity(
 				firstNameInitial: credential.firstNameInitial ?? "",
 				lastNameInitial: credential.lastNameInitial ?? "",
 				birthDay: credential.birthDay ?? "",
@@ -209,16 +207,19 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			)
 			switch proofValidator.validate(sampleTimeStamp) {
 				case let .valid(validUntilDate):
-
+					showExpiredQR = false
 					showQRMessageIsValid(validUntilDate, holder: holder)
 					startValidityTimer()
 
 				case let .expiring(validUntilDate, timeLeft):
-
+					showExpiredQR = false
 					showQRMessageIsExpiring(validUntilDate, timeLeft: timeLeft, holder: holder)
 					startValidityTimer()
 
 				case .expired:
+
+					// Clear the cache
+					cryptoManager?.removeCredential()
 
 					logDebug("Proof is no longer valid")
 					showQRMessageIsExpired()
@@ -230,46 +231,53 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	}
 
 	/// Show the QR message is valid
-	/// - Parameter validUntil: valid until time
-	func showQRMessageIsValid(_ validUntil: Date, holder: HolderTestCredentials) {
+	/// - Parameters:
+	///   - validUntil: valid until time
+	///   - holder: the holder identity
+	func showQRMessageIsValid(
+		_ validUntil: Date,
+		holder: TestHolderIdentity) {
 
 		let validUntilDateString = printDateFormatter.string(from: validUntil)
 		logDebug("Proof is valid until \(validUntilDateString)")
+		let validUntilString = String(format: .holderDashboardQRMessage, validUntilDateString)
 
-		let identity = holder.mapIdentity(months: String.shortMonths).map({ $0.isEmpty ? "_" : $0 }).joined(separator: " ")
-		qrCard = QRCardInfo(
-			identifier: .qrcode,
-			title: .holderDashboardQRTitle,
-			message: .holderDashboardQRSubTitle,
-			holder: identity,
-			actionTitle: .holderDashboardQRAction,
-			image: .myQR,
-			validUntil: String(format: .holderDashboardQRMessage, validUntilDateString)
+		let accessibilityValidUntilDateString = accessibilityDateFormatter.string(from: validUntil)
+		let acceccibilityTimeString = getAccessibilityTime(validUntil)
+		let accessibiliyValidUntilString = String(format: .holderDashboardQRMessageAccessibility, accessibilityValidUntilDateString, acceccibilityTimeString)
+
+		makeQRCard(
+			validUntil: validUntilString,
+			validUntilAccessibility: accessibiliyValidUntilString,
+			holder: holder
 		)
-
-		showExpiredQR = false
 	}
 
-	/// Show the QR message is valid
-	/// - Parameter validUntil: valid until time
-	func showQRMessageIsExpiring(_ validUntil: Date, timeLeft: TimeInterval, holder: HolderTestCredentials) {
+	/// Show the QR message is valid, but expiring
+	/// - Parameters:
+	///   - validUntil: valid until time
+	///   - timeLeft: the time left until expiring
+	///   - holder: the holder identity
+	func showQRMessageIsExpiring(
+		_ validUntil: Date,
+		timeLeft: TimeInterval,
+		holder: TestHolderIdentity) {
 
 		let validUntilDateString = printDateFormatter.string(from: validUntil)
 		logDebug("Proof is valid until \(validUntilDateString), expiring in \(timeLeft)")
 
-		let identity = holder.mapIdentity(months: String.shortMonths).map({ $0.isEmpty ? "_" : $0 }).joined(separator: " ")
-		qrCard = QRCardInfo(
-			identifier: .qrcode,
-			title: .holderDashboardQRTitle,
-			message: .holderDashboardQRSubTitle,
-			holder: identity,
-			actionTitle: .holderDashboardQRAction,
-			image: .myQR,
-			validUntil: String(format: .holderDashboardQRExpiring, validUntilDateString, timeLeft.stringTime)
+		let validUntilString = String(format: .holderDashboardQRExpiring, validUntilDateString, timeLeft.stringTime)
+
+		let accessibilityValidUntilDateString = accessibilityDateFormatter.string(from: validUntil)
+		let acceccibilityTimeString = getAccessibilityTime(validUntil)
+		let accessibiliyValidUntilString = String(format: .holderDashboardQRExpiringAccessibility, accessibilityValidUntilDateString, acceccibilityTimeString, timeLeft.accessibilityTime)
+
+		makeQRCard(
+			validUntil: validUntilString,
+			validUntilAccessibility: accessibiliyValidUntilString,
+			holder: holder
 		)
-
-		showExpiredQR = false
-
+		
 		// Cut off at the cut off time
 		if timeLeft < 60 {
 			validityTimer?.invalidate()
@@ -281,6 +289,33 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 				repeats: true
 			)
 		}
+	}
+
+	/// Make the QR Card
+	/// - Parameters:
+	///   - validUntil: the valid until time string
+	///   - validUntilAccessibility: the valid until time string for pronouncation
+	///   - holder: the holder identity
+	func makeQRCard(
+		validUntil: String,
+		validUntilAccessibility: String,
+		holder: TestHolderIdentity) {
+
+		let identity = holder
+			.mapIdentity(months: String.shortMonths)
+			.map({ $0.isEmpty ? "_" : $0 })
+			.joined(separator: " ")
+
+		qrCard = QRCardInfo(
+			identifier: .qrcode,
+			title: .holderDashboardQRTitle,
+			message: .holderDashboardQRSubTitle,
+			holder: identity,
+			actionTitle: .holderDashboardQRAction,
+			image: .myQR,
+			validUntil: validUntil,
+			validUntilAccessibility: validUntilAccessibility
+		)
 	}
 
 	/// Show the QR Message is expired
@@ -309,7 +344,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// User wants to close the expired QR
 	func closeExpiredRQ() {
 
-		cryptoManager?.removeCredential()
+		showExpiredQR = false
 		checkQRValidity()
 	}
 
@@ -323,12 +358,34 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
+	/// Formatter for accessibility
+	private lazy var accessibilityDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "EEEE d MMMM"
+		return dateFormatter
+	}()
+
+	/// Get the accessibility time label
+	/// - Parameter date: the date to use
+	/// - Returns: The time of the message as a string
+	func getAccessibilityTime(_ date: Date) -> String {
+
+		let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+		return DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
+	}
+
 	@objc func showBanner() {
 
 		bannerManager.showBanner(
-			title: .holderBannerNewQRTitle,
-			message: .holderBannerNewQRMessage,
-			icon: UIImage.alert,
+			content: NotificationBannerContent(
+				title: .holderBannerNewQRTitle,
+				message: .holderBannerNewQRMessage,
+				link: .holderBannerNewQRMessageLink,
+				icon: UIImage.alert
+			),
 			callback: { [weak self] in
 
 				if let url = self?.configuration.getHolderFAQURL() {
@@ -345,9 +402,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			title: qrCard == nil ? .holderDashboardCreateTitle : .holderDashboardChangeTitle,
 			message: .holderDashboardCreateMessage,
 			actionTitle: qrCard == nil ? .holderDashboardCreateAction : .holderDashboardChangeAction,
-			image: .create,
-			backgroundColor: Theme.colors.create,
-			imageRect: CGRect(x: 0, y: 0, width: 0.77, height: 1)
+			image: .createTile,
+			backgroundColor: Theme.colors.create
 		)
 	}
 }
@@ -388,6 +444,27 @@ extension TimeInterval {
 			return "\(minutes) \(String.minute)"
 		} else {
 			return  "1 \(String.minute)"
+		}
+	}
+
+	var accessibilityTime: String {
+
+		if hours != 0 {
+			if minutes > 1 {
+				return "\(hours) \(String.hour) \(minutes) \(String.longMinutes)"
+			} else if minutes == 0 {
+				return "\(hours) \(String.hour)"
+			} else {
+				return "\(hours) \(String.hour) \(minutes) \(String.longMinute)"
+			}
+		} else if minutes != 0 {
+			if minutes > 1 {
+				return "\(minutes) \(String.longMinutes)"
+			} else {
+				return "\(minutes) \(String.longMinute)"
+			}
+		} else {
+			return  "1 \(String.longMinute)"
 		}
 	}
 }

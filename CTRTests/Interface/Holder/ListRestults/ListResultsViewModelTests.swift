@@ -49,7 +49,7 @@ class ListResultsViewModelTests: XCTestCase {
 			result: nil,
 			status: .pending
 		)
-		proofManagingSpy.testResultWrapper = pendingWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = pendingWrapper
 
 		// When
 		sut?.checkResult()
@@ -73,12 +73,11 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: "now",
 				testType: "test",
 				negativeResult: false,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = notNegativeWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = notNegativeWrapper
 
 		// When
 		sut?.checkResult()
@@ -102,21 +101,22 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: "2021-02-01T00:00:00+00:00",
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooOldWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = tooOldWrapper
 
 		// When
 		sut?.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
+		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
+		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
+		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultTooOld", "Identifier should match")
+
 	}
 
 	/// Test the check result method with a too new test result
@@ -133,21 +133,21 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = tooNewWrapper
+		proofManagingSpy.stubbedGetTestWrapperResult = tooNewWrapper
 
 		// When
 		sut?.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
+		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
+		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
+		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
+		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultTooNew", "Identifier should match")
 	}
 
 	/// Test the check result method with a valid test result
@@ -164,12 +164,11 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: nil,
-				checksum: nil
+				holder: nil
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = validProtocolOne
+		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolOne
 
 		// When
 		sut?.checkResult()
@@ -196,17 +195,16 @@ class ListResultsViewModelTests: XCTestCase {
 				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
 				testType: "test",
 				negativeResult: true,
-				holder: HolderTestCredentials(
+				holder: TestHolderIdentity(
 					firstNameInitial: "T",
 					lastNameInitial: "T",
 					birthDay: "1",
 					birthMonth: "1"
-				),
-				checksum: nil
+				)
 			),
 			status: .complete
 		)
-		proofManagingSpy.testResultWrapper = validProtocolTwo
+		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolTwo
 
 		// When
 		sut?.checkResult()
@@ -220,7 +218,7 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test tap on the next button with an item selected
-	func testButtonTappedListItemNotNil() {
+	func testButtonTappedListItemNotNil() throws {
 
 		// Given
 		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
@@ -229,16 +227,13 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.buttonTapped()
 
 		// Then
-		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		XCTAssertTrue(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be executed")
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
 
 	/// Test tap on the next button with no item selected
-	func testButtonTappedListItemNil() {
+	func testButtonTappedListItemNil() throws {
 
 		// Given
 		sut?.listItem = nil
@@ -248,15 +243,12 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
 
 	/// Test tap on the close button with an item selected
-	func testDismissListItemNotNil() {
+	func testDismissListItemNotNil() throws {
 
 		// Given
 		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
@@ -265,16 +257,13 @@ class ListResultsViewModelTests: XCTestCase {
 		sut?.dismiss()
 
 		// Then
-		XCTAssertFalse(proofManagingSpy.fetchNonceCalled, "Step 1 should be not executed")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		XCTAssertFalse(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be not executed")
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.showAlert, "Alert should be shown")
 	}
 
 	/// Test tap on the close button with no item selected
-	func testDismissListItemNil() {
+	func testDismissListItemNil() throws {
 
 		// Given
 		sut?.listItem = nil
@@ -284,135 +273,113 @@ class ListResultsViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
 	}
 
 	/// Test step one with an error
-	func testStepOneIssuerPublicKeysError() {
+	func testStepOneIssuerPublicKeysError() throws {
 
 		// Given
 		let error = NSError(
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.issuerPublicKeyError = error
+        proofManagingSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 
 		// When
 		sut?.createProofStepOne()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
-	func testStepOneIssuerPublicKeysNoError() {
+	func testStepOneIssuerPublicKeysNoError() throws {
 
 		// Given
-		proofManagingSpy.shouldIssuerPublicKeyComplete = true
+		proofManagingSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 
 		// When
 		sut?.createProofStepOne()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
-		XCTAssertTrue(proofManagingSpy.fetchNonceCalled, "Step 2 should be called")
+		XCTAssertTrue(proofManagingSpy.invokedFetchNonce, "Step 2 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
 	/// Test step two with an error
-	func testStepTwoNonceError() {
+	func testStepTwoNonceError() throws {
 
 		// Given
 		let error = NSError(
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.nonceError = error
+		proofManagingSpy.stubbedFetchNonceOnErrorResult = (error, ())
 
 		// When
 		sut?.createProofStepTwo()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
-	func testStepTwoNonceNoError() {
+	func testStepTwoNonceNoError() throws {
 
 		// Given
-		proofManagingSpy.shouldNonceComplete = true
+		proofManagingSpy.shouldInvokeFetchNonceOnCompletion = true
 
 		// When
 		sut?.createProofStepTwo()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
-		XCTAssertTrue(proofManagingSpy.fetchSignedTestResultCalled, "Step 2 should be called")
+		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 3 should be called")
 		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
 	}
 
 	/// Test step three with an error
-	func testStepThreeWithError() {
+	func testStepThreeWithError() throws {
 
 		// Given
 		let error = NSError(
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
 		)
-		proofManagingSpy.signedTestResultError = error
+		proofManagingSpy.stubbedFetchSignedTestResultOnErrorResult = (error, ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
 	}
 
 	/// Test step three with a valid result
-	func testStepThreeWithValidResult() {
+	func testStepThreeWithValidResult() throws {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .valid
+		proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.valid, ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertFalse(strongSut.showError, "Error should be false")
 		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
@@ -423,13 +390,15 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithAlreadySignedResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .alreadySigned
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.alreadySigned(
+            response: SignedTestResultErrorResponse(status: "test", code: 1)
+        ), ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNil(sut?.errorMessage, "Error should be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsAlreadyHandledTitle, "Title should match")
 		XCTAssertEqual(sut?.message, .holderTestResultsAlreadyHandledText, "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -440,13 +409,15 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithNotNegativeResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .notNegative
+		proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.notNegative(
+            response: SignedTestResultErrorResponse(status: "test", code: 1)
+        ), ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNil(sut?.errorMessage, "Error should be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -457,13 +428,15 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithTooNewResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .tooNew
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.tooNew(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		), ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -474,13 +447,15 @@ class ListResultsViewModelTests: XCTestCase {
 	func testStepThreeWithTooOldResult() {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .tooOld
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.tooOld(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		), ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
+		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
 		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
@@ -488,46 +463,43 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test step two with a too old  result
-	func testStepThreeWithUnknownError() {
+	func testStepThreeWithUnknownError() throws {
 
 		// Given
-		proofManagingSpy.shouldSignedTestResultComplete = true
-		proofManagingSpy.signedTestResultState = .unknown(nil)
+        proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.unknown(
+			response: SignedTestResultErrorResponse(status: "test", code: 1)
+		), ())
 
 		// When
 		sut?.createProofStepThree()
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
-		XCTAssertTrue(strongSut.showError, "Error should be true")
+		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
 	}
 
 	/// Test the display of the identity
 	func testIdentity() {
 
 		// Given
-		let examples: [String: HolderTestCredentials] = [
-			"R P 27 JAN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
-			"R P 27 FEB": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
-			"R P 27 MAR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
-			"R P 27 APR": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
-			"R P 27 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
-			"R P 27 JUN": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
-			"R P 27 JUL": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
-			"R P 27 AUG": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
-			"R P 27 SEP": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
-			"R P 27 OKT": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
-			"R P 27 NOV": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
-			"R P 27 DEC": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
-			"R P 05 MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
-			"R P X MEI": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
-			"R P X X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
-			"R P 27 X": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
-			"R P 27 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
-			"R P 0 0": HolderTestCredentials(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
+		let examples: [String: TestHolderIdentity] = [
+			"R P 27 JAN": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "1"),
+			"R P 27 FEB": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "2"),
+			"R P 27 MAR": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "3"),
+			"R P 27 APR": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "4"),
+			"R P 27 MEI": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "5"),
+			"R P 27 JUN": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "6"),
+			"R P 27 JUL": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "7"),
+			"R P 27 AUG": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "8"),
+			"R P 27 SEP": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "9"),
+			"R P 27 OKT": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "10"),
+			"R P 27 NOV": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "11"),
+			"R P 27 DEC": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "12"),
+			"R P 05 MEI": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "5", birthMonth: "5"),
+			"R P X MEI": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "5"),
+			"R P X X": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "X", birthMonth: "X"),
+			"R P 27 X": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "X"),
+			"R P 27 0": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "27", birthMonth: "0"),
+			"R P 0 0": TestHolderIdentity(firstNameInitial: "R", lastNameInitial: "P", birthDay: "0", birthMonth: "0")
 		]
 
 		examples.forEach { expectedResult, holder in

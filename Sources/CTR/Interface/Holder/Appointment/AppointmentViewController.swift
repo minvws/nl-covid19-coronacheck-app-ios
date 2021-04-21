@@ -11,7 +11,7 @@ class AppointmentViewController: BaseViewController {
 
 	private let viewModel: AppointmentViewModel
 
-	let sceneView = AppointmentView()
+	let sceneView = HeaderTitleMessageButtonView()
 
 	// MARK: Initializers
 
@@ -41,34 +41,51 @@ class AppointmentViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$body.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$linkedBody.binding = { [weak self] in
-			self?.sceneView.underline($0)
-//			self?.setupLink()
-		}
 
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
-		viewModel.$image.binding = { [weak self] in self?.sceneView.headerImage = $0 }
+		viewModel.$image.binding = { [weak self] in
+			self?.sceneView.headerImage = $0
+			self?.sceneView.headerImageView.backgroundColor = Theme.colors.appointment
+			self?.sceneView.stackView.backgroundColor = Theme.colors.appointment
+		}
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.buttonTapped()
+		}
+
+		sceneView.contentTextView.linkTouched { [weak self] _ in
+
+			self?.viewModel.linkedTapped()
 		}
 	}
 
 	// MARK: Helper methods
 
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
+	override func viewWillAppear(_ animated: Bool) {
 
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-		sceneView.messageLabel.isUserInteractionEnabled = true
+		super.viewWillAppear(animated)
+		layoutForOrientation()
 	}
 
-	// MARK: User interaction
+	// Rotation
 
-	/// User tapped on the link
-	@objc func linkTapped() {
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
 
-		viewModel.linkedTapped()
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	/// Layout for different orientations
+	func layoutForOrientation() {
+
+		if traitCollection.verticalSizeClass == .compact {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

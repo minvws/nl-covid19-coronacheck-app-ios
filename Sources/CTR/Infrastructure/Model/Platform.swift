@@ -7,11 +7,11 @@
 
 import Foundation
 
-/**
-Platform to detect if we are running in the simulator
-*/
+/// Platform to detect if we are running in the simulator (used for preventing camera features)
 struct Platform {
+
 	static let isSimulator: Bool = {
+
 		var isSim = false
 		#if arch(i386) || arch(x86_64)
 		isSim = true

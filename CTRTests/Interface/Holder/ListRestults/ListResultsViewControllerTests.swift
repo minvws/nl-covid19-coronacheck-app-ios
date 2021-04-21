@@ -56,7 +56,7 @@ class ListResultsViewControllerTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test the content for pending result
-	func testContentPendingResult() {
+	func testContentPendingResult() throws {
 
 		// Given
 		loadView()
@@ -68,15 +68,12 @@ class ListResultsViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut?.sceneView.title, .holderTestResultsPendingTitle, "Title should match")
 		XCTAssertEqual(sut?.sceneView.message, .holderTestResultsPendingText, "Message should match")
 		XCTAssertEqual(sut?.sceneView.primaryTitle, .holderTestResultsBackToMenuButton, "Button title should match")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.sceneView.resultView.isHidden, "Resultview should not be visible")
 	}
 
 	/// Test the content for no result
-	func testContentNoResult() {
+	func testContentNoResult() throws {
 
 		// Given
 		loadView()
@@ -88,15 +85,12 @@ class ListResultsViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut?.sceneView.title, .holderTestResultsNoResultsTitle, "Title should match")
 		XCTAssertEqual(sut?.sceneView.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
 		XCTAssertEqual(sut?.sceneView.primaryTitle, .holderTestResultsBackToMenuButton, "Button title should match")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.sceneView.resultView.isHidden, "Resultview should not be visible")
 	}
 
 	/// Test the content for no result
-	func testContentAlreadyDoneResult() {
+	func testContentAlreadyDoneResult() throws {
 
 		// Given
 		loadView()
@@ -108,14 +102,11 @@ class ListResultsViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut?.sceneView.title, .holderTestResultsAlreadyHandledTitle, "Title should match")
 		XCTAssertEqual(sut?.sceneView.message, .holderTestResultsAlreadyHandledText, "Message should match")
 		XCTAssertEqual(sut?.sceneView.primaryTitle, .holderTestResultsBackToMenuButton, "Button title should match")
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.sceneView.resultView.isHidden, "Resultview should not be visible")
 	}
 
-	func testContentValid() {
+	func testContentValid() throws {
 
 		// Given
 		loadView()
@@ -124,8 +115,7 @@ class ListResultsViewControllerTests: XCTestCase {
 			sampleDate: "2021-02-01T00:00:00+00:00",
 			testType: "test",
 			negativeResult: true,
-			holder: nil,
-			checksum: nil
+			holder: nil
 		)
 		
 		// When
@@ -136,10 +126,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut?.sceneView.message, .holderTestResultsResultsText, "Message should match")
 		XCTAssertEqual(sut?.sceneView.primaryTitle, .holderTestResultsResultsButton, "Button title should match")
 
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.sceneView.resultView.isHidden, "Resultview should be visible")
 		XCTAssertEqual(sut?.sceneView.resultView.header, .holderTestResultsRecent, "Header should match")
 		XCTAssertEqual(sut?.sceneView.resultView.title, .holderTestResultsNegative, "Title should match")
@@ -190,7 +177,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		)
 	}
 
-	func testProgress() {
+	func testProgress() throws {
 
 		// Given
 		loadView()
@@ -199,14 +186,11 @@ class ListResultsViewControllerTests: XCTestCase {
 		viewModel?.showProgress = true
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.sceneView.primaryButton.isEnabled, "Button should be disabled")
 	}
 
-	func testProgressFalse() {
+	func testProgressFalse() throws {
 
 		// Given
 		loadView()
@@ -215,10 +199,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		viewModel?.showProgress = false
 
 		// Then
-		guard let strongSut = sut else {
-			XCTFail("Can't unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertTrue(strongSut.sceneView.primaryButton.isEnabled, "Button should be enabled")
 	}
 
@@ -245,7 +226,7 @@ class ListResultsViewControllerTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should not be called")
-		XCTAssertTrue(proofManagingSpy.fetchIssuerPublicKeysCalled, "Step 1 should be executed")
+		XCTAssertTrue(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be executed")
 	}
 
 	func testDisclaimer() {

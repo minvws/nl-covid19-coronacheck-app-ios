@@ -48,7 +48,7 @@ class ChooseProviderViewController: BaseViewController {
 			for provider in providers {
 				self?.setupProviderButton(provider)
 			}
-//			self.setupNoDigidButton()
+//			self?.setupNoDigidButton()
 		}
 
 		// Only show an arrow as back button
@@ -71,18 +71,18 @@ class ChooseProviderViewController: BaseViewController {
 				presentingViewController: self
 			)
 		}
-		self.sceneView.stackView.addArrangedSubview(button)
+		self.sceneView.innerStackView.addArrangedSubview(button)
 	}
 
 	/// Setup no diigid button
 	func setupNoDigidButton() {
 
-		let label = Label(bodyMedium: .holderChooseProviderNoDigiD)
+		let label = Label(bodyMedium: .holderChooseProviderNoDigiD, textColor: Theme.colors.primary).multiline()
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noDidiDTapped))
 		label.isUserInteractionEnabled = true
 		label.addGestureRecognizer(tapGesture)
 		label.heightAnchor.constraint(equalToConstant: 40).isActive = true
-		sceneView.stackView.addArrangedSubview(label)
+		sceneView.innerStackView.addArrangedSubview(label)
 	}
 
 	// MARK: User interaction
@@ -91,5 +91,33 @@ class ChooseProviderViewController: BaseViewController {
 	@objc func noDidiDTapped() {
 
 		viewModel.noDidiD()
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+
+		super.viewWillAppear(animated)
+		layoutForOrientation()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	/// Layout for different orientations
+	func layoutForOrientation() {
+
+		if traitCollection.verticalSizeClass == .compact {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

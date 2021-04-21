@@ -13,18 +13,22 @@ class ConsentView: BaseView {
 	private struct ViewTraits {
 
 		// Dimensions
+		static let shadowRadius: CGFloat = 6
+		static let shadowOpacity: Float = 0.2
 		static let buttonHeight: CGFloat = 52
 		static let titleLineHeight: CGFloat = 26
 		static let messageLineHeight: CGFloat = 22
+		static let gradientHeight: CGFloat = 15.0
 		static let buttonWidth: CGFloat = 182.0
 
 		// Margins
 		static let margin: CGFloat = 20.0
+		static let bottomMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
 	}
 
 	/// The scrollview
-	private let scrollView: UIScrollView = {
+	let scrollView: UIScrollView = {
 
 		let view = UIScrollView(frame: .zero)
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +47,7 @@ class ConsentView: BaseView {
 		return view
 	}()
 
-	/// The stack view for the privacy hightlight items
+	/// The stack view for the privacy highlight items
 	let itemStackView: UIStackView = {
 
 		let view = UIStackView()
@@ -75,6 +79,15 @@ class ConsentView: BaseView {
 		return button
 	}()
 
+	let lineView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.line
+		view.isHidden = true
+		return view
+	}()
+
 	let consentButton: ConsentButton = {
 
 		let button = ConsentButton()
@@ -99,9 +112,13 @@ class ConsentView: BaseView {
 		stackView.addArrangedSubview(itemStackView)
 		stackView.addArrangedSubview(consentButton)
 
-		scrollView.addSubview(stackView)
+		stackView.embed(
+			in: scrollView,
+			insets: UIEdgeInsets.all(ViewTraits.margin)
+		)
 
 		addSubview(scrollView)
+		addSubview(lineView)
 		addSubview(primaryButton)
 	}
 
@@ -118,7 +135,7 @@ class ConsentView: BaseView {
 			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			scrollView.bottomAnchor.constraint(
 				equalTo: primaryButton.topAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.bottomMargin
 			),
 
 			// StackView
@@ -127,24 +144,33 @@ class ConsentView: BaseView {
 				constant: -2.0 * ViewTraits.margin
 			),
 			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			stackView.topAnchor.constraint(
-				equalTo: scrollView.topAnchor,
-				constant: ViewTraits.margin
+
+			// Line
+			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			lineView.bottomAnchor.constraint(
+				equalTo: primaryButton.topAnchor,
+				constant: -ViewTraits.bottomMargin
 			),
-			stackView.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
+			lineView.heightAnchor.constraint(equalToConstant: 1),
 
 			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
+			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
 	}
 
 	// MARK: - Public Access
@@ -172,8 +198,9 @@ class ConsentView: BaseView {
 			return
 		}
 
-		let attributedUnderlined = messageText.underline(underlined: underlinedText, with: Theme.colors.iosBlue)
+		let attributedUnderlined = messageText.underlineAsLink(underlined: underlinedText)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
+		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
 	var consent: String? {
@@ -184,7 +211,7 @@ class ConsentView: BaseView {
 
 	/// Add a privacy item
 	/// - Parameter text: the privacy text
-	func addPrivacyItem(_ text: String) {
+	func addPrivacyItem(_ text: String, number: Int, total: Int) {
 
 		let label = Label(body: nil, textColor: Theme.colors.dark).multiline()
 		label.attributedText = .makeFromHtml(
@@ -192,6 +219,7 @@ class ConsentView: BaseView {
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
+		label.accessibilityHint = String(format: .listAccessibility, "\(number)", "\(total)")
 
 		let stack = HStack(
 			spacing: 16,

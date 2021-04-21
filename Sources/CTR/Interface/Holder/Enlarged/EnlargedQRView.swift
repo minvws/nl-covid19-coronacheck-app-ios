@@ -25,12 +25,19 @@ class EnlargedQRImageView: BaseView {
 		return view
 	}()
 
+	let accessibilityView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
+	}()
+
 	/// The security features
 	let securityView: SecurityFeaturesView = {
 
 		let view = SecurityFeaturesView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-
 		return view
 	}()
 
@@ -46,6 +53,7 @@ class EnlargedQRImageView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(securityView)
+		addSubview(accessibilityView)
 		addSubview(largeQRimageView)
 	}
 	/// Setup the constraints
@@ -70,6 +78,12 @@ class EnlargedQRImageView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
+			// Accessibility View
+			accessibilityView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
+			accessibilityView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
+			accessibilityView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
+			accessibilityView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -78,6 +92,20 @@ class EnlargedQRImageView: BaseView {
 				constant: ViewTraits.securityMargin
 			)
 		])
+
+		bringSubviewToFront(accessibilityView)
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Security
+		securityView.isAccessibilityElement = false
+		securityView.primaryButton.isAccessibilityElement = false
+		largeQRimageView.accessibilityTraits = .none
+		accessibilityView.isAccessibilityElement = true
+		accessibilityView.accessibilityTraits = .image
 	}
 
 	// MARK: Public Access
@@ -86,6 +114,13 @@ class EnlargedQRImageView: BaseView {
 	var qrImage: UIImage? {
 		didSet {
 			largeQRimageView.image = qrImage
+		}
+	}
+
+	/// The accessibility description
+	var accessibilityDescription: String? {
+		didSet {
+			accessibilityView.accessibilityLabel = accessibilityDescription
 		}
 	}
 

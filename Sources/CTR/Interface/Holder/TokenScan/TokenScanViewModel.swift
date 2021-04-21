@@ -7,12 +7,10 @@
 
 import UIKit
 
-class TokenScanViewModel: Logging {
-
-	var loggingCategory: String = "TokenScanViewModel"
+class TokenScanViewModel: ScanPermissionViewModel {
 
 	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
+	weak var theCoordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -38,15 +36,16 @@ class TokenScanViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: HolderCoordinatorDelegate) {
+	init(coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)) {
 
-		self.coordinator = coordinator
+		self.theCoordinator = coordinator
 		self.title = .holderTokenScanTitle
 		self.message = .holderTokenScanMessage
 		self.torchAccessibility = .holderTokenScanTorchAccessibility
 		self.errorTitle = .holderTokenScanErrorTitle
 		self.errorMessage = .holderTokenScanErrorMessage
 		self.showError = false
+		super.init(coordinator: coordinator)
 	}
 
 	/// Parse the scanned QR-code
@@ -56,7 +55,7 @@ class TokenScanViewModel: Logging {
 		do {
 			let object = try JSONDecoder().decode(RequestToken.self, from: Data(code.utf8))
 			self.logDebug("Response Object: \(object)")
-			coordinator?.navigateToTokenEntry(object)
+			theCoordinator?.navigateToTokenEntry(object)
 		} catch {
 			self.logError("Token Scan Error: \(error)")
 			self.showError = true

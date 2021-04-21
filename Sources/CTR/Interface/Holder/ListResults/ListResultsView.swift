@@ -136,6 +136,14 @@ class ListResultsView: ScrolledStackView {
 		])
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+	}
+
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
@@ -152,6 +160,7 @@ class ListResultsView: ScrolledStackView {
 			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
 			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
 		]
+		footerGradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		footerGradientView.layer.insertSublayer(gradient, at: 0)
 	}
 

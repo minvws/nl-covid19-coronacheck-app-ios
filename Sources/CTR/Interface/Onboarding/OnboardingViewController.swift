@@ -45,11 +45,6 @@ class OnboardingViewController: BaseViewController {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	/// Show always in portrait
-	override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-		return .portrait
-	}
-	
 	// MARK: View lifecycle
 	override func loadView() {
 		
@@ -95,20 +90,31 @@ class OnboardingViewController: BaseViewController {
 	
 	/// Create a custom back button so we can catch the tapped on the back button.
 	private func setupBackButton() {
-		
+
+		// hide the original back button
 		navigationItem.hidesBackButton = true
-		
+
+		// Create a button with a back arrow and a .previous title
 		let button = UIButton(type: .custom)
 		button.setTitle(.previous, for: .normal)
 		button.setTitleColor(Theme.colors.dark, for: .normal)
 		button.setTitleColor(Theme.colors.gray, for: .highlighted)
-		button.titleLabel?.font = Theme.fonts.bodyBold
+		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.setImage(.backArrow, for: .normal)
+
 		// Add a little spacing between the image and the title, shift the tilte 5 px right
 		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
 		// Increase the hit area, move the button 5 px to the left
 		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
+
+		// Handle touches
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
+
+		// Accessibility
+		button.accessibilityLabel = .back
+
+		// Make sure the text won't be truncated if the user opts for bold texts
+		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
 		
 		backButton = UIBarButtonItem(customView: button)
 	}
@@ -143,6 +149,7 @@ class OnboardingViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageCtrl.view)
 		self.addChild(pageCtrl)
 		pageCtrl.didMove(toParent: self)
+		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
 	}
 	
 	/// User tapped on the button
@@ -159,8 +166,21 @@ class OnboardingViewController: BaseViewController {
 				let nextVC = viewControllers[index]
 				self.pageViewController?.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
 				currentIndex = index
+				UIAccessibility.post(notification: .screenChanged, argument: nextVC)
 			}
 		}
+	}
+
+	/// User tapped on the page control
+	@objc func valueChanged() {
+
+		let index = sceneView.pageControl.currentPage
+		let direction = index > currentIndex ?? 0 ? UIPageViewController.NavigationDirection.forward : UIPageViewController.NavigationDirection.reverse
+
+		let nextVC = viewControllers[index]
+		self.pageViewController?.setViewControllers([nextVC], direction: direction, animated: true, completion: nil)
+		currentIndex = index
+		UIAccessibility.post(notification: .screenChanged, argument: nextVC)
 	}
 }
 

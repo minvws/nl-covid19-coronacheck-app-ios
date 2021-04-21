@@ -18,4 +18,9 @@ extension String {
 
 		return Localization.string(for: "holder.banner.newqr.message")
 	}
+
+	static var holderBannerNewQRMessageLink: String {
+
+		return Localization.string(for: "holder.banner.newqr.message.link")
+	}
 }

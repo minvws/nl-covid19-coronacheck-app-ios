@@ -52,23 +52,15 @@ class MenuViewModel {
 	/// The bottom menu items
 	@Bindable var bottomMenu: [MenuItem]
 
-	/// The version and build number
-	@Bindable var version: String
-
 	/// Initializer
 	/// - Parameters:
 	///   - menuDelegate: the menu delegate
 
-	init(delegate: MenuDelegate, versionSupplier: AppVersionSupplierProtocol) {
+	init(delegate: MenuDelegate) {
 
 		self.menuDelegate = delegate
 		self.topMenu = delegate.getTopMenuItems()
 		self.bottomMenu = delegate.getBottomMenuItems()
-		self.version = String(
-			format: .menuVersion,
-			versionSupplier.getCurrentVersion(),
-			versionSupplier.getCurrentBuild()
-		)
 	}
 
 	/// The user tapped on a menu item

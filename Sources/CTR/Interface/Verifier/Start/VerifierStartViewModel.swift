@@ -9,17 +9,12 @@ import UIKit
 
 class VerifierStartViewModel: Logging {
 
-	/// The logging category
 	var loggingCategory: String = "VerifierStartViewModel"
 
-	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
-
-	/// The crypto manager
-	weak var cryptoManager: CryptoManaging?
-
-	@UserDefaults(key: "scanInstructionShown", defaultValue: false)
-	private var scanInstructionShown: Bool // swiftlint:disable:this let_var_whitespace
+	weak private var coordinator: VerifierCoordinatorDelegate?
+	weak private var cryptoManager: CryptoManaging?
+	weak private var proofManager: ProofManaging?
+	private var userSettings: UserSettingsProtocol
 
 	// MARK: - Bindable properties
 
@@ -32,9 +27,6 @@ class VerifierStartViewModel: Logging {
 	/// The message of the scene
 	@Bindable private(set) var message: String
 
-	/// The linked message of the scene
-	@Bindable private(set) var linkedMessage: String
-
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
@@ -45,21 +37,28 @@ class VerifierStartViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
-	init(coordinator: VerifierCoordinator, cryptoManager: CryptoManaging) {
+	///   - proofManager: the proof manager
+	///   - userSettings: the user managed settings
+	init(
+		coordinator: VerifierCoordinatorDelegate,
+		cryptoManager: CryptoManaging,
+		proofManager: ProofManaging,
+		userSettings: UserSettingsProtocol = UserSettings()) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
+		self.proofManager = proofManager
+		self.userSettings = userSettings
 
 		primaryButtonTitle = .verifierStartButtonTitle
 		title = .verifierStartTitle
 		header = .verifierStartHeader
 		message = .verifierStartMessage
-		linkedMessage = .verifierStartLinkedMessage
 	}
 
 	func primaryButtonTapped() {
 
-		if scanInstructionShown {
+		if userSettings.scanInstructionShown {
 
 			if let crypto = cryptoManager, crypto.hasPublicKeys() {
 				coordinator?.navigateToScan()
@@ -69,23 +68,20 @@ class VerifierStartViewModel: Logging {
 			}
 		} else {
 
-			scanInstructionShown = true
+			userSettings.scanInstructionShown = true
 			coordinator?.navigateToScanInstruction(present: true)
 		}
 	}
 
-	func linkTapped(_ viewController: UIViewController) {
+	func linkTapped() {
 
 		coordinator?.navigateToScanInstruction(present: false)
 	}
 
-	/// The proof manager
-	var proofManager: ProofManaging = Services.proofManager
-
 	/// Update the public keys
-	func updatePublicKeys() {
+	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		proofManager.fetchIssuerPublicKeys(oncompletion: nil, onError: nil)
+		proofManager?.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 	}
 }

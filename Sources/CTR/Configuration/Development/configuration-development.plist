@@ -4,14 +4,14 @@
 <dict>
 	<key>general</key>
 	<dict>
+		<key>autoCloseTime</key>
+		<integer>10</integer>
 		<key>testresultWarningTTL</key>
-		<integer>21600</integer>
+		<real>21600</real>
 		<key>QRTTL</key>
 		<integer>180</integer>
 		<key>QRRefresh</key>
 		<integer>10</integer>
-		<key>holderAboutURL</key>
-		<string>https://coronacheck.nl/nl/over-de-app-in-app</string>
 		<key>holderFAQURL</key>
 		<string>https://coronacheck.nl/nl/faq-in-app</string>
 		<key>privacyPolicyURL</key>

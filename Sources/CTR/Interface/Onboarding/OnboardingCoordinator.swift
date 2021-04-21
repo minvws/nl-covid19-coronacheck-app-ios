@@ -95,7 +95,6 @@ extension OnboardingCoordinator: OpenUrlProtocol {
 
 		if inApp {
 			let safariController = SFSafariViewController(url: url)
-			safariController.preferredControlTintColor = Theme.colors.primary
 			navigationController.present(safariController, animated: true)
 		} else {
 			UIApplication.shared.open(url)

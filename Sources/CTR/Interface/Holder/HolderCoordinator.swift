@@ -6,19 +6,6 @@
 */
 
 import UIKit
-import SafariServices
-
-protocol Dismissable: AnyObject {
-
-	/// Dismiss the presented viewcontroller
-	func dismiss()
-}
-
-protocol OpenUrlProtocol: AnyObject {
-
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool)
-}
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
@@ -60,65 +47,14 @@ protocol HolderCoordinatorDelegate: AnyObject {
 }
 // swiftlint:enable class_delegate_protocol
 
-class HolderCoordinator: Coordinator, Logging {
+class HolderCoordinator: SharedCoordinator {
 
-	var loggingCategory: String = "HolderCoordinator"
-
-	/// The UI Window
-	private var window: UIWindow
-
-	/// The side panel controller
-	var sidePanel: SidePanelController?
-
-	/// The onboardings manager
-	var onboardingManager: OnboardingManaging = Services.onboardingManager
-
-	/// The proof manager
-	var proofManager: ProofManaging = Services.proofManager
-
-	/// The crypto manager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
-
-	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
-
-	/// The open ID manager
 	var openIdManager: OpenIdManaging = Services.openIdManager
-
-	/// The general configuration
-	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
-
-	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	/// The Child Coordinators
-	var childCoordinators: [Coordinator] = []
-
-	/// The navigation controller
-	var navigationController: UINavigationController
-
-	/// The dashboard navigation controller
-	var dashboardNavigationContoller: UINavigationController?
-
-	/// The about navigation controller
-	var aboutNavigationContoller: UINavigationController?
-
-	/// Initiatilzer
-	init(navigationController: UINavigationController, window: UIWindow) {
-
-		self.navigationController = navigationController
-		self.window = window
-	}
-
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 48
-	}
-
 	// Designated starter method
-	func start() {
+	override func start() {
 
 		if onboardingManager.needsOnboarding {
 			/// Start with the onboarding
@@ -140,12 +76,39 @@ class HolderCoordinator: Coordinator, Logging {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()
+		} else if forcedInformationManager.needsUpdating {
+			// Show Forced Information
+			let coordinator = ForcedInformationCoordinator(
+				navigationController: navigationController,
+				forcedInformationManager: forcedInformationManager,
+				delegate: self
+			)
+			startChildCoordinator(coordinator)
+
 		} else {
 
 			// Start with the holder app
 			navigateToHolderStart()
 		}
 	}
+
+    // MARK: - Universal Links
+
+    /// Try to consume the Activity
+    /// returns: bool indicating whether it was possible.
+    func consume(universalLink: UniversalLink) -> Bool {
+
+        switch universalLink {
+            case .redeemHolderToken(let requestToken):
+
+                // Handled in the follow-up PR
+//                // Do it on the next runloop:
+//                DispatchQueue.main.async { [self] in
+//                    navigateToTokenEntry(requestToken)
+//                }
+            return true
+        }
+    }
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -158,11 +121,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
-				delegate: self,
-				versionSupplier: AppVersionSupplier()
+				delegate: self
 			)
 		)
-		sidePanel = CustomSidePanelController(sideController: UINavigationController(rootViewController: menu))
+		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 		let dashboardViewController = HolderDashboardViewController(
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
@@ -191,6 +153,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				maxValidity: maxValidity
 			)
 		)
+		destination.modalPresentationStyle = .fullScreen
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
@@ -249,7 +212,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				proofManager: proofManager,
-				scannedToken: token
+				requestToken: token
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -314,33 +277,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 }
 
-// MARK: - OpenUrlProtocol
-
-extension HolderCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		if inApp {
-			let safariController = SFSafariViewController(url: url)
-			safariController.preferredControlTintColor = Theme.colors.primary
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
-		} else {
-			UIApplication.shared.open(url)
-		}
-	}
-}
-
-// MARK: - Dismissable
-
-extension HolderCoordinator: Dismissable {
-
-	func dismiss() {
-
-		sidePanel?.selectedViewController?.dismiss(animated: true, completion: nil)
-	}
-}
-
 // MARK: - MenuDelegate
 
 extension HolderCoordinator: MenuDelegate {
@@ -365,16 +301,14 @@ extension HolderCoordinator: MenuDelegate {
 				openUrl(faqUrl, inApp: true)
 
 			case .about :
-				let aboutUrl = generalConfiguration.getHolderAboutAppURL()
-				openUrl(aboutUrl, inApp: true)
-//				let destination = AboutViewController(
-//					viewModel: AboutViewModel(
-//						coordinator: self,
-//						configuration: generalConfiguration
-//					)
-//				)
-//				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-//				sidePanel?.selectedViewController = aboutNavigationContoller
+				let destination = AboutViewController(
+					viewModel: AboutViewModel(
+						versionSupplier: versionSupplier,
+						flavor: AppFlavor.flavor
+					)
+				)
+				aboutNavigationContoller = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationContoller
 
 			case .privacy :
 				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
@@ -407,31 +341,5 @@ extension HolderCoordinator: MenuDelegate {
 			MenuItem(identifier: .about, title: .holderMenuAbout),
 			MenuItem(identifier: .privacy, title: .holderMenuPrivacy)
 		]
-	}
-}
-
-// MARK: - OnboardingDelegate
-
-extension HolderCoordinator: OnboardingDelegate {
-
-	/// User has seen all the onboarding pages
-	func finishOnboarding() {
-
-		onboardingManager.finishOnboarding()
-	}
-
-	/// The onboarding is finished
-	func consentGiven() {
-
-		// Mark as complete
-		onboardingManager.consentGiven()
-
-		// Remove child coordinator
-		if let onboardingCoorinator = childCoordinators.first {
-			removeChildCoordinator(onboardingCoorinator)
-		}
-
-		// Navigate to Holder Start.
-		navigateToHolderStart()
 	}
 }

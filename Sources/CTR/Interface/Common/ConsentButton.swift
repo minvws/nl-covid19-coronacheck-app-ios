@@ -35,8 +35,8 @@ class ConsentButton: UIButton {
 
 		icon.tintColor = Theme.colors.primary
 
-		icon.contentMode = .top
-		icon.snap(to: .left, of: self, insets: .left(16) + .top(32))
+		icon.contentMode = .center
+		icon.snap(to: .left, of: self, insets: .left(16))
 
 		isSelected = selected
 
@@ -51,7 +51,7 @@ class ConsentButton: UIButton {
 
 	fileprivate func setup() {
 		clipsToBounds = true
-		contentEdgeInsets = .topBottom(17) + .left(52) + .right(16)
+		contentEdgeInsets = .topBottom(17) + .left(68) + .right(16)
 
 		layer.cornerRadius = 8
 

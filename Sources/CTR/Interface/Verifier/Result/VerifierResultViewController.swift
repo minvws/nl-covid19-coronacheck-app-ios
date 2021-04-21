@@ -7,11 +7,13 @@
 
 import UIKit
 
-class VerifierResultViewController: BaseViewController {
+class VerifierResultViewController: BaseViewController, Logging {
 
 	private let viewModel: VerifierResultViewModel
 
 	let sceneView = ResultView()
+
+	var previousOrientation: UIInterfaceOrientation?
 
 	init(viewModel: VerifierResultViewModel) {
 
@@ -41,22 +43,23 @@ class VerifierResultViewController: BaseViewController {
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.viewModel.dismiss()
+			self?.viewModel.scanAgain()
 		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
 
 			if $0 == .verified {
 				self?.sceneView.imageView.image = .access
-				self?.sceneView.backgroundColor = Theme.colors.access
+				self?.sceneView.actionColor = Theme.colors.access
 				self?.sceneView.setupForVerified()
 
 			} else if $0 == .demo {
 				self?.sceneView.imageView.image = .access
-				self?.sceneView.backgroundColor = Theme.colors.demo
+				self?.sceneView.actionColor = Theme.colors.grey4
+				self?.sceneView.setupForVerified()
 			} else {
 				self?.sceneView.imageView.image = .denied
-				self?.sceneView.backgroundColor = Theme.colors.denied
+				self?.sceneView.actionColor = Theme.colors.denied
 			}
 		}
 
@@ -74,7 +77,11 @@ class VerifierResultViewController: BaseViewController {
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
-			self?.sceneView.isHidden = $0
+            #if DEBUG
+            self?.logDebug("Skipping hiding of result because in DEBUG mode")
+            #else
+            self?.sceneView.isHidden = $0
+            #endif
 		}
 
 		viewModel.$debugInfo.binding = { [weak self] in
@@ -97,6 +104,16 @@ class VerifierResultViewController: BaseViewController {
 		super.viewWillAppear(animated)
 		// Make the navbar the same color as the background.
 		navigationController?.navigationBar.backgroundColor = .clear
+
+		previousOrientation = OrientationUtility.currentOrientation()
+		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+		sceneView.scrollView.contentSize = sceneView.stackView.frame.size
+	}
+
+	override func viewWillDisappear(_ animated: Bool) {
+
+		super.viewWillDisappear(animated)
+		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 
 	/// User tapped on the button

@@ -17,10 +17,12 @@ import Foundation
 ///
 /// - Tag: Bindable
 @propertyWrapper class Bindable<T> {
+
     var value: T
     private(set) lazy var projectedValue = Binder { [unowned self] in self.value }
     
     init(wrappedValue: T) {
+
         value = wrappedValue
     }
     
@@ -37,10 +39,12 @@ import Foundation
     
     // Use a nested class to store the binding closure. This way a @Bindable property can be declared immutable and still have a mutable value for the closure.
     class Binder {
+
         private var valueProvider: () -> T
         var binding: ((T) -> Void)? = nil { didSet { binding?(valueProvider()) } }
         
         init(valueProvider: @escaping () -> T) {
+			
             self.valueProvider = valueProvider
         }
     }

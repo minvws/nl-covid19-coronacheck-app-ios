@@ -54,6 +54,12 @@ class ListResultsViewController: BaseViewController {
 			}
 		}
 
+		viewModel.$errorMessage.binding = { [weak self] in
+			if let message = $0 {
+				self?.showError(.errorTitle, message: message)
+			}
+		}
+
 		viewModel.$listItem.binding = { [weak self] in
 			if let item = $0 {
 				self?.sceneView.resultView.isHidden = false
@@ -74,10 +80,13 @@ class ListResultsViewController: BaseViewController {
 			}
 
 			if $0 {
-				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				let hud = MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				hud.accessibilityLabel = .loading
+				UIAccessibility.post(notification: .screenChanged, argument: hud)
 				strongSelf.sceneView.primaryButton.isEnabled = false
 			} else {
 				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
+				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.primaryButton)
 				strongSelf.sceneView.primaryButton.isEnabled = true
 			}
 		}

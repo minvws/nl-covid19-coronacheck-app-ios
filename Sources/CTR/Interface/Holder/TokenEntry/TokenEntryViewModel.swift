@@ -7,52 +7,63 @@
 
 import UIKit
 
-class TokenEntryViewModel: Logging {
+class TokenEntryViewModel {
 
-	var loggingCategory: String = "TokenEntryViewModel"
-
-	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
-
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
-	/// The request token
-	var requestToken: RequestToken?
-
-	var tokenValidator: TokenValidatorProtocol = TokenValidator()
-
-	/// The verification code
-	var verificationCode: String?
-
-	/// The current highest known protocol version
-	/// 1.0: Checksum
-	/// 2.0: Initials + Birthday/month
-	let highestKnownProtocolVersion = "2.0"
+	// MARK: - Bindables
 
 	@Bindable private(set) var token: String?
 	@Bindable private(set) var showProgress: Bool = false
 	@Bindable private(set) var showVerification: Bool = false
 
+	/// True if we should enable the next button
+	@Bindable private(set) var enableNextButton: Bool = false
+
 	/// An error message
-	@Bindable private(set) var errorMessage: String?
+    @Bindable private(set) var errorMessage: String?
+
+	/// The title for the secondary button
+	@Bindable private(set) var secondaryButtonTitle: String?
+
+	/// Is the secondary button enabled?
+	@Bindable private(set) var secondaryButtonEnabled: Bool = false
 
 	/// Show internet error
 	@Bindable private(set) var showError: Bool = false
 
-	/// Initializer
+    // MARK: - Private vars
+
+	private weak var coordinator: HolderCoordinatorDelegate?
+
+	private let proofManager: ProofManaging?
+
+	private var requestToken: RequestToken?
+
+	private let tokenValidator: TokenValidatorProtocol
+
+    /// A timer to enable resending of the verification code
+    private var resendTimer: Timer?
+
+	private var verificationCode: String?
+
+	// Counter that tracks the countdown before the SMS can be resent
+	private var resendCountdownCounter = 10
+
+	// MARK: - Initializer
+
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
-	///   - scannedToken: the scanned token
+	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		proofManager: ProofManaging,
-		scannedToken: RequestToken?) {
+		requestToken: RequestToken?,
+		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
-		self.requestToken = scannedToken
+		self.requestToken = requestToken
+        self.tokenValidator = tokenValidator
 
 		if let unwrappedToken = requestToken {
 			fetchProviders(unwrappedToken)
@@ -62,48 +73,70 @@ class TokenEntryViewModel: Logging {
 		}
 	}
 
-	/// Check the token
-	/// - Parameter text: the request token
-	func checkToken(_ text: String?) {
+	// MARK: Handling user input
 
-		if let input = text, !input.isEmpty {
-			if let requestToken = createRequestToken(input.uppercased()) {
+	/// Check the next button state
+	/// - Parameters:
+	///   - tokenInput: the token input
+	///   - verificationInput: the verification input
+	func handleInput(_ tokenInput: String?, verificationInput: String?) {
+
+		errorMessage = nil
+		guard let tokenInput = tokenInput else {
+			enableNextButton = false
+			return
+		}
+
+		if !tokenInput.isEmpty { // && !showVerification {
+
+			let validToken = tokenValidator.validate(tokenInput)
+			enableNextButton = validToken
+			showVerification = validToken && showVerification
+			return
+		}
+
+		if let verification = verificationInput, verification.isEmpty {
+			enableNextButton = false
+			return
+		}
+
+		enableNextButton = true
+	}
+
+	/// User tapped the next button
+	/// - Parameters:
+	///   - tokenInput: the token input
+	///   - verificationInput: the verification input
+    func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
+        errorMessage = nil
+
+        guard let tokenInput = tokenInput else {
+            return
+        }
+
+		if let verification = verificationInput, !verification.isEmpty {
+			verificationCode = verification.uppercased()
+			errorMessage = nil
+			if let token = requestToken {
+				fetchProviders(token)
+			}
+		} else {
+			if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken)
-				errorMessage = nil
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
 			}
 		}
 	}
 
-	/// Check the verification
-	/// - Parameter text: the verification text
-	func checkVerification(_ text: String?) {
-
-		if let input = text, !input.isEmpty {
-			verificationCode = input.uppercased()
-			errorMessage = nil
-			if let token = requestToken {
-				fetchProviders(token)
-			}
-		}
-	}
-
 	/// Fetch the providers
 	/// - Parameter requestToken: the request token
-	func fetchProviders(_ requestToken: RequestToken) {
-
-		guard proofManager?.getTestProvider(requestToken) == nil else {
-			// only fetch providers if we do not have it.
-			fetchResult(requestToken)
-			return
-		}
+	private func fetchProviders(_ requestToken: RequestToken) {
 
 		showProgress = true
-
 		proofManager?.fetchCoronaTestProviders(
-			oncompletion: { [weak self] in
+			onCompletion: { [weak self] in
 
 				self?.showProgress = false
 				self?.fetchResult(requestToken)
@@ -121,6 +154,7 @@ class TokenEntryViewModel: Logging {
 	private func fetchResult(_ requestToken: RequestToken) {
 
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
+			showProgress = false
 			errorMessage = .holderTokenEntryErrorInvalidCode
 			return
 		}
@@ -160,38 +194,60 @@ class TokenEntryViewModel: Logging {
 		}
 	}
 
-	/// Handle the verfication required response
-	func handleVerificationRequired() {
+	/// Handle the verification required response
+	private func handleVerificationRequired() {
 
-		if showVerification {
+		if let code = verificationCode, !code.isEmpty {
 			// We are showing the verification entry, so this is a wrong verification code
 			errorMessage = .holderTokenEntryErrorInvalidCode
 		}
+		resetCountdownCounter()
+		startResendTimer()
 		showVerification = true
+		enableNextButton = false
 	}
 
-	/// Create a request token from a string
-	/// - Parameter token: the input string
-	/// - Returns: the request token
-	func createRequestToken(_ input: String) -> RequestToken? {
+	// MARK: Resend SMS Countdown
 
-		// Check the validity of the input
-		guard tokenValidator.validate(input) else {
-			return nil
-		}
+	private func resetCountdownCounter() {
+		resendCountdownCounter = 10
+	}
 
-		let parts = input.split(separator: "-")
-		if parts.count >= 2 {
-			if parts[0].count == 3 {
-				let identifierPart = String(parts[0])
-				let tokenPart = String(parts[1])
-				return RequestToken(
-					token: tokenPart,
-					protocolVersion: highestKnownProtocolVersion,
-					providerIdentifier: identifierPart
-				)
-			}
+	private func startResendTimer() {
+
+		guard resendTimer == nil else {
+			return
 		}
-		return nil
+		// Show immediately, and repeat every second
+		resendTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(1),
+			target: self,
+			selector: (#selector(updateResendButtonState)),
+			userInfo: nil,
+			repeats: true
+		)
+		resendTimer?.fire()
+	}
+
+	@objc func updateResendButtonState() {
+
+		if resendCountdownCounter > 0 {
+			secondaryButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(resendCountdownCounter)")
+			secondaryButtonEnabled = false
+			resendCountdownCounter -= 1
+		} else {
+			resendCountdownCounter = 10
+			resendTimer?.invalidate()
+			resendTimer = nil
+			secondaryButtonTitle = .holderTokenEntryRetryTitle
+			secondaryButtonEnabled = true
+		}
+	}
+}
+
+extension TokenEntryViewModel: Logging {
+
+	var loggingCategory: String {
+		return "TokenEntryViewModel"
 	}
 }

@@ -65,6 +65,8 @@ class QRCardView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .bottomRight
 		view.clipsToBounds = true
+		view.layer.cornerRadius = ViewTraits.cornerRadius
+		view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 		return view
 	}()
 
@@ -73,6 +75,8 @@ class QRCardView: BaseView {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+		view.layer.cornerRadius = ViewTraits.cornerRadius
+		view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 		return view
 	}()
 	
@@ -82,7 +86,7 @@ class QRCardView: BaseView {
 		super.setupViews()
 		layer.cornerRadius = ViewTraits.cornerRadius
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-		identityLabel.textColor = Theme.colors.tileGray
+		identityLabel.textColor = Theme.colors.grey2
 		backgroundColor = Theme.colors.viewControllerBackground
 		
 		// Shadow
@@ -175,19 +179,9 @@ class QRCardView: BaseView {
 				equalTo: blurView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.trailingAnchor.constraint(
-				equalTo: primaryButton.leadingAnchor,
-				constant: -10
-			),
-
 			messageLabel.topAnchor.constraint(
 				equalTo: blurView.topAnchor,
 				constant: 19
-			),
-
-			messageLabel.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -19
 			),
 
 			// Primary Button
@@ -197,7 +191,7 @@ class QRCardView: BaseView {
 				constant: -ViewTraits.margin
 			),
 			primaryButton.widthAnchor.constraint(
-				equalTo: widthAnchor,
+				greaterThanOrEqualTo: widthAnchor,
 				multiplier: ViewTraits.buttonRatio
 			),
 			primaryButton.bottomAnchor.constraint(
@@ -205,6 +199,49 @@ class QRCardView: BaseView {
 				constant: -16
 			)
 		])
+
+		setupViewConstraintsForBottomBehaviour()
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		// Title
+		titleLabel.accessibilityTraits = .header
+
+		// Time
+		timeLabel.accessibilityTraits = .updatesFrequently
+	}
+
+	func setupViewConstraintsForBottomBehaviour() {
+
+		if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
+			// Larger font size -> Show message above button
+			NSLayoutConstraint.activate([
+				messageLabel.trailingAnchor.constraint(
+					equalTo: blurView.trailingAnchor,
+					constant: -ViewTraits.margin
+				),
+				messageLabel.bottomAnchor.constraint(
+					equalTo: primaryButton.topAnchor,
+					constant: -19
+				)
+			])
+		} else {
+			// Normal font size -> Show message next to button
+			NSLayoutConstraint.activate([
+				messageLabel.trailingAnchor.constraint(
+					equalTo: primaryButton.leadingAnchor,
+					constant: -10
+				),
+				messageLabel.bottomAnchor.constraint(
+					equalTo: bottomAnchor,
+					constant: -19
+				)
+			])
+		}
 	}
 	
 	/// User tapped on the primary button
@@ -218,7 +255,7 @@ class QRCardView: BaseView {
 	/// The  title
 	var title: String? {
 		didSet {
-			titleLabel.text = title
+			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
 		}
 	}
 	
@@ -245,6 +282,13 @@ class QRCardView: BaseView {
 				textColor: Theme.colors.dark,
 				lineHeight: 17.0
 			)
+		}
+	}
+
+	/// The accessibility string for the time
+	var timeAccessibility: String? {
+		didSet {
+			timeLabel.accessibilityLabel = timeAccessibility
 		}
 	}
 

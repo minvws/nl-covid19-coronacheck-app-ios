@@ -19,7 +19,7 @@ class ScanView: BaseView {
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 20.0
-		static let maskOffset: CGFloat = 100.0
+		static let maskOffset: CGFloat = UIDevice.current.isSmallScreen ? 200.0 : 100.0
 	}
 
 	/// The message label

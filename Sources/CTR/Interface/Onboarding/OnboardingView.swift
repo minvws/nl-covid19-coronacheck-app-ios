@@ -44,8 +44,8 @@ class OnboardingView: BaseView {
 		let view = UIPageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isUserInteractionEnabled = false
-		view.pageIndicatorTintColor = Theme.colors.gray.withAlphaComponent(0.3)
-		view.currentPageIndicatorTintColor = Theme.colors.gray
+		view.pageIndicatorTintColor = Theme.colors.grey2
+		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 	
@@ -94,14 +94,23 @@ class OnboardingView: BaseView {
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
 
 			// Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
+			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Ribbon view
+		ribbonView.isAccessibilityElement = true
+		ribbonView.accessibilityLabel = .government
 	}
 
 	override func layoutSubviews() {

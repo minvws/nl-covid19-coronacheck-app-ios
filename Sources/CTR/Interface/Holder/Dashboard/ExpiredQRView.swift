@@ -27,6 +27,7 @@ class ExpiredQRView: BaseView {
 
 	/// The expired image
 	private let expiredImageView: UIImageView = {
+		
 		let view = UIImageView(image: .expiredQR)
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
@@ -115,6 +116,16 @@ class ExpiredQRView: BaseView {
 			closeButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonSize),
 			closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonSize)
 		])
+	}
+
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		// Title
+		titleLabel.accessibilityTraits = .header
+		// Button
+		closeButton.accessibilityLabel = .close
 	}
 
 	/// User tapped on the close button

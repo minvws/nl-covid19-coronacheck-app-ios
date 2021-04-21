@@ -91,7 +91,7 @@ class QRCodeView: BaseView {
 			),
 
 			// Primary Button
-			primaryButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
+			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.leadingAnchor.constraint(
 				equalTo: stackView.leadingAnchor,
 				constant: ViewTraits.buttonOffset

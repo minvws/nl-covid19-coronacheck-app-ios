@@ -5,18 +5,16 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
+import AVFoundation
 
-class VerifierScanViewModel: Logging {
-
-	/// The logging category
-	var loggingCategory: String = "VerifierScanViewModel"
+class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
 	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	weak var theCoordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol)?
 
 	// MARK: - Bindable properties
 
@@ -37,45 +35,30 @@ class VerifierScanViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (VerifierCoordinatorDelegate & Dismissable),
+		coordinator: (VerifierCoordinatorDelegate & Dismissable & OpenUrlProtocol),
 		cryptoManager: CryptoManaging) {
 
-		self.coordinator = coordinator
+		self.theCoordinator = coordinator
 		self.cryptoManager = cryptoManager
 
 		self.title = .verifierScanTitle
 		self.message = .verifierScanMessage
 		self.torchAccessibility = .verifierScanTorchAccessibility
+
+		super.init(coordinator: coordinator)
 	}
 
 	/// Parse the scanned QR-code
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let attributes = cryptoManager?.verifyQRMessage(message) {
-			coordinator?.navigateToScanResult(attributes)
-		} else {
-			coordinator?.navigateToScanResult(
-				Attributes(
-					cryptoAttributes:
-						CrypoAttributes(
-							birthDay: nil,
-							birthMonth: nil,
-							firstNameInitial: nil,
-							lastNameInitial: nil,
-							sampleTime: "",
-							testType: "",
-							specimen: "0",
-							paperProof: "0"
-						),
-					unixTimeStamp: 0
-				)
-			)
+		if let cryptoResults = cryptoManager?.verifyQRMessage(message) {
+			theCoordinator?.navigateToScanResult(cryptoResults)
 		}
 	}
 
 	func dismiss() {
 
-		coordinator?.dismiss()
+		theCoordinator?.navigateToVerifierWelcome()
 	}
 }

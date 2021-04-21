@@ -152,7 +152,8 @@ class IdentityView: BaseView {
 
 			stackView.topAnchor.constraint(equalTo: topAnchor),
 			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			stackView.centerXAnchor.constraint(equalTo: centerXAnchor)
+			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
+			stackView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor)
 		])
 	}
 

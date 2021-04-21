@@ -35,12 +35,29 @@ class TokenValidator: TokenValidatorProtocol {
 
 		let codeSplit = token.components(separatedBy: "-")
 
+		// Hard Rules for Token (XXX-YYYYYYYYY-Z2)
 		guard codeSplit.count == 3 else {
+
+			return false
+		}
+		guard codeSplit[0].count == 3 else {
+
+			return false
+		}
+		guard codeSplit[2].count == 2 else {
+
+			return false
+		}
+		guard codeSplit[2].last == "2" else {
+
 			return false
 		}
 
-		let code = codeSplit[1] + codeSplit[2].prefix(1)
-		return luhnModN(code)
+		return true
+
+		// Bypass the luhnModN checksum for now.
+//		let code = codeSplit[1] + codeSplit[2].prefix(1)
+//		return luhnModN(code)
 	}
 
 	/// Check the luhn mod N checksum

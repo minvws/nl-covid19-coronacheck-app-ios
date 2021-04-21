@@ -17,6 +17,8 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 
 	let sceneView = ScanView()
 
+	var previousOrientation: UIInterfaceOrientation?
+
 	// MARK: View lifecycle
 	override func loadView() {
 
@@ -54,7 +56,11 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			captureSession.addOutput(metadataOutput)
 
 			metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-			metadataOutput.metadataObjectTypes = [.qr]
+			if Configuration().getEnvironment() == "test" {
+				metadataOutput.metadataObjectTypes = [.qr, .aztec]
+			} else {
+				metadataOutput.metadataObjectTypes = [.qr]
+			}
 		} else {
 			failed()
 			return
@@ -79,6 +85,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		]
 		navigationController?.navigationBar.titleTextAttributes = textAttributes
 		navigationController?.navigationBar.tintColor = .white
+
+		previousOrientation = OrientationUtility.currentOrientation()
+		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -105,6 +114,8 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		]
 		navigationController?.navigationBar.titleTextAttributes = textAttributes
 		navigationController?.navigationBar.tintColor = Theme.colors.dark
+
+		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 
 	func failed() {

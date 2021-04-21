@@ -9,6 +9,10 @@ import Foundation
 
 protocol ConfigurationGeneralProtocol: AnyObject {
 
+	/// Get the time for auto close
+	/// - Returns: Time for auto close
+	func getAutoCloseTime() -> TimeInterval
+
 	/// Get the TTL for a test result warning
 	/// - Returns: TTL for a test result warning
 	func getTestResultWarningTTL() -> Int
@@ -24,10 +28,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// Get the URL for the privacy policy
 	/// - Returns: the privay policy url
 	func getPrivacyPolicyURL() -> URL
-
-	/// Get the URL for the holder about url
-	/// - Returns: the holder about url
-	func getHolderAboutAppURL() -> URL
 
 	/// Get the URL for the holder faq
 	/// - Returns: the holder faq uel
@@ -45,6 +45,15 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 // MARK: - ConfigurationGeneralProtocol
 
 extension Configuration: ConfigurationGeneralProtocol {
+
+	/// Get the time for auto close
+	/// - Returns: Time for auto close
+	func getAutoCloseTime() -> TimeInterval {
+		guard let value = general["autoCloseTime"] as? TimeInterval else {
+			fatalError("Configuration: No Auto Close Time provided")
+		}
+		return value
+	}
 
 	/// Get the TTL for a test result warning
 	/// - Returns: TTL for a test result warning
@@ -74,7 +83,7 @@ extension Configuration: ConfigurationGeneralProtocol {
 	}
 
 	/// Get the URL for the privacy policy
-	/// - Returns: the privay policy url
+	/// - Returns: the privacy policy url
 	func getPrivacyPolicyURL() -> URL {
 		guard let value = general["privacyPolicyURL"] as? String,
 			  let url = URL(string: value) else {
@@ -83,18 +92,8 @@ extension Configuration: ConfigurationGeneralProtocol {
 		return url
 	}
 
-	/// Get the URL for the holder about url
-	/// - Returns: the holder about url
-	func getHolderAboutAppURL() -> URL {
-		guard let value = general["holderAboutURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Holder About URL provided")
-		}
-		return url
-	}
-
 	/// Get the URL for the holder faq
-	/// - Returns: the holder faq uel
+	/// - Returns: the holder faq url
 	func getHolderFAQURL() -> URL {
 		guard let value = general["holderFAQURL"] as? String,
 			  let url = URL(string: value) else {
@@ -113,8 +112,8 @@ extension Configuration: ConfigurationGeneralProtocol {
 		return url
 	}
 
-	/// Get the URL for the holder faq
-	/// - Returns: the holder faq uel
+	/// Get the URL for the verifier faq
+	/// - Returns: the verifier faq url
 	func getVerifierFAQURL() -> URL {
 		guard let value = general["verifierFAQURL"] as? String,
 			  let url = URL(string: value) else {

@@ -56,7 +56,7 @@ class OnboardingViewControllerTests: XCTestCase {
 	// MARK: Test
 
 	/// Test all the content
-	func testContent() {
+	func testContent() throws {
 
 		// Given
 
@@ -64,11 +64,7 @@ class OnboardingViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		guard let strongSut = sut else {
-
-			XCTFail("Can not unwrap sut")
-			return
-		}
+		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.primaryButton.titleLabel?.text, .next, "Button title should match")
 	}
 

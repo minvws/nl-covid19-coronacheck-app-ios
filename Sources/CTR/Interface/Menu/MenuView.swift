@@ -46,6 +46,15 @@ class MenuItemView: BaseView {
 		primaryButton.embed(in: self)
 	}
 
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+		
+		titleLabel.isAccessibilityElement = false
+
+	}
+
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
@@ -56,9 +65,17 @@ class MenuItemView: BaseView {
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
+			primaryButton.accessibilityLabel = title
+		}
+	}
 }
 
-class MenuView: BaseView {
+class MenuView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -106,28 +123,33 @@ class MenuView: BaseView {
 		return view
 	}()
 
+	private let spacer: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
+	}()
+
 	/// The bottom label
 	let bottomLabel: Label = {
 
-		return Label(body: nil).multiline()
+		return Label(footnote: nil, textColor: Theme.colors.secondary).multiline()
 	}()
 
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.primary
-		bottomLabel.textColor = Theme.colors.secondary
-		bottomLabel.font = Theme.fonts.subheadMontserrat
-		bottomLabel.textAlignment = .right
 	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(topStackView)
-//		addSubview(lineView)
-		addSubview(bottomStackView)
+		stackView.addArrangedSubview(topStackView)
+//		stackView.addArrangedSubview(lineView)
+		stackView.addArrangedSubview(bottomStackView)
+		stackView.addArrangedSubview(spacer)
 		addSubview(bottomLabel)
 	}
 
@@ -137,52 +159,22 @@ class MenuView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
+			// Lineview
+			lineView.heightAnchor.constraint(equalToConstant: 1),
 
-			// Top Stack View
-			topStackView.topAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.margin
-			),
+			// Spacer
+			spacer.heightAnchor.constraint(equalTo: bottomLabel.heightAnchor),
 
-			topStackView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			topStackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+			// Bottom label
+			bottomLabel.bottomAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
-
-//			// Line
-//			lineView.heightAnchor.constraint(equalToConstant: 1),
-//			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
-//			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
-//			lineView.topAnchor.constraint(
-//				equalTo: topStackView.bottomAnchor,
-//				constant: ViewTraits.lineMarginTop
-//			),
-
-			// Bottom Stack view
-//			bottomStackView.topAnchor.constraint(
-//				equalTo: lineView.bottomAnchor,
-//				constant: ViewTraits.lineMarginBottom
-//			),
-			bottomStackView.topAnchor.constraint(
-				equalTo: topStackView.bottomAnchor,
-				constant: ViewTraits.lineMarginBottom * 2
-			),
-			bottomStackView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+			bottomLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+			bottomLabel.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.margin
-			),
-			bottomStackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			bottomLabel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-			bottomLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-			bottomLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor)
+			)
 		])
 	}
 

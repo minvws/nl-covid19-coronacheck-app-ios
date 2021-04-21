@@ -52,6 +52,7 @@ class LaunchViewController: BaseViewController {
 
 		super.viewWillAppear(animated)
 		sceneView.spinner.startAnimating()
+		layoutForOrientation()
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -63,5 +64,27 @@ class LaunchViewController: BaseViewController {
 	func checkRequirements() {
 
 		viewModel.checkRequirements()
+	}
+
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+			self?.sceneView.setNeedsLayout()
+		}
+	}
+
+	/// Layout for different orientations
+	func layoutForOrientation() {
+
+		if traitCollection.verticalSizeClass == .compact {
+			sceneView.hideImage()
+		} else {
+			sceneView.showImage()
+		}
 	}
 }

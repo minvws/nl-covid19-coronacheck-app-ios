@@ -60,12 +60,12 @@ class TokenOverviewViewModel: Logging {
 				identifier: .code,
 				icon: .tokenExample,
 				subTitle: .holderTokenOverviewCodeText
-			),
-			TokenProvider(
-				identifier: .qr,
-				icon: .miniQR,
-				subTitle: .holderTokenOverviewQRText
-			)
+			)// ,
+//			TokenProvider(
+//				identifier: .qr,
+//				icon: .miniQR,
+//				subTitle: .holderTokenOverviewQRText
+//			)
 		]
 	}
 
