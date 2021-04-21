@@ -799,6 +799,8 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
+    // MARK: - DisplayMode: inputVerificationCode (hiding tokenEntry field)
+
     // MARK: - Sugar
 
     private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {

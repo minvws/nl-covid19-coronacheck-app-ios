@@ -3712,7 +3712,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 22;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = QMK879NYMV;
+				DEVELOPMENT_TEAM = N8N37QWHHP;
 				DISPLAY_NAME = "CoronaCheck D";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3725,7 +3725,7 @@
 				);
 				MARKETING_VERSION = 1.1.5;
 				NETWORK_CONFIGURATION = Development;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug.ian;
 				PRODUCT_MODULE_NAME = CTR;
 				PRODUCT_NAME = CTR;
 				PROVISIONING_PROFILE_SPECIFIER = "";
