@@ -62,7 +62,9 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.linkTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.navigateToScanInstructionCalled) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
+			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 	}
 
 	func test_primaryButtonTapped_noScanInstructionsShown() {
@@ -74,7 +76,9 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.navigateToScanInstructionCalled) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
+			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
 		expect(self.userSettingsSpy.invokedScanInstructionShownGetter) == true
 	}
 
@@ -88,7 +92,9 @@ class VerifierStartViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		expect(self.verifyCoordinatorDelegateSpy.navigateToScanCalled) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResult) == true
+		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishVerifierStartResultParameters?.result)
+			.to(equal(.userTappedProceedToScan), description: "Result should match")
 	}
 
 	func test_primaryButtonTapped_scanInstructionsShown_noPublicKeys() {

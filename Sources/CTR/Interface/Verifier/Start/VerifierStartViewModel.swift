@@ -7,6 +7,13 @@
 
 import UIKit
 
+enum VerifierStartResult {
+
+	case userTappedProceedToScan
+
+	case userTappedProceedToScanInstructions
+}
+
 class VerifierStartViewModel: Logging {
 
 	var loggingCategory: String = "VerifierStartViewModel"
@@ -61,21 +68,21 @@ class VerifierStartViewModel: Logging {
 		if userSettings.scanInstructionShown {
 
 			if let crypto = cryptoManager, crypto.hasPublicKeys() {
-				coordinator?.navigateToScan()
+				coordinator?.didFinish(.userTappedProceedToScan)
 			} else {
 				updatePublicKeys()
 				showError = true
 			}
 		} else {
-
+			// Show the scan instructions the first time no matter what link was tapped
 			userSettings.scanInstructionShown = true
-			coordinator?.navigateToScanInstruction(present: true)
+			coordinator?.didFinish(.userTappedProceedToScanInstructions)
 		}
 	}
 
 	func linkTapped() {
 
-		coordinator?.navigateToScanInstruction(present: false)
+		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 
 	/// Update the public keys
