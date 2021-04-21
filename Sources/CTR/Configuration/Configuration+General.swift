@@ -24,22 +24,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// Get the Refresh Period for a QR
 	/// - Returns: TTL for a QR
 	func getQRRefreshPeriod() -> TimeInterval
-
-	/// Get the URL for the privacy policy
-	/// - Returns: the privay policy url
-	func getPrivacyPolicyURL() -> URL
-
-	/// Get the URL for the holder faq
-	/// - Returns: the holder faq uel
-	func getHolderFAQURL() -> URL
-
-	/// Get the URL for the verifier about url
-	/// - Returns: the verifier about url
-	func getVerifierAboutAppURL() -> URL
-
-	/// Get the URL for the holder faq
-	/// - Returns: the holder faq uel
-	func getVerifierFAQURL() -> URL
 }
 
 // MARK: - ConfigurationGeneralProtocol
@@ -80,45 +64,5 @@ extension Configuration: ConfigurationGeneralProtocol {
 			fatalError("Configuration: No QR Refresh Period provided")
 		}
 		return value
-	}
-
-	/// Get the URL for the privacy policy
-	/// - Returns: the privacy policy url
-	func getPrivacyPolicyURL() -> URL {
-		guard let value = general["privacyPolicyURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Privacy Policy URL provided")
-		}
-		return url
-	}
-
-	/// Get the URL for the holder faq
-	/// - Returns: the holder faq url
-	func getHolderFAQURL() -> URL {
-		guard let value = general["holderFAQURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Holder FAQ URL provided")
-		}
-		return url
-	}
-
-	/// Get the URL for the verifier about url
-	/// - Returns: the verifier about url
-	func getVerifierAboutAppURL() -> URL {
-		guard let value = general["verifierAboutURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Verifier About URL provided")
-		}
-		return url
-	}
-
-	/// Get the URL for the verifier faq
-	/// - Returns: the verifier faq url
-	func getVerifierFAQURL() -> URL {
-		guard let value = general["verifierFAQURL"] as? String,
-			  let url = URL(string: value) else {
-			fatalError("Configuration: No Verifier FAQ URL provided")
-		}
-		return url
 	}
 }

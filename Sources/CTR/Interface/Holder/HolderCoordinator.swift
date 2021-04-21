@@ -163,8 +163,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = AppointmentViewController(
 			viewModel: AppointmentViewModel(
 				coordinator: self,
-				maxValidity: String(maxValidity),
-				configuration: generalConfiguration
+				maxValidity: String(maxValidity)
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
@@ -297,7 +296,10 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationContoller
 
 			case .faq:
-				let faqUrl = generalConfiguration.getHolderFAQURL()
+				guard let faqUrl = URL(string: .holderUrlFAQ) else {
+					logError("No holder FAQ url")
+					return
+				}
 				openUrl(faqUrl, inApp: true)
 
 			case .about :
@@ -307,11 +309,14 @@ extension HolderCoordinator: MenuDelegate {
 						flavor: AppFlavor.flavor
 					)
 				)
-				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-				sidePanel?.selectedViewController = aboutNavigationContoller
+				aboutNavigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .privacy :
-				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
+				guard let privacyUrl = URL(string: .holderUrlPrivacy) else {
+					logError("No holder privacy url")
+					return
+				}
 				openUrl(privacyUrl, inApp: true)
 
 			default:

@@ -88,7 +88,7 @@ class ConsentViewController: BaseViewController {
 	/// User tapped on the link
 	@objc func linkTapped() {
 
-		viewModel.linkTapped(self)
+		viewModel.linkTapped()
 	}
 
 	/// The user tapped on the primary button

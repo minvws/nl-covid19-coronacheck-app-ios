@@ -23,7 +23,7 @@ class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 		dismissCalled = true
 	}
 
-	func showPrivacyPage(_ viewController: UIViewController) {
+	func showPrivacyPage() {
 
 		showPrivacyPageCalled = true
 	}
