@@ -199,7 +199,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_fetchesProviders() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_fetchesProviders() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
 
@@ -214,7 +214,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_success_stopsProgress() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_success_stopsProgress() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -232,7 +232,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_failure_stopsProgressAndShowsError() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_failure_stopsProgressAndShowsError() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -253,7 +253,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withUnidentifiableTestProvider_showsErrorMessage() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withUnidentifiableTestProvider_showsErrorMessage() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -270,7 +270,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_startsProgress() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_startsProgress() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -287,7 +287,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -308,7 +308,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -328,7 +328,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -348,7 +348,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_showsErrorAndResetsUIForVerification() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_showsErrorAndResetsUIForVerification() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -374,7 +374,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_invalid_showsError() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_invalid_showsError() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -393,7 +393,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_success_unknown_showsError() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_unknown_showsError() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -413,7 +413,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
@@ -433,7 +433,7 @@ class TokenEntryViewModelTests: XCTestCase {
         TokenEntryViewController(viewModel: sut).assertImage()
     }
 
-    func test_nextButtonPressed_withNonemptyVerificationInput_withPreviousRequestTokenSet_withIdentifiableTestProvider_failure_showsError() {
+    func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_failure_showsError() {
         // Arrange
         sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
