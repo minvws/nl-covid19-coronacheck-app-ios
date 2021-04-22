@@ -20,7 +20,7 @@ class TokenEntryViewModel {
 
 	// MARK: - Bindables
 
-    @Bindable private(set) var title: String
+    @Bindable private(set) var title: String = .holderTokenEntryTitle
     @Bindable private(set) var message: String?
     @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
@@ -64,7 +64,6 @@ class TokenEntryViewModel {
 
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
-
 
     /// Indicates that the screen originated in a QR or Universal Link flow.
     private let wasInitializedWithARequestToken: Bool
@@ -120,7 +119,6 @@ class TokenEntryViewModel {
 		self.requestToken = requestToken
         self.tokenValidator = tokenValidator
         self.message = nil
-        self.title = ""
 
 		if let unwrappedToken = requestToken {
             self.wasInitializedWithARequestToken = true
@@ -389,35 +387,25 @@ class TokenEntryViewModel {
                 shouldShowTokenEntryField = false
                 shouldShowVerificationEntryField = false
                 shouldShowNextButton = false
-                title = "Testresultaat ophalen" // TODO
                 message = nil
 
             case .inputToken:
                 shouldShowTokenEntryField = true
                 shouldShowVerificationEntryField = false
                 shouldShowNextButton = true
-                title = .holderTokenEntryTitle
                 message = .holderTokenEntryText
 
             case .inputTokenWithVerificationCode:
                 shouldShowTokenEntryField = true
                 shouldShowVerificationEntryField = true
                 shouldShowNextButton = true
-                title = .holderTokenEntryTitle
                 message = .holderTokenEntryText
 
             case .inputVerificationCode:
                 shouldShowTokenEntryField = false
                 shouldShowVerificationEntryField = true
                 shouldShowNextButton = true
-
-                if wasInitializedWithARequestToken {
-                    title = "Testresultaat ophalen" // TODO
-                    message = "Vul jouw verficatie code in.." // TODO
-                } else {
-                    title = .holderTokenEntryTitle
-                    message = .holderTokenEntryText
-                }
+                message = .holderTokenEntryText
         }
     }
 
