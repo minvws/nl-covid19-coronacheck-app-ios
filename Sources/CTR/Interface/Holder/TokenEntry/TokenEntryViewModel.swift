@@ -22,6 +22,8 @@ class TokenEntryViewModel {
 
     @Bindable private(set) var title: String = .holderTokenEntryTitle
     @Bindable private(set) var message: String?
+
+    // Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
     @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
             update(
@@ -100,6 +102,25 @@ class TokenEntryViewModel {
                 )
             )
         }
+    }
+
+    private var inProgressCount = 0 {
+        didSet {
+            guard inProgressCount >= 0 else { return }
+            self.shouldShowProgress = inProgressCount > 0
+        }
+    }
+
+    private func incrementProgressCount() {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        inProgressCount += 1
+    }
+
+    private func decrementProgressCount() {
+        objc_sync_enter(self)
+        defer { objc_sync_exit(self) }
+        inProgressCount -= 1
     }
 
 	// MARK: - Initializer
@@ -250,18 +271,18 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchProviders(_ requestToken: RequestToken) {
 
-        shouldShowProgress = true
+        incrementProgressCount()
 
         proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
 
-				self?.shouldShowProgress = false
-				self?.fetchResult(requestToken)
+                self?.fetchResult(requestToken)
+                self?.decrementProgressCount()
 
 			}, onError: { [weak self] error in
 
-				self?.shouldShowProgress = false
-				self?.showError = true
+                self?.showError = true
+                self?.decrementProgressCount()
 			}
 		)
 	}
@@ -269,9 +290,8 @@ class TokenEntryViewModel {
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
 	private func fetchResult(_ requestToken: RequestToken) {
-		guard let provider = proofManager?.getTestProvider(requestToken) else {
-            shouldShowProgress = false
-			errorMessage = .holderTokenEntryErrorInvalidCode
+        guard let provider = proofManager?.getTestProvider(requestToken) else {
+            errorMessage = .holderTokenEntryErrorInvalidCode
 
             update(inputMode: TokenEntryViewModel.calculateInputMode(
                     tokenValidityIndicator: true,
@@ -283,16 +303,16 @@ class TokenEntryViewModel {
             )
             self.enableNextButton = true
 
-			return
-		}
+            return
+        }
 
-        shouldShowProgress = true
+        incrementProgressCount()
+
 		proofManager?.fetchTestResult(
 			requestToken,
 			code: verificationCode,
 			provider: provider) {  [weak self] response in
 
-			self?.shouldShowProgress = false
 			self?.errorMessage = nil
 
 			switch response {
@@ -322,6 +342,9 @@ class TokenEntryViewModel {
 					}
                     self?.enableNextButton = true
             }
+
+            self?.decrementProgressCount()
+
         }
 	}
 
