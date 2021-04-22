@@ -27,7 +27,7 @@ class AppointmentViewControllerTests: XCTestCase {
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		viewModel = AppointmentViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			maxValidity: "test"
+			maxValidity: 40
 		)
 		sut = AppointmentViewController(viewModel: viewModel)
 		window = UIWindow()
