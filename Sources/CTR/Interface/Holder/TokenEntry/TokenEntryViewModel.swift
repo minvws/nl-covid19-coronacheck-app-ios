@@ -9,31 +9,12 @@ import UIKit
 
 class TokenEntryViewModel {
 
-//    private enum ProgressIndicationMode {
-//        case hud
-//        case fullscreen
-//    }
-
     fileprivate enum InputMode {
         case none // hide all fields
         case inputToken
         case inputTokenWithVerificationCode
         case inputVerificationCode
     }
-
-//    private func update(progressIndicationMode newProgressIndicationMode: ProgressIndicationMode?) {
-//        switch newProgressIndicationMode {
-//            case .none:
-//                shouldShowProgress = false
-//                shouldShowViewContents = true
-//            case .hud?:
-//                shouldShowProgress = true
-//                shouldShowViewContents = true
-//            case .fullscreen?:
-//                shouldShowProgress = true
-//                shouldShowViewContents = false
-//        }
-//    }
 
     private var verificationCodeIsKnownToBeRequired = false {
         didSet {
@@ -110,7 +91,6 @@ class TokenEntryViewModel {
         }
     }
 //    @Bindable private(set) var shouldShowProgress: Bool = false
-//    @Bindable private(set) var shouldShowViewContents: Bool = false // allow anything except loading spinner?
     @Bindable private(set) var shouldShowTokenEntryField: Bool = false
     @Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 
@@ -308,8 +288,7 @@ class TokenEntryViewModel {
             if let unwrappedToken = requestToken {
                 self.fetchProviders(unwrappedToken)
             }
-        }
-        else {
+        } else {
             if let tokenInput = tokenInput {
                 // TODO: rename this function or something
                 nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
@@ -340,7 +319,6 @@ class TokenEntryViewModel {
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
 	private func fetchResult(_ requestToken: RequestToken) {
-
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
 			showProgress = false
 			errorMessage = .holderTokenEntryErrorInvalidCode
@@ -470,23 +448,13 @@ private func calculateInputMode(
     if wasInitialisedWithARefreshToken {
         if hasEverPressedNextButton {
             return .inputVerificationCode
-        }
-        else {
+        } else {
             if isInProgress || screenHasCompleted {
                 return .none
-            }
-            else {
+            } else {
                 return .inputVerificationCode
             }
         }
-
-//        if screenHasCompleted {
-//            return .none
-//        } else if isInProgress && !hasEverPressedNextButton {
-//            return .none
-//        } else {
-//            return .inputVerificationCode
-//        }
     } else {
         if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
             return .inputTokenWithVerificationCode
