@@ -187,9 +187,9 @@ class TokenEntryViewModel {
         hasEverPressedNextButton = true
 
         if wasInitializedWithARequestToken {
-            nextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
+            handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
         } else {
-            nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
+            handleNextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
         }
 	}
 
@@ -202,15 +202,14 @@ class TokenEntryViewModel {
             }
         } else {
             if let tokenInput = tokenInput {
-                // TODO: rename this function or something
-                nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
+                handleNextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
             }
         }
     }
 
     // MARK: - Private tap handlers:
 
-    private func nextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
+    private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
         errorMessage = nil
 
         guard let tokenInput = tokenInput else {
@@ -233,7 +232,7 @@ class TokenEntryViewModel {
         }
     }
 
-    private func nextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
+    private func handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
         errorMessage = nil
 
         guard let requestToken = requestToken else { return }
