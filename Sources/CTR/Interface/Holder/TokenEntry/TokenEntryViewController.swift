@@ -111,6 +111,11 @@ class TokenEntryViewController: BaseViewController {
             strongSelf.sceneView.tokenEntryView.isHidden = !$0
         }
 
+        viewModel.$shouldShowNextButton.binding = { [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.sceneView.primaryButton.isHidden = !$0
+        }
+
 		viewModel.$shouldShowVerificationEntryField.binding = { [weak self]  in
 
 			guard let strongSelf = self else { return }

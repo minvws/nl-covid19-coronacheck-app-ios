@@ -57,24 +57,28 @@ class TokenEntryViewModel {
             case .none:
                 shouldShowTokenEntryField = false
                 shouldShowVerificationEntryField = false
+                shouldShowNextButton = false
                 title = "Testresultaat ophalen" // TODO
                 message = nil
                 
             case .inputToken:
                 shouldShowTokenEntryField = true
                 shouldShowVerificationEntryField = false
+                shouldShowNextButton = true
                 title = .holderTokenEntryTitle
                 message = .holderTokenEntryText
 
             case .inputTokenWithVerificationCode:
                 shouldShowTokenEntryField = true
                 shouldShowVerificationEntryField = true
+                shouldShowNextButton = true
                 title = .holderTokenEntryTitle
                 message = .holderTokenEntryText
 
             case .inputVerificationCode:
                 shouldShowTokenEntryField = false
                 shouldShowVerificationEntryField = true
+                shouldShowNextButton = true
 
                 if wasInitializedWithARequestToken {
                     title = "Testresultaat ophalen" // TODO
@@ -110,6 +114,8 @@ class TokenEntryViewModel {
 //    @Bindable private(set) var shouldShowViewContents: Bool = false // allow anything except loading spinner?
     @Bindable private(set) var shouldShowTokenEntryField: Bool = false
     @Bindable private(set) var shouldShowVerificationEntryField: Bool = false
+
+    @Bindable private(set) var shouldShowNextButton: Bool = true
 
 	/// True if we should enable the next button
 	@Bindable private(set) var enableNextButton: Bool = false
@@ -335,6 +341,7 @@ class TokenEntryViewModel {
                     hasEverPressedNextButton: hasEverPressedNextButton,
                     screenHasCompleted: screenHasCompleted)
             )
+            self.enableNextButton = true
 
 			return
 		}
@@ -358,9 +365,11 @@ class TokenEntryViewModel {
 							self?.handleVerificationRequired()
 						case .invalid:
 							self?.errorMessage = .holderTokenEntryErrorInvalidCode
+                            self?.enableNextButton = true
 						default:
 							self?.logDebug("Unhandled test result status: \(wrapper.status)")
 							self?.errorMessage = "Unhandled: \(wrapper.status)"
+                            self?.enableNextButton = true
 					}
 				case let .failure(error):
 
@@ -371,8 +380,9 @@ class TokenEntryViewModel {
 						self?.errorMessage = error.localizedDescription
 						self?.showError = true
 					}
-			}
-		}
+                    self?.enableNextButton = true
+            }
+        }
 	}
 
 	/// Handle the verification required response
@@ -381,11 +391,14 @@ class TokenEntryViewModel {
 		if let code = verificationCode, !code.isEmpty {
 			// We are showing the verification entry, so this is a wrong verification code
 			errorMessage = .holderTokenEntryErrorInvalidCode
-		}
+            enableNextButton = true
+        } else {
+            enableNextButton = false
+        }
 		resetCountdownCounter()
 		startResendTimer()
         verificationCodeIsKnownToBeRequired = true
-		enableNextButton = false
+
 	}
 
 	// MARK: Resend SMS Countdown
@@ -443,13 +456,25 @@ private func calculateInputMode(
 ) -> TokenEntryViewModel.InputMode {
 
     if wasInitialisedWithARefreshToken {
-        if screenHasCompleted {
-            return .none
-        } else if isInProgress && !hasEverPressedNextButton {
-            return .none
-        } else {
+        if hasEverPressedNextButton {
             return .inputVerificationCode
         }
+        else {
+            if isInProgress || screenHasCompleted {
+                return .none
+            }
+            else {
+                return .inputVerificationCode
+            }
+        }
+
+//        if screenHasCompleted {
+//            return .none
+//        } else if isInProgress && !hasEverPressedNextButton {
+//            return .none
+//        } else {
+//            return .inputVerificationCode
+//        }
     } else {
         if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
             return .inputTokenWithVerificationCode
