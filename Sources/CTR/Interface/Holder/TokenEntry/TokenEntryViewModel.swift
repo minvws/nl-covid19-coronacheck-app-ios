@@ -403,7 +403,12 @@ class TokenEntryViewModel {
 
     // Applies a new InputMode to the UI bindables
     // Should **not** not make any decisions
+    private var previousInputMode: InputMode?
+    
     private func update(inputMode newInputMode: InputMode) {
+        guard newInputMode != previousInputMode else { return }
+        previousInputMode = newInputMode
+
         switch newInputMode {
             case .none:
                 shouldShowTokenEntryField = false
