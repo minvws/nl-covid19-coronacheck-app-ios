@@ -9,66 +9,13 @@ import UIKit
 
 class TokenEntryViewModel {
 
+    /// There are four "modes" for user entry
+    /// that determine which fields (if any) should be shown at one time.
     fileprivate enum InputMode {
         case none // hide all fields
         case inputToken
         case inputTokenWithVerificationCode
         case inputVerificationCode
-    }
-
-    private var verificationCodeIsKnownToBeRequired = false {
-        didSet {
-            update(
-                inputMode: calculateInputMode(
-                    tokenValidityIndicator: true,
-                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: shouldShowProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted
-                )
-            )
-        }
-    }
-
-    // Applies the outcome of a decision about the new InputMode
-    // i.e. does not make any decisions
-    private func update(inputMode newInputMode: InputMode) {
-        switch newInputMode {
-            case .none:
-                shouldShowTokenEntryField = false
-                shouldShowVerificationEntryField = false
-                shouldShowNextButton = false
-                title = "Testresultaat ophalen" // TODO
-                message = nil
-                
-            case .inputToken:
-                shouldShowTokenEntryField = true
-                shouldShowVerificationEntryField = false
-                shouldShowNextButton = true
-                title = .holderTokenEntryTitle
-                message = .holderTokenEntryText
-
-            case .inputTokenWithVerificationCode:
-                shouldShowTokenEntryField = true
-                shouldShowVerificationEntryField = true
-                shouldShowNextButton = true
-                title = .holderTokenEntryTitle
-                message = .holderTokenEntryText
-
-            case .inputVerificationCode:
-                shouldShowTokenEntryField = false
-                shouldShowVerificationEntryField = true
-                shouldShowNextButton = true
-
-                if wasInitializedWithARequestToken {
-                    title = "Testresultaat ophalen" // TODO
-                    message = "Vul jouw verficatie code in.." // TODO
-                } else {
-                    title = .holderTokenEntryTitle
-                    message = .holderTokenEntryText
-                }
-        }
     }
 
 	// MARK: - Bindables
@@ -78,7 +25,7 @@ class TokenEntryViewModel {
     @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
             update(
-                inputMode: calculateInputMode(
+                inputMode: TokenEntryViewModel.calculateInputMode(
                     tokenValidityIndicator: nil,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
@@ -91,19 +38,10 @@ class TokenEntryViewModel {
     }
     @Bindable private(set) var shouldShowTokenEntryField: Bool = false
     @Bindable private(set) var shouldShowVerificationEntryField: Bool = false
-
     @Bindable private(set) var shouldShowNextButton: Bool = true
-
-	/// True if we should enable the next button
 	@Bindable private(set) var enableNextButton: Bool = false
-
-	/// An error message
     @Bindable private(set) var errorMessage: String?
-
-	/// The title for the secondary button
 	@Bindable private(set) var secondaryButtonTitle: String?
-
-	/// Is the secondary button enabled?
 	@Bindable private(set) var secondaryButtonEnabled: Bool = false
 
 	/// Show internet error
@@ -127,6 +65,7 @@ class TokenEntryViewModel {
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
 
+
     /// Indicates that the screen originated in a QR or Universal Link flow.
     private let wasInitializedWithARequestToken: Bool
 
@@ -137,7 +76,22 @@ class TokenEntryViewModel {
     private var screenHasCompleted: Bool = false {
         didSet {
             update(
-                inputMode: calculateInputMode(
+                inputMode: TokenEntryViewModel.calculateInputMode(
+                    tokenValidityIndicator: true,
+                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
+                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
+                    isInProgress: shouldShowProgress,
+                    hasEverPressedNextButton: hasEverPressedNextButton,
+                    screenHasCompleted: screenHasCompleted
+                )
+            )
+        }
+    }
+
+    private var verificationCodeIsKnownToBeRequired = false {
+        didSet {
+            update(
+                inputMode: TokenEntryViewModel.calculateInputMode(
                     tokenValidityIndicator: true,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
@@ -175,7 +129,7 @@ class TokenEntryViewModel {
             self.wasInitializedWithARequestToken = false
 
             update(
-                inputMode: calculateInputMode(
+                inputMode: TokenEntryViewModel.calculateInputMode(
                     tokenValidityIndicator: nil,
                     wasInitialisedWithARefreshToken: false,
                     verificationCodeIsKnownToBeRequired: false,
@@ -207,7 +161,7 @@ class TokenEntryViewModel {
 			enableNextButton = validToken
 
             update(
-                inputMode: calculateInputMode(
+                inputMode: TokenEntryViewModel.calculateInputMode(
                     tokenValidityIndicator: validToken,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
@@ -241,6 +195,23 @@ class TokenEntryViewModel {
         }
 	}
 
+    /// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
+    func sendVerificationAgainButtonPressed(tokenInput: String?) {
+
+        if wasInitializedWithARequestToken {
+            if let unwrappedToken = requestToken {
+                self.fetchProviders(unwrappedToken)
+            }
+        } else {
+            if let tokenInput = tokenInput {
+                // TODO: rename this function or something
+                nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
+            }
+        }
+    }
+
+    // MARK: - Private tap handlers:
+
     private func nextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
         errorMessage = nil
 
@@ -267,10 +238,7 @@ class TokenEntryViewModel {
     private func nextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
         errorMessage = nil
 
-        guard let requestToken = requestToken else {
-            fatalError("shouldn't go here") // TODO remove
-            return
-        }
+        guard let requestToken = requestToken else { return }
 
         if let verification = verificationInput, !verification.isEmpty {
             verificationCode = verification.uppercased()
@@ -279,20 +247,7 @@ class TokenEntryViewModel {
         }
     }
 
-    /// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
-    func sendVerificationAgainButtonPressed(tokenInput: String?) {
-
-        if wasInitializedWithARequestToken {
-            if let unwrappedToken = requestToken {
-                self.fetchProviders(unwrappedToken)
-            }
-        } else {
-            if let tokenInput = tokenInput {
-                // TODO: rename this function or something
-                nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
-            }
-        }
-    }
+    // MARK: - Networking:
 
 	/// Fetch the providers
 	/// - Parameter requestToken: the request token
@@ -321,7 +276,7 @@ class TokenEntryViewModel {
             shouldShowProgress = false
 			errorMessage = .holderTokenEntryErrorInvalidCode
 
-            update(inputMode: calculateInputMode(
+            update(inputMode: TokenEntryViewModel.calculateInputMode(
                     tokenValidityIndicator: true,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
@@ -389,7 +344,7 @@ class TokenEntryViewModel {
 
 	}
 
-	// MARK: Resend SMS Countdown
+	// MARK: - Resend SMS Countdown
 
 	private func resetCountdownCounter() {
 		resendCountdownCounter = 10
@@ -425,6 +380,74 @@ class TokenEntryViewModel {
 			secondaryButtonEnabled = true
 		}
 	}
+
+    // Applies a new InputMode to the UI bindables
+    // Should **not** not make any decisions
+    private func update(inputMode newInputMode: InputMode) {
+        switch newInputMode {
+            case .none:
+                shouldShowTokenEntryField = false
+                shouldShowVerificationEntryField = false
+                shouldShowNextButton = false
+                title = "Testresultaat ophalen" // TODO
+                message = nil
+
+            case .inputToken:
+                shouldShowTokenEntryField = true
+                shouldShowVerificationEntryField = false
+                shouldShowNextButton = true
+                title = .holderTokenEntryTitle
+                message = .holderTokenEntryText
+
+            case .inputTokenWithVerificationCode:
+                shouldShowTokenEntryField = true
+                shouldShowVerificationEntryField = true
+                shouldShowNextButton = true
+                title = .holderTokenEntryTitle
+                message = .holderTokenEntryText
+
+            case .inputVerificationCode:
+                shouldShowTokenEntryField = false
+                shouldShowVerificationEntryField = true
+                shouldShowNextButton = true
+
+                if wasInitializedWithARequestToken {
+                    title = "Testresultaat ophalen" // TODO
+                    message = "Vul jouw verficatie code in.." // TODO
+                } else {
+                    title = .holderTokenEntryTitle
+                    message = .holderTokenEntryText
+                }
+        }
+    }
+
+    private static func calculateInputMode(
+        tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
+        wasInitialisedWithARefreshToken: Bool,
+        verificationCodeIsKnownToBeRequired: Bool,
+        isInProgress: Bool,
+        hasEverPressedNextButton: Bool,
+        screenHasCompleted: Bool
+    ) -> TokenEntryViewModel.InputMode {
+
+        if wasInitialisedWithARefreshToken {
+            if hasEverPressedNextButton {
+                return .inputVerificationCode
+            } else {
+                if isInProgress || screenHasCompleted {
+                    return .none
+                } else {
+                    return .inputVerificationCode
+                }
+            }
+        } else {
+            if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
+                return .inputTokenWithVerificationCode
+            } else {
+                return .inputToken
+            }
+        }
+    }
 }
 
 extension TokenEntryViewModel: Logging {
@@ -432,32 +455,4 @@ extension TokenEntryViewModel: Logging {
 	var loggingCategory: String {
 		return "TokenEntryViewModel"
 	}
-}
-
-private func calculateInputMode(
-    tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
-    wasInitialisedWithARefreshToken: Bool,
-    verificationCodeIsKnownToBeRequired: Bool,
-    isInProgress: Bool,
-    hasEverPressedNextButton: Bool,
-    screenHasCompleted: Bool
-) -> TokenEntryViewModel.InputMode {
-
-    if wasInitialisedWithARefreshToken {
-        if hasEverPressedNextButton {
-            return .inputVerificationCode
-        } else {
-            if isInProgress || screenHasCompleted {
-                return .none
-            } else {
-                return .inputVerificationCode
-            }
-        }
-    } else {
-        if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
-            return .inputTokenWithVerificationCode
-        } else {
-            return .inputToken
-        }
-    }
 }
