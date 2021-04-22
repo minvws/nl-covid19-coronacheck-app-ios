@@ -158,6 +158,8 @@ public final class LogHandler: Logging {
 		let level = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String ?? "debug"
 
 		switch level {
+			case "verbose":
+				dynamicLogLevel = .verbose
 			case "debug":
 				dynamicLogLevel = .debug
 			case "info":
