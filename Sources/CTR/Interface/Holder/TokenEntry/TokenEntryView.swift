@@ -164,12 +164,12 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-            if let message = message {
-                messageLabel.attributedText = message.setLineHeight(ViewTraits.messageLineHeight)
-                messageLabel.isHidden = false
-            } else {
-                messageLabel.isHidden = true
-            }
+			if let message = message {
+				messageLabel.attributedText = message.setLineHeight(ViewTraits.messageLineHeight)
+				messageLabel.isHidden = false
+			} else {
+				messageLabel.isHidden = true
+			}
 		}
 	}
 

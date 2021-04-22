@@ -59,18 +59,18 @@ class TokenEntryViewController: BaseViewController {
 
 	func setupBinding() {
 
-        viewModel.$title.binding = { [weak self] title in
-            guard let strongSelf = self else { return }
-            strongSelf.sceneView.title = title
-        }
+		viewModel.$title.binding = { [weak self] title in
+			guard let strongSelf = self else { return }
+			strongSelf.sceneView.title = title
+		}
 
-        viewModel.$message.binding = { [weak self] message in
-            guard let strongSelf = self else { return }
-            strongSelf.sceneView.message = message
-        }
+		viewModel.$message.binding = { [weak self] message in
+			guard let strongSelf = self else { return }
+			strongSelf.sceneView.message = message
+		}
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
-            guard let strongSelf = self else { return }
+			guard let strongSelf = self else { return }
 
 			if $0 {
 				let hud = MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
@@ -97,17 +97,17 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 
-        viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
-            guard let strongSelf = self else { return }
+		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
+			guard let strongSelf = self else { return }
 
-            strongSelf.sceneView.tokenEntryView.isHidden = !$0
-        }
+			strongSelf.sceneView.tokenEntryView.isHidden = !$0
+		}
 
-        viewModel.$shouldShowNextButton.binding = { [weak self] in
-            guard let strongSelf = self else { return }
-            strongSelf.sceneView.primaryButton.isHidden = !$0
-        }
-        
+		viewModel.$shouldShowNextButton.binding = { [weak self] in
+			guard let strongSelf = self else { return }
+			strongSelf.sceneView.primaryButton.isHidden = !$0
+		}
+
 		viewModel.$shouldShowVerificationEntryField.binding = { [weak self] shouldShowVerificationEntryField in
 
 			guard let strongSelf = self else { return }
@@ -117,24 +117,24 @@ class TokenEntryViewController: BaseViewController {
 			strongSelf.sceneView.verificationEntryView.isHidden = !shouldShowVerificationEntryField
 			strongSelf.sceneView.secondaryButton.isHidden = !shouldShowVerificationEntryField
 
-            if strongSelf.sceneView.errorView.isHidden {
+			if strongSelf.sceneView.errorView.isHidden {
 				strongSelf.sceneView.textLabel.isHidden = !shouldShowVerificationEntryField
 			}
 
-            if shouldShowVerificationEntryField {
-                // Don't want the following code executing during viewDidLoad because it causes
-                // a glitch, so let's do it with a slight delay:
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    if !strongSelf.sceneView.verificationEntryView.isHidden {
-                        strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
-                    }
-                }
-            }
+			if shouldShowVerificationEntryField {
+				// Don't want the following code executing during viewDidLoad because it causes
+				// a glitch, so let's do it with a slight delay:
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					if !strongSelf.sceneView.verificationEntryView.isHidden {
+						strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+					}
+				}
+			}
 
-            if wasHidden && shouldShowVerificationEntryField {
-                // Only post once
-                UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
-            }
+			if wasHidden && shouldShowVerificationEntryField {
+				// Only post once
+				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
+			}
 		}
 
 		viewModel.$enableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
@@ -157,7 +157,7 @@ class TokenEntryViewController: BaseViewController {
 			guard let strongSelf = self else { return }
 			strongSelf.sceneView.verificationEntryView.inputField.text = nil
 			strongSelf.viewModel.sendVerificationAgainButtonPressed(
-                tokenInput: strongSelf.sceneView.tokenEntryView.inputField.text
+				tokenInput: strongSelf.sceneView.tokenEntryView.inputField.text
 			)
 		}
 	}
@@ -262,14 +262,14 @@ extension TokenEntryViewController: UITextFieldDelegate {
 			let updatedText = text.replacingCharacters(in: textRange, with: string)
 
 			switch textField.tag {
-                case TextFieldTag.tokenEntry.rawValue:
-                    viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
+				case TextFieldTag.tokenEntry.rawValue:
+					viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
 
-                case TextFieldTag.verificationEntry.rawValue:
-                    viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
+				case TextFieldTag.verificationEntry.rawValue:
+					viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
 
-                default:
-                    break
+				default:
+					break
 			}
 		}
 
