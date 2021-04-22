@@ -239,7 +239,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.shouldShowProgress) == false
-        expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true 
+        expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.shouldShowTokenEntryField) == false

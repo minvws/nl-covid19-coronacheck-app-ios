@@ -87,9 +87,8 @@ class HolderCoordinator: SharedCoordinator {
 
         } else if let unhandledUniversalLink = unhandledUniversalLink {
 
-            // TODO: not sure on this approach, maybe store only the universalLink and not call `consume()` again
+            // Attempt to consume the universal link again:
             self.unhandledUniversalLink = nil // prevent potential infinite loops
-
             consume(universalLink: unhandledUniversalLink)
         } else {
 
@@ -118,8 +117,7 @@ class HolderCoordinator: SharedCoordinator {
 
                 if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
                     self.unhandledUniversalLink = universalLink
-                }
-                else {
+                } else {
                     // Do it on the next runloop, to standardise all the entrypoints to this function:
                     DispatchQueue.main.async { [self] in
                         navigateToTokenEntry(requestToken)
