@@ -150,9 +150,8 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			strongSelf.sceneView.verificationEntryView.inputField.text = nil
-			strongSelf.viewModel.nextButtonPressed(
-				strongSelf.sceneView.tokenEntryView.inputField.text,
-				verificationInput: nil
+			strongSelf.viewModel.sendVerificationAgainButtonPressed(
+                tokenInput: strongSelf.sceneView.tokenEntryView.inputField.text
 			)
 		}
 	}

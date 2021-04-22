@@ -257,7 +257,7 @@ class TokenEntryViewModel {
         hasEverPressedNextButton = true
 
         if wasInitializedWithARequestToken {
-            nextButtonPressedDuringInitialRequestTokenFlow(tokenInput, verificationInput: verificationInput)
+            nextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
         } else {
             nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
         }
@@ -286,7 +286,7 @@ class TokenEntryViewModel {
         }
     }
 
-    private func nextButtonPressedDuringInitialRequestTokenFlow(_ tokenInput: String?, verificationInput: String?) {
+    private func nextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
         errorMessage = nil
 
         guard let requestToken = requestToken else {
@@ -298,6 +298,22 @@ class TokenEntryViewModel {
             verificationCode = verification.uppercased()
             errorMessage = nil
             fetchProviders(requestToken)
+        }
+    }
+
+    /// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
+    func sendVerificationAgainButtonPressed(tokenInput: String?) {
+
+        if wasInitializedWithARequestToken {
+            if let unwrappedToken = requestToken {
+                self.fetchProviders(unwrappedToken)
+            }
+        }
+        else {
+            if let tokenInput = tokenInput {
+                // TODO: rename this function or something
+                nextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
+            }
         }
     }
 
