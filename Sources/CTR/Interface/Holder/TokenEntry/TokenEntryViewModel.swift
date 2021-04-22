@@ -26,16 +26,7 @@ class TokenEntryViewModel {
     // Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
     @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
-            update(
-                inputMode: TokenEntryViewModel.calculateInputMode(
-                    tokenValidityIndicator: nil,
-                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: shouldShowProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted
-                )
-            )
+            recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
         }
     }
     @Bindable private(set) var shouldShowTokenEntryField: Bool = false
@@ -76,31 +67,13 @@ class TokenEntryViewModel {
     // Indicates that we've forwarded to the coordinator and there's nothing left to do
     private var screenHasCompleted: Bool = false {
         didSet {
-            update(
-                inputMode: TokenEntryViewModel.calculateInputMode(
-                    tokenValidityIndicator: true,
-                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: shouldShowProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted
-                )
-            )
+            recalculateAndUpdateUI(tokenValidityIndicator: true)
         }
     }
 
     private var verificationCodeIsKnownToBeRequired = false {
         didSet {
-            update(
-                inputMode: TokenEntryViewModel.calculateInputMode(
-                    tokenValidityIndicator: true,
-                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: shouldShowProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted
-                )
-            )
+            recalculateAndUpdateUI(tokenValidityIndicator: true)
         }
     }
 
@@ -152,20 +125,11 @@ class TokenEntryViewModel {
 
 		if let unwrappedToken = requestToken {
             self.wasInitializedWithARequestToken = true
+            recalculateAndUpdateUI(tokenValidityIndicator: nil)
             self.fetchProviders(unwrappedToken)
 		} else {
             self.wasInitializedWithARequestToken = false
-
-            update(
-                inputMode: TokenEntryViewModel.calculateInputMode(
-                    tokenValidityIndicator: nil,
-                    wasInitialisedWithARefreshToken: false,
-                    verificationCodeIsKnownToBeRequired: false,
-                    isInProgress: false,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted
-                )
-            )
+            recalculateAndUpdateUI(tokenValidityIndicator: nil)
 		}
 	}
 
@@ -188,16 +152,7 @@ class TokenEntryViewModel {
 			let validToken = tokenValidator.validate(tokenInput)
 			enableNextButton = validToken
 
-            update(
-                inputMode: TokenEntryViewModel.calculateInputMode(
-                    tokenValidityIndicator: validToken,
-                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: shouldShowProgress,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted
-                )
-            )
+            recalculateAndUpdateUI(tokenValidityIndicator: validToken)
 			return
 		}
 
@@ -270,6 +225,7 @@ class TokenEntryViewModel {
         if let verification = verificationInput, !verification.isEmpty {
             verificationCode = verification.uppercased()
             errorMessage = nil
+
             fetchProviders(requestToken)
         }
     }
@@ -281,6 +237,7 @@ class TokenEntryViewModel {
 	private func fetchProviders(_ requestToken: RequestToken) {
 
         incrementProgressCount()
+        recalculateAndUpdateUI(tokenValidityIndicator: true)
 
         proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
@@ -302,14 +259,8 @@ class TokenEntryViewModel {
         guard let provider = proofManager?.getTestProvider(requestToken) else {
             errorMessage = .holderTokenEntryErrorInvalidCode
 
-            update(inputMode: TokenEntryViewModel.calculateInputMode(
-                    tokenValidityIndicator: true,
-                    wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
-                    verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: false,
-                    hasEverPressedNextButton: hasEverPressedNextButton,
-                    screenHasCompleted: screenHasCompleted)
-            )
+            recalculateAndUpdateUI(tokenValidityIndicator: true)
+
             self.enableNextButton = true
 
             return
@@ -353,7 +304,6 @@ class TokenEntryViewModel {
             }
 
             self?.decrementProgressCount()
-
         }
 	}
 
@@ -370,7 +320,6 @@ class TokenEntryViewModel {
 		resetCountdownCounter()
 		startResendTimer()
         verificationCodeIsKnownToBeRequired = true
-
 	}
 
 	// MARK: - Resend SMS Countdown
@@ -413,7 +362,18 @@ class TokenEntryViewModel {
     // Applies a new InputMode to the UI bindables
     // Should **not** not make any decisions
     private var previousInputMode: InputMode?
-    
+
+    private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
+        update(inputMode: TokenEntryViewModel.calculateInputMode(
+                tokenValidityIndicator: tokenValidityIndicator,
+                wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
+                verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
+                isInProgress: shouldShowProgress,
+                hasEverPressedNextButton: hasEverPressedNextButton,
+                screenHasCompleted: screenHasCompleted)
+        )
+    }
+
     private func update(inputMode newInputMode: InputMode) {
         guard newInputMode != previousInputMode else { return }
         previousInputMode = newInputMode
