@@ -23,7 +23,7 @@ class TokenEntryViewModel {
                     tokenValidityIndicator: true,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: showProgress,
+                    isInProgress: shouldShowProgress,
                     hasEverPressedNextButton: hasEverPressedNextButton,
                     screenHasCompleted: screenHasCompleted
                 )
@@ -75,22 +75,20 @@ class TokenEntryViewModel {
 
     @Bindable private(set) var title: String
     @Bindable private(set) var message: String?
-
-    @Bindable private(set) var showProgress: Bool = false {
+    @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
             update(
                 inputMode: calculateInputMode(
                     tokenValidityIndicator: nil,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: showProgress,
+                    isInProgress: shouldShowProgress,
                     hasEverPressedNextButton: hasEverPressedNextButton,
                     screenHasCompleted: screenHasCompleted
                 )
             )
         }
     }
-//    @Bindable private(set) var shouldShowProgress: Bool = false
     @Bindable private(set) var shouldShowTokenEntryField: Bool = false
     @Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 
@@ -143,7 +141,7 @@ class TokenEntryViewModel {
                     tokenValidityIndicator: true,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: showProgress,
+                    isInProgress: shouldShowProgress,
                     hasEverPressedNextButton: hasEverPressedNextButton,
                     screenHasCompleted: screenHasCompleted
                 )
@@ -213,7 +211,7 @@ class TokenEntryViewModel {
                     tokenValidityIndicator: validToken,
                     wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                     verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
-                    isInProgress: showProgress,
+                    isInProgress: shouldShowProgress,
                     hasEverPressedNextButton: hasEverPressedNextButton,
                     screenHasCompleted: screenHasCompleted
                 )
@@ -300,17 +298,17 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchProviders(_ requestToken: RequestToken) {
 
-		showProgress = true
+        shouldShowProgress = true
 
         proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
 
-				self?.showProgress = false
+				self?.shouldShowProgress = false
 				self?.fetchResult(requestToken)
 
 			}, onError: { [weak self] error in
 
-				self?.showProgress = false
+				self?.shouldShowProgress = false
 				self?.showError = true
 			}
 		)
@@ -320,7 +318,7 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchResult(_ requestToken: RequestToken) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
-			showProgress = false
+            shouldShowProgress = false
 			errorMessage = .holderTokenEntryErrorInvalidCode
 
             update(inputMode: calculateInputMode(
@@ -336,13 +334,13 @@ class TokenEntryViewModel {
 			return
 		}
 
-		showProgress = true
+        shouldShowProgress = true
 		proofManager?.fetchTestResult(
 			requestToken,
 			code: verificationCode,
 			provider: provider) {  [weak self] response in
 
-			self?.showProgress = false
+			self?.shouldShowProgress = false
 			self?.errorMessage = nil
 
 			switch response {

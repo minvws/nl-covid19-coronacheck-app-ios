@@ -69,7 +69,7 @@ class TokenEntryViewController: BaseViewController {
             strongSelf.sceneView.message = message
         }
 
-		viewModel.$showProgress.binding = { [weak self] in
+		viewModel.$shouldShowProgress.binding = { [weak self] in
             guard let strongSelf = self else { return }
 
 			if $0 {
