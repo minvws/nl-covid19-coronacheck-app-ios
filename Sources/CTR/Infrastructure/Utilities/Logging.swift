@@ -14,11 +14,19 @@ public protocol Logging {
 	/// The category with which the class that conforms to the `Logging`-protocol is logging.
 	var loggingCategory: String { get }
 
+	/// Log for verbose purpose
+	/// - Parameters:
+	///   - message: the message to log
+	///   - function: the function in which the the method is called
+	///   - file: the file in which the method is called
+	///   - line: the line on wicht the method is called
+	func logVerbose(_ message: String, function: StaticString, file: StaticString, line: UInt)
+
 	/// Log for debug purpose
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logDebug(_ message: String, function: StaticString, file: StaticString, line: UInt)
 
@@ -26,7 +34,7 @@ public protocol Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logInfo(_ message: String, function: StaticString, file: StaticString, line: UInt)
 
@@ -34,7 +42,7 @@ public protocol Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logWarning(_ message: String, function: StaticString, file: StaticString, line: UInt)
 
@@ -42,7 +50,7 @@ public protocol Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logError(_ message: String, function: StaticString, file: StaticString, line: UInt)
 }
@@ -54,11 +62,26 @@ public extension Logging {
 		return "CoronaTester"
 	}
 
+	/// Log for verbose purpose
+	/// - Parameters:
+	///   - message: the message to log
+	///   - function: the function in which the the method is called
+	///   - file: the file in which the method is called
+	///   - line: the line on wicht the method is called
+	func logVerbose(
+		_ message: String,
+		function: StaticString = #function,
+		file: StaticString = #file,
+		line: UInt = #line) {
+
+		DDLogVerbose("💤 \(message)", file: file, function: function, line: line, tag: loggingCategory)
+	}
+
 	/// Log for debug purpose
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logDebug(
 		_ message: String,
@@ -72,7 +95,7 @@ public extension Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logInfo(
 		_ message: String,
@@ -86,7 +109,7 @@ public extension Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logWarning(
 		_ message: String,
@@ -100,7 +123,7 @@ public extension Logging {
 	/// - Parameters:
 	///   - message: the message to log
 	///   - function: the function in which the the method is called
-	///   - file: the lfile in which the method is called
+	///   - file: the file in which the method is called
 	///   - line: the line on wicht the method is called
 	func logError(
 		_ message: String,
@@ -135,6 +158,8 @@ public final class LogHandler: Logging {
 		let level = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String ?? "debug"
 
 		switch level {
+			case "verbose":
+				dynamicLogLevel = .verbose
 			case "debug":
 				dynamicLogLevel = .debug
 			case "info":
