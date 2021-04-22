@@ -107,28 +107,34 @@ class TokenEntryViewController: BaseViewController {
             guard let strongSelf = self else { return }
             strongSelf.sceneView.primaryButton.isHidden = !$0
         }
-
-		viewModel.$shouldShowVerificationEntryField.binding = { [weak self]  in
+        
+		viewModel.$shouldShowVerificationEntryField.binding = { [weak self] shouldShowVerificationEntryField in
 
 			guard let strongSelf = self else { return }
 
 			let wasHidden = strongSelf.sceneView.verificationEntryView.isHidden
 
-			strongSelf.sceneView.verificationEntryView.isHidden = !$0
-			strongSelf.sceneView.secondaryButton.isHidden = !$0
+			strongSelf.sceneView.verificationEntryView.isHidden = !shouldShowVerificationEntryField
+			strongSelf.sceneView.secondaryButton.isHidden = !shouldShowVerificationEntryField
 
             if strongSelf.sceneView.errorView.isHidden {
-				strongSelf.sceneView.textLabel.isHidden = !$0
-			}
-            
-			if $0 {
-				strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+				strongSelf.sceneView.textLabel.isHidden = !shouldShowVerificationEntryField
 			}
 
-			if wasHidden && $0 {
-				// Only post once
-				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
-			}
+            if shouldShowVerificationEntryField {
+                // Don't want the following code executing during viewDidLoad because it causes
+                // a glitch, so let's do it with a slight delay:
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    if !strongSelf.sceneView.verificationEntryView.isHidden {
+                        strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
+                    }
+                }
+            }
+
+            if wasHidden && shouldShowVerificationEntryField {
+                // Only post once
+                UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
+            }
 		}
 
 		viewModel.$enableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
