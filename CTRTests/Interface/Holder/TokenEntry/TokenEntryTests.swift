@@ -113,10 +113,10 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_handleInput_withValidToken_hidingVerification_enablesNextButtonAndHidesVerification() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
+        tokenValidatorSpy.stubbedValidateResult = true
         let validToken = "XXX-YYYYYYYYYYYY-Z2"
 
-        tokenValidatorSpy.stubbedValidateResult = true
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.handleInput(validToken, verificationInput: nil)
@@ -134,8 +134,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_handleInput_withEmptyTokenInput_withEmptyVerificationInput_disablesNextButton() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let emptyVerificationInput = ""
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.handleInput("", verificationInput: emptyVerificationInput)
@@ -152,8 +152,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_handleInput_withEmptyTokenInput_withNonemptyVerificationInput_enablesNextButton() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let nonemptyVerificationInput = "1234"
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.handleInput("", verificationInput: nonemptyVerificationInput)
@@ -229,10 +229,11 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_success_stopsProgress() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+        let validToken = RequestToken.fake.token
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "1234")
@@ -250,10 +251,11 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_failure_stopsProgressAndShowsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
+        tokenValidatorSpy.stubbedValidateResult = true
+        let validToken = RequestToken.fake.token
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "1234")
@@ -276,10 +278,11 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withUnidentifiableTestProvider_showsErrorMessage() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+        let validToken = RequestToken.fake.token
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "1234")
@@ -298,11 +301,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_startsProgress() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
+        let validToken = RequestToken.fake.token
+
+        sut = mockedViewModel(withRequestToken: .fake)
+
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "1234")
 
@@ -320,13 +325,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
         let validToken = RequestToken.fake.token
         let verificationInput = "1234"
-
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -346,14 +351,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
-
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -369,14 +374,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
-
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakePending), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -393,13 +398,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_showsErrorAndResetsUIForVerification() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -421,13 +427,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_invalid_showsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -445,14 +452,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_success_unknown_showsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
-
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -470,14 +477,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
-
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -495,14 +502,14 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withNonemptyVerificationInput_withInitialRequestTokenSet_withIdentifiableTestProvider_failure_showsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: .fake)
-        let validToken = RequestToken.fake.token
-        let verificationInput = "1234"
-
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
+        let validToken = RequestToken.fake.token
+        let verificationInput = "1234"
+
+        sut = mockedViewModel(withRequestToken: .fake)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
@@ -523,8 +530,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withInvalidTokenInput_setsErrorMessage() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let invalidTokenInput = "🍔"
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(invalidTokenInput, verificationInput: "")
@@ -541,10 +548,10 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withLowercaseTokenInput_createsTokenWithUppercaseInput() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validLowercaseToken = "xxx-yyyyyyyyyyyy-z2"
-
         tokenValidatorSpy.stubbedValidateResult = true
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validLowercaseToken, verificationInput: "")
@@ -561,9 +568,9 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_callsFetchProviders() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -579,10 +586,10 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_success_stopsProgress() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -598,10 +605,10 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_failure_stopsProgressAndShowsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -622,10 +629,10 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "zzz-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -641,11 +648,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_startsProgress() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
+
+        sut = mockedViewModel(withRequestToken: nil)
+
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
 
@@ -661,11 +670,12 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -683,12 +693,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -701,12 +712,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakePending), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -719,12 +731,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_codeIsEmpty_resetsUIForVerification() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
-        let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+        let validToken = "xxx-yyyyyyyyyyyy-z2"
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -742,12 +755,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_invalid_showsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -762,12 +776,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_unknown_showsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -782,12 +797,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -802,12 +818,13 @@ class TokenEntryViewModelTests: XCTestCase {
 
     func test_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_failure_showsError() {
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "xxx-yyyyyyyyyyyy-z2"
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         // Act
         sut.nextButtonPressed(validToken, verificationInput: "")
@@ -824,13 +841,14 @@ class TokenEntryViewModelTests: XCTestCase {
     func test_handleInput_withValidToken_showingVerification_enablesNextButtonAndShowsVerification() {
 
         // Arrange
-        sut = mockedViewModel(withRequestToken: nil)
         let validToken = "XXX-YYYYYYYYYYYY-Z2"
 
         tokenValidatorSpy.stubbedValidateResult = true
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+
+        sut = mockedViewModel(withRequestToken: nil)
 
         sut.nextButtonPressed(validToken, verificationInput: "") // setup sut so that shouldShowVerificationEntryField == true
 
