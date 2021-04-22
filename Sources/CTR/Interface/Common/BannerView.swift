@@ -20,8 +20,14 @@ class BannerView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 20.0
-
 	}
+
+	let containerView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
 
 	/// The banner image
 	let bannerImageView: UIImageView = {
@@ -79,9 +85,10 @@ class BannerView: BaseView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		addSubview(bannerImageView)
-		addSubview(titleLabel)
-		addSubview(messageTextView)
+		addSubview(containerView)
+		containerView.addSubview(bannerImageView)
+		containerView.addSubview(titleLabel)
+		containerView.addSubview(messageTextView)
 		addSubview(closeButton)
 	}
 
@@ -92,6 +99,15 @@ class BannerView: BaseView {
 
 		NSLayoutConstraint.activate([
 
+			// Container
+			containerView.topAnchor.constraint(
+				equalTo: closeButton.topAnchor,
+				constant: ViewTraits.margin
+			),
+			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
+			containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -36),
+
 			// Header
 			bannerImageView.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
@@ -99,10 +115,7 @@ class BannerView: BaseView {
 			),
 			bannerImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageWidth),
 			bannerImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageHeight),
-			bannerImageView.topAnchor.constraint(
-				equalTo: closeButton.topAnchor,
-				constant: 2 * ViewTraits.margin
-			),
+			bannerImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 
 			closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
 			closeButton.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -111,26 +124,25 @@ class BannerView: BaseView {
 
 			// Title
 			titleLabel.topAnchor.constraint(
-				equalTo: closeButton.topAnchor,
-				constant: ViewTraits.margin
+				equalTo: containerView.topAnchor
 			),
 			titleLabel.leadingAnchor.constraint(
 				equalTo: bannerImageView.trailingAnchor,
 				constant: ViewTraits.margin
 			),
-			titleLabel.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
+			titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 
 			// Message
 			messageTextView.leadingAnchor.constraint(
 				equalTo: bannerImageView.trailingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageTextView.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor),
+			messageTextView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
 			messageTextView.topAnchor.constraint(
 				equalTo: titleLabel.bottomAnchor,
 				constant: 4
 			),
-			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40)
+			messageTextView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
 		])
 	}
 
@@ -141,6 +153,7 @@ class BannerView: BaseView {
 
 		titleLabel.accessibilityTraits = .header
 		closeButton.accessibilityLabel = .close
+		bannerImageView.isAccessibilityElement = true
 		bannerImageView.accessibilityTraits = .staticText
 		bannerImageView.accessibilityLabel = .notification
 		accessibilityElements = [bannerImageView, titleLabel, messageTextView, closeButton]
