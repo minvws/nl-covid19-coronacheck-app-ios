@@ -106,8 +106,17 @@ class TokenEntryViewModel {
 
     private var inProgressCount = 0 {
         didSet {
+            objc_sync_enter(self)
+            defer { objc_sync_exit(self) }
+
             guard inProgressCount >= 0 else { return }
-            self.shouldShowProgress = inProgressCount > 0
+
+            let newState = inProgressCount > 0
+            // Prevent multiple applications of same shouldShowProgress
+            // state, showing multiple spinners..
+            if shouldShowProgress != newState {
+                shouldShowProgress = newState
+            }
         }
     }
 
