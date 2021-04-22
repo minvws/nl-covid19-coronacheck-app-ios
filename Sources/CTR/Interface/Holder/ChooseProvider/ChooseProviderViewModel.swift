@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// The identty of a provider
+/// The identity of a provider
 enum ProviderIdentifier: String {
 
 	// A Commercial Test Provider
@@ -20,13 +20,13 @@ enum ProviderIdentifier: String {
 /// Struct for information to display the different test providers
 struct DisplayProvider {
 
-	/// The identifer
+	/// The identifier
 	let identifier: ProviderIdentifier
 
 	/// The name
 	let name: String
 
-	/// The subtite
+	/// The subtitle
 	let subTitle: String
 }
 
@@ -36,7 +36,7 @@ class ChooseProviderViewModel: Logging {
 	var loggingCategory: String = "ChooseProviderViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: HolderCoordinatorDelegate?
 
 	/// The proof manager
 	weak var proofManager: ProofManaging?
@@ -64,7 +64,7 @@ class ChooseProviderViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - openIdManager: the open ID manager
 	init(
-		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
+		coordinator: HolderCoordinatorDelegate,
 		openIdManager: OpenIdManaging) {
 
 		self.coordinator = coordinator
@@ -90,7 +90,7 @@ class ChooseProviderViewModel: Logging {
 	/// The user selected a provider
 	/// - Parameters:
 	///   - identifier: the identifier of the provider
-	///   - presentingViewController: The presenting viewcontroller
+	///   - presentingViewController: The presenting view controller
 	func providerSelected(
 		_ identifier: ProviderIdentifier,
 		presentingViewController: UIViewController?) {
@@ -105,14 +105,14 @@ class ChooseProviderViewModel: Logging {
 	}
 
 	/// Login at a commercial tester
-	func loginCommercial() {
+	private func loginCommercial() {
 
 		coordinator?.navigateToTokenOverview()
 	}
 
 	/// Login at the GGD
-	/// - Parameter presentingViewController: the presenting viewcontroller
-	func loginGGD(_ presentingViewController: UIViewController?) {
+	/// - Parameter presentingViewController: the presenting view controller
+	private func loginGGD(_ presentingViewController: UIViewController?) {
 
 		guard let viewController = presentingViewController else {
 			self.logError("Can't present login for GGD")
@@ -133,15 +133,6 @@ class ChooseProviderViewModel: Logging {
 
 		} onError: { [weak self] error in
 			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
-		}
-	}
-
-	/// The user has no DigiD
-	func noDidiD() {
-
-		logInfo("Provider selected: no DigiD")
-		if let url = URL(string: "https://digid.nl/aanvragen") {
-			coordinator?.openUrl(url, inApp: false)
 		}
 	}
 }

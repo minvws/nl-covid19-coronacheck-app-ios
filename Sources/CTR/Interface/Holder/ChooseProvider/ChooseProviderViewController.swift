@@ -48,7 +48,6 @@ class ChooseProviderViewController: BaseViewController {
 			for provider in providers {
 				self?.setupProviderButton(provider)
 			}
-//			self?.setupNoDigidButton()
 		}
 
 		// Only show an arrow as back button
@@ -72,25 +71,6 @@ class ChooseProviderViewController: BaseViewController {
 			)
 		}
 		self.sceneView.innerStackView.addArrangedSubview(button)
-	}
-
-	/// Setup no diigid button
-	func setupNoDigidButton() {
-
-		let label = Label(bodyMedium: .holderChooseProviderNoDigiD, textColor: Theme.colors.primary).multiline()
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(noDidiDTapped))
-		label.isUserInteractionEnabled = true
-		label.addGestureRecognizer(tapGesture)
-		label.heightAnchor.constraint(equalToConstant: 40).isActive = true
-		sceneView.innerStackView.addArrangedSubview(label)
-	}
-
-	// MARK: User interaction
-
-	/// User tapped on the no digid button
-	@objc func noDidiDTapped() {
-
-		viewModel.noDidiD()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
