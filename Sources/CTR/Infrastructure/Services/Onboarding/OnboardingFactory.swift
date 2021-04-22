@@ -38,7 +38,7 @@ protocol OnboardingFactoryProtocol {
 	/// Generate an array of onboarding steps
 	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: String) -> [OnboardingPage]
+	func create(maxValidity: Int) -> [OnboardingPage]
 
 	/// Get the Consent Title
 	func getConsentTitle() -> String
@@ -61,7 +61,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	/// Generate an array of onboarding steps
 	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: String) -> [OnboardingPage] {
+	func create(maxValidity: Int) -> [OnboardingPage] {
 
 		let pages = [
 			OnboardingPage(
@@ -78,7 +78,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			),
 			OnboardingPage(
 				title: .holderOnboardingTitleValidity,
-				message: String(format: .holderOnboardingMessageValidity, maxValidity),
+				message: String(format: .holderOnboardingMessageValidity, "\(maxValidity)"),
 				image: .onboardingValidity,
 				step: .validity
 			),
@@ -132,7 +132,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	/// Generate an array of onboarding steps
 	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: String) -> [OnboardingPage] {
+	func create(maxValidity: Int) -> [OnboardingPage] {
 
 		let pages = [
 			OnboardingPage(
@@ -143,7 +143,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			),
 			OnboardingPage(
 				title: .verifierOnboardingTitleScanQR,
-				message: String(format: .verifierOnboardingMessageScanQR, maxValidity),
+				message: String(format: .verifierOnboardingMessageScanQR, "\(maxValidity)"),
 				image: .onboardingScan,
 				step: .yourQR
 			),

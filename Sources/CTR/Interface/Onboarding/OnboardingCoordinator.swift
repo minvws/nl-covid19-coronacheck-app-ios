@@ -61,7 +61,7 @@ class OnboardingCoordinator: Coordinator, Logging {
 		navigationController: UINavigationController,
 		onboardingDelegate: OnboardingDelegate,
 		factory: OnboardingFactoryProtocol,
-		maxValidity: String) {
+		maxValidity: Int) {
 		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate

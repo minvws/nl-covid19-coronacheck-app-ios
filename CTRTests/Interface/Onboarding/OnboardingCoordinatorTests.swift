@@ -10,9 +10,9 @@ import XCTest
 
 class OnboardingCoordinatorTests: XCTestCase {
 
-	var sut: OnboardingCoordinator?
-	var onboardingDelegateSpy = OnboardingDelegateSpy()
-	var navigationSpy = NavigationControllerSpy()
+	var sut: OnboardingCoordinator!
+	var onboardingDelegateSpy: OnboardingDelegateSpy!
+	var navigationSpy: NavigationControllerSpy!
 
 	override func setUp() {
 
@@ -24,7 +24,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
 			factory: HolderOnboardingFactory(),
-			maxValidity: "48"
+			maxValidity: 40
 		)
 	}
 
@@ -55,7 +55,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		// When
 
 		// Then
-		XCTAssertEqual(sut?.onboardingPages.count, 4, "There should be 4 pages")
+		XCTAssertEqual(sut.onboardingPages.count, 4, "There should be 4 pages")
 		XCTAssertEqual(navigationSpy.pushViewControllerCallCount, 0, "There should be no pages pushed")
 		XCTAssertFalse(onboardingDelegateSpy.consentGivenCalled, "Method should NOT be called")
 	}
