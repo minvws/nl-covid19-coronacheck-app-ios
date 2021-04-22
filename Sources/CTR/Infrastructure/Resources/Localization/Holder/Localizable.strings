@@ -136,8 +136,6 @@
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.commercial.title" = "Testen voor Toegang";
-"holder.provider.commercial.subtitle" = "Haal testuitslag op";
-"holder.provider.nodigid" = "Ik heb geen DigiD";
 
 /* MARK: - Holder Token Overview */
 "holder.tokenoverview.title" = "Testuitslag ophalen";

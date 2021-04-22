@@ -44,6 +44,25 @@ class ChooseProviderViewModelTests: XCTestCase {
 		expect(self.sut.providers).to(haveCount(1), description: "There should only be 1 provider")
 	}
 
+	func test_content_ggdEnabled() throws {
+
+		// Given
+
+		// When
+		sut = ChooseProviderViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			openIdManager: openIdManagerSpy,
+			enableGGD: true
+		)
+
+		// Then
+		expect(self.sut.title) == .holderChooseProviderTitle
+		expect(self.sut.header) == .holderChooseProviderHeader
+		expect(self.sut.body) == .holderChooseProviderMessage
+		expect(self.sut.image) == .create
+		expect(self.sut.providers).to(haveCount(2), description: "There should be 2 providers")
+	}
+
 	func test_commercialProviderChosen() {
 
 		// Given

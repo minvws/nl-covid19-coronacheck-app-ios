@@ -27,7 +27,26 @@ struct DisplayProvider {
 	let name: String
 
 	/// The subtitle
-	let subTitle: String
+	let subTitle: String?
+}
+
+extension DisplayProvider {
+
+	static var commercialDisplayProvider: DisplayProvider {
+		return DisplayProvider(
+			identifier: .commercial,
+			name: .holderChooseProviderCommercialTitle,
+			subTitle: nil
+		)
+	}
+
+	static var ggdDisplayProvider: DisplayProvider {
+		return DisplayProvider(
+			identifier: .ggd,
+			name: .holderChooseProviderGGDTitle,
+			subTitle: .holderChooseProviderGGDSubtitle
+		)
+	}
 }
 
 class ChooseProviderViewModel: Logging {
@@ -57,15 +76,17 @@ class ChooseProviderViewModel: Logging {
 	@Bindable private(set) var body: String
 
 	/// The Test Provider options
-	@Bindable private(set) var providers: [DisplayProvider]
+	@Bindable private(set) var providers: [DisplayProvider] = []
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - openIdManager: the open ID manager
+	///   - openIdManager: the open ID manager (for GGD)
+	///   - enableGGD: True if we want to enable the GGD option
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		openIdManager: OpenIdManaging) {
+		openIdManager: OpenIdManaging,
+		enableGGD: Bool = false) {
 
 		self.coordinator = coordinator
 		self.openIdManager = openIdManager
@@ -73,18 +94,19 @@ class ChooseProviderViewModel: Logging {
 		header = .holderChooseProviderHeader
 		body = .holderChooseProviderMessage
 		image = .create
-		providers = [
-			DisplayProvider(
-				identifier: .commercial,
-				name: .holderChooseProviderCommercialTitle,
-				subTitle: .holderChooseProviderCommercialSubtitle
-			)
-//			DisplayProvider(
-//				identifier: .ggd,
-//				name: .holderChooseProviderGGDTitle,
-//				subTitle: .holderChooseProviderGGDSubtitle
-//			)
-		]
+		setupProviders(includeGGD: enableGGD)
+	}
+
+	private func setupProviders(includeGGD: Bool) {
+
+		// use internal var to prevent updating the @binding providers too often
+		var providerList = [DisplayProvider]()
+		providerList.append(DisplayProvider.commercialDisplayProvider)
+		if includeGGD {
+			providerList.append(DisplayProvider.ggdDisplayProvider)
+		}
+
+		providers = providerList
 	}
 
 	/// The user selected a provider

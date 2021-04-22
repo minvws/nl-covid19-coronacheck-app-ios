@@ -54,25 +54,6 @@ class ChooseProviderViewController: BaseViewController {
 		styleBackButton(buttonText: "")
 	}
 
-	// MARK: Helper Methods
-
-	/// Setup a provider button
-	/// - Parameter provider: the provider
-	func setupProviderButton(_ provider: DisplayProvider) {
-
-		let button = ButtonWithSubtitle()
-		button.isUserInteractionEnabled = true
-		button.title = provider.name
-		button.subtitle = provider.subTitle
-		button.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.providerSelected(
-				provider.identifier,
-				presentingViewController: self
-			)
-		}
-		self.sceneView.innerStackView.addArrangedSubview(button)
-	}
-
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
@@ -91,8 +72,73 @@ class ChooseProviderViewController: BaseViewController {
 		}
 	}
 
+	// MARK: Helper Methods
+
+	/// Setup a provider button
+	/// - Parameter provider: the provider
+	private func setupProviderButton(_ provider: DisplayProvider) {
+
+		let primaryButtonTappedCommand: (() -> Void)? = { [weak self] in
+			self?.viewModel.providerSelected(
+				provider.identifier,
+				presentingViewController: self
+			)
+		}
+
+		if let subTitle = provider.subTitle {
+			self.sceneView.innerStackView.addArrangedSubview(
+				createButtonWithSubtitle(
+					provider.name,
+					subTitle: subTitle,
+					command: primaryButtonTappedCommand
+				)
+			)
+		} else {
+			self.sceneView.innerStackView.addArrangedSubview(
+				createDisclosureButton(
+					provider.name,
+					command: primaryButtonTappedCommand
+				)
+			)
+		}
+	}
+
+	/// Create a disclosure button
+	/// - Parameters:
+	///   - title: the title of the button
+	///   - command: the command to execute when tapped
+	/// - Returns: A disclosure button
+	private func createDisclosureButton(
+		_ title: String,
+		command: (() -> Void)? ) -> DisclosureButton {
+
+		let button = DisclosureButton()
+		button.isUserInteractionEnabled = true
+		button.title = title
+		button.primaryButtonTappedCommand = command
+		return button
+	}
+	/// Create a disclosure button with subtitle
+	/// - Parameters:
+	///   - title: the title of the button
+	///   - subTitle: the sub title of the button
+	///   - command: the command to execute when tapped
+	/// - Returns: A disclosure button
+	private func createButtonWithSubtitle(
+		_ title: String,
+		subTitle: String,
+		command: (() -> Void)? ) -> DisclosureSubTitleButton {
+
+		let button = DisclosureSubTitleButton()
+		button.isUserInteractionEnabled = true
+		button.title = title
+		button.subtitle = subTitle
+		button.primaryButtonTappedCommand = command
+		return button
+	}
+
 	/// Layout for different orientations
-	func layoutForOrientation() {
+	private func layoutForOrientation() {
 
 		if traitCollection.verticalSizeClass == .compact {
 			sceneView.hideImage()

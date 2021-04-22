@@ -48,7 +48,6 @@ class ChooseProviderViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
-	/// Test the tap on the button
 	func test_content() {
 
 		// Given
@@ -68,11 +67,36 @@ class ChooseProviderViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
+	func test_content_ggdEnabled() {
+
+		// Given
+		viewModel = ChooseProviderViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			openIdManager: openIdManagerSpy,
+			enableGGD: true
+		)
+		sut = ChooseProviderViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.title) == .holderChooseProviderTitle
+		expect(self.sut.sceneView.title) == .holderChooseProviderHeader
+		expect(self.sut.sceneView.message) == .holderChooseProviderMessage
+		expect(self.sut.sceneView.headerImage) == .create
+		expect(self.sut.sceneView.innerStackView.arrangedSubviews)
+			.to(haveCount(2), description: "There should be 2 elements")
+
+		// Snapshot
+		sut.assertImage()
+	}
+
 	func test_chooseFirstOption() {
 
 		// Given
 		loadView()
-		let firstOption = sut.sceneView.innerStackView.arrangedSubviews.first as? ButtonWithSubtitle
+		let firstOption = sut.sceneView.innerStackView.arrangedSubviews.first as? DisclosureButton
 
 		// When
 		firstOption?.primaryButtonTapped()
