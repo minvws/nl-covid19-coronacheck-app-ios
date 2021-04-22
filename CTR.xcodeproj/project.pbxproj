@@ -1185,11 +1185,12 @@
 		6D32BD2325E6A55B00C4A4D2 /* Holder */ = {
 			isa = PBXGroup;
 			children = (
-				3CF42A2C2628B66C00AAC3B2 /* TokenEntry */,
 				6D0FD4BF26037CEA00187946 /* Appointment */,
+				6D96958D263066A600F13A56 /* ChooseProvider */,
 				6DC3BEAB25E4E6A40079A3F2 /* Dashboard */,
 				6D037A4025E67649006C2BFA /* Enlarged */,
 				6DD23F8825E3BE3600CE4AEB /* ListRestults */,
+				3CF42A2C2628B66C00AAC3B2 /* TokenEntry */,
 			);
 			path = Holder;
 			sourceTree = "<group>";
@@ -1481,6 +1482,13 @@
 				6D9284BD25B5D351009D4350 /* VerifierCoordinator.swift */,
 			);
 			path = Verifier;
+			sourceTree = "<group>";
+		};
+		6D96958D263066A600F13A56 /* ChooseProvider */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ChooseProvider;
 			sourceTree = "<group>";
 		};
 		6D9819D525D53A5F009A96D7 /* TokenOverview */ = {
