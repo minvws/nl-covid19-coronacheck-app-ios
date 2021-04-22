@@ -69,14 +69,6 @@ class TokenEntryViewController: BaseViewController {
             strongSelf.sceneView.message = message
         }
 
-		viewModel.$token.binding = { [weak self] token in
-			self?.sceneView.tokenEntryView.inputField.text = token
-			if token == nil {
-				self?.sceneView.tokenEntryView.inputField.becomeFirstResponder()
-				self?.sceneView.primaryButton.isEnabled = false
-			}
-		}
-
 		viewModel.$showProgress.binding = { [weak self] in
             guard let strongSelf = self else { return }
 

@@ -94,7 +94,6 @@ class TokenEntryViewModel {
 
     @Bindable private(set) var title: String
     @Bindable private(set) var message: String?
-	@Bindable private(set) var token: String?
 
     @Bindable private(set) var showProgress: Bool = false {
         didSet {
@@ -192,12 +191,9 @@ class TokenEntryViewModel {
         self.title = ""
 
 		if let unwrappedToken = requestToken {
-            self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
             self.wasInitializedWithARequestToken = true
-
-            fetchProviders(unwrappedToken)
+            self.fetchProviders(unwrappedToken)
 		} else {
-            self.token = nil
             self.wasInitializedWithARequestToken = false
 
             update(
