@@ -12,7 +12,9 @@ class HolderDashboardViewController: BaseViewController {
 	private let viewModel: HolderDashboardViewModel
 	
 	let sceneView = HolderDashboardView()
-	
+
+	var bannerView: BannerView?
+
 	var screenCaptureInProgress = false
 	
 	// MARK: Initializers
@@ -94,6 +96,15 @@ class HolderDashboardViewController: BaseViewController {
 
 			self?.sceneView.hideQRImage = $0
 		}
+
+		viewModel.$notificationBanner.binding = { [weak self] in
+
+			if let content = $0 {
+				self?.showNotificationBanner(content)
+			} else {
+				self?.hideNotificationBanner()
+			}
+		}
 	}
 
 	private func setupListeners() {
@@ -126,7 +137,6 @@ class HolderDashboardViewController: BaseViewController {
 
 		super.viewWillAppear(animated)
 		checkValidity()
-		//		sceneView.play()
 
 		// Scroll to top
 		sceneView.scrollView.setContentOffset(.zero, animated: false)
@@ -170,5 +180,37 @@ class HolderDashboardViewController: BaseViewController {
 		card.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.cardTapped(cardInfo.identifier)
 		}
+	}
+
+	func showNotificationBanner(_ content: NotificationBannerContent) {
+
+		guard bannerView == nil else {
+			return
+		}
+
+		bannerView = BannerView()
+		bannerView?.translatesAutoresizingMaskIntoConstraints = false
+		bannerView?.title = content.title
+		bannerView?.message = content.message
+		bannerView?.icon = content.icon
+		bannerView?.messageTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
+
+		bannerView?.primaryButtonTappedCommand = { [weak self] in
+			self?.hideNotificationBanner()
+		}
+		if let newBannerView = bannerView {
+
+			navigationController?.addBannerView(newBannerView)
+			UIAccessibility.post(notification: .screenChanged, argument: newBannerView)
+		}
+	}
+
+	func hideNotificationBanner() {
+
+		bannerView?.removeFromSuperview()
+		bannerView = nil
 	}
 }
