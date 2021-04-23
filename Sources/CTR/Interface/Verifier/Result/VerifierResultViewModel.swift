@@ -35,9 +35,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
 
-	/// The identity with title numbers
-	private var identityWithTitles: [(String, String)] = []
-
 	// MARK: - Bindable properties
 
 	/// The title of the scene
@@ -133,17 +130,16 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	func setHolderIdentity(_ attributes: Attributes) {
 
-		let holder = TestHolderIdentity(
-			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
-			lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
-			birthDay: attributes.cryptoAttributes.birthDay ?? "",
-			birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
-		)
-		let mapping = holder.mapIdentity(months: String.shortMonths)
-		for (index, element) in mapping.enumerated() {
-			identity.append(("", element.isEmpty ? "_" : element))
-			identityWithTitles.append(("\(index + 1)", element.isEmpty ? "_" : element))
-		}
+//		let holder = TestHolderIdentity(
+//			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
+//			lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
+//			birthDay: attributes.cryptoAttributes.birthDay ?? "",
+//			birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
+//		)
+//		let mapping = holder.mapIdentity(months: String.shortMonths)
+//		for element in mapping {
+//			identity.append(("", element.isEmpty ? "_" : element))
+//		}
 	}
 
 	/// Set the debug information

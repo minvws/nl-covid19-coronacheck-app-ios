@@ -214,5 +214,7 @@ class ResultView: ScrolledStackWithButtonView {
 		identityView.isHidden = false
 		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
 		messageLabel.font = Theme.fonts.body
+		primaryButton.style = .primary
+		primaryButton.alpha = 0
 	}
 }
