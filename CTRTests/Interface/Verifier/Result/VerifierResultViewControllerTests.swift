@@ -7,13 +7,14 @@
 
 import XCTest
 @testable import CTR
+import SnapshotTesting
 
 class VerifierResultViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
 	var sut: VerifierResultViewController!
 
-	var verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	var viewModel: VerifierResultViewModel!
 
 	var window = UIWindow()
@@ -88,6 +89,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.message, .verifierResultAccessMessage, "Message should match")
 		XCTAssertEqual(sut.sceneView.imageView.image, .access, "Image should match")
 
+		// Snapshot
+		sut.assertImage()
 	}
 
 	/// Test all the demo content
@@ -121,6 +124,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
 		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
 
+		// Snapshot
+		sut.assertImage()
 	}
 
 	/// Test all the denied content
@@ -153,6 +158,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
 		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
 		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
+
+		// Snapshot
+		sut.assertImage()
 	}
 
 	/// Test all the denied content
@@ -186,6 +194,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
 		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
 		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
+
+		// Snapshot
+		sut.assertImage()
 	}
 
 	/// Test all the verified content
@@ -219,6 +230,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.title, .verifierResultAccessTitle, "Title should match")
 		XCTAssertEqual(sut.sceneView.message, .verifierResultAccessMessage, "Message should match")
 		XCTAssertEqual(sut.sceneView.imageView.image, .access, "Image should match")
+
+		// Snapshot
+		sut.assertImage()
 	}
 
 	/// Test the dismiss method

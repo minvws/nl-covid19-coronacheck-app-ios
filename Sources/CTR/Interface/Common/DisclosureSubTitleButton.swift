@@ -7,7 +7,8 @@
 
 import UIKit
 
-class ButtonWithSubtitle: BaseView {
+/// A grey full width button with a title, sub title and a disclosure icon
+class DisclosureSubTitleButton: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -37,7 +38,7 @@ class ButtonWithSubtitle: BaseView {
 	}()
 
 	/// The disclosure image
-	private let disclosureView: UIImageView = {
+	let disclosureView: UIImageView = {
 
 		let view = UIImageView(image: UIImage.disclosure)
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -55,11 +56,8 @@ class ButtonWithSubtitle: BaseView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.lightBackground
-
 		layer.cornerRadius = ViewTraits.cornerRadius
-
 		createShadow()
-
 		button.addTarget(self, action: #selector(primaryButtonTapped), for: .touchUpInside)
 	}
 
@@ -119,7 +117,15 @@ class ButtonWithSubtitle: BaseView {
 			subTitleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.topMargin
-			),
+			)
+		])
+
+		setupDisclosureViewConstraints()
+	}
+
+	func setupDisclosureViewConstraints() {
+
+		NSLayoutConstraint.activate([
 
 			disclosureView.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
@@ -136,7 +142,7 @@ class ButtonWithSubtitle: BaseView {
 
 		super.setupAccessibility()
 
-		subTitleLabel.isAccessibilityElement = false
+		titleLabel.isAccessibilityElement = false
 		disclosureView.isAccessibilityElement = false
 		subTitleLabel.isAccessibilityElement = false
 	}
