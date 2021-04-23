@@ -90,9 +90,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// The proof validator
 	var proofValidator: ProofValidatorProtocol
 
-	/// The banner manager
-	var bannerManager: NotificationBannerManaging = NotificationBannerManager.shared
-
 	/// the notification center
 	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
@@ -113,6 +110,9 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 	/// Show an expired QR Message
 	@Bindable private(set) var showExpiredQR: Bool
+
+	/// Show notification banner
+	@Bindable private(set) var notificationBanner: NotificationBannerContent?
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -175,7 +175,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// - Parameter identifier: the identifier of the card
 	func cardTapped(_ identifier: CardIdentifier) {
 
-		bannerManager.hideBanner()
+		notificationBanner = nil
 		switch identifier {
 			case .appointment:
 				coordinator?.navigateToAppointment()
@@ -379,20 +379,27 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 	@objc func showBanner() {
 
-		bannerManager.showBanner(
-			content: NotificationBannerContent(
-				title: .holderBannerNewQRTitle,
-				message: .holderBannerNewQRMessage,
-				link: .holderBannerNewQRMessageLink,
-				icon: UIImage.alert
-			),
-			callback: { [weak self] in
-
-				if let faqUrl = URL(string: .holderUrlFAQ) {
-					self?.coordinator?.openUrl(faqUrl, inApp: true)
-				}
-			}
+		notificationBanner = NotificationBannerContent(
+			title: .holderBannerNewQRTitle,
+			message: .holderBannerNewQRMessage,
+			link: .holderBannerNewQRMessageLink,
+			icon: UIImage.alert
 		)
+
+//		bannerManager.showBanner(
+//			content: NotificationBannerContent(
+//				title: .holderBannerNewQRTitle,
+//				message: .holderBannerNewQRMessage,
+//				link: .holderBannerNewQRMessageLink,
+//				icon: UIImage.alert
+//			),
+//			callback: { [weak self] in
+//
+//				if let faqUrl = URL(string: .holderUrlFAQ) {
+//					self?.coordinator?.openUrl(faqUrl, inApp: true)
+//				}
+//			}
+//		)
 	}
 
 	func setupCreateCard() {
