@@ -47,7 +47,7 @@ class VerifierCoordinator: SharedCoordinator {
 				navigationController: navigationController,
 				onboardingDelegate: self,
 				factory: onboardingFactory,
-				maxValidity: String(maxValidity)
+				maxValidity: maxValidity
 			)
 			startChildCoordinator(coordinator)
 			
@@ -57,7 +57,7 @@ class VerifierCoordinator: SharedCoordinator {
 				navigationController: navigationController,
 				onboardingDelegate: self,
 				factory: onboardingFactory,
-				maxValidity: String(maxValidity)
+				maxValidity: maxValidity
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent()

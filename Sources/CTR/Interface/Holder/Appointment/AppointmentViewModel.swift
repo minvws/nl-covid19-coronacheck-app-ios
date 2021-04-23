@@ -34,13 +34,14 @@ class AppointmentViewModel: Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - maxValidity: the maximum validity of a test result
-	init(coordinator: OpenUrlProtocol, maxValidity: String) {
+	init(coordinator: OpenUrlProtocol, maxValidity: Int) {
 
 		self.coordinator = coordinator
 
 		self.title = .holderAppointmentTitle
 		self.header = .holderAppointmentHeader
-		self.body = String(format: .holderAppointmentBody, maxValidity, maxValidity)
+		let maxValidityAsString = "\(maxValidity)"
+		self.body = String(format: .holderAppointmentBody, maxValidityAsString, maxValidityAsString)
 		self.buttonTitle = .holderAppointmentButtonTitle
 		self.image = UIImage.appointment
 	}

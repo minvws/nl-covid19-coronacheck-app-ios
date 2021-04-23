@@ -22,7 +22,7 @@ class AppointmentViewModelTests: XCTestCase {
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		sut = AppointmentViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			maxValidity: "test"
+			maxValidity: 40
 		)
 	}
 

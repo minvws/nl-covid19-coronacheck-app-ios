@@ -233,7 +233,7 @@ class ProofManager: ProofManaging, Logging {
 	
 	private func parseSignedTestResult(_ data: Data, onCompletion: @escaping ((SignedTestResultState) -> Void)) {
 		
-		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
+		logVerbose("ISM Response: \(String(decoding: data, as: UTF8.self))")
 		
 		removeTestWrapper()
 		do {
@@ -310,7 +310,7 @@ class ProofManager: ProofManaging, Logging {
 		
 		if let data = try? JSONEncoder().encode(object),
 		   let convertedToString = String(data: data, encoding: .utf8) {
-			logDebug("ProofManager: Convert to \(convertedToString)")
+			logVerbose("ProofManager: Convert to \(convertedToString)")
 			return convertedToString
 		}
 		return ""

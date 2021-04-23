@@ -201,11 +201,11 @@ class NetworkManager: NetworkManaging, Logging {
 			}
 		}
 		
-		logDebug("--REQUEST--")
-		if let url = request.url { logDebug(url.debugDescription) }
-		if let allHTTPHeaderFields = request.allHTTPHeaderFields { logDebug(allHTTPHeaderFields.debugDescription) }
-		if let httpBody = request.httpBody { logDebug(String(data: httpBody, encoding: .utf8)!) }
-		logDebug("--END REQUEST--")
+		logVerbose("--REQUEST--")
+		if let url = request.url { logVerbose(url.debugDescription) }
+		if let allHTTPHeaderFields = request.allHTTPHeaderFields { logVerbose(allHTTPHeaderFields.debugDescription) }
+		if let httpBody = request.httpBody { logVerbose(String(data: httpBody, encoding: .utf8)!) }
+		logVerbose("--END REQUEST--")
 		
 		return .success(request)
 	}
@@ -386,7 +386,7 @@ class NetworkManager: NetworkManaging, Logging {
 			return
 		}
 		
-		logDebug("--RESPONSE--")
+		logVerbose("--RESPONSE--")
 		if let response = response as? HTTPURLResponse {
 			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
 			
@@ -398,14 +398,14 @@ class NetworkManager: NetworkManaging, Logging {
 			
 			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
 				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
-					logDebug("Response body: \n\(body)")
+					logVerbose("Response body: \n\(body)")
 				}
 			}
 		} else if let error = error {
 			logDebug("Error with response: \(error)")
 		}
 		
-		logDebug("--END RESPONSE--")
+		logVerbose("--END RESPONSE--")
 		
 		guard let response = response,
 			  let object = object else {
@@ -427,13 +427,11 @@ class NetworkManager: NetworkManaging, Logging {
 	private func decodeJson<Object: Decodable>(data: Data) -> Result<Object, NetworkResponseHandleError> {
 		do {
 			let object = try self.jsonDecoder.decode(Object.self, from: data)
-			if !(object is SignedResponse) {
-				self.logDebug("Response Object: \(object)")
-			}
+			self.logVerbose("Response Object: \(object)")
 			return .success(object)
 		} catch {
 			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-				self.logDebug("Raw JSON: \(json)")
+				self.logVerbose("Raw JSON: \(json)")
 			}
 			self.logError("Error Deserializing \(Object.self): \(error)")
 			return .failure(.cannotDeserialize)
