@@ -419,7 +419,7 @@ class TokenEntryViewModel {
         hasEverMadeFieldsVisible: Bool,
         screenHasCompleted: Bool
     ) -> TokenEntryViewModel.InputMode {
-        
+
         if wasInitialisedWithARefreshToken {
             if hasEverMadeFieldsVisible {
                 return .inputVerificationCode
