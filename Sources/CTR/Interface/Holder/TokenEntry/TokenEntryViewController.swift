@@ -81,7 +81,7 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$errorMessage.binding = { [weak self] in
+		viewModel.$fieldErrorMessage.binding = { [weak self] in
 			if let message = $0 {
 				self?.sceneView.errorView.error = message
 				self?.sceneView.errorView.isHidden = false
@@ -91,7 +91,7 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$showError.binding = { [weak self] in
+		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
 			if $0 {
 				self?.showError(.errorTitle, message: .technicalErrorText)
 			}
@@ -148,11 +148,11 @@ class TokenEntryViewController: BaseViewController {
 			)
 		}
 
-		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+		viewModel.$resendVerificationButtonTitle.binding = { [weak self] in
 
 			self?.sceneView.secondaryTitle = $0
 		}
-		viewModel.$secondaryButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
+		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			strongSelf.sceneView.verificationEntryView.inputField.text = nil

@@ -20,10 +20,13 @@ class TokenEntryViewModel {
 
 	// MARK: - Bindables
 
+	/// The navbar title
     @Bindable private(set) var title: String = .holderTokenEntryTitle
+
+	/// The description label underneath the navbar title
     @Bindable private(set) var message: String?
 
-    // Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
+    /// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
     @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
             recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
@@ -33,26 +36,22 @@ class TokenEntryViewModel {
     @Bindable private(set) var shouldShowVerificationEntryField: Bool = false
     @Bindable private(set) var shouldShowNextButton: Bool = true
 	@Bindable private(set) var enableNextButton: Bool = false
-    @Bindable private(set) var errorMessage: String?
-	@Bindable private(set) var secondaryButtonTitle: String?
-	@Bindable private(set) var secondaryButtonEnabled: Bool = false
+    @Bindable private(set) var fieldErrorMessage: String?
+	@Bindable private(set) var resendVerificationButtonTitle: String?
+	@Bindable private(set) var resendVerificationButtonEnabled: Bool = false
 
 	/// Show internet error
-	@Bindable private(set) var showError: Bool = false
+	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
 
     // MARK: - Private vars
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-
 	private let proofManager: ProofManaging?
-
 	private var requestToken: RequestToken?
-
 	private let tokenValidator: TokenValidatorProtocol
 
     /// A timer to enable resending of the verification code
     private var resendTimer: Timer?
-
 	private var verificationCode: String?
 
 	// Counter that tracks the countdown before the SMS can be resent
@@ -61,7 +60,8 @@ class TokenEntryViewModel {
     /// Indicates that the screen originated in a QR or Universal Link flow.
     private let wasInitializedWithARequestToken: Bool
 
-    private var hasEverPressedNextButton: Bool = false
+	///
+    private var hasEverMadeFieldsVisible: Bool = false
 
     // Hopefully can remove this after a refactor.
     // Indicates that we've forwarded to the coordinator and there's nothing left to do
@@ -125,8 +125,8 @@ class TokenEntryViewModel {
 
 		if let unwrappedToken = requestToken {
             self.wasInitializedWithARequestToken = true
-            recalculateAndUpdateUI(tokenValidityIndicator: nil)
             self.fetchProviders(unwrappedToken)
+			recalculateAndUpdateUI(tokenValidityIndicator: nil)
 		} else {
             self.wasInitializedWithARequestToken = false
             recalculateAndUpdateUI(tokenValidityIndicator: nil)
@@ -141,7 +141,7 @@ class TokenEntryViewModel {
 	///   - verificationInput: the verification input
 	func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
-		errorMessage = nil
+		fieldErrorMessage = nil
 		guard let tokenInput = tokenInput else {
 			enableNextButton = false
 			return
@@ -169,7 +169,6 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
     func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
-        hasEverPressedNextButton = true
 
         if wasInitializedWithARequestToken {
             handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
@@ -195,7 +194,7 @@ class TokenEntryViewModel {
     // MARK: - Private tap handlers:
 
     private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
-        errorMessage = nil
+        fieldErrorMessage = nil
 
         guard let tokenInput = tokenInput else {
             return
@@ -203,7 +202,7 @@ class TokenEntryViewModel {
 
         if let verification = verificationInput, !verification.isEmpty {
             verificationCode = verification.uppercased()
-            errorMessage = nil
+            fieldErrorMessage = nil
             if let token = requestToken {
                 fetchProviders(token)
             }
@@ -212,19 +211,19 @@ class TokenEntryViewModel {
                 self.requestToken = requestToken
                 fetchProviders(requestToken)
             } else {
-                errorMessage = .holderTokenEntryErrorInvalidCode
+                fieldErrorMessage = .holderTokenEntryErrorInvalidCode
             }
         }
     }
 
     private func handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
-        errorMessage = nil
+        fieldErrorMessage = nil
 
         guard let requestToken = requestToken else { return }
 
         if let verification = verificationInput, !verification.isEmpty {
             verificationCode = verification.uppercased()
-            errorMessage = nil
+            fieldErrorMessage = nil
 
             fetchProviders(requestToken)
         }
@@ -247,7 +246,7 @@ class TokenEntryViewModel {
 
 			}, onError: { [weak self] error in
 
-                self?.showError = true
+                self?.showTechnicalErrorAlert = true
                 self?.decrementProgressCount()
 			}
 		)
@@ -257,7 +256,7 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchResult(_ requestToken: RequestToken) {
         guard let provider = proofManager?.getTestProvider(requestToken) else {
-            errorMessage = .holderTokenEntryErrorInvalidCode
+            fieldErrorMessage = .holderTokenEntryErrorInvalidCode
 
             recalculateAndUpdateUI(tokenValidityIndicator: true)
 
@@ -273,7 +272,7 @@ class TokenEntryViewModel {
 			code: verificationCode,
 			provider: provider) {  [weak self] response in
 
-			self?.errorMessage = nil
+			self?.fieldErrorMessage = nil
 
 			switch response {
 				case let .success(wrapper):
@@ -284,21 +283,21 @@ class TokenEntryViewModel {
 						case .verificationRequired:
 							self?.handleVerificationRequired()
 						case .invalid:
-							self?.errorMessage = .holderTokenEntryErrorInvalidCode
+							self?.fieldErrorMessage = .holderTokenEntryErrorInvalidCode
                             self?.enableNextButton = true
 						default:
 							self?.logDebug("Unhandled test result status: \(wrapper.status)")
-							self?.errorMessage = "Unhandled: \(wrapper.status)"
+							self?.fieldErrorMessage = "Unhandled: \(wrapper.status)"
                             self?.enableNextButton = true
 					}
 				case let .failure(error):
 
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self?.errorMessage = .holderTokenEntryErrorInvalidCode
+						self?.fieldErrorMessage = .holderTokenEntryErrorInvalidCode
 					} else {
 						// For now, display the network error.
-						self?.errorMessage = error.localizedDescription
-						self?.showError = true
+						self?.fieldErrorMessage = error.localizedDescription
+						self?.showTechnicalErrorAlert = true
 					}
                     self?.enableNextButton = true
             }
@@ -312,11 +311,9 @@ class TokenEntryViewModel {
 
 		if let code = verificationCode, !code.isEmpty {
 			// We are showing the verification entry, so this is a wrong verification code
-			errorMessage = .holderTokenEntryErrorInvalidCode
-            enableNextButton = true
-        } else {
-            enableNextButton = false
+			fieldErrorMessage = .holderTokenEntryErrorInvalidCode
         }
+        enableNextButton = true
 		resetCountdownCounter()
 		startResendTimer()
         verificationCodeIsKnownToBeRequired = true
@@ -347,36 +344,45 @@ class TokenEntryViewModel {
 	@objc func updateResendButtonState() {
 
 		if resendCountdownCounter > 0 {
-			secondaryButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(resendCountdownCounter)")
-			secondaryButtonEnabled = false
+			resendVerificationButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(resendCountdownCounter)")
+			resendVerificationButtonEnabled = false
 			resendCountdownCounter -= 1
 		} else {
 			resendCountdownCounter = 10
 			resendTimer?.invalidate()
 			resendTimer = nil
-			secondaryButtonTitle = .holderTokenEntryRetryTitle
-			secondaryButtonEnabled = true
+			resendVerificationButtonTitle = .holderTokenEntryRetryTitle
+			resendVerificationButtonEnabled = true
 		}
 	}
 
-    // Applies a new InputMode to the UI bindables
-    // Should **not** not make any decisions
-    private var previousInputMode: InputMode?
-
+	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
     private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
         update(inputMode: TokenEntryViewModel.calculateInputMode(
                 tokenValidityIndicator: tokenValidityIndicator,
                 wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                 verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
                 isInProgress: shouldShowProgress,
-                hasEverPressedNextButton: hasEverPressedNextButton,
+				hasEverMadeFieldsVisible: hasEverMadeFieldsVisible,
                 screenHasCompleted: screenHasCompleted)
         )
     }
 
+	/// Retains the current applied value of InputMode, for comparison with
+	/// future applications.
+	private var currentInputMode: InputMode? {
+		didSet {
+			if currentInputMode != TokenEntryViewModel.InputMode.none {
+				hasEverMadeFieldsVisible = true
+			}
+		}
+	}
+
+	// Applies a new InputMode to the UI bindables
+	// Should **not** not make any decisions
     private func update(inputMode newInputMode: InputMode) {
-        guard newInputMode != previousInputMode else { return }
-        previousInputMode = newInputMode
+        guard newInputMode != currentInputMode else { return }
+        currentInputMode = newInputMode
 
         switch newInputMode {
             case .none:
@@ -410,12 +416,12 @@ class TokenEntryViewModel {
         wasInitialisedWithARefreshToken: Bool,
         verificationCodeIsKnownToBeRequired: Bool,
         isInProgress: Bool,
-        hasEverPressedNextButton: Bool,
+        hasEverMadeFieldsVisible: Bool,
         screenHasCompleted: Bool
     ) -> TokenEntryViewModel.InputMode {
 
         if wasInitialisedWithARefreshToken {
-            if hasEverPressedNextButton {
+            if hasEverMadeFieldsVisible {
                 return .inputVerificationCode
             } else {
                 if isInProgress || screenHasCompleted {
