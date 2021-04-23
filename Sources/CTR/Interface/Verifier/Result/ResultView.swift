@@ -74,6 +74,13 @@ class ResultView: ScrolledStackWithButtonView {
 		return view
 	}()
 
+	var checkIdentityView: VerifierCheckIdentityView = {
+
+		let view = VerifierCheckIdentityView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	var messageTopConstraint: NSLayoutConstraint?
 
 	/// setup the views
@@ -85,6 +92,7 @@ class ResultView: ScrolledStackWithButtonView {
 		messageLabel.textAlignment = .center
 		primaryButton.style = .secondary
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		checkIdentityView.alpha = 0
 	}
 
 	/// Setup the hierarchy
@@ -98,6 +106,7 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(identityView)
 		contentView.addSubview(debugLabel)
 		contentView.addSubview(spacer)
+		contentView.addSubview(checkIdentityView)
 		stackView.addArrangedSubview(contentView)
 	}
 
@@ -106,6 +115,8 @@ class ResultView: ScrolledStackWithButtonView {
 
 		super.setupViewConstraints()
 		setupPrimaryButton()
+
+		checkIdentityView.embed(in: contentView)
 
 		NSLayoutConstraint.activate([
 
@@ -216,5 +227,13 @@ class ResultView: ScrolledStackWithButtonView {
 		messageLabel.font = Theme.fonts.body
 		primaryButton.style = .primary
 		primaryButton.alpha = 0
+
+		UIView.animate(withDuration: 0.3, delay: 0.8, options: .curveLinear) {
+			self.primaryButton.alpha = 100
+			self.checkIdentityView.alpha = 100
+		} completion: { _ in
+			print("completed")
+		}
+
 	}
 }

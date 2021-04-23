@@ -142,12 +142,14 @@ class IdentityView: BaseView {
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
+		super.setupViewHierarchy()
 		addSubview(stackView)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
+		super.setupViewConstraints()
 		NSLayoutConstraint.activate([
 
 			stackView.topAnchor.constraint(equalTo: topAnchor),
