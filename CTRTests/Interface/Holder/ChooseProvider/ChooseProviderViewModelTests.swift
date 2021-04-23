@@ -72,51 +72,5 @@ class ChooseProviderViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.navigateToTokenOverviewCalled) == true
-		expect(self.holderCoordinatorDelegateSpy.navigateToListResultsCalled) == false
-	}
-
-	func test_ggdProviderChosen_withoutViewController() {
-
-		// Given
-		openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = ("testtoken", ())
-
-		// When
-		sut.providerSelected(ProviderIdentifier.ggd, presentingViewController: nil)
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToTokenOverviewCalled) == false
-		expect(self.holderCoordinatorDelegateSpy.navigateToListResultsCalled) == false
-	}
-
-	func test_ggdProviderChosen_withViewController_success() {
-
-		// Given
-		let viewController = UIViewController()
-		openIdManagerSpy.stubbedRequestAccessTokenOnCompletionResult = ("testtoken", ())
-
-		// When
-		sut.providerSelected(ProviderIdentifier.ggd, presentingViewController: viewController)
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToTokenOverviewCalled) == false
-		expect(self.holderCoordinatorDelegateSpy.navigateToListResultsCalled) == true
-	}
-
-	func test_ggdProviderChosen_withViewController_error() {
-
-		// Given
-		let viewController = UIViewController()
-		let error = NSError(
-			domain: NSURLErrorDomain,
-			code: URLError.notConnectedToInternet.rawValue
-		)
-		openIdManagerSpy.stubbedRequestAccessTokenOnErrorResult = (error, ())
-
-		// When
-		sut.providerSelected(ProviderIdentifier.ggd, presentingViewController: viewController)
-
-		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToTokenOverviewCalled) == false
-		expect(self.holderCoordinatorDelegateSpy.navigateToListResultsCalled) == false
 	}
 }

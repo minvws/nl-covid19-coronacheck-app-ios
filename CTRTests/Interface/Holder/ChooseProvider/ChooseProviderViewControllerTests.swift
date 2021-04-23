@@ -19,8 +19,6 @@ class ChooseProviderViewControllerTests: XCTestCase {
 	private var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	private var openIdManagerSpy: OpenIdManagerSpy!
 
-	var window = UIWindow()
-
 	// MARK: Test lifecycle
 	override func setUp() {
 
@@ -32,7 +30,6 @@ class ChooseProviderViewControllerTests: XCTestCase {
 			openIdManager: openIdManagerSpy
 		)
 		sut = ChooseProviderViewController(viewModel: viewModel)
-		window = UIWindow()
 	}
 
 	override func tearDown() {
@@ -42,8 +39,7 @@ class ChooseProviderViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		window.addSubview(sut.view)
-		RunLoop.current.run(until: Date())
+		_ = sut.view
 	}
 
 	// MARK: - Tests

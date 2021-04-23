@@ -122,7 +122,7 @@ class ChooseProviderViewModel: Logging {
 		if identifier == ProviderIdentifier.commercial {
 			loginCommercial()
 		} else if identifier == ProviderIdentifier.ggd {
-			loginGGD(presentingViewController)
+//			loginGGD(presentingViewController)
 		}
 	}
 
@@ -132,29 +132,29 @@ class ChooseProviderViewModel: Logging {
 		coordinator?.navigateToTokenOverview()
 	}
 
-	/// Login at the GGD
-	/// - Parameter presentingViewController: the presenting view controller
-	private func loginGGD(_ presentingViewController: UIViewController?) {
-
-		guard let viewController = presentingViewController else {
-			self.logError("Can't present login for GGD")
-			return
-		}
-
-		openIdManager?.requestAccessToken(
-			presenter: viewController) { [weak self] accessToken in
-			self?.logDebug("Got Acces token: \(accessToken ?? "nil") ")
-
-			// Can't deal with token just yet.
-			//			if let token = accessToken {
-			//				self?.getTestResults(token)
-			//			}
-			// For now, reset test results
-			self?.proofManager?.removeTestWrapper()
-			self?.coordinator?.navigateToListResults()
-
-		} onError: { [weak self] error in
-			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
-		}
-	}
+//	/// Login at the GGD
+//	/// - Parameter presentingViewController: the presenting view controller
+//	private func loginGGD(_ presentingViewController: UIViewController?) {
+//
+//		guard let viewController = presentingViewController else {
+//			self.logError("Can't present login for GGD")
+//			return
+//		}
+//
+//		openIdManager?.requestAccessToken(
+//			presenter: viewController) { [weak self] accessToken in
+//			self?.logDebug("Got Acces token: \(accessToken ?? "nil") ")
+//
+//			// Can't deal with token just yet.
+//			//			if let token = accessToken {
+//			//				self?.getTestResults(token)
+//			//			}
+//			// For now, reset test results
+//			self?.proofManager?.removeTestWrapper()
+//			self?.coordinator?.navigateToListResults()
+//
+//		} onError: { [weak self] error in
+//			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+//		}
+//	}
 }
