@@ -46,16 +46,12 @@ class TokenEntryViewModel {
     // MARK: - Private vars
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-
 	private let proofManager: ProofManaging?
-
 	private var requestToken: RequestToken?
-
 	private let tokenValidator: TokenValidatorProtocol
 
     /// A timer to enable resending of the verification code
     private var resendTimer: Timer?
-
 	private var verificationCode: String?
 
 	// Counter that tracks the countdown before the SMS can be resent
@@ -64,7 +60,8 @@ class TokenEntryViewModel {
     /// Indicates that the screen originated in a QR or Universal Link flow.
     private let wasInitializedWithARequestToken: Bool
 
-    private var hasEverPressedNextButton: Bool = false
+	///
+    private var hasEverMadeFieldsVisible: Bool = false
 
     // Hopefully can remove this after a refactor.
     // Indicates that we've forwarded to the coordinator and there's nothing left to do
@@ -128,8 +125,8 @@ class TokenEntryViewModel {
 
 		if let unwrappedToken = requestToken {
             self.wasInitializedWithARequestToken = true
-            recalculateAndUpdateUI(tokenValidityIndicator: nil)
             self.fetchProviders(unwrappedToken)
+			recalculateAndUpdateUI(tokenValidityIndicator: nil)
 		} else {
             self.wasInitializedWithARequestToken = false
             recalculateAndUpdateUI(tokenValidityIndicator: nil)
@@ -172,7 +169,6 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
     func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
-        hasEverPressedNextButton = true
 
         if wasInitializedWithARequestToken {
             handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
@@ -316,10 +312,8 @@ class TokenEntryViewModel {
 		if let code = verificationCode, !code.isEmpty {
 			// We are showing the verification entry, so this is a wrong verification code
 			fieldErrorMessage = .holderTokenEntryErrorInvalidCode
-            enableNextButton = true
-        } else {
-            enableNextButton = false
         }
+        enableNextButton = true
 		resetCountdownCounter()
 		startResendTimer()
         verificationCodeIsKnownToBeRequired = true
@@ -362,24 +356,33 @@ class TokenEntryViewModel {
 		}
 	}
 
-    // Applies a new InputMode to the UI bindables
-    // Should **not** not make any decisions
-    private var previousInputMode: InputMode?
-
+	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
     private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
         update(inputMode: TokenEntryViewModel.calculateInputMode(
                 tokenValidityIndicator: tokenValidityIndicator,
                 wasInitialisedWithARefreshToken: wasInitializedWithARequestToken,
                 verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
                 isInProgress: shouldShowProgress,
-                hasEverPressedNextButton: hasEverPressedNextButton,
+				hasEverMadeFieldsVisible: hasEverMadeFieldsVisible,
                 screenHasCompleted: screenHasCompleted)
         )
     }
 
+	/// Retains the current applied value of InputMode, for comparison with
+	/// future applications.
+	private var currentInputMode: InputMode? {
+		didSet {
+			if currentInputMode != TokenEntryViewModel.InputMode.none {
+				hasEverMadeFieldsVisible = true
+			}
+		}
+	}
+
+	// Applies a new InputMode to the UI bindables
+	// Should **not** not make any decisions
     private func update(inputMode newInputMode: InputMode) {
-        guard newInputMode != previousInputMode else { return }
-        previousInputMode = newInputMode
+        guard newInputMode != currentInputMode else { return }
+        currentInputMode = newInputMode
 
         switch newInputMode {
             case .none:
@@ -413,12 +416,12 @@ class TokenEntryViewModel {
         wasInitialisedWithARefreshToken: Bool,
         verificationCodeIsKnownToBeRequired: Bool,
         isInProgress: Bool,
-        hasEverPressedNextButton: Bool,
+		hasEverMadeFieldsVisible: Bool,
         screenHasCompleted: Bool
     ) -> TokenEntryViewModel.InputMode {
 
         if wasInitialisedWithARefreshToken {
-            if hasEverPressedNextButton {
+            if hasEverMadeFieldsVisible {
                 return .inputVerificationCode
             } else {
                 if isInProgress || screenHasCompleted {
