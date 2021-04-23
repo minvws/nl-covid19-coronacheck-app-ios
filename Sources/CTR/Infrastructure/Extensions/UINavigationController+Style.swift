@@ -23,7 +23,7 @@ extension UINavigationController {
 
 	/// Add a banner view to the top of the screen
 	/// - Parameter bannerView: the banner view to show
-	func addBannerView(_ bannerView: UIView) {
+	func addBannerView(_ bannerView: BannerView) {
 
 		view.addSubview(bannerView)
 
