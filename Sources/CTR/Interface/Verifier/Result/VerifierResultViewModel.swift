@@ -227,8 +227,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessAllowed() {
 
 		title = .verifierResultAccessTitle
-		message =  .verifierResultAccessMessage
-		linkedMessage = .verifierResultAccessLink
 	}
 
 	private func showAccessDenied() {
@@ -241,8 +239,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessDemo() {
 
 		title = .verifierResultDemoTitle
-		message =  .verifierResultAccessMessage
-		linkedMessage = .verifierResultAccessLink
 	}
 
 	func dismiss() {
@@ -271,24 +267,14 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(
-			text: .verifierResultCheckMessageOne,
+			text: .verifierResultCheckText,
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
-
-		let label2 = Label(body: nil).multiline()
-		label2.attributedText = .makeFromHtml(
-			text: .verifierResultCheckMessageTwo,
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
-
-		let identityView = IdentityView()
-		identityView.elements = identityWithTitles
 
 		coordinator?.displayContent(
 			title: .verifierResultCheckTitle,
-			content: [(label, 16), (label2, 16), (identityView, 0)]
+			content: [(label, 16)]
 		)
 	}
 

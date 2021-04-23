@@ -115,8 +115,6 @@
 
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.access.message" = "Controleer of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs. Lees meer.";
-"verifier.result.access.link" = "Lees meer.";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.denied.title" = "Ongeldige QR-code";
 "verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs. Lees mogelijke oorzaken.";
@@ -135,10 +133,15 @@
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
 
+"holder.result.identity.title" = "Controleer de gegevens";
+"holder.result.identity.lastname" = "Achternaam";
+"holder.result.identity.firstname" = "Voornaam";
+"holder.result.identity.dayofbirth" = "Geboortedag";
+"holder.result.identity.monthofbirth" = "Geboortemaand";
+
 /* MARK: - Verifier Check Result */
-"verifier.result.check.title" = "Controleer gegevens";
-"verifier.result.check.section.one" = "Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of deze gegevens hetzelfde zijn als de gegevens op het identiteitsbewijs.";
-"verifier.result.check.section.two" = "De gegevens bestaan uit: (1) de eerste letter van de voornaam, (2) de eerste letter van de achternaam, (3) de geboortedag en (4) de geboortemaand. ";
+"verifier.result.check.title" = "Over de controle";
+"verifier.result.check.text" = "<p>De controle is nodig om te zien of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om privacy te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Ongeldige QR-code";

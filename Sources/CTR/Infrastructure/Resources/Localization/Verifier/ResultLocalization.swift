@@ -14,16 +14,6 @@ extension String {
 		return Localization.string(for: "verifier.result.access.title")
 	}
 
-	static var verifierResultAccessMessage: String {
-
-		return Localization.string(for: "verifier.result.access.message")
-	}
-
-	static var verifierResultAccessLink: String {
-
-		return Localization.string(for: "verifier.result.access.link")
-	}
-
 	static var verifierResultDeniedTitle: String {
 
 		return Localization.string(for: "verifier.result.denied.title")
@@ -48,4 +38,30 @@ extension String {
 
 		return Localization.string(for: "verifier.result.next")
 	}
+
+	static var verifierResultIdentityTitle: String {
+
+		return Localization.string(for: "holder.result.identity.title")
+	}
+
+	static var verifierResultIdentityLastname: String {
+
+		return Localization.string(for: "holder.result.identity.lastname")
+	}
+
+	static var verifierResultIdentityFirstname: String {
+
+		return Localization.string(for: "holder.result.identity.firstname")
+	}
+
+	static var verifierResultIdentityDayOfBirth: String {
+
+		return Localization.string(for: "holder.result.identity.dayofbirth")
+	}
+
+	static var verifierResultIdentityMonthOfBirth: String {
+
+		return Localization.string(for: "holder.result.identity.monthofbirth")
+	}
 }
+
