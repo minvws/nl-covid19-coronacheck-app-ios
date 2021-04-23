@@ -12,10 +12,10 @@ class AboutTestResultViewModel: Logging {
 	var loggingCategory: String = "AboutTestResultViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: (HolderCoordinatorDelegate & Dismissable)?
+	weak private var coordinator: Dismissable?
 
 	/// The proof manager
-	var proofManager: ProofManaging?
+	weak private var proofManager: ProofManaging?
 
 	@Bindable private (set) var identity: [(String, String)] = []
 
@@ -24,13 +24,13 @@ class AboutTestResultViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
 	init(
-		coordinator: HolderCoordinatorDelegate & Dismissable,
+		coordinator: Dismissable,
 		proofManager: ProofManaging) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
 
-		identity = getDisplayIdentity(proofManager.getTestWrapper()?.result?.holder )
+		identity = getDisplayIdentity(proofManager.getTestWrapper()?.result?.holder)
 	}
 
 	func dismiss() {
@@ -39,9 +39,9 @@ class AboutTestResultViewModel: Logging {
 	}
 
 	/// Get a display version of the holder identity
-	/// - Parameter holder: the holder identiy
+	/// - Parameter holder: the holder identity
 	/// - Returns: the display version
-	func getDisplayIdentity(_ holder: TestHolderIdentity?) -> [(String, String)] {
+	private func getDisplayIdentity(_ holder: TestHolderIdentity?) -> [(String, String)] {
 
 		guard let holder = holder else {
 			return []

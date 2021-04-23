@@ -37,7 +37,7 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 		return Label(body: nil).multiline()
 	}()
 
-	/// The stackview for the content
+	/// The stack view for the content
 	let innerStackView: UIStackView = {
 
 		let view = UIStackView()
