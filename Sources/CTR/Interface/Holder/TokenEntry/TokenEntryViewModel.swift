@@ -20,10 +20,13 @@ class TokenEntryViewModel {
 
 	// MARK: - Bindables
 
+	/// The navbar title
     @Bindable private(set) var title: String = .holderTokenEntryTitle
+
+	/// The description label underneath the navbar title
     @Bindable private(set) var message: String?
 
-    // Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
+    /// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
     @Bindable private(set) var shouldShowProgress: Bool = false {
         didSet {
             recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
@@ -33,12 +36,12 @@ class TokenEntryViewModel {
     @Bindable private(set) var shouldShowVerificationEntryField: Bool = false
     @Bindable private(set) var shouldShowNextButton: Bool = true
 	@Bindable private(set) var enableNextButton: Bool = false
-    @Bindable private(set) var errorMessage: String?
+    @Bindable private(set) var fieldErrorMessage: String?
 	@Bindable private(set) var resendVerificationButtonTitle: String?
 	@Bindable private(set) var resendVerificationButtonEnabled: Bool = false
 
 	/// Show internet error
-	@Bindable private(set) var showError: Bool = false
+	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
 
     // MARK: - Private vars
 
@@ -141,7 +144,7 @@ class TokenEntryViewModel {
 	///   - verificationInput: the verification input
 	func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
-		errorMessage = nil
+		fieldErrorMessage = nil
 		guard let tokenInput = tokenInput else {
 			enableNextButton = false
 			return
@@ -195,7 +198,7 @@ class TokenEntryViewModel {
     // MARK: - Private tap handlers:
 
     private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
-        errorMessage = nil
+        fieldErrorMessage = nil
 
         guard let tokenInput = tokenInput else {
             return
@@ -203,7 +206,7 @@ class TokenEntryViewModel {
 
         if let verification = verificationInput, !verification.isEmpty {
             verificationCode = verification.uppercased()
-            errorMessage = nil
+            fieldErrorMessage = nil
             if let token = requestToken {
                 fetchProviders(token)
             }
@@ -212,19 +215,19 @@ class TokenEntryViewModel {
                 self.requestToken = requestToken
                 fetchProviders(requestToken)
             } else {
-                errorMessage = .holderTokenEntryErrorInvalidCode
+                fieldErrorMessage = .holderTokenEntryErrorInvalidCode
             }
         }
     }
 
     private func handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
-        errorMessage = nil
+        fieldErrorMessage = nil
 
         guard let requestToken = requestToken else { return }
 
         if let verification = verificationInput, !verification.isEmpty {
             verificationCode = verification.uppercased()
-            errorMessage = nil
+            fieldErrorMessage = nil
 
             fetchProviders(requestToken)
         }
@@ -247,7 +250,7 @@ class TokenEntryViewModel {
 
 			}, onError: { [weak self] error in
 
-                self?.showError = true
+                self?.showTechnicalErrorAlert = true
                 self?.decrementProgressCount()
 			}
 		)
@@ -257,7 +260,7 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchResult(_ requestToken: RequestToken) {
         guard let provider = proofManager?.getTestProvider(requestToken) else {
-            errorMessage = .holderTokenEntryErrorInvalidCode
+            fieldErrorMessage = .holderTokenEntryErrorInvalidCode
 
             recalculateAndUpdateUI(tokenValidityIndicator: true)
 
@@ -273,7 +276,7 @@ class TokenEntryViewModel {
 			code: verificationCode,
 			provider: provider) {  [weak self] response in
 
-			self?.errorMessage = nil
+			self?.fieldErrorMessage = nil
 
 			switch response {
 				case let .success(wrapper):
@@ -284,21 +287,21 @@ class TokenEntryViewModel {
 						case .verificationRequired:
 							self?.handleVerificationRequired()
 						case .invalid:
-							self?.errorMessage = .holderTokenEntryErrorInvalidCode
+							self?.fieldErrorMessage = .holderTokenEntryErrorInvalidCode
                             self?.enableNextButton = true
 						default:
 							self?.logDebug("Unhandled test result status: \(wrapper.status)")
-							self?.errorMessage = "Unhandled: \(wrapper.status)"
+							self?.fieldErrorMessage = "Unhandled: \(wrapper.status)"
                             self?.enableNextButton = true
 					}
 				case let .failure(error):
 
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self?.errorMessage = .holderTokenEntryErrorInvalidCode
+						self?.fieldErrorMessage = .holderTokenEntryErrorInvalidCode
 					} else {
 						// For now, display the network error.
-						self?.errorMessage = error.localizedDescription
-						self?.showError = true
+						self?.fieldErrorMessage = error.localizedDescription
+						self?.showTechnicalErrorAlert = true
 					}
                     self?.enableNextButton = true
             }
@@ -312,7 +315,7 @@ class TokenEntryViewModel {
 
 		if let code = verificationCode, !code.isEmpty {
 			// We are showing the verification entry, so this is a wrong verification code
-			errorMessage = .holderTokenEntryErrorInvalidCode
+			fieldErrorMessage = .holderTokenEntryErrorInvalidCode
             enableNextButton = true
         } else {
             enableNextButton = false

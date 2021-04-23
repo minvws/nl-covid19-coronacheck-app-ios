@@ -39,10 +39,10 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == false
         expect(self.sut.enableNextButton) == false
-        expect(self.sut.errorMessage).to(beNil())
-        expect(self.sut.secondaryButtonTitle).to(beNil())
-        expect(self.sut.secondaryButtonEnabled) == false
-        expect(self.sut.showError) == false
+        expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.resendVerificationButtonTitle).to(beNil())
+        expect(self.sut.resendVerificationButtonEnabled) == false
+        expect(self.sut.showTechnicalErrorAlert) == false
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -57,10 +57,10 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowVerificationEntryField) == false
         expect(self.sut.shouldShowNextButton) == false
         expect(self.sut.enableNextButton) == false
-        expect(self.sut.errorMessage).to(beNil())
-        expect(self.sut.secondaryButtonTitle).to(beNil())
-        expect(self.sut.secondaryButtonEnabled) == false
-        expect(self.sut.showError) == false
+        expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.resendVerificationButtonTitle).to(beNil())
+        expect(self.sut.resendVerificationButtonEnabled) == false
+        expect(self.sut.showTechnicalErrorAlert) == false
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -84,7 +84,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -106,7 +106,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == false
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -127,7 +127,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == false
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -145,7 +145,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -162,7 +162,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.tokenValidatorSpy.invokedValidate) == false
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -196,7 +196,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
 
@@ -212,7 +212,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.shouldShowProgress) == true
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.shouldShowVerificationEntryField) == true
@@ -222,7 +222,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
 
-        expect(self.sut.showError) == false
+        expect(self.sut.showTechnicalErrorAlert) == false
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -264,9 +264,9 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
         expect(self.proofManagerSpy.invokedGetTestProvider) == false
 
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.shouldShowProgress) == false
-        expect(self.sut.showError) == true
+        expect(self.sut.showTechnicalErrorAlert) == true
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
         expect(self.sut.message) == .holderTokenEntryText
@@ -288,7 +288,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "1234")
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.shouldShowProgress) == false
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
@@ -312,7 +312,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "1234")
 
         // Assert
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.shouldShowProgress) == true
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
@@ -411,9 +411,9 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
-        expect(self.sut.secondaryButtonEnabled) == false
-        expect(self.sut.secondaryButtonTitle) == String(format: .holderTokenEntryRetryCountdown, "\(10)")
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.resendVerificationButtonEnabled) == false
+        expect(self.sut.resendVerificationButtonTitle) == String(format: .holderTokenEntryRetryCountdown, "\(10)")
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.enableNextButton) == true
@@ -440,7 +440,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
         expect(self.sut.message) == .holderTokenEntryText
@@ -465,7 +465,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
 
         // Assert
-        expect(self.sut.errorMessage) == "Unhandled: unknown"
+        expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
         expect(self.sut.message) == .holderTokenEntryText
@@ -490,7 +490,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
         expect(self.sut.message) == .holderTokenEntryText
@@ -515,8 +515,8 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: verificationInput)
 
         // Assert
-        expect(self.sut.errorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-        expect(self.sut.showError) == true
+        expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
+        expect(self.sut.showTechnicalErrorAlert) == true
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
         expect(self.sut.message) == .holderTokenEntryText
@@ -539,7 +539,7 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
         expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidTokenInput
-        expect(self.sut.errorMessage) == String.holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == String.holderTokenEntryErrorInvalidCode
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
 
@@ -559,7 +559,7 @@ class TokenEntryViewModelTests: XCTestCase {
         // Assert
         expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validLowercaseToken.uppercased()
         expect(self.sut.shouldShowProgress) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
 
@@ -577,7 +577,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
 
@@ -615,9 +615,9 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.shouldShowProgress) == false
-        expect(self.sut.showError) == true
+        expect(self.sut.showTechnicalErrorAlert) == true
 
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
@@ -638,7 +638,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.shouldShowProgress) == false
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
@@ -659,7 +659,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.shouldShowProgress) == true
 
         expect(self.sut.enableNextButton) == false
@@ -743,8 +743,8 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.secondaryButtonEnabled) == false
-        expect(self.sut.secondaryButtonTitle) == String(format: .holderTokenEntryRetryCountdown, "\(10)")
+        expect(self.sut.resendVerificationButtonEnabled) == false
+        expect(self.sut.resendVerificationButtonTitle) == String(format: .holderTokenEntryRetryCountdown, "\(10)")
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.enableNextButton) == false
@@ -767,7 +767,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
 
@@ -788,7 +788,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.errorMessage) == "Unhandled: unknown"
+        expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
 
@@ -809,7 +809,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.errorMessage) == .holderTokenEntryErrorInvalidCode
+        expect(self.sut.fieldErrorMessage) == .holderTokenEntryErrorInvalidCode
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
 
@@ -830,8 +830,8 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.errorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-        expect(self.sut.showError) == true
+        expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
+        expect(self.sut.showTechnicalErrorAlert) == true
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
 
@@ -861,7 +861,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == true
-        expect(self.sut.errorMessage).to(beNil())
+        expect(self.sut.fieldErrorMessage).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -885,10 +885,10 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == false
         expect(self.sut.message).to(beNil())
-        expect(self.sut.errorMessage).to(beNil())
-        expect(self.sut.secondaryButtonTitle).to(beNil())
-        expect(self.sut.secondaryButtonEnabled) == false
-        expect(self.sut.showError) == false
+        expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.resendVerificationButtonTitle).to(beNil())
+        expect(self.sut.resendVerificationButtonEnabled) == false
+        expect(self.sut.showTechnicalErrorAlert) == false
 
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
 

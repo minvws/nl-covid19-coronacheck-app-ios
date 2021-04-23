@@ -81,7 +81,7 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$errorMessage.binding = { [weak self] in
+		viewModel.$fieldErrorMessage.binding = { [weak self] in
 			if let message = $0 {
 				self?.sceneView.errorView.error = message
 				self?.sceneView.errorView.isHidden = false
@@ -91,7 +91,7 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$showError.binding = { [weak self] in
+		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
 			if $0 {
 				self?.showError(.errorTitle, message: .technicalErrorText)
 			}
