@@ -111,14 +111,14 @@ class HolderCoordinator: SharedCoordinator {
 
                 // Need to handle two situations:
                 // - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
-                //   ⮑ in this sitation, it is nice to keep hold of the UniversalLink and go straight to handling
+                //   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
                 //      that after the user has completed these screens.
                 // - the user is somewhere in the Holder app, and the nav stack can just be replaced.
 
                 if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
                     self.unhandledUniversalLink = universalLink
                 } else {
-                    // Do it on the next runloop, to standardise all the entrypoints to this function:
+                    // Do it on the next runloop, to standardise all the entry points to this function:
                     DispatchQueue.main.async { [self] in
                         navigateToTokenEntry(requestToken)
                     }

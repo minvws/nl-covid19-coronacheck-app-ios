@@ -161,7 +161,7 @@
 "holder.tokenentry.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
 "holder.tokenentry.verification.info" = "Je krijgt een code via sms of e-mail";
 "holder.tokenentry.verification.title" = "Verificatiecode";
-"holder.tokenentry.verification.placeholder" = "Bijv. 0576";
+"holder.tokenentry.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.retry.title" = "Stuur opnieuw";
 "holder.tokenentry.retry.countdown" = "Stuur opnieuw in %@";
