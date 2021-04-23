@@ -54,16 +54,10 @@ class BannerView: BaseView {
 	}()
 
 	/// The message text view
-	let messageTextView: UITextView = {
+	let messageTextView: TextView = {
 
-		let view = UITextView()
+		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isScrollEnabled = false
-		view.isEditable = false
-		view.isSelectable = false
-		view.textContainer.lineFragmentPadding = 0
-		view.backgroundColor = nil
-		view.textContainerInset = .zero
 		return view
 	}()
 
@@ -180,40 +174,12 @@ class BannerView: BaseView {
 	/// The  message
 	var message: String? {
 		didSet {
-			messageTextView.text = message
-		}
-	}
-
-	/// Underline part ot the message
-	/// - Parameter text: the text to underline
-	func underline(_ text: String?) {
-
-		guard let underlinedText = text,
-			  let messageText = message else {
-			return
-		}
-
-		let output = NSMutableAttributedString(
-			string: messageText,
-			attributes: [
-				NSAttributedString.Key.font: Theme.fonts.footnote,
-				NSAttributedString.Key.foregroundColor: Theme.colors.secondary
+			messageTextView.html(message, textColor: Theme.colors.secondary)
+			messageTextView.linkTextAttributes = [
+				.foregroundColor: Theme.colors.secondary,
+				.underlineColor: Theme.colors.secondary
 			]
-		)
-
-		if let range = output.string.range(of: underlinedText) {
-			let attributes: [NSAttributedString.Key: Any] = [
-				.link: underlinedText,
-				.underlineStyle: NSUnderlineStyle.single.rawValue
-			]
-			output.addAttributes(attributes, range: NSRange(range, in: output.string))
 		}
-
-		messageTextView.attributedText = output
-		messageTextView.linkTextAttributes = [
-			.foregroundColor: Theme.colors.secondary,
-			.underlineColor: Theme.colors.secondary
-		]
 	}
 
 	/// The icon

@@ -382,24 +382,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		notificationBanner = NotificationBannerContent(
 			title: .holderBannerNewQRTitle,
 			message: .holderBannerNewQRMessage,
-			link: .holderBannerNewQRMessageLink,
 			icon: UIImage.alert
 		)
-
-//		bannerManager.showBanner(
-//			content: NotificationBannerContent(
-//				title: .holderBannerNewQRTitle,
-//				message: .holderBannerNewQRMessage,
-//				link: .holderBannerNewQRMessageLink,
-//				icon: UIImage.alert
-//			),
-//			callback: { [weak self] in
-//
-//				if let faqUrl = URL(string: .holderUrlFAQ) {
-//					self?.coordinator?.openUrl(faqUrl, inApp: true)
-//				}
-//			}
-//		)
 	}
 
 	func setupCreateCard() {
@@ -412,6 +396,11 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			image: .createTile,
 			backgroundColor: Theme.colors.create
 		)
+	}
+
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
 	}
 }
 

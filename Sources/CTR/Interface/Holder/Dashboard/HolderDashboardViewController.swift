@@ -137,7 +137,6 @@ class HolderDashboardViewController: BaseViewController {
 
 		super.viewWillAppear(animated)
 		checkValidity()
-		//		sceneView.play()
 
 		// Scroll to top
 		sceneView.scrollView.setContentOffset(.zero, animated: false)
@@ -194,11 +193,11 @@ class HolderDashboardViewController: BaseViewController {
 		bannerView?.title = content.title
 		bannerView?.message = content.message
 		bannerView?.icon = content.icon
+		bannerView?.messageTextView.linkTouched { [weak self] url in
 
-//		if content.message != nil && self.callback != nil {
-//			setupLink(view)
-//			view.underline(content.link)
-//		}
+			self?.viewModel.openUrl(url)
+		}
+
 		bannerView?.primaryButtonTappedCommand = { [weak self] in
 			self?.hideNotificationBanner()
 		}

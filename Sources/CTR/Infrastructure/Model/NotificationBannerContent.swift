@@ -15,9 +15,6 @@ struct NotificationBannerContent: Equatable {
 	/// The message of the banner
 	let message: String?
 
-	/// The linked part of the banner
-	let link: String?
-
 	/// The icon to display on the banner
 	let icon: UIImage?
 }
