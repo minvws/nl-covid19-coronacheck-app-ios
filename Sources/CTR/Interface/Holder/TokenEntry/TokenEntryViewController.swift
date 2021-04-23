@@ -148,11 +148,11 @@ class TokenEntryViewController: BaseViewController {
 			)
 		}
 
-		viewModel.$secondaryButtonTitle.binding = { [weak self] in
+		viewModel.$resendVerificationButtonTitle.binding = { [weak self] in
 
 			self?.sceneView.secondaryTitle = $0
 		}
-		viewModel.$secondaryButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
+		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in self?.sceneView.secondaryButton.isEnabled = $0 }
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			strongSelf.sceneView.verificationEntryView.inputField.text = nil

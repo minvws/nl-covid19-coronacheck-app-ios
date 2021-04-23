@@ -34,8 +34,8 @@ class TokenEntryViewModel {
     @Bindable private(set) var shouldShowNextButton: Bool = true
 	@Bindable private(set) var enableNextButton: Bool = false
     @Bindable private(set) var errorMessage: String?
-	@Bindable private(set) var secondaryButtonTitle: String?
-	@Bindable private(set) var secondaryButtonEnabled: Bool = false
+	@Bindable private(set) var resendVerificationButtonTitle: String?
+	@Bindable private(set) var resendVerificationButtonEnabled: Bool = false
 
 	/// Show internet error
 	@Bindable private(set) var showError: Bool = false
@@ -347,15 +347,15 @@ class TokenEntryViewModel {
 	@objc func updateResendButtonState() {
 
 		if resendCountdownCounter > 0 {
-			secondaryButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(resendCountdownCounter)")
-			secondaryButtonEnabled = false
+			resendVerificationButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(resendCountdownCounter)")
+			resendVerificationButtonEnabled = false
 			resendCountdownCounter -= 1
 		} else {
 			resendCountdownCounter = 10
 			resendTimer?.invalidate()
 			resendTimer = nil
-			secondaryButtonTitle = .holderTokenEntryRetryTitle
-			secondaryButtonEnabled = true
+			resendVerificationButtonTitle = .holderTokenEntryRetryTitle
+			resendVerificationButtonEnabled = true
 		}
 	}
 
