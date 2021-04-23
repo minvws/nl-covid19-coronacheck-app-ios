@@ -390,7 +390,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.title) == .holderTokenEntryTitle
-        expect(self.sut.message) == .holderTokenEntryText // TODO: Check Figma for the copy. Vul jouw verficatie code in om je negatieve testuitslag op te halen.
+        expect(self.sut.message) == .holderTokenEntryText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -667,7 +667,7 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.title) == .holderTokenEntryTitle
         expect(self.sut.message) == .holderTokenEntryText
-        expect(self.sut.enableNextButton) == true // TODO: nextButton should always be disabled on tap, and during progress.
+        expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
 
         TokenEntryViewController(viewModel: sut).assertImage()
