@@ -89,7 +89,10 @@ class HolderCoordinator: SharedCoordinator {
 
             // Attempt to consume the universal link again:
             self.unhandledUniversalLink = nil // prevent potential infinite loops
-            consume(universalLink: unhandledUniversalLink)
+            navigateToHolderStart {
+                self.consume(universalLink: unhandledUniversalLink)
+            }
+
         } else {
 
 			// Start with the holder app
@@ -134,7 +137,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	// MARK: Navigation
 
-	func navigateToHolderStart() {
+    func navigateToHolderStart(completion: (() -> Void)? = nil) {
 
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
@@ -156,6 +159,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
+
+        DispatchQueue.main.async {
+            completion?()
+        }
 	}
 
 	/// Navigate to enlarged QR
