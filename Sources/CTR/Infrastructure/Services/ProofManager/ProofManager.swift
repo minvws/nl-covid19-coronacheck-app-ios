@@ -249,7 +249,7 @@ class ProofManager: ProofManaging, Logging {
 				onCompletion(
 					SignedTestResultState.unknown(
 						response: SignedTestResultErrorResponse(
-							status: "Unknown",
+							status: "Can't create credential in CL lib",
 							code: 19999
 						)
 					)
