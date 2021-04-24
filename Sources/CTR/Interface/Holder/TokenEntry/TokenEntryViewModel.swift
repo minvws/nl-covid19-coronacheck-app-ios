@@ -114,7 +114,7 @@ class TokenEntryViewModel {
 		}
 
 		if let verification = verificationInput, !verification.isEmpty {
-			verificationCode = verification.uppercased()
+			verificationCode = sanitize(verification)
 			errorMessage = nil
 			if let token = requestToken {
 				fetchProviders(token)
