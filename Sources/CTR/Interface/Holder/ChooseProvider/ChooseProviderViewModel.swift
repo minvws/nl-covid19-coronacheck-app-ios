@@ -86,7 +86,7 @@ class ChooseProviderViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		openIdManager: OpenIdManaging,
-		enableGGD: Bool = true) {
+		enableGGD: Bool = false) {
 
 		self.coordinator = coordinator
 		self.openIdManager = openIdManager
