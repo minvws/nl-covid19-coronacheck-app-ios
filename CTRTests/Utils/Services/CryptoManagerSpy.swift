@@ -94,7 +94,8 @@ class CryptoManagerSpy: CryptoManaging {
 	}
 
 	func createCredential() -> Bool {
-		// Nothing yet
+
+		return true
 	}
 
 	func readCredential() -> CrypoAttributes? {
