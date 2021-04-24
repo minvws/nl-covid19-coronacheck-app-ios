@@ -106,7 +106,7 @@ protocol CryptoManaging: AnyObject {
 	// MARK: Credential
 	
 	/// Create the credential
-	func createCredential()
+	func createCredential() -> Bool
 	
 	/// Read the crypto credential
 	/// - Returns: the  the crypto attributes

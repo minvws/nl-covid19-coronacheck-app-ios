@@ -247,21 +247,23 @@ class CryptoManager: CryptoManaging, Logging {
 	}
 	
 	/// Create the credential
-	func createCredential() {
+	func createCredential() -> Bool {
 		
 		guard let holderSecretKey = cryptoData.holderSecretKey,
 			  let ism = cryptoData.ism else {
-			return
+			return false
 		}
 		let result = ClmobileCreateCredential(holderSecretKey, ism)
 		if let credential = result?.value {
 			cryptoData.credential = credential
+			return true
 		} else {
 			logError("Can't create credential: \(String(describing: result?.error))")
 		}
+		return false
 	}
 	
-	/// Remove the credial
+	/// Remove the credential
 	func removeCredential() {
 		
 		cryptoData.credential = nil

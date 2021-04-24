@@ -93,7 +93,7 @@ class CryptoManagerSpy: CryptoManaging {
 		removeCredentialCalled = true
 	}
 
-	func createCredential() {
+	func createCredential() -> Bool {
 		// Nothing yet
 	}
 

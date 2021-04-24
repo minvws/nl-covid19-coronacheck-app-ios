@@ -233,7 +233,7 @@ class ProofManager: ProofManaging, Logging {
 	
 	private func parseSignedTestResult(_ data: Data, onCompletion: @escaping ((SignedTestResultState) -> Void)) {
 		
-		logVerbose("ISM Response: \(String(decoding: data, as: UTF8.self))")
+		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
 		
 		removeTestWrapper()
 		do {
@@ -243,8 +243,18 @@ class ProofManager: ProofManaging, Logging {
 		} catch {
 			// Success, no error!
 			cryptoManager.setTestProof(data)
-			cryptoManager.createCredential()
-			onCompletion(SignedTestResultState.valid)
+			if cryptoManager.createCredential() {
+				onCompletion(SignedTestResultState.valid)
+			} else {
+				onCompletion(
+					SignedTestResultState.unknown(
+						response: SignedTestResultErrorResponse(
+							status: "Unknown",
+							code: 19999
+						)
+					)
+				)
+			}
 		}
 	}
 	
