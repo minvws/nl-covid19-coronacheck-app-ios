@@ -292,6 +292,6 @@ class ListResultView: BaseView {
 		}
 	}
 
-	/// The user tapped on the primary button
+	/// The user tapped on the disclaimer button
 	var disclaimerButtonTappedCommand: (() -> Void)?
 }

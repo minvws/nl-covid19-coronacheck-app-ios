@@ -96,6 +96,8 @@ class VerifierResultViewController: BaseViewController, Logging {
 			}
 		}
 
+		setupIdentityView()
+
 		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
@@ -153,5 +155,15 @@ class VerifierResultViewController: BaseViewController, Logging {
 	@objc func debugLinkTapped() {
 
 		sceneView.debugLabel.isHidden = !sceneView.debugLabel.isHidden
+	}
+
+	private func setupIdentityView() {
+
+		sceneView.checkIdentityView.header = String.verifierResultIdentityTitle
+		sceneView.checkIdentityView.firstNameHeader = .verifierResultIdentityFirstname
+		sceneView.checkIdentityView.lastNameHeader = .verifierResultIdentityLastname
+		sceneView.checkIdentityView.dayOfBirthHeader = .verifierResultIdentityDayOfBirth
+		sceneView.checkIdentityView.monthOfBirthHeader = .verifierResultIdentityMonthOfBirth
+
 	}
 }

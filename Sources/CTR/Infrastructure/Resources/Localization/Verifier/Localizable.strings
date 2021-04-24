@@ -133,11 +133,11 @@
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
 
-"holder.result.identity.title" = "Controleer de gegevens";
-"holder.result.identity.lastname" = "Achternaam";
-"holder.result.identity.firstname" = "Voornaam";
-"holder.result.identity.dayofbirth" = "Geboortedag";
-"holder.result.identity.monthofbirth" = "Geboortemaand";
+"verifier.result.identity.title" = "Controleer de gegevens";
+"verifier.result.identity.lastname" = "Achternaam";
+"verifier.result.identity.firstname" = "Voornaam";
+"verifier.result.identity.dayofbirth" = "Geboortedag";
+"verifier.result.identity.monthofbirth" = "Geboortemaand";
 
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Over de controle";

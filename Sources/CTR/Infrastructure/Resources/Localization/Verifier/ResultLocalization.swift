@@ -41,27 +41,26 @@ extension String {
 
 	static var verifierResultIdentityTitle: String {
 
-		return Localization.string(for: "holder.result.identity.title")
+		return Localization.string(for: "verifier.result.identity.title")
 	}
 
 	static var verifierResultIdentityLastname: String {
 
-		return Localization.string(for: "holder.result.identity.lastname")
+		return Localization.string(for: "verifier.result.identity.lastname")
 	}
 
 	static var verifierResultIdentityFirstname: String {
 
-		return Localization.string(for: "holder.result.identity.firstname")
+		return Localization.string(for: "verifier.result.identity.firstname")
 	}
 
 	static var verifierResultIdentityDayOfBirth: String {
 
-		return Localization.string(for: "holder.result.identity.dayofbirth")
+		return Localization.string(for: "verifier.result.identity.dayofbirth")
 	}
 
 	static var verifierResultIdentityMonthOfBirth: String {
 
-		return Localization.string(for: "holder.result.identity.monthofbirth")
+		return Localization.string(for: "verifier.result.identity.monthofbirth")
 	}
 }
-

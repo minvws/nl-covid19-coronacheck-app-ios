@@ -116,7 +116,7 @@ class ResultView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		setupPrimaryButton()
 
-		checkIdentityView.embed(in: contentView)
+		checkIdentityView.embed(in: contentView, insets: .top(24))
 
 		NSLayoutConstraint.activate([
 

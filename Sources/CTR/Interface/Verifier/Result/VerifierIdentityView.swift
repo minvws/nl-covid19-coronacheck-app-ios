@@ -41,14 +41,14 @@ class VerifierIdentityView: BaseView {
 		return view
 	}()
 
-	let birthDayView: IdentityElementView = {
+	let dayOfBirthView: IdentityElementView = {
 		let view = IdentityElementView()
 		view.backgroundColor = .cyan
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
-	let birthMonthView: IdentityElementView = {
+	let monthOfBirthView: IdentityElementView = {
 		let view = IdentityElementView()
 		view.backgroundColor = .cyan
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -67,8 +67,8 @@ class VerifierIdentityView: BaseView {
 
 		stackView.addArrangedSubview(lastNameView)
 		stackView.addArrangedSubview(firstNameView)
-		stackView.addArrangedSubview(birthDayView)
-		stackView.addArrangedSubview(birthMonthView)
+		stackView.addArrangedSubview(dayOfBirthView)
+		stackView.addArrangedSubview(monthOfBirthView)
 		addSubview(stackView)
 	}
 
@@ -89,6 +89,29 @@ class VerifierIdentityView: BaseView {
 
 class VerifierCheckIdentityView: BaseView {
 
+	/// The display constants
+	private struct ViewTraits {
+
+		// Dimensions
+		static let identityTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 48.0
+		static let headerTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 40.0
+	}
+
+	/// The title label
+	let headerLabel: Label = {
+
+		return Label(title1: nil, montserrat: true).multiline()
+	}()
+
+	let disclaimerButton: UIButton = {
+
+		let button = UIButton()
+		button.setImage(.questionMark, for: .normal)
+		button.titleLabel?.textColor = Theme.colors.dark
+		button.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+
 	let identity: VerifierIdentityView = {
 		let view = VerifierIdentityView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -100,6 +123,13 @@ class VerifierCheckIdentityView: BaseView {
 
 		super.setupViews()
 
+		backgroundColor = Theme.colors.secondary
+		headerLabel.backgroundColor = .red
+		disclaimerButton.addTarget(
+			self,
+			action: #selector(disclaimerButtonTapped),
+			for: .touchUpInside
+		)
 	}
 
 	/// Setup the hierarchy
@@ -107,8 +137,9 @@ class VerifierCheckIdentityView: BaseView {
 
 		super.setupViewHierarchy()
 
+		addSubview(headerLabel)
+		addSubview(disclaimerButton)
 		addSubview(identity)
-
 	}
 
 	/// Setup the constraints
@@ -117,12 +148,80 @@ class VerifierCheckIdentityView: BaseView {
 		super.setupViewConstraints()
 		NSLayoutConstraint.activate([
 
-			identity.topAnchor.constraint(equalTo: topAnchor),
-			identity.bottomAnchor.constraint(equalTo: bottomAnchor),
+			// Title
+			headerLabel.topAnchor.constraint(
+				equalTo: topAnchor,
+				constant: ViewTraits.headerTopMargin
+			),
+			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			headerLabel.trailingAnchor.constraint(
+				equalTo: disclaimerButton.leadingAnchor,
+				constant: -8
+			),
+
+			// Disclaimer button
+			disclaimerButton.heightAnchor.constraint(
+				equalToConstant: 50
+			),
+			disclaimerButton.widthAnchor.constraint(
+				equalToConstant: 50
+			),
+			disclaimerButton.trailingAnchor.constraint(
+				equalTo: trailingAnchor
+			),
+			disclaimerButton.bottomAnchor.constraint(
+				equalTo: headerLabel.bottomAnchor,
+				constant: 15
+			),
+
+			// Identity
+			identity.topAnchor.constraint(
+				equalTo: headerLabel.bottomAnchor,
+				constant: ViewTraits.identityTopMargin
+			),
 			identity.leadingAnchor.constraint(equalTo: leadingAnchor),
 			identity.trailingAnchor.constraint(equalTo: trailingAnchor)
-
 		])
 	}
 
+	/// User tapped on the primary button
+	@objc func disclaimerButtonTapped() {
+
+		disclaimerButtonTappedCommand?()
+	}
+
+	// Public Access
+
+	var header: String? {
+		didSet {
+			headerLabel.text = header
+		}
+	}
+
+	var firstNameHeader: String? {
+		didSet {
+			identity.firstNameView.header = firstNameHeader
+		}
+	}
+
+	var lastNameHeader: String? {
+		didSet {
+			identity.lastNameView.header = lastNameHeader
+		}
+	}
+
+	var dayOfBirthHeader: String? {
+		didSet {
+			identity.dayOfBirthView.header = dayOfBirthHeader
+		}
+	}
+
+	var monthOfBirthHeader: String? {
+		didSet {
+			identity.monthOfBirthView.header = monthOfBirthHeader
+		}
+	}
+
+	/// The user tapped on the disclaimer button
+	var disclaimerButtonTappedCommand: (() -> Void)?
 }
