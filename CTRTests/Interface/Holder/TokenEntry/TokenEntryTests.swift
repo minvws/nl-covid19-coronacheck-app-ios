@@ -97,7 +97,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.handleInput(invalidToken, verificationInput: nil)
 
         // Assert
-        expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
+		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken.uppercased()
 
         expect(self.sut.enableNextButton) == false
         expect(self.sut.showVerification) == false

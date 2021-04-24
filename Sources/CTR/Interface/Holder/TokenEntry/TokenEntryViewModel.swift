@@ -19,7 +19,7 @@ class TokenEntryViewModel {
 	@Bindable private(set) var enableNextButton: Bool = false
 
 	/// An error message
-    @Bindable private(set) var errorMessage: String?
+	@Bindable private(set) var errorMessage: String?
 
 	/// The title for the secondary button
 	@Bindable private(set) var secondaryButtonTitle: String?
@@ -30,7 +30,7 @@ class TokenEntryViewModel {
 	/// Show internet error
 	@Bindable private(set) var showError: Bool = false
 
-    // MARK: - Private vars
+	// MARK: - Private vars
 
 	private weak var coordinator: HolderCoordinatorDelegate?
 
@@ -40,8 +40,8 @@ class TokenEntryViewModel {
 
 	private let tokenValidator: TokenValidatorProtocol
 
-    /// A timer to enable resending of the verification code
-    private var resendTimer: Timer?
+	/// A timer to enable resending of the verification code
+	private var resendTimer: Timer?
 
 	private var verificationCode: String?
 
@@ -63,7 +63,7 @@ class TokenEntryViewModel {
 		self.coordinator = coordinator
 		self.proofManager = proofManager
 		self.requestToken = requestToken
-        self.tokenValidator = tokenValidator
+		self.tokenValidator = tokenValidator
 
 		if let unwrappedToken = requestToken {
 			fetchProviders(unwrappedToken)
@@ -88,8 +88,7 @@ class TokenEntryViewModel {
 		}
 
 		if !tokenInput.isEmpty { // && !showVerification {
-
-			let validToken = tokenValidator.validate(tokenInput)
+			let validToken = tokenValidator.validate(sanitize(tokenInput))
 			enableNextButton = validToken
 			showVerification = validToken && showVerification
 			return
@@ -107,12 +106,12 @@ class TokenEntryViewModel {
 	/// - Parameters:
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
-    func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
-        errorMessage = nil
+	func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
+		errorMessage = nil
 
-        guard let tokenInput = tokenInput else {
-            return
-        }
+		guard let tokenInput = tokenInput else {
+			return
+		}
 
 		if let verification = verificationInput, !verification.isEmpty {
 			verificationCode = verification.uppercased()
@@ -121,13 +120,21 @@ class TokenEntryViewModel {
 				fetchProviders(token)
 			}
 		} else {
-			if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
+			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
 				fetchProviders(requestToken)
 			} else {
 				errorMessage = .holderTokenEntryErrorInvalidCode
 			}
 		}
+	}
+
+	func sanitize(_ input: String) -> String {
+
+		return input
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+			.uppercased()
 	}
 
 	/// Fetch the providers
