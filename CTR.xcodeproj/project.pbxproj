@@ -31,6 +31,7 @@
 		3C565B21262ECE0200E17DD7 /* UniversalLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */; };
 		3C565B22262ECE0200E17DD7 /* RequestTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */; };
 		3C6C394626283F0100CC7433 /* TokenValidatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */; };
+		3CA679092636F41200BDAD9E /* TokenEntryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA679082636F41200BDAD9E /* TokenEntryViewTests.swift */; };
 		3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */ = {isa = PBXBuildFile; productRef = 3CF42A292628B51100AAC3B2 /* Nimble */; };
@@ -608,6 +609,7 @@
 		3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalLinkTests.swift; sourceTree = "<group>"; };
 		3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTokenTests.swift; sourceTree = "<group>"; };
 		3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenValidatorSpy.swift; sourceTree = "<group>"; };
+		3CA679082636F41200BDAD9E /* TokenEntryViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryViewTests.swift; sourceTree = "<group>"; };
 		3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLink.swift; sourceTree = "<group>"; };
 		3CF42A2F2628B67D00AAC3B2 /* TokenEntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryTests.swift; sourceTree = "<group>"; };
 		3CF8F771262ED730005CE5D2 /* SnapshotTesting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotTesting.swift; sourceTree = "<group>"; };
@@ -1013,6 +1015,7 @@
 			isa = PBXGroup;
 			children = (
 				3CF42A2F2628B67D00AAC3B2 /* TokenEntryTests.swift */,
+				3CA679082636F41200BDAD9E /* TokenEntryViewTests.swift */,
 			);
 			path = TokenEntry;
 			sourceTree = "<group>";
@@ -2916,6 +2919,7 @@
 				6DD23FBB25E3EF1100CE4AEB /* HolderCoordinatorTests.swift in Sources */,
 				3C565B22262ECE0200E17DD7 /* RequestTokenTests.swift in Sources */,
 				6DFCC7292625A83E0019FC9F /* ForcedInformationManagerTests.swift in Sources */,
+				3CA679092636F41200BDAD9E /* TokenEntryViewTests.swift in Sources */,
 				6D3A06D926144770004E6843 /* LaunchViewControllerTests.swift in Sources */,
 				6D20239325CAB15E00CFCD14 /* NavigationControllerSpy.swift in Sources */,
 				6D32BD2525E6A5AF00C4A4D2 /* VerifierResultViewModelTests.swift in Sources */,
