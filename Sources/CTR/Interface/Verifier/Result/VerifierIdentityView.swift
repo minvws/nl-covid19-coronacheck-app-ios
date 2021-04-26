@@ -14,6 +14,8 @@ class VerifierIdentityView: BaseView {
 
 		// Dimensions
 		static let spacing: CGFloat = 24.0
+		static let borderHeight: CGFloat = 61.0
+		static let borderWidth: CGFloat = 1.0
 	}
 
 	private let stackView: UIStackView = {
@@ -21,44 +23,62 @@ class VerifierIdentityView: BaseView {
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
-		view.alignment = .leading
+		view.alignment = .fill
 		view.distribution = .fill
 		view.spacing = ViewTraits.spacing
 		return view
 	}()
 
+	private let horizontalStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .horizontal
+		view.alignment = .leading
+		view.distribution = .fillProportionally
+		view.spacing = ViewTraits.spacing
+		return view
+	}()
+
+	static func createIdentityElementView() -> IdentityElementView {
+
+		return IdentityElementView(
+			borderHeight: ViewTraits.borderHeight,
+			borderWidth: ViewTraits.borderWidth,
+			borderColor: Theme.colors.grey3,
+			headerAlignment: .natural,
+			bodyFont: Theme.fonts.title2
+		)
+	}
+
 	let lastNameView: IdentityElementView = {
-		let view = IdentityElementView()
-		view.backgroundColor = .cyan
+		let view = createIdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	let firstNameView: IdentityElementView = {
-		let view = IdentityElementView()
-		view.backgroundColor = .cyan
+		let view = createIdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	let dayOfBirthView: IdentityElementView = {
-		let view = IdentityElementView()
-		view.backgroundColor = .cyan
+		let view = createIdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	let monthOfBirthView: IdentityElementView = {
-		let view = IdentityElementView()
-		view.backgroundColor = .cyan
+		let view = createIdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
-//	override func setupViews() {
-//
-//
-//	}
+	override func setupViews() {
+
+		super.setupViews()
+	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
@@ -67,8 +87,9 @@ class VerifierIdentityView: BaseView {
 
 		stackView.addArrangedSubview(lastNameView)
 		stackView.addArrangedSubview(firstNameView)
-		stackView.addArrangedSubview(dayOfBirthView)
-		stackView.addArrangedSubview(monthOfBirthView)
+		horizontalStackView.addArrangedSubview(dayOfBirthView)
+		horizontalStackView.addArrangedSubview(monthOfBirthView)
+		stackView.addArrangedSubview(horizontalStackView)
 		addSubview(stackView)
 	}
 
@@ -81,7 +102,7 @@ class VerifierIdentityView: BaseView {
 			stackView.topAnchor.constraint(equalTo: topAnchor),
 			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			stackView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor)
+			stackView.widthAnchor.constraint(equalTo: widthAnchor)
 		])
 	}
 }
@@ -116,7 +137,7 @@ class VerifierCheckIdentityView: BaseView {
 	let identity: VerifierIdentityView = {
 		let view = VerifierIdentityView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .blue
+		view.backgroundColor = Theme.colors.viewControllerBackground
 		return view
 	}()
 
