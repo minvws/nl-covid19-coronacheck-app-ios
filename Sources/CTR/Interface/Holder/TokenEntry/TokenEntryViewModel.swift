@@ -193,28 +193,6 @@ class TokenEntryViewModel {
                 enableNextButton = receivedNonemptyVerificationInput
                 return
         }
-
-//		guard let tokenInput = tokenInput else {
-//			enableNextButton = false
-//			return
-//		}
-//
-//        // If token is not empty, then if it's valid, enable next button.
-//		if !tokenInput.isEmpty {
-//
-//			let validToken = tokenValidator.validate(tokenInput)
-//			enableNextButton = validToken
-//
-//            recalculateAndUpdateUI(tokenValidityIndicator: validToken)
-//			return
-//		}
-//
-//		if let verification = verificationInput, verification.isEmpty {
-//			enableNextButton = false
-//			return
-//		}
-//
-//		enableNextButton = true
 	}
 
 	/// User tapped the next button
