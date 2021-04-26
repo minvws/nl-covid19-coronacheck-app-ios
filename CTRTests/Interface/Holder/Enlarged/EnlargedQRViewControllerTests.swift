@@ -85,7 +85,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	func setupValidCredential() {
 
 		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -121,7 +121,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,

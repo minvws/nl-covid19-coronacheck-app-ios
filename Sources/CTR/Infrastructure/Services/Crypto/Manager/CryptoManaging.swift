@@ -15,7 +15,7 @@ struct NonceEnvelope: Codable {
 	let stoken: String
 }
 
-struct CrypoAttributes: Codable {
+struct CryptoAttributes: Codable {
 	
 	let birthDay: String?
 	let birthMonth: String?
@@ -51,7 +51,7 @@ struct CrypoAttributes: Codable {
 
 struct Attributes {
 	
-	let cryptoAttributes: CrypoAttributes
+	let cryptoAttributes: CryptoAttributes
 	let unixTimeStamp: Int64
 }
 
@@ -110,7 +110,7 @@ protocol CryptoManaging: AnyObject {
 	
 	/// Read the crypto credential
 	/// - Returns: the  the crypto attributes
-	func readCredential() -> CrypoAttributes?
+	func readCredential() -> CryptoAttributes?
 	
 	/// Remove the credial
 	func removeCredential()

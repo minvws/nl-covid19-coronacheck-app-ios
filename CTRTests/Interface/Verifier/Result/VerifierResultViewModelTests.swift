@@ -10,29 +10,29 @@ import XCTest
 import Nimble
 
 class VerifierResultViewModelTests: XCTestCase {
-
+	
 	/// Subject under test
 	var sut: VerifierResultViewModel!
-
+	
 	/// The coordinator spy
 	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-
+	
 	/// Date parser
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		return dateFormatter
 	}()
-
+	
 	override func setUp() {
-
+		
 		super.setUp()
 		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
-
+		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoResults: CryptoResult(
 				attributes: Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -49,18 +49,17 @@ class VerifierResultViewModelTests: XCTestCase {
 			maxValidity: 48
 		)
 	}
-
+	
 	// MARK: - Tests
-
-	/// Func test the demo qr
+	
 	func testDemo() {
-
+		
 		// Given
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
 		sut.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -74,24 +73,23 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
 		sut.checkAttributes()
-
+		
 		// Then
 		expect(self.sut.allowAccess) == .demo
 		expect(self.sut.title) == .verifierResultDemoTitle
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
-
-	/// Func test the demo qr
+	
 	func testDemoButFaultyTime() {
-
+		
 		// Given
-		sut?.cryptoResults = CryptoResult(
+		sut.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -105,24 +103,23 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .denied
 		expect(self.sut.title) == .verifierResultDeniedTitle
 		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
-
-	/// Func test denied
+	
 	func testDenied() {
-
+		
 		// Given
-		sut?.cryptoResults = CryptoResult(
+		sut.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -136,25 +133,24 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .denied
 		expect(self.sut.title) == .verifierResultDeniedTitle
 		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
-
-	/// Func test allowd
+	
 	func testAllow() {
-
+		
 		// Given
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
-		sut?.cryptoResults = CryptoResult(
+		sut.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -168,26 +164,25 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .verified
 		expect(self.sut.title) == .verifierResultAccessTitle
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
-
-	/// Func test allowed, qr time just within the grace period
+	
 	func testAllowWithInGracePeriod() {
-
+		
 		// Given
 		let timeStamp175SecFromNow = Date().timeIntervalSince1970 + 175 // QR Time
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40 // Sample Time
-		sut?.cryptoResults = CryptoResult(
+		sut.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -201,26 +196,25 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .verified
 		expect(self.sut.title) == .verifierResultAccessTitle
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
-
-	/// Func test denied, just outside the grace period
+	
 	func testDeniedOutsideInGracePeriod() {
-
+		
 		// Given
 		let timeStamp185SecFromNow = Date().timeIntervalSince1970 + 185 // QR Time
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40 // Sample Time
 		sut?.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -234,25 +228,24 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .denied
 		expect(self.sut.title) == .verifierResultDeniedTitle
 		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
-
-	/// Func test expired unit time stamp
+	
 	func testExpiredTimeStamp() {
-
+		
 		// Given
 		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
 		sut?.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -267,23 +260,22 @@ class VerifierResultViewModelTests: XCTestCase {
 			errorMessage: nil
 		)
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .denied
 		expect(self.sut.title) == .verifierResultDeniedTitle
 		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
-
-	/// Func test expired unit time stamp, but paperproof
+	
 	func testExpiredUnixTimeStampButPaperProof() {
-
+		
 		// Given
 		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
 		sut?.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -297,63 +289,59 @@ class VerifierResultViewModelTests: XCTestCase {
 				),
 			errorMessage: nil
 		)
-
+		
 		// When
-		sut?.checkAttributes()
-
+		sut.checkAttributes()
+		
 		// Then
 		expect(self.sut.allowAccess) == .verified
 		expect(self.sut.title) == .verifierResultAccessTitle
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
-
-    /// Test the dismiss method
-    func testDismiss() {
-
-        // Given
-
-        // When
-        sut?.dismiss()
-
-        // Then
-        XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome, "Method should be called")
-    }
-
-	/// Test the dismiss method
+	
+	func testDismiss() {
+		
+		// Given
+		
+		// When
+		sut.dismiss()
+		
+		// Then
+		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
+	}
+	
 	func testScanAgain() {
-
+		
 		// Given
-
+		
 		// When
-		sut?.scanAgain()
-
+		sut.scanAgain()
+		
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToScan, "Method should be called")
+		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScan) == true
 	}
-
-	/// Test the link tapped method
+	
 	func testLinkTappedDenied() {
-
+		
 		// Given
-		sut?.allowAccess = .denied
-
+		sut.allowAccess = .denied
+		
 		// When
-		sut?.linkTapped()
-
+		sut.linkTapped()
+		
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedDisplayContent, "Method should be called")
+		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
 	}
-
-	/// Test the link tapped method
+	
 	func testLinkTappedAllowed() {
-
+		
 		// Given
-		sut?.allowAccess = .verified
-
+		sut.allowAccess = .verified
+		
 		// When
-		sut?.linkTapped()
-
+		sut.linkTapped()
+		
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedDisplayContent, "Method should be called")
+		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
 	}
 }

@@ -28,7 +28,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoResults: CryptoResult(
 				attributes: Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -53,7 +53,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 	// MARK: - Tests
 
-	/// Test all the demo content
 	func testDemo() throws {
 
 		// Given
@@ -62,7 +61,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -90,14 +89,13 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	/// Test all the demo content
 	func testDemoFaultTime() throws {
 
 		// Given
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -125,14 +123,13 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	/// Test all the denied content
 	func testDenied() throws {
 
 		// Given
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -160,7 +157,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	/// Test all the denied content
 	func testDenied48hours() throws {
 
 		// Given
@@ -168,7 +164,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -196,7 +192,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	/// Test all the verified content
 	func testVerified() throws {
 
 		// Given
@@ -204,7 +199,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -232,7 +227,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	/// Test the dismiss method
 	func testDismiss() {
 
 		// Given
@@ -256,7 +250,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScan) == true
     }
 
-	/// Test the link tapped method
 	func testLinkTapped() {
 
 		// Given
@@ -268,7 +261,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
 	}
 
-	/// Test the link tapped method
 	func testDebugLinkTapped() throws {
 
 		// Given
