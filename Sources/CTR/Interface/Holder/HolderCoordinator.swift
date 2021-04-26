@@ -57,7 +57,7 @@ class HolderCoordinator: SharedCoordinator {
 	override func start() {
 
 		if onboardingManager.needsOnboarding {
-			/// Start with the onboarding
+			// Start with the onboarding
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
@@ -85,7 +85,15 @@ class HolderCoordinator: SharedCoordinator {
 			)
 			startChildCoordinator(coordinator)
 
-		} else {
+        } else if let unhandledUniversalLink = unhandledUniversalLink {
+
+            // Attempt to consume the universal link again:
+            self.unhandledUniversalLink = nil // prevent potential infinite loops
+            navigateToHolderStart {
+                self.consume(universalLink: unhandledUniversalLink)
+            }
+
+        } else {
 
 			// Start with the holder app
 			navigateToHolderStart()
@@ -94,18 +102,30 @@ class HolderCoordinator: SharedCoordinator {
 
     // MARK: - Universal Links
 
+    /// If set, this should be handled at the first opportunity:
+    private var unhandledUniversalLink: UniversalLink?
+
     /// Try to consume the Activity
     /// returns: bool indicating whether it was possible.
-    func consume(universalLink: UniversalLink) -> Bool {
-
+    @discardableResult
+    override func consume(universalLink: UniversalLink) -> Bool {
         switch universalLink {
             case .redeemHolderToken(let requestToken):
 
-                // Handled in the follow-up PR
-//                // Do it on the next runloop:
-//                DispatchQueue.main.async { [self] in
-//                    navigateToTokenEntry(requestToken)
-//                }
+                // Need to handle two situations:
+                // - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+                //   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+                //      that after the user has completed these screens.
+                // - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+
+                if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+                    self.unhandledUniversalLink = universalLink
+                } else {
+                    // Do it on the next runloop, to standardise all the entry points to this function:
+                    DispatchQueue.main.async { [self] in
+                        navigateToTokenEntry(requestToken)
+                    }
+                }
             return true
         }
     }
@@ -117,7 +137,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	// MARK: Navigation
 
-	func navigateToHolderStart() {
+    func navigateToHolderStart(completion: (() -> Void)? = nil) {
 
 		let menu = MenuViewController(
 			viewModel: MenuViewModel(
@@ -139,6 +159,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
+
+        DispatchQueue.main.async {
+            completion?()
+        }
 	}
 
 	/// Navigate to enlarged QR

@@ -9,58 +9,117 @@ import Foundation
 
 extension String {
 
-	static var holderTokenEntryTitle: String {
+    // MARK: - "Regular" flow, i.e. not coming from QR/Universal Link
 
-		return Localization.string(for: "holder.tokenentry.title")
+	static var holderTokenEntryRegularFlowTitle: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.title")
 	}
 
-	static var holderTokenEntryText: String {
+	static var holderTokenEntryRegularFlowText: String {
 
-		return Localization.string(for: "holder.tokenentry.text")
+        return Localization.string(for: "holder.tokenentry.regularflow.text")
 	}
 
-	static var holderTokenEntryTokenTitle: String {
+	static var holderTokenEntryRegularFlowTokenTitle: String {
 
-		return Localization.string(for: "holder.tokenentry.token.title")
+        return Localization.string(for: "holder.tokenentry.regularflow.token.title")
 	}
 
-	static var holderTokenEntryTokenPlaceholder: String {
+	static var holderTokenEntryRegularFlowTokenPlaceholder: String {
 
-		return Localization.string(for: "holder.tokenentry.token.placeholder")
+        return Localization.string(for: "holder.tokenentry.regularflow.token.placeholder")
 	}
 
-	static var holderTokenEntryVerificationTitle: String {
+	static var holderTokenEntryRegularFlowVerificationTitle: String {
 
-		return Localization.string(for: "holder.tokenentry.verification.title")
+        return Localization.string(for: "holder.tokenentry.regularflow.verification.title")
 	}
 
-	static var holderTokenEntryVerificationPlaceholder: String {
+	static var holderTokenEntryRegularFlowVerificationPlaceholder: String {
 
-		return Localization.string(for: "holder.tokenentry.verification.placeholder")
+        return Localization.string(for: "holder.tokenentry.regularflow.verification.placeholder")
 	}
 
-	static var holderTokenEntryVerificationInfo: String {
+	static var holderTokenEntryRegularFlowVerificationInfo: String {
 
-		return Localization.string(for: "holder.tokenentry.verification.info")
+        return Localization.string(for: "holder.tokenentry.regularflow.verification.info")
 	}
 
-	static var holderTokenEntryErrorInvalidCode: String {
+	static var holderTokenEntryRegularFlowErrorInvalidCode: String {
 
-		return Localization.string(for: "holder.tokenentry.error.invalid.code")
+        return Localization.string(for: "holder.tokenentry.regularflow.error.invalid.code")
 	}
 
-	static var holderTokenEntryRetryTitle: String {
+	static var holderTokenEntryRegularFlowRetryTitle: String {
 
-		return Localization.string(for: "holder.tokenentry.retry.title")
+        return Localization.string(for: "holder.tokenentry.regularflow.retry.title")
 	}
 
-	static var holderTokenEntryRetryCountdown: String {
+	static var holderTokenEntryRegularFlowRetryCountdown: String {
 
-		return Localization.string(for: "holder.tokenentry.retry.countdown")
+        return Localization.string(for: "holder.tokenentry.regularflow.retry.countdown")
 	}
 
-	static var holderTokenEntryNext: String {
+	static var holderTokenEntryRegularFlowNext: String {
 
-		return Localization.string(for: "holder.tokenentry.next")
+        return Localization.string(for: "holder.tokenentry.regularflow.next")
 	}
+
+    // MARK: - "Regular" flow, i.e. not coming from QR/Universal Link
+
+    static var holderTokenEntryUniversalLinkFlowTitle: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.title")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowText: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.text")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowTokenTitle: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.token.title")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowTokenPlaceholder: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.token.placeholder")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowVerificationTitle: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.verification.title")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowVerificationPlaceholder: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.verification.placeholder")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowVerificationInfo: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.verification.info")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowErrorInvalidCode: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.error.invalid.code")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowRetryTitle: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.retry.title")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowRetryCountdown: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.retry.countdown")
+    }
+
+    static var holderTokenEntryUniversalLinkFlowNext: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.next")
+    }
 }

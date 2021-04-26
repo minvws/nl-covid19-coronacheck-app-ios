@@ -82,6 +82,13 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 			delegate?.finishForcedInformation()
 		}
 	}
+
+    // MARK: - Universal Link handling
+
+    /// Override point for coordinators which wish to deal with universal links.
+    func consume(universalLink: UniversalLink) -> Bool {
+        return false
+    }
 }
 
 // MARK: - ForcedInformationCoordinatorDelegate & OpenUrlProtocol

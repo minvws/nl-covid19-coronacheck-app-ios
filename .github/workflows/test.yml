@@ -1,8 +1,9 @@
+# Syntax: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
 name: test
 
 on:
-  pull_request:
-    branches: [main]
+  pull_request
 
 jobs:
   swiftlint:
