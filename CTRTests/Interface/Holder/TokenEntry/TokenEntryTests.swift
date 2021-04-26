@@ -92,7 +92,7 @@ class TokenEntryViewModelTests: XCTestCase {
     func test_handleInput_withInvalidToken_disablesNextButtonAndHidesVerification() {
         // Arrange
         sut = mockedViewModel(withRequestToken: nil)
-        let invalidToken = "Hello"
+        let invalidToken = "HELLO"
 
         tokenValidatorSpy.stubbedValidateResult = false
 
@@ -100,7 +100,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.handleInput(invalidToken, verificationInput: nil)
 
         // Assert
-		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken.uppercased()
+		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
 
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
@@ -925,7 +925,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.enableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
-//		TokenEntryViewController(viewModel: sut).assertImage()
+		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
     func test_nextButtonPressed_withEmptyVerificationInput_callsFetchProviders() {
