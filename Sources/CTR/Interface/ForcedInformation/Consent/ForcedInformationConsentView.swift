@@ -172,6 +172,7 @@ class ForcedInformationConsentView: BaseView {
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
 			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
+			primaryButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
 
 			// Secondary Button
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),

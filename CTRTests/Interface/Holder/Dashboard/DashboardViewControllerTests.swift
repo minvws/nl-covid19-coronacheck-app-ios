@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import SnapshotTesting
 
 class DashboardViewControllerTests: XCTestCase {
 
@@ -71,6 +72,8 @@ class DashboardViewControllerTests: XCTestCase {
 			.to(equal(.holderDashboardQRExpired), description: "QR Expired title should match")
 		expect(self.sut.sceneView.qrCardView.isHidden) == true
 		expect(self.sut.sceneView.expiredQRView.isHidden) == true
+
+		sut.assertImage()
 	}
 
 	/// Test tapping on the appointment card
@@ -167,6 +170,8 @@ class DashboardViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.qrCardView.isHidden) == true
 		expect(self.sut.sceneView.expiredQRView.isHidden) == false
+
+		sut.assertImage()
 	}
 
 	/// Test the validity of the credential without credential
@@ -182,6 +187,8 @@ class DashboardViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.qrCardView.isHidden) == true
 		expect(self.sut.sceneView.expiredQRView.isHidden) == true
+
+		sut.assertImage()
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -242,5 +249,18 @@ class DashboardViewControllerTests: XCTestCase {
 		expect(self.cryptoManagerSpy.removeCredentialCalled) == true
 		expect(self.cryptoManagerSpy.crypoAttributes)
 			.to(beNil())
+	}
+
+	func test_showNotificationBanner() {
+
+		// Given
+		loadView()
+
+		// When
+		NotificationCenter.default.post(name: .qrCreated, object: nil)
+
+		// Then
+		expect(self.sut.bannerView)
+			.toNot(beNil(), description: "Banner view should be shown")
 	}
 }

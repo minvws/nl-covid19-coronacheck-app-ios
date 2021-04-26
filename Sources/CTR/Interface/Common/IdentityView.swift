@@ -24,6 +24,8 @@ class IdentityElementView: BaseView {
 		// Margins
 		static let margin: CGFloat = 10.0
 		static let titleOffset: CGFloat = 2.0
+		static let minimalTextTopMargin: CGFloat = 4.0
+		static let minimalTextMargin: CGFloat = 7.0
 
 	}
 
@@ -74,7 +76,7 @@ class IdentityElementView: BaseView {
 			// Header
 			headerLabel.topAnchor.constraint(equalTo: topAnchor),
 			headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-			headerLabel.heightAnchor.constraint(equalToConstant: ViewTraits.headerLineHeight),
+			headerLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.headerLineHeight),
 
 			// Border / Background
 			borderView.topAnchor.constraint(
@@ -84,17 +86,27 @@ class IdentityElementView: BaseView {
 			borderView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			borderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			borderView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			borderView.widthAnchor.constraint(equalToConstant: ViewTraits.width),
-			borderView.heightAnchor.constraint(equalToConstant: ViewTraits.height),
+			borderView.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.width),
+			borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.height),
 
 			// Title
 			bodyLabel.centerYAnchor.constraint(
-				equalTo: borderView.centerYAnchor,
+				lessThanOrEqualTo: borderView.centerYAnchor,
 				constant: -ViewTraits.titleOffset
 			),
 			bodyLabel.centerXAnchor.constraint(equalTo: borderView.centerXAnchor),
-			bodyLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-			bodyLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
+			bodyLabel.leadingAnchor.constraint(
+				greaterThanOrEqualTo: borderView.leadingAnchor,
+				constant: ViewTraits.minimalTextMargin
+			),
+			bodyLabel.trailingAnchor.constraint(
+				greaterThanOrEqualTo: borderView.trailingAnchor,
+				constant: -ViewTraits.minimalTextMargin
+			),
+			bodyLabel.topAnchor.constraint(
+				greaterThanOrEqualTo: borderView.topAnchor,
+				constant: ViewTraits.minimalTextTopMargin
+			)
 		])
 	}
 

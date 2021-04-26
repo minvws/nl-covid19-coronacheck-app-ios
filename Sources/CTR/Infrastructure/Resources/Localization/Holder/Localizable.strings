@@ -120,8 +120,7 @@
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
-"holder.banner.newqr.message" = "Lees hier welke informatie in de QR-code staat.";
-"holder.banner.newqr.message.link" = "Lees hier";
+"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 
 /* MARK: - Holder Appointment */
 "holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.</p><p>Je QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is bij de ingang.</p>";
@@ -136,8 +135,6 @@
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.commercial.title" = "Testen voor Toegang";
-"holder.provider.commercial.subtitle" = "Haal testuitslag op";
-"holder.provider.nodigid" = "Ik heb geen DigiD";
 
 /* MARK: - Holder Token Overview */
 "holder.tokenoverview.title" = "Testuitslag ophalen";
