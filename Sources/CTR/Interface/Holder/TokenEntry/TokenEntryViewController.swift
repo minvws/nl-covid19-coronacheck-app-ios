@@ -132,7 +132,6 @@ class TokenEntryViewController: BaseViewController {
 			let wasHidden = strongSelf.sceneView.verificationEntryView.isHidden
 			
 			strongSelf.sceneView.verificationEntryView.isHidden = !shouldShowVerificationEntryField
-			strongSelf.sceneView.resendVerificationCodeButton.isHidden = !shouldShowVerificationEntryField
 			
 			if strongSelf.sceneView.errorView.isHidden {
 				strongSelf.sceneView.textLabel.isHidden = !shouldShowVerificationEntryField
@@ -171,6 +170,10 @@ class TokenEntryViewController: BaseViewController {
 		
 		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButton.isEnabled = $0
+        }
+
+        viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
+            self?.sceneView.resendVerificationCodeButton.isHidden = !$0
 		}
 		
 		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in

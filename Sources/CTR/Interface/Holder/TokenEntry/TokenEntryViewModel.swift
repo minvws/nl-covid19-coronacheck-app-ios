@@ -44,13 +44,15 @@ class TokenEntryViewModel {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
 	}
+
 	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
 	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 	@Bindable private(set) var shouldShowNextButton: Bool = true
 	@Bindable private(set) var enableNextButton: Bool = false
 	@Bindable private(set) var fieldErrorMessage: String?
 	@Bindable private(set) var resendVerificationButtonTitle: String?
-	@Bindable private(set) var resendVerificationButtonEnabled: Bool = false
+	@Bindable private(set) var resendVerificationButtonEnabled: Bool = true
+	@Bindable private(set) var shouldShowResendVerificationButton: Bool = false
 
 	/// Show internet error
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
@@ -146,6 +148,7 @@ class TokenEntryViewModel {
 		self.verificationInfo = Strings.verificationInfo(forMode: initializationMode)
 		self.verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
+		self.resendVerificationButtonTitle = Strings.holderTokenEntryRetryTitle(forMode: initializationMode)
 
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken)
@@ -353,42 +356,6 @@ class TokenEntryViewModel {
 		verificationCodeIsKnownToBeRequired = true
 	}
 
-	// MARK: - Resend SMS Countdown
-	//
-	//	private func resetCountdownCounter() {
-	//		resendCountdownCounter = 10
-	//	}
-	//
-	//	private func startResendTimer() {
-	//
-	//		guard resendTimer == nil else {
-	//			return
-	//		}
-	//		// Show immediately, and repeat every second
-	//		resendTimer = Timer.scheduledTimer(
-	//			timeInterval: TimeInterval(1),
-	//			target: self,
-	//			selector: (#selector(updateResendButtonState)),
-	//			userInfo: nil,
-	//			repeats: true
-	//		)
-	//		resendTimer?.fire()
-	//	}
-	//
-	//	@objc func updateResendButtonState() {
-	//
-	//		if resendCountdownCounter > 0 {
-	//            resendVerificationButtonTitle = Strings.holderTokenEntryRetryCountdown(counter: resendCountdownCounter, forMode: initializationMode)
-	//			resendVerificationButtonEnabled = false
-	//			resendCountdownCounter -= 1
-	//		} else {
-	//			resendCountdownCounter = 10
-	//			resendTimer?.invalidate()
-	//			resendTimer = nil
-	//			resendVerificationButtonTitle = Strings.holderTokenEntryRetryTitle(forMode: initializationMode)
-	//			resendVerificationButtonEnabled = true
-	//		}
-	//	}
 
 	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
 	private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
@@ -423,21 +390,25 @@ class TokenEntryViewModel {
 				shouldShowTokenEntryField = false
 				shouldShowVerificationEntryField = false
 				shouldShowNextButton = false
+				shouldShowResendVerificationButton = false
 
 			case .inputToken:
 				shouldShowTokenEntryField = true
 				shouldShowVerificationEntryField = false
 				shouldShowNextButton = true
+				shouldShowResendVerificationButton = false
 
 			case .inputTokenWithVerificationCode:
 				shouldShowTokenEntryField = true
 				shouldShowVerificationEntryField = true
 				shouldShowNextButton = true
+				shouldShowResendVerificationButton = true
 
 			case .inputVerificationCode:
 				shouldShowTokenEntryField = false
 				shouldShowVerificationEntryField = true
 				shouldShowNextButton = true
+				shouldShowResendVerificationButton = true
 		}
 
 		message = Strings.holderTokenEntryText(forMode: initializationMode, inputMode: newInputMode)
