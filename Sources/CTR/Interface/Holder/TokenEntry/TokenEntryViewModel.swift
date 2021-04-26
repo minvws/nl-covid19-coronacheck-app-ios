@@ -176,8 +176,7 @@ class TokenEntryViewModel {
 
                 if verificationCodeIsKnownToBeRequired {
                     enableNextButton = validToken && receivedNonemptyVerificationInput
-                }
-                else {
+                } else {
                     enableNextButton = validToken
                 }
 
