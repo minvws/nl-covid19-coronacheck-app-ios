@@ -413,26 +413,24 @@ class TokenEntryViewModel {
                 shouldShowTokenEntryField = false
                 shouldShowVerificationEntryField = false
                 shouldShowNextButton = false
-                message = nil
 
             case .inputToken:
                 shouldShowTokenEntryField = true
                 shouldShowVerificationEntryField = false
                 shouldShowNextButton = true
-                message = Strings.holderTokenEntryText(forMode: initializationMode)
 
             case .inputTokenWithVerificationCode:
                 shouldShowTokenEntryField = true
                 shouldShowVerificationEntryField = true
                 shouldShowNextButton = true
-                message = Strings.holderTokenEntryText(forMode: initializationMode)
 
             case .inputVerificationCode:
                 shouldShowTokenEntryField = false
                 shouldShowVerificationEntryField = true
                 shouldShowNextButton = true
-                message = Strings.holderTokenEntryText(forMode: initializationMode)
         }
+
+        message = Strings.holderTokenEntryText(forMode: initializationMode, inputMode: newInputMode)
     }
 
     private static func calculateInputMode(
@@ -478,11 +476,13 @@ extension TokenEntryViewModel {
             }
         }
 
-        fileprivate static func holderTokenEntryText(forMode mode: InitializationMode) -> String {
-            switch mode {
-                case .regular:
+        fileprivate static func holderTokenEntryText(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
+            switch (initializationMode, inputMode) {
+                case (_, .none):
+                    return nil
+                case (.regular, _):
                     return .holderTokenEntryRegularFlowText
-                case .withRequestTokenProvided:
+                case (.withRequestTokenProvided, _):
                     return .holderTokenEntryUniversalLinkFlowText
             }
         }
