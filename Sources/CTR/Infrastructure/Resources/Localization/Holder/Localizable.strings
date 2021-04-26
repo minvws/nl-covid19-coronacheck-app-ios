@@ -160,8 +160,7 @@
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige combinatie";
-"holder.tokenentry.regularflow.retry.title" = "Stuur opnieuw";
-"holder.tokenentry.regularflow.retry.countdown" = "Stuur opnieuw in %@";
+"holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.regularflow.next" = "Haal testuitslag op";
 
 /* MARK: - Holder Token entry - Universal Link flow */
@@ -173,8 +172,7 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "Geen geldige combinatie";
-"holder.tokenentry.universallinkflow.retry.title" = "Stuur opnieuw";
-"holder.tokenentry.universallinkflow.retry.countdown" = "Stuur opnieuw in %@";
+"holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
 
 /* MARK: - Holder Test Results */

@@ -56,11 +56,6 @@ extension String {
         return Localization.string(for: "holder.tokenentry.regularflow.retry.title")
 	}
 
-	static var holderTokenEntryRegularFlowRetryCountdown: String {
-
-        return Localization.string(for: "holder.tokenentry.regularflow.retry.countdown")
-	}
-
 	static var holderTokenEntryRegularFlowNext: String {
 
         return Localization.string(for: "holder.tokenentry.regularflow.next")
@@ -111,11 +106,6 @@ extension String {
     static var holderTokenEntryUniversalLinkFlowRetryTitle: String {
 
         return Localization.string(for: "holder.tokenentry.universallinkflow.retry.title")
-    }
-
-    static var holderTokenEntryUniversalLinkFlowRetryCountdown: String {
-
-        return Localization.string(for: "holder.tokenentry.universallinkflow.retry.countdown")
     }
 
     static var holderTokenEntryUniversalLinkFlowNext: String {
