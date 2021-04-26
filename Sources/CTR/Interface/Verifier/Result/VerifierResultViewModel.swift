@@ -46,6 +46,18 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The identity of the holder
 	@Bindable private(set) var identity: [(String, String)] = []
 
+	/// The first name of the holder
+	@Bindable private(set) var firstName: String = "-"
+
+	/// The last name of the holder
+	@Bindable private(set) var lastName: String = "-"
+
+	/// The birth day of the holder
+	@Bindable private(set) var dayOfBirth: String = "-"
+
+	/// The birth mont of the holder
+	@Bindable private(set) var monthOfBirth: String = "-"
+
 	/// The linked message of the scene
 	@Bindable var linkedMessage: String?
 
@@ -129,6 +141,11 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	}
 
 	func setHolderIdentity(_ attributes: Attributes) {
+
+		firstName = attributes.cryptoAttributes.firstNameInitial ?? "-"
+		lastName = attributes.cryptoAttributes.lastNameInitial ?? "-"
+		dayOfBirth = attributes.cryptoAttributes.birthDay ?? "-"
+		monthOfBirth = attributes.cryptoAttributes.birthMonth ?? "-"
 
 //		let holder = TestHolderIdentity(
 //			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
@@ -301,17 +318,17 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
 	private func startAutoCloseTimer() {
 
-		guard autoCloseTimer == nil else {
-			return
-		}
-
-		autoCloseTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
-			target: self,
-			selector: (#selector(autoCloseScene)),
-			userInfo: nil,
-			repeats: true
-		)
+//		guard autoCloseTimer == nil else {
+//			return
+//		}
+//
+//		autoCloseTimer = Timer.scheduledTimer(
+//			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
+//			target: self,
+//			selector: (#selector(autoCloseScene)),
+//			userInfo: nil,
+//			repeats: true
+//		)
 	}
 
 	private func stopAutoCloseTimer() {

@@ -51,12 +51,16 @@ class VerifierResultViewController: BaseViewController, Logging {
 			if $0 == .verified {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.actionColor = Theme.colors.access
-				self?.sceneView.setupForVerified()
+				self?.sceneView.setupForVerified { [weak self] in
+					self?.title = self?.viewModel.title
+				}
 
 			} else if $0 == .demo {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.actionColor = Theme.colors.grey4
-				self?.sceneView.setupForVerified()
+				self?.sceneView.setupForVerified { [weak self] in
+					self?.title = self?.viewModel.title
+				}
 			} else {
 				self?.sceneView.imageView.image = .denied
 				self?.sceneView.actionColor = Theme.colors.denied
@@ -96,7 +100,14 @@ class VerifierResultViewController: BaseViewController, Logging {
 			}
 		}
 
+		// Identity
 		setupIdentityView()
+		viewModel.$lastName.binding = { [weak self] in self?.sceneView.checkIdentityView.lastName = $0 }
+		viewModel.$firstName.binding = { [weak self] in self?.sceneView.checkIdentityView.firstName = $0 }
+		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
+		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
+
+		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
 
 		addCloseButton(action: #selector(closeButtonTapped))
 	}

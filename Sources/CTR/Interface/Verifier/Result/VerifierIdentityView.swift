@@ -84,7 +84,6 @@ class VerifierIdentityView: BaseView {
 			stackView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor)
 		])
 	}
-
 }
 
 class VerifierCheckIdentityView: BaseView {
@@ -92,8 +91,10 @@ class VerifierCheckIdentityView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
+		// Margins
+		static let margin: CGFloat = 20.0
 		static let identityTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 48.0
+		static let identitySideMargin: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 48.0
 		static let headerTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 40.0
 	}
 
@@ -106,9 +107,9 @@ class VerifierCheckIdentityView: BaseView {
 	let disclaimerButton: UIButton = {
 
 		let button = UIButton()
+		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setImage(.questionMark, for: .normal)
 		button.titleLabel?.textColor = Theme.colors.dark
-		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
 
@@ -124,7 +125,6 @@ class VerifierCheckIdentityView: BaseView {
 		super.setupViews()
 
 		backgroundColor = Theme.colors.secondary
-		headerLabel.backgroundColor = .red
 		disclaimerButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
@@ -153,7 +153,7 @@ class VerifierCheckIdentityView: BaseView {
 				equalTo: topAnchor,
 				constant: ViewTraits.headerTopMargin
 			),
-			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin),
 			headerLabel.trailingAnchor.constraint(
 				equalTo: disclaimerButton.leadingAnchor,
 				constant: -8
@@ -161,17 +161,17 @@ class VerifierCheckIdentityView: BaseView {
 
 			// Disclaimer button
 			disclaimerButton.heightAnchor.constraint(
-				equalToConstant: 50
+				equalToConstant: 60
 			),
 			disclaimerButton.widthAnchor.constraint(
-				equalToConstant: 50
+				equalToConstant: 60
 			),
 			disclaimerButton.trailingAnchor.constraint(
 				equalTo: trailingAnchor
 			),
 			disclaimerButton.bottomAnchor.constraint(
 				equalTo: headerLabel.bottomAnchor,
-				constant: 15
+				constant: 20
 			),
 
 			// Identity
@@ -179,8 +179,14 @@ class VerifierCheckIdentityView: BaseView {
 				equalTo: headerLabel.bottomAnchor,
 				constant: ViewTraits.identityTopMargin
 			),
-			identity.leadingAnchor.constraint(equalTo: leadingAnchor),
-			identity.trailingAnchor.constraint(equalTo: trailingAnchor)
+			identity.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.identitySideMargin
+			),
+			identity.trailingAnchor.constraint(
+				equalTo: trailingAnchor,
+				constant: -ViewTraits.identitySideMargin
+			)
 		])
 	}
 
@@ -204,9 +210,21 @@ class VerifierCheckIdentityView: BaseView {
 		}
 	}
 
+	var firstName: String? {
+		didSet {
+			identity.firstNameView.body = firstName
+		}
+	}
+
 	var lastNameHeader: String? {
 		didSet {
 			identity.lastNameView.header = lastNameHeader
+		}
+	}
+
+	var lastName: String? {
+		didSet {
+			identity.lastNameView.body = lastName
 		}
 	}
 
@@ -216,9 +234,21 @@ class VerifierCheckIdentityView: BaseView {
 		}
 	}
 
+	var dayOfBirth: String? {
+		didSet {
+			identity.dayOfBirthView.body = dayOfBirth
+		}
+	}
+
 	var monthOfBirthHeader: String? {
 		didSet {
 			identity.monthOfBirthView.header = monthOfBirthHeader
+		}
+	}
+
+	var monthOfBirth: String? {
+		didSet {
+			identity.monthOfBirthView.body = monthOfBirth
 		}
 	}
 

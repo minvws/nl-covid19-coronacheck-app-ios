@@ -21,6 +21,13 @@ class ScrolledStackView: BaseView {
 	/// bottom constraint for scroll view
 	var bottomScrollViewConstraint: NSLayoutConstraint?
 
+	var stackViewInset = UIEdgeInsets(
+		top: ViewTraits.topMargin,
+		left: ViewTraits.margin,
+		bottom: ViewTraits.margin,
+		right: ViewTraits.margin
+	)
+
 	/// The scrollview
 	let scrollView: UIScrollView = {
 
@@ -54,6 +61,8 @@ class ScrolledStackView: BaseView {
 
 		super.setupViewConstraints()
 
+		stackView.embed(in: scrollView, insets: stackViewInset)
+
 		NSLayoutConstraint.activate([
 
 			// Scrollview
@@ -64,25 +73,9 @@ class ScrolledStackView: BaseView {
 			// StackView
 			stackView.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
-				constant: -2.0 * ViewTraits.margin
+				constant: -stackViewInset.left - stackViewInset.right
 			),
-			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			stackView.topAnchor.constraint(
-				equalTo: scrollView.topAnchor,
-				constant: ViewTraits.topMargin
-			),
-			stackView.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
-				constant: -ViewTraits.margin
-			),
-			stackView.leadingAnchor.constraint(
-				equalTo: scrollView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			stackView.trailingAnchor.constraint(
-				equalTo: scrollView.trailingAnchor,
-				constant: -ViewTraits.margin
-			)
+			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
 		])
 
 		bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)

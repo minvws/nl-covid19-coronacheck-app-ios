@@ -87,6 +87,7 @@ class ResultView: ScrolledStackWithButtonView {
 	override func setupViews() {
 
 		super.setupViews()
+		stackViewInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
 		backgroundColor = Theme.colors.viewControllerBackground
 		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
@@ -125,11 +126,11 @@ class ResultView: ScrolledStackWithButtonView {
 			imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
 			imageView.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.imageMargin
+				constant: ViewTraits.imageMargin + ViewTraits.margin
 			),
 			imageView.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.imageMargin
+				constant: -ViewTraits.imageMargin + ViewTraits.margin
 			),
 
 			// Debug
@@ -220,7 +221,7 @@ class ResultView: ScrolledStackWithButtonView {
 		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
-	func setupForVerified() {
+	func setupForVerified(_ onCompletion: (() -> Void)? = nil) {
 
 		identityView.isHidden = false
 		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
@@ -228,12 +229,14 @@ class ResultView: ScrolledStackWithButtonView {
 		primaryButton.style = .primary
 		primaryButton.alpha = 0
 
-		UIView.animate(withDuration: 0.3, delay: 0.8, options: .curveLinear) {
+		UIView.animate(withDuration: 0.5, delay: 0.8, options: .curveLinear) {
 			self.primaryButton.alpha = 100
 			self.checkIdentityView.alpha = 100
+			self.imageView.alpha = 0
+			self.titleLabel.alpha = 0
 		} completion: { _ in
-			print("completed")
-		}
 
+			onCompletion?()
+		}
 	}
 }
