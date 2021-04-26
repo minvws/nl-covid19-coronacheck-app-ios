@@ -117,10 +117,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		super.viewWillAppear(animated)
 		// Make the navbar the same color as the background.
 		navigationController?.navigationBar.backgroundColor = .clear
-
 		previousOrientation = OrientationUtility.currentOrientation()
-		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-		sceneView.scrollView.contentSize = sceneView.stackView.frame.size
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {

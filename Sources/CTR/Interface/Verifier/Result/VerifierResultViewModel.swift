@@ -145,18 +145,36 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		firstName = attributes.cryptoAttributes.firstNameInitial ?? "-"
 		lastName = attributes.cryptoAttributes.lastNameInitial ?? "-"
 		dayOfBirth = attributes.cryptoAttributes.birthDay ?? "-"
-		monthOfBirth = attributes.cryptoAttributes.birthMonth ?? "-"
+		determineMonthOfBirth(attributes.cryptoAttributes.birthMonth)
+	}
 
-//		let holder = TestHolderIdentity(
-//			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
-//			lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
-//			birthDay: attributes.cryptoAttributes.birthDay ?? "",
-//			birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
-//		)
-//		let mapping = holder.mapIdentity(months: String.shortMonths)
-//		for element in mapping {
-//			identity.append(("", element.isEmpty ? "_" : element))
-//		}
+	/// Set the monthOfBirth as MMM (mm)
+	/// - Parameter value: the possible month value
+	func determineMonthOfBirth(_ value: String?) {
+
+		if let birthMonthAsString = value {
+			if let birthMonthAsInt = Int(birthMonthAsString),
+			   let month = mapMonth(month: birthMonthAsInt, months: String.shortMonths) {
+
+				let formatter = NumberFormatter()
+				formatter.minimumIntegerDigits = 2
+				if let monthWithLeadingZero = formatter.string(from: NSNumber(value: birthMonthAsInt)) {
+					monthOfBirth = month + " (\(monthWithLeadingZero))"
+				}
+			} else {
+				monthOfBirth = birthMonthAsString
+			}
+		} else {
+			monthOfBirth = "-"
+		}
+	}
+
+	func mapMonth(month: Int, months: [String]) -> String? {
+
+		if month <= months.count, month > 0 {
+			return months[month - 1]
+		}
+		return nil
 	}
 
 	/// Set the debug information
