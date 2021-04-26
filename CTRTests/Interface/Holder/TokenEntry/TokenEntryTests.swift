@@ -43,6 +43,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.resendVerificationButtonTitle).to(beNil())
         expect(self.sut.resendVerificationButtonEnabled) == false
         expect(self.sut.showTechnicalErrorAlert) == false
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -61,6 +63,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.resendVerificationButtonTitle).to(beNil())
         expect(self.sut.resendVerificationButtonEnabled) == false
         expect(self.sut.showTechnicalErrorAlert) == false
+        expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
+        expect(self.sut.message).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -85,6 +89,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -107,6 +113,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == false
         expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -128,6 +136,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == false
         expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -145,6 +155,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -162,6 +174,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
         expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -180,6 +194,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -198,9 +214,13 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
+
+    // MARK: - initWithInitialRequestTokenSet
 
     func test_initWithInitialRequestTokenSet_fetchesProviders() {
         // Arrange
@@ -219,6 +239,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == false
         expect(self.sut.showTechnicalErrorAlert) == false
+        expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
+        expect(self.sut.message).to(beNil())
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -884,6 +906,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage) == String.holderTokenEntryRegularFlowErrorInvalidCode
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -904,6 +928,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -922,6 +948,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage).to(beNil())
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -941,6 +969,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -963,6 +993,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
         expect(self.proofManagerSpy.invokedGetTestProvider) == false
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -982,6 +1014,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowProgress) == false
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1003,6 +1037,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowProgress) == true
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1025,6 +1061,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1044,6 +1082,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1063,6 +1103,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1087,6 +1129,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1108,6 +1152,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1129,6 +1175,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1150,6 +1198,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1172,6 +1222,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.showTechnicalErrorAlert) == true
         expect(self.sut.enableNextButton) == true
         expect(self.sut.shouldShowNextButton) == true
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1200,6 +1252,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.fieldErrorMessage).to(beNil())
+        expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+        expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
@@ -1227,7 +1281,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.resendVerificationButtonTitle).to(beNil())
         expect(self.sut.resendVerificationButtonEnabled) == false
         expect(self.sut.showTechnicalErrorAlert) == false
-
+        expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
+        expect(self.sut.message).to(beNil())
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
 
         TokenEntryViewController(viewModel: sut).assertImage()

@@ -165,8 +165,8 @@
 "holder.tokenentry.regularflow.next" = "Haal testuitslag op";
 
 /* MARK: - Holder Token entry - Universal Link flow */
-"holder.tokenentry.universallinkflow.title" = "Unieke code invullen";
-"holder.tokenentry.universallinkflow.text" = "Vul jouw unieke code in. Deze heb je van je testlocatie gekregen.";
+"holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
+"holder.tokenentry.universallinkflow.text" = "Vul jouw verficatie code in om je negatieve testuitslag op te halen.";
 "holder.tokenentry.universallinkflow.token.title" = "Code";
 "holder.tokenentry.universallinkflow.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
 "holder.tokenentry.universallinkflow.verification.info" = "Je krijgt een code via sms of e-mail";
