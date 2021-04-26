@@ -164,15 +164,17 @@ class TokenEntryViewModel {
 
 		fieldErrorMessage = nil
 
-        let receivedNonemptyVerificationInput = !(verificationInput ?? "").isEmpty
+        let sanitizedTokenInput = tokenInput.map({ sanitize($0) })
+        let sanitizedVerificationInput = verificationInput.map({ sanitize($0) })
+        let receivedNonemptyVerificationInput = !(sanitizedVerificationInput ?? "").isEmpty
 
         switch initializationMode {
             case .regular:
-                guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
+                guard let sanitizedTokenInput = sanitizedTokenInput, !sanitizedTokenInput.isEmpty else {
                     enableNextButton = false
                     return
                 }
-                let validToken = tokenValidator.validate(tokenInput)
+                let validToken = tokenValidator.validate(sanitizedTokenInput)
 
                 if verificationCodeIsKnownToBeRequired {
                     enableNextButton = validToken && receivedNonemptyVerificationInput
@@ -234,13 +236,13 @@ class TokenEntryViewModel {
         }
 
         if let verification = verificationInput, !verification.isEmpty {
-            verificationCode = verification.uppercased()
+            verificationCode = sanitize(verification)
             fieldErrorMessage = nil
             if let token = requestToken {
                 fetchProviders(token)
             }
         } else {
-            if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
+            if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
                 self.requestToken = requestToken
                 fetchProviders(requestToken)
             } else {
@@ -254,8 +256,9 @@ class TokenEntryViewModel {
 
         guard let requestToken = requestToken else { return }
 
-        if let verification = verificationInput, !verification.isEmpty {
-            verificationCode = verification.uppercased()
+        if let sanitizedVerification = verificationInput.map({ sanitize($0) }),
+           !sanitizedVerification.isEmpty {
+            verificationCode = sanitizedVerification
             fieldErrorMessage = nil
 
             fetchProviders(requestToken)
@@ -471,6 +474,15 @@ class TokenEntryViewModel {
                 }
         }
     }
+
+    /// Sanitize userInput of token & validation
+    private func sanitize(_ input: String) -> String {
+
+         return input
+             .trimmingCharacters(in: .whitespacesAndNewlines)
+             .replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+             .uppercased()
+     }
 }
 
 /// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:

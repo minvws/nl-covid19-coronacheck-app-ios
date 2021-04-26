@@ -3036,7 +3036,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck Test";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3048,7 +3048,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR TEST";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
@@ -3147,7 +3147,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck ACC";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3159,7 +3159,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR ACC";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
@@ -3258,7 +3258,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = "CoronaCheck PROD";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3271,7 +3271,7 @@
 					"@executable_path/Frameworks",
 				);
 				LOG_LEVEL = error;
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = "CTR PROD";
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck Ad Hoc";
@@ -3370,7 +3370,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3382,7 +3382,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck App Store";
@@ -3736,7 +3736,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = QMK879NYMV;
 				DISPLAY_NAME = "CoronaCheck D";
@@ -3749,7 +3749,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				NETWORK_CONFIGURATION = Development;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr.debug;
 				PRODUCT_MODULE_NAME = CTR;
@@ -3772,7 +3772,7 @@
 				CODE_SIGN_ENTITLEMENTS = CTR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = C2H38GV99H;
 				DISPLAY_NAME = CoronaCheck;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3784,7 +3784,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rijksoverheid.ctr;
 				PRODUCT_NAME = CTR;
 				PROVISIONING_PROFILE_SPECIFIER = "CoronaCheck App Store";
