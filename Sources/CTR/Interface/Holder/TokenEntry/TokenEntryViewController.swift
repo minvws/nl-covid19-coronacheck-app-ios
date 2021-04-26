@@ -71,10 +71,7 @@ class TokenEntryViewController: BaseViewController {
         }
 
         viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
-            self?.sceneView.tokenEntryView.inputField.attributedPlaceholder = NSAttributedString(
-                string: $0,
-                attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
-            )
+            self?.sceneView.tokenEntryFieldPlaceholder = $0
         }
 
         viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
@@ -90,10 +87,7 @@ class TokenEntryViewController: BaseViewController {
         }
 
         viewModel.$verificationPlaceholder.binding = { [weak self] in
-            self?.sceneView.verificationEntryView.inputField.attributedPlaceholder = NSAttributedString(
-                string: $0,
-                attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
-            )
+            self?.sceneView.verificationEntryFieldPlaceholder = $0
         }
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in

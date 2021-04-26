@@ -188,4 +188,26 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	
 	/// The user tapped on the secondary button
 	var resendVerificationCodeButtonTappedCommand: (() -> Void)?
+	
+	var tokenEntryFieldPlaceholder: String? {
+		didSet {
+			tokenEntryView.inputField.attributedPlaceholder = tokenEntryFieldPlaceholder.map {
+				NSAttributedString(
+					string: $0,
+					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+				)
+			}
+		}
+	}
+	
+	var verificationEntryFieldPlaceholder: String? {
+		didSet {
+			verificationEntryView.inputField.attributedPlaceholder = verificationEntryFieldPlaceholder.map {
+				NSAttributedString(
+					string: $0,
+					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+				)
+			}
+		}
+	}
 }
