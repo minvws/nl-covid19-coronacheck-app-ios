@@ -1,4 +1,3 @@
-//
 /*
  * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
  *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -40,8 +39,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowVerificationEntryField) == false
         expect(self.sut.enableNextButton) == false
         expect(self.sut.fieldErrorMessage).to(beNil())
-        expect(self.sut.resendVerificationButtonTitle).to(beNil())
-        expect(self.sut.resendVerificationButtonEnabled) == false
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryRegularFlowRetryTitle
+        expect(self.sut.resendVerificationButtonEnabled) == true
         expect(self.sut.showTechnicalErrorAlert) == false
         expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
         expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -60,8 +59,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowNextButton) == false
         expect(self.sut.enableNextButton) == false
         expect(self.sut.fieldErrorMessage).to(beNil())
-        expect(self.sut.resendVerificationButtonTitle).to(beNil())
-        expect(self.sut.resendVerificationButtonEnabled) == false
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryRegularFlowRetryTitle
+		expect(self.sut.resendVerificationButtonEnabled) == true
         expect(self.sut.showTechnicalErrorAlert) == false
         expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
         expect(self.sut.message).to(beNil())
@@ -425,8 +424,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.fieldErrorMessage).to(beNil())
-        expect(self.sut.resendVerificationButtonEnabled) == false
-        expect(self.sut.resendVerificationButtonTitle) == String(format: .holderTokenEntryUniversalLinkFlowRetryCountdown, "\(10)")
+		expect(self.sut.resendVerificationButtonEnabled) == true
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
         expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.enableNextButton) == false
@@ -784,9 +783,9 @@ class TokenEntryViewModelTests: XCTestCase {
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
-        expect(self.sut.resendVerificationButtonEnabled) == false
-        expect(self.sut.resendVerificationButtonTitle) == String(format: .holderTokenEntryUniversalLinkFlowRetryCountdown, "\(10)")
-        expect(self.sut.shouldShowTokenEntryField) == false
+		expect(self.sut.resendVerificationButtonEnabled) == true
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
+		expect(self.sut.shouldShowTokenEntryField) == false
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
@@ -1169,9 +1168,9 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.nextButtonPressed(validToken, verificationInput: "")
 
         // Assert
-        expect(self.sut.resendVerificationButtonEnabled) == false
-        expect(self.sut.resendVerificationButtonTitle) == String(format: .holderTokenEntryRegularFlowRetryCountdown, "\(10)")
-        expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.resendVerificationButtonEnabled) == true
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
+		expect(self.sut.shouldShowTokenEntryField) == true
         expect(self.sut.shouldShowVerificationEntryField) == true
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
@@ -1324,8 +1323,8 @@ class TokenEntryViewModelTests: XCTestCase {
         expect(self.sut.shouldShowNextButton) == false
         expect(self.sut.message).to(beNil())
         expect(self.sut.fieldErrorMessage).to(beNil())
-        expect(self.sut.resendVerificationButtonTitle).to(beNil())
-        expect(self.sut.resendVerificationButtonEnabled) == false
+		expect(self.sut.resendVerificationButtonEnabled) == true
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
         expect(self.sut.showTechnicalErrorAlert) == false
         expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
         expect(self.sut.message).to(beNil())
