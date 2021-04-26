@@ -102,7 +102,9 @@ class VerifierIdentityView: BaseView {
 			stackView.topAnchor.constraint(equalTo: topAnchor),
 			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			stackView.widthAnchor.constraint(equalTo: widthAnchor)
+			stackView.widthAnchor.constraint(equalTo: widthAnchor),
+			stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			stackView.trailingAnchor.constraint(equalTo: trailingAnchor)
 		])
 	}
 }
@@ -174,11 +176,11 @@ class VerifierCheckIdentityView: BaseView {
 				equalTo: topAnchor,
 				constant: ViewTraits.headerTopMargin
 			),
-			headerLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.margin),
-			headerLabel.trailingAnchor.constraint(
-				equalTo: disclaimerButton.leadingAnchor,
-				constant: -8
+			headerLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor,
+				constant: ViewTraits.margin
 			),
+			headerLabel.trailingAnchor.constraint(equalTo: disclaimerButton.leadingAnchor),
 
 			// Disclaimer button
 			disclaimerButton.heightAnchor.constraint(
@@ -207,6 +209,10 @@ class VerifierCheckIdentityView: BaseView {
 			identity.trailingAnchor.constraint(
 				equalTo: trailingAnchor,
 				constant: -ViewTraits.identitySideMargin
+			),
+			identity.bottomAnchor.constraint(
+				lessThanOrEqualTo: bottomAnchor,
+				constant: -ViewTraits.margin
 			)
 		])
 	}

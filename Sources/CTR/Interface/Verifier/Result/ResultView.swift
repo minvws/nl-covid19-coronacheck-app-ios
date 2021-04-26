@@ -58,14 +58,6 @@ class ResultView: ScrolledStackWithButtonView {
 		return label
 	}()
 
-	let identityView: IdentityView = {
-
-		let view = IdentityView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isHidden = true
-		return view
-	}()
-
 	private let spacer: UIView = {
 
 		let view = UIView()
@@ -94,6 +86,10 @@ class ResultView: ScrolledStackWithButtonView {
 		primaryButton.style = .secondary
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		checkIdentityView.alpha = 0
+		footerBackground.alpha = 0
+		footerGradientView.alpha = 0
+		lineView.alpha = 0
+		scrollView.bounces = false
 	}
 
 	/// Setup the hierarchy
@@ -104,7 +100,6 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(imageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(identityView)
 		contentView.addSubview(debugLabel)
 		contentView.addSubview(spacer)
 		contentView.addSubview(checkIdentityView)
@@ -117,9 +112,13 @@ class ResultView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		setupPrimaryButton()
 
-		checkIdentityView.embed(in: contentView, insets: .top(24))
+		// disable the bottom constraint of the scroll view, add our own
+		bottomScrollViewConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
+
+			// Scroll View
+			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
 
 			// Image
 			imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -152,12 +151,6 @@ class ResultView: ScrolledStackWithButtonView {
 				constant: -ViewTraits.margin
 			),
 
-			identityView.topAnchor.constraint(
-				equalTo: titleLabel.bottomAnchor,
-				constant: ViewTraits.identityTopMargin
-			),
-			identityView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-
 			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
@@ -166,6 +159,22 @@ class ResultView: ScrolledStackWithButtonView {
 			messageLabel.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
+			),
+
+			// Message
+			checkIdentityView.topAnchor.constraint(
+				equalTo: contentView.topAnchor,
+				constant: ViewTraits.margin
+			),
+			checkIdentityView.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor
+			),
+			checkIdentityView.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor
+			),
+			checkIdentityView.bottomAnchor.constraint(
+				equalTo: contentView.bottomAnchor,
+				constant: 200
 			),
 
 			// Spacer
@@ -223,7 +232,6 @@ class ResultView: ScrolledStackWithButtonView {
 
 	func setupForVerified(_ onCompletion: (() -> Void)? = nil) {
 
-		identityView.isHidden = false
 		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
 		messageLabel.font = Theme.fonts.body
 		primaryButton.style = .primary
@@ -232,11 +240,16 @@ class ResultView: ScrolledStackWithButtonView {
 		UIView.animate(withDuration: 0.5, delay: 0.8, options: .curveLinear) {
 			self.primaryButton.alpha = 100
 			self.checkIdentityView.alpha = 100
-			self.imageView.alpha = 0
-			self.titleLabel.alpha = 0
+			self.footerBackground.alpha = 100
+			self.footerGradientView.alpha = 100
 		} completion: { _ in
-
 			onCompletion?()
 		}
+	}
+
+	func setupForDenied() {
+
+		self.footerBackground.alpha = 100
+		self.footerGradientView.alpha = 100
 	}
 }

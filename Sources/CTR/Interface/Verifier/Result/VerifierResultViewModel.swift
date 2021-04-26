@@ -41,10 +41,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	@Bindable private(set) var title: String = ""
 
 	/// The message of the scene
-	@Bindable private(set) var message: String = ""
-
-	/// The identity of the holder
-	@Bindable private(set) var identity: [(String, String)] = []
+	@Bindable private(set) var message: String?
 
 	/// The first name of the holder
 	@Bindable private(set) var firstName: String = "-"
@@ -258,6 +255,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessAllowed() {
 
 		title = .verifierResultAccessTitle
+		message = nil
 	}
 
 	private func showAccessDenied() {
@@ -270,6 +268,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessDemo() {
 
 		title = .verifierResultDemoTitle
+		message = nil
 	}
 
 	func dismiss() {

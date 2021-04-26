@@ -7,14 +7,15 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class VerifierResultViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: VerifierResultViewModel?
+	var sut: VerifierResultViewModel!
 
 	/// The coordinator spy
-	var verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
+	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 
 	/// Date parser
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
@@ -56,7 +57,7 @@ class VerifierResultViewModelTests: XCTestCase {
 
 		// Given
 		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
-		sut?.cryptoResults = CryptoResult(
+		sut.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
 					cryptoAttributes: CrypoAttributes(
@@ -75,12 +76,12 @@ class VerifierResultViewModelTests: XCTestCase {
 		)
 
 		// When
-		sut?.checkAttributes()
+		sut.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .demo, "Type should be demo")
-		XCTAssertEqual(sut?.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+		expect(self.sut.allowAccess) == .demo
+		expect(self.sut.title) == .verifierResultDemoTitle
+		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 
 	/// Func test the demo qr
@@ -109,9 +110,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .denied, "Type should be denied")
-		XCTAssertEqual(sut?.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultDeniedMessage, "Message should match")
+		expect(self.sut.allowAccess) == .denied
+		expect(self.sut.title) == .verifierResultDeniedTitle
+		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
 
 	/// Func test denied
@@ -140,9 +141,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .denied, "Type should be denied")
-		XCTAssertEqual(sut?.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultDeniedMessage, "Message should match")
+		expect(self.sut.allowAccess) == .denied
+		expect(self.sut.title) == .verifierResultDeniedTitle
+		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
 
 	/// Func test allowd
@@ -172,9 +173,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .verified, "Type should be verified")
-		XCTAssertEqual(sut?.title, .verifierResultAccessTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.title) == .verifierResultAccessTitle
+		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 
 	/// Func test allowed, qr time just within the grace period
@@ -205,9 +206,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .verified, "Type should be verified")
-		XCTAssertEqual(sut?.title, .verifierResultAccessTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.title) == .verifierResultAccessTitle
+		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 
 	/// Func test denied, just outside the grace period
@@ -238,9 +239,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .denied, "Type should be denied")
-		XCTAssertEqual(sut?.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultDeniedMessage, "Message should match")
+		expect(self.sut.allowAccess) == .denied
+		expect(self.sut.title) == .verifierResultDeniedTitle
+		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
 
 	/// Func test expired unit time stamp
@@ -269,9 +270,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .denied, "Type should be denied")
-		XCTAssertEqual(sut?.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultDeniedMessage, "Message should match")
+		expect(self.sut.allowAccess) == .denied
+		expect(self.sut.title) == .verifierResultDeniedTitle
+		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
 
 	/// Func test expired unit time stamp, but paperproof
@@ -301,9 +302,9 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut?.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut?.allowAccess, .verified, "Type should be verified")
-		XCTAssertEqual(sut?.title, .verifierResultAccessTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierResultAccessMessage, "Message should match")
+		expect(self.sut.allowAccess) == .verified
+		expect(self.sut.title) == .verifierResultAccessTitle
+		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 
     /// Test the dismiss method
