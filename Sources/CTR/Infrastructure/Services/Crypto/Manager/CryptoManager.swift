@@ -86,14 +86,6 @@ class CryptoManager: CryptoManaging, Logging {
 		cryptoData.stoken = stoken
 	}
 	
-	/// Set the signature message
-	/// - Parameter proof: the signature message (signed proof)
-	func setTestProof(_ proof: Data?) {
-		
-		cryptoData.ism = proof
-		cryptoData.credential = nil
-	}
-	
 	/// Get the stoken
 	/// - Returns: the stoken
 	func getStoken() -> String? {
@@ -245,22 +237,31 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
-	
-	/// Create the credential
-	func createCredential() -> Bool {
+
+	/// Create the credential from the issuer commit message
+	/// - Parameter ism: the issuer commit message (signed testproof)
+	/// - Returns: Credential data if success, error if not
+	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
 		
-		guard let holderSecretKey = cryptoData.holderSecretKey,
-			  let ism = cryptoData.ism else {
-			return false
+		guard let holderSecretKey = cryptoData.holderSecretKey else {
+			return .failure(CryptoError.keyMissing)
 		}
+
 		let result = ClmobileCreateCredential(holderSecretKey, ism)
 		if let credential = result?.value {
-			cryptoData.credential = credential
-			return true
-		} else {
-			logError("Can't create credential: \(String(describing: result?.error))")
+			return .success(credential)
+		} else if let reason = result?.error {
+			logError("Can't create credential: \(String(describing: reason))")
+			return .failure(CryptoError.credentialCreateFail(reason: reason))
 		}
-		return false
+		return .failure(CryptoError.unknown)
+	}
+
+	/// Store the credential in the vault
+	/// - Parameter credential: the credential
+	func storeCredential(_ credential: Data) {
+
+		cryptoData.credential = credential
 	}
 	
 	/// Remove the credential

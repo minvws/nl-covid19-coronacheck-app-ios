@@ -256,7 +256,7 @@ class ListResultsViewModel: Logging {
 				errorMessage = String(format: .technicalErrorCustom, "\(signedTestResultErrorResponse.code)")
 
 			case let .unknown(signedTestResultErrorResponse):
-				errorMessage = String(format: .technicalErrorCustom, "\(signedTestResultErrorResponse.code)")
+				errorMessage = String(format: .technicalErrorCustom, "\(signedTestResultErrorResponse.code) \(signedTestResultErrorResponse.status)")
 		}
 	}
 

@@ -93,9 +93,9 @@ class CryptoManagerSpy: CryptoManaging {
 		removeCredentialCalled = true
 	}
 
-	func createCredential() -> Bool {
+	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
 
-		return true
+		return .failure(.unknown)
 	}
 
 	func readCredential() -> CrypoAttributes? {
@@ -103,5 +103,9 @@ class CryptoManagerSpy: CryptoManaging {
 		readCredentialCalled = true
 
 		return crypoAttributes
+	}
+
+	func storeCredential(_ credential: Data) {
+		// Nothing yet
 	}
 }
