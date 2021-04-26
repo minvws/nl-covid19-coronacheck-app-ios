@@ -64,9 +64,6 @@ class TokenEntryViewModel {
 	private var requestToken: RequestToken?
 	private let tokenValidator: TokenValidatorProtocol
 
-	/// The most recent user-submitted verification code
-	private var verificationCode: String?
-
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
 
@@ -151,7 +148,7 @@ class TokenEntryViewModel {
 		self.resendVerificationButtonTitle = Strings.holderTokenEntryRetryTitle(forMode: initializationMode)
 
 		if let unwrappedToken = requestToken {
-			self.fetchProviders(unwrappedToken)
+			self.fetchProviders(unwrappedToken, verificationCode: nil)
 		}
 		recalculateAndUpdateUI(tokenValidityIndicator: nil)
 	}
@@ -214,17 +211,10 @@ class TokenEntryViewModel {
 	}
 
 	/// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
-	func sendVerificationAgainButtonPressed(tokenInput: String?) {
-
-		switch initializationMode {
-			case .regular:
-				if let tokenInput = tokenInput {
-					handleNextButtonPressedDuringRegularFlow(tokenInput, verificationInput: nil)
-				}
-			case .withRequestTokenProvided:
-				if let unwrappedToken = requestToken {
-					self.fetchProviders(unwrappedToken)
-				}
+	func resendVerificationCodeButtonTapped(tokenInput: String?) {
+		fieldErrorMessage = nil
+		if let requestToken = requestToken {
+			self.fetchProviders(requestToken, verificationCode: nil)
 		}
 	}
 
@@ -238,15 +228,14 @@ class TokenEntryViewModel {
 		}
 
 		if let verification = verificationInput, !verification.isEmpty {
-			verificationCode = sanitize(verification)
 			fieldErrorMessage = nil
 			if let token = requestToken {
-				fetchProviders(token)
+				fetchProviders(token, verificationCode: sanitize(verification))
 			}
 		} else {
 			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
-				fetchProviders(requestToken)
+				fetchProviders(requestToken, verificationCode: nil)
 			} else {
 				fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: initializationMode)
 			}
@@ -260,10 +249,9 @@ class TokenEntryViewModel {
 
 		if let sanitizedVerification = verificationInput.map({ sanitize($0) }),
 		   !sanitizedVerification.isEmpty {
-			verificationCode = sanitizedVerification
-			fieldErrorMessage = nil
 
-			fetchProviders(requestToken)
+			fieldErrorMessage = nil
+			fetchProviders(requestToken, verificationCode: sanitizedVerification)
 		}
 	}
 
@@ -271,7 +259,7 @@ class TokenEntryViewModel {
 
 	/// Fetch the providers
 	/// - Parameter requestToken: the request token
-	private func fetchProviders(_ requestToken: RequestToken) {
+	private func fetchProviders(_ requestToken: RequestToken, verificationCode: String?) {
 
 		incrementProgressCount()
 		recalculateAndUpdateUI(tokenValidityIndicator: true)
@@ -279,7 +267,7 @@ class TokenEntryViewModel {
 		proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
 
-				self?.fetchResult(requestToken)
+				self?.fetchResult(requestToken, verificationCode: verificationCode)
 				self?.decrementProgressCount()
 
 			}, onError: { [weak self] error in
@@ -292,7 +280,7 @@ class TokenEntryViewModel {
 
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
-	private func fetchResult(_ requestToken: RequestToken) {
+	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
 			fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: initializationMode)
 
@@ -320,7 +308,13 @@ class TokenEntryViewModel {
 							self.screenHasCompleted = true
 							self.coordinator?.navigateToListResults()
 						case .verificationRequired:
-							self.handleVerificationRequired()
+							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+								// the user has just submitted a wrong verification code & should see an error message
+								self.fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: self.initializationMode)
+							}
+							self.enableNextButton = false
+							self.verificationCodeIsKnownToBeRequired = true
+
 						case .invalid:
 							self.fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: self.initializationMode)
 							self.enableNextButton = true
@@ -344,18 +338,6 @@ class TokenEntryViewModel {
 			self.decrementProgressCount()
 		}
 	}
-
-	/// Handle the verification required response
-	private func handleVerificationRequired() {
-
-		if let code = verificationCode, !code.isEmpty {
-			// We are showing the verification entry, so this is a wrong verification code
-			fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: initializationMode)
-		}
-		enableNextButton = false
-		verificationCodeIsKnownToBeRequired = true
-	}
-
 
 	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
 	private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
@@ -483,15 +465,6 @@ extension TokenEntryViewModel {
 					return .holderTokenEntryRegularFlowRetryTitle
 				case .withRequestTokenProvided:
 					return .holderTokenEntryUniversalLinkFlowRetryTitle
-			}
-		}
-
-		fileprivate static func holderTokenEntryRetryCountdown(counter: Int, forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return String(format: .holderTokenEntryRegularFlowRetryCountdown, "\(counter)")
-				case .withRequestTokenProvided:
-					return String(format: .holderTokenEntryUniversalLinkFlowRetryCountdown, "\(counter)")
 			}
 		}
 
