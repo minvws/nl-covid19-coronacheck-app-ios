@@ -335,17 +335,17 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Start the auto close timer, close after configuration.getAutoCloseTime() seconds
 	private func startAutoCloseTimer() {
 
-//		guard autoCloseTimer == nil else {
-//			return
-//		}
-//
-//		autoCloseTimer = Timer.scheduledTimer(
-//			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
-//			target: self,
-//			selector: (#selector(autoCloseScene)),
-//			userInfo: nil,
-//			repeats: true
-//		)
+		guard autoCloseTimer == nil else {
+			return
+		}
+
+		autoCloseTimer = Timer.scheduledTimer(
+			timeInterval: TimeInterval(configuration.getAutoCloseTime()),
+			target: self,
+			selector: (#selector(autoCloseScene)),
+			userInfo: nil,
+			repeats: true
+		)
 	}
 
 	private func stopAutoCloseTimer() {

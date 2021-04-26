@@ -79,8 +79,9 @@ class ResultView: ScrolledStackWithButtonView {
 	override func setupViews() {
 
 		super.setupViews()
-		stackViewInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
 		backgroundColor = Theme.colors.viewControllerBackground
+		stackViewInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+		scrollView.bounces = false
 		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
 		primaryButton.style = .secondary
@@ -89,7 +90,6 @@ class ResultView: ScrolledStackWithButtonView {
 		footerBackground.alpha = 0
 		footerGradientView.alpha = 0
 		lineView.alpha = 0
-		scrollView.bounces = false
 	}
 
 	/// Setup the hierarchy

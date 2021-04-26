@@ -114,6 +114,9 @@ class VerifierCheckIdentityView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
+		// Dimensions
+		static let disclaimerSize: CGFloat = 60.0
+
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let identityTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 48.0
@@ -147,7 +150,7 @@ class VerifierCheckIdentityView: BaseView {
 
 		super.setupViews()
 
-		backgroundColor = Theme.colors.secondary
+		backgroundColor = Theme.colors.viewControllerBackground
 		disclaimerButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
@@ -184,17 +187,17 @@ class VerifierCheckIdentityView: BaseView {
 
 			// Disclaimer button
 			disclaimerButton.heightAnchor.constraint(
-				equalToConstant: 60
+				equalToConstant: ViewTraits.disclaimerSize
 			),
 			disclaimerButton.widthAnchor.constraint(
-				equalToConstant: 60
+				equalToConstant: ViewTraits.disclaimerSize
 			),
 			disclaimerButton.trailingAnchor.constraint(
 				equalTo: trailingAnchor
 			),
 			disclaimerButton.bottomAnchor.constraint(
 				equalTo: headerLabel.bottomAnchor,
-				constant: 20
+				constant: ViewTraits.margin
 			),
 
 			// Identity
