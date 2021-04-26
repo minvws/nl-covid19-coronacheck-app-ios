@@ -18,7 +18,7 @@ class TokenEntryViewModel {
         case inputVerificationCode
     }
 
-    fileprivate enum InitializationMode {
+    fileprivate enum InitializationMode: Equatable {
         case regular
         case withRequestTokenProvided(originalRequestToken: RequestToken)
     }
@@ -163,26 +163,59 @@ class TokenEntryViewModel {
 	func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
 		fieldErrorMessage = nil
-		guard let tokenInput = tokenInput else {
-			enableNextButton = false
-			return
-		}
 
-		if !tokenInput.isEmpty {
+        let receivedNonemptyVerificationInput = !(verificationInput ?? "").isEmpty
 
-			let validToken = tokenValidator.validate(tokenInput)
-			enableNextButton = validToken
+        switch initializationMode {
+            case .regular:
+                guard let tokenInput = tokenInput, !tokenInput.isEmpty else {
+                    enableNextButton = false
+                    return
+                }
+                let validToken = tokenValidator.validate(tokenInput)
 
-            recalculateAndUpdateUI(tokenValidityIndicator: validToken)
-			return
-		}
+                if verificationCodeIsKnownToBeRequired {
+                    enableNextButton = validToken && receivedNonemptyVerificationInput
+                }
+                else {
+                    enableNextButton = validToken
+                }
 
-		if let verification = verificationInput, verification.isEmpty {
-			enableNextButton = false
-			return
-		}
+                recalculateAndUpdateUI(tokenValidityIndicator: validToken)
+                return
 
-		enableNextButton = true
+            case .withRequestTokenProvided:
+                // Then we don't care about the tokenInput parameter, because it's hidden
+                guard verificationCodeIsKnownToBeRequired else {
+                    logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
+                    return
+                }
+
+                enableNextButton = receivedNonemptyVerificationInput
+                return
+        }
+
+//		guard let tokenInput = tokenInput else {
+//			enableNextButton = false
+//			return
+//		}
+//
+//        // If token is not empty, then if it's valid, enable next button.
+//		if !tokenInput.isEmpty {
+//
+//			let validToken = tokenValidator.validate(tokenInput)
+//			enableNextButton = validToken
+//
+//            recalculateAndUpdateUI(tokenValidityIndicator: validToken)
+//			return
+//		}
+//
+//		if let verification = verificationInput, verification.isEmpty {
+//			enableNextButton = false
+//			return
+//		}
+//
+//		enableNextButton = true
 	}
 
 	/// User tapped the next button
@@ -337,7 +370,7 @@ class TokenEntryViewModel {
 			// We are showing the verification entry, so this is a wrong verification code
 			fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: initializationMode)
         }
-        enableNextButton = true
+        enableNextButton = false
 		resetCountdownCounter()
 		startResendTimer()
         verificationCodeIsKnownToBeRequired = true
