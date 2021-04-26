@@ -98,6 +98,10 @@ class AppCoordinator: Coordinator, Logging {
 
         let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
+
+        if let universalLink = self.unhandledUniversalLink {
+           coordinator.receive(universalLink: universalLink)
+        }
     }
 
     /// Start the app as a verifiier
@@ -141,6 +145,22 @@ class AppCoordinator: Coordinator, Logging {
 			topController.present(updateController, animated: true)
 		}
 	}
+
+    // MARK: - Universal Link handling
+
+    /// If set, this should be handled at the first opportunity:
+    private var unhandledUniversalLink: UniversalLink?
+
+    func consume(universalLink: UniversalLink) -> Bool {
+
+        switch universalLink {
+            case .redeemHolderToken:
+                /// If we reach here it means that there was no holderCoordinator initialized at the time
+                /// the universal link was received. So hold onto it here, for when it is ready.
+                unhandledUniversalLink = universalLink
+                return true
+        }
+    }
 }
 
 // MARK: - AppCoordinatorDelegate

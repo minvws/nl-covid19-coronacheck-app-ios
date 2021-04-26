@@ -82,6 +82,13 @@ class OnboardingCoordinator: Coordinator, Logging {
 		let viewController = OnboardingViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
+
+    // MARK: - Universal Link handling
+
+    /// Override point for coordinators which wish to deal with universal links.
+    func consume(universalLink: UniversalLink) -> Bool {
+        return false
+    }
 }
 
 // MARK: - OpenUrlProtocol
