@@ -27,7 +27,8 @@ class ChooseProviderViewControllerTests: XCTestCase {
 		openIdManagerSpy = OpenIdManagerSpy()
 		viewModel = ChooseProviderViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			openIdManager: openIdManagerSpy
+			openIdManager: openIdManagerSpy,
+			enableGGD: false
 		)
 		sut = ChooseProviderViewController(viewModel: viewModel)
 	}

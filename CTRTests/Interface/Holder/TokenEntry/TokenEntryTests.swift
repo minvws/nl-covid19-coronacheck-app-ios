@@ -100,7 +100,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut.handleInput(invalidToken, verificationInput: nil)
 
         // Assert
-        expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
+		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken.uppercased()
 
         expect(self.sut.enableNextButton) == false
         expect(self.sut.shouldShowNextButton) == true
@@ -907,6 +907,26 @@ class TokenEntryViewModelTests: XCTestCase {
 
         TokenEntryViewController(viewModel: sut).assertImage()
     }
+
+	func test_nextButtonPressed_withEmptyVerificationInput_withLowercaseTokenInput_withSpaces_createsTokenWithUppercaseInputWithoutSpaces() {
+		// Arrange
+		let validLowercaseToken = "x xx-yy  yyyyy   yyyyy-z 2   "
+		tokenValidatorSpy.stubbedValidateResult = true
+
+		sut = mockedViewModel(withRequestToken: nil)
+
+		// Act
+		sut.nextButtonPressed(validLowercaseToken, verificationInput: "")
+
+		// Assert
+		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == "XXX-yyyyyyyyyyyy-z2".uppercased()
+		expect(self.sut.shouldShowProgress) == true
+		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldShowNextButton) == true
+
+//		TokenEntryViewController(viewModel: sut).assertImage()
+	}
 
     func test_nextButtonPressed_withEmptyVerificationInput_callsFetchProviders() {
         // Arrange
