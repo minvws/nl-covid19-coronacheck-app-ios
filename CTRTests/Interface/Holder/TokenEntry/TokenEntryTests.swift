@@ -211,7 +211,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: nil)
+        sut.nextButtonTapped(nil, verificationInput: nil)
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
@@ -230,7 +230,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: "1234")
+        sut.nextButtonTapped(nil, verificationInput: "1234")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
@@ -539,7 +539,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.reset()
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: "1234")
+        sut.nextButtonTapped(nil, verificationInput: "1234")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
@@ -572,7 +572,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: "1234")
+        sut.nextButtonTapped(nil, verificationInput: "1234")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
@@ -604,7 +604,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: "1234")
+        sut.nextButtonTapped(nil, verificationInput: "1234")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
@@ -634,7 +634,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: "1234")
+        sut.nextButtonTapped(nil, verificationInput: "1234")
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
@@ -662,7 +662,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.reset()
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: "1234")
+        sut.nextButtonTapped(nil, verificationInput: "1234")
 
         // Assert
         expect(self.sut.fieldErrorMessage).to(beNil())
@@ -693,7 +693,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedGetTestProviderResult = .fake
         
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == validToken
@@ -724,7 +724,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
         
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
@@ -751,7 +751,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
@@ -779,7 +779,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: verificationInput)
+        sut.nextButtonTapped(validToken, verificationInput: verificationInput)
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
@@ -812,7 +812,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
@@ -841,7 +841,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
@@ -870,7 +870,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
@@ -899,7 +899,7 @@ class TokenEntryViewModelTests: XCTestCase {
         proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
 
         // Act
-        sut.nextButtonPressed(nil, verificationInput: verificationInput)
+        sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
         // Assert
         expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
@@ -921,7 +921,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(invalidTokenInput, verificationInput: "")
+        sut.nextButtonTapped(invalidTokenInput, verificationInput: "")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
@@ -943,7 +943,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validLowercaseToken, verificationInput: "")
+        sut.nextButtonTapped(validLowercaseToken, verificationInput: "")
 
         // Assert
         expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validLowercaseToken.uppercased()
@@ -965,7 +965,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.nextButtonPressed(validLowercaseToken, verificationInput: "")
+		sut.nextButtonTapped(validLowercaseToken, verificationInput: "")
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == "XXX-yyyyyyyyyyyy-z2".uppercased()
@@ -986,7 +986,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
@@ -1007,7 +1007,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.shouldShowProgress) == false
@@ -1028,7 +1028,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
@@ -1052,7 +1052,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
@@ -1075,7 +1075,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.fieldErrorMessage).to(beNil())
@@ -1098,7 +1098,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
@@ -1123,7 +1123,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
@@ -1144,7 +1144,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
@@ -1165,7 +1165,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
 		expect(self.sut.resendVerificationButtonEnabled) == true
@@ -1191,7 +1191,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
@@ -1214,7 +1214,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
@@ -1237,7 +1237,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
@@ -1260,7 +1260,7 @@ class TokenEntryViewModelTests: XCTestCase {
         sut = mockedViewModel(withRequestToken: nil)
 
         // Act
-        sut.nextButtonPressed(validToken, verificationInput: "")
+        sut.nextButtonTapped(validToken, verificationInput: "")
 
         // Assert
         expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
@@ -1285,7 +1285,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
         sut = mockedViewModel(withRequestToken: nil)
 
-        sut.nextButtonPressed(validToken, verificationInput: "") // setup sut so that shouldShowVerificationEntryField == true
+        sut.nextButtonTapped(validToken, verificationInput: "") // setup sut so that shouldShowVerificationEntryField == true
 
         // Act
         sut.handleInput(validToken, verificationInput: nil)

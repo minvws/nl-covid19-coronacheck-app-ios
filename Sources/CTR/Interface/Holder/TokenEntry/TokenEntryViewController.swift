@@ -158,7 +158,7 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			
-			strongSelf.viewModel.nextButtonPressed(
+			strongSelf.viewModel.nextButtonTapped(
 				strongSelf.sceneView.tokenEntryView.inputField.text,
 				verificationInput: strongSelf.sceneView.verificationEntryView.inputField.text
 			)

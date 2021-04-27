@@ -185,7 +185,7 @@ class TokenEntryViewModel {
 	/// - Parameters:
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
-	func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
+	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
 
 		switch initializationMode {
 			case .regular:
