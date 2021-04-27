@@ -52,6 +52,11 @@ class TokenEntryViewModel {
 	@Bindable private(set) var fieldErrorMessage: String?
 	@Bindable private(set) var resendVerificationButtonTitle: String?
 	@Bindable private(set) var resendVerificationButtonEnabled: Bool = true
+	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
+	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
+	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?
+	@Bindable private(set) var confirmResendVerificationAlertCancelButton: String?
+
 	@Bindable private(set) var shouldShowResendVerificationButton: Bool = false
 
 	/// Show internet error
@@ -131,6 +136,10 @@ class TokenEntryViewModel {
 		self.verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		self.resendVerificationButtonTitle = Strings.holderTokenEntryRetryTitle(forMode: initializationMode)
+		self.confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
+		self.confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
+		self.confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
+		self.confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
 
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken, verificationCode: nil)
@@ -531,6 +540,45 @@ extension TokenEntryViewModel {
 					return .holderTokenEntryUniversalLinkFlowNext
 			}
 		}
+
+		// SMS Resend Verification Alert
+
+		fileprivate static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertTitle
+			}
+		}
+
+		fileprivate static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertMessage
+			}
+		}
+
+		fileprivate static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertOkayButton
+			}
+		}
+
+		fileprivate static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationCancelButton
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton
+			}
+		}
+
 	}
 }
 

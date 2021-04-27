@@ -61,7 +61,29 @@ extension String {
         return Localization.string(for: "holder.tokenentry.regularflow.next")
 	}
 
-    // MARK: - "Regular" flow, i.e. not coming from QR/Universal Link
+	static var holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.confirmresendverificationalert.title")
+	}
+
+	static var holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.confirmresendverificationalert.message")
+	}
+
+	static var holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton")
+	}
+
+	static var holderTokenEntryRegularFlowConfirmResendVerificationCancelButton: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton")
+	}
+
+	// MARK: ----------
+	// MARK: - "UniversalLink" (or QR Code) flow
+	// MARK: ----------
 
     static var holderTokenEntryUniversalLinkFlowTitle: String {
 
@@ -112,4 +134,24 @@ extension String {
 
         return Localization.string(for: "holder.tokenentry.universallinkflow.next")
     }
+
+	static var holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertTitle: String {
+
+		return Localization.string(for: "holder.tokenentry.universallinkflow.confirmresendverificationalert.title")
+	}
+
+	static var holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertMessage: String {
+
+		return Localization.string(for: "holder.tokenentry.universallinkflow.confirmresendverificationalert.message")
+	}
+
+	static var holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertOkayButton: String {
+
+		return Localization.string(for: "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton")
+	}
+
+	static var holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton: String {
+
+		return Localization.string(for: "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton")
+	}
 }
