@@ -236,8 +236,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				proofManager: proofManager,
 				requestToken: token
-			)
+			),
+			alertPresenter: { [weak self] alertController in
+				self?.sidePanel?.selectedViewController?.present(alertController, animated: true, completion: nil)
+			}
 		)
+		
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
