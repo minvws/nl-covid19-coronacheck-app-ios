@@ -58,7 +58,7 @@ class TokenEntryViewController: BaseViewController {
 	}
 	
 	func setupBinding() {
-		
+
 		viewModel.$title.binding = { [weak self] title in
 			self?.sceneView.title = title
 		}
@@ -259,9 +259,7 @@ class TokenEntryViewController: BaseViewController {
 			style: .default) { [weak self] _ in
 				guard let self = self else { return }
 				self.sceneView.verificationEntryView.inputField.text = nil
-				self.viewModel.resendVerificationCodeButtonTapped(
-					tokenInput: self.sceneView.tokenEntryView.inputField.text
-				)
+				self.viewModel.resendVerificationCodeButtonTapped()
 			})
 		alertController.addAction(UIAlertAction(
 			title: viewModel.confirmResendVerificationAlertCancelButton,

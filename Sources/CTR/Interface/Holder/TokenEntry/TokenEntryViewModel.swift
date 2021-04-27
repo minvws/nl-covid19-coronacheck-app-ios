@@ -205,7 +205,7 @@ class TokenEntryViewModel {
 	}
 
 	/// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
-	func resendVerificationCodeButtonTapped(tokenInput: String?) {
+	func resendVerificationCodeButtonTapped() {
 		fieldErrorMessage = nil
 		if let requestToken = requestToken {
 			self.fetchProviders(requestToken, verificationCode: nil)
