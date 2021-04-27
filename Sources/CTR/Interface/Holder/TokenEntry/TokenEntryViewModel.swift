@@ -66,10 +66,7 @@ class TokenEntryViewModel {
 
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
-
 	private let initializationMode: InitializationMode
-
-	///
 	private var hasEverMadeFieldsVisible: Bool = false
 
 	// Hopefully can remove this after a refactor.
@@ -100,18 +97,6 @@ class TokenEntryViewModel {
 				shouldShowProgress = newState
 			}
 		}
-	}
-
-	private func incrementProgressCount() {
-		objc_sync_enter(self)
-		defer { objc_sync_exit(self) }
-		inProgressCount += 1
-	}
-
-	private func decrementProgressCount() {
-		objc_sync_enter(self)
-		defer { objc_sync_exit(self) }
-		inProgressCount -= 1
 	}
 
 	// MARK: - Initializer
@@ -395,6 +380,22 @@ class TokenEntryViewModel {
 
 		message = Strings.holderTokenEntryText(forMode: initializationMode, inputMode: newInputMode)
 	}
+
+	// MARK: - +/- Progress Counter
+
+	private func incrementProgressCount() {
+		objc_sync_enter(self)
+		defer { objc_sync_exit(self) }
+		inProgressCount += 1
+	}
+
+	private func decrementProgressCount() {
+		objc_sync_enter(self)
+		defer { objc_sync_exit(self) }
+		inProgressCount -= 1
+	}
+
+	// MARK: - Static private functions
 
 	private static func calculateInputMode(
 		tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
