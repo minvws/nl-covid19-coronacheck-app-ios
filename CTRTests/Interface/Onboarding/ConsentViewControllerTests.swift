@@ -27,7 +27,7 @@ class ConsentViewControllerTests: XCTestCase {
 			viewModel: ConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: HolderOnboardingFactory(),
-				hideBackButton: true
+				shouldHideBackButton: true
 			)
 		)
 		window = UIWindow()

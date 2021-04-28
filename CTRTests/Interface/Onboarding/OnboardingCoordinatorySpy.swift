@@ -38,14 +38,14 @@ class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 
 	var invokedNavigateToConsent = false
 	var invokedNavigateToConsentCount = 0
-	var invokedNavigateToConsentParameters: (hideBackButton: Bool, Void)?
-	var invokedNavigateToConsentParametersList = [(hideBackButton: Bool, Void)]()
+	var invokedNavigateToConsentParameters: (shouldHideBackButton: Bool, Void)?
+	var invokedNavigateToConsentParametersList = [(shouldHideBackButton: Bool, Void)]()
 
-	func navigateToConsent(hideBackButton: Bool) {
+	func navigateToConsent(shouldHideBackButton: Bool) {
 		invokedNavigateToConsent = true
 		invokedNavigateToConsentCount += 1
-		invokedNavigateToConsentParameters = (hideBackButton, ())
-		invokedNavigateToConsentParametersList.append((hideBackButton, ()))
+		invokedNavigateToConsentParameters = (shouldHideBackButton, ())
+		invokedNavigateToConsentParametersList.append((shouldHideBackButton, ()))
 	}
 
 	var invokedConsentGiven = false

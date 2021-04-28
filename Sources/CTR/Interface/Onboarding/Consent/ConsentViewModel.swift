@@ -23,13 +23,13 @@ class ConsentViewModel {
 	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var consentText: String?
 	@Bindable private(set) var summary: [String]
-	@Bindable private(set) var hideBackButton: Bool
+	@Bindable private(set) var shouldHideBackButton: Bool
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - factory: The factory for onboarding content
-	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol, hideBackButton: Bool) {
+	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol, shouldHideBackButton: Bool) {
 
 		self.coordinator = coordinator
 		self.factory = factory
@@ -39,7 +39,7 @@ class ConsentViewModel {
 		self.consentText = factory.getConsentButtonTitle()
 		self.summary = factory.getConsentItems()
 		self.isContinueButtonEnabled = false
-		self.hideBackButton = hideBackButton
+		self.shouldHideBackButton = shouldHideBackButton
 	}
 
 	/// The user tapped on the consent button
