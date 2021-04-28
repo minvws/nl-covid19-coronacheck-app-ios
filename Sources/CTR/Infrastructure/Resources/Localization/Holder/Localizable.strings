@@ -139,8 +139,6 @@
 /* MARK: - Holder Token Overview */
 "holder.tokenoverview.title" = "Testuitslag ophalen";
 "holder.tokenoverview.text" = "Om je testuitslag op te halen heb je een unieke code nodig.";
-"holder.tokenoverview.nocode" = "Ik heb geen code";
-"holder.tokenoverview.nocode.details" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 "holder.tokenoverview.code.subtitle" = "Ik heb een unieke code";
 "holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
 
@@ -166,6 +164,8 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
 "holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Stuur code";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
+"holder.tokenentry.regularflow.button.notoken" = "Ik heb geen code";
+"holder.tokenentry.regularflow.modal.notokendetails" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
@@ -182,6 +182,8 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Stuur code";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
+"holder.tokenentry.universallinkflow.button.notoken" = "Ik heb geen code";
+"holder.tokenentry.universallinkflow.modal.notokendetails" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";

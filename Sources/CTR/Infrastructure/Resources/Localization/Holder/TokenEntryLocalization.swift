@@ -81,6 +81,11 @@ extension String {
         return Localization.string(for: "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton")
 	}
 
+	static var holderTokenEntryRegularFlowNoTokenButton: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.button.notoken")
+	}
+
 	// MARK: - ---------
 	// MARK: - "UniversalLink" (or QR Code) flow
 	// MARK: - ---------
@@ -153,5 +158,10 @@ extension String {
 	static var holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton: String {
 
 		return Localization.string(for: "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton")
+	}
+
+	static var holderTokenEntryUniversalLinkFlowNoTokenButton: String {
+
+		return Localization.string(for: "holder.tokenentry.universallinkflow.button.notoken")
 	}
 }

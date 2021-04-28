@@ -21,7 +21,7 @@ class TokenEntryViewTests: XCTestCase {
         sut.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
     }
 
-    func testA() {
+    func testDefaultState() {
         sut.title = "A nice title"
         sut.message = "Here is a message of reasonable length"
         sut.tokenEntryFieldPlaceholder = "tokenEntryFieldPlaceholder"
@@ -33,7 +33,11 @@ class TokenEntryViewTests: XCTestCase {
         sut.errorView.error = "An error occurred!"
         sut.errorView.isHidden = false
         sut.textLabel.isHidden = true
+		sut.userNeedsATokenButton.isHidden = false
+		sut.userNeedsATokenButton.title = "userNeedsATokenButton"
+		sut.resendVerificationCodeButton.isHidden = false
+		sut.resendVerificationCodeButton.title = "resendVerificationCodeButton"
 
-        assertSnapshot(matching: sut, as: .image)
+		assertSnapshot(matching: sut, as: .image)
     }
 }

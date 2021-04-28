@@ -78,11 +78,19 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		
 		return Label(subhead: nil).multiline()
 	}()
-	
-	/// the secondary button
+
 	let resendVerificationCodeButton: Button = {
-		
+
 		let button = Button(title: "Button 1", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
+	let userNeedsATokenButton: Button = {
+		
+		let button = Button(title: "", style: .tertiary)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.isHidden = true
 		button.contentHorizontalAlignment = .leading
@@ -112,6 +120,8 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(tokenEntryView)
 		stackView.setCustomSpacing(0, after: tokenEntryView)
+		stackView.addArrangedSubview(userNeedsATokenButton)
+		stackView.setCustomSpacing(8, after: userNeedsATokenButton)
 		stackView.addArrangedSubview(verificationEntryView)
 		stackView.setCustomSpacing(8, after: verificationEntryView)
 		stackView.addArrangedSubview(errorView)
@@ -127,7 +137,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			
+			userNeedsATokenButton.heightAnchor.constraint(equalToConstant: 40),
 			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
@@ -143,6 +153,11 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		titleLabel.accessibilityTraits = .header
 	}
 	
+	@objc func userNeedsATokenButtonTapped() {
+
+		userNeedsATokenButtonTappedCommand?()
+	}
+
 	@objc func resendVerificationCodeButtonTapped() {
 		
 		resendVerificationCodeButtonTappedCommand?()
@@ -179,13 +194,20 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 	
+	var userNeedsATokenButtonTitle: String? {
 		didSet {
-			resendVerificationCodeButton.setTitle(secondaryTitle, for: .normal)
+			userNeedsATokenButton.setTitle(userNeedsATokenButtonTitle, for: .normal)
+		}
+	}
 	var resendVerificationCodeButtonTitle: String? {
+		didSet {
+			resendVerificationCodeButton.setTitle(resendVerificationCodeButtonTitle, for: .normal)
 		}
 	}
 	
 	var resendVerificationCodeButtonTappedCommand: (() -> Void)?
+
+	var userNeedsATokenButtonTappedCommand: (() -> Void)?
 	
 	var tokenEntryFieldPlaceholder: String? {
 		didSet {
