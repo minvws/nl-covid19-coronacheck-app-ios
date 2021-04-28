@@ -26,7 +26,7 @@ class TokenEntryViewController: BaseViewController {
 		
 		self.viewModel = viewModel
 		self.alertPresenter = alertPresenter
-
+		
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -58,7 +58,7 @@ class TokenEntryViewController: BaseViewController {
 	}
 	
 	func setupBinding() {
-
+		
 		viewModel.$title.binding = { [weak self] title in
 			self?.sceneView.title = title
 		}
@@ -171,17 +171,17 @@ class TokenEntryViewController: BaseViewController {
 		
 		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButton.isEnabled = $0
-        }
-
-        viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
-            self?.sceneView.resendVerificationCodeButton.isHidden = !$0
+		}
+		
+		viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
+			self?.sceneView.resendVerificationCodeButton.isHidden = !$0
 		}
 		
 		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in
 			self?.displayResendVerificationConfirmationAlert()
 		}
 	}
-
+	
 	override func viewWillAppear(_ animated: Bool) {
 		
 		super.viewWillAppear(animated)
@@ -226,7 +226,7 @@ class TokenEntryViewController: BaseViewController {
 			view.endEditing(true)
 		}
 	}
-
+	
 	// MARK: Keyboard
 	
 	@objc func keyBoardWillShow(notification: Notification) {
@@ -244,9 +244,9 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.scrollView.contentInset.bottom = 0.0
 		sceneView.bottomButtonConstraint?.constant = -20
 	}
-
+	
 	// MARK: Alerts
-
+	
 	func displayResendVerificationConfirmationAlert() {
 		
 		let alertController = UIAlertController(
@@ -257,15 +257,15 @@ class TokenEntryViewController: BaseViewController {
 		alertController.addAction(UIAlertAction(
 			title: viewModel.confirmResendVerificationAlertOkayButton,
 			style: .default) { [weak self] _ in
-				guard let self = self else { return }
-				self.sceneView.verificationEntryView.inputField.text = nil
-				self.viewModel.resendVerificationCodeButtonTapped()
-			})
+			guard let self = self else { return }
+			self.sceneView.verificationEntryView.inputField.text = nil
+			self.viewModel.resendVerificationCodeButtonTapped()
+		})
 		alertController.addAction(UIAlertAction(
 			title: viewModel.confirmResendVerificationAlertCancelButton,
 			style: .cancel
 		))
-
+		
 		alertPresenter(alertController)
 	}
 }
