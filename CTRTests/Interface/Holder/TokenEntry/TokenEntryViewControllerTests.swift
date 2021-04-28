@@ -8,6 +8,7 @@
 
 import XCTest
 import SnapshotTesting
+import ViewControllerPresentationSpy
 import Nimble
 @testable import CTR
 
@@ -15,6 +16,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 
 	private var sut: TokenEntryViewController!
 	private var viewModel: TokenEntryViewModel!
+	private var window: UIWindow!
 
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
 	private var proofManagerSpy: ProofManagingSpy!
@@ -28,54 +30,59 @@ class TokenEntryViewControllerTests: XCTestCase {
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		proofManagerSpy = ProofManagingSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
+
+		window = UIWindow()
 	}
 
 	func test_withoutInitialRequestToken_tappingIHaveReceivedNoCode_showsAResendDialog() {
 
+		let alertVerifier = AlertVerifier()
 		// Arrange
-		var presentedAlertController: UIAlertController?
-
 		viewModel = mockedViewModel(withRequestToken: nil)
-		sut = TokenEntryViewController(viewModel: viewModel, alertPresenter: { presentedAlertController = $0 })
+		sut = TokenEntryViewController(viewModel: viewModel)
+
+		loadView(viewController: sut)
 
 		// Act
 		sut.displayResendVerificationConfirmationAlert()
 
 		// Assert
-		expect(presentedAlertController?.title) == .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle
-		expect(presentedAlertController?.message) == .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage
-		expect(presentedAlertController?.actions.count) == 2
-
-		// Order is also important
-		let okayAction = presentedAlertController?.actions[0]
-		let cancelAction = presentedAlertController?.actions[1]
-
-		expect(okayAction?.title) == .holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton
-		expect(cancelAction?.title) == .holderTokenEntryRegularFlowConfirmResendVerificationCancelButton
+		alertVerifier.verify(
+			title: .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle,
+			message: .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage,
+			animated: true,
+			actions: [
+				.default(.holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton),
+				.cancel(.holderTokenEntryRegularFlowConfirmResendVerificationCancelButton)
+			],
+			preferredStyle: .actionSheet,
+			presentingViewController: sut
+		)
 	}
 
 	func test_withInitialRequestTokenSet_tappingIHaveReceivedNoCode_showsAResendDialog() {
-
+		let alertVerifier = AlertVerifier()
 		// Arrange
-		var presentedAlertController: UIAlertController?
-
 		viewModel = mockedViewModel(withRequestToken: .fake)
-		sut = TokenEntryViewController(viewModel: viewModel, alertPresenter: { presentedAlertController = $0 })
+		sut = TokenEntryViewController(viewModel: viewModel)
+
+		loadView(viewController: sut)
 
 		// Act
 		sut.displayResendVerificationConfirmationAlert()
 
 		// Assert
-		expect(presentedAlertController?.title) == .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertTitle
-		expect(presentedAlertController?.message) == .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertMessage
-		expect(presentedAlertController?.actions.count) == 2
-
-		// Order is also important
-		let okayAction = presentedAlertController?.actions[0]
-		let cancelAction = presentedAlertController?.actions[1]
-
-		expect(okayAction?.title) == .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertOkayButton
-		expect(cancelAction?.title) == .holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton
+		alertVerifier.verify(
+			title: .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle,
+			message: .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage,
+			animated: true,
+			actions: [
+				.default(.holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton),
+				.cancel(.holderTokenEntryRegularFlowConfirmResendVerificationCancelButton)
+			],
+			preferredStyle: .actionSheet,
+			presentingViewController: sut
+		)
 	}
 	
 	// MARK: - Sugar
@@ -87,5 +94,11 @@ class TokenEntryViewControllerTests: XCTestCase {
 			requestToken: requestToken,
 			tokenValidator: tokenValidatorSpy
 		)
+	}
+
+	private func loadView(viewController: UIViewController) {
+		_ = viewController.view
+//		window.addSubview(view)
+//		RunLoop.current.run(until: Date())
 	}
 }

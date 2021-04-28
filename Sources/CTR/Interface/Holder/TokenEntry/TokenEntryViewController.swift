@@ -17,16 +17,14 @@ class TokenEntryViewController: BaseViewController {
 	}
 	
 	private let viewModel: TokenEntryViewModel
-	private let alertPresenter: (UIAlertController) -> Void
-	var tapGestureRecognizer: UITapGestureRecognizer?
+	private var tapGestureRecognizer: UITapGestureRecognizer?
 	
 	let sceneView = TokenEntryView()
 	
-	init(viewModel: TokenEntryViewModel, alertPresenter: @escaping (UIAlertController) -> Void) {
+	init(viewModel: TokenEntryViewModel) {
 		
 		self.viewModel = viewModel
-		self.alertPresenter = alertPresenter
-		
+
 		super.init(nibName: nil, bundle: nil)
 	}
 	
@@ -265,8 +263,8 @@ class TokenEntryViewController: BaseViewController {
 			title: viewModel.confirmResendVerificationAlertCancelButton,
 			style: .cancel
 		))
-		
-		alertPresenter(alertController)
+
+		self.present(alertController, animated: true)
 	}
 }
 
