@@ -31,6 +31,7 @@ class HolderDashboardView: ScrolledStackView {
 
 		let view = QRCardView()
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.isHidden = true
 		return view
 	}()
 
