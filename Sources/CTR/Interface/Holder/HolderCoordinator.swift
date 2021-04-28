@@ -75,7 +75,7 @@ class HolderCoordinator: SharedCoordinator {
 				maxValidity: maxValidity
 			)
 			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent()
+			coordinator.navigateToConsent(shouldHideBackButton: true)
 		} else if forcedInformationManager.needsUpdating {
 			// Show Forced Information
 			let coordinator = ForcedInformationCoordinator(
