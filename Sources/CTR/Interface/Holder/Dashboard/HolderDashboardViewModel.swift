@@ -294,7 +294,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// Make the QR Card
 	/// - Parameters:
 	///   - validUntil: the valid until time string
-	///   - validUntilAccessibility: the valid until time string for pronouncation
+	///   - validUntilAccessibility: the valid until time string for pronunciation
 	///   - holder: the holder identity
 	func makeQRCard(
 		validUntil: String,

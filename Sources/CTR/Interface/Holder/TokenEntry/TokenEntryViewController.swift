@@ -63,38 +63,38 @@ class TokenEntryViewController: BaseViewController {
 		}
 
 		viewModel.$message.binding = { [weak self] message in
-            self?.sceneView.message = message
+			self?.sceneView.message = message
 		}
 
-        viewModel.$tokenEntryHeaderTitle.binding = { [weak self] in
-            self?.sceneView.tokenEntryView.header = $0
-        }
+		viewModel.$tokenEntryHeaderTitle.binding = { [weak self] in
+			self?.sceneView.tokenEntryView.header = $0
+		}
 
-        viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
-            self?.sceneView.tokenEntryView.inputField.attributedPlaceholder = NSAttributedString(
-                string: $0,
-                attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
-            )
-        }
+		viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
+			self?.sceneView.tokenEntryView.inputField.attributedPlaceholder = NSAttributedString(
+				string: $0,
+				attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+			)
+		}
 
-        viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
-            self?.sceneView.verificationEntryView.header = $0
-        }
+		viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
+			self?.sceneView.verificationEntryView.header = $0
+		}
 
-        viewModel.$verificationInfo.binding = { [weak self] in
-            self?.sceneView.text = $0
-        }
+		viewModel.$verificationInfo.binding = { [weak self] in
+			self?.sceneView.text = $0
+		}
 
-        viewModel.$primaryTitle.binding = { [weak self] in
-            self?.sceneView.primaryTitle = $0
-        }
+		viewModel.$primaryTitle.binding = { [weak self] in
+			self?.sceneView.primaryTitle = $0
+		}
 
-        viewModel.$verificationPlaceholder.binding = { [weak self] in
-            self?.sceneView.verificationEntryView.inputField.attributedPlaceholder = NSAttributedString(
-                string: $0,
-                attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
-            )
-        }
+		viewModel.$verificationPlaceholder.binding = { [weak self] in
+			self?.sceneView.verificationEntryView.inputField.attributedPlaceholder = NSAttributedString(
+				string: $0,
+				attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+			)
+		}
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 			guard let strongSelf = self else { return }
@@ -163,7 +163,7 @@ class TokenEntryViewController: BaseViewController {
 		viewModel.$enableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-            guard let strongSelf = self else { return }
+			guard let strongSelf = self else { return }
 
 			strongSelf.viewModel.nextButtonPressed(
 				strongSelf.sceneView.tokenEntryView.inputField.text,
@@ -175,11 +175,11 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.secondaryTitle = $0
 		}
 
-        viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
-            self?.sceneView.secondaryButton.isEnabled = $0
-        }
+		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
+			self?.sceneView.secondaryButton.isEnabled = $0
+		}
 
-        sceneView.secondaryButtonTappedCommand = { [weak self] in
+		sceneView.secondaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
 			strongSelf.sceneView.verificationEntryView.inputField.text = nil
 			strongSelf.viewModel.sendVerificationAgainButtonPressed(

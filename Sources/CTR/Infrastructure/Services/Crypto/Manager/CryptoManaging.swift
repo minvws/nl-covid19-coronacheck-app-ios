@@ -89,10 +89,6 @@ protocol CryptoManaging: AnyObject {
 	/// - Returns: commitment message
 	func generateCommitmentMessage() -> String?
 	
-	/// Set the signature message
-	/// - Parameter proofs: the signature message (signed proof)
-	func setTestProof(_ proof: Data?)
-	
 	// MARK: Public Keys
 	
 	/// Set the issuer public keys
@@ -104,15 +100,21 @@ protocol CryptoManaging: AnyObject {
 	func hasPublicKeys() -> Bool
 	
 	// MARK: Credential
-	
-	/// Create the credential
-	func createCredential()
+
+	/// Create the credential from the issuer commit message
+	/// - Parameter ism: the issuer commit message (signed testproof)
+	/// - Returns: Credential data if success, error if not
+	func createCredential(_ ism: Data) -> Result<Data, CryptoError>
 	
 	/// Read the crypto credential
 	/// - Returns: the  the crypto attributes
 	func readCredential() -> CryptoAttributes?
-	
-	/// Remove the credial
+
+	/// Store the credential in the vault
+	/// - Parameter credential: the credential
+	func storeCredential(_ credential: Data)
+
+	/// Remove the credential
 	func removeCredential()
 	
 	// MARK: QR
@@ -125,4 +127,12 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Attributes if the QR is valid or error string if not
 	func verifyQRMessage(_ message: String) -> CryptoResult
+}
+
+/// The errors returned by the crypto library
+enum CryptoError: Error {
+
+	case keyMissing
+	case credentialCreateFail(reason: String)
+	case unknown
 }

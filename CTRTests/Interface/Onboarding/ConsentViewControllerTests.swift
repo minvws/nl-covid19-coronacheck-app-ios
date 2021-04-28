@@ -11,9 +11,9 @@ import XCTest
 class ConsentViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: ConsentViewController?
+	var sut: ConsentViewController!
 
-	var coordinatorSpy = OnboardingCoordinatorSpy()
+	var coordinatorSpy: OnboardingCoordinatorSpy!
 
 	var window = UIWindow()
 
@@ -26,7 +26,8 @@ class ConsentViewControllerTests: XCTestCase {
 		sut = ConsentViewController(
 			viewModel: ConsentViewModel(
 				coordinator: coordinatorSpy,
-				factory: HolderOnboardingFactory()
+				factory: HolderOnboardingFactory(),
+				shouldHideBackButton: true
 			)
 		)
 		window = UIWindow()
@@ -39,16 +40,14 @@ class ConsentViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		_ = sut.view
+
 	}
 
 	// MARK: Test
 
 	/// Test all the content without consent
-	func testContent() throws {
+	func testContent() {
 
 		// Given
 
@@ -56,11 +55,10 @@ class ConsentViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .holderConsentTitle, "Title should match")
-		XCTAssertEqual(strongSut.sceneView.message, .holderConsentMessage, "Message should match")
-		XCTAssertEqual(strongSut.sceneView.consent, .holderConsentButtonTitle, "Consent should match")
-		XCTAssertEqual(strongSut.sceneView.itemStackView.arrangedSubviews.count, 3, "There should be 3 items")
+		XCTAssertEqual(sut.sceneView.title, .holderConsentTitle, "Title should match")
+		XCTAssertEqual(sut.sceneView.message, .holderConsentMessage, "Message should match")
+		XCTAssertEqual(sut.sceneView.consent, .holderConsentButtonTitle, "Consent should match")
+		XCTAssertEqual(sut.sceneView.itemStackView.arrangedSubviews.count, 3, "There should be 3 items")
 	}
 
 	/// Test the user tapped on the link
@@ -70,14 +68,14 @@ class ConsentViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.linkTapped()
+		sut.linkTapped()
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.showPrivacyPageCalled, "Method should be called")
+		XCTAssertTrue(coordinatorSpy.invokedShowPrivacyPage, "Method should be called")
 	}
 
 	/// Test the user tapped on the consent button
-	func testConsentGivenTrue() throws {
+	func testConsentGivenTrue() {
 
 		// Given
 		loadView()
@@ -85,15 +83,14 @@ class ConsentViewControllerTests: XCTestCase {
 		button.isSelected = true
 
 		// When
-		sut?.consentValueChanged(button)
+		sut.consentValueChanged(button)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.viewModel.isContinueButtonEnabled, "Button should be enabled")
+		XCTAssertTrue(sut.viewModel.isContinueButtonEnabled, "Button should be enabled")
 	}
 
 	/// Test the user tapped on the consent button
-	func testConsentGivenFalse() throws {
+	func testConsentGivenFalse() {
 
 		// Given
 		loadView()
@@ -101,11 +98,10 @@ class ConsentViewControllerTests: XCTestCase {
 		button.isSelected = false
 
 		// When
-		sut?.consentValueChanged(button)
+		sut.consentValueChanged(button)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.viewModel.isContinueButtonEnabled, "Button should not be enabled")
+		XCTAssertFalse(sut.viewModel.isContinueButtonEnabled, "Button should not be enabled")
 	}
 
 	/// Test the user tapped on the enabled primary button
@@ -113,13 +109,13 @@ class ConsentViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		sut?.sceneView.primaryButton.isEnabled = true
+		sut.sceneView.primaryButton.isEnabled = true
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.consentGivenCalled, "Method should be called")
+		XCTAssertTrue(coordinatorSpy.invokedConsentGiven, "Method should be called")
 	}
 
 	/// Test the user tapped on the enabled primary button
@@ -127,12 +123,12 @@ class ConsentViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
-		sut?.sceneView.primaryButton.isEnabled = false
+		sut.sceneView.primaryButton.isEnabled = false
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertFalse(coordinatorSpy.consentGivenCalled, "Method should not be called")
+		XCTAssertFalse(coordinatorSpy.invokedConsentGiven, "Method should not be called")
 	}
 }

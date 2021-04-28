@@ -117,6 +117,8 @@ class QRCardView: BaseView {
 	
 	/// Setup the constraints
 	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
 			
