@@ -21,7 +21,6 @@ extension String {
 		return Localization.string(for: "holder.tokenentry.modal.notoken.details")
 	}
 
-
     // MARK: - "Regular" flow, i.e. not coming from QR/Universal Link
 
 	static var holderTokenEntryRegularFlowTitle: String {
