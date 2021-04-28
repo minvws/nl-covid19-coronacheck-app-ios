@@ -137,8 +137,8 @@ class TokenEntryViewModel {
 		self.verificationInfo = Strings.verificationInfo(forMode: initializationMode)
 		self.verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
-		self.resendVerificationButtonTitle = Strings.retryTitle(forMode: initializationMode)
-		self.userNeedsATokenButtonTitle = Strings.noTokenButton(forMode: initializationMode)
+		self.resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
+		self.userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
 		self.confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		self.confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		self.confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
@@ -486,7 +486,7 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func retryTitle(forMode mode: InitializationMode) -> String {
+		fileprivate static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
 					return .holderTokenEntryRegularFlowRetryTitle
@@ -596,7 +596,7 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func noTokenButton(forMode mode: InitializationMode) -> String {
+		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
 					return .holderTokenEntryRegularFlowNoTokenButton
