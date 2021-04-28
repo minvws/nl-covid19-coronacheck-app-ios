@@ -118,4 +118,14 @@ extension String {
 
 		return Localization.string(for: "holder.dashboard.qr.minute.long")
 	}
+
+	static var am: String {
+
+		return Localization.string(for: "holder.dashboard.qr.am")
+	}
+
+	static var pm: String {
+
+		return Localization.string(for: "holder.dashboard.qr.pm")
+	}
 }

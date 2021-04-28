@@ -112,6 +112,8 @@
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";
 "holder.dashboard.qr.minutes.long" = "minuten";
+"holder.dashboard.qr.am" = "'s morgens";
+"holder.dashboard.qr.pm" = "'s middags";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
