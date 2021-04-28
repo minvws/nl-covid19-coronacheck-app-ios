@@ -368,13 +368,37 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
+	/// Formatter for accessibility
+	private lazy var accessibilityTimeFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "a"
+		dateFormatter.amSymbol = String.am
+		dateFormatter.pmSymbol = String.pm
+		return dateFormatter
+	}()
+
 	/// Get the accessibility time label
 	/// - Parameter date: the date to use
 	/// - Returns: The time of the message as a string
-	func getAccessibilityTime(_ date: Date) -> String {
+	private func getAccessibilityTime(_ date: Date) -> String {
 
-		let components = Calendar.current.dateComponents([.hour, .minute], from: date)
-		return DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
+		var output = ""
+		var components = Calendar.current.dateComponents([.hour, .minute], from: date)
+
+		// Convert from 24 to 12 hour clock
+		if let hour = components.hour, hour > 12 {
+			components.hour = hour - 12
+		}
+		output = DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
+
+		// Add AM or PM to the end
+		let amOrPm = accessibilityTimeFormatter.string(from: date)
+		output += " \(amOrPm)"
+
+		return output
 	}
 
 	@objc func showBanner() {
