@@ -395,8 +395,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		output = DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
 
 		// Add AM or PM to the end
-		let ampOrpm = accessibilityTimeFormatter.string(from: date)
-		output += " \(ampOrpm)"
+		let amOrPm = accessibilityTimeFormatter.string(from: date)
+		output += " \(amOrPm)"
 
 		return output
 	}
