@@ -72,6 +72,6 @@ class ChooseProviderViewModelTests: XCTestCase {
 		sut.providerSelected(ProviderIdentifier.commercial, presentingViewController: nil)
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToTokenOverviewCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.navigateToTokenEntryCalled) == true
 	}
 }

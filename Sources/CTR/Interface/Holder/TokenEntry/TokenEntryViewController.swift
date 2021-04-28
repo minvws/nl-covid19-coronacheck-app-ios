@@ -164,7 +164,15 @@ class TokenEntryViewController: BaseViewController {
 		}
 		
 		viewModel.$resendVerificationButtonTitle.binding = { [weak self] in
-			self?.sceneView.secondaryTitle = $0
+			self?.sceneView.resendVerificationCodeButtonTitle = $0
+		}
+
+		viewModel.$userNeedsATokenButtonTitle.binding = { [weak self] in
+			self?.sceneView.userNeedsATokenButtonTitle = $0
+		}
+
+		viewModel.$shouldShowUserNeedsATokenButton.binding = { [weak self] in
+			self?.sceneView.userNeedsATokenButton.isHidden = !$0
 		}
 		
 		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
@@ -177,6 +185,10 @@ class TokenEntryViewController: BaseViewController {
 		
 		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in
 			self?.displayResendVerificationConfirmationAlert()
+		}
+
+		sceneView.userNeedsATokenButtonTappedCommand = { [weak self] in
+			self?.viewModel.userHasNoTokenButtonTapped()
 		}
 	}
 	

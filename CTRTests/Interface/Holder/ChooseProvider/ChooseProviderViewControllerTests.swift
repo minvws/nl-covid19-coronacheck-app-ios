@@ -99,6 +99,6 @@ class ChooseProviderViewControllerTests: XCTestCase {
 		firstOption?.primaryButtonTapped()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToTokenOverviewCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.navigateToTokenEntryCalled) == true
 	}
 }

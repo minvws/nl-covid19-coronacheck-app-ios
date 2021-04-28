@@ -78,11 +78,19 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		
 		return Label(subhead: nil).multiline()
 	}()
-	
-	/// the secondary button
+
 	let resendVerificationCodeButton: Button = {
-		
+
 		let button = Button(title: "Button 1", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
+	let userNeedsATokenButton: Button = {
+		
+		let button = Button(title: "", style: .tertiary)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.isHidden = true
 		button.contentHorizontalAlignment = .leading
@@ -102,6 +110,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViews()
 		stackView.distribution = .fill
 		resendVerificationCodeButton.touchUpInside(self, action: #selector(resendVerificationCodeButtonTapped))
+		userNeedsATokenButton.touchUpInside(self, action: #selector(userNeedsATokenButtonTapped))
 	}
 	
 	/// Setup the hierarchy
@@ -110,14 +119,22 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
+
 		stackView.addArrangedSubview(tokenEntryView)
-		stackView.setCustomSpacing(0, after: tokenEntryView)
+		stackView.setCustomSpacing(8, after: tokenEntryView)
+
+		stackView.addArrangedSubview(userNeedsATokenButton)
+		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
+
 		stackView.addArrangedSubview(verificationEntryView)
 		stackView.setCustomSpacing(8, after: verificationEntryView)
+
 		stackView.addArrangedSubview(errorView)
 		stackView.setCustomSpacing(0, after: errorView)
+
 		stackView.addArrangedSubview(textLabel)
 		stackView.setCustomSpacing(8, after: textLabel)
+
 		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.addArrangedSubview(spacer)
 	}
@@ -127,7 +144,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			
+			userNeedsATokenButton.heightAnchor.constraint(equalToConstant: 40),
 			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
@@ -143,6 +160,11 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		titleLabel.accessibilityTraits = .header
 	}
 	
+	@objc func userNeedsATokenButtonTapped() {
+
+		userNeedsATokenButtonTappedCommand?()
+	}
+
 	@objc func resendVerificationCodeButtonTapped() {
 		
 		resendVerificationCodeButtonTappedCommand?()
@@ -179,15 +201,20 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	/// The title of the secondary button
-	var secondaryTitle: String? {
+	var userNeedsATokenButtonTitle: String? {
 		didSet {
-			resendVerificationCodeButton.setTitle(secondaryTitle, for: .normal)
+			userNeedsATokenButton.setTitle(userNeedsATokenButtonTitle, for: .normal)
+		}
+	}
+	var resendVerificationCodeButtonTitle: String? {
+		didSet {
+			resendVerificationCodeButton.setTitle(resendVerificationCodeButtonTitle, for: .normal)
 		}
 	}
 	
-	/// The user tapped on the secondary button
 	var resendVerificationCodeButtonTappedCommand: (() -> Void)?
+
+	var userNeedsATokenButtonTappedCommand: (() -> Void)?
 	
 	var tokenEntryFieldPlaceholder: String? {
 		didSet {
