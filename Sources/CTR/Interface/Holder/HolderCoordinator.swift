@@ -20,9 +20,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to choose provider
 	func navigateToChooseProvider()
 
-	/// Navigate to the token overview scene
-	func navigateToTokenOverview()
-
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
@@ -200,17 +197,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ChooseProviderViewModel(
 				coordinator: self,
 				openIdManager: openIdManager
-			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to the token overview scene
-	func navigateToTokenOverview() {
-
-		let destination = TokenOverviewViewController(
-			viewModel: TokenOverviewViewModel(
-				coordinator: self
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)

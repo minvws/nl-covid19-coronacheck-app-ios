@@ -129,7 +129,7 @@ class ChooseProviderViewModel: Logging {
 	/// Login at a commercial tester
 	private func loginCommercial() {
 
-		coordinator?.navigateToTokenOverview()
+		coordinator?.navigateToTokenEntry(nil)
 	}
 
 //	/// Login at the GGD
