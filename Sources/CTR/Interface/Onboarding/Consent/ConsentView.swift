@@ -220,8 +220,15 @@ class ConsentView: BaseView {
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
-		label.accessibilityHint = String(format: .listAccessibility, "\(number)", "\(total)")
-
+		var accessibiliyHint = ""
+		if number == 1 {
+			accessibiliyHint = .listAccessibilityStart
+		}
+		accessibiliyHint += String(format: .listAccessibility, "\(number)", "\(total)")
+		if number == total {
+			accessibiliyHint += .listAccessibilityEnd
+		}
+		label.accessibilityHint = accessibiliyHint
 		let stack = HStack(
 			spacing: 16,
 			ImageView(imageName: "PrivacyItem").asIcon(),
