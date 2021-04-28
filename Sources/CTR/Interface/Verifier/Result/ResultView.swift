@@ -232,6 +232,8 @@ class ResultView: ScrolledStackWithButtonView {
 
 	func setupForVerified() {
 
+		footerBackground.alpha = 0
+		footerGradientView.alpha = 0
 		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
 		messageLabel.font = Theme.fonts.body
 		primaryButton.style = .primary
@@ -242,6 +244,10 @@ class ResultView: ScrolledStackWithButtonView {
 
 		footerBackground.alpha = 100
 		footerGradientView.alpha = 100
+		messageTopConstraint?.constant = 2 * ViewTraits.margin
+		messageLabel.font = Theme.fonts.title3Medium
+		primaryButton.style = .secondary
+		primaryButton.alpha = 100
 	}
 
 	func revealIdentityView(_ onCompletion: (() -> Void)? = nil) {
