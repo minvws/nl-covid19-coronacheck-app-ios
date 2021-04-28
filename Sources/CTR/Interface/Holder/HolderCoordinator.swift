@@ -238,6 +238,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				requestToken: token
 			)
 		)
+		
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 

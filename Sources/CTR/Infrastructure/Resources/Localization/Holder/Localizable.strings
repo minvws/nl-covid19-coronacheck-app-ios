@@ -160,9 +160,12 @@
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige combinatie";
-"holder.tokenentry.regularflow.retry.title" = "Stuur opnieuw";
-"holder.tokenentry.regularflow.retry.countdown" = "Stuur opnieuw in %@";
+"holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.regularflow.next" = "Haal testuitslag op";
+"holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Nieuwe verificatiecode nodig?";
+"holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
+"holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Stuur code";
+"holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
@@ -173,9 +176,12 @@
 "holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "Geen geldige combinatie";
-"holder.tokenentry.universallinkflow.retry.title" = "Stuur opnieuw";
-"holder.tokenentry.universallinkflow.retry.countdown" = "Stuur opnieuw in %@";
+"holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Nieuwe verificatiecode nodig?";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Stuur code";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";

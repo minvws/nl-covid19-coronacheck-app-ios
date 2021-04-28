@@ -80,7 +80,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	}()
 	
 	/// the secondary button
-	let secondaryButton: Button = {
+	let resendVerificationCodeButton: Button = {
 		
 		let button = Button(title: "Button 1", style: .tertiary)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +101,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		
 		super.setupViews()
 		stackView.distribution = .fill
-		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
+		resendVerificationCodeButton.touchUpInside(self, action: #selector(resendVerificationCodeButtonTapped))
 	}
 	
 	/// Setup the hierarchy
@@ -118,7 +118,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		stackView.setCustomSpacing(0, after: errorView)
 		stackView.addArrangedSubview(textLabel)
 		stackView.setCustomSpacing(8, after: textLabel)
-		stackView.addArrangedSubview(secondaryButton)
+		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.addArrangedSubview(spacer)
 	}
 	
@@ -128,7 +128,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		
 		NSLayoutConstraint.activate([
 			
-			secondaryButton.heightAnchor.constraint(equalToConstant: 40),
+			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
 		
@@ -143,10 +143,9 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		titleLabel.accessibilityTraits = .header
 	}
 	
-	/// User tapped on the primary button
-	@objc func secondaryButtonTapped() {
+	@objc func resendVerificationCodeButtonTapped() {
 		
-		secondaryButtonTappedCommand?()
+		resendVerificationCodeButtonTappedCommand?()
 	}
 	
 	// MARK: Public Access
@@ -183,10 +182,32 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	/// The title of the secondary button
 	var secondaryTitle: String? {
 		didSet {
-			secondaryButton.setTitle(secondaryTitle, for: .normal)
+			resendVerificationCodeButton.setTitle(secondaryTitle, for: .normal)
 		}
 	}
 	
 	/// The user tapped on the secondary button
-	var secondaryButtonTappedCommand: (() -> Void)?
+	var resendVerificationCodeButtonTappedCommand: (() -> Void)?
+	
+	var tokenEntryFieldPlaceholder: String? {
+		didSet {
+			tokenEntryView.inputField.attributedPlaceholder = tokenEntryFieldPlaceholder.map {
+				NSAttributedString(
+					string: $0,
+					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+				)
+			}
+		}
+	}
+	
+	var verificationEntryFieldPlaceholder: String? {
+		didSet {
+			verificationEntryView.inputField.attributedPlaceholder = verificationEntryFieldPlaceholder.map {
+				NSAttributedString(
+					string: $0,
+					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+				)
+			}
+		}
+	}
 }
