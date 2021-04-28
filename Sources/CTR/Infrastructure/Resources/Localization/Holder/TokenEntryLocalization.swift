@@ -81,9 +81,9 @@ extension String {
         return Localization.string(for: "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton")
 	}
 
-	// MARK: ----------
+	// MARK: - ---------
 	// MARK: - "UniversalLink" (or QR Code) flow
-	// MARK: ----------
+	// MARK: - ---------
 
     static var holderTokenEntryUniversalLinkFlowTitle: String {
 

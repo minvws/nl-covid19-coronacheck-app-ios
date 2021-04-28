@@ -118,15 +118,15 @@ class TokenEntryViewController: BaseViewController {
 				self?.showError(.errorTitle, message: .technicalErrorText)
 			}
 		}
-		
+
 		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
 			self?.sceneView.tokenEntryView.isHidden = !$0
 		}
-		
+
 		viewModel.$shouldShowNextButton.binding = { [weak self] in
 			self?.sceneView.primaryButton.isHidden = !$0
 		}
-		
+
 		viewModel.$shouldShowVerificationEntryField.binding = { [weak self] shouldShowVerificationEntryField in
 			guard let strongSelf = self else { return }
 			
