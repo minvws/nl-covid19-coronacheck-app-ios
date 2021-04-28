@@ -16,8 +16,8 @@ class TokenEntryViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-isRecording = true
-        sut = TokenEntryView()
+
+		sut = TokenEntryView()
         sut.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
     }
 
