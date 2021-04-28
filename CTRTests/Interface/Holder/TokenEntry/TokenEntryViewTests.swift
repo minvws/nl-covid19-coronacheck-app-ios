@@ -33,11 +33,17 @@ class TokenEntryViewTests: XCTestCase {
         sut.errorView.error = "An error occurred!"
         sut.errorView.isHidden = false
         sut.textLabel.isHidden = true
+		sut.userNeedsATokenButton.isHidden = true
+		sut.resendVerificationCodeButton.isHidden = false
+		sut.resendVerificationCodeButton.title = "resendVerificationCodeButton"
+
+		assertSnapshot(matching: sut, as: .image)
+    }
 		sut.userNeedsATokenButton.isHidden = false
 		sut.userNeedsATokenButton.title = "userNeedsATokenButton"
 		sut.resendVerificationCodeButton.isHidden = false
 		sut.resendVerificationCodeButton.title = "resendVerificationCodeButton"
 
 		assertSnapshot(matching: sut, as: .image)
-    }
+	}
 }
