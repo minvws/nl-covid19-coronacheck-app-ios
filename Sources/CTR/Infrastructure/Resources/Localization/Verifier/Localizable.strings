@@ -1,12 +1,24 @@
-/*
- * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
- *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
- *
- *  SPDX-License-Identifier: EUPL-1.2
- */
+/* MARK: - URL */
+"verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
+"verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
 
+"verifier.result.identity.title" = "Controleer nu de gegevens";
+"verifier.result.identity.lastname" = "Achternaam";
+"verifier.result.identity.firstname" = "Voornaam";
+"verifier.result.identity.dayofbirth" = "Geboortedag";
+"verifier.result.identity.monthofbirth" = "Geboortemaand";
+
+"verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
+
+
+/* Voice over voor begin van een lijst */
+"general.list.accessibility.start" = "Begin van lijst.";
+
+/* Voice over voor einde van een lijst */
+"general.list.accessibility.end" = "Eind van lijst.";
 /* MARK: - General */
 "general.cancel" = "Annuleer";
+/* MARK: - General */
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
 "general.back" = "Terug";
@@ -25,8 +37,6 @@
 "general.menu.open" = "Open zijmenu";
 "general.menu.close" = "Sluit zijmenu";
 "general.list.accessibility" = "%@ van %@.";
-"general.list.accessibility.start" = "Begin van lijst.";
-"general.list.accessibility.end" = "Eind van lijst.";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -66,10 +76,6 @@
 "verifier.menu.feedback" = "Geef ons feedback";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
 
-/* MARK: - URL */
-"verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
-"verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
-
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
 "verifier.onboarding.message.safely" = "Bezoekers van bepaalde sociale, culturele of sportieve activiteiten moeten eerst een coronatest doen. Ook als zij gevaccineerd zijn. Bezoekers krijgen alleen toegang als uit de test blijkt dat ze geen corona hebben.";
@@ -99,7 +105,7 @@
 /* MARK: - Verifier Scan Instructions */
 "verifier.instructions.title" = "Zo werkt scannen";
 "verifier.instructions.distance.title" = "1. Houd afstand";
-"verifier.instructions.distance.text" = "Druk op de knop ‘Start Scannen’ en vraag de bezoeker de QR-code te laten zien. Dat mag zowel via de CoronaCheck-app als op papier. De QR-code geldt als testbewijs en kan veilig op afstand uitgelezen worden.";
+"verifier.instructions.distance.text" = "Druk op de knop ‘Start Scannen’ en vraag de bezoeker de QR-code te laten zien. Dat mag zowel via de CoronaCheck-app als op papier. De QR-code geldt als testbewijs en kan op veilige afstand uitgelezen worden.";
 "verifier.instructions.scan.title" = "2. Scan de QR-code";
 "verifier.instructions.scan.text" = "Richt de camera van je telefoon op het testbewijs van de bezoeker en scan de QR-code.";
 "verifier.instructions.access.title" = "3. Groen scherm";
@@ -135,16 +141,8 @@
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
 
-"verifier.result.identity.title" = "Controleer de gegevens";
-"verifier.result.identity.lastname" = "Achternaam";
-"verifier.result.identity.firstname" = "Voornaam";
-"verifier.result.identity.dayofbirth" = "Geboortedag";
-"verifier.result.identity.monthofbirth" = "Geboortemaand";
-
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Over de controle";
-"verifier.result.check.text" = "<p>De controle is nodig om te zien of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om privacy te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
-
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Ongeldige QR-code";
 "verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p>";
