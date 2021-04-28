@@ -379,24 +379,28 @@ class TokenEntryViewModel {
 				shouldShowVerificationEntryField = false
 				shouldShowNextButton = false
 				shouldShowResendVerificationButton = false
+				shouldShowUserNeedsATokenButton = false
 
 			case .inputToken:
 				shouldShowTokenEntryField = true
 				shouldShowVerificationEntryField = false
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = false
+				shouldShowUserNeedsATokenButton = true
 
 			case .inputTokenWithVerificationCode:
 				shouldShowTokenEntryField = true
 				shouldShowVerificationEntryField = true
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = true
+				shouldShowUserNeedsATokenButton = false
 
 			case .inputVerificationCode:
 				shouldShowTokenEntryField = false
 				shouldShowVerificationEntryField = true
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = true
+				shouldShowUserNeedsATokenButton = false
 		}
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
