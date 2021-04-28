@@ -52,7 +52,8 @@ class VerifierResultViewController: BaseViewController, Logging {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.actionColor = Theme.colors.access
 				self?.sceneView.footerActionColor = Theme.colors.secondary
-				self?.sceneView.setupForVerified { [weak self] in
+				self?.sceneView.setupForVerified()
+				self?.sceneView.revealIdentityView { [weak self] in
 					self?.title = self?.viewModel.title
 				}
 
@@ -60,7 +61,8 @@ class VerifierResultViewController: BaseViewController, Logging {
 				self?.sceneView.imageView.image = .access
 				self?.sceneView.actionColor = Theme.colors.grey4
 				self?.sceneView.footerActionColor = Theme.colors.secondary
-				self?.sceneView.setupForVerified { [weak self] in
+				self?.sceneView.setupForVerified()
+				self?.sceneView.revealIdentityView { [weak self] in
 					self?.title = self?.viewModel.title
 				}
 			} else {

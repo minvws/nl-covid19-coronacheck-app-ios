@@ -230,12 +230,21 @@ class ResultView: ScrolledStackWithButtonView {
 		messageLabel.accessibilityTraits = [.staticText, .link]
 	}
 
-	func setupForVerified(_ onCompletion: (() -> Void)? = nil) {
+	func setupForVerified() {
 
 		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
 		messageLabel.font = Theme.fonts.body
 		primaryButton.style = .primary
 		primaryButton.alpha = 0
+	}
+
+	func setupForDenied() {
+
+		footerBackground.alpha = 100
+		footerGradientView.alpha = 100
+	}
+
+	func revealIdentityView(_ onCompletion: (() -> Void)? = nil) {
 
 		UIView.animate(withDuration: 0.5, delay: 0.8, options: .curveLinear) {
 			self.primaryButton.alpha = 100
@@ -245,11 +254,5 @@ class ResultView: ScrolledStackWithButtonView {
 		} completion: { _ in
 			onCompletion?()
 		}
-	}
-
-	func setupForDenied() {
-
-		self.footerBackground.alpha = 100
-		self.footerGradientView.alpha = 100
 	}
 }

@@ -21,16 +21,16 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	var loggingCategory: String = "VerifierResultViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
 	/// The configuration
-	var configuration: ConfigurationGeneralProtocol = Configuration()
+	private var configuration: ConfigurationGeneralProtocol = Configuration()
 
 	/// The proof validator
-	var proofValidator: ProofValidatorProtocol
+	private var proofValidator: ProofValidatorProtocol
 
 	/// The scanned attributes
-	var cryptoResults: (attributes: Attributes?, errorMessage: String?)
+	internal var cryptoResults: (attributes: Attributes?, errorMessage: String?)
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -142,12 +142,12 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		firstName = attributes.cryptoAttributes.firstNameInitial ?? "-"
 		lastName = attributes.cryptoAttributes.lastNameInitial ?? "-"
 		dayOfBirth = attributes.cryptoAttributes.birthDay ?? "-"
-		determineMonthOfBirth(attributes.cryptoAttributes.birthMonth)
+		monthOfBirth = determineMonthOfBirth(attributes.cryptoAttributes.birthMonth)
 	}
 
 	/// Set the monthOfBirth as MMM (mm)
 	/// - Parameter value: the possible month value
-	func determineMonthOfBirth(_ value: String?) {
+	private func determineMonthOfBirth(_ value: String?) -> String {
 
 		if let birthMonthAsString = value {
 			if let birthMonthAsInt = Int(birthMonthAsString),
@@ -156,17 +156,16 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 				let formatter = NumberFormatter()
 				formatter.minimumIntegerDigits = 2
 				if let monthWithLeadingZero = formatter.string(from: NSNumber(value: birthMonthAsInt)) {
-					monthOfBirth = month + " (\(monthWithLeadingZero))"
+					return month + " (\(monthWithLeadingZero))"
 				}
 			} else {
-				monthOfBirth = birthMonthAsString
+				return birthMonthAsString
 			}
-		} else {
-			monthOfBirth = "-"
 		}
+		return "-"
 	}
 
-	func mapMonth(month: Int, months: [String]) -> String? {
+	private func mapMonth(month: Int, months: [String]) -> String? {
 
 		if month <= months.count, month > 0 {
 			return months[month - 1]
@@ -293,7 +292,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
-	func showVerifiedInfo() {
+	private func showVerifiedInfo() {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(
@@ -308,7 +307,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		)
 	}
 
-	func showDeniedInfo() {
+	private func showDeniedInfo() {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(
