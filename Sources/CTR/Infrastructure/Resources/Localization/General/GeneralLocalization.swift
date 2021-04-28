@@ -96,4 +96,14 @@ extension String {
 
 		return Localization.string(for: "general.list.accessibility")
 	}
+
+	static var listAccessibilityStart: String {
+
+		return Localization.string(for: "general.list.accessibility.start")
+	}
+
+	static var listAccessibilityEnd: String {
+
+		return Localization.string(for: "general.list.accessibility.end")
+	}
 }

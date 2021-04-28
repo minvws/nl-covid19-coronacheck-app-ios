@@ -24,7 +24,9 @@
 "general.notification" = "Let op!";
 "general.menu.open" = "Open zijmenu";
 "general.menu.close" = "Sluit zijmenu";
-"general.list.accessibility" = "%@ van %@";
+"general.list.accessibility" = "%@ van %@.";
+"general.list.accessibility.start" = "Begin van lijst.";
+"general.list.accessibility.end" = "Eind van lijst.";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
