@@ -163,7 +163,7 @@
 "holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.regularflow.next" = "Haal testuitslag op";
 "holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Nieuwe verificatiecode nodig?";
-"holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet gekregen? Dan kunnen we een nieuwe code sturen. ";
+"holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
 "holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Stuur code";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 
@@ -179,7 +179,7 @@
 "holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Nieuwe verificatiecode nodig?";
-"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet gekregen? Dan kunnen we een nieuwe code sturen. ";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Stuur code";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 
