@@ -149,6 +149,10 @@
 "holder.tokenscan.error.title" = "Ongeldige QR-code";
 "holder.tokenscan.error.message" = "Deze QR-code is niet geldig. Scan de QR-code die je van je testlocatie hebt gekregen.";
 
+/* MARK: - Holder Token entry - Shared  */
+"holder.tokenentry.modal.notoken.title" = "Ik heb geen code";
+"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
+
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.regularflow.title" = "Unieke code invullen";
 "holder.tokenentry.regularflow.text" = "Vul jouw unieke code in. Deze heb je van je testlocatie gekregen.";
@@ -165,7 +169,6 @@
 "holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Stuur code";
 "holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 "holder.tokenentry.regularflow.button.notoken" = "Ik heb geen code";
-"holder.tokenentry.regularflow.modal.notokendetails" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
@@ -183,7 +186,6 @@
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Stuur code";
 "holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
 "holder.tokenentry.universallinkflow.button.notoken" = "Ik heb geen code";
-"holder.tokenentry.universallinkflow.modal.notokendetails" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";

@@ -209,9 +209,19 @@ class TokenEntryViewModel {
 	/// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
 	func resendVerificationCodeButtonTapped() {
 		fieldErrorMessage = nil
+
 		if let requestToken = requestToken {
 			self.fetchProviders(requestToken, verificationCode: nil)
 		}
+	}
+
+	func userHasNoTokenButtonTapped() {
+
+		coordinator?.presentInformationPage(
+			title: .holderTokenEntryModalNoTokenTitle,
+			body: .holderTokenEntryModalNoTokenDetails,
+			showBottomCloseButton: false
+		)
 	}
 
 	// MARK: - Private tap handlers:

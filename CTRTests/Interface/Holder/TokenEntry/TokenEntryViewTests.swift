@@ -16,12 +16,12 @@ class TokenEntryViewTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-
+isRecording = true
         sut = TokenEntryView()
         sut.frame = CGRect(x: 0, y: 0, width: 390, height: 844)
     }
 
-    func testDefaultState() {
+    func testAllVisible() {
         sut.title = "A nice title"
         sut.message = "Here is a message of reasonable length"
         sut.tokenEntryFieldPlaceholder = "tokenEntryFieldPlaceholder"
@@ -32,17 +32,26 @@ class TokenEntryViewTests: XCTestCase {
         sut.primaryTitle = "Primary title"
         sut.errorView.error = "An error occurred!"
         sut.errorView.isHidden = false
-        sut.textLabel.isHidden = true
-		sut.userNeedsATokenButton.isHidden = true
+        sut.textLabel.isHidden = false
+		sut.textLabel.text = "textLabel"
+		sut.userNeedsATokenButton.isHidden = false
+		sut.userNeedsATokenButton.title = "userNeedsATokenButton"
 		sut.resendVerificationCodeButton.isHidden = false
 		sut.resendVerificationCodeButton.title = "resendVerificationCodeButton"
 
 		assertSnapshot(matching: sut, as: .image)
     }
+
+	func testTokenEntryOnly() {
+		sut.title = "A nice title"
+		sut.message = "Here is a message of reasonable length"
+		sut.tokenEntryFieldPlaceholder = "tokenEntryFieldPlaceholder"
+		sut.tokenEntryView.header = "sut.tokenEntryView.header"
+		sut.errorView.isHidden = true
 		sut.userNeedsATokenButton.isHidden = false
 		sut.userNeedsATokenButton.title = "userNeedsATokenButton"
-		sut.resendVerificationCodeButton.isHidden = false
-		sut.resendVerificationCodeButton.title = "resendVerificationCodeButton"
+		sut.resendVerificationCodeButton.isHidden = true
+		sut.showLineView = false
 
 		assertSnapshot(matching: sut, as: .image)
 	}

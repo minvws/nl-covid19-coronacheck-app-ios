@@ -186,6 +186,10 @@ class TokenEntryViewController: BaseViewController {
 		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in
 			self?.displayResendVerificationConfirmationAlert()
 		}
+
+		sceneView.userNeedsATokenButtonTappedCommand = { [weak self] in
+			self?.viewModel.userHasNoTokenButtonTapped()
+		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

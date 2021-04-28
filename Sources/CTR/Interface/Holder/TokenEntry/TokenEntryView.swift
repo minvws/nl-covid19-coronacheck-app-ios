@@ -110,6 +110,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViews()
 		stackView.distribution = .fill
 		resendVerificationCodeButton.touchUpInside(self, action: #selector(resendVerificationCodeButtonTapped))
+		userNeedsATokenButton.touchUpInside(self, action: #selector(userNeedsATokenButtonTapped))
 	}
 	
 	/// Setup the hierarchy
@@ -118,16 +119,22 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
+
 		stackView.addArrangedSubview(tokenEntryView)
-		stackView.setCustomSpacing(0, after: tokenEntryView)
+		stackView.setCustomSpacing(8, after: tokenEntryView)
+
 		stackView.addArrangedSubview(userNeedsATokenButton)
-		stackView.setCustomSpacing(8, after: userNeedsATokenButton)
+		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
+
 		stackView.addArrangedSubview(verificationEntryView)
 		stackView.setCustomSpacing(8, after: verificationEntryView)
+
 		stackView.addArrangedSubview(errorView)
 		stackView.setCustomSpacing(0, after: errorView)
+
 		stackView.addArrangedSubview(textLabel)
 		stackView.setCustomSpacing(8, after: textLabel)
+
 		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.addArrangedSubview(spacer)
 	}

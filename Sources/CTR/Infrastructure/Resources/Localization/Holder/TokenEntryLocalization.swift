@@ -9,6 +9,19 @@ import Foundation
 
 extension String {
 
+	// MARK: - Shared
+
+	static var holderTokenEntryModalNoTokenTitle: String {
+
+		return Localization.string(for: "holder.tokenentry.modal.notoken.title")
+	}
+
+	static var holderTokenEntryModalNoTokenDetails: String {
+
+		return Localization.string(for: "holder.tokenentry.modal.notoken.details")
+	}
+
+
     // MARK: - "Regular" flow, i.e. not coming from QR/Universal Link
 
 	static var holderTokenEntryRegularFlowTitle: String {
