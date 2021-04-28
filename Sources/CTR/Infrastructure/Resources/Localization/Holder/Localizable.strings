@@ -136,12 +136,6 @@
 "holder.provider.ggd.subtitle" = "Log in met je DigiD";
 "holder.provider.commercial.title" = "Testen voor Toegang";
 
-/* MARK: - Holder Token Overview */
-"holder.tokenoverview.title" = "Testuitslag ophalen";
-"holder.tokenoverview.text" = "Om je testuitslag op te halen heb je een unieke code nodig.";
-"holder.tokenoverview.code.subtitle" = "Ik heb een unieke code";
-"holder.tokenoverview.qr.subtitle" = "Ik heb een QR-code";
-
 /* MARK: - Holder Token Scan */
 "holder.tokenscan.title" = "Scan QR-code";
 "holder.tokenscan.message" = "Richt je toestel op de QR-code die je van de testlocatie hebt gekregen.";
