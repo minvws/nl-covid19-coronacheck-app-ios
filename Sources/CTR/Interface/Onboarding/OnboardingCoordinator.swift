@@ -19,7 +19,7 @@ protocol OnboardingCoordinatorDelegate: AnyObject {
 	func finishOnboarding()
 
 	/// Navigate to the consent page
-	func navigateToConsent()
+	func navigateToConsent(hideBackButton: Bool)
 
 	/// Consent was given
 	func consentGiven()
@@ -142,16 +142,17 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		onboardingDelegate?.finishOnboarding()
 
 		// Go to consent
-		navigateToConsent()
+		navigateToConsent(hideBackButton: false)
 	}
 
 	/// Navigate to the consent page
-	func navigateToConsent() {
+	func navigateToConsent(hideBackButton: Bool) {
 
 		let viewController = ConsentViewController(
 			viewModel: ConsentViewModel(
 				coordinator: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				hideBackButton: hideBackButton
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
