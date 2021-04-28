@@ -139,6 +139,7 @@ class TokenEntryViewModel {
 		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		self.resendVerificationButtonTitle = Strings.retryTitle(forMode: initializationMode)
 		self.userNeedsATokenButtonTitle = Strings.noTokenButton(forMode: initializationMode)
+		self.confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		self.confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		self.confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
 		self.confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
