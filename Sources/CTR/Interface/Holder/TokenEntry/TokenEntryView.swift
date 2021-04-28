@@ -179,14 +179,12 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	/// The title of the secondary button
-	var secondaryTitle: String? {
 		didSet {
 			resendVerificationCodeButton.setTitle(secondaryTitle, for: .normal)
+	var resendVerificationCodeButtonTitle: String? {
 		}
 	}
 	
-	/// The user tapped on the secondary button
 	var resendVerificationCodeButtonTappedCommand: (() -> Void)?
 	
 	var tokenEntryFieldPlaceholder: String? {

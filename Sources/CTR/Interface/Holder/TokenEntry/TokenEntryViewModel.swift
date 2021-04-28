@@ -127,16 +127,15 @@ class TokenEntryViewModel {
 		} else {
 			self.initializationMode = .regular
 		}
-		
-		self.title = Strings.holderTokenEntryTitle(forMode: initializationMode)
+
+		self.title = Strings.title(forMode: initializationMode)
 		self.tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
 		self.tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
 		self.verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
 		self.verificationInfo = Strings.verificationInfo(forMode: initializationMode)
 		self.verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
-		self.resendVerificationButtonTitle = Strings.holderTokenEntryRetryTitle(forMode: initializationMode)
-		self.confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
+		self.resendVerificationButtonTitle = Strings.retryTitle(forMode: initializationMode)
 		self.confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		self.confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
 		self.confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
@@ -231,7 +230,7 @@ class TokenEntryViewModel {
 				self.requestToken = requestToken
 				fetchProviders(requestToken, verificationCode: nil)
 			} else {
-				fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: initializationMode)
+				fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
 			}
 		}
 	}
@@ -276,17 +275,17 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
-			fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: initializationMode)
-			
+			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+
 			recalculateAndUpdateUI(tokenValidityIndicator: true)
-			
+
 			self.enableNextButton = true
-			
+
 			return
 		}
-		
+
 		incrementProgressCount()
-		
+
 		proofManager?.fetchTestResult(
 			requestToken,
 			code: verificationCode,
@@ -304,13 +303,13 @@ class TokenEntryViewModel {
 						case .verificationRequired:
 							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 								// the user has just submitted a wrong verification code & should see an error message
-								self.fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: self.initializationMode)
+								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 							}
 							self.enableNextButton = false
 							self.verificationCodeIsKnownToBeRequired = true
-							
+
 						case .invalid:
-							self.fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: self.initializationMode)
+							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 							self.enableNextButton = true
 						default:
 							self.logDebug("Unhandled test result status: \(wrapper.status)")
@@ -318,9 +317,9 @@ class TokenEntryViewModel {
 							self.enableNextButton = true
 					}
 				case let .failure(error):
-					
+
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self.fieldErrorMessage = Strings.holderTokenEntryErrorInvalidCode(forMode: self.initializationMode)
+						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription
@@ -386,12 +385,12 @@ class TokenEntryViewModel {
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = true
 		}
-		
-		message = Strings.holderTokenEntryText(forMode: initializationMode, inputMode: newInputMode)
+
+		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
 	}
-	
+
 	// MARK: - +/- Progress Counter
-	
+
 	private func incrementProgressCount() {
 		objc_sync_enter(self)
 		defer { objc_sync_exit(self) }
@@ -447,9 +446,9 @@ class TokenEntryViewModel {
 
 /// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:
 extension TokenEntryViewModel {
-	
+
 	struct Strings {
-		fileprivate static func holderTokenEntryTitle(forMode mode: InitializationMode) -> String {
+		fileprivate static func title(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
 					return .holderTokenEntryRegularFlowTitle
@@ -457,8 +456,8 @@ extension TokenEntryViewModel {
 					return .holderTokenEntryUniversalLinkFlowTitle
 			}
 		}
-		
-		fileprivate static func holderTokenEntryText(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
+
+		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
 			switch (initializationMode, inputMode) {
 				case (_, .none):
 					return nil
@@ -468,8 +467,8 @@ extension TokenEntryViewModel {
 					return .holderTokenEntryUniversalLinkFlowText
 			}
 		}
-		
-		fileprivate static func holderTokenEntryRetryTitle(forMode mode: InitializationMode) -> String {
+
+		fileprivate static func retryTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
 					return .holderTokenEntryRegularFlowRetryTitle
@@ -477,8 +476,8 @@ extension TokenEntryViewModel {
 					return .holderTokenEntryUniversalLinkFlowRetryTitle
 			}
 		}
-		
-		fileprivate static func holderTokenEntryErrorInvalidCode(forMode mode: InitializationMode) -> String {
+
+		fileprivate static func errorInvalidCode(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
 					return .holderTokenEntryRegularFlowErrorInvalidCode
