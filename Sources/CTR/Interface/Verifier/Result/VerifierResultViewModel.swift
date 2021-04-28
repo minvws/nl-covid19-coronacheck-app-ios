@@ -21,22 +21,19 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	var loggingCategory: String = "VerifierResultViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
+	weak private var coordinator: (VerifierCoordinatorDelegate & Dismissable)?
 
 	/// The configuration
-	var configuration: ConfigurationGeneralProtocol = Configuration()
+	private var configuration: ConfigurationGeneralProtocol = Configuration()
 
 	/// The proof validator
-	var proofValidator: ProofValidatorProtocol
+	private var proofValidator: ProofValidatorProtocol
 
 	/// The scanned attributes
-	var cryptoResults: (attributes: Attributes?, errorMessage: String?)
+	internal var cryptoResults: (attributes: Attributes?, errorMessage: String?)
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
-
-	/// The identity with title numbers
-	private var identityWithTitles: [(String, String)] = []
 
 	// MARK: - Bindable properties
 
@@ -44,10 +41,19 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	@Bindable private(set) var title: String = ""
 
 	/// The message of the scene
-	@Bindable private(set) var message: String = ""
+	@Bindable private(set) var message: String?
 
-	/// The identity of the holder
-	@Bindable private(set) var identity: [(String, String)] = []
+	/// The first name of the holder
+	@Bindable private(set) var firstName: String = "-"
+
+	/// The last name of the holder
+	@Bindable private(set) var lastName: String = "-"
+
+	/// The birth day of the holder
+	@Bindable private(set) var dayOfBirth: String = "-"
+
+	/// The birth mont of the holder
+	@Bindable private(set) var monthOfBirth: String = "-"
 
 	/// The linked message of the scene
 	@Bindable var linkedMessage: String?
@@ -133,17 +139,38 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	func setHolderIdentity(_ attributes: Attributes) {
 
-		let holder = TestHolderIdentity(
-			firstNameInitial: attributes.cryptoAttributes.firstNameInitial ?? "",
-			lastNameInitial: attributes.cryptoAttributes.lastNameInitial ?? "",
-			birthDay: attributes.cryptoAttributes.birthDay ?? "",
-			birthMonth: attributes.cryptoAttributes.birthMonth ?? ""
-		)
-		let mapping = holder.mapIdentity(months: String.shortMonths)
-		for (index, element) in mapping.enumerated() {
-			identity.append(("", element.isEmpty ? "_" : element))
-			identityWithTitles.append(("\(index + 1)", element.isEmpty ? "_" : element))
+		firstName = attributes.cryptoAttributes.firstNameInitial ?? "-"
+		lastName = attributes.cryptoAttributes.lastNameInitial ?? "-"
+		dayOfBirth = attributes.cryptoAttributes.birthDay ?? "-"
+		monthOfBirth = determineMonthOfBirth(attributes.cryptoAttributes.birthMonth)
+	}
+
+	/// Set the monthOfBirth as MMM (mm)
+	/// - Parameter value: the possible month value
+	private func determineMonthOfBirth(_ value: String?) -> String {
+
+		if let birthMonthAsString = value {
+			if let birthMonthAsInt = Int(birthMonthAsString),
+			   let month = mapMonth(month: birthMonthAsInt, months: String.shortMonths) {
+
+				let formatter = NumberFormatter()
+				formatter.minimumIntegerDigits = 2
+				if let monthWithLeadingZero = formatter.string(from: NSNumber(value: birthMonthAsInt)) {
+					return month + " (\(monthWithLeadingZero))"
+				}
+			} else {
+				return birthMonthAsString
+			}
 		}
+		return "-"
+	}
+
+	private func mapMonth(month: Int, months: [String]) -> String? {
+
+		if month <= months.count, month > 0 {
+			return months[month - 1]
+		}
+		return nil
 	}
 
 	/// Set the debug information
@@ -227,8 +254,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessAllowed() {
 
 		title = .verifierResultAccessTitle
-		message =  .verifierResultAccessMessage
-		linkedMessage = .verifierResultAccessLink
+		message = nil
 	}
 
 	private func showAccessDenied() {
@@ -241,8 +267,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private func showAccessDemo() {
 
 		title = .verifierResultDemoTitle
-		message =  .verifierResultAccessMessage
-		linkedMessage = .verifierResultAccessLink
+		message = nil
 	}
 
 	func dismiss() {
@@ -267,32 +292,22 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
-	func showVerifiedInfo() {
+	private func showVerifiedInfo() {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(
-			text: .verifierResultCheckMessageOne,
+			text: .verifierResultCheckText,
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
-
-		let label2 = Label(body: nil).multiline()
-		label2.attributedText = .makeFromHtml(
-			text: .verifierResultCheckMessageTwo,
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
-
-		let identityView = IdentityView()
-		identityView.elements = identityWithTitles
 
 		coordinator?.displayContent(
 			title: .verifierResultCheckTitle,
-			content: [(label, 16), (label2, 16), (identityView, 0)]
+			content: [(label, 16)]
 		)
 	}
 
-	func showDeniedInfo() {
+	private func showDeniedInfo() {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(

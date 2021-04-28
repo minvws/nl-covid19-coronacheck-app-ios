@@ -58,19 +58,18 @@ class ResultView: ScrolledStackWithButtonView {
 		return label
 	}()
 
-	let identityView: IdentityView = {
-
-		let view = IdentityView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isHidden = true
-		return view
-	}()
-
 	private let spacer: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = .clear
+		return view
+	}()
+
+	var checkIdentityView: VerifierCheckIdentityView = {
+
+		let view = VerifierCheckIdentityView()
+		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
@@ -81,10 +80,16 @@ class ResultView: ScrolledStackWithButtonView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		stackViewInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+		scrollView.bounces = false
 		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
 		primaryButton.style = .secondary
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		checkIdentityView.alpha = 0
+		footerBackground.alpha = 0
+		footerGradientView.alpha = 0
+		lineView.alpha = 0
 	}
 
 	/// Setup the hierarchy
@@ -95,9 +100,9 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(imageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(identityView)
 		contentView.addSubview(debugLabel)
 		contentView.addSubview(spacer)
+		contentView.addSubview(checkIdentityView)
 		stackView.addArrangedSubview(contentView)
 	}
 
@@ -107,18 +112,24 @@ class ResultView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		setupPrimaryButton()
 
+		// disable the bottom constraint of the scroll view, add our own
+		bottomScrollViewConstraint?.isActive = false
+
 		NSLayoutConstraint.activate([
+
+			// Scroll View
+			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
 
 			// Image
 			imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
 			imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
 			imageView.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
-				constant: ViewTraits.imageMargin
+				constant: ViewTraits.imageMargin + ViewTraits.margin
 			),
 			imageView.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.imageMargin
+				constant: -ViewTraits.imageMargin + ViewTraits.margin
 			),
 
 			// Debug
@@ -140,12 +151,6 @@ class ResultView: ScrolledStackWithButtonView {
 				constant: -ViewTraits.margin
 			),
 
-			identityView.topAnchor.constraint(
-				equalTo: titleLabel.bottomAnchor,
-				constant: ViewTraits.identityTopMargin
-			),
-			identityView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-
 			// Message
 			messageLabel.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
@@ -154,6 +159,22 @@ class ResultView: ScrolledStackWithButtonView {
 			messageLabel.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
+			),
+
+			// Message
+			checkIdentityView.topAnchor.constraint(
+				equalTo: contentView.topAnchor,
+				constant: ViewTraits.margin
+			),
+			checkIdentityView.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor
+			),
+			checkIdentityView.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor
+			),
+			checkIdentityView.bottomAnchor.constraint(
+				equalTo: contentView.bottomAnchor,
+				constant: 200
 			),
 
 			// Spacer
@@ -211,8 +232,33 @@ class ResultView: ScrolledStackWithButtonView {
 
 	func setupForVerified() {
 
-		identityView.isHidden = false
+		footerBackground.alpha = 0
+		footerGradientView.alpha = 0
 		messageTopConstraint?.constant = ViewTraits.verifiedMessageMargin
 		messageLabel.font = Theme.fonts.body
+		primaryButton.style = .primary
+		primaryButton.alpha = 0
+	}
+
+	func setupForDenied() {
+
+		footerBackground.alpha = 100
+		footerGradientView.alpha = 100
+		messageTopConstraint?.constant = 2 * ViewTraits.margin
+		messageLabel.font = Theme.fonts.title3Medium
+		primaryButton.style = .secondary
+		primaryButton.alpha = 100
+	}
+
+	func revealIdentityView(_ onCompletion: (() -> Void)? = nil) {
+
+		UIView.animate(withDuration: 0.5, delay: 0.8, options: .curveLinear) {
+			self.primaryButton.alpha = 100
+			self.checkIdentityView.alpha = 100
+			self.footerBackground.alpha = 100
+			self.footerGradientView.alpha = 100
+		} completion: { _ in
+			onCompletion?()
+		}
 	}
 }

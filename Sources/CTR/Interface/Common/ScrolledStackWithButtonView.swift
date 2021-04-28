@@ -41,7 +41,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	}()
 
 	/// The footer gradient
-	private let footerGradientView: UIView = {
+	let footerGradientView: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -154,9 +154,9 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		let gradient = CAGradientLayer()
 		gradient.frame = footerGradientView.bounds
 		gradient.colors = [
-			actionColor.withAlphaComponent(0.0).cgColor,
-			actionColor.withAlphaComponent(0.5).cgColor,
-			actionColor.withAlphaComponent(1.0).cgColor
+			footerActionColor.withAlphaComponent(0.0).cgColor,
+			footerActionColor.withAlphaComponent(0.5).cgColor,
+			footerActionColor.withAlphaComponent(1.0).cgColor
 		]
 		footerGradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		footerGradientView.layer.insertSublayer(gradient, at: 0)
@@ -189,9 +189,15 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	/// The color to use for the backgrounds and gradient. Defaults to Theme.colors.viewControllerBackground
 	var actionColor: UIColor = Theme.colors.viewControllerBackground {
 		didSet {
-			setFooterGradient()
 			backgroundColor = actionColor
-			footerBackground.backgroundColor = actionColor
+		}
+	}
+
+	/// The color to use for the backgrounds and gradient. Defaults to Theme.colors.viewControllerBackground
+	var footerActionColor: UIColor = Theme.colors.viewControllerBackground {
+		didSet {
+			setFooterGradient()
+			footerBackground.backgroundColor = footerActionColor
 		}
 	}
 

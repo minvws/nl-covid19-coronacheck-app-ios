@@ -8,16 +8,15 @@
 import XCTest
 @testable import CTR
 import SnapshotTesting
+import Nimble
 
 class VerifierResultViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: VerifierResultViewController!
+	private var sut: VerifierResultViewController!
 
-	var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
-	var viewModel: VerifierResultViewModel!
-
-	var window = UIWindow()
+	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var viewModel: VerifierResultViewModel!
 
 	// MARK: Test lifecycle
 	override func setUp() {
@@ -29,7 +28,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoResults: CryptoResult(
 				attributes: Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -46,17 +45,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 			maxValidity: 48
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
-		window = UIWindow()
 	}
 
 	func loadView() {
-        window.addSubview(sut.view)
-        RunLoop.current.run(until: Date())
+		_ = sut.view
 	}
 
 	// MARK: - Tests
 
-	/// Test all the demo content
 	func testDemo() throws {
 
 		// Given
@@ -65,7 +61,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -85,22 +81,21 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, .verifierResultDemoTitle, "Title should match")
-		XCTAssertEqual(sut.sceneView.message, .verifierResultAccessMessage, "Message should match")
-		XCTAssertEqual(sut.sceneView.imageView.image, .access, "Image should match")
+		expect(self.sut.sceneView.title) == .verifierResultDemoTitle
+		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
+		expect(self.sut.sceneView.imageView.image) == UIImage.access
 
 		// Snapshot
 		sut.assertImage()
 	}
 
-	/// Test all the demo content
 	func testDemoFaultTime() throws {
 
 		// Given
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -120,22 +115,21 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
-		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
+		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
+		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
+		expect(self.sut.sceneView.imageView.image) == UIImage.denied
 
 		// Snapshot
 		sut.assertImage()
 	}
 
-	/// Test all the denied content
 	func testDenied() throws {
 
 		// Given
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -155,15 +149,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
-		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
+		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
+		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
+		expect(self.sut.sceneView.imageView.image) == UIImage.denied
 
 		// Snapshot
 		sut.assertImage()
 	}
 
-	/// Test all the denied content
 	func testDenied48hours() throws {
 
 		// Given
@@ -171,7 +164,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -191,15 +184,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, .verifierResultDeniedTitle, "Title should match")
-		XCTAssertEqual(sut.sceneView.message, .verifierResultDeniedMessage, "Message should match")
-		XCTAssertEqual(sut.sceneView.imageView.image, .denied, "Image should match")
+		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
+		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
+		expect(self.sut.sceneView.imageView.image) == UIImage.denied
 
 		// Snapshot
 		sut.assertImage()
 	}
 
-	/// Test all the verified content
 	func testVerified() throws {
 
 		// Given
@@ -207,7 +199,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.cryptoResults = CryptoResult(
 			attributes:
 				Attributes(
-					cryptoAttributes: CrypoAttributes(
+					cryptoAttributes: CryptoAttributes(
 						birthDay: nil,
 						birthMonth: nil,
 						firstNameInitial: nil,
@@ -227,15 +219,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		XCTAssertEqual(sut.sceneView.title, .verifierResultAccessTitle, "Title should match")
-		XCTAssertEqual(sut.sceneView.message, .verifierResultAccessMessage, "Message should match")
-		XCTAssertEqual(sut.sceneView.imageView.image, .access, "Image should match")
+		expect(self.sut.sceneView.title) == .verifierResultAccessTitle
+		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
+		expect(self.sut.sceneView.imageView.image) == UIImage.access
 
 		// Snapshot
 		sut.assertImage()
 	}
 
-	/// Test the dismiss method
 	func testDismiss() {
 
 		// Given
@@ -244,8 +235,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.closeButtonTapped()
 
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome, "Method should be called")
-	}
+		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
+ 	}
 
     func testPrimaryButtonTapped() {
 
@@ -256,10 +247,9 @@ class VerifierResultViewControllerTests: XCTestCase {
         sut.sceneView.primaryButtonTapped()
 
         // Then
-        XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToScan, "Method should be called")
+		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScan) == true
     }
 
-	/// Test the link tapped method
 	func testLinkTapped() {
 
 		// Given
@@ -268,10 +258,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.linkTapped()
 
 		// Then
-		XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedDisplayContent, "Method should be called")
+		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
 	}
 
-	/// Test the link tapped method
 	func testDebugLinkTapped() throws {
 
 		// Given
@@ -280,6 +269,6 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.debugLinkTapped()
 
 		// Then
-		XCTAssertFalse(sut.sceneView.debugLabel.isHidden, "View should be visible")
+		expect(self.sut.sceneView.debugLabel.isHidden) == false
 	}
 }

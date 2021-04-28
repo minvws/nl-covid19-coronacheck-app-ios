@@ -206,10 +206,10 @@ class CryptoManager: CryptoManaging, Logging {
 			}
 			
 			do {
-				let object = try JSONDecoder().decode(CrypoAttributes.self, from: attributesJson)
+				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
 				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
 			} catch {
-				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+				self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
 				return (attributes: nil, errorMessage: error.localizedDescription)
 			}
 		}
@@ -220,16 +220,16 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	/// Read the crypto credential
 	/// - Returns: the crypto attributes
-	func readCredential() -> CrypoAttributes? {
+	func readCredential() -> CryptoAttributes? {
 		
 		if let cryptoDataValue = cryptoData.credential,
 		   let response = ClmobileReadCredential(cryptoDataValue) {
 			if let value = response.value {
 				do {
-					let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
+					let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
 					return object
 				} catch {
-					self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+					self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
 				}
 			} else {
 				logError("Can't read credential: \(String(describing: response.error))")
