@@ -109,7 +109,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
 
 		addCloseButton(action: #selector(closeButtonTapped))
-		layoutForOrientation()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -117,6 +116,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		super.viewWillAppear(animated)
 		// Make the navbar the same color as the background.
 		navigationController?.navigationBar.backgroundColor = .clear
+		layoutForOrientation()
 	}
 
 	/// User tapped on the button
