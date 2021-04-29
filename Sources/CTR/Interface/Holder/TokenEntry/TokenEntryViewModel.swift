@@ -339,8 +339,7 @@ class TokenEntryViewModel {
 					// in this situation, we know we definitely loaded a requestToken successfully the
 					// first time, so no need to exit `.withRequestTokenProvided` mode.
 					self.enableNextButton = true
-				}
-				else {
+				} else {
 					// The `.withRequestTokenProvided` mode failed at some point
 					// during `init`, so abort & reset to `.regular` mode.
 					self.initializationMode = .regular
