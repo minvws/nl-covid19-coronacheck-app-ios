@@ -274,7 +274,9 @@ class ResultView: ScrolledStackWithButtonView {
 
 	func layoutForOrientation() {
 
-		if traitCollection.verticalSizeClass == .compact {
+		if traitCollection.verticalSizeClass == .compact ||
+			OrientationUtility.currentOrientation() == .landscapeLeft ||
+			OrientationUtility.currentOrientation() == .landscapeRight {
 			// Image should be 0.3 times the screen height in a compact vertical screen
 			imageHeightConstraint?.isActive = true
 		} else {
