@@ -44,7 +44,7 @@ class SharedCoordinator: Coordinator, Logging {
 
 	// Navigation controllers for each of the flows from the menu
 	var navigationController: UINavigationController
-	var dashboardNavigationContoller: UINavigationController?
+	var dashboardNavigationController: UINavigationController?
 	var aboutNavigationController: UINavigationController?
 
 	var maxValidity: Int {

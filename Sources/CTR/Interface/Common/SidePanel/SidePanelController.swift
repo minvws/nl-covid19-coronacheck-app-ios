@@ -137,7 +137,11 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	@objc func hideSidePanel() {
 
 		UIView.animate(withDuration: animationSpeed, animations: {
-            self.updateSidePanelConstraints(isVisible: false, verticalSizeClass: self.view.traitCollection.verticalSizeClass, superview: self.view)
+            self.updateSidePanelConstraints(
+				isVisible: false,
+				verticalSizeClass: self.view.traitCollection.verticalSizeClass,
+				superview: self.view
+			)
             self.view.layoutIfNeeded()
 			self.overlayMainView.alpha = 0
 		}, completion: { completed  in
@@ -148,7 +152,10 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
             self.view.disableAllGestureRecognisers()
 
             if let mainViewController = (self.selectedViewController as? UINavigationController)?.topViewController ?? self.selectedViewController {
-                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: mainViewController)
+                UIAccessibility.post(
+					notification: UIAccessibility.Notification.screenChanged,
+					argument: mainViewController
+				)
             }
             
             self.sidePanelView.accessibilityViewIsModal = false
@@ -159,7 +166,11 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 		overlayMainView.isHidden = false
 		UIView.animate(withDuration: animationSpeed, animations: {
-            self.updateSidePanelConstraints(isVisible: true, verticalSizeClass: self.view.traitCollection.verticalSizeClass, superview: self.view)
+            self.updateSidePanelConstraints(
+				isVisible: true,
+				verticalSizeClass: self.view.traitCollection.verticalSizeClass,
+				superview: self.view
+			)
             self.view.layoutIfNeeded()
 			self.overlayMainView.alpha = 0.1
         }, completion: { completed in
@@ -168,7 +179,10 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
             self.view.enableAllGestureRecognisers()
 
-            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: self.sideController)
+            UIAccessibility.post(
+				notification: UIAccessibility.Notification.screenChanged,
+				argument: self.sideController
+			)
 
             self.sidePanelView.accessibilityViewIsModal = true
         })
@@ -226,7 +240,11 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         ])
 
         // Set appropriate swappable constraints:
-        updateSidePanelConstraints(isVisible: false, verticalSizeClass: view.traitCollection.verticalSizeClass, superview: view)
+        updateSidePanelConstraints(
+			isVisible: false,
+			verticalSizeClass: view.traitCollection.verticalSizeClass,
+			superview: view
+		)
 
 		self.mainView = mainView
 		self.overlayMainView = overlayView
@@ -237,12 +255,18 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - UITraitEnvironment
 
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        updateSidePanelConstraints(isVisible: sidePanelIsVisible, verticalSizeClass: traitCollection.verticalSizeClass, superview: view)
+
+        updateSidePanelConstraints(
+			isVisible: sidePanelIsVisible,
+			verticalSizeClass: traitCollection.verticalSizeClass,
+			superview: view
+		)
     }
 
     // MARK: - Private functions
 
     private func setupGestureRecognisers() {
+
         let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeGesture(_:)))
         leftSwipeGesture.direction = .left
         self.view.addGestureRecognizer(leftSwipeGesture)
@@ -279,7 +303,11 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
     ///
     /// Note: takes `superview` as a parameter to prevent infinite-loop
     /// when calling from `loadView` (when referencing `self.view`).
-    private func updateSidePanelConstraints(isVisible: Bool, verticalSizeClass: UIUserInterfaceSizeClass, superview: UIView) {
+    private func updateSidePanelConstraints(
+		isVisible: Bool,
+		verticalSizeClass: UIUserInterfaceSizeClass,
+		superview: UIView) {
+
         guard let sidePanelClosedConstraints = sidePanelClosedConstraints,
               let sidePanelRegularOpenConstraints = sidePanelRegularOpenConstraints,
               let sidePanelCompactOpenConstraints = sidePanelCompactOpenConstraints
@@ -304,12 +332,14 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 private extension UIView {
     func disableAllGestureRecognisers() {
+
         gestureRecognizers?.forEach({ gestureRecognizer in
             gestureRecognizer.isEnabled = false
         })
     }
 
     func enableAllGestureRecognisers() {
+
         gestureRecognizers?.forEach({ gestureRecognizer in
             gestureRecognizer.isEnabled = true
         })

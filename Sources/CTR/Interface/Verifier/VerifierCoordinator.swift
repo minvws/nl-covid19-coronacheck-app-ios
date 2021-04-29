@@ -96,8 +96,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				proofManager: proofManager
 			)
 		)
-		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationContoller
+		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationController
 		
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
@@ -212,9 +212,9 @@ extension VerifierCoordinator: MenuDelegate {
 		
 		switch identifier {
 			case .overview:
-				dashboardNavigationContoller?.popToRootViewController(animated: false)
-				sidePanel?.selectedViewController = dashboardNavigationContoller
-				
+				dashboardNavigationController?.popToRootViewController(animated: false)
+				sidePanel?.selectedViewController = dashboardNavigationController
+
 			case .support:
 				guard let faqUrl = URL(string: .verifierUrlFAQ) else {
 					logError("No verifier faq url")
@@ -246,6 +246,14 @@ extension VerifierCoordinator: MenuDelegate {
 				destinationViewController.placeholder = "\(identifier)"
 				let navigationController = UINavigationController(rootViewController: destinationViewController)
 				sidePanel?.selectedViewController = navigationController
+		}
+		fixRotation()
+	}
+
+	func fixRotation() {
+		
+		if let frame = sidePanel?.view.frame {
+			sidePanel?.selectedViewController?.view.frame = frame
 		}
 	}
 	
