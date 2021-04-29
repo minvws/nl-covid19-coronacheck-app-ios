@@ -262,7 +262,7 @@ class TokenEntryViewModel {
 				self?.decrementProgressCount()
 
 			}, onError: { [weak self] error in
-				self?.abortRequestTokenProvidedMode()
+				self?.decideWhetherToAbortRequestTokenProvidedMode()
 				self?.showTechnicalErrorAlert = true
 				self?.decrementProgressCount()
 			}
@@ -274,7 +274,7 @@ class TokenEntryViewModel {
 	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
-			self.abortRequestTokenProvidedMode()
+			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 
@@ -304,12 +304,12 @@ class TokenEntryViewModel {
 
 						case .invalid:
 							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 						default:
 							self.logDebug("Unhandled test result status: \(wrapper.status)")
 							self.fieldErrorMessage = "Unhandled: \(wrapper.status)"
-							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 					}
 
 				case let .failure(error):
@@ -320,7 +320,7 @@ class TokenEntryViewModel {
 						self.fieldErrorMessage = error.localizedDescription
 						self.showTechnicalErrorAlert = true
 					}
-					self.abortRequestTokenProvidedMode()
+					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
 
 			self.decrementProgressCount()
@@ -329,14 +329,23 @@ class TokenEntryViewModel {
 
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
 	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
-	private func abortRequestTokenProvidedMode() {
+	private func decideWhetherToAbortRequestTokenProvidedMode() {
 		switch self.initializationMode {
 			case .regular:
 				// There must have been a token already entered, so this can be assumed:
 				self.enableNextButton = true
 			case .withRequestTokenProvided:
-				self.initializationMode = .regular
-				self.enableNextButton = verificationCodeIsKnownToBeRequired // TODO improve heuristics here. //swiftlint:disable:this todo
+				if verificationCodeIsKnownToBeRequired {
+					// in this situation, we know we definitely loaded a requestToken successfully the
+					// first time, so no need to exit `.withRequestTokenProvided` mode.
+					self.enableNextButton = true
+				}
+				else {
+					// The `.withRequestTokenProvided` mode failed at some point
+					// during `init`, so abort & reset to `.regular` mode.
+					self.initializationMode = .regular
+					self.enableNextButton = false
+				}
 		}
 	}
 
