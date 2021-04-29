@@ -304,12 +304,12 @@ class TokenEntryViewModel {
 
 						case .invalid:
 							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable this
+							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 						default:
 							self.logDebug("Unhandled test result status: \(wrapper.status)")
 							self.fieldErrorMessage = "Unhandled: \(wrapper.status)"
-							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable this
+							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 					}
 
 				case let .failure(error):
@@ -336,7 +336,7 @@ class TokenEntryViewModel {
 				self.enableNextButton = true
 			case .withRequestTokenProvided:
 				self.initializationMode = .regular
-				self.enableNextButton = verificationCodeIsKnownToBeRequired // TODO improve heuristics here. //swiftlint:disable this
+				self.enableNextButton = verificationCodeIsKnownToBeRequired // TODO improve heuristics here. //swiftlint:disable:this todo
 		}
 	}
 
