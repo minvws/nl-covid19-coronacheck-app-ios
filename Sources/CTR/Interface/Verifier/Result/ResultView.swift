@@ -73,7 +73,8 @@ class ResultView: ScrolledStackWithButtonView {
 		return view
 	}()
 
-	var messageTopConstraint: NSLayoutConstraint?
+	private var messageTopConstraint: NSLayoutConstraint?
+	private var imageHeightConstraint: NSLayoutConstraint?
 
 	/// setup the views
 	override func setupViews() {
@@ -190,6 +191,13 @@ class ResultView: ScrolledStackWithButtonView {
 			constant: 2 * ViewTraits.margin
 		)
 		messageTopConstraint?.isActive = true
+
+		imageHeightConstraint = imageView.heightAnchor.constraint(
+			equalTo: heightAnchor,
+			multiplier: 0.3
+		)
+		imageHeightConstraint?.isActive = false
+
 	}
 
 	/// Setup all the accessibility traits
@@ -259,6 +267,17 @@ class ResultView: ScrolledStackWithButtonView {
 			self.footerGradientView.alpha = 100
 		} completion: { _ in
 			onCompletion?()
+		}
+	}
+
+	func layoutForOrientation() {
+
+		if traitCollection.verticalSizeClass == .compact {
+			// Image should be 0.3 times the screen height in a compact vertical screen
+			imageHeightConstraint?.isActive = true
+		} else {
+			// Image height should be bound by the width only
+			imageHeightConstraint?.isActive = false
 		}
 	}
 }

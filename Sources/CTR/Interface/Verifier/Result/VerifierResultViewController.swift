@@ -111,6 +111,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
 
 		addCloseButton(action: #selector(closeButtonTapped))
+		layoutForOrientation()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -173,6 +174,22 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.lastNameHeader = .verifierResultIdentityLastname
 		sceneView.checkIdentityView.dayOfBirthHeader = .verifierResultIdentityDayOfBirth
 		sceneView.checkIdentityView.monthOfBirthHeader = .verifierResultIdentityMonthOfBirth
+	}
 
+	// Rotation
+
+	override func willTransition(
+		to newCollection: UITraitCollection,
+		with coordinator: UIViewControllerTransitionCoordinator) {
+
+		coordinator.animate { [weak self] _ in
+			self?.layoutForOrientation()
+		}
+	}
+
+	/// Layout for different orientations
+	private func layoutForOrientation() {
+
+		sceneView.layoutForOrientation()
 	}
 }
