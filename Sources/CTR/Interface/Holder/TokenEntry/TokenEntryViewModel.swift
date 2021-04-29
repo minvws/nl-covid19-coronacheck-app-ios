@@ -76,7 +76,7 @@ class TokenEntryViewModel {
 
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
-	private let initializationMode: InitializationMode
+	private var initializationMode: InitializationMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
 	// Hopefully can remove this after a refactor.
@@ -262,7 +262,7 @@ class TokenEntryViewModel {
 				self?.decrementProgressCount()
 
 			}, onError: { [weak self] error in
-
+				self?.abortRequestTokenProvidedMode()
 				self?.showTechnicalErrorAlert = true
 				self?.decrementProgressCount()
 			}
@@ -274,9 +274,7 @@ class TokenEntryViewModel {
 	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
-
-			self.enableNextButton = true
-
+			self.abortRequestTokenProvidedMode()
 			return
 		}
 
@@ -306,14 +304,15 @@ class TokenEntryViewModel {
 
 						case .invalid:
 							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.enableNextButton = true
+							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable this
+
 						default:
 							self.logDebug("Unhandled test result status: \(wrapper.status)")
 							self.fieldErrorMessage = "Unhandled: \(wrapper.status)"
-							self.enableNextButton = true
+							self.abortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable this
 					}
-				case let .failure(error):
 
+				case let .failure(error):
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 					} else {
@@ -321,10 +320,23 @@ class TokenEntryViewModel {
 						self.fieldErrorMessage = error.localizedDescription
 						self.showTechnicalErrorAlert = true
 					}
-					self.enableNextButton = true
+					self.abortRequestTokenProvidedMode()
 			}
 
 			self.decrementProgressCount()
+		}
+	}
+
+	/// If the path where `.withRequestTokenProvided` fails due to networking,
+	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
+	private func abortRequestTokenProvidedMode() {
+		switch self.initializationMode {
+			case .regular:
+				// There must have been a token already entered, so this can be assumed:
+				self.enableNextButton = true
+			case .withRequestTokenProvided:
+				self.initializationMode = .regular
+				self.enableNextButton = verificationCodeIsKnownToBeRequired // TODO improve heuristics here. //swiftlint:disable this
 		}
 	}
 

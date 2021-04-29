@@ -296,17 +296,17 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.enableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowUserNeedsATokenButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_initWithInitialRequestTokenSet_fetchesProviders_failure_stopsProgressAndShowsTechnicalErrorAlert() {
+	func test_initWithInitialRequestTokenSet_fetchesProviders_failure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
 		// Arrange
 		proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
 		tokenValidatorSpy.stubbedValidateResult = true
@@ -320,10 +320,40 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.shouldShowUserNeedsATokenButton) == true
+		expect(self.sut.shouldShowResendVerificationButton) == false
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldShowNextButton) == true
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
+	func test_initWithInitialRequestTokenSet_fetchResult_networkFailure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
+
+		// Act
+		sut = mockedViewModel(withRequestToken: .fake)
+
+		// Assert
+		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
+		expect(self.proofManagerSpy.invokedGetTestProvider) == true
+		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.shouldShowUserNeedsATokenButton) == true
+		expect(self.sut.shouldShowResendVerificationButton) == false
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 		expect(self.sut.enableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -341,11 +371,11 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowUserNeedsATokenButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+		expect(self.sut.enableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -515,11 +545,11 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+		expect(self.sut.enableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -538,10 +568,12 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+		expect(self.sut.enableNextButton) == false
+
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -616,10 +648,46 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
+	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_NoTestProvider_stopsProgressAndFieldErrorMessageAndShowsTokenEntryField() {
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		sut = mockedViewModel(withRequestToken: .fake)
+
+		proofManagerSpy.reset()
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = nil
+
+		// Act
+		sut.nextButtonTapped(nil, verificationInput: "1234")
+
+		// Assert
+		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
+		expect(self.proofManagerSpy.invokedGetTestProvider) == true
+		expect(self.proofManagerSpy.invokedFetchTestResult) == false
+		expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldShowVerificationEntryField) == true
+		expect(self.sut.shouldShowUserNeedsATokenButton) == false
+		expect(self.sut.shouldShowResendVerificationButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldShowNextButton) == true
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_failure_stopsProgressAndShowsTechnicalErrorAlert() {
 		// Arrange
-		proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
 		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -636,37 +704,10 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.shouldShowTokenEntryField) == false
+		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
-	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
-		// Arrange
-		tokenValidatorSpy.stubbedValidateResult = true
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-
-		sut = mockedViewModel(withRequestToken: .fake)
-
-		// Reset spies after init, (which does it's own `fetchProvider` pass):
-		proofManagerSpy.reset()
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-
-		// Act
-		sut.nextButtonTapped(nil, verificationInput: "1234")
-
-		// Assert
-		expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
-		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 		expect(self.sut.enableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -883,7 +924,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -898,9 +939,9 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 		expect(self.sut.enableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -912,7 +953,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -928,9 +969,9 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
-		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 		expect(self.sut.enableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -1060,7 +1101,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.enableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.proofManagerSpy.invokedGetTestProvider) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
