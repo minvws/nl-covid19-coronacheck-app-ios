@@ -26,17 +26,16 @@ class TokenEntryViewModel {
 	// MARK: - Bindables
 
 	/// The navbar title
-	@Bindable private(set) var title: String
+	@Bindable private(set) var title: String = ""
 
 	/// The description label underneath the navbar title
 	@Bindable private(set) var message: String?
-
-	@Bindable private(set) var tokenEntryHeaderTitle: String
-	@Bindable private(set) var tokenEntryPlaceholder: String
-	@Bindable private(set) var verificationEntryHeaderTitle: String
-	@Bindable private(set) var verificationInfo: String
-	@Bindable private(set) var verificationPlaceholder: String
-	@Bindable private(set) var primaryTitle: String
+	@Bindable private(set) var tokenEntryHeaderTitle = ""
+	@Bindable private(set) var tokenEntryPlaceholder = ""
+	@Bindable private(set) var verificationEntryHeaderTitle = ""
+	@Bindable private(set) var verificationInfo = ""
+	@Bindable private(set) var verificationPlaceholder = ""
+	@Bindable private(set) var primaryTitle = ""
 
 	/// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
 	@Bindable private(set) var shouldShowProgress: Bool = false {
@@ -48,7 +47,11 @@ class TokenEntryViewModel {
 	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
 	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 	@Bindable private(set) var shouldShowNextButton: Bool = true
-	@Bindable private(set) var enableNextButton: Bool = false
+	@Bindable private(set) var enableNextButton: Bool = false {
+		didSet {
+			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
+		}
+	}
 	@Bindable private(set) var fieldErrorMessage: String?
 	@Bindable private(set) var userNeedsATokenButtonTitle: String?
 	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
@@ -73,7 +76,7 @@ class TokenEntryViewModel {
 
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
-	private let initializationMode: InitializationMode
+	private var initializationMode: InitializationMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
 	// Hopefully can remove this after a refactor.
@@ -130,20 +133,6 @@ class TokenEntryViewModel {
 			self.initializationMode = .regular
 		}
 
-		self.title = Strings.title(forMode: initializationMode)
-		self.tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
-		self.tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
-		self.verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
-		self.verificationInfo = Strings.verificationInfo(forMode: initializationMode)
-		self.verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
-		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
-		self.resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		self.userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
-		self.confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
-		self.confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
-		self.confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
-		self.confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
-
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken, verificationCode: nil)
 		}
@@ -178,9 +167,6 @@ class TokenEntryViewModel {
 					enableNextButton = validToken
 				}
 
-				recalculateAndUpdateUI(tokenValidityIndicator: validToken)
-				return
-
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
 				guard verificationCodeIsKnownToBeRequired else {
@@ -189,7 +175,6 @@ class TokenEntryViewModel {
 				}
 
 				enableNextButton = receivedNonemptyVerificationInput
-				return
 		}
 	}
 
@@ -269,7 +254,6 @@ class TokenEntryViewModel {
 	private func fetchProviders(_ requestToken: RequestToken, verificationCode: String?) {
 
 		incrementProgressCount()
-		recalculateAndUpdateUI(tokenValidityIndicator: true)
 
 		proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
@@ -278,7 +262,7 @@ class TokenEntryViewModel {
 				self?.decrementProgressCount()
 
 			}, onError: { [weak self] error in
-
+				self?.decideWhetherToAbortRequestTokenProvidedMode()
 				self?.showTechnicalErrorAlert = true
 				self?.decrementProgressCount()
 			}
@@ -290,11 +274,7 @@ class TokenEntryViewModel {
 	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
-
-			recalculateAndUpdateUI(tokenValidityIndicator: true)
-
-			self.enableNextButton = true
-
+			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 
@@ -324,14 +304,15 @@ class TokenEntryViewModel {
 
 						case .invalid:
 							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.enableNextButton = true
+							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+
 						default:
 							self.logDebug("Unhandled test result status: \(wrapper.status)")
 							self.fieldErrorMessage = "Unhandled: \(wrapper.status)"
-							self.enableNextButton = true
+							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 					}
-				case let .failure(error):
 
+				case let .failure(error):
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 					} else {
@@ -339,10 +320,31 @@ class TokenEntryViewModel {
 						self.fieldErrorMessage = error.localizedDescription
 						self.showTechnicalErrorAlert = true
 					}
-					self.enableNextButton = true
+					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
 
 			self.decrementProgressCount()
+		}
+	}
+
+	/// If the path where `.withRequestTokenProvided` fails due to networking,
+	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
+	private func decideWhetherToAbortRequestTokenProvidedMode() {
+		switch self.initializationMode {
+			case .regular:
+				// There must have been a token already entered, so this can be assumed:
+				self.enableNextButton = true
+			case .withRequestTokenProvided:
+				if verificationCodeIsKnownToBeRequired {
+					// in this situation, we know we definitely loaded a requestToken successfully the
+					// first time, so no need to exit `.withRequestTokenProvided` mode.
+					self.enableNextButton = true
+				} else {
+					// The `.withRequestTokenProvided` mode failed at some point
+					// during `init`, so abort & reset to `.regular` mode.
+					self.initializationMode = .regular
+					self.enableNextButton = false
+				}
 		}
 	}
 
@@ -405,6 +407,19 @@ class TokenEntryViewModel {
 		}
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
+		title = Strings.title(forMode: initializationMode)
+		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
+		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
+		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
+		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
+		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
+		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
+		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
+		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
+		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
+		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
 	}
 
 	// MARK: - +/- Progress Counter
