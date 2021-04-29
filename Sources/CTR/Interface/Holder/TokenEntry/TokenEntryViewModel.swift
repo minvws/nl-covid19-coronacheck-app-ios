@@ -48,7 +48,11 @@ class TokenEntryViewModel {
 	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
 	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 	@Bindable private(set) var shouldShowNextButton: Bool = true
-	@Bindable private(set) var enableNextButton: Bool = false
+	@Bindable private(set) var enableNextButton: Bool = false {
+		didSet {
+			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
+		}
+	}
 	@Bindable private(set) var fieldErrorMessage: String?
 	@Bindable private(set) var userNeedsATokenButtonTitle: String?
 	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
@@ -178,9 +182,6 @@ class TokenEntryViewModel {
 					enableNextButton = validToken
 				}
 
-				recalculateAndUpdateUI(tokenValidityIndicator: validToken)
-				return
-
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
 				guard verificationCodeIsKnownToBeRequired else {
@@ -189,7 +190,6 @@ class TokenEntryViewModel {
 				}
 
 				enableNextButton = receivedNonemptyVerificationInput
-				return
 		}
 	}
 
@@ -269,7 +269,6 @@ class TokenEntryViewModel {
 	private func fetchProviders(_ requestToken: RequestToken, verificationCode: String?) {
 
 		incrementProgressCount()
-		recalculateAndUpdateUI(tokenValidityIndicator: true)
 
 		proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
@@ -290,8 +289,6 @@ class TokenEntryViewModel {
 	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
-
-			recalculateAndUpdateUI(tokenValidityIndicator: true)
 
 			self.enableNextButton = true
 

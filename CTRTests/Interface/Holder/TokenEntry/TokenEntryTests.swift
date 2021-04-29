@@ -330,7 +330,6 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	// HERE
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withUnidentifiableTestProvider_showsErrorMessage() {
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
