@@ -266,6 +266,8 @@ class ResultView: ScrolledStackWithButtonView {
 			self.footerBackground.alpha = 100
 			self.footerGradientView.alpha = 100
 		} completion: { _ in
+			self.accessibilityElements = [self.checkIdentityView, self.primaryButton]
+			UIAccessibility.post(notification: .screenChanged, argument: self.checkIdentityView)
 			onCompletion?()
 		}
 	}

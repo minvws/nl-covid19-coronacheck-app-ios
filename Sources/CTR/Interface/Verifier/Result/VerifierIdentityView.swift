@@ -108,6 +108,13 @@ class VerifierIdentityView: BaseView {
 		])
 	}
 
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		accessibilityElements = [lastNameView, firstNameView, dayOfBirthView, monthOfBirthView]
+	}
+
 	// MARK: Public
 
 	var firstNameHeader: String? {
