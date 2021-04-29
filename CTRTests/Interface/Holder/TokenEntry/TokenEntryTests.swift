@@ -285,27 +285,6 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_initWithInitialRequestTokenSet_fetchesProviders_success_stopsProgress() {
-		// Arrange
-		tokenValidatorSpy.stubbedValidateResult = true
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-
-		// Act
-		sut = mockedViewModel(withRequestToken: .fake)
-
-		// Assert
-		expect(self.sut.shouldShowProgress) == false
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-		expect(self.sut.enableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
-		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
 	func test_initWithInitialRequestTokenSet_fetchesProviders_failure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
 		// Arrange
 		proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
