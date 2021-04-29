@@ -26,17 +26,16 @@ class TokenEntryViewModel {
 	// MARK: - Bindables
 
 	/// The navbar title
-	@Bindable private(set) var title: String
+	@Bindable private(set) var title: String = ""
 
 	/// The description label underneath the navbar title
 	@Bindable private(set) var message: String?
-
-	@Bindable private(set) var tokenEntryHeaderTitle: String
-	@Bindable private(set) var tokenEntryPlaceholder: String
-	@Bindable private(set) var verificationEntryHeaderTitle: String
-	@Bindable private(set) var verificationInfo: String
-	@Bindable private(set) var verificationPlaceholder: String
-	@Bindable private(set) var primaryTitle: String
+	@Bindable private(set) var tokenEntryHeaderTitle = ""
+	@Bindable private(set) var tokenEntryPlaceholder = ""
+	@Bindable private(set) var verificationEntryHeaderTitle = ""
+	@Bindable private(set) var verificationInfo = ""
+	@Bindable private(set) var verificationPlaceholder = ""
+	@Bindable private(set) var primaryTitle = ""
 
 	/// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
 	@Bindable private(set) var shouldShowProgress: Bool = false {
@@ -133,20 +132,6 @@ class TokenEntryViewModel {
 		} else {
 			self.initializationMode = .regular
 		}
-
-		self.title = Strings.title(forMode: initializationMode)
-		self.tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
-		self.tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
-		self.verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
-		self.verificationInfo = Strings.verificationInfo(forMode: initializationMode)
-		self.verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
-		self.primaryTitle = Strings.primaryTitle(forMode: initializationMode)
-		self.resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		self.userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
-		self.confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
-		self.confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
-		self.confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
-		self.confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
 
 		if let unwrappedToken = requestToken {
 			self.fetchProviders(unwrappedToken, verificationCode: nil)
@@ -402,6 +387,19 @@ class TokenEntryViewModel {
 		}
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
+		title = Strings.title(forMode: initializationMode)
+		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
+		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
+		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
+		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
+		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
+		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
+		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
+		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
+		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
+		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
 	}
 
 	// MARK: - +/- Progress Counter
