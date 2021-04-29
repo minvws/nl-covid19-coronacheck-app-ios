@@ -5,6 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:coronacheck.nl</string>
+		<string>applinks:www.coronacheck.nl</string>
 	</array>
 </dict>
 </plist>
