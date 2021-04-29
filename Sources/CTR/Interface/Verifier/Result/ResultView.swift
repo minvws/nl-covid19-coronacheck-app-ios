@@ -129,7 +129,7 @@ class ResultView: ScrolledStackWithButtonView {
 			),
 			imageView.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
-				constant: -ViewTraits.imageMargin + ViewTraits.margin
+				constant: -ViewTraits.imageMargin - ViewTraits.margin
 			),
 
 			// Debug
