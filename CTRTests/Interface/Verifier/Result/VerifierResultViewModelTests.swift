@@ -298,7 +298,115 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.title) == .verifierResultAccessTitle
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
-	
+
+	func test_holderIdentity_allNil() {
+
+		// Given
+		let attributes = Attributes(
+			cryptoAttributes: CryptoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				sampleTime: "0",
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "1"
+			),
+			unixTimeStamp: 0
+		)
+
+		// When
+		sut.setHolderIdentity(attributes)
+
+		// Then
+		expect(self.sut.firstName) == "-"
+		expect(self.sut.lastName) == "-"
+		expect(self.sut.dayOfBirth) == "-"
+		expect(self.sut.monthOfBirth) == "-"
+	}
+
+	func test_holderIdentity_allEmpty() {
+
+		// Given
+		let attributes = Attributes(
+			cryptoAttributes: CryptoAttributes(
+				birthDay: "",
+				birthMonth: "",
+				firstNameInitial: "",
+				lastNameInitial: "",
+				sampleTime: "0",
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "1"
+			),
+			unixTimeStamp: Int64(0)
+		)
+
+		// When
+		sut.setHolderIdentity(attributes)
+
+		// Then
+		expect(self.sut.firstName) == "-"
+		expect(self.sut.lastName) == "-"
+		expect(self.sut.dayOfBirth) == "-"
+		expect(self.sut.monthOfBirth) == "-"
+	}
+
+	func test_holderIdentity_allNotEmpty() {
+
+		// Given
+		let attributes = Attributes(
+			cryptoAttributes: CryptoAttributes(
+				birthDay: "5",
+				birthMonth: "5",
+				firstNameInitial: "R",
+				lastNameInitial: "P",
+				sampleTime: "0",
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "1"
+			),
+			unixTimeStamp: Int64(0)
+		)
+
+		// When
+		sut.setHolderIdentity(attributes)
+
+		// Then
+		expect(self.sut.firstName) == "R"
+		expect(self.sut.lastName) == "P"
+		expect(self.sut.dayOfBirth) == "5"
+		expect(self.sut.monthOfBirth) == "MEI (05)"
+	}
+
+	func test_holderIdentity_dateOfBirthUnknown() {
+
+		// Given
+		let attributes = Attributes(
+			cryptoAttributes: CryptoAttributes(
+				birthDay: "X",
+				birthMonth: "X",
+				firstNameInitial: "",
+				lastNameInitial: "",
+				sampleTime: "0",
+				testType: "pcr",
+				specimen: "0",
+				paperProof: "1"
+			),
+			unixTimeStamp: Int64(0)
+		)
+
+		// When
+		sut.setHolderIdentity(attributes)
+
+		// Then
+		expect(self.sut.firstName) == "-"
+		expect(self.sut.lastName) == "-"
+		expect(self.sut.dayOfBirth) == "X"
+		expect(self.sut.monthOfBirth) == "X"
+	}
+
 	func testDismiss() {
 		
 		// Given
