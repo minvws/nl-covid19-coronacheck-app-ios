@@ -139,17 +139,28 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	func setHolderIdentity(_ attributes: Attributes) {
 
-		firstName = attributes.cryptoAttributes.firstNameInitial ?? "-"
-		lastName = attributes.cryptoAttributes.lastNameInitial ?? "-"
-		dayOfBirth = attributes.cryptoAttributes.birthDay ?? "-"
+		firstName = determineAttributeValue(attributes.cryptoAttributes.firstNameInitial)
+		lastName = determineAttributeValue(attributes.cryptoAttributes.lastNameInitial)
+		dayOfBirth = determineAttributeValue(attributes.cryptoAttributes.birthDay)
 		monthOfBirth = determineMonthOfBirth(attributes.cryptoAttributes.birthMonth)
+	}
+
+	/// Determine the value for display
+	/// - Parameter value: the crypto attribute value
+	/// - Returns: the value of the attribute, or a hyphen if empty
+	private func determineAttributeValue(_ value: String?) -> String {
+
+		if let value = value, !value.isEmpty {
+			return value
+		}
+		return "-"
 	}
 
 	/// Set the monthOfBirth as MMM (mm)
 	/// - Parameter value: the possible month value
 	private func determineMonthOfBirth(_ value: String?) -> String {
 
-		if let birthMonthAsString = value {
+		if let birthMonthAsString = value, !birthMonthAsString.isEmpty {
 			if let birthMonthAsInt = Int(birthMonthAsString),
 			   let month = mapMonth(month: birthMonthAsInt, months: String.shortMonths) {
 
