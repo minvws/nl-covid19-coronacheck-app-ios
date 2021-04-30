@@ -177,26 +177,32 @@ class ListResultsViewControllerTests: XCTestCase {
 		)
 	}
 
-	func testProgress() throws {
+	func test_shouldShowProgress() throws {
 
 		// Given
 		loadView()
+		proofManagingSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = false
 
 		// When
-		viewModel?.showProgress = true
+		viewModel?.createProofStepOne()
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertFalse(strongSut.sceneView.primaryButton.isEnabled, "Button should be disabled")
 	}
 
-	func testProgressFalse() throws {
+	func test_shouldNotShowProgress() throws {
 
 		// Given
 		loadView()
+		let error = NSError(
+			domain: NSURLErrorDomain,
+			code: URLError.notConnectedToInternet.rawValue
+		)
+		proofManagingSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 
 		// When
-		viewModel?.showProgress = false
+		viewModel?.createProofStepOne()
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)

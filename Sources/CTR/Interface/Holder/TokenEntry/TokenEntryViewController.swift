@@ -93,9 +93,8 @@ class TokenEntryViewController: BaseViewController {
 			guard let strongSelf = self else { return }
 			
 			if $0 {
-				let hud = MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
-				hud.accessibilityLabel = .loading
-				UIAccessibility.post(notification: .screenChanged, argument: hud)
+				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				strongSelf.announce(.loading)
 			} else {
 				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
 			}
