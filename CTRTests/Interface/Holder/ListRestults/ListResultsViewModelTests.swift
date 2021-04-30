@@ -294,7 +294,7 @@ class ListResultsViewModelTests: XCTestCase {
 		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
-		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
+		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
@@ -310,7 +310,7 @@ class ListResultsViewModelTests: XCTestCase {
 		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(proofManagingSpy.invokedFetchNonce, "Step 2 should be called")
-		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
+		XCTAssertTrue(strongSut.shouldShowProgress, "Progress should be shown")
 	}
 
 	/// Test step two with an error
@@ -330,7 +330,7 @@ class ListResultsViewModelTests: XCTestCase {
 		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
-		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
+		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
 	}
 
 	/// Test step one without an error
@@ -346,7 +346,7 @@ class ListResultsViewModelTests: XCTestCase {
 		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 3 should be called")
-		XCTAssertTrue(strongSut.showProgress, "Progress should be shown")
+		XCTAssertTrue(strongSut.shouldShowProgress, "Progress should be shown")
 	}
 
 	/// Test step three with an error
@@ -366,7 +366,7 @@ class ListResultsViewModelTests: XCTestCase {
 		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertTrue(strongSut.showError, "Error should not be nil")
-		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
+		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
 	}
 
 	/// Test step three with a valid result
@@ -382,7 +382,7 @@ class ListResultsViewModelTests: XCTestCase {
 		let strongSut = try XCTUnwrap(sut)
 
 		XCTAssertFalse(strongSut.showError, "Error should be false")
-		XCTAssertFalse(strongSut.showProgress, "Progress should not be shown")
+		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
 	}
 
