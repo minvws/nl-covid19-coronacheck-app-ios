@@ -148,8 +148,14 @@ class TokenEntryView: ScrolledStackWithButtonView {
 			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
-		
-		setupPrimaryButton()
+
+		setupPrimaryButton(useFullWidth: {
+			switch traitCollection.preferredContentSizeCategory {
+				case .unspecified: return true
+				case let size where size > .extraLarge: return true
+				default: return false
+			}
+		}())
 	}
 	
 	/// Setup all the accessibility traits

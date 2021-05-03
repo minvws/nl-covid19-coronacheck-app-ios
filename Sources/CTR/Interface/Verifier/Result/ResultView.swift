@@ -111,7 +111,13 @@ class ResultView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton()
+		setupPrimaryButton(useFullWidth: {
+			switch traitCollection.preferredContentSizeCategory {
+				case .unspecified: return true
+				case let size where size > .extraLarge: return true
+				default: return false
+			}
+		}())
 
 		// disable the bottom constraint of the scroll view, add our own
 		bottomScrollViewConstraint?.isActive = false
