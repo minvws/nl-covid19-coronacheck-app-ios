@@ -5,7 +5,7 @@
 	<key>APP_FLAVOR</key>
 	<string>${APP_FLAVOR}</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>nl_NL</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
