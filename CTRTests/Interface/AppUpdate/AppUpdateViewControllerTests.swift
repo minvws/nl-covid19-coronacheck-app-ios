@@ -40,8 +40,6 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 		sut = AppUpdateViewController(viewModel: viewModel)
 		window = UIWindow()
-
-//		isRecording = true
 	}
 
 	override func tearDown() {
@@ -57,22 +55,8 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 	// MARK: Test
 
-	/// Test all the content
-	func testContent() {
-
-		// Given
-
-		// When
-		loadView()
-
-		// Then
-		expect(self.sut.sceneView.title) == .updateAppTitle
-		expect(self.sut.sceneView.message) == "AppUpdateViewControllerTests"
-		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .updateAppButton
-	}
-
 	/// Test showing the alert (should happen if no url is provided)
-	func testAlert() {
+	func test_alert() {
 
 		// Given
 		let alertVerifier = AlertVerifier()
@@ -91,6 +75,64 @@ class AppUpdateViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
+	}
+
+	func test_updateRequired() {
+
+		// Given
+		let viewModel = AppUpdateViewModel(
+			coordinator: appCoordinatorSpy,
+			versionInformation: RemoteConfiguration(
+				minVersion: "1.0",
+				minVersionMessage: nil,
+				storeUrl: nil,
+				deactivated: nil,
+				informationURL: nil,
+				configTTL: 3600,
+				maxValidityHours: 48
+			)
+		)
+		sut = AppUpdateViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == .updateAppTitle
+		expect(self.sut.sceneView.message) == .updateAppContent
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .updateAppButton
+		expect(self.sut.sceneView.image) == .updateRequired
+
+		sut.assertImage()
+	}
+
+	func test_endOfLife() {
+
+		// Given
+		let viewModel = EndOfLifeViewModel(
+			coordinator: appCoordinatorSpy,
+			versionInformation: RemoteConfiguration(
+				minVersion: "1.0",
+				minVersionMessage: nil,
+				storeUrl: nil,
+				deactivated: true,
+				informationURL: nil,
+				configTTL: 3600,
+				maxValidityHours: 48
+			)
+		)
+		sut = AppUpdateViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == .endOfLifeTitle
+		expect(self.sut.sceneView.message) == .endOfLifeDescription
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .endOfLifeButton
+		expect(self.sut.sceneView.image) == .endOfLife
+
+		sut.assertImage()
 	}
 
 	func test_noInternet() {
