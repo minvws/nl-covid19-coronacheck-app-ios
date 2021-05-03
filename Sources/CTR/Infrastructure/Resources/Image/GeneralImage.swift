@@ -25,8 +25,11 @@ extension UIImage {
 
 	static var questionMark: UIImage? { return UIImage(named: "QuestionMark") }
 
-	static var warning: UIImage? { return UIImage(named: "Warning") }
+	static var endOfLife: UIImage? { return UIImage(named: "EndOfLife") }
 
 	static var check: UIImage? { return UIImage(named: "Check") }
 
+	static var noInternet: UIImage? { return UIImage(named: "NoInternet") }
+
+	static var updateRequired: UIImage? { return UIImage(named: "UpdateRequired") }
 }

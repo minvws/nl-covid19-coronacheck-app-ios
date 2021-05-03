@@ -91,8 +91,8 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
 		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.noActionNeeded, "State should match")
+		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
+		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.noActionNeeded, "State should match")
 	}
 
 	/// Test internet required for the remote config
@@ -108,8 +108,8 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
 		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.internetRequired, "State should match")
+		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
+		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.internetRequired, "State should match")
 	}
 
 	/// Test internet required for the issuer public keys
@@ -129,8 +129,8 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
 		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.internetRequired, "State should match")
+		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
+		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.internetRequired, "State should match")
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
@@ -150,8 +150,8 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
 		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.internetRequired, "State should match")
+		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
+		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.internetRequired, "State should match")
 	}
 
 	/// Test update required
@@ -168,7 +168,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
 		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.handleLaunchStateCalled, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.launchState, LaunchState.actionRequired(remoteConfig), "State should match")
+		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
+		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.actionRequired(remoteConfig), "State should match")
 	}
 }

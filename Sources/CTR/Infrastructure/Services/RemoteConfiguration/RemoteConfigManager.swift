@@ -25,7 +25,7 @@ protocol RemoteConfigManaging {
 	func getConfiguration() -> RemoteConfiguration
 }
 
-/// The remote configuration mananger
+/// The remote configuration manager
 class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// Category for logging
@@ -44,7 +44,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	/// The current app version
 	var appVersion: String {
 
-		return versionSupplier.getCurrentVersion()
+		versionSupplier.getCurrentVersion()
 	}
 
 	/// Persist the remote configuration in the keychain
@@ -70,7 +70,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		}
 	}
 
-	/// Handle the resultwrapper response from the get remote configuration calll
+	/// Handle the resultwrapper response from the get remote configuration call
 	/// - Parameters:
 	///   - resultWrapper: the result wrapper
 	///   - completion: completion handler
@@ -114,7 +114,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// Compare the remote configuration against the app version
 	/// - Parameters:
-	///   - remoteConfiguration: the remote confiiguration
+	///   - remoteConfiguration: the remote configuration
 	///   - completion: completion handler
 	private func compare(
 		_ remoteConfiguration: AppVersionInformation,
