@@ -241,8 +241,9 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 		
 		tapGestureRecognizer?.isEnabled = true
-		let offset: CGFloat = traitCollection.verticalSizeClass == .compact ? 90 : 160
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + offset
+
+		sceneView.scrollView.contentInset.bottom = notification.getHeight()
+
 		let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
 		sceneView.bottomButtonConstraint?.constant = -notification.getHeight() + buttonOffset
 	}
@@ -282,7 +283,25 @@ class TokenEntryViewController: BaseViewController {
 // MARK: - UITextFieldDelegate
 
 extension TokenEntryViewController: UITextFieldDelegate {
-	
+
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+
+		// Standardise the frames of textField & button inside the frame of self.view:
+		let textfieldFrame = self.view.convert(textField.frame, from: textField)
+		let buttonFrame = self.view.convert(self.sceneView.primaryButton.frame, from: self.sceneView.primaryButton)
+
+		if textfieldFrame.intersects(buttonFrame) {
+			// The textfield intersects the button frame, but by how much?
+			let intersection = textfieldFrame.intersection(buttonFrame)
+			guard intersection.height > 0 else { return }
+
+			// Okay so shift the scrollView up by the height of the intersection (plus a 10px extra for luck):
+			UIView.animate(withDuration: 0.2) {
+				self.sceneView.scrollView.contentOffset.y += intersection.height + 10
+			}
+		}
+	}
+
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		
 		textField.resignFirstResponder()
