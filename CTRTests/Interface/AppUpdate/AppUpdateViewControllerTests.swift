@@ -8,12 +8,14 @@
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
+import Nimble
+import SnapshotTesting
 
 class AppUpdateViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: AppUpdateViewController?
-	var appCoordinatorSpy = AppCoordinatorSpy()
+	private var sut: AppUpdateViewController!
+	private var appCoordinatorSpy: AppCoordinatorSpy!
 
 	var window = UIWindow()
 
@@ -38,6 +40,8 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 		sut = AppUpdateViewController(viewModel: viewModel)
 		window = UIWindow()
+
+//		isRecording = true
 	}
 
 	override func tearDown() {
@@ -47,10 +51,8 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: Test
@@ -64,9 +66,9 @@ class AppUpdateViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		XCTAssertEqual(sut?.sceneView.titleLabel.text, .updateAppTitle, "Text should match")
-		XCTAssertEqual(sut?.sceneView.messageLabel.text, "AppUpdateViewControllerTests", "Text should match")
-		XCTAssertEqual(sut?.sceneView.primaryButton.titleLabel?.text, .updateAppButton, "Text should match")
+		expect(self.sut.sceneView.title) == .updateAppTitle
+		expect(self.sut.sceneView.message) == "AppUpdateViewControllerTests"
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .updateAppButton
 	}
 
 	/// Test showing the alert (should happen if no url is provided)
@@ -77,7 +79,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
 		alertVerifier.verify(
@@ -89,5 +91,23 @@ class AppUpdateViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
+	}
+
+	func test_noInternet() {
+
+		// Given
+		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+		sut = AppUpdateViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == .internetRequiredTitle
+		expect(self.sut.sceneView.message) == .internetRequiredText
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .internetRequiredButton
+		expect(self.sut.sceneView.image) == .noInternet
+
+		sut.assertImage()
 	}
 }

@@ -10,24 +10,35 @@ import XCTest
 
 class AppCoordinatorSpy: AppCoordinatorDelegate {
 
-	var openUrlCalled = false
-	var handleLaunchStateCalled = false
-	var retryCalled = false
-	var launchState: LaunchState?
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, Void)?
+	var invokedOpenUrlParametersList = [(url: URL, Void)]()
 
 	func openUrl(_ url: URL) {
-
-		openUrlCalled = true
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, ())
+		invokedOpenUrlParametersList.append((url, ()))
 	}
+
+	var invokedHandleLaunchState = false
+	var invokedHandleLaunchStateCount = 0
+	var invokedHandleLaunchStateParameters: (state: LaunchState, Void)?
+	var invokedHandleLaunchStateParametersList = [(state: LaunchState, Void)]()
 
 	func handleLaunchState(_ state: LaunchState) {
-
-		handleLaunchStateCalled = true
-		launchState = state
+		invokedHandleLaunchState = true
+		invokedHandleLaunchStateCount += 1
+		invokedHandleLaunchStateParameters = (state, ())
+		invokedHandleLaunchStateParametersList.append((state, ()))
 	}
 
-	func retry() {
+	var invokedRetry = false
+	var invokedRetryCount = 0
 
-		retryCalled = true
+	func retry() {
+		invokedRetry = true
+		invokedRetryCount += 1
 	}
 }

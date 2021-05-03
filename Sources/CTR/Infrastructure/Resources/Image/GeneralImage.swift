@@ -29,4 +29,6 @@ extension UIImage {
 
 	static var check: UIImage? { return UIImage(named: "Check") }
 
+	static var noInternet: UIImage? { return UIImage(named: "NoInternet") }
+
 }

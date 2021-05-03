@@ -7,14 +7,13 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class AppUpdateViewModelTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: AppUpdateViewModel?
-
-	/// Spies
-	var appCoordinatorSpy = AppCoordinatorSpy()
+	var sut: AppUpdateViewModel!
+	var appCoordinatorSpy: AppCoordinatorSpy!
 
 	// MARK: Test lifecycle
 	override func setUp() {
@@ -36,21 +35,19 @@ class AppUpdateViewModelTests: XCTestCase {
 	// MARK: Tests
 
 	/// Test the initializer
-	func testInitializerWitMessage() throws {
+	func testInitializerWitMessage() {
 
 		// Given
 
 		// When
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(strongSut.message, "test message")
+		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertEqual(sut.message, "test message")
 	}
 
 	/// Test the initializer without a message in the app information.
-	func testInitializerWithoutMessage() throws {
+	func testInitializerWithoutMessage() {
 
 		// Given
 		let appVersionInfo = RemoteConfiguration(
@@ -67,26 +64,24 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(strongSut.message, .updateAppContent)
+		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertEqual(sut.message, .updateAppContent)
 	}
 
 	/// Test the update button tapped method with an url
-	func testUpdateButtonTappedWithUrl() throws {
+	func testUpdateButtonTappedWithUrl() {
 
 		// Given
 
 		// When
-		sut?.actionButtonTapped()
+		sut.actionButtonTapped()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
 	}
 
 	/// Test the update button tapped method with an url
-	func testUpdateButtonTappedWithoutUrl() throws {
+	func testUpdateButtonTappedWithoutUrl() {
 
 		// Given
 		let appVersionInfo = RemoteConfiguration(
@@ -102,16 +97,15 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// When
-		sut?.actionButtonTapped()
+		sut.actionButtonTapped()
 
 		// Then
-		XCTAssertFalse(appCoordinatorSpy.openUrlCalled, "Method should NOT be called")
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.showCannotOpenAlert, "We should show an alert")
+		XCTAssertFalse(appCoordinatorSpy.invokedOpenUrl, "Method should NOT be called")
+		XCTAssertTrue(sut.showCannotOpenAlert, "We should show an alert")
 	}
 
 	/// Test the initializer for end of life
-	func testInitializerEndOfLifeNoUrl() throws {
+	func testInitializerEndOfLifeNoUrl() {
 
 		// Given
 		let appVersionInfo = RemoteConfiguration(
@@ -128,13 +122,12 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(strongSut.message, .endOfLifeDescription)
+		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertEqual(sut.message, .endOfLifeDescription)
 	}
 
 	/// Test the initializer for end of life
-	func testInitializerEndOfLifeWithUrl() throws {
+	func testInitializerEndOfLifeWithUrl() {
 
 		// Given
 		let appVersionInfo = RemoteConfiguration(
@@ -151,8 +144,33 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(strongSut.errorMessage, .endOfLifeErrorMessage)
+		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
+		XCTAssertEqual(sut.errorMessage, .endOfLifeErrorMessage)
+	}
+
+	func test_noInternet() {
+
+		// Given
+
+		// When
+		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+
+		// Then
+		expect(self.sut.title) == .internetRequiredTitle
+		expect(self.sut.message) == .internetRequiredText
+		expect(self.sut.actionTitle) == .internetRequiredButton
+		expect(self.sut.image) == .noInternet
+	}
+
+	func test_noInternet_actionButtonTapped() {
+
+		// Given
+		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+
+		// When
+		sut.actionButtonTapped()
+
+		// Then
+		expect(self.appCoordinatorSpy.invokedRetry) == true
 	}
 }

@@ -83,7 +83,7 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	}
 }
 
-/// Viewmodel when the app is deactivated
+/// View Model when there is no internet
 class InternetRequiredViewModel: AppUpdateViewModel {
 
 	/// Initializer
@@ -96,6 +96,7 @@ class InternetRequiredViewModel: AppUpdateViewModel {
 		self.title = .internetRequiredTitle
 		self.message = .internetRequiredText
 		self.actionTitle = .internetRequiredButton
+		self.image = .noInternet
 	}
 
 	/// User tapped on the update button
