@@ -100,14 +100,11 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 		
-		viewModel.$fieldErrorMessage.binding = { [weak self] in
-			if let message = $0 {
-				self?.sceneView.errorView.error = message
-				self?.sceneView.errorView.isHidden = false
-				self?.sceneView.textLabel.isHidden = true
-			} else {
-				self?.sceneView.errorView.isHidden = true
+		viewModel.$fieldErrorMessage.binding = { [weak self] message in
+			if let message = message {
+				UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: message)
 			}
+			self?.sceneView.fieldErrorMessage = message
 		}
 		
 		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
