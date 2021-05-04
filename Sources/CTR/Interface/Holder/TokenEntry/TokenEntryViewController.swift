@@ -307,6 +307,12 @@ extension TokenEntryViewController: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		
 		textField.resignFirstResponder()
+
+		if sceneView.primaryButton.isEnabled {
+			// Simulate a tap on the next button:
+			sceneView.primaryButton.sendActions(for: .touchUpInside)
+		}
+
 		return true
 	}
 	
