@@ -316,6 +316,7 @@ extension HolderCoordinator: MenuDelegate {
 			case .about :
 				let destination = AboutViewController(
 					viewModel: AboutViewModel(
+						coordinator: self,
 						versionSupplier: versionSupplier,
 						flavor: AppFlavor.flavor
 					)

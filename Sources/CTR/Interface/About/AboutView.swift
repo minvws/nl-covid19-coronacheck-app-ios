@@ -15,14 +15,19 @@ class AboutView: ScrolledStackView {
 		// Dimensions
 		static let messageLineHeight: CGFloat = 22
 		static let messageLineKerning: CGFloat = -0.41
+		static let listHeaderLineHeight: CGFloat = 16
 		static let versionLineHeight: CGFloat = 18
 		static let versionLineKerning: CGFloat = -0.24
 	}
 
-	/// The message label
 	let messageLabel: Label = {
 
 		return Label(body: nil).multiline()
+	}()
+
+	let listHeaderLabel: Label = {
+
+		return Label(caption1SemiBold: nil).multiline()
 	}()
 
 	/// The link label
@@ -45,6 +50,7 @@ class AboutView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(listHeaderLabel)
 		stackView.addArrangedSubview(versionLabel)
 	}
 
@@ -60,12 +66,22 @@ class AboutView: ScrolledStackView {
 		}
 	}
 
+	/// The list header
+	var listHeader: String? {
+		didSet {
+			listHeaderLabel.attributedText = listHeader?.setLineHeight(
+				ViewTraits.listHeaderLineHeight
+			)
+		}
+	}
+
 	/// The version
 	var version: String? {
 		didSet {
 			versionLabel.attributedText = version?.setLineHeight(
 				ViewTraits.versionLineHeight,
-				kerning: ViewTraits.versionLineKerning
+				kerning: ViewTraits.versionLineKerning,
+				textColor: Theme.colors.grey1
 			)
 		}
 	}

@@ -114,6 +114,7 @@
 "holder.menu.about" = "Over deze app";
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
+"holder.menu.accessibility" = "Toegankelijkheid";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang na testen";
@@ -231,3 +232,4 @@ Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.about.title" = "Over deze app";
 "holder.about.text" = "CoronaCheck is ontwikkeld zodat bezoekers weer naar sociale, culturele en sportieve locaties kunnen. Met behulp van deze app bewijzen bezoekers dat ze kortgeleden negatief getest zijn op corona. Zo kan Nederland meer buiten de deur doen.";
 "holder.about.link" = "Lees hier de privacyverklaring";
+"holder.about.readmore" = "Lees meer";
