@@ -10,22 +10,23 @@ import SnapshotTesting
 import UIKit
 
 internal extension UIViewController {
-    func assertImage(
-        file: StaticString = #file,
-        testName: String = #function,
-        line: UInt = #line
-    ) {
-        UIScreen.main.assertSimulatorIsAllowedForSnapshotTesting()
+	func assertImage(
+		file: StaticString = #file,
+		testName: String = #function,
+		line: UInt = #line,
+		precision: Float = 1
+	) {
+		UIScreen.main.assertSimulatorIsAllowedForSnapshotTesting()
 		UIViewController.assertSimulatorDoesNotHaveAlteredAccessibilitySizes()
-
-        SnapshotTesting.assertSnapshot(
-            matching: self,
-            as: .image,
-            file: file,
-            testName: testName,
-            line: line
-        )
-    }
+		
+		SnapshotTesting.assertSnapshot(
+			matching: self,
+			as: .image(precision: precision),
+			file: file,
+			testName: testName,
+			line: line
+		)
+	}
 }
 
 private extension UIScreen {
