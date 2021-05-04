@@ -324,13 +324,6 @@ extension HolderCoordinator: MenuDelegate {
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
-//			case .privacy :
-//				guard let privacyUrl = URL(string: .holderUrlPrivacy) else {
-//					logError("No holder privacy url")
-//					return
-//				}
-//				openUrl(privacyUrl, inApp: true)
-
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
 

@@ -58,6 +58,10 @@ class AboutViewControllerTests: XCTestCase {
 		expect(self.sut.title) == .holderAboutTitle
 		expect(self.sut.sceneView.message) == .holderAboutText
 		expect(self.sut.sceneView.listHeader) == .holderAboutReadMore
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
+			.to(haveCount(1), description: "There shoulde be one element in the list")
 		expect(self.sut.sceneView.version).toNot(beNil(), description: "Version should not be nil")
+
+		sut.assertImage()
 	}
 }
