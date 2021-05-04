@@ -55,7 +55,6 @@ class OnboardingView: BaseView {
 		
 		let button = Button(title: "Button 1", style: .primary)
 		button.rounded = true
-		button.translatesAutoresizingMaskIntoConstraints = false
 		return button
 	}()
 	
