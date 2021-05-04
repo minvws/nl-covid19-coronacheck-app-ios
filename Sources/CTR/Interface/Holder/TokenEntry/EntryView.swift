@@ -32,13 +32,13 @@ class EntryView: BaseView {
 		
 		let field = UITextField()
 		field.translatesAutoresizingMaskIntoConstraints = false
-		field.returnKeyType = .default
+		field.returnKeyType = .send
 		field.autocorrectionType = .no
 		field.autocapitalizationType = .none
 		field.font = UIFont.preferredFont(forTextStyle: .body)
 		return field
 	}()
-
+	
 	private let lineView: UIView = {
 		
 		let view = UIView()
