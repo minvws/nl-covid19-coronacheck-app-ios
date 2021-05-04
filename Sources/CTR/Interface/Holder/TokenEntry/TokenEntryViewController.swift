@@ -286,18 +286,20 @@ extension TokenEntryViewController: UITextFieldDelegate {
 
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 
-		// Standardise the frames of textField & button inside the frame of self.view:
-		let textfieldFrame = self.view.convert(textField.frame, from: textField)
-		let buttonFrame = self.view.convert(self.sceneView.primaryButton.frame, from: self.sceneView.primaryButton)
+		// Wait until after the keyboard has presented, then do some frame calculations:
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
 
-		if textfieldFrame.intersects(buttonFrame) {
-			// The textfield intersects the button frame, but by how much?
-			let intersection = textfieldFrame.intersection(buttonFrame)
-			guard intersection.height > 0 else { return }
+			// Standardise the frames of textField & the gradient line (above the Primary button) inside the frame of self.view:
+			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
+			let gradientLineFrame = view.convert(sceneView.footerGradientView.frame, from: sceneView.footerGradientView.superview)
 
-			// Okay so shift the scrollView up by the height of the intersection (plus a 10px extra for luck):
-			UIView.animate(withDuration: 0.2) {
-				self.sceneView.scrollView.contentOffset.y += intersection.height + 10
+			if textfieldFrame.maxY > gradientLineFrame.minY {
+				let correction = textfieldFrame.maxY - gradientLineFrame.minY
+
+				// Okay so shift the scrollView up by the correction:
+				UIView.animate(withDuration: 0.2) {
+					sceneView.scrollView.contentOffset.y += correction
+				}
 			}
 		}
 	}
