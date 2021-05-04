@@ -30,6 +30,18 @@ class AboutView: ScrolledStackView {
 		return Label(caption1SemiBold: nil).multiline()
 	}()
 
+	/// The stack view for the menu items
+	let itemStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = 0
+		return view
+	}()
+
 	/// The link label
 	let versionLabel: Label = {
 
@@ -41,6 +53,7 @@ class AboutView: ScrolledStackView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		stackView.distribution = .fill
 		versionLabel.textColor = Theme.colors.grey1
 	}
 
@@ -51,7 +64,17 @@ class AboutView: ScrolledStackView {
 
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(listHeaderLabel)
+		stackView.setCustomSpacing(0, after: listHeaderLabel)
+		stackView.addArrangedSubview(itemStackView)
+		stackView.setCustomSpacing(24, after: itemStackView)
 		stackView.addArrangedSubview(versionLabel)
+	}
+
+	override func setupAccessibility() {
+
+		super.setupAccessibility()
+
+		listHeaderLabel.accessibilityTraits = .header
 	}
 
 	// MARK: Public Access

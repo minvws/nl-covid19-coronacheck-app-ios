@@ -27,7 +27,7 @@ struct AboutMenuOption {
 	let name: String
 }
 
-class AboutViewModel {
+class AboutViewModel: Logging {
 
 	/// Coordination Delegate
 	weak var coordinator: OpenUrlProtocol?
@@ -68,20 +68,36 @@ class AboutViewModel {
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}
 
-	func setupMenuHolder() {
+	private func setupMenuHolder() {
 
 		menu = [
-			AboutMenuOption(identifier: .privacyStatement, name: .holderMenuPrivacy),
-			AboutMenuOption(identifier: .accessibility, name: .holderMenuAccessibility)
+			AboutMenuOption(identifier: .privacyStatement, name: .holderMenuPrivacy)// ,
+//			AboutMenuOption(identifier: .accessibility, name: .holderMenuAccessibility)
 		]
 	}
 
-	func setupMenuVerifier() {
+	private func setupMenuVerifier() {
 
 		menu = [
-			AboutMenuOption(identifier: .terms, name: .verifierMenuPrivacy),
-			AboutMenuOption(identifier: .accessibility, name: .verifierMenuAccessibility)
+			AboutMenuOption(identifier: .terms, name: .verifierMenuPrivacy)// ,
+//			AboutMenuOption(identifier: .accessibility, name: .verifierMenuAccessibility)
 		]
+	}
+
+	func menuOptionSelected(_ identifier: AboutMenuIdentifier) {
+
+		switch identifier {
+			case .privacyStatement:
+				if let privacyUrl = URL(string: .holderUrlPrivacy) {
+					coordinator?.openUrl(privacyUrl, inApp: true)
+				}
+			case .terms:
+				if let privacyUrl = URL(string: .verifierUrlPrivacy) {
+					coordinator?.openUrl(privacyUrl, inApp: true)
+				}
+			default:
+				logWarning("About menu option \(identifier) not supported")
+		}
 	}
 
 }
