@@ -20,12 +20,12 @@ class AboutView: ScrolledStackView {
 		static let versionLineKerning: CGFloat = -0.24
 	}
 
-	let messageLabel: Label = {
+	private let messageLabel: Label = {
 
 		return Label(body: nil).multiline()
 	}()
 
-	let listHeaderLabel: Label = {
+	private let listHeaderLabel: Label = {
 
 		return Label(caption1SemiBold: nil).multiline()
 	}()
@@ -42,8 +42,7 @@ class AboutView: ScrolledStackView {
 		return view
 	}()
 
-	/// The link label
-	let versionLabel: Label = {
+	private let versionLabel: Label = {
 
 		return Label(subhead: nil).multiline()
 	}()

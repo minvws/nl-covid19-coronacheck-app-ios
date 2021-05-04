@@ -14,7 +14,7 @@ import SnapshotTesting
 class AboutViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: AboutViewController!
+	private var sut: AboutViewController!
 	private var coordinatorSpy: OpenUrlProtocolSpy!
 
 	var window = UIWindow()

@@ -11,7 +11,7 @@ import Nimble
 
 class AboutViewModelTests: XCTestCase {
 
-	var sut: AboutViewModel!
+	private var sut: AboutViewModel!
 	private var coordinatorSpy: OpenUrlProtocolSpy!
 
 	override func setUp() {

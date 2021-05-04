@@ -49,7 +49,7 @@ class AboutViewController: BaseViewController {
 		setupMenuOptions()
 	}
 
-	func setupMenuOptions() {
+	private func setupMenuOptions() {
 
 		for item in viewModel.menu {
 

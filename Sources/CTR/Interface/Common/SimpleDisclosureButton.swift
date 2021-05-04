@@ -34,7 +34,7 @@ class SimpleDisclosureButton: BaseView {
 	}()
 
 	/// The line above the button
-	let lineView: UIView = {
+	private let lineView: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
