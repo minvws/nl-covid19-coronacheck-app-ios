@@ -241,8 +241,9 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 		
 		tapGestureRecognizer?.isEnabled = true
-		let offset: CGFloat = traitCollection.verticalSizeClass == .compact ? 90 : 160
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + offset
+
+		sceneView.scrollView.contentInset.bottom = notification.getHeight()
+
 		let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
 		sceneView.bottomButtonConstraint?.constant = -notification.getHeight() + buttonOffset
 	}
@@ -282,7 +283,27 @@ class TokenEntryViewController: BaseViewController {
 // MARK: - UITextFieldDelegate
 
 extension TokenEntryViewController: UITextFieldDelegate {
-	
+
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+
+		// Wait until after the keyboard has presented, then do some frame calculations:
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+
+			// Standardise the frames of textField & the gradient line (above the Primary button) inside the frame of self.view:
+			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
+			let gradientLineFrame = view.convert(sceneView.footerGradientView.frame, from: sceneView.footerGradientView.superview)
+
+			if textfieldFrame.maxY > gradientLineFrame.minY {
+				let correction = textfieldFrame.maxY - gradientLineFrame.minY
+
+				// Okay so shift the scrollView up by the correction:
+				UIView.animate(withDuration: 0.2) {
+					sceneView.scrollView.contentOffset.y += correction
+				}
+			}
+		}
+	}
+
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		
 		textField.resignFirstResponder()
