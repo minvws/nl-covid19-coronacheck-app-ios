@@ -53,6 +53,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		let button = Button(title: "Button 1", style: .primary)
 		button.rounded = true
+		button.titleLabel?.textAlignment = .center
 		return button
 	}()
 
