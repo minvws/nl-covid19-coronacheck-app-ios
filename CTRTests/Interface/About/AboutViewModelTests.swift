@@ -42,8 +42,9 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.title) == .holderAboutTitle
 		expect(self.sut.message) == .holderAboutText
 		expect(self.sut.listHeader) == .holderAboutReadMore
-		expect(self.sut.menu).to(haveCount(1), description: "There should be 1 element")
+		expect(self.sut.menu).to(haveCount(2), description: "There should be 2 elements")
 		expect(self.sut.menu.first?.identifier) == .privacyStatement
+		expect(self.sut.menu.last?.identifier) == .accessibility
 		expect(self.sut.version.contains("testInitHolder")) == true
 	}
 
@@ -62,8 +63,9 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.title) == .verifierAboutTitle
 		expect(self.sut.message) == .verifierAboutText
 		expect(self.sut.listHeader) == .verifierAboutReadMore
-		expect(self.sut.menu).to(haveCount(1), description: "There should be 1 element")
+		expect(self.sut.menu).to(haveCount(2), description: "There should be 2 elements")
 		expect(self.sut.menu.first?.identifier) == .terms
+		expect(self.sut.menu.last?.identifier) == .accessibility
 		expect(self.sut.version.contains("testInitVerifier")) == false // verifier version not in target language file.
 	}
 
@@ -91,14 +93,36 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlPrivacy
 	}
 
-	func test_menuOptionSelected_accessibility() {
+	func test_menuOptionSelected_accessibility_forHolder() {
 
 		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder
+		)
+		// When
+		sut.menuOptionSelected(.accessibility)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlAccessibility
+	}
+
+	func test_menuOptionSelected_accessibility_forVerifier() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
+			flavor: AppFlavor.verifier
+		)
 
 		// When
 		sut.menuOptionSelected(.accessibility)
 
 		// Then
-		expect(self.coordinatorSpy.invokedOpenUrl) == false
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlAccessibility
 	}
 }

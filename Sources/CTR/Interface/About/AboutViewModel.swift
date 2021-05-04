@@ -30,7 +30,9 @@ struct AboutMenuOption {
 class AboutViewModel: Logging {
 
 	/// Coordination Delegate
-	weak var coordinator: OpenUrlProtocol?
+	weak private var coordinator: OpenUrlProtocol?
+
+	private var flavor: AppFlavor
 
 	// MARK: - Bindable
 
@@ -53,6 +55,7 @@ class AboutViewModel: Logging {
 		flavor: AppFlavor) {
 
 		self.coordinator = coordinator
+		self.flavor = flavor
 
 		self.title = flavor == .holder ? .holderAboutTitle : .verifierAboutTitle
 		self.message = flavor == .holder ? .holderAboutText : .verifierAboutText
@@ -71,16 +74,16 @@ class AboutViewModel: Logging {
 	private func setupMenuHolder() {
 
 		menu = [
-			AboutMenuOption(identifier: .privacyStatement, name: .holderMenuPrivacy)// ,
-//			AboutMenuOption(identifier: .accessibility, name: .holderMenuAccessibility)
+			AboutMenuOption(identifier: .privacyStatement, name: .holderMenuPrivacy) ,
+			AboutMenuOption(identifier: .accessibility, name: .holderMenuAccessibility)
 		]
 	}
 
 	private func setupMenuVerifier() {
 
 		menu = [
-			AboutMenuOption(identifier: .terms, name: .verifierMenuPrivacy)// ,
-//			AboutMenuOption(identifier: .accessibility, name: .verifierMenuAccessibility)
+			AboutMenuOption(identifier: .terms, name: .verifierMenuPrivacy) ,
+			AboutMenuOption(identifier: .accessibility, name: .verifierMenuAccessibility)
 		]
 	}
 
@@ -88,16 +91,22 @@ class AboutViewModel: Logging {
 
 		switch identifier {
 			case .privacyStatement:
-				if let privacyUrl = URL(string: .holderUrlPrivacy) {
-					coordinator?.openUrl(privacyUrl, inApp: true)
-				}
+				openUrlString(.holderUrlPrivacy)
 			case .terms:
-				if let privacyUrl = URL(string: .verifierUrlPrivacy) {
-					coordinator?.openUrl(privacyUrl, inApp: true)
+				openUrlString(.verifierUrlPrivacy)
+			case .accessibility:
+				if flavor == .holder {
+					openUrlString(.holderUrlAccessibility)
+				} else {
+					openUrlString(.verifierUrlAccessibility)
 				}
-			default:
-				logWarning("About menu option \(identifier) not supported")
 		}
 	}
 
+	private func openUrlString(_ urlString: String) {
+
+		if let url = URL(string: urlString) {
+			coordinator?.openUrl(url, inApp: true)
+		}
+	}
 }
