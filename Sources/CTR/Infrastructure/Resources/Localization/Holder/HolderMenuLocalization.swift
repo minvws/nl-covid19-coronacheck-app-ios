@@ -40,4 +40,9 @@ extension String {
 
 		return Localization.string(for: "holder.menu.privacy")
 	}
+
+	static var holderMenuAccessibility: String {
+
+		return Localization.string(for: "holder.menu.accessibility")
+	}
 }

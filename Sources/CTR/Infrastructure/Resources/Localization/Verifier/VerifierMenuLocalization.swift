@@ -35,4 +35,9 @@ extension String {
 
 		return Localization.string(for: "verifier.menu.privacy")
 	}
+
+	static var verifierMenuAccessibility: String {
+
+		return Localization.string(for: "verifier.menu.accessibility")
+	}
 }

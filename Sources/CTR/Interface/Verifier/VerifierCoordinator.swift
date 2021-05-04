@@ -225,19 +225,13 @@ extension VerifierCoordinator: MenuDelegate {
 			case .about :
 				let destination = AboutViewController(
 					viewModel: AboutViewModel(
+						coordinator: self,
 						versionSupplier: versionSupplier,
 						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
-				
-			case .privacy :
-				guard let privacyUrl = URL(string: .verifierUrlPrivacy) else {
-					logError("No holder privacy url")
-					return
-				}
-				openUrl(privacyUrl, inApp: true)
 				
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
@@ -271,8 +265,7 @@ extension VerifierCoordinator: MenuDelegate {
 		
 		return [
 			MenuItem(identifier: .support, title: .verifierMenuSupport),
-			MenuItem(identifier: .about, title: .verifierMenuAbout),
-			MenuItem(identifier: .privacy, title: .verifierMenuPrivacy)
+			MenuItem(identifier: .about, title: .verifierMenuAbout)
 		]
 	}
 }

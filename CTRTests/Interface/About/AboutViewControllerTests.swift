@@ -8,11 +8,14 @@
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
+import Nimble
+import SnapshotTesting
 
 class AboutViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: AboutViewController?
+	private var sut: AboutViewController!
+	private var coordinatorSpy: OpenUrlProtocolSpy!
 
 	var window = UIWindow()
 
@@ -20,8 +23,9 @@ class AboutViewControllerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-
+		coordinatorSpy = OpenUrlProtocolSpy()
 		let viewModel = AboutViewModel(
+			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.holder
 		)
@@ -37,16 +41,13 @@ class AboutViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: Test
 
-	/// Test all the content
-	func testContent() throws {
+	func test_content() {
 
 		// Given
 
@@ -54,9 +55,13 @@ class AboutViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .holderAboutTitle, "Text should match")
-		XCTAssertEqual(strongSut.sceneView.message, .holderAboutText, "Text should match")
-		XCTAssertNotNil(strongSut.sceneView.version, "Version should not be nil")
+		expect(self.sut.title) == .holderAboutTitle
+		expect(self.sut.sceneView.message) == .holderAboutText
+		expect(self.sut.sceneView.listHeader) == .holderAboutReadMore
+		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
+			.to(haveCount(1), description: "There shoulde be one element in the list")
+		expect(self.sut.sceneView.version).toNot(beNil(), description: "Version should not be nil")
+
+		sut.assertImage()
 	}
 }
