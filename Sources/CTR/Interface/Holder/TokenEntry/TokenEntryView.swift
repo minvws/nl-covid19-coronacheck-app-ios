@@ -144,8 +144,6 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			userNeedsATokenButton.heightAnchor.constraint(equalToConstant: 40),
-			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
 
