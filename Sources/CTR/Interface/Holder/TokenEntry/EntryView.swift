@@ -35,6 +35,7 @@ class EntryView: BaseView {
 		field.returnKeyType = .default
 		field.autocorrectionType = .no
 		field.autocapitalizationType = .none
+		field.font = UIFont.preferredFont(forTextStyle: .body)
 		return field
 	}()
 
@@ -91,7 +92,7 @@ class EntryView: BaseView {
 			inputField.leadingAnchor.constraint(equalTo: leadingAnchor),
 			inputField.trailingAnchor.constraint(equalTo: trailingAnchor),
 			inputField.bottomAnchor.constraint(equalTo: lineView.topAnchor),
-			inputField.heightAnchor.constraint(equalToConstant: ViewTraits.inputHeight),
+			inputField.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.inputHeight),
 			
 			// Line
 			lineView.heightAnchor.constraint(equalToConstant: ViewTraits.lineHeight),
