@@ -47,7 +47,7 @@ class TokenEntryViewModel {
 	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
 	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 	@Bindable private(set) var shouldShowNextButton: Bool = true
-	@Bindable private(set) var enableNextButton: Bool = false {
+	@Bindable private(set) var shouldEnableNextButton: Bool = false {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
@@ -156,15 +156,15 @@ class TokenEntryViewModel {
 		switch initializationMode {
 			case .regular:
 				guard let sanitizedTokenInput = sanitizedTokenInput, !sanitizedTokenInput.isEmpty else {
-					enableNextButton = false
+					shouldEnableNextButton = false
 					return
 				}
 				let validToken = tokenValidator.validate(sanitizedTokenInput)
 
 				if verificationCodeIsKnownToBeRequired {
-					enableNextButton = validToken && receivedNonemptyVerificationInput
+					shouldEnableNextButton = validToken && receivedNonemptyVerificationInput
 				} else {
-					enableNextButton = validToken
+					shouldEnableNextButton = validToken
 				}
 
 			case .withRequestTokenProvided:
@@ -174,7 +174,7 @@ class TokenEntryViewModel {
 					return
 				}
 
-				enableNextButton = receivedNonemptyVerificationInput
+				shouldEnableNextButton = receivedNonemptyVerificationInput
 		}
 	}
 
@@ -299,7 +299,7 @@ class TokenEntryViewModel {
 								// the user has just submitted a wrong verification code & should see an error message
 								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 							}
-							self.enableNextButton = false
+							self.shouldEnableNextButton = false
 							self.verificationCodeIsKnownToBeRequired = true
 
 						case .invalid:
@@ -333,17 +333,17 @@ class TokenEntryViewModel {
 		switch self.initializationMode {
 			case .regular:
 				// There must have been a token already entered, so this can be assumed:
-				self.enableNextButton = true
+				self.shouldEnableNextButton = true
 			case .withRequestTokenProvided:
 				if verificationCodeIsKnownToBeRequired {
 					// in this situation, we know we definitely loaded a requestToken successfully the
 					// first time, so no need to exit `.withRequestTokenProvided` mode.
-					self.enableNextButton = true
+					self.shouldEnableNextButton = true
 				} else {
 					// The `.withRequestTokenProvided` mode failed at some point
 					// during `init`, so abort & reset to `.regular` mode.
 					self.initializationMode = .regular
-					self.enableNextButton = false
+					self.shouldEnableNextButton = false
 				}
 		}
 	}
