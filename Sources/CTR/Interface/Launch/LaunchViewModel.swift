@@ -19,6 +19,8 @@ class LaunchViewModel {
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
+	private var isHandlingJailBreakDetectionWarning = false
+
 	private var configStatus: LaunchState?
 	private var issuerPublicKeysStatus: LaunchState?
 	private var flavor: AppFlavor
@@ -34,9 +36,6 @@ class LaunchViewModel {
 
 	/// The icon of the launch page
 	@Bindable private(set) var appIcon: UIImage?
-
-	/// Should we show the jailbreak warning?
-	@Bindable private(set) var shouldShowJailBreakDialog: Bool = false
 
 	/// Initializer
 	/// - Parameters:
@@ -75,29 +74,34 @@ class LaunchViewModel {
 	/// Check the requirements
 	func checkRequirements() {
 
-		detectJailBreak()
 		updateConfiguration()
 		updateKeys()
 	}
 
-	func jailBreakWarningDismissed() {
-
-		userSettings.jailbreakWarningShown = true
-		shouldShowJailBreakDialog = false
-		handleState()
-	}
-
-	private func detectJailBreak() {
+	func shouldShowJailBreakAlert() -> Bool {
 
 		guard flavor == .holder else {
 			// Only enable for the holder
-			shouldShowJailBreakDialog = false
-			return
+			return false
 		}
 
+		isHandlingJailBreakDetectionWarning = true
+
 		if !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken() {
-			shouldShowJailBreakDialog = true
+			return true
+
+		} else {
+			isHandlingJailBreakDetectionWarning = false
+			handleState()
+			return false
 		}
+	}
+
+	func dismissJailBreakWarning() {
+
+		userSettings.jailbreakWarningShown = true
+		isHandlingJailBreakDetectionWarning = false
+		handleState()
 	}
 
 	/// Update the configuration
@@ -148,7 +152,7 @@ class LaunchViewModel {
 
 		guard let configStatus = configStatus,
 			  let issuerPublicKeysStatus = issuerPublicKeysStatus,
-			  !shouldShowJailBreakDialog else {
+			  !isHandlingJailBreakDetectionWarning else {
 			return
 		}
 

@@ -46,11 +46,6 @@ class LaunchViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$version.binding = { [weak self] in self?.sceneView.version = $0 }
 		viewModel.$appIcon.binding = { [weak self] in self?.sceneView.appIcon = $0 }
-		viewModel.$shouldShowJailBreakDialog.binding = { [weak self] in
-			if $0 {
-				self?.showJailBreakWarning()
-			}
-		}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +58,11 @@ class LaunchViewController: BaseViewController {
 	override func viewDidAppear(_ animated: Bool) {
 
 		super.viewDidAppear(animated)
+
+		if viewModel.shouldShowJailBreakAlert() {
+			showJailBreakWarning()
+		}
+
 		checkRequirements()
 	}
 
@@ -83,7 +83,7 @@ class LaunchViewController: BaseViewController {
 				title: .ok,
 				style: .default,
 				handler: { [weak self] _ in
-					self?.viewModel.jailBreakWarningDismissed()
+					self?.viewModel.dismissJailBreakWarning()
 				}
 			)
 		)
