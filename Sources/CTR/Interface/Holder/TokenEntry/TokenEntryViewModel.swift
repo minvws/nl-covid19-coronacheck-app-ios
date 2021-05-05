@@ -63,7 +63,6 @@ class TokenEntryViewModel {
 	@Bindable private(set) var userNeedsATokenButtonTitle: String?
 	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
 	@Bindable private(set) var resendVerificationButtonTitle: String?
-	@Bindable private(set) var resendVerificationButtonEnabled: Bool = true
 	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
 	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
 	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?

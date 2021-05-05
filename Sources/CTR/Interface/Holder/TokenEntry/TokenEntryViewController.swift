@@ -174,10 +174,6 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.userNeedsATokenButton.isHidden = !$0
 		}
 		
-		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
-			self?.sceneView.resendVerificationCodeButton.isEnabled = $0
-		}
-		
 		viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButton.isHidden = !$0
 		}
