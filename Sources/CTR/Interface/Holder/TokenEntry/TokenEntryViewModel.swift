@@ -176,11 +176,19 @@ class TokenEntryViewModel {
 
 	// MARK: Handling user input
 
+	func userDidUpdateTokenField(rawTokenInput: String?, currentValueOfVerificationInput: String?) {
+		handleInput(rawTokenInput, verificationInput: currentValueOfVerificationInput)
+	}
+
+	func userDidUpdateVerificationField(rawVerificationInput: String?, currentValueOfTokenInput: String?) {
+		handleInput(currentValueOfTokenInput, verificationInput: rawVerificationInput)
+	}
+
 	/// Check the next button state
 	/// - Parameters:
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
-	func handleInput(_ tokenInput: String?, verificationInput: String?) {
+	private func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
 		fieldErrorMessage = nil
 

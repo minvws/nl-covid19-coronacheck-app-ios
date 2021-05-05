@@ -89,7 +89,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput(nil, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: nil, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.sut.shouldShowTokenEntryField) == true
@@ -110,7 +110,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = false
 
 		// Act
-		sut.handleInput(invalidToken, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: invalidToken, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
@@ -135,7 +135,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput(validToken, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validToken
@@ -157,7 +157,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput("", verificationInput: emptyVerificationInput)
+		sut.userDidUpdateVerificationField(rawVerificationInput: emptyVerificationInput, currentValueOfTokenInput: "")
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidate) == false
@@ -177,7 +177,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput("", verificationInput: nonemptyVerificationInput)
+		sut.userDidUpdateVerificationField(rawVerificationInput: nonemptyVerificationInput, currentValueOfTokenInput: "")
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidate) == false
@@ -202,7 +202,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Act
-		sut.handleInput("", verificationInput: nonemptyVerificationInput)
+		sut.userDidUpdateVerificationField(rawVerificationInput: nonemptyVerificationInput, currentValueOfTokenInput: "")
 
 		// Assertn
 		expect(self.tokenValidatorSpy.invokedValidate) == false
@@ -1297,7 +1297,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "") // setup sut so that shouldShowVerificationEntryField == true
 
 		// Act
-		sut.handleInput(validToken, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validToken
