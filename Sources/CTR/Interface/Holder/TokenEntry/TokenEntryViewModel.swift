@@ -23,7 +23,7 @@ class TokenEntryViewModel {
 		case withRequestTokenProvided(originalRequestToken: RequestToken)
 	}
 
-	// MARK: - Bindables
+	// MARK: - Bindable Strings
 
 	/// The navbar title
 	@Bindable private(set) var title: String = ""
@@ -36,6 +36,15 @@ class TokenEntryViewModel {
 	@Bindable private(set) var verificationInfo = ""
 	@Bindable private(set) var verificationPlaceholder = ""
 	@Bindable private(set) var primaryTitle = ""
+	@Bindable private(set) var fieldErrorMessage: String?
+	@Bindable private(set) var userNeedsATokenButtonTitle: String?
+	@Bindable private(set) var resendVerificationButtonTitle: String?
+	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
+	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
+	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?
+	@Bindable private(set) var confirmResendVerificationAlertCancelButton: String?
+
+	// MARK: - Bindable Boolean state
 
 	/// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
 	@Bindable private(set) var shouldShowProgress: Bool = false {
@@ -48,40 +57,32 @@ class TokenEntryViewModel {
 			)
 		}
 	}
-
-	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
-	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
-	@Bindable private(set) var shouldShowNextButton: Bool = true
-
-	/// Don't update directly. Instead, see `preventEnablingOfNextButton`.
+	/// Do not set directly. Instead, see `preventEnablingOfNextButton`.
 	@Bindable private(set) var shouldEnableNextButton: Bool = false {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
 	}
-	@Bindable private(set) var fieldErrorMessage: String?
-	@Bindable private(set) var userNeedsATokenButtonTitle: String?
-	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
-	@Bindable private(set) var resendVerificationButtonTitle: String?
-	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
-	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
-	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?
-	@Bindable private(set) var confirmResendVerificationAlertCancelButton: String?
 
+	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
+	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
+	@Bindable private(set) var shouldShowNextButton: Bool = true
+	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
 	@Bindable private(set) var shouldShowResendVerificationButton: Bool = false
 
-	/// Show internet error
+	// MARK: - Bindables, other
+
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
 
-	// MARK: - Private vars
+	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
 	private let proofManager: ProofManaging?
-	private var requestToken: RequestToken?
 	private let tokenValidator: TokenValidatorProtocol
 
-	// Counter that tracks the countdown before the SMS can be resent
-	private var resendCountdownCounter = 10
+	// MARK: - Private State:
+
+	private var requestToken: RequestToken?
 	private var initializationMode: InitializationMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
