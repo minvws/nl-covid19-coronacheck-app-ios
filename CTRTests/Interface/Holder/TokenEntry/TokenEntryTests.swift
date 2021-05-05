@@ -1189,6 +1189,64 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_clearTokenField_resetsUIForTokenEntry() {
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		let validToken = "xxx-yyyyyyyyyyyy-z2"
+
+		sut = mockedViewModel(withRequestToken: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: "")
+
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == true
+
+		// Act
+		sut.userDidUpdateTokenField(rawTokenInput: "", currentValueOfVerificationInput: "")
+
+		// Assert
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_changeTokenField_resetsUIForTokenEntry() {
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		let validToken = "xxx-yyyyyyyyyyyy-z2"
+
+		sut = mockedViewModel(withRequestToken: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: "")
+
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == true
+
+		// Act
+		sut.userDidUpdateTokenField(rawTokenInput: String(validToken.dropLast()), currentValueOfVerificationInput: "")
+
+		// Assert
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_invalid_showsError() {
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"

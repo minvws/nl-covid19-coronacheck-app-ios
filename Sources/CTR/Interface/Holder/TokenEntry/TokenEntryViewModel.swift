@@ -178,6 +178,16 @@ class TokenEntryViewModel {
 	// MARK: Handling user input
 
 	func userDidUpdateTokenField(rawTokenInput: String?, currentValueOfVerificationInput: String?) {
+
+		guard currentInputMode != .inputTokenWithVerificationCode else {
+			// User has changed the token field, this is not permitted during the `.inputTokenWithVerificationCode` mode,
+			// so abort and reset back to `.inputToken`
+			requestToken = nil
+			verificationCodeIsKnownToBeRequired = false
+			allowEnablingOfNextButton = false
+			return
+		}
+
 		handleInput(rawTokenInput, verificationInput: currentValueOfVerificationInput)
 	}
 
@@ -203,13 +213,16 @@ class TokenEntryViewModel {
 					allowEnablingOfNextButton = false
 					return
 				}
+
 				let validToken = tokenValidator.validate(sanitizedTokenInput)
 
-				if verificationCodeIsKnownToBeRequired {
-					allowEnablingOfNextButton = validToken && receivedNonemptyVerificationInput
-				} else {
-					allowEnablingOfNextButton = validToken
-				}
+				allowEnablingOfNextButton = {
+					if verificationCodeIsKnownToBeRequired {
+						return validToken && receivedNonemptyVerificationInput
+					} else {
+						return validToken
+					}
+				}()
 
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
