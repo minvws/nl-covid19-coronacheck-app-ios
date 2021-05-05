@@ -1282,37 +1282,6 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_withoutInitialRequestToken_handleInput_withValidToken_showingVerification_showsVerification() {
-
-		// Arrange
-		let validToken = "XXX-YYYYYYYYYYYY-Z2"
-
-		tokenValidatorSpy.stubbedValidateResult = true
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
-
-		sut = mockedViewModel(withRequestToken: nil)
-
-		sut.nextButtonTapped(validToken, verificationInput: "") // setup sut so that shouldShowVerificationEntryField == true
-
-		// Act
-		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: nil)
-
-		// Assert
-		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validToken
-		expect(self.sut.shouldEnableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
-		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
 	// MARK: - Skipping the entry when no verification is needed:
 
 	func test_withInitialRequestToken_whenNoVerificationIsRequired_shouldHideTheInputFields() {
