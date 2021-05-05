@@ -17,6 +17,7 @@ class LaunchViewModelTests: XCTestCase {
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
 		super.setUp()
@@ -27,6 +28,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
@@ -34,7 +36,8 @@ class LaunchViewModelTests: XCTestCase {
 			flavor: AppFlavor.holder,
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
-			jailBreakDetector: jailBreakProtocolSpy
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
 		)
 	}
 
@@ -174,14 +177,13 @@ class LaunchViewModelTests: XCTestCase {
 	func test_checkForJailBreak_notbroken_shouldwarn() {
 
 		// Given
-		jailBreakProtocolSpy.stubbedShouldWarnUserResult = true
+		userSettingsSpy.stubbedJailbreakWarningShown = false
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
-		expect(self.jailBreakProtocolSpy.invokedShouldWarnUser) == true
 		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == true
 		expect(self.sut.shouldShowJailBreakDialog) == false
 	}
@@ -189,14 +191,13 @@ class LaunchViewModelTests: XCTestCase {
 	func test_checkForJailBreak_broken_shouldwarn() {
 
 		// Given
-		jailBreakProtocolSpy.stubbedShouldWarnUserResult = true
+		userSettingsSpy.stubbedJailbreakWarningShown = false
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
-		expect(self.jailBreakProtocolSpy.invokedShouldWarnUser) == true
 		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == true
 		expect(self.sut.shouldShowJailBreakDialog) == true
 	}
@@ -204,14 +205,13 @@ class LaunchViewModelTests: XCTestCase {
 	func test_checkForJailBreak_notbroken_shouldnotwarn() {
 
 		// Given
-		jailBreakProtocolSpy.stubbedShouldWarnUserResult = false
+		userSettingsSpy.stubbedJailbreakWarningShown = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
-		expect(self.jailBreakProtocolSpy.invokedShouldWarnUser) == true
 		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == false
 		expect(self.sut.shouldShowJailBreakDialog) == false
 	}
@@ -219,14 +219,13 @@ class LaunchViewModelTests: XCTestCase {
 	func test_checkForJailBreak_broken_shouldnotwarn() {
 
 		// Given
-		jailBreakProtocolSpy.stubbedShouldWarnUserResult = false
+		userSettingsSpy.stubbedJailbreakWarningShown = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
 
 		// When
 		sut?.checkRequirements()
 
 		// Then
-		expect(self.jailBreakProtocolSpy.invokedShouldWarnUser) == true
 		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == false
 		expect(self.sut.shouldShowJailBreakDialog) == false
 	}
@@ -247,20 +246,20 @@ class LaunchViewModelTests: XCTestCase {
 		sut?.checkRequirements()
 
 		// Then
-		expect(self.jailBreakProtocolSpy.invokedShouldWarnUser) == false
 		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == false
 		expect(self.sut.shouldShowJailBreakDialog) == false
 	}
 
-	func test_dismissWarning() {
+	func test_dismissJailBreakWarning() {
 
 		// Given
-		expect(self.jailBreakProtocolSpy.invokedWarningHasBeenSeen) == false
+		userSettingsSpy.stubbedJailbreakWarningShown = false
 
 		// When
 		sut.jailBreakWarningDismissed()
 
 		// Then
-		expect(self.jailBreakProtocolSpy.invokedWarningHasBeenSeen) == true
+		expect(self.userSettingsSpy.invokedJailbreakWarningShownSetter) == true
+		expect(self.userSettingsSpy.invokedJailbreakWarningShown) == true
 	}
 }

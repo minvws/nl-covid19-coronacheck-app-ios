@@ -19,22 +19,4 @@ class JailBreakProtocolSpy: JailBreakProtocol {
 		invokedIsJailBrokenCount += 1
 		return stubbedIsJailBrokenResult
 	}
-
-	var invokedShouldWarnUser = false
-	var invokedShouldWarnUserCount = 0
-	var stubbedShouldWarnUserResult: Bool! = false
-
-	func shouldWarnUser() -> Bool {
-		invokedShouldWarnUser = true
-		invokedShouldWarnUserCount += 1
-		return stubbedShouldWarnUserResult
-	}
-
-	var invokedWarningHasBeenSeen = false
-	var invokedWarningHasBeenSeenCount = 0
-
-	func warningHasBeenSeen() {
-		invokedWarningHasBeenSeen = true
-		invokedWarningHasBeenSeenCount += 1
-	}
 }

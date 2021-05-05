@@ -13,24 +13,24 @@ protocol JailBreakProtocol {
 	/// Is this device jail broken?
 	func isJailBroken() -> Bool
 
-	/// Should we warn the user
-	func shouldWarnUser() -> Bool
-
-	/// The user has seen the warning
-	func warningHasBeenSeen()
+//	/// Should we warn the user
+//	func shouldWarnUser() -> Bool
+//
+//	/// The user has seen the warning
+//	func warningHasBeenSeen()
 }
 
 class JailBreakDetector: JailBreakProtocol, Logging {
 
-	/// The user settings to store if the warning should be shown / has been seen.
-	private var userSettings: UserSettingsProtocol
-
-	/// Initializer
-	/// - Parameter userSettings: the user settings
-	init(userSettings: UserSettingsProtocol = UserSettings()) {
-
-		self.userSettings = userSettings
-	}
+//	/// The user settings to store if the warning should be shown / has been seen.
+//	private var userSettings: UserSettingsProtocol
+//
+//	/// Initializer
+//	/// - Parameter userSettings: the user settings
+//	init(userSettings: UserSettingsProtocol = UserSettings()) {
+//
+//		self.userSettings = userSettings
+//	}
 
 	/// Is this device jail broken?
 	func isJailBroken() -> Bool {
@@ -46,15 +46,15 @@ class JailBreakDetector: JailBreakProtocol, Logging {
 		return false
 	}
 
-	/// Should we warn the user
-	func shouldWarnUser() -> Bool {
-
-		return !userSettings.jailbreakWarningShown
-	}
-
-	/// The user has seen the warning
-	func warningHasBeenSeen() {
-
-		userSettings.jailbreakWarningShown = true
-	}
+//	/// Should we warn the user
+//	func shouldWarnUser() -> Bool {
+//
+//		return !userSettings.jailbreakWarningShown
+//	}
+//
+//	/// The user has seen the warning
+//	func warningHasBeenSeen() {
+//
+//		userSettings.jailbreakWarningShown = true
+//	}
 }

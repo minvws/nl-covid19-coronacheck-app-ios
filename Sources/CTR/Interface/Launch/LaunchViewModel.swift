@@ -15,6 +15,7 @@ class LaunchViewModel {
 	private var remoteConfigManager: RemoteConfigManaging
 	private var proofManager: ProofManaging
 	private var jailBreakDetector: JailBreakProtocol
+	private var userSettings: UserSettingsProtocol
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -48,7 +49,8 @@ class LaunchViewModel {
 		flavor: AppFlavor,
 		remoteConfigManager: RemoteConfigManaging,
 		proofManager: ProofManaging,
-		jailBreakDetector: JailBreakProtocol = JailBreakDetector()) {
+		jailBreakDetector: JailBreakProtocol = JailBreakDetector(),
+		userSettings: UserSettingsProtocol = UserSettings()) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
@@ -56,6 +58,7 @@ class LaunchViewModel {
 		self.proofManager = proofManager
 		self.flavor = flavor
 		self.jailBreakDetector = jailBreakDetector
+		self.userSettings = userSettings
 
 		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
 		message = flavor == .holder  ? .holderLaunchText : .verifierLaunchText
@@ -79,7 +82,7 @@ class LaunchViewModel {
 
 	func jailBreakWarningDismissed() {
 
-		jailBreakDetector.warningHasBeenSeen()
+		userSettings.jailbreakWarningShown = true
 		shouldShowJailBreakDialog = false
 		handleState()
 	}
@@ -92,7 +95,7 @@ class LaunchViewModel {
 			return
 		}
 
-		if jailBreakDetector.shouldWarnUser() && jailBreakDetector.isJailBroken() {
+		if !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken() {
 			shouldShowJailBreakDialog = true
 		}
 	}

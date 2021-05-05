@@ -12,53 +12,12 @@ import Nimble
 class JailBreakTests: XCTestCase {
 
 	private var sut: JailBreakDetector!
-	private var userSettingSpy: UserSettingsSpy!
 
 	override func setUp() {
 
 		super.setUp()
 
-		userSettingSpy = UserSettingsSpy()
-		sut = JailBreakDetector(userSettings: userSettingSpy)
-	}
-
-	func test_shouldWarnUser() {
-
-		// Given
-		userSettingSpy.stubbedJailbreakWarningShown = false
-
-		// When
-		let shouldWarnUser = sut.shouldWarnUser()
-
-		// Then
-		expect(shouldWarnUser) == true
-		expect(self.userSettingSpy.invokedJailbreakWarningShownGetter) == true
-	}
-
-	func test_shouldWarnUser_alreadyWarned() {
-
-		// Given
-		userSettingSpy.stubbedJailbreakWarningShown = true
-
-		// When
-		let shouldWarnUser = sut.shouldWarnUser()
-
-		// Then
-		expect(shouldWarnUser) == false
-		expect(self.userSettingSpy.invokedJailbreakWarningShownGetter) == true
-	}
-
-	func test_warningHasBeenSeen() {
-
-		// Given
-		userSettingSpy.stubbedJailbreakWarningShown = false
-
-		// When
-		sut.warningHasBeenSeen()
-
-		// Then
-		expect(self.userSettingSpy.invokedJailbreakWarningShownSetter) == true
-		expect(self.userSettingSpy.invokedJailbreakWarningShown) == true
+		sut = JailBreakDetector()
 	}
 
 	func test_isJailBroken() {

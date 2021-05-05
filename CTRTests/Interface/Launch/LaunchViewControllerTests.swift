@@ -20,6 +20,7 @@ class LaunchViewControllerTests: XCTestCase {
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	var window = UIWindow()
 
@@ -33,6 +34,7 @@ class LaunchViewControllerTests: XCTestCase {
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
@@ -40,7 +42,8 @@ class LaunchViewControllerTests: XCTestCase {
 			flavor: AppFlavor.holder,
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
-			jailBreakDetector: jailBreakProtocolSpy
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
 		)
 
 		sut = LaunchViewController(viewModel: viewModel)
@@ -77,10 +80,10 @@ class LaunchViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	func test_showAlertDialog() {
+	func test_showJailBreakAlert() {
 
 		// Given
-		jailBreakProtocolSpy.stubbedShouldWarnUserResult = true
+		userSettingsSpy.stubbedJailbreakWarningShown = false
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
 
 		let viewModel = LaunchViewModel(
@@ -89,7 +92,8 @@ class LaunchViewControllerTests: XCTestCase {
 			flavor: AppFlavor.holder,
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
-			jailBreakDetector: jailBreakProtocolSpy
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
