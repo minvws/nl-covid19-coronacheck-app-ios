@@ -16,6 +16,7 @@ class AboutView: ScrolledStackView {
 		static let messageLineHeight: CGFloat = 22
 		static let messageLineKerning: CGFloat = -0.41
 		static let listHeaderLineHeight: CGFloat = 16
+		static let listHeaderHeight: CGFloat = 38
 		static let versionLineHeight: CGFloat = 18
 		static let versionLineKerning: CGFloat = -0.24
 	}
@@ -67,6 +68,14 @@ class AboutView: ScrolledStackView {
 		stackView.addArrangedSubview(itemStackView)
 		stackView.setCustomSpacing(24, after: itemStackView)
 		stackView.addArrangedSubview(versionLabel)
+	}
+
+	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
+		NSLayoutConstraint.activate([
+			listHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.listHeaderHeight)
+		])
 	}
 
 	override func setupAccessibility() {
