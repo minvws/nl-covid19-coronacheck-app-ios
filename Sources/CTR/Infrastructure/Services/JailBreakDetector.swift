@@ -55,6 +55,6 @@ class JailBreakDetector: JailBreakProtocol, Logging {
 	/// The user has seen the warning
 	func warningHasBeenSeen() {
 
-//		userSettings.jailbreakWarningShown = true
+		userSettings.jailbreakWarningShown = true
 	}
 }

@@ -75,7 +75,7 @@ class LaunchViewController: BaseViewController {
 
 		let alertController = UIAlertController(
 			title: .jailbrokenTitle,
-			message: .jailbrokenTitle,
+			message: .jailbrokenMessage,
 			preferredStyle: .alert
 		)
 		alertController.addAction(

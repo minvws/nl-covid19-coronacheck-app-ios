@@ -14,7 +14,7 @@ class LaunchViewModel {
 	private var versionSupplier: AppVersionSupplierProtocol
 	private var remoteConfigManager: RemoteConfigManaging
 	private var proofManager: ProofManaging
-	private var jailBreakDetector: JailBreakProtocol = JailBreakDetector()
+	private var jailBreakDetector: JailBreakProtocol
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -47,13 +47,15 @@ class LaunchViewModel {
 		versionSupplier: AppVersionSupplierProtocol,
 		flavor: AppFlavor,
 		remoteConfigManager: RemoteConfigManaging,
-		proofManager: ProofManaging) {
+		proofManager: ProofManaging,
+		jailBreakDetector: JailBreakProtocol = JailBreakDetector()) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
 		self.remoteConfigManager = remoteConfigManager
 		self.proofManager = proofManager
 		self.flavor = flavor
+		self.jailBreakDetector = jailBreakDetector
 
 		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
 		message = flavor == .holder  ? .holderLaunchText : .verifierLaunchText
