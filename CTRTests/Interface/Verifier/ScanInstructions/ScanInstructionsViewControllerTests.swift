@@ -50,7 +50,7 @@ class ScanInstructionsViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.stackView.arrangedSubviews)
 			.to(haveCount(10), description: "There should be 10 items")
 
-        sut.assertImage()
+		sut.assertImage(precision: 0.9)
 	}
 
 	func test_primaryButtonTapped() {

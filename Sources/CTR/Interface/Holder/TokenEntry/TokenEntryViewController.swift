@@ -151,7 +151,7 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 		
-		viewModel.$enableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
+		viewModel.$shouldEnableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
@@ -307,6 +307,12 @@ extension TokenEntryViewController: UITextFieldDelegate {
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		
 		textField.resignFirstResponder()
+
+		if sceneView.primaryButton.isEnabled {
+			// Simulate a tap on the next button:
+			sceneView.primaryButton.sendActions(for: .touchUpInside)
+		}
+
 		return true
 	}
 	
