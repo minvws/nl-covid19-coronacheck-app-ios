@@ -1,3 +1,6 @@
+"jailbroken.title" = "Alert titel voor rooted device";
+"jailbroken.message" = "Alert content voor rooted device";
+
 "holder.tokenentry.modal.notoken.title" = "Ik heb geen code";
 "holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 "holder.tokenentry.regularflow.button.notoken" = "Ik heb geen code";

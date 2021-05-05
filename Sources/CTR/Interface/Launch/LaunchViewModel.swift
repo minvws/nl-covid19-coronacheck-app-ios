@@ -7,34 +7,20 @@
 
 import UIKit
 
-class LaunchViewModel: Logging {
+class LaunchViewModel {
 
-	/// The logging Category
-	var loggingCategory: String = "LaunchViewModel"
+	private weak var coordinator: AppCoordinatorDelegate?
 
-	/// App Coordinator Delegate
-	weak var coordinator: AppCoordinatorDelegate?
+	private var versionSupplier: AppVersionSupplierProtocol
+	private var remoteConfigManager: RemoteConfigManaging
+	private var proofManager: ProofManaging
+	private var jailBreakDetector: JailBreakProtocol = JailBreakDetector()
 
-	/// The current app version supplier
-	var versionSupplier: AppVersionSupplierProtocol
-
-	/// The remote config manager
-	var remoteConfigManager: RemoteConfigManaging
-
-	/// The proof manager
-	var proofManager: ProofManaging
-
-	/// flag for updating configuration
 	private var isUpdatingConfiguration = false
-
-	/// flag for updating public keys
 	private var isUpdatingIssuerPublicKeys = false
-
-	/// The launch state of the configuration
 	private var configStatus: LaunchState?
-
-	/// The launch state of the issuer public keys
 	private var issuerPublicKeysStatus: LaunchState?
+	private var flavor: AppFlavor
 
 	/// The title of the launch page
 	@Bindable private(set) var title: String
@@ -47,6 +33,9 @@ class LaunchViewModel: Logging {
 
 	/// The icon of the launch page
 	@Bindable private(set) var appIcon: UIImage?
+
+	/// Should we show the jailbreak warning?
+	@Bindable private(set) var shouldShowJailBreakDialog: Bool = false
 
 	/// Initializer
 	/// - Parameters:
@@ -64,6 +53,7 @@ class LaunchViewModel: Logging {
 		self.versionSupplier = versionSupplier
 		self.remoteConfigManager = remoteConfigManager
 		self.proofManager = proofManager
+		self.flavor = flavor
 
 		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
 		message = flavor == .holder  ? .holderLaunchText : .verifierLaunchText
@@ -80,13 +70,33 @@ class LaunchViewModel: Logging {
 	/// Check the requirements
 	func checkRequirements() {
 
-		logInfo("Checking Requirements")
+		detectJailBreak()
 		updateConfiguration()
 		updateKeys()
 	}
 
+	func jailBreakWarningDismissed() {
+
+		jailBreakDetector.warningHasBeenSeen()
+		shouldShowJailBreakDialog = false
+		handleState()
+	}
+
+	private func detectJailBreak() {
+
+		guard flavor == .holder else {
+			// Only enable for the holder
+			shouldShowJailBreakDialog = false
+			return
+		}
+
+		if jailBreakDetector.shouldWarnUser() && jailBreakDetector.isJailBroken() {
+			shouldShowJailBreakDialog = true
+		}
+	}
+
 	/// Update the configuration
-	func updateConfiguration() {
+	private func updateConfiguration() {
 
 		// Execute once.
 		guard !isUpdatingConfiguration else {
@@ -104,7 +114,7 @@ class LaunchViewModel: Logging {
 	}
 
 	/// Update the Issuer Public keys
-	func updateKeys() {
+	private func updateKeys() {
 
 		// Execute once.
 		guard !isUpdatingIssuerPublicKeys else {
@@ -129,10 +139,11 @@ class LaunchViewModel: Logging {
 	}
 
 	/// Handle the state of the updates
-	func handleState() {
+	private func handleState() {
 
 		guard let configStatus = configStatus,
-			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
+			  let issuerPublicKeysStatus = issuerPublicKeysStatus,
+			  !shouldShowJailBreakDialog else {
 			return
 		}
 

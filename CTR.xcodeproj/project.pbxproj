@@ -158,6 +158,14 @@
 		6D4824EC260B391F00C2BD52 /* ScrolledStackWithButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */; };
 		6D4824ED260B391F00C2BD52 /* ScrolledStackWithButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */; };
 		6D4A977A25BDA6410084CAA1 /* ProcessInfo+Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4A977925BDA6410084CAA1 /* ProcessInfo+Testing.swift */; };
+		6D4F6878264273FD00AF9B00 /* IOSSecuritySuite in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4F6877264273FD00AF9B00 /* IOSSecuritySuite */; };
+		6D4F687A264275CC00AF9B00 /* JailbreakDetectionLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F6879264275CC00AF9B00 /* JailbreakDetectionLocalization.swift */; };
+		6D4F687B264275CC00AF9B00 /* JailbreakDetectionLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F6879264275CC00AF9B00 /* JailbreakDetectionLocalization.swift */; };
+		6D4F687D264276BB00AF9B00 /* JailBreakDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F687C264276BB00AF9B00 /* JailBreakDetector.swift */; };
+		6D4F687E264276BB00AF9B00 /* JailBreakDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F687C264276BB00AF9B00 /* JailBreakDetector.swift */; };
+		6D4F688026427A5D00AF9B00 /* TimeInterval+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F687F26427A5D00AF9B00 /* TimeInterval+Accessibility.swift */; };
+		6D4F688126427A5D00AF9B00 /* TimeInterval+Accessibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F687F26427A5D00AF9B00 /* TimeInterval+Accessibility.swift */; };
+		6D4F6883264299C000AF9B00 /* IOSSecuritySuite in Frameworks */ = {isa = PBXBuildFile; productRef = 6D4F6882264299C000AF9B00 /* IOSSecuritySuite */; };
 		6D4F6E1225DE970600557326 /* holder_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4F6E1125DE970600557326 /* holder_logo.png */; };
 		6D4F6E1725DE972C00557326 /* splash_ministerie.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4F6E1625DE972C00557326 /* splash_ministerie.png */; };
 		6D4F6E3A25DE9F2B00557326 /* verifier_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 6D4F6E1B25DE9C8800557326 /* verifier_logo.png */; };
@@ -697,6 +705,9 @@
 		6D47C5C125DA5C49004C24C7 /* VerifierScanViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifierScanViewModel.swift; sourceTree = "<group>"; };
 		6D4824EB260B391F00C2BD52 /* ScrolledStackWithButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrolledStackWithButtonView.swift; sourceTree = "<group>"; };
 		6D4A977925BDA6410084CAA1 /* ProcessInfo+Testing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ProcessInfo+Testing.swift"; sourceTree = "<group>"; };
+		6D4F6879264275CC00AF9B00 /* JailbreakDetectionLocalization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JailbreakDetectionLocalization.swift; sourceTree = "<group>"; };
+		6D4F687C264276BB00AF9B00 /* JailBreakDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JailBreakDetector.swift; sourceTree = "<group>"; };
+		6D4F687F26427A5D00AF9B00 /* TimeInterval+Accessibility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeInterval+Accessibility.swift"; sourceTree = "<group>"; };
 		6D4F6E1125DE970600557326 /* holder_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = holder_logo.png; sourceTree = "<group>"; };
 		6D4F6E1625DE972C00557326 /* splash_ministerie.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash_ministerie.png; sourceTree = "<group>"; };
 		6D4F6E1B25DE9C8800557326 /* verifier_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = verifier_logo.png; sourceTree = "<group>"; };
@@ -935,6 +946,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C195C8C26208042002F0387 /* AppAuth in Frameworks */,
+				6D4F6883264299C000AF9B00 /* IOSSecuritySuite in Frameworks */,
 				6D9D3B0F25FA3E2F0031DA5D /* clcore.framework in Frameworks */,
 				3C195C9226208042002F0387 /* CocoaLumberjackSwift in Frameworks */,
 				3C195C9426208043002F0387 /* MBProgressHUD in Frameworks */,
@@ -951,6 +963,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C195C8126207D7B002F0387 /* CocoaLumberjack in Frameworks */,
+				6D4F6878264273FD00AF9B00 /* IOSSecuritySuite in Frameworks */,
 				3C195C7A26207D40002F0387 /* AppAuth in Frameworks */,
 				6D9D3B0E25FA3E2F0031DA5D /* clcore.framework in Frameworks */,
 				3C195C8426207DA4002F0387 /* MBProgressHUD in Frameworks */,
@@ -1364,6 +1377,7 @@
 				6DE6FD7825C18952006602AC /* RemoteConfiguration */,
 				6D1F304925CBDC22000E901D /* Services.swift */,
 				6D43AD05262DABC700694D85 /* UserSettings.swift */,
+				6D4F687C264276BB00AF9B00 /* JailBreakDetector.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1592,15 +1606,16 @@
 		6DB3C27825F127CD00B41B46 /* Holder */ = {
 			isa = PBXGroup;
 			children = (
+				6D97233125FA19B6008D93AA /* AboutTestResultsLocalization.swift */,
 				6DB386EB25D17E9A00B2CD7C /* AppointmentLocalization.swift */,
 				6D8E65F026010F5B00F79CFE /* BannerLocalization.swift */,
-				6D97233125FA19B6008D93AA /* AboutTestResultsLocalization.swift */,
 				6DBFE47925D2C60B00B3D006 /* ChooseProviderLocalization.swift */,
 				6D27551125D1259D00164F2E /* DashboardLocalization.swift */,
 				6DFF55862608AD0A0048E801 /* EnlargedLocalization.swift */,
 				6DB3C33225F1301E00B41B46 /* HolderConsentLocalization.swift */,
 				6DB3C32925F12FF600B41B46 /* HolderMenuLocalization.swift */,
 				6DB3C2C925F12CCE00B41B46 /* HolderOnboardingLocalization.swift */,
+				6D4F6879264275CC00AF9B00 /* JailbreakDetectionLocalization.swift */,
 				6D5D203925BF1C0A00DC2E27 /* Localizable.strings */,
 				6D02446B25D3BDD200EF8D32 /* TestResultsLocalization.swift */,
 				6DD19D7925D5516F001FDDDC /* TokenEntryLocalization.swift */,
@@ -1859,6 +1874,7 @@
 				6DC6CCEF25C3039C00060237 /* String+Data.swift */,
 				6D54AAEF25C8532200D92212 /* String+Dictionary.swift */,
 				6D7C908825CA86FE00AEC5DE /* String+extension.swift */,
+				6D4F687F26427A5D00AF9B00 /* TimeInterval+Accessibility.swift */,
 				6D7FFAE825C9AF6B00B5482F /* UIDevice+ScreenType.swift */,
 				6DAACD0925CEBAA200D3C320 /* UIEdgeInsets+Convenience.swift */,
 				6DFB73EC25DFA32D003D6243 /* UINavigationController+Style.swift */,
@@ -2127,6 +2143,7 @@
 				3C195C9326208043002F0387 /* MBProgressHUD */,
 				3C195C9526208043002F0387 /* Lottie */,
 				3C195C9726208043002F0387 /* FirebaseCrashlytics */,
+				6D4F6882264299C000AF9B00 /* IOSSecuritySuite */,
 			);
 			productName = CoronaTester;
 			productReference = 6DD7D89D25D26D3A00B97B7F /* Verifier.app */;
@@ -2155,6 +2172,7 @@
 				3C195C8326207DA4002F0387 /* MBProgressHUD */,
 				3C195C8626207E00002F0387 /* Lottie */,
 				3C195C8926207F0D002F0387 /* FirebaseCrashlytics */,
+				6D4F6877264273FD00AF9B00 /* IOSSecuritySuite */,
 			);
 			productName = CoronaTester;
 			productReference = 6DDEFAF025AEDCA800A6912A /* CTR.app */;
@@ -2222,6 +2240,7 @@
 				3C195CD726208812002F0387 /* XCRemoteSwiftPackageReference "OHHTTPStubs" */,
 				3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */,
 				3C565B0D262ECBBA00E17DD7 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+				6D4F6876264273FD00AF9B00 /* XCRemoteSwiftPackageReference "IOSSecuritySuite" */,
 			);
 			productRefGroup = 6DDEFAF125AEDCA800A6912A /* Products */;
 			projectDirPath = "";
@@ -2404,6 +2423,7 @@
 				6DB3C30D25F12D5E00B41B46 /* HolderOnboardingLocalization.swift in Sources */,
 				6D283A5026131DBE00E9208E /* ScrollView.swift in Sources */,
 				6DD7D81925D26D3A00B97B7F /* UserDefaults.swift in Sources */,
+				6D4F688126427A5D00AF9B00 /* TimeInterval+Accessibility.swift in Sources */,
 				6DBFE4BE25D2F8A300B3D006 /* ProofManaging.swift in Sources */,
 				6DD7D81A25D26D3A00B97B7F /* DashboardImage.swift in Sources */,
 				6D9D3AB825FA297E0031DA5D /* SignedTestResultState.swift in Sources */,
@@ -2412,9 +2432,11 @@
 				6DD7D81C25D26D3A00B97B7F /* OnboardingManager.swift in Sources */,
 				6DD19DDF25D6DD8F001FDDDC /* InformationViewModel.swift in Sources */,
 				6DD7D81E25D26D3A00B97B7F /* AppCoordinator.swift in Sources */,
+				6D4F687B264275CC00AF9B00 /* JailbreakDetectionLocalization.swift in Sources */,
 				6DB3C30525F12D5800B41B46 /* TokenEntryLocalization.swift in Sources */,
 				6DD7D81F25D26D3A00B97B7F /* NetworkConfiguration.swift in Sources */,
 				6DC2419626243408001457B3 /* ForcedInformationCoordinator.swift in Sources */,
+				6D4F687E264276BB00AF9B00 /* JailBreakDetector.swift in Sources */,
 				6DC8F284262494D600C190E6 /* ForcedInformationConsentViewModel.swift in Sources */,
 				6DB892EC2611AA2C00C52A7C /* AppFlavor.swift in Sources */,
 				6DD7D82025D26D3A00B97B7F /* RemoteConfiguration.swift in Sources */,
@@ -2632,6 +2654,7 @@
 				6DC6CCE325C2F7D100060237 /* UserDefaults.swift in Sources */,
 				6DBFE4BD25D2F8A300B3D006 /* ProofManaging.swift in Sources */,
 				6D283A4F26131DBE00E9208E /* ScrollView.swift in Sources */,
+				6D4F688026427A5D00AF9B00 /* TimeInterval+Accessibility.swift in Sources */,
 				6D5A7C0325D174470008B904 /* DashboardImage.swift in Sources */,
 				6D92849525B5CB96009D4350 /* Haptic.swift in Sources */,
 				6D7C909425CA9D2600AEC5DE /* OnboardingManager.swift in Sources */,
@@ -2640,9 +2663,11 @@
 				6DFCC7392625B5070019FC9F /* SharedCoordinator.swift in Sources */,
 				6D164D4D25F374ED00A86409 /* AppVersionSupplier.swift in Sources */,
 				6D92848A25B5CB12009D4350 /* AppCoordinator.swift in Sources */,
+				6D4F687A264275CC00AF9B00 /* JailbreakDetectionLocalization.swift in Sources */,
 				6D037A2A25E66D4C006C2BFA /* EnlargedQRViewModel.swift in Sources */,
 				6DAE8BDC25CB242700AAF2A7 /* NetworkConfiguration.swift in Sources */,
 				6DE6FD7A25C189A3006602AC /* RemoteConfiguration.swift in Sources */,
+				6D4F687D264276BB00AF9B00 /* JailBreakDetector.swift in Sources */,
 				6DC2419526243408001457B3 /* ForcedInformationCoordinator.swift in Sources */,
 				6DC8F283262494D600C190E6 /* ForcedInformationConsentViewModel.swift in Sources */,
 				6DB892EB2611AA2C00C52A7C /* AppFlavor.swift in Sources */,
@@ -3956,6 +3981,14 @@
 				minimumVersion = 9.0.0;
 			};
 		};
+		6D4F6876264273FD00AF9B00 /* XCRemoteSwiftPackageReference "IOSSecuritySuite" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/securing/IOSSecuritySuite";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.8.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -4048,6 +4081,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 3CF42A242628B4F600AAC3B2 /* XCRemoteSwiftPackageReference "Nimble" */;
 			productName = Nimble;
+		};
+		6D4F6877264273FD00AF9B00 /* IOSSecuritySuite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D4F6876264273FD00AF9B00 /* XCRemoteSwiftPackageReference "IOSSecuritySuite" */;
+			productName = IOSSecuritySuite;
+		};
+		6D4F6882264299C000AF9B00 /* IOSSecuritySuite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6D4F6876264273FD00AF9B00 /* XCRemoteSwiftPackageReference "IOSSecuritySuite" */;
+			productName = IOSSecuritySuite;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
