@@ -42,7 +42,7 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.title) == .holderAboutTitle
 		expect(self.sut.message) == .holderAboutText
 		expect(self.sut.listHeader) == .holderAboutReadMore
-		expect(self.sut.menu).to(haveCount(2), description: "There should be 2 elements")
+		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu.first?.identifier) == .privacyStatement
 		expect(self.sut.menu.last?.identifier) == .accessibility
 		expect(self.sut.version.contains("testInitHolder")) == true
@@ -63,7 +63,7 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.title) == .verifierAboutTitle
 		expect(self.sut.message) == .verifierAboutText
 		expect(self.sut.listHeader) == .verifierAboutReadMore
-		expect(self.sut.menu).to(haveCount(2), description: "There should be 2 elements")
+		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu.first?.identifier) == .terms
 		expect(self.sut.menu.last?.identifier) == .accessibility
 		expect(self.sut.version.contains("testInitVerifier")) == false // verifier version not in target language file.
