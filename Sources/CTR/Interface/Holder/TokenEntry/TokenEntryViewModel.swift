@@ -283,7 +283,8 @@ class TokenEntryViewModel {
 
 		guard let tokenInput = tokenInput else { return }
 
-		if let verification = verificationInput, !verification.isEmpty {
+		if currentInputMode == .inputVerificationCode || currentInputMode == .inputTokenWithVerificationCode,
+		   let verification = verificationInput, !verification.isEmpty {
 			fieldErrorMessage = nil
 			if let token = requestToken {
 				fetchProviders(token, verificationCode: sanitize(verification))

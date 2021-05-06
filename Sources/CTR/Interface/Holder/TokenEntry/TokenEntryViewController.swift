@@ -321,7 +321,7 @@ extension TokenEntryViewController: UITextFieldDelegate {
 					viewModel.userDidUpdateTokenField(rawTokenInput: updatedText, currentValueOfVerificationInput: sceneView.verificationEntryView.inputField.text)
 					
 				case TextFieldTag.verificationEntry.rawValue:
-					viewModel.userDidUpdateVerificationField(rawVerificationInput: sceneView.tokenEntryView.inputField.text, currentValueOfTokenInput: updatedText)
+					viewModel.userDidUpdateVerificationField(rawVerificationInput: updatedText, currentValueOfTokenInput: sceneView.tokenEntryView.inputField.text)
 					
 				default:
 					break
