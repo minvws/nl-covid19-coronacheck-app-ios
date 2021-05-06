@@ -112,7 +112,7 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR code";
 "verifier.start.header" = "Get started";
-"verifier.start.message" = "Now scan the QR codes of your visitors. But please note: you're only allowed to give access to visitors with a valid QR code. How scanning works.";
+"verifier.start.message" = "Now scan the QR codes of your visitors. But please note: you're only allowed to give access to visitors with a valid QR code. <a href=\"https://coronacheck.nl/scanner\">How scanning works.</a>";
 "verifier.start.button.title" = "Start scanning";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 

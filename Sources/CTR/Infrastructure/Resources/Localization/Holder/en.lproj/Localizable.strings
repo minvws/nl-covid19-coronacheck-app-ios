@@ -39,13 +39,13 @@
 /* Voice over voor geldigheid QR code */
 "holder.dashboard.qr.pm" = "pm";
 /* Link to the faq for the holder */
-"holder.url.faq" = "https://coronacheck.nl/nl/faq-in-app";
+"holder.url.faq" = "https://coronacheck.nl/en/faq-in-app";
 /* MARK: - URL */
-"holder.url.appointment" = "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app";
+"holder.url.appointment" = "https://coronacheck.nl/en/testafspraak-in-app";
 /* Link to the privacy policy for the holder */
-"holder.url.privacy" = "https://coronacheck.nl/nl/privacy-in-app";
+"holder.url.privacy" = "https://coronacheck.nl/en/privacy-in-app";
 
-"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Learn more</a> about which information the QR code contains.";
+"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/en/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.regularflow.title" = "Retrieve test result";
@@ -111,7 +111,7 @@
 /* MARK: - New Terms */
 "new.terms.title" = "We've updated our policy";
 "new.terms.highlights" = "<b>This has changed/b><br\><ul><li> Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
-"new.terms.description" = "Read the full privacy statement <a href=\"https://coronacheck.nl/nl/privacy-in-app\">here</a>.";
+"new.terms.description" = "Read the full privacy statement <a href=\"https://coronacheck.nl/en/privacy-in-app\">here</a>.";
 "new.terms.error.title" = "You can't proceed if you don't agree";
 "new.terms.error.message" = "You can't access the CoronaCheck app without agreeing to the updated terms.";
 "new.terms.agree" = "Agree";
