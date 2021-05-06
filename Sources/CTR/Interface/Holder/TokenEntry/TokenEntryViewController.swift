@@ -169,10 +169,6 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.userNeedsATokenButton.isHidden = !$0
 		}
 		
-		viewModel.$resendVerificationButtonEnabled.binding = { [weak self] in
-			self?.sceneView.resendVerificationCodeButton.isEnabled = $0
-		}
-		
 		viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
 			self?.sceneView.resendVerificationCodeButton.isHidden = !$0
 		}
@@ -322,10 +318,10 @@ extension TokenEntryViewController: UITextFieldDelegate {
 			
 			switch textField.tag {
 				case TextFieldTag.tokenEntry.rawValue:
-					viewModel.handleInput(updatedText, verificationInput: sceneView.verificationEntryView.inputField.text)
+					viewModel.userDidUpdateTokenField(rawTokenInput: updatedText, currentValueOfVerificationInput: sceneView.verificationEntryView.inputField.text)
 					
 				case TextFieldTag.verificationEntry.rawValue:
-					viewModel.handleInput(sceneView.tokenEntryView.inputField.text, verificationInput: updatedText)
+					viewModel.userDidUpdateVerificationField(rawVerificationInput: sceneView.tokenEntryView.inputField.text, currentValueOfTokenInput: updatedText)
 					
 				default:
 					break

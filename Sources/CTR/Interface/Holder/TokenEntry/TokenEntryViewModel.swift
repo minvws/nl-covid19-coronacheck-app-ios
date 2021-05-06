@@ -23,7 +23,7 @@ class TokenEntryViewModel {
 		case withRequestTokenProvided(originalRequestToken: RequestToken)
 	}
 
-	// MARK: - Bindables
+	// MARK: - Bindable Strings
 
 	/// The navbar title
 	@Bindable private(set) var title: String = ""
@@ -36,6 +36,15 @@ class TokenEntryViewModel {
 	@Bindable private(set) var verificationInfo = ""
 	@Bindable private(set) var verificationPlaceholder = ""
 	@Bindable private(set) var primaryTitle = ""
+	@Bindable private(set) var fieldErrorMessage: String?
+	@Bindable private(set) var userNeedsATokenButtonTitle: String?
+	@Bindable private(set) var resendVerificationButtonTitle: String?
+	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
+	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
+	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?
+	@Bindable private(set) var confirmResendVerificationAlertCancelButton: String?
+
+	// MARK: - Bindable Boolean state
 
 	/// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
 	@Bindable private(set) var shouldShowProgress: Bool = false {
@@ -48,41 +57,39 @@ class TokenEntryViewModel {
 			)
 		}
 	}
-
-	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
-	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
-	@Bindable private(set) var shouldShowNextButton: Bool = true
-
-	/// Don't update directly. Instead, see `preventEnablingOfNextButton`.
+	/// Do not set directly. Instead, see `preventEnablingOfNextButton`.
 	@Bindable private(set) var shouldEnableNextButton: Bool = false {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
 	}
-	@Bindable private(set) var fieldErrorMessage: String?
-	@Bindable private(set) var userNeedsATokenButtonTitle: String?
-	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
-	@Bindable private(set) var resendVerificationButtonTitle: String?
-	@Bindable private(set) var resendVerificationButtonEnabled: Bool = true
-	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
-	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
-	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?
-	@Bindable private(set) var confirmResendVerificationAlertCancelButton: String?
 
+	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
+	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
+	@Bindable private(set) var shouldShowNextButton: Bool = true
+	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
 	@Bindable private(set) var shouldShowResendVerificationButton: Bool = false
 
-	/// Show internet error
+	// MARK: - Bindables, other
+
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
 
-	// MARK: - Private vars
+	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
 	private let proofManager: ProofManaging?
-	private var requestToken: RequestToken?
 	private let tokenValidator: TokenValidatorProtocol
 
-	// Counter that tracks the countdown before the SMS can be resent
-	private var resendCountdownCounter = 10
+	// MARK: - Private State:
+
+	private var requestToken: RequestToken? {
+		didSet {
+			if requestToken == nil {
+				verificationCodeIsKnownToBeRequired = false
+				allowEnablingOfNextButton = false
+			}
+		}
+	}
 	private var initializationMode: InitializationMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
@@ -177,11 +184,27 @@ class TokenEntryViewModel {
 
 	// MARK: Handling user input
 
+	func userDidUpdateTokenField(rawTokenInput: String?, currentValueOfVerificationInput: String?) {
+
+		guard currentInputMode != .inputTokenWithVerificationCode else {
+			// User has changed the token field, this is not permitted during the `.inputTokenWithVerificationCode` mode,
+			// so abort and reset back to `.inputToken`
+			requestToken = nil
+			return
+		}
+
+		handleInput(rawTokenInput, verificationInput: currentValueOfVerificationInput)
+	}
+
+	func userDidUpdateVerificationField(rawVerificationInput: String?, currentValueOfTokenInput: String?) {
+		handleInput(currentValueOfTokenInput, verificationInput: rawVerificationInput)
+	}
+
 	/// Check the next button state
 	/// - Parameters:
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
-	func handleInput(_ tokenInput: String?, verificationInput: String?) {
+	private func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
 		fieldErrorMessage = nil
 
@@ -192,16 +215,19 @@ class TokenEntryViewModel {
 		switch initializationMode {
 			case .regular:
 				guard let sanitizedTokenInput = sanitizedTokenInput, !sanitizedTokenInput.isEmpty else {
-					allowEnablingOfNextButton = false
+					requestToken = nil
 					return
 				}
-				let validToken = tokenValidator.validate(sanitizedTokenInput)
 
-				if verificationCodeIsKnownToBeRequired {
-					allowEnablingOfNextButton = validToken && receivedNonemptyVerificationInput
-				} else {
-					allowEnablingOfNextButton = validToken
-				}
+				allowEnablingOfNextButton = {
+					let validToken = tokenValidator.validate(sanitizedTokenInput)
+
+					if verificationCodeIsKnownToBeRequired {
+						return validToken && receivedNonemptyVerificationInput
+					} else {
+						return validToken
+					}
+				}()
 
 			case .withRequestTokenProvided:
 				// Then we don't care about the tokenInput parameter, because it's hidden
@@ -255,9 +281,7 @@ class TokenEntryViewModel {
 	private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
 		fieldErrorMessage = nil
 
-		guard let tokenInput = tokenInput else {
-			return
-		}
+		guard let tokenInput = tokenInput else { return }
 
 		if let verification = verificationInput, !verification.isEmpty {
 			fieldErrorMessage = nil
@@ -390,9 +414,8 @@ class TokenEntryViewModel {
 
 	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
 	private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
-		update(inputMode: TokenEntryViewModel.calculateInputMode(
+		update(inputMode: initializationMode.calculateInputMode(
 				tokenValidityIndicator: tokenValidityIndicator,
-				initializationMode: initializationMode,
 				verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
 				isInProgress: shouldShowProgress,
 				hasEverMadeFieldsVisible: hasEverMadeFieldsVisible,
@@ -478,16 +501,26 @@ class TokenEntryViewModel {
 
 	// MARK: - Static private functions
 
-	private static func calculateInputMode(
+	/// Sanitize userInput of token & validation
+	private func sanitize(_ input: String) -> String {
+
+		return input
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+			.uppercased()
+	}
+}
+
+extension TokenEntryViewModel.InitializationMode {
+	func calculateInputMode(
 		tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
-		initializationMode: InitializationMode,
 		verificationCodeIsKnownToBeRequired: Bool,
 		isInProgress: Bool,
 		hasEverMadeFieldsVisible: Bool,
 		screenHasCompleted: Bool
 	) -> TokenEntryViewModel.InputMode {
 
-		switch initializationMode {
+		switch self {
 			case .regular:
 				if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
 					return .inputTokenWithVerificationCode
@@ -505,15 +538,6 @@ class TokenEntryViewModel {
 					}
 				}
 		}
-	}
-
-	/// Sanitize userInput of token & validation
-	private func sanitize(_ input: String) -> String {
-
-		return input
-			.trimmingCharacters(in: .whitespacesAndNewlines)
-			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
-			.uppercased()
 	}
 }
 
