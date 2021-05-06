@@ -32,6 +32,7 @@
 "holder.url.appointment" = "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app";
 /* Link to the privacy policy for the holder */
 "holder.url.privacy" = "https://coronacheck.nl/nl/privacy-in-app";
+"holder.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 
 "holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 
