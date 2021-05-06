@@ -110,9 +110,6 @@ class OnboardingViewController: BaseViewController {
 		// Handle touches
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
 
-		// Accessibility
-		button.accessibilityLabel = .back
-
 		// Make sure the text won't be truncated if the user opts for bold texts
 		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
 		
