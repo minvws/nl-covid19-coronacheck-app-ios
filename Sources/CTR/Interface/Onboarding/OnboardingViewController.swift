@@ -145,7 +145,6 @@ class OnboardingViewController: BaseViewController {
 		}
 	}
     
-	
 	/// Setup the page controller
 	private func setupPageController() {
 		
