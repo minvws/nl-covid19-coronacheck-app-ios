@@ -1,3 +1,17 @@
+/* Link naar web accessibility pagina */
+"verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
+
+/* Koptekst in de over de app pagina */
+"verifier.about.readmore" = "Lees meer";
+
+/* Menu item voor Toegankelijkheid */
+"verifier.menu.accessibility" = "Toegankelijkheid";
+
+/* Alert titel voor rooted device */
+"jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
+
+/* Alert content voor rooted device */
+"jailbroken.message" = "Let op: je apparaat is geroot. Je gegevens zijn mogelijk niet veilig.";
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";

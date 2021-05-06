@@ -1,156 +1,167 @@
+/* Link naar web accessibility pagina */
+"verifier.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
+
+/* Koptekst in de over de app pagina */
+"verifier.about.readmore" = "Read more";
+
+/* Menu item voor Toegankelijkheid */
+"verifier.menu.accessibility" = "Accessibility";
+
+/* Alert titel voor rooted device */
+"jailbroken.title" = "There are security risks";
+
+/* Alert content voor rooted device */
+"jailbroken.message" = "Beware: your device is rooted. Your data may not be secure.";
 /* MARK: - URL */
-"verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
-"verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
-"verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
+"verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
+"verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
 
-"verifier.result.identity.title" = "Controleer nu de gegevens";
-"verifier.result.identity.lastname" = "Achternaam";
-"verifier.result.identity.firstname" = "Voornaam";
-"verifier.result.identity.dayofbirth" = "Geboortedag";
-"verifier.result.identity.monthofbirth" = "Geboortemaand";
+"verifier.result.identity.title" = "Check personal details";
+"verifier.result.identity.lastname" = "Last name";
+"verifier.result.identity.firstname" = "First name";
+"verifier.result.identity.dayofbirth" = "Day of birth";
+"verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
+"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br/>In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect, the visitor is not allowed access.</p>";
 
 
 /* Voice over voor begin van een lijst */
-"general.list.accessibility.start" = "Begin van lijst.";
+"general.list.accessibility.start" = "Start of list.";
 
 /* Voice over voor einde van een lijst */
-"general.list.accessibility.end" = "Eind van lijst.";
+"general.list.accessibility.end" = "End of list.";
 /* MARK: - General */
-"general.cancel" = "Annuleer";
+"general.cancel" = "Cancel";
 /* MARK: - General */
-"general.close" = "Sluiten";
-"general.previous" = "Vorige";
-"general.back" = "Terug";
-"general.next" = "Volgende";
-"general.done" = "Klaar";
-"general.ok" = "Ok";
-"general.error.title" = "Sorry, er ging iets mis";
-"general.error.technical.text" = "Dat komt door een technische fout.";
-"general.error.technical.custom" = "Dat komt door een technische fout (%@)";
-"general.error.nointernet.title" = "Geen internetverbinding";
-"general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
-"general.menu.version" = "App versie %@ (%@)";
-"general.government" = "Rijksoverheid";
-"general.loading" = "Bezig met laden";
-"general.notification" = "Let op!";
-"general.menu.open" = "Open zijmenu";
-"general.menu.close" = "Sluit zijmenu";
-"general.list.accessibility" = "%@ van %@.";
+"general.close" = "Close";
+"general.previous" = "Previous";
+"general.back" = "Back";
+"general.next" = "Next";
+"general.done" = "Done";
+"general.ok" = "OK";
+"general.error.title" = "Sorry, something went wrong";
+"general.error.technical.text" = "Because of a technical error.";
+"general.error.technical.custom" = "Because of a technical error (%@)";
+"general.error.nointernet.title" = "No internet connection";
+"general.error.nointernet.text" = "You're not connected to the internet right now.";
+"general.menu.version" = "App version %@ (%@)";
+"general.government" = "Central Government";
+"general.loading" = "Loading";
+"general.notification" = "Watch out!";
+"general.menu.open" = "Open side menu";
+"general.menu.close" = "Close side menu";
+"general.list.accessibility" = "%@ of %@.";
 
 /* MARK: - Update App */
-"updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "Tijd voor een update";
-"updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
-"updateApp.button" = "Installeer update";
+"updateApp.error.message" = "Can't open the App Store.";
+"updateApp.title" = "Time for an update";
+"updateApp.content" = "To continue, download the latest version of the app";
+"updateApp.button" = "Install update";
 
 /* MARK: - EndOfLife */
-"endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "App buiten werking";
-"endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar Coronacheck.nl";
-"endOfLife.button" = "Ga naar CoronaCheck.nl";
+"endOfLife.error.message" = "Can't open the website.";
+"endOfLife.title" = "App out of order";
+"endOfLife.description" = "The app is no longer in use. For more information, go to CoronaCheck.nl";
+"endOfLife.button" = "Go to CoronaCheck.nl";
 
 /* MARK: - Internet Requird */
-"internet.required.button" = "Probeer opnieuw";
-"internet.required.text" = "Om de app op te starten heb je internet nodig.";
-"internet.required.title" = "Je hebt geen internetverbinding";
+"internet.required.button" = "Try again";
+"internet.required.text" = "To start the app, you need to be connected to the internet.";
+"internet.required.title" = "You're not connected to the internet";
 
 /* MARK: - New Terms */
-"new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"new.terms.highlights" = "<b>Dit is veranderd</b><br\><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
-"new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
-"new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
-"new.terms.error.message" = "Je hebt geen toegang de CoronaCheck Scanner-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
-"new.terms.agree" = "Akkoord";
-"new.terms.disagree" = "Niet akkoord";
+"new.terms.title" = "We've updated our policy";
+"new.terms.highlights" = "<b>Here's what changed</b><br\><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
+"new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
+"new.terms.error.title" = "You can't proceed if you don't agree";
+"new.terms.error.message" = "You don't have access to the CoronaCheck Scanner app if you don't agree to the updated policy.";
+"new.terms.agree" = "Agree";
+"new.terms.disagree" = "Don't agree";
 
 /* MARK: - Verifier Launch */
 "verifier.launch.title" = "CoronaCheck Scanner";
-"verifier.launch.text" = "We starten de app voor je op...";
-"verifier.launch.version" = "App versie %@ (build %@)";
+"verifier.launch.text" = "We're starting the app...";
+"verifier.launch.version" = "App version %@ (build %@)";
 
 /* MARK: - Verifier Menu */
-"verifier.menu.dashboard" = "Scan QR-code";
+"verifier.menu.dashboard" = "Scan QR code";
 "verifier.menu.support" = "Support";
-"verifier.menu.about" = "Over deze app";
-"verifier.menu.feedback" = "Geef ons feedback";
-"verifier.menu.privacy" = "Gebruikersvoorwaarden";
-"verifier.menu.accessibility" = "Toegankelijkheid";
+"verifier.menu.about" = "About this app";
+"verifier.menu.feedback" = "Give us feedback";
+"verifier.menu.privacy" = "Acceptable use policy";
 
 /* MARK: - Verifier Onboarding */
-"verifier.onboarding.title.safely" = "Alleen toegang na testen";
-"verifier.onboarding.message.safely" = "Bezoekers van bepaalde sociale, culturele of sportieve activiteiten moeten eerst een coronatest doen. Ook als zij gevaccineerd zijn. Bezoekers krijgen alleen toegang als uit de test blijkt dat ze geen corona hebben.";
-"verifier.onboarding.title.scanqr" = "Scan QR-code voor toegang";
-"verifier.onboarding.message.scanqr" = "De bezoeker laat een QR-code zien. Dat is het testbewijs. Met deze app scan je de QR-code van de bezoeker. De QR-code moet binnen %@ uur na het moment van testen gescand zijn.";
-"verifier.onboarding.title.access" = "Controle van identiteitsbewijs";
-"verifier.onboarding.message.access" = "Groen scherm? Vraag de bezoeker een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Zo weet je zeker dat de testuitslag van de bezoeker is en kun je toegang geven.";
-"verifier.onboarding.title.who" = "Voor wie is de scanner?";
-"verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw sociale, culturele of sportieve activiteit onder de aangewezen locaties valt.";
+"verifier.onboarding.title.safely" = "Only access after testing";
+"verifier.onboarding.message.safely" = "Visitors of certain social, cultural or athletic activities must take a coronavirus test first. Even if they're vaccinated. Visitors only get access when the test proves they do not have coronavirus.";
+"verifier.onboarding.title.scanqr" = "Scan QR code for access";
+"verifier.onboarding.message.scanqr" = "The visitor shows a QR code. This is the valid negative test declaration. With this app, you scan the visitor's QR code. The QR code must be scanned within %@ hours after testing.";
+"verifier.onboarding.title.access" = "Proof of identity check";
+"verifier.onboarding.message.access" = "Green screen? Ask the visitor to show their proof of identity. Check whether the data on your screen match the data on the proof of identity. This way, you're sure the test result belongs to the visitor and you can give them access.";
+"verifier.onboarding.title.who" = "Who is the scanner for?";
+"verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your social, cultural or athletic activity falls under the designated locations.";
 
 /* MARK: - Verifier Consent */
-"verifier.consent.title" = "Voorwaarden voor gebruik";
-"verifier.consent.message" = "In de gebruikersvoorwaarden staat hoe CoronaCheck Scanner werkt en wat je rechten zijn.";
-"verifier.consent.message.underlined" = "gebruikersvoorwaarden";
-"verifier.consent.item.1" = "In de QR-code staan <b>minimale gegevens</b> van de bezoeker";
-"verifier.consent.item.2" = "Deze gegevens mag je alleen gebruiken voor <b>controle van het testbewijs</b>";
-"verifier.consent.item.3" = "Gegevens van de bezoeker worden <b>nergens centraal opgeslagen</b> ";
-"verifier.consent.button" = "Ik heb de gebruikersvoorwaarden gelezen en ga hiermee akkoord.";
+"verifier.consent.title" = "Acceptable use policy";
+"verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
+"verifier.consent.message.underlined" = "acceptable use policy";
+"verifier.consent.item.1" = "The QR code contains <b>minimal data</b> of the visitor";
+"verifier.consent.item.2" = "You're only allowed to use this data to <b>check the valid negative test declaration</b>";
+"verifier.consent.item.3" = "The visitor's data is <b>not centrally stored anywhere</b>";
+"verifier.consent.button" = "I've read and agree to the acceptable use policy.";
 
 /* MARK: - Verifier Start */
-"verifier.start.title" = "Scan QR-code";
-"verifier.start.header" = "Aan de slag";
-"verifier.start.message" = "Scan nu de QR-codes van jouw bezoekers. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. <a href=\"https://coronacheck.nl/scanner\">Zo werkt scannen.</a>";
-"verifier.start.button.title" = "Start scannen";
-"verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
+"verifier.start.title" = "Scan QR code";
+"verifier.start.header" = "Get started";
+"verifier.start.message" = "Now scan the QR codes of your visitors. But please note: you're only allowed to give access to visitors with a valid QR code. How scanning works.";
+"verifier.start.button.title" = "Start scanning";
+"verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 
 /* MARK: - Verifier Scan Instructions */
-"verifier.instructions.title" = "Zo werkt scannen";
-"verifier.instructions.distance.title" = "1. Houd afstand";
-"verifier.instructions.distance.text" = "Druk op de knop ‘Start Scannen’ en vraag de bezoeker de QR-code te laten zien. Dat mag zowel via de CoronaCheck-app als op papier. De QR-code geldt als testbewijs en kan op veilige afstand uitgelezen worden.";
-"verifier.instructions.scan.title" = "2. Scan de QR-code";
-"verifier.instructions.scan.text" = "Richt de camera van je telefoon op het testbewijs van de bezoeker en scan de QR-code.";
-"verifier.instructions.access.title" = "3. Groen scherm";
-"verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldige negatieve testuitslag. Controleer nu of de gegevens op het groene scherm hetzelfde zijn als de gegevens op het identiteitsbewijs. Check? Dan mag de bezoeker naar binnen. Het kan zijn dat er ook een toegangskaartje nodig is.";
-"verifier.instructions.denied.title" = "4. Rood scherm";
-"verifier.instructions.denied.text" = "Rood scherm? Dat betekent niet dat de bezoeker corona heeft. Het betekent alleen dat de QR-code ongeldig is. Er is dus geen bewijs van een recente negatieve testuitslag. Dit kun je doen:<br\><br\><ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck-app laat zien. Een schermafbeelding of kopie van een QR-code uit de app geeft altijd een rood scherm.</li><li>Vraag de bezoeker de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li><li>Blijft er een rood scherm komen, terwijl de bezoeker wel een negatieve testuitslag heeft? Stuur de bezoeker naar onze helpdesk, telefoonnummer: <a href=\"tel:\\08001421\">0800-1421</a>.</li></ul> <br\>Er is altijd een groen scherm nodig voor toegang. Heeft de bezoeker geen (geldige) QR-code? Dan kun je de bezoeker niet binnenlaten. Kijk <a href=\"https://www.coronacheck.nl/scanner\">hier</a> voor meer informatie.";
+"verifier.instructions.title" = "How scanning works";
+"verifier.instructions.distance.title" = "1. Keep a distance";
+"verifier.instructions.distance.text" = "Press the 'Start Scanning' button and ask the visitor to show their QR code. They can show their code using the CoronaCheck app or the paper version. The QR code acts as a valid negative test declaration and can be read at a safe distance.";
+"verifier.instructions.scan.title" = "2. Scan the QR code";
+"verifier.instructions.scan.text" = "Point your phone camera at the visitor's valid negative test declaration. Scan the QR code.";
+"verifier.instructions.access.title" = "3. Green screen";
+"verifier.instructions.access.text" = "Green screen? The visitor has a valid negative test declaration. Now check whether the data on the green screen match the data on the proof of identity. All good? Then the visitor may enter. They might also need an entrance ticket.";
+"verifier.instructions.denied.title" = "4. Red screen";
+"verifier.instructions.denied.text" = "Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a recent negative test result. Here's what you can do: <br\><br\><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a negative test result? Direct the visitor to our help desk. Phone number: <a href=\"tel:\\08001421\">0800-1421</a>.</li></ul> <br\>A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter. Find more information <a href=\"https://www.coronacheck.nl/scanner\">here</a>.";
 
 /* MARK: - Verifier QR Scan */
-"verifier.scan.title" = "Scan QR-code";
-"verifier.scan.message" = "Richt je telefoon op de QR-code op het scherm van de bezoeker. Of op het papieren testbewijs.";
-"verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
-"verifier.scan.permission.title" = "Geen toegang tot camera";
-"verifier.scan.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
-"verifier.scan.permission.settings" = "Naar instellingen";
+"verifier.scan.title" = "Scan QR code";
+"verifier.scan.message" = "Point your device at the QR code on the visitor's screen. Or at the paper version of their valid negative test declaration.";
+"verifier.scan.torch.accessibility" = "Turn the flashlight on.";
+"verifier.scan.permission.title" = "No access to camera";
+"verifier.scan.permission.message" = "The app wants to access the camera to scan the QR code.";
+"verifier.scan.permission.settings" = "To settings";
 
 /* MARK: - Verifier Result */
-"verifier.result.access.title" = "Geldige QR-code";
-"verifier.result.demo.title" = "Demo QR-code gescand";
-"verifier.result.denied.title" = "Ongeldige QR-code";
-"verifier.result.denied.message" = "De bezoeker heeft geen geldig negatief testbewijs. Lees mogelijke oorzaken.";
-"verifier.result.denied.link" = "Lees mogelijke oorzaken";
-"verifier.result.next" = "Scan volgende";
+"verifier.result.access.title" = "Valid QR code";
+"verifier.result.demo.title" = "Demo QR code scanned";
+"verifier.result.denied.title" = "Invalid QR code";
+"verifier.result.denied.message" = "The visitor doesn't have a valid negative test declaration. See possible causes.";
+"verifier.result.denied.link" = "See possible causes.";
+"verifier.result.next" = "Scan next";
 "holder.testresults.january" = "JAN";
 "holder.testresults.february" = "FEB";
 "holder.testresults.march" = "MAR";
 "holder.testresults.april" = "APR";
-"holder.testresults.may" = "MEI";
+"holder.testresults.may" = "MAY";
 "holder.testresults.june" = "JUN";
 "holder.testresults.july" = "JUL";
 "holder.testresults.august" = "AUG";
 "holder.testresults.september" = "SEP";
-"holder.testresults.october" = "OKT";
+"holder.testresults.october" = "OCT";
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
 
 /* MARK: - Verifier Check Result */
-"verifier.result.check.title" = "Over de controle";
+"verifier.result.check.title" = "About the check";
 /* MARK: - Verifier Denied Instructions */
-"verifier.denied.title" = "Ongeldige QR-code";
-"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p>";
-"verifier.denied.message.two" = "<p><b>Wat nu?</b><br>Vraag de bezoeker eerst een test te doen. Als de testuitslag bekend is kan de bezoeker er in de CoronaCheck-app een QR-code van maken.</p>";
+"verifier.denied.title" = "Invalid QR code";
+"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b><ul><li>The person hasn't been tested</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li></ul></p>";
+"verifier.denied.message.two" = "<p><b>What to do now?</b><br>Ask the visitor to take a test first. Once the test result is known, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
 
 /* MARK: - Verifier About */
-"verifier.about.title" = "Over deze app";
-"verifier.about.text" = "CoronaCheck Scanner is ontwikkeld zodat sociale, culturele en sportieve locaties hun deuren kunnen openen. Denk bijvoorbeeld aan evenementen, musea en concerten. Met behulp van deze app krijgen alleen bezoekers die kortgeleden negatief op corona getest zijn toegang. Zo kan Nederland meer buiten de deur doen.";
-"verifier.about.readmore" = "Lees meer";
+"verifier.about.title" = "About this app";
+"verifier.about.text" = "CoronaCheck Scanner is created so that social, cultural and sports locations can open their doors again. Think for example of events, museums and concerts. With this app, only visitors that are able to prove they’ve recently tested negative for corona can get access. This way, the Netherlands can head out more often.";
