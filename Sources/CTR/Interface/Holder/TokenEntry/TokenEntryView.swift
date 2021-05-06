@@ -75,7 +75,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	
 	/// The message label
 	let textLabel: Label = {
-		
+
 		return Label(subhead: nil).multiline()
 	}()
 
@@ -198,7 +198,6 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	/// The  message
 	var text: String? {
 		didSet {
 			textLabel.text = text
@@ -238,6 +237,18 @@ class TokenEntryView: ScrolledStackWithButtonView {
 					string: $0,
 					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
 				)
+			}
+		}
+	}
+
+	var fieldErrorMessage: String? {
+		didSet {
+			if let message = fieldErrorMessage {
+				errorView.error = message
+				errorView.isHidden = false
+				textLabel.isHidden = true
+			} else {
+				errorView.isHidden = true
 			}
 		}
 	}
