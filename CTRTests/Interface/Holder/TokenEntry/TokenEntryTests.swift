@@ -1459,6 +1459,49 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorSpy.presentInformationPageCalled) == true
 	}
 
+	// MARK: - Other
+
+	func test_withoutInitialRequestToken_withAnInitialFetch_typedVerificationCode_clearTokenField_retypeToken_shouldIgnoreExistingVerificationCodeFieldValue() {
+		// Arrange
+		let validToken = "XXX-YYYYYYYYYYYY-Z2"
+
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+
+		sut = mockedViewModel(withRequestToken: nil)
+
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: "")
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == true
+
+		// Act
+		// Clear the token field
+		sut.userDidUpdateTokenField(rawTokenInput: "", currentValueOfVerificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == false
+
+		// Update the token field again:
+		// Simulate having entered a value into verification code before it was hidden
+
+		let nextValidToken = "TTTTTTTTTTTT"
+		let currentValueOfVerificationInput = "1234"
+		sut.userDidUpdateTokenField(rawTokenInput: "XXX-\(nextValidToken)-Z2", currentValueOfVerificationInput: currentValueOfVerificationInput)
+
+		proofManagerSpy.reset()
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+
+		sut.nextButtonTapped("XXX-\(nextValidToken)-Z2", verificationInput: currentValueOfVerificationInput)
+
+		// Assert
+
+		// The VM should ignore the verification input because it should be still in `inputToken` mode
+		// So it should submit to fetchTestResult with a nil Verification Code:
+		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == nextValidToken
+		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+	}
+	
 	// MARK: - Sugar
 
 	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {
