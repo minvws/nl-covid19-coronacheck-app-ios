@@ -138,7 +138,7 @@
 "holder.onboarding.title.validity" = "Validity of your negative test declaration";
 "holder.onboarding.message.validity" = "Want access to a certain social, cultural or sports events? Make sure your QR code is scanned at the entrance within %@ hour(s) after the moment you've been tested. When your negative test declaration expires, the QR code disappears from the app.";
 "holder.onboarding.title.privacy" = "Minimum amount of data";
-"holder.onboarding.message.privacy" = "Your QR code only states when you tested negative (no coronavirus), the time of testing, and the minimum amount of identifying data: your first name initial, your last name initial, your day of birth, and your month of both. We verify this information to make sure the test result is yours.";
+"holder.onboarding.message.privacy" = "Your QR code only states when you tested negative (no coronavirus), the time of testing, and the minimum amount of identifying data: your first name initial, your last name initial, your day of birth, and your month of birth. We verify this information to make sure the test result is yours.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";

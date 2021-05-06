@@ -22,7 +22,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br/>In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect, the visitor is not allowed access.</p>";
+"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br/>In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect<b>, the visitor is not allowed access.</p>";
 
 
 /* Voice over voor begin van een lijst */
