@@ -82,7 +82,14 @@ class TokenEntryViewModel {
 
 	// MARK: - Private State:
 
-	private var requestToken: RequestToken?
+	private var requestToken: RequestToken? {
+		didSet {
+			if requestToken == nil {
+				verificationCodeIsKnownToBeRequired = false
+				allowEnablingOfNextButton = false
+			}
+		}
+	}
 	private var initializationMode: InitializationMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
@@ -183,8 +190,6 @@ class TokenEntryViewModel {
 			// User has changed the token field, this is not permitted during the `.inputTokenWithVerificationCode` mode,
 			// so abort and reset back to `.inputToken`
 			requestToken = nil
-			verificationCodeIsKnownToBeRequired = false
-			allowEnablingOfNextButton = false
 			return
 		}
 
@@ -210,13 +215,13 @@ class TokenEntryViewModel {
 		switch initializationMode {
 			case .regular:
 				guard let sanitizedTokenInput = sanitizedTokenInput, !sanitizedTokenInput.isEmpty else {
-					allowEnablingOfNextButton = false
+					requestToken = nil
 					return
 				}
 
-				let validToken = tokenValidator.validate(sanitizedTokenInput)
-
 				allowEnablingOfNextButton = {
+					let validToken = tokenValidator.validate(sanitizedTokenInput)
+
 					if verificationCodeIsKnownToBeRequired {
 						return validToken && receivedNonemptyVerificationInput
 					} else {
@@ -276,9 +281,7 @@ class TokenEntryViewModel {
 	private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
 		fieldErrorMessage = nil
 
-		guard let tokenInput = tokenInput else {
-			return
-		}
+		guard let tokenInput = tokenInput else { return }
 
 		if let verification = verificationInput, !verification.isEmpty {
 			fieldErrorMessage = nil
@@ -411,9 +414,8 @@ class TokenEntryViewModel {
 
 	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
 	private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
-		update(inputMode: TokenEntryViewModel.calculateInputMode(
+		update(inputMode: initializationMode.calculateInputMode(
 				tokenValidityIndicator: tokenValidityIndicator,
-				initializationMode: initializationMode,
 				verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
 				isInProgress: shouldShowProgress,
 				hasEverMadeFieldsVisible: hasEverMadeFieldsVisible,
@@ -499,16 +501,26 @@ class TokenEntryViewModel {
 
 	// MARK: - Static private functions
 
-	private static func calculateInputMode(
+	/// Sanitize userInput of token & validation
+	private func sanitize(_ input: String) -> String {
+
+		return input
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+			.uppercased()
+	}
+}
+
+extension TokenEntryViewModel.InitializationMode {
+	func calculateInputMode(
 		tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
-		initializationMode: InitializationMode,
 		verificationCodeIsKnownToBeRequired: Bool,
 		isInProgress: Bool,
 		hasEverMadeFieldsVisible: Bool,
 		screenHasCompleted: Bool
 	) -> TokenEntryViewModel.InputMode {
 
-		switch initializationMode {
+		switch self {
 			case .regular:
 				if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
 					return .inputTokenWithVerificationCode
@@ -526,15 +538,6 @@ class TokenEntryViewModel {
 					}
 				}
 		}
-	}
-
-	/// Sanitize userInput of token & validation
-	private func sanitize(_ input: String) -> String {
-
-		return input
-			.trimmingCharacters(in: .whitespacesAndNewlines)
-			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
-			.uppercased()
 	}
 }
 
