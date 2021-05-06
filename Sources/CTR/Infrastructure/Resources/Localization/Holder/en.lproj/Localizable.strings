@@ -45,13 +45,13 @@
 /* Link to the privacy policy for the holder */
 "holder.url.privacy" = "https://coronacheck.nl/en/privacy-in-app";
 
-"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/en/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
+"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/en/faq-in-app\">Learn more</a> about which information the QR code contains.";
 
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.regularflow.title" = "Retrieve test result";
 "holder.tokenentry.regularflow.text" = "Enter your retrieval code. The test location sent it to you.";
 "holder.tokenentry.regularflow.token.title" = "Retrieval code";
-"holder.tokenentry.regularflow.token.placeholder" = "E.g.: BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.regularflow.token.placeholder" = "E.g. BRB-YYYYYYYYYY-Z2";
 "holder.tokenentry.regularflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.regularflow.verification.title" = "Verification code";
 "holder.tokenentry.regularflow.verification.placeholder" = "E.g. 123456";
@@ -62,7 +62,7 @@
 "holder.tokenentry.universallinkflow.title" = "Retrieve test result";
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
 "holder.tokenentry.universallinkflow.token.title" = "Code";
-"holder.tokenentry.universallinkflow.token.placeholder" = "E.g.: BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.universallinkflow.token.placeholder" = "E.g. BRB-YYYYYYYYYY-Z2";
 "holder.tokenentry.universallinkflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
