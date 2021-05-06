@@ -7,6 +7,19 @@
 
 import UIKit
 
+private class PageViewController: UIPageViewController {
+    
+    override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewController.NavigationDirection, animated: Bool, completion: ((Bool) -> Void)? = nil) {
+        super.setViewControllers(viewControllers, direction: direction, animated: animated) { completed in
+            completion?(completed)
+            
+            if let view = viewControllers?.first?.view {
+                UIAccessibility.post(notification: .screenChanged, argument: view)
+            }
+        }
+    }
+}
+
 class OnboardingViewController: BaseViewController {
 	
 	/// The model
@@ -16,7 +29,7 @@ class OnboardingViewController: BaseViewController {
 	let sceneView = OnboardingView()
 	
 	/// The page controller
-	private var pageViewController: UIPageViewController?
+	private var pageViewController: PageViewController?
 	
 	/// The current index of the visbile page
 	var currentIndex: Int? {
@@ -131,11 +144,12 @@ class OnboardingViewController: BaseViewController {
 			self.sceneView.primaryButton.isEnabled = true
 		}
 	}
+    
 	
 	/// Setup the page controller
 	private func setupPageController() {
 		
-		let pageCtrl = UIPageViewController(
+		let pageCtrl = PageViewController(
 			transitionStyle: .scroll,
 			navigationOrientation: .horizontal,
 			options: nil
@@ -166,7 +180,6 @@ class OnboardingViewController: BaseViewController {
 				let nextVC = viewControllers[index]
 				self.pageViewController?.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
 				currentIndex = index
-				UIAccessibility.post(notification: .screenChanged, argument: nextVC)
 			}
 		}
 	}
@@ -180,7 +193,6 @@ class OnboardingViewController: BaseViewController {
 		let nextVC = viewControllers[index]
 		self.pageViewController?.setViewControllers([nextVC], direction: direction, animated: true, completion: nil)
 		currentIndex = index
-		UIAccessibility.post(notification: .screenChanged, argument: nextVC)
 	}
 }
 
