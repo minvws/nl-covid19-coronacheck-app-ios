@@ -1,0 +1,9 @@
+/*
+ * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+ *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+ *
+ *  SPDX-License-Identifier: EUPL-1.2
+ */
+
+"NSCameraUsageDescription" = "The app required access to the camera for scanning QR-codes";
+"NSHumanReadableCopyright" = "2021 Governement of the Netherlands, Ministry of Health, Welfare and Sport";

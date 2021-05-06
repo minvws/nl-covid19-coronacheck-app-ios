@@ -1,8 +1,20 @@
-"jailbroken.title" = "Alert titel voor rooted device";
-"jailbroken.message" = "Alert content voor rooted device";
+/* Link naar web accessibility pagina */
+"holder.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
+
+/* Koptekst in de over de app pagina */
+"holder.about.readmore" = "Lees meer";
+
+/* Alert titel voor rooted device */
+"jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
+
+/* Alert content voor rooted device */
+"jailbroken.message" = "Let op: je apparaat is geroot. Je gegevens zijn mogelijk niet veilig.";
+
+/* Menu item over toegankelijkheid. */
+"holder.menu.accessibility" = "Toegankelijkheid";
 
 "holder.tokenentry.modal.notoken.title" = "Ik heb geen code";
-"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een code met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
+"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
 "holder.tokenentry.regularflow.button.notoken" = "Ik heb geen code";
 
 /* Voice over voor begin van een lijst */
@@ -29,17 +41,16 @@
 /* Link to the faq for the holder */
 "holder.url.faq" = "https://coronacheck.nl/nl/faq-in-app";
 /* MARK: - URL */
-"holder.url.appointment" = "https://coronacheck.nl/nl/testaanbieders-fieldlab-in-de-app";
+"holder.url.appointment" = "https://coronacheck.nl/nl/testafspraak-in-app";
 /* Link to the privacy policy for the holder */
 "holder.url.privacy" = "https://coronacheck.nl/nl/privacy-in-app";
-"holder.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 
 "holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.regularflow.title" = "Testuitslag ophalen";
 "holder.tokenentry.regularflow.text" = "Vul jouw ophaalcode in. Deze heb je van je testlocatie gekregen.";
-"holder.tokenentry.regularflow.token.title" = "Code";
+"holder.tokenentry.regularflow.token.title" = "Ophaalcode";
 "holder.tokenentry.regularflow.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
 "holder.tokenentry.regularflow.verification.info" = "Je krijgt een code via sms of e-mail";
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
@@ -118,7 +129,6 @@
 "holder.menu.about" = "Over deze app";
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
-"holder.menu.accessibility" = "Toegankelijkheid";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang na testen";
@@ -193,7 +203,7 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";
-"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs. ";
+"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code";
 "holder.testresults.noresults.title" = "Geen negatieve testuitslag";
 "holder.testresults.noresults.text" = "Er is geen negatieve testuitslag beschikbaar.";
@@ -201,8 +211,9 @@
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p><p>
-Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p>
+<p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>
+";
 "holder.testresults.recent" = "Opgehaalde testuitslag";
 "holder.testresults.negative" = "Negatieve testuitslag";
 "holder.testresults.identity" = "Identificatiegegevens: %@";
@@ -236,4 +247,3 @@ Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.about.title" = "Over deze app";
 "holder.about.text" = "CoronaCheck is ontwikkeld zodat bezoekers weer naar sociale, culturele en sportieve locaties kunnen. Met behulp van deze app bewijzen bezoekers dat ze kortgeleden negatief getest zijn op corona. Zo kan Nederland meer buiten de deur doen.";
 "holder.about.link" = "Lees hier de privacyverklaring";
-"holder.about.readmore" = "Lees meer";

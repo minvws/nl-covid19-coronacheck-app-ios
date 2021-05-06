@@ -1,7 +1,20 @@
+/* Link naar web accessibility pagina */
+"verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
+
+/* Koptekst in de over de app pagina */
+"verifier.about.readmore" = "Lees meer";
+
+/* Menu item voor Toegankelijkheid */
+"verifier.menu.accessibility" = "Toegankelijkheid";
+
+/* Alert titel voor rooted device */
+"jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
+
+/* Alert content voor rooted device */
+"jailbroken.message" = "Let op: je apparaat is geroot. Je gegevens zijn mogelijk niet veilig.";
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
-"verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 
 "verifier.result.identity.title" = "Controleer nu de gegevens";
 "verifier.result.identity.lastname" = "Achternaam";
@@ -76,7 +89,6 @@
 "verifier.menu.about" = "Over deze app";
 "verifier.menu.feedback" = "Geef ons feedback";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
-"verifier.menu.accessibility" = "Toegankelijkheid";
 
 /* MARK: - Verifier Onboarding */
 "verifier.onboarding.title.safely" = "Alleen toegang na testen";
@@ -153,4 +165,3 @@
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
 "verifier.about.text" = "CoronaCheck Scanner is ontwikkeld zodat sociale, culturele en sportieve locaties hun deuren kunnen openen. Denk bijvoorbeeld aan evenementen, musea en concerten. Met behulp van deze app krijgen alleen bezoekers die kortgeleden negatief op corona getest zijn toegang. Zo kan Nederland meer buiten de deur doen.";
-"verifier.about.readmore" = "Lees meer";
