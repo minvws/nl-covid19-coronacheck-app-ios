@@ -52,7 +52,15 @@ class OnboardingViewController: BaseViewController {
 	}
 	
 	/// the onboarding viewcontrollers
-	private var viewControllers = [UIViewController]()
+    private var viewControllers = [UIViewController]() {
+        didSet {
+            viewControllers.forEach { viewController in
+                if let onboardingPageViewController = viewController as? OnboardingPageViewController {
+                    onboardingPageViewController.delegate = self
+                }
+            }
+        }
+    }
 	
 	// the back button
 	private var backButton: UIBarButtonItem?
@@ -257,4 +265,21 @@ extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewCo
 			currentIndex = pendingIndex
 		}
 	}
+}
+
+// MARK: - OnboardingPageViewControllerDelegate
+
+extension OnboardingViewController: OnboardingPageViewControllerDelegate {
+    
+    /// Enables swipe to navigate behaviour for assistive technologies
+    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+        if direction == .right {
+            backbuttonTapped()
+            return true
+        } else if direction == .left {
+            primaryButtonTapped()
+            return true
+        }
+        return false
+    }
 }
