@@ -352,8 +352,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	private lazy var printDateFormatter: DateFormatter = {
 		
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
-		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE '<br>' d MMMM HH:mm"
 		return dateFormatter
 	}()
@@ -362,8 +361,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	private lazy var accessibilityDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
-		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM"
 		return dateFormatter
 	}()
@@ -372,8 +370,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	private lazy var accessibilityTimeFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
-		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "a"
 		dateFormatter.amSymbol = String.am
 		dateFormatter.pmSymbol = String.pm
