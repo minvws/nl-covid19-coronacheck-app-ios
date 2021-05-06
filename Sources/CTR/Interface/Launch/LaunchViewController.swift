@@ -59,19 +59,16 @@ class LaunchViewController: BaseViewController {
 
 		super.viewDidAppear(animated)
 
-		if viewModel.shouldShowJailBreakAlert() {
-			showJailBreakWarning()
+		// We can't start this on viewDidLoad.
+		// It could present the jail break dialog while the view is not yet on screen, resulting in an error
+		viewModel.$interruptForJailBreakDialog.binding = { [weak self] in
+			if $0 {
+				self?.showJailBreakDialog()
+			}
 		}
-
-		checkRequirements()
 	}
 
-	func checkRequirements() {
-
-		viewModel.checkRequirements()
-	}
-
-	private func showJailBreakWarning() {
+	private func showJailBreakDialog() {
 
 		let alertController = UIAlertController(
 			title: .jailbrokenTitle,
@@ -83,7 +80,7 @@ class LaunchViewController: BaseViewController {
 				title: .ok,
 				style: .default,
 				handler: { [weak self] _ in
-					self?.viewModel.dismissJailBreakWarning()
+					self?.viewModel.userDismissedJailBreakWarning()
 				}
 			)
 		)

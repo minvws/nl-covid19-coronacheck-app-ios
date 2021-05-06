@@ -19,29 +19,26 @@ class LaunchViewModel {
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
-	private var isHandlingJailBreakDetectionWarning = false
 
 	private var configStatus: LaunchState?
 	private var issuerPublicKeysStatus: LaunchState?
 	private var flavor: AppFlavor
 
-	/// The title of the launch page
 	@Bindable private(set) var title: String
-
-	/// The message of the launch page
 	@Bindable private(set) var message: String
-
-	/// The version of the launch page
 	@Bindable private(set) var version: String
-
-	/// The icon of the launch page
 	@Bindable private(set) var appIcon: UIImage?
+	@Bindable private(set) var interruptForJailBreakDialog: Bool = false
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
+	///   - remoteConfigManager: the manager for fetching the remote configuration
+	///   - proofManager: the proof manager for fetching the keys
+	///   - jailBreakDetector: the detector for detecting jailbreaks
+	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol,
@@ -69,39 +66,42 @@ class LaunchViewModel {
 			versionSupplier.getCurrentVersion(),
 			versionSupplier.getCurrentBuild()
 		)
+
+		if shouldShowJailBreakAlert() {
+			// Interrupt, do not continu the flow
+			interruptForJailBreakDialog = true
+		} else {
+			// Continu with the flow
+			interruptForJailBreakDialog = false
+			updateDependencies()
+		}
 	}
 
-	/// Check the requirements
-	func checkRequirements() {
+	/// Update the dependencies
+	private func updateDependencies() {
 
 		updateConfiguration()
 		updateKeys()
 	}
 
-	func shouldShowJailBreakAlert() -> Bool {
+	private func shouldShowJailBreakAlert() -> Bool {
 
 		guard flavor == .holder else {
 			// Only enable for the holder
 			return false
 		}
 
-		isHandlingJailBreakDetectionWarning = true
-
-		if !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken() {
-			return true
-
-		} else {
-			isHandlingJailBreakDetectionWarning = false
-			handleState()
-			return false
-		}
+		return !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken()
 	}
 
-	func dismissJailBreakWarning() {
+	func userDismissedJailBreakWarning() {
 
+		// Interruption is over
+		interruptForJailBreakDialog = false
+		// Warning has been shown, do not show twice
 		userSettings.jailbreakWarningShown = true
-		isHandlingJailBreakDetectionWarning = false
-		handleState()
+		// Continu with flow
+		updateDependencies()
 	}
 
 	/// Update the configuration
@@ -151,8 +151,7 @@ class LaunchViewModel {
 	private func handleState() {
 
 		guard let configStatus = configStatus,
-			  let issuerPublicKeysStatus = issuerPublicKeysStatus,
-			  !isHandlingJailBreakDetectionWarning else {
+			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
 			return
 		}
 
