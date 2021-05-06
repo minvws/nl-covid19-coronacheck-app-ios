@@ -7,39 +7,32 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class LaunchViewModelTests: XCTestCase {
 
-	var sut: LaunchViewModel?
-
-	var appCoordinatorSpy = AppCoordinatorSpy()
-	var versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-
-	var remoteConfigSpy = RemoteConfigManagingSpy()
-	var proofManagerSpy = ProofManagingSpy()
+	private var sut: LaunchViewModel!
+	private var appCoordinatorSpy: AppCoordinatorSpy!
+	private var versionSupplierSpy: AppVersionSupplierSpy!
+	private var remoteConfigSpy: RemoteConfigManagingSpy!
+	private var proofManagerSpy: ProofManagingSpy!
+	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
 		super.setUp()
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		proofManagerSpy = ProofManagingSpy()
-
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy
-		)
+		jailBreakProtocolSpy = JailBreakProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 	}
 
 	// MARK: Tests
 
-	/// Test the initializer for the holder
-	func testInitHolder() {
+	func test_initializeHolder() {
 
 		// Given
 
@@ -53,13 +46,12 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderLaunchTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderLaunchText, "Message should match")
-		XCTAssertEqual(sut?.appIcon, .holderAppIcon, "Icon should match")
+		expect(self.sut.title) == .holderLaunchTitle
+		expect(self.sut.message) == .holderLaunchText
+		expect(self.sut.appIcon) == .holderAppIcon
 	}
 
-	/// Test the initializer for the verifier
-	func testInitVerifier() {
+	func test_initializeVerifier() {
 
 		// Given
 
@@ -73,43 +65,63 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		XCTAssertEqual(sut?.title, .verifierLaunchTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .verifierLaunchText, "Message should match")
-		XCTAssertEqual(sut?.appIcon, .verifierAppIcon, "Icon should match")
+		expect(self.sut.title) == .verifierLaunchTitle
+		expect(self.sut.message) == .verifierLaunchText
+		expect(self.sut.appIcon) == .verifierAppIcon
 	}
 
-	/// Test all good
-	func testNoActionRequired() {
+	func test_noActionRequired() {
 
 		// Given
 		remoteConfigSpy.launchState = .noActionNeeded
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
-		sut?.checkRequirements()
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// Then
-		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.noActionNeeded, "State should match")
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
+		expect(self.sut.interruptForJailBreakDialog) == false
+
 	}
 
 	/// Test internet required for the remote config
-	func testInternetRequiredRemoteConfig() {
+	func test_internetRequiredRemoteConfig() {
 
 		// Given
 		remoteConfigSpy.launchState = .internetRequired
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
-		sut?.checkRequirements()
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// Then
-		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.internetRequired, "State should match")
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
+		expect(self.sut.interruptForJailBreakDialog) == false
 	}
 
 	/// Test internet required for the issuer public keys
@@ -122,15 +134,25 @@ class LaunchViewModelTests: XCTestCase {
 			code: URLError.notConnectedToInternet.rawValue
 		)
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
-		sut?.checkRequirements()
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// Then
-		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.internetRequired, "State should match")
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
+		expect(self.sut.interruptForJailBreakDialog) == false
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
@@ -143,32 +165,154 @@ class LaunchViewModelTests: XCTestCase {
 			code: URLError.notConnectedToInternet.rawValue
 		)
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
-		sut?.checkRequirements()
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// Then
-		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.internetRequired, "State should match")
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
+		expect(self.sut.interruptForJailBreakDialog) == false
 	}
 
 	/// Test update required
-	func testActionRequire() {
+	func testActionRequired() {
 
 		// Given
 		let remoteConfig = remoteConfigSpy.getConfiguration()
 		remoteConfigSpy.launchState = .actionRequired(remoteConfig)
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
 		// When
-		sut?.checkRequirements()
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
 
 		// Then
-		XCTAssertTrue(remoteConfigSpy.updateCalled, "Method should be called")
-		XCTAssertTrue(proofManagerSpy.invokedFetchIssuerPublicKeys, "Method should be called")
-		XCTAssertTrue(appCoordinatorSpy.invokedHandleLaunchState, "Delegate method should be called")
-		XCTAssertEqual(appCoordinatorSpy.invokedHandleLaunchStateParameters?.state, LaunchState.actionRequired(remoteConfig), "State should match")
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
+		expect(self.sut.interruptForJailBreakDialog) == false
+	}
+
+	func test_checkForJailBreak_broken_shouldwarn() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+
+		// When
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Then
+		expect(self.remoteConfigSpy.updateCalled) == false
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == false
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
+		expect(self.sut.interruptForJailBreakDialog) == true
+		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == true
+	}
+
+	func test_checkForJailBreak_broken_shouldnotwarn() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = true
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+
+		// When
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Then
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
+		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == false
+	}
+
+	func test_checkForJailBreak_broken_shouldWarn_butIsVerifier() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+
+		// When
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.verifier,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// Then
+		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
+		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.jailBreakProtocolSpy.invokedIsJailBroken) == false
+	}
+
+	func test_userDismissedJailBreakWarning() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
+
+		// When
+		sut.userDismissedJailBreakWarning()
+
+		// Then
+		expect(self.userSettingsSpy.invokedJailbreakWarningShownSetter) == true
+		expect(self.userSettingsSpy.invokedJailbreakWarningShown) == true
+		expect(self.sut.interruptForJailBreakDialog) == false
 	}
 }

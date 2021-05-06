@@ -8,17 +8,19 @@
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
+import Nimble
+import SnapshotTesting
 
 class LaunchViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: LaunchViewController?
-
-	var appCoordinatorSpy = AppCoordinatorSpy()
-	var versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-
-	var remoteConfigSpy = RemoteConfigManagingSpy()
-	var proofManagerSpy = ProofManagingSpy()
+	private var sut: LaunchViewController!
+	private var appCoordinatorSpy: AppCoordinatorSpy!
+	private var versionSupplierSpy: AppVersionSupplierSpy!
+	private var remoteConfigSpy: RemoteConfigManagingSpy!
+	private var proofManagerSpy: ProofManagingSpy!
+	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
+	private var userSettingsSpy: UserSettingsSpy!
 
 	var window = UIWindow()
 
@@ -29,16 +31,19 @@ class LaunchViewControllerTests: XCTestCase {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		proofManagerSpy = ProofManagingSpy()
+		jailBreakProtocolSpy = JailBreakProtocolSpy()
+		userSettingsSpy = UserSettingsSpy()
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
 			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
 		)
 
 		sut = LaunchViewController(viewModel: viewModel)
@@ -52,16 +57,14 @@ class LaunchViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: Test
 
 	/// Test all the content
-	func testContent() throws {
+	func test_content() {
 
 		// Given
 
@@ -69,10 +72,47 @@ class LaunchViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.title, .holderLaunchTitle, "Text should match")
-		XCTAssertEqual(strongSut.sceneView.message, .holderLaunchText, "Text should match")
-		XCTAssertNotNil(strongSut.sceneView.version, "Version should not be nil")
-		XCTAssertNotNil(strongSut.sceneView.appIcon, "AppIcon should not be nil")
+		expect(self.sut.sceneView.title) == .holderLaunchTitle
+		expect(self.sut.sceneView.message) == .holderLaunchText
+		expect(self.sut.sceneView.version).toNot(beNil(), description: "Version should not be nil")
+		expect(self.sut.sceneView.version).toNot(beNil(), description: "AppIcon should not be nil")
+
+		sut.assertImage()
+	}
+
+	func test_showJailBreakAlert() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+
+		let viewModel = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy
+		)
+		sut = LaunchViewController(viewModel: viewModel)
+
+		let alertVerifier = AlertVerifier()
+
+		// When
+		loadView()
+
+		// Then
+		alertVerifier.verify(
+			title: .jailbrokenTitle,
+			message: .jailbrokenMessage,
+			animated: true,
+			actions: [
+				.default(.ok)
+			],
+			presentingViewController: sut
+		)
+
+		sut.assertImage()
 	}
 }
