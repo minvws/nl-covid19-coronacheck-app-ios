@@ -89,20 +89,18 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.verificationEntryFieldPlaceholder = $0
 		}
 		
-		viewModel.$shouldShowProgress.binding = { [weak self] in
-			guard let strongSelf = self else { return }
-			
+		viewModel.$shouldShowProgress.binding = { [sceneView] in
 			if $0 {
-				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
-				strongSelf.announce(.loading)
+				MBProgressHUD.showAdded(to: sceneView, animated: true)
+				UIAccessibility.post(notification: .announcement, argument: String.loading)
 			} else {
-				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
+				MBProgressHUD.hide(for: sceneView, animated: true)
 			}
 		}
 		
 		viewModel.$fieldErrorMessage.binding = { [weak self] message in
 			if let message = message {
-				UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: message)
+				UIAccessibility.post(notification: .announcement, argument: message)
 			}
 			self?.sceneView.fieldErrorMessage = message
 		}
