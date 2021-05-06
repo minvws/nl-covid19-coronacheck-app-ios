@@ -110,7 +110,7 @@
 
 /* MARK: - New Terms */
 "new.terms.title" = "We've updated our policy";
-"new.terms.highlights" = "<b>This has changed/b><br\><ul><li> Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
+"new.terms.highlights" = "<b>This has changed</b><br\><ul><li> Initials and day and month of birth are included in the QR code</li><li>This data is displayed on the Scanner app for ID verification purposes</li></ul>";
 "new.terms.description" = "Read the full privacy statement <a href=\"https://coronacheck.nl/en/privacy-in-app\">here</a>.";
 "new.terms.error.title" = "You can't proceed if you don't agree";
 "new.terms.error.message" = "You can't access the CoronaCheck app without agreeing to the updated terms.";
