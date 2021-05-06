@@ -85,6 +85,7 @@
 "general.error.nointernet.text" = "You're not connected to the internet right now.";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
+"general.government.logo" = "Logo of Central Government";
 "general.loading" = "Loading";
 "general.notification" = "Watch out!";
 "general.menu.open" = "Open side menu";

@@ -72,6 +72,11 @@ extension String {
 		return Localization.string(for: "general.government")
 	}
 
+    static var governmentLogo: String {
+
+        return Localization.string(for: "general.government.logo")
+    }
+    
 	static var loading: String {
 
 		return Localization.string(for: "general.loading")
