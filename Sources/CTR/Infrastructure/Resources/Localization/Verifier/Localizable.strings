@@ -1,6 +1,7 @@
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
+"verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 
 "verifier.result.identity.title" = "Controleer nu de gegevens";
 "verifier.result.identity.lastname" = "Achternaam";
