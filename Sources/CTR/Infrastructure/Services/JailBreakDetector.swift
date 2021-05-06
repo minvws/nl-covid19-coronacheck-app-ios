@@ -20,14 +20,6 @@ class JailBreakDetector: JailBreakProtocol, Logging {
 	func isJailBroken() -> Bool {
 
 		let jailbreakStatus = IOSSecuritySuite.amIJailbrokenWithFailedChecks()
-		if jailbreakStatus.jailbroken {
-			if (jailbreakStatus.failedChecks.contains { $0.check == .existenceOfSuspiciousFiles })
-				&& (jailbreakStatus.failedChecks.contains { $0.check == .suspiciousFilesCanBeOpened }) {
-				logInfo("This device is a real jailbroken device")
-				logDebug("Reasons: \(IOSSecuritySuite.amIJailbrokenWithFailMessage())")
-				return true
-			}
-		}
-		return false
+		return jailbreakStatus.jailbroken
 	}
 }
