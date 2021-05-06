@@ -191,11 +191,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// Retry loading the requirements
     func retry() {
 
-        guard let topController = window.rootViewController else { return }
-
-        topController.dismiss(animated: true) {
-            ((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
-        }
+		startLauncher()
     }
 }
 

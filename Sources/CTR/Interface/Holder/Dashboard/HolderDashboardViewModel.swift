@@ -54,7 +54,7 @@ struct QRCardInfo {
 	/// The message of the card
 	let message: String
 
-	/// The identiry of the holder
+	/// The identity of the holder
 	let holder: String
 
 	/// The title on the action button of the card
@@ -438,50 +438,5 @@ extension HolderDashboardViewModel {
 			name: .qrCreated,
 			object: nil
 		)
-	}
-}
-
-extension TimeInterval {
-
-	private var minutes: Int {
-
-		return (Int(self) / 60 ) % 60
-	}
-
-	private var hours: Int {
-
-		return Int(self) / 3600
-	}
-
-	var stringTime: String {
-
-		if hours != 0 {
-			return "\(hours) \(String.hour) \(minutes) \(String.minute)"
-		} else if minutes != 0 {
-			return "\(minutes) \(String.minute)"
-		} else {
-			return  "1 \(String.minute)"
-		}
-	}
-
-	var accessibilityTime: String {
-
-		if hours != 0 {
-			if minutes > 1 {
-				return "\(hours) \(String.hour) \(minutes) \(String.longMinutes)"
-			} else if minutes == 0 {
-				return "\(hours) \(String.hour)"
-			} else {
-				return "\(hours) \(String.hour) \(minutes) \(String.longMinute)"
-			}
-		} else if minutes != 0 {
-			if minutes > 1 {
-				return "\(minutes) \(String.longMinutes)"
-			} else {
-				return "\(minutes) \(String.longMinute)"
-			}
-		} else {
-			return  "1 \(String.longMinute)"
-		}
 	}
 }

@@ -31,4 +31,26 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedScanInstructionShownList.append(newValue)
 		}
 	}
+
+	var invokedJailbreakWarningShownSetter = false
+	var invokedJailbreakWarningShownSetterCount = 0
+	var invokedJailbreakWarningShown: Bool?
+	var invokedJailbreakWarningShownList = [Bool]()
+	var invokedJailbreakWarningShownGetter = false
+	var invokedJailbreakWarningShownGetterCount = 0
+	var stubbedJailbreakWarningShown: Bool! = false
+
+	var jailbreakWarningShown: Bool {
+		get {
+			invokedJailbreakWarningShownGetter = true
+			invokedJailbreakWarningShownGetterCount += 1
+			return stubbedJailbreakWarningShown
+		}
+		set {
+			invokedJailbreakWarningShownSetter = true
+			invokedJailbreakWarningShownSetterCount += 1
+			invokedJailbreakWarningShown = newValue
+			invokedJailbreakWarningShownList.append(newValue)
+		}
+	}
 }

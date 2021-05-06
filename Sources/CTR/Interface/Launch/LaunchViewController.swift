@@ -58,12 +58,33 @@ class LaunchViewController: BaseViewController {
 	override func viewDidAppear(_ animated: Bool) {
 
 		super.viewDidAppear(animated)
-		checkRequirements()
+
+		// We can't start this on viewDidLoad.
+		// It could present the jail break dialog while the view is not yet on screen, resulting in an error
+		viewModel.$interruptForJailBreakDialog.binding = { [weak self] in
+			if $0 {
+				self?.showJailBreakDialog()
+			}
+		}
 	}
 
-	func checkRequirements() {
+	private func showJailBreakDialog() {
 
-		viewModel.checkRequirements()
+		let alertController = UIAlertController(
+			title: .jailbrokenTitle,
+			message: .jailbrokenMessage,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .ok,
+				style: .default,
+				handler: { [weak self] _ in
+					self?.viewModel.userDismissedJailBreakWarning()
+				}
+			)
+		)
+		present(alertController, animated: true, completion: nil)
 	}
 
 	// Rotation

@@ -25,6 +25,10 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>tel</string>
+		<string>cydia</string>
+		<string>sileo</string>
+		<string>undecimus</string>
+		<string>zbra</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
