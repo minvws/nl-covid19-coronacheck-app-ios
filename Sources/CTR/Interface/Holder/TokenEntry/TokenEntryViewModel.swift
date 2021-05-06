@@ -41,13 +41,20 @@ class TokenEntryViewModel {
 	@Bindable private(set) var shouldShowProgress: Bool = false {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
+			shouldEnableNextButton = nextButtonEnabledState(
+				allowEnablingOfNextButton: allowEnablingOfNextButton,
+				shouldShowProgress: shouldShowProgress,
+				screenHasCompleted: screenHasCompleted
+			)
 		}
 	}
 
 	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
 	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
 	@Bindable private(set) var shouldShowNextButton: Bool = true
-	@Bindable private(set) var enableNextButton: Bool = false {
+
+	/// Don't update directly. Instead, see `preventEnablingOfNextButton`.
+	@Bindable private(set) var shouldEnableNextButton: Bool = false {
 		didSet {
 			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
 		}
@@ -79,6 +86,19 @@ class TokenEntryViewModel {
 	private var initializationMode: InitializationMode
 	private var hasEverMadeFieldsVisible: Bool = false
 
+	/// Instead of updating `shouldEnableNextButton` directly, internal logic
+	/// should toggle `preventEnablingOfNextButton` to indicate its preference.
+	/// The actual state of `shouldEnableNextButton` is also dependent on `shouldShowProgress`.
+	private var allowEnablingOfNextButton = false {
+		didSet {
+			shouldEnableNextButton = nextButtonEnabledState(
+				allowEnablingOfNextButton: allowEnablingOfNextButton,
+				shouldShowProgress: shouldShowProgress,
+				screenHasCompleted: screenHasCompleted
+			)
+		}
+	}
+
 	// Hopefully can remove this after a refactor.
 	// Indicates that we've forwarded to the coordinator and there's nothing left to do
 	private var screenHasCompleted: Bool = false {
@@ -99,6 +119,22 @@ class TokenEntryViewModel {
 			defer { objc_sync_exit(self) }
 
 			guard inProgressCount >= 0 else { return }
+
+			let newState = inProgressCount > 0
+			// Prevent multiple applications of same shouldShowProgress
+			// state, showing multiple spinners..
+			if shouldShowProgress != newState {
+				shouldShowProgress = newState
+			}
+		}
+	}
+
+	private var disableNextButtonCount = 0 {
+		didSet {
+			objc_sync_enter(self)
+			defer { objc_sync_exit(self) }
+
+			guard disableNextButtonCount >= 0 else { return }
 
 			let newState = inProgressCount > 0
 			// Prevent multiple applications of same shouldShowProgress
@@ -156,15 +192,15 @@ class TokenEntryViewModel {
 		switch initializationMode {
 			case .regular:
 				guard let sanitizedTokenInput = sanitizedTokenInput, !sanitizedTokenInput.isEmpty else {
-					enableNextButton = false
+					allowEnablingOfNextButton = false
 					return
 				}
 				let validToken = tokenValidator.validate(sanitizedTokenInput)
 
 				if verificationCodeIsKnownToBeRequired {
-					enableNextButton = validToken && receivedNonemptyVerificationInput
+					allowEnablingOfNextButton = validToken && receivedNonemptyVerificationInput
 				} else {
-					enableNextButton = validToken
+					allowEnablingOfNextButton = validToken
 				}
 
 			case .withRequestTokenProvided:
@@ -174,7 +210,7 @@ class TokenEntryViewModel {
 					return
 				}
 
-				enableNextButton = receivedNonemptyVerificationInput
+				allowEnablingOfNextButton = receivedNonemptyVerificationInput
 		}
 	}
 
@@ -183,6 +219,7 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
 	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
+		guard inProgressCount == 0 else { return }
 
 		switch initializationMode {
 			case .regular:
@@ -194,6 +231,8 @@ class TokenEntryViewModel {
 
 	/// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
 	func resendVerificationCodeButtonTapped() {
+		guard inProgressCount == 0 else { return }
+
 		fieldErrorMessage = nil
 
 		if let requestToken = requestToken {
@@ -202,6 +241,7 @@ class TokenEntryViewModel {
 	}
 
 	func userHasNoTokenButtonTapped() {
+		guard inProgressCount == 0 else { return }
 
 		coordinator?.presentInformationPage(
 			title: .holderTokenEntryModalNoTokenTitle,
@@ -299,7 +339,7 @@ class TokenEntryViewModel {
 								// the user has just submitted a wrong verification code & should see an error message
 								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 							}
-							self.enableNextButton = false
+							self.allowEnablingOfNextButton = false
 							self.verificationCodeIsKnownToBeRequired = true
 
 						case .invalid:
@@ -333,17 +373,17 @@ class TokenEntryViewModel {
 		switch self.initializationMode {
 			case .regular:
 				// There must have been a token already entered, so this can be assumed:
-				self.enableNextButton = true
+				self.allowEnablingOfNextButton = true
 			case .withRequestTokenProvided:
 				if verificationCodeIsKnownToBeRequired {
 					// in this situation, we know we definitely loaded a requestToken successfully the
 					// first time, so no need to exit `.withRequestTokenProvided` mode.
-					self.enableNextButton = true
+					self.allowEnablingOfNextButton = true
 				} else {
 					// The `.withRequestTokenProvided` mode failed at some point
 					// during `init`, so abort & reset to `.regular` mode.
 					self.initializationMode = .regular
-					self.enableNextButton = false
+					self.allowEnablingOfNextButton = false
 				}
 		}
 	}
@@ -627,4 +667,9 @@ extension TokenEntryViewModel: Logging {
 	var loggingCategory: String {
 		return "TokenEntryViewModel"
 	}
+}
+
+/// Returns the `enabled` state to be used for `shouldEnableNextButton`
+private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
+	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
 }

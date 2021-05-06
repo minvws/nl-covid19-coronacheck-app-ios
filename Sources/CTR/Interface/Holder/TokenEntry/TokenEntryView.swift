@@ -75,7 +75,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	
 	/// The message label
 	let textLabel: Label = {
-		
+
 		return Label(subhead: nil).multiline()
 	}()
 
@@ -144,12 +144,16 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			userNeedsATokenButton.heightAnchor.constraint(equalToConstant: 40),
-			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
-		
-		setupPrimaryButton()
+
+		setupPrimaryButton(useFullWidth: {
+			switch traitCollection.preferredContentSizeCategory {
+				case .unspecified: return true
+				case let size where size > .extraLarge: return true
+				default: return false
+			}
+		}())
 	}
 	
 	/// Setup all the accessibility traits
@@ -194,7 +198,6 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 	}
 	
-	/// The  message
 	var text: String? {
 		didSet {
 			textLabel.text = text
@@ -234,6 +237,18 @@ class TokenEntryView: ScrolledStackWithButtonView {
 					string: $0,
 					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
 				)
+			}
+		}
+	}
+
+	var fieldErrorMessage: String? {
+		didSet {
+			if let message = fieldErrorMessage {
+				errorView.error = message
+				errorView.isHidden = false
+				textLabel.isHidden = true
+			} else {
+				errorView.isHidden = true
 			}
 		}
 	}

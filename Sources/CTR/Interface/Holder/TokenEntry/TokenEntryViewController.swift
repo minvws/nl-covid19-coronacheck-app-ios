@@ -89,25 +89,20 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.verificationEntryFieldPlaceholder = $0
 		}
 		
-		viewModel.$shouldShowProgress.binding = { [weak self] in
-			guard let strongSelf = self else { return }
-			
+		viewModel.$shouldShowProgress.binding = { [sceneView] in
 			if $0 {
-				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
-				strongSelf.announce(.loading)
+				MBProgressHUD.showAdded(to: sceneView, animated: true)
+				UIAccessibility.post(notification: .announcement, argument: String.loading)
 			} else {
-				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)
+				MBProgressHUD.hide(for: sceneView, animated: true)
 			}
 		}
 		
-		viewModel.$fieldErrorMessage.binding = { [weak self] in
-			if let message = $0 {
-				self?.sceneView.errorView.error = message
-				self?.sceneView.errorView.isHidden = false
-				self?.sceneView.textLabel.isHidden = true
-			} else {
-				self?.sceneView.errorView.isHidden = true
+		viewModel.$fieldErrorMessage.binding = { [weak self] message in
+			if let message = message {
+				UIAccessibility.post(notification: .announcement, argument: message)
 			}
+			self?.sceneView.fieldErrorMessage = message
 		}
 		
 		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
@@ -151,7 +146,7 @@ class TokenEntryViewController: BaseViewController {
 			}
 		}
 		
-		viewModel.$enableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
+		viewModel.$shouldEnableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			guard let strongSelf = self else { return }
@@ -241,8 +236,9 @@ class TokenEntryViewController: BaseViewController {
 	@objc func keyBoardWillShow(notification: Notification) {
 		
 		tapGestureRecognizer?.isEnabled = true
-		let offset: CGFloat = traitCollection.verticalSizeClass == .compact ? 90 : 160
-		sceneView.scrollView.contentInset.bottom = notification.getHeight() + offset
+
+		sceneView.scrollView.contentInset.bottom = notification.getHeight()
+
 		let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
 		sceneView.bottomButtonConstraint?.constant = -notification.getHeight() + buttonOffset
 	}
@@ -282,10 +278,36 @@ class TokenEntryViewController: BaseViewController {
 // MARK: - UITextFieldDelegate
 
 extension TokenEntryViewController: UITextFieldDelegate {
-	
+
+	func textFieldDidBeginEditing(_ textField: UITextField) {
+
+		// Wait until after the keyboard has presented, then do some frame calculations:
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+
+			// Standardise the frames of textField & the gradient line (above the Primary button) inside the frame of self.view:
+			let textfieldFrame = view.convert(textField.frame, from: textField.superview)
+			let gradientLineFrame = view.convert(sceneView.footerGradientView.frame, from: sceneView.footerGradientView.superview)
+
+			if textfieldFrame.maxY > gradientLineFrame.minY {
+				let correction = textfieldFrame.maxY - gradientLineFrame.minY
+
+				// Okay so shift the scrollView up by the correction:
+				UIView.animate(withDuration: 0.2) {
+					sceneView.scrollView.contentOffset.y += correction
+				}
+			}
+		}
+	}
+
 	func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 		
 		textField.resignFirstResponder()
+
+		if sceneView.primaryButton.isEnabled {
+			// Simulate a tap on the next button:
+			sceneView.primaryButton.sendActions(for: .touchUpInside)
+		}
+
 		return true
 	}
 	

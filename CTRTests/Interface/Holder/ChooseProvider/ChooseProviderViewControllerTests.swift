@@ -61,7 +61,7 @@ class ChooseProviderViewControllerTests: XCTestCase {
 			.to(haveCount(1), description: "There should only be 1 element")
 
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(precision: 0.9)
 	}
 
 	func test_content_ggdEnabled() {
@@ -86,7 +86,7 @@ class ChooseProviderViewControllerTests: XCTestCase {
 			.to(haveCount(2), description: "There should be 2 elements")
 
 		// Snapshot
-		sut.assertImage()
+		sut.assertImage(precision: 0.9)
 	}
 
 	func test_chooseFirstOption() {

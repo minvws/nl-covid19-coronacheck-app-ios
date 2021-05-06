@@ -7,15 +7,19 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class AboutViewModelTests: XCTestCase {
 
-	var sut: AboutViewModel?
+	private var sut: AboutViewModel!
+	private var coordinatorSpy: OpenUrlProtocolSpy!
 
 	override func setUp() {
 		super.setUp()
 
+		coordinatorSpy = OpenUrlProtocolSpy()
 		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "1.0.0"),
 			flavor: AppFlavor.holder
 		)
@@ -23,39 +27,102 @@ class AboutViewModelTests: XCTestCase {
 
 	// MARK: Tests
 
-	/// Test the initializer for the holder
-	func testInitHolder() throws {
+	func test_initializationWithHolder() {
 
 		// Given
 
 		// When
 		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
 			flavor: AppFlavor.holder
 		)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .holderAboutTitle, "Title should match")
-		XCTAssertEqual(strongSut.message, .holderAboutText, "Message should match")
-		XCTAssertTrue(strongSut.version.contains("testInitHolder"), "Version should match")
+		expect(self.sut.title) == .holderAboutTitle
+		expect(self.sut.message) == .holderAboutText
+		expect(self.sut.listHeader) == .holderAboutReadMore
+		expect(self.sut.menu).to(haveCount(2))
+		expect(self.sut.menu.first?.identifier) == .privacyStatement
+		expect(self.sut.menu.last?.identifier) == .accessibility
+		expect(self.sut.version.contains("testInitHolder")) == true
 	}
 
-	/// Test the initializer for the verifier
-	func testInitVerifier() throws {
+	func test_initializationWithVerifier() {
 
 		// Given
 
 		// When
 		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
 			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
 			flavor: AppFlavor.verifier
 		)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .verifierAboutTitle, "Title should match")
-		XCTAssertEqual(strongSut.message, .verifierAboutText, "Message should match")
-		XCTAssertFalse(strongSut.version.contains("testInitVerifier"), "Version should match") // verifier version not in target
+		expect(self.sut.title) == .verifierAboutTitle
+		expect(self.sut.message) == .verifierAboutText
+		expect(self.sut.listHeader) == .verifierAboutReadMore
+		expect(self.sut.menu).to(haveCount(2))
+		expect(self.sut.menu.first?.identifier) == .terms
+		expect(self.sut.menu.last?.identifier) == .accessibility
+		expect(self.sut.version.contains("testInitVerifier")) == false // verifier version not in target language file.
+	}
+
+	func test_menuOptionSelected_privacy() {
+
+		// Given
+
+		// When
+		sut.menuOptionSelected(.privacyStatement)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlPrivacy
+	}
+
+	func test_menuOptionSelected_terms() {
+
+		// Given
+
+		// When
+		sut.menuOptionSelected(.terms)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlPrivacy
+	}
+
+	func test_menuOptionSelected_accessibility_forHolder() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitHolder"),
+			flavor: AppFlavor.holder
+		)
+		// When
+		sut.menuOptionSelected(.accessibility)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlAccessibility
+	}
+
+	func test_menuOptionSelected_accessibility_forVerifier() {
+
+		// Given
+		sut = AboutViewModel(
+			coordinator: coordinatorSpy,
+			versionSupplier: AppVersionSupplierSpy(version: "testInitVerifier"),
+			flavor: AppFlavor.verifier
+		)
+
+		// When
+		sut.menuOptionSelected(.accessibility)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlAccessibility
 	}
 }

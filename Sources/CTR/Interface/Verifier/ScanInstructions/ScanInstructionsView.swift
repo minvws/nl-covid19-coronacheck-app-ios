@@ -21,7 +21,13 @@ class ScanInstructionsView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton(useFullWidth: false)
+		setupPrimaryButton(useFullWidth: {
+			switch traitCollection.preferredContentSizeCategory {
+				case .unspecified: return true
+				case let size where size > .extraLarge: return true
+				default: return false
+			}
+		}())
 		topButtonConstraint?.constant = 32
 
 		// disable the bottom constraint of the scroll view, add our own
