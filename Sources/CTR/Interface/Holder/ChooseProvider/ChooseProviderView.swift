@@ -28,7 +28,7 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label
@@ -119,14 +119,6 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 				constant: -ViewTraits.margin
 			)
 		])
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 	}
 
 	// MARK: Public Access
