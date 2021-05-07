@@ -21,7 +21,7 @@ class DisplayContentView: ScrolledStackView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	override func setupViews() {
