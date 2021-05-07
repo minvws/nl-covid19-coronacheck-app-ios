@@ -17,6 +17,16 @@ class ConsentButton: UIButton {
 		didSet { applyState() }
 	}
 
+    override var accessibilityTraits: UIAccessibilityTraits {
+        get { return UISwitch().accessibilityTraits }
+        set { super.accessibilityTraits = newValue }
+    }
+
+    override var accessibilityValue: String? {
+        get { return isSelected ? "1" : "0" }
+        set { super.accessibilityValue = newValue }
+    }
+    
 	var useHapticFeedback = true
 
 	required init(title: String = "", selected: Bool = false) {
