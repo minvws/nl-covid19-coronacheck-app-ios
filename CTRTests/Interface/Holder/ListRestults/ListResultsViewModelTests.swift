@@ -7,17 +7,15 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class ListResultsViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: ListResultsViewModel?
-
-	/// The coordinator spy
-	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-
-	/// The proof manager spy
-	var proofManagingSpy = ProofManagingSpy()
+	private var sut: ListResultsViewModel!
+	private var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	private var proofManagingSpy: ProofManagingSpy!
+	private let maxValidity = 48
 
 	/// Date parser
 	private lazy var parseDateFormatter: ISO8601DateFormatter = {
@@ -33,7 +31,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut = ListResultsViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			proofManager: proofManagingSpy,
-			maxValidity: 48
+			maxValidity: maxValidity
 		)
 	}
 
@@ -52,13 +50,13 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedGetTestWrapperResult = pendingWrapper
 
 		// When
-		sut?.checkResult()
+		sut.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsPendingTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsPendingText, "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		expect(self.sut.title) == .holderTestResultsPendingTitle
+		expect(self.sut.message) == .holderTestResultsPendingText
+		expect(self.sut.buttonTitle) == .holderTestResultsBackToMenuButton
+		expect(self.sut.listItem).to(beNil())
 	}
 
 	/// Test the check result method with a not negative test result
@@ -80,13 +78,13 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedGetTestWrapperResult = notNegativeWrapper
 
 		// When
-		sut?.checkResult()
+		sut.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		expect(self.sut.title) == .holderTestResultsNoResultsTitle
+		expect(self.sut.message) == String(format: .holderTestResultsNoResultsText, "\(maxValidity)")
+		expect(self.sut.buttonTitle) == .holderTestResultsBackToMenuButton
+		expect(self.sut.listItem).to(beNil())
 	}
 
 	/// Test the check result method with a too old test result
@@ -108,15 +106,14 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedGetTestWrapperResult = tooOldWrapper
 
 		// When
-		sut?.checkResult()
+		sut.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
-		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
-		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultTooOld", "Identifier should match")
-
+		expect(self.sut.title) == .holderTestResultsResultsTitle
+		expect(self.sut.message) == .holderTestResultsResultsText
+		expect(self.sut.buttonTitle) == .holderTestResultsResultsButton
+		expect(self.sut.listItem).toNot(beNil())
+		expect(self.sut.listItem?.identifier) == "testCheckResultTooOld"
 	}
 
 	/// Test the check result method with a too new test result
@@ -140,14 +137,14 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedGetTestWrapperResult = tooNewWrapper
 
 		// When
-		sut?.checkResult()
+		sut.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
-		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
-		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultTooNew", "Identifier should match")
+		expect(self.sut.title) == .holderTestResultsResultsTitle
+		expect(self.sut.message) == .holderTestResultsResultsText
+		expect(self.sut.buttonTitle) == .holderTestResultsResultsButton
+		expect(self.sut.listItem).toNot(beNil())
+		expect(self.sut.listItem?.identifier) == "testCheckResultTooNew"
 	}
 
 	/// Test the check result method with a valid test result
@@ -171,14 +168,14 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolOne
 
 		// When
-		sut?.checkResult()
+		sut.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
-		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
-		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultValid", "Identifier should match")
+		expect(self.sut.title) == .holderTestResultsResultsTitle
+		expect(self.sut.message) == .holderTestResultsResultsText
+		expect(self.sut.buttonTitle) == .holderTestResultsResultsButton
+		expect(self.sut.listItem).toNot(beNil())
+		expect(self.sut.listItem?.identifier) == "testCheckResultValid"
 	}
 
 	/// Test the check result method with a valid test result
@@ -207,78 +204,74 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolTwo
 
 		// When
-		sut?.checkResult()
+		sut.checkResult()
 
 		// Then
-		XCTAssertEqual(sut?.title, .holderTestResultsResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsResultsText, "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsResultsButton, "Button should match")
-		XCTAssertNotNil(sut?.listItem, "Selected item should NOT be nil")
-		XCTAssertEqual(sut?.listItem?.identifier, "testCheckResultValid", "Identifier should match")
+		expect(self.sut.title) == .holderTestResultsResultsTitle
+		expect(self.sut.message) == .holderTestResultsResultsText
+		expect(self.sut.buttonTitle) == .holderTestResultsResultsButton
+		expect(self.sut.listItem).toNot(beNil())
+		expect(self.sut.listItem?.identifier) == "testCheckResultValid"
 	}
 
 	/// Test tap on the next button with an item selected
-	func testButtonTappedListItemNotNil() throws {
+	func testButtonTappedListItemNotNil() {
 
 		// Given
-		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
+		sut.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
 
 		// When
-		sut?.buttonTapped()
+		sut.buttonTapped()
 
 		// Then
-		XCTAssertTrue(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be executed")
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
+		expect(self.proofManagingSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.sut.showAlert) == false
 	}
 
 	/// Test tap on the next button with no item selected
-	func testButtonTappedListItemNil() throws {
+	func testButtonTappedListItemNil() {
 
 		// Given
-		sut?.listItem = nil
+		sut.listItem = nil
 
 		// When
-		sut?.buttonTapped()
+		sut.buttonTapped()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
+		expect(self.holderCoordinatorDelegateSpy.navigateBackToStartCalled) == true
+		expect(self.sut.showAlert) == false
 	}
 
 	/// Test tap on the close button with an item selected
-	func testDismissListItemNotNil() throws {
+	func testDismissListItemNotNil() {
 
 		// Given
-		sut?.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
+		sut.listItem = ListResultItem(identifier: "test", date: "test", holder: "CC 10 MAR")
 
 		// When
-		sut?.dismiss()
+		sut.dismiss()
 
 		// Then
-		XCTAssertFalse(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be not executed")
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.showAlert, "Alert should be shown")
+		expect(self.proofManagingSpy.invokedFetchIssuerPublicKeys) == false
+		expect(self.sut.showAlert) == true
 	}
 
 	/// Test tap on the close button with no item selected
-	func testDismissListItemNil() throws {
+	func testDismissListItemNil() {
 
 		// Given
-		sut?.listItem = nil
+		sut.listItem = nil
 
 		// When
-		sut?.dismiss()
+		sut.dismiss()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.showAlert, "Alert should not be shown")
+		expect(self.holderCoordinatorDelegateSpy.navigateBackToStartCalled) == true
+		expect(self.sut.showAlert) == false
 	}
 
 	/// Test step one with an error
-	func testStepOneIssuerPublicKeysError() throws {
+	func testStepOneIssuerPublicKeysError() {
 
 		// Given
 		let error = NSError(
@@ -288,33 +281,29 @@ class ListResultsViewModelTests: XCTestCase {
         proofManagingSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 
 		// When
-		sut?.createProofStepOne()
+		sut.createProofStepOne()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertTrue(strongSut.showError, "Error should not be nil")
-		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
+		expect(self.sut.showError) == true
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step one without an error
-	func testStepOneIssuerPublicKeysNoError() throws {
+	func testStepOneIssuerPublicKeysNoError() {
 
 		// Given
 		proofManagingSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 
 		// When
-		sut?.createProofStepOne()
+		sut.createProofStepOne()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertTrue(proofManagingSpy.invokedFetchNonce, "Step 2 should be called")
-		XCTAssertTrue(strongSut.shouldShowProgress, "Progress should be shown")
+		expect(self.proofManagingSpy.invokedFetchNonce) == true
+		expect(self.sut.shouldShowProgress) == true
 	}
 
 	/// Test step two with an error
-	func testStepTwoNonceError() throws {
+	func testStepTwoNonceError() {
 
 		// Given
 		let error = NSError(
@@ -324,33 +313,29 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedFetchNonceOnErrorResult = (error, ())
 
 		// When
-		sut?.createProofStepTwo()
+		sut.createProofStepTwo()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertTrue(strongSut.showError, "Error should not be nil")
-		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
+		expect(self.sut.showError) == true
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step one without an error
-	func testStepTwoNonceNoError() throws {
+	func testStepTwoNonceNoError() {
 
 		// Given
 		proofManagingSpy.shouldInvokeFetchNonceOnCompletion = true
 
 		// When
-		sut?.createProofStepTwo()
+		sut.createProofStepTwo()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertTrue(proofManagingSpy.invokedFetchSignedTestResult, "Step 3 should be called")
-		XCTAssertTrue(strongSut.shouldShowProgress, "Progress should be shown")
+		expect(self.proofManagingSpy.invokedFetchSignedTestResult) == true
+		expect(self.sut.shouldShowProgress) == true
 	}
 
 	/// Test step three with an error
-	func testStepThreeWithError() throws {
+	func testStepThreeWithError() {
 
 		// Given
 		let error = NSError(
@@ -360,30 +345,26 @@ class ListResultsViewModelTests: XCTestCase {
 		proofManagingSpy.stubbedFetchSignedTestResultOnErrorResult = (error, ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertTrue(strongSut.showError, "Error should not be nil")
-		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
+		expect(self.sut.showError) == true
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step three with a valid result
-	func testStepThreeWithValidResult() throws {
+	func testStepThreeWithValidResult() {
 
 		// Given
 		proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.valid, ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-
-		XCTAssertFalse(strongSut.showError, "Error should be false")
-		XCTAssertFalse(strongSut.shouldShowProgress, "Progress should not be shown")
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
+		expect(self.sut.showError) == false
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.holderCoordinatorDelegateSpy.navigateBackToStartCalled) == true
 	}
 
 	/// Test step two with an already signed result
@@ -395,14 +376,15 @@ class ListResultsViewModelTests: XCTestCase {
         ), ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		XCTAssertNil(sut?.errorMessage, "Error should be nil")
-		XCTAssertEqual(sut?.title, .holderTestResultsAlreadyHandledTitle, "Title should match")
-		XCTAssertEqual(sut?.message, .holderTestResultsAlreadyHandledText, "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		expect(self.sut.errorMessage).to(beNil())
+		expect(self.sut.title) == .holderTestResultsAlreadyHandledTitle
+		expect(self.sut.message) == .holderTestResultsAlreadyHandledText
+		expect(self.sut.buttonTitle) == .holderTestResultsBackToMenuButton
+		expect(self.sut.listItem).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step two with a not negative  result
@@ -414,14 +396,15 @@ class ListResultsViewModelTests: XCTestCase {
         ), ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		XCTAssertNil(sut?.errorMessage, "Error should be nil")
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		expect(self.sut.errorMessage).to(beNil())
+		expect(self.sut.title) == .holderTestResultsNoResultsTitle
+		expect(self.sut.message) == String(format: .holderTestResultsNoResultsText, "\(maxValidity)")
+		expect(self.sut.buttonTitle) == .holderTestResultsBackToMenuButton
+		expect(self.sut.listItem).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step two with a too new  result
@@ -433,14 +416,15 @@ class ListResultsViewModelTests: XCTestCase {
 		), ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		expect(self.sut.errorMessage).toNot(beNil())
+		expect(self.sut.title) == .holderTestResultsNoResultsTitle
+		expect(self.sut.message) == String(format: .holderTestResultsNoResultsText, "\(maxValidity)")
+		expect(self.sut.buttonTitle) == .holderTestResultsBackToMenuButton
+		expect(self.sut.listItem).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step two with a too old  result
@@ -452,18 +436,19 @@ class ListResultsViewModelTests: XCTestCase {
 		), ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
-		XCTAssertEqual(sut?.title, .holderTestResultsNoResultsTitle, "Title should match")
-		XCTAssertEqual(sut?.message, String(format: .holderTestResultsNoResultsText, "48"), "Message should match")
-		XCTAssertEqual(sut?.buttonTitle, .holderTestResultsBackToMenuButton, "Button should match")
-		XCTAssertNil(sut?.listItem, "Selected item should be nil")
+		expect(self.sut.errorMessage).toNot(beNil())
+		expect(self.sut.title) == .holderTestResultsNoResultsTitle
+		expect(self.sut.message) == String(format: .holderTestResultsNoResultsText, "\(maxValidity)")
+		expect(self.sut.buttonTitle) == .holderTestResultsBackToMenuButton
+		expect(self.sut.listItem).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test step two with a too old  result
-	func testStepThreeWithUnknownError() throws {
+	func testStepThreeWithUnknownError() {
 
 		// Given
         proofManagingSpy.stubbedFetchSignedTestResultOnCompletionResult = (.unknown(
@@ -471,10 +456,11 @@ class ListResultsViewModelTests: XCTestCase {
 		), ())
 
 		// When
-		sut?.createProofStepThree()
+		sut.createProofStepThree()
 
 		// Then
-		XCTAssertNotNil(sut?.errorMessage, "Error should not be nil")
+		expect(self.sut.errorMessage).toNot(beNil())
+		expect(self.sut.shouldShowProgress) == false
 	}
 
 	/// Test the display of the identity
@@ -505,10 +491,10 @@ class ListResultsViewModelTests: XCTestCase {
 		examples.forEach { expectedResult, holder in
 
 			// When
-			let result = sut?.getDisplayIdentity(holder)
+			let result = sut.getDisplayIdentity(holder)
 
 			// Then
-			XCTAssertEqual(expectedResult, result, "Display Indentity should match")
+			expect(result) == expectedResult
 		}
 	}
 }
