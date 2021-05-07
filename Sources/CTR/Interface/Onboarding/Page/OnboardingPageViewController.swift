@@ -7,6 +7,12 @@
 
 import UIKit
 
+protocol OnboardingPageViewControllerDelegate: AnyObject {
+    
+    /// Delegates the onAccessibilityScroll event
+    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool
+}
+
 class OnboardingPageViewController: BaseViewController {
 	
 	/// The model
@@ -14,6 +20,9 @@ class OnboardingPageViewController: BaseViewController {
 	
 	/// The view
 	let sceneView = OnboardingPageView()
+    
+    /// The delegate
+    weak var delegate: OnboardingPageViewControllerDelegate?
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -34,6 +43,11 @@ class OnboardingPageViewController: BaseViewController {
 		
 		view = sceneView
 	}
+    
+    /// Use accessibility scroll event to navigate.
+    override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+        return delegate?.onAccessibilityScroll(direction) ?? false
+    }
 	
 	override func viewDidLoad() {
 		
