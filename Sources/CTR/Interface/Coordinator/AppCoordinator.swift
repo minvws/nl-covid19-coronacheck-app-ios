@@ -79,7 +79,7 @@ class AppCoordinator: Coordinator, Logging {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        navigationController.pushViewController(destination, animated: false)
+        navigationController.viewControllers = [destination]
     }
 
     /// Start the real application
@@ -191,7 +191,13 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// Retry loading the requirements
     func retry() {
 
-		startLauncher()
+		if let presentedViewController = navigationController.presentedViewController {
+			presentedViewController.dismiss(animated: true) { [weak self] in
+				self?.startLauncher()
+			}
+		} else {
+			startLauncher()
+		}
     }
 }
 
