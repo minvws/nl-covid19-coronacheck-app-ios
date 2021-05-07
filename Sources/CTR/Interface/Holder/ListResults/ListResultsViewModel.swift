@@ -200,6 +200,7 @@ class ListResultsViewModel: Logging {
 		// Step 1: Fetch the public keys
 		proofManager?.fetchIssuerPublicKeys(
 			onCompletion: { [weak self] in
+				self?.decrementProgressCount()
 				self?.createProofStepTwo()
 			}, onError: { [weak self] error in
 				self?.decrementProgressCount()
@@ -217,6 +218,7 @@ class ListResultsViewModel: Logging {
 		// Step 2: Fetch the nonce and stoken
 		proofManager?.fetchNonce(
 			onCompletion: { [weak self] in
+				self?.decrementProgressCount()
 				self?.createProofStepThree()
 			}, onError: { [weak self] error in
 				self?.decrementProgressCount()
