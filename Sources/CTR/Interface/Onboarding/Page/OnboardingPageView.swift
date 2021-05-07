@@ -44,7 +44,7 @@ class OnboardingPageView: ScrolledStackView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
 	/// The message label
@@ -82,13 +82,6 @@ class OnboardingPageView: ScrolledStackView {
 				multiplier: ViewTraits.imageHeightPercentage
 			)
 		])
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		titleLabel.accessibilityTraits = .header
 	}
 
 	// MARK: Public Access

@@ -189,7 +189,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 		)
 		button.accessibilityIdentifier = "TorchButton"
 		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
+		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button
 		navigationController?.navigationItem.rightBarButtonItem = button
 	}

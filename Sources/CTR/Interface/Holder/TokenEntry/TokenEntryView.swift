@@ -30,7 +30,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
 	/// The message label
@@ -155,15 +155,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 			}
 		}())
 	}
-	
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-		
-		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
-	}
-	
+
 	@objc func userNeedsATokenButtonTapped() {
 
 		userNeedsATokenButtonTappedCommand?()

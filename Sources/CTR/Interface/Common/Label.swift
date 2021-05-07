@@ -116,6 +116,16 @@ class Label: UILabel {
     }
     
     @discardableResult
+    func header(_ isHeader: Bool = true) -> Self {
+        if isHeader {
+            accessibilityTraits.insert(.header)
+        } else {
+            accessibilityTraits.remove(.header)
+        }
+        return self
+    }
+    
+    @discardableResult
     func hideIfEmpty() -> Self {
         isHidden = text?.isEmpty == true
         return self
