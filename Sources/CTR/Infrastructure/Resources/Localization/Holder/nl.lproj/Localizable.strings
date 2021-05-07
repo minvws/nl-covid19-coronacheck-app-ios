@@ -85,6 +85,7 @@
 "general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
+"general.government.logo" = "Logo Rijksoverheid";
 "general.loading" = "Bezig met laden";
 "general.notification" = "Let op!";
 "general.menu.open" = "Open zijmenu";
