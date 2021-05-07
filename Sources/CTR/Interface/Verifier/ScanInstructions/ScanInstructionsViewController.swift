@@ -49,27 +49,30 @@ class ScanInstructionsViewController: BaseViewController {
 		}
 	}
 
-	private func setupContent(_ list: [(title: String, text: String, image: UIImage?)]) {
+    private func setupContent(_ content: [ScanInstructions]) {
 
-		for item in list {
+		for item in content {
 			if let image = item.image {
-				let view = UIImageView(image: image)
-				view.translatesAutoresizingMaskIntoConstraints = false
-				view.contentMode = .center
-				sceneView.stackView.addArrangedSubview(view)
-				sceneView.stackView.setCustomSpacing(32, after: view)
+				let imageView = UIImageView(image: image)
+                imageView.isAccessibilityElement = true
+                imageView.accessibilityLabel = item.imageDescription
+                imageView.translatesAutoresizingMaskIntoConstraints = false
+                imageView.contentMode = .center
+				sceneView.stackView.addArrangedSubview(imageView)
+				sceneView.stackView.setCustomSpacing(32, after: imageView)
 			}
-			let label = Label(title3: item.title, montserrat: true)
+            
+            let label = Label(title3: item.title, montserrat: true).header()
 			sceneView.stackView.addArrangedSubview(label)
 			sceneView.stackView.setCustomSpacing(8, after: label)
 
-			let content = TextView(htmlText: item.text)
-			content.linkTouched { [weak self] url in
+			let text = TextView(htmlText: item.text)
+			text.linkTouched { [weak self] url in
 				print("tapped on \(url)")
 				self?.viewModel.linkTapped(url)
 			}
-			sceneView.stackView.addArrangedSubview(content)
-			sceneView.stackView.setCustomSpacing(56, after: content)
+			sceneView.stackView.addArrangedSubview(text)
+			sceneView.stackView.setCustomSpacing(56, after: text)
 		}
 	}
 }
