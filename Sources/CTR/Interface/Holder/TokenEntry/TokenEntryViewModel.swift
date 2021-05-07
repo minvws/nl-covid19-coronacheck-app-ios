@@ -120,37 +120,12 @@ class TokenEntryViewModel {
 		}
 	}
 
-	private var inProgressCount = 0 {
-		didSet {
-			objc_sync_enter(self)
-			defer { objc_sync_exit(self) }
-
-			guard inProgressCount >= 0 else { return }
-
-			let newState = inProgressCount > 0
-			// Prevent multiple applications of same shouldShowProgress
-			// state, showing multiple spinners..
-			if shouldShowProgress != newState {
-				shouldShowProgress = newState
-			}
+	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
+		ProgressIndicationCounter { [weak self] in
+			// Do not increment/decrement progress within this closure
+			self?.shouldShowProgress = $0
 		}
-	}
-
-	private var disableNextButtonCount = 0 {
-		didSet {
-			objc_sync_enter(self)
-			defer { objc_sync_exit(self) }
-
-			guard disableNextButtonCount >= 0 else { return }
-
-			let newState = inProgressCount > 0
-			// Prevent multiple applications of same shouldShowProgress
-			// state, showing multiple spinners..
-			if shouldShowProgress != newState {
-				shouldShowProgress = newState
-			}
-		}
-	}
+	}()
 
 	// MARK: - Initializer
 
@@ -245,7 +220,7 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
 	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
-		guard inProgressCount == 0 else { return }
+		guard progressIndicationCounter.isInactive else { return }
 
 		switch initializationMode {
 			case .regular:
@@ -257,7 +232,7 @@ class TokenEntryViewModel {
 
 	/// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
 	func resendVerificationCodeButtonTapped() {
-		guard inProgressCount == 0 else { return }
+		guard progressIndicationCounter.isInactive else { return }
 
 		fieldErrorMessage = nil
 
@@ -267,7 +242,7 @@ class TokenEntryViewModel {
 	}
 
 	func userHasNoTokenButtonTapped() {
-		guard inProgressCount == 0 else { return }
+		guard progressIndicationCounter.isInactive else { return }
 
 		coordinator?.presentInformationPage(
 			title: .holderTokenEntryModalNoTokenTitle,
@@ -318,18 +293,18 @@ class TokenEntryViewModel {
 	/// - Parameter requestToken: the request token
 	private func fetchProviders(_ requestToken: RequestToken, verificationCode: String?) {
 
-		incrementProgressCount()
+		progressIndicationCounter.increment()
 
 		proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
 
 				self?.fetchResult(requestToken, verificationCode: verificationCode)
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 
 			}, onError: { [weak self] error in
 				self?.decideWhetherToAbortRequestTokenProvidedMode()
 				self?.showTechnicalErrorAlert = true
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 			}
 		)
 	}
@@ -343,7 +318,7 @@ class TokenEntryViewModel {
 			return
 		}
 
-		incrementProgressCount()
+		progressIndicationCounter.increment()
 
 		proofManager?.fetchTestResult(
 			requestToken,
@@ -388,7 +363,7 @@ class TokenEntryViewModel {
 					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
 
-			self.decrementProgressCount()
+			self.progressIndicationCounter.decrement()
 		}
 	}
 
@@ -484,20 +459,6 @@ class TokenEntryViewModel {
 		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
 		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
-	}
-
-	// MARK: - +/- Progress Counter
-
-	private func incrementProgressCount() {
-		objc_sync_enter(self)
-		defer { objc_sync_exit(self) }
-		inProgressCount += 1
-	}
-
-	private func decrementProgressCount() {
-		objc_sync_enter(self)
-		defer { objc_sync_exit(self) }
-		inProgressCount -= 1
 	}
 
 	// MARK: - Static private functions

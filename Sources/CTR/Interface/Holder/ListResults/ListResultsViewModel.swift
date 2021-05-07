@@ -44,21 +44,12 @@ class ListResultsViewModel: Logging {
 	@Bindable var listItem: ListResultItem?
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	private var inProgressCount = 0 {
-		didSet {
-			objc_sync_enter(self)
-			defer { objc_sync_exit(self) }
-
-			guard inProgressCount >= 0 else { return }
-
-			let newState = inProgressCount > 0
-			// Prevent multiple applications of same shouldShowProgress
-			// state, showing multiple spinners..
-			if shouldShowProgress != newState {
-				shouldShowProgress = newState
-			}
+	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
+		ProgressIndicationCounter { [weak self] in
+			// Do not increment/decrement progress within this closure
+			self?.shouldShowProgress = $0
 		}
-	}
+	}()
 
 	/// Initializer
 	/// - Parameters:
@@ -195,15 +186,15 @@ class ListResultsViewModel: Logging {
 	// Create the proof
 	func createProofStepOne() {
 
-		incrementProgressCount()
+		progressIndicationCounter.increment()
 
 		// Step 1: Fetch the public keys
 		proofManager?.fetchIssuerPublicKeys(
 			onCompletion: { [weak self] in
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 				self?.createProofStepTwo()
 			}, onError: { [weak self] error in
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 				self?.showError = true
 				self?.logError("Can't fetch the keys: \(error.localizedDescription)")
 			}
@@ -213,15 +204,15 @@ class ListResultsViewModel: Logging {
 	// Create the proof
 	func createProofStepTwo() {
 
-		incrementProgressCount()
+		progressIndicationCounter.increment()
 
 		// Step 2: Fetch the nonce and stoken
 		proofManager?.fetchNonce(
 			onCompletion: { [weak self] in
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 				self?.createProofStepThree()
 			}, onError: { [weak self] error in
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 				self?.showError = true
 				self?.logError("Can't fetch the nonce: \(error.localizedDescription)")
 			}
@@ -231,15 +222,15 @@ class ListResultsViewModel: Logging {
 	/// Fetch the proof
 	func createProofStepThree() {
 
-		incrementProgressCount()
+		progressIndicationCounter.increment()
 
 		// Step 3: Fetch the signed result
 		proofManager?.fetchSignedTestResult(
 			onCompletion: { [weak self] state in
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 				self?.handleTestProofsResponse(state)
 			}, onError: { [weak self] error in
-				self?.decrementProgressCount()
+				self?.progressIndicationCounter.decrement()
 				self?.showError = true
 				self?.logError("Can't fetch the ism: \(error.localizedDescription)")
 			}
@@ -289,19 +280,5 @@ class ListResultsViewModel: Logging {
 			output.append(" ")
 		}
 		return output.trimmingCharacters(in: .whitespaces)
-	}
-
-	// MARK: - +/- Progress Counter
-
-	private func incrementProgressCount() {
-		objc_sync_enter(self)
-		defer { objc_sync_exit(self) }
-		inProgressCount += 1
-	}
-
-	private func decrementProgressCount() {
-		objc_sync_enter(self)
-		defer { objc_sync_exit(self) }
-		inProgressCount -= 1
 	}
 }
