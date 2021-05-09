@@ -1,5 +1,7 @@
 name: CTR
 
+# - Packages:
+
 packages:
   AppAuth:
     github: openid/AppAuth-iOS.git
@@ -64,7 +66,7 @@ settings:
     AppStore:
       LOG_LEVEL: error
 
-# - Templates (i.e. shared default settings for targets):
+# - Target Templates (i.e. shared default settings for targets):
 
 targetTemplates: 
   Standard_iOS:
@@ -98,7 +100,7 @@ targetTemplates:
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
         VALIDATE_PRODUCT: YES
-        SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
+        DEBUG_INFORMATION_FORMAT: dwarf-with-dsym # Firebase warns, when this is not set for all targets. 
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR #maybe not here
@@ -208,6 +210,8 @@ targetTemplates:
     settings:
       TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
       
+# - Targets
+
 targets:
   Holder:
     templates: 
@@ -301,8 +305,10 @@ targets:
         excludes:
           - "**/__Snapshots__"
 
+# - Schemes
+
 schemes:
-  HolderDevelopment:
+  CoronaCheck:
     build:
       targets:
         Holder: all
@@ -327,4 +333,16 @@ schemes:
     analyze:
       config: Development
     archive:
+      config: AppStore
+  Verifier:
+    build:
+      targets:
+        Verifier: all
+    run:
       config: Development
+    profile:
+      config: Development
+    analyze:
+      config: Development
+    archive:
+      config: AppStore
