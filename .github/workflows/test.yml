@@ -53,13 +53,10 @@ jobs:
           git lfs pull
           git checkout .
 
-      - name: Compile dependencies
+      - name: Make Environment
         run: |
           make ci
-      - name: Prepare Project Fastfile
-        run: |
-          Vendor/XcodeGen/.build/release/xcodegen generate --spec project.yml
-          
+
       - name: Build and test
         env:
           SLACK_URL: ${{ secrets.SLACK_URL }}

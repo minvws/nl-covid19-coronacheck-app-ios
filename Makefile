@@ -1,7 +1,7 @@
-dev: install_dev_deps install_githooks
-ci: install_ci_deps
+dev: install_dev_deps install_githooks generate_project
+ci: install_ci_deps generate_project
 
-# -- setup --
+# -- setup environment --
 
 install_dev_deps: build_xcodegen bundler
 	@echo "All dev dependencies are installed"
@@ -12,10 +12,15 @@ install_ci_deps: build_xcodegen bundler
 bundler: 
 	@bundle install
 
+# -- generate -- 
+
+generate_project: 
+	Vendor/XcodeGen/.build/release/xcodegen  --spec project.yml
+
 # -- building -- 
 
 build_xcodegen:
-	@cd vendor/XcodeGen && swift build -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.13"
+	@cd Vendor/XcodeGen && swift build -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.13"
 
 # -- git hooks: -- 
 
