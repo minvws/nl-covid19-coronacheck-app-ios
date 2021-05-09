@@ -1,3 +1,5 @@
+"general.government.logo" = "Logo of Central Government";
+
 /* Link naar web accessibility pagina */
 "verifier.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
 
@@ -22,7 +24,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br/>In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect<b>, the visitor is not allowed access.</p>";
+"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br/>In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect</b>, the visitor is not allowed access.</p>";
 
 
 /* Voice over voor begin van een lijst */
@@ -46,6 +48,7 @@
 "general.error.nointernet.text" = "You're not connected to the internet right now.";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
+"general.government.logo" = "Logo of Central Government";
 "general.loading" = "Loading";
 "general.notification" = "Watch out!";
 "general.menu.open" = "Open side menu";
@@ -112,7 +115,7 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR code";
 "verifier.start.header" = "Get started";
-"verifier.start.message" = "Now scan the QR codes of your visitors. But please note: you're only allowed to give access to visitors with a valid QR code. <a href=\"https://coronacheck.nl/scanner\">How scanning works.</a>";
+"verifier.start.message" = "Now scan the QR codes of your visitors. But please note: you're only allowed to give access to visitors with a valid QR code. <a href=\"https://coronacheck.nl/en/scanner\">How scanning works.</a>";
 "verifier.start.button.title" = "Start scanning";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 
@@ -125,7 +128,7 @@
 "verifier.instructions.access.title" = "3. Green screen";
 "verifier.instructions.access.text" = "Green screen? The visitor has a valid negative test declaration. Now check whether the data on the green screen match the data on the proof of identity. All good? Then the visitor may enter. They might also need an entrance ticket.";
 "verifier.instructions.denied.title" = "4. Red screen";
-"verifier.instructions.denied.text" = "Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a recent negative test result. Here's what you can do: <br\><br\><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a negative test result? Direct the visitor to our help desk. Phone number: <a href=\"tel:\\08001421\">0800-1421</a>.</li></ul> <br\>A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter. Find more information <a href=\"https://www.coronacheck.nl/scanner\">here</a>.";
+"verifier.instructions.denied.text" = "Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a recent negative test result. Here's what you can do: <br\><br\><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a negative test result? Direct the visitor to our help desk. Phone number: <a href=\"tel:\\08001421\">0800-1421</a>.</li></ul> <br\>A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter. Find more information <a href=\"https://coronacheck.nl/en/scanner\">here</a>.";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR code";

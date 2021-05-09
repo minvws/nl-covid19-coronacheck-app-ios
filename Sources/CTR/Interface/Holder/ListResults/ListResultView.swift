@@ -42,7 +42,7 @@ class ListResultView: BaseView {
 	/// The header label
 	let headerLabel: Label = {
 
-		return Label(caption1SemiBold: nil).multiline()
+        return Label(caption1SemiBold: nil).multiline().header()
 	}()
 
 	/// The title label
@@ -228,7 +228,6 @@ class ListResultView: BaseView {
 
 		super.setupAccessibility()
 
-		headerLabel.accessibilityTraits = .header
 		disclaimerButton.accessibilityLabel = .holderTestResultsDisclaimerAccessibility
 
 		accessibilityView.isAccessibilityElement = true

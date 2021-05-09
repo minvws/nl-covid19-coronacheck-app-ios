@@ -91,7 +91,7 @@ class MenuViewController: BaseViewController {
 			)
 			button.accessibilityIdentifier = "CloseButton"
 			button.accessibilityLabel = accessibilityLabel
-			button.accessibilityTraits = UIAccessibilityTraits.button
+			button.accessibilityTraits = .button
 			button.tintColor = Theme.colors.secondary
 			navigationItem.hidesBackButton = true
 			navigationItem.leftBarButtonItem = button

@@ -41,8 +41,7 @@ class InformationView: BaseView {
 
 	/// The title label
 	private let titleLabel: Label = {
-
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label

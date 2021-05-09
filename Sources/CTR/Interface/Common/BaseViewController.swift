@@ -101,7 +101,7 @@ class BaseViewController: UIViewController {
 		)
 		button.accessibilityIdentifier = "CloseButton"
 		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
+		button.accessibilityTraits = .button
 		button.tintColor = tintColor
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
@@ -125,7 +125,7 @@ class BaseViewController: UIViewController {
 		)
 		button.accessibilityIdentifier = "BackButton"
 		button.accessibilityLabel = accessibilityLabel
-		button.accessibilityTraits = UIAccessibilityTraits.button
+		button.accessibilityTraits = .button
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
 		navigationController?.navigationItem.leftBarButtonItem = button

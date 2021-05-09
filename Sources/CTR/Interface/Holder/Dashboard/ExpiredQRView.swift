@@ -36,7 +36,7 @@ class ExpiredQRView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(body: nil).multiline()
+        return Label(body: nil).multiline().header()
 	}()
 
 	/// The close button
@@ -122,8 +122,6 @@ class ExpiredQRView: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 		// Button
 		closeButton.accessibilityLabel = .close
 	}

@@ -28,7 +28,7 @@ class AboutView: ScrolledStackView {
 
 	private let listHeaderLabel: Label = {
 
-		return Label(caption1SemiBold: nil).multiline()
+        return Label(caption1SemiBold: nil).multiline().header()
 	}()
 
 	/// The stack view for the menu items
@@ -76,13 +76,6 @@ class AboutView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 			listHeaderLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.listHeaderHeight)
 		])
-	}
-
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-
-		listHeaderLabel.accessibilityTraits = .header
 	}
 
 	// MARK: Public Access

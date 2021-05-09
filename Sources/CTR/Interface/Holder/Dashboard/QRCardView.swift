@@ -29,7 +29,7 @@ class QRCardView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(title3: nil, montserrat: true).multiline()
+        return Label(title3: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The time label
@@ -209,9 +209,6 @@ class QRCardView: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-
-		// Title
-		titleLabel.accessibilityTraits = .header
 
 		// Time
 		timeLabel.accessibilityTraits = .updatesFrequently
