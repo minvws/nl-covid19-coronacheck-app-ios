@@ -28,6 +28,9 @@ packages:
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
+projectReferences:
+  ViewControllerPresentationSpy:
+    path: Vendor/ViewControllerPresentationSpy-main/Source/ViewControllerPresentationSpy.xcodeproj
 
 # - Configurations:
 
@@ -196,10 +199,23 @@ targetTemplates:
     type: bundle.unit-test
     dependencies:
       - package: OHHTTPStubs
+        product: OHHTTPStubs
+      - package: OHHTTPStubs
+        product: OHHTTPStubsSwift
       - package: Nimble
       - package: SnapshotTesting
+      - target: Holder
+      - target: ViewControllerPresentationSpy/ViewControllerPresentationSpy
       
 targets:
+  CTRTests:
+    templates:
+      - Standard_UnitTesting
+    sources:
+      - path: CTRTests
+        excludes:
+          - "**/__Snapshots__"
+        
   Holder:
     templates: 
       - Standard_iOS
