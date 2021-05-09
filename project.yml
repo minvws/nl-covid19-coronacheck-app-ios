@@ -1,0 +1,286 @@
+name: CTR
+
+packages:
+  AppAuth:
+    github: openid/AppAuth-iOS.git
+    majorVersion: 1.4.0
+  CocoaLumberjack:
+    github: CocoaLumberjack/CocoaLumberjack
+    majorVersion: 3.7.2
+  MBProgressHUD:
+    github: jdg/MBProgressHUD
+    majorVersion: 1.2.0
+  Lottie:
+    github: airbnb/lottie-ios
+    majorVersion: 3.2.1
+  Firebase:
+    github: firebase/firebase-ios-sdk/
+    exactVersion: 7.5.1
+  OHHTTPStubs:
+    github: AliSoftware/OHHTTPStubs
+    majorVersion: 9.1.0
+  Nimble:
+    github: Quick/Nimble
+    majorVersion: 9.0.0
+  SnapshotTesting:
+    github: pointfreeco/swift-snapshot-testing
+    majorVersion: 1.8.2
+  IOSSecuritySuite:
+    github: securing/IOSSecuritySuite
+    majorVersion: 1.8.0
+
+# - Configurations:
+
+configs:
+  Development: debug
+  FirebaseTest: release
+  FirebaseAcceptance: release
+  FirebaseProduction: release
+  AppStore: release
+
+# - Project Level settings:
+
+settings:
+  base:
+    IPHONEOS_DEPLOYMENT_TARGET: 11.0
+    SWIFT_VERSION: 5.0
+    VERSIONING_SYSTEM: apple-generic
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+    FRAMEWORK_SEARCH_PATHS:
+      - "$(inherited)"
+      - "$(PROJECT_DIR)"
+    LD_RUNPATH_SEARCH_PATHS:
+      - "$(inherited)"
+      - "@executable_path/Frameworks"
+  configs:
+    Development:
+      LOG_LEVEL: debug
+    FirebaseTest:
+      LOG_LEVEL: debug
+    FirebaseAcceptance:
+      LOG_LEVEL: debug
+    FirebaseProduction:
+      LOG_LEVEL: error
+    AppStore:
+      LOG_LEVEL: error
+
+# - Templates (i.e. shared default settings for targets):
+
+targetTemplates: 
+  Standard_iOS:
+    platform: iOS
+    type: application
+    dependencies:
+      - package: AppAuth
+        product: AppAuth
+      - package: AppAuth
+        product: AppAuthCore
+      - package: CocoaLumberjack
+        product: CocoaLumberjack
+      - package: CocoaLumberjack
+        product: CocoaLumberjackSwift
+      - package: MBProgressHUD
+      - package: Lottie
+      - package: Firebase
+        product: FirebaseCrashlytics
+      - package: IOSSecuritySuite
+      - framework: clcore.framework
+        embed: false
+      - framework: openssl.framework
+        embed: false
+    settings:
+      base:
+        MARKETING_VERSION: 1.2.0
+        CURRENT_PROJECT_VERSION: 25
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: CTR.entitlements
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
+        TARGETED_DEVICE_FAMILY: 1
+        PRODUCT_NAME: $(TARGET_NAME)
+        VALIDATE_PRODUCT: YES
+      configs:
+        Development:
+          PRODUCT_MODULE_NAME: CTR #maybe not here
+          NETWORK_CONFIGURATION: Development
+          CODE_SIGN_IDENTITY: Apple Development
+          CODE_SIGN_STYLE: Automatic
+          DEVELOPMENT_TEAM: QMK879NYMV
+          VALIDATE_PRODUCT: NO
+        FirebaseTest:
+          NETWORK_CONFIGURATION: Test
+          CODE_SIGN_IDENTITY: iPhone Distribution
+          CODE_SIGN_STYLE: Manual
+          DEVELOPMENT_TEAM: C2H38GV99H
+        FirebaseAcceptance:
+          NETWORK_CONFIGURATION: ACC
+          CODE_SIGN_IDENTITY: iPhone Distribution
+          CODE_SIGN_STYLE: Manual
+          DEVELOPMENT_TEAM: C2H38GV99H
+        FirebaseProduction:
+          NETWORK_CONFIGURATION: Production
+          CODE_SIGN_IDENTITY: iPhone Distribution
+          CODE_SIGN_STYLE: Manual
+          DEVELOPMENT_TEAM: C2H38GV99H
+        AppStore:
+          NETWORK_CONFIGURATION: Production
+          CODE_SIGN_IDENTITY: iPhone Distribution
+          CODE_SIGN_STYLE: Manual
+          DEVELOPMENT_TEAM: C2H38GV99H
+    info: 
+      properties:
+        NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
+        APP_FLAVOR: ${APP_FLAVOR}
+        CFBundleDevelopmentRegion: nl_NL
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleName: ${DISPLAY_NAME}
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        LSApplicationQueriesSchemes:
+          - 'tel'
+          - 'cydia'
+          - 'sileo'
+          - 'undecimus'
+          - 'zbra'
+        LSRequiresIPhoneOS: true
+        NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen. "
+        UIAppFonts:
+          - 'Montserrat-Bold.ttf'
+          - 'Montserrat-SemiBold.ttf'
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+        UIApplicationSupportsIndirectInputEvents: true
+        UIRequiredDeviceCapabilities:
+          - armv7
+        UIStatusBarStyle: UIStatusBarStyleDarkContent
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+          - UIInterfaceOrientationPortraitUpsideDown
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIViewControllerBasedStatusBarAppearance: true
+    preBuildScripts:
+      - name: Run SwiftLint
+        basedOnDependencyAnalysis: true
+        script: |
+          if which swiftlint >/dev/null; then
+            swiftlint
+          else
+            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+          fi
+    postBuildScripts:
+      - name: Upload Crashlytics
+        basedOnDependencyAnalysis: true
+        inputFiles:
+          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
+          - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
+        script: |
+          if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
+            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          else 
+            "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
+          fi
+          
+  Standard_UnitTesting:
+    platform: iOS
+    type: bundle.unit-test
+    dependencies:
+      - package: OHHTTPStubs
+      - package: Nimble
+      - package: SnapshotTesting
+      
+targets:
+  Holder:
+    templates: 
+      - Standard_iOS
+    sources:
+      - path: Sources
+        excludes:
+          - "CTR/Configuration/Verifier"
+          - "CTR/Interface/Verifier/Launch"
+          - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
+          - "CTR/Configuration/verifier-Info.plist"
+    settings:
+      base: 
+        APP_FLAVOR: holder
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
+        INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
+      configs:
+        Development:
+          DISPLAY_NAME: CoronaCheck D
+          PRODUCT_NAME: CTR #needed?
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.debug
+        FirebaseTest:
+          DISPLAY_NAME: CoronaCheck Test
+          PRODUCT_NAME: CTR TEST #needed?
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Ad Hoc
+        FirebaseAcceptance:
+          DISPLAY_NAME: CoronaCheck ACC
+          PRODUCT_NAME: CTR ACC #needed?
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Ad Hoc
+        FirebaseProduction:
+          DISPLAY_NAME: CoronaCheck PROD
+          PRODUCT_NAME: CTR PROD #needed?
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Ad Hoc
+        AppStore:
+          DISPLAY_NAME: CoronaCheck
+          PRODUCT_NAME: CTR #needed?
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck App Store
+        
+    info:
+      path: Sources/CTR/Configuration/holder-Info.plist
+      properties:
+        CFBundleURLTypes:
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr
+              CFBundleURLSchemes:
+                - coronatester-app-dev
+        UILaunchStoryboardName: LaunchScreenHolder
+  
+  Verifier:
+    templates: 
+      - Standard_iOS
+    sources:
+      - path: Sources
+        excludes:
+          - "CTR/Configuration/Holder"
+          - "CTR/Interface/Holder/Launch"
+          - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
+          - "CTR/Configuration/holder-Info.plist"
+    settings:
+      base: 
+        APP_FLAVOR: verifier
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
+        INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
+      configs:
+        Development:
+          DISPLAY_NAME: Scanner Dev
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.debug
+        FirebaseTest:
+          DISPLAY_NAME: Scanner Test
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+        FirebaseAcceptance:
+          DISPLAY_NAME: Scanner ACC
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+        FirebaseProduction:
+          DISPLAY_NAME: Scanner PROD
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+        AppStore:
+          DISPLAY_NAME: Scanner
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Scanner App Store
+    info:
+      path: Sources/CTR/Configuration/verifier-Info.plist
+      properties:
+        UILaunchStoryboardName: LaunchScreenVerifier
