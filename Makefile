@@ -1,12 +1,16 @@
 dev: install_dev_deps install_githooks
+ci: install_ci_deps
 
-# -- installing --
+# -- setup --
 
-install_dev_deps: build_xcodegen
+install_dev_deps: build_xcodegen bundler
 	@echo "All dev dependencies are installed"
 
-install_ci_deps: build_xcodegen
+install_ci_deps: build_xcodegen bundler
 	@echo "All CI dependencies are installed"
+
+bundler: 
+	@bundle install
 
 # -- building -- 
 
