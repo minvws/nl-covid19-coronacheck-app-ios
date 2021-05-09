@@ -206,16 +206,10 @@ targetTemplates:
       - package: SnapshotTesting
       - target: Holder
       - target: ViewControllerPresentationSpy/ViewControllerPresentationSpy
+    settings:
+      TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
       
 targets:
-  CTRTests:
-    templates:
-      - Standard_UnitTesting
-    sources:
-      - path: CTRTests
-        excludes:
-          - "**/__Snapshots__"
-        
   Holder:
     templates: 
       - Standard_iOS
@@ -253,7 +247,6 @@ targets:
           DISPLAY_NAME: CoronaCheck
           PRODUCT_NAME: CTR #needed?
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck App Store
-        
     info:
       path: Sources/CTR/Configuration/holder-Info.plist
       properties:
@@ -300,3 +293,39 @@ targets:
       path: Sources/CTR/Configuration/verifier-Info.plist
       properties:
         UILaunchStoryboardName: LaunchScreenVerifier
+
+  CTRTests:
+    templates:
+      - Standard_UnitTesting
+    sources:
+      - path: CTRTests
+        excludes:
+          - "**/__Snapshots__"
+
+schemes:
+  HolderDevelopment:
+    build:
+      targets:
+        Holder: all
+        CTRTests: [test]
+    run:
+      config: Development
+    test:
+      config: Development
+      commandLineArguments: 
+        "--unittesting": true
+      language: nl
+      region: NL
+      gatherCoverageData: true
+      coverageTargets:
+        - Holder
+      targets: 
+        - name: CTRTests
+          parallelizable: false
+          randomExecutionOrder: false
+    profile:
+      config: Development
+    analyze:
+      config: Development
+    archive:
+      config: Development
