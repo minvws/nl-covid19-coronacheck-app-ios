@@ -28,9 +28,6 @@ packages:
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
-projectReferences:
-  ViewControllerPresentationSpy:
-    path: Vendor/ViewControllerPresentationSpy-main/Source/ViewControllerPresentationSpy.xcodeproj
 
 # - Configurations:
 
@@ -206,7 +203,8 @@ targetTemplates:
       - package: Nimble
       - package: SnapshotTesting
       - target: Holder
-      - target: ViewControllerPresentationSpy/ViewControllerPresentationSpy
+      - framework: Vendor/ViewControllerPresentationSpy.framework
+        embed: true
     settings:
       TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
       
