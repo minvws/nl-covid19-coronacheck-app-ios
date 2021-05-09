@@ -101,6 +101,7 @@ targetTemplates:
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
         VALIDATE_PRODUCT: YES
+        SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR #maybe not here
