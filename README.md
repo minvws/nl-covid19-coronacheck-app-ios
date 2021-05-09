@@ -16,3 +16,14 @@ If you plan to make non-trivial changes, we recommend to open an issue beforehan
 This increases the chance that we might be able to use your contribution (or it avoids doing work if there are reasons why we wouldn't be able to use it).
 
 Note that all commits should be signed using a gpg key.
+
+## Setting up environment
+
+Running `make dev` will compile: 
+
+- XcodeGen 
+
+and will install githooks for: 
+
+- GitLFS 
+- XcodeGen

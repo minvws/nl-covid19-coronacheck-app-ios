@@ -1,0 +1,386 @@
+name: Project
+include: [environments.yml, AnotherProject/project.yml]
+options:
+  bundleIdPrefix: com.project
+  usesTabs: false
+  indentWidth: 2
+  tabWidth: 2
+  transitivelyLinkDependencies: true
+  deploymentTarget:
+    watchOS: 4.0
+  groupSortPosition: top
+  preGenCommand: echo "This is a pre-gen command"
+  postGenCommand: scripts/script.sh
+  fileTypes:
+    abc:
+      buildPhase: none
+    abcd:
+      buildPhase: none
+fileGroups:
+  - Configs
+  - FileGroup
+  - SomeFile
+  - Utilities
+  - App_iOS/Configuration.storekit
+projectReferences:
+  AnotherProject:
+    path: ./AnotherProject/AnotherProject.xcodeproj
+configFiles:
+  Test Debug: Configs/config.xcconfig
+targets:
+  Legacy:
+    type: ""
+    platform: iOS
+    legacy:
+      toolPath: /usr/bin/true
+      passSettings: true
+
+  App_macOS:
+    type: application
+    platform: macOS
+    scheme: {}
+    info:
+      path: App_macOS/App-Info.plist
+      properties:
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSMainStoryboardFile: Main
+        NSPrincipalClass: NSApplication
+        CFBundleIconFile: ""
+        CustomSetting: $CUSTOM_SETTING
+    attributes:
+      ProvisioningStyle: Automatic
+    sources:
+      - path: App_macOS
+      - path: StandaloneFiles/Standalone.swift
+      - path: Vendor/SomeXPCService.xpc
+      - path: NonExisting
+        optional: true
+    dependencies:
+      - target: Framework_macOS
+      - target: XPC Service
+      - sdk: Contacts.framework
+      - sdk: libc++.tbd
+      - sdk: libz.dylib
+
+  App_iOS:
+    type: application
+    platform: iOS
+    attributes:
+      ProvisioningStyle: Automatic
+    sources:
+      - StandaloneFiles/StandaloneAssets.xcassets
+      - path: App_iOS
+        name: App
+        compilerFlags:
+          - "-Werror"
+        excludes:
+          - "**/excluded-file"
+          - "excluded-file"
+          - "Model.xcmappingmodel"
+          - "Configuration.storekit"
+      - path: App_iOS
+        name: App
+        includes:
+          - "Model.xcmappingmodel"
+      - path: StandaloneFiles/Standalone.swift
+      - FileGroup/UnderFileGroup
+      - Resources/MyBundle.bundle
+      - Resources/SceneKitCatalog.scnassets
+      - Resources/GoogleService-Info.plist
+      - path: Resources/ResourceFolder
+        type: folder
+      - path: Folder
+        type: folder
+        buildPhase: none
+        group: CustomGroup
+      - path: Mintfile
+        type: file
+        buildPhase: none
+        group: CustomGroup
+      - path: Group/File1.swift
+        group: CustomGroup
+      - path: Group2/File2.swift
+        group: CustomGroup
+      - path: CopyFiles
+        buildPhase:
+          copyFiles:
+            destination: productsDirectory
+            subpath: include/$(PRODUCT_NAME)
+      - path: Resources/example.mp4
+        buildPhase: resources
+        resourceTags:
+          - tag1
+          - tag2
+    settings:
+      INFOPLIST_FILE: App_iOS/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.project.app
+    dependencies:
+      - target: Framework_iOS
+      - target: StaticLibrary_ObjC_iOS
+      - carthage: Result
+      - carthage: SwiftyJSON
+        linkType: static
+      - target: Framework2_iOS
+        weak: true
+      - target: App_watchOS
+      - target: iMessageApp
+      - sdk: Contacts.framework
+      - bundle: BundleX.bundle
+      - target: AnotherProject/ExternalTarget
+      - target: App_Clip
+    onlyCopyFilesOnInstall: true
+    scheme:
+      testTargets:
+        - App_iOS_Tests
+        - App_iOS_UITests
+      gatherCoverageData: true
+      disableMainThreadChecker: true
+      stopOnEveryMainThreadCheckerIssue: true
+      configVariants:
+        - Test
+        - Staging
+        - Production
+      commandLineArguments:
+          MyEnabledArgument: true
+          MyDisabledArgument: false
+      storeKitConfiguration: "App_iOS/Configuration.storekit"
+    postbuildScripts:
+      - path: scripts/strip-frameworks.sh
+        name: Strip Unused Architectures from Frameworks
+        runOnlyWhenInstalling: true
+        basedOnDependencyAnalysis: false
+      - name: MyScript
+        script: |
+          echo "You ran a script!"
+          touch "${DERIVED_FILE_DIR}/target.d"
+        inputFileLists:
+          - App_iOS/inputList.xcfilelist
+        outputFileLists:
+          - App_iOS/outputList.xcfilelist
+        discoveredDependencyFile: $(DERIVED_FILE_DIR)/target.d
+
+  EntitledApp:
+    type: application
+    platform: iOS
+    entitlements:
+      path: App_iOS/App.entitlements
+      properties:
+        com.apple.security.application-groups: group.com.app
+
+  App_watchOS:
+      type: application.watchapp2
+      platform: watchOS
+      deploymentTarget: 4.0
+      sources:
+        App_watchOS
+      settings:
+        PRODUCT_BUNDLE_IDENTIFIER: com.project.app.watch
+      dependencies:
+        - target: App_watchOS Extension
+      templates: [MyTemplate]
+
+  App_watchOS Extension:
+      type: watchkit2-extension
+      platform: watchOS
+      sources:
+        App_watchOS Extension
+      settings:
+        PRODUCT_BUNDLE_IDENTIFIER: com.project.app.watch.extension
+      dependencies:
+        - carthage: Result
+          link: false
+
+  iMessageApp:
+    type: application.messages
+    platform: iOS
+    sources: iMessageApp
+    scheme: {}
+    dependencies:
+      - target: iMessageExtension
+
+  iMessageExtension:
+    type: app-extension.messages
+    platform: iOS
+    sources: iMessageExtension
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.project.iMessageApp.extension
+    scheme: {}
+
+  iMessageStickersExtension:
+    type: app-extension.messages-sticker-pack
+    platform: iOS
+    sources:
+      - path: iMessageStickers
+
+  StaticLibrary_ObjC:
+    type: library.static
+    platform: [iOS, tvOS, watchOS, macOS]
+    sources: StaticLibrary_ObjC
+
+  StaticLibrary_Swift:
+    type: library.static
+    platform: iOS
+    sources: StaticLibrary_Swift
+
+  Framework:
+    type: framework
+    platform: [iOS, tvOS, watchOS, macOS]
+    sources:
+      - path: Framework
+        excludes:
+          - "*.xcodeproj"
+      - path: Headers
+        buildPhase: headers
+        type: folder
+        headerVisibility: public
+    postbuildScripts:
+      - name: MyScript
+        path: scripts/script.sh
+    dependencies:
+      - carthage: Result
+      - target: StaticLibrary_ObjC_${platform}
+
+  Framework2:
+    type: framework
+    platform: [iOS, tvOS, watchOS, macOS]
+    sources:
+      - path: Framework
+        excludes:
+          - "*.xcodeproj"
+  TestFramework:
+    type: framework
+    platform: iOS
+    sources:
+      - path: Framework
+        excludes:
+          - "*.xcodeproj"
+    depencencies:
+      - sdk: Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework
+        root: DEVELOPER_DIR
+
+  App_iOS_Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: App_iOS_Tests
+    dependencies:
+      - target: App_iOS
+      - target: TestFramework
+      - carthage: swift-tagged
+        linkType: static
+  App_iOS_UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: App_iOS_UITests
+    dependencies:
+      - target: App_iOS
+
+  App_macOS_Tests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: App_macOS_Tests
+    dependencies:
+      - target: App_macOS
+
+  XPC Service:
+    type: xpc-service
+    platform: macOS
+    sources:
+      - path: XPC Service
+
+  Tool:
+    type: tool
+    platform: macOS
+    sources: [Tool]
+    scheme: {}
+
+  App_Clip:
+    type: application.on-demand-install-capable
+    platform: iOS
+    entitlements:
+      path: App_Clip/Clip.entitlements
+      properties:
+        com.apple.developer.parent-application-identifiers: [$(AppIdentifierPrefix)com.project.appwithclip]
+        com.apple.security.application-groups: group.com.app
+    sources:
+      App_Clip
+    settings:
+      INFOPLIST_FILE: App_Clip/Info.plist
+      PRODUCT_BUNDLE_IDENTIFIER: com.project.app.clip
+    dependencies:
+      - target: Framework_iOS
+      - target: StaticLibrary_ObjC_iOS
+    scheme:
+      testTargets:
+        - App_Clip_Tests
+        - App_Clip_UITests
+
+  App_Clip_Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: App_iOS_Tests
+    dependencies:
+      - target: App_Clip
+      - target: TestFramework
+      - carthage: swift-tagged
+        linkType: static
+
+  App_Clip_UITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: App_Clip_UITests
+    dependencies:
+      - target: App_Clip
+
+schemes:
+  Framework:
+    build:
+      parallelizeBuild: false
+      buildImplicitDependencies: false
+      targets:
+        Framework_iOS: all
+      preActions:
+        - script: echo Starting Framework Build
+          settingsTarget: Framework_iOS
+      runPostActionsOnFailure: true
+    run:
+      commandLineArguments:
+        argument: YES
+        argument.with.dot: YES
+    test:
+      gatherCoverageData: true
+      language: ja
+      region: en
+  App_Scheme:
+    build:
+      targets:
+        App_iOS: all
+    run:
+      simulateLocation:
+        allow: true
+        defaultLocation: Honolulu, HI, USA
+      customLLDBInit: ${SRCROOT}/.lldbinit
+      storeKitConfiguration: "App_iOS/Configuration.storekit"
+      macroExpansion: App_iOS 
+    test:
+      gatherCoverageData: true
+      targets:
+        - App_iOS_UITests
+        - name: App_iOS_Tests
+          parallelizable: true
+          randomExecutionOrder: true
+      customLLDBInit: ${SRCROOT}/.lldbinit
+targetTemplates:
+  MyTemplate:
+    scheme: {}
+aggregateTargets:
+  SuperTarget:
+    attributes:
+      CUSTOM: value
+    targets:
+      - App_iOS
+      - Framework_iOS
+    settings:
+      MY_SETTING: hello
+    buildScripts:
+      - name: MyScript
+        script: echo "do the thing"
