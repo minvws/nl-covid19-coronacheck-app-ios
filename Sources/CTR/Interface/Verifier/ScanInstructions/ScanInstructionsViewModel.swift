@@ -13,6 +13,8 @@ enum ScanInstructionsResult {
 	case scanInstructionsCompleted
 }
 
+typealias ScanInstructions = (title: String, text: String, image: UIImage?, imageDescription: String?)
+
 class ScanInstructionsViewModel: Logging {
 
 	/// Coordination Delegate
@@ -24,8 +26,8 @@ class ScanInstructionsViewModel: Logging {
 	@Bindable private(set) var title: String
 	
 	/// The content of the scene
-	@Bindable private(set) var content: [(title: String, text: String, image: UIImage?)]
-
+    @Bindable private(set) var content: [ScanInstructions]
+    
 	// MARK: - Initializer
 
 	/// Initializer
@@ -39,19 +41,23 @@ class ScanInstructionsViewModel: Logging {
 			(
 				title: .verifierScanInstructionsDistanceTitle,
 				text: .verifierScanInstructionsDistanceText,
-				image: nil
+				image: nil,
+                imageDescription: nil
 			), (
 				title: .verifierScanInstructionsScanTitle,
 				text: .verifierScanInstructionsScanText,
-				image: nil
+				image: nil,
+                imageDescription: nil
 			), (
 				title: .verifierScanInstructionsAccessTitle,
 				text: .verifierScanInstructionsAccessText,
-				image: .greenScreen
+				image: .greenScreen,
+                imageDescription: .verifierScanInstructionsAccessImage
 			), (
 				title: .verifierScanInstructionsDeniedTitle,
 				text: .verifierScanInstructionsDeniedText,
-				image: .redScreen
+				image: .redScreen,
+                imageDescription: .verifierScanInstructionsDeniedImage
 			)
 		]
 	}
