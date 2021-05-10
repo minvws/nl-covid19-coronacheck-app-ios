@@ -26,13 +26,14 @@
 		3C195C9826208043002F0387 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195C9726208043002F0387 /* FirebaseCrashlytics */; };
 		3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CD826208813002F0387 /* OHHTTPStubs */; };
 		3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3C195CDA26208813002F0387 /* OHHTTPStubsSwift */; };
-		3C195CE7262090E5002F0387 /* ViewControllerPresentationSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C195CE4262090BD002F0387 /* ViewControllerPresentationSpy.framework */; };
 		3C565B0F262ECBBB00E17DD7 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 3C565B0E262ECBBB00E17DD7 /* SnapshotTesting */; };
 		3C565B21262ECE0200E17DD7 /* UniversalLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */; };
 		3C565B22262ECE0200E17DD7 /* RequestTokenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */; };
 		3C6C394626283F0100CC7433 /* TokenValidatorSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */; };
 		3CA679092636F41200BDAD9E /* TokenEntryViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA679082636F41200BDAD9E /* TokenEntryViewTests.swift */; };
 		3CA679162637F87500BDAD9E /* TokenEntryViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA679152637F87500BDAD9E /* TokenEntryViewControllerTests.swift */; };
+		3CE287A32649248C00D4457D /* ViewControllerPresentationSpy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE287A22649248C00D4457D /* ViewControllerPresentationSpy.framework */; platformFilter = ios; };
+		3CE287A5264924C000D4457D /* ViewControllerPresentationSpy.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3CE287A22649248C00D4457D /* ViewControllerPresentationSpy.framework */; platformFilter = ios; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3CE9BD832625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CE9BD842625D5EA00D773B3 /* UniversalLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */; };
 		3CED28C926451DF3004404D2 /* ProgressIndicationCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CED28C826451DF3004404D2 /* ProgressIndicationCounter.swift */; };
@@ -592,20 +593,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3C195CE3262090BD002F0387 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 48007C792079A76E007A4AB0;
-			remoteInfo = ViewControllerPresentationSpy;
-		};
-		3C195CE5262090BD002F0387 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 48213D2F25DF8B2100201AEF;
-			remoteInfo = "ViewControllerPresentationSpy-tvOS";
-		};
 		6DDEFB0725AEDCAA00A6912A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6DDEFAE825AEDCA800A6912A /* Project object */;
@@ -615,15 +602,28 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3CE287A4264924B700D4457D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3CE287A5264924C000D4457D /* ViewControllerPresentationSpy.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		326E62C025D45DBF0072CB8E /* demo-root.pem */ = {isa = PBXFileReference; lastKnownFileType = text; path = "demo-root.pem"; sourceTree = "<group>"; };
-		3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ViewControllerPresentationSpy.xcodeproj; path = "Vendor/ViewControllerPresentationSpy-main/Source/ViewControllerPresentationSpy.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		3C42A0622625B85600774E46 /* CTR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CTR.entitlements; sourceTree = "<group>"; };
 		3C565B1F262ECE0200E17DD7 /* UniversalLinkTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniversalLinkTests.swift; sourceTree = "<group>"; };
 		3C565B20262ECE0200E17DD7 /* RequestTokenTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestTokenTests.swift; sourceTree = "<group>"; };
 		3C6C394526283F0100CC7433 /* TokenValidatorSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenValidatorSpy.swift; sourceTree = "<group>"; };
 		3CA679082636F41200BDAD9E /* TokenEntryViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryViewTests.swift; sourceTree = "<group>"; };
 		3CA679152637F87500BDAD9E /* TokenEntryViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenEntryViewControllerTests.swift; sourceTree = "<group>"; };
+		3CE287A22649248C00D4457D /* ViewControllerPresentationSpy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ViewControllerPresentationSpy.framework; path = Vendor/ViewControllerPresentationSpy.framework; sourceTree = "<group>"; };
 		3CE9BD822625D5EA00D773B3 /* UniversalLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalLink.swift; sourceTree = "<group>"; };
 		3CED28C826451DF3004404D2 /* ProgressIndicationCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressIndicationCounter.swift; sourceTree = "<group>"; };
 		3CED28CD26452FB5004404D2 /* ProgressIndicationCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressIndicationCounterTests.swift; sourceTree = "<group>"; };
@@ -994,7 +994,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C565B0F262ECBBB00E17DD7 /* SnapshotTesting in Frameworks */,
-				3C195CE7262090E5002F0387 /* ViewControllerPresentationSpy.framework in Frameworks */,
+				3CE287A32649248C00D4457D /* ViewControllerPresentationSpy.framework in Frameworks */,
 				3CF42A2A2628B51100AAC3B2 /* Nimble in Frameworks */,
 				3C195CD926208813002F0387 /* OHHTTPStubs in Frameworks */,
 				3C195CDB26208813002F0387 /* OHHTTPStubsSwift in Frameworks */,
@@ -1007,27 +1007,11 @@
 		24D22EDDC156812B48895190 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3CE287A22649248C00D4457D /* ViewControllerPresentationSpy.framework */,
 				6D9D3B0D25FA3E2F0031DA5D /* clcore.framework */,
 				6D33015D25CFE70200A98C1C /* openssl.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		3C195CBB2620875F002F0387 /* Vendor */ = {
-			isa = PBXGroup;
-			children = (
-				3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */,
-			);
-			path = Vendor;
-			sourceTree = "<group>";
-		};
-		3C195CDF262090BD002F0387 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				3C195CE4262090BD002F0387 /* ViewControllerPresentationSpy.framework */,
-				3C195CE6262090BD002F0387 /* ViewControllerPresentationSpy.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		3C565B1E262ECE0200E17DD7 /* Model */ = {
@@ -1939,7 +1923,6 @@
 		6DDEFB0925AEDCAA00A6912A /* CTRTests */ = {
 			isa = PBXGroup;
 			children = (
-				3C195CBB2620875F002F0387 /* Vendor */,
 				6DDEFB0C25AEDCAA00A6912A /* Info.plist */,
 				6DB080A925BB0EF300A56B22 /* Infrastrucure */,
 				6D01D8DF25C04FDB00A4AB89 /* Interface */,
@@ -2200,6 +2183,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6DDEFB1D25AEDCAA00A6912A /* Build configuration list for PBXNativeTarget "CTRTests" */;
 			buildPhases = (
+				3CE287A4264924B700D4457D /* CopyFiles */,
 				6DDEFB0225AEDCAA00A6912A /* Sources */,
 				6DDEFB0325AEDCAA00A6912A /* Frameworks */,
 				6DDEFB0425AEDCAA00A6912A /* Resources */,
@@ -2263,12 +2247,6 @@
 			);
 			productRefGroup = 6DDEFAF125AEDCA800A6912A /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 3C195CDF262090BD002F0387 /* Products */;
-					ProjectRef = 3C195CDE262090BD002F0387 /* ViewControllerPresentationSpy.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				6DDEFAEF25AEDCA800A6912A /* Holder */,
@@ -2277,23 +2255,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		3C195CE4262090BD002F0387 /* ViewControllerPresentationSpy.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ViewControllerPresentationSpy.framework;
-			remoteRef = 3C195CE3262090BD002F0387 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		3C195CE6262090BD002F0387 /* ViewControllerPresentationSpy.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = ViewControllerPresentationSpy.framework;
-			remoteRef = 3C195CE5262090BD002F0387 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6DD7D88C25D26D3A00B97B7F /* Resources */ = {
@@ -3135,6 +3096,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor",
+				);
 				INFOPLIST_FILE = CTRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3247,6 +3212,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor",
+				);
 				INFOPLIST_FILE = CTRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3360,6 +3329,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor",
+				);
 				INFOPLIST_FILE = CTRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3472,6 +3445,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor",
+				);
 				INFOPLIST_FILE = CTRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3876,6 +3853,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor",
+				);
 				INFOPLIST_FILE = CTRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3897,6 +3878,10 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QMK879NYMV;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Vendor",
+				);
 				INFOPLIST_FILE = CTRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
