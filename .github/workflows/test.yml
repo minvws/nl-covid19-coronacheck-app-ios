@@ -7,7 +7,7 @@ on:
 
 jobs:
   swiftlint:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     
     steps:
       - name: Checkout
@@ -34,7 +34,7 @@ jobs:
     #     DIFF_BASE: ${{ github.base_ref }}
 
   test:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
@@ -52,11 +52,11 @@ jobs:
           git lfs install
           git lfs pull
           git checkout .
-          
-      - name: Install Bundler dependencies
+
+      - name: Make Environment
         run: |
-          bundle install
-          
+          make ci
+
       - name: Build and test
         env:
           SLACK_URL: ${{ secrets.SLACK_URL }}
