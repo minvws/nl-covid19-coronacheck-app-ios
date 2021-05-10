@@ -8,12 +8,19 @@
 import Foundation
 import CoreData
 
+enum EventType: String {
+
+	case recovery
+	case test
+	case vaccination
+}
+
 class EventModel {
 
 	static let entityName = "Event"
 
 	@discardableResult class func create(
-		type: String,
+		type: EventType,
 		issuedAt: Date,
 		jsonData: Data,
 		wallet: Wallet,
@@ -23,7 +30,7 @@ class EventModel {
 			forEntityName: entityName,
 			into: managedContext) as? Event {
 
-			object.type = type
+			object.type = type.rawValue
 			object.issuedAt = issuedAt
 			object.jsonData = jsonData
 			object.wallet = wallet

@@ -31,7 +31,7 @@ class EventModelTests: XCTestCase {
 
 			// When
 			let event = EventModel.create(
-				type: "test",
+				type: EventType.test,
 				issuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -39,7 +39,7 @@ class EventModelTests: XCTestCase {
 			)
 
 			// Then
-			expect(event?.type) == "test"
+			expect(event?.type) == EventType.test.rawValue
 			expect(event?.issuedAt) == date
 			expect(event?.jsonData) == json
 			expect(event?.wallet) == wallet
@@ -54,18 +54,18 @@ class EventModelTests: XCTestCase {
 		context.performAndWait {
 			let wallet = WalletModel.initialize(managedContext: context)!
 			let date = Date()
-			let json = "test_createEvent".data(using: .utf8)!
+			let json = "test_createTwoEvents".data(using: .utf8)!
 
 			// When
 			EventModel.create(
-				type: "test",
+				type: EventType.test,
 				issuedAt: date,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
 			)
 			EventModel.create(
-				type: "test",
+				type: EventType.vaccination,
 				issuedAt: date,
 				jsonData: json,
 				wallet: wallet,

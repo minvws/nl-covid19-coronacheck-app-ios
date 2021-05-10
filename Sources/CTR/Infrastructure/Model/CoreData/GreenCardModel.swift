@@ -8,12 +8,21 @@
 import Foundation
 import CoreData
 
+enum GreenCardType: String {
+
+	case domestic
+	case euRecovery
+	case euTest
+	case euVaccination
+	case euAllInOne
+}
+
 class GreenCardModel {
 
 	static let entityName = "GreenCard"
 
 	@discardableResult class func create(
-		type: String,
+		type: GreenCardType,
 		issuedAt: Date,
 		wallet: Wallet,
 		managedContext: NSManagedObjectContext) -> GreenCard? {
@@ -22,7 +31,7 @@ class GreenCardModel {
 			forEntityName: entityName,
 			into: managedContext) as? GreenCard {
 
-			object.type = type
+			object.type = type.rawValue
 			object.issuedAt = issuedAt
 			object.wallet = wallet
 

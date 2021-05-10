@@ -144,7 +144,7 @@ class WalletModelTests: XCTestCase {
 
 			// When
 			let event = EventModel.create(
-				type: "test",
+				type: EventType.recovery,
 				issuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -171,7 +171,7 @@ class WalletModelTests: XCTestCase {
 			let date = Date()
 			let json = "test_removeEvent".data(using: .utf8)!
 			let event = EventModel.create(
-				type: "test",
+				type: EventType.recovery,
 				issuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -197,7 +197,7 @@ class WalletModelTests: XCTestCase {
 
 			// When
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .euTest,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
@@ -222,7 +222,7 @@ class WalletModelTests: XCTestCase {
 			let wallet = WalletModel.initialize(managedContext: context)!
 			let date = Date()
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .euRecovery,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context

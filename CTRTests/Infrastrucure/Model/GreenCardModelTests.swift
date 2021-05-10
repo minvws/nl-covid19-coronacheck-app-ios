@@ -30,14 +30,14 @@ class GreenCardModelTests: XCTestCase {
 
 			// When
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .domestic,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
 			)
 
 			// Then
-			expect(greenCard?.type) == "test"
+			expect(greenCard?.type) == GreenCardType.domestic.rawValue
 			expect(greenCard?.issuedAt) == date
 			expect(greenCard?.wallet) == wallet
 			expect(wallet.greenCards).to(haveCount(1))
@@ -54,13 +54,13 @@ class GreenCardModelTests: XCTestCase {
 
 			// When
 			GreenCardModel.create(
-				type: "test",
+				type: .euAllInOne,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
 			)
 			GreenCardModel.create(
-				type: "test",
+				type: .euTest,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
@@ -80,7 +80,7 @@ class GreenCardModelTests: XCTestCase {
 			let wallet = WalletModel.initialize(managedContext: context)!
 			let date = Date()
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .domestic,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
@@ -114,12 +114,12 @@ class GreenCardModelTests: XCTestCase {
 			let wallet = WalletModel.initialize(managedContext: context)!
 			let date = Date()
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .euRecovery,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
 			)!
-			let json = "test_addCredential".data(using: .utf8)!
+			let json = "test_removeCredential".data(using: .utf8)!
 			let credential = CredentialModel.create(
 				qrData: json,
 				validFrom: date,

@@ -28,7 +28,7 @@ class CredentialModelTests: XCTestCase {
 			let date = Date()
 			let wallet = WalletModel.initialize(managedContext: context)!
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .domestic,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
@@ -59,7 +59,7 @@ class CredentialModelTests: XCTestCase {
 			let date = Date()
 			let wallet = WalletModel.initialize(managedContext: context)!
 			let greenCard = GreenCardModel.create(
-				type: "test",
+				type: .domestic,
 				issuedAt: date,
 				wallet: wallet,
 				managedContext: context
