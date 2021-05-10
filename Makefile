@@ -4,10 +4,10 @@ ci: install_ci_deps generate_project
 
 # -- setup environment --
 
-install_dev_deps: build_xcodegen bundler
+install_dev_deps: build_xcodegen build_swiftlint bundler
 	@echo "All dev dependencies are installed"
 
-install_ci_deps: build_xcodegen bundler
+install_ci_deps: build_xcodegen build_swiftlint bundler
 	@echo "All CI dependencies are installed"
 
 bundler: 
@@ -25,6 +25,9 @@ generate_project:
 
 build_xcodegen:
 	@cd Vendor/XcodeGen && swift build -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.13"
+
+build_swiftlint: 
+	@cd Vendor/SwiftLint && swift build -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.13"
 
 # -- git hooks: -- 
 
