@@ -305,44 +305,113 @@ targets:
         excludes:
           - "**/__Snapshots__"
 
-# - Schemes
+# - Scheme Templates
 
-schemes:
-  CoronaCheck:
+schemeTemplates:
+
+  # Template for Development/Test/Acc/Production/AppStore varieties
+  ConfigScheme: 
     build:
+      config: ${configEnvironment} #not sure if needed.
       targets:
-        Holder: all
-        CTRTests: [test]
+        ${appTargetName}: all
+    test: 
+      config: ${configEnvironment}
     run:
-      config: Development
+      config: ${configEnvironment} 
+    profile:
+      config: ${configEnvironment}
+    analyze:
+      config: ${configEnvironment}
+    archive:
+      config: ${configEnvironment}
+
+  # Template for adding unit tests to a scheme:
+  TestScheme:
     test:
-      config: Development
       commandLineArguments: 
         "--unittesting": true
       language: nl
       region: NL
       gatherCoverageData: true
       coverageTargets:
-        - Holder
+        - ${appTargetName}
       targets: 
-        - name: CTRTests
+        - name: ${testTargetName}
           parallelizable: false
           randomExecutionOrder: false
-    profile:
-      config: Development
-    analyze:
-      config: Development
-    archive:
-      config: AppStore
-  Verifier:
-    build:
-      targets:
-        Verifier: all
-    run:
-      config: Development
-    profile:
-      config: Development
-    analyze:
-      config: Development
-    archive:
-      config: AppStore
+
+# - Schemes
+
+schemes:
+  Holder Dev:
+    templates:
+      - ConfigScheme
+      - TestScheme # This scheme has unit tests too
+    templateAttributes:
+      appTargetName: Holder
+      testTargetName: CTRTests
+      configEnvironment: Development
+
+  Holder Test:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseTest
+
+  Holder Acceptance:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseAcceptance
+
+  Holder Production:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseProduction
+
+  Holder AppStore:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: AppStore
+
+  Verifier Dev:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: Development
+
+  Verifier Test:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseTest
+
+  Verifier Acceptance:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseAcceptance
+
+  Verifier Production:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseProduction
+
+  Verifier AppStore:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: AppStore
