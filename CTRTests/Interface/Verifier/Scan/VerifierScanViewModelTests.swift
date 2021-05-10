@@ -39,6 +39,6 @@ class VerifierScanViewModelTests: XCTestCase {
         sut?.dismiss()
 
         // Then
-        XCTAssertTrue(verifyCoordinatorDelegateSpy.navigateToVerifierWelcomeCalled)
+        XCTAssertTrue(verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome)
     }
 }

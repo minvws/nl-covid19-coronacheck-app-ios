@@ -7,7 +7,7 @@ on:
 
 jobs:
   firebase-dev:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -17,6 +17,9 @@ jobs:
       run: |
         mkdir fastlane/certificates
         echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
+    - name: Make Environment
+      run: |
+        make ci
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -25,10 +28,9 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
-        bundle install
         bundle exec fastlane ios deploy_test_ci
   firebase-acc:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -38,6 +40,9 @@ jobs:
       run: |
         mkdir fastlane/certificates
         echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
+    - name: Make Environment
+      run: |
+        make ci    
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -46,10 +51,10 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
-        bundle install
         bundle exec fastlane ios deploy_acc_ci
+
   firebase-prod:
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -59,6 +64,9 @@ jobs:
       run: |
         mkdir fastlane/certificates
         echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
+    - name: Make Environment
+      run: |
+        make ci
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -67,5 +75,4 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
-        bundle install
         bundle exec fastlane ios deploy_prod_ci
