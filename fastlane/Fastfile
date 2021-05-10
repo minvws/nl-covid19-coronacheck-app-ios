@@ -16,6 +16,7 @@
 default_platform(:ios)
 
 platform :ios do
+
   desc "Run tests for integration purposes"
   lane :test_ci do
     prepare
@@ -24,9 +25,9 @@ platform :ios do
       app_name: "CTR",
       device: "iPhone 12",
       project: "CTR.xcodeproj",
-      scheme: "CoronaCheck",
+      scheme: "Holder Dev",
       reinstall_app: true,
-      app_identifier: "nl.rijksoverheid.ctr",
+      app_identifier: "nl.rijksoverheid.ctr.dev",
       skip_slack: true
     )
   end
