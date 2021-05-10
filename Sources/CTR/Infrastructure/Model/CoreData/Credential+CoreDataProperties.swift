@@ -8,7 +8,6 @@
 import Foundation
 import CoreData
 
-
 extension Credential {
 	
 	@nonobjc public class func fetchRequest() -> NSFetchRequest<Credential> {
