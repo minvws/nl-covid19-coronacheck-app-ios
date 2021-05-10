@@ -13,18 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Bundler dependencies
+      - name: Install and Run SwiftLint 
         run: |
-          bundle install
-          
-      - name: Install SwiftLint via Cocoapods
-        # Unorthadox hack to acquire cocoapods, until "norio-nomura/action-swiftlint@3.2.1" is fixed.
-        run: |
-          echo "platform :ios, '11.0'" > Podfile
-          echo "install! 'cocoapods', :integrate_targets => false" >> Podfile
-          echo "pod 'SwiftLint'" >> Podfile
-          pod install 
-          Pods/SwiftLint/swiftlint --quiet --strict --config=./.swiftlint.yml
+          make build_swiftlint
+          Vendor/SwiftLint/.build/release/swiftlint --quiet --strict --config=./.swiftlint.yml
 
     # - name: Run SwiftLint for changes in this pull request
     #   uses: norio-nomura/action-swiftlint@3.2.1
