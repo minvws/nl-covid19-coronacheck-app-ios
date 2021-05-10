@@ -27,3 +27,5 @@ and will install githooks for:
 
 - GitLFS 
 - XcodeGen
+
+and will run `bundle install` to setup your Ruby dependencies.

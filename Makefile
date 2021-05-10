@@ -1,3 +1,4 @@
+
 dev: install_dev_deps install_githooks generate_project
 ci: install_ci_deps generate_project
 
@@ -10,8 +11,10 @@ install_ci_deps: build_xcodegen bundler
 	@echo "All CI dependencies are installed"
 
 bundler: 
-	@bundle install
-
+ifeq (, $(shell which bundle))
+$(error "You must install bundler on your system before setup can continue. You could try running 'gem install bundler'.")
+endif
+ 
 # -- generate -- 
 
 generate_project: 
