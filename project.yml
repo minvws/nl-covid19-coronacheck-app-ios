@@ -311,17 +311,18 @@ targets:
         Development:
           DISPLAY_NAME: Scanner Dev
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
         FirebaseTest:
           DISPLAY_NAME: Scanner Test
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
         FirebaseAcceptance:
           DISPLAY_NAME: Scanner ACC
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Acc
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.acc
         FirebaseProduction:
           DISPLAY_NAME: Scanner PROD
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Prod
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
         AppStore:
           DISPLAY_NAME: Scanner
