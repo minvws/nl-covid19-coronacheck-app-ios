@@ -175,18 +175,51 @@ targetTemplates:
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
     postBuildScripts:
-      - name: Upload Crashlytics
+      - name: Upload Crashlytics (FirebaseTest/FirebaseAcceptance only)
         basedOnDependencyAnalysis: true
         inputFiles:
           - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
           - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
         script: |
-          if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
-            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
+          then 
+            if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
+              "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+            else 
+              "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
+            fi
           else 
-            "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
+            echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
           fi
-          
+      - name: Copy Firebase Plist (FirebaseTest/FirebaseAcceptance only)
+        basedOnDependencyAnalysis: false
+        script: |
+          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
+          then 
+            # Get a reference to the folder which contains the configuration subfolders.
+            CONFIGURATIONS_FOLDER=Sources/CTR/Configuration/Firebase/${APP_FLAVOR}/${CONFIGURATION}
+            # Get a reference to the filename of a 'GoogleService-Info.plist' file.
+            GOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist
+            # Get a reference to the 'GoogleService-Info.plist' for the current configuration.
+            GOOGLESERVICE_INFO_PLIST_LOCATION=${PROJECT_DIR}/${CONFIGURATIONS_FOLDER}/${GOOGLESERVICE_INFO_PLIST}
+
+            # Check if 'GoogleService-Info.plist' file for current configuration exist.
+            if [ ! -f $GOOGLESERVICE_INFO_PLIST_LOCATION ]
+            then
+              echo "No '${GOOGLESERVICE_INFO_PLIST}' file found for the configuration '${CONFIGURATION}' in location '${GOOGLESERVICE_INFO_PLIST_LOCATION}'."
+              exit 1
+            fi
+
+            # Get a reference to the destination location for the GoogleService-Info.plist.
+            GOOGLESERVICE_INFO_PLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app
+            
+            # Copy 'GoogleService-Info.plist' for current configution to destination.
+            cp "${GOOGLESERVICE_INFO_PLIST_LOCATION}" "${GOOGLESERVICE_INFO_PLIST_DESTINATION}"
+            echo "Successfully copied the '${GOOGLESERVICE_INFO_PLIST}' file for the '${CONFIGURATION}' configuration from '${GOOGLESERVICE_INFO_PLIST_LOCATION}' to '${GOOGLESERVICE_INFO_PLIST_DESTINATION}'."
+          else 
+            echo "Skipping adding Google Service Plist as Configuration is '$CONFIGURATION'"
+          fi
+
   Standard_UnitTesting:
     platform: iOS
     type: bundle.unit-test
@@ -212,7 +245,7 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "CTR/Configuration/Verifier"
+          - "CTR/Configuration/Firebase"
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
           - "CTR/Configuration/verifier-Info.plist"
@@ -263,7 +296,7 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "CTR/Configuration/Holder"
+          - "CTR/Configuration/Firebase"
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
