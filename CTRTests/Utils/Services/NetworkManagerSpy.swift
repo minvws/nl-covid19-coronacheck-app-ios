@@ -52,6 +52,10 @@ class NetworkSpy: NetworkManaging {
 		// Nothing yet
 	}
 
+	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
+		// Nothing yet
+	}
+
 	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
 		// Nothing yet
 	}

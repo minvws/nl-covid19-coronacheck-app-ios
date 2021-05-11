@@ -7,11 +7,12 @@
   
 @testable import CTR
 import XCTest
+import Nimble
 
 class ProofManagerTests: XCTestCase {
 
-	var sut = ProofManager()
-	var cryptoSpy = CryptoManagerSpy()
+	var sut: ProofManager!
+	var cryptoSpy: CryptoManagerSpy!
 
 	override func setUp() {
 
@@ -32,14 +33,14 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == true
 		} onError: { _ in
-			XCTFail("There should be no error")
+			fail("There should be no error")
 		}
 	}
 
-	/// Test the fetch issuers public keys with no repsonse
-	func testFetchIssuerPublicKeysNoResonse() {
+	/// Test the fetch issuers public keys with no response
+	func testFetchIssuerPublicKeysNoResponse() {
 
 		// Given
 		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
@@ -49,9 +50,9 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
 		} onError: { _ in
-			XCTFail("There should be no error")
+			fail("There should be no error")
 		}
 	}
 
@@ -68,10 +69,9 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTFail("There should be no success")
+			fail("There should be no success")
 		} onError: { _ in
-
-			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
 		}
 	}
 
@@ -88,10 +88,10 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTFail("There should be no success")
+			fail("There should be no success")
 		} onError: { _ in
 
-			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == true
 		}
 	}
 
@@ -108,9 +108,19 @@ class ProofManagerTests: XCTestCase {
 		// When
 		sut.fetchIssuerPublicKeys {
 			// Then
-			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
 		} onError: { _ in
-			XCTFail("There should be no error")
+			fail("There should be no error")
 		}
+	}
+
+	func test_fetchTestProviders() {
+
+		// Given
+
+		// When
+
+		// Then
+
 	}
 }
