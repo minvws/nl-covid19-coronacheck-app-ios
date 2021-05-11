@@ -38,8 +38,8 @@ packages:
 
 configs:
   Development: debug
-  FirebaseTest: release
-  FirebaseAcceptance: release
+  FirebaseTest: debug
+  FirebaseAcceptance: debug
   FirebaseProduction: release
   AppStore: release
 
@@ -211,13 +211,13 @@ targetTemplates:
           - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
         script: |
           if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
-          then
+          then 
             if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
               "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-            else
+            else 
               "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
             fi
-          else
+          else 
             echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
           fi
 
