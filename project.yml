@@ -98,7 +98,6 @@ targetTemplates:
         MARKETING_VERSION: 1.3.0
         CURRENT_PROJECT_VERSION: 26
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        CODE_SIGN_ENTITLEMENTS: CTR.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
@@ -256,6 +255,7 @@ targets:
         APP_FLAVOR: holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
+        CODE_SIGN_ENTITLEMENTS: CTR.entitlement # TODO: distinguish per-config
       configs:
         Development:
           DISPLAY_NAME: CoronaCheck D
