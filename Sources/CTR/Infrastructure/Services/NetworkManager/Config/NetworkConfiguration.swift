@@ -108,9 +108,9 @@ struct NetworkConfiguration {
 	}
 
 	/// The providers url
-	var testProvidersUrl: URL? {
+	var providersUrl: URL? {
 
-		return self.combine(path: Endpoint.testProviders, fromCdn: false)
+		return self.combine(path: Endpoint.providers, fromCdn: false)
 	}
 
 	/// The types url

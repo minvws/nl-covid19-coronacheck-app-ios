@@ -102,7 +102,7 @@ class NetworkManager: NetworkManaging, Logging {
 	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.testProvidersUrl,
+			url: networkConfiguration.providersUrl,
 			method: .GET
 		)
 		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
@@ -118,7 +118,7 @@ class NetworkManager: NetworkManaging, Logging {
 	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.testProvidersUrl,
+			url: networkConfiguration.providersUrl,
 			method: .GET
 		)
 		func open(result: Result<ArrayEnvelope<EventProvider>, NetworkError>) {
