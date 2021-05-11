@@ -7,7 +7,7 @@ ci: install_ci_deps generate_project
 install_dev_deps: build_xcodegen build_swiftlint bundler
 	@echo "All dev dependencies are installed"
 
-install_ci_deps: build_xcodegen bundler #  build_swiftlint 
+install_ci_deps: build_xcodegen build_swiftlint bundler
 	@echo "All CI dependencies are installed"
 
 bundler: 
