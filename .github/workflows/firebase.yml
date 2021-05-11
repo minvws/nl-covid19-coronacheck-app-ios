@@ -3,7 +3,7 @@ name: firebase
 on:
   push:
     branches:
-      - fix_firebase
+      - feature/fix_firebase
       # - main
 
 jobs:
