@@ -78,6 +78,8 @@ struct Envelope<Item: Envelopable & Codable>: Codable {
 
 extension TestProvider: Envelopable { static let envelopeName = "corona_test_providers" }
 
+extension EventProvider: Envelopable { static let envelopeName = "event_providers" }
+
 extension TestType: Envelopable { static let envelopeName = "test_types" }
 
 extension IssuerPublicKey: Envelopable { static let envelopeName = "cl_keys" }

@@ -113,6 +113,22 @@ class NetworkManager: NetworkManaging, Logging {
 		decodedSignedJSONData(request: urlRequest, completion: open)
 	}
 
+	/// Get the event providers
+	/// - Parameter completion: completion handler
+	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.testProvidersUrl,
+			method: .GET
+		)
+		func open(result: Result<ArrayEnvelope<EventProvider>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+		decodedSignedJSONData(request: urlRequest, completion: open)
+	}
+
 	/// Get the test types
 	/// - Parameter completion: completion handler
 	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
