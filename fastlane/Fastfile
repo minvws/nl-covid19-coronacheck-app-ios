@@ -128,7 +128,7 @@ platform :ios do
 
   # -- PRIVATE LANES --
 
-  private lane :deploy do |options|
+  private_lane :deploy do |options|
 
     # unwrap options:
     provisioning_profile_path =   options[:provisioning_profile_path]
