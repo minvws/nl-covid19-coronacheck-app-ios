@@ -75,21 +75,6 @@ class ProofManager: ProofManaging, Logging {
 		}
 	}
 	
-	/// Get the test types
-	func fetchTestTypes() {
-		
-		networkManager.getTestTypes { [weak self] response in
-			// Response is of type (Result<[TestType], NetworkError>)
-			switch response {
-				case let .success(types):
-					self?.proofData.testTypes = types
-					
-				case let .failure(error):
-					self?.logError("Error getting the test types: \(error)")
-			}
-		}
-	}
-	
 	/// Get the provider for a test token
 	/// - Parameter token: the test token
 	/// - Returns: the test provider

@@ -36,8 +36,5 @@ struct Endpoint {
 	static let providers = Path(components: "holder", "config_providers")
 	
 	/// Endpoint for test results as ism
-	static let testResultIsm = Path(components: "holder", "get_test_ism")
-	
-	/// Endpoint for test types
-	static let testTypes = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "test_types")
+	static let sign = Path(components: "holder", "sign")
 }

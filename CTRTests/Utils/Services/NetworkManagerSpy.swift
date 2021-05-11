@@ -100,18 +100,6 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedGetTestTypes = false
-	var invokedGetTestTypesCount = 0
-	var stubbedGetTestTypesCompletionResult: (Result<[TestType], NetworkError>, Void)?
-
-	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
-		invokedGetTestTypes = true
-		invokedGetTestTypesCount += 1
-		if let result = stubbedGetTestTypesCompletionResult {
-			completion(result.0)
-		}
-	}
-
 	var invokedGetTestResult = false
 	var invokedGetTestResultCount = 0
 	var invokedGetTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
