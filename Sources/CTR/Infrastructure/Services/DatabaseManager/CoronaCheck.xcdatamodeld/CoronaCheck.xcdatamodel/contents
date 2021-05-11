@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Credential" representedClassName="Credential" syncable="YES" codeGenerationType="class">
+        <attribute name="qrData" attributeType="Binary"/>
+        <attribute name="validFrom" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="credentials" inverseEntity="GreenCard"/>
+    </entity>
+    <entity name="Event" representedClassName="Event" syncable="YES" codeGenerationType="class">
+        <attribute name="issuedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="jsonData" attributeType="Binary"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="wallet" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="events" inverseEntity="Wallet"/>
+    </entity>
+    <entity name="GreenCard" representedClassName="GreenCard" syncable="YES" codeGenerationType="class">
+        <attribute name="issuedAt" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="credentials" toMany="YES" deletionRule="Cascade" destinationEntity="Credential" inverseName="greenCard" inverseEntity="Credential"/>
+        <relationship name="wallet" maxCount="1" deletionRule="Nullify" destinationEntity="Wallet" inverseName="greenCards" inverseEntity="Wallet"/>
+    </entity>
+    <entity name="Wallet" representedClassName="Wallet" syncable="YES" codeGenerationType="class">
+        <attribute name="label" attributeType="String"/>
+        <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="wallet" inverseEntity="Event"/>
+        <relationship name="greenCards" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="GreenCard" inverseName="wallet" inverseEntity="GreenCard"/>
+    </entity>
+    <elements>
+        <element name="Credential" positionX="308.243896484375" positionY="-141.7915496826172" width="128" height="74"/>
+        <element name="Event" positionX="-103.700927734375" positionY="-134.4311370849609" width="128" height="89"/>
+        <element name="GreenCard" positionX="130.821044921875" positionY="-141.7990264892578" width="128" height="89"/>
+        <element name="Wallet" positionX="15.81640625" positionY="-307.3936309814453" width="128" height="74"/>
+    </elements>
+</model>

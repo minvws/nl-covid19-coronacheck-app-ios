@@ -365,6 +365,17 @@ schemeTemplates:
     archive:
       config: ${configEnvironment}
 
+  # Variant of the standard `ConfigScheme` for Development
+  DevelopmentConfigScheme:
+    templates:
+      - ConfigScheme
+    run:
+      commandLineArguments:
+        # Enable CoreData debug flags:
+        # See: https://www.donnywals.com/using-launch-arguments-for-easier-core-data-debugging/
+        "-com.apple.CoreData.SQLDebug 2": YES # choose a level from 1-4 
+        "-com.apple.CoreData.ConcurrencyDebug 1": YES # crash with stacktrace on concurrency mistakes
+
   # Template for adding unit tests to a scheme:
   TestScheme:
     test:
@@ -385,7 +396,7 @@ schemeTemplates:
 schemes:
   Holder Dev:
     templates:
-      - ConfigScheme
+      - DevelopmentConfigScheme
       - TestScheme # This scheme has unit tests too
     templateAttributes:
       appTargetName: Holder
@@ -422,7 +433,7 @@ schemes:
 
   Verifier Dev:
     templates:
-      - ConfigScheme
+      - DevelopmentConfigScheme
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: Development

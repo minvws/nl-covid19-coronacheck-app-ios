@@ -15,6 +15,14 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
+### remove_temp_keychain
+```
+fastlane remove_temp_keychain
+```
+
+
+----
+
 ## iOS
 ### ios ian
 ```
