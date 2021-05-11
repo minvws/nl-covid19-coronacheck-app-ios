@@ -114,14 +114,53 @@ class ProofManagerTests: XCTestCase {
 			fail("There should be no error")
 		}
 	}
-//
-//	func test_fetchTestProviders() {
-//
-//		// Given
-//
-//		// When
-//
-//		// Then
-//
-//	}
+
+	func test_fetchTestProviders() {
+
+		// Given
+		networkSpy.stubbedGetTestProvidersCompletionResult = (
+			.success(
+				[
+					TestProvider(
+						identifier: "test_fetchTestProviders",
+						name: "test",
+						resultURL: URL(string: "https://coronacheck.nl"),
+						publicKey: "key",
+						certificate: "certificate")
+				]
+			), ()
+		)
+
+		waitUntil(timeout: .seconds(10)) {done in
+			// When
+			self.sut.fetchCoronaTestProviders {
+				// Then
+				expect(self.networkSpy.invokedGetTestProviders) == true
+				expect(self.sut.testProviders).to(haveCount(1))
+				expect(self.sut.testProviders.first?.identifier) == "test_fetchTestProviders"
+				done()
+			} onError: { _ in
+				fail("call should not error")
+			}
+		}
+	}
+
+	func test_fetchTestProviders_withError() {
+
+		// Given
+		networkSpy.stubbedGetTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest),(()))
+
+		waitUntil(timeout: .seconds(10)) {done in
+			// When
+			self.sut.fetchCoronaTestProviders {
+				// Then
+				fail("call should not success")
+
+			} onError: { _ in
+				expect(self.networkSpy.invokedGetTestProviders) == true
+				expect(self.sut.testProviders).to(beEmpty())
+				done()
+			}
+		}
+	}
 }

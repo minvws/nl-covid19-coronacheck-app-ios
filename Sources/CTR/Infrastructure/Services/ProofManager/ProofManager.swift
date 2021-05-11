@@ -16,7 +16,7 @@ class ProofManager: ProofManaging, Logging {
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 
-	private var testProviders = [TestProvider]()
+	internal var testProviders = [TestProvider]()
 	
 	/// Structure to hold proof data
 	private struct ProofData: Codable {
