@@ -11,15 +11,12 @@ import Foundation
 class ProofManager: ProofManaging, Logging {
 	
 	var loggingCategory: String = "ProofManager"
-	
-	/// The remote config manager
+
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	
-	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
-	
-	/// The crypto manager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
+
+	private var testProviders = [TestProvider]()
 	
 	/// Structure to hold proof data
 	private struct ProofData: Codable {
@@ -38,19 +35,7 @@ class ProofManager: ProofManaging, Logging {
 			return ProofData(testTypes: [], testWrapper: nil, signedWrapper: nil)
 		}
 	}
-	
-	/// Structure to hold provider data
-	private struct ProviderData: Codable {
-		
-		/// The key of the holder
-		var testProviders: [TestProvider]
-		
-		/// Empty crypto data
-		static var empty: ProviderData {
-			return ProviderData(testProviders: [])
-		}
-	}
-	
+
 	/// Array of constants
 	private struct Constants {
 		static let keychainService = "ProofManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
@@ -59,14 +44,7 @@ class ProofManager: ProofManaging, Logging {
 	/// The proof data stored in the keychain
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
 	private var proofData: ProofData = .empty
-	
-	/// The provider data stored in the keychain
-	@Keychain(name: "providerData", service: Constants.keychainService, clearOnReinstall: true)
-	private var providerData: ProviderData = .empty
-	
-	@UserDefaults(key: "providersFetchedTimestamp", defaultValue: nil)
-	private var providersFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
-	
+
 	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
 	var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 	
@@ -82,22 +60,12 @@ class ProofManager: ProofManaging, Logging {
 		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 		
-		#if DEBUG
-		if let lastFetchedTimestamp = providersFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - 3600, !providerData.testProviders.isEmpty {
-			// Don't fetch again within an hour
-			onCompletion?()
-			return
-		}
-		#endif
-		
 		networkManager.getTestProviders { [weak self] response in
 			
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
-					self?.providerData.testProviders = providers
-					self?.providersFetchedTimestamp = Date()
+					self?.testProviders = providers
 					onCompletion?()
 					
 				case let .failure(error):
@@ -127,7 +95,7 @@ class ProofManager: ProofManaging, Logging {
 	/// - Returns: the test provider
 	func getTestProvider(_ token: RequestToken) -> TestProvider? {
 		
-		for provider in providerData.testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
+		for provider in testProviders where provider.identifier.lowercased() == token.providerIdentifier.lowercased() {
 			return provider
 		}
 		return nil
