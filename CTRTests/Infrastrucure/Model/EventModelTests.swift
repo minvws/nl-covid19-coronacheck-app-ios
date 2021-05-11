@@ -25,7 +25,7 @@ class EventModelTests: XCTestCase {
 		// Given
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let json = "test_createEvent".data(using: .utf8)!
 
@@ -52,7 +52,7 @@ class EventModelTests: XCTestCase {
 		// Given
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let json = "test_createTwoEvents".data(using: .utf8)!
 

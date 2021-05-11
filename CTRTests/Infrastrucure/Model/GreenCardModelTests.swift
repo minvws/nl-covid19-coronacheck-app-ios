@@ -25,7 +25,7 @@ class GreenCardModelTests: XCTestCase {
 		// Given
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 
 			// When
@@ -49,7 +49,7 @@ class GreenCardModelTests: XCTestCase {
 		// Given
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 
 			// When
@@ -77,7 +77,7 @@ class GreenCardModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let greenCard = GreenCardModel.create(
 				type: .domestic,
@@ -111,7 +111,7 @@ class GreenCardModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let greenCard = GreenCardModel.create(
 				type: .euRecovery,

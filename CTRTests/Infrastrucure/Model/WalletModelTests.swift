@@ -7,6 +7,7 @@
 import XCTest
 import Nimble
 @testable import CTR
+import CoreData
 
 class WalletModelTests: XCTestCase {
 
@@ -99,46 +100,13 @@ class WalletModelTests: XCTestCase {
 		}
 	}
 
-	func test_initializeWallet() {
-
-		// Given
-		let context = databaseManager.managedObjectContext()
-		context.performAndWait {
-
-			// When
-			let wallet = WalletModel.initialize(managedContext: context)
-
-			// Then
-			expect(wallet?.label) == "main"
-		}
-	}
-
-	func test_initializeWallet_existingWallet() {
-
-		// Given
-		let context = databaseManager.managedObjectContext()
-		context.performAndWait {
-
-			WalletModel.create(
-				label: "test_initializeWallet_existingWallet",
-				managedContext: context
-			)
-
-			// When
-			let wallet = WalletModel.initialize(managedContext: context)
-
-			// Then
-			expect(wallet?.label) == "test_initializeWallet_existingWallet"
-		}
-	}
-
 	func test_addEvent() {
 
 		// Given
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let json = "test_addEvent".data(using: .utf8)!
 
@@ -167,7 +135,7 @@ class WalletModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let json = "test_removeEvent".data(using: .utf8)!
 			let event = EventModel.create(
@@ -192,7 +160,7 @@ class WalletModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 
 			// When
@@ -219,7 +187,7 @@ class WalletModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let greenCard = GreenCardModel.create(
 				type: .euRecovery,
@@ -234,5 +202,13 @@ class WalletModelTests: XCTestCase {
 			// Then
 			expect(wallet.greenCards).to(haveCount(0))
 		}
+	}
+}
+
+extension WalletModel {
+
+	class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
+
+		return WalletModel.create(label: "testWallet", managedContext: managedContext)
 	}
 }

@@ -12,11 +12,17 @@ protocol DatabaseManaging {
 
 	init()
 
+	/// Get a context to perform a query on
+	/// - Returns: the main context
 	func managedObjectContext() -> NSManagedObjectContext
 
-	func saveContext ()
+	/// Get a background context to perform a query on
+	/// - Returns: the background context
+	func backgroundContext() -> NSManagedObjectContext
 
-	func clearCoreData()
+	/// Save the context, saves all pending changes.
+	/// - Parameter context: the context to be saved.
+	func save(_ context: NSManagedObjectContext)
 }
 
 class DatabaseManager: DatabaseManaging, Logging {
@@ -70,10 +76,17 @@ class DatabaseManager: DatabaseManaging, Logging {
 		return persistentContainer.viewContext
 	}
 
-	/// Save the context, saves all pending changes.
-	func saveContext () {
+	/// Get a background context to perform a query on
+	/// - Returns: the background context
+	func backgroundContext() -> NSManagedObjectContext {
 
-		let context = managedObjectContext()
+		return persistentContainer.newBackgroundContext()
+	}
+
+	/// Save the context, saves all pending changes.
+	/// - Parameter context: the context to be saved.
+	func save(_ context: NSManagedObjectContext) {
+
 		if context.hasChanges {
 			do {
 				try context.save()
@@ -88,6 +101,11 @@ class DatabaseManager: DatabaseManaging, Logging {
 	/// Clear all the data, for all the stored entities.
 	/// Used by unit test to clear the stack.
 	func clearCoreData() {
+
+		guard ProcessInfo.processInfo.isTesting else {
+			// Only use while testing
+			return
+		}
 
 		let context = managedObjectContext()
 		context.performAndWait {
@@ -104,10 +122,10 @@ class DatabaseManager: DatabaseManaging, Logging {
 						context.delete(object)
 					}
 				} catch let error as NSError {
-					self.logError("DatabaseController - clearCoreData deleteObject error : \(error)")
+					self.logError("DatabaseController - clearCoreData deleteObject error: \(error)")
 				}
 			}
-			self.saveContext()
+			self.save(context)
 		}
 	}
 }

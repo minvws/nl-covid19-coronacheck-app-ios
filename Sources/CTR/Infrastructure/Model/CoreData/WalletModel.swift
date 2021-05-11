@@ -26,16 +26,6 @@ class WalletModel {
 		return nil
 	}
 
-	@discardableResult class func initialize(managedContext: NSManagedObjectContext) -> Wallet? {
-
-		let list = WalletModel.listAll(managedContext: managedContext)
-		if !list.isEmpty {
-			return list.first
-		}
-
-		return WalletModel.create(label: "main", managedContext: managedContext)
-	}
-
 	class func listAll(managedContext: NSManagedObjectContext) -> [Wallet] {
 		
 		let request = NSFetchRequest<Wallet>(entityName: entityName)

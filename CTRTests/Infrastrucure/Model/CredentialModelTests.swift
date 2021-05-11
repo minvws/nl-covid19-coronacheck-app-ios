@@ -26,7 +26,7 @@ class CredentialModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 			let date = Date()
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let greenCard = GreenCardModel.create(
 				type: .domestic,
 				issuedAt: date,
@@ -57,7 +57,7 @@ class CredentialModelTests: XCTestCase {
 		let context = databaseManager.managedObjectContext()
 		context.performAndWait {
 			let date = Date()
-			let wallet = WalletModel.initialize(managedContext: context)!
+			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let greenCard = GreenCardModel.create(
 				type: .domestic,
 				issuedAt: date,
