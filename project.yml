@@ -104,36 +104,26 @@ targetTemplates:
         PRODUCT_NAME: $(TARGET_NAME)
         VALIDATE_PRODUCT: YES
         DEBUG_INFORMATION_FORMAT: dwarf-with-dsym # Firebase warns that this must be set for all targets.
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: iPhone Distribution
+        DEVELOPMENT_TEAM: C2H38GV99H
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR
           NETWORK_CONFIGURATION: Development
-          CODE_SIGN_IDENTITY: Apple Development
-          CODE_SIGN_STYLE: Automatic
-          DEVELOPMENT_TEAM: QMK879NYMV
+          CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
         FirebaseTest:
           NETWORK_CONFIGURATION: Test
-          CODE_SIGN_IDENTITY: iPhone Distribution
-          CODE_SIGN_STYLE: Manual
-          DEVELOPMENT_TEAM: C2H38GV99H
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
-          CODE_SIGN_IDENTITY: iPhone Distribution
-          CODE_SIGN_STYLE: Manual
-          DEVELOPMENT_TEAM: C2H38GV99H
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
-          CODE_SIGN_IDENTITY: iPhone Distribution
-          CODE_SIGN_STYLE: Manual
-          DEVELOPMENT_TEAM: C2H38GV99H
         AppStore:
           NETWORK_CONFIGURATION: Production
-          CODE_SIGN_IDENTITY: iPhone Distribution
-          CODE_SIGN_STYLE: Manual
-          DEVELOPMENT_TEAM: C2H38GV99H
     info: 
       properties:
+        # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
         NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
         APP_FLAVOR: ${APP_FLAVOR}
         CFBundleDevelopmentRegion: nl_NL
@@ -182,7 +172,7 @@ targetTemplates:
           if which Vendor/SwiftLint/.build/release/swiftlint >/dev/null; then
             swiftlint --quiet --config=.swiftlint.yml
           else
-            echo "warning: SwiftLint not found, run `make dev` in the project root folder"
+            echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
     postBuildScripts:
       - name: Upload Crashlytics
@@ -231,27 +221,31 @@ targets:
         APP_FLAVOR: holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
       configs:
         Development:
           DISPLAY_NAME: CoronaCheck D
           PRODUCT_NAME: CTR
-          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.debug
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
         FirebaseTest:
           DISPLAY_NAME: CoronaCheck Test
           PRODUCT_NAME: CTR TEST
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Ad Hoc
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
         FirebaseAcceptance:
           DISPLAY_NAME: CoronaCheck ACC
           PRODUCT_NAME: CTR ACC
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Ad Hoc
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.acc
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Acc
         FirebaseProduction:
           DISPLAY_NAME: CoronaCheck PROD
           PRODUCT_NAME: CTR PROD
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Ad Hoc
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Prod
         AppStore:
           DISPLAY_NAME: CoronaCheck
           PRODUCT_NAME: CTR
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck App Store
     info:
       path: Sources/CTR/Configuration/holder-Info.plist
@@ -278,23 +272,26 @@ targets:
         APP_FLAVOR: verifier
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
-        PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
       configs:
         Development:
           DISPLAY_NAME: Scanner Dev
-          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.debug
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
         FirebaseTest:
           DISPLAY_NAME: Scanner Test
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
         FirebaseAcceptance:
           DISPLAY_NAME: Scanner ACC
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.acc
         FirebaseProduction:
           DISPLAY_NAME: Scanner PROD
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
         AppStore:
           DISPLAY_NAME: Scanner
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Scanner App Store
+          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
     info:
       path: Sources/CTR/Configuration/verifier-Info.plist
       properties:
@@ -308,44 +305,113 @@ targets:
         excludes:
           - "**/__Snapshots__"
 
-# - Schemes
+# - Scheme Templates
 
-schemes:
-  CoronaCheck:
+schemeTemplates:
+
+  # Template for Development/Test/Acc/Production/AppStore varieties
+  ConfigScheme: 
     build:
+      config: ${configEnvironment} #not sure if needed.
       targets:
-        Holder: all
-        CTRTests: [test]
+        ${appTargetName}: all
+    test: 
+      config: ${configEnvironment}
     run:
-      config: Development
+      config: ${configEnvironment} 
+    profile:
+      config: ${configEnvironment}
+    analyze:
+      config: ${configEnvironment}
+    archive:
+      config: ${configEnvironment}
+
+  # Template for adding unit tests to a scheme:
+  TestScheme:
     test:
-      config: Development
       commandLineArguments: 
         "--unittesting": true
       language: nl
       region: NL
       gatherCoverageData: true
       coverageTargets:
-        - Holder
+        - ${appTargetName}
       targets: 
-        - name: CTRTests
+        - name: ${testTargetName}
           parallelizable: false
           randomExecutionOrder: false
-    profile:
-      config: Development
-    analyze:
-      config: Development
-    archive:
-      config: AppStore
-  Verifier:
-    build:
-      targets:
-        Verifier: all
-    run:
-      config: Development
-    profile:
-      config: Development
-    analyze:
-      config: Development
-    archive:
-      config: AppStore
+
+# - Schemes
+
+schemes:
+  Holder Dev:
+    templates:
+      - ConfigScheme
+      - TestScheme # This scheme has unit tests too
+    templateAttributes:
+      appTargetName: Holder
+      testTargetName: CTRTests
+      configEnvironment: Development
+
+  Holder Test:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseTest
+
+  Holder Acceptance:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseAcceptance
+
+  Holder Production:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: FirebaseProduction
+
+  Holder AppStore:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Holder
+      configEnvironment: AppStore
+
+  Verifier Dev:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: Development
+
+  Verifier Test:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseTest
+
+  Verifier Acceptance:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseAcceptance
+
+  Verifier Production:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: FirebaseProduction
+
+  Verifier AppStore:
+    templates:
+      - ConfigScheme
+    templateAttributes:
+      appTargetName: Verifier
+      configEnvironment: AppStore
