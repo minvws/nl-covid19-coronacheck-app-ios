@@ -24,41 +24,11 @@ fastlane remove_temp_keychain
 ----
 
 ## iOS
-### ios ian
-```
-fastlane ios ian
-```
-
-### ios remove_temp_keychain
-```
-fastlane ios remove_temp_keychain
-```
-
 ### ios test_ci
 ```
 fastlane ios test_ci
 ```
 Run tests for integration purposes
-### ios deploy_test_ci
-```
-fastlane ios deploy_test_ci
-```
-Build and deploy the apps for Test via Firebase from CI
-### ios deploy_acc_ci
-```
-fastlane ios deploy_acc_ci
-```
-Build and deploy the apps for Acc via Firebase from CI
-### ios deploy_prod_ci
-```
-fastlane ios deploy_prod_ci
-```
-Build and deploy the apps for Prod via Firebase from CI
-### ios deploycombined
-```
-fastlane ios deploycombined
-```
-
 ### ios deploy_holder_test_ci
 ```
 fastlane ios deploy_holder_test_ci
