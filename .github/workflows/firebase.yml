@@ -3,7 +3,8 @@ name: firebase
 on:
   push:
     branches:
-      - main
+      - fix_firebase
+      # - main
 
 jobs:
   firebase-dev:
@@ -29,50 +30,51 @@ jobs:
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
         bundle exec fastlane ios deploy_test_ci
-  firebase-acc:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Load certificate
-      env:
-        CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
-      run: |
-        mkdir fastlane/certificates
-        echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
-    - name: Make Environment
-      run: |
-        make ci    
-    - name: Build and deploy
-      timeout-minutes: 45
-      env:
-        CERTIFICATE_PATH: fastlane/certificates/distribution.p12
-        CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        SLACK_URL: ${{ secrets.SLACK_URL }}
-      run: |
-        bundle exec fastlane ios deploy_acc_ci
 
-  firebase-prod:
-    runs-on: macos-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Load certificate
-      env:
-        CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
-      run: |
-        mkdir fastlane/certificates
-        echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
-    - name: Make Environment
-      run: |
-        make ci
-    - name: Build and deploy
-      timeout-minutes: 45
-      env:
-        CERTIFICATE_PATH: fastlane/certificates/distribution.p12
-        CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        SLACK_URL: ${{ secrets.SLACK_URL }}
-      run: |
-        bundle exec fastlane ios deploy_prod_ci
+  # firebase-acc:
+  #   runs-on: macos-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #   - name: Load certificate
+  #     env:
+  #       CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+  #     run: |
+  #       mkdir fastlane/certificates
+  #       echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
+  #   - name: Make Environment
+  #     run: |
+  #       make ci    
+  #   - name: Build and deploy
+  #     timeout-minutes: 45
+  #     env:
+  #       CERTIFICATE_PATH: fastlane/certificates/distribution.p12
+  #       CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+  #       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  #       SLACK_URL: ${{ secrets.SLACK_URL }}
+  #     run: |
+  #       bundle exec fastlane ios deploy_acc_ci
+
+  # firebase-prod:
+  #   runs-on: macos-latest
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v2
+  #   - name: Load certificate
+  #     env:
+  #       CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+  #     run: |
+  #       mkdir fastlane/certificates
+  #       echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12
+  #   - name: Make Environment
+  #     run: |
+  #       make ci
+  #   - name: Build and deploy
+  #     timeout-minutes: 45
+  #     env:
+  #       CERTIFICATE_PATH: fastlane/certificates/distribution.p12
+  #       CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+  #       FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+  #       SLACK_URL: ${{ secrets.SLACK_URL }}
+  #     run: |
+  #       bundle exec fastlane ios deploy_prod_ci
