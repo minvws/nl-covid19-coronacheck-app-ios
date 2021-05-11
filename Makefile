@@ -1,5 +1,5 @@
 
-dev: install_dev_deps install_githooks generate_project
+dev: install_dev_deps install_githooks generate_project open_project
 ci: install_ci_deps generate_project
 
 # -- setup environment --
@@ -20,6 +20,9 @@ endif
 
 generate_project: 
 	Vendor/XcodeGen/.build/release/xcodegen  --spec project.yml
+
+open_project: 
+	open CTR.xcodeproj
 
 # -- building -- 
 
