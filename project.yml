@@ -174,23 +174,7 @@ targetTemplates:
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
-    postBuildScripts:
-      - name: Upload Crashlytics (FirebaseTest/FirebaseAcceptance only)
-        basedOnDependencyAnalysis: true
-        inputFiles:
-          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
-          - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
-        script: |
-          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
-          then 
-            if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
-              "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-            else 
-              "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
-            fi
-          else 
-            echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
-          fi
+    postCompileScripts:
       - name: Copy Firebase Plist (FirebaseTest/FirebaseAcceptance only)
         basedOnDependencyAnalysis: false
         script: |
@@ -219,6 +203,24 @@ targetTemplates:
           else 
             echo "Skipping adding Google Service Plist as Configuration is '$CONFIGURATION'"
           fi
+    postBuildScripts:
+      - name: Upload Crashlytics (FirebaseTest/FirebaseAcceptance only)
+        basedOnDependencyAnalysis: true
+        inputFiles:
+          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
+          - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
+        script: |
+          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
+          then
+            if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
+              "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+            else
+              "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
+            fi
+          else
+            echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
+          fi
+
 
   Standard_UnitTesting:
     platform: iOS
