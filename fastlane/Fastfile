@@ -40,8 +40,6 @@ platform :ios do
   desc "Build and deploy the apps for Test via Firebase from CI"
   lane :deploy_test_ci do
 
-    #deploy_holder_test_ci 
-
     ## Deploy Holder Test: 
     deploycombined(
       x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Holder_Test.mobileprovision",
@@ -52,72 +50,112 @@ platform :ios do
       x_provisioningprofilename: "CoronaCheck Holder Test",
       x_bundleid: "nl.rijksoverheid.ctr.test",
       x_firebaseappid: "1:168257592968:ios:5b5b37bd2aa002a526493d",
-      x_firebasegroupscsv: ""
+      x_firebasegroupscsv: "" #testers
     )
 
-    # ## Deploy Verifier Test: 
-    # deploycombined(
-    #   x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Verifier_Test.mobileprovision",
-    #   x_xcodeproj: "CTR.xcodeproj",
-    #   x_targetname: "Verifier",
-    #   x_schemename:  "CoronaCheck",
-    #   x_configuration: "Ad Hoc Test",
-    #   x_provisioningprofilename: "CoronaCheck Ad Hoc",
-    #   x_bundleid: "nl.rijksoverheid.ctr",
-    #   x_firebaseappid: "1:168257592968:ios:87200fa917a43f0f26493d",
-    #   x_firebasegroupscsv: "testers"
-    # )
-
-
-    # deploy_verifier_test_ci
+    ## Deploy Verifier Test: 
+    deploycombined(
+      x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Verifier_Test.mobileprovision",
+      x_xcodeproj: "CTR.xcodeproj",
+      x_targetname: "Verifier",
+      x_schemename:  "Verifier Test",
+      x_configuration: "FirebaseTest",
+      x_provisioningprofilename: "CoronaCheck Verifier Test",
+      x_bundleid: "nl.rijksoverheid.ctr.verifier.test",
+      x_firebaseappid: "1:168257592968:ios:f8f08363d969e6bc26493d",
+      x_firebasegroupscsv: "" #verifiers
+    )
 
   end 
 
   desc "Build and deploy the apps for Acc via Firebase from CI"
   lane :deploy_acc_ci do
 
-    deploy_holder_acc_ci
-    deploy_verifier_acc_ci
+    ## Deploy Holder Test: 
+    deploycombined(
+      x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Holder_Acc.mobileprovision",
+      x_xcodeproj: "CTR.xcodeproj",
+      x_targetname: "Holder",
+      x_schemename:  "Holder Acceptance",
+      x_configuration: "FirebaseAcceptance",
+      x_provisioningprofilename: "CoronaCheck Holder Acc",
+      x_bundleid: "nl.rijksoverheid.ctr.acc",
+      x_firebaseappid: "1:168257592968:ios:e39aba89b3caf97626493d",
+      x_firebasegroupscsv: "" #testers
+    )
+    
+    ## Deploy Verifier Test: 
+    deploycombined(
+      x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Verifier_Acc.mobileprovision",
+      x_xcodeproj: "CTR.xcodeproj",
+      x_targetname: "Verifier",
+      x_schemename:  "Verifier Acceptance",
+      x_configuration: "FirebaseAcceptance",
+      x_provisioningprofilename: "CoronaCheck Verifier Acc",
+      x_bundleid: "nl.rijksoverheid.ctr.verifier.acc",
+      x_firebaseappid: "1:168257592968:ios:e3402385406b0d9726493d",
+      x_firebasegroupscsv: "" #verifiers
+    )
 
   end 
 
   desc "Build and deploy the apps for Prod via Firebase from CI"
   lane :deploy_prod_ci do
 
-    deploy_holder_prod_ci
-    deploy_verifier_prod_ci
+    ## Deploy Holder Test: 
+    deploycombined(
+      x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Holder_Prod.mobileprovision",
+      x_xcodeproj: "CTR.xcodeproj",
+      x_targetname: "Holder",
+      x_schemename:  "Holder Production",
+      x_configuration: "FirebaseProduction",
+      x_provisioningprofilename: "CoronaCheck Holder Prod",
+      x_bundleid: "nl.rijksoverheid.ctr",
+      x_firebaseappid: "1:168257592968:ios:e0498230630ed6a826493d",
+      x_firebasegroupscsv: "" #testers
+    )
+
+    ## Deploy Verifier Test: 
+    deploycombined(
+      x_provisioning_profile_path: "fastlane/profiles/CoronaCheck_Verifier_Prod.mobileprovision",
+      x_xcodeproj: "CTR.xcodeproj",
+      x_targetname: "Verifier",
+      x_schemename:  "Verifier Production",
+      x_configuration: "FirebaseProduction",
+      x_provisioningprofilename: "CoronaCheck Verifier Prod",
+      x_bundleid: "nl.rijksoverheid.ctr.verifier",
+      x_firebaseappid: "1:168257592968:ios:6a903add03edb4a126493d",
+      x_firebasegroupscsv: "" #verifiers
+    )
 
   end 
 
 
   lane :deploycombined do |options|
 
-    provisioning_profile_path =   options[:x_provisioning_profile_path] # "fastlane/profiles/CoronaCheck_Ad_Hoc.mobileprovision"
-    xcodeproj =                   options[:x_xcodeproj] # "CTR.xcodeproj"
-    targetname =                  options[:x_targetname] # "Holder"
-    schemename =                  options[:x_schemename] #  "CoronaCheck"
-    configuration =               options[:x_configuration] # "Ad Hoc Test"
-    provisioningprofilename =     options[:x_provisioningprofilename] # "CoronaCheck Ad Hoc"
-    bundleid =                    options[:x_bundleid] # "nl.rijksoverheid.ctr"
-    firebase_app_id =             options[:x_firebaseappid] # "1:168257592968:ios:87200fa917a43f0f26493d"
-    firebase_groups_csv =         options[:x_firebasegroupscsv] # "testers"
+    # unwrap options:
+    provisioning_profile_path =   options[:x_provisioning_profile_path]
+    xcodeproj =                   options[:x_xcodeproj]
+    targetname =                  options[:x_targetname]
+    schemename =                  options[:x_schemename]
+    configuration =               options[:x_configuration]
+    provisioningprofilename =     options[:x_provisioningprofilename]
+    bundleid =                    options[:x_bundleid]
+    firebase_app_id =             options[:x_firebaseappid]
+    firebase_groups_csv =         options[:x_firebasegroupscsv]
 
-    # -- previously "deploy_holder"
+    # Prepare:
     setup_ci(provider: "travis", force: true)
     prepare_certificate
     install_provisioning_profile(path: provisioning_profile_path)
-  
     prepare
-    # -- 
 
-    # -- Previously "deploy_holder_test_ci"
+    # Version/Build number
     version = get_version_number(xcodeproj: xcodeproj, target: targetname, configuration: configuration)
     build_number = determine_build_number()
     increment_build_number(build_number: build_number, xcodeproj: xcodeproj)
-    # -- 
-
-    # -- Previously "deploy_holder_test"
-
+    
+    # Build:
     build_ios_app(
       scheme: schemename,
       configuration: configuration,
@@ -129,140 +167,22 @@ platform :ios do
       }
     )
 
+    # Deploy to Firebase:
     firebase_app_distribution(
       app: firebase_app_id,
       groups: firebase_groups_csv
     )
-    # -- 
-
-    # inform_slack(
-    #   default_payloads: [:git_author],
-    #   message: "Successfully distributed iOS Holder (Test) app beta build #{version} (#{build_number}) :rocket:",
-    # )
-  end
-
-
-
-
-
-  # -- Deploy based on App Flavor to one environment
-
-  desc "Build and deploy the Holder app for Test via Firebase from CI"
-  lane :deploy_holder_test_ci do
-    deploy_holder
-
-    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "Holder", configuration: "Ad Hoc Test")
-    build_number = determine_build_number()
-    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
-
-    deploy_holder_test
-
+    
     inform_slack(
       default_payloads: [:git_author],
-      message: "Successfully distributed iOS Holder (Test) app beta build #{version} (#{build_number}) :rocket:",
+      message: "Successfully distributed iOS #{schemename} app beta build #{version} (#{build_number}) :rocket:",
     )
   end
 
-  desc "Build and deploy the Verifier app for Test via Firebase from CI"
-  lane :deploy_verifier_test_ci do
-    deploy_verifier
 
-    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "Verifier", configuration: "Ad Hoc Test")
-    build_number = determine_build_number()
-    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
-
-    deploy_verifier_test
-
-    inform_slack(
-      default_payloads: [:git_author],
-      message: "Successfully distributed iOS Verifier (Test) app beta build #{version} (#{build_number}) :rocket:",
-    )
-  end
-
-  desc "Build and deploy the Holder app for Acc via Firebase from CI"
-  lane :deploy_holder_acc_ci do
-    deploy_holder
-
-    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "Holder", configuration: "Ad Hoc Acc")
-    build_number = determine_build_number()
-    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
-
-    deploy_holder_acc
-
-    inform_slack(
-      default_payloads: [:git_author],
-      message: "Successfully distributed iOS Holder (Acc) app beta build #{version} (#{build_number}) :rocket:",
-    )
-  end
-
-  desc "Build and deploy the Verifier app for Acc via Firebase from CI"
-  lane :deploy_verifier_acc_ci do
-    deploy_verifier
-
-    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "Verifier", configuration: "Ad Hoc Acc")
-    build_number = determine_build_number()
-    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
-
-    deploy_verifier_acc
-
-    inform_slack(
-      default_payloads: [:git_author],
-      message: "Successfully distributed iOS Verifier (Acc) app beta build #{version} (#{build_number}) :rocket:",
-    )
-  end
-
-  desc "Build and deploy the Holder app for Prod via Firebase from CI"
-  lane :deploy_holder_prod_ci do
-    deploy_holder
-
-    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "Holder", configuration: "Ad Hoc Prod")
-    build_number = determine_build_number()
-    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
-
-    deploy_holder_prod
-
-    inform_slack(
-      default_payloads: [:git_author],
-      message: "Successfully distributed iOS Holder (Prod) app beta build #{version} (#{build_number}) :rocket:",
-    )
-  end
-
-  desc "Build and deploy the Verifier app for Prod via Firebase from CI"
-  lane :deploy_verifier_prod_ci do
-    deploy_verifier
-
-    version = get_version_number(xcodeproj: "CTR.xcodeproj", target: "Verifier", configuration: "Ad Hoc Prod")
-    build_number = determine_build_number()
-    increment_build_number(build_number: build_number, xcodeproj: "CTR.xcodeproj")
-
-    deploy_verifier_prod
-
-    inform_slack(
-      default_payloads: [:git_author],
-      message: "Successfully distributed iOS Verifier (Prod) app beta build #{version} (#{build_number}) :rocket:",
-    )
-  end
-
-  # private_lane :deploy_holder do
-
-  #   setup_ci(provider: "travis", force: true)
-  #   prepare_certificate
-  #   install_provisioning_profile(path: "fastlane/profiles/CoronaCheck_Ad_Hoc.mobileprovision")
-  
-  #   prepare
-  # end
-
-  private_lane :deploy_verifier do
-
-    setup_ci(provider: "travis", force: true)
-    prepare_certificate
-    install_provisioning_profile(path: "fastlane/profiles/CoronaCheck_Verifier_Ad_Hoc.mobileprovision")
-
-    prepare
-  end
+  # Private Lanes
 
   private_lane :prepare_certificate do
-
     import_certificate(
       certificate_path: ENV["CERTIFICATE_PATH"],
       certificate_password: ENV["CERTIFICATE_PASSWORD"],
@@ -279,118 +199,9 @@ platform :ios do
       ENV['GITHUB_RUN_NUMBER']
   end
 
-  private_lane :deploy_holder_test do
-    build_ios_app(
-      scheme: "CoronaCheck",
-      configuration: "Ad Hoc Test",
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "nl.rijksoverheid.ctr" => "CoronaCheck Ad Hoc"
-        }
-      }
-    )
-
-    firebase_app_distribution(
-      app: "1:168257592968:ios:87200fa917a43f0f26493d",
-      groups: "testers"
-    )
-  end
-
-  private_lane :deploy_verifier_test do
-    build_ios_app(
-      scheme: "Verifier",
-      configuration: "Ad Hoc Test",
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaCheck Verifier Ad Hoc"
-        }
-      }
-    )
-
-    firebase_app_distribution(
-      app: "1:168257592968:ios:528e987682225ac626493d",
-      groups: "verifiers"
-    )
-  end
-
-  # private_lane :deploy_holder_acc do
-  #   build_ios_app(
-  #     scheme: "CoronaCheck",
-  #     configuration: "Ad Hoc Acc",
-  #     export_options: {
-  #       method: "ad-hoc",
-  #       provisioningProfiles: {
-  #         "nl.rijksoverheid.ctr" => "CoronaCheck Ad Hoc"
-  #       }
-  #     }
-  #   )
-
-  #   firebase_app_distribution(
-  #     app: "1:406021306322:ios:c348fa3e6d8575972cfa0b",
-  #     groups: "testers"
-  #   )
-  # end
-
-  private_lane :deploy_verifier_acc do
-    build_ios_app(
-      scheme: "Verifier",
-      configuration: "Ad Hoc Acc",
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaCheck Verifier Ad Hoc"
-        }
-      }
-    )
-
-    firebase_app_distribution(
-      app: "1:406021306322:ios:efc9c030ce5e5bcd2cfa0b",
-      groups: "verifiers"
-    )
-  end
-
-  private_lane :deploy_holder_prod do
-    build_ios_app(
-      scheme: "CoronaCheck",
-      configuration: "Ad Hoc Prod",
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "nl.rijksoverheid.ctr" => "CoronaCheck Ad Hoc"
-        }
-      }
-    )
-
-    firebase_app_distribution(
-      app: "1:625955224267:ios:f1931622b1d8a00e97794e",
-      groups: "testers"
-    )
-  end
-
-  private_lane :deploy_verifier_prod do
-    build_ios_app(
-      scheme: "Verifier",
-      configuration: "Ad Hoc Prod",
-      export_options: {
-        method: "ad-hoc",
-        provisioningProfiles: {
-          "nl.rijksoverheid.ctr.verifier" => "CoronaCheck Verifier Ad Hoc"
-        }
-      }
-    )
-
-    firebase_app_distribution(
-      app: "1:625955224267:ios:39838403806e73dd97794e",
-      groups: "verifiers"
-    )
-  end
-
   private_lane :inform_slack do |options|
     unless ENV['SLACK_URL'].nil?
       slack(options)
     end
   end
-
 end
