@@ -11,8 +11,9 @@ import Nimble
 
 class ProofManagerTests: XCTestCase {
 
-	var sut: ProofManager!
-	var cryptoSpy: CryptoManagerSpy!
+	private var sut: ProofManager!
+	private var cryptoSpy: CryptoManagerSpy!
+	private var networkSpy: NetworkSpy!
 
 	override func setUp() {
 
@@ -20,19 +21,21 @@ class ProofManagerTests: XCTestCase {
 		sut = ProofManager()
 		cryptoSpy = CryptoManagerSpy()
 		sut.cryptoManager = cryptoSpy
+		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
 	}
 
 	/// Test the fetch issuers public keys
-	func testFetchIssuerPublicKeys() {
+	func test_fetchIssuerPublicKeys() {
 
 		// Given
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut.networkManager = networkSpy
-		networkSpy.shouldReturnPublicKeys = true
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
 
 		// When
 		sut.fetchIssuerPublicKeys {
+
 			// Then
+			expect(self.networkSpy.invokedGetPublicKeys) == true
 			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == true
 		} onError: { _ in
 			fail("There should be no error")
@@ -40,16 +43,16 @@ class ProofManagerTests: XCTestCase {
 	}
 
 	/// Test the fetch issuers public keys with no response
-	func testFetchIssuerPublicKeysNoResponse() {
+	func test_fetchIssuerPublicKeys_noResponse() {
 
 		// Given
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut.networkManager = networkSpy
-		networkSpy.shouldReturnPublicKeys = false
+		networkSpy.stubbedGetPublicKeysCompletionResult = nil
 
 		// When
 		sut.fetchIssuerPublicKeys {
+
 			// Then
+			expect(self.networkSpy.invokedGetPublicKeys) == true
 			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
 		} onError: { _ in
 			fail("There should be no error")
@@ -57,13 +60,11 @@ class ProofManagerTests: XCTestCase {
 	}
 
 	/// Test the fetch issuers public keys with an network error
-	func testFetchIssuerPublicKeysWithError() {
+	func test_fetchIssuerPublicKeys_withErrorResponse() {
 
 		// Given
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut.networkManager = networkSpy
-		networkSpy.shouldReturnPublicKeys = false
-		networkSpy.publicKeyError = NetworkError.invalidRequest
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest),(()))
+
 		sut.keysFetchedTimestamp = nil
 
 		// When
@@ -71,56 +72,56 @@ class ProofManagerTests: XCTestCase {
 			// Then
 			fail("There should be no success")
 		} onError: { _ in
+			expect(self.networkSpy.invokedGetPublicKeys) == true
 			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
 		}
 	}
 
 	/// Test the fetch issuers public keys with invalid keys error
-	func testFetchIssuerPublicKeysWithInvalidKeysError() {
+	func test_fetchIssuerPublicKeys_withInvalidKeysError() {
 
 		// Given
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut.networkManager = networkSpy
-		networkSpy.shouldReturnPublicKeys = true
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
 		// Trigger invalid keys
 		cryptoSpy.issuerPublicKeysAreValid = false
 
 		// When
 		sut.fetchIssuerPublicKeys {
+
 			// Then
 			fail("There should be no success")
 		} onError: { _ in
 
+			expect(self.networkSpy.invokedGetPublicKeys) == true
 			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == true
 		}
 	}
 
 	/// Test the fetch issuers public keys with an network error
-	func testFetchIssuerPublicKeysWithErrorWithinTTL() {
+	func test_fetchIssuerPublicKeys_withError_withinTTL() {
 
 		// Given
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut.networkManager = networkSpy
-		networkSpy.shouldReturnPublicKeys = false
-		networkSpy.publicKeyError = NetworkError.invalidRequest
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest),(()))
 		sut.keysFetchedTimestamp = Date()
 
 		// When
 		sut.fetchIssuerPublicKeys {
+
 			// Then
+			expect(self.networkSpy.invokedGetPublicKeys) == true
 			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
 		} onError: { _ in
 			fail("There should be no error")
 		}
 	}
-
-	func test_fetchTestProviders() {
-
-		// Given
-
-		// When
-
-		// Then
-
-	}
+//
+//	func test_fetchTestProviders() {
+//
+//		// Given
+//
+//		// When
+//
+//		// Then
+//
+//	}
 }
