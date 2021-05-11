@@ -32,14 +32,11 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
 
 		// When
-		sut.fetchIssuerPublicKeys {
+		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
-			// Then
-			expect(self.networkSpy.invokedGetPublicKeys) == true
-			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == true
-		} onError: { _ in
-			fail("There should be no error")
-		}
+		// Then
+		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with no response
@@ -49,14 +46,11 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = nil
 
 		// When
-		sut.fetchIssuerPublicKeys {
+		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
-			// Then
-			expect(self.networkSpy.invokedGetPublicKeys) == true
-			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
-		} onError: { _ in
-			fail("There should be no error")
-		}
+		// Then
+		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -64,17 +58,14 @@ class ProofManagerTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
-
 		sut.keysFetchedTimestamp = nil
 
 		// When
-		sut.fetchIssuerPublicKeys {
-			// Then
-			fail("There should be no success")
-		} onError: { _ in
-			expect(self.networkSpy.invokedGetPublicKeys) == true
-			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
-		}
+		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+
+		// Then
+		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with invalid keys error
@@ -86,15 +77,11 @@ class ProofManagerTests: XCTestCase {
 		cryptoSpy.issuerPublicKeysAreValid = false
 
 		// When
-		sut.fetchIssuerPublicKeys {
+		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
-			// Then
-			fail("There should be no success")
-		} onError: { _ in
-
-			expect(self.networkSpy.invokedGetPublicKeys) == true
-			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == true
-		}
+		// Then
+		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -105,14 +92,11 @@ class ProofManagerTests: XCTestCase {
 		sut.keysFetchedTimestamp = Date()
 
 		// When
-		sut.fetchIssuerPublicKeys {
+		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
-			// Then
-			expect(self.networkSpy.invokedGetPublicKeys) == true
-			expect(self.cryptoSpy.setIssuerPublicKeysCalled) == false
-		} onError: { _ in
-			fail("There should be no error")
-		}
+		// Then
+		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
 	}
 
 	func test_fetchTestProviders() {
@@ -131,18 +115,13 @@ class ProofManagerTests: XCTestCase {
 			), ()
 		)
 
-		waitUntil(timeout: .seconds(10)) {done in
-			// When
-			self.sut.fetchCoronaTestProviders {
-				// Then
-				expect(self.networkSpy.invokedGetTestProviders) == true
-				expect(self.sut.testProviders).to(haveCount(1))
-				expect(self.sut.testProviders.first?.identifier) == "test_fetchTestProviders"
-				done()
-			} onError: { _ in
-				fail("call should not error")
-			}
-		}
+		// When
+		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
+
+		// Then
+		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
+		expect(self.sut.testProviders).toEventually(haveCount(1))
+		expect(self.sut.testProviders.first?.identifier).toEventually(equal("test_fetchTestProviders"))
 	}
 
 	func test_fetchTestProviders_withError() {
@@ -150,17 +129,11 @@ class ProofManagerTests: XCTestCase {
 		// Given
 		networkSpy.stubbedGetTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest), ())
 
-		waitUntil(timeout: .seconds(10)) {done in
-			// When
-			self.sut.fetchCoronaTestProviders {
-				// Then
-				fail("call should not success")
+		// When
+		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
 
-			} onError: { _ in
-				expect(self.networkSpy.invokedGetTestProviders) == true
-				expect(self.sut.testProviders).to(beEmpty())
-				done()
-			}
-		}
+		// Then
+		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
+		expect(self.sut.testProviders).toEventually(beEmpty())
 	}
 }
