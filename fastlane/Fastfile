@@ -303,3 +303,26 @@ platform :ios do
   end
 
 end
+
+# We were seeing an issue where fastlane would leave a temporary keychain as the _default_ 
+# macOS keychain, which caused all kinds of issues.
+# This lane (running on `after_all` and `error`) will cleanup.
+lane :remove_temp_keychain do
+  begin 
+    name = "fastlane_tmp_keychain"
+    delete_keychain(
+      name: name
+    ) if File.exist? File.expand_path("~/Library/Keychains/#{name}-db")
+  rescue => ex
+    puts(ex)
+  end
+end
+
+after_all do |lane, options|
+  puts "HELLO!"
+  remove_temp_keychain
+end
+
+error do |lane, exception, options|
+  remove_temp_keychain
+end
