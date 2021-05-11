@@ -11,12 +11,11 @@ import CoreData
 
 class WalletModelTests: XCTestCase {
 
-	var databaseManager = DatabaseManager()
+	var dataStoreManager: DataStoreManaging!
 
-	override func tearDown() {
-
-		databaseManager.clearCoreData()
-		super.tearDown()
+	override func setUp() {
+		super.setUp()
+		dataStoreManager = DataStoreManager(.inMemory)
 	}
 
 	// MARK: Tests
@@ -24,7 +23,7 @@ class WalletModelTests: XCTestCase {
 	func test_createWallet() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			// When
@@ -44,7 +43,7 @@ class WalletModelTests: XCTestCase {
 	func test_listWallets_noWallets() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			// When
@@ -58,7 +57,7 @@ class WalletModelTests: XCTestCase {
 	func test_listWallets_oneWallet() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			WalletModel.create(
@@ -79,7 +78,7 @@ class WalletModelTests: XCTestCase {
 	func test_listWallets_twoWallets() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			WalletModel.create(
@@ -103,7 +102,7 @@ class WalletModelTests: XCTestCase {
 	func test_addEvent() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
@@ -132,7 +131,7 @@ class WalletModelTests: XCTestCase {
 	func test_removeEvent() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
@@ -157,7 +156,7 @@ class WalletModelTests: XCTestCase {
 	func test_addGreenCard() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
@@ -184,7 +183,7 @@ class WalletModelTests: XCTestCase {
 	func test_removeGreencard() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			let wallet = WalletModel.createTestWallet(managedContext: context)!

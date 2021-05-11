@@ -8,9 +8,13 @@
 import Foundation
 import CoreData
 
-protocol DatabaseManaging {
+enum StorageType {
+	case persistent, inMemory
+}
 
-	init()
+protocol DataStoreManaging {
+
+	init(_ storageType: StorageType)
 
 	/// Get a context to perform a query on
 	/// - Returns: the main context
@@ -25,9 +29,11 @@ protocol DatabaseManaging {
 	func save(_ context: NSManagedObjectContext)
 }
 
-class DatabaseManager: DatabaseManaging, Logging {
+class DataStoreManager: DataStoreManaging, Logging {
 
 	private let containerName = "CoronaCheck"
+
+	private var storageType: StorageType
 
 	/// The persistent container holding our data model
 	private lazy var persistentContainer: NSPersistentContainer = {
@@ -41,6 +47,9 @@ class DatabaseManager: DatabaseManaging, Logging {
 			FileProtectionType.complete as NSObject,
 			forKey: NSPersistentStoreFileProtectionKey
 		)
+		if storageType == .inMemory {
+			description.url = URL(fileURLWithPath: "/dev/null")
+		}
 		container.persistentStoreDescriptions = [description]
 		container.loadPersistentStores(completionHandler: { storeDescription, error in
 			if let error = error as NSError? {
@@ -65,8 +74,11 @@ class DatabaseManager: DatabaseManaging, Logging {
 		}
 	}
 
-	required init() {
-		// Required by protocol
+	/// Initialize the database manager
+	/// - Parameter storageType: store the data in memory or on disk.
+	required init(_ storageType: StorageType) {
+
+		self.storageType = storageType
 	}
 
 	/// Get a context to perform a query on
@@ -95,37 +107,6 @@ class DatabaseManager: DatabaseManaging, Logging {
 				self.logError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 				fatalError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 			}
-		}
-	}
-
-	/// Clear all the data, for all the stored entities.
-	/// Used by unit test to clear the stack.
-	func clearCoreData() {
-
-		guard ProcessInfo.processInfo.isTesting else {
-			// Only use while testing
-			return
-		}
-
-		let context = managedObjectContext()
-		context.performAndWait {
-			for entity in self.persistentContainer.managedObjectModel.entities {
-
-				guard let entityName = entity.name else {
-					break
-				}
-
-				let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-				fetchRequest.includesSubentities = false
-				do {
-					for case let object as NSManagedObject in try context.fetch(fetchRequest) {
-						context.delete(object)
-					}
-				} catch let error as NSError {
-					self.logError("DatabaseController - clearCoreData deleteObject error: \(error)")
-				}
-			}
-			self.save(context)
 		}
 	}
 }

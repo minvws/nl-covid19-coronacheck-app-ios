@@ -10,12 +10,11 @@ import Nimble
 
 class GreenCardModelTests: XCTestCase {
 
-	var databaseManager = DatabaseManager()
+	var dataStoreManager: DataStoreManaging!
 
-	override func tearDown() {
-
-		databaseManager.clearCoreData()
-		super.tearDown()
+	override func setUp() {
+		super.setUp()
+		dataStoreManager = DataStoreManager(.inMemory)
 	}
 
 	// MARK: Tests
@@ -23,7 +22,7 @@ class GreenCardModelTests: XCTestCase {
 	func test_createGreenCard() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
@@ -47,7 +46,7 @@ class GreenCardModelTests: XCTestCase {
 	func test_createTwoGreenCards() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
@@ -74,7 +73,7 @@ class GreenCardModelTests: XCTestCase {
 	func test_addCredential() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
@@ -108,7 +107,7 @@ class GreenCardModelTests: XCTestCase {
 	func test_removeCredential() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			let wallet = WalletModel.createTestWallet(managedContext: context)!

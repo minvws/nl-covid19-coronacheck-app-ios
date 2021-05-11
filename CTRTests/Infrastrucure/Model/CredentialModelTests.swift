@@ -10,12 +10,11 @@ import Nimble
 
 class CredentialModelTests: XCTestCase {
 
-	var databaseManager = DatabaseManager()
+	var dataStoreManager: DataStoreManaging!
 
-	override func tearDown() {
-
-		databaseManager.clearCoreData()
-		super.tearDown()
+	override func setUp() {
+		super.setUp()
+		dataStoreManager = DataStoreManager(.inMemory)
 	}
 
 	// MARK: Tests
@@ -23,7 +22,7 @@ class CredentialModelTests: XCTestCase {
 	func test_createCredential() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let date = Date()
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
@@ -54,7 +53,7 @@ class CredentialModelTests: XCTestCase {
 	func test_createTwoCredentials() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let date = Date()
 			let wallet = WalletModel.createTestWallet(managedContext: context)!

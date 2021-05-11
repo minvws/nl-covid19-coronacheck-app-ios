@@ -10,12 +10,11 @@ import Nimble
 
 class EventModelTests: XCTestCase {
 
-	var databaseManager = DatabaseManager()
+	var dataStoreManager: DataStoreManaging!
 
-	override func tearDown() {
-
-		databaseManager.clearCoreData()
-		super.tearDown()
+	override func setUp() {
+		super.setUp()
+		dataStoreManager = DataStoreManager(.inMemory)
 	}
 
 	// MARK: Tests
@@ -23,7 +22,7 @@ class EventModelTests: XCTestCase {
 	func test_createEvent() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
@@ -50,7 +49,7 @@ class EventModelTests: XCTestCase {
 	func test_createTwoEvents() {
 
 		// Given
-		let context = databaseManager.managedObjectContext()
+		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
