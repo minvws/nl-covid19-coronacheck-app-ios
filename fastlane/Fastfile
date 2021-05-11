@@ -319,7 +319,6 @@ lane :remove_temp_keychain do
 end
 
 after_all do |lane, options|
-  puts "HELLO!"
   remove_temp_keychain
 end
 
