@@ -36,7 +36,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest),(()))
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest), ())
 			self.sut.lastFetchedTimestamp = nil
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
@@ -45,7 +45,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 				// Then
 				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
-				expect(state) ==  LaunchState.internetRequired
+				expect(state) == LaunchState.internetRequired
 				done()
 			}
 		}
@@ -56,7 +56,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(100)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest),())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest), ())
 			self.sut.lastFetchedTimestamp = Date()
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 

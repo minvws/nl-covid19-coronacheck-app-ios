@@ -63,7 +63,7 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys_withErrorResponse() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest),(()))
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
 
 		sut.keysFetchedTimestamp = nil
 
@@ -101,7 +101,7 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys_withError_withinTTL() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest),(()))
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
 		sut.keysFetchedTimestamp = Date()
 
 		// When
@@ -148,7 +148,7 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchTestProviders_withError() {
 
 		// Given
-		networkSpy.stubbedGetTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest),(()))
+		networkSpy.stubbedGetTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest), ())
 
 		waitUntil(timeout: .seconds(10)) {done in
 			// When
