@@ -219,5 +219,12 @@ after_all do |lane, options|
 end
 
 error do |lane, exception, options|
+
+  inform_slack(
+    default_payloads: [:git_author],
+    message: ":hot_face: FAIL to distribute iOS build for lane #{lane}, error: #{exception}",
+    success: false
+  )
+
   remove_temp_keychain
 end
