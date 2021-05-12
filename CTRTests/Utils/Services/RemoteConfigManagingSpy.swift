@@ -10,39 +10,45 @@ import XCTest
 
 class RemoteConfigManagingSpy: RemoteConfigManaging {
 
-	var appVersion: String = "1.0.0"
-	var updateCalled = false
-	var getConfigurationCalled = false
-	var launchState: LaunchState?
-	var configuration: RemoteConfiguration
+	required init() {}
 
-	required init() {
-		configuration = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: "RemoteConfigManagingSpy",
-			storeUrl: nil,
-			deactivated: false,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
-		)
+	var invokedAppVersionGetter = false
+	var invokedAppVersionGetterCount = 0
+	var stubbedAppVersion: String! = ""
+
+	var appVersion: String {
+		invokedAppVersionGetter = true
+		invokedAppVersionGetterCount += 1
+		return stubbedAppVersion
 	}
 
-	func update(completion: @escaping (LaunchState) -> Void) {
+	var invokedUpdate = false
+	var invokedUpdateCount = 0
+	var stubbedUpdateCompletionResult: (LaunchState, Void)?
 
-		updateCalled = true
-		if let state = launchState {
-			completion(state)
+	func update(completion: @escaping (LaunchState) -> Void) {
+		invokedUpdate = true
+		invokedUpdateCount += 1
+		if let result = stubbedUpdateCompletionResult {
+			completion(result.0)
 		}
 	}
 
-	func getConfiguration() -> RemoteConfiguration {
+	var invokedGetConfiguration = false
+	var invokedGetConfigurationCount = 0
+	var stubbedGetConfigurationResult: RemoteConfiguration!
 
-		getConfigurationCalled = true
-		return configuration
+	func getConfiguration() -> RemoteConfiguration {
+		invokedGetConfiguration = true
+		invokedGetConfigurationCount += 1
+		return stubbedGetConfigurationResult
 	}
 
+	var invokedReset = false
+	var invokedResetCount = 0
+
 	func reset() {
-		configuration = .default
+		invokedReset = true
+		invokedResetCount += 1
 	}
 }
