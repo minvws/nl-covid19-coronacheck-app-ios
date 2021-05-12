@@ -24,7 +24,13 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
 	}
 
