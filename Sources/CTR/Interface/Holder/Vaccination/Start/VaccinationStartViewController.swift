@@ -9,7 +9,6 @@ import UIKit
 
 class VaccinationStartViewModel {
 
-	/// Coordination Delegate
 	weak var coordinator: VaccinationCoordinatorDelegate?
 
 	init(coordinator: VaccinationCoordinatorDelegate) {
@@ -19,14 +18,15 @@ class VaccinationStartViewModel {
 	func backButtonTapped() {
 		coordinator?.didFinish()
 	}
+
+	func primaryButtonTapped() {
+
+	}
 }
 
 class VaccinationStartViewController: BaseViewController {
 
-	/// The model
 	let viewModel: VaccinationStartViewModel
-
-	/// The view
 	let sceneView = VaccinationStartView()
 
 	/// Initializer
@@ -56,10 +56,15 @@ class VaccinationStartViewController: BaseViewController {
 		title = "** Vaccinatie ophalen **"
 		sceneView.primaryTitle = "** Login met DigiD ** "
 		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backbuttonTapped), accessibilityLabel: .back)
+		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
+
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+
+			self?.viewModel.primaryButtonTapped()
+		}
 	}
 
-	@objc func backbuttonTapped() {
+	@objc func backButtonTapped() {
 
 		viewModel.backButtonTapped()
 	}
