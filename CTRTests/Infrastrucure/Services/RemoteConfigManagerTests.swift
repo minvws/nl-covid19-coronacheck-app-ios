@@ -218,7 +218,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 extension RemoteConfiguration {
 
-	init(minVersion: String, minVersionMessage:String?, deactivated: Bool? = nil) {
+	init(minVersion: String, minVersionMessage: String?, deactivated: Bool? = nil) {
 
 		self.init(
 			minVersion: minVersion,
