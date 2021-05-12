@@ -101,22 +101,16 @@ struct NetworkConfiguration {
 		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
     }
 
-	/// The nonce url
-	var testResultIsmUrl: URL? {
+	/// The sign url
+	var signUrl: URL? {
 
-		return self.combine(path: Endpoint.testResultIsm, fromCdn: false)
+		return self.combine(path: Endpoint.sign, fromCdn: false)
 	}
 
 	/// The providers url
-	var testProvidersUrl: URL? {
+	var providersUrl: URL? {
 
-		return self.combine(path: Endpoint.testProviders, fromCdn: false)
-	}
-
-	/// The types url
-	var testTypesUrl: URL? {
-
-		return self.combine(path: Endpoint.testTypes, fromCdn: false)
+		return self.combine(path: Endpoint.providers, fromCdn: false)
 	}
 
 	/// Combine the endpoint info into an url
