@@ -17,15 +17,22 @@ This increases the chance that we might be able to use your contribution (or it 
 
 Note that all commits should be signed using a gpg key.
 
-## Setting up environment
+## Getting started 
 
-Running `make dev` will compile: 
+The Xcode project file (`CTR.xcodeproj`) is not checked-in to git. Instead, we generate it dynamically using [XcodeGen](https://github.com/yonaskolb/XcodeGen) based on a [project.yml](./.project.yml) file. There is a [Makefile](./Makefile) which should make it easy to get started:
+
+Simply run `make dev` from the command line.  
+
+It will compile: 
 
 - XcodeGen 
+- SwiftLint
 
 and will install githooks for: 
 
-- GitLFS 
-- XcodeGen
+- GitLFS (which will download the [snapshot](https://github.com/pointfreeco/swift-snapshot-testing) PNGs used in our unit tests) 
+- XcodeGen (which will update the Xcode project each time you change branches)
 
-and will run `bundle install` to setup your Ruby dependencies.
+and will run `bundle install` to setup your Ruby dependencies such as fastlane
+
+and lastly, will generate and open the Xcode Project for you.
