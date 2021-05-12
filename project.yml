@@ -38,9 +38,9 @@ packages:
 
 configs:
   Development: debug
-  FirebaseTest: release
-  FirebaseAcceptance: release
-  FirebaseProduction: release
+  FirebaseTest: debug
+  FirebaseAcceptance: debug
+  FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
 # - Project Level settings:
@@ -98,7 +98,6 @@ targetTemplates:
         MARKETING_VERSION: 1.3.0
         CURRENT_PROJECT_VERSION: 26
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
-        CODE_SIGN_ENTITLEMENTS: CTR.entitlements
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
         PRODUCT_NAME: $(TARGET_NAME)
@@ -174,19 +173,54 @@ targetTemplates:
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
+    postCompileScripts:
+      - name: Copy Firebase Plist (FirebaseTest/FirebaseAcceptance only)
+        basedOnDependencyAnalysis: false
+        script: |
+          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
+          then 
+            # Get a reference to the folder which contains the configuration subfolders.
+            CONFIGURATIONS_FOLDER=Sources/CTR/Configuration/Firebase/${APP_FLAVOR}/${CONFIGURATION}
+            # Get a reference to the filename of a 'GoogleService-Info.plist' file.
+            GOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist
+            # Get a reference to the 'GoogleService-Info.plist' for the current configuration.
+            GOOGLESERVICE_INFO_PLIST_LOCATION=${PROJECT_DIR}/${CONFIGURATIONS_FOLDER}/${GOOGLESERVICE_INFO_PLIST}
+
+            # Check if 'GoogleService-Info.plist' file for current configuration exist.
+            if [ ! -f $GOOGLESERVICE_INFO_PLIST_LOCATION ]
+            then
+              echo "No '${GOOGLESERVICE_INFO_PLIST}' file found for the configuration '${CONFIGURATION}' in location '${GOOGLESERVICE_INFO_PLIST_LOCATION}'."
+              exit 1
+            fi
+
+            # Get a reference to the destination location for the GoogleService-Info.plist.
+            GOOGLESERVICE_INFO_PLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app
+            
+            # Copy 'GoogleService-Info.plist' for current configution to destination.
+            cp "${GOOGLESERVICE_INFO_PLIST_LOCATION}" "${GOOGLESERVICE_INFO_PLIST_DESTINATION}"
+            echo "Successfully copied the '${GOOGLESERVICE_INFO_PLIST}' file for the '${CONFIGURATION}' configuration from '${GOOGLESERVICE_INFO_PLIST_LOCATION}' to '${GOOGLESERVICE_INFO_PLIST_DESTINATION}'."
+          else 
+            echo "Skipping adding Google Service Plist as Configuration is '$CONFIGURATION'"
+          fi
     postBuildScripts:
-      - name: Upload Crashlytics
+      - name: Upload Crashlytics (FirebaseTest/FirebaseAcceptance only)
         basedOnDependencyAnalysis: true
         inputFiles:
           - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
           - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
         script: |
-          if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
-            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
+          then 
+            if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
+              "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
+            else 
+              "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
+            fi
           else 
-            "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
+            echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
           fi
-          
+
+
   Standard_UnitTesting:
     platform: iOS
     type: bundle.unit-test
@@ -212,7 +246,7 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "CTR/Configuration/Verifier"
+          - "CTR/Configuration/Firebase"
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
           - "CTR/Configuration/verifier-Info.plist"
@@ -221,32 +255,37 @@ targets:
         APP_FLAVOR: holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
+        
       configs:
         Development:
-          DISPLAY_NAME: CoronaCheck D
+          DISPLAY_NAME: "🤖 Dev Holder"
           PRODUCT_NAME: CTR
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
         FirebaseTest:
-          DISPLAY_NAME: CoronaCheck Test
+          DISPLAY_NAME: "🪲 Test Holder"
           PRODUCT_NAME: CTR TEST
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
         FirebaseAcceptance:
-          DISPLAY_NAME: CoronaCheck ACC
+          DISPLAY_NAME: "💡 Acc Holder"
           PRODUCT_NAME: CTR ACC
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.acc
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Acc
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Acc.entitlements
         FirebaseProduction:
-          DISPLAY_NAME: CoronaCheck PROD
+          DISPLAY_NAME: "Prod Holder"
           PRODUCT_NAME: CTR PROD
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Prod
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Prod.entitlements
         AppStore:
           DISPLAY_NAME: CoronaCheck
           PRODUCT_NAME: CTR
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck App Store
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Prod.entitlements
     info:
       path: Sources/CTR/Configuration/holder-Info.plist
       properties:
@@ -263,7 +302,7 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "CTR/Configuration/Holder"
+          - "CTR/Configuration/Firebase"
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
@@ -274,19 +313,20 @@ targets:
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
       configs:
         Development:
-          DISPLAY_NAME: Scanner Dev
+          DISPLAY_NAME: "🤖 Dev Scanner"
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
         FirebaseTest:
-          DISPLAY_NAME: Scanner Test
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          DISPLAY_NAME: "🪲 Test Scanner"
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
         FirebaseAcceptance:
-          DISPLAY_NAME: Scanner ACC
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          DISPLAY_NAME: "💡 Acc Scanner"
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Acc
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.acc
         FirebaseProduction:
-          DISPLAY_NAME: Scanner PROD
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Ad Hoc
+          DISPLAY_NAME: "Prod Scanner"
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Prod
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
         AppStore:
           DISPLAY_NAME: Scanner
