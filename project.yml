@@ -258,24 +258,24 @@ targets:
         
       configs:
         Development:
-          DISPLAY_NAME: CoronaCheck D
+          DISPLAY_NAME: "🤖 Dev Holder"
           PRODUCT_NAME: CTR
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
         FirebaseTest:
-          DISPLAY_NAME: CoronaCheck Test
+          DISPLAY_NAME: "🪲 Test Holder"
           PRODUCT_NAME: CTR TEST
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
         FirebaseAcceptance:
-          DISPLAY_NAME: CoronaCheck ACC
+          DISPLAY_NAME: "💡 Acc Holder"
           PRODUCT_NAME: CTR ACC
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.acc
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Acc
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Acc.entitlements
         FirebaseProduction:
-          DISPLAY_NAME: CoronaCheck PROD
+          DISPLAY_NAME: "Prod Holder"
           PRODUCT_NAME: CTR PROD
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Prod
@@ -313,19 +313,19 @@ targets:
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
       configs:
         Development:
-          DISPLAY_NAME: Scanner Dev
+          DISPLAY_NAME: "🤖 Dev Scanner"
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
         FirebaseTest:
-          DISPLAY_NAME: Scanner Test
+          DISPLAY_NAME: "🪲 Test Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
         FirebaseAcceptance:
-          DISPLAY_NAME: Scanner ACC
+          DISPLAY_NAME: "💡 Acc Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Acc
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.acc
         FirebaseProduction:
-          DISPLAY_NAME: Scanner PROD
+          DISPLAY_NAME: "Prod Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Prod
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
         AppStore:
