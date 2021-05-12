@@ -26,7 +26,13 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -52,12 +58,7 @@ class AppUpdateViewModelTests: XCTestCase {
 		// Given
 		let appVersionInfo = RemoteConfiguration(
 			minVersion: "1.0",
-			minVersionMessage: nil,
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
+			minVersionMessage: nil
 		)
 
 		// When
@@ -91,7 +92,13 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -105,7 +112,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	}
 
 	/// Test the initializer for end of life
-	func testInitializerEndOfLifeNoUrl() {
+	func testInitializerEndOfLifeNoInformationUrl() {
 
 		// Given
 		let appVersionInfo = RemoteConfiguration(
@@ -115,7 +122,13 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: true,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
 
 		// When
@@ -127,7 +140,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	}
 
 	/// Test the initializer for end of life
-	func testInitializerEndOfLifeWithUrl() {
+	func testInitializerEndOfLifeWithInformationUrl() {
 
 		// Given
 		let appVersionInfo = RemoteConfiguration(
@@ -137,7 +150,13 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: true,
 			informationURL: URL(string: "https://apple.com"),
 			configTTL: 3600,
-			maxValidityHours: 48
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
 
 		// When
