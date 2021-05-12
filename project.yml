@@ -264,7 +264,7 @@ targets:
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
         FirebaseTest:
-          DISPLAY_NAME: "🪲 Test Holder"
+          DISPLAY_NAME: "🐞 Test Holder"
           PRODUCT_NAME: CTR TEST
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
@@ -317,7 +317,7 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
         FirebaseTest:
-          DISPLAY_NAME: "🪲 Test Scanner"
+          DISPLAY_NAME: "🐞 Test Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
         FirebaseAcceptance:
