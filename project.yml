@@ -40,7 +40,7 @@ configs:
   Development: debug
   FirebaseTest: debug
   FirebaseAcceptance: debug
-  FirebaseProduction: release
+  FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
 # - Project Level settings:
@@ -262,6 +262,7 @@ targets:
           PRODUCT_NAME: CTR
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
+          CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
         FirebaseTest:
           DISPLAY_NAME: CoronaCheck Test
           PRODUCT_NAME: CTR TEST
