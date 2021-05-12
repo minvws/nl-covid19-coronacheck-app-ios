@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+
 import XCTest
 import Nimble
 @testable import CTR
@@ -35,7 +36,7 @@ class WalletModelTests: XCTestCase {
 			// Then
 			expect(newWallet).toNot(beNil())
 			expect(newWallet?.label) == "test_createWallet"
-			expect(newWallet?.events).to(haveCount(0))
+			expect(newWallet?.eventGroups).to(haveCount(0))
 			expect(newWallet?.greenCards).to(haveCount(0))
 		}
 	}
@@ -110,18 +111,18 @@ class WalletModelTests: XCTestCase {
 			let json = "test_addEvent".data(using: .utf8)!
 
 			// When
-			let event = EventModel.create(
+			let eventGroup = EventGroupModel.create(
 				type: EventType.recovery,
-				issuedAt: date,
+				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
 			)
 
 			// Then
-			expect(wallet.events).to(haveCount(1))
-			if case let walletEvent as Event = wallet.events?.allObjects.first {
-				expect(walletEvent) == event
+			expect(wallet.eventGroups).to(haveCount(1))
+			if case let walletEventGroup as EventGroup = wallet.eventGroups?.allObjects.first {
+				expect(walletEventGroup) == eventGroup
 			} else {
 				fail("Event does not match")
 			}
@@ -137,19 +138,19 @@ class WalletModelTests: XCTestCase {
 			let wallet = WalletModel.createTestWallet(managedContext: context)!
 			let date = Date()
 			let json = "test_removeEvent".data(using: .utf8)!
-			let event = EventModel.create(
+			let eventGroup = EventGroupModel.create(
 				type: EventType.recovery,
-				issuedAt: date,
+				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
 			)!
 
 			// When
-			wallet.removeFromEvents(event)
+			wallet.removeFromEventGroups(eventGroup)
 
 			// Then
-			expect(wallet.events).to(haveCount(0))
+			expect(wallet.eventGroups).to(haveCount(0))
 		}
 	}
 

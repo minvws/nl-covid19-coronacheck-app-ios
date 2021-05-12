@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+
 import XCTest
 import Nimble
 @testable import CTR
