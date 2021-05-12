@@ -360,3 +360,26 @@ extension HolderCoordinator: MenuDelegate {
 		]
 	}
 }
+
+extension HolderCoordinator: VaccinationFlowDelegate {
+
+	func navigateToVaccination() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let vaccinationCoordinator = VaccinationCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			startChildCoordinator(vaccinationCoordinator)
+		}
+	}
+
+	func finishVaccinationFlow() {
+
+		if let vaccinationCoordinator = childCoordinators.last {
+			removeChildCoordinator(vaccinationCoordinator)
+		}
+
+		navigateBackToStart()
+	}
+}
