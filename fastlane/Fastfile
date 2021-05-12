@@ -47,7 +47,7 @@ platform :ios do
       provisioningprofilename: "CoronaCheck Holder Test",
       bundleid: "nl.rijksoverheid.ctr.test",
       firebaseappid: "1:168257592968:ios:5b5b37bd2aa002a526493d",
-      firebasegroupscsv: "" #testers
+      firebasegroupscsv: "testers"
     )
   end
 
@@ -62,7 +62,7 @@ platform :ios do
       provisioningprofilename: "CoronaCheck Verifier Test",
       bundleid: "nl.rijksoverheid.ctr.verifier.test",
       firebaseappid: "1:168257592968:ios:f8f08363d969e6bc26493d",
-      firebasegroupscsv: "" #verifiers
+      firebasegroupscsv: "verifiers"
     )
   end
 
@@ -77,7 +77,7 @@ platform :ios do
       provisioningprofilename: "CoronaCheck Holder Acc",
       bundleid: "nl.rijksoverheid.ctr.acc",
       firebaseappid: "1:168257592968:ios:e39aba89b3caf97626493d",
-      firebasegroupscsv: "" #testers
+      firebasegroupscsv: "testers"
     )
   end
 
@@ -92,7 +92,7 @@ platform :ios do
       provisioningprofilename: "CoronaCheck Verifier Acc",
       bundleid: "nl.rijksoverheid.ctr.verifier.acc",
       firebaseappid: "1:168257592968:ios:e3402385406b0d9726493d",
-      firebasegroupscsv: "" #verifiers
+      firebasegroupscsv: "verifiers"
     )
   end
 
@@ -107,7 +107,7 @@ platform :ios do
       provisioningprofilename: "CoronaCheck Holder Prod",
       bundleid: "nl.rijksoverheid.ctr",
       firebaseappid: "1:168257592968:ios:e0498230630ed6a826493d",
-      firebasegroupscsv: "" #testers
+      firebasegroupscsv: "testers"
     )
   end
 
@@ -122,7 +122,7 @@ platform :ios do
       provisioningprofilename: "CoronaCheck Verifier Prod",
       bundleid: "nl.rijksoverheid.ctr.verifier",
       firebaseappid: "1:168257592968:ios:6a903add03edb4a126493d",
-      firebasegroupscsv: "" #verifiers
+      firebasegroupscsv: "verifiers"
     )
   end
 
