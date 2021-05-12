@@ -29,12 +29,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionInformation: RemoteConfiguration(
 				minVersion: "1.0",
-				minVersionMessage: "AppUpdateViewControllerTests",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "AppUpdateViewControllerTests"
 			)
 		)
 
@@ -84,12 +79,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionInformation: RemoteConfiguration(
 				minVersion: "1.0",
-				minVersionMessage: nil,
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: nil
 			)
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
@@ -114,11 +104,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 			versionInformation: RemoteConfiguration(
 				minVersion: "1.0",
 				minVersionMessage: nil,
-				storeUrl: nil,
-				deactivated: true,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				deactivated: true
 			)
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)

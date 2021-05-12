@@ -73,7 +73,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_noActionRequired() {
 
 		// Given
-		remoteConfigSpy.launchState = .noActionNeeded
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.noActionNeeded, ())
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
@@ -89,7 +89,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
@@ -101,7 +101,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequiredRemoteConfig() {
 
 		// Given
-		remoteConfigSpy.launchState = .internetRequired
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.internetRequired, ())
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
@@ -117,7 +117,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
@@ -128,7 +128,7 @@ class LaunchViewModelTests: XCTestCase {
 	func testInternetRequiredIssuerPublicKeys() {
 
 		// Given
-		remoteConfigSpy.launchState = .noActionNeeded
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.noActionNeeded, ())
 		let error = NSError(
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
@@ -148,7 +148,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
@@ -159,7 +159,7 @@ class LaunchViewModelTests: XCTestCase {
 	func testInternetRequiredBothActions() {
 
 		// Given
-		remoteConfigSpy.launchState = .internetRequired
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.internetRequired, ())
 		let error = NSError(
 			domain: NSURLErrorDomain,
 			code: URLError.notConnectedToInternet.rawValue
@@ -179,7 +179,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
@@ -190,8 +190,9 @@ class LaunchViewModelTests: XCTestCase {
 	func testActionRequired() {
 
 		// Given
+		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration(minVersion: "1.0", minVersionMessage: "remoteConfigSpy")
 		let remoteConfig = remoteConfigSpy.getConfiguration()
-		remoteConfigSpy.launchState = .actionRequired(remoteConfig)
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.actionRequired(remoteConfig), ())
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 
@@ -207,7 +208,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
@@ -232,7 +233,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == false
+		expect(self.remoteConfigSpy.invokedUpdate) == false
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
@@ -258,7 +259,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())
@@ -284,7 +285,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.remoteConfigSpy.updateCalled) == true
+		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == false
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state).to(beNil())

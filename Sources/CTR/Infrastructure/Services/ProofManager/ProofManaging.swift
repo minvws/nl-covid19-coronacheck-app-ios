@@ -19,9 +19,6 @@ protocol ProofManaging: AnyObject {
 		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?)
 
-	/// Get the test types
-	func fetchTestTypes()
-
 	/// Fetch the issuer public keys
 	/// - Parameters:
 	///   - onCompletion: completion handler

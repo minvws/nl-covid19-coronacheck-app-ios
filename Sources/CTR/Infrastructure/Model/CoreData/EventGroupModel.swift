@@ -15,23 +15,23 @@ enum EventType: String {
 	case vaccination
 }
 
-class EventModel {
+class EventGroupModel {
 
-	static let entityName = "Event"
+	static let entityName = "EventGroup"
 
 	@discardableResult class func create(
 		type: EventType,
-		issuedAt: Date,
+		maxIssuedAt: Date,
 		jsonData: Data,
 		wallet: Wallet,
-		managedContext: NSManagedObjectContext) -> Event? {
+		managedContext: NSManagedObjectContext) -> EventGroup? {
 
 		if let object = NSEntityDescription.insertNewObject(
 			forEntityName: entityName,
-			into: managedContext) as? Event {
+			into: managedContext) as? EventGroup {
 
 			object.type = type.rawValue
-			object.issuedAt = issuedAt
+			object.maxIssuedAt = maxIssuedAt
 			object.jsonData = jsonData
 			object.wallet = wallet
 
