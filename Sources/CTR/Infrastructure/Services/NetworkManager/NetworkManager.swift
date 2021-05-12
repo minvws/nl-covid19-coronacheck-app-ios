@@ -80,7 +80,7 @@ class NetworkManager: NetworkManaging, Logging {
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 			let urlRequest = constructRequest(
-				url: networkConfiguration.signUrl,
+				url: networkConfiguration.testResultIsmUrl,
 				method: .POST,
 				body: jsonData
 			)
@@ -102,7 +102,7 @@ class NetworkManager: NetworkManaging, Logging {
 	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.providersUrl,
+			url: networkConfiguration.testProvidersUrl,
 			method: .GET
 		)
 		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
@@ -113,15 +113,15 @@ class NetworkManager: NetworkManaging, Logging {
 		decodedSignedJSONData(request: urlRequest, completion: open)
 	}
 
-	/// Get the event providers
+	/// Get the test types
 	/// - Parameter completion: completion handler
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
+	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.providersUrl,
+			url: networkConfiguration.testTypesUrl,
 			method: .GET
 		)
-		func open(result: Result<ArrayEnvelope<EventProvider>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<TestType>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 

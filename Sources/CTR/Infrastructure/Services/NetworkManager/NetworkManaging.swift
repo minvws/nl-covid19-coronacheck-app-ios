@@ -78,10 +78,10 @@ protocol NetworkManaging {
 	/// Get the test providers
 	/// - Parameter completion: completion handler
 	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
-
-	/// Get the event providers
+	
+	/// Get the test types
 	/// - Parameter completion: completion handler
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void)
+	func getTestTypes(completion: @escaping (Result<[TestType], NetworkError>) -> Void)
 	
 	/// Get a test result
 	/// - Parameters:

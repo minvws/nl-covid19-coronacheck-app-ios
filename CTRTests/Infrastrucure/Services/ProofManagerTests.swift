@@ -7,13 +7,11 @@
   
 @testable import CTR
 import XCTest
-import Nimble
 
 class ProofManagerTests: XCTestCase {
 
-	private var sut: ProofManager!
-	private var cryptoSpy: CryptoManagerSpy!
-	private var networkSpy: NetworkSpy!
+	var sut = ProofManager()
+	var cryptoSpy = CryptoManagerSpy()
 
 	override func setUp() {
 
@@ -21,119 +19,98 @@ class ProofManagerTests: XCTestCase {
 		sut = ProofManager()
 		cryptoSpy = CryptoManagerSpy()
 		sut.cryptoManager = cryptoSpy
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut.networkManager = networkSpy
 	}
 
 	/// Test the fetch issuers public keys
-	func test_fetchIssuerPublicKeys() {
+	func testFetchIssuerPublicKeys() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = true
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beTrue())
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		} onError: { _ in
+			XCTFail("There should be no error")
+		}
 	}
 
-	/// Test the fetch issuers public keys with no response
-	func test_fetchIssuerPublicKeys_noResponse() {
+	/// Test the fetch issuers public keys with no repsonse
+	func testFetchIssuerPublicKeysNoResonse() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = nil
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = false
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+		} onError: { _ in
+			XCTFail("There should be no error")
+		}
 	}
 
 	/// Test the fetch issuers public keys with an network error
-	func test_fetchIssuerPublicKeys_withErrorResponse() {
+	func testFetchIssuerPublicKeysWithError() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = false
+		networkSpy.publicKeyError = NetworkError.invalidRequest
 		sut.keysFetchedTimestamp = nil
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTFail("There should be no success")
+		} onError: { _ in
 
-		// Then
-		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+		}
 	}
 
 	/// Test the fetch issuers public keys with invalid keys error
-	func test_fetchIssuerPublicKeys_withInvalidKeysError() {
+	func testFetchIssuerPublicKeysWithInvalidKeysError() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = true
 		// Trigger invalid keys
 		cryptoSpy.issuerPublicKeysAreValid = false
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTFail("There should be no success")
+		} onError: { _ in
 
-		// Then
-		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beTrue())
+			XCTAssertTrue(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should be called")
+		}
 	}
 
 	/// Test the fetch issuers public keys with an network error
-	func test_fetchIssuerPublicKeys_withError_withinTTL() {
+	func testFetchIssuerPublicKeysWithErrorWithinTTL() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
+		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
+		networkSpy.shouldReturnPublicKeys = false
+		networkSpy.publicKeyError = NetworkError.invalidRequest
 		sut.keysFetchedTimestamp = Date()
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
-	}
-
-	func test_fetchTestProviders() {
-
-		// Given
-		networkSpy.stubbedGetTestProvidersCompletionResult = (
-			.success(
-				[
-					TestProvider(
-						identifier: "test_fetchTestProviders",
-						name: "test",
-						resultURL: URL(string: "https://coronacheck.nl"),
-						publicKey: "key",
-						certificate: "certificate")
-				]
-			), ()
-		)
-
-		// When
-		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
-		expect(self.sut.testProviders).toEventually(haveCount(1))
-		expect(self.sut.testProviders.first?.identifier).toEventually(equal("test_fetchTestProviders"))
-	}
-
-	func test_fetchTestProviders_withError() {
-
-		// Given
-		networkSpy.stubbedGetTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest), ())
-
-		// When
-		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
-		expect(self.sut.testProviders).toEventually(beEmpty())
+		sut.fetchIssuerPublicKeys {
+			// Then
+			XCTAssertFalse(self.cryptoSpy.setIssuerPublicKeysCalled, "Method should not be called")
+		} onError: { _ in
+			XCTFail("There should be no error")
+		}
 	}
 }
