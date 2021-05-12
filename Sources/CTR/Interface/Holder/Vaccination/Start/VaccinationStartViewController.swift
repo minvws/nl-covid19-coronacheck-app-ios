@@ -7,9 +7,13 @@
 
 import UIKit
 
-class VaccinationStartViewModel {
+class VaccinationStartViewModel: Logging {
 
 	weak var coordinator: VaccinationCoordinatorDelegate?
+
+	var tvsToken = "508193527" // Todo: Get from DigiD
+
+	var accessTokens = [AccessToken]()
 
 	init(coordinator: VaccinationCoordinatorDelegate) {
 		self.coordinator = coordinator
@@ -21,6 +25,15 @@ class VaccinationStartViewModel {
 
 	func primaryButtonTapped() {
 
+		Services.networkManager.getAccessTokens(tvsToken: tvsToken) { [weak self] result in
+			switch result {
+				case let .failure(error):
+					self?.logInfo("Error getting access tokens: \(error)")
+				case let .success(tokens):
+					self?.accessTokens = tokens
+					self?.logInfo("Access Tokens: \(self?.accessTokens.count)")
+			}
+		}
 	}
 }
 

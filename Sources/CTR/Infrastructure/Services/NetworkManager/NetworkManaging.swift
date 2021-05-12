@@ -55,7 +55,13 @@ protocol NetworkManaging {
 	///   - configuration: the network configuration
 	///   - validator: the signature validator
 	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
-	
+
+	/// Get the access tokens
+	/// - Parameters:
+	///   - tvsToken: the tvs token
+	///   - completion: completion handler
+	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[AccessToken], NetworkError>) -> Void)
+
 	/// Get the nonce
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void)

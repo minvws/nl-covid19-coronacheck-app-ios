@@ -28,6 +28,24 @@ class NetworkManager: NetworkManaging, Logging {
 			delegateQueue: nil)
 	}
 
+	/// Get the access tokens
+	/// - Parameters:
+	///   - tvsToken: the tvs token
+	///   - completion: completion handler
+	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[AccessToken], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.accessTokensUrl,
+			method: .POST,
+			body: ["tvs_token" : tvsToken]
+		)
+		func open(result: Result<ArrayEnvelope<AccessToken>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+		decodeSignedJSONData(request: urlRequest, completion: open)
+	}
+
 	/// Get the nonce
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void) {
@@ -37,7 +55,7 @@ class NetworkManager: NetworkManaging, Logging {
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: completion)
+		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Get the public keys
@@ -55,7 +73,7 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get the remote configuration
@@ -66,7 +84,7 @@ class NetworkManager: NetworkManaging, Logging {
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.config)
-		decodedSignedJSONData(request: urlRequest, completion: completion)
+		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Fetch the test results with issue signature message
@@ -110,7 +128,7 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get the event providers
@@ -126,7 +144,7 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get a test result
@@ -251,7 +269,7 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - request: the network request
 	///   - completion: completion handler
-	private func decodedSignedJSONData<Object: Decodable>(
+	private func decodeSignedJSONData<Object: Decodable>(
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {
