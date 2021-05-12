@@ -41,8 +41,4 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 		getConfigurationCalled = true
 		return configuration
 	}
-
-	func reset() {
-		configuration = .default
-	}
 }

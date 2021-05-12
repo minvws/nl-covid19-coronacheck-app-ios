@@ -33,8 +33,11 @@ struct Endpoint {
 	static let remoteConfiguration = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "config")
 	
 	/// Endpoint for test providers
-	static let providers = Path(components: "holder", "config_providers")
+	static let testProviders = Path(components: "holder", "config_ctp")
 	
 	/// Endpoint for test results as ism
-	static let sign = Path(components: "holder", "sign")
+	static let testResultIsm = Path(components: "holder", "get_test_ism")
+	
+	/// Endpoint for test types
+	static let testTypes = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "test_types")
 }

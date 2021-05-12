@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// - Tag: RemoteConfigManaging
 protocol RemoteConfigManaging {
 
 	/// Initialize
@@ -22,8 +23,6 @@ protocol RemoteConfigManaging {
 	/// Get the configuration
 	/// - Returns: the remote configuration
 	func getConfiguration() -> RemoteConfiguration
-
-	func reset()
 }
 
 /// The remote configuration manager
@@ -152,10 +151,5 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	func getConfiguration() -> RemoteConfiguration {
 
 		return storedConfiguration
-	}
-
-	func reset() {
-
-		storedConfiguration = .default
 	}
 }
