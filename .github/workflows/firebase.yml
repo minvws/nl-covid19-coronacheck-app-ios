@@ -1,10 +1,11 @@
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
 name: firebase
 
 on:
   push:
     branches:
-      - feature/fix_firebase
-      # - main
+      - main
+      - 'release/*'
 
 jobs:
   firebase-deploy-holder-test:
