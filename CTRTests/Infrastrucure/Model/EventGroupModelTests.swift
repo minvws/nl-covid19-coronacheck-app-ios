@@ -4,11 +4,12 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+
 import XCTest
 import Nimble
 @testable import CTR
 
-class EventModelTests: XCTestCase {
+class EventGroupModelTests: XCTestCase {
 
 	var dataStoreManager: DataStoreManaging!
 
@@ -29,20 +30,20 @@ class EventModelTests: XCTestCase {
 			let json = "test_createEvent".data(using: .utf8)!
 
 			// When
-			let event = EventModel.create(
+			let eventGroup = EventGroupModel.create(
 				type: EventType.test,
-				issuedAt: date,
+				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
 			)
 
 			// Then
-			expect(event?.type) == EventType.test.rawValue
-			expect(event?.issuedAt) == date
-			expect(event?.jsonData) == json
-			expect(event?.wallet) == wallet
-			expect(wallet.events).to(haveCount(1))
+			expect(eventGroup?.type) == EventType.test.rawValue
+			expect(eventGroup?.maxIssuedAt) == date
+			expect(eventGroup?.jsonData) == json
+			expect(eventGroup?.wallet) == wallet
+			expect(wallet.eventGroups).to(haveCount(1))
 		}
 	}
 
@@ -56,23 +57,23 @@ class EventModelTests: XCTestCase {
 			let json = "test_createTwoEvents".data(using: .utf8)!
 
 			// When
-			EventModel.create(
+			EventGroupModel.create(
 				type: EventType.test,
-				issuedAt: date,
+				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
 			)
-			EventModel.create(
+			EventGroupModel.create(
 				type: EventType.vaccination,
-				issuedAt: date,
+				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
 				managedContext: context
 			)
 
 			// Then
-			expect(wallet.events).to(haveCount(2))
+			expect(wallet.eventGroups).to(haveCount(2))
 		}
 	}
 }
