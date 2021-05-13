@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum VaccinationFlowResult {
+enum VaccinationScreenResult {
 
 	/// Stop with vaccination flow,
 	case stop
@@ -18,9 +18,9 @@ enum VaccinationFlowResult {
 
 protocol VaccinationCoordinatorDelegate: AnyObject {
 
-	func vaccinationStartScreenDidFinish(_ result: VaccinationFlowResult)
+	func vaccinationStartScreenDidFinish(_ result: VaccinationScreenResult)
 
-	func fetchEventsScreenDidFinish(_ result: VaccinationFlowResult)
+	func fetchEventsScreenDidFinish(_ result: VaccinationScreenResult)
 }
 
 protocol VaccinationFlowDelegate: AnyObject {
@@ -84,7 +84,7 @@ class VaccinationCoordinator: Coordinator, Logging {
 
 extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 
-	func vaccinationStartScreenDidFinish(_ result: VaccinationFlowResult) {
+	func vaccinationStartScreenDidFinish(_ result: VaccinationScreenResult) {
 
 		switch result {
 			case .stop:
@@ -94,7 +94,7 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 		}
 	}
 
-	func fetchEventsScreenDidFinish(_ result: VaccinationFlowResult) {
+	func fetchEventsScreenDidFinish(_ result: VaccinationScreenResult) {
 
 		switch result {
 			case .stop:

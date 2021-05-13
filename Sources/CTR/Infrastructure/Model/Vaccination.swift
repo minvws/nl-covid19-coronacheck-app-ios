@@ -55,7 +55,7 @@ struct Vaccination {
 		var accessToken: AccessToken?
 
 		/// Result of the unomi call
-		var hasEventInformationAvailable: Bool = false
+		var eventInformationAvailable: EventInformationAvailable?
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -70,7 +70,7 @@ struct Vaccination {
 	}
 
 	/// The response of a unomi call
-	struct EventInformationAvailable: Codable {
+	struct EventInformationAvailable: Codable, Equatable {
 
 		/// The provider identifier
 		let providerIdentifier: String

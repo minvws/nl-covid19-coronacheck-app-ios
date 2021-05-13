@@ -118,14 +118,14 @@ class FetchEventsViewModel: Logging {
 	private func fetchHasEventInformationResponses() {
 
 		for provider in eventProviders {
-			fetchHasEventInformationResponse(provider)
+			fetchHasEventInformationResponse(from: provider)
 		}
 		hasEventInformationFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
 			self?.finishedHasEventInformationFetching()
 		}
 	}
 
-	private func fetchHasEventInformationResponse(_ provider: Vaccination.EventProvider) {
+	private func fetchHasEventInformationResponse(from provider: Vaccination.EventProvider) {
 
 		if let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") {
 
@@ -157,7 +157,7 @@ class FetchEventsViewModel: Logging {
 
 		for index in 0 ..< eventProviders.count {
 			for response in eventInformationAvailableResults where eventProviders[index].identifier == response.providerIdentifier {
-				eventProviders[index].hasEventInformationAvailable = response.informationAvailable
+				eventProviders[index].eventInformationAvailable = response
 			}
 		}
 	}
@@ -167,16 +167,17 @@ class FetchEventsViewModel: Logging {
 	private func fetchVaccinationEvents() {
 
 		for provider in eventProviders {
-			fetchEvent(provider)
+			fetchVaccinationEvent(from: provider)
 		}
 		eventFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
 			self?.finishedEventFetching()
 		}
 	}
 
-	private func fetchEvent(_ provider: Vaccination.EventProvider) {
+	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider) {
 
-		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"), provider.hasEventInformationAvailable {
+		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
+		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
 
 			progressIndicationCounter.increment()
 			eventFetchingGroup.enter()
