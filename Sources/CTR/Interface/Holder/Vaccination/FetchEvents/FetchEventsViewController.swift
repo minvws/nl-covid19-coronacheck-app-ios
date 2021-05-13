@@ -20,6 +20,10 @@ class FetchEventsViewModel: Logging {
 	/// List of event providers
 	private var eventProviders = [EventProvider]()
 
+	private var unomiResults = [UnomiResponse]()
+
+	private var eventResults = [(TestResultWrapper, SignedResponse)]()
+
 	private var networkManager: NetworkManaging
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -31,6 +35,8 @@ class FetchEventsViewModel: Logging {
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	let prefetchingGroup = DispatchGroup()
+	let unomiFetchingGroup = DispatchGroup()
+	let eventFetchingGroup = DispatchGroup()
 
 	init(
 		coordinator: VaccinationCoordinatorDelegate,
@@ -53,12 +59,12 @@ class FetchEventsViewModel: Logging {
 		networkManager.getAccessTokens(tvsToken: tvsToken) { [weak self] result in
 			switch result {
 				case let .failure(error):
-					self?.prefetchingGroup.leave()
 					self?.logError("Error getting access tokens: \(error)")
-				case let .success(tokens):
 					self?.prefetchingGroup.leave()
+				case let .success(tokens):
 					self?.accessTokens = tokens
 					self?.logInfo("We fetched \(tokens.count) access tokens")
+					self?.prefetchingGroup.leave()
 			}
 		}
 	}
@@ -68,12 +74,12 @@ class FetchEventsViewModel: Logging {
 		networkManager.getEventProviders { [weak self] result in
 			switch result {
 				case let .failure(error):
-					self?.prefetchingGroup.leave()
 					self?.logError("Error getting event providers: \(error)")
-				case let .success(providers):
 					self?.prefetchingGroup.leave()
+				case let .success(providers):
 					self?.eventProviders = providers
 					self?.logInfo("We fetched \(providers.count) eventProviders")
+					self?.prefetchingGroup.leave()
 			}
 		}
 	}
@@ -97,6 +103,7 @@ class FetchEventsViewModel: Logging {
 		logInfo("finishedFetching")
 		progressIndicationCounter.decrement()
 		updateEventProvidersWithAccessTokens()
+		fetchUnomiRepsonses()
 	}
 
 	private func updateEventProvidersWithAccessTokens() {
@@ -107,6 +114,89 @@ class FetchEventsViewModel: Logging {
 				eventProviders[index].unomiAccessToken = accessToken.unomiAccessToken
 			}
 		}
+	}
+
+	private func fetchUnomiRepsonses() {
+
+		logInfo("fetchUnomiRepsonses")
+		progressIndicationCounter.increment()
+		for provider in eventProviders {
+			if let url = provider.unomiURL?.absoluteString, provider.unomiAccessToken != nil, url.starts(with: "https") {
+
+				self.logInfo("evenprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
+
+				unomiFetchingGroup.enter()
+				networkManager.getUnomiResult(provider: provider) { [weak self] result in
+					// Result<UnomiResponse, NetworkError>
+					//					self?.logInfo("evenprovider: \(self?.eventProviders[index].identifier) - \(self?.eventProviders[index].name)")
+					switch result {
+						case let .failure(error):
+							self?.unomiFetchingGroup.leave()
+							self?.logError("Error getting unomi: \(error)")
+						case let .success(response):
+							self?.logInfo("response: \(response)")
+							self?.unomiResults.append(response)
+							self?.unomiFetchingGroup.leave()
+					}
+				}
+			}
+		}
+		unomiFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
+			self?.finishedUnomiFetching()
+		}
+	}
+
+	private func finishedUnomiFetching() {
+
+		logInfo("finishedUnomiFetching")
+		progressIndicationCounter.decrement()
+		updateEventProvidersWithUnomiResponse()
+		fetchEvents()
+	}
+
+	private func updateEventProvidersWithUnomiResponse() {
+
+		for index in 0 ..< eventProviders.count {
+			for response in unomiResults where eventProviders[index].identifier == response.providerIdentifier {
+				eventProviders[index].unomi = response.informationAvailable
+			}
+		}
+	}
+
+	private func fetchEvents() {
+
+		logInfo("fetchEvents")
+		progressIndicationCounter.increment()
+
+		for provider in eventProviders {
+			if let url = provider.eventURL?.absoluteString, provider.eventAccessToken != nil, url.starts(with: "https"), provider.unomi {
+
+				eventFetchingGroup.enter()
+				networkManager.getEvents(provider: provider) { [weak self] result in
+					// (Result<(TestResultWrapper, SignedResponse), NetworkError>
+
+					switch result {
+						case let .failure(error):
+							self?.eventFetchingGroup.leave()
+							self?.logError("Error getting event: \(error)")
+						case let .success(response):
+							self?.logInfo("response: \(response)")
+							self?.eventResults.append(response)
+							self?.eventFetchingGroup.leave()
+					}
+
+				}
+			}
+		}
+		eventFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
+			self?.finishedEventFetching()
+		}
+	}
+
+	private func finishedEventFetching() {
+
+		logInfo("finishedEventFetching")
+		progressIndicationCounter.decrement()
 	}
 }
 

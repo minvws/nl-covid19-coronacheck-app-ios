@@ -135,4 +135,40 @@ class NetworkSpy: NetworkManaging {
 			completion(result.0)
 		}
 	}
+
+	var invokedGetUnomiResult = false
+	var invokedGetUnomiResultCount = 0
+	var invokedGetUnomiResultParameters: (provider: EventProvider, Void)?
+	var invokedGetUnomiResultParametersList = [(provider: EventProvider, Void)]()
+	var stubbedGetUnomiResultCompletionResult: (Result<UnomiResponse, NetworkError>, Void)?
+
+	func getUnomiResult(
+		provider: EventProvider,
+		completion: @escaping (Result<UnomiResponse, NetworkError>) -> Void) {
+		invokedGetUnomiResult = true
+		invokedGetUnomiResultCount += 1
+		invokedGetUnomiResultParameters = (provider, ())
+		invokedGetUnomiResultParametersList.append((provider, ()))
+		if let result = stubbedGetUnomiResultCompletionResult {
+			completion(result.0)
+		}
+	}
+
+	var invokedGetEvents = false
+	var invokedGetEventsCount = 0
+	var invokedGetEventsParameters: (provider: EventProvider, Void)?
+	var invokedGetEventsParametersList = [(provider: EventProvider, Void)]()
+	var stubbedGetEventsCompletionResult: (Result<(TestResultWrapper, SignedResponse), NetworkError>, Void)?
+
+	func getEvents(
+		provider: EventProvider,
+		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		invokedGetEvents = true
+		invokedGetEventsCount += 1
+		invokedGetEventsParameters = (provider, ())
+		invokedGetEventsParametersList.append((provider, ()))
+		if let result = stubbedGetEventsCompletionResult {
+			completion(result.0)
+		}
+	}
 }

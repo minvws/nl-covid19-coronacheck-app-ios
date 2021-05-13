@@ -91,7 +91,7 @@ protocol NetworkManaging {
 	
 	/// Get a test result
 	/// - Parameters:
-	///   - provider: the the test provider
+	///   - provider: the test provider
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
@@ -99,6 +99,22 @@ protocol NetworkManaging {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
+		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
+
+	/// Get a unomi result
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func getUnomiResult(
+		provider: EventProvider,
+		completion: @escaping (Result<UnomiResponse, NetworkError>) -> Void)
+
+	/// Get  events
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func getEvents(
+		provider: EventProvider,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 

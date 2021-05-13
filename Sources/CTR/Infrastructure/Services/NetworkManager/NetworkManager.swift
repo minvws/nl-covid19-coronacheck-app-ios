@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -180,6 +181,68 @@ class NetworkManager: NetworkManaging, Logging {
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
+
+	/// Get a unomi result
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func getUnomiResult(
+		provider: EventProvider,
+		completion: @escaping (Result<UnomiResponse, NetworkError>) -> Void) {
+
+		guard let providerUrl = provider.unomiURL else {
+			self.logError("No url provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		guard let accessToken = provider.unomiAccessToken else {
+			self.logError("No unomi token provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
+			HTTPHeaderKey.tokenProtocolVersion: "3.0"
+		]
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+		sessionDelegate?.setSecurityStrategy(.none)
+//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
+	}
+
+	/// Get  events
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func getEvents(
+		provider: EventProvider,
+		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
+
+		guard let providerUrl = provider.eventURL else {
+			self.logError("No url provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		guard let accessToken = provider.eventAccessToken else {
+			self.logError("No event token provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
+			HTTPHeaderKey.tokenProtocolVersion: "3.0"
+		]
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+		sessionDelegate?.setSecurityStrategy(.none)
+//		//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
+	}
 	
 	// MARK: - Construct Request
 	
@@ -219,11 +282,11 @@ class NetworkManager: NetworkManaging, Logging {
 			}
 		}
 		
-		logVerbose("--REQUEST--")
-		if let url = request.url { logVerbose(url.debugDescription) }
-		if let allHTTPHeaderFields = request.allHTTPHeaderFields { logVerbose(allHTTPHeaderFields.debugDescription) }
+		logDebug("--REQUEST--")
+		if let url = request.url { logDebug(url.debugDescription) }
+		if let allHTTPHeaderFields = request.allHTTPHeaderFields { logDebug(allHTTPHeaderFields.debugDescription) }
 		if let httpBody = request.httpBody { logVerbose(String(data: httpBody, encoding: .utf8)!) }
-		logVerbose("--END REQUEST--")
+		logDebug("--END REQUEST--")
 		
 		return .success(request)
 	}
@@ -404,7 +467,7 @@ class NetworkManager: NetworkManaging, Logging {
 			return
 		}
 		
-		logVerbose("--RESPONSE--")
+		logDebug("--RESPONSE--")
 		if let response = response as? HTTPURLResponse {
 			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
 			
@@ -423,7 +486,7 @@ class NetworkManager: NetworkManaging, Logging {
 			logDebug("Error with response: \(error)")
 		}
 		
-		logVerbose("--END RESPONSE--")
+		logDebug("--END RESPONSE--")
 		
 		guard let response = response,
 			  let object = object else {
