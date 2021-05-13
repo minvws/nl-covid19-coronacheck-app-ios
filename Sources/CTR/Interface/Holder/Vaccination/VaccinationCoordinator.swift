@@ -87,7 +87,6 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 		}
 	}
 
-
 	func didFinishLoad(_ result: VaccinationFlowResult) {
 
 		switch result {

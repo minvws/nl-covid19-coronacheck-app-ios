@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// A wrapper around a test result.
+/// The access token used to fetch fat and thin ID Hashes
 struct AccessToken: Codable {
 
 	/// The provider identifier

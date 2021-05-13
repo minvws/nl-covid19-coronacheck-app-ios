@@ -37,7 +37,7 @@ class NetworkManager: NetworkManaging, Logging {
 		let urlRequest = constructRequest(
 			url: networkConfiguration.accessTokensUrl,
 			method: .POST,
-			body: ["tvs_token" : tvsToken]
+			body: ["tvs_token": tvsToken]
 		)
 		func open(result: Result<ArrayEnvelope<AccessToken>, NetworkError>) {
 			completion(result.map { $0.items })

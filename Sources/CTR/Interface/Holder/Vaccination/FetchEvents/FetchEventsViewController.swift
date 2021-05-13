@@ -102,11 +102,9 @@ class FetchEventsViewModel: Logging {
 	private func updateEventProvidersWithAccessTokens() {
 
 		for index in 0 ..< eventProviders.count {
-			for accessToken in accessTokens {
-				if eventProviders[index].identifier == accessToken.providerIdentifier {
-					eventProviders[index].eventAccessToken = accessToken.eventAccessToken
-					eventProviders[index].unomiAccessToken = accessToken.unomiAccessToken
-				}
+			for accessToken in accessTokens where eventProviders[index].identifier == accessToken.providerIdentifier {
+				eventProviders[index].eventAccessToken = accessToken.eventAccessToken
+				eventProviders[index].unomiAccessToken = accessToken.unomiAccessToken
 			}
 		}
 	}
