@@ -67,11 +67,7 @@ class VaccinationCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
-	private func navigateToFetchEvents(_ token: String = "999999011") {
-		// The token param should not have a default value.
-		// When the digid login is fixed, the default 999999011 should be removed.
-		// Until then, this is the only fake BSN to use to get vaccination events
-
+	private func navigateToFetchEvents(token: String) {
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
 				coordinator: self,
@@ -90,7 +86,10 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 			case .stop:
 				delegate?.vaccinationFlowDidComplete()
 			case .continue:
-				navigateToFetchEvents()
+				// When the digid login is fixed, the default 999999011 should be removed.
+				// Until then, this is the only fake BSN to use to get vaccination events
+				// TODO: Remove default value // swiftlint:disable:this todo
+				navigateToFetchEvents(token: "999999011")
 		}
 	}
 
