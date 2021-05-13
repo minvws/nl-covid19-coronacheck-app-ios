@@ -60,7 +60,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[AccessToken], NetworkError>) -> Void)
+	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
@@ -87,7 +87,7 @@ protocol NetworkManaging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void)
+	func getVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void)
 	
 	/// Get a test result
 	/// - Parameters:
@@ -105,16 +105,16 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getUnomiResult(
-		provider: EventProvider,
-		completion: @escaping (Result<UnomiResponse, NetworkError>) -> Void)
+	func getVaccinationUnomi(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void)
 
 	/// Get  events
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getEvents(
-		provider: EventProvider,
+	func getVaccinationEvents(
+		provider: Vaccination.EventProvider,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 

@@ -28,8 +28,8 @@ class VaccinationStartViewModel: Logging {
 
 class VaccinationStartViewController: BaseViewController {
 
-	let viewModel: VaccinationStartViewModel
-	let sceneView = VaccinationStartView()
+	private let viewModel: VaccinationStartViewModel
+	private let sceneView = VaccinationStartView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model

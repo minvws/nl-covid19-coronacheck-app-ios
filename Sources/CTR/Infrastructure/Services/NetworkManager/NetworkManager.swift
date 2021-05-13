@@ -33,14 +33,14 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[AccessToken], NetworkError>) -> Void) {
+	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.accessTokensUrl,
 			method: .POST,
 			body: ["tvs_token": tvsToken]
 		)
-		func open(result: Result<ArrayEnvelope<AccessToken>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<Vaccination.AccessToken>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
@@ -134,13 +134,13 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
+	func getVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,
 			method: .GET
 		)
-		func open(result: Result<ArrayEnvelope<EventProvider>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<Vaccination.EventProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 
@@ -186,9 +186,9 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getUnomiResult(
-		provider: EventProvider,
-		completion: @escaping (Result<UnomiResponse, NetworkError>) -> Void) {
+	func getVaccinationUnomi(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -196,7 +196,7 @@ class NetworkManager: NetworkManaging, Logging {
 			return
 		}
 
-		guard let accessToken = provider.unomiAccessToken else {
+		guard let accessToken = provider.accessToken?.unomiAccessToken else {
 			self.logError("No unomi token provided for \(provider.name)")
 			completion(.failure(NetworkError.invalidRequest))
 			return
@@ -217,8 +217,8 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getEvents(
-		provider: EventProvider,
+	func getVaccinationEvents(
+		provider: Vaccination.EventProvider,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.eventURL else {
@@ -227,7 +227,7 @@ class NetworkManager: NetworkManaging, Logging {
 			return
 		}
 
-		guard let accessToken = provider.eventAccessToken else {
+		guard let accessToken = provider.accessToken?.eventAccessToken else {
 			self.logError("No event token provided for \(provider.name)")
 			completion(.failure(NetworkError.invalidRequest))
 			return
