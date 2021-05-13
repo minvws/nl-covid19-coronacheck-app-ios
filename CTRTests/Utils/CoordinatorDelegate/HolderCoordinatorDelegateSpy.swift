@@ -21,6 +21,7 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	var presentInformationPageCalled = false
 	var dismissCalled = false
 	var openUrlCalled = false
+	var startVaccinationEventFlowCalled = false
 
 	func navigateToEnlargedQR() {
 
@@ -75,5 +76,10 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func openUrl(_ url: URL, inApp: Bool) {
 
 		openUrlCalled = true
+	}
+
+	func startVaccinationEventFlow() {
+
+		startVaccinationEventFlowCalled = true
 	}
 }
