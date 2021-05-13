@@ -14,16 +14,16 @@ struct AccessToken: Codable {
 	let providerIdentifier: String
 
 	/// The unomi access token
-	let unomi: String
+	let unomiAccessToken: String
 
 	/// The event access token
-	let event: String
+	let eventAccessToken: String
 
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 
 		case providerIdentifier = "provider_identifier"
-		case event
-		case unomi
+		case eventAccessToken = "event"
+		case unomiAccessToken = "unomi"
 	}
 }

@@ -104,8 +104,8 @@ class FetchEventsViewModel: Logging {
 		for index in 0 ..< eventProviders.count {
 			for accessToken in accessTokens {
 				if eventProviders[index].identifier == accessToken.providerIdentifier {
-					eventProviders[index].eventAccessToken = accessToken.event
-					eventProviders[index].unomiAccessToken = accessToken.unomi
+					eventProviders[index].eventAccessToken = accessToken.eventAccessToken
+					eventProviders[index].unomiAccessToken = accessToken.unomiAccessToken
 				}
 			}
 		}
