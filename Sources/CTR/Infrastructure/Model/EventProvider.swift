@@ -28,6 +28,15 @@ struct EventProvider: Codable, Equatable {
 	/// The ssl certificate of the provider
 	let tlsCertificate: String
 
+	/// The thin ID hash for the unomi call
+	var unomiAccessToken: String?
+
+	/// The fat ID hash for the even call
+	var eventAccessToken: String?
+
+	/// Result of the unomi call
+	var unomi: Bool = false
+
 	// Key mapping
 	enum CodingKeys: String, CodingKey {
 

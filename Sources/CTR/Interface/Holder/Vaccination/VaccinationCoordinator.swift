@@ -7,10 +7,18 @@
 
 import UIKit
 
+enum VaccinationFlowResult {
+
+	case stop
+
+	case continu
+}
+
 protocol VaccinationCoordinatorDelegate: AnyObject {
 
-	/// The user did finish the vaccination scene
-	func didFinish()
+	func didFinishStart(_ result: VaccinationFlowResult)
+
+	func didFinishLoad(_ result: VaccinationFlowResult)
 }
 
 protocol VaccinationFlowDelegate: AnyObject {
@@ -19,7 +27,7 @@ protocol VaccinationFlowDelegate: AnyObject {
 	func finishVaccinationFlow()
 }
 
-class VaccinationCoordinator: Coordinator {
+class VaccinationCoordinator: Coordinator, Logging {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -54,12 +62,39 @@ class VaccinationCoordinator: Coordinator {
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
 	}
+
+	private func navigateToLoad(_ token: String = "999999011") {
+
+		let viewController = FetchEventsViewController(
+			viewModel: FetchEventsViewModel(
+				coordinator: self,
+				tvsToken: token
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
 }
 
 extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 
-	func didFinish() {
-		
-		delegate?.finishVaccinationFlow()
+	func didFinishStart(_ result: VaccinationFlowResult) {
+
+		switch result {
+			case .stop:
+				delegate?.finishVaccinationFlow()
+			case .continu:
+				navigateToLoad()
+		}
+	}
+
+
+	func didFinishLoad(_ result: VaccinationFlowResult) {
+
+		switch result {
+			case .stop:
+				delegate?.finishVaccinationFlow()
+			case .continu:
+				logInfo("To be implemented")
+		}
 	}
 }
