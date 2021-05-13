@@ -41,6 +41,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - showBottomCloseButton: True if the bottom close button should be shown
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
+
+	func startVaccinationEventFlow()
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -285,6 +287,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let destination = UINavigationController(rootViewController: viewController)
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
+
+	func startVaccinationEventFlow() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let vaccinationCoordinator = VaccinationCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			startChildCoordinator(vaccinationCoordinator)
+		}
+	}
 }
 
 // MARK: - MenuDelegate
@@ -363,18 +376,7 @@ extension HolderCoordinator: MenuDelegate {
 
 extension HolderCoordinator: VaccinationFlowDelegate {
 
-	func navigateToVaccination() {
-
-		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
-			let vaccinationCoordinator = VaccinationCoordinator(
-				navigationController: navController,
-				delegate: self
-			)
-			startChildCoordinator(vaccinationCoordinator)
-		}
-	}
-
-	func finishVaccinationFlow() {
+	func vaccinationFlowDidComplete () {
 
 		if let vaccinationCoordinator = childCoordinators.last {
 			removeChildCoordinator(vaccinationCoordinator)

@@ -17,12 +17,12 @@ class VaccinationStartViewModel: Logging {
 
 	func backButtonTapped() {
 		
-		coordinator?.didFinishStart(.stop)
+		coordinator?.vaccinationStartScreenDidFinish(.stop)
 	}
 
 	func primaryButtonTapped() {
 
-		coordinator?.didFinishStart(.continu)
+		coordinator?.vaccinationStartScreenDidFinish(.continue)
 	}
 }
 

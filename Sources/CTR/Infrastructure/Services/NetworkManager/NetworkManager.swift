@@ -282,11 +282,11 @@ class NetworkManager: NetworkManaging, Logging {
 			}
 		}
 		
-		logDebug("--REQUEST--")
-		if let url = request.url { logDebug(url.debugDescription) }
-		if let allHTTPHeaderFields = request.allHTTPHeaderFields { logDebug(allHTTPHeaderFields.debugDescription) }
+		logVerbose("--REQUEST--")
+		if let url = request.url { logVerbose(url.debugDescription) }
+		if let allHTTPHeaderFields = request.allHTTPHeaderFields { logVerbose(allHTTPHeaderFields.debugDescription) }
 		if let httpBody = request.httpBody { logVerbose(String(data: httpBody, encoding: .utf8)!) }
-		logDebug("--END REQUEST--")
+		logVerbose("--END REQUEST--")
 		
 		return .success(request)
 	}
@@ -467,7 +467,7 @@ class NetworkManager: NetworkManaging, Logging {
 			return
 		}
 		
-		logDebug("--RESPONSE--")
+		logVerbose("--RESPONSE--")
 		if let response = response as? HTTPURLResponse {
 			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
 			
@@ -486,7 +486,7 @@ class NetworkManager: NetworkManaging, Logging {
 			logDebug("Error with response: \(error)")
 		}
 		
-		logDebug("--END RESPONSE--")
+		logVerbose("--END RESPONSE--")
 		
 		guard let response = response,
 			  let object = object else {

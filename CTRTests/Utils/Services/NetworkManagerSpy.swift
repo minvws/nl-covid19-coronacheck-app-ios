@@ -22,18 +22,18 @@ class NetworkSpy: NetworkManaging {
 		return stubbedNetworkConfiguration
 	}
 
-	var invokedGetVaccinationAccessTokens = false
-	var invokedGetVaccinationAccessTokensCount = 0
-	var invokedGetVaccinationAccessTokensParameters: (tvsToken: String, Void)?
-	var invokedGetVaccinationAccessTokensParametersList = [(tvsToken: String, Void)]()
-	var stubbedGetVaccinationAccessTokensCompletionResult: (Result<[Vaccination.AccessToken], NetworkError>, Void)?
+	var invokedFetchVaccinationAccessTokens = false
+	var invokedFetchVaccinationAccessTokensCount = 0
+	var invokedFetchVaccinationAccessTokensParameters: (tvsToken: String, Void)?
+	var invokedFetchVaccinationAccessTokensParametersList = [(tvsToken: String, Void)]()
+	var stubbedFetchVaccinationAccessTokensCompletionResult: (Result<[Vaccination.AccessToken], NetworkError>, Void)?
 
-	func getVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
-		invokedGetVaccinationAccessTokens = true
-		invokedGetVaccinationAccessTokensCount += 1
-		invokedGetVaccinationAccessTokensParameters = (tvsToken, ())
-		invokedGetVaccinationAccessTokensParametersList.append((tvsToken, ()))
-		if let result = stubbedGetVaccinationAccessTokensCompletionResult {
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+		invokedFetchVaccinationAccessTokens = true
+		invokedFetchVaccinationAccessTokensCount += 1
+		invokedFetchVaccinationAccessTokensParameters = (tvsToken, ())
+		invokedFetchVaccinationAccessTokensParametersList.append((tvsToken, ()))
+		if let result = stubbedFetchVaccinationAccessTokensCompletionResult {
 			completion(result.0)
 		}
 	}

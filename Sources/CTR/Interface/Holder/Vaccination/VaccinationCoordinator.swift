@@ -9,22 +9,24 @@ import UIKit
 
 enum VaccinationFlowResult {
 
+	/// Stop with vaccination flow,
 	case stop
 
-	case continu
+	/// Continue with the next step in the flow
+	case `continue`
 }
 
 protocol VaccinationCoordinatorDelegate: AnyObject {
 
-	func didFinishStart(_ result: VaccinationFlowResult)
+	func vaccinationStartScreenDidFinish(_ result: VaccinationFlowResult)
 
-	func didFinishLoad(_ result: VaccinationFlowResult)
+	func fetchEventsScreenDidFinish(_ result: VaccinationFlowResult)
 }
 
 protocol VaccinationFlowDelegate: AnyObject {
 
 	/// The vaccination flow is finished
-	func finishVaccinationFlow()
+	func vaccinationFlowDidComplete()
 }
 
 class VaccinationCoordinator: Coordinator, Logging {
@@ -63,7 +65,12 @@ class VaccinationCoordinator: Coordinator, Logging {
 		return false
 	}
 
-	private func navigateToLoad(_ token: String = "999999011") {
+	// MARK: Private functions
+
+	private func navigateToFetchEvents(_ token: String = "999999011") {
+		// The token param should not have a default value.
+		// When the digid login is fixed, the default 999999011 should be removed.
+		// Until then, this is the only fake BSN to use to get vaccination events
 
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
@@ -77,22 +84,22 @@ class VaccinationCoordinator: Coordinator, Logging {
 
 extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 
-	func didFinishStart(_ result: VaccinationFlowResult) {
+	func vaccinationStartScreenDidFinish(_ result: VaccinationFlowResult) {
 
 		switch result {
 			case .stop:
-				delegate?.finishVaccinationFlow()
-			case .continu:
-				navigateToLoad()
+				delegate?.vaccinationFlowDidComplete()
+			case .continue:
+				navigateToFetchEvents()
 		}
 	}
 
-	func didFinishLoad(_ result: VaccinationFlowResult) {
+	func fetchEventsScreenDidFinish(_ result: VaccinationFlowResult) {
 
 		switch result {
 			case .stop:
-				delegate?.finishVaccinationFlow()
-			case .continu:
+				delegate?.vaccinationFlowDidComplete()
+			case .continue:
 				logInfo("To be implemented")
 		}
 	}
