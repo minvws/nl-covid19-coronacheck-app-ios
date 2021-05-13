@@ -60,7 +60,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
@@ -105,7 +105,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getVaccinationUnomi(
+	func fetchVaccinationEventInformation(
 		provider: Vaccination.EventProvider,
 		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void)
 
@@ -113,7 +113,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getVaccinationEvents(
+	func fetchVaccinationEvents(
 		provider: Vaccination.EventProvider,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
 }

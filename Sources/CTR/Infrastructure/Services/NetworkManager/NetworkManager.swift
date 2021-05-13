@@ -33,7 +33,7 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.accessTokensUrl,
@@ -186,7 +186,7 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getVaccinationUnomi(
+	func fetchVaccinationEventInformation(
 		provider: Vaccination.EventProvider,
 		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
 
@@ -217,7 +217,7 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
-	func getVaccinationEvents(
+	func fetchVaccinationEvents(
 		provider: Vaccination.EventProvider,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
 

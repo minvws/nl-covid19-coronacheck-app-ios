@@ -56,13 +56,12 @@ class FetchEventsViewModel: Logging {
 
 	private func fetchVaccinationAccessTokens() {
 
-		networkManager.getAccessTokens(tvsToken: tvsToken) { [weak self] result in
+		networkManager.fetchVaccinationAccessTokens(tvsToken: tvsToken) { [weak self] result in
 			switch result {
 				case let .failure(error):
 					self?.logError("Error getting access tokens: \(error)")
 				case let .success(tokens):
 					self?.accessTokens = tokens
-					self?.logInfo("We fetched \(tokens.count) access tokens")
 			}
 			self?.prefetchingGroup.leave()
 		}
@@ -76,7 +75,6 @@ class FetchEventsViewModel: Logging {
 					self?.logError("Error getting event providers: \(error)")
 				case let .success(providers):
 					self?.eventProviders = providers
-					self?.logInfo("We fetched \(providers.count) eventProviders")
 			}
 			self?.prefetchingGroup.leave()
 		}
@@ -84,7 +82,6 @@ class FetchEventsViewModel: Logging {
 
 	private func startFetching() {
 
-		logInfo("startFetching")
 		progressIndicationCounter.increment()
 		prefetchingGroup.enter()
 		fetchVaccinationAccessTokens()
@@ -98,7 +95,6 @@ class FetchEventsViewModel: Logging {
 
 	private func finishedFetching() {
 
-		logInfo("finishedFetching")
 		progressIndicationCounter.decrement()
 		updateEventProvidersWithAccessTokens()
 		fetchHasEventInformationResponses()
@@ -115,7 +111,6 @@ class FetchEventsViewModel: Logging {
 
 	private func fetchHasEventInformationResponses() {
 
-		logInfo("fetchHasEventInformationResponses")
 		progressIndicationCounter.increment()
 		for provider in eventProviders {
 			fetchHasEventInformationResponse(provider)
@@ -132,13 +127,12 @@ class FetchEventsViewModel: Logging {
 			self.logInfo("evenprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 			hasEventInformationFetchingGroup.enter()
-			networkManager.getVaccinationUnomi(provider: provider) { [weak self] result in
+			networkManager.fetchVaccinationEventInformation(provider: provider) { [weak self] result in
 				// Result<UnomiResponse, NetworkError>
 				switch result {
 					case let .failure(error):
 						self?.logError("Error getting unomi: \(error)")
 					case let .success(response):
-						self?.logInfo("response: \(response)")
 						self?.eventInformationAvailableResults.append(response)
 				}
 				self?.hasEventInformationFetchingGroup.leave()
@@ -148,7 +142,6 @@ class FetchEventsViewModel: Logging {
 
 	private func finishedHasEventInformationFetching() {
 
-		logInfo("finishedHasEventInformationFetching")
 		progressIndicationCounter.decrement()
 		updateEventProvidersWithUnomiResponse()
 		fetchEvents()
@@ -165,7 +158,6 @@ class FetchEventsViewModel: Logging {
 
 	private func fetchEvents() {
 
-		logInfo("fetchEvents")
 		progressIndicationCounter.increment()
 
 		for provider in eventProviders {
@@ -181,14 +173,13 @@ class FetchEventsViewModel: Logging {
 		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"), provider.hasEventInformationAvailable {
 
 			eventFetchingGroup.enter()
-			networkManager.getVaccinationEvents(provider: provider) { [weak self] result in
+			networkManager.fetchVaccinationEvents(provider: provider) { [weak self] result in
 				// (Result<(TestResultWrapper, SignedResponse), NetworkError>
 
 				switch result {
 					case let .failure(error):
 						self?.logError("Error getting event: \(error)")
 					case let .success(response):
-						self?.logInfo("response: \(response)")
 						self?.eventResults.append(response)
 				}
 				self?.eventFetchingGroup.leave()
