@@ -13,17 +13,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: Install and Run SwiftLint 
-        run: |
-          make build_swiftlint
-          Vendor/SwiftLint/.build/release/swiftlint --quiet --strict --config=./.swiftlint.yml
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
-    # - name: Run SwiftLint for changes in this pull request
-    #   uses: norio-nomura/action-swiftlint@3.2.1
-    #   with:
-    #     args: --force-exclude
-    #   env:
-    #     DIFF_BASE: ${{ github.base_ref }}
+      - name: Cache SwiftLint builds
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-SwiftLint-builds
+        with:
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/SwiftLint/**') }}
+          path: Vendor/SwiftLint/.build
+
+      - name: Build SwiftLint (if necessary)
+        run: |
+          make build_swiftlint_ci
+          
+      - name: Run SwiftLint 
+        run: |
+          make run_swiftlint
 
   test:
     runs-on: macos-latest
@@ -45,9 +54,26 @@ jobs:
           git lfs pull
           git checkout .
 
-      - name: Make Environment
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Cache XcodeGen builds
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-XcodeGen-builds
+        with:
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
+          path: Vendor/XcodeGen/.build
+
+      - name: Build XcodeGen (if necessary)
         run: |
-          make ci
+          make build_xcodegen_ci
+          
+      - name: Run XcodeGen
+        run: |
+          make generate_project
 
       - name: Build and test
         env:
