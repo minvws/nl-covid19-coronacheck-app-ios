@@ -22,6 +22,22 @@ class NetworkSpy: NetworkManaging {
 		return stubbedNetworkConfiguration
 	}
 
+	var invokedGetAccessTokens = false
+	var invokedGetAccessTokensCount = 0
+	var invokedGetAccessTokensParameters: (tvsToken: String, Void)?
+	var invokedGetAccessTokensParametersList = [(tvsToken: String, Void)]()
+	var stubbedGetAccessTokensCompletionResult: (Result<[AccessToken], NetworkError>, Void)?
+
+	func getAccessTokens(tvsToken: String, completion: @escaping (Result<[AccessToken], NetworkError>) -> Void) {
+		invokedGetAccessTokens = true
+		invokedGetAccessTokensCount += 1
+		invokedGetAccessTokensParameters = (tvsToken, ())
+		invokedGetAccessTokensParametersList.append((tvsToken, ()))
+		if let result = stubbedGetAccessTokensCompletionResult {
+			completion(result.0)
+		}
+	}
+
 	var invokedGetNonce = false
 	var invokedGetNonceCount = 0
 	var stubbedGetNonceCompletionResult: (Result<NonceEnvelope, NetworkError>, Void)?
