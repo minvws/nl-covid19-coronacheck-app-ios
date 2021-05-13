@@ -78,12 +78,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(RemoteConfiguration(
 				minVersion: "1.0.0",
-				minVersionMessage: "test_remoteConfigManagerUpdate_versionsEqual",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "test_remoteConfigManagerUpdate_versionsEqual"
 			)), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 			self.sut.lastFetchedTimestamp = nil
@@ -106,12 +101,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(RemoteConfiguration(
 				minVersion: "1.0",
-				minVersionMessage: "test_emoteConfigManagerUpdate_versionsAlmostEqual",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "test_emoteConfigManagerUpdate_versionsAlmostEqual"
 			)), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 			self.sut.lastFetchedTimestamp = nil
@@ -134,12 +124,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			let configuration = RemoteConfiguration(
 				minVersion: "1.0.1",
-				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualBug",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualBug"
 			)
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -163,12 +148,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			let configuration = RemoteConfiguration(
 				minVersion: "4.3.2",
-				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualMajor",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualMajor"
 			)
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
@@ -193,12 +173,7 @@ class RemoteConfigManagerTests: XCTestCase {
 		waitUntil(timeout: .seconds(10)) { done in
 			let configuration = RemoteConfiguration(
 				minVersion: "1.0.0",
-				minVersionMessage: "test_remoteConfigManagerUpdate_existingVersionHigher",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "test_remoteConfigManagerUpdate_existingVersionHigher"
 			)
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
@@ -223,11 +198,7 @@ class RemoteConfigManagerTests: XCTestCase {
 			let configuration = RemoteConfiguration(
 				minVersion: "1.0.0",
 				minVersionMessage: "test_remoteConfigManager_endOfLife",
-				storeUrl: nil,
-				deactivated: true,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				deactivated: true
 			)
 			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
@@ -242,5 +213,28 @@ class RemoteConfigManagerTests: XCTestCase {
 				done()
 			}
 		}
+	}
+}
+
+extension RemoteConfiguration {
+
+	init(minVersion: String, minVersionMessage: String?, deactivated: Bool? = nil) {
+
+		self.init(
+			minVersion: minVersion,
+			minVersionMessage: minVersionMessage,
+			storeUrl: nil,
+			deactivated: deactivated,
+			informationURL: nil,
+			configTTL: 3600,
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
+		)
+
 	}
 }

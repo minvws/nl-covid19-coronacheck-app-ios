@@ -13,7 +13,7 @@ protocol AppVersionInformation {
 	/// The minimum required version
 	var minimumVersion: String { get }
 
-	/// The message for the minium required version
+	/// The message for the minimum required version
 	var minimumVersionMessage: String? { get }
 
 	/// The url to the appStore
@@ -22,14 +22,32 @@ protocol AppVersionInformation {
 	/// The url to the site
 	var informationURL: URL? { get }
 
-	/// Is the app deactvated?
+	/// Is the app deactivated?
 	var appDeactivated: Bool? { get }
 
 	/// What is the TTL of the config
 	var configTTL: Int? { get }
 
-	/// What is the TTL of a test
+	/// What is the validity of a test
 	var maxValidityHours: Int? { get }
+
+	/// When should we update
+	var requireUpdateBefore: TimeInterval? { get }
+
+	/// Is the app temporarily disabled?
+	var temporarilyDisabled: Bool? { get }
+
+	/// What is the validity of a vaccination
+	var vaccinationValidityHours: Int? { get }
+
+	/// What is the validity of a recovery
+	var recoveryValidityHours: Int? { get }
+
+	/// What is the validity of a test
+	var testValidityHours: Int? { get }
+
+	/// What is the validity of a domestic test / vaccination
+	var domesticValidityHours: Int? { get }
 }
 
 extension AppVersionInformation {
@@ -46,7 +64,7 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// The minimum required version
 	let minimumVersion: String
 
-	/// The message for the minium required version
+	/// The message for the minimum required version
 	let minimumVersionMessage: String?
 
 	/// The url to the appStore
@@ -55,14 +73,32 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// The url to the site
 	let informationURL: URL?
 
-	/// Is the app deactvated?
+	/// Is the app deactivated?
 	let appDeactivated: Bool?
 
 	/// What is the TTL of the config
 	let configTTL: Int?
 
-	/// What is the TTL of a test
-	var maxValidityHours: Int?
+	/// What is the validity of a test
+	let maxValidityHours: Int?
+
+	/// When should we update
+	let requireUpdateBefore: TimeInterval?
+
+	/// Is the app temporarily disabled?
+	let temporarilyDisabled: Bool?
+
+	/// What is the validity of a vaccination
+	let vaccinationValidityHours: Int?
+
+	/// What is the validity of a recovery
+	let recoveryValidityHours: Int?
+
+	/// What is the validity of a test
+	let testValidityHours: Int?
+
+	/// What is the validity of a domestic  test / vaccination
+	let domesticValidityHours: Int?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -74,17 +110,14 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
 		case maxValidityHours = "maxValidityHours"
+		case requireUpdateBefore = "requireUpdateBefore"
+		case temporarilyDisabled = "temporarilyDisabled"
+		case vaccinationValidityHours = "vaccinationValidity"
+		case recoveryValidityHours = "recoveryValidity"
+		case testValidityHours = "testValidity"
+		case domesticValidityHours = "domesticValidity"
 	}
 
-	/// Initializer
-	/// - Parameters:
-	///   - minVersion: The minimum required version
-	///   - minVersionMessage: The message for the minium required version
-	///   - storeUrl: The url to the appStore
-	///   - deactiviated: The deactivation String
-	///   - informationURL: The information url
-	///   - configTTL: The TTL of the config
-	///   - maxValidityHours: The TTL of the test proof
 	init(
 		minVersion: String,
 		minVersionMessage: String?,
@@ -92,7 +125,13 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		deactivated: Bool?,
 		informationURL: URL?,
 		configTTL: Int?,
-		maxValidityHours: Int?) {
+		maxValidityHours: Int?,
+		requireUpdateBefore: TimeInterval?,
+		temporarilyDisabled: Bool?,
+		vaccinationValidityHours: Int?,
+		recoveryValidityHours: Int?,
+		testValidityHours: Int?,
+		domesticValidityHours: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -101,6 +140,12 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		self.informationURL = informationURL
 		self.configTTL = configTTL
 		self.maxValidityHours = maxValidityHours
+		self.requireUpdateBefore = requireUpdateBefore
+		self.temporarilyDisabled = temporarilyDisabled
+		self.vaccinationValidityHours = vaccinationValidityHours
+		self.recoveryValidityHours = recoveryValidityHours
+		self.testValidityHours = testValidityHours
+		self.domesticValidityHours = domesticValidityHours
 	}
 
 	/// Default remote configuration
@@ -112,7 +157,13 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			maxValidityHours: 40,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
 	}
 }
