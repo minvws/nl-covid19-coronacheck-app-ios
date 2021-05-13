@@ -162,7 +162,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	// MARK: Fetch vaccination event information
+	// MARK: Fetch vaccination events
 
 	private func fetchVaccinationEvents() {
 
