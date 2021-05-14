@@ -71,7 +71,7 @@ class MenuViewModel {
 	}
 
 	/// Close the menu
-	func clossButtonTapped() {
+	func closeButtonTapped() {
 
 		menuDelegate?.closeMenu()
 	}
