@@ -34,6 +34,85 @@ platform :ios do
     )
   end
 
+  # -- TestFlight --
+
+  desc "Build and ship the Holder app to TestFlight"
+  lane :ship_holder_to_testflight do
+    ship_to_testflight(
+      provisioning_profile_path: "fastlane/profiles/CoronaCheck_Holder_AppStore.mobileprovision",
+      xcodeproj: "CTR.xcodeproj",
+      targetname: "Holder",
+      schemename:  "Holder AppStore",
+      configuration: "AppStore",
+      provisioningprofilename: "CoronaCheck App Store",
+      bundleid: "nl.rijksoverheid.ctr"
+    )
+  end
+
+  desc "Build and ship the Verifier app to TestFlight"
+  lane :ship_verifier_to_testflight do
+    ship_to_testflight(
+      provisioning_profile_path: "fastlane/profiles/CoronaCheck_Verifier_AppStore.mobileprovision",
+      xcodeproj: "CTR.xcodeproj",
+      targetname: "Verifier",
+      schemename:  "Verifier AppStore",
+      configuration: "AppStore",
+      provisioningprofilename: "CoronaCheck Scanner App Store",
+      bundleid: "nl.rijksoverheid.ctr.verifier"
+    )
+  end
+
+  desc "Builds and uploads to Testflight from CI"
+  private_lane :ship_to_testflight do 
+
+    api_key = app_store_connect_api_key(
+      key_id: ENV['APP_STORE_API_KEY_ID'],
+      issuer_id: ENV["APP_STORE_API_KEY_ISSUER"],
+      key_filepath: "appstore-apikey.p8",
+      duration: 1200,
+    )
+    
+     # unwrap options:
+     provisioning_profile_path =   options[:provisioning_profile_path]
+     xcodeproj =                   options[:xcodeproj]
+     targetname =                  options[:targetname]
+     schemename =                  options[:schemename]
+     configuration =               options[:configuration]
+     provisioningprofilename =     options[:provisioningprofilename]
+     bundleid =                    options[:bundleid]                 
+ 
+     # Prepare:
+     setup_ci(provider: "travis", force: true)
+     prepare_certificate
+     install_provisioning_profile(path: provisioning_profile_path)
+     prepare
+ 
+     # Version/Build number
+     version = get_version_number(xcodeproj: xcodeproj, target: targetname, configuration: configuration)
+     build_number = determine_build_number()
+     increment_build_number(build_number: build_number, xcodeproj: xcodeproj)
+     
+     # Build:
+     build_ios_app(
+       scheme: schemename,
+       configuration: configuration,
+       export_options: {
+         provisioningProfiles: {
+           bundleid => provisioningprofilename
+         }
+       }
+     )
+
+     upload_to_testflight(skip_submission: true)
+
+     inform_slack(
+      default_payloads: [:git_author],
+      message: "[TESTFLIGHT] :apple: Successfully distributed iOS #{schemename} app build #{version} (#{build_number}) to TestFlight :rocket:",
+    )
+
+  end 
+
+
   # -- DEPLOYING -- 
 
   desc "Build and deploy the Holder app for Test via Firebase from CI"
