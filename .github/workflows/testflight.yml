@@ -1,0 +1,82 @@
+# Syntax: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: testflight
+
+on:
+  push:
+    tags:
+      - '*.*.*-RC*'
+      - '*.*.*-RC*-Verifier'
+      - '*.*.*-RC*-Holder'
+
+env: 
+  APPSTORE_KEY_BASE64_FILENAME: appstore-apikey.p8
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+
+jobs:
+  upload:
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+          
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Cache XcodeGen builds
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-XcodeGen-builds
+        with:
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
+          path: Vendor/XcodeGen/.build
+
+      - name: Build XcodeGen (if necessary)
+        run: |
+          make build_xcodegen_ci
+          
+      - name: Run XcodeGen
+        run: |
+          make generate_project
+      
+      - name: Write p8 Key
+        if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+        env:
+          APP_STORE_API_KEY_P8_BASE64: ${{ secrets.APP_STORE_API_KEY_P8 }}
+        run: | 
+          echo $APP_STORE_API_KEY_P8_BASE64 | base64 --decode > $APPSTORE_KEY_BASE64_FILENAME # not certain this is p8 format
+          
+      - name: Load certificate
+        env:
+          CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
+        run: |
+          mkdir fastlane/certificates
+          echo "$CERTIFICATE_CONTENTS" | base64 -D > fastlane/certificates/distribution.p12          
+
+      - name: Ship Holder to TestFlight
+        if: ${{ !contains(github.ref, 'Verifier') }}
+        timeout-minutes: 45
+        env:
+          CERTIFICATE_PATH: fastlane/certificates/distribution.p12
+          CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}      
+          APP_STORE_API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
+          APP_STORE_API_KEY_ISSUER: ${{ secrets.APP_STORE_API_KEY_ISSUER }}
+        run: |
+          bundle exec fastlane ios ship_holder_to_testflight
+
+      - name: Ship Verifier to TestFlight
+        if: ${{ !contains(github.ref, 'Holder') }}
+        timeout-minutes: 45
+        env:
+          CERTIFICATE_PATH: fastlane/certificates/distribution.p12
+          CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}      
+          APP_STORE_API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
+          APP_STORE_API_KEY_ISSUER: ${{ secrets.APP_STORE_API_KEY_ISSUER }}
+        run: |
+          bundle exec fastlane ios ship_verifier_to_testflight
