@@ -69,30 +69,22 @@ struct Vaccination {
 		}
 
 		func getHostNames() -> [String] {
-			var result = [String]()
-			if let hostName = unomiURL?.host {
-				result.append(hostName)
-			}
-			if let hostName = eventURL?.host {
-				result.append(hostName)
-			}
-			return result
+			
+			[unomiURL?.host, eventURL?.host].compactMap { $0 }
 		}
 
 		func getSSLCertificate() -> Data? {
 
-			if let base64DecodedString = tlsCertificate.base64Decoded() {
-				return Data(base64DecodedString.utf8)
+			tlsCertificate.base64Decoded().map {
+				Data($0.utf8)
 			}
-			return nil
 		}
 
 		func getSigningCertificate() -> SigningCertificate? {
 
-			if let decoded = cmsCertificate.base64Decoded() {
-				return SigningCertificate(name: "EventProvider", certificate: decoded)
+			cmsCertificate.base64Decoded().map {
+				SigningCertificate(name: "EventProvider", certificate: $0)
 			}
-			return nil
 		}
 	}
 

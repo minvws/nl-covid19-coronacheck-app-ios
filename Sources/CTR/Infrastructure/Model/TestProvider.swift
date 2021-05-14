@@ -37,26 +37,20 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 
 	func getHostNames() -> [String] {
 
-		var result = [String]()
-		if let hostName = resultURL?.host {
-			result.append(hostName)
-		}
-		return result
+		[resultURL?.host].compactMap { $0 }
 	}
 
 	func getSSLCertificate() -> Data? {
-		
-		if let base64DecodedString = certificate.base64Decoded() {
-			return Data(base64DecodedString.utf8)
+
+		certificate.base64Decoded().map {
+			Data($0.utf8)
 		}
-		return nil
 	}
 
 	func getSigningCertificate() -> SigningCertificate? {
 
-		if let decoded = publicKey.base64Decoded() {
-			return SigningCertificate(name: "TestProvider", certificate: decoded)
+		publicKey.base64Decoded().map {
+			SigningCertificate(name: "TestProvider", certificate: $0)
 		}
-		return nil
 	}
 }
