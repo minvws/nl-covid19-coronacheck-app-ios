@@ -31,7 +31,7 @@ struct Vaccination {
 	}
 
 	// A Vaccination Event Provider (VEP)
-	struct EventProvider: Codable, Equatable {
+	struct EventProvider: Codable, Equatable, CertificateProvider {
 
 		/// The identifier of the provider
 		let identifier: String
@@ -66,6 +66,25 @@ struct Vaccination {
 			case eventURL = "event_url"
 			case cmsCertificate = "cms"
 			case tlsCertificate = "tls"
+		}
+
+		func getHostNames() -> [String] {
+			
+			[unomiURL?.host, eventURL?.host].compactMap { $0 }
+		}
+
+		func getSSLCertificate() -> Data? {
+
+			tlsCertificate.base64Decoded().map {
+				Data($0.utf8)
+			}
+		}
+
+		func getSigningCertificate() -> SigningCertificate? {
+
+			cmsCertificate.base64Decoded().map {
+				SigningCertificate(name: "EventProvider", certificate: $0)
+			}
 		}
 	}
 

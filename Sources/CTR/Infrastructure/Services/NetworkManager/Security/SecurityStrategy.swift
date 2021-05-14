@@ -8,13 +8,22 @@
 import Foundation
 import Security
 
+protocol CertificateProvider {
+
+	func getHostNames() -> [String]
+
+	func getSSLCertificate() -> Data?
+
+	func getSigningCertificate() -> SigningCertificate?
+}
+
 /// The security strategy
-enum SecurityStrategy: Equatable {
+enum SecurityStrategy {
 
 	case none
 	case config // 1.3
 	case data // 1.4
-	case provider(TestProvider) // 1.5
+	case provider(CertificateProvider) // 1.5
 }
 
 struct SecurityCheckerFactory {
@@ -25,7 +34,7 @@ struct SecurityCheckerFactory {
 		challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) -> SecurityCheckerProtocol {
 
-		guard strategy != .none else {
+		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
 				challenge: challenge,
 				completionHandler: completionHandler
@@ -39,18 +48,19 @@ struct SecurityCheckerFactory {
 			trustedCertificates.append(TrustConfiguration.dstRootCAX3)
 		}
 
-		if strategy == .data {
+		if case SecurityStrategy.data = strategy {
 			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
 		}
 
 		if case let .provider(provider) = strategy {
 
-			if let host = provider.resultURL?.host {
-				trustedNames = [host]
+			trustedNames.append(contentsOf: provider.getHostNames())
+			if let signingCertificate = provider.getSigningCertificate() {
+				trustedSigners.append(signingCertificate)
 			}
-			if let certData = provider.getCertificateData() {
-				trustedCertificates.append(certData)
+			if let sslCertificate = provider.getSSLCertificate() {
+				trustedCertificates.append(sslCertificate)
 			}
 			trustedCertificates.append(TrustConfiguration.sdNRootCAG3)
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
@@ -268,7 +278,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	}
 }
 
-/// TestProvider security. Allows more certificates than alllowed for backend stuff
+/// TestProvider security. Allows more certificates than allowed for backend stuff
 class SecurityCheckerProvider: SecurityChecker {
 
 	/// Check the SSL Connection
