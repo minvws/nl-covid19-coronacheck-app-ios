@@ -63,7 +63,7 @@ platform :ios do
   end
 
   desc "Builds and uploads to Testflight from CI"
-  private_lane :ship_to_testflight do 
+  private_lane :ship_to_testflight do |options|
 
     api_key = app_store_connect_api_key(
       key_id: ENV['APP_STORE_API_KEY_ID'],
