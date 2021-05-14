@@ -186,6 +186,10 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
+	@objc func addProofTapped() {
+		coordinator?.navigateToChooseProvider()
+	}
+
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 

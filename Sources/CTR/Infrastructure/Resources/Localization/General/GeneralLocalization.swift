@@ -42,6 +42,11 @@ extension String {
 		return Localization.string(for: "general.back")
 	}
 
+	static var add: String {
+
+		return Localization.string(for: "general.add")
+	}
+
 	static var errorTitle: String {
 
 		return Localization.string(for: "general.error.title")
