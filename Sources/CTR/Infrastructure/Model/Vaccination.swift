@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct VaccinationFlow {
+struct Vaccination {
 
 	/// The access token used to fetch fat and thin ID Hashes
 	struct AccessToken: Codable, Equatable {
@@ -168,14 +168,14 @@ struct VaccinationFlow {
 		let unique: String
 
 		/// The vaccination
-		let vaccination: Vaccination?
+		let vaccination: VaccinationEvent?
 
 		/// The complete vaccination
-		let vaccinationComplete: Vaccination?
+		let vaccinationComplete: VaccinationEvent?
 	}
 
-	/// An actual vaccination
-	struct Vaccination: Codable {
+	/// An actual vaccination event
+	struct VaccinationEvent: Codable {
 
 		/// The date of administering the vaccin
 		let dateString: String?

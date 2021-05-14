@@ -60,7 +60,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[VaccinationFlow.AccessToken], NetworkError>) -> Void)
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
@@ -87,7 +87,7 @@ protocol NetworkManaging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchVaccinationEventProviders(completion: @escaping (Result<[VaccinationFlow.EventProvider], NetworkError>) -> Void)
+	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void)
 	
 	/// Get a test result
 	/// - Parameters:
@@ -106,16 +106,16 @@ protocol NetworkManaging {
 	///   - provider: the event provider
 	///   - completion: the completion handler
 	func fetchVaccinationEventInformation(
-		provider: VaccinationFlow.EventProvider,
-		completion: @escaping (Result<VaccinationFlow.EventInformationAvailable, NetworkError>) -> Void)
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void)
 
 	/// Get  events
 	/// - Parameters:
 	///   - provider: the event provider
 	///   - completion: the completion handler
 	func fetchVaccinationEvents(
-		provider: VaccinationFlow.EventProvider,
-		completion: @escaping (Result<(VaccinationFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 
 struct SignedResponse: Codable {

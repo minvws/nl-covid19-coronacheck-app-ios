@@ -7,25 +7,6 @@
 
 import UIKit
 
-class VaccinationStartViewModel: Logging {
-
-	weak var coordinator: VaccinationCoordinatorDelegate?
-
-	init(coordinator: VaccinationCoordinatorDelegate) {
-		self.coordinator = coordinator
-	}
-
-	func backButtonTapped() {
-		
-		coordinator?.vaccinationStartScreenDidFinish(.stop)
-	}
-
-	func primaryButtonTapped() {
-
-		coordinator?.vaccinationStartScreenDidFinish(.continue)
-	}
-}
-
 class VaccinationStartViewController: BaseViewController {
 
 	private let viewModel: VaccinationStartViewModel
@@ -69,29 +50,5 @@ class VaccinationStartViewController: BaseViewController {
 	@objc func backButtonTapped() {
 
 		viewModel.backButtonTapped()
-	}
-}
-
-class VaccinationStartView: ScrolledStackWithButtonView {
-
-	override func setupViews() {
-
-		super.setupViews()
-		backgroundColor = Theme.colors.viewControllerBackground
-		stackView.distribution = .fill
-		showLineView = false
-	}
-
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-		setupPrimaryButton(useFullWidth: {
-			switch traitCollection.preferredContentSizeCategory {
-				case .unspecified: return true
-				case let size where size > .extraLarge: return true
-				default: return false
-			}
-		}())
 	}
 }
