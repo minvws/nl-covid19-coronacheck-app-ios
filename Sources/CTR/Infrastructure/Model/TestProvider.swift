@@ -8,7 +8,7 @@
 import Foundation
 
 /// The test providers
-struct TestProvider: Codable, Equatable {
+struct TestProvider: Codable, CertificateProvider {
 
 	/// The identifier of the provider
 	let identifier: String
@@ -35,12 +35,27 @@ struct TestProvider: Codable, Equatable {
 		case certificate = "ssl_cert"
 	}
 
-	/// Get the certificate data
-	/// - Returns: Certificate as Data
-	func getCertificateData() -> Data? {
+	func getHostNames() -> [String] {
 
+		var result = [String]()
+		if let hostName = resultURL?.host {
+			result.append(hostName)
+		}
+		return result
+	}
+
+	func getSSLCertificate() -> Data? {
+		
 		if let base64DecodedString = certificate.base64Decoded() {
 			return Data(base64DecodedString.utf8)
+		}
+		return nil
+	}
+
+	func getSigningCertificate() -> SigningCertificate? {
+
+		if let decoded = publicKey.base64Decoded() {
+			return SigningCertificate(name: "TestProvider", certificate: decoded)
 		}
 		return nil
 	}

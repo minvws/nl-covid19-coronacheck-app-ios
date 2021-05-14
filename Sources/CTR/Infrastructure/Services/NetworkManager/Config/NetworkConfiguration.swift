@@ -85,7 +85,7 @@ struct NetworkConfiguration {
 	)
 
 	/// The access tokens url
-	var accessTokensUrl: URL? {
+	var vaccinationAccessTokensUrl: URL? {
 
 		return self.combine(path: Endpoint.accessTokens, fromCdn: false)
 	}

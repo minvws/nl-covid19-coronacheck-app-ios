@@ -36,7 +36,7 @@ class NetworkManager: NetworkManaging, Logging {
 	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.accessTokensUrl,
+			url: networkConfiguration.vaccinationAccessTokensUrl,
 			method: .POST,
 			body: ["tvs_token": tvsToken]
 		)
@@ -208,8 +208,7 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
-		sessionDelegate?.setSecurityStrategy(.none)
-//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
@@ -239,8 +238,7 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
-		sessionDelegate?.setSecurityStrategy(.none)
-//		//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 	
