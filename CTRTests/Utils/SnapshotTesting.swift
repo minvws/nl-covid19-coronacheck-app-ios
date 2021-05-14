@@ -11,6 +11,7 @@ import UIKit
 
 internal extension UIViewController {
 	func assertImage(
+		containedInNavigationController: Bool = false,
 		file: StaticString = #file,
 		testName: String = #function,
 		line: UInt = #line,
@@ -18,9 +19,17 @@ internal extension UIViewController {
 	) {
 		UIScreen.main.assertSimulatorIsAllowedForSnapshotTesting()
 		UIViewController.assertSimulatorDoesNotHaveAlteredAccessibilitySizes()
-		
+
+		let subject: UIViewController
+
+		if containedInNavigationController {
+			subject = UINavigationController(rootViewController: self)
+		} else {
+			subject = self
+		}
+
 		SnapshotTesting.assertSnapshot(
-			matching: self,
+			matching: subject,
 			as: .image(precision: precision),
 			file: file,
 			testName: testName,

@@ -67,7 +67,9 @@ class HolderDashboardView: ScrolledStackView {
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(qrCardView)
 		stackView.addArrangedSubview(expiredQRView)
-		stackView.addArrangedSubview(appointmentCard)
+
+		// Currently hide the Book a Test card
+		// stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
 	}
 

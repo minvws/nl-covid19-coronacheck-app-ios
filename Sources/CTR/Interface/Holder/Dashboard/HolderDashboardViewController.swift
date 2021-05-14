@@ -47,6 +47,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
+		setupPlusButton()
 	}
 
 	private func setupBindings() {
@@ -180,6 +181,17 @@ class HolderDashboardViewController: BaseViewController {
 		card.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.cardTapped(cardInfo.identifier)
 		}
+	}
+
+	func setupPlusButton() {
+		let plusbutton = UIBarButtonItem(
+			image: .plus,
+			style: .plain,
+			target: viewModel,
+			action: #selector(HolderDashboardViewModel.addProofTapped)
+		)
+		plusbutton.accessibilityLabel = .add
+		navigationItem.rightBarButtonItem = plusbutton
 	}
 
 	func showNotificationBanner(_ content: NotificationBannerContent) {

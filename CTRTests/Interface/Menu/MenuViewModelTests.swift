@@ -44,7 +44,7 @@ class MenuViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut?.clossButtonTapped()
+		sut?.closeButtonTapped()
 
 		// Then
 		XCTAssertTrue(menuDelegateSpy.closeMenuCalled, "Close Menu delegate method should be called")

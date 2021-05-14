@@ -73,7 +73,7 @@ class DashboardViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.qrCardView.isHidden) == true
 		expect(self.sut.sceneView.expiredQRView.isHidden) == true
 
-		sut.assertImage()
+		sut.assertImage(containedInNavigationController: true)
 	}
 
 	/// Test tapping on the appointment card
