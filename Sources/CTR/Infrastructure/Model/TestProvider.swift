@@ -8,7 +8,7 @@
 import Foundation
 
 /// The test providers
-struct TestProvider: Codable, CertificateProvider {
+struct TestProvider: Codable, CertificateProvider, Equatable {
 
 	/// The identifier of the provider
 	let identifier: String
