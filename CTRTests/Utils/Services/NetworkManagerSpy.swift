@@ -22,6 +22,22 @@ class NetworkSpy: NetworkManaging {
 		return stubbedNetworkConfiguration
 	}
 
+	var invokedFetchVaccinationAccessTokens = false
+	var invokedFetchVaccinationAccessTokensCount = 0
+	var invokedFetchVaccinationAccessTokensParameters: (tvsToken: String, Void)?
+	var invokedFetchVaccinationAccessTokensParametersList = [(tvsToken: String, Void)]()
+	var stubbedFetchVaccinationAccessTokensCompletionResult: (Result<[Vaccination.AccessToken], NetworkError>, Void)?
+
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+		invokedFetchVaccinationAccessTokens = true
+		invokedFetchVaccinationAccessTokensCount += 1
+		invokedFetchVaccinationAccessTokensParameters = (tvsToken, ())
+		invokedFetchVaccinationAccessTokensParametersList.append((tvsToken, ()))
+		if let result = stubbedFetchVaccinationAccessTokensCompletionResult {
+			completion(result.0)
+		}
+	}
+
 	var invokedGetNonce = false
 	var invokedGetNonceCount = 0
 	var stubbedGetNonceCompletionResult: (Result<NonceEnvelope, NetworkError>, Void)?
@@ -88,14 +104,14 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedGetEventProviders = false
-	var invokedGetEventProvidersCount = 0
-	var stubbedGetEventProvidersCompletionResult: (Result<[EventProvider], NetworkError>, Void)?
+	var invokedFetchVaccinationEventProviders = false
+	var invokedFetchVaccinationEventProvidersCount = 0
+	var stubbedFetchVaccinationEventProvidersCompletionResult: (Result<[Vaccination.EventProvider], NetworkError>, Void)?
 
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
-		invokedGetEventProviders = true
-		invokedGetEventProvidersCount += 1
-		if let result = stubbedGetEventProvidersCompletionResult {
+	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
+		invokedFetchVaccinationEventProviders = true
+		invokedFetchVaccinationEventProvidersCount += 1
+		if let result = stubbedFetchVaccinationEventProvidersCompletionResult {
 			completion(result.0)
 		}
 	}
@@ -116,6 +132,42 @@ class NetworkSpy: NetworkManaging {
 		invokedGetTestResultParameters = (provider, token, code)
 		invokedGetTestResultParametersList.append((provider, token, code))
 		if let result = stubbedGetTestResultCompletionResult {
+			completion(result.0)
+		}
+	}
+
+	var invokedFetchVaccinationEventInformation = false
+	var invokedFetchVaccinationEventInformationCount = 0
+	var invokedFetchVaccinationEventInformationParameters: (provider: Vaccination.EventProvider, Void)?
+	var invokedFetchVaccinationEventInformationParametersList = [(provider: Vaccination.EventProvider, Void)]()
+	var stubbedFetchVaccinationEventInformationCompletionResult: (Result<Vaccination.EventInformationAvailable, NetworkError>, Void)?
+
+	func fetchVaccinationEventInformation(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+		invokedFetchVaccinationEventInformation = true
+		invokedFetchVaccinationEventInformationCount += 1
+		invokedFetchVaccinationEventInformationParameters = (provider, ())
+		invokedFetchVaccinationEventInformationParametersList.append((provider, ()))
+		if let result = stubbedFetchVaccinationEventInformationCompletionResult {
+			completion(result.0)
+		}
+	}
+
+	var invokedFetchVaccinationEvents = false
+	var invokedFetchVaccinationEventsCount = 0
+	var invokedFetchVaccinationEventsParameters: (provider: Vaccination.EventProvider, Void)?
+	var invokedFetchVaccinationEventsParametersList = [(provider: Vaccination.EventProvider, Void)]()
+	var stubbedFetchVaccinationEventsCompletionResult: (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>, Void)?
+
+	func fetchVaccinationEvents(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		invokedFetchVaccinationEvents = true
+		invokedFetchVaccinationEventsCount += 1
+		invokedFetchVaccinationEventsParameters = (provider, ())
+		invokedFetchVaccinationEventsParametersList.append((provider, ()))
+		if let result = stubbedFetchVaccinationEventsCompletionResult {
 			completion(result.0)
 		}
 	}

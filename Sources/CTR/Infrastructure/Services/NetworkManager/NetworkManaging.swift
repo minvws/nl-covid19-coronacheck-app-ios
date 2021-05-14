@@ -55,7 +55,13 @@ protocol NetworkManaging {
 	///   - configuration: the network configuration
 	///   - validator: the signature validator
 	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
-	
+
+	/// Get the access tokens
+	/// - Parameters:
+	///   - tvsToken: the tvs token
+	///   - completion: completion handler
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
+
 	/// Get the nonce
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void)
@@ -81,11 +87,11 @@ protocol NetworkManaging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void)
+	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void)
 	
 	/// Get a test result
 	/// - Parameters:
-	///   - provider: the the test provider
+	///   - provider: the test provider
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
@@ -94,6 +100,22 @@ protocol NetworkManaging {
 		token: RequestToken,
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
+
+	/// Get a unomi result
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func fetchVaccinationEventInformation(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void)
+
+	/// Get  events
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func fetchVaccinationEvents(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 
 struct SignedResponse: Codable {

@@ -22,6 +22,9 @@ struct Path {
 struct Endpoint {
 	
 	// MARK: - API
+
+	/// Endpoint for access tokens
+	static let accessTokens = Path(components: "holder", "access_tokens")
 	
 	/// Endpoint for the nonce
 	static let nonce = Path(components: "holder", "nonce")

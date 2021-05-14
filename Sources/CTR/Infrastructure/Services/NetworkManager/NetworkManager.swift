@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -28,6 +29,24 @@ class NetworkManager: NetworkManaging, Logging {
 			delegateQueue: nil)
 	}
 
+	/// Get the access tokens
+	/// - Parameters:
+	///   - tvsToken: the tvs token
+	///   - completion: completion handler
+	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.accessTokensUrl,
+			method: .POST,
+			body: ["tvs_token": tvsToken]
+		)
+		func open(result: Result<ArrayEnvelope<Vaccination.AccessToken>, NetworkError>) {
+			completion(result.map { $0.items })
+		}
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+		decodeSignedJSONData(request: urlRequest, completion: open)
+	}
+
 	/// Get the nonce
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void) {
@@ -37,7 +56,7 @@ class NetworkManager: NetworkManaging, Logging {
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: completion)
+		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Get the public keys
@@ -55,7 +74,7 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get the remote configuration
@@ -66,7 +85,7 @@ class NetworkManager: NetworkManaging, Logging {
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.config)
-		decodedSignedJSONData(request: urlRequest, completion: completion)
+		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Fetch the test results with issue signature message
@@ -110,23 +129,23 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func getEventProviders(completion: @escaping (Result<[EventProvider], NetworkError>) -> Void) {
+	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,
 			method: .GET
 		)
-		func open(result: Result<ArrayEnvelope<EventProvider>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<Vaccination.EventProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodedSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: open)
 	}
 
 	/// Get a test result
@@ -160,6 +179,68 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
+	}
+
+	/// Get a unomi result
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func fetchVaccinationEventInformation(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+
+		guard let providerUrl = provider.unomiURL else {
+			self.logError("No url provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		guard let accessToken = provider.accessToken?.unomiAccessToken else {
+			self.logError("No unomi token provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
+			HTTPHeaderKey.tokenProtocolVersion: "3.0"
+		]
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+		sessionDelegate?.setSecurityStrategy(.none)
+//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
+	}
+
+	/// Get  events
+	/// - Parameters:
+	///   - provider: the event provider
+	///   - completion: the completion handler
+	func fetchVaccinationEvents(
+		provider: Vaccination.EventProvider,
+		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+
+		guard let providerUrl = provider.eventURL else {
+			self.logError("No url provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		guard let accessToken = provider.accessToken?.eventAccessToken else {
+			self.logError("No event token provided for \(provider.name)")
+			completion(.failure(NetworkError.invalidRequest))
+			return
+		}
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
+			HTTPHeaderKey.tokenProtocolVersion: "3.0"
+		]
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+		sessionDelegate?.setSecurityStrategy(.none)
+//		//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 	
@@ -251,7 +332,7 @@ class NetworkManager: NetworkManaging, Logging {
 	/// - Parameters:
 	///   - request: the network request
 	///   - completion: completion handler
-	private func decodedSignedJSONData<Object: Decodable>(
+	private func decodeSignedJSONData<Object: Decodable>(
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {

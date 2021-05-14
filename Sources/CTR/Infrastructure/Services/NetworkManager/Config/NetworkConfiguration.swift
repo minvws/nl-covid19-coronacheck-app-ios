@@ -83,6 +83,13 @@ struct NetworkConfiguration {
 			path: ["v3"]
 		)
 	)
+
+	/// The access tokens url
+	var accessTokensUrl: URL? {
+
+		return self.combine(path: Endpoint.accessTokens, fromCdn: false)
+	}
+
 	/// The nonce url
 	var nonceUrl: URL? {
 
