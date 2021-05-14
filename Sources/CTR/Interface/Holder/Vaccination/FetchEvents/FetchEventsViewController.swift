@@ -15,14 +15,14 @@ class FetchEventsViewModel: Logging {
 	private var tvsToken: String
 
 	// List of tokens for the vaccination event providers
-	private var accessTokens = [Vaccination.AccessToken]()
+	private var accessTokens = [VaccinationFlow.AccessToken]()
 
 	/// List of event providers
-	private var eventProviders = [Vaccination.EventProvider]()
+	private var eventProviders = [VaccinationFlow.EventProvider]()
 
-	private var eventInformationAvailableResults = [Vaccination.EventInformationAvailable]()
+	private var eventInformationAvailableResults = [VaccinationFlow.EventInformationAvailable]()
 
-	private var eventResults = [(TestResultWrapper, SignedResponse)]()
+	private var eventResponses = [(wrapper: VaccinationFlow.EventResultWrapper, signed: SignedResponse)]()
 
 	private var networkManager: NetworkManaging
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
@@ -76,7 +76,7 @@ class FetchEventsViewModel: Logging {
 
 		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
-		networkManager.getVaccinationEventProviders { [weak self] result in
+		networkManager.fetchVaccinationEventProviders { [weak self] result in
 			switch result {
 				case let .failure(error):
 					self?.logError("Error getting event providers: \(error)")
@@ -125,7 +125,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchHasEventInformationResponse(from provider: Vaccination.EventProvider) {
+	private func fetchHasEventInformationResponse(from provider: VaccinationFlow.EventProvider) {
 
 		if let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") {
 
@@ -134,7 +134,7 @@ class FetchEventsViewModel: Logging {
 			progressIndicationCounter.increment()
 			hasEventInformationFetchingGroup.enter()
 			networkManager.fetchVaccinationEventInformation(provider: provider) { [weak self] result in
-				// Result<UnomiResponse, NetworkError>
+				// Result<Vaccination.EventInformationAvailable, NetworkError>
 				switch result {
 					case let .failure(error):
 						self?.logError("Error getting unomi: \(error)")
@@ -174,7 +174,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider) {
+	private func fetchVaccinationEvent(from provider: VaccinationFlow.EventProvider) {
 
 		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
 		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
@@ -188,7 +188,7 @@ class FetchEventsViewModel: Logging {
 					case let .failure(error):
 						self?.logError("Error getting event: \(error)")
 					case let .success(response):
-						self?.eventResults.append(response)
+						self?.eventResponses.append(response)
 				}
 				self?.progressIndicationCounter.decrement()
 				self?.eventFetchingGroup.leave()
@@ -199,6 +199,12 @@ class FetchEventsViewModel: Logging {
 	private func finishedEventFetching() {
 
 		logInfo("finishedEventFetching")
+
+		for response in eventResponses {
+
+			logDebug("response: \(response.wrapper)")
+		}
+
 		// To do:
 		// - Store vaccination events in Core Data
 		// - Enable SSL checking for unomi and event calls.
