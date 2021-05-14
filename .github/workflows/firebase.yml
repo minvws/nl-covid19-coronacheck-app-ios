@@ -6,6 +6,9 @@ on:
     branches:
       - main
       - 'release/*'
+env: 
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
 
 jobs:
   firebase-deploy-holder-test:
