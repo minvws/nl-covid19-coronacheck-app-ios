@@ -22,7 +22,7 @@ class FetchEventsViewModel: Logging {
 
 	private var eventInformationAvailableResults = [Vaccination.EventInformationAvailable]()
 
-	private var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signed: SignedResponse)]()
+	private var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]()
 
 	private var networkManager: NetworkManaging
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
@@ -199,14 +199,38 @@ class FetchEventsViewModel: Logging {
 	private func finishedEventFetching() {
 
 		logInfo("finishedEventFetching")
-
 		for response in eventResponses {
 
-			logDebug("response: \(response.wrapper)")
+			if response.wrapper.status == .complete {
+				logDebug("response: \(response.wrapper)")
+
+				let walletManager = WalletManager()
+
+				// Remove any existing vaccination events for the provider
+				walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+
+				// Store the new vaccination events
+
+				// Store
+				let date = Date()
+
+				walletManager.storeEventGroup(
+					.vaccination,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					signedResponse: response.signedResponse,
+					issuedAt: date
+				)
+
+				// Notify
+				logInfo("Stored information")
+
+			} else {
+				// Not complete
+				// Show warning
+			}
 		}
 
 		// To do:
 		// - Store vaccination events in Core Data
-		// - Enable SSL checking for unomi and event calls.
 	}
 }

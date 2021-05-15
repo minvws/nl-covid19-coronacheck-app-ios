@@ -49,12 +49,14 @@ class DataStoreManager: DataStoreManaging, Logging {
 		)
 		if storageType == .inMemory {
 			description.url = URL(fileURLWithPath: "/dev/null")
+		} else {
+			description.url = container.persistentStoreDescriptions.last?.url
 		}
 		container.persistentStoreDescriptions = [description]
 		container.loadPersistentStores(completionHandler: { storeDescription, error in
 			if let error = error as NSError? {
-				self.logError("DatabaseControllerUnresolved error \(error), \(error.userInfo)")
-				fatalError("DatabaseControllerUnresolved error \(error), \(error.userInfo)")
+				self.logError("DataStoreManager error \(error), \(error.userInfo)")
+				fatalError("DataStoreManager error \(error), \(error.userInfo)")
 			}
 			if let url = storeDescription.url {
 				self.excludeFromBackup(fileUrl: url)

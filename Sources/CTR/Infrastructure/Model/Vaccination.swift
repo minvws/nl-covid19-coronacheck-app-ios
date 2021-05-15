@@ -188,45 +188,45 @@ struct Vaccination {
 
 		/// The vaccination
 		let vaccination: VaccinationEvent?
-
-		/// The complete vaccination
-		let vaccinationComplete: VaccinationEvent?
 	}
 
 	/// An actual vaccination event
 	struct VaccinationEvent: Codable {
 
-		/// The date of administering the vaccin
+		/// The date of administering the vaccine
 		let dateString: String?
 
-		/// the hpk code of the vaccin (https://hpkcode.nl/)
+		/// the hpk code of the vaccine (https://hpkcode.nl/)
 		/// If available: type/brand can be left blank.
 		let hpkCode: String?
 
-		/// the type of vaccin
+		/// the type of vaccine
 		let type: String?
 
-		/// the brand of the vaccin
+		/// The manufacturer of the vaccine
+		let manufacturer: String?
+
+		/// the brand of the vaccine
 		let brand: String?
 
-		/// The batch number of the vaccin
-		let batchNumber: String?
+		/// Optional
+		let completedByMedicalStatement: Bool?
 
-		/// The place of administering
-		let administeringCenter: String?
+		let doseNumber: Int?
 
-		/// The country in which the administering took place
-		let country: String?
+		/// optional, will be based on brand info if left out
+		let totalDoses: Int?
 
 		enum CodingKeys: String, CodingKey {
 
 			case dateString = "date"
 			case hpkCode
 			case type
+			case manufacturer
 			case brand
-			case batchNumber
-			case administeringCenter
-			case country
+			case completedByMedicalStatement
+			case doseNumber
+			case totalDoses
 		}
 	}
 }

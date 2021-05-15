@@ -21,6 +21,7 @@ class EventGroupModel {
 
 	@discardableResult class func create(
 		type: EventType,
+		providerIdentifier: String,
 		maxIssuedAt: Date,
 		jsonData: Data,
 		wallet: Wallet,
@@ -31,6 +32,7 @@ class EventGroupModel {
 			into: managedContext) as? EventGroup {
 
 			object.type = type.rawValue
+			object.providerIdentifier = providerIdentifier
 			object.maxIssuedAt = maxIssuedAt
 			object.jsonData = jsonData
 			object.wallet = wallet

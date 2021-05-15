@@ -28,12 +28,25 @@ class WalletModel {
 
 	class func listAll(managedContext: NSManagedObjectContext) -> [Wallet] {
 		
-		let request = NSFetchRequest<Wallet>(entityName: entityName)
+		let fetchRequest = NSFetchRequest<Wallet>(entityName: entityName)
 		
 		do {
-			let fetchedResults = try managedContext.fetch(request)
+			let fetchedResults = try managedContext.fetch(fetchRequest)
 			return fetchedResults
 		} catch {}
 		return []
+	}
+
+	class func findBy(label: String, managedContext: NSManagedObjectContext) -> Wallet? {
+
+		let fetchRequest = NSFetchRequest<Wallet>(entityName: entityName)
+		let namePredicate = NSPredicate(format: "label = %@", label)
+		fetchRequest.predicate = namePredicate
+
+		do {
+			let fetchedResults = try managedContext.fetch(fetchRequest)
+			return fetchedResults.first
+		} catch {}
+		return nil
 	}
 }
