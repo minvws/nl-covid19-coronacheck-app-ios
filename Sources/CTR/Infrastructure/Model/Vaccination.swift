@@ -126,6 +126,26 @@ struct Vaccination {
 		/// The vaccination events
 		var events: [Event] = []
 
+		func getMaxIssuedAt(_ dateFormatter: DateFormatter) -> Date? {
+
+			var maxIssuedAt: Date?
+
+			for event in events {
+				if let dateString = event.vaccination.dateString,
+				   let date = dateFormatter.date(from: dateString) {
+					if maxIssuedAt == nil {
+						maxIssuedAt = date
+					} else {
+						if date > maxIssuedAt! {
+							maxIssuedAt = date
+						}
+					}
+				}
+			}
+
+			return maxIssuedAt
+		}
+
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 

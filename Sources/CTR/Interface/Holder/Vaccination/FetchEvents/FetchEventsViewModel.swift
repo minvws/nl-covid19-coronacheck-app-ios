@@ -25,6 +25,8 @@ class FetchEventsViewModel: Logging {
 	private var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]()
 
 	private var networkManager: NetworkManaging
+	private var walletManager: WalletManaging
+
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
 			// Do not increment/decrement progress within this closure
@@ -41,10 +43,12 @@ class FetchEventsViewModel: Logging {
 	init(
 		coordinator: VaccinationCoordinatorDelegate,
 		tvsToken: String,
-		networkManager: NetworkManaging = Services.networkManager) {
+		networkManager: NetworkManaging = Services.networkManager,
+		walletManager: WalletManaging = WalletManager()) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.networkManager = networkManager
+		self.walletManager = walletManager
 
 		startFetching()
 	}
@@ -203,49 +207,24 @@ class FetchEventsViewModel: Logging {
 		var eventGroups = [EventGroup]()
 		for response in eventResponses where response.wrapper.status == .complete {
 
-			logDebug("response: \(response.wrapper)")
-
-			let walletManager = WalletManager()
-
 			// Remove any existing vaccination events for the provider
 			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
 
 			// Store the new vaccination events
 
-			var maxIssuedAt: Date?
-
-			for event in response.wrapper.events {
-				if let dateString = event.vaccination.dateString,
-				   let date = dateFormatter.date(from: dateString) {
-					if maxIssuedAt == nil {
-						maxIssuedAt = date
-					} else {
-						if date > maxIssuedAt! {
-							maxIssuedAt = date
-						}
-					}
-				}
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter),
+			   let eventGroup = walletManager.storeEventGroup(
+				.vaccination,
+				providerIdentifier: response.wrapper.providerIdentifier,
+				signedResponse: response.signedResponse,
+				issuedAt: maxIssuedAt
+			   ) {
+				eventGroups.append(eventGroup)
 			}
 
-			if let maxIssuedAtUnWrapped = maxIssuedAt {
-
-				// Store
-				if let eventGroup = walletManager.storeEventGroup(
-					.vaccination,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
-					issuedAt: maxIssuedAtUnWrapped
-				) {
-					eventGroups.append(eventGroup)
-				}
-
-				// Notify
-				logInfo("Stored information \(eventGroups)")
-			}
+			// Notify
+			logInfo("Stored information \(eventGroups)")
 		}
-
-		// To do:
-		// - Store vaccination events in Core Data
 	}
 
 	lazy var dateFormatter: DateFormatter = {
