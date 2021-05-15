@@ -199,38 +199,61 @@ class FetchEventsViewModel: Logging {
 	private func finishedEventFetching() {
 
 		logInfo("finishedEventFetching")
-		for response in eventResponses {
 
-			if response.wrapper.status == .complete {
-				logDebug("response: \(response.wrapper)")
+		var eventGroups = [EventGroup]()
+		for response in eventResponses where response.wrapper.status == .complete {
 
-				let walletManager = WalletManager()
+			logDebug("response: \(response.wrapper)")
 
-				// Remove any existing vaccination events for the provider
-				walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+			let walletManager = WalletManager()
 
-				// Store the new vaccination events
+			// Remove any existing vaccination events for the provider
+			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+
+			// Store the new vaccination events
+
+			var maxIssuedAt: Date?
+
+			for event in response.wrapper.events {
+				if let dateString = event.vaccination.dateString,
+				   let date = dateFormatter.date(from: dateString) {
+					if maxIssuedAt == nil {
+						maxIssuedAt = date
+					} else {
+						if date > maxIssuedAt! {
+							maxIssuedAt = date
+						}
+					}
+				}
+			}
+
+			if let maxIssuedAtUnWrapped = maxIssuedAt {
 
 				// Store
-				let date = Date()
-
-				walletManager.storeEventGroup(
+				if let eventGroup = walletManager.storeEventGroup(
 					.vaccination,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					signedResponse: response.signedResponse,
-					issuedAt: date
-				)
+					issuedAt: maxIssuedAtUnWrapped
+				) {
+					eventGroups.append(eventGroup)
+				}
 
 				// Notify
-				logInfo("Stored information")
-
-			} else {
-				// Not complete
-				// Show warning
+				logInfo("Stored information \(eventGroups)")
 			}
 		}
 
 		// To do:
 		// - Store vaccination events in Core Data
 	}
+
+	lazy var dateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.calendar = .current
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.dateFormat = "yyyy-MM-dd"
+
+		return dateFormatter
+	}()
 }

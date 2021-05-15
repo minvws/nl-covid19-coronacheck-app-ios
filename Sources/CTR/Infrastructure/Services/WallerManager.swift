@@ -65,21 +65,17 @@ class WalletManager: WalletManaging, Logging {
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				let json = Data()
-
-				// Store vaccination
-				if let eventGroup = EventGroupModel.create(
-					type: type,
-					providerIdentifier: providerIdentifier,
-					maxIssuedAt: issuedAt,
-					jsonData: json,
-					wallet: wallet,
-					managedContext: context) {
-					dataStoreManager.save(context)
-					result = eventGroup
-				}
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let jsonData = try? JSONEncoder().encode(signedResponse),
+			   let eventGroup = EventGroupModel.create(
+				type: type,
+				providerIdentifier: providerIdentifier,
+				maxIssuedAt: issuedAt,
+				jsonData: jsonData,
+				wallet: wallet,
+				managedContext: context) {
+				dataStoreManager.save(context)
+				result = eventGroup
 			}
 		}
 		return result

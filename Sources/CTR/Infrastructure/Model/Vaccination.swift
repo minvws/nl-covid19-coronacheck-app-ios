@@ -160,7 +160,7 @@ struct Vaccination {
 
 	struct Identity: Codable {
 
-		let identityHash: String
+		let infix: String
 
 		let firstName: String
 
@@ -171,7 +171,7 @@ struct Vaccination {
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
-			case identityHash
+			case infix
 			case firstName
 			case lastName
 			case birthDateString = "birthDate"
@@ -187,7 +187,7 @@ struct Vaccination {
 		let unique: String
 
 		/// The vaccination
-		let vaccination: VaccinationEvent?
+		let vaccination: VaccinationEvent
 	}
 
 	/// An actual vaccination event
