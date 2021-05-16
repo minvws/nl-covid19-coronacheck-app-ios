@@ -32,13 +32,13 @@ class ChooseQRCodeTypeViewModel: Logging {
 		self.coordinator = coordinator
 
 		buttonModels = [
-			ButtonModel(
+			.init(
 				title: .holderChooseQRCodeTypeOptionNegativeTestTitle,
 				subtitle: .holderChooseQRCodeTypeOptionNegativeTestSubtitle) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateANegativeTestQR()
 			},
-			ButtonModel(
+			.init(
 				title: .holderChooseQRCodeTypeOptionVaccineTitle,
 				subtitle: .holderChooseQRCodeTypeOptionVaccineSubtitle) { [weak self] in
 
