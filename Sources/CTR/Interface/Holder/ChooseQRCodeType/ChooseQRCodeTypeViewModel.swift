@@ -16,7 +16,7 @@ class ChooseQRCodeTypeViewModel: Logging {
 	@Bindable private(set) var title: String = .holderChooseQRCodeTypeTitle
 
 	/// The description label underneath the navbar title
-	@Bindable private(set) var message: String = .holderChooseQRCodeTypeMessage
+	@Bindable private(set) var message: String
 	private weak var coordinator: HolderCoordinatorDelegate?
 
 	@Bindable private(set) var buttonModels: [ChooseQRCodeTypeViewController.ButtonModel] = []
@@ -31,6 +31,8 @@ class ChooseQRCodeTypeViewModel: Logging {
 
 		self.coordinator = coordinator
 
+		message = .holderChooseQRCodeTypeMessage(testHoursValidity: 40, vaccineDaysValidity: 365)
+		
 		buttonModels = [
 			.init(
 				title: .holderChooseQRCodeTypeOptionNegativeTestTitle,

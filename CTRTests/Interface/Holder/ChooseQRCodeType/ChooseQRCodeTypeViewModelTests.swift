@@ -29,6 +29,8 @@ class ChooseQRCodeTypeViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.title) == .holderChooseQRCodeTypeTitle
-		expect(self.sut.message) == .holderChooseQRCodeTypeMessage
+
+		// This test can be adjusted once there is an input to `ChooseQRCodeTypeViewModel` that makes this value dynamic.
+		expect(self.sut.message) == "Je kan een QR-code maken van een negatieve testuitslag (geldt 40 uur) of van een vaccinatie (geldt 1 jaar)."
 	}
 }

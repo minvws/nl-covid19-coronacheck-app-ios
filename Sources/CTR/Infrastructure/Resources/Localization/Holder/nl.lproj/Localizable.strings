@@ -152,7 +152,7 @@
 
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Waar wil je een QR-code van maken?";
-"holder.chooseqrcodetype.message" = "Je kan een QR-code maken van een negatieve testuitslag (geldt 40 uur) of van een vaccinatie (geldt 1 jaar).";
+"holder.chooseqrcodetype.message" = "Je kan een QR-code maken van een negatieve testuitslag (geldt %@) of van een vaccinatie (geldt %@).";
 "holder.chooseqrcodetype.option.negativetest.title" = "Een negatieve testuitslag";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
 "holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatiebewijs";

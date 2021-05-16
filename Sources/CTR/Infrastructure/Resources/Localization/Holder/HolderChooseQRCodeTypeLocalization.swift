@@ -17,9 +17,29 @@ extension String {
 		return Localization.string(for: "holder.chooseqrcodetype.title")
 	}
 
-	static var holderChooseQRCodeTypeMessage: String {
+	static func holderChooseQRCodeTypeMessage(testHoursValidity: Int, vaccineDaysValidity: Int) -> String {
 
-		return Localization.string(for: "holder.chooseqrcodetype.message")
+		let formattedTestHoursValidity: String = {
+			let hoursFormatter = DateComponentsFormatter()
+			hoursFormatter.unitsStyle = .full
+			hoursFormatter.collapsesLargestUnit = true
+			hoursFormatter.allowedUnits = [.hour]
+
+			let components = DateComponents(hour: testHoursValidity)
+			return hoursFormatter.string(from: components) ?? "-"
+		}()
+
+		let formattedVaccineDaysValidity: String = {
+			let daysFormatter = DateComponentsFormatter()
+			daysFormatter.unitsStyle = .full
+			daysFormatter.collapsesLargestUnit = true
+			daysFormatter.allowedUnits = [.day, .year]
+
+			let components = DateComponents(day: vaccineDaysValidity)
+			return daysFormatter.string(from: components) ?? "-"
+		}()
+
+		return Localization.string(for: "holder.chooseqrcodetype.message", comment: "", [formattedTestHoursValidity, formattedVaccineDaysValidity])
 	}
 
 	static var holderChooseQRCodeTypeOptionNegativeTestTitle: String {
