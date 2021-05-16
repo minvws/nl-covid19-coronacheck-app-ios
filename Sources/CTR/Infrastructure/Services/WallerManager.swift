@@ -36,19 +36,19 @@ class WalletManager: WalletManaging, Logging {
 
 		self.dataStoreManager = dataStoreManager
 
+		createMainWalletIfNotExists()
+	}
+
+	private func createMainWalletIfNotExists() {
+
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
-			if WalletModel.listAll(managedContext: context).isEmpty {
-				createWallet(context: context)
+			if WalletModel.findBy(label: WalletManager.walletName, managedContext: context) == nil {
+				WalletModel.create(label: WalletManager.walletName, managedContext: context)
+				dataStoreManager.save(context)
 			}
 		}
-	}
-
-	private func createWallet(context: NSManagedObjectContext) {
-
-		WalletModel.create(label: WalletManager.walletName, managedContext: context)
-		dataStoreManager.save(context)
 	}
 
 	/// Store an event group
@@ -58,7 +58,11 @@ class WalletManager: WalletManaging, Logging {
 	///   - signedResponse: the json of the signed response to store
 	///   - issuedAt: when was this event administered?
 	/// - Returns: optional event group
-	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> EventGroup? {
+	@discardableResult func storeEventGroup(
+		_ type: EventType,
+		providerIdentifier: String,
+		signedResponse: SignedResponse,
+		issuedAt: Date) -> EventGroup? {
 
 		var result: EventGroup?
 

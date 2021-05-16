@@ -12,6 +12,11 @@ class WalletModel {
 
 	static let entityName = "Wallet"
 
+	/// Create a wallet
+	/// - Parameters:
+	///   - label: the label of the wallet
+	///   - managedContext: the managed object context
+	/// - Returns: optional newly created wallet
 	@discardableResult class func create(
 		label: String,
 		managedContext: NSManagedObjectContext) -> Wallet? {
@@ -26,6 +31,9 @@ class WalletModel {
 		return nil
 	}
 
+	/// List all the wallets
+	/// - Parameter managedContext: the managed object context
+	/// - Returns: a list of all wallets
 	class func listAll(managedContext: NSManagedObjectContext) -> [Wallet] {
 		
 		let fetchRequest = NSFetchRequest<Wallet>(entityName: entityName)
@@ -37,6 +45,11 @@ class WalletModel {
 		return []
 	}
 
+	/// Find a wallet by its label
+	/// - Parameters:
+	///   - label: the label to search on
+	///   - managedContext: the managed object context
+	/// - Returns: the wallet with the label
 	class func findBy(label: String, managedContext: NSManagedObjectContext) -> Wallet? {
 
 		let fetchRequest = NSFetchRequest<Wallet>(entityName: entityName)

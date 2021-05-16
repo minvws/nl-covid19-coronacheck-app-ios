@@ -113,6 +113,7 @@ class WalletModelTests: XCTestCase {
 			// When
 			let eventGroup = EventGroupModel.create(
 				type: EventType.recovery,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -140,6 +141,7 @@ class WalletModelTests: XCTestCase {
 			let json = "test_removeEvent".data(using: .utf8)!
 			let eventGroup = EventGroupModel.create(
 				type: EventType.recovery,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -203,11 +205,58 @@ class WalletModelTests: XCTestCase {
 			expect(wallet.greenCards).to(haveCount(0))
 		}
 	}
+
+	func test_findBy_noResult() {
+
+		// Given
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			// When
+			let result = WalletModel.findBy(label: "testWallet", managedContext: context)
+
+			// Then
+			expect(result).to(beNil())
+		}
+	}
+
+	func test_findBy_withResult() {
+
+		// Given
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			let wallet = WalletModel.createTestWallet(managedContext: context)
+
+			// When
+			let result = WalletModel.findBy(label: "testWallet", managedContext: context)
+
+			// Then
+			expect(result).toNot(beNil())
+			expect(result) == wallet
+		}
+	}
+
+	func test_findBy_wrongWalletName() {
+
+		// Given
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			WalletModel.createTestWallet(managedContext: context)
+
+			// When
+			let result = WalletModel.findBy(label: "wrong wallet name", managedContext: context)
+
+			// Then
+			expect(result).to(beNil())
+		}
+	}
 }
 
 extension WalletModel {
 
-	class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
+	@discardableResult class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
 
 		return WalletModel.create(label: "testWallet", managedContext: managedContext)
 	}

@@ -34,6 +34,15 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
+	lazy var dateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.calendar = .current
+		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+		dateFormatter.dateFormat = "yyyy-MM-dd"
+
+		return dateFormatter
+	}()
+
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	private let prefetchingGroup = DispatchGroup()
@@ -50,7 +59,16 @@ class FetchEventsViewModel: Logging {
 		self.networkManager = networkManager
 		self.walletManager = walletManager
 
-		startFetching()
+		startFetching {
+			self.fetchHasEventInformation {
+				self.fetchVaccinationEvents {
+					self.storeVaccinationEvent { eventgroups in
+
+						self.logInfo("Finished vaccination flow: \(eventgroups)")
+					}
+				}
+			}
+		}
 	}
 
 	func backButtonTapped() {
@@ -59,6 +77,17 @@ class FetchEventsViewModel: Logging {
 	}
 
 	// MARK: Fetch access tokens and event providers
+
+	private func startFetching(_ onCompletion: @escaping () -> Void) {
+
+		fetchVaccinationAccessTokens()
+		fetchVaccinationEventProviders()
+
+		prefetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
+			self?.updateEventProvidersWithAccessTokens()
+			onCompletion()
+		}
+	}
 
 	private func fetchVaccinationAccessTokens() {
 
@@ -92,22 +121,6 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func startFetching() {
-
-		fetchVaccinationAccessTokens()
-		fetchVaccinationEventProviders()
-
-		prefetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
-			self?.finishedFetching()
-		}
-	}
-
-	private func finishedFetching() {
-
-		updateEventProvidersWithAccessTokens()
-		fetchHasEventInformationResponses()
-	}
-
 	private func updateEventProvidersWithAccessTokens() {
 
 		for index in 0 ..< eventProviders.count {
@@ -119,13 +132,14 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Fetch event information
 
-	private func fetchHasEventInformationResponses() {
+	private func fetchHasEventInformation(_ onCompletion: @escaping () -> Void) {
 
 		for provider in eventProviders {
 			fetchHasEventInformationResponse(from: provider)
 		}
 		hasEventInformationFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
-			self?.finishedHasEventInformationFetching()
+			self?.updateEventProvidersWithHasEventInformationResponse()
+			onCompletion()
 		}
 	}
 
@@ -151,12 +165,6 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func finishedHasEventInformationFetching() {
-
-		updateEventProvidersWithHasEventInformationResponse()
-		fetchVaccinationEvents()
-	}
-
 	private func updateEventProvidersWithHasEventInformationResponse() {
 
 		for index in 0 ..< eventProviders.count {
@@ -168,13 +176,13 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Fetch vaccination events
 
-	private func fetchVaccinationEvents() {
+	private func fetchVaccinationEvents(_ onCompletion: @escaping () -> Void) {
 
 		for provider in eventProviders {
 			fetchVaccinationEvent(from: provider)
 		}
-		eventFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
-			self?.finishedEventFetching()
+		eventFetchingGroup.notify(queue: DispatchQueue.main) {
+			onCompletion()
 		}
 	}
 
@@ -200,9 +208,9 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func finishedEventFetching() {
+	// MARK: Store vaccination events
 
-		logInfo("finishedEventFetching")
+	private func storeVaccinationEvent(_ onCompletion: @escaping ([EventGroup]) -> Void) {
 
 		var eventGroups = [EventGroup]()
 		for response in eventResponses where response.wrapper.status == .complete {
@@ -221,18 +229,7 @@ class FetchEventsViewModel: Logging {
 			   ) {
 				eventGroups.append(eventGroup)
 			}
-
-			// Notify
-			logInfo("Stored information \(eventGroups)")
 		}
+		onCompletion(eventGroups)
 	}
-
-	lazy var dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-
-		return dateFormatter
-	}()
 }
