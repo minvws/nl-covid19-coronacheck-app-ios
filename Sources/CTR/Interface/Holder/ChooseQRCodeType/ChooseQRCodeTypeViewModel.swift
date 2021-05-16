@@ -10,12 +10,6 @@ import UIKit
 
 class ChooseQRCodeTypeViewModel: Logging {
 
-	struct ButtonModel {
-		let title: String
-		let subtitle: String
-		let action: () -> Void
-	}
-
 	// MARK: - Bindable Strings
 
 	/// The navbar title
@@ -25,7 +19,7 @@ class ChooseQRCodeTypeViewModel: Logging {
 	@Bindable private(set) var message: String = .holderChooseQRCodeTypeMessage
 	private weak var coordinator: HolderCoordinatorDelegate?
 
-	@Bindable private(set) var buttonModels: [ButtonModel] = []
+	@Bindable private(set) var buttonModels: [ChooseQRCodeTypeViewController.ButtonModel] = []
 
 	// MARK: - Private State:
 

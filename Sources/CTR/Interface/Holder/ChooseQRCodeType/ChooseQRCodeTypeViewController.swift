@@ -10,6 +10,12 @@ import UIKit
 
 class ChooseQRCodeTypeViewController: BaseViewController {
 
+	struct ButtonModel {
+		let title: String
+		let subtitle: String
+		let action: () -> Void
+	}
+
 	private let viewModel: ChooseQRCodeTypeViewModel
 
 	let sceneView = ChooseQRCodeTypeView()
