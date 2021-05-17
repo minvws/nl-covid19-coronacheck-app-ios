@@ -150,6 +150,19 @@
 "holder.consent.item.3" = "In de QR-code staan minimale <b>persoonsgegevens</b>";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en geef toestemming voor het verwerken van mijn persoonsgegevens.";
 
+/* MARK: - Choose QR Code Type */
+"holder.chooseqrcodetype.title" = "Waar wil je een QR-code van maken?";
+"holder.chooseqrcodetype.message" = "Je kan een QR-code maken van een negatieve testuitslag (geldt %@) of van een vaccinatie (geldt %@).";
+"holder.chooseqrcodetype.option.negativetest.title" = "Een negatieve testuitslag";
+"holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
+"holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatiebewijs";
+"holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb mijn prik of prikken gehad";
+
+/* MARK: - About Making a QR */
+"holder.aboutmakingaqr.title" = "QR-code maken";
+"holder.aboutmakingaqr.header" = "Over het maken van een QR-code";
+"holder.aboutmakingaqr.body" = "<p>Je kan een QR-code maken van een negatieve testuitslag of van een vaccinatie. Dat is jouw bewijs.</p> <br/> <p><b>Meerdere bewijzen</b></p> <p>Je kunt meerdere bewijzen tegelijkertijd hebben. Zowel een vaccinatiebewijs als een testbewijs, bijvoorbeeld. Ook kun je een bewijs voor je kinderen maken.</p> <br/> <p><b>Ga je naar het buitenland?</b></p> <p>Als je een QR-code maakt, krijg je automatisch een QR-code voor binnen Nederland en een die in Europa bruikbaar is. Gebruik in het buitenland de Europese QR-code.</p> <br/> <p><b>Geldigheid in Europa</b></p> <p>Weten welke test- en vaccinatiebewijzen geldig zijn in het land dat je bezoekt? Bekijk <a href=\"https://coronacheck.nl/\">deze pagina !!TODO FIX URL HERE!!</a>. Zo voorkom je onverwachtse verrassingen ter plekke.</p>";
+
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
 "holder.dashboard.intro" = "Voor toegang tot een pilot-event heb je een negatieve testuitslag nodig. Daar maak je een QR-code van. Laat bij de ingang de QR-code én je identiteitsbewijs zien.";

@@ -17,14 +17,11 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to appointment
 	func navigateToAppointment()
 
-	/// Navigate to choose provider
-	func navigateToChooseProvider()
+	/// Navigate to About Making a QR
+	func navigateToAboutMakingAQR()
 
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
-
-	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken?)
 
 	/// Navigate to List Results Scene
 	func navigateToListResults()
@@ -42,7 +39,15 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - showBottomCloseButton: True if the bottom close button should be shown
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
 
-	func startVaccinationEventFlow()
+	func userWishesToCreateAQR()
+
+	func userWishesToCreateANegativeTestQR()
+
+	func userWishesToCreateAVaccinationQR()
+
+	func userDidScanRequestToken(requestToken: RequestToken)
+
+	func openUrl(_ url: URL, inApp: Bool)
 }
 // swiftlint:enable class_delegate_protocol
 
@@ -128,6 +133,41 @@ class HolderCoordinator: SharedCoordinator {
             return true
         }
     }
+
+	func startVaccinationEventFlow() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let vaccinationCoordinator = VaccinationCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			startChildCoordinator(vaccinationCoordinator)
+		}
+	}
+
+	/// Navigate to the token entry scene
+	func navigateToTokenEntry(_ token: RequestToken? = nil) {
+
+		let destination = TokenEntryViewController(
+			viewModel: TokenEntryViewModel(
+				coordinator: self,
+				proofManager: proofManager,
+				requestToken: token
+			)
+		)
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
+	// "Waar wil je een QR-code van maken?"
+	func navigateToChooseQRCodeType() {
+		let destination = ChooseQRCodeTypeViewController(
+			viewModel: ChooseQRCodeTypeViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -193,13 +233,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to choose provider
-	func navigateToChooseProvider() {
+	func navigateToAboutMakingAQR() {
 
-		let destination = ChooseProviderViewController(
-			viewModel: ChooseProviderViewModel(
-				coordinator: self,
-				openIdManager: openIdManager
-			)
+		let destination = AboutMakingAQRViewController(
+			viewModel: AboutMakingAQRViewModel(coordinator: self)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
@@ -213,20 +250,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to the token entry scene
-	func navigateToTokenEntry(_ token: RequestToken? = nil) {
-
-		let destination = TokenEntryViewController(
-			viewModel: TokenEntryViewModel(
-				coordinator: self,
-				proofManager: proofManager,
-				requestToken: token
-			)
-		)
-		
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
@@ -288,15 +311,20 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
 
-	func startVaccinationEventFlow() {
+	func userWishesToCreateANegativeTestQR() {
+		navigateToTokenEntry()
+	}
 
-		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
-			let vaccinationCoordinator = VaccinationCoordinator(
-				navigationController: navController,
-				delegate: self
-			)
-			startChildCoordinator(vaccinationCoordinator)
-		}
+	func userWishesToCreateAVaccinationQR() {
+		startVaccinationEventFlow()
+	}
+
+	func userWishesToCreateAQR() {
+		navigateToChooseQRCodeType()
+	}
+
+	func userDidScanRequestToken(requestToken: RequestToken) {
+		navigateToTokenEntry(requestToken)
 	}
 }
 
@@ -326,7 +354,7 @@ extension HolderCoordinator: MenuDelegate {
 				}
 				openUrl(faqUrl, inApp: true)
 
-			case .about :
+			case .about:
 				let destination = AboutViewController(
 					viewModel: AboutViewModel(
 						coordinator: self,
@@ -336,6 +364,13 @@ extension HolderCoordinator: MenuDelegate {
 				)
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
+
+			case .qrCodeMaken:
+				let destination = AboutMakingAQRViewController(
+					viewModel: AboutMakingAQRViewModel(coordinator: self)
+				)
+				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
 
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
@@ -368,6 +403,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
+			MenuItem(identifier: .qrCodeMaken, title: .holderAboutMakingAQRTitle),
 			MenuItem(identifier: .faq, title: .holderMenuFaq),
 			MenuItem(identifier: .about, title: .holderMenuAbout)
 		]

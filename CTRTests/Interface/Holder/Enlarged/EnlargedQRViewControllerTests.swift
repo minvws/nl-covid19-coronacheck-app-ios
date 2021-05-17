@@ -138,7 +138,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Method should be called")
 	}
 
 	/// Test the validity of the credential without credential
@@ -152,7 +152,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Method should be called")
 	}
 
 	/// Test the validity of the credential with valid credential while screencapturing

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseProviderView: ScrolledStackWithHeaderView {
+class AboutMakingAQRView: ScrolledStackWithHeaderView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -15,13 +15,12 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
-		static let messageLineHeight: CGFloat = 22
+		static let buttonHeight: CGFloat = 52
 
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let titleTopMargin: CGFloat = 34.0
-		static let messageTopMargin: CGFloat = 24.0
-		static let spacing: CGFloat = 24.0
+		static let contentTextTopMargin: CGFloat = 24.0
 		static let stackviewTopMargin: CGFloat = 32.0
 	}
 
@@ -31,22 +30,20 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	/// The message label
-	let messageLabel: Label = {
+	let contentTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		let view = TextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 
-	/// The stack view for the content
-	let innerStackView: UIStackView = {
+	/// the secondary button
+	let button: Button = {
 
-		let view = UIStackView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .vertical
-		view.alignment = .fill
-		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
-		return view
+		let button = Button(title: "Button", style: .primary)
+		button.titleLabel?.font = Theme.fonts.bodySemiBold
+		button.rounded = true
+		return button
 	}()
 
 	override func setupViews() {
@@ -62,8 +59,8 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
-		contentView.addSubview(messageLabel)
-		contentView.addSubview(innerStackView)
+		contentView.addSubview(contentTextView)
+		contentView.addSubview(button)
 	}
 
 	/// Setup the constraints
@@ -87,46 +84,47 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 				constant: -ViewTraits.margin
 			),
 			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
-				constant: -ViewTraits.messageTopMargin
+				equalTo: contentTextView.topAnchor,
+				constant: -ViewTraits.contentTextTopMargin
 			),
 
 			// Message
-			messageLabel.leadingAnchor.constraint(
+			contentTextView.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			messageLabel.trailingAnchor.constraint(
+			contentTextView.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
 
 			// StackView
-			innerStackView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
+			button.topAnchor.constraint(
+				equalTo: contentTextView.bottomAnchor,
 				constant: ViewTraits.stackviewTopMargin
 			),
-			innerStackView.leadingAnchor.constraint(
+			button.leadingAnchor.constraint(
 				equalTo: contentView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
-			innerStackView.trailingAnchor.constraint(
+			button.trailingAnchor.constraint(
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			innerStackView.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
+			button.bottomAnchor.constraint(
+				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
-			)
+			),
+			button.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight)
 		])
 	}
 
 	// MARK: Public Access
 
 	/// The title
-	var title: String? {
+	var header: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(
+			titleLabel.attributedText = header?.setLineHeight(
 				ViewTraits.titleLineHeight,
 				kerning: ViewTraits.titleKerning
 			)
@@ -134,9 +132,15 @@ class ChooseProviderView: ScrolledStackWithHeaderView {
 	}
 
 	/// The message
-	var message: String? {
+	var body: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			contentTextView.html(body)
+		}
+	}
+
+	var buttonTitle: String? {
+		didSet {
+			button.setTitle(buttonTitle, for: .normal)
 		}
 	}
 

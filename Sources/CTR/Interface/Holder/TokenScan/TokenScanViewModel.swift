@@ -55,7 +55,7 @@ class TokenScanViewModel: ScanPermissionViewModel {
 		do {
 			let object = try JSONDecoder().decode(RequestToken.self, from: Data(code.utf8))
 			self.logDebug("Response Object: \(object)")
-			theCoordinator?.navigateToTokenEntry(object)
+			theCoordinator?.userDidScanRequestToken(requestToken: object)
 		} catch {
 			self.logError("Token Scan Error: \(error)")
 			self.showError = true
