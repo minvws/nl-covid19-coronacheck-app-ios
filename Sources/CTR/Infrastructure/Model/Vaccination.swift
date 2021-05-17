@@ -131,8 +131,7 @@ struct Vaccination {
 			let maxIssuedAt: Date? = events
 				.compactMap { $0.vaccination.dateString }
 				.compactMap { dateFormatter.date(from: $0) }
-				.reduce(nil) {
-					(latestDateFound: Date?, nextDate: Date) -> Date? in
+				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
 					switch latestDateFound {
 						case let latestDateFound? where nextDate > latestDateFound:
