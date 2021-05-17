@@ -97,8 +97,10 @@ class FetchEventsViewController: BaseViewController {
 		displayContent(content)
 
 		// Remove previously added rows:
-		self.sceneView.eventStackView.subviews
+		sceneView.eventStackView.subviews
 			.forEach { $0.removeFromSuperview() }
+
+		sceneView.addSeparator()
 
 		// Add new rows:
 		rows
@@ -109,8 +111,7 @@ class FetchEventsViewController: BaseViewController {
 					command: rowModel.action
 				)
 			}
-			.forEach(self.sceneView.eventStackView.addArrangedSubview)
-
+			.forEach(self.sceneView.addVaccinationEventView)
 	}
 
 	private func setForNoEvents(_ content: Content) {
