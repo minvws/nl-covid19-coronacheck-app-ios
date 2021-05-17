@@ -24,40 +24,42 @@ class WalletModelTests: XCTestCase {
 	func test_createWallet() {
 
 		// Given
+		var wallet: Wallet?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			// When
-			let newWallet = WalletModel.create(
+			wallet = WalletModel.create(
 				label: "test_createWallet",
 				managedContext: context
 			)
-
-			// Then
-			expect(newWallet).toNot(beNil())
-			expect(newWallet?.label) == "test_createWallet"
-			expect(newWallet?.eventGroups).to(haveCount(0))
-			expect(newWallet?.greenCards).to(haveCount(0))
 		}
+
+		// Then
+		expect(wallet).toEventuallyNot(beNil())
+		expect(wallet?.label).toEventually(equal("test_createWallet"))
+		expect(wallet?.eventGroups).toEventually(haveCount(0))
+		expect(wallet?.greenCards).toEventually(haveCount(0))
 	}
 
 	func test_listWallets_noWallets() {
 
 		// Given
+		var listIsEmpty = false
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			// When
-			let list = WalletModel.listAll(managedContext: context)
-
-			// Then
-			expect(list).to(beEmpty())
+			listIsEmpty = WalletModel.listAll(managedContext: context).isEmpty
 		}
+		// Then
+		expect(listIsEmpty).toEventually(beTrue())
 	}
 
 	func test_listWallets_oneWallet() {
 
 		// Given
+		var list = [Wallet]()
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
@@ -67,18 +69,18 @@ class WalletModelTests: XCTestCase {
 			)
 
 			// When
-			let list = WalletModel.listAll(managedContext: context)
-
-			// Then
-			expect(list).toNot(beEmpty())
-			expect(list).to(haveCount(1))
-			expect(list.first?.label) == "test_listWallets_oneWallet"
+			list = WalletModel.listAll(managedContext: context)
 		}
+		// Then
+		expect(list).toEventuallyNot(beEmpty())
+		expect(list).toEventually(haveCount(1))
+		expect(list.first?.label).toEventually(equal("test_listWallets_oneWallet"))
 	}
 
 	func test_listWallets_twoWallets() {
 
 		// Given
+		var list = [Wallet]()
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
@@ -92,12 +94,11 @@ class WalletModelTests: XCTestCase {
 			)
 
 			// When
-			let list = WalletModel.listAll(managedContext: context)
-
-			// Then
-			expect(list).toNot(beEmpty())
-			expect(list).to(haveCount(2))
+			list = WalletModel.listAll(managedContext: context)
 		}
+		// Then
+		expect(list).toEventuallyNot(beEmpty())
+		expect(list).toEventually(haveCount(2))
 	}
 
 	func test_addEvent() {
@@ -113,6 +114,7 @@ class WalletModelTests: XCTestCase {
 			// When
 			let eventGroup = EventGroupModel.create(
 				type: EventType.recovery,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -140,6 +142,7 @@ class WalletModelTests: XCTestCase {
 			let json = "test_removeEvent".data(using: .utf8)!
 			let eventGroup = EventGroupModel.create(
 				type: EventType.recovery,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -203,11 +206,59 @@ class WalletModelTests: XCTestCase {
 			expect(wallet.greenCards).to(haveCount(0))
 		}
 	}
+
+	func test_findBy_noResult() {
+
+		// Given
+		var resultIsNil = false
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			// When
+			resultIsNil = WalletModel.findBy(label: "testWallet", managedContext: context) == nil
+		}
+		// Then
+		expect(resultIsNil).toEventually(beTrue())
+	}
+
+	func test_findBy_withResult() {
+
+		// Given
+		var wallet: Wallet?
+		var result: Wallet?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			wallet = WalletModel.createTestWallet(managedContext: context)
+
+			// When
+			result = WalletModel.findBy(label: "testWallet", managedContext: context)
+		}
+		// Then
+		expect(result).toEventuallyNot(beNil())
+		expect(result).toEventually(equal(wallet))
+	}
+
+	func test_findBy_wrongWalletName() {
+
+		// Given
+		var resultIsNil = false
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			WalletModel.createTestWallet(managedContext: context)
+
+			// When
+			resultIsNil = WalletModel.findBy(label: "wrong wallet name", managedContext: context) == nil
+		}
+		// Then
+		expect(resultIsNil).toEventually(beTrue())
+	}
 }
 
 extension WalletModel {
 
-	class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
+	@discardableResult class func createTestWallet(managedContext: NSManagedObjectContext) -> Wallet? {
 
 		return WalletModel.create(label: "testWallet", managedContext: managedContext)
 	}

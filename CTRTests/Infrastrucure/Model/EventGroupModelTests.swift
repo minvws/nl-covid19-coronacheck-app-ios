@@ -32,6 +32,7 @@ class EventGroupModelTests: XCTestCase {
 			// When
 			let eventGroup = EventGroupModel.create(
 				type: EventType.test,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -40,6 +41,7 @@ class EventGroupModelTests: XCTestCase {
 
 			// Then
 			expect(eventGroup?.type) == EventType.test.rawValue
+			expect(eventGroup?.providerIdentifier) == "CoronaCheck"
 			expect(eventGroup?.maxIssuedAt) == date
 			expect(eventGroup?.jsonData) == json
 			expect(eventGroup?.wallet) == wallet
@@ -59,6 +61,7 @@ class EventGroupModelTests: XCTestCase {
 			// When
 			EventGroupModel.create(
 				type: EventType.test,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
@@ -66,6 +69,7 @@ class EventGroupModelTests: XCTestCase {
 			)
 			EventGroupModel.create(
 				type: EventType.vaccination,
+				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: date,
 				jsonData: json,
 				wallet: wallet,
