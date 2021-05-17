@@ -78,7 +78,7 @@ class FetchEventsViewModel: Logging {
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
 					self.storeVaccinationEvent(eventResponses: eventResponses) { saved in
 						self.logInfo("Finished vaccination flow: \(saved)")
-					self.determineViewState(from: eventResponses)
+						self.determineViewState(from: eventResponses)
 					}
 				}
 			}
