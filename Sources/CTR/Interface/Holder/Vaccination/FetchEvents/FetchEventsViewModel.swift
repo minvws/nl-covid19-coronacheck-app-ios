@@ -329,14 +329,14 @@ class FetchEventsViewModel: Logging {
 			// Store the new vaccination events
 
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
-				let saved = walletManager.storeEventGroup(
+				success = success && walletManager.storeEventGroup(
 					.vaccination,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					signedResponse: response.signedResponse,
 					issuedAt: maxIssuedAt
 				)
-				if !saved {
-					success = false
+				if !success {
+					break
 				}
 			}
 		}

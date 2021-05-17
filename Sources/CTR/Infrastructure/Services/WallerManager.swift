@@ -64,7 +64,7 @@ class WalletManager: WalletManaging, Logging {
 		signedResponse: SignedResponse,
 		issuedAt: Date) -> Bool {
 
-		var saved = false
+		var success = true
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -80,10 +80,11 @@ class WalletManager: WalletManaging, Logging {
 					managedContext: context
 				)
 				dataStoreManager.save(context)
-				saved = true
+			} else {
+				success = false
 			}
 		}
-		return saved
+		return success
 	}
 
 	/// Remove any existing event groups for the type and provider identifier
