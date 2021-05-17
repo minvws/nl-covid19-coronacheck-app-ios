@@ -38,6 +38,15 @@ class FetchEventsViewModel: Logging {
 		return dateFormatter
 	}()
 
+	/// Formatter to print
+	lazy var printDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM"
+		return dateFormatter
+	}()
+
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	@Bindable private(set) var viewState: FetchEventsViewController.State
@@ -57,21 +66,19 @@ class FetchEventsViewModel: Logging {
 		self.walletManager = walletManager
 
 		viewState = .loading(
-			content: FetchEventsViewController.Content(title: .holderVaccinationLoadingTitle, subTitle: nil, actionTitle: nil, action: nil)
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationLoadingTitle,
+				subTitle: nil,
+				actionTitle: nil,
+				action: nil
+			)
 		)
-
-		//						self.logInfo("Finished vaccination flow: \(eventGroups)")
-		//						if eventGroups.isEmpty {
-		//							self.setEmptyEventsState()
-		//						} else {
-		//							self.setListEventsState(eventGroups)
-		//						}
-
 		startFetchingEventProvidersWithAccessTokens { eventProviders in
 			self.fetchHasEventInformation(eventProviders: eventProviders) { eventProvidersWithEventInformation in
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
-					self.storeVaccinationEvent(eventResponses: eventResponses) { eventgroups in
-						self.logInfo("Finished vaccination flow: \(eventgroups)")
+					self.storeVaccinationEvent(eventResponses: eventResponses) { eventGroups in
+						self.logInfo("Finished vaccination flow: \(eventGroups)")
+						self.determineViewState(from: eventResponses)
 					}
 				}
 			}
@@ -84,6 +91,25 @@ class FetchEventsViewModel: Logging {
 	}
 
 	// MARK: State Helpers
+
+	private func determineViewState(
+		from eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) {
+
+		var listDataSource = [(Vaccination.Identity, Vaccination.Event)]()
+
+		for eventResponse in eventResponses {
+			let identity = eventResponse.wrapper.identity
+			for event in eventResponse.wrapper.events {
+				listDataSource.append((identity, event))
+			}
+		}
+
+		if listDataSource.isEmpty {
+			self.setEmptyEventsState()
+		} else {
+			self.setListEventsState(listDataSource)
+		}
+	}
 
 	private func setEmptyEventsState() {
 
@@ -99,21 +125,29 @@ class FetchEventsViewModel: Logging {
 		)
 	}
 
-	private func setListEventsState(_ eventgroups: [EventGroup]) {
+	private func setListEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) {
 
 		var rows = [FetchEventsViewController.Row]()
-		//		var t = 1
-		//		for eventGroup in eventgroups {
-		//
-		//
-		//			rows.append(
-		//				FetchEventsViewController.Row(
-		//					title: String(format: .holderVaccinationElementTitle, "\(index)"),
-		//					subTitle: String(format: .holderVaccinationElementSubTitle, "\(index)"),
-		//					action: nil
-		//				)
-		//			)
-		//		}
+
+		for (index, dataRow) in dataSource.enumerated() {
+
+			var formattedDate: String = ""
+
+			if let dateString = dataRow.event.vaccination.dateString,
+			   let date = dateFormatter.date(from: dateString) {
+				formattedDate = printDateFormatter.string(from: date)
+			}
+
+			rows.append(
+				FetchEventsViewController.Row(
+					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
+					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
+					action: { [weak self] in
+						self?.logDebug("Tapped on \(dataRow.event.unique)")
+					}
+				)
+			)
+		}
 
 		viewState = .listEvents(
 			content: FetchEventsViewController.Content(

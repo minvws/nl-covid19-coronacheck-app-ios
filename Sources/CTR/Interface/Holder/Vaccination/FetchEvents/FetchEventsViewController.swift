@@ -96,11 +96,11 @@ class FetchEventsViewController: BaseViewController {
 		sceneView.spinner.isHidden = true
 		displayContent(content)
 
-		// Remove previously added buttons:
+		// Remove previously added rows:
 		self.sceneView.eventStackView.subviews
 			.forEach { $0.removeFromSuperview() }
 
-		// Add new buttons:
+		// Add new rows:
 		rows
 			.map { rowModel -> VaccinationEventView in
 				VaccinationEventView.makeView(
