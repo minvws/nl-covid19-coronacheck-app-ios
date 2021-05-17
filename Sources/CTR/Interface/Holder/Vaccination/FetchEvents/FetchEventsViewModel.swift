@@ -51,8 +51,8 @@ class FetchEventsViewModel: Logging {
 		startFetchingEventProvidersWithAccessTokens { eventProviders in
 			self.fetchHasEventInformation(eventProviders: eventProviders) { eventProvidersWithEventInformation in
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
-					self.storeVaccinationEvent(eventResponses: eventResponses) { eventgroups in
-						self.logInfo("Finished vaccination flow: \(eventgroups)")
+					self.storeVaccinationEvent(eventResponses: eventResponses) { saved in
+						self.logInfo("Finished vaccination flow: \(saved)")
 					}
 				}
 			}
@@ -211,9 +211,9 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Store vaccination events
 
-	private func storeVaccinationEvent(eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)], onCompletion: @escaping ([EventGroup]) -> Void) {
+	private func storeVaccinationEvent(eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)], onCompletion: @escaping (Bool) -> Void) {
 
-		var eventGroups = [EventGroup]()
+		var success = true
 		for response in eventResponses where response.wrapper.status == .complete {
 
 			// Remove any existing vaccination events for the provider
@@ -221,16 +221,18 @@ class FetchEventsViewModel: Logging {
 
 			// Store the new vaccination events
 
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter),
-			   let eventGroup = walletManager.storeEventGroup(
-				.vaccination,
-				providerIdentifier: response.wrapper.providerIdentifier,
-				signedResponse: response.signedResponse,
-				issuedAt: maxIssuedAt
-			   ) {
-				eventGroups.append(eventGroup)
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
+				let saved = walletManager.storeEventGroup(
+					.vaccination,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					signedResponse: response.signedResponse,
+					issuedAt: maxIssuedAt
+				)
+				if !saved {
+					success = false
+				}
 			}
 		}
-		onCompletion(eventGroups)
+		onCompletion(success)
 	}
 }

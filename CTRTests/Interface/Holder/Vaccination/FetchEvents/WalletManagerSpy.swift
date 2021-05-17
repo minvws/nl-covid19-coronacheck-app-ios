@@ -14,9 +14,9 @@ class WalletManagerSpy: WalletManaging {
 	var invokedStoreEventGroupCount = 0
 	var invokedStoreEventGroupParameters: (type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)?
 	var invokedStoreEventGroupParametersList = [(type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)]()
-	var stubbedStoreEventGroupResult: EventGroup!
+	var stubbedStoreEventGroupResult: Bool! = false
 
-	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> EventGroup? {
+	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
 		invokedStoreEventGroupParameters = (type, providerIdentifier, signedResponse, issuedAt)

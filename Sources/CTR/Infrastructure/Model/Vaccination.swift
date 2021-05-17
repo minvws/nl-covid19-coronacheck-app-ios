@@ -128,20 +128,21 @@ struct Vaccination {
 
 		func getMaxIssuedAt(_ dateFormatter: DateFormatter) -> Date? {
 
-			var maxIssuedAt: Date?
+			let maxIssuedAt: Date? = events
+				.compactMap { $0.vaccination.dateString }
+				.compactMap { dateFormatter.date(from: $0) }
+				.reduce(nil) {
+					(latestDateFound: Date?, nextDate: Date) -> Date? in
 
-			for event in events {
-				if let dateString = event.vaccination.dateString,
-				   let date = dateFormatter.date(from: dateString) {
-					if maxIssuedAt == nil {
-						maxIssuedAt = date
-					} else {
-						if date > maxIssuedAt! {
-							maxIssuedAt = date
-						}
+					switch latestDateFound {
+						case let latestDateFound? where nextDate > latestDateFound:
+							return nextDate
+						case .none:
+							return nextDate
+						default:
+							return latestDateFound
 					}
 				}
-			}
 
 			return maxIssuedAt
 		}
