@@ -13,17 +13,6 @@ class FetchEventsViewModel: Logging {
 
 	// Resulting token from DigiD VWS
 	private var tvsToken: String
-
-	// List of tokens for the vaccination event providers
-	private var accessTokens = [Vaccination.AccessToken]()
-
-	/// List of event providers
-	private var eventProviders = [Vaccination.EventProvider]()
-
-	private var eventInformationAvailableResults = [Vaccination.EventInformationAvailable]()
-
-	private var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]()
-
 	private var networkManager: NetworkManaging
 	private var walletManager: WalletManaging
 
@@ -59,11 +48,10 @@ class FetchEventsViewModel: Logging {
 		self.networkManager = networkManager
 		self.walletManager = walletManager
 
-		startFetching {
-			self.fetchHasEventInformation {
-				self.fetchVaccinationEvents {
-					self.storeVaccinationEvent { eventgroups in
-
+		startFetchingEventProvidersWithAccessTokens { eventProviders in
+			self.fetchHasEventInformation(eventProviders: eventProviders) { eventProvidersWithEventInformation in
+				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
+					self.storeVaccinationEvent(eventResponses: eventResponses) { eventgroups in
 						self.logInfo("Finished vaccination flow: \(eventgroups)")
 					}
 				}
@@ -78,72 +66,95 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Fetch access tokens and event providers
 
-	private func startFetching(_ onCompletion: @escaping () -> Void) {
+	private func startFetchingEventProvidersWithAccessTokens(_ onCompletion: @escaping ([Vaccination.EventProvider]) -> Void) {
 
-		fetchVaccinationAccessTokens()
-		fetchVaccinationEventProviders()
+		var accessTokenResult: Result<[Vaccination.AccessToken], NetworkError>?
+		fetchVaccinationAccessTokens { result in
+			accessTokenResult = result
+		}
 
-		prefetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
-			self?.updateEventProvidersWithAccessTokens()
-			onCompletion()
+		var vaccinationEventProvidersResult: Result<[Vaccination.EventProvider], NetworkError>?
+		fetchVaccinationEventProviders { result in
+			vaccinationEventProvidersResult = result
+		}
+
+		prefetchingGroup.notify(queue: DispatchQueue.main) {
+
+			switch (accessTokenResult, vaccinationEventProvidersResult) {
+				case (.success(let accessTokens), .success(let eventProviders)):
+					var eventProviders = eventProviders // mutable
+					for index in 0 ..< eventProviders.count {
+						for accessToken in accessTokens where eventProviders[index].identifier == accessToken.providerIdentifier {
+							eventProviders[index].accessToken = accessToken
+						}
+					}
+					onCompletion(eventProviders)
+
+				case (.failure(let error), _):
+					self.logError("Error getting access tokens: \(error)")
+
+				case (_, .failure(let error)):
+					self.logError("Error getting event providers: \(error)")
+
+				default:
+					// this should not happen due to the prefetching group
+					self.logError("Unexpected: did not receive response from accessToken or eventProviders call")
+			}
 		}
 	}
 
-	private func fetchVaccinationAccessTokens() {
+	private func fetchVaccinationAccessTokens(completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
 
 		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
 		networkManager.fetchVaccinationAccessTokens(tvsToken: tvsToken) { [weak self] result in
-			switch result {
-				case let .failure(error):
-					self?.logError("Error getting access tokens: \(error)")
-				case let .success(tokens):
-					self?.accessTokens = tokens
-			}
+			completion(result)
 			self?.progressIndicationCounter.decrement()
 			self?.prefetchingGroup.leave()
 		}
 	}
 
-	private func fetchVaccinationEventProviders() {
+	private func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
 
 		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
 		networkManager.fetchVaccinationEventProviders { [weak self] result in
-			switch result {
-				case let .failure(error):
-					self?.logError("Error getting event providers: \(error)")
-				case let .success(providers):
-					self?.eventProviders = providers
-			}
+			completion(result)
 			self?.progressIndicationCounter.decrement()
 			self?.prefetchingGroup.leave()
-		}
-	}
-
-	private func updateEventProvidersWithAccessTokens() {
-
-		for index in 0 ..< eventProviders.count {
-			for accessToken in accessTokens where eventProviders[index].identifier == accessToken.providerIdentifier {
-				eventProviders[index].accessToken = accessToken
-			}
 		}
 	}
 
 	// MARK: Fetch event information
 
-	private func fetchHasEventInformation(_ onCompletion: @escaping () -> Void) {
+	private func fetchHasEventInformation(eventProviders: [Vaccination.EventProvider], onCompletion: @escaping ([Vaccination.EventProvider]) -> Void) {
+
+		var eventInformationAvailableResults = [Vaccination.EventInformationAvailable]()
 
 		for provider in eventProviders {
-			fetchHasEventInformationResponse(from: provider)
+			fetchHasEventInformationResponse(from: provider) { result in
+				switch result {
+					case let .failure(error):
+						self.logError("Error getting unomi: \(error)")
+					case let .success(response):
+						eventInformationAvailableResults.append(response)
+				}
+			}
 		}
-		hasEventInformationFetchingGroup.notify(queue: DispatchQueue.main) { [weak self] in
-			self?.updateEventProvidersWithHasEventInformationResponse()
-			onCompletion()
+
+		hasEventInformationFetchingGroup.notify(queue: DispatchQueue.main) {
+			var outputEventProviders = eventProviders
+
+			for index in 0 ..< eventProviders.count {
+				for response in eventInformationAvailableResults where eventProviders[index].identifier == response.providerIdentifier {
+					outputEventProviders[index].eventInformationAvailable = response
+				}
+			}
+			onCompletion(outputEventProviders)
 		}
 	}
 
-	private func fetchHasEventInformationResponse(from provider: Vaccination.EventProvider) {
+	private func fetchHasEventInformationResponse(from provider: Vaccination.EventProvider, completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
 
 		if let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") {
 
@@ -153,40 +164,36 @@ class FetchEventsViewModel: Logging {
 			hasEventInformationFetchingGroup.enter()
 			networkManager.fetchVaccinationEventInformation(provider: provider) { [weak self] result in
 				// Result<Vaccination.EventInformationAvailable, NetworkError>
-				switch result {
-					case let .failure(error):
-						self?.logError("Error getting unomi: \(error)")
-					case let .success(response):
-						self?.eventInformationAvailableResults.append(response)
-				}
+				completion(result)
 				self?.progressIndicationCounter.decrement()
 				self?.hasEventInformationFetchingGroup.leave()
 			}
 		}
 	}
 
-	private func updateEventProvidersWithHasEventInformationResponse() {
-
-		for index in 0 ..< eventProviders.count {
-			for response in eventInformationAvailableResults where eventProviders[index].identifier == response.providerIdentifier {
-				eventProviders[index].eventInformationAvailable = response
-			}
-		}
-	}
-
 	// MARK: Fetch vaccination events
 
-	private func fetchVaccinationEvents(_ onCompletion: @escaping () -> Void) {
+	private func fetchVaccinationEvents(eventProviders: [Vaccination.EventProvider], onCompletion: @escaping ( [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> Void) {
+
+		var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]()
 
 		for provider in eventProviders {
-			fetchVaccinationEvent(from: provider)
+			fetchVaccinationEvent(from: provider) { result in
+				switch result {
+					case let .failure(error):
+						self.logError("Error getting event: \(error)")
+					case let .success(response):
+						eventResponses.append(response)
+				}
+			}
 		}
+
 		eventFetchingGroup.notify(queue: DispatchQueue.main) {
-			onCompletion()
+			onCompletion(eventResponses)
 		}
 	}
 
-	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider) {
+	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider, completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
 		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
@@ -195,13 +202,7 @@ class FetchEventsViewModel: Logging {
 			eventFetchingGroup.enter()
 			networkManager.fetchVaccinationEvents(provider: provider) { [weak self] result in
 				// (Result<(TestResultWrapper, SignedResponse), NetworkError>
-
-				switch result {
-					case let .failure(error):
-						self?.logError("Error getting event: \(error)")
-					case let .success(response):
-						self?.eventResponses.append(response)
-				}
+				completion(result)
 				self?.progressIndicationCounter.decrement()
 				self?.eventFetchingGroup.leave()
 			}
@@ -210,7 +211,7 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Store vaccination events
 
-	private func storeVaccinationEvent(_ onCompletion: @escaping ([EventGroup]) -> Void) {
+	private func storeVaccinationEvent(eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)], onCompletion: @escaping ([EventGroup]) -> Void) {
 
 		var eventGroups = [EventGroup]()
 		for response in eventResponses where response.wrapper.status == .complete {
