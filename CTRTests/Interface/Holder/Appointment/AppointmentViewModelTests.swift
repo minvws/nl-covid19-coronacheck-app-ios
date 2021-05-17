@@ -38,7 +38,7 @@ class AppointmentViewModelTests: XCTestCase {
 		sut?.openUrl(url)
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.openUrlCalled, "Delegate should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedOpenUrl, "Delegate should be called")
 	}
 
 	/// Test the tap on the button
@@ -50,6 +50,6 @@ class AppointmentViewModelTests: XCTestCase {
 		sut?.buttonTapped()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.openUrlCalled, "Delegate should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedOpenUrl, "Delegate should be called")
 	}
 }

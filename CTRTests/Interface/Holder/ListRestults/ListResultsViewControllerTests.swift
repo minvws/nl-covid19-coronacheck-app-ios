@@ -218,7 +218,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Delegate method should be called")
 	}
 
 	func testNextButtonWithItems() {
@@ -231,7 +231,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertFalse(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should not be called")
+		XCTAssertFalse(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Delegate method should not be called")
 		XCTAssertTrue(proofManagingSpy.invokedFetchIssuerPublicKeys, "Step 1 should be executed")
 	}
 
@@ -245,7 +245,7 @@ class ListResultsViewControllerTests: XCTestCase {
 		sut?.sceneView.resultView.disclaimerButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateToAboutTestResultCalled, "Delegate method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateToAboutTestResult, "Delegate method should be called")
 	}
 
 	func testDismiss() {
@@ -256,6 +256,6 @@ class ListResultsViewControllerTests: XCTestCase {
 		sut?.closeButtonTapped()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.navigateBackToStartCalled, "Delegate method should be called")
+		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Delegate method should be called")
 	}
 }

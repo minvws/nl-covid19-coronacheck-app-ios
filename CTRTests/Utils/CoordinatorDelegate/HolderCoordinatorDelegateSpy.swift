@@ -10,76 +10,127 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var navigateToAppointmentCalled = false
-	var navigateToEnlargedQRCalled = false
-	var navigateToChooseProviderCalled = false
-	var navigateToTokenScanCalled = false
-	var navigateToTokenEntryCalled = false
-	var navigateToListResultsCalled = false
-	var navigateToAboutTestResultCalled = false
-	var navigateBackToStartCalled = false
-	var presentInformationPageCalled = false
-	var dismissCalled = false
-	var openUrlCalled = false
-	var startVaccinationEventFlowCalled = false
+	var invokedNavigateToEnlargedQR = false
+	var invokedNavigateToEnlargedQRCount = 0
 
 	func navigateToEnlargedQR() {
-
-		navigateToEnlargedQRCalled = true
+		invokedNavigateToEnlargedQR = true
+		invokedNavigateToEnlargedQRCount += 1
 	}
+
+	var invokedNavigateToAppointment = false
+	var invokedNavigateToAppointmentCount = 0
 
 	func navigateToAppointment() {
-
-		navigateToAppointmentCalled = true
+		invokedNavigateToAppointment = true
+		invokedNavigateToAppointmentCount += 1
 	}
 
-	func navigateToChooseProvider() {
+	var invokedNavigateToAboutMakingAQR = false
+	var invokedNavigateToAboutMakingAQRCount = 0
 
-		navigateToChooseProviderCalled = true
+	func navigateToAboutMakingAQR() {
+		invokedNavigateToAboutMakingAQR = true
+		invokedNavigateToAboutMakingAQRCount += 1
 	}
+
+	var invokedNavigateToTokenScan = false
+	var invokedNavigateToTokenScanCount = 0
 
 	func navigateToTokenScan() {
-
-		navigateToTokenScanCalled = true
+		invokedNavigateToTokenScan = true
+		invokedNavigateToTokenScanCount += 1
 	}
 
-	func navigateToTokenEntry(_ token: RequestToken?) {
-
-		navigateToTokenEntryCalled = true
-	}
+	var invokedNavigateToListResults = false
+	var invokedNavigateToListResultsCount = 0
 
 	func navigateToListResults() {
-
-		navigateToListResultsCalled = true
+		invokedNavigateToListResults = true
+		invokedNavigateToListResultsCount += 1
 	}
+
+	var invokedNavigateToAboutTestResult = false
+	var invokedNavigateToAboutTestResultCount = 0
 
 	func navigateToAboutTestResult() {
-
-		navigateToAboutTestResultCalled = true
+		invokedNavigateToAboutTestResult = true
+		invokedNavigateToAboutTestResultCount += 1
 	}
+
+	var invokedNavigateBackToStart = false
+	var invokedNavigateBackToStartCount = 0
 
 	func navigateBackToStart() {
-
-		navigateBackToStartCalled = true
+		invokedNavigateBackToStart = true
+		invokedNavigateBackToStartCount += 1
 	}
+
+	var invokedPresentInformationPage = false
+	var invokedPresentInformationPageCount = 0
+	var invokedPresentInformationPageParameters: (title: String, body: String, showBottomCloseButton: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, showBottomCloseButton: Bool)]()
 
 	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
-
-		presentInformationPageCalled = true
+		invokedPresentInformationPage = true
+		invokedPresentInformationPageCount += 1
+		invokedPresentInformationPageParameters = (title, body, showBottomCloseButton)
+		invokedPresentInformationPageParametersList.append((title, body, showBottomCloseButton))
 	}
 
-	func dismiss() {
+	var invokedUserWishesToCreateAQR = false
+	var invokedUserWishesToCreateAQRCount = 0
 
-		dismissCalled = true
+	func userWishesToCreateAQR() {
+		invokedUserWishesToCreateAQR = true
+		invokedUserWishesToCreateAQRCount += 1
 	}
+
+	var invokedUserWishesToCreateANegativeTestQR = false
+	var invokedUserWishesToCreateANegativeTestQRCount = 0
+
+	func userWishesToCreateANegativeTestQR() {
+		invokedUserWishesToCreateANegativeTestQR = true
+		invokedUserWishesToCreateANegativeTestQRCount += 1
+	}
+
+	var invokedUserWishesToCreateAVaccinationQR = false
+	var invokedUserWishesToCreateAVaccinationQRCount = 0
+
+	func userWishesToCreateAVaccinationQR() {
+		invokedUserWishesToCreateAVaccinationQR = true
+		invokedUserWishesToCreateAVaccinationQRCount += 1
+	}
+
+	var invokedUserDidScanRequestToken = false
+	var invokedUserDidScanRequestTokenCount = 0
+	var invokedUserDidScanRequestTokenParameters: (requestToken: RequestToken, Void)?
+	var invokedUserDidScanRequestTokenParametersList = [(requestToken: RequestToken, Void)]()
+
+	func userDidScanRequestToken(requestToken: RequestToken) {
+		invokedUserDidScanRequestToken = true
+		invokedUserDidScanRequestTokenCount += 1
+		invokedUserDidScanRequestTokenParameters = (requestToken, ())
+		invokedUserDidScanRequestTokenParametersList.append((requestToken, ()))
+	}
+
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
+	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
 
 	func openUrl(_ url: URL, inApp: Bool) {
-
-		openUrlCalled = true
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, inApp)
+		invokedOpenUrlParametersList.append((url, inApp))
 	}
 
-	func startVaccinationEventFlow() {
+	var invokedDismiss = false
+	var invokedDismissCount = 0
 
-		startVaccinationEventFlowCalled = true
+	func dismiss() {
+		invokedDismiss = true
+		invokedDismissCount += 1
 	}
 }

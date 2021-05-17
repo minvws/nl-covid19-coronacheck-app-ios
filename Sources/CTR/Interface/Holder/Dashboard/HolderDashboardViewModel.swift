@@ -180,14 +180,14 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			case .appointment:
 				coordinator?.navigateToAppointment()
 			case .create:
-				coordinator?.navigateToChooseProvider()
+				coordinator?.navigateToAboutMakingAQR()
 			case .qrcode:
 				coordinator?.navigateToEnlargedQR()
 		}
 	}
 
 	@objc func addProofTapped() {
-		coordinator?.navigateToChooseProvider()
+		coordinator?.navigateToAboutMakingAQR()
 	}
 
 	/// Check the QR Validity
