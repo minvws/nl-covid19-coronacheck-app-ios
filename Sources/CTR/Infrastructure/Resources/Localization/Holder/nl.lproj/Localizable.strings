@@ -268,9 +268,9 @@
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
 "holder.vaccination.list.message" = "Je kan een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
-"holder.vaccination.list.actiontitle" = "Maak QR-code";
+"holder.vaccination.list.action" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Vaccinatiedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties op kunnen halen";
 "holder.vaccination.nolist.message" = "<p>Er zijn geen vaccinatiegegevens beschikbaar.</p><p>Als jouw huisarts niet is aangesloten op de GGD kunnen wij op dit moment geen vaccinatie ophalen. Dit kan over een maand.</p>";
-"holder.vaccination.nolist.actiontitle" = "Naar Mijn Overzicht";
+"holder.vaccination.nolist.action" = "Naar Mijn Overzicht";

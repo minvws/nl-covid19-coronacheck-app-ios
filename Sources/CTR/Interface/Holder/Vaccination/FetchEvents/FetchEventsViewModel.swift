@@ -9,7 +9,7 @@ import Foundation
 
 enum FetchEventsViewState {
 	case loading
-	case showEvents
+	case listEvents
 	case noEvents
 }
 
@@ -73,16 +73,14 @@ class FetchEventsViewModel: Logging {
 		startFetching {
 			self.fetchHasEventInformation {
 				self.fetchVaccinationEvents {
-					self.storeVaccinationEvent { eventGroups in
+					self.storeVaccinationEvent {
 
-						self.logInfo("Finished vaccination flow: \(eventGroups)")
+//						self.logInfo("Finished vaccination flow: \(eventGroups)")
 //						if eventGroups.isEmpty {
-						self.setEmptyState()
+//							self.setEmptyEventsState()
 //						} else {
-//
+//							self.setListEventsState(eventGroups)
 //						}
-
-//						self.viewState = eventGroups.isEmpty ? .noEvents( : .showEvents(rows:[])
 					}
 				}
 			}
@@ -96,7 +94,7 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: State Helpers
 
-	private func setEmptyState() {
+	private func setEmptyEventsState() {
 
 		viewState = .emptyEvents(
 			content: FetchEventsViewController.Content(
@@ -110,6 +108,34 @@ class FetchEventsViewModel: Logging {
 		)
 	}
 
+	private func setListEventsState(_ eventgroups: [EventGroup]) {
+
+		var rows = [FetchEventsViewController.Row]()
+//		var t = 1
+//		for eventGroup in eventgroups {
+//
+//
+//			rows.append(
+//				FetchEventsViewController.Row(
+//					title: String(format: .holderVaccinationElementTitle, "\(index)"),
+//					subTitle: String(format: .holderVaccinationElementSubTitle, "\(index)"),
+//					action: nil
+//				)
+//			)
+//		}
+
+		viewState = .listEvents(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationListTitle,
+				subTitle: .holderVaccinationListMessage,
+				actionTitle: .holderVaccinationListActionTitle,
+				action: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			),
+			rows: rows
+		)
+	}
 
 	// MARK: Fetch access tokens and event providers
 
@@ -213,15 +239,21 @@ class FetchEventsViewModel: Logging {
 
 	private func fetchVaccinationEvents(_ onCompletion: @escaping () -> Void) {
 
+		var events = [Vaccination.Event]()
+
 		for provider in eventProviders {
-			fetchVaccinationEvent(from: provider)
+			fetchVaccinationEvent(from: provider) { result in
+				events.append(result)
+			}
 		}
 		eventFetchingGroup.notify(queue: DispatchQueue.main) {
 			onCompletion()
 		}
 	}
 
-	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider) {
+	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider, onCompletion: ([Vaccination.Event]) -> Void) {
+
+		var events = [Vaccination.Event]()
 
 		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
 		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
@@ -236,18 +268,19 @@ class FetchEventsViewModel: Logging {
 						self?.logError("Error getting event: \(error)")
 					case let .success(response):
 						self?.eventResponses.append(response)
+						events = response.0.events
 				}
 				self?.progressIndicationCounter.decrement()
 				self?.eventFetchingGroup.leave()
+				onCompletion(events)
 			}
 		}
 	}
 
 	// MARK: Store vaccination events
 
-	private func storeVaccinationEvent(_ onCompletion: @escaping ([EventGroup]) -> Void) {
+	private func storeVaccinationEvent(_ onCompletion: @escaping () -> Void) {
 
-		var eventGroups = [EventGroup]()
 		for response in eventResponses where response.wrapper.status == .complete {
 
 			// Remove any existing vaccination events for the provider
@@ -255,16 +288,15 @@ class FetchEventsViewModel: Logging {
 
 			// Store the new vaccination events
 
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter),
-			   let eventGroup = walletManager.storeEventGroup(
-				.vaccination,
-				providerIdentifier: response.wrapper.providerIdentifier,
-				signedResponse: response.signedResponse,
-				issuedAt: maxIssuedAt
-			   ) {
-				eventGroups.append(eventGroup)
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
+				walletManager.storeEventGroup(
+					.vaccination,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					signedResponse: response.signedResponse,
+					issuedAt: maxIssuedAt
+				)
 			}
 		}
-		onCompletion(eventGroups)
+		onCompletion()
 	}
 }

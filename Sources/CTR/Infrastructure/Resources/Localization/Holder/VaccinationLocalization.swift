@@ -41,7 +41,7 @@ extension String {
 
 	static var holderVaccinationListActionTitle: String {
 
-		return Localization.string(for: "holder.vaccination.list.actiontitle")
+		return Localization.string(for: "holder.vaccination.list.action")
 	}
 
 	static var holderVaccinationElementTitle: String {
@@ -66,6 +66,6 @@ extension String {
 
 	static var holderVaccinationNoListActionTitle: String {
 
-		return Localization.string(for: "holder.vaccination.nolist.actiontitle")
+		return Localization.string(for: "holder.vaccination.nolist.action")
 	}
 }

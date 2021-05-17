@@ -24,7 +24,7 @@ class FetchEventsViewController: BaseViewController {
 
 	struct Row {
 		let title: String
-		let subTitle: String?
+		let subTitle: String
 		let action: (() -> Void)?
 	}
 
@@ -75,7 +75,7 @@ class FetchEventsViewController: BaseViewController {
 				case let .loading(content):
 					self?.setForLoadingState(content)
 				case let .listEvents(content, rows):
-					self?.setForShowEvents(content, rows: rows)
+					self?.setForListEvents(content, rows: rows)
 			}
 		}
 	}
@@ -91,10 +91,26 @@ class FetchEventsViewController: BaseViewController {
 		displayContent(content)
 	}
 
-	private func setForShowEvents(_ content: Content, rows: [Row]) {
+	private func setForListEvents(_ content: Content, rows: [Row]) {
 
 		sceneView.spinner.isHidden = true
 		displayContent(content)
+
+		// Remove previously added buttons:
+		self.sceneView.eventStackView.subviews
+			.forEach { $0.removeFromSuperview() }
+
+		// Add new buttons:
+		rows
+			.map { rowModel -> VaccinationEventView in
+				VaccinationEventView.makeView(
+					title: rowModel.title,
+					subTitle: rowModel.subTitle,
+					command: rowModel.action
+				)
+			}
+			.forEach(self.sceneView.eventStackView.addArrangedSubview)
+
 	}
 
 	private func setForNoEvents(_ content: Content) {
@@ -124,5 +140,27 @@ class FetchEventsViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = {
 			content.action?()
 		}
+	}
+}
+
+extension VaccinationEventView {
+
+	/// Create a vaccination event view
+	/// - Parameters:
+	///   - title: the title of the view
+	///   - subTitle: the sub title of the view
+	///   - command: the command to execute when tapped
+	/// - Returns: a vacation event view
+	fileprivate static func makeView(
+		title: String,
+		subTitle: String,
+		command: (() -> Void)? ) -> VaccinationEventView {
+
+		let view = VaccinationEventView()
+		view.isUserInteractionEnabled = true
+		view.title = title
+		view.subTitle = subTitle
+		view.disclaimerButtonTappedCommand = command
+		return view
 	}
 }

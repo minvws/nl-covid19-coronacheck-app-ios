@@ -17,7 +17,7 @@ protocol WalletManaging {
 	///   - signedResponse: the json of the signed response to store
 	///   - issuedAt: when was this event administered?
 	/// - Returns: optional event group
-	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> EventGroup?
+	@discardableResult func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> EventGroup?
 
 	/// Remove any existing event groups for the type and provider identifier
 	/// - Parameters:

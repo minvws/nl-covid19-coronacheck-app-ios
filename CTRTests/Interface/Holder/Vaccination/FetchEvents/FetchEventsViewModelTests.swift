@@ -42,33 +42,6 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_happyFlow_willStoreEventGroup() {
 
 		// Given
-		let accessToken = Vaccination.AccessToken(providerIdentifier: "CC", unomiAccessToken: "unomi test", eventAccessToken: "event test")
-		let provider = Vaccination.EventProvider(
-			identifier: "CC",
-			name: "CoronaCheck",
-			unomiURL: URL(string: "https://coronacheck.nl"),
-			eventURL: URL(string: "https://coronacheck.nl"),
-			cmsCertificate: "test",
-			tlsCertificate: "test",
-			accessToken: nil,
-			eventInformationAvailable: nil
-		)
-		let eventInformationAvailable = Vaccination.EventInformationAvailable(
-			providerIdentifier: "CC",
-			protocolVersion: "3.0",
-			informationAvailable: true
-		)
-		let identity = Vaccination.Identity(infix: "", firstName: "Corona", lastName: "Check", birthDateString: "2021-05-16")
-		let vaccinationEvent = Vaccination.VaccinationEvent(
-			dateString: "2021-05-16",
-			hpkCode: nil,
-			type: nil,
-			manufacturer: nil,
-			brand: nil,
-			completedByMedicalStatement: false,
-			doseNumber: 1,
-			totalDoses: 2
-		)
 		let eventWrapper = Vaccination.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
@@ -78,7 +51,6 @@ class FetchEventsViewModelTests: XCTestCase {
 				Vaccination.Event(type: "vaccination", unique: "1234", vaccination: vaccinationEvent)
 			]
 		)
-		let signedResponse = SignedResponse(payload: "payload", signature: "signature")
 
 		networkSpy.stubbedFetchVaccinationAccessTokensCompletionResult = (.success([accessToken]), ())
 		networkSpy.stubbedFetchVaccinationEventProvidersCompletionResult = (.success([provider]), ())
@@ -86,11 +58,93 @@ class FetchEventsViewModelTests: XCTestCase {
 		networkSpy.stubbedFetchVaccinationEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", networkManager: networkSpy, walletManager: walletSpy)
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: "test",
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
 
 		// Then
 		expect(self.walletSpy.invokedRemoveExistingEventGroups).toEventually(beTrue())
 		expect(self.walletSpy.invokedStoreEventGroup).toEventually(beTrue())
 		expect(self.walletSpy.invokedStoreEventGroupCount) == 1
 	}
+
+	func test_happyFlow_noEvents() {
+
+		// Given
+		let eventWrapper = Vaccination.EventResultWrapper(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			identity: identity,
+			status: .complete,
+			events: []
+		)
+
+		networkSpy.stubbedFetchVaccinationAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchVaccinationEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchVaccinationEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchVaccinationEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: "test",
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups).toEventually(beTrue())
+		expect(self.walletSpy.invokedStoreEventGroup).toEventually(beFalse())
+	}
+
+	// MARK: Default values
+
+	let accessToken = Vaccination.AccessToken(
+		providerIdentifier: "CC",
+		unomiAccessToken: "unomi test",
+		eventAccessToken: "event test"
+	)
+
+	let provider = Vaccination.EventProvider(
+		identifier: "CC",
+		name: "CoronaCheck",
+		unomiURL: URL(string: "https://coronacheck.nl"),
+		eventURL: URL(string: "https://coronacheck.nl"),
+		cmsCertificate: "test",
+		tlsCertificate: "test",
+		accessToken: nil,
+		eventInformationAvailable: nil
+	)
+
+	let eventInformationAvailable = Vaccination.EventInformationAvailable(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		informationAvailable: true
+	)
+
+	let identity = Vaccination.Identity(
+		infix: "",
+		firstName: "Corona",
+		lastName: "Check",
+		birthDateString: "2021-05-16"
+	)
+
+	let vaccinationEvent = Vaccination.VaccinationEvent(
+		dateString: "2021-05-16",
+		hpkCode: nil,
+		type: nil,
+		manufacturer: nil,
+		brand: nil,
+		completedByMedicalStatement: false,
+		doseNumber: 1,
+		totalDoses: 2
+	)
+
+	let signedResponse = SignedResponse(
+		payload: "payload",
+		signature: "signature"
+	)
 }

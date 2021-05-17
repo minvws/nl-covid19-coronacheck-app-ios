@@ -35,6 +35,18 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		return Label(body: nil).multiline()
 	}()
 
+	/// The stack view for the event
+	let eventStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = 0
+		return view
+	}()
+
 	/// The spinner
 	let spinner: UIActivityIndicatorView = {
 
@@ -63,6 +75,7 @@ class FetchEventsView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(eventStackView)
 	}
 
 	/// Setup the constraints
