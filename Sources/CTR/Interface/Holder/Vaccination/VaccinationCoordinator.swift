@@ -9,6 +9,9 @@ import UIKit
 
 enum VaccinationScreenResult {
 
+	/// The user wants to go back a scene
+	case back
+
 	/// Stop with vaccination flow,
 	case stop
 
@@ -27,6 +30,8 @@ protocol VaccinationFlowDelegate: AnyObject {
 
 	/// The vaccination flow is finished
 	func vaccinationFlowDidComplete()
+
+	func vaccinationFlowDidCancel()
 }
 
 class VaccinationCoordinator: Coordinator, Logging {
@@ -83,8 +88,8 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 	func vaccinationStartScreenDidFinish(_ result: VaccinationScreenResult) {
 
 		switch result {
-			case .stop:
-				delegate?.vaccinationFlowDidComplete()
+			case .back, .stop:
+				delegate?.vaccinationFlowDidCancel()
 			case .continue:
 				// When the digid login is fixed, the default 999999011 should be removed.
 				// Until then, this is the only fake BSN to use to get vaccination events
@@ -100,6 +105,10 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 				delegate?.vaccinationFlowDidComplete()
 			case .continue:
 				logInfo("To be implemented")
+			case .back:
+				for viewController in navigationController.viewControllers where viewController is VaccinationStartViewController {
+					navigationController.popToViewController(viewController, animated: true)
+				}
 		}
 	}
 }
