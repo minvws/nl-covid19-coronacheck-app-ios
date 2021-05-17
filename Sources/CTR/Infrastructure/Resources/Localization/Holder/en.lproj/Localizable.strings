@@ -246,3 +246,16 @@
 "holder.about.title" = "About this app";
 "holder.about.text" = "CoronaCheck is created so that people can visit social, cultural and sports locations again. With this app, visitors are able to prove they've recently tested negative for corona. This way, the Netherlands can head out more often.";
 "holder.about.link" = "Read the privacy statement here";
+
+"holder.vaccination.start.title" = "Vaccinatie ophalen";
+"holder.vaccination.start.message" = "<p>Heb je een of meer prikken gekregen? Dan kan je een Europees bewijs maken.<p><p>Vragen over vaccinaties? <a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier meer.</a></p>";
+"holder.vaccination.start.action" = "Login met DigiD";
+"holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
+"holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
+"holder.vaccination.list.message" = "Je kan een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
+"holder.vaccination.list.actiontitle" = "Maak QR-code";
+"holder.vaccination.element.title" = "Vaccinatie %@";
+"holder.vaccination.element.subtitle" = "Vaccinatiedatum: %@";
+"holder.vaccination.nolist.title" = "Geen vaccinaties op kunnen halen";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen vaccinatiegegevens beschikbaar.</p><p>Als jouw huisarts niet is aangesloten op de GGD kunnen wij op dit moment geen vaccinatie ophalen. Dit kan over een maand.</p>";
+"holder.vaccination.nolist.actiontitle" = "Naar Mijn Overzicht";

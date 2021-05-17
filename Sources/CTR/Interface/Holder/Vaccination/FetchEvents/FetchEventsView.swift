@@ -7,7 +7,33 @@
 
 import UIKit
 
-class FetchEventsView: ScrolledStackView {
+class FetchEventsView: ScrolledStackWithButtonView {
+
+	/// The display constants
+	private struct ViewTraits {
+
+		// Dimensions
+		static let titleLineHeight: CGFloat = 26
+		static let titleKerning: CGFloat = -0.26
+		static let messageLineHeight: CGFloat = 22
+
+		// Margins
+//		static let margin: CGFloat = 20.0
+//		static let buttonMargin: CGFloat = 54.0
+//		static let titleTopMargin: CGFloat = 34.0
+//		static let messageTopMargin: CGFloat = 24.0
+	}
+
+	/// The title label
+	private let titleLabel: Label = {
+
+		return Label(title1: nil, montserrat: true).multiline().header()
+	}()
+
+	private let messageLabel: Label = {
+
+		return Label(body: nil).multiline()
+	}()
 
 	/// The spinner
 	let spinner: UIActivityIndicatorView = {
@@ -32,6 +58,43 @@ class FetchEventsView: ScrolledStackView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		stackView.addArrangedSubview(spinner)
+
+		addSubview(spinner)
+
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+	}
+
+	/// Setup the constraints
+	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+
+			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+		])
+
+		setupPrimaryButton()
+	}
+
+	// MARK: Public Access
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
+		}
+	}
+
+	/// The message
+	var message: String? {
+		didSet {
+			messageLabel.attributedText = .makeFromHtml(text: message, font: Theme.fonts.body, textColor: Theme.colors.dark)
+		}
 	}
 }

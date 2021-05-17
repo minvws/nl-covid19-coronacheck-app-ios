@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum FetchEventsViewState {
+	case loading
+	case showEvents
+	case noEvents
+}
+
 class FetchEventsViewModel: Logging {
 
 	weak var coordinator: VaccinationCoordinatorDelegate?
@@ -45,6 +51,8 @@ class FetchEventsViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
+	@Bindable private(set) var viewState: FetchEventsViewController.State
+
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
@@ -59,12 +67,22 @@ class FetchEventsViewModel: Logging {
 		self.networkManager = networkManager
 		self.walletManager = walletManager
 
+		viewState = .loading(
+			content: FetchEventsViewController.Content(title: .holderVaccinationLoadingTitle, subTitle: nil, actionTitle: nil, action: nil)
+		)
 		startFetching {
 			self.fetchHasEventInformation {
 				self.fetchVaccinationEvents {
-					self.storeVaccinationEvent { eventgroups in
+					self.storeVaccinationEvent { eventGroups in
 
-						self.logInfo("Finished vaccination flow: \(eventgroups)")
+						self.logInfo("Finished vaccination flow: \(eventGroups)")
+//						if eventGroups.isEmpty {
+						self.setEmptyState()
+//						} else {
+//
+//						}
+
+//						self.viewState = eventGroups.isEmpty ? .noEvents( : .showEvents(rows:[])
 					}
 				}
 			}
@@ -75,6 +93,23 @@ class FetchEventsViewModel: Logging {
 
 		coordinator?.fetchEventsScreenDidFinish(.stop)
 	}
+
+	// MARK: State Helpers
+
+	private func setEmptyState() {
+
+		viewState = .emptyEvents(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationNoListTitle,
+				subTitle: .holderVaccinationNoListMessage,
+				actionTitle: .holderVaccinationNoListActionTitle,
+				action: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			)
+		)
+	}
+
 
 	// MARK: Fetch access tokens and event providers
 

@@ -9,6 +9,25 @@ import UIKit
 
 class FetchEventsViewController: BaseViewController {
 
+	enum State {
+		case loading(content: Content)
+		case listEvents(content: Content, rows: [Row])
+		case emptyEvents(content: Content)
+	}
+
+	struct Content {
+		let title: String
+		let subTitle: String?
+		let actionTitle: String?
+		let action: (() -> Void)?
+	}
+
+	struct Row {
+		let title: String
+		let subTitle: String?
+		let action: (() -> Void)?
+	}
+
 	private let viewModel: FetchEventsViewModel
 	private let sceneView = FetchEventsView()
 
@@ -36,11 +55,10 @@ class FetchEventsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		title = "** Vaccinatie loader **"
 		navigationItem.hidesBackButton = true
 		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
 
-		viewModel.$shouldShowProgress.binding = {[weak self] in
+		viewModel.$shouldShowProgress.binding = { [weak self] in
 
 			if $0 {
 				self?.sceneView.spinner.startAnimating()
@@ -48,10 +66,63 @@ class FetchEventsViewController: BaseViewController {
 				self?.sceneView.spinner.stopAnimating()
 			}
 		}
+
+		viewModel.$viewState.binding = { [weak self] in
+
+			switch $0 {
+				case let .emptyEvents(content):
+					self?.setForNoEvents(content)
+				case let .loading(content):
+					self?.setForLoadingState(content)
+				case let .listEvents(content, rows):
+					self?.setForShowEvents(content, rows: rows)
+			}
+		}
 	}
 
 	@objc func backButtonTapped() {
 
 		viewModel.backButtonTapped()
+	}
+
+	private func setForLoadingState(_ content: Content) {
+
+		sceneView.spinner.isHidden = false
+		displayContent(content)
+	}
+
+	private func setForShowEvents(_ content: Content, rows: [Row]) {
+
+		sceneView.spinner.isHidden = true
+		displayContent(content)
+	}
+
+	private func setForNoEvents(_ content: Content) {
+
+		sceneView.spinner.isHidden = true
+		displayContent(content)
+	}
+
+	private func displayContent(_ content: Content) {
+
+		// Texts
+		sceneView.title = content.title
+		sceneView.message = content.subTitle
+
+		// Button
+		sceneView.showLineView = false
+		if let actionTitle = content.actionTitle {
+			sceneView.primaryTitle = actionTitle
+			sceneView.footerBackground.isHidden = false
+			sceneView.primaryButton.isHidden = false
+			sceneView.footerGradientView.isHidden = false
+		} else {
+			sceneView.footerBackground.isHidden = true
+			sceneView.primaryButton.isHidden = true
+			sceneView.footerGradientView.isHidden = true
+		}
+		sceneView.primaryButtonTappedCommand = {
+			content.action?()
+		}
 	}
 }
