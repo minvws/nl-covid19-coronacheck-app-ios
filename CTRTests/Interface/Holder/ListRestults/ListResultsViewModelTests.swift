@@ -238,7 +238,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut.buttonTapped()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateBackToStartCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
 		expect(self.sut.showAlert) == false
 	}
 
@@ -266,7 +266,7 @@ class ListResultsViewModelTests: XCTestCase {
 		sut.dismiss()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateBackToStartCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
 		expect(self.sut.showAlert) == false
 	}
 
@@ -364,7 +364,7 @@ class ListResultsViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.showError) == false
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.holderCoordinatorDelegateSpy.navigateBackToStartCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
 	}
 
 	/// Test step two with an already signed result
