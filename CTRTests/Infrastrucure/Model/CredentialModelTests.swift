@@ -23,65 +23,77 @@ class CredentialModelTests: XCTestCase {
 	func test_createCredential() {
 
 		// Given
+		var greenCard: GreenCard?
+		var credential: Credential?
+		let date = Date()
+		let json = "test_createCredential".data(using: .utf8)
+
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let date = Date()
-			let wallet = WalletModel.createTestWallet(managedContext: context)!
-			let greenCard = GreenCardModel.create(
-				type: .domestic,
-				issuedAt: date,
-				wallet: wallet,
-				managedContext: context
-			)!
-			let json = "test_createCredential".data(using: .utf8)!
+			if let wallet = WalletModel.createTestWallet(managedContext: context),
+			   let unwrappedJson = json {
+				greenCard = GreenCardModel.create(
+					type: .domestic,
+					issuedAt: date,
+					wallet: wallet,
+					managedContext: context
+				)
+				if let unwrappedGreenCard = greenCard {
 
-			// When
-			let credential = CredentialModel.create(
-				qrData: json,
-				validFrom: date,
-				greenCard: greenCard,
-				managedContext: context
-			)
-
-			// Then
-			expect(credential?.qrData) == json
-			expect(credential?.validFrom) == date
-			expect(credential?.greenCard) == greenCard
-			expect(greenCard.credentials).to(haveCount(1))
+					// When
+					credential = CredentialModel.create(
+						qrData: unwrappedJson,
+						validFrom: date,
+						greenCard: unwrappedGreenCard,
+						managedContext: context
+					)
+				}
+			}
 		}
+
+		// Then
+		expect(credential?.qrData).toEventually(equal(json))
+		expect(credential?.validFrom).toEventually(equal(date))
+		expect(credential?.greenCard).toEventually(equal(greenCard))
+		expect(greenCard?.credentials).toEventually(haveCount(1))
 	}
 
 	func test_createTwoCredentials() {
 
 		// Given
+		var greenCard: GreenCard?
+		let date = Date()
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let date = Date()
-			let wallet = WalletModel.createTestWallet(managedContext: context)!
-			let greenCard = GreenCardModel.create(
-				type: .domestic,
-				issuedAt: date,
-				wallet: wallet,
-				managedContext: context
-			)!
-			let json = "test_createTwoCredentials".data(using: .utf8)!
+			if let wallet = WalletModel.createTestWallet(managedContext: context),
+			   let json = "test_createTwoCredentials".data(using: .utf8) {
+				greenCard = GreenCardModel.create(
+					type: .domestic,
+					issuedAt: date,
+					wallet: wallet,
+					managedContext: context
+				)
 
-			// When
-			CredentialModel.create(
-				qrData: json,
-				validFrom: date,
-				greenCard: greenCard,
-				managedContext: context
-			)
-			CredentialModel.create(
-				qrData: json,
-				validFrom: date,
-				greenCard: greenCard,
-				managedContext: context
-			)
+				if let unwrappedGreenCard = greenCard {
 
-			// Then
-			expect(greenCard.credentials).to(haveCount(2))
+					// When
+					CredentialModel.create(
+						qrData: json,
+						validFrom: date,
+						greenCard: unwrappedGreenCard,
+						managedContext: context
+					)
+					CredentialModel.create(
+						qrData: json,
+						validFrom: date,
+						greenCard: unwrappedGreenCard,
+						managedContext: context
+					)
+				}
+			}
 		}
+
+		// Then
+		expect(greenCard?.credentials).toEventually(haveCount(2))
 	}
 }
