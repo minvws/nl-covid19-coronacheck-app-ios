@@ -36,7 +36,7 @@ class WalletManagerTests: XCTestCase {
 		}
 	}
 
-	func test_initializer_withExitingWallet() {
+	func test_initializer_withExistingWallet() {
 
 		// Given
 		dataStoreManager = DataStoreManager(.inMemory)
@@ -60,7 +60,7 @@ class WalletManagerTests: XCTestCase {
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
 
 		// When
-		let eventGroup = sut.storeEventGroup(
+		let result = sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
 			signedResponse: SignedResponse(payload: "test", signature: "signature"),
@@ -68,14 +68,8 @@ class WalletManagerTests: XCTestCase {
 		)
 
 		// Then
-		expect(eventGroup).toNot(beNil())
-
+		expect(result) == true
 		expect(wallet?.eventGroups).to(haveCount(1))
-		if case let walletEventGroup as EventGroup = wallet?.eventGroups?.allObjects.first {
-			expect(walletEventGroup) == eventGroup
-		} else {
-			fail("Event does not match")
-		}
 	}
 
 	func test_removeExistingEventGroups() {

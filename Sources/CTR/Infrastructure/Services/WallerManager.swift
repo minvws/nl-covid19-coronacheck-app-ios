@@ -16,8 +16,8 @@ protocol WalletManaging {
 	///   - providerIdentifier: the identifier of the provider
 	///   - signedResponse: the json of the signed response to store
 	///   - issuedAt: when was this event administered?
-	/// - Returns: optional event group
-	@discardableResult func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> EventGroup?
+	/// - Returns: True if stored
+	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool
 
 	/// Remove any existing event groups for the type and provider identifier
 	/// - Parameters:
@@ -62,27 +62,28 @@ class WalletManager: WalletManaging, Logging {
 		_ type: EventType,
 		providerIdentifier: String,
 		signedResponse: SignedResponse,
-		issuedAt: Date) -> EventGroup? {
+		issuedAt: Date) -> Bool {
 
-		var result: EventGroup?
+		var saved = false
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let jsonData = try? JSONEncoder().encode(signedResponse),
-			   let eventGroup = EventGroupModel.create(
-				type: type,
-				providerIdentifier: providerIdentifier,
-				maxIssuedAt: issuedAt,
-				jsonData: jsonData,
-				wallet: wallet,
-				managedContext: context) {
+			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+				EventGroupModel.create(
+					type: type,
+					providerIdentifier: providerIdentifier,
+					maxIssuedAt: issuedAt,
+					jsonData: jsonData,
+					wallet: wallet,
+					managedContext: context
+				)
 				dataStoreManager.save(context)
-				result = eventGroup
+				saved = true
 			}
 		}
-		return result
+		return saved
 	}
 
 	/// Remove any existing event groups for the type and provider identifier
