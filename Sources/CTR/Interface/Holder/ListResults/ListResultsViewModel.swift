@@ -127,23 +127,18 @@ class ListResultsViewModel: Logging {
 		self.title = .holderTestResultsResultsTitle
 		self.message = .holderTestResultsResultsText
 		self.buttonTitle = .holderTestResultsResultsButton
-		if let date = parseDateFormatter.date(from: result.sampleDate) {
-			let dateString = printDateFormatter.string(from: date).capitalizingFirstLetter()
 
-			self.listItem = ListResultItem(
-				identifier: result.unique,
-				date: dateString,
-				holder: String(format: .holderTestResultsIdentity, getDisplayIdentity(result.holder))
-			)
+		var printDate = ""
+
+		if let date = Formatter().getDateFrom(dateString8601: result.sampleDate) {
+			printDate = printDateFormatter.string(from: date).capitalizingFirstLetter()
 		}
+		self.listItem = ListResultItem(
+			identifier: result.unique,
+			date: printDate,
+			holder: String(format: .holderTestResultsIdentity, getDisplayIdentity(result.holder))
+		)
 	}
-
-	/// Formatter to parse
-	private lazy var parseDateFormatter: ISO8601DateFormatter = {
-
-		let dateFormatter = ISO8601DateFormatter()
-		return dateFormatter
-	}()
 
 	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
