@@ -16,7 +16,7 @@ extension Notification.Name {
 struct ListResultItem {
 
 	let identifier: String
-	let date: String
+	let date: String?
 	let holder: String
 }
 
@@ -128,12 +128,10 @@ class ListResultsViewModel: Logging {
 		self.message = .holderTestResultsResultsText
 		self.buttonTitle = .holderTestResultsResultsButton
 
-		var printDate = ""
-
-		if let date = Formatter().getDateFrom(dateString8601: result.sampleDate) {
-			printDate = printDateFormatter.string(from: date).capitalizingFirstLetter()
-		}
-		// PrintDate might be "", it won't interrupt creating a credential.
+		let printDate: String? = Formatter().getDateFrom(dateString8601: result.sampleDate)
+			.map {
+				printDateFormatter.string(from: $0).capitalizingFirstLetter()
+			}
 		self.listItem = ListResultItem(
 			identifier: result.unique,
 			date: printDate,
