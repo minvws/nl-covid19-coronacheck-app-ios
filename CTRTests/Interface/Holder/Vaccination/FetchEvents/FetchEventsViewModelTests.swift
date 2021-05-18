@@ -36,7 +36,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .stop
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back
 	}
 
 	func test_happyFlow_willStoreEventGroup() {
