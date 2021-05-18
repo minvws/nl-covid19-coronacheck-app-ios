@@ -34,6 +34,8 @@ struct SecurityCheckerFactory {
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
 		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
+		trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
+		trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
 		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
 			trustedNames.append(TrustConfiguration.testNameContent)
 			trustedCertificates.append(TrustConfiguration.dstRootCAX3)
