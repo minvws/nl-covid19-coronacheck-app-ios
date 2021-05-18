@@ -150,6 +150,7 @@ class NetworkManager: NetworkManaging, Logging {
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(token.token)",
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
+			HTTPHeaderKey.contentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
 		var body: Data?

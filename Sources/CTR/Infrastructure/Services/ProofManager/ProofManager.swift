@@ -82,22 +82,12 @@ class ProofManager: ProofManaging, Logging {
 		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 		
-		#if DEBUG
-		if let lastFetchedTimestamp = providersFetchedTimestamp,
-		   lastFetchedTimestamp > Date() - 3600, !providerData.testProviders.isEmpty {
-			// Don't fetch again within an hour
-			onCompletion?()
-			return
-		}
-		#endif
-		
 		networkManager.getTestProviders { [weak self] response in
 			
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
 				case let .success(providers):
 					self?.providerData.testProviders = providers
-					self?.providersFetchedTimestamp = Date()
 					onCompletion?()
 					
 				case let .failure(error):
