@@ -29,12 +29,9 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
-	lazy var dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-
+	lazy var dateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
+		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
 
@@ -87,7 +84,7 @@ class FetchEventsViewModel: Logging {
 
 	func backButtonTapped() {
 
-		coordinator?.fetchEventsScreenDidFinish(.stop)
+		coordinator?.fetchEventsScreenDidFinish(.back)
 	}
 
 	// MARK: State Helpers
@@ -127,14 +124,36 @@ class FetchEventsViewModel: Logging {
 
 	private func setListEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) {
 
+		viewState = .listEvents(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationListTitle,
+				subTitle: .holderVaccinationListMessage,
+				actionTitle: .holderVaccinationListActionTitle,
+				action: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			),
+			rows: getSortedRowsFromEvents(dataSource)
+		)
+	}
+
+	func getSortedRowsFromEvents(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> [FetchEventsViewController.Row] {
+
 		var rows = [FetchEventsViewController.Row]()
 
-		for (index, dataRow) in dataSource.enumerated() {
+		// Sort the vaccination events in ascending order
+		let sortedDataSource = dataSource.sorted { lhs, rhs in
+			if let lhsDate = lhs.event.vaccination.getDate(with: dateFormatter),
+			   let rhsDate = rhs.event.vaccination.getDate(with: dateFormatter) {
+				return lhsDate < rhsDate
+			}
+			return false
+		}
+
+		for (index, dataRow) in sortedDataSource.enumerated() {
 
 			var formattedDate: String = ""
-
-			if let dateString = dataRow.event.vaccination.dateString,
-			   let date = dateFormatter.date(from: dateString) {
+			if let date = dataRow.event.vaccination.getDate(with: dateFormatter) {
 				formattedDate = printDateFormatter.string(from: date)
 			}
 
@@ -149,17 +168,7 @@ class FetchEventsViewModel: Logging {
 			)
 		}
 
-		viewState = .listEvents(
-			content: FetchEventsViewController.Content(
-				title: .holderVaccinationListTitle,
-				subTitle: .holderVaccinationListMessage,
-				actionTitle: .holderVaccinationListActionTitle,
-				action: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				}
-			),
-			rows: rows
-		)
+		return rows
 	}
 
 	// MARK: Fetch access tokens and event providers
