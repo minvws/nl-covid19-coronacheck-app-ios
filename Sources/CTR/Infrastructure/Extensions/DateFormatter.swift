@@ -9,34 +9,23 @@ import Foundation
 
 extension Formatter {
 
-	static let iso8601MicroSeconds: ISO8601DateFormatter = {
-		let formatter = ISO8601DateFormatter()
-		formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-		return formatter
-	}()
-
-	static let iso8601NoMicroSecond: ISO8601DateFormatter = {
-		let formatter = ISO8601DateFormatter()
-		formatter.formatOptions = [.withInternetDateTime]
-		return formatter
-	}()
-
-	static let iso8601DateOnly: ISO8601DateFormatter = {
-		let formatter = ISO8601DateFormatter()
-		formatter.formatOptions = [.withFullDate]
-		return formatter
-	}()
-
 	func getDateFrom(dateString8601 string: String) -> Date? {
 
-		if let date = Formatter.iso8601MicroSeconds.date(from: string) {
-			return date
-		}
-		if let date = Formatter.iso8601NoMicroSecond.date(from: string) {
-			return date
-		}
-		if let date = Formatter.iso8601DateOnly.date(from: string) {
-			return date
+		let validFormatOptions: [ISO8601DateFormatter.Options] = [
+			[.withInternetDateTime, .withFractionalSeconds, .withTimeZone],
+			[.withInternetDateTime, .withFractionalSeconds],
+			[.withInternetDateTime, .withTimeZone],
+			[.withInternetDateTime],
+			[.withFullDate]
+		]
+
+		let formatter = ISO8601DateFormatter()
+		for formatOptions in validFormatOptions {
+
+			formatter.formatOptions = formatOptions
+			if let date = formatter.date(from: string) {
+				return date
+			}
 		}
 		return nil
 	}

@@ -133,6 +133,7 @@ class ListResultsViewModel: Logging {
 		if let date = Formatter().getDateFrom(dateString8601: result.sampleDate) {
 			printDate = printDateFormatter.string(from: date).capitalizingFirstLetter()
 		}
+		// PrintDate might be "", it won't interrupt creating a credential.
 		self.listItem = ListResultItem(
 			identifier: result.unique,
 			date: printDate,
