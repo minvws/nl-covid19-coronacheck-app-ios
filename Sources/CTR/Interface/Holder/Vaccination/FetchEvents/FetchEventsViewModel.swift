@@ -7,12 +7,6 @@
 
 import Foundation
 
-enum FetchEventsViewState {
-	case loading
-	case listEvents
-	case noEvents
-}
-
 class FetchEventsViewModel: Logging {
 
 	weak var coordinator: VaccinationCoordinatorDelegate?
@@ -29,12 +23,9 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
-	private lazy var dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-
+	private lazy var dateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
+		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
 
@@ -49,7 +40,9 @@ class FetchEventsViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable private(set) var viewState: FetchEventsViewController.State
+	@Bindable internal var viewState: FetchEventsViewController.State
+
+	@Bindable private(set) var navigationAlert: FetchEventsViewController.AlertContent?
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -87,7 +80,31 @@ class FetchEventsViewModel: Logging {
 
 	func backButtonTapped() {
 
-		coordinator?.fetchEventsScreenDidFinish(.stop)
+		switch viewState {
+			case .loading, .listEvents:
+				warnBeforeGoBack()
+			case .emptyEvents:
+				goBack()
+		}
+	}
+
+	func warnBeforeGoBack() {
+
+		navigationAlert = FetchEventsViewController.AlertContent(
+			title: .holderVaccinationAlertTitle,
+			subTitle: .holderVaccinationAlertMessage,
+			cancelAction: nil,
+			cancelTitle: .holderVaccinationAlertCancel,
+			okAction: { _ in
+				self.goBack()
+			},
+			okTitle: .holderVaccinationAlertOk
+		)
+	}
+
+	func goBack() {
+
+		coordinator?.fetchEventsScreenDidFinish(.back)
 	}
 
 	// MARK: State Helpers
@@ -127,9 +144,33 @@ class FetchEventsViewModel: Logging {
 
 	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> FetchEventsViewController.State {
 
+		return .listEvents(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationListTitle,
+				subTitle: .holderVaccinationListMessage,
+				actionTitle: .holderVaccinationListActionTitle,
+				action: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			),
+			rows: getSortedRowsFromEvents(dataSource)
+		)
+	}
+
+	func getSortedRowsFromEvents(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> [FetchEventsViewController.Row] {
+
 		var rows = [FetchEventsViewController.Row]()
 
-		for (index, dataRow) in dataSource.enumerated() {
+		// Sort the vaccination events in ascending order
+		let sortedDataSource = dataSource.sorted { lhs, rhs in
+			if let lhsDate = lhs.event.vaccination.getDate(with: dateFormatter),
+			   let rhsDate = rhs.event.vaccination.getDate(with: dateFormatter) {
+				return lhsDate < rhsDate
+			}
+			return false
+		}
+
+		for (index, dataRow) in sortedDataSource.enumerated() {
 
 			let formattedDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
 				.map {
@@ -147,17 +188,7 @@ class FetchEventsViewModel: Logging {
 			)
 		}
 
-		return .listEvents(
-			content: FetchEventsViewController.Content(
-				title: .holderVaccinationListTitle,
-				subTitle: .holderVaccinationListMessage,
-				actionTitle: .holderVaccinationListActionTitle,
-				action: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				}
-			),
-			rows: rows
-		)
+		return rows
 	}
 
 	// MARK: Fetch access tokens and event providers
