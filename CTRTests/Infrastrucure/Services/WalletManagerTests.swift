@@ -24,21 +24,23 @@ class WalletManagerTests: XCTestCase {
 	func test_initializer() {
 
 		// Given
+		var wallet: Wallet?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
 			// When
-			let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
-
-			// Then
-			expect(wallet).toNot(beNil())
-			expect(wallet?.label) == WalletManager.walletName
+			wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
 		}
+
+		// Then
+		expect(wallet).toEventuallyNot(beNil())
+		expect(wallet?.label).toEventually(equal(WalletManager.walletName))
 	}
 
 	func test_initializer_withExistingWallet() {
 
 		// Given
+		var wallet: Wallet?
 		dataStoreManager = DataStoreManager(.inMemory)
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
@@ -47,11 +49,12 @@ class WalletManagerTests: XCTestCase {
 
 			// When
 			sut = WalletManager(dataStoreManager: dataStoreManager)
-			let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
+			wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
 
 			// Then
 			expect(wallet) == exitingWallet
 		}
+		expect(wallet).toEventuallyNot(beNil())
 	}
 
 	func test_storeEventGroup() {

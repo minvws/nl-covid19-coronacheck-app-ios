@@ -23,61 +23,66 @@ class EventGroupModelTests: XCTestCase {
 	func test_createEvent() {
 
 		// Given
+		var wallet: Wallet?
+		var eventGroup: EventGroup?
+		let date = Date()
+		let json = "test_createEvent".data(using: .utf8)
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let wallet = WalletModel.createTestWallet(managedContext: context)!
-			let date = Date()
-			let json = "test_createEvent".data(using: .utf8)!
+			wallet = WalletModel.createTestWallet(managedContext: context)
+			if let unwrappedJson = json, let unwrappedWallet = wallet {
 
-			// When
-			let eventGroup = EventGroupModel.create(
-				type: EventType.test,
-				providerIdentifier: "CoronaCheck",
-				maxIssuedAt: date,
-				jsonData: json,
-				wallet: wallet,
-				managedContext: context
-			)
-
-			// Then
-			expect(eventGroup?.type) == EventType.test.rawValue
-			expect(eventGroup?.providerIdentifier) == "CoronaCheck"
-			expect(eventGroup?.maxIssuedAt) == date
-			expect(eventGroup?.jsonData) == json
-			expect(eventGroup?.wallet) == wallet
-			expect(wallet.eventGroups).to(haveCount(1))
+				// When
+				eventGroup = EventGroupModel.create(
+					type: EventType.test,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: date,
+					jsonData: unwrappedJson,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+			}
 		}
+
+		// Then
+		expect(eventGroup?.type).toEventually(equal(EventType.test.rawValue))
+		expect(eventGroup?.providerIdentifier).toEventually(equal("CoronaCheck"))
+		expect(eventGroup?.maxIssuedAt).toEventually(equal(date))
+		expect(eventGroup?.jsonData).toEventually(equal(json))
+		expect(eventGroup?.wallet).toEventually(equal(wallet))
+		expect(wallet?.eventGroups).toEventually(haveCount(1))
 	}
 
 	func test_createTwoEvents() {
 
 		// Given
+		var wallet: Wallet?
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			let wallet = WalletModel.createTestWallet(managedContext: context)!
-			let date = Date()
-			let json = "test_createTwoEvents".data(using: .utf8)!
+			wallet = WalletModel.createTestWallet(managedContext: context)
+			if let unwrappedWallet = wallet,
+			   let json = "test_createTwoEvents".data(using: .utf8) {
 
-			// When
-			EventGroupModel.create(
-				type: EventType.test,
-				providerIdentifier: "CoronaCheck",
-				maxIssuedAt: date,
-				jsonData: json,
-				wallet: wallet,
-				managedContext: context
-			)
-			EventGroupModel.create(
-				type: EventType.vaccination,
-				providerIdentifier: "CoronaCheck",
-				maxIssuedAt: date,
-				jsonData: json,
-				wallet: wallet,
-				managedContext: context
-			)
-
-			// Then
-			expect(wallet.eventGroups).to(haveCount(2))
+				// When
+				EventGroupModel.create(
+					type: EventType.test,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: Date(),
+					jsonData: json,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+				EventGroupModel.create(
+					type: EventType.vaccination,
+					providerIdentifier: "CoronaCheck",
+					maxIssuedAt: Date(),
+					jsonData: json,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+			}
 		}
+		// Then
+		expect(wallet?.eventGroups).toEventually(haveCount(2))
 	}
 }
