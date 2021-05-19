@@ -38,6 +38,8 @@ class VerifierCoordinator: SharedCoordinator {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate()
+
 	// Designated starter method
 	override func start() {
 		
@@ -148,8 +150,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				content: content
 			)
 		)
-		let destination = UINavigationController(rootViewController: viewController)
-		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
 	}
 
 	private func navigateToScanInstruction() {
@@ -170,7 +176,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		//				attributes:
 		//					Attributes(
 		//						cryptoAttributes:
-		//							CrypoAttributes(
+		//							CryptoAttributes(
 		//								birthDay: "27",
 		//								birthMonth: "5",
 		//								firstNameInitial: nil, // "R",

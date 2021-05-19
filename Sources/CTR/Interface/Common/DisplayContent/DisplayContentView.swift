@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DisplayContentView: ScrolledStackView {
+final class DisplayContentView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -16,6 +16,7 @@ class DisplayContentView: ScrolledStackView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let spacing: CGFloat = 24
+		static let bottomMargin: CGFloat = 20
 	}
 
 	/// The title label
@@ -24,18 +25,44 @@ class DisplayContentView: ScrolledStackView {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
+	/// The stackview for the content
+	private let stackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.spacing = ViewTraits.spacing
+		return view
+	}()
+
+	func addToStackView(subview: UIView, followedByCustomSpacing spacing: CGFloat) {
+		stackView.addArrangedSubview(subview)
+		stackView.setCustomSpacing(spacing, after: subview)
+	}
+
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
-		stackView.distribution = .equalSpacing
-		stackView.alignment = .fill
-		stackView.spacing = ViewTraits.spacing
 	}
 
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
+
+		addSubview(stackView)
+	}
+
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+			stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: 20),
+			stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -20),
+			stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+			stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -ViewTraits.bottomMargin)
+		])
+
 		stackView.addArrangedSubview(titleLabel)
 	}
 
