@@ -6,6 +6,8 @@ on:
     branches:
       - main
       - 'release/*'
+  workflow_dispatch:
+  
 env: 
   FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
   FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
