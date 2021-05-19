@@ -91,14 +91,14 @@ class FetchEventsViewModel: Logging {
 	func warnBeforeGoBack() {
 
 		navigationAlert = FetchEventsViewController.AlertContent(
-			title: "Weet je zeker dat je wilt stoppen?",
-			subTitle: "Je moet dan later opnieuw met DigiD inloggon om je vaccinatie op te halen",
+			title: .holderVaccinationAlertTitle,
+			subTitle: .holderVaccinationAlertMessage,
 			cancelAction: nil,
-			cancelTitle: "Nee, terug",
+			cancelTitle: .holderVaccinationAlertCancel,
 			okAction: { _ in
 				self.goBack()
 			},
-			okTitle: "Ja, stop"
+			okTitle: .holderVaccinationAlertOk
 		)
 	}
 
