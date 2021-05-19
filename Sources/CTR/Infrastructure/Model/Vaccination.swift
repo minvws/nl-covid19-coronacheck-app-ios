@@ -178,7 +178,7 @@ struct Vaccination {
 		}
 	}
 
-	struct Identity: Codable {
+	struct Identity: Codable, Equatable {
 
 		let infix: String
 
@@ -198,7 +198,7 @@ struct Vaccination {
 		}
 	}
 
-	struct Event: Codable {
+	struct Event: Codable, Equatable {
 
 		/// The type of event (vaccination / vaccinationComplete)
 		let type: String
@@ -211,7 +211,7 @@ struct Vaccination {
 	}
 
 	/// An actual vaccination event
-	struct VaccinationEvent: Codable {
+	struct VaccinationEvent: Codable, Equatable {
 
 		/// The date of administering the vaccine
 		let dateString: String?

@@ -88,4 +88,14 @@ extension String {
 
 		return Localization.string(for: "holder.vaccination.alert.ok")
 	}
+
+	static var holderVaccinationAboutTitle: String {
+
+		return Localization.string(for: "holder.vaccination.about.text")
+	}
+
+	static var holderVaccinationAboutBody: String {
+
+		return Localization.string(for: "holder.vaccination.about.body")
+	}
 }
