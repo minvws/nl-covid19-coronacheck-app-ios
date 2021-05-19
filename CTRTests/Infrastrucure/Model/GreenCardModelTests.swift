@@ -25,7 +25,6 @@ class GreenCardModelTests: XCTestCase {
 		// Given
 		var wallet: Wallet?
 		var greenCard: GreenCard?
-		let date = Date()
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
@@ -34,7 +33,6 @@ class GreenCardModelTests: XCTestCase {
 				// When
 				greenCard = GreenCardModel.create(
 					type: .domestic,
-					issuedAt: date,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
@@ -43,7 +41,6 @@ class GreenCardModelTests: XCTestCase {
 
 		// Then
 		expect(greenCard?.type).toEventually(equal(GreenCardType.domestic.rawValue))
-		expect(greenCard?.issuedAt).toEventually(equal(date))
 		expect(greenCard?.wallet).toEventually(equal(wallet))
 		expect(wallet?.greenCards).toEventually(haveCount(1))
 	}
@@ -56,18 +53,15 @@ class GreenCardModelTests: XCTestCase {
 		context.performAndWait {
 			wallet = WalletModel.createTestWallet(managedContext: context)
 			if let unwrappedWallet = wallet {
-				let date = Date()
 
 				// When
 				GreenCardModel.create(
-					type: .euAllInOne,
-					issuedAt: date,
+					type: .domestic,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
 				GreenCardModel.create(
-					type: .euTest,
-					issuedAt: date,
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
@@ -91,7 +85,6 @@ class GreenCardModelTests: XCTestCase {
 			   let unwrappedJson = json {
 				greenCard = GreenCardModel.create(
 					type: .domestic,
-					issuedAt: date,
 					wallet: wallet,
 					managedContext: context
 				)
@@ -128,8 +121,7 @@ class GreenCardModelTests: XCTestCase {
 
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let greenCard = GreenCardModel.create(
-				type: .euRecovery,
-				issuedAt: date,
+				type: .eu,
 				wallet: wallet,
 				managedContext: context
 			   ),
@@ -144,6 +136,77 @@ class GreenCardModelTests: XCTestCase {
 				// When
 				greenCard.removeFromCredentials(credential)
 				listIsEmpty = greenCard.credentials?.allObjects.isEmpty ?? false
+			}
+		}
+
+		// Then
+		expect(listIsEmpty).toEventually(beTrue())
+	}
+
+	func test_addOrigin() {
+
+		// Given
+		var greenCard: GreenCard?
+		var origin: Origin?
+		let date = Date()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
+				greenCard = GreenCardModel.create(
+					type: .domestic,
+					wallet: wallet,
+					managedContext: context
+				)
+
+				if let unwrappedGreenCard = greenCard {
+
+					// When
+					origin = OriginModel.create(
+						type: .vaccination,
+						eventDate: date,
+						expireDate: date,
+						greenCard: unwrappedGreenCard,
+						managedContext: context
+					)
+				}
+			}
+		}
+
+		// Then
+		expect(greenCard?.origins).to(haveCount(1))
+		if case let actualOrigin as Origin = greenCard?.origins?.allObjects.first {
+			expect(actualOrigin) == origin
+		} else {
+			fail("origin does not match")
+		}
+	}
+
+	func test_removeOrigin() {
+
+		// Given
+		var listIsEmpty = false
+		let date = Date()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.createTestWallet(managedContext: context),
+			   let greenCard = GreenCardModel.create(
+				type: .eu,
+				wallet: wallet,
+				managedContext: context
+			   ),
+			   let origin = OriginModel.create(
+				type: .vaccination,
+				eventDate: date,
+				expireDate: date,
+				greenCard: greenCard,
+				managedContext: context
+			   ) {
+
+				// When
+				greenCard.removeFromOrigins(origin)
+				listIsEmpty = greenCard.origins?.allObjects.isEmpty ?? false
 			}
 		}
 

@@ -28,6 +28,15 @@ class FetchEventsViewController: BaseViewController {
 		let action: (() -> Void)?
 	}
 
+	struct AlertContent {
+		let title: String
+		let subTitle: String
+		let cancelAction: ((UIAlertAction) -> Void)?
+		let cancelTitle: String
+		let okAction: ((UIAlertAction) -> Void)
+		let okTitle: String
+	}
+
 	private let viewModel: FetchEventsViewModel
 	private let sceneView = FetchEventsView()
 
@@ -77,6 +86,10 @@ class FetchEventsViewController: BaseViewController {
 				case let .listEvents(content, rows):
 					self?.setForListEvents(content, rows: rows)
 			}
+		}
+
+		viewModel.$navigationAlert.binding = { [weak self] in
+			self?.showAlert($0)
 		}
 	}
 
@@ -140,6 +153,34 @@ class FetchEventsViewController: BaseViewController {
 			sceneView.footerGradientView.isHidden = true
 		}
 		sceneView.primaryButtonTappedCommand = content.action
+	}
+
+	func showAlert(_ alertContent: AlertContent?) {
+
+		guard let content = alertContent else {
+			return
+		}
+
+		let alertController = UIAlertController(
+			title: content.title,
+			message: content.subTitle,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: content.okTitle,
+				style: .default,
+				handler: content.okAction
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: content.cancelTitle,
+				style: .default,
+				handler: content.cancelAction
+			)
+		)
+		present(alertController, animated: true, completion: nil)
 	}
 }
 

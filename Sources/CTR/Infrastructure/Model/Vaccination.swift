@@ -126,7 +126,7 @@ struct Vaccination {
 		/// The vaccination events
 		var events: [Event] = []
 
-		func getMaxIssuedAt(_ dateFormatter: DateFormatter) -> Date? {
+		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
 			let maxIssuedAt: Date? = events
 				.compactMap { $0.vaccination.dateString }
@@ -247,6 +247,17 @@ struct Vaccination {
 			case completedByMedicalStatement
 			case doseNumber
 			case totalDoses
+		}
+
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+			if let dateString = dateString {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
 		}
 	}
 }

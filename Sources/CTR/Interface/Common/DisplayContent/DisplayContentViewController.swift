@@ -40,6 +40,7 @@ class DisplayContentViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+
 		setupBindings()
 		addCloseButton(action: #selector(closeButtonTapped))
 	}
@@ -51,8 +52,7 @@ class DisplayContentViewController: BaseViewController {
 		viewModel.$content.binding = { [weak self] in
 
 			for (view, spacing) in $0 {
-				self?.sceneView.stackView.addArrangedSubview(view)
-				self?.sceneView.stackView.setCustomSpacing(spacing, after: view)
+				self?.sceneView.addToStackView(subview: view, followedByCustomSpacing: spacing)
 			}
 		}
 
@@ -61,7 +61,7 @@ class DisplayContentViewController: BaseViewController {
 			self?.sceneView.isHidden = $0
 		}
 	}
-
+	
 	/// User tapped on the button
 	@objc func closeButtonTapped() {
 
