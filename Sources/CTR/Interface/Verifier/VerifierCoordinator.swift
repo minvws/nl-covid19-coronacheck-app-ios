@@ -38,7 +38,7 @@ class VerifierCoordinator: SharedCoordinator {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 
-	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate()
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	// Designated starter method
 	override func start() {
