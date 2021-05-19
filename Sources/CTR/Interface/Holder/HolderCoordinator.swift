@@ -412,12 +412,35 @@ extension HolderCoordinator: MenuDelegate {
 
 extension HolderCoordinator: VaccinationFlowDelegate {
 
-	func vaccinationFlowDidComplete () {
+	func vaccinationFlowDidComplete() {
+
+		/// The user canceled the vaccination flow. Go back to the dashboard.
 
 		if let vaccinationCoordinator = childCoordinators.last {
 			removeChildCoordinator(vaccinationCoordinator)
 		}
 
-		navigateBackToStart()
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager,
+				proofManager: proofManager,
+				configuration: generalConfiguration,
+				maxValidity: maxValidity
+			)
+		)
+		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationController
+	}
+
+	func vaccinationFlowDidCancel() {
+
+		/// The user cancelled the flow. Go back one page
+
+		if let vaccinationCoordinator = childCoordinators.last {
+			removeChildCoordinator(vaccinationCoordinator)
+		}
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 	}
 }

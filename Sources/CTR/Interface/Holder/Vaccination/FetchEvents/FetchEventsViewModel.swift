@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum FetchEventsViewState {
+	case loading
+	case listEvents
+	case noEvents
+}
+
 class FetchEventsViewModel: Logging {
 
 	weak var coordinator: VaccinationCoordinatorDelegate?
@@ -23,7 +29,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
-	lazy var dateFormatter: DateFormatter = {
+	private lazy var dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.calendar = .current
 		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -32,7 +38,18 @@ class FetchEventsViewModel: Logging {
 		return dateFormatter
 	}()
 
+	/// Formatter to print
+	private lazy var printDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM"
+		return dateFormatter
+	}()
+
 	@Bindable private(set) var shouldShowProgress: Bool = false
+
+	@Bindable private(set) var viewState: FetchEventsViewController.State
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -48,11 +65,20 @@ class FetchEventsViewModel: Logging {
 		self.networkManager = networkManager
 		self.walletManager = walletManager
 
+		viewState = .loading(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationLoadingTitle,
+				subTitle: nil,
+				actionTitle: nil,
+				action: nil
+			)
+		)
 		startFetchingEventProvidersWithAccessTokens { eventProviders in
 			self.fetchHasEventInformation(eventProviders: eventProviders) { eventProvidersWithEventInformation in
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
 					self.storeVaccinationEvent(eventResponses: eventResponses) { saved in
 						self.logInfo("Finished vaccination flow: \(saved)")
+						self.viewState = self.getViewState(from: eventResponses)
 					}
 				}
 			}
@@ -64,9 +90,80 @@ class FetchEventsViewModel: Logging {
 		coordinator?.fetchEventsScreenDidFinish(.stop)
 	}
 
+	// MARK: State Helpers
+
+	private func getViewState(
+		from eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> FetchEventsViewController.State {
+
+		var listDataSource = [(Vaccination.Identity, Vaccination.Event)]()
+
+		for eventResponse in eventResponses {
+			let identity = eventResponse.wrapper.identity
+			for event in eventResponse.wrapper.events {
+				listDataSource.append((identity, event))
+			}
+		}
+
+		if listDataSource.isEmpty {
+			return emptyEventsState()
+		} else {
+			return listEventsState(listDataSource)
+		}
+	}
+
+	private func emptyEventsState() -> FetchEventsViewController.State {
+
+		return .emptyEvents(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationNoListTitle,
+				subTitle: .holderVaccinationNoListMessage,
+				actionTitle: .holderVaccinationNoListActionTitle,
+				action: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			)
+		)
+	}
+
+	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> FetchEventsViewController.State {
+
+		var rows = [FetchEventsViewController.Row]()
+
+		for (index, dataRow) in dataSource.enumerated() {
+
+			let formattedDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
+				.map {
+					printDateFormatter.string(from: $0)
+				} ?? ""
+
+			rows.append(
+				FetchEventsViewController.Row(
+					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
+					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
+					action: { [weak self] in
+						self?.logDebug("Tapped on \(dataRow.event.unique)")
+					}
+				)
+			)
+		}
+
+		return .listEvents(
+			content: FetchEventsViewController.Content(
+				title: .holderVaccinationListTitle,
+				subTitle: .holderVaccinationListMessage,
+				actionTitle: .holderVaccinationListActionTitle,
+				action: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				}
+			),
+			rows: rows
+		)
+	}
+
 	// MARK: Fetch access tokens and event providers
 
-	private func startFetchingEventProvidersWithAccessTokens(_ onCompletion: @escaping ([Vaccination.EventProvider]) -> Void) {
+	private func startFetchingEventProvidersWithAccessTokens(
+		_ onCompletion: @escaping ([Vaccination.EventProvider]) -> Void) {
 
 		var accessTokenResult: Result<[Vaccination.AccessToken], NetworkError>?
 		fetchVaccinationAccessTokens { result in
@@ -154,7 +251,9 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchHasEventInformationResponse(from provider: Vaccination.EventProvider, completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+	private func fetchHasEventInformationResponse(
+		from provider: Vaccination.EventProvider,
+		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
 
 		if let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") {
 
@@ -173,7 +272,9 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Fetch vaccination events
 
-	private func fetchVaccinationEvents(eventProviders: [Vaccination.EventProvider], onCompletion: @escaping ( [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> Void) {
+	private func fetchVaccinationEvents(
+		eventProviders: [Vaccination.EventProvider],
+		onCompletion: @escaping ( [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> Void) {
 
 		var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]()
 
@@ -193,7 +294,9 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchVaccinationEvent(from provider: Vaccination.EventProvider, completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+	private func fetchVaccinationEvent(
+		from provider: Vaccination.EventProvider,
+		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
 		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
@@ -211,7 +314,9 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Store vaccination events
 
-	private func storeVaccinationEvent(eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)], onCompletion: @escaping (Bool) -> Void) {
+	private func storeVaccinationEvent(
+		eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)],
+		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
 		for response in eventResponses where response.wrapper.status == .complete {

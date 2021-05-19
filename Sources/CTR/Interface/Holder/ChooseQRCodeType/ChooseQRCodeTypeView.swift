@@ -64,7 +64,6 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(buttonsStackView)
-
 	}
 
 	override func setupViewConstraints() {

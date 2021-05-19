@@ -7,7 +7,45 @@
 
 import UIKit
 
-class FetchEventsView: ScrolledStackView {
+class FetchEventsView: ScrolledStackWithButtonView {
+
+	/// The display constants
+	private struct ViewTraits {
+
+		// Dimensions
+		static let titleLineHeight: CGFloat = 26
+		static let titleKerning: CGFloat = -0.26
+		static let messageLineHeight: CGFloat = 22
+
+		// Margins
+//		static let margin: CGFloat = 20.0
+//		static let buttonMargin: CGFloat = 54.0
+//		static let titleTopMargin: CGFloat = 34.0
+//		static let messageTopMargin: CGFloat = 24.0
+	}
+
+	/// The title label
+	private let titleLabel: Label = {
+
+		return Label(title1: nil, montserrat: true).multiline().header()
+	}()
+
+	private let messageLabel: Label = {
+
+		return Label(body: nil).multiline()
+	}()
+
+	/// The stack view for the event
+	let eventStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = 0
+		return view
+	}()
 
 	/// The spinner
 	let spinner: UIActivityIndicatorView = {
@@ -32,6 +70,74 @@ class FetchEventsView: ScrolledStackView {
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
-		stackView.addArrangedSubview(spinner)
+
+		addSubview(spinner)
+
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(eventStackView)
+	}
+
+	/// Setup the constraints
+	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
+
+		// disable the bottom constraint of the scroll view, add our own
+		bottomScrollViewConstraint?.isActive = false
+
+		NSLayoutConstraint.activate([
+
+			// Scroll View
+			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
+
+			spinner.centerYAnchor.constraint(equalTo: centerYAnchor),
+			spinner.centerXAnchor.constraint(equalTo: centerXAnchor)
+		])
+		
+		setupPrimaryButton()
+	}
+
+	private func createSeparatorView() -> UIView {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.line
+		return view
+	}
+
+	// MARK: Public Access
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
+		}
+	}
+
+	/// The message
+	var message: String? {
+		didSet {
+			messageLabel.attributedText = .makeFromHtml(text: message, font: Theme.fonts.body, textColor: Theme.colors.dark)
+		}
+	}
+
+	func addSeparator() {
+
+		let separator = createSeparatorView()
+		eventStackView.addArrangedSubview(separator)
+
+		NSLayoutConstraint.activate([
+			separator.heightAnchor.constraint(equalToConstant: 1)
+		])
+	}
+
+	func addVaccinationEventView(_ eventView: VaccinationEventView) {
+
+		eventStackView.addArrangedSubview(eventView)
+		addSeparator()
 	}
 }
