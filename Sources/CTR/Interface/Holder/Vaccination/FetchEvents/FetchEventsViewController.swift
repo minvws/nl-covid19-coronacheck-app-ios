@@ -134,13 +134,12 @@ class FetchEventsViewController: BaseViewController {
 			sceneView.primaryButton.isHidden = false
 			sceneView.footerGradientView.isHidden = false
 		} else {
+			sceneView.primaryTitle = nil
 			sceneView.footerBackground.isHidden = true
 			sceneView.primaryButton.isHidden = true
 			sceneView.footerGradientView.isHidden = true
 		}
-		sceneView.primaryButtonTappedCommand = {
-			content.action?()
-		}
+		sceneView.primaryButtonTappedCommand = content.action
 	}
 }
 
@@ -151,7 +150,7 @@ extension VaccinationEventView {
 	///   - title: the title of the view
 	///   - subTitle: the sub title of the view
 	///   - command: the command to execute when tapped
-	/// - Returns: a vacation event view
+	/// - Returns: a vaccination event view
 	fileprivate static func makeView(
 		title: String,
 		subTitle: String,

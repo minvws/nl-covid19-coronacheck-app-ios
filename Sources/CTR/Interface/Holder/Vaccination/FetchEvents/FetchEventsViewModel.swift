@@ -29,14 +29,14 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
-	lazy var dateFormatter: ISO8601DateFormatter = {
+	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
 
 	/// Formatter to print
-	lazy var printDateFormatter: DateFormatter = {
+	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
@@ -75,7 +75,7 @@ class FetchEventsViewModel: Logging {
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
 					self.storeVaccinationEvent(eventResponses: eventResponses) { saved in
 						self.logInfo("Finished vaccination flow: \(saved)")
-						self.determineViewState(from: eventResponses)
+						self.viewState = self.getViewState(from: eventResponses)
 					}
 				}
 			}
@@ -89,8 +89,8 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: State Helpers
 
-	private func determineViewState(
-		from eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) {
+	private func getViewState(
+		from eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> FetchEventsViewController.State {
 
 		var listDataSource = [(Vaccination.Identity, Vaccination.Event)]()
 
@@ -102,15 +102,15 @@ class FetchEventsViewModel: Logging {
 		}
 
 		if listDataSource.isEmpty {
-			self.setEmptyEventsState()
+			return emptyEventsState()
 		} else {
-			self.setListEventsState(listDataSource)
+			return listEventsState(listDataSource)
 		}
 	}
 
-	private func setEmptyEventsState() {
+	private func emptyEventsState() -> FetchEventsViewController.State {
 
-		viewState = .emptyEvents(
+		return .emptyEvents(
 			content: FetchEventsViewController.Content(
 				title: .holderVaccinationNoListTitle,
 				subTitle: .holderVaccinationNoListMessage,
@@ -122,9 +122,9 @@ class FetchEventsViewModel: Logging {
 		)
 	}
 
-	private func setListEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) {
+	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> FetchEventsViewController.State {
 
-		viewState = .listEvents(
+		return .listEvents(
 			content: FetchEventsViewController.Content(
 				title: .holderVaccinationListTitle,
 				subTitle: .holderVaccinationListMessage,
@@ -152,10 +152,10 @@ class FetchEventsViewModel: Logging {
 
 		for (index, dataRow) in sortedDataSource.enumerated() {
 
-			var formattedDate: String = ""
-			if let date = dataRow.event.vaccination.getDate(with: dateFormatter) {
-				formattedDate = printDateFormatter.string(from: date)
-			}
+			let formattedDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
+				.map {
+					printDateFormatter.string(from: $0)
+				} ?? ""
 
 			rows.append(
 				FetchEventsViewController.Row(

@@ -24,7 +24,7 @@ class VaccinationEventView: BaseView {
 	}
 
 	/// The disclaimer image
-	let disclaimerImageView: UIImageView = {
+	private let disclaimerImageView: UIImageView = {
 		let view = UIImageView(image: .questionMark)
 		view.tintColor = Theme.colors.dark
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -32,18 +32,18 @@ class VaccinationEventView: BaseView {
 	}()
 
 	/// The title label
-	let titleLabel: Label = {
+	private let titleLabel: Label = {
 
 		return Label(bodyMedium: nil).multiline()
 	}()
 
 	/// The message label
-	let messageLabel: Label = {
+	private let messageLabel: Label = {
 
 		return Label(subhead: nil).multiline()
 	}()
 
-	let disclaimerButton: UIButton = {
+	private let disclaimerButton: UIButton = {
 
 		let button = UIButton()
 		button.backgroundColor = .clear
