@@ -106,8 +106,13 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 			case .continue:
 				logInfo("To be implemented")
 			case .back:
-				for viewController in navigationController.viewControllers where viewController is VaccinationStartViewController {
-					navigationController.popToViewController(viewController, animated: true)
+				if let vaccineStartViewController = navigationController.viewControllers
+					.first(where: { $0 is VaccinationStartViewController }) {
+
+					navigationController.popToViewController(
+						vaccineStartViewController,
+						animated: true
+					)
 				}
 		}
 	}
