@@ -45,6 +45,8 @@ class VaccinationCoordinator: Coordinator, Logging {
 
 	weak var delegate: VaccinationFlowDelegate?
 
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
+
 	/// Initiailzer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -96,8 +98,11 @@ class VaccinationCoordinator: Coordinator, Logging {
 			)
 		)
 
-		let destination = UINavigationController(rootViewController: viewController)
-		navigationController.visibleViewController?.present(destination, animated: true, completion: nil)
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
 		
 	}
 }
