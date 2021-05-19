@@ -16,12 +16,6 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
-
-		// Margins
-//		static let margin: CGFloat = 20.0
-//		static let buttonMargin: CGFloat = 54.0
-//		static let titleTopMargin: CGFloat = 34.0
-//		static let messageTopMargin: CGFloat = 24.0
 	}
 
 	/// The title label

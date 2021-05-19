@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import SafariServices
 
 enum VaccinationScreenResult {
 
@@ -114,6 +115,29 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 						animated: true
 					)
 				}
+		}
+	}
+}
+
+extension VaccinationCoordinator: OpenUrlProtocol {
+
+	/// Open a url
+	/// - Parameters:
+	///   - url: The url to open
+	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
+	func openUrl(_ url: URL, inApp: Bool) {
+
+		var shouldOpenInApp = inApp
+		if url.scheme == "tel" {
+			// Do not open phone numbers in app, doesn't work & will crash.
+			shouldOpenInApp = false
+		}
+
+		if shouldOpenInApp {
+			let safariController = SFSafariViewController(url: url)
+			navigationController.viewControllers.last?.present(safariController, animated: true)
+		} else {
+			UIApplication.shared.open(url)
 		}
 	}
 }

@@ -12,9 +12,9 @@ import Nimble
 class VaccinationStartViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: VaccinationStartViewModel!
+	private var sut: VaccinationStartViewModel!
 
-	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
+	private var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
 
 	override func setUp() {
 
@@ -46,5 +46,18 @@ class VaccinationStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue
+	}
+
+	func test_openUrl() throws {
+
+		// Given
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+
+		// When
+		sut.openUrl(url)
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == url
 	}
 }
