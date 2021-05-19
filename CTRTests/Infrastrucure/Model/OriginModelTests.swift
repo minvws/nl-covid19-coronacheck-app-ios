@@ -9,7 +9,7 @@ import XCTest
 import Nimble
 @testable import CTR
 
-class CredentialModelTests: XCTestCase {
+class OriginModelTests: XCTestCase {
 
 	var dataStoreManager: DataStoreManaging!
 
@@ -20,18 +20,16 @@ class CredentialModelTests: XCTestCase {
 
 	// MARK: Tests
 
-	func test_createCredential() {
+	func test_createOrigin() {
 
 		// Given
 		var greenCard: GreenCard?
-		var credential: Credential?
+		var origin: Origin?
 		let date = Date()
-		let json = "test_createCredential".data(using: .utf8)
 
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			if let wallet = WalletModel.createTestWallet(managedContext: context),
-			   let unwrappedJson = json {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				greenCard = GreenCardModel.create(
 					type: .domestic,
 					wallet: wallet,
@@ -40,9 +38,10 @@ class CredentialModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					credential = CredentialModel.create(
-						qrData: unwrappedJson,
-						validFrom: date,
+					origin = OriginModel.create(
+						type: .vaccination,
+						eventDate: date,
+						expireDate: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -51,21 +50,21 @@ class CredentialModelTests: XCTestCase {
 		}
 
 		// Then
-		expect(credential?.qrData).toEventually(equal(json))
-		expect(credential?.validFrom).toEventually(equal(date))
-		expect(credential?.greenCard).toEventually(equal(greenCard))
-		expect(greenCard?.credentials).toEventually(haveCount(1))
+		expect(origin?.type).toEventually(equal(OriginType.vaccination.rawValue))
+		expect(origin?.eventDate).toEventually(equal(date))
+		expect(origin?.expireDate).toEventually(equal(date))
+		expect(origin?.greenCard).toEventually(equal(greenCard))
+		expect(greenCard?.origins).toEventually(haveCount(1))
 	}
 
-	func test_createTwoCredentials() {
+	func test_createTwoOrigins() {
 
 		// Given
 		var greenCard: GreenCard?
 		let date = Date()
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
-			if let wallet = WalletModel.createTestWallet(managedContext: context),
-			   let json = "test_createTwoCredentials".data(using: .utf8) {
+			if let wallet = WalletModel.createTestWallet(managedContext: context) {
 				greenCard = GreenCardModel.create(
 					type: .domestic,
 					wallet: wallet,
@@ -75,15 +74,17 @@ class CredentialModelTests: XCTestCase {
 				if let unwrappedGreenCard = greenCard {
 
 					// When
-					CredentialModel.create(
-						qrData: json,
-						validFrom: date,
+					OriginModel.create(
+						type: .recovery,
+						eventDate: date,
+						expireDate: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
-					CredentialModel.create(
-						qrData: json,
-						validFrom: date,
+					OriginModel.create(
+						type: .vaccination,
+						eventDate: date,
+						expireDate: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -92,6 +93,6 @@ class CredentialModelTests: XCTestCase {
 		}
 
 		// Then
-		expect(greenCard?.credentials).toEventually(haveCount(2))
+		expect(greenCard?.origins).toEventually(haveCount(2))
 	}
 }

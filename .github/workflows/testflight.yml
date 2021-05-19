@@ -8,6 +8,7 @@ on:
       - '*.*.*-RC*'
       - '*.*.*-RC*-Verifier'
       - '*.*.*-RC*-Holder'
+  workflow_dispatch:
 
 env: 
   APPSTORE_KEY_BASE64_FILENAME: appstore-apikey.p8
