@@ -179,7 +179,7 @@ class ListResultsViewModelTests: XCTestCase {
 	}
 
 	/// Test the check result method with a valid test result
-	func testCheckResultValidProtocolVersionTwo() {
+	func test_checkResultValid_protocolVersionTwo() {
 
 		// Given
 		let now = Date().timeIntervalSince1970 - 200
@@ -212,6 +212,46 @@ class ListResultsViewModelTests: XCTestCase {
 		expect(self.sut.buttonTitle) == .holderTestResultsResultsButton
 		expect(self.sut.listItem).toNot(beNil())
 		expect(self.sut.listItem?.identifier) == "testCheckResultValid"
+		expect(self.sut.listItem?.date) != ""
+
+	}
+
+	/// Test the check result method with a valid test result using microseconds
+	func test_checkResultValid_protocolVersionTwo_withMicroSeconds() {
+
+		// Given
+		let now = Date().timeIntervalSince1970 - 200
+		parseDateFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+		let validProtocolTwo = TestResultWrapper(
+			providerIdentifier: "testCheckResultValid",
+			protocolVersion: "2.0",
+			result: TestResult(
+				unique: "testCheckResultValid",
+				sampleDate: parseDateFormatter.string(from: Date(timeIntervalSince1970: now)),
+				testType: "test",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "T",
+					lastNameInitial: "T",
+					birthDay: "1",
+					birthMonth: "1"
+				)
+			),
+			status: .complete
+		)
+		proofManagingSpy.stubbedGetTestWrapperResult = validProtocolTwo
+
+		// When
+		sut.checkResult()
+
+		// Then
+		expect(self.sut.title) == .holderTestResultsResultsTitle
+		expect(self.sut.message) == .holderTestResultsResultsText
+		expect(self.sut.buttonTitle) == .holderTestResultsResultsButton
+		expect(self.sut.listItem).toNot(beNil())
+		expect(self.sut.listItem?.identifier) == "testCheckResultValid"
+		expect(self.sut.listItem?.date) != ""
 	}
 
 	/// Test tap on the next button with an item selected
