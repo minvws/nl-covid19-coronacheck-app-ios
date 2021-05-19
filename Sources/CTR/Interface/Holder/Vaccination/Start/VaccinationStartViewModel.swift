@@ -9,9 +9,10 @@ import Foundation
 
 class VaccinationStartViewModel: Logging {
 
-	weak var coordinator: VaccinationCoordinatorDelegate?
+	weak var coordinator: (VaccinationCoordinatorDelegate & OpenUrlProtocol)?
 
-	init(coordinator: VaccinationCoordinatorDelegate) {
+	init(coordinator: VaccinationCoordinatorDelegate & OpenUrlProtocol) {
+
 		self.coordinator = coordinator
 	}
 
@@ -23,5 +24,10 @@ class VaccinationStartViewModel: Logging {
 	func primaryButtonTapped() {
 
 		coordinator?.vaccinationStartScreenDidFinish(.continue)
+	}
+
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
 	}
 }
