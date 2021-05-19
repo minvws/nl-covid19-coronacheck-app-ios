@@ -414,7 +414,7 @@ extension HolderCoordinator: VaccinationFlowDelegate {
 
 	func vaccinationFlowDidComplete() {
 
-		/// The user canceled the vacation flow. Go back to the dashboard.
+		/// The user canceled the vaccination flow. Go back to the dashboard.
 
 		if let vaccinationCoordinator = childCoordinators.last {
 			removeChildCoordinator(vaccinationCoordinator)

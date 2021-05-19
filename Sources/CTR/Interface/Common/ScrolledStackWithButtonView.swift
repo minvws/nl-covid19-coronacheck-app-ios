@@ -172,7 +172,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	// MARK: Public Access
 
 	/// The title for the primary button
-	var primaryTitle: String = "" {
+	var primaryTitle: String? {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}

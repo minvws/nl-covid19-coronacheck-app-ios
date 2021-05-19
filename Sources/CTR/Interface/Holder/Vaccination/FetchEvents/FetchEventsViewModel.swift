@@ -29,7 +29,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
-	lazy var dateFormatter: DateFormatter = {
+	private lazy var dateFormatter: DateFormatter = {
 		let dateFormatter = DateFormatter()
 		dateFormatter.calendar = .current
 		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
@@ -39,7 +39,7 @@ class FetchEventsViewModel: Logging {
 	}()
 
 	/// Formatter to print
-	lazy var printDateFormatter: DateFormatter = {
+	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
