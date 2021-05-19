@@ -8,27 +8,32 @@
 import Foundation
 import CoreData
 
-enum GreenCardType: String {
+enum OriginType: String {
 
-	case domestic
-	case eu
+	case vaccination
+	case recovery
+	case negativeTest
 }
 
-class GreenCardModel {
+class OriginModel {
 
-	static let entityName = "GreenCard"
+	static let entityName = "Origin"
 
 	@discardableResult class func create(
-		type: GreenCardType,
-		wallet: Wallet,
-		managedContext: NSManagedObjectContext) -> GreenCard? {
+		type: OriginType,
+		eventDate: Date,
+		expireDate: Date,
+		greenCard: GreenCard,
+		managedContext: NSManagedObjectContext) -> Origin? {
 
 		if let object = NSEntityDescription.insertNewObject(
 			forEntityName: entityName,
-			into: managedContext) as? GreenCard {
+			into: managedContext) as? Origin {
 
 			object.type = type.rawValue
-			object.wallet = wallet
+			object.eventDate = eventDate
+			object.expireDate = expireDate
+			object.greenCard = greenCard
 
 			return object
 		}

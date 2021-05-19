@@ -171,8 +171,7 @@ class WalletModelTests: XCTestCase {
 				
 				// When
 				greenCard = GreenCardModel.create(
-					type: .euTest,
-					issuedAt: Date(),
+					type: .eu,
 					wallet: unwrappedWallet,
 					managedContext: context
 				)
@@ -196,8 +195,7 @@ class WalletModelTests: XCTestCase {
 			
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let greenCard = GreenCardModel.create(
-				type: .euRecovery,
-				issuedAt: Date(),
+				type: .eu,
 				wallet: wallet,
 				managedContext: context
 			   ) {
