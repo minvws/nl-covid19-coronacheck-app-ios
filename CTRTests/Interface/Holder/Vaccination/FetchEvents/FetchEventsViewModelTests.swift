@@ -27,9 +27,23 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", networkManager: networkSpy, walletManager: walletSpy)
 	}
 
-	func test_backButtonTapped() {
+	func test_backButtonTapped_loadingState() {
 
 		// Given
+		sut.viewState = .loading(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil))
+
+		// When
+		sut.backButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
+		expect(self.sut.navigationAlert).toNot(beNil())
+	}
+
+	func test_backButtonTapped_emptyState() {
+
+		// Given
+		sut.viewState = .emptyEvents(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil))
 
 		// When
 		sut.backButtonTapped()
@@ -37,6 +51,31 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back
+	}
+
+	func test_backButtonTapped_listState() {
+
+		// Given
+		sut.viewState = .listEvents(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil), rows: [])
+
+		// When
+		sut.backButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
+		expect(self.sut.navigationAlert).toNot(beNil())
+	}
+
+	func test_warnBeforeGoBack() {
+
+		// Given
+
+		// When
+		sut.warnBeforeGoBack()
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
+		expect(self.sut.navigationAlert).toNot(beNil())
 	}
 
 	func test_happyFlow_willStoreEventGroup() {

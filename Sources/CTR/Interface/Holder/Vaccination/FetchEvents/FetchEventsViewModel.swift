@@ -7,12 +7,6 @@
 
 import Foundation
 
-enum FetchEventsViewState {
-	case loading
-	case listEvents
-	case noEvents
-}
-
 class FetchEventsViewModel: Logging {
 
 	weak var coordinator: VaccinationCoordinatorDelegate?
@@ -46,7 +40,9 @@ class FetchEventsViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable private(set) var viewState: FetchEventsViewController.State
+	@Bindable internal var viewState: FetchEventsViewController.State
+
+	@Bindable private(set) var navigationAlert: FetchEventsViewController.AlertContent?
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -83,6 +79,30 @@ class FetchEventsViewModel: Logging {
 	}
 
 	func backButtonTapped() {
+
+		switch viewState {
+			case .loading, .listEvents:
+				warnBeforeGoBack()
+			case .emptyEvents:
+				goBack()
+		}
+	}
+
+	func warnBeforeGoBack() {
+
+		navigationAlert = FetchEventsViewController.AlertContent(
+			title: "Weet je zeker dat je wilt stoppen?",
+			subTitle: "Je moet dan later opnieuw met DigiD inloggon om je vaccinatie op te halen",
+			cancelAction: nil,
+			cancelTitle: "Nee, terug",
+			okAction: { _ in
+				self.goBack()
+			},
+			okTitle: "Ja, stop"
+		)
+	}
+
+	func goBack() {
 
 		coordinator?.fetchEventsScreenDidFinish(.back)
 	}
