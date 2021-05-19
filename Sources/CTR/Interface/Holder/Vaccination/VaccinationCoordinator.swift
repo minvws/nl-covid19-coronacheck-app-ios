@@ -93,8 +93,7 @@ class VaccinationCoordinator: Coordinator, Logging {
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body,
-				showBottomCloseButton: false
+				message: body
 			)
 		)
 

@@ -246,8 +246,7 @@ class TokenEntryViewModel {
 
 		coordinator?.presentInformationPage(
 			title: .holderTokenEntryModalNoTokenTitle,
-			body: .holderTokenEntryModalNoTokenDetails,
-			showBottomCloseButton: false
+			body: .holderTokenEntryModalNoTokenDetails
 		)
 	}
 
