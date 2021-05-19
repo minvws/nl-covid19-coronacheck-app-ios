@@ -17,6 +17,7 @@ final class DisplayContentView: BaseView {
 		static let titleKerning: CGFloat = -0.26
 		static let spacing: CGFloat = 24
 		static let bottomMargin: CGFloat = 20
+		static let horizontalMargin: CGFloat = 2
 	}
 
 	/// The title label
@@ -57,8 +58,8 @@ final class DisplayContentView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-			stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: 20),
-			stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -20),
+			stackView.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor, constant: ViewTraits.horizontalMargin),
+			stackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor, constant: -ViewTraits.horizontalMargin),
 			stackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
 			stackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -ViewTraits.bottomMargin)
 		])
