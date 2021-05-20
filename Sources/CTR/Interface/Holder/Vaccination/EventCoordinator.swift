@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum EventScreenResult: Equatable {
+enum EventScreenResult {
 
 	/// The user wants to go back a scene
 	case back
@@ -19,6 +19,9 @@ enum EventScreenResult: Equatable {
 	/// Continue with the next step in the flow
 	case `continue`
 
+	/// Show the vaccination events
+	case remoteVaccinationEvents([RemoteVaccinationEvent])
+
 	/// Show the details of a vaccination event
 	case details(title: String, body: String)
 }
@@ -28,6 +31,8 @@ protocol EventCoordinatorDelegate: AnyObject {
 	func vaccinationStartScreenDidFinish(_ result: EventScreenResult)
 
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
+
+	func listEventsScreenDidFinish(_ result: EventScreenResult)
 }
 
 protocol EventFlowDelegate: AnyObject {
@@ -88,6 +93,17 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
+	private func navigateToListEvents(_ events: [RemoteVaccinationEvent]) {
+
+		let viewController = ListEventsViewController(
+			viewModel: ListEventsViewModel(
+				coordinator: self,
+				remoteVaccinationEvents: events
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
+
 	private func navigateToVaccinationEventDetails(_ title: String, body: String) {
 
 		let viewController = InformationViewController(
@@ -137,8 +153,27 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
-			case .continue:
-				logInfo("To be implemented")
+			case .back:
+				if let vaccineStartViewController = navigationController.viewControllers
+					.first(where: { $0 is VaccinationStartViewController }) {
+
+					navigationController.popToViewController(
+						vaccineStartViewController,
+						animated: true
+					)
+				}
+			case let .remoteVaccinationEvents(remoteEvents):
+				navigateToListEvents(remoteEvents)
+			default:
+				break
+		}
+	}
+
+	func listEventsScreenDidFinish(_ result: EventScreenResult) {
+
+		switch result {
+			case .stop:
+				delegate?.eventFlowDidComplete()
 			case .back:
 				if let vaccineStartViewController = navigationController.viewControllers
 					.first(where: { $0 is VaccinationStartViewController }) {
@@ -150,6 +185,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				}
 			case let .details(title, body):
 				navigateToVaccinationEventDetails(title, body: body)
+			default:
+				break
 		}
 	}
 }

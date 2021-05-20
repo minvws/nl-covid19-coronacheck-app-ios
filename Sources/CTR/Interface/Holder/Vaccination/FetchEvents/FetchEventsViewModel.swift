@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias RemoteVaccinationEvent = (wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)
+
 class FetchEventsViewModel: Logging {
 
 	weak var coordinator: EventCoordinatorDelegate?
@@ -68,11 +70,14 @@ class FetchEventsViewModel: Logging {
 		)
 		startFetchingEventProvidersWithAccessTokens { eventProviders in
 			self.fetchHasEventInformation(eventProviders: eventProviders) { eventProvidersWithEventInformation in
-				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { eventResponses in
-					self.storeVaccinationEvent(eventResponses: eventResponses) { saved in
-						self.logInfo("Finished vaccination flow: \(saved)")
-						self.viewState = self.getViewState(from: eventResponses)
+				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation) { [self] remoteEvents in
+
+					if remoteEvents.isEmpty {
+						self.viewState = self.emptyEventsState()
+					} else {
+						self.coordinator?.fetchEventsScreenDidFinish(.remoteVaccinationEvents(remoteEvents))
 					}
+
 				}
 			}
 		}
@@ -109,25 +114,6 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: State Helpers
 
-	private func getViewState(
-		from eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> FetchEventsViewController.State {
-
-		var listDataSource = [(Vaccination.Identity, Vaccination.Event)]()
-
-		for eventResponse in eventResponses {
-			let identity = eventResponse.wrapper.identity
-			for event in eventResponse.wrapper.events {
-				listDataSource.append((identity, event))
-			}
-		}
-
-		if listDataSource.isEmpty {
-			return emptyEventsState()
-		} else {
-			return listEventsState(listDataSource)
-		}
-	}
-
 	private func emptyEventsState() -> FetchEventsViewController.State {
 
 		return .emptyEvents(
@@ -140,61 +126,6 @@ class FetchEventsViewModel: Logging {
 				}
 			)
 		)
-	}
-
-	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> FetchEventsViewController.State {
-
-		return .listEvents(
-			content: FetchEventsViewController.Content(
-				title: .holderVaccinationListTitle,
-				subTitle: .holderVaccinationListMessage,
-				actionTitle: .holderVaccinationListActionTitle,
-				action: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				}
-			),
-			rows: getSortedRowsFromEvents(dataSource)
-		)
-	}
-
-	func getSortedRowsFromEvents(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> [FetchEventsViewController.Row] {
-
-		var rows = [FetchEventsViewController.Row]()
-
-		// Sort the vaccination events in ascending order
-		let sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.vaccination.getDate(with: dateFormatter),
-			   let rhsDate = rhs.event.vaccination.getDate(with: dateFormatter) {
-				return lhsDate < rhsDate
-			}
-			return false
-		}
-
-		for (index, dataRow) in sortedDataSource.enumerated() {
-
-			let formattedDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
-				.map {
-					printDateFormatter.string(from: $0)
-				} ?? ""
-
-			rows.append(
-				FetchEventsViewController.Row(
-					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
-					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
-					action: { [weak self] in
-
-						self?.coordinator?.fetchEventsScreenDidFinish(
-							.details(
-								title: .holderVaccinationAboutTitle,
-								body: .holderVaccinationAboutBody
-							)
-						)
-					}
-				)
-			)
-		}
-
-		return rows
 	}
 
 	// MARK: Fetch access tokens and event providers
@@ -311,9 +242,9 @@ class FetchEventsViewModel: Logging {
 
 	private func fetchVaccinationEvents(
 		eventProviders: [Vaccination.EventProvider],
-		onCompletion: @escaping ( [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]) -> Void) {
+		onCompletion: @escaping ( [RemoteVaccinationEvent]) -> Void) {
 
-		var eventResponses = [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)]()
+		var eventResponses = [RemoteVaccinationEvent]()
 
 		for provider in eventProviders {
 			fetchVaccinationEvent(from: provider) { result in
@@ -349,32 +280,32 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	// MARK: Store vaccination events
-
-	private func storeVaccinationEvent(
-		eventResponses: [(wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)],
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-		for response in eventResponses where response.wrapper.status == .complete {
-
-			// Remove any existing vaccination events for the provider
-			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
-
-			// Store the new vaccination events
-
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
-				success = success && walletManager.storeEventGroup(
-					.vaccination,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
-					issuedAt: maxIssuedAt
-				)
-				if !success {
-					break
-				}
-			}
-		}
-		onCompletion(success)
-	}
+//	// MARK: Store vaccination events
+//
+//	private func storeVaccinationEvent(
+//		eventResponses: [RemoteVaccinationEvent],
+//		onCompletion: @escaping (Bool) -> Void) {
+//
+//		var success = true
+//		for response in eventResponses where response.wrapper.status == .complete {
+//
+//			// Remove any existing vaccination events for the provider
+//			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+//
+//			// Store the new vaccination events
+//
+//			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
+//				success = success && walletManager.storeEventGroup(
+//					.vaccination,
+//					providerIdentifier: response.wrapper.providerIdentifier,
+//					signedResponse: response.signedResponse,
+//					issuedAt: maxIssuedAt
+//				)
+//				if !success {
+//					break
+//				}
+//			}
+//		}
+//		onCompletion(success)
+//	}
 }
