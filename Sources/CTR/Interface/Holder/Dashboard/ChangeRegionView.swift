@@ -19,6 +19,7 @@ class ChangeRegionView: BaseView {
 
 	private let currentLocationLabel: Label = {
 		let label = Label(body: nil, textColor: Theme.colors.grey2)
+		label.numberOfLines = 0
 		label.textAlignment = .center
 		return label
 	}()
