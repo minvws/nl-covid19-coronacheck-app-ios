@@ -288,10 +288,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 
-		let navController = UINavigationController(rootViewController: destination)
+		destination.transitioningDelegate = bottomSheetTransitioningDelegate
+		destination.modalPresentationStyle = .custom
+		destination.modalTransitionStyle = .coverVertical
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
-			navController,
+			destination,
 			animated: true,
 			completion: nil
 		)
