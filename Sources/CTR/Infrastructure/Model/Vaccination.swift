@@ -110,7 +110,7 @@ struct Vaccination {
 	}
 
 	/// A wrapper around an event result.
-	struct EventResultWrapper: Codable {
+	struct EventResultWrapper: Codable, Equatable {
 
 		/// The provider identifier
 		let providerIdentifier: String
@@ -158,7 +158,7 @@ struct Vaccination {
 	}
 
 	/// The state of a test
-	enum EventState: String, Codable {
+	enum EventState: String, Codable, Equatable {
 
 		/// The vaccination result is pending
 		case pending

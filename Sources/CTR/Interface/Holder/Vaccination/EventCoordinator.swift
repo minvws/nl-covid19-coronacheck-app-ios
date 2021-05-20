@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum VaccinationScreenResult: Equatable {
+enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
 	case back
@@ -19,32 +19,64 @@ enum VaccinationScreenResult: Equatable {
 	/// Continue with the next step in the flow
 	case `continue`
 
+	/// Show the vaccination events
+	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
+
 	/// Show the details of a vaccination event
 	case details(title: String, body: String)
+
+	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
+		switch (lhs, rhs) {
+			case (.back, .back), (.stop, .stop), (.continue, .continue):
+				return true
+			case (let .details(lhsTitle, lhsBody), let .details(rhsTitle, rhsBody)):
+				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
+			case (let remoteVaccinationEvents(lhsEvents), let remoteVaccinationEvents(rhsEvents)):
+
+				if lhsEvents.count != rhsEvents.count {
+					return false
+				}
+
+				for index in 0 ..< lhsEvents.count {
+
+					if lhsEvents[index].wrapper != rhsEvents[index].wrapper ||
+						lhsEvents[index].signedResponse != rhsEvents[index].signedResponse {
+						return false
+					}
+				}
+				return true
+
+			default:
+				return false
+		}
+	}
+
 }
 
-protocol VaccinationCoordinatorDelegate: AnyObject {
+protocol EventCoordinatorDelegate: AnyObject {
 
-	func vaccinationStartScreenDidFinish(_ result: VaccinationScreenResult)
+	func vaccinationStartScreenDidFinish(_ result: EventScreenResult)
 
-	func fetchEventsScreenDidFinish(_ result: VaccinationScreenResult)
+	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
+
+	func listEventsScreenDidFinish(_ result: EventScreenResult)
 }
 
-protocol VaccinationFlowDelegate: AnyObject {
+protocol EventFlowDelegate: AnyObject {
 
-	/// The vaccination flow is finished
-	func vaccinationFlowDidComplete()
+	/// The event flow is finished
+	func eventFlowDidComplete()
 
-	func vaccinationFlowDidCancel()
+	func eventFlowDidCancel()
 }
 
-class VaccinationCoordinator: Coordinator, Logging {
+class EventCoordinator: Coordinator, Logging {
 
 	var childCoordinators: [Coordinator] = []
 
 	var navigationController: UINavigationController
 
-	weak var delegate: VaccinationFlowDelegate?
+	weak var delegate: EventFlowDelegate?
 
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
@@ -54,7 +86,7 @@ class VaccinationCoordinator: Coordinator, Logging {
 	///   - delegate: the vaccination flow delegate
 	init(
 		navigationController: UINavigationController,
-		delegate: VaccinationFlowDelegate) {
+		delegate: EventFlowDelegate) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
@@ -88,6 +120,17 @@ class VaccinationCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
+	private func navigateToListEvents(_ events: [RemoteVaccinationEvent]) {
+
+		let viewController = ListEventsViewController(
+			viewModel: ListEventsViewModel(
+				coordinator: self,
+				remoteVaccinationEvents: events
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
+
 	private func navigateToVaccinationEventDetails(_ title: String, body: String) {
 
 		let viewController = InformationViewController(
@@ -107,7 +150,7 @@ class VaccinationCoordinator: Coordinator, Logging {
 	}
 }
 
-extension VaccinationCoordinator: Dismissable {
+extension EventCoordinator: Dismissable {
 
 	func dismiss() {
 
@@ -115,13 +158,13 @@ extension VaccinationCoordinator: Dismissable {
 	}
 }
 
-extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
+extension EventCoordinator: EventCoordinatorDelegate {
 
-	func vaccinationStartScreenDidFinish(_ result: VaccinationScreenResult) {
+	func vaccinationStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case .back, .stop:
-				delegate?.vaccinationFlowDidCancel()
+				delegate?.eventFlowDidCancel()
 			case .continue:
 				// When the digid login is fixed, the default 999999011 should be removed.
 				// Until then, this is the only fake BSN to use to get vaccination events
@@ -132,13 +175,32 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 		}
 	}
 
-	func fetchEventsScreenDidFinish(_ result: VaccinationScreenResult) {
+	func fetchEventsScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case .stop:
-				delegate?.vaccinationFlowDidComplete()
-			case .continue:
-				logInfo("To be implemented")
+				delegate?.eventFlowDidComplete()
+			case .back:
+				if let vaccineStartViewController = navigationController.viewControllers
+					.first(where: { $0 is VaccinationStartViewController }) {
+
+					navigationController.popToViewController(
+						vaccineStartViewController,
+						animated: true
+					)
+				}
+			case let .remoteVaccinationEvents(remoteEvents):
+				navigateToListEvents(remoteEvents)
+			default:
+				break
+		}
+	}
+
+	func listEventsScreenDidFinish(_ result: EventScreenResult) {
+
+		switch result {
+			case .stop:
+				delegate?.eventFlowDidComplete()
 			case .back:
 				if let vaccineStartViewController = navigationController.viewControllers
 					.first(where: { $0 is VaccinationStartViewController }) {
@@ -150,11 +212,13 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 				}
 			case let .details(title, body):
 				navigateToVaccinationEventDetails(title, body: body)
+			default:
+				break
 		}
 	}
 }
 
-extension VaccinationCoordinator: OpenUrlProtocol {
+extension EventCoordinator: OpenUrlProtocol {
 
 	/// Open a url
 	/// - Parameters:
