@@ -47,6 +47,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion,  completion: @escaping (QRCodeValidityRegion) -> Void)
+
 	func openUrl(_ url: URL, inApp: Bool)
 }
 // swiftlint:enable class_delegate_protocol
@@ -56,6 +58,7 @@ class HolderCoordinator: SharedCoordinator {
 	var networkManager: NetworkManaging = Services.networkManager
 	var openIdManager: OpenIdManaging = Services.openIdManager
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	// Designated starter method
 	override func start() {
@@ -168,6 +171,15 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
+
+	func presentChangeRegionBottomSheet(currentRegion: QRCodeValidityRegion, callback: @escaping (QRCodeValidityRegion) -> Void) {
+		let viewController = ToggleRegionViewController(viewModel: ToggleRegionViewModel(currentRegion: currentRegion, didChangeCallback: callback))
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.present(viewController, animated: true, completion: nil)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -190,7 +202,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity
+				maxValidity: maxValidity,
+				qrCodeValidityRegion: .netherlands // HARD-CODED for now
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
@@ -326,6 +339,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userDidScanRequestToken(requestToken: RequestToken) {
 		navigateToTokenEntry(requestToken)
 	}
+
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
+		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
+	}
 }
 
 // MARK: - MenuDelegate
@@ -426,7 +443,8 @@ extension HolderCoordinator: VaccinationFlowDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity
+				maxValidity: maxValidity,
+				qrCodeValidityRegion: .netherlands // HARD CODED for now
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
