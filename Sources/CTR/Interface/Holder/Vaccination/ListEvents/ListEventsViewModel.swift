@@ -12,6 +12,7 @@ class ListEventsViewModel: Logging {
 	weak var coordinator: EventCoordinatorDelegate?
 
 	private var walletManager: WalletManaging
+	private var networkManager: NetworkManaging
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -48,8 +49,11 @@ class ListEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate,
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
+		networkManager: NetworkManaging = Services.networkManager,
 		walletManager: WalletManaging = WalletManager()) {
+
 		self.coordinator = coordinator
+		self.networkManager = networkManager
 		self.walletManager = walletManager
 
 		viewState = .loading(
@@ -61,11 +65,6 @@ class ListEventsViewModel: Logging {
 			)
 		)
 		viewState = getViewState(from: remoteVaccinationEvents)
-
-//					self.storeVaccinationEvent(eventResponses: remoteVaccinationEvents) { saved in
-//						self.logInfo("Finished vaccination flow: \(saved)")
-//					}
-
 	}
 
 	func backButtonTapped() {
@@ -100,11 +99,11 @@ class ListEventsViewModel: Logging {
 	// MARK: State Helpers
 
 	private func getViewState(
-		from eventResponses: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
+		from remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		var listDataSource = [(Vaccination.Identity, Vaccination.Event)]()
 
-		for eventResponse in eventResponses {
+		for eventResponse in remoteEvents {
 			let identity = eventResponse.wrapper.identity
 			for event in eventResponse.wrapper.events {
 				listDataSource.append((identity, event))
@@ -114,7 +113,7 @@ class ListEventsViewModel: Logging {
 		if listDataSource.isEmpty {
 			return emptyEventsState()
 		} else {
-			return listEventsState(listDataSource)
+			return listEventsState(listDataSource, remoteEvents: remoteEvents)
 		}
 	}
 
@@ -132,7 +131,7 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> ListEventsViewController.State {
+	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)], remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
 			content: ListEventsViewController.Content(
@@ -140,7 +139,8 @@ class ListEventsViewModel: Logging {
 				subTitle: .holderVaccinationListMessage,
 				actionTitle: .holderVaccinationListActionTitle,
 				action: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.saveAndSignTheEvents(remoteEvents: remoteEvents)
+
 				}
 			),
 			rows: getSortedRowsFromEvents(dataSource)
@@ -187,14 +187,37 @@ class ListEventsViewModel: Logging {
 		return rows
 	}
 
+	// MARK: Sign the events
+
+	private func saveAndSignTheEvents( remoteEvents: [RemoteVaccinationEvent]) {
+
+		self.storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
+			self.logInfo("Finished vaccination flow: \(saved)")
+
+			self.networkManager.fetchGreencards(dictionary: [:]) { result in
+//				Result<GreenCardResponse, NetworkError>
+
+				switch result {
+					case let .success(greencardResponse):
+						self.logInfo("ok: \(greencardResponse)")
+					case let .failure(error):
+						self.logError("error: \(error)")
+				}
+
+			}
+
+//			self.coordinator?.fetchEventsScreenDidFinish(.stop)
+		}
+	}
+
 	// MARK: Store vaccination events
 
 	private func storeVaccinationEvent(
-		eventResponses: [RemoteVaccinationEvent],
+		remoteEvents: [RemoteVaccinationEvent],
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
-		for response in eventResponses where response.wrapper.status == .complete {
+		for response in remoteEvents where response.wrapper.status == .complete {
 
 			// Remove any existing vaccination events for the provider
 			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)

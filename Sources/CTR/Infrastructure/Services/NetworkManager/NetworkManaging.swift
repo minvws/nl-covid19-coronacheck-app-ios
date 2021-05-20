@@ -88,7 +88,11 @@ protocol NetworkManaging {
 	/// Get the event providers
 	/// - Parameter completion: completion handler
 	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void)
-	
+
+	func fetchGreencards(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<GreenCardResponse.Response, NetworkError>) -> Void)
+
 	/// Get a test result
 	/// - Parameters:
 	///   - provider: the test provider
