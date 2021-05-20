@@ -212,7 +212,7 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 					cardWrapperViewBottomConstraint?.constant = 0
 					cardWrapperViewTopConstraint?.constant = 0
 					UIView.animate(withDuration: 0.3) {
-						self.containerView?.layoutSubviews()
+						self.containerView?.layoutIfNeeded()
 					}
 				}
 
