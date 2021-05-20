@@ -20,9 +20,6 @@ class InformationViewModel {
 	/// The message of the information page
 	@Bindable private(set) var message: String
 
-	/// Show Bottom Close Button
-	@Bindable private(set) var showBottomCloseButton: Bool
-
 	// MARK: - Initializer
 
 	/// Initializer
@@ -30,17 +27,14 @@ class InformationViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - title: The title of the page
 	///   - message: The message of the page
-	///   - showBottomCloseButton: True if we want to show a close button at the bottom
 	init(
 		coordinator: Dismissable,
 		title: String,
-		message: String,
-		showBottomCloseButton: Bool) {
+		message: String) {
 
 		self.coordinator = coordinator
 		self.title = title
 		self.message = message
-		self.showBottomCloseButton = showBottomCloseButton
 	}
 
 	// MARK: - Methods

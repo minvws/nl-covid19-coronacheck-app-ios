@@ -36,8 +36,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	///   - showBottomCloseButton: True if the bottom close button should be shown
-	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool)
+	func presentInformationPage(title: String, body: String)
 
 	func userWishesToCreateAQR()
 
@@ -56,6 +55,8 @@ class HolderCoordinator: SharedCoordinator {
 	var networkManager: NetworkManaging = Services.networkManager
 	var openIdManager: OpenIdManaging = Services.openIdManager
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	// Designated starter method
 	override func start() {
@@ -296,19 +297,22 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	///   - showBottomCloseButton: True if the bottom close button should be shown
-	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
+	func presentInformationPage(title: String, body: String) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body,
-				showBottomCloseButton: showBottomCloseButton
+				message: body
 			)
 		)
-		let destination = UINavigationController(rootViewController: viewController)
-		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(viewController, animated: true, completion: nil)
+//		let destination = UINavigationController(rootViewController: viewController)
+//		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
 
 	func userWishesToCreateANegativeTestQR() {

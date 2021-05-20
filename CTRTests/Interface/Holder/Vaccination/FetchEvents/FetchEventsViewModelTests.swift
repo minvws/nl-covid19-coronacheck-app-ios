@@ -50,7 +50,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == .back
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == VaccinationScreenResult.back
 	}
 
 	func test_backButtonTapped_listState() {

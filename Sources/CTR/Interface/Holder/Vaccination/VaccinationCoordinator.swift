@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum VaccinationScreenResult {
+enum VaccinationScreenResult: Equatable {
 
 	/// The user wants to go back a scene
 	case back
@@ -18,6 +18,9 @@ enum VaccinationScreenResult {
 
 	/// Continue with the next step in the flow
 	case `continue`
+
+	/// Show the details of a vaccination event
+	case details(title: String, body: String)
 }
 
 protocol VaccinationCoordinatorDelegate: AnyObject {
@@ -42,6 +45,8 @@ class VaccinationCoordinator: Coordinator, Logging {
 	var navigationController: UINavigationController
 
 	weak var delegate: VaccinationFlowDelegate?
+
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	/// Initiailzer
 	/// - Parameters:
@@ -82,6 +87,32 @@ class VaccinationCoordinator: Coordinator, Logging {
 		)
 		navigationController.pushViewController(viewController, animated: true)
 	}
+
+	private func navigateToVaccinationEventDetails(_ title: String, body: String) {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: title,
+				message: body
+			)
+		)
+
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+		
+	}
+}
+
+extension VaccinationCoordinator: Dismissable {
+
+	func dismiss() {
+
+		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+	}
 }
 
 extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
@@ -96,6 +127,8 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 				// Until then, this is the only fake BSN to use to get vaccination events
 				// TODO: Remove default value // swiftlint:disable:this todo
 				navigateToFetchEvents(token: "999999011")
+			default:
+				break
 		}
 	}
 
@@ -115,6 +148,8 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 						animated: true
 					)
 				}
+			case let .details(title, body):
+				navigateToVaccinationEventDetails(title, body: body)
 		}
 	}
 }

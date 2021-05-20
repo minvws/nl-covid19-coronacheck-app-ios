@@ -182,7 +182,13 @@ class FetchEventsViewModel: Logging {
 					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
 					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
 					action: { [weak self] in
-						self?.logDebug("Tapped on \(dataRow.event.unique)")
+
+						self?.coordinator?.fetchEventsScreenDidFinish(
+							.details(
+								title: .holderVaccinationAboutTitle,
+								body: .holderVaccinationAboutBody
+							)
+						)
 					}
 				)
 			)
