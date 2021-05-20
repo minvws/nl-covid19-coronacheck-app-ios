@@ -29,6 +29,4 @@ extension String {
 
 		return Localization.string(for: "toggleRegion.label.bottomText.nl")
 	}
-
 }
-

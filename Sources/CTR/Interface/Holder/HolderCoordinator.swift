@@ -46,7 +46,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion,  completion: @escaping (QRCodeValidityRegion) -> Void)
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
 
 	func openUrl(_ url: URL, inApp: Bool)
 }
