@@ -38,7 +38,7 @@ struct SecurityCheckerFactory {
 		trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
 		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
 			trustedNames.append(TrustConfiguration.testNameContent)
-			trustedCertificates.append(TrustConfiguration.dstRootCAX3)
+			trustedCertificates.append(TrustConfiguration.dstRootISRGX1)
 		}
 
 		if strategy == .data {
