@@ -19,7 +19,7 @@ enum VaccinationScreenResult: Equatable {
 	case `continue`
 
 	/// Show the details of a vaccination event
-	case details(Vaccination.Event, Vaccination.Identity)
+	case details(title: String, body: String)
 }
 
 protocol VaccinationCoordinatorDelegate: AnyObject {
@@ -147,12 +147,8 @@ extension VaccinationCoordinator: VaccinationCoordinatorDelegate {
 						animated: true
 					)
 				}
-			//			case let .details(event, identity):
-			// Todo: Populate the .holderVaccinationAboutBody with the right details from event and identity.
-			// Copy is not final, so just a placeholder.
-			case .details:
-
-				navigateToVaccinationEventDetails(.holderVaccinationAboutTitle, body: .holderVaccinationAboutBody)
+			case let .details(title, body):
+				navigateToVaccinationEventDetails(title, body: body)
 		}
 	}
 }

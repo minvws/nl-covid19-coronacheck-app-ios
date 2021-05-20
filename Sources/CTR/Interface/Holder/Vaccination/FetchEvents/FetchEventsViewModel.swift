@@ -182,7 +182,13 @@ class FetchEventsViewModel: Logging {
 					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
 					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
 					action: { [weak self] in
-						self?.coordinator?.fetchEventsScreenDidFinish(.details(dataRow.event, dataRow.identity))
+
+						self?.coordinator?.fetchEventsScreenDidFinish(
+							.details(
+								title: .holderVaccinationAboutTitle,
+								body: .holderVaccinationAboutBody
+							)
+						)
 					}
 				)
 			)
