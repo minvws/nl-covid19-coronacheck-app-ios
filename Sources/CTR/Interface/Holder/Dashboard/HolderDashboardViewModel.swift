@@ -70,6 +70,18 @@ struct QRCardInfo {
 	let validUntilAccessibility: String
 }
 
+struct ChangeRegionInfo {
+	let buttonTitle: String
+	let currentLocationTitle: String
+}
+
+/// Currently used for the NL/EU toggle on the dashboard
+/// but could be expanded elsewhere
+enum QRCodeValidityRegion {
+	case netherlands
+	case europeanUnion
+}
+
 class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 	/// The logging category
@@ -123,6 +135,24 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// The create QR Card information
 	@Bindable private(set) var qrCard: QRCardInfo?
 
+	@Bindable private(set) var changeRegionInfo: ChangeRegionInfo?
+
+	private var qrCodeValidityRegion: QRCodeValidityRegion {
+		didSet {
+			changeRegionInfo = ChangeRegionInfo(
+				buttonTitle: .changeRegionButton,
+				currentLocationTitle: {
+					switch qrCodeValidityRegion {
+						case .netherlands:
+							return .changeRegionTitleNL
+						case .europeanUnion:
+							return .changeRegionTitleEU
+					}
+				}()
+			)
+		}
+	}
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -135,7 +165,8 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
-		maxValidity: Int) {
+		maxValidity: Int,
+		qrCodeValidityRegion: QRCodeValidityRegion) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
@@ -144,6 +175,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		self.title = .holderDashboardTitle
 		self.message = .holderDashboardIntro
 		self.expiredTitle = .holderDashboardQRExpired
+		self.qrCodeValidityRegion = qrCodeValidityRegion
 
 		// Start by showing nothing
 		self.showExpiredQR = false
@@ -168,6 +200,18 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
 		super.init()
+
+		changeRegionInfo = ChangeRegionInfo(
+			buttonTitle: .changeRegionButton,
+			currentLocationTitle: {
+				switch qrCodeValidityRegion {
+					case .netherlands:
+						return .changeRegionTitleNL
+					case .europeanUnion:
+						return .changeRegionTitleEU
+				}
+			}()
+		)
 	}
 
 	/// The user tapped on one of the cards
@@ -180,7 +224,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			case .create:
 				coordinator?.navigateToAboutMakingAQR()
 			case .qrcode:
-				coordinator?.navigateToEnlargedQR()
+				coordinator?.navigateToShowQR()
 		}
 	}
 
@@ -415,5 +459,12 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
+	}
+
+	func didTapChangeRegion() {
+		coordinator?.userWishesToChangeRegion(currentRegion: qrCodeValidityRegion) { [weak self] newRegion in
+			print("new region: ", newRegion)
+			self?.qrCodeValidityRegion = newRegion
+		}
 	}
 }

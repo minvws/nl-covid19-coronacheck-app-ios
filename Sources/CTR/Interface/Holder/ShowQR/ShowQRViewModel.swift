@@ -7,10 +7,10 @@
   
 import UIKit
 
-class EnlargedQRViewModel: PreventableScreenCapture, Logging {
+class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	/// The logging category
-	var loggingCategory: String = "EnlargedQRViewModel"
+	var loggingCategory: String = "ShowQRViewModel"
 
 	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?

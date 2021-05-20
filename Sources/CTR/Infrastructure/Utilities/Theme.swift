@@ -202,6 +202,8 @@ final class Colors {
 
 	var grey4: UIColor { return color(for: "Grey4") }
 
+	var grey5: UIColor { return color(for: "Grey5") }
+
 	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
 
 	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }

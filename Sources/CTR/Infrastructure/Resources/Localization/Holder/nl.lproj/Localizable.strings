@@ -78,6 +78,8 @@
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
+"general.europeanUnion" = "Europa";
+"general.netherlands" = "Nederland";
 "general.error.title" = "Sorry, er ging iets mis";
 "general.error.technical.text" = "Dat komt door een technische fout.";
 "general.error.technical.custom" = "Dat komt door een technische fout (%@)";
@@ -91,6 +93,12 @@
 "general.menu.open" = "Open zijmenu";
 "general.menu.close" = "Sluit zijmenu";
 "general.list.accessibility" = "%@ van %@.";
+
+/* MARK: - Toggle Region */
+"toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland, maar binnen Europa? Gebruik dan je Europese bewijs.";
+"toggleRegion.label.topText.nl" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland, maar binnen Europa? Gebruik dan je Europese bewijs.";
+"toggleRegion.label.bottomText.eu" = "In de Europese QR-code zijn meer gegevens verwerkt: je naam, geboortedatum, het type vaccin en batchnummer.";
+"toggleRegion.label.bottomText.nl" = "In de Nederlandse QR-code staan alleen je initialen, je geboortedag en je geboortemaand.";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
@@ -186,6 +194,9 @@
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";
 "holder.dashboard.qr.minutes.long" = "minuten";
+"holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
+"holder.dashboard.changeregion.title.eu" = "Ik reis buiten Nederland";
+"holder.dashboard.changeregion.button" = "Aanpassen";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";

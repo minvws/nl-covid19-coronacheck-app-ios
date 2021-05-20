@@ -10,12 +10,12 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToEnlargedQR = false
-	var invokedNavigateToEnlargedQRCount = 0
+	var invokedNavigateToShowQR = false
+	var invokedNavigateToShowQRCount = 0
 
-	func navigateToEnlargedQR() {
-		invokedNavigateToEnlargedQR = true
-		invokedNavigateToEnlargedQRCount += 1
+	func navigateToShowQR() {
+		invokedNavigateToShowQR = true
+		invokedNavigateToShowQRCount += 1
 	}
 
 	var invokedNavigateToAppointment = false
@@ -112,6 +112,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserDidScanRequestTokenCount += 1
 		invokedUserDidScanRequestTokenParameters = (requestToken, ())
 		invokedUserDidScanRequestTokenParametersList.append((requestToken, ()))
+	}
+
+	var invokedUserWishesToChangeRegion = false
+	var invokedUserWishesToChangeRegionCount = 0
+	var invokedUserWishesToChangeRegionParameters: (currentRegion: QRCodeValidityRegion, Void)?
+	var invokedUserWishesToChangeRegionParametersList = [(currentRegion: QRCodeValidityRegion, Void)]()
+	var stubbedUserWishesToChangeRegionCompletionResult: (QRCodeValidityRegion, Void)?
+
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
+		invokedUserWishesToChangeRegion = true
+		invokedUserWishesToChangeRegionCount += 1
+		invokedUserWishesToChangeRegionParameters = (currentRegion, ())
+		invokedUserWishesToChangeRegionParametersList.append((currentRegion, ()))
+		if let result = stubbedUserWishesToChangeRegionCompletionResult {
+			completion(result.0)
+		}
 	}
 
 	var invokedOpenUrl = false

@@ -35,7 +35,8 @@ class DashboardViewModelTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
-			maxValidity: 48
+			maxValidity: 48,
+			qrCodeValidityRegion: .netherlands
 		)
 	}
 
@@ -76,7 +77,8 @@ class DashboardViewModelTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
-			maxValidity: 48
+			maxValidity: 48,
+			qrCodeValidityRegion: .netherlands
 		)
 
 		// Then
@@ -188,7 +190,7 @@ class DashboardViewModelTests: XCTestCase {
 	}
 
 	/// Test the navigat to enlarged QR scene
-	func testNavigateToEnlargedQR() {
+	func testNavigateToShowQR() {
 
 		// Given
 
@@ -196,7 +198,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.cardTapped(.qrcode)
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToEnlargedQR) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToShowQR) == true
 	}
 
 	func testCloseExpiredRQ() {

@@ -60,6 +60,12 @@ class HolderDashboardView: ScrolledStackView {
 		return view
 	}()
 
+	let changeRegionView: ChangeRegionView = {
+		let view = ChangeRegionView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
@@ -71,6 +77,8 @@ class HolderDashboardView: ScrolledStackView {
 		// Currently hide the Book a Test card
 		// stackView.addArrangedSubview(appointmentCard)
 		stackView.addArrangedSubview(createCard)
+
+		stackView.addArrangedSubview(changeRegionView)
 	}
 
 	// MARK: Public Access
