@@ -10,7 +10,7 @@ import UIKit
 class VaccinationStartViewController: BaseViewController {
 
 	private let viewModel: VaccinationStartViewModel
-	private let sceneView = VaccinationStartView()
+	internal let sceneView = VaccinationStartView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -36,14 +36,20 @@ class VaccinationStartViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		title = "** Vaccinatie ophalen **"
-		sceneView.primaryTitle = "** Login met DigiD ** "
+		sceneView.title = .holderVaccinationStartTitle
+		sceneView.message = .holderVaccinationStartMessage
+		sceneView.primaryTitle = .holderVaccinationStartAction
 		navigationItem.hidesBackButton = true
 		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.primaryButtonTapped()
+		}
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
 		}
 	}
 

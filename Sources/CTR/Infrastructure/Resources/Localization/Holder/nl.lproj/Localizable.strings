@@ -263,7 +263,8 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Vaccinatie ophalen";
-"holder.vaccination.start.message" = "<p>Heb je een of meer prikken gekregen? Dan kan je een Europees bewijs maken.<p><p>Vragen over vaccinaties? <a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier meer.</a></p>";
+"holder.vaccination.start.message" = "
+<p>Let op: je kunt alleen een Europees bewijs maken als je al gevaccineerd bent.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p><p>Vragen over vaccinaties? <a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier meer.</a></p>";
 "holder.vaccination.start.action" = "Login met DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
