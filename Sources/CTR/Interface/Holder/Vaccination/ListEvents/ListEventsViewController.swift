@@ -38,7 +38,7 @@ class ListEventsViewController: BaseViewController {
 	}
 
 	private let viewModel: ListEventsViewModel
-	private let sceneView = FetchEventsView()
+	private let sceneView = ListEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model

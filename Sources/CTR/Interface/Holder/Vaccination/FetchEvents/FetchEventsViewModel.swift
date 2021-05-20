@@ -86,7 +86,7 @@ class FetchEventsViewModel: Logging {
 	func backButtonTapped() {
 
 		switch viewState {
-			case .loading, .listEvents:
+			case .loading:
 				warnBeforeGoBack()
 			case .emptyEvents:
 				goBack()
@@ -279,33 +279,4 @@ class FetchEventsViewModel: Logging {
 			}
 		}
 	}
-
-//	// MARK: Store vaccination events
-//
-//	private func storeVaccinationEvent(
-//		eventResponses: [RemoteVaccinationEvent],
-//		onCompletion: @escaping (Bool) -> Void) {
-//
-//		var success = true
-//		for response in eventResponses where response.wrapper.status == .complete {
-//
-//			// Remove any existing vaccination events for the provider
-//			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
-//
-//			// Store the new vaccination events
-//
-//			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
-//				success = success && walletManager.storeEventGroup(
-//					.vaccination,
-//					providerIdentifier: response.wrapper.providerIdentifier,
-//					signedResponse: response.signedResponse,
-//					issuedAt: maxIssuedAt
-//				)
-//				if !success {
-//					break
-//				}
-//			}
-//		}
-//		onCompletion(success)
-//	}
 }

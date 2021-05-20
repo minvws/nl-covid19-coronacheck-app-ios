@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FetchEventsView: ScrolledStackWithButtonView {
+class ListEventsView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -27,6 +27,18 @@ class FetchEventsView: ScrolledStackWithButtonView {
 	private let messageLabel: Label = {
 
 		return Label(body: nil).multiline()
+	}()
+
+	/// The stack view for the event
+	let eventStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .fill
+		view.distribution = .fill
+		view.spacing = 0
+		return view
 	}()
 
 	/// The spinner
@@ -54,8 +66,10 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 
 		addSubview(spinner)
+
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(eventStackView)
 	}
 
 	/// Setup the constraints
@@ -78,6 +92,14 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		setupPrimaryButton()
 	}
 
+	private func createSeparatorView() -> UIView {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.line
+		return view
+	}
+
 	// MARK: Public Access
 
 	/// The title
@@ -93,11 +115,23 @@ class FetchEventsView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			messageLabel.attributedText = .makeFromHtml(text: message, font: Theme.fonts.body, textColor: Theme.colors.dark)
 		}
+	}
+
+	func addSeparator() {
+
+		let separator = createSeparatorView()
+		eventStackView.addArrangedSubview(separator)
+
+		NSLayoutConstraint.activate([
+			separator.heightAnchor.constraint(equalToConstant: 1)
+		])
+	}
+
+	func addVaccinationEventView(_ eventView: VaccinationEventView) {
+
+		eventStackView.addArrangedSubview(eventView)
+		addSeparator()
 	}
 }

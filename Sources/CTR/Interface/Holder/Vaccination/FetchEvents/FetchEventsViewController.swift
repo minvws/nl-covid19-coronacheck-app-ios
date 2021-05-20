@@ -11,7 +11,6 @@ class FetchEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
-		case listEvents(content: Content, rows: [Row])
 		case emptyEvents(content: Content)
 	}
 
@@ -19,12 +18,6 @@ class FetchEventsViewController: BaseViewController {
 		let title: String
 		let subTitle: String?
 		let actionTitle: String?
-		let action: (() -> Void)?
-	}
-
-	struct Row {
-		let title: String
-		let subTitle: String
 		let action: (() -> Void)?
 	}
 
@@ -83,8 +76,6 @@ class FetchEventsViewController: BaseViewController {
 					self?.setForNoEvents(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
-				case let .listEvents(content, rows):
-					self?.setForListEvents(content, rows: rows)
 			}
 		}
 
@@ -102,29 +93,6 @@ class FetchEventsViewController: BaseViewController {
 
 		sceneView.spinner.isHidden = false
 		displayContent(content)
-	}
-
-	private func setForListEvents(_ content: Content, rows: [Row]) {
-
-//		sceneView.spinner.isHidden = true
-//		displayContent(content)
-//
-//		// Remove previously added rows:
-//		sceneView.eventStackView.subviews
-//			.forEach { $0.removeFromSuperview() }
-//
-//		sceneView.addSeparator()
-//
-//		// Add new rows:
-//		rows
-//			.map { rowModel -> VaccinationEventView in
-//				VaccinationEventView.makeView(
-//					title: rowModel.title,
-//					subTitle: rowModel.subTitle,
-//					command: rowModel.action
-//				)
-//			}
-//			.forEach(self.sceneView.addVaccinationEventView)
 	}
 
 	private func setForNoEvents(_ content: Content) {
