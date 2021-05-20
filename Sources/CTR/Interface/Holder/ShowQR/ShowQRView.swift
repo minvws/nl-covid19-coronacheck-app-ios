@@ -7,7 +7,7 @@
   
 import UIKit
 
-class EnlargedQRImageView: BaseView {
+class ShowQRImageView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {

@@ -12,7 +12,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	// MARK: Navigation
 
 	/// Navigate to enlarged QR
-	func navigateToEnlargedQR()
+	func navigateToShowQR()
 
 	/// Navigate to appointment
 	func navigateToAppointment()
@@ -217,10 +217,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to enlarged QR
-	func navigateToEnlargedQR() {
+	func navigateToShowQR() {
 
-		let destination = EnlargedQRViewController(
-			viewModel: EnlargedQRViewModel(
+		let destination = ShowQRViewController(
+			viewModel: ShowQRViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,

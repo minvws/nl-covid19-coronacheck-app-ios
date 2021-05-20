@@ -227,7 +227,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			case .create:
 				coordinator?.navigateToAboutMakingAQR()
 			case .qrcode:
-				coordinator?.navigateToEnlargedQR()
+				coordinator?.navigateToShowQR()
 		}
 	}
 
