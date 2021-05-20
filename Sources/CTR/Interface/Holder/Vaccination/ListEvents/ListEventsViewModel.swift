@@ -94,7 +94,7 @@ class ListEventsViewModel: Logging {
 
 	func goBack() {
 
-		coordinator?.fetchEventsScreenDidFinish(.back)
+		coordinator?.listEventsScreenDidFinish(.back)
 	}
 
 	// MARK: State Helpers

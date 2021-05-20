@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum EventScreenResult {
+enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
 	case back
@@ -20,10 +20,37 @@ enum EventScreenResult {
 	case `continue`
 
 	/// Show the vaccination events
-	case remoteVaccinationEvents([RemoteVaccinationEvent])
+	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
 
 	/// Show the details of a vaccination event
 	case details(title: String, body: String)
+
+	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
+		switch (lhs, rhs) {
+			case (.back, .back), (.stop, .stop), (.continue, .continue):
+				return true
+			case (let .details(lhsTitle, lhsBody), let .details(rhsTitle, rhsBody)):
+				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
+			case (let remoteVaccinationEvents(lhsEvents), let remoteVaccinationEvents(rhsEvents)):
+
+				if lhsEvents.count != rhsEvents.count {
+					return false
+				}
+
+				for index in 0 ..< lhsEvents.count {
+
+					if lhsEvents[index].wrapper != rhsEvents[index].wrapper ||
+						lhsEvents[index].signedResponse != rhsEvents[index].signedResponse {
+						return false
+					}
+				}
+				return true
+
+			default:
+				return false
+		}
+	}
+
 }
 
 protocol EventCoordinatorDelegate: AnyObject {

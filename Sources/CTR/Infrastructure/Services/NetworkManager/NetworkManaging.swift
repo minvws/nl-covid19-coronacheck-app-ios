@@ -118,7 +118,7 @@ protocol NetworkManaging {
 		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 
-struct SignedResponse: Codable {
+struct SignedResponse: Codable, Equatable {
 	
 	/// The payload
 	let payload: String

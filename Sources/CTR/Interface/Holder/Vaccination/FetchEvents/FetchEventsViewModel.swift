@@ -16,7 +16,6 @@ class FetchEventsViewModel: Logging {
 	// Resulting token from DigiD VWS
 	private var tvsToken: String
 	private var networkManager: NetworkManaging
-	private var walletManager: WalletManaging
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -53,12 +52,10 @@ class FetchEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate,
 		tvsToken: String,
-		networkManager: NetworkManaging = Services.networkManager,
-		walletManager: WalletManaging = WalletManager()) {
+		networkManager: NetworkManaging = Services.networkManager) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.networkManager = networkManager
-		self.walletManager = walletManager
 
 		viewState = .loading(
 			content: FetchEventsViewController.Content(
@@ -75,7 +72,7 @@ class FetchEventsViewModel: Logging {
 					if remoteEvents.isEmpty {
 						self.viewState = self.emptyEventsState()
 					} else {
-						self.coordinator?.fetchEventsScreenDidFinish(.remoteVaccinationEvents(remoteEvents))
+						self.coordinator?.fetchEventsScreenDidFinish(.remoteVaccinationEvents(events: remoteEvents))
 					}
 
 				}

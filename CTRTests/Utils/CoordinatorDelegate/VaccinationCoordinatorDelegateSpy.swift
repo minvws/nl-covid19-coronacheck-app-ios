@@ -34,6 +34,18 @@ class VaccinationCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtoc
 		invokedFetchEventsScreenDidFinishParametersList.append((result, ()))
 	}
 
+	var invokedListEventsScreenDidFinish = false
+	var invokedListEventsScreenDidFinishCount = 0
+	var invokedListEventsScreenDidFinishParameters: (result: EventScreenResult, Void)?
+	var invokedListEventsScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
+
+	func listEventsScreenDidFinish(_ result: EventScreenResult) {
+		invokedListEventsScreenDidFinish = true
+		invokedListEventsScreenDidFinishCount += 1
+		invokedListEventsScreenDidFinishParameters = (result, ())
+		invokedListEventsScreenDidFinishParametersList.append((result, ()))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

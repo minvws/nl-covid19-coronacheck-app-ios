@@ -15,7 +15,6 @@ class FetchEventsViewModelTests: XCTestCase {
 	var sut: FetchEventsViewModel!
 	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
 	var networkSpy: NetworkSpy!
-	var walletSpy: WalletManagerSpy!
 
 	override func setUp() {
 
@@ -23,8 +22,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		walletSpy = WalletManagerSpy()
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", networkManager: networkSpy, walletManager: walletSpy)
+		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", networkManager: networkSpy)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -53,19 +51,6 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == EventScreenResult.back
 	}
 
-	func test_backButtonTapped_listState() {
-
-		// Given
-		sut.viewState = .listEvents(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil), rows: [])
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
-	}
-
 	func test_warnBeforeGoBack() {
 
 		// Given
@@ -78,7 +63,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.navigationAlert).toNot(beNil())
 	}
 
-	func test_happyFlow_willStoreEventGroup() {
+	func test_happyFlow_willInvokeCoordinator() {
 
 		// Given
 		let eventWrapper = Vaccination.EventResultWrapper(
@@ -100,14 +85,11 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			networkManager: networkSpy
 		)
 
 		// Then
-		expect(self.walletSpy.invokedRemoveExistingEventGroups).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEventGroup).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEventGroupCount) == 1
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
 	}
 
 	func test_happyFlow_noEvents() {
@@ -130,13 +112,11 @@ class FetchEventsViewModelTests: XCTestCase {
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			networkManager: networkSpy
 		)
 
 		// Then
-		expect(self.walletSpy.invokedRemoveExistingEventGroups).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEventGroup).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
 	}
 
 	// MARK: Default values
