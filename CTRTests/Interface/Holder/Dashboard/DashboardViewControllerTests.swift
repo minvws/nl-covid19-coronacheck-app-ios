@@ -191,7 +191,7 @@ class DashboardViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.qrCardView.isHidden) == false
 		expect(self.sut.sceneView.expiredQRView.isHidden) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToEnlargedQR) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToShowQR) == true
 	}
 
 	/// Test the validity of the credential with valid credential

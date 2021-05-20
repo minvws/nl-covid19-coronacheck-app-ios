@@ -10,12 +10,12 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToEnlargedQR = false
-	var invokedNavigateToEnlargedQRCount = 0
+	var invokedNavigateToShowQR = false
+	var invokedNavigateToShowQRCount = 0
 
-	func navigateToEnlargedQR() {
-		invokedNavigateToEnlargedQR = true
-		invokedNavigateToEnlargedQRCount += 1
+	func navigateToShowQR() {
+		invokedNavigateToShowQR = true
+		invokedNavigateToShowQRCount += 1
 	}
 
 	var invokedNavigateToAppointment = false

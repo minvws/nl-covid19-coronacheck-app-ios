@@ -188,7 +188,7 @@ class DashboardViewModelTests: XCTestCase {
 	}
 
 	/// Test the navigat to enlarged QR scene
-	func testNavigateToEnlargedQR() {
+	func testNavigateToShowQR() {
 
 		// Given
 
@@ -196,7 +196,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.cardTapped(.qrcode)
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToEnlargedQR) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToShowQR) == true
 	}
 
 	func testCloseExpiredRQ() {
