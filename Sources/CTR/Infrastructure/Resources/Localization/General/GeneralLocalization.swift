@@ -116,4 +116,12 @@ extension String {
 
 		return Localization.string(for: "general.list.accessibility.end")
 	}
+
+	static var europeanUnion: String {
+		Localization.string(for: "general.europeanUnion")
+	}
+
+	static var netherlands: String {
+		Localization.string(for: "general.netherlands")
+	}
 }

@@ -35,7 +35,8 @@ class DashboardViewModelTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
-			maxValidity: 48
+			maxValidity: 48,
+			qrCodeValidityRegion: .netherlands
 		)
 	}
 
@@ -76,7 +77,8 @@ class DashboardViewModelTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
-			maxValidity: 48
+			maxValidity: 48,
+			qrCodeValidityRegion: .netherlands
 		)
 
 		// Then

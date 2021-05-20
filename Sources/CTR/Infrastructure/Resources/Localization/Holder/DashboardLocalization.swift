@@ -128,4 +128,16 @@ extension String {
 
 		return Localization.string(for: "holder.dashboard.qr.pm")
 	}
+
+	static var changeRegionTitleNL: String {
+		return Localization.string(for: "holder.dashboard.changeregion.title.nl")
+	}
+
+	static var changeRegionTitleEU: String {
+		return Localization.string(for: "holder.dashboard.changeregion.title.eu")
+	}
+
+	static var changeRegionButton: String {
+		return Localization.string(for: "holder.dashboard.changeregion.button")
+	}
 }
