@@ -68,14 +68,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, showBottomCloseButton: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, showBottomCloseButton: Bool)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String)]()
 
-	func presentInformationPage(title: String, body: String, showBottomCloseButton: Bool) {
+	func presentInformationPage(title: String, body: String) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, showBottomCloseButton)
-		invokedPresentInformationPageParametersList.append((title, body, showBottomCloseButton))
+		invokedPresentInformationPageParameters = (title, body)
+		invokedPresentInformationPageParametersList.append((title, body))
 	}
 
 	var invokedUserWishesToCreateAQR = false

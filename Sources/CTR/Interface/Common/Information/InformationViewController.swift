@@ -41,15 +41,5 @@ class InformationViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$showBottomCloseButton.binding = { [weak self] in self?.sceneView.closeButtonIsHidden = !$0 }
-
-		addCloseButton(action: #selector(closeButtonTapped))
-		sceneView.closeButton.touchUpInside(self, action: #selector(closeButtonTapped))
-	}
-
-	/// User tapped on the button
-	@objc private func closeButtonTapped() {
-
-		viewModel.dismiss()
 	}
 }
