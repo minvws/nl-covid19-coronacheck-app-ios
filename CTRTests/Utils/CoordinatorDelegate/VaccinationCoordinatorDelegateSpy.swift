@@ -8,14 +8,14 @@
 import XCTest
 @testable import CTR
 
-class VaccinationCoordinatorDelegateSpy: VaccinationCoordinatorDelegate, OpenUrlProtocol {
+class VaccinationCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedVaccinationStartScreenDidFinish = false
 	var invokedVaccinationStartScreenDidFinishCount = 0
-	var invokedVaccinationStartScreenDidFinishParameters: (result: VaccinationScreenResult, Void)?
-	var invokedVaccinationStartScreenDidFinishParametersList = [(result: VaccinationScreenResult, Void)]()
+	var invokedVaccinationStartScreenDidFinishParameters: (result: EventScreenResult, Void)?
+	var invokedVaccinationStartScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
 
-	func vaccinationStartScreenDidFinish(_ result: VaccinationScreenResult) {
+	func vaccinationStartScreenDidFinish(_ result: EventScreenResult) {
 		invokedVaccinationStartScreenDidFinish = true
 		invokedVaccinationStartScreenDidFinishCount += 1
 		invokedVaccinationStartScreenDidFinishParameters = (result, ())
@@ -24,10 +24,10 @@ class VaccinationCoordinatorDelegateSpy: VaccinationCoordinatorDelegate, OpenUrl
 
 	var invokedFetchEventsScreenDidFinish = false
 	var invokedFetchEventsScreenDidFinishCount = 0
-	var invokedFetchEventsScreenDidFinishParameters: (result: VaccinationScreenResult, Void)?
-	var invokedFetchEventsScreenDidFinishParametersList = [(result: VaccinationScreenResult, Void)]()
+	var invokedFetchEventsScreenDidFinishParameters: (result: EventScreenResult, Void)?
+	var invokedFetchEventsScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
 
-	func fetchEventsScreenDidFinish(_ result: VaccinationScreenResult) {
+	func fetchEventsScreenDidFinish(_ result: EventScreenResult) {
 		invokedFetchEventsScreenDidFinish = true
 		invokedFetchEventsScreenDidFinishCount += 1
 		invokedFetchEventsScreenDidFinishParameters = (result, ())

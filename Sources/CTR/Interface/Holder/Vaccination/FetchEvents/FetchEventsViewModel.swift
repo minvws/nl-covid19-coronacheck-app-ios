@@ -9,7 +9,7 @@ import Foundation
 
 class FetchEventsViewModel: Logging {
 
-	weak var coordinator: VaccinationCoordinatorDelegate?
+	weak var coordinator: EventCoordinatorDelegate?
 
 	// Resulting token from DigiD VWS
 	private var tvsToken: String
@@ -49,7 +49,7 @@ class FetchEventsViewModel: Logging {
 	private let eventFetchingGroup = DispatchGroup()
 
 	init(
-		coordinator: VaccinationCoordinatorDelegate,
+		coordinator: EventCoordinatorDelegate,
 		tvsToken: String,
 		networkManager: NetworkManaging = Services.networkManager,
 		walletManager: WalletManaging = WalletManager()) {

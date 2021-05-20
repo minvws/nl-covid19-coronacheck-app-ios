@@ -135,14 +135,14 @@ class HolderCoordinator: SharedCoordinator {
         }
     }
 
-	func startVaccinationEventFlow() {
+	func startEventFlow() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
-			let vaccinationCoordinator = VaccinationCoordinator(
+			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
 				delegate: self
 			)
-			startChildCoordinator(vaccinationCoordinator)
+			startChildCoordinator(eventCoordinator)
 		}
 	}
 
@@ -320,7 +320,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateAVaccinationQR() {
-		startVaccinationEventFlow()
+		startEventFlow()
 	}
 
 	func userWishesToCreateAQR() {
@@ -414,9 +414,9 @@ extension HolderCoordinator: MenuDelegate {
 	}
 }
 
-extension HolderCoordinator: VaccinationFlowDelegate {
+extension HolderCoordinator: EventFlowDelegate {
 
-	func vaccinationFlowDidComplete() {
+	func eventFlowDidComplete() {
 
 		/// The user canceled the vaccination flow. Go back to the dashboard.
 
@@ -437,7 +437,7 @@ extension HolderCoordinator: VaccinationFlowDelegate {
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
 
-	func vaccinationFlowDidCancel() {
+	func eventFlowDidCancel() {
 
 		/// The user cancelled the flow. Go back one page
 

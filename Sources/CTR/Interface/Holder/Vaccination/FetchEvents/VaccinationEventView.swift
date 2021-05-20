@@ -156,9 +156,12 @@ class VaccinationEventView: BaseView {
 	/// The message
 	var subTitle: String? {
 		didSet {
-			messageLabel.attributedText = subTitle?.setLineHeight(
-				ViewTraits.messageLineHeight,
-				kerning: ViewTraits.messageKerning
+			messageLabel.attributedText = .makeFromHtml(
+				text: subTitle,
+				font: Theme.fonts.subhead,
+				textColor: Theme.colors.dark,
+				lineHeight: ViewTraits.messageLineHeight,
+				kern: ViewTraits.messageKerning
 			)
 			setAccessibilityLabel()
 		}
