@@ -114,6 +114,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserDidScanRequestTokenParametersList.append((requestToken, ()))
 	}
 
+	var invokedUserWishesToChangeRegion = false
+	var invokedUserWishesToChangeRegionCount = 0
+	var invokedUserWishesToChangeRegionParameters: (currentRegion: QRCodeValidityRegion, Void)?
+	var invokedUserWishesToChangeRegionParametersList = [(currentRegion: QRCodeValidityRegion, Void)]()
+	var stubbedUserWishesToChangeRegionCompletionResult: (QRCodeValidityRegion, Void)?
+
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
+		invokedUserWishesToChangeRegion = true
+		invokedUserWishesToChangeRegionCount += 1
+		invokedUserWishesToChangeRegionParameters = (currentRegion, ())
+		invokedUserWishesToChangeRegionParametersList.append((currentRegion, ()))
+		if let result = stubbedUserWishesToChangeRegionCompletionResult {
+			completion(result.0)
+		}
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

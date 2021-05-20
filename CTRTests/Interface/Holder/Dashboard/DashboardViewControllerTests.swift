@@ -41,7 +41,8 @@ class DashboardViewControllerTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
-			maxValidity: 48
+			maxValidity: 48,
+			qrCodeValidityRegion: .netherlands
 		)
 		sut = HolderDashboardViewController(viewModel: viewModel!)
 		window = UIWindow()
