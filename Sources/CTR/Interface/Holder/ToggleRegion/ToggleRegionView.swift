@@ -21,7 +21,13 @@ class ToggleRegionView: BaseView {
 		static let topLabelBottomMargin: CGFloat = 32
 		static let bottomLabelBottomMargin: CGFloat = 16
 		static let segmentedControlBottomMargin: CGFloat = 20
-		static let segmentedControlToBottomMinimumHeight: CGFloat = 90
+		static let segmentedControlToBottomMinimumHeight: CGFloat = {
+			if #available(iOS 13.0, *) {
+				return 95
+			} else {
+				return 120
+			}
+		}()
 	}
 
 	private let topLabel: Label = {
