@@ -7,12 +7,6 @@
 
 import UIKit
 
-extension Notification.Name {
-
-	/// a valid qr has been created
-	static let qrCreated = Notification.Name("nl.rijksoverheid.ctr.qrcreated")
-}
-
 struct ListResultItem {
 
 	let identifier: String
@@ -237,8 +231,7 @@ class ListResultsViewModel: Logging {
 
 		switch state {
 			case .valid:
-
-				notificationCenter.post(name: .qrCreated, object: nil)
+				
 				coordinator?.navigateBackToStart()
 			case .alreadySigned:
 
