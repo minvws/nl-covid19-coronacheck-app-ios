@@ -168,14 +168,12 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 
 		super.init()
-		self.addObserver()
 	}
 
 	/// The user tapped on one of the cards
 	/// - Parameter identifier: the identifier of the card
 	func cardTapped(_ identifier: CardIdentifier) {
 
-		notificationBanner = nil
 		switch identifier {
 			case .appointment:
 				coordinator?.navigateToAppointment()
@@ -402,15 +400,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		return output
 	}
 
-	@objc func showBanner() {
-
-		notificationBanner = NotificationBannerContent(
-			title: .holderBannerNewQRTitle,
-			message: .holderBannerNewQRMessage,
-			icon: UIImage.alert
-		)
-	}
-
 	func setupCreateCard() {
 
 		self.createCard = CardInfo(
@@ -426,21 +415,5 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
-	}
-}
-
-// MARK: - qrCreated
-
-extension HolderDashboardViewModel {
-
-	/// Add an observer for the qrCreated
-	func addObserver() {
-
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(showBanner),
-			name: .qrCreated,
-			object: nil
-		)
 	}
 }

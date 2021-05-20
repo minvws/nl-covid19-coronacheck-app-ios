@@ -241,9 +241,14 @@ class DashboardViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
+		let notificationContent = NotificationBannerContent(
+			title: "Banner title",
+			message: nil,
+			icon: nil
+		)
 
 		// When
-		NotificationCenter.default.post(name: .qrCreated, object: nil)
+		sut.showNotificationBanner(notificationContent)
 
 		// Then
 		expect(self.sut.bannerView)
