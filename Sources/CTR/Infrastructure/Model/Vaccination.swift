@@ -284,7 +284,7 @@ struct RemoteGreenCards: Codable {
 
 	struct EuGreenCard: Codable {
 
-		let origins: RemoteGreenCards.Origin
+		let origins: [RemoteGreenCards.Origin]
 		let credential: String
 	}
 
