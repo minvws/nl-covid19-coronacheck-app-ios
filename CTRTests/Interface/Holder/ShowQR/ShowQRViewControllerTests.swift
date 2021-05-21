@@ -9,10 +9,10 @@ import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
 
-class EnlargedQRViewControllerTests: XCTestCase {
+class ShowQRViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: EnlargedQRViewController?
+	var sut: ShowQRViewController?
 
 	/// The coordinator spy
 	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
@@ -27,7 +27,7 @@ class EnlargedQRViewControllerTests: XCTestCase {
 	var configSpy = ConfigurationGeneralSpy()
 
 	/// The view model
-	var viewModel: EnlargedQRViewModel?
+	var viewModel: ShowQRViewModel?
 
 	var window = UIWindow()
 
@@ -40,14 +40,14 @@ class EnlargedQRViewControllerTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
-		viewModel = EnlargedQRViewModel(
+		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
 			maxValidity: 48
 		)
-		sut = EnlargedQRViewController(viewModel: viewModel!)
+		sut = ShowQRViewController(viewModel: viewModel!)
 		window = UIWindow()
 	}
 

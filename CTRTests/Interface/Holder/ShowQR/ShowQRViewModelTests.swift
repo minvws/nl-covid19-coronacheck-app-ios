@@ -8,10 +8,10 @@
 import XCTest
 @testable import CTR
 
-class EnlargedQRViewModelTests: XCTestCase {
+class ShowQRViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: EnlargedQRViewModel?
+	var sut: ShowQRViewModel?
 
 	/// The coordinator spy
 	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
@@ -33,7 +33,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
 
-		sut = EnlargedQRViewModel(
+		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
@@ -50,7 +50,7 @@ class EnlargedQRViewModelTests: XCTestCase {
 		// Given
 
 		// When
-		sut = EnlargedQRViewModel(
+		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,

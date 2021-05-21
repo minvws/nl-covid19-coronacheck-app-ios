@@ -7,11 +7,11 @@
 
 import UIKit
 
-class EnlargedQRViewController: BaseViewController {
+class ShowQRViewController: BaseViewController {
 
-	private let viewModel: EnlargedQRViewModel
+	private let viewModel: ShowQRViewModel
 
-	let sceneView = EnlargedQRImageView()
+	let sceneView = ShowQRImageView()
 
 	var screenCaptureInProgress = false
 
@@ -19,7 +19,7 @@ class EnlargedQRViewController: BaseViewController {
 
 	// MARK: Initializers
 
-	init(viewModel: EnlargedQRViewModel) {
+	init(viewModel: ShowQRViewModel) {
 
 		self.viewModel = viewModel
 

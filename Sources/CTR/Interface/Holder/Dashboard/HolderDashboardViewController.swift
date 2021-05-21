@@ -48,6 +48,7 @@ class HolderDashboardViewController: BaseViewController {
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 		setupPlusButton()
+		setupChangeRegionButton()
 	}
 
 	private func setupBindings() {
@@ -105,6 +106,11 @@ class HolderDashboardViewController: BaseViewController {
 			} else {
 				self?.hideNotificationBanner()
 			}
+		}
+
+		viewModel.$changeRegionInfo.binding = { [weak self] config in
+			self?.sceneView.changeRegionView.changeRegionButtonTitle = config?.buttonTitle
+			self?.sceneView.changeRegionView.currentLocationTitle = config?.currentLocationTitle
 		}
 	}
 
@@ -192,6 +198,12 @@ class HolderDashboardViewController: BaseViewController {
 		)
 		plusbutton.accessibilityLabel = .add
 		navigationItem.rightBarButtonItem = plusbutton
+	}
+
+	func setupChangeRegionButton() {
+		sceneView.changeRegionView.changeRegionButtonTappedCommand = { [viewModel] in
+			viewModel.didTapChangeRegion()
+		}
 	}
 
 	func showNotificationBanner(_ content: NotificationBannerContent) {

@@ -41,7 +41,8 @@ class DashboardViewControllerTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
-			maxValidity: 48
+			maxValidity: 48,
+			qrCodeValidityRegion: .netherlands
 		)
 		sut = HolderDashboardViewController(viewModel: viewModel!)
 		window = UIWindow()
@@ -191,7 +192,7 @@ class DashboardViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.qrCardView.isHidden) == false
 		expect(self.sut.sceneView.expiredQRView.isHidden) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToEnlargedQR) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToShowQR) == true
 	}
 
 	/// Test the validity of the credential with valid credential
@@ -241,9 +242,14 @@ class DashboardViewControllerTests: XCTestCase {
 
 		// Given
 		loadView()
+		let notificationContent = NotificationBannerContent(
+			title: "Banner title",
+			message: nil,
+			icon: nil
+		)
 
 		// When
-		NotificationCenter.default.post(name: .qrCreated, object: nil)
+		sut.showNotificationBanner(notificationContent)
 
 		// Then
 		expect(self.sut.bannerView)

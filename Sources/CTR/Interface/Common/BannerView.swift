@@ -31,7 +31,7 @@ class BannerView: BaseView {
 
 	/// The banner image
 	let bannerImageView: UIImageView = {
-		let view = UIImageView(image: .alert)
+		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.tintColor = Theme.colors.secondary
 		return view

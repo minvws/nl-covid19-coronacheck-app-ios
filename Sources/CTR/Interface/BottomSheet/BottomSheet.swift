@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -48,8 +47,8 @@ private final class RoundedCornerWithShadowsView: UIView {
 		shadowLayer.shadowColor = UIColor.black.cgColor
 		shadowLayer.shadowPath = shadowLayer.path
 		shadowLayer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-		shadowLayer.shadowOpacity = 0.3
-		shadowLayer.shadowRadius = 40
+		shadowLayer.shadowOpacity = 0.5
+		shadowLayer.shadowRadius = 20
 	}
 }
 
@@ -106,7 +105,7 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 		super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
 
 		dimmingView.translatesAutoresizingMaskIntoConstraints = false
-		dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+		dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.32) // yes, exactly 32%.
 		dimmingView.accessibilityIdentifier = "dimmingView"
 
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapShroud))
@@ -212,7 +211,7 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 					cardWrapperViewBottomConstraint?.constant = 0
 					cardWrapperViewTopConstraint?.constant = 0
 					UIView.animate(withDuration: 0.3) {
-						self.containerView?.layoutSubviews()
+						self.containerView?.layoutIfNeeded()
 					}
 				}
 
