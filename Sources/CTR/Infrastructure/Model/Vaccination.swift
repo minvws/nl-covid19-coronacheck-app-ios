@@ -261,3 +261,37 @@ struct Vaccination {
 		}
 	}
 }
+
+struct RemoteGreenCards: Codable {
+
+	struct Response: Codable {
+
+		let domesticGreenCard: DomesticGreenCard?
+		let euGreenCards: [EuGreenCard]?
+
+		enum CodingKeys: String, CodingKey {
+
+			case domesticGreenCard = "domesticGreencard"
+			case euGreenCards = "euGreencards"
+		}
+	}
+
+	struct DomesticGreenCard: Codable {
+
+		let origins: [RemoteGreenCards.Origin]
+		let createCredentialMessages: String?
+	}
+
+	struct EuGreenCard: Codable {
+
+		let origins: RemoteGreenCards.Origin
+		let credential: String
+	}
+
+	struct Origin: Codable {
+
+		let type: String
+		let eventTime: Date
+		let expirationTime: Date
+	}
+}

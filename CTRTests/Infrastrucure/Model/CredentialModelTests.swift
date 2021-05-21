@@ -41,7 +41,7 @@ class CredentialModelTests: XCTestCase {
 
 					// When
 					credential = CredentialModel.create(
-						qrData: unwrappedJson,
+						data: unwrappedJson,
 						validFrom: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
@@ -51,7 +51,7 @@ class CredentialModelTests: XCTestCase {
 		}
 
 		// Then
-		expect(credential?.qrData).toEventually(equal(json))
+		expect(credential?.data).toEventually(equal(json))
 		expect(credential?.validFrom).toEventually(equal(date))
 		expect(credential?.greenCard).toEventually(equal(greenCard))
 		expect(greenCard?.credentials).toEventually(haveCount(1))
@@ -76,13 +76,13 @@ class CredentialModelTests: XCTestCase {
 
 					// When
 					CredentialModel.create(
-						qrData: json,
+						data: json,
 						validFrom: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
 					CredentialModel.create(
-						qrData: json,
+						data: json,
 						validFrom: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context

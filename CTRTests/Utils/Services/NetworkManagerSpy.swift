@@ -116,6 +116,24 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
+	var invokedFetchGreencards = false
+	var invokedFetchGreencardsCount = 0
+	var invokedFetchGreencardsParameters: (dictionary: [String: AnyObject], Void)?
+	var invokedFetchGreencardsParametersList = [(dictionary: [String: AnyObject], Void)]()
+	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, NetworkError>, Void)?
+
+	func fetchGreencards(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+		invokedFetchGreencards = true
+		invokedFetchGreencardsCount += 1
+		invokedFetchGreencardsParameters = (dictionary, ())
+		invokedFetchGreencardsParametersList.append((dictionary, ()))
+		if let result = stubbedFetchGreencardsCompletionResult {
+			completion(result.0)
+		}
+	}
+
 	var invokedGetTestResult = false
 	var invokedGetTestResultCount = 0
 	var invokedGetTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?

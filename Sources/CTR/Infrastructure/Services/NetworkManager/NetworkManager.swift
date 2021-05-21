@@ -116,6 +116,32 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 	}
 
+	func fetchGreencards(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+
+		do {
+			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+			let urlRequest = constructRequest(
+				url: URL(string: "https://qrdaar.scriptbase.org/v3/get_credentials"),
+				method: .POST,
+				body: jsonData
+			)
+			sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
+			data(request: urlRequest) { result in
+				DispatchQueue.main.async {
+					completion(self.jsonResponseHandler(result: result))
+				}
+			}
+
+//			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
+//			decodeSignedJSONData(request: urlRequest, completion: completion)
+		} catch {
+			logError("Could not serialize dictionary")
+			completion(.failure(.encodingError))
+		}
+	}
+
 	/// Get the test providers
 	/// - Parameter completion: completion handler
 	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
@@ -575,7 +601,8 @@ class NetworkManager: NetworkManaging, Logging {
 	
 	private lazy var jsonDecoder: JSONDecoder = {
 		let decoder = JSONDecoder()
-		decoder.dateDecodingStrategy = .formatted(dateFormatter)
+//		decoder.dateDecodingStrategy = .formatted(dateFormatter)
+		decoder.dateDecodingStrategy = .iso8601
 		decoder.source = .api
 		return decoder
 	}()
