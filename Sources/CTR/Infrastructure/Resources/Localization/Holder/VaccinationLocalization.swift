@@ -24,6 +24,16 @@ extension String {
 		return Localization.string(for: "holder.vaccination.start.action")
 	}
 
+	static var holderVaccinationStartNoDigiD: String {
+
+		return Localization.string(for: "holder.vaccination.start.nodigid")
+	}
+
+	static var holderVaccinationStartNoDigiDURL: String {
+
+		return Localization.string(for: "holder.vaccination.start.nodigid.url")
+	}
+
 	static var holderVaccinationLoadingTitle: String {
 
 		return Localization.string(for: "holder.vaccination.loading.title")
