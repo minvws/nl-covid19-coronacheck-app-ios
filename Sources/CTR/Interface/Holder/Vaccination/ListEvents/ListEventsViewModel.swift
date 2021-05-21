@@ -60,8 +60,10 @@ class ListEventsViewModel: Logging {
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationLoadingTitle,
 				subTitle: nil,
-				actionTitle: nil,
-				action: nil
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: nil,
+				secondaryAction: nil
 			)
 		)
 		viewState = getViewState(from: remoteVaccinationEvents)
@@ -123,10 +125,12 @@ class ListEventsViewModel: Logging {
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationNoListTitle,
 				subTitle: .holderVaccinationNoListMessage,
-				actionTitle: .holderVaccinationNoListActionTitle,
-				action: { [weak self] in
+				primaryActionTitle: .holderVaccinationNoListActionTitle,
+				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				}
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
 			)
 		)
 	}
@@ -137,9 +141,18 @@ class ListEventsViewModel: Logging {
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationListTitle,
 				subTitle: .holderVaccinationListMessage,
-				actionTitle: .holderVaccinationListActionTitle,
-				action: { [weak self] in
+				primaryActionTitle: .holderVaccinationListActionTitle,
+				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents)
+				},
+				secondaryActionTitle: .holderVaccinationListWrong,
+				secondaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(
+						.moreInformation(
+							title: .holderVaccinationWrongTitle,
+							body: .holderVaccinationWrongBody
+						)
+					)
 				}
 			),
 			rows: getSortedRowsFromEvents(dataSource)
@@ -173,7 +186,7 @@ class ListEventsViewModel: Logging {
 					action: { [weak self] in
 
 						self?.coordinator?.listEventsScreenDidFinish(
-							.details(
+							.moreInformation(
 								title: .holderVaccinationAboutTitle,
 								body: .holderVaccinationAboutBody
 							)

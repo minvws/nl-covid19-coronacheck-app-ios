@@ -98,4 +98,19 @@ extension String {
 
 		return Localization.string(for: "holder.vaccination.about.body")
 	}
+
+	static var holderVaccinationListWrong: String {
+
+		return Localization.string(for: "holder.vaccination.list.wrong")
+	}
+
+	static var holderVaccinationWrongTitle: String {
+
+		return Localization.string(for: "holder.vaccination.wrong.title")
+	}
+
+	static var holderVaccinationWrongBody: String {
+
+		return Localization.string(for: "holder.vaccination.wrong.body")
+	}
 }

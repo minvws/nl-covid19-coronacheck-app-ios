@@ -265,3 +265,7 @@
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
 "holder.vaccination.about.body" = "**Nog niet final**";
+
+"holder.vaccination.list.wrong" = "Klopt er iets niet?";
+"holder.vaccination.wrong.title" = "Er klopt iets niet";
+"holder.vaccination.wrong.body" = "<p>Klopt je naam of geboortedatum niet? Neem contact op met je huisarts. Deze kan je gegevens aanpassen.</p><p>Mist er een prik? Neem contact op met de locatie waar je je vaccinatie hebt gekregen. Zij kunnen je gegevens aanpassen.</p>";
