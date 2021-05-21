@@ -18,8 +18,10 @@ class ListEventsViewController: BaseViewController {
 	struct Content {
 		let title: String
 		let subTitle: String?
-		let actionTitle: String?
-		let action: (() -> Void)?
+		let primaryActionTitle: String?
+		let primaryAction: (() -> Void)?
+		let secondaryActionTitle: String?
+		let secondaryAction: (() -> Void)?
 	}
 
 	struct Row {
@@ -141,7 +143,7 @@ class ListEventsViewController: BaseViewController {
 
 		// Button
 		sceneView.showLineView = false
-		if let actionTitle = content.actionTitle {
+		if let actionTitle = content.primaryActionTitle {
 			sceneView.primaryTitle = actionTitle
 			sceneView.footerBackground.isHidden = false
 			sceneView.primaryButton.isHidden = false
@@ -152,7 +154,9 @@ class ListEventsViewController: BaseViewController {
 			sceneView.primaryButton.isHidden = true
 			sceneView.footerGradientView.isHidden = true
 		}
-		sceneView.primaryButtonTappedCommand = content.action
+		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.somethingIsWrongTappedCommand = content.secondaryAction
+		sceneView.somethingIsWrongButtonTitle = content.secondaryActionTitle
 	}
 
 	func showAlert(_ alertContent: AlertContent?) {

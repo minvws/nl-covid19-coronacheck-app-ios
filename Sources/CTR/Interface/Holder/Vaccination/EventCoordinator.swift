@@ -22,14 +22,14 @@ enum EventScreenResult: Equatable {
 	/// Show the vaccination events
 	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
 
-	/// Show the details of a vaccination event
-	case details(title: String, body: String)
+	/// Show some more information
+	case moreInformation(title: String, body: String)
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
 			case (.back, .back), (.stop, .stop), (.continue, .continue):
 				return true
-			case (let .details(lhsTitle, lhsBody), let .details(rhsTitle, rhsBody)):
+			case (let .moreInformation(lhsTitle, lhsBody), let .moreInformation(rhsTitle, rhsBody)):
 				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
 			case (let remoteVaccinationEvents(lhsEvents), let remoteVaccinationEvents(rhsEvents)):
 
@@ -210,7 +210,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						animated: true
 					)
 				}
-			case let .details(title, body):
+			case let .moreInformation(title, body):
 				navigateToVaccinationEventDetails(title, body: body)
 			default:
 				break

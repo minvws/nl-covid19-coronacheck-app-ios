@@ -55,10 +55,20 @@ class ListEventsView: ScrolledStackWithButtonView {
 		return view
 	}()
 
+	let somethingIsWrongButton: Button = {
+
+		let button = Button(title: "", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		somethingIsWrongButton.touchUpInside(self, action: #selector(somethingIsWrongButtonTapped))
 	}
 
 	override func setupViewHierarchy() {
@@ -70,6 +80,7 @@ class ListEventsView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(eventStackView)
+		stackView.addArrangedSubview(somethingIsWrongButton)
 	}
 
 	/// Setup the constraints
@@ -100,6 +111,11 @@ class ListEventsView: ScrolledStackWithButtonView {
 		return view
 	}
 
+	@objc func somethingIsWrongButtonTapped() {
+
+		somethingIsWrongTappedCommand?()
+	}
+
 	// MARK: Public Access
 
 	/// The title
@@ -116,6 +132,15 @@ class ListEventsView: ScrolledStackWithButtonView {
 	var message: String? {
 		didSet {
 			messageLabel.attributedText = .makeFromHtml(text: message, font: Theme.fonts.body, textColor: Theme.colors.dark)
+		}
+	}
+
+	var somethingIsWrongTappedCommand: (() -> Void)?
+
+	var somethingIsWrongButtonTitle: String? {
+		didSet {
+			somethingIsWrongButton.setTitle(somethingIsWrongButtonTitle, for: .normal)
+			somethingIsWrongButton.isHidden = somethingIsWrongButtonTitle?.isEmpty ?? true
 		}
 	}
 
