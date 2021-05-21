@@ -20,7 +20,7 @@ class GreenCardModelTests: XCTestCase {
 
 	// MARK: Tests
 
-	func test_createGreenCard() {
+	func test_createGreenCard_domesticType() {
 
 		// Given
 		var wallet: Wallet?
@@ -41,6 +41,60 @@ class GreenCardModelTests: XCTestCase {
 
 		// Then
 		expect(greenCard?.type).toEventually(equal(GreenCardType.domestic.rawValue))
+		expect(greenCard?.getType()).toEventually(equal(GreenCardType.domestic))
+		expect(greenCard?.wallet).toEventually(equal(wallet))
+		expect(wallet?.greenCards).toEventually(haveCount(1))
+	}
+
+	func test_createGreenCard_euType() {
+
+		// Given
+		var wallet: Wallet?
+		var greenCard: GreenCard?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			wallet = WalletModel.createTestWallet(managedContext: context)
+			if let unwrappedWallet = wallet {
+
+				// When
+				greenCard = GreenCardModel.create(
+					type: .eu,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+			}
+		}
+
+		// Then
+		expect(greenCard?.type).toEventually(equal(GreenCardType.eu.rawValue))
+		expect(greenCard?.getType()).toEventually(equal(GreenCardType.eu))
+		expect(greenCard?.wallet).toEventually(equal(wallet))
+		expect(wallet?.greenCards).toEventually(haveCount(1))
+	}
+
+	func test_createGreenCard_unknownType() {
+
+		// Given
+		var wallet: Wallet?
+		var greenCard: GreenCard?
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+			wallet = WalletModel.createTestWallet(managedContext: context)
+			if let unwrappedWallet = wallet {
+
+				// When
+				greenCard = GreenCardModel.create(
+					type: .eu,
+					wallet: unwrappedWallet,
+					managedContext: context
+				)
+				greenCard?.type = "unknown"
+			}
+		}
+
+		// Then
+		expect(greenCard?.type).toEventually(equal("unknown"))
+		expect(greenCard?.getType()).toEventually(beNil())
 		expect(greenCard?.wallet).toEventually(equal(wallet))
 		expect(wallet?.greenCards).toEventually(haveCount(1))
 	}
@@ -93,7 +147,7 @@ class GreenCardModelTests: XCTestCase {
 
 					// When
 					credential = CredentialModel.create(
-						qrData: unwrappedJson,
+						data: unwrappedJson,
 						validFrom: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
@@ -127,7 +181,7 @@ class GreenCardModelTests: XCTestCase {
 			   ),
 			   let json = "test_removeCredential".data(using: .utf8),
 			   let credential = CredentialModel.create(
-				qrData: json,
+				data: json,
 				validFrom: date,
 				greenCard: greenCard,
 				managedContext: context

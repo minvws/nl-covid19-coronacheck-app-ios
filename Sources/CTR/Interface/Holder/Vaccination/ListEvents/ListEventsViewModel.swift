@@ -146,7 +146,7 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	func getSortedRowsFromEvents(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromEvents(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 

@@ -35,4 +35,40 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveExistingEventGroupsParameters = (type, providerIdentifier)
 		invokedRemoveExistingEventGroupsParametersList.append((type, providerIdentifier))
 	}
+
+	var invokedRemoveExistingGreenCards = false
+	var invokedRemoveExistingGreenCardsCount = 0
+
+	func removeExistingGreenCards() {
+		invokedRemoveExistingGreenCards = true
+		invokedRemoveExistingGreenCardsCount += 1
+	}
+
+	var invokedStoreDomesticGreenCard = false
+	var invokedStoreDomesticGreenCardCount = 0
+	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, Void)?
+	var invokedStoreDomesticGreenCardParametersList = [(remoteGreenCard: RemoteGreenCards.DomesticGreenCard, Void)]()
+	var stubbedStoreDomesticGreenCardResult: Bool! = false
+
+	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard) -> Bool {
+		invokedStoreDomesticGreenCard = true
+		invokedStoreDomesticGreenCardCount += 1
+		invokedStoreDomesticGreenCardParameters = (remoteGreenCard, ())
+		invokedStoreDomesticGreenCardParametersList.append((remoteGreenCard, ()))
+		return stubbedStoreDomesticGreenCardResult
+	}
+
+	var invokedStoreEuGreenCard = false
+	var invokedStoreEuGreenCardCount = 0
+	var invokedStoreEuGreenCardParameters: (remoteEuGreenCard: RemoteGreenCards.EuGreenCard, Void)?
+	var invokedStoreEuGreenCardParametersList = [(remoteEuGreenCard: RemoteGreenCards.EuGreenCard, Void)]()
+	var stubbedStoreEuGreenCardResult: Bool! = false
+
+	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard) -> Bool {
+		invokedStoreEuGreenCard = true
+		invokedStoreEuGreenCardCount += 1
+		invokedStoreEuGreenCardParameters = (remoteEuGreenCard, ())
+		invokedStoreEuGreenCardParametersList.append((remoteEuGreenCard, ()))
+		return stubbedStoreEuGreenCardResult
+	}
 }
