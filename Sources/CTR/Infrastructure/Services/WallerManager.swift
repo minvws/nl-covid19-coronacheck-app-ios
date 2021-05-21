@@ -176,7 +176,10 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				if let greenCard = GreenCardModel.create(type: .eu, wallet: wallet, managedContext: context) {
 
-					result = result && storeOrigin(remoteOrigin: remoteEuGreenCard.origins, greenCard: greenCard, context: context)
+					for remoteOrigin in remoteEuGreenCard.origins {
+
+						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
+					}
 
 					// data and date should come from the CreateCredential method of the Go Library.
 					let data = Data(remoteEuGreenCard.credential.utf8)
