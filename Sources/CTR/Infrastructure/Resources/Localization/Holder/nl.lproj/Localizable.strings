@@ -296,3 +296,6 @@
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
 "holder.vaccination.wrong.body" = "<p>Klopt je naam of geboortedatum niet? Neem contact op met je huisarts. Deze kan je gegevens aanpassen.</p><p>Mist er een prik? Neem contact op met de locatie waar je je vaccinatie hebt gekregen. Zij kunnen je gegevens aanpassen.</p>";
+
+"holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
+"holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";

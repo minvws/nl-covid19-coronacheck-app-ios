@@ -16,6 +16,11 @@ class VaccinationStartView: ScrolledStackWithButtonView {
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
+		static let buttonHeight: CGFloat = 52
+
+		// Margins
+		static let margin: CGFloat = 20.0
+		static let buttonMargin: CGFloat = 36.0
 	}
 
 	/// The title label
@@ -31,12 +36,21 @@ class VaccinationStartView: ScrolledStackWithButtonView {
 		return view
 	}()
 
+	let secondaryButton: Button = {
+
+		let button = Button(title: "", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.contentHorizontalAlignment = .center
+		return button
+	}()
+
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .equalSpacing
 		showLineView = false
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
 	override func setupViewHierarchy() {
@@ -45,6 +59,7 @@ class VaccinationStartView: ScrolledStackWithButtonView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
+		footerBackground.addSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
@@ -58,11 +73,43 @@ class VaccinationStartView: ScrolledStackWithButtonView {
 				default: return false
 			}
 		}())
+
+		bottomButtonConstraint?.isActive = false
+
+		NSLayoutConstraint.activate([
+
+			// Primary button
+			primaryButton.bottomAnchor.constraint(
+				equalTo: secondaryButton.topAnchor,
+				constant: -ViewTraits.margin
+			),
+
+			// Secondary button
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
+			secondaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+
+			secondaryButton.leadingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.leadingAnchor,
+				constant: ViewTraits.buttonMargin
+			),
+			secondaryButton.trailingAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.trailingAnchor,
+				constant: -ViewTraits.buttonMargin
+			),
+			secondaryButton.bottomAnchor.constraint(
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
+				constant: -ViewTraits.margin
+			)
+		])
+	}
+
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
 
-	/// The title
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
@@ -72,10 +119,17 @@ class VaccinationStartView: ScrolledStackWithButtonView {
 		}
 	}
 
-	/// The  message
 	var message: String? {
 		didSet {
 			contentTextView.html(message)
+		}
+	}
+
+	var secondaryButtonTappedCommand: (() -> Void)?
+
+	var secondaryButtonTitle: String? {
+		didSet {
+			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
 		}
 	}
 }

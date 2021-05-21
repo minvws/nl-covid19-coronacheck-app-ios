@@ -76,4 +76,17 @@ class VaccinationStartViewControllerTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue
 	}
+
+	func test_secondaryButtonTapped() {
+
+		// Given
+		loadView()
+
+		// When
+		sut.sceneView.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: .holderVaccinationStartNoDigiDURL)
+	}
 }
