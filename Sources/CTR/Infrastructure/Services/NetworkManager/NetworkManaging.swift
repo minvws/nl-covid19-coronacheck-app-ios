@@ -91,7 +91,7 @@ protocol NetworkManaging {
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<GreenCardResponse.Response, NetworkError>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void)
 
 	/// Get a test result
 	/// - Parameters:

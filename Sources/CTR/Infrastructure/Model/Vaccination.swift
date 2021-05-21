@@ -262,7 +262,7 @@ struct Vaccination {
 	}
 }
 
-struct GreenCardResponse: Codable {
+struct RemoteGreenCards: Codable {
 
 	struct Response: Codable {
 
@@ -278,12 +278,13 @@ struct GreenCardResponse: Codable {
 
 	struct DomesticGreenCard: Codable {
 
-		let origins: [GreenCardResponse.Origin]
+		let origins: [RemoteGreenCards.Origin]
+		let createCredentialMessages: String?
 	}
 
 	struct EuGreenCard: Codable {
 
-		let origins: GreenCardResponse.Origin
+		let origins: RemoteGreenCards.Origin
 		let credential: String
 	}
 
@@ -293,5 +294,4 @@ struct GreenCardResponse: Codable {
 		let eventTime: Date
 		let expirationTime: Date
 	}
-
 }

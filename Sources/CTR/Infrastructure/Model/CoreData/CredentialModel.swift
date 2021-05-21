@@ -13,8 +13,9 @@ class CredentialModel {
 	static let entityName = "Credential"
 
 	@discardableResult class func create(
-		qrData: Data,
+		data: Data,
 		validFrom: Date,
+		version: Int32 = 1,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Credential? {
 
@@ -22,7 +23,8 @@ class CredentialModel {
 			forEntityName: entityName,
 			into: managedContext) as? Credential {
 
-			object.qrData = qrData
+			object.data = data
+			object.version = version
 			object.validFrom = validFrom
 			object.greenCard = greenCard
 

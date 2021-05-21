@@ -139,8 +139,7 @@ class ListEventsViewModel: Logging {
 				subTitle: .holderVaccinationListMessage,
 				actionTitle: .holderVaccinationListActionTitle,
 				action: { [weak self] in
-					self?.saveAndSignTheEvents(remoteEvents: remoteEvents)
-
+					self?.userWantsToMakeQR(remoteEvents: remoteEvents)
 				}
 			),
 			rows: getSortedRowsFromEvents(dataSource)
@@ -189,24 +188,41 @@ class ListEventsViewModel: Logging {
 
 	// MARK: Sign the events
 
-	private func saveAndSignTheEvents( remoteEvents: [RemoteVaccinationEvent]) {
+	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
 
-		self.storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
+		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
 			self.logInfo("Finished vaccination flow: \(saved)")
 
+			self.fetchGreenCards { [weak self] response in
+				if let greenCardResponse = response {
+
+					self?.storeGreenCards(response: greenCardResponse, onCompletion: { greenCardsSaved in
+						if greenCardsSaved {
+							self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+						} else {
+							self?.logError("Failed to save greenCards")
+						}
+					})
+				} else {
+					self?.logError("No greencards")
+				}
+			}
+		}
+	}
+
+	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
+
 			self.networkManager.fetchGreencards(dictionary: [:]) { result in
-//				Result<GreenCardResponse, NetworkError>
+//				Result<RemoteGreenCards.Response, NetworkError>
 
 				switch result {
 					case let .success(greencardResponse):
 						self.logInfo("ok: \(greencardResponse)")
+						onCompletion(greencardResponse)
 					case let .failure(error):
 						self.logError("error: \(error)")
+						onCompletion(nil)
 				}
-
-			}
-
-//			self.coordinator?.fetchEventsScreenDidFinish(.stop)
 		}
 	}
 
@@ -236,6 +252,23 @@ class ListEventsViewModel: Logging {
 				}
 			}
 		}
+		onCompletion(success)
+	}
+
+	// MARK: Store green cards
+
+	private func storeGreenCards(
+		response: RemoteGreenCards.Response,
+		onCompletion: @escaping (Bool) -> Void) {
+
+		var success = true
+
+		walletManager.removeExistingGreenCards()
+
+		if let domestic = response.domesticGreenCard {
+			success = success && walletManager.storeDomesticGreenCard(domestic)
+		}
+
 		onCompletion(success)
 	}
 }

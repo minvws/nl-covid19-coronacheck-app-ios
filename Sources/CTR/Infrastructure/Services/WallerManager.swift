@@ -24,6 +24,10 @@ protocol WalletManaging {
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventType, providerIdentifier: String)
+
+	func removeExistingGreenCards()
+
+	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard) -> Bool
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -109,5 +113,52 @@ class WalletManager: WalletManaging, Logging {
 				}
 			}
 		}
+	}
+
+	func removeExistingGreenCards() {
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let greenCrards = wallet.greenCards {
+					for case let greenCard as GreenCard in greenCrards.allObjects {
+
+						context.delete(greenCard)
+					}
+				}
+				dataStoreManager.save(context)
+			}
+		}
+	}
+
+	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard) -> Bool {
+
+		var result = true
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let greenCard = GreenCardModel.create(type: .domestic, wallet: wallet, managedContext: context) {
+
+					if remoteGreenCard.origins.isEmpty {
+						result = false
+					}
+
+					for remoteOrigin in remoteGreenCard.origins {
+
+						result = result && OriginModel.create(type: .vaccination, eventDate: remoteOrigin.eventTime, expireDate: remoteOrigin.expirationTime, greenCard: greenCard, managedContext: context) != nil
+					}
+
+				//let credential = CredentialModel.create(data: Data, validFrom: Date(), greenCard: greenCard, managedContext: context)
+
+				}
+			} else {
+				result = false
+			}
+		}
+		return result
 	}
 }
