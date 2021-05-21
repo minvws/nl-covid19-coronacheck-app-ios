@@ -126,9 +126,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// Show notification banner
 	@Bindable private(set) var notificationBanner: NotificationBannerContent?
 
-	/// The appointment Card information
-	@Bindable private(set) var appointmentCard: CardInfo
-
 	/// The create QR Card information
 	@Bindable private(set) var createCard: CardInfo
 
@@ -180,14 +177,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		// Start by showing nothing
 		self.showExpiredQR = false
 
-		self.appointmentCard = CardInfo(
-			identifier: .appointment,
-			title: .holderDashboardAppointmentTitle,
-			message: .holderDashboardAppointmentMessage,
-			actionTitle: .holderDashboardAppointmentAction,
-			image: .appointmentTile,
-			backgroundColor: Theme.colors.appointment
-		)
 		self.createCard = CardInfo(
 			identifier: .create,
 			title: .holderDashboardCreateTitle,

@@ -44,14 +44,6 @@ class HolderDashboardView: ScrolledStackView {
 		return view
 	}()
 
-	/// The appointment Card
-	let appointmentCard: CardView = {
-
-		let view = CardView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
 	/// The create QR Card
 	let createCard: CardView = {
 

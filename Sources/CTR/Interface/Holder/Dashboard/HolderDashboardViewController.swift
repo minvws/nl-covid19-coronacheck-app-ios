@@ -56,10 +56,6 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$expiredTitle.binding = { [weak self] in self?.sceneView.expiredQRView.title = $0 }
-		viewModel.$appointmentCard.binding = { [weak self] in
-			guard let strongSelf = self else { return }
-			strongSelf.styleCard(strongSelf.sceneView.appointmentCard, cardInfo: $0)
-		}
 		viewModel.$createCard.binding = { [weak self] in
 			guard let strongSelf = self else { return }
 			strongSelf.styleCard(strongSelf.sceneView.createCard, cardInfo: $0)
