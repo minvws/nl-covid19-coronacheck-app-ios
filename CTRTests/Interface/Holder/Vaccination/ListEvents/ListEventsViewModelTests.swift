@@ -101,7 +101,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy
 		)
 
-		if case let ListEventsViewController.State.listEvents(content: _, rows: rows) = sut.viewState {
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
 
 			// When
 			rows.first?.action?()
@@ -138,7 +138,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy
 		)
 
-		if case let ListEventsViewController.State.listEvents(content: content, rows: _) = sut.viewState {
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
 
 			// When
 			content.secondaryAction?()
