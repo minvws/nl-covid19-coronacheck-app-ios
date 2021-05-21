@@ -35,3 +35,15 @@ class GreenCardModel {
 		return nil
 	}
 }
+
+extension GreenCard {
+
+	/// Get the type of a greenCard as a GreenCardType
+	/// - Returns: greenCard type
+	func getType() -> GreenCardType? {
+		if let type = type {
+			return GreenCardType(rawValue: type)
+		}
+		return nil
+	}
+}

@@ -197,6 +197,7 @@ class ListEventsViewModel: Logging {
 				if let greenCardResponse = response {
 
 					self?.storeGreenCards(response: greenCardResponse, onCompletion: { greenCardsSaved in
+
 						if greenCardsSaved {
 							self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 						} else {
@@ -267,6 +268,11 @@ class ListEventsViewModel: Logging {
 
 		if let domestic = response.domesticGreenCard {
 			success = success && walletManager.storeDomesticGreenCard(domestic)
+		}
+		if let remoteEuGreenCards = response.euGreenCards {
+			for remoteEuGreenCard in remoteEuGreenCards {
+				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
+			}
 		}
 
 		onCompletion(success)

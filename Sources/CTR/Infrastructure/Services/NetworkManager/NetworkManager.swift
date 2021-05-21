@@ -129,7 +129,9 @@ class NetworkManager: NetworkManaging, Logging {
 			)
 			sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
 			data(request: urlRequest) { result in
-				completion(self.jsonResponseHandler(result: result))
+				DispatchQueue.main.async {
+					completion(self.jsonResponseHandler(result: result))
+				}
 			}
 
 //			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)

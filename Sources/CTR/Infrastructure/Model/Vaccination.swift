@@ -267,7 +267,7 @@ struct RemoteGreenCards: Codable {
 	struct Response: Codable {
 
 		let domesticGreenCard: DomesticGreenCard?
-		let euGreenCards: [EuGreenCard]
+		let euGreenCards: [EuGreenCard]?
 
 		enum CodingKeys: String, CodingKey {
 
