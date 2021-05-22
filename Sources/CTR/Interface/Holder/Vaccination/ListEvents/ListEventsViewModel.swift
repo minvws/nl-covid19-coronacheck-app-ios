@@ -42,6 +42,8 @@ class ListEventsViewModel: Logging {
 
 	@Bindable private(set) var navigationAlert: ListEventsViewController.AlertContent?
 
+	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
+
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
@@ -212,6 +214,9 @@ class ListEventsViewModel: Logging {
 
 	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
 
+		shouldPrimaryButtonBeEnabled = false
+		progressIndicationCounter.increment()
+
 		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
 			self.logInfo("Finished vaccination flow: \(saved)")
 
@@ -220,13 +225,17 @@ class ListEventsViewModel: Logging {
 
 					self?.storeGreenCards(response: greenCardResponse, onCompletion: { greenCardsSaved in
 
+						self?.progressIndicationCounter.decrement()
 						if greenCardsSaved {
 							self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 						} else {
+							self?.shouldPrimaryButtonBeEnabled = true
 							self?.logError("Failed to save greenCards")
 						}
 					})
 				} else {
+					self?.progressIndicationCounter.decrement()
+					self?.shouldPrimaryButtonBeEnabled = true
 					self?.logError("No greencards")
 				}
 			}
