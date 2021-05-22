@@ -196,6 +196,43 @@ struct Vaccination {
 			case lastName
 			case birthDateString = "birthDate"
 		}
+
+		var fullName: String {
+
+			"\(lastName), \(firstName) \(infix)".trimmingCharacters(in: .whitespaces)
+		}
+
+		/// Map the identity of the holder
+		/// - Parameter months: the months
+		/// - Returns: mapped identify
+		func mapIdentity(months: [String]) -> [String] {
+
+			var output: [String] = []
+			output.append(String(firstName.prefix(1)))
+			output.append(String(lastName.prefix(1)))
+
+			if let date = Formatter().getDateFrom(dateString8601: birthDateString) {
+				let components = Calendar.current.dateComponents([.day, .month], from: date)
+				if let value = components.day, value > 0 {
+					let formatter = NumberFormatter()
+					formatter.minimumIntegerDigits = 2
+					if let day = formatter.string(from: NSNumber(value: value)) {
+						output.append(day)
+					}
+				} else {
+					output.append("")
+				}
+				if let value = components.month, value <= months.count, value > 0 {
+					output.append(months[value - 1])
+				} else {
+					output.append("")
+				}
+			} else {
+				output.append("")
+				output.append("")
+			}
+			return output
+		}
 	}
 
 	struct Event: Codable, Equatable {

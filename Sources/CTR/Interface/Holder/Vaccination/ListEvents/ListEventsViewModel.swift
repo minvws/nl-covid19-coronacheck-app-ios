@@ -32,7 +32,7 @@ class ListEventsViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM"
+		dateFormatter.dateFormat = "dd MMMM yyyy"
 		return dateFormatter
 	}()
 
@@ -174,21 +174,30 @@ class ListEventsViewModel: Logging {
 
 		for (index, dataRow) in sortedDataSource.enumerated() {
 
-			let formattedDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
+			let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: dataRow.identity.birthDateString)
 				.map {
 					printDateFormatter.string(from: $0)
-				} ?? ""
+				} ?? dataRow.identity.birthDateString
+			let formattedShotDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
+				.map {
+					printDateFormatter.string(from: $0)
+				} ?? (dataRow.event.vaccination.dateString ?? "")
+
+			let domesticIdentity = dataRow.identity
+				.mapIdentity(months: String.shortMonths)
+				.map({ $0.isEmpty ? "_" : $0 })
+				.joined(separator: " ")
 
 			rows.append(
 				ListEventsViewController.Row(
 					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
-					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
+					subTitle: String(format: .holderVaccinationElementSubTitle, dataRow.identity.fullName, formattedBirthDate),
 					action: { [weak self] in
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: .holderVaccinationAboutTitle,
-								body: .holderVaccinationAboutBody
+								body: String(format: .holderVaccinationAboutBody, domesticIdentity, dataRow.identity.fullName, formattedBirthDate, dataRow.event.vaccination.brand ?? "-", "\(index + 1)", formattedShotDate)
 							)
 						)
 					}

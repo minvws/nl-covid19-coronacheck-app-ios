@@ -107,7 +107,13 @@ class ListEventsViewModelTests: XCTestCase {
 			rows.first?.action?()
 			// Then
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: .holderVaccinationAboutTitle, body: .holderVaccinationAboutBody)
+
+			if case let .moreInformation(title, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == .holderVaccinationAboutTitle
+			} else {
+				fail("wrong information")
+			}
+
 		} else {
 			fail("wrong state")
 		}
