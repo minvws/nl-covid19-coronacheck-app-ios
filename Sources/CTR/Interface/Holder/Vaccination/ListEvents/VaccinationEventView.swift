@@ -159,7 +159,7 @@ class VaccinationEventView: BaseView {
 			messageLabel.attributedText = .makeFromHtml(
 				text: subTitle,
 				font: Theme.fonts.subhead,
-				textColor: Theme.colors.dark,
+				textColor: Theme.colors.grey1,
 				lineHeight: ViewTraits.messageLineHeight,
 				kern: ViewTraits.messageKerning
 			)
