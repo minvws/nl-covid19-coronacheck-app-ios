@@ -48,7 +48,9 @@ build_xcodegen_ci:
 build_swiftlint_ci: 
 	@[ -d "Vendor/SwiftLint/.build" ] || (cd Vendor/SwiftLint && swift build -c release -Xswiftc "-target" -Xswiftc "x86_64-apple-macosx10.13")
 
-
+homebrew_ci:
+	@brew install imagemagick
+	
 # -- git hooks: -- 
 
 install_githooks: install_githooks_gitlfs install_githooks_xcodegen
