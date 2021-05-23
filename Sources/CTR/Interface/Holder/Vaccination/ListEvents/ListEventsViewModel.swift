@@ -86,8 +86,8 @@ class ListEventsViewModel: Logging {
 			subTitle: .holderVaccinationAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
-			okAction: { _ in
-				self.goBack()
+			okAction: { [weak self] _ in
+				self?.goBack()
 			},
 			okTitle: .holderVaccinationAlertOk
 		)
@@ -254,8 +254,8 @@ class ListEventsViewModel: Logging {
 			subTitle: .holderVaccinationErrorMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationErrorClose,
-			okAction: { _ in
-				self.userWantsToMakeQR(remoteEvents: remoteEvents)
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents)
 			},
 			okTitle: .holderVaccinationErrorAgain
 		)
