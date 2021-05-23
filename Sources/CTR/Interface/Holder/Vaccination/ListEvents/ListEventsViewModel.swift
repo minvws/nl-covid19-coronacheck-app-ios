@@ -218,7 +218,7 @@ class ListEventsViewModel: Logging {
 					self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 
 						if greenCardsSaved {
-							self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+							self?.coordinator?.listEventsScreenDidFinish(.continue)
 						} else {
 							self?.showVaccinationError(remoteEvents: remoteEvents)
 							self?.logError("Failed to save greenCards")
@@ -233,17 +233,17 @@ class ListEventsViewModel: Logging {
 
 	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
 
-			self.networkManager.fetchGreencards(dictionary: [:]) { result in
-//				Result<RemoteGreenCards.Response, NetworkError>
+		self.networkManager.fetchGreencards(dictionary: [:]) { result in
+			//				Result<RemoteGreenCards.Response, NetworkError>
 
-				switch result {
-					case let .success(greencardResponse):
-						self.logDebug("ok: \(greencardResponse)")
-						onCompletion(greencardResponse)
-					case let .failure(error):
-						self.logError("error: \(error)")
-						onCompletion(nil)
-				}
+			switch result {
+				case let .success(greencardResponse):
+					self.logDebug("ok: \(greencardResponse)")
+					onCompletion(greencardResponse)
+				case let .failure(error):
+					self.logError("error: \(error)")
+					onCompletion(nil)
+			}
 		}
 	}
 
