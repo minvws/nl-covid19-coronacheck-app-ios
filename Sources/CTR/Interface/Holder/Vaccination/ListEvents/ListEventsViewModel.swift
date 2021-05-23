@@ -40,7 +40,7 @@ class ListEventsViewModel: Logging {
 
 	@Bindable internal var viewState: ListEventsViewController.State
 
-	@Bindable private(set) var navigationAlert: ListEventsViewController.AlertContent?
+	@Bindable private(set) var alert: ListEventsViewController.AlertContent?
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -81,13 +81,13 @@ class ListEventsViewModel: Logging {
 
 	func warnBeforeGoBack() {
 
-		navigationAlert = ListEventsViewController.AlertContent(
+		alert = ListEventsViewController.AlertContent(
 			title: .holderVaccinationAlertTitle,
 			subTitle: .holderVaccinationAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
-			okAction: { _ in
-				self.goBack()
+			okAction: { [weak self] _ in
+				self?.goBack()
 			},
 			okTitle: .holderVaccinationAlertOk
 		)
@@ -135,7 +135,9 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func listEventsState(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)], remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
+	private func listEventsState(
+		_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)],
+		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
 			content: ListEventsViewController.Content(
@@ -204,21 +206,26 @@ class ListEventsViewModel: Logging {
 	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
 
 		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
-			self.logInfo("Finished vaccination flow: \(saved)")
+
+			guard saved else {
+				self.showVaccinationError(remoteEvents: remoteEvents)
+				return
+			}
 
 			self.fetchGreenCards { [weak self] response in
 				if let greenCardResponse = response {
 
-					self?.storeGreenCards(response: greenCardResponse, onCompletion: { greenCardsSaved in
+					self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 
 						if greenCardsSaved {
-							self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+							self?.coordinator?.listEventsScreenDidFinish(.continue)
 						} else {
+							self?.showVaccinationError(remoteEvents: remoteEvents)
 							self?.logError("Failed to save greenCards")
 						}
-					})
+					}
 				} else {
-					self?.logError("No greencards")
+					self?.showVaccinationError(remoteEvents: remoteEvents)
 				}
 			}
 		}
@@ -226,18 +233,32 @@ class ListEventsViewModel: Logging {
 
 	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
 
-			self.networkManager.fetchGreencards(dictionary: [:]) { result in
-//				Result<RemoteGreenCards.Response, NetworkError>
+		self.networkManager.fetchGreencards(dictionary: [:]) { result in
+			//				Result<RemoteGreenCards.Response, NetworkError>
 
-				switch result {
-					case let .success(greencardResponse):
-						self.logInfo("ok: \(greencardResponse)")
-						onCompletion(greencardResponse)
-					case let .failure(error):
-						self.logError("error: \(error)")
-						onCompletion(nil)
-				}
+			switch result {
+				case let .success(greencardResponse):
+					self.logDebug("ok: \(greencardResponse)")
+					onCompletion(greencardResponse)
+				case let .failure(error):
+					self.logError("error: \(error)")
+					onCompletion(nil)
+			}
 		}
+	}
+
+	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
+
+		alert = ListEventsViewController.AlertContent(
+			title: .errorTitle,
+			subTitle: .holderVaccinationErrorMessage,
+			cancelAction: nil,
+			cancelTitle: .holderVaccinationErrorClose,
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents)
+			},
+			okTitle: .holderVaccinationErrorAgain
+		)
 	}
 
 	// MARK: Store vaccination events

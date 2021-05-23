@@ -90,7 +90,7 @@ class ListEventsViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$navigationAlert.binding = { [weak self] in
+		viewModel.$alert.binding = { [weak self] in
 			self?.showAlert($0)
 		}
 	}

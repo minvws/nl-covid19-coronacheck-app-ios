@@ -14,6 +14,7 @@ class ListEventsViewModelTests: XCTestCase {
 	/// Subject under test
 	var sut: ListEventsViewModel!
 	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
+	var networkSpy: NetworkSpy!
 	var walletSpy: WalletManagerSpy!
 
 	override func setUp() {
@@ -22,26 +23,36 @@ class ListEventsViewModelTests: XCTestCase {
 
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
 		walletSpy = WalletManagerSpy()
-		sut = ListEventsViewModel(coordinator: coordinatorSpy, remoteVaccinationEvents: [], walletManager: walletSpy)
+		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			remoteVaccinationEvents: [],
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
 	}
 
 	func test_backButtonTapped_loadingState() {
 
 		// Given
-		sut.viewState = .loading(content: ListEventsViewController.Content(title: "test", subTitle: nil, primaryActionTitle: nil, primaryAction: nil, secondaryActionTitle: nil, secondaryAction: nil))
+		sut.viewState = .loading(
+			content: defaultContent
+		)
 
 		// When
 		sut.backButtonTapped()
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_backButtonTapped_emptyState() {
 
 		// Given
-		sut.viewState = .emptyEvents(content: ListEventsViewController.Content(title: "test", subTitle: nil, primaryActionTitle: nil, primaryAction: nil, secondaryActionTitle: nil, secondaryAction: nil))
+		sut.viewState = .emptyEvents(
+			content: defaultContent
+		)
 
 		// When
 		sut.backButtonTapped()
@@ -54,14 +65,17 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_backButtonTapped_listState() {
 
 		// Given
-		sut.viewState = .listEvents(content: ListEventsViewController.Content(title: "test", subTitle: nil, primaryActionTitle: nil, primaryAction: nil, secondaryActionTitle: nil, secondaryAction: nil), rows: [])
+		sut.viewState = .listEvents(
+			content: defaultContent,
+			rows: []
+		)
 
 		// When
 		sut.backButtonTapped()
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_warnBeforeGoBack() {
@@ -73,31 +87,16 @@ class ListEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_vaccinationrow_actionTapped() {
 
 		// Given
-		let remoteVaccinationEvent = RemoteVaccinationEvent(
-			wrapper: Vaccination.EventResultWrapper(
-				providerIdentifier: "CC",
-				protocolVersion: "3.0",
-				identity: identity,
-				status: .complete,
-				events: [
-					Vaccination.Event(
-						type: "vaccination",
-						unique: "1234",
-						vaccination: vaccinationEvent
-					)
-				]
-			),
-			signedResponse: signedResponse
-		)
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
-			remoteVaccinationEvents: [remoteVaccinationEvent],
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
 
@@ -116,25 +115,10 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_somethingIsWrong_tapped() {
 
 		// Given
-		let remoteVaccinationEvent = RemoteVaccinationEvent(
-			wrapper: Vaccination.EventResultWrapper(
-				providerIdentifier: "CC",
-				protocolVersion: "3.0",
-				identity: identity,
-				status: .complete,
-				events: [
-					Vaccination.Event(
-						type: "vaccination",
-						unique: "1234",
-						vaccination: vaccinationEvent
-					)
-				]
-			),
-			signedResponse: signedResponse
-		)
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
-			remoteVaccinationEvents: [remoteVaccinationEvent],
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
 
@@ -151,16 +135,199 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 	}
 
+	func test_makeQR_saveEventGroupError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = false
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.networkSpy.invokedFetchGreencards) == false
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
+			expect(self.sut.alert).toNot(beNil())
+
+		} else {
+			fail("wrong state")
+		}
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.failure(NetworkError.invalidResponse), ())
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+			expect(self.sut.alert).toEventuallyNot(beNil())
+
+		} else {
+			fail("wrong state")
+		}
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveEUGreencardError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = false
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+			expect(self.sut.alert).toEventuallyNot(beNil())
+
+		} else {
+			fail("wrong state")
+		}
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveDomesticGreencardError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = false
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+			expect(self.sut.alert).toEventuallyNot(beNil())
+
+		} else {
+			fail("wrong state")
+		}
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveGreencardNoError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			networkManager: networkSpy,
+			walletManager: walletSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue))
+			expect(self.sut.alert).toEventually(beNil())
+		} else {
+			fail("wrong state")
+		}
+	}
+
 	// MARK: Default values
 
-	let identity = Vaccination.Identity(
+	private func defaultremoteVaccinationEvent() -> RemoteVaccinationEvent {
+		return RemoteVaccinationEvent(
+			wrapper: Vaccination.EventResultWrapper(
+				providerIdentifier: "CC",
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				events: [
+					Vaccination.Event(
+						type: "vaccination",
+						unique: "1234",
+						vaccination: vaccinationEvent
+					)
+				]
+			),
+			signedResponse: signedResponse
+		)
+	}
+
+	private let defaultContent = ListEventsViewController.Content(
+		title: "test",
+		subTitle: nil,
+		primaryActionTitle: nil,
+		primaryAction: nil,
+		secondaryActionTitle: nil,
+		secondaryAction: nil
+	)
+
+	private let identity = Vaccination.Identity(
 		infix: "",
 		firstName: "Corona",
 		lastName: "Check",
 		birthDateString: "2021-05-16"
 	)
 
-	let vaccinationEvent = Vaccination.VaccinationEvent(
+	private let vaccinationEvent = Vaccination.VaccinationEvent(
 		dateString: "2021-05-16",
 		hpkCode: nil,
 		type: nil,
@@ -171,8 +338,33 @@ class ListEventsViewModelTests: XCTestCase {
 		totalDoses: 2
 	)
 
-	let signedResponse = SignedResponse(
+	private let signedResponse = SignedResponse(
 		payload: "payload",
 		signature: "signature"
+	)
+
+	private let remoteGreenCards = RemoteGreenCards.Response(
+		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+			origins: [
+				RemoteGreenCards.Origin(
+					type: "vaccination",
+					eventTime: Date(),
+					expirationTime: Date()
+				)
+			],
+			createCredentialMessages: "test"
+		),
+		euGreenCards: [
+			RemoteGreenCards.EuGreenCard(
+				origins: [
+					RemoteGreenCards.Origin(
+						type: "vaccination",
+						eventTime: Date(),
+						expirationTime: Date()
+					)
+				],
+				credential: "test credential"
+			)
+		]
 	)
 }
