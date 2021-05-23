@@ -35,7 +35,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_backButtonTapped_emptyState() {
@@ -61,7 +61,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_warnBeforeGoBack() {
@@ -73,7 +73,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_vaccinationrow_actionTapped() {
