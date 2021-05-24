@@ -199,7 +199,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 	func listEventsScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
-			case .stop:
+			case .stop, .continue:
 				delegate?.eventFlowDidComplete()
 			case .back:
 				if let vaccineStartViewController = navigationController.viewControllers

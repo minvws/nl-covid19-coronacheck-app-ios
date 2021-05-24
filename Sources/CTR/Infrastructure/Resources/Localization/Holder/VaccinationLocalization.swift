@@ -123,4 +123,34 @@ extension String {
 
 		return Localization.string(for: "holder.vaccination.wrong.body")
 	}
+
+	static var holderVaccinationErrorAgain: String {
+
+		return Localization.string(for: "holder.vaccination.error.again")
+	}
+
+	static var holderVaccinationErrorClose: String {
+
+		return Localization.string(for: "holder.vaccination.error.close")
+	}
+
+	static var holderVaccinationErrorMessage: String {
+
+		return Localization.string(for: "holder.vaccination.error.message")
+	}
+
+	static var holderVaccinationErrorMessageCode: String {
+
+		return Localization.string(for: "holder.vaccination.error.message.code")
+	}
+
+	static var holderVaccinationErrorTitleTooBusy: String {
+
+		return Localization.string(for: "holder.vaccination.error.title.toobusy")
+	}
+
+	static var holderVaccinationErrorMessageTooBusy: String {
+
+		return Localization.string(for: "holder.vaccination.error.message.toobusy")
+	}
 }

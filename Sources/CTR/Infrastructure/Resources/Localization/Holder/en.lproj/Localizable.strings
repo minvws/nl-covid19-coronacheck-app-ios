@@ -272,3 +272,10 @@
 
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
+
+"holder.vaccination.error.again" = "Probeer opnieuw";
+"holder.vaccination.error.close" = "Sluiten";
+"holder.vaccination.error.message" = "Het is niet gelukt om de vaccinatie op te halen. Probeer het nog eens.";
+"holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je geprikt bent en geef de foutcode (%@) door.";
+"holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
+"holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
