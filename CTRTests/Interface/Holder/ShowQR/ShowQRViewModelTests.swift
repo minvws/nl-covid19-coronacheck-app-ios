@@ -68,14 +68,14 @@ class ShowQRViewModelTests: XCTestCase {
 	func testValidityNoCredential() {
 
 		// Given
-		cryptoManagerSpy.crypoAttributes = nil
+		cryptoManagerSpy.stubbedReadCredentialResult = nil
 
 		// When
 		sut?.checkQRValidity()
 
 		// Then
-		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
-		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
+		XCTAssertTrue(cryptoManagerSpy.invokedReadCredential, "Credential should be checked")
+		XCTAssertFalse(cryptoManagerSpy.invokedGenerateQRmessage, "Generate QR should not be checked")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Method should be called")
 	}
 
@@ -84,7 +84,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -100,8 +100,8 @@ class ShowQRViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
-		XCTAssertFalse(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should not be checked")
+		XCTAssertTrue(cryptoManagerSpy.invokedReadCredential, "Credential should be checked")
+		XCTAssertFalse(cryptoManagerSpy.invokedGenerateQRmessage, "Generate QR should not be checked")
 		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Method should be called")
 	}
 
@@ -110,7 +110,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -121,7 +121,7 @@ class ShowQRViewModelTests: XCTestCase {
 			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
-		cryptoManagerSpy.qrMessage = qrMessage
+		cryptoManagerSpy.stubbedGenerateQRmessageResult = qrMessage
 		sut?.proofValidator = ProofValidator(maxValidity: 40)
 
 		// When
@@ -129,8 +129,8 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(cryptoManagerSpy.readCredentialCalled, "Credential should be checked")
-		XCTAssertTrue(cryptoManagerSpy.generateQRmessageCalled, "Generate QR should be checked")
+		XCTAssertTrue(cryptoManagerSpy.invokedReadCredential, "Credential should be checked")
+		XCTAssertTrue(cryptoManagerSpy.invokedGenerateQRmessage, "Generate QR should be checked")
 		XCTAssertEqual(strongSut.qrMessage, qrMessage, "The QR Code should match")
 		XCTAssertNotNil(strongSut.validityTimer, "The timer should be started")
 		XCTAssertTrue(strongSut.showValidQR, "Valid QR should be shown")

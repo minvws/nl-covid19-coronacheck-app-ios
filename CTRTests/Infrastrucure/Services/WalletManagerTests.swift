@@ -41,10 +41,13 @@ class WalletManagerTests: XCTestCase {
 
 		// Given
 		var wallet: Wallet?
-		dataStoreManager = DataStoreManager(.inMemory)
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
+			// Delete the one created by the initializer in the setup()
+			for element in WalletModel.listAll(managedContext: context) {
+				context.delete(element)
+			}
 			let exitingWallet = WalletModel.create(label: WalletManager.walletName, managedContext: context)
 
 			// When

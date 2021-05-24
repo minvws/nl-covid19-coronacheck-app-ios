@@ -36,7 +36,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beTrue())
+		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with no response
@@ -50,7 +50,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -65,7 +65,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with invalid keys error
@@ -74,14 +74,14 @@ class ProofManagerTests: XCTestCase {
 		// Given
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
 		// Trigger invalid keys
-		cryptoSpy.issuerPublicKeysAreValid = false
+		cryptoSpy.stubbedSetIssuerPublicKeysResult = false
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beTrue())
+		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -96,7 +96,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.setIssuerPublicKeysCalled).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beFalse())
 	}
 
 	func test_fetchTestProviders() {
@@ -185,26 +185,3 @@ class ProofManagerTests: XCTestCase {
 		expect(self.sut.getSignedWrapper()).toEventually(beNil())
 	}
 }
-
-/*
-
-if let testEvent = getTestWrapper(),
-let signedProof = getSignedWrapper(),
-let sampleDate = testEvent.result?.sampleDate,
-let issuedAt = Formatter().getDateFrom(dateString8601: sampleDate),
-testEvent.status == .complete {
-
-// Convert to eventGroup
-_ = walletManager.storeEventGroup(
-.test,
-providerIdentifier: testEvent.providerIdentifier,
-signedResponse: signedProof,
-issuedAt: issuedAt
-)
-// Remove old data
-removeTestWrapper()
-}
-
-// Convert Credential
-cryptoManager.migrateExistingCredential(walletManager)
-*/

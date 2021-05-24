@@ -102,14 +102,14 @@ class DashboardViewModelTests: XCTestCase {
 	func testValidityNoCredential() {
 
 		// Given
-		cryptoManagerSpy.crypoAttributes = nil
+		cryptoManagerSpy.stubbedReadCredentialResult = nil
 
 		// When
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.readCredentialCalled) == true
-		expect(self.cryptoManagerSpy.generateQRmessageCalled) == false
+		expect(self.cryptoManagerSpy.invokedReadCredential) == true
+		expect(self.cryptoManagerSpy.invokedGenerateQRmessage) == false
 		expect(self.sut.qrCard)
 			.to(beNil())
 		expect(self.sut.showExpiredQR) == false
@@ -124,7 +124,7 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -140,8 +140,8 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.readCredentialCalled) == true
-		expect(self.cryptoManagerSpy.generateQRmessageCalled) == false
+		expect(self.cryptoManagerSpy.invokedReadCredential) == true
+		expect(self.cryptoManagerSpy.invokedGenerateQRmessage) == false
 		expect(self.sut.validityTimer)
 			.to(beNil())
 		expect(self.sut.qrCard)
@@ -158,7 +158,7 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -169,14 +169,14 @@ class DashboardViewModelTests: XCTestCase {
 			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
-		cryptoManagerSpy.qrMessage = qrMessage
+		cryptoManagerSpy.stubbedGenerateQRmessageResult = qrMessage
 		sut?.proofValidator = ProofValidator(maxValidity: 40)
 
 		// When
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.readCredentialCalled) == true
+		expect(self.cryptoManagerSpy.invokedReadCredential) == true
 		expect(self.sut.qrCard)
 			.toNot(beNil())
 		expect(self.sut.validityTimer)
@@ -205,7 +205,7 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -222,9 +222,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.closeExpiredRQ()
 
 		// Then
-		expect(self.cryptoManagerSpy.removeCredentialCalled) == true
-		expect(self.cryptoManagerSpy.crypoAttributes)
-			.to(beNil())
+		expect(self.cryptoManagerSpy.invokedRemoveCredential) == true
 	}
 
 	func test_qrcard_withValidAMTime() {
