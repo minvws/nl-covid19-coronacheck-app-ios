@@ -93,6 +93,10 @@ class ListEventsViewController: BaseViewController {
 		viewModel.$alert.binding = { [weak self] in
 			self?.showAlert($0)
 		}
+
+		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
+			self?.sceneView.primaryButton.isEnabled = $0
+		}
 	}
 
 	@objc func backButtonTapped() {

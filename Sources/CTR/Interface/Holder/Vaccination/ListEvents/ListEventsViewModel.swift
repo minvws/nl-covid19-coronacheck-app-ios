@@ -32,7 +32,7 @@ class ListEventsViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM"
+		dateFormatter.dateFormat = "dd MMMM yyyy"
 		return dateFormatter
 	}()
 
@@ -41,6 +41,8 @@ class ListEventsViewModel: Logging {
 	@Bindable internal var viewState: ListEventsViewController.State
 
 	@Bindable private(set) var alert: ListEventsViewController.AlertContent?
+
+	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -176,21 +178,39 @@ class ListEventsViewModel: Logging {
 
 		for (index, dataRow) in sortedDataSource.enumerated() {
 
-			let formattedDate: String = Formatter().getDateFrom(dateString8601: dataRow.event.vaccination.dateString ?? "")
-				.map {
-					printDateFormatter.string(from: $0)
-				} ?? ""
+			let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: dataRow.identity.birthDateString)
+				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedShotDate: String = dataRow.event.vaccination.dateString
+				.flatMap(Formatter().getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.event.vaccination.dateString ?? "")
+
+			let domesticIdentity = dataRow.identity
+				.mapIdentity(months: String.shortMonths)
+				.map({ $0.isEmpty ? "_" : $0 })
+				.joined(separator: " ")
 
 			rows.append(
 				ListEventsViewController.Row(
 					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
-					subTitle: String(format: .holderVaccinationElementSubTitle, formattedDate),
+					subTitle: String(
+						format: .holderVaccinationElementSubTitle,
+						dataRow.identity.fullName,
+						formattedBirthDate
+					),
 					action: { [weak self] in
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: .holderVaccinationAboutTitle,
-								body: .holderVaccinationAboutBody
+								body: String(
+									format: .holderVaccinationAboutBody,
+									domesticIdentity,
+									dataRow.identity.fullName,
+									formattedBirthDate,
+									dataRow.event.vaccination.brand ?? "-",
+									"\(index + 1)",
+									formattedShotDate
+								)
 							)
 						)
 					}
@@ -205,6 +225,9 @@ class ListEventsViewModel: Logging {
 
 	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
 
+		shouldPrimaryButtonBeEnabled = false
+		progressIndicationCounter.increment()
+
 		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
 
 			guard saved else {
@@ -217,14 +240,19 @@ class ListEventsViewModel: Logging {
 
 					self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 
+						self?.progressIndicationCounter.decrement()
 						if greenCardsSaved {
 							self?.coordinator?.listEventsScreenDidFinish(.continue)
 						} else {
-							self?.showVaccinationError(remoteEvents: remoteEvents)
 							self?.logError("Failed to save greenCards")
+							self?.shouldPrimaryButtonBeEnabled = true
+							self?.showVaccinationError(remoteEvents: remoteEvents)
 						}
 					}
 				} else {
+					self?.logError("No greencards")
+					self?.progressIndicationCounter.decrement()
+					self?.shouldPrimaryButtonBeEnabled = true
 					self?.showVaccinationError(remoteEvents: remoteEvents)
 				}
 			}

@@ -255,7 +255,7 @@
 "holder.vaccination.list.message" = "Je kan een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
 "holder.vaccination.list.actiontitle" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
-"holder.vaccination.element.subtitle" = "Vaccinatiedatum: %@";
+"holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties op kunnen halen";
 "holder.vaccination.nolist.message" = "<p>Er zijn geen vaccinatiegegevens beschikbaar.</p><p>Als jouw huisarts niet is aangesloten op de GGD kunnen wij op dit moment geen vaccinatie ophalen. Dit kan over een maand.</p>";
 "holder.vaccination.nolist.actiontitle" = "Naar Mijn Overzicht";
@@ -264,7 +264,7 @@
 "holder.vaccination.alert.cancel" = "Nee, terug";
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
-"holder.vaccination.about.body" = "**Nog niet final**";
+"holder.vaccination.about.body" = "<p><b>Gegevens voor Nederland</b></p><p>Voor een Nederlandse QR-code worden er minimale gegevens opgehaald: je vaccinatiedatum en enkele gegevens van jou. Jouw gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p><b>Gegevens voor Europa</b></p><p>Voor een Europese QR-code zijn meer gegevens nodig, namelijk:</p><p>Naam:  <b>%@</b><br>Geboortedatum:  <b>%@</b><br>Vaccin:  <b>%@</b><br>Prikdatum %@:  <b>%@</b><br></p>";
 
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
