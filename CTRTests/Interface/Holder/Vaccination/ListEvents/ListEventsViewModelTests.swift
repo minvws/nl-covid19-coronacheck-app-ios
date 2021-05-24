@@ -22,7 +22,7 @@ class ListEventsViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
-		walletSpy = WalletManagerSpy()
+		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,

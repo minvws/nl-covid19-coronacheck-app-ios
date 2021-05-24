@@ -136,4 +136,75 @@ class ProofManagerTests: XCTestCase {
 		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
 		expect(self.sut.testProviders).toEventually(beEmpty())
 	}
+
+	func test_migrateExistingProof_noProof() {
+
+		// Given
+		let walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
+		sut.walletManager = walletSpy
+		sut.proofData.signedWrapper = nil
+		sut.proofData.testWrapper = nil
+
+		// When
+		sut.migrateExistingProof()
+
+		// Then
+		expect(walletSpy.invokedStoreEventGroup).toEventually(beFalse())
+	}
+
+	func test_migrateExistingProof() {
+
+		// Given
+		let walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
+		sut.walletManager = walletSpy
+		sut.proofData.signedWrapper = SignedResponse(payload: "test", signature: "test")
+		sut.proofData.testWrapper = TestResultWrapper(
+			providerIdentifier: "CC",
+			protocolVersion: "2.0",
+			result: TestResult(
+				unique: "1234",
+				sampleDate: "1621852090",
+				testType: "pcr",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "R",
+					lastNameInitial: "P",
+					birthDay: "27",
+					birthMonth: "5"
+				)
+			),
+			status: .complete
+		)
+
+		// When
+		sut.migrateExistingProof()
+
+		// Then
+		expect(walletSpy.invokedStoreEventGroup).toEventually(beTrue())
+		expect(self.sut.getTestWrapper()).toEventually(beNil())
+		expect(self.sut.getSignedWrapper()).toEventually(beNil())
+	}
 }
+
+/*
+
+if let testEvent = getTestWrapper(),
+let signedProof = getSignedWrapper(),
+let sampleDate = testEvent.result?.sampleDate,
+let issuedAt = Formatter().getDateFrom(dateString8601: sampleDate),
+testEvent.status == .complete {
+
+// Convert to eventGroup
+_ = walletManager.storeEventGroup(
+.test,
+providerIdentifier: testEvent.providerIdentifier,
+signedResponse: signedProof,
+issuedAt: issuedAt
+)
+// Remove old data
+removeTestWrapper()
+}
+
+// Convert Credential
+cryptoManager.migrateExistingCredential(walletManager)
+*/

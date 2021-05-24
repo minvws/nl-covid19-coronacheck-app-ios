@@ -145,4 +145,12 @@ class ProofManagingSpy: ProofManaging {
 		invokedRemoveTestWrapper = true
 		invokedRemoveTestWrapperCount += 1
 	}
+
+	var invokedMigrateExistingProof = false
+	var invokedMigrateExistingProofCount = 0
+
+	func migrateExistingProof() {
+		invokedMigrateExistingProof = true
+		invokedMigrateExistingProofCount += 1
+	}
 }

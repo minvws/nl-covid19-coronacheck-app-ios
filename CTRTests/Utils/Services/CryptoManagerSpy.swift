@@ -108,4 +108,8 @@ class CryptoManagerSpy: CryptoManaging {
 	func storeCredential(_ credential: Data) {
 		// Nothing yet
 	}
+
+	func migrateExistingCredential(_ walletManager: WalletManaging) {
+		// Nothing yet
+	}
 }

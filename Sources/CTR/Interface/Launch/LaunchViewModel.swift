@@ -75,6 +75,10 @@ class LaunchViewModel {
 			interruptForJailBreakDialog = false
 			updateDependencies()
 		}
+
+		if flavor == .holder {
+			proofManager.migrateExistingProof()
+		}
 	}
 
 	/// Update the dependencies

@@ -128,4 +128,20 @@ class WalletManagerTests: XCTestCase {
 		// Then
 		expect(wallet?.eventGroups).to(haveCount(1))
 	}
+
+	func test_import() {
+
+		// Given
+		var result = false
+
+		// When
+		result = sut.importExistingTestCredential(Data(), sampleDate: Date())
+
+		// Then
+		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
+		expect(wallet?.greenCards?.allObjects).toEventually(haveCount(1))
+		expect((wallet?.greenCards?.allObjects.first as? GreenCard)?.credentials?.allObjects).toEventually(haveCount(1))
+		expect((wallet?.greenCards?.allObjects.first as? GreenCard)?.origins?.allObjects).toEventually(haveCount(1))
+		expect(result).toEventually(beTrue())
+	}
 }
