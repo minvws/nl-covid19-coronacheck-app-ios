@@ -95,7 +95,7 @@ class DashboardViewControllerTests: XCTestCase {
 	func setupValidCredential() {
 
 		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -106,7 +106,7 @@ class DashboardViewControllerTests: XCTestCase {
 			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
-		cryptoManagerSpy.qrMessage = qrMessage
+		cryptoManagerSpy.stubbedGenerateQRmessageResult = qrMessage
 		viewModel.proofValidator = ProofValidator(maxValidity: 1)
 	}
 
@@ -138,7 +138,7 @@ class DashboardViewControllerTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -165,7 +165,7 @@ class DashboardViewControllerTests: XCTestCase {
 	func testValidityNoCredential() {
 
 		// Given
-		cryptoManagerSpy.crypoAttributes = nil
+		cryptoManagerSpy.stubbedReadCredentialResult = nil
 		loadView()
 
 		// When
@@ -215,7 +215,7 @@ class DashboardViewControllerTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -233,9 +233,7 @@ class DashboardViewControllerTests: XCTestCase {
 		sut?.sceneView.expiredQRView.closeButtonTapped()
 
 		// Then
-		expect(self.cryptoManagerSpy.removeCredentialCalled) == true
-		expect(self.cryptoManagerSpy.crypoAttributes)
-			.to(beNil())
+		expect(self.cryptoManagerSpy.invokedRemoveCredential) == true
 	}
 
 	func test_showNotificationBanner() {

@@ -269,4 +269,17 @@ class CryptoManager: CryptoManaging, Logging {
 		
 		cryptoData.credential = nil
 	}
+
+	/// Migrate existing credential to the wallet
+	/// - Parameter walletManager: the wallet manager
+	func migrateExistingCredential(_ walletManager: WalletManaging) {
+
+		if let existingCredential = cryptoData.credential,
+		   let cryptoAttributes = readCredential(),
+			let sampleTime = TimeInterval(cryptoAttributes.sampleTime),
+			walletManager.importExistingTestCredential(existingCredential, sampleDate: Date(timeIntervalSince1970: sampleTime)) {
+
+				removeCredential()
+		}
+	}
 }

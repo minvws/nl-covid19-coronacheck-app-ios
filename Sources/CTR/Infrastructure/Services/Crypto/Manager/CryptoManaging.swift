@@ -127,6 +127,10 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Attributes if the QR is valid or error string if not
 	func verifyQRMessage(_ message: String) -> CryptoResult
+
+	// MARK: Migration
+
+	func migrateExistingCredential(_ walletManager: WalletManaging)
 }
 
 /// The errors returned by the crypto library

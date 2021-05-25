@@ -30,6 +30,15 @@ protocol WalletManaging {
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard) -> Bool
 
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard) -> Bool
+
+	init( dataStoreManager: DataStoreManaging)
+
+	/// Import any existing version 1 credentials into the database
+	/// - Parameters:
+	///   - data: the credential data
+	///   - sampleDate: the sample date of the credential
+	/// - Returns: True if import was successful
+	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -38,7 +47,7 @@ class WalletManager: WalletManaging, Logging {
 
 	private var dataStoreManager: DataStoreManaging
 
-	init( dataStoreManager: DataStoreManaging = Services.dataStoreManager) {
+	required init( dataStoreManager: DataStoreManaging = Services.dataStoreManager) {
 
 		self.dataStoreManager = dataStoreManager
 
@@ -47,7 +56,7 @@ class WalletManager: WalletManaging, Logging {
 
 	private func createMainWalletIfNotExists() {
 
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
 			if WalletModel.findBy(label: WalletManager.walletName, managedContext: context) == nil {
@@ -72,7 +81,7 @@ class WalletManager: WalletManaging, Logging {
 
 		var success = true
 
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
@@ -99,7 +108,7 @@ class WalletManager: WalletManaging, Logging {
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventType, providerIdentifier: String) {
 
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -119,7 +128,7 @@ class WalletManager: WalletManaging, Logging {
 
 	func removeExistingGreenCards() {
 
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -142,7 +151,7 @@ class WalletManager: WalletManaging, Logging {
 		}
 
 		var result = true
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -155,8 +164,8 @@ class WalletManager: WalletManaging, Logging {
 
 					}
 					if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
-						// data and date should come from the CreateCredential method of the Go Library.
-						result = result && CredentialModel.create(data: data, validFrom: Date(), greenCard: greenCard, managedContext: context) != nil
+						// data, version and date should come from the CreateCredential method of the Go Library.
+						result = result && CredentialModel.create(data: data, validFrom: Date(), version: 2, greenCard: greenCard, managedContext: context) != nil
 					}
 					dataStoreManager.save(context)
 				}
@@ -170,7 +179,7 @@ class WalletManager: WalletManaging, Logging {
 	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard) -> Bool {
 
 		var result = true
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -181,9 +190,9 @@ class WalletManager: WalletManaging, Logging {
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
 					}
 
-					// data and date should come from the CreateCredential method of the Go Library.
+					// data, version and date should come from the CreateCredential method of the Go Library.
 					let data = Data(remoteEuGreenCard.credential.utf8)
-					result = result && CredentialModel.create(data: data, validFrom: Date(), greenCard: greenCard, managedContext: context) != nil
+					result = result && CredentialModel.create(data: data, validFrom: Date(), version: 2, greenCard: greenCard, managedContext: context) != nil
 					dataStoreManager.save(context)
 				} else {
 					result = false
@@ -201,7 +210,6 @@ class WalletManager: WalletManaging, Logging {
 		} else {
 			return false
 		}
-
 	}
 
 	func listGreenCards() -> [GreenCard] {
@@ -213,6 +221,43 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
 			   let greenCards = wallet.greenCards?.allObjects as? [GreenCard] {
 				result = greenCards
+			}
+		}
+		return result
+	}
+
+	/// Import any existing version 1 credentials into the database
+	/// - Parameters:
+	///   - data: the credential data
+	///   - sampleDate: the sample date of the credential
+	/// - Returns: True if import was successful
+	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool {
+
+		guard let expireDate = Calendar.current.date(byAdding: .hour, value: 40, to: sampleDate) else {
+
+			return false
+		}
+
+		var result = true
+		let context = dataStoreManager.backgroundContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				guard let greenCards = wallet.greenCards, greenCards.allObjects.isEmpty else {
+					// Existing greencard.
+					result = false
+					return
+				}
+
+				if let greenCard = GreenCardModel.create(type: .domestic, wallet: wallet, managedContext: context) {
+					result = result && OriginModel.create(type: .negativeTest, eventDate: sampleDate, expireDate: expireDate, greenCard: greenCard, managedContext: context) != nil
+					// Legacy credential should have version 1
+					result = result && CredentialModel.create(data: data, validFrom: sampleDate, version: 1, greenCard: greenCard, managedContext: context) != nil
+					dataStoreManager.save(context)
+				}
+			} else {
+				result = false
 			}
 		}
 		return result
