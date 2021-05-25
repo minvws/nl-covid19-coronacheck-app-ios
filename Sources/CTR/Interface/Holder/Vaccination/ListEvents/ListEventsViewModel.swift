@@ -13,6 +13,7 @@ class ListEventsViewModel: Logging {
 
 	private var walletManager: WalletManaging
 	private var networkManager: NetworkManaging
+	private var cryptoManager: CryptoManaging
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -52,11 +53,14 @@ class ListEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate,
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
 		networkManager: NetworkManaging = Services.networkManager,
-		walletManager: WalletManaging = WalletManager()) {
+		walletManager: WalletManaging = WalletManager(),
+		cryptoManager: CryptoManaging = Services.cryptoManager
+	) {
 
 		self.coordinator = coordinator
 		self.networkManager = networkManager
 		self.walletManager = walletManager
+		self.cryptoManager = cryptoManager
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -235,38 +239,83 @@ class ListEventsViewModel: Logging {
 				return
 			}
 
-			self.fetchGreenCards { [weak self] response in
-				if let greenCardResponse = response {
+			self.prepareIssue { [weak self] prepareIssueEnvelope in
+				if let envelope = prepareIssueEnvelope,
+				   let nonce = envelope.prepareIssueMessage.base64Decoded() {
+					self?.cryptoManager.setNonce(nonce)
+					self?.cryptoManager.setStoken(envelope.stoken)
 
-					self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+					self?.fetchGreenCards { [weak self] response in
+						if let greenCardResponse = response {
 
-						self?.progressIndicationCounter.decrement()
-						if greenCardsSaved {
-							self?.coordinator?.listEventsScreenDidFinish(.continue)
+							self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+
+								self?.progressIndicationCounter.decrement()
+								if greenCardsSaved {
+									self?.coordinator?.listEventsScreenDidFinish(.continue)
+								} else {
+									self?.logError("Failed to save greenCards")
+									self?.shouldPrimaryButtonBeEnabled = true
+									self?.showVaccinationError(remoteEvents: remoteEvents)
+								}
+							}
 						} else {
-							self?.logError("Failed to save greenCards")
+							self?.logError("No greencards")
+							self?.progressIndicationCounter.decrement()
 							self?.shouldPrimaryButtonBeEnabled = true
 							self?.showVaccinationError(remoteEvents: remoteEvents)
 						}
 					}
+
 				} else {
-					self?.logError("No greencards")
+					self?.logError("Can't save the nonce / prepareIssueMessage")
 					self?.progressIndicationCounter.decrement()
 					self?.shouldPrimaryButtonBeEnabled = true
-					self?.showVaccinationError(remoteEvents: remoteEvents)
 				}
+			}
+		}
+	}
+
+	/// Prepare the cryptoManager
+	/// - Parameter onCompletion: completion handler
+	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
+
+		networkManager.prepareIssue { result in
+			// Result<PrepareIssueEnvelope, NetworkError>
+			switch result {
+				case let .success(prepareIssueEnvelope):
+					self.logDebug("ok: \(prepareIssueEnvelope)")
+					onCompletion(prepareIssueEnvelope)
+				case let .failure(error):
+					self.logError("error: \(error)")
+					onCompletion(nil)
 			}
 		}
 	}
 
 	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
 
-		self.networkManager.fetchGreencards(dictionary: [:]) { result in
+		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
+			let utf8 = issueCommitmentMessage.data(using: .utf8),
+			let stoken = cryptoManager.getStoken()
+		else {
+			//					onError(ProofError.missingParams)
+			return
+		}
+
+		let dictionary: [String: AnyObject] = [
+			//			"test": generateString(object: wrapper) as AnyObject,
+			"stoken": stoken as AnyObject,
+			"events": [] as AnyObject,
+			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
+		]
+
+		self.networkManager.fetchGreencards(dictionary: dictionary) { result in
 			//				Result<RemoteGreenCards.Response, NetworkError>
 
 			switch result {
 				case let .success(greencardResponse):
-					self.logDebug("ok: \(greencardResponse)")
+//					self.logDebug("ok: \(greencardResponse)")
 					onCompletion(greencardResponse)
 				case let .failure(error):
 					self.logError("error: \(error)")
@@ -329,13 +378,13 @@ class ListEventsViewModel: Logging {
 		walletManager.removeExistingGreenCards()
 
 		if let domestic = response.domesticGreenCard {
-			success = success && walletManager.storeDomesticGreenCard(domestic)
+			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
 		}
-		if let remoteEuGreenCards = response.euGreenCards {
-			for remoteEuGreenCard in remoteEuGreenCards {
-				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
-			}
-		}
+//		if let remoteEuGreenCards = response.euGreenCards {
+//			for remoteEuGreenCard in remoteEuGreenCards {
+//				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
+//			}
+//		}
 
 		onCompletion(success)
 	}
