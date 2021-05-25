@@ -148,8 +148,8 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	/// Navigate to the consent page
 	func navigateToConsent(shouldHideBackButton: Bool) {
 
-		let viewController = ConsentViewController(
-			viewModel: ConsentViewModel(
+		let viewController = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
 				coordinator: self,
 				factory: onboardingFactory,
 				shouldHideBackButton: shouldHideBackButton

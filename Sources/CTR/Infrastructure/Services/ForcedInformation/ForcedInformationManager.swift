@@ -59,7 +59,7 @@ class ForcedInformationManager: ForcedInformationManaging {
 			content: .newTermsDescription,
 			consentMandatory: true
 		),
-		version: 1
+		version: 2
 	)
 
 	// MARK: - ForcedInformationManaging
