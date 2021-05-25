@@ -332,7 +332,8 @@ class TokenEntryViewModel {
 					switch wrapper.status {
 						case .complete, .pending:
 							self.screenHasCompleted = true
-							self.coordinator?.navigateToListResults()
+//							self.coordinator?.navigateToListResults()
+							self.coordinator?.userWishesToMakeQRFromNegativeTest()
 						case .verificationRequired:
 							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 								// the user has just submitted a wrong verification code & should see an error message

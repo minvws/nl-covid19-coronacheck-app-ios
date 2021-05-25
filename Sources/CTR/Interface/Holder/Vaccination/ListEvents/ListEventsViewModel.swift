@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum ListEventSourceMode {
+	case vaccination
+	case negativeTest
+}
+
 class ListEventsViewModel: Logging {
 
 	weak var coordinator: EventCoordinatorDelegate?
@@ -50,7 +55,9 @@ class ListEventsViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate,
+		sourceMode: ListEventSourceMode = .vaccination,
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
+		remoteTestEvents: [RemoteTestEvent],
 		networkManager: NetworkManaging = Services.networkManager,
 		walletManager: WalletManaging = WalletManager()) {
 
@@ -60,7 +67,7 @@ class ListEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
-				title: .holderVaccinationLoadingTitle,
+				title: sourceMode == .vaccination ? .holderVaccinationLoadingTitle : .holderTestResultsResultsTitle,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -68,7 +75,11 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
-		viewState = getViewState(from: remoteVaccinationEvents)
+		if sourceMode == .vaccination {
+			viewState = getViewState(from: remoteVaccinationEvents)
+		} else {
+			viewState = getViewState(from: remoteTestEvents)
+		}
 	}
 
 	func backButtonTapped() {
@@ -115,13 +126,13 @@ class ListEventsViewModel: Logging {
 		}
 
 		if listDataSource.isEmpty {
-			return emptyEventsState()
+			return emptyVaccinationEventsState()
 		} else {
 			return listEventsState(listDataSource, remoteEvents: remoteEvents)
 		}
 	}
 
-	private func emptyEventsState() -> ListEventsViewController.State {
+	private func emptyVaccinationEventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
@@ -147,7 +158,7 @@ class ListEventsViewModel: Logging {
 				subTitle: .holderVaccinationListMessage,
 				primaryActionTitle: .holderVaccinationListActionTitle,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: remoteEvents)
+//					self?.userWantsToMakeQR(remoteEvents: remoteEvents)
 				},
 				secondaryActionTitle: .holderVaccinationListWrong,
 				secondaryAction: { [weak self] in
@@ -221,122 +232,161 @@ class ListEventsViewModel: Logging {
 		return rows
 	}
 
-	// MARK: Sign the events
+	private func getViewState(
+		from remoteEvent: [RemoteTestEvent]) -> ListEventsViewController.State {
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
+//		switch remoteEvent.wrapper.status {
+//			case .complete:
+//				if let result = wrapper.result, result.negativeResult {
+//					reportTestResult(result)
+//				} else {
+//					reportNoTestResult()
+//				}
+//			case .pending:
+//				reportPendingResult()
+//			default:
+//				reportNoTestResult()
+//		}
 
-		shouldPrimaryButtonBeEnabled = false
-		progressIndicationCounter.increment()
-
-		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
-
-			guard saved else {
-				self.showVaccinationError(remoteEvents: remoteEvents)
-				return
-			}
-
-			self.fetchGreenCards { [weak self] response in
-				if let greenCardResponse = response {
-
-					self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
-
-						self?.progressIndicationCounter.decrement()
-						if greenCardsSaved {
-							self?.coordinator?.listEventsScreenDidFinish(.continue)
-						} else {
-							self?.logError("Failed to save greenCards")
-							self?.shouldPrimaryButtonBeEnabled = true
-							self?.showVaccinationError(remoteEvents: remoteEvents)
-						}
-					}
-				} else {
-					self?.logError("No greencards")
-					self?.progressIndicationCounter.decrement()
-					self?.shouldPrimaryButtonBeEnabled = true
-					self?.showVaccinationError(remoteEvents: remoteEvents)
-				}
-			}
-		}
+		return emptyTestEventsState()
 	}
 
-	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
+	private func emptyTestEventsState() -> ListEventsViewController.State {
 
-		self.networkManager.fetchGreencards(dictionary: [:]) { result in
-			//				Result<RemoteGreenCards.Response, NetworkError>
-
-			switch result {
-				case let .success(greencardResponse):
-					self.logDebug("ok: \(greencardResponse)")
-					onCompletion(greencardResponse)
-				case let .failure(error):
-					self.logError("error: \(error)")
-					onCompletion(nil)
-			}
-		}
-	}
-
-	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
-
-		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
-			subTitle: .holderVaccinationErrorMessage,
-			cancelAction: nil,
-			cancelTitle: .holderVaccinationErrorClose,
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents)
-			},
-			okTitle: .holderVaccinationErrorAgain
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: .holderTestResultsNoResultsTitle,
+				subTitle: .holderTestResultsNoResultsText,
+				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
 		)
 	}
 
-	// MARK: Store vaccination events
+//	self.title = .holderTestResultsNoResultsTitle
+//	self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
+//	self.buttonTitle = .holderTestResultsBackToMenuButton
 
-	private func storeVaccinationEvent(
-		remoteEvents: [RemoteVaccinationEvent],
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-		for response in remoteEvents where response.wrapper.status == .complete {
-
-			// Remove any existing vaccination events for the provider
-			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
-
-			// Store the new vaccination events
-
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
-				success = success && walletManager.storeEventGroup(
-					.vaccination,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
-					issuedAt: maxIssuedAt
-				)
-				if !success {
-					break
-				}
-			}
-		}
-		onCompletion(success)
-	}
-
-	// MARK: Store green cards
-
-	private func storeGreenCards(
-		response: RemoteGreenCards.Response,
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-
-		walletManager.removeExistingGreenCards()
-
-		if let domestic = response.domesticGreenCard {
-			success = success && walletManager.storeDomesticGreenCard(domestic)
-		}
-		if let remoteEuGreenCards = response.euGreenCards {
-			for remoteEuGreenCard in remoteEuGreenCards {
-				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
-			}
-		}
-
-		onCompletion(success)
-	}
+//	// MARK: Sign the events
+//
+//	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
+//
+//		shouldPrimaryButtonBeEnabled = false
+//		progressIndicationCounter.increment()
+//
+//		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
+//
+//			guard saved else {
+//				self.showVaccinationError(remoteEvents: remoteEvents)
+//				return
+//			}
+//
+//			self.fetchGreenCards { [weak self] response in
+//				if let greenCardResponse = response {
+//
+//					self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+//
+//						self?.progressIndicationCounter.decrement()
+//						if greenCardsSaved {
+//							self?.coordinator?.listEventsScreenDidFinish(.continue)
+//						} else {
+//							self?.logError("Failed to save greenCards")
+//							self?.shouldPrimaryButtonBeEnabled = true
+//							self?.showVaccinationError(remoteEvents: remoteEvents)
+//						}
+//					}
+//				} else {
+//					self?.logError("No greencards")
+//					self?.progressIndicationCounter.decrement()
+//					self?.shouldPrimaryButtonBeEnabled = true
+//					self?.showVaccinationError(remoteEvents: remoteEvents)
+//				}
+//			}
+//		}
+//	}
+//
+//	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
+//
+//		self.networkManager.fetchGreencards(dictionary: [:]) { result in
+//			//				Result<RemoteGreenCards.Response, NetworkError>
+//
+//			switch result {
+//				case let .success(greencardResponse):
+//					self.logDebug("ok: \(greencardResponse)")
+//					onCompletion(greencardResponse)
+//				case let .failure(error):
+//					self.logError("error: \(error)")
+//					onCompletion(nil)
+//			}
+//		}
+//	}
+//
+//	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
+//
+//		alert = ListEventsViewController.AlertContent(
+//			title: .errorTitle,
+//			subTitle: .holderVaccinationErrorMessage,
+//			cancelAction: nil,
+//			cancelTitle: .holderVaccinationErrorClose,
+//			okAction: { [weak self] _ in
+//				self?.userWantsToMakeQR(remoteEvents: remoteEvents)
+//			},
+//			okTitle: .holderVaccinationErrorAgain
+//		)
+//	}
+//
+//	// MARK: Store vaccination events
+//
+//	private func storeVaccinationEvent(
+//		remoteEvents: [RemoteVaccinationEvent],
+//		onCompletion: @escaping (Bool) -> Void) {
+//
+//		var success = true
+//		for response in remoteEvents where response.wrapper.status == .complete {
+//
+//			// Remove any existing vaccination events for the provider
+//			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+//
+//			// Store the new vaccination events
+//
+//			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
+//				success = success && walletManager.storeEventGroup(
+//					.vaccination,
+//					providerIdentifier: response.wrapper.providerIdentifier,
+//					signedResponse: response.signedResponse,
+//					issuedAt: maxIssuedAt
+//				)
+//				if !success {
+//					break
+//				}
+//			}
+//		}
+//		onCompletion(success)
+//	}
+//
+//	// MARK: Store green cards
+//
+//	private func storeGreenCards(
+//		response: RemoteGreenCards.Response,
+//		onCompletion: @escaping (Bool) -> Void) {
+//
+//		var success = true
+//
+//		walletManager.removeExistingGreenCards()
+//
+//		if let domestic = response.domesticGreenCard {
+//			success = success && walletManager.storeDomesticGreenCard(domestic)
+//		}
+//		if let remoteEuGreenCards = response.euGreenCards {
+//			for remoteEuGreenCard in remoteEuGreenCards {
+//				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
+//			}
+//		}
+//
+//		onCompletion(success)
+//	}
 }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias RemoteVaccinationEvent = (wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)
+
 struct Vaccination {
 
 	/// The access token used to fetch fat and thin ID Hashes

@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias RemoteTestEvent = (wrapper: TestResultWrapper, signedResponse: SignedResponse)
+
 /// A wrapper around a test result.
 struct TestResultWrapper: Codable {
 
