@@ -159,45 +159,15 @@ class WalletManager: WalletManaging, Logging {
 				if let greenCard = GreenCardModel.create(type: .domestic, wallet: wallet, managedContext: context) {
 
 					for remoteOrigin in remoteDomesticGreenCard.origins {
-
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
-
 					}
 					if let ccm = remoteDomesticGreenCard.createCredentialMessages, let data = Data(base64Encoded: ccm) {
-
 						switch convertToDomesticCredentials(cryptoManager: cryptoManager, data: data) {
 							case .failure:
 								result = false
 							case let .success(domesticCredentials):
-
 								for domesticCredential in domesticCredentials {
-
-									if let credentialVersion = domesticCredential.attributes.credentialVersion,
-									   let version = Int32(credentialVersion),
-									   let validFrom = domesticCredential.attributes.validFrom,
-									   let validFromTimeInterval = TimeInterval(validFrom),
-									   let validHours = domesticCredential.attributes.validForHours,
-									   let validHoursInt = Int(validHours),
-									   let data = domesticCredential.credential {
-
-										let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
-										if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
-
-											logDebug("Added credential from \(validFromDate) to \(expireDate)")
-											logDebug("data: \(data.map { String(format: "%02x", $0) }.joined())")
-
-											result = result && CredentialModel.create(
-												data: data,
-												validFrom: validFromDate,
-												expirationTime: expireDate,
-												version: version,
-												greenCard: greenCard,
-												managedContext: context) != nil
-										}
-
-										let check = cryptoManager.readDomesticCredentials(data)
-										logDebug("check: \(check)")
-									}
+									result = result && storeCredential(domesticCredential: domesticCredential, greenCard: greenCard, context: context)
 								}
 						}
 					}
@@ -206,6 +176,44 @@ class WalletManager: WalletManaging, Logging {
 			} else {
 				result = false
 			}
+		}
+		return result
+	}
+
+	/// Store a credential in CoreData from a Domestic Credential
+	/// - Parameters:
+	///   - domesticCredential: the domestic credential
+	///   - greenCard: the green card
+	///   - context: the managed object context
+	/// - Returns: True if storing was successful
+	private func storeCredential(domesticCredential: DomesticCredential, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
+
+		var result = true
+
+		if let credentialVersion = domesticCredential.attributes.credentialVersion,
+		   let version = Int32(credentialVersion),
+		   let validFrom = domesticCredential.attributes.validFrom,
+		   let validFromTimeInterval = TimeInterval(validFrom),
+		   let validHours = domesticCredential.attributes.validForHours,
+		   let validHoursInt = Int(validHours),
+		   let data = domesticCredential.credential {
+
+			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
+			if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
+
+//				logDebug("Added credential from \(validFromDate) to \(expireDate)")
+//				logDebug("data: \(data.map { String(format: "%02x", $0) }.joined())")
+
+				result = result && CredentialModel.create(
+					data: data,
+					validFrom: validFromDate,
+					expirationTime: expireDate,
+					version: version,
+					greenCard: greenCard,
+					managedContext: context) != nil
+			}
+//			let check = cryptoManager.readDomesticCredentials(data)
+//			logDebug("check: \(check)")
 		}
 		return result
 	}
@@ -243,7 +251,7 @@ class WalletManager: WalletManaging, Logging {
 					}
 
 					// data, version and date should come from the CreateCredential method of the Go Library.
-					let data = Data(remoteEuGreenCard.credential.utf8)
+//					let data = Data(remoteEuGreenCard.credential.utf8)
 //					result = result && CredentialModel.create(data: data, validFrom: Date(), version: 2, greenCard: greenCard, managedContext: context) != nil
 //					dataStoreManager.save(context)
 				} else {

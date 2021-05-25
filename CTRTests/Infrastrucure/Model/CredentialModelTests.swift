@@ -43,6 +43,7 @@ class CredentialModelTests: XCTestCase {
 					credential = CredentialModel.create(
 						data: unwrappedJson,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -78,12 +79,14 @@ class CredentialModelTests: XCTestCase {
 					CredentialModel.create(
 						data: json,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
 					CredentialModel.create(
 						data: json,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)

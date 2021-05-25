@@ -96,7 +96,7 @@ class CryptoManagerSpy: CryptoManaging {
 
 	var invokedReadCredential = false
 	var invokedReadCredentialCount = 0
-	var stubbedReadCredentialResult: CryptoAttributes?
+	var stubbedReadCredentialResult: CryptoAttributes!
 
 	func readCredential() -> CryptoAttributes? {
 		invokedReadCredential = true
@@ -158,5 +158,19 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedMigrateExistingCredentialCount += 1
 		invokedMigrateExistingCredentialParameters = (walletManager, ())
 		invokedMigrateExistingCredentialParametersList.append((walletManager, ()))
+	}
+
+	var invokedReadDomesticCredentials = false
+	var invokedReadDomesticCredentialsCount = 0
+	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?
+	var invokedReadDomesticCredentialsParametersList = [(data: Data, Void)]()
+	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes!
+
+	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
+		invokedReadDomesticCredentials = true
+		invokedReadDomesticCredentialsCount += 1
+		invokedReadDomesticCredentialsParameters = (data, ())
+		invokedReadDomesticCredentialsParametersList.append((data, ()))
+		return stubbedReadDomesticCredentialsResult
 	}
 }

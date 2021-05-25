@@ -50,6 +50,18 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
+	var invokedPrepareIssue = false
+	var invokedPrepareIssueCount = 0
+	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, NetworkError>, Void)?
+
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
+		invokedPrepareIssue = true
+		invokedPrepareIssueCount += 1
+		if let result = stubbedPrepareIssueCompletionResult {
+			completion(result.0)
+		}
+	}
+
 	var invokedGetPublicKeys = false
 	var invokedGetPublicKeysCount = 0
 	var stubbedGetPublicKeysCompletionResult: (Result<[IssuerPublicKey], NetworkError>, Void)?
