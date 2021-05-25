@@ -41,10 +41,13 @@ class WalletManagerTests: XCTestCase {
 
 		// Given
 		var wallet: Wallet?
-		dataStoreManager = DataStoreManager(.inMemory)
 		let context = dataStoreManager.managedObjectContext()
 		context.performAndWait {
 
+			// Delete the one created by the initializer in the setup()
+			for element in WalletModel.listAll(managedContext: context) {
+				context.delete(element)
+			}
 			let exitingWallet = WalletModel.create(label: WalletManager.walletName, managedContext: context)
 
 			// When
@@ -127,5 +130,21 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(wallet?.eventGroups).to(haveCount(1))
+	}
+
+	func test_import() {
+
+		// Given
+		var result = false
+
+		// When
+		result = sut.importExistingTestCredential(Data(), sampleDate: Date())
+
+		// Then
+		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
+		expect(wallet?.greenCards?.allObjects).toEventually(haveCount(1))
+		expect((wallet?.greenCards?.allObjects.first as? GreenCard)?.credentials?.allObjects).toEventually(haveCount(1))
+		expect((wallet?.greenCards?.allObjects.first as? GreenCard)?.origins?.allObjects).toEventually(haveCount(1))
+		expect(result).toEventually(beTrue())
 	}
 }

@@ -15,11 +15,12 @@ class ProofManager: ProofManaging, Logging {
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
+	var walletManager: WalletManaging = Services.walletManager
 
 	internal var testProviders = [TestProvider]()
 	
 	/// Structure to hold proof data
-	private struct ProofData: Codable {
+	internal struct ProofData: Codable {
 		
 		/// The key of the holder
 		var testTypes: [TestType]
@@ -43,7 +44,7 @@ class ProofManager: ProofManaging, Logging {
 	
 	/// The proof data stored in the keychain
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
-	private var proofData: ProofData = .empty
+	internal var proofData: ProofData = .empty
 
 	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
 	var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
@@ -52,7 +53,7 @@ class ProofManager: ProofManaging, Logging {
 	required init() {
 		// Required by protocol
 		
-		removeTestWrapper()
+//		removeTestWrapper()
 	}
 	
 	/// Get the providers
@@ -188,7 +189,7 @@ class ProofManager: ProofManaging, Logging {
 		
 		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
 		
-		removeTestWrapper()
+//		removeTestWrapper()
 		do {
 			let ismResponse = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
 			onCompletion(ismResponse.asSignedTestResultState())
@@ -287,5 +288,29 @@ class ProofManager: ProofManaging, Logging {
 		}
 		return ""
 	}
-	
+
+	// MARK: - Migrating to Database
+
+	func migrateExistingProof() {
+
+		if let testEvent = getTestWrapper(),
+		   let signedProof = getSignedWrapper(),
+		   let sampleDate = testEvent.result?.sampleDate,
+		   let sampleTime = TimeInterval(sampleDate),
+		   testEvent.status == .complete {
+
+			// Convert to eventGroup
+			_ = walletManager.storeEventGroup(
+				.test,
+				providerIdentifier: testEvent.providerIdentifier,
+				signedResponse: signedProof,
+				issuedAt: Date(timeIntervalSince1970: sampleTime)
+			)
+			// Remove old data
+			removeTestWrapper()
+		}
+
+		// Convert Credential
+		cryptoManager.migrateExistingCredential(walletManager)
+	}
 }

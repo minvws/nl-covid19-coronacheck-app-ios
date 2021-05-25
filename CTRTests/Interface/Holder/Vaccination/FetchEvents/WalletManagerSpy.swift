@@ -10,6 +10,8 @@ import XCTest
 
 class WalletManagerSpy: WalletManaging {
 
+	required init(dataStoreManager: DataStoreManaging) {}
+
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
 	var invokedStoreEventGroupParameters: (type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)?
@@ -70,5 +72,19 @@ class WalletManagerSpy: WalletManaging {
 		invokedStoreEuGreenCardParameters = (remoteEuGreenCard, ())
 		invokedStoreEuGreenCardParametersList.append((remoteEuGreenCard, ()))
 		return stubbedStoreEuGreenCardResult
+	}
+
+	var invokedImportExistingTestCredential = false
+	var invokedImportExistingTestCredentialCount = 0
+	var invokedImportExistingTestCredentialParameters: (data: Data, sampleDate: Date)?
+	var invokedImportExistingTestCredentialParametersList = [(data: Data, sampleDate: Date)]()
+	var stubbedImportExistingTestCredentialResult: Bool! = false
+
+	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool {
+		invokedImportExistingTestCredential = true
+		invokedImportExistingTestCredentialCount += 1
+		invokedImportExistingTestCredentialParameters = (data, sampleDate)
+		invokedImportExistingTestCredentialParametersList.append((data, sampleDate))
+		return stubbedImportExistingTestCredentialResult
 	}
 }

@@ -69,6 +69,8 @@ protocol ProofManaging: AnyObject {
 
 	/// Remove the test wrapper
 	func removeTestWrapper()
+
+	func migrateExistingProof()
 }
 
 enum ProofError: Error {
