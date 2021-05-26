@@ -23,6 +23,7 @@ class OriginModel {
 		type: OriginType,
 		eventDate: Date,
 		expirationTime: Date,
+		validFromDate: Date,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
 
@@ -33,6 +34,7 @@ class OriginModel {
 			object.type = type.rawValue
 			object.eventDate = eventDate
 			object.expirationTime = expirationTime
+			object.validFromDate = validFromDate
 			object.greenCard = greenCard
 
 			return object

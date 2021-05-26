@@ -26,6 +26,7 @@ class OriginModelTests: XCTestCase {
 		var greenCard: GreenCard?
 		var origin: Origin?
 		let date = Date()
+		let validFromDate = Date.init(timeIntervalSinceNow: -10)
 
 		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
@@ -42,6 +43,7 @@ class OriginModelTests: XCTestCase {
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
+						validFromDate: validFromDate,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -53,6 +55,7 @@ class OriginModelTests: XCTestCase {
 		expect(origin?.type).toEventually(equal(OriginType.vaccination.rawValue))
 		expect(origin?.eventDate).toEventually(equal(date))
 		expect(origin?.expirationTime).toEventually(equal(date))
+		expect(origin?.validFromDate).toEventually(equal(validFromDate))
 		expect(origin?.greenCard).toEventually(equal(greenCard))
 		expect(greenCard?.origins).toEventually(haveCount(1))
 	}
@@ -78,6 +81,7 @@ class OriginModelTests: XCTestCase {
 						type: .recovery,
 						eventDate: date,
 						expirationTime: date,
+						validFromDate: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -85,6 +89,7 @@ class OriginModelTests: XCTestCase {
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
+						validFromDate: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
