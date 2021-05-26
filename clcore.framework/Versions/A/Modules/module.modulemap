@@ -1,6 +1,6 @@
 framework module "Clcore" {
 	header "ref.h"
-    header "Clmobile.objc.h"
+    header "Mobilecore.objc.h"
     header "Universe.objc.h"
     header "Clcore.h"
 

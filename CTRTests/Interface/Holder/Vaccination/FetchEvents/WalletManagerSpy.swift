@@ -48,15 +48,15 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreDomesticGreenCard = false
 	var invokedStoreDomesticGreenCardCount = 0
-	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, Void)?
-	var invokedStoreDomesticGreenCardParametersList = [(remoteGreenCard: RemoteGreenCards.DomesticGreenCard, Void)]()
+	var invokedStoreDomesticGreenCardParameters: (remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)?
+	var invokedStoreDomesticGreenCardParametersList = [(remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging)]()
 	var stubbedStoreDomesticGreenCardResult: Bool! = false
 
-	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard) -> Bool {
+	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
 		invokedStoreDomesticGreenCard = true
 		invokedStoreDomesticGreenCardCount += 1
-		invokedStoreDomesticGreenCardParameters = (remoteGreenCard, ())
-		invokedStoreDomesticGreenCardParametersList.append((remoteGreenCard, ()))
+		invokedStoreDomesticGreenCardParameters = (remoteGreenCard, cryptoManager)
+		invokedStoreDomesticGreenCardParametersList.append((remoteGreenCard, cryptoManager))
 		return stubbedStoreDomesticGreenCardResult
 	}
 

@@ -149,6 +149,7 @@ class GreenCardModelTests: XCTestCase {
 					credential = CredentialModel.create(
 						data: unwrappedJson,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -183,6 +184,7 @@ class GreenCardModelTests: XCTestCase {
 			   let credential = CredentialModel.create(
 				data: json,
 				validFrom: date,
+				expirationTime: date,
 				greenCard: greenCard,
 				managedContext: context
 			   ) {
@@ -219,7 +221,7 @@ class GreenCardModelTests: XCTestCase {
 					origin = OriginModel.create(
 						type: .vaccination,
 						eventDate: date,
-						expireDate: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -253,7 +255,7 @@ class GreenCardModelTests: XCTestCase {
 			   let origin = OriginModel.create(
 				type: .vaccination,
 				eventDate: date,
-				expireDate: date,
+				expirationTime: date,
 				greenCard: greenCard,
 				managedContext: context
 			   ) {

@@ -59,7 +59,7 @@ class CryptoManager: CryptoManaging, Logging {
 		loadPublicKeys()
 		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
-			if let result = ClmobileGenerateHolderSk(),
+			if let result = MobilecoreGenerateHolderSk(),
 			   let data = result.value {
 				self.cryptoData = CryptoData(
 					holderSecretKey: data,
@@ -120,7 +120,7 @@ class CryptoManager: CryptoManaging, Logging {
 	@discardableResult func loadPublicKeys() -> Bool {
 
 		guard let keysAsData = keyData.issuerPublicKeys,
-			  let result = ClmobileLoadIssuerPks(keysAsData) else {
+			  let result = MobilecoreLoadDomesticIssuerPks(keysAsData) else {
 
 			return false
 		}
@@ -144,7 +144,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func generateCommitmentMessage() -> String? {
 		
 		if let nonce = cryptoData.nonce,
-		   let result = ClmobileCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
+		   let result = MobilecoreCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
 			if let value = result.value, result.error.isEmpty {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
@@ -178,8 +178,8 @@ class CryptoManager: CryptoManaging, Logging {
 		guard hasPublicKeys() else {
 			return nil
 		}
-		
-		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(holderSecretKey, credential)
+
+		let disclosed = MobilecoreDiscloseAllWithTimeQrEncoded(holderSecretKey, credential)
 		if let payload = disclosed?.value {
 			let message = String(decoding: payload, as: UTF8.self)
 			logDebug("QR message: \(message)")
@@ -196,15 +196,15 @@ class CryptoManager: CryptoManaging, Logging {
 		guard hasPublicKeys() else {
 			return (attributes: nil, errorMessage: "no public keys")
 		}
-		
+
 		let proofAsn1QREncoded = message.data(using: .utf8)
-		if let result = ClmobileVerifyQREncoded(proofAsn1QREncoded) {
-			
+		if let result = MobilecoreVerifyQREncoded(proofAsn1QREncoded) {
+
 			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
 				self.logError("Error Proof: \(result.error)")
 				return (attributes: nil, errorMessage: result.error)
 			}
-			
+
 			do {
 				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
 				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
@@ -223,7 +223,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func readCredential() -> CryptoAttributes? {
 		
 		if let cryptoDataValue = cryptoData.credential,
-		   let response = ClmobileReadCredential(cryptoDataValue) {
+		   let response = MobilecoreReadDomesticCredential(cryptoDataValue) {
 			if let value = response.value {
 				do {
 					let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
@@ -238,16 +238,31 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
+	/// Read the crypto credential
+	/// - Returns: the crypto attributes
+	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
+
+		if let response = MobilecoreReadDomesticCredential(data) {
+			if let value = response.value {
+				do {
+					let object = try JSONDecoder().decode(DomesticCredentialAttributes.self, from: value)
+					return object
+				} catch {
+					self.logError("Error Deserializing \(DomesticCredentialAttributes.self): \(error)")
+				}
+			} else {
+				logError("Can't read credential: \(String(describing: response.error))")
+			}
+		}
+		return nil
+	}
+
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-		
-		guard let holderSecretKey = cryptoData.holderSecretKey else {
-			return .failure(CryptoError.keyMissing)
-		}
 
-		let result = ClmobileCreateCredential(holderSecretKey, ism)
+		let result = MobilecoreCreateCredentials(ism)
 		if let credential = result?.value {
 			return .success(credential)
 		} else if let reason = result?.error {
