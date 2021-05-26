@@ -26,7 +26,7 @@ class OriginModelTests: XCTestCase {
 		var greenCard: GreenCard?
 		var origin: Origin?
 		let date = Date()
-		let validFromDate = Date.init(timeIntervalSinceNow: -10)
+		let validFromDate = Date(timeIntervalSinceNow: -10)
 
 		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
