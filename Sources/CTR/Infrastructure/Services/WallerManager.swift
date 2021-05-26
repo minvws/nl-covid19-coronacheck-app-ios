@@ -266,7 +266,15 @@ class WalletManager: WalletManaging, Logging {
 
 		if let type = OriginType(rawValue: remoteOrigin.type) {
 
-			return OriginModel.create(type: type, eventDate: remoteOrigin.eventTime, expirationTime: remoteOrigin.expirationTime, greenCard: greenCard, managedContext: context) != nil
+			return OriginModel.create(
+				type: type,
+				eventDate: remoteOrigin.eventTime,
+				expirationTime: remoteOrigin.expirationTime,
+				validFromDate: remoteOrigin.validityFromTime,
+				greenCard: greenCard,
+				managedContext: context
+			) != nil
+
 		} else {
 			return false
 		}
@@ -315,6 +323,7 @@ class WalletManager: WalletManaging, Logging {
 						type: .negativeTest,
 						eventDate: sampleDate,
 						expirationTime: expireDate,
+						validFromDate: sampleDate, // I guess this is correct?
 						greenCard: greenCard,
 						managedContext: context) != nil
 					// Legacy credential should have version 1
