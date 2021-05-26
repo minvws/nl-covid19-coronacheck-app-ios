@@ -61,9 +61,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
-	/// The debug info
-	@Bindable private(set) var debugInfo: [String] = []
-
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
 
@@ -109,15 +106,14 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 
-		/// The time is now!
-		let now = Date().timeIntervalSince1970
-		setDebugInformation(now)
-
 		guard let attributes = cryptoResults.attributes else {
 			allowAccess = .denied
 			showAccessDenied()
 			return
 		}
+		
+		/// The time is now!
+		let now = Date().timeIntervalSince1970
 
 		if isQRTimeStampValid(now, attributes: attributes) && isSampleTimeValid(now, attributes: attributes) {
 
@@ -182,36 +178,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 			return months[month - 1]
 		}
 		return nil
-	}
-
-	/// Set the debug information
-	/// - Parameter timestamp: the timestamp used for validation
-	func setDebugInformation(_ timestamp: TimeInterval) {
-
-		if let attributes = cryptoResults.attributes {
-
-			debugInfo = [
-				"QR Information",
-				"Current Date: \(printDateFormatter.string(from: Date(timeIntervalSince1970: timestamp)))",
-				"isPaperProof: \(attributes.cryptoAttributes.isPaperProof), isSpecimen: \(attributes.cryptoAttributes.isSpecimen)",
-				"---------------------",
-				"isSampleTimeValid: \(isSampleTimeValid(timestamp, attributes: attributes))",
-				"TTL: \(proofValidator.maxValidity) hours",
-				"SampleTime: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0)))",
-				"Validity: \(proofValidator.validate(TimeInterval(attributes.cryptoAttributes.sampleTime) ?? 0))",
-				"---------------------",
-				"isQRTimeStampValid: \(isQRTimeStampValid(timestamp, attributes: attributes))",
-				"TTL: \(configuration.getQRGracePeriod()) seconds",
-				"QRTimeStamp: \(printDateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(attributes.unixTimeStamp))))"
-			]
-		} else {
-			if let message = cryptoResults.errorMessage {
-				debugInfo = [
-					"QR Information",
-					"Error: \(message)"
-				]
-			}
-		}
 	}
 
 	/// Formatter to print
