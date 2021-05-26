@@ -50,7 +50,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut.cardTapped(.appointment)
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToAppointmentCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToAppointment) == true
 	}
 
 	/// Test the create card tapped
@@ -62,7 +62,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut.cardTapped(.create)
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToChooseProviderCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToTokenEntry) == true
 	}
 
 	/// Test all the default content
@@ -196,7 +196,7 @@ class DashboardViewModelTests: XCTestCase {
 		sut?.cardTapped(.qrcode)
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToEnlargedQR) == true
 	}
 
 	func testCloseExpiredRQ() {
