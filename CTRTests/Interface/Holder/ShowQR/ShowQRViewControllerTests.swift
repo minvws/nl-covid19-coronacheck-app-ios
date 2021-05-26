@@ -85,7 +85,7 @@ class ShowQRViewControllerTests: XCTestCase {
 	func setupValidCredential() {
 
 		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -96,7 +96,7 @@ class ShowQRViewControllerTests: XCTestCase {
 			paperProof: "0"
 		)
 		let qrMessage = Data("testValidityCredentialValid".utf8)
-		cryptoManagerSpy.qrMessage = qrMessage
+		cryptoManagerSpy.stubbedGenerateQRmessageResult = qrMessage
 		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
 	}
 
@@ -121,7 +121,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
+		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -145,7 +145,7 @@ class ShowQRViewControllerTests: XCTestCase {
 	func testValidityNoCredential() {
 
 		// Given
-		cryptoManagerSpy.crypoAttributes = nil
+		cryptoManagerSpy.stubbedReadCredentialResult = nil
 		loadView()
 
 		// When

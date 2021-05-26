@@ -59,6 +59,23 @@ class NetworkManager: NetworkManaging, Logging {
 		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
+	/// Get the nonce
+	/// - Parameter completion: completion handler
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
+
+		let urlRequest = constructRequest(
+			url: URL(string: "https://qrdaar.scriptbase.org/v3/prepare_issue"),
+			method: .GET
+		)
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
+		data(request: urlRequest) { result in
+			DispatchQueue.main.async {
+				completion(self.jsonResponseHandler(result: result))
+
+			}
+		}
+	}
+
 	/// Get the public keys
 	/// - Parameter completion: completion handler
 	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void) {
@@ -549,7 +566,10 @@ class NetworkManager: NetworkManaging, Logging {
 		switch result {
 			case let .success(result):
 				return decodeJson(data: result.1)
-					.mapError { $0.asNetworkError }
+					.mapError {
+						$0.asNetworkError
+						
+					}
 			case let .failure(error):
 				return .failure(error)
 		}

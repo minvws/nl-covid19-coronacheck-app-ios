@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Credential" representedClassName="Credential" syncable="YES" codeGenerationType="class">
         <attribute name="data" attributeType="Binary"/>
+        <attribute name="expirationTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="validFrom" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="version" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="credentials" inverseEntity="GreenCard"/>
@@ -21,7 +22,7 @@
     </entity>
     <entity name="Origin" representedClassName="Origin" syncable="YES" codeGenerationType="class">
         <attribute name="eventDate" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="expireDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="expirationTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" attributeType="String"/>
         <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="origins" inverseEntity="GreenCard"/>
     </entity>
@@ -31,7 +32,7 @@
         <relationship name="greenCards" toMany="YES" deletionRule="Cascade" destinationEntity="GreenCard" inverseName="wallet" inverseEntity="GreenCard"/>
     </entity>
     <elements>
-        <element name="Credential" positionX="322.51953125" positionY="-208.2158203125" width="128" height="28"/>
+        <element name="Credential" positionX="322.51953125" positionY="-208.2158203125" width="128" height="118"/>
         <element name="EventGroup" positionX="-89.9326171875" positionY="-138.9628753662109" width="128" height="118"/>
         <element name="GreenCard" positionX="130.821044921875" positionY="-141.7990264892578" width="128" height="103"/>
         <element name="Origin" positionX="319.337646484375" positionY="-67.99729919433594" width="128" height="103"/>

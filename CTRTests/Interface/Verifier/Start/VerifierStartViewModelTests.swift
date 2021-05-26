@@ -86,7 +86,7 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
-		cryptoManagerSpy.keys = [IssuerPublicKey(identifier: "test", publicKey: "test")]
+		cryptoManagerSpy.stubbedHasPublicKeysResult = true
 
 		// When
 		sut.primaryButtonTapped()
@@ -101,7 +101,7 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
-		cryptoManagerSpy.keys = []
+		cryptoManagerSpy.stubbedHasPublicKeysResult = false
 
 		// When
 		sut.primaryButtonTapped()

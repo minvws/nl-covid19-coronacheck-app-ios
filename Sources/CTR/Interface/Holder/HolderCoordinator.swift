@@ -249,12 +249,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to choose provider
 	func navigateToAboutMakingAQR() {
 
-		userWishesToMakeQRFromNegativeTest()
+//		userWishesToMakeQRFromNegativeTest()
 
-//		let destination = AboutMakingAQRViewController(
-//			viewModel: AboutMakingAQRViewModel(coordinator: self)
-//		)
-//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		let destination = AboutMakingAQRViewController(
+			viewModel: AboutMakingAQRViewModel(coordinator: self)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
 	/// Navigate to the token scanner

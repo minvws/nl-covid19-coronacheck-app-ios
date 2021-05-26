@@ -28,7 +28,7 @@ class CredentialModelTests: XCTestCase {
 		let date = Date()
 		let json = "test_createCredential".data(using: .utf8)
 
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let unwrappedJson = json {
@@ -43,6 +43,7 @@ class CredentialModelTests: XCTestCase {
 					credential = CredentialModel.create(
 						data: unwrappedJson,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -62,7 +63,7 @@ class CredentialModelTests: XCTestCase {
 		// Given
 		var greenCard: GreenCard?
 		let date = Date()
-		let context = dataStoreManager.managedObjectContext()
+		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let json = "test_createTwoCredentials".data(using: .utf8) {
@@ -78,12 +79,14 @@ class CredentialModelTests: XCTestCase {
 					CredentialModel.create(
 						data: json,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
 					CredentialModel.create(
 						data: json,
 						validFrom: date,
+						expirationTime: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
