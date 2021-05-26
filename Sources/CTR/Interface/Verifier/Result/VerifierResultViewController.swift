@@ -87,18 +87,6 @@ class VerifierResultViewController: BaseViewController, Logging {
             #endif
 		}
 
-		viewModel.$debugInfo.binding = { [weak self] in
-
-			var text = ""
-			for element in $0 {
-				text += "   \(element)\n"
-			}
-			self?.sceneView.debugLabel.text = text
-			if !text.isEmpty {
-				self?.setupDebugLink()
-			}
-		}
-
 		// Identity
 		setupIdentityView()
 		viewModel.$lastName.binding = { [weak self] in self?.sceneView.checkIdentityView.lastName = $0 }
@@ -134,28 +122,13 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.messageLabel.addGestureRecognizer(tapGesture)
 		sceneView.messageLabel.isUserInteractionEnabled = true
 	}
-
-	/// Setup a gesture recognizer for underlined text
-	private func setupDebugLink() {
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(debugLinkTapped))
-		tapGesture.numberOfTapsRequired = 3
-		sceneView.imageView.addGestureRecognizer(tapGesture)
-		sceneView.imageView.isUserInteractionEnabled = true
-	}
-
+	
 	// MARK: User interaction
 
 	/// User tapped on the link
 	@objc func linkTapped() {
 
 		viewModel.linkTapped()
-	}
-
-	/// User tapped on the debug link
-	@objc func debugLinkTapped() {
-
-		sceneView.debugLabel.isHidden = !sceneView.debugLabel.isHidden
 	}
 
 	private func setupIdentityView() {
