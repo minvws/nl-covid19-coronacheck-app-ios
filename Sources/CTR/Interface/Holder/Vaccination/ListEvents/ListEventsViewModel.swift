@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -19,6 +20,11 @@ class ListEventsViewModel: Logging {
 	private var walletManager: WalletManaging
 	private var networkManager: NetworkManaging
 	private var cryptoManager: CryptoManaging
+	private var remoteConfigManager: RemoteConfigManaging
+
+	var maxValidity: Int {
+		remoteConfigManager.getConfiguration().maxValidityHours ?? 40
+	}
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -42,6 +48,15 @@ class ListEventsViewModel: Logging {
 		return dateFormatter
 	}()
 
+	/// Formatter to print
+	private lazy var printTestDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EE d MMMM HH:mm"
+		return dateFormatter
+	}()
+
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	@Bindable internal var viewState: ListEventsViewController.State
@@ -61,13 +76,15 @@ class ListEventsViewModel: Logging {
 		remoteTestEvents: [RemoteTestEvent],
 		networkManager: NetworkManaging = Services.networkManager,
 		walletManager: WalletManaging = WalletManager(),
-		cryptoManager: CryptoManaging = Services.cryptoManager
+		cryptoManager: CryptoManaging = Services.cryptoManager,
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	) {
 
 		self.coordinator = coordinator
 		self.networkManager = networkManager
 		self.walletManager = walletManager
 		self.cryptoManager = cryptoManager
+		self.remoteConfigManager = remoteConfigManager
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -132,7 +149,7 @@ class ListEventsViewModel: Logging {
 		if listDataSource.isEmpty {
 			return emptyVaccinationEventsState()
 		} else {
-			return listEventsState(listDataSource, remoteEvents: remoteEvents)
+			return listVaccinationEventsState(listDataSource, remoteEvents: remoteEvents)
 		}
 	}
 
@@ -152,7 +169,7 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func listEventsState(
+	private func listVaccinationEventsState(
 		_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)],
 		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
@@ -162,7 +179,9 @@ class ListEventsViewModel: Logging {
 				subTitle: .holderVaccinationListMessage,
 				primaryActionTitle: .holderVaccinationListActionTitle,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: remoteEvents)
+					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
+						self?.showVaccinationError(remoteEvents: remoteEvents)
+					}
 				},
 				secondaryActionTitle: .holderVaccinationListWrong,
 				secondaryAction: { [weak self] in
@@ -239,20 +258,39 @@ class ListEventsViewModel: Logging {
 	private func getViewState(
 		from remoteEvent: [RemoteTestEvent]) -> ListEventsViewController.State {
 
-//		switch remoteEvent.wrapper.status {
-//			case .complete:
-//				if let result = wrapper.result, result.negativeResult {
-//					reportTestResult(result)
-//				} else {
-//					reportNoTestResult()
-//				}
-//			case .pending:
-//				reportPendingResult()
-//			default:
-//				reportNoTestResult()
-//		}
+		if let event = remoteEvent.first {
+
+			switch event.wrapper.status {
+				case .complete:
+					if let result = event.wrapper.result, result.negativeResult {
+						return listTestEventsState(event)
+					} else {
+						return emptyTestEventsState()
+					}
+				case .pending:
+					return pendingTestEventsState()
+				default:
+					return emptyTestEventsState()
+			}
+		}
 
 		return emptyTestEventsState()
+	}
+
+	private func pendingTestEventsState() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: .holderTestResultsPendingTitle,
+				subTitle: .holderTestResultsPendingText,
+				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
 	}
 
 	private func emptyTestEventsState() -> ListEventsViewController.State {
@@ -269,15 +307,91 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
+	}
 
-		//	self.title = .holderTestResultsNoResultsTitle
-		//	self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
-		//	self.buttonTitle = .holderTestResultsBackToMenuButton
+	private func listTestEventsState(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.State {
+
+		var rows = [ListEventsViewController.Row]()
+		if let row = getTestRow(remoteTestEvent) {
+			rows.append(row)
+		}
+
+		return .listEvents(
+			content: ListEventsViewController.Content(
+				title: .holderTestResultsResultsTitle,
+				subTitle: .holderTestResultsResultsText,
+				primaryActionTitle: .holderTestResultsResultsButton,
+				primaryAction: { [weak self] in
+					self?.userWantsToMakeQR(remoteEvents: [remoteTestEvent], onError: {
+
+					})
+				},
+				secondaryActionTitle: .holderVaccinationListWrong,
+				secondaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(
+						.moreInformation(
+							title: .holderVaccinationWrongTitle,
+							body: .holderTestWrongBody
+						)
+					)
+				}
+			),
+			rows: rows
+		)
+	}
+
+	private func getTestRow(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.Row? {
+
+		guard let result = remoteTestEvent.wrapper.result,
+			  let sampleDate = Formatter().getDateFrom(dateString8601: result.sampleDate) else {
+			return nil
+		}
+
+		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
+		let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: sampleDate) ?? sampleDate
+		let printExpireDate: String = printTestDateFormatter.string(from: expireDate)
+
+		return ListEventsViewController.Row(
+			title: .holderTestResultsNegative,
+			subTitle: String(
+				format: .holderTestElementSubTitle,
+				printSampleDate,
+				printExpireDate,
+				getDisplayIdentity(result.holder)
+			),
+			action: { [weak self] in
+
+				self?.coordinator?.listEventsScreenDidFinish(
+					.moreInformation(
+						title: .holderTestAboutTitle,
+						body: .holderTestAboutBody
+					)
+				)
+			}
+		)
+	}
+
+	/// Get a display version of the holder identity
+	/// - Parameter holder: the holder identity
+	/// - Returns: the display version
+	private func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
+
+		guard let holder = holder else {
+			return ""
+		}
+
+		let parts = holder.mapIdentity(months: String.shortMonths)
+		var output = ""
+		for part in parts {
+			output.append(part)
+			output.append(" ")
+		}
+		return output.trimmingCharacters(in: .whitespaces)
 	}
 
 	// MARK: Sign the events
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent]) {
+	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent], onError: @escaping () -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
@@ -285,43 +399,67 @@ class ListEventsViewModel: Logging {
 		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
 
 			guard saved else {
-				self.showVaccinationError(remoteEvents: remoteEvents)
+				self.progressIndicationCounter.decrement()
+				self.shouldPrimaryButtonBeEnabled = true
+				onError()
 				return
 			}
 
-			self.prepareIssue { [weak self] prepareIssueEnvelope in
-				if let envelope = prepareIssueEnvelope,
-				   let nonce = envelope.prepareIssueMessage.base64Decoded() {
-					self?.cryptoManager.setNonce(nonce)
-					self?.cryptoManager.setStoken(envelope.stoken)
+			self.signTheEventsIntoGreenCardsAndCredentials(onError: onError)
+		}
+	}
 
-					self?.fetchGreenCards { [weak self] response in
-						if let greenCardResponse = response {
+	private func userWantsToMakeQR(remoteEvents: [RemoteTestEvent], onError: @escaping () -> Void) {
 
-							self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+		shouldPrimaryButtonBeEnabled = false
+		progressIndicationCounter.increment()
 
-								self?.progressIndicationCounter.decrement()
-								if greenCardsSaved {
-									self?.coordinator?.listEventsScreenDidFinish(.continue)
-								} else {
-									self?.logError("Failed to save greenCards")
-									self?.shouldPrimaryButtonBeEnabled = true
-									self?.showVaccinationError(remoteEvents: remoteEvents)
-								}
-							}
-						} else {
-							self?.logError("No greencards")
+		storeTestEvent(remoteEvents: remoteEvents) { saved in
+
+			guard saved else {
+				self.progressIndicationCounter.decrement()
+				self.shouldPrimaryButtonBeEnabled = true
+				onError()
+				return
+			}
+			self.signTheEventsIntoGreenCardsAndCredentials(onError: onError)
+		}
+	}
+
+	private func signTheEventsIntoGreenCardsAndCredentials(onError: @escaping () -> Void) {
+
+		self.prepareIssue { [weak self] prepareIssueEnvelope in
+			if let envelope = prepareIssueEnvelope,
+			   let nonce = envelope.prepareIssueMessage.base64Decoded() {
+				self?.cryptoManager.setNonce(nonce)
+				self?.cryptoManager.setStoken(envelope.stoken)
+
+				self?.fetchGreenCards { [weak self] response in
+					if let greenCardResponse = response {
+
+						self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+
 							self?.progressIndicationCounter.decrement()
-							self?.shouldPrimaryButtonBeEnabled = true
-							self?.showVaccinationError(remoteEvents: remoteEvents)
+							if greenCardsSaved {
+								self?.coordinator?.listEventsScreenDidFinish(.continue)
+							} else {
+								self?.logError("Failed to save greenCards")
+								self?.shouldPrimaryButtonBeEnabled = true
+								onError()
+							}
 						}
+					} else {
+						self?.logError("No greencards")
+						self?.progressIndicationCounter.decrement()
+						self?.shouldPrimaryButtonBeEnabled = true
+						onError()
 					}
-
-				} else {
-					self?.logError("Can't save the nonce / prepareIssueMessage")
-					self?.progressIndicationCounter.decrement()
-					self?.shouldPrimaryButtonBeEnabled = true
 				}
+
+			} else {
+				self?.logError("Can't save the nonce / prepareIssueMessage")
+				self?.progressIndicationCounter.decrement()
+				self?.shouldPrimaryButtonBeEnabled = true
 			}
 		}
 	}
@@ -334,7 +472,25 @@ class ListEventsViewModel: Logging {
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationErrorClose,
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents)
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
+					self?.showVaccinationError(remoteEvents: remoteEvents)
+				}
+			},
+			okTitle: .holderVaccinationErrorAgain
+		)
+	}
+
+	private func showTestError(remoteEvents: [RemoteTestEvent]) {
+
+		alert = ListEventsViewController.AlertContent(
+			title: .errorTitle,
+			subTitle: .holderVaccinationErrorMessage,
+			cancelAction: nil,
+			cancelTitle: .holderVaccinationErrorClose,
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
+					self?.showTestError(remoteEvents: remoteEvents)
+				}
 			},
 			okTitle: .holderVaccinationErrorAgain
 		)
@@ -379,7 +535,7 @@ class ListEventsViewModel: Logging {
 
 			switch result {
 				case let .success(greencardResponse):
-//					self.logDebug("ok: \(greencardResponse)")
+					self.logDebug("ok: \(greencardResponse)")
 					onCompletion(greencardResponse)
 				case let .failure(error):
 					self.logError("error: \(error)")
@@ -417,6 +573,36 @@ class ListEventsViewModel: Logging {
 		onCompletion(success)
 	}
 
+	// MARK: Store vaccination events
+
+	private func storeTestEvent(
+		remoteEvents: [RemoteTestEvent],
+		onCompletion: @escaping (Bool) -> Void) {
+
+		var success = true
+		for response in remoteEvents where response.wrapper.status == .complete {
+
+			// Remove any existing test events for the provider
+			walletManager.removeExistingEventGroups(type: .test, providerIdentifier: response.wrapper.providerIdentifier)
+
+			// Store the new test events
+			if let result = response.wrapper.result,
+			   let sampleDate = Formatter().getDateFrom(dateString8601: result.sampleDate) {
+
+				success = success && walletManager.storeEventGroup(
+					.test,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					signedResponse: response.signedResponse,
+					issuedAt: sampleDate
+				)
+				if !success {
+					break
+				}
+			}
+		}
+		onCompletion(success)
+	}
+
 	// MARK: Store green cards
 
 	private func storeGreenCards(
@@ -430,11 +616,12 @@ class ListEventsViewModel: Logging {
 		if let domestic = response.domesticGreenCard {
 			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
 		}
-//		if let remoteEuGreenCards = response.euGreenCards {
-//			for remoteEuGreenCard in remoteEuGreenCards {
+		if let remoteEuGreenCards = response.euGreenCards {
+			for remoteEuGreenCard in remoteEuGreenCards {
+				print(remoteEuGreenCard)
 //				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
-//			}
-//		}
+			}
+		}
 
 		onCompletion(success)
 	}

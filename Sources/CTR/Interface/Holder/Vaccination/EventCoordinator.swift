@@ -50,7 +50,6 @@ enum EventScreenResult: Equatable {
 				return false
 		}
 	}
-
 }
 
 protocol EventCoordinatorDelegate: AnyObject {
