@@ -222,6 +222,7 @@ class GreenCardModelTests: XCTestCase {
 						type: .vaccination,
 						eventDate: date,
 						expirationTime: date,
+						validFromDate: date,
 						greenCard: unwrappedGreenCard,
 						managedContext: context
 					)
@@ -256,6 +257,7 @@ class GreenCardModelTests: XCTestCase {
 				type: .vaccination,
 				eventDate: date,
 				expirationTime: date,
+				validFromDate: date,
 				greenCard: greenCard,
 				managedContext: context
 			   ) {

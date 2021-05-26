@@ -24,6 +24,7 @@
         <attribute name="eventDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="expirationTime" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="type" attributeType="String"/>
+        <attribute name="validFromDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="greenCard" maxCount="1" deletionRule="Nullify" destinationEntity="GreenCard" inverseName="origins" inverseEntity="GreenCard"/>
     </entity>
     <entity name="Wallet" representedClassName="Wallet" syncable="YES" codeGenerationType="class">
@@ -35,7 +36,7 @@
         <element name="Credential" positionX="322.51953125" positionY="-208.2158203125" width="128" height="118"/>
         <element name="EventGroup" positionX="-89.9326171875" positionY="-138.9628753662109" width="128" height="118"/>
         <element name="GreenCard" positionX="130.821044921875" positionY="-141.7990264892578" width="128" height="103"/>
-        <element name="Origin" positionX="319.337646484375" positionY="-67.99729919433594" width="128" height="103"/>
+        <element name="Origin" positionX="319.337646484375" positionY="-67.99729919433594" width="128" height="104"/>
         <element name="Wallet" positionX="7.106201171875" positionY="-270.4821319580078" width="128" height="74"/>
     </elements>
 </model>

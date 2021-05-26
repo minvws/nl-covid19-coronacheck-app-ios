@@ -409,7 +409,8 @@ class ListEventsViewModelTests: XCTestCase {
 				RemoteGreenCards.Origin(
 					type: "vaccination",
 					eventTime: Date(),
-					expirationTime: Date()
+					expirationTime: Date(),
+					validityFromTime: Date()
 				)
 			],
 			createCredentialMessages: "test"
@@ -420,7 +421,8 @@ class ListEventsViewModelTests: XCTestCase {
 					RemoteGreenCards.Origin(
 						type: "vaccination",
 						eventTime: Date(),
-						expirationTime: Date()
+						expirationTime: Date(),
+						validityFromTime: Date()
 					)
 				],
 				credential: "test credential"
