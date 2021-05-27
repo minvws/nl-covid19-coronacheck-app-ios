@@ -131,9 +131,13 @@ class OnboardingViewController: BaseViewController {
 	}
 
 	/// User tapped on the page control
-	@objc func valueChanged() {
+	@objc func valueChanged(_ pageControl: UIPageControl) {
 
-        pageViewController.nextPage()
+		if pageControl.currentPage > pageViewController.currentIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
 	}
 }
 
