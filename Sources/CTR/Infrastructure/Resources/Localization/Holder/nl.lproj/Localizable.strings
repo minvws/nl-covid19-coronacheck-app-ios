@@ -148,11 +148,11 @@
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
 "holder.consent.item.2" = "Je GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b>";
 "holder.consent.item.3" = "In de QR-code staan minimale <b>persoonsgegevens</b>";
-"holder.consent.button" = "Ik heb de privacyverklaring gelezen en geef toestemming voor het verwerken van mijn persoonsgegevens.";
+"holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe CoronaCheck met mijn gegevens omgaat";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Voor toegang tot een pilot-event heb je een negatieve testuitslag nodig. Daar maak je een QR-code van. Laat bij de ingang de QR-code én je identiteitsbewijs zien.";
+"holder.dashboard.intro" = "Voor toegang tot bepaalde locaties of activiteiten heb je een negatieve testuitslag nodig. Daar maak je een QR-code van. Laat bij de ingang de QR-code én je identiteitsbewijs zien.";
 "holder.dashboard.appointment.title" = "Testafspraak maken";
 "holder.dashboard.appointment.message" = "Wil je een QR-code maken? Laat je dan eerst testen op corona.";
 "holder.dashboard.appointment.action" = "Maak afspraak";
