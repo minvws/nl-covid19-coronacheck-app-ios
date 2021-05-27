@@ -38,18 +38,6 @@ class OnboardingViewController: BaseViewController {
 		view = sceneView
 	}
 	
-	/// the onboarding viewcontrollers
-    private var viewControllers = [UIViewController]() {
-        didSet {
-            viewControllers.forEach { viewController in
-                if let onboardingPageViewController = viewController as? OnboardingPageViewController {
-                    onboardingPageViewController.delegate = self
-                }
-            }
-            pageViewController.pages = viewControllers
-        }
-    }
-	
 	// the back button
 	private var backButton: UIBarButtonItem?
 	
@@ -60,19 +48,17 @@ class OnboardingViewController: BaseViewController {
 		setupPageController()
 		viewModel.$pages.binding = { [weak self] in
 
-			guard let strongSelf = self else {
+			guard let self = self else {
 				return
 			}
 			
-			for page in $0 {
-				strongSelf.viewControllers.append(strongSelf.viewModel.getOnboardingStep(page))
+			self.pageViewController.pages = $0.compactMap { page in
+				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingPageViewController else { return nil }
+				onboardingPageViewController.delegate = self
+				return onboardingPageViewController
 			}
-//			if let firstVC = strongSelf.viewControllers.first {
-//				strongSelf.pageViewController.setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
-//				strongSelf.pageViewController.didMove(toParent: self)
-//			}
-			strongSelf.sceneView.pageControl.numberOfPages = $0.count
-			strongSelf.sceneView.pageControl.currentPage = 0
+			self.sceneView.pageControl.numberOfPages = $0.count
+			self.sceneView.pageControl.currentPage = 0
 		}
 		
 		sceneView.primaryButton.setTitle(.next, for: .normal)
