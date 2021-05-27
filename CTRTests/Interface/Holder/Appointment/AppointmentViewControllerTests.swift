@@ -56,6 +56,6 @@ class AppointmentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.openUrlCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
 	}
 }

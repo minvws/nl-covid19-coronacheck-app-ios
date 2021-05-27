@@ -17,9 +17,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to appointment
 	func navigateToAppointment()
 
-	/// Navigate to choose provider
-	func navigateToChooseProvider()
-
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
@@ -185,18 +182,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: AppointmentViewModel(
 				coordinator: self,
 				maxValidity: maxValidity
-			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to choose provider
-	func navigateToChooseProvider() {
-
-		let destination = ChooseProviderViewController(
-			viewModel: ChooseProviderViewModel(
-				coordinator: self,
-				openIdManager: openIdManager
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)

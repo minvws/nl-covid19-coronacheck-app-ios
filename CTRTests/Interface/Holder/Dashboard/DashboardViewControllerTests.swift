@@ -86,8 +86,8 @@ class DashboardViewControllerTests: XCTestCase {
 		sut.sceneView.appointmentCard.primaryButtonTapped()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToAppointmentCalled) == true
-		expect(self.holderCoordinatorDelegateSpy.navigateToChooseProviderCalled) == false
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToAppointment) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToTokenEntry) == false
 	}
 
 	/// Test tapping on the create qr card
@@ -100,8 +100,8 @@ class DashboardViewControllerTests: XCTestCase {
 		sut.sceneView.createCard.primaryButtonTapped()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.navigateToChooseProviderCalled) == true
-		expect(self.holderCoordinatorDelegateSpy.navigateToAppointmentCalled) == false
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToTokenEntry) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToAppointment) == false
 	}
 
 	/// Helper method to setup valid credential
@@ -205,7 +205,7 @@ class DashboardViewControllerTests: XCTestCase {
 		// Then
 		expect(self.sut.sceneView.qrCardView.isHidden) == false
 		expect(self.sut.sceneView.expiredQRView.isHidden) == true
-		expect(self.holderCoordinatorDelegateSpy.navigateToEnlargedQRCalled) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateToEnlargedQR) == true
 	}
 
 	/// Test the validity of the credential with valid credential

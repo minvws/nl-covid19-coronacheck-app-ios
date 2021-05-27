@@ -180,7 +180,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			case .appointment:
 				coordinator?.navigateToAppointment()
 			case .create:
-				coordinator?.navigateToChooseProvider()
+				coordinator?.navigateToTokenEntry(nil)
 			case .qrcode:
 				coordinator?.navigateToEnlargedQR()
 		}
