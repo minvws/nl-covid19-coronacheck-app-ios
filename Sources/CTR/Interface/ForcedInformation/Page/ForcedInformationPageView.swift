@@ -9,6 +9,17 @@ import UIKit
 
 final class ForcedInformationPageView: ScrolledStackView {
 	
+	private enum ViewTraits {
+		
+		// Dimensions
+		static let titleLineHeight: CGFloat = 32
+		static let titleKerning: CGFloat = -0.26
+		static let imageHeightPercentage: CGFloat = 0.38
+		
+		// Margins
+		static let spacing: CGFloat = 24
+	}
+	
 	/// The image view
 	private let imageView: UIImageView = {
 		
@@ -18,9 +29,67 @@ final class ForcedInformationPageView: ScrolledStackView {
 		return view
 	}()
 	
+	private let bottomStackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.alignment = .leading
+		view.spacing = ViewTraits.spacing
+		return view
+	}()
+	
+	/// The title label
+	private let titleLabel: Label = {
+		
+		return Label(title1: nil, montserrat: true).multiline().header()
+	}()
+	
+	private let taglineLabel: Label = {
+		
+		return Label(body: nil)
+	}()
+	
+	private let contentLabel: Label = {
+		
+		return Label(body: nil).multiline()
+	}()
+	
+	/// setup the views
+	override func setupViews() {
+		
+		super.setupViews()
+		backgroundColor = Theme.colors.viewControllerBackground
+	}
+	
+	/// Setup the hierarchy
+	override func setupViewHierarchy() {
+		
+		super.setupViewHierarchy()
+
+		bottomStackView.addArrangedSubview(titleLabel)
+		bottomStackView.addArrangedSubview(taglineLabel)
+		bottomStackView.addArrangedSubview(contentLabel)
+
+		stackView.addArrangedSubview(imageView)
+		stackView.addArrangedSubview(bottomStackView)
+	}
+	
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+
+			imageView.heightAnchor.constraint(
+				lessThanOrEqualTo: heightAnchor,
+				multiplier: ViewTraits.imageHeightPercentage
+			)
+		])
+	}
+	
 	var image: UIImage? {
 		didSet {
-			
+			imageView.image = image
 		}
 	}
 	
@@ -32,13 +101,20 @@ final class ForcedInformationPageView: ScrolledStackView {
 	
 	var title: String? {
 		didSet {
-			
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning
+			)
 		}
 	}
 	
 	var content: String? {
 		didSet {
-			
+			contentLabel.attributedText = .makeFromHtml(
+				text: content,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark
+			)
 		}
 	}
 	

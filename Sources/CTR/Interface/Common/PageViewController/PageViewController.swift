@@ -26,7 +26,7 @@ final class PageViewController: UIPageViewController {
 		return pages.count - 1 == currentIndex
 	}
 	
-    var currentIndex = 0 {
+    private(set) var currentIndex = 0 {
         didSet {
             pageViewControllerDelegate?.pageViewController(self, didSwipeToPendingViewControllerAt: currentIndex)
         }
