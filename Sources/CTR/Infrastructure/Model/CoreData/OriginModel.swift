@@ -22,7 +22,8 @@ class OriginModel {
 	@discardableResult class func create(
 		type: OriginType,
 		eventDate: Date,
-		expireDate: Date,
+		expirationTime: Date,
+		validFromDate: Date,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Origin? {
 
@@ -32,7 +33,8 @@ class OriginModel {
 
 			object.type = type.rawValue
 			object.eventDate = eventDate
-			object.expireDate = expireDate
+			object.expirationTime = expirationTime
+			object.validFromDate = validFromDate
 			object.greenCard = greenCard
 
 			return object

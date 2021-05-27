@@ -65,6 +65,10 @@ protocol NetworkManaging {
 	/// Get the nonce
 	/// - Parameter completion: completion handler
 	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void)
+
+	/// Get the nonce
+	/// - Parameter completion: completion handler
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void)
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler

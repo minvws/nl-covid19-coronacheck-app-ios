@@ -15,6 +15,7 @@ class CredentialModel {
 	@discardableResult class func create(
 		data: Data,
 		validFrom: Date,
+		expirationTime: Date,
 		version: Int32 = 1,
 		greenCard: GreenCard,
 		managedContext: NSManagedObjectContext) -> Credential? {
@@ -26,6 +27,7 @@ class CredentialModel {
 			object.data = data
 			object.version = version
 			object.validFrom = validFrom
+			object.expirationTime = expirationTime
 			object.greenCard = greenCard
 
 			return object
