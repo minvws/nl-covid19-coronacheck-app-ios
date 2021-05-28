@@ -144,6 +144,42 @@ class WalletManager: WalletManaging, Logging {
 		}
 	}
 
+	/// Remove expired GreenCards that contain no more valid origins
+	/// returns: an array of `Greencard.type` Strings. One for each GreenCard that was deleted.
+	func removeExpiredGreenCards() -> [String] {
+
+		var deletedGreenCardTypes: [String] = []
+
+		let context = dataStoreManager.backgroundContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let greenCards = wallet.greenCards {
+					for case let greenCard as GreenCard in greenCards.allObjects {
+
+						// Does the GreenCard have any valid Origins remaining?
+						let validOrFutureOrigins = greenCard.origins?
+							.compactMap { $0 as? Origin }
+							.contains(where: { (origin: Origin) in
+								(origin.expirationTime ?? .distantPast) > Date()
+							}) ?? false
+
+						if !validOrFutureOrigins {
+							if let type = greenCard.type {
+								deletedGreenCardTypes += [type]
+							}
+							context.delete(greenCard)
+						}
+					}
+				}
+				dataStoreManager.save(context)
+			}
+		}
+
+		return deletedGreenCardTypes
+	}
+
 	func storeDomesticGreenCard(_ remoteDomesticGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool {
 
 		if remoteDomesticGreenCard.origins.isEmpty {
