@@ -73,8 +73,6 @@ class ProofManager: ProofManaging, Logging {
 	/// Initializer
 	required init() {
 		// Required by protocol
-		
-		removeTestWrapper()
 	}
 	
 	/// Get the providers
@@ -222,10 +220,7 @@ class ProofManager: ProofManaging, Logging {
 	}
 	
 	private func parseSignedTestResult(_ data: Data, onCompletion: @escaping ((SignedTestResultState) -> Void)) {
-		
-		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
-		
-		removeTestWrapper()
+
 		do {
 			let ismResponse = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
 			onCompletion(ismResponse.asSignedTestResultState())

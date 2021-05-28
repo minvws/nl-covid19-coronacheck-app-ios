@@ -220,6 +220,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 					// Clear the cache
 					cryptoManager?.removeCredential()
+					proofManager?.removeTestWrapper()
 
 					logDebug("Proof is no longer valid")
 					showQRMessageIsExpired()
