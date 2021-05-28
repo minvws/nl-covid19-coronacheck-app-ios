@@ -154,3 +154,27 @@ extension String {
 		return Localization.string(for: "holder.vaccination.error.message.toobusy")
 	}
 }
+
+extension String {
+
+	static var holderTestWrongBody: String {
+
+		return Localization.string(for: "holder.testresults.wrong.body")
+	}
+
+	static var holderTestAboutTitle: String {
+
+		return Localization.string(for: "holder.testresults.about.title")
+	}
+
+	static var holderTestAboutBody: String {
+
+		return Localization.string(for: "holder.testresults.about.body")
+	}
+
+	static var holderTestElementSubTitle: String {
+
+		return Localization.string(for: "holder.testresults.element.subtitle")
+	}
+
+}

@@ -115,7 +115,7 @@ class WalletManager: WalletManaging, Logging {
 
 				if let eventGroups = wallet.eventGroups {
 					for case let eventGroup as EventGroup in eventGroups.allObjects {
-						if eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue && type == .vaccination {
+						if eventGroup.providerIdentifier == providerIdentifier && eventGroup.type == type.rawValue {
 							self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 							context.delete(eventGroup)
 						}
@@ -270,7 +270,7 @@ class WalletManager: WalletManaging, Logging {
 				type: type,
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
-				validFromDate: remoteOrigin.validityFromTime,
+				validFromDate: remoteOrigin.validFrom,
 				greenCard: greenCard,
 				managedContext: context
 			) != nil

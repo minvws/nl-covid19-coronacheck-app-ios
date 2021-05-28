@@ -78,6 +78,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentInformationPageParametersList.append((title, body))
 	}
 
+	var invokedUserWishesToMakeQRFromNegativeTest = false
+	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
+
+	func userWishesToMakeQRFromNegativeTest() {
+		invokedUserWishesToMakeQRFromNegativeTest = true
+		invokedUserWishesToMakeQRFromNegativeTestCount += 1
+	}
+
 	var invokedUserWishesToCreateAQR = false
 	var invokedUserWishesToCreateAQRCount = 0
 

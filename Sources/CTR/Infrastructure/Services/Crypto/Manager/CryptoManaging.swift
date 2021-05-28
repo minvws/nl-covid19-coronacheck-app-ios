@@ -128,6 +128,10 @@ protocol CryptoManaging: AnyObject {
 	/// Generate the QR message
 	/// - Returns: the QR message
 	func generateQRmessage() -> Data?
+
+	/// Generate the QR message
+	/// - Returns: the QR message
+	func generateQRmessageNew(_ credential: Data) -> Data?
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code

@@ -56,6 +56,8 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCommitmentMessage(
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData* _Nullable ccmsJson);
 
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
+
 /**
  * Stubs
  */
@@ -66,6 +68,11 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreLoadDomesticIssuerPks(NSData* _Nullable annotatedPksJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
+
+/**
+ * TODO: Add checking of verified time 'challenge'
+ */
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreVerify(NSData* _Nullable proofBase45);
 
 FOUNDATION_EXPORT MobilecoreVerifyResult* _Nullable MobilecoreVerifyQREncoded(NSData* _Nullable proofQrEncodedAsn1);
 
