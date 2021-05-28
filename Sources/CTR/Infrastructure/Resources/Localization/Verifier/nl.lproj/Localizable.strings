@@ -164,7 +164,7 @@
 "verifier.result.check.title" = "Over de controle";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Ongeldige QR-code";
-"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li></ul></p>";
+"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li><li>De tijd op de telefoon van de bezoeker wijkt af</li></ul></p>";
 "verifier.denied.message.two" = "<p><b>Wat nu?</b><br>Vraag de bezoeker eerst een test te doen. Als de testuitslag bekend is kan de bezoeker er in de CoronaCheck-app een QR-code van maken.</p>";
 
 /* MARK: - Verifier About */
