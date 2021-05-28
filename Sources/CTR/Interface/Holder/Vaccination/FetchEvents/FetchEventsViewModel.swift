@@ -7,8 +7,6 @@
 
 import Foundation
 
-typealias RemoteVaccinationEvent = (wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)
-
 class FetchEventsViewModel: Logging {
 
 	weak var coordinator: EventCoordinatorDelegate?

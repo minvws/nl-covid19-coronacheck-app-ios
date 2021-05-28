@@ -50,7 +50,6 @@ enum EventScreenResult: Equatable {
 				return false
 		}
 	}
-
 }
 
 protocol EventCoordinatorDelegate: AnyObject {
@@ -102,6 +101,11 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
+	func startWithListTestEvents(testEvents: [RemoteTestEvent]) {
+
+		navigateToListEvents([], testEvents: testEvents, sourceMode: .negativeTest)
+	}
+
 	// MARK: - Universal Link handling
 
 	func consume(universalLink: UniversalLink) -> Bool {
@@ -120,12 +124,17 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	private func navigateToListEvents(_ events: [RemoteVaccinationEvent]) {
+	private func navigateToListEvents(
+		_ vaccinationEvents: [RemoteVaccinationEvent],
+		testEvents: [RemoteTestEvent],
+		sourceMode: ListEventSourceMode = .vaccination) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
-				remoteVaccinationEvents: events
+				sourceMode: sourceMode,
+				remoteVaccinationEvents: vaccinationEvents,
+				remoteTestEvents: testEvents
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -190,7 +199,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					)
 				}
 			case let .remoteVaccinationEvents(remoteEvents):
-				navigateToListEvents(remoteEvents)
+				navigateToListEvents(remoteEvents, testEvents: [])
 			default:
 				break
 		}

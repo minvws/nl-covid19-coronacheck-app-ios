@@ -38,6 +38,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	func presentInformationPage(title: String, body: String)
 
+	func userWishesToMakeQRFromNegativeTest()
+
 	func userWishesToCreateAQR()
 
 	func userWishesToCreateANegativeTestQR()
@@ -247,6 +249,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to choose provider
 	func navigateToAboutMakingAQR() {
 
+//		userWishesToMakeQRFromNegativeTest()
+
 		let destination = AboutMakingAQRViewController(
 			viewModel: AboutMakingAQRViewModel(coordinator: self)
 		)
@@ -324,8 +328,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		viewController.modalTransitionStyle = .coverVertical
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(viewController, animated: true, completion: nil)
-//		let destination = UINavigationController(rootViewController: viewController)
-//		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+	}
+
+	func userWishesToMakeQRFromNegativeTest() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithListTestEvents(testEvents: [])
+		}
 	}
 
 	func userWishesToCreateANegativeTestQR() {
