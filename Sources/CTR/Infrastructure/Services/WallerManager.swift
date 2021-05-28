@@ -158,8 +158,8 @@ class WalletManager: WalletManaging, Logging {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
-						// Does the GreenCard have any valid Origins remaining?
-						let validOrFutureCredentials = greenCard.origins?
+						// Does the GreenCard have any valid Credentials remaining?
+						let validOrFutureCredentials = greenCard.credentials?
 							.compactMap { $0 as? Credential }
 							.contains(where: { (credential: Credential) in
 								(credential.expirationTime ?? .distantPast) > Date()
