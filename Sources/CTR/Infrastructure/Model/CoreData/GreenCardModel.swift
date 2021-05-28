@@ -59,4 +59,18 @@ extension GreenCard {
 		} catch {}
 		return []
 	}
+
+	func getActiveCredential(forDate now: Date = Date()) -> Credential? {
+
+		if let list = credentials?.allObjects as? [Credential] {
+			return list
+				.filter { $0.expirationTime != nil }
+				.filter { $0.validFrom != nil }
+				.filter { $0.expirationTime! > now }
+				.filter { $0.validFrom! < now }
+				.sorted { $0.validFrom! < $1.validFrom! }
+				.last
+		}
+		return nil
+	}
 }

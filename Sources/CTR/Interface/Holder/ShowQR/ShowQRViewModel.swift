@@ -9,32 +9,23 @@ import UIKit
 
 class ShowQRViewModel: PreventableScreenCapture, Logging {
 
-	/// The logging category
 	var loggingCategory: String = "ShowQRViewModel"
 
-	/// Coordination Delegate
 	weak var coordinator: HolderCoordinatorDelegate?
 
-	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
 
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
-	/// The proof validator
-	var proofValidator: ProofValidatorProtocol
-
-	/// The configuration
 	weak var configuration: ConfigurationGeneralProtocol?
 
-	/// the notification center
 	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
-	/// The previous brightness
 	var previousBrightness: CGFloat?
 
-	/// A timer to keep the QR refreshed
 	weak var validityTimer: Timer?
+
+	var greenCard: GreenCard
+
+	@Bindable private(set) var title: String
 
 	/// The cl signed test proof
 	@Bindable private(set) var qrMessage: Data?
@@ -49,25 +40,24 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
-	///   - proofManager: the proof manager
 	///   - configuration: the configuration
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: HolderCoordinatorDelegate,
+		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
-		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol,
-		maxValidity: Int) {
+		configuration: ConfigurationGeneralProtocol) {
 
 		self.coordinator = coordinator
+		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
-		self.proofManager = proofManager
 		self.configuration = configuration
 
 		// Start by showing nothing
 		self.showValidQR = false
 
-		self.proofValidator = ProofValidator(maxValidity: maxValidity)
+		title = greenCard.type == GreenCardType.domestic.rawValue ? .holderShowQRDomesticTitle : .holderShowQREuTitle
+
 		super.init()
 		addObserver()
 	}
@@ -75,29 +65,34 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credential = cryptoManager?.readCredential() else {
+		greenCard.type == GreenCardType.domestic.rawValue ? checkDomesticValidity() : checkEUValidity()
+
+	}
+
+	private func checkDomesticValidity() {
+
+		guard let credential = greenCard.getActiveCredential() else {
 			coordinator?.navigateBackToStart()
 			return
 		}
 
-		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
+		if let data = credential.data,
+		   let message = self.cryptoManager?.generateQRmessageNew(data),
+		   let expirationTime = credential.expirationTime, expirationTime > Date() {
 
-			switch proofValidator.validate(sampleTimeStamp) {
-				case let .valid(validUntilDate):
-					logDebug("Proof is valid until \(validUntilDate)")
-					showQRMessageIsValid()
-					startValidityTimer()
-				case let .expiring(validUntilDate, _):
-					logDebug("Proof is valid until \(validUntilDate)")
-					showQRMessageIsValid()
-					startValidityTimer()
-				case .expired:
-					logDebug("Proof is no longer valid")
-					validityTimer?.invalidate()
-					validityTimer = nil
-					coordinator?.navigateBackToStart()
-			}
+			qrMessage = message
+			showValidQR = true
+			startValidityTimer()
+		} else {
+			logDebug("Credential is no longer valid")
+			validityTimer?.invalidate()
+			validityTimer = nil
+			coordinator?.navigateBackToStart()
 		}
+	}
+	
+	private func checkEUValidity() {
+
 	}
 
 	/// Adjust the brightness
@@ -110,15 +105,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		UIScreen.main.brightness = reset ? previousBrightness ?? 1 : 1
-	}
-
-	/// Show the QR message is valid
-	func showQRMessageIsValid() {
-
-		if let message = self.cryptoManager?.generateQRmessage() {
-			qrMessage = message
-			showValidQR = true
-		}
 	}
 
 	/// Start the validity timer, check every 90 seconds.

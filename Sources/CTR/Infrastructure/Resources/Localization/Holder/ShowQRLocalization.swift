@@ -19,8 +19,13 @@ extension String {
 		return Localization.string(for: "holder.enlarged.screenshot.message")
 	}
 
-	static var holderEnlargedTitle: String {
+	static var holderShowQRDomesticTitle: String {
 
-		return Localization.string(for: "holder.enlarged.title")
+		return Localization.string(for: "holder.showqr.domestic.title")
+	}
+
+	static var holderShowQREuTitle: String {
+
+		return Localization.string(for: "holder.showqr.eu.title")
 	}
 }
