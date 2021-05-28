@@ -135,9 +135,9 @@
 "holder.onboarding.title.safely" = "Only access after testing";
 "holder.onboarding.message.safely" = "Your health and other people's health matters. Get tested when visiting certain social, cultural or sports events. Even when you've already been vaccinated. Does your test prove you don't have coronavirus (negative test result)? Then you can get access.";
 "holder.onboarding.title.yourqr" = "Your QR code in your pocket";
-"holder.onboarding.message.yourqr" = "If your test proves you don't have coronavirus, you can make a personal QR code in this app. This will be your test declaration. The QR code is scanned before you get access.";
-"holder.onboarding.title.validity" = "Validity of your negative test declaration";
-"holder.onboarding.message.validity" = "Want access to a certain social, cultural or sports events? Make sure your QR code is scanned at the entrance within %@ hour(s) after the moment you've been tested. When your negative test declaration expires, the QR code disappears from the app.";
+"holder.onboarding.message.yourqr" = "If your test proves you don't have coronavirus, you can make a personal QR code in this app. This will be your test certificate. The QR code is scanned before you get access.";
+"holder.onboarding.title.validity" = "Validity of your negative test certificate";
+"holder.onboarding.message.validity" = "Want access to a certain social, cultural or sports events? Make sure your QR code is scanned at the entrance within %@ hour(s) after the moment you've been tested. When your negative test certificate expires, the QR code disappears from the app.";
 "holder.onboarding.title.privacy" = "Minimum amount of data";
 "holder.onboarding.message.privacy" = "Your QR code only states when you tested negative (no coronavirus), the time of testing, and the minimum amount of identifying data: your first name initial, your last name initial, your day of birth, and your month of birth. We verify this information to make sure the test result is yours.";
 
@@ -204,7 +204,7 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Check your test result";
-"holder.testresults.results.text" = "This test result is retrieved from the test location.<br\>Is the below correct? Then you can convert the negative test result into a QR code. This is your test declaration.";
+"holder.testresults.results.text" = "This test result is retrieved from the test location.<br\>Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.";
 "holder.testresults.results.button" = "Make QR code";
 "holder.testresults.noresults.title" = "No negative test result";
 "holder.testresults.noresults.text" = "No negative test result available";
