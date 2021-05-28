@@ -332,6 +332,6 @@ struct RemoteGreenCards: Codable {
 		let type: String
 		let eventTime: Date
 		let expirationTime: Date
-		let validityFromTime: Date // name likely to change
+		let validFrom: Date // name likely to change
 	}
 }

@@ -270,7 +270,7 @@ class WalletManager: WalletManaging, Logging {
 				type: type,
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
-				validFromDate: remoteOrigin.validityFromTime,
+				validFromDate: remoteOrigin.validFrom,
 				greenCard: greenCard,
 				managedContext: context
 			) != nil
