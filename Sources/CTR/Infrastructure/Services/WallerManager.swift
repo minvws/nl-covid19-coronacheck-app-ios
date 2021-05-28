@@ -160,13 +160,13 @@ class WalletManager: WalletManaging, Logging {
 
 						// Does the GreenCard have any valid Origins remaining?
 						let validOrFutureCredentials = greenCard.origins?
-							.compactMap {$0 as? Credential}
+							.compactMap { $0 as? Credential }
 							.contains(where: { (credential: Credential) in
 								(credential.expirationTime ?? .distantPast) > Date()
 							}) ?? false
 
 						if !validOrFutureCredentials {
-							if let type = greenCard.type { 
+							if let type = greenCard.type {
 								deletedGreenCardTypes += [type]
 							}
 							context.delete(greenCard)
