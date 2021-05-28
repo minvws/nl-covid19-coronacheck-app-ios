@@ -46,4 +46,17 @@ extension GreenCard {
 		}
 		return nil
 	}
+
+	func getActiveCredentials(managedContext: NSManagedObjectContext, forDate now: Date = Date()) -> [Credential] {
+
+		let fetchRequest = NSFetchRequest<Credential>(entityName: CredentialModel.entityName)
+		let predicate = NSPredicate(format: "validFrom < %@ AND expirationTime > %@", now as NSDate, now as NSDate)
+		fetchRequest.predicate = predicate
+
+		do {
+			let fetchedResults = try managedContext.fetch(fetchRequest)
+			return fetchedResults
+		} catch {}
+		return []
+	}
 }
