@@ -187,6 +187,37 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
+
+	/// Generate the QR message
+	/// - Returns: the QR message
+	func generateQRmessageNew(_ credential: Data) -> Data? {
+
+		if let holderSecretKey = cryptoData.holderSecretKey {
+			return createQRMessageNew(credential, holderSecretKey: holderSecretKey)
+		}
+
+		return nil
+	}
+
+	/// Create the QR Message
+	/// - Parameters:
+	///   - credential: the credential
+	///   - holderSecretKey: the holder Secret Key
+	/// - Returns: QR Messaga as Data
+	private func createQRMessageNew(_ credential: Data?, holderSecretKey: Data) -> Data? {
+
+		guard hasPublicKeys() else {
+			return nil
+		}
+
+		let disclosed = MobilecoreDisclose(holderSecretKey, credential)
+		if let payload = disclosed?.value {
+			let message = String(decoding: payload, as: UTF8.self)
+			logDebug("QR message: \(message)")
+			return payload
+		}
+		return nil
+	}
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code

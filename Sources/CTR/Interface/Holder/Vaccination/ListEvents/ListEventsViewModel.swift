@@ -203,8 +203,8 @@ class ListEventsViewModel: Logging {
 
 		// Sort the vaccination events in ascending order
 		let sortedDataSource = dataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.vaccination.getDate(with: dateFormatter),
-			   let rhsDate = rhs.event.vaccination.getDate(with: dateFormatter) {
+			if let lhsDate = lhs.event.vaccination?.getDate(with: dateFormatter),
+			   let rhsDate = rhs.event.vaccination?.getDate(with: dateFormatter) {
 				return lhsDate < rhsDate
 			}
 			return false
@@ -214,9 +214,9 @@ class ListEventsViewModel: Logging {
 
 			let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: dataRow.identity.birthDateString)
 				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
-			let formattedShotDate: String = dataRow.event.vaccination.dateString
+			let formattedShotDate: String = dataRow.event.vaccination?.dateString
 				.flatMap(Formatter().getDateFrom)
-				.map(printDateFormatter.string) ?? (dataRow.event.vaccination.dateString ?? "")
+				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 
 			let domesticIdentity = dataRow.identity
 				.mapIdentity(months: String.shortMonths)
@@ -241,7 +241,7 @@ class ListEventsViewModel: Logging {
 									domesticIdentity,
 									dataRow.identity.fullName,
 									formattedBirthDate,
-									dataRow.event.vaccination.brand ?? "-",
+									dataRow.event.vaccination?.brand ?? "-",
 									"\(index + 1)",
 									formattedShotDate
 								)

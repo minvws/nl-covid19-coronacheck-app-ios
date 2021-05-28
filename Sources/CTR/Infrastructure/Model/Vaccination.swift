@@ -131,7 +131,7 @@ struct Vaccination {
 		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
 			let maxIssuedAt: Date? = events
-				.compactMap { $0.vaccination.dateString }
+				.compactMap { $0.vaccination?.dateString }
 				.compactMap { dateFormatter.date(from: $0) }
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
@@ -246,7 +246,7 @@ struct Vaccination {
 		let unique: String
 
 		/// The vaccination
-		let vaccination: VaccinationEvent
+		let vaccination: VaccinationEvent?
 	}
 
 	/// An actual vaccination event
