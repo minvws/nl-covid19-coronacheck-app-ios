@@ -12,10 +12,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedNavigateToShowQR = false
 	var invokedNavigateToShowQRCount = 0
+	var invokedNavigateToShowQRParameters: (greenCard: GreenCard, Void)?
+	var invokedNavigateToShowQRParametersList = [(greenCard: GreenCard, Void)]()
 
-	func navigateToShowQR() {
+	func navigateToShowQR(_ greenCard: GreenCard) {
 		invokedNavigateToShowQR = true
 		invokedNavigateToShowQRCount += 1
+		invokedNavigateToShowQRParameters = (greenCard, ())
+		invokedNavigateToShowQRParametersList.append((greenCard, ()))
 	}
 
 	var invokedNavigateToAppointment = false
