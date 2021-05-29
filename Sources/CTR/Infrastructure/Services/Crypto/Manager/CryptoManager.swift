@@ -156,66 +156,21 @@ class CryptoManager: CryptoManaging, Logging {
 	}
 	
 	// MARK: - QR
-	
-	/// Generate the QR message
-	/// - Returns: the QR message
-	func generateQRmessage() -> Data? {
-		
-		if let credential = cryptoData.credential, let holderSecretKey = cryptoData.holderSecretKey {
-			return createQRMessage(credential, holderSecretKey: holderSecretKey)
-		}
-		
-		return nil
-	}
-	
-	/// Create the QR Message
-	/// - Parameters:
-	///   - credential: the credential
-	///   - holderSecretKey: the holder Secret Key
-	/// - Returns: QR Messaga as Data
-	private func createQRMessage(_ credential: Data?, holderSecretKey: Data) -> Data? {
-		
-		guard hasPublicKeys() else {
-			return nil
-		}
-
-		let disclosed = MobilecoreDiscloseAllWithTimeQrEncoded(holderSecretKey, credential)
-		if let payload = disclosed?.value {
-			let message = String(decoding: payload, as: UTF8.self)
-			logDebug("QR message: \(message)")
-			return payload
-		}
-		return nil
-	}
 
 	/// Generate the QR message
+	/// - Parameter credential: the (domestic) credential to generate the QR from
 	/// - Returns: the QR message
-	func generateQRmessageNew(_ credential: Data) -> Data? {
+	func generateQRmessage(_ credential: Data) -> Data? {
 
-		if let holderSecretKey = cryptoData.holderSecretKey {
-			return createQRMessageNew(credential, holderSecretKey: holderSecretKey)
+		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
+			let disclosed = MobilecoreDisclose(holderSecretKey, credential)
+			if let payload = disclosed?.value {
+				let message = String(decoding: payload, as: UTF8.self)
+				logDebug("QR message: \(message)")
+				return payload
+			}
 		}
-
-		return nil
-	}
-
-	/// Create the QR Message
-	/// - Parameters:
-	///   - credential: the credential
-	///   - holderSecretKey: the holder Secret Key
-	/// - Returns: QR Messaga as Data
-	private func createQRMessageNew(_ credential: Data?, holderSecretKey: Data) -> Data? {
-
-		guard hasPublicKeys() else {
-			return nil
-		}
-
-		let disclosed = MobilecoreDisclose(holderSecretKey, credential)
-		if let payload = disclosed?.value {
-			let message = String(decoding: payload, as: UTF8.self)
-			logDebug("QR message: \(message)")
-			return payload
-		}
+		
 		return nil
 	}
 	

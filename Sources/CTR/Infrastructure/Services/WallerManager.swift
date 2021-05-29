@@ -287,9 +287,11 @@ class WalletManager: WalletManaging, Logging {
 					}
 
 					// data, version and date should come from the CreateCredential method of the Go Library.
-//					let data = Data(remoteEuGreenCard.credential.utf8)
-//					result = result && CredentialModel.create(data: data, validFrom: Date(), version: 2, greenCard: greenCard, managedContext: context) != nil
-//					dataStoreManager.save(context)
+					let data = Data(remoteEuGreenCard.credential.utf8)
+					if let expireDate = Calendar.current.date(byAdding: .hour, value: 24, to: Date()) {
+						result = result && CredentialModel.create(data: data, validFrom: Date(), expirationTime: expireDate, version: 2, greenCard: greenCard, managedContext: context) != nil
+					}
+					dataStoreManager.save(context)
 				} else {
 					result = false
 				}

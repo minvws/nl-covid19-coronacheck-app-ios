@@ -47,19 +47,9 @@ extension GreenCard {
 		return nil
 	}
 
-	func getActiveCredentials(managedContext: NSManagedObjectContext, forDate now: Date = Date()) -> [Credential] {
-
-		let fetchRequest = NSFetchRequest<Credential>(entityName: CredentialModel.entityName)
-		let predicate = NSPredicate(format: "validFrom < %@ AND expirationTime > %@", now as NSDate, now as NSDate)
-		fetchRequest.predicate = predicate
-
-		do {
-			let fetchedResults = try managedContext.fetch(fetchRequest)
-			return fetchedResults
-		} catch {}
-		return []
-	}
-
+	/// Get the active credential with the longest lifetime for a date
+	/// - Parameter now: the date for the credential (defaults to now)
+	/// - Returns: the active credential
 	func getActiveCredential(forDate now: Date = Date()) -> Credential? {
 
 		if let list = credentials?.allObjects as? [Credential] {

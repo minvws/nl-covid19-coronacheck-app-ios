@@ -65,34 +65,37 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		greenCard.type == GreenCardType.domestic.rawValue ? checkDomesticValidity() : checkEUValidity()
-
-	}
-
-	private func checkDomesticValidity() {
-
-		guard let credential = greenCard.getActiveCredential() else {
-			coordinator?.navigateBackToStart()
+		guard let credential = greenCard.getActiveCredential(),
+			  let data = credential.data,
+			  let expirationTime = credential.expirationTime, expirationTime > Date() else {
+			setQRNotValid()
 			return
 		}
 
-		if let data = credential.data,
-		   let message = self.cryptoManager?.generateQRmessageNew(data),
-		   let expirationTime = credential.expirationTime, expirationTime > Date() {
-
-			qrMessage = message
-			showValidQR = true
-			startValidityTimer()
+		if greenCard.type == GreenCardType.domestic.rawValue {
+			if let message = self.cryptoManager?.generateQRmessage(data) {
+				setQRValid(message)
+			} else {
+				setQRNotValid()
+				return
+			}
 		} else {
-			logDebug("Credential is no longer valid")
-			validityTimer?.invalidate()
-			validityTimer = nil
-			coordinator?.navigateBackToStart()
+			setQRValid(data)
 		}
 	}
-	
-	private func checkEUValidity() {
 
+	private func setQRValid(_ data: Data) {
+
+		qrMessage = data
+		showValidQR = true
+		startValidityTimer()
+	}
+
+	private func setQRNotValid() {
+
+		logDebug("Credential is not valid")
+		stopValidityTimer()
+		coordinator?.navigateBackToStart()
 	}
 
 	/// Adjust the brightness
@@ -108,7 +111,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	}
 
 	/// Start the validity timer, check every 90 seconds.
-	func startValidityTimer() {
+	private func startValidityTimer() {
 
 		guard validityTimer == nil, let configuration = configuration else {
 			return
@@ -123,8 +126,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		)
 	}
 
+	func stopValidityTimer() {
+		validityTimer?.invalidate()
+		validityTimer = nil
+	}
+
 	/// Add an observer for the userDidTakeScreenshotNotification notification
-	func addObserver() {
+	private func addObserver() {
 
 		notificationCenter.addObserver(
 			self,
@@ -135,7 +143,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	}
 
 	/// handle a screen shot taken
-	@objc func handleScreenShot() {
+	@objc private func handleScreenShot() {
 
 		showScreenshotWarning = true
 	}
