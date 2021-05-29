@@ -8,46 +8,47 @@
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
+import Nimble
 
 class ShowQRViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: ShowQRViewController?
+	var sut: ShowQRViewController!
 
-	/// The coordinator spy
-	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-
-	/// The crypto manager spy
-	var cryptoManagerSpy = CryptoManagerSpy()
-
-	/// The proof manager spy
-	var proofManagerSpy = ProofManagingSpy()
-
-	/// The configuration spy
-	var configSpy = ConfigurationGeneralSpy()
-
-	/// The view model
-	var viewModel: ShowQRViewModel?
+	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	var cryptoManagerSpy: CryptoManagerSpy!
+	var configSpy: ConfigurationGeneralSpy!
+	var dataStoreManager: DataStoreManaging!
+	var viewModel: ShowQRViewModel!
 
 	var window = UIWindow()
 
 	// MARK: Test lifecycle
-	override func setUp() {
 
-		super.setUp()
+	override func setUpWithError() throws {
+
+		try super.setUpWithError()
+		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		proofManagerSpy = ProofManagingSpy()
 		configSpy = ConfigurationGeneralSpy()
+		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: true
+			)
+		)
 
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
+			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
-			configuration: configSpy,
-			maxValidity: 48
+			configuration: configSpy
 		)
-		sut = ShowQRViewController(viewModel: viewModel!)
+		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 
@@ -58,16 +59,14 @@ class ShowQRViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
 
 	/// Test all the default content
-	func testContent() throws {
+	func test_content_domesticGreenCard() {
 
 		// Given
 
@@ -75,91 +74,69 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.title, .holderEnlargedTitle, "Title should match")
-		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should not be shown")
-		XCTAssertNil(strongSut.sceneView.largeQRimageView.image, "There should be no image")
+		expect(self.sut.title) == .holderShowQRDomesticTitle
+		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
+		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
-	/// Helper method to setup valid credential
-	func setupValidCredential() {
+	func test_content_euGreenCard() throws {
 
-		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
-			birthDay: nil,
-			birthMonth: nil,
-			firstNameInitial: nil,
-			lastNameInitial: nil,
-			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired",
-			specimen: "0",
-			paperProof: "0"
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
 		)
-		let qrMessage = Data("testValidityCredentialValid".utf8)
-		cryptoManagerSpy.stubbedGenerateQRmessageResult = qrMessage
-		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
-	}
-
-	/// Test the validity of the credential with valid credential
-	func testValidityCredentialValid() throws {
-
-		// Given
-		setupValidCredential()
-		loadView()
-
-		// When
-		sut?.checkValidity()
-
-		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
-	}
-
-	/// Test the validity of the credential with expired credential
-	func testValidityCredentialExpired() {
-
-		// Given
-		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.stubbedReadCredentialResult = CryptoAttributes(
-			birthDay: nil,
-			birthMonth: nil,
-			firstNameInitial: nil,
-			lastNameInitial: nil,
-			sampleTime: "\(sampleTime)",
-			testType: "testValidityCredentialExpired",
-			specimen: "0",
-			paperProof: "0"
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCard: greenCard,
+			cryptoManager: cryptoManagerSpy,
+			configuration: configSpy
 		)
-		viewModel?.proofValidator = ProofValidator(maxValidity: 1)
-		loadView()
+		sut = ShowQRViewController(viewModel: viewModel)
 
 		// When
-		sut?.checkValidity()
+		loadView()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Method should be called")
+		expect(self.sut.title) == .holderShowQREuTitle
+		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
+		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
 	/// Test the validity of the credential without credential
-	func testValidityNoCredential() {
+	func test_withoutCredential() throws {
 
 		// Given
-		cryptoManagerSpy.stubbedReadCredentialResult = nil
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: false
+			)
+		)
+		viewModel = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCard: greenCard,
+			cryptoManager: cryptoManagerSpy,
+			configuration: configSpy
+		)
+		sut = ShowQRViewController(viewModel: viewModel)
 		loadView()
 
 		// When
 		sut?.checkValidity()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.invokedNavigateBackToStart, "Method should be called")
+		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == true
 	}
 
 	/// Test the validity of the credential with valid credential while screencapturing
-	func testValidityCredentialValidWithScreenCapture() throws {
+	func testValidityCredentialValidWithScreenCapture() {
 
 		// Given
-		setupValidCredential()
 		loadView()
 		sut?.checkValidity()
 
@@ -167,16 +144,14 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel?.hideForCapture = true
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertTrue(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should not be shown")
-		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
+		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
+		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
 	}
 
 	/// Test the security features
-	func testSecurityFeaturesAnimation() throws {
+	func testSecurityFeaturesAnimation() {
 
 		// Given
-		setupValidCredential()
 		loadView()
 		sut?.checkValidity()
 
@@ -184,10 +159,9 @@ class ShowQRViewControllerTests: XCTestCase {
 		sut?.sceneView.securityView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertFalse(strongSut.sceneView.largeQRimageView.isHidden, "Large QR should be shown")
-		XCTAssertNotNil(strongSut.sceneView.largeQRimageView.image, "There should be image")
-		XCTAssertEqual(strongSut.sceneView.securityView.currentAnimation, .cyclistRightToLeft, "Animation should match")
+		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
+		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
+		expect(self.sut.sceneView.securityView.currentAnimation) == .cyclistRightToLeft
 	}
 
 	/// Test showing the alert dialog for screen shots
@@ -198,11 +172,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		NotificationCenter.default.post(
-			name: UIApplication.userDidTakeScreenshotNotification,
-			object: nil,
-			userInfo: nil
-		)
+		viewModel.handleScreenShot()
 
 		// Then
 		alertVerifier.verify(

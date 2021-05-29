@@ -86,6 +86,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	private func setQRValid(_ data: Data) {
 
+		logDebug("Credential is valid")
 		qrMessage = data
 		showValidQR = true
 		startValidityTimer()
@@ -94,6 +95,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	private func setQRNotValid() {
 
 		logDebug("Credential is not valid")
+		qrMessage = nil
+		showValidQR = false
 		stopValidityTimer()
 		coordinator?.navigateBackToStart()
 	}
@@ -143,7 +146,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	}
 
 	/// handle a screen shot taken
-	@objc private func handleScreenShot() {
+	@objc internal func handleScreenShot() {
 
 		showScreenshotWarning = true
 	}
