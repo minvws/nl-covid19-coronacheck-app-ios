@@ -28,4 +28,24 @@ extension String {
 
 		return Localization.string(for: "holder.showqr.eu.title")
 	}
+
+	static var holderShowQRDomesticAboutTitle: String {
+
+		return Localization.string(for: "holder.showqr.domestic.about.title")
+	}
+
+	static var holderShowQRDomesticAboutMessage: String {
+
+		return Localization.string(for: "holder.showqr.domestic.about.message")
+	}
+
+	static var holderShowQREuAboutTitle: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.title")
+	}
+
+	static var holderShowQREuAboutMessage: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.message")
+	}
 }

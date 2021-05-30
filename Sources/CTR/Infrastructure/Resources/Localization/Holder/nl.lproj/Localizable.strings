@@ -202,7 +202,12 @@
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
 "holder.showqr.domestic.title" = "Mijn QR-code";
+"holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een groen scherm krijgt. In de QR-code staat niet of je een testbewijs, herstelverklaring of vaccinatie hebt.</p><p>Daarnaast staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Er kunnen gegevens wegvallen om de herleidbaarheid naar jou zo klein mogelijk te maken.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De Europese QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Europeese QR-code";
+"holder.showqr.eu.about.title" = "Over mijn Europese QR-code";
+"holder.showqr.eu.about.message" = "** todo **";
+
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";

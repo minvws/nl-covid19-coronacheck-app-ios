@@ -48,11 +48,16 @@ class ShowQRViewController: BaseViewController {
 		setupListeners()
 	}
 
-	func setupBinding() {
+	private func setupBinding() {
 
 		viewModel.$title.binding = { [weak self] in
 			self?.title = $0
 			self?.sceneView.accessibilityDescription = $0
+		}
+
+		viewModel.$infoButtonAccessibility.binding = { [weak self] in
+
+			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
 		}
 
 		viewModel.$qrMessage.binding = { [weak self] in
@@ -91,7 +96,7 @@ class ShowQRViewController: BaseViewController {
 		}
 	}
 
-	func setupListeners() {
+	private func setupListeners() {
 
 		// set observer for UIApplication.willEnterForegroundNotification
 		NotificationCenter.default.addObserver(
@@ -141,5 +146,31 @@ class ShowQRViewController: BaseViewController {
 		viewModel.setBrightness(reset: true)
 		viewModel.stopValidityTimer()
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
+	}
+
+	/// Add an information button to the navigation bar.
+	/// - Parameters:
+	///   - action: the action when the users taps the information button
+	///   - accessibilityLabel: the label for Voice Over
+	func addInfoButton(
+		action: Selector?,
+		accessibilityLabel: String) {
+
+		let button = UIBarButtonItem(
+			image: .questionMark,
+			style: .plain,
+			target: self,
+			action: action
+		)
+		button.accessibilityIdentifier = "InformationButton"
+		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityTraits = .button
+		navigationItem.rightBarButtonItem = button
+		navigationController?.navigationItem.rightBarButtonItem = button
+	}
+
+	@objc func informationButtonTapped() {
+
+		viewModel.showMoreInformation()
 	}
 }
