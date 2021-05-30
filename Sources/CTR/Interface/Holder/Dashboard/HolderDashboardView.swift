@@ -28,15 +28,6 @@ class HolderDashboardView: ScrolledStackView {
 		return Label(body: nil).multiline()
 	}()
 
-//	/// The QR Card
-//	let qrCardView: QRCardView = {
-//
-//		let view = QRCardView()
-//		view.translatesAutoresizingMaskIntoConstraints = false
-//		view.isHidden = true
-//		return view
-//	}()
-
 	/// The create QR Card
 	let makeQRCard: CardView = {
 
@@ -55,22 +46,4 @@ class HolderDashboardView: ScrolledStackView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 	}
-
-	// MARK: Public Access
-
-//	/// The  message
-//	var message: String? {
-//		didSet {
-//			messageLabel.text = message
-//		}
-//	}
-//
-//	/// Hide the QR Image
-//	var hideQRImage: Bool = false {
-//		didSet {
-//			if qrCardView.time != nil {
-//				qrCardView.isHidden = hideQRImage
-//			}
-//		}
-//	}
 }
