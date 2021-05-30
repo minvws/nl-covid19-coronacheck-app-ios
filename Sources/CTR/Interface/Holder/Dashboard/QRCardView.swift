@@ -1,3 +1,4 @@
+//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -8,87 +9,184 @@
 import UIKit
 
 class QRCardView: BaseView {
-	
+
+	// MARK: - Public types
+	struct OriginRow {
+		let type: String
+		let validityStringEvaluator: (Date) -> HolderDashboardViewController.ValidityText
+	}
+
+	// MARK: - Private types
+
 	/// The display constants
 	private struct ViewTraits {
-		
+
 		// Dimensions
-		static let buttonHeight: CGFloat = 42
-		static let titleLineHeight: CGFloat = 28
 		static let cornerRadius: CGFloat = 15
-		static let buttonRatio: CGFloat = 0.45
-		static let shadowRadius: CGFloat = 8
-		static let shadowOpacity: Float = 0.3
-
-		// Margins
-		static let smallMargin: CGFloat = 8.0
-		static let margin: CGFloat = 20.0
-		static let topMargin: CGFloat = 24.0
+		static let shadowRadius: CGFloat = 24
+		static let shadowOpacity: Float = 0.15
 	}
-	
-	/// The title label
+
+	// MARK: - Private properties
+
+	private let regionLabel: Label = {
+		return Label(title3: nil).multiline().header()
+	}()
+
 	private let titleLabel: Label = {
-		
-        return Label(title3: nil, montserrat: true).multiline().header()
+		return Label(title3: nil, montserrat: true)
 	}()
 
-	/// The time label
-	let identityLabel: Label = {
-
-		return Label(subhead: nil).multiline()
+	private let verticalLabelsStackView: UIStackView = {
+		let stackView = UIStackView()
+		stackView.translatesAutoresizingMaskIntoConstraints = false
+		stackView.axis = .vertical
+		return stackView
 	}()
 
-	/// The time label
-	let timeLabel: Label = {
+	private let viewQRButton: Button = {
 
-		return Label(body: nil).multiline()
-	}()
-
-	/// The message label
-	let messageLabel: Label = {
-		
-		return Label(subhead: nil).multiline()
-	}()
-
-	/// the scan button
-	private let primaryButton: Button = {
-		
-		let button = Button(title: "Button 1", style: .primary)
+		let button = Button(title: "", style: .primary)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
+		button.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
 		return button
 	}()
-	
-	let backgroundImageView: UIImageView = {
-		
-		let view = UIImageView()
+
+	private let largeIconImageView: UIImageView = {
+
+		let view = UIImageView(image: .domesticQRIcon)
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.contentMode = .bottomRight
-		view.clipsToBounds = true
-		view.layer.cornerRadius = ViewTraits.cornerRadius
-		view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 		return view
 	}()
 
-	let blurView: UIView = {
+	private var reloadTimer: Timer?
 
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = UIColor.white.withAlphaComponent(0.6)
-		view.layer.cornerRadius = ViewTraits.cornerRadius
-		view.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-		return view
-	}()
+	// MARK: - init
+
+	init() {
+		super.init(frame: .zero)
+		reloadTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [weak self] _ in
+			self?.reapplyLabels()
+			self?.reapplyButtonEnabledState()
+		})
+		reloadTimer?.fire()
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	// MARK: - Lifecycle
 	
-	/// setup the views
+	/// Setup all the views
 	override func setupViews() {
-		
+
 		super.setupViews()
+		view?.backgroundColor = .white
 		layer.cornerRadius = ViewTraits.cornerRadius
-		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-		identityLabel.textColor = Theme.colors.grey2
-		backgroundColor = Theme.colors.viewControllerBackground
-		
+		createShadow()
+	}
+
+	/// Setup the hierarchy
+	override func setupViewHierarchy() {
+
+		super.setupViewHierarchy()
+
+		addSubview(regionLabel)
+		addSubview(titleLabel)
+		addSubview(largeIconImageView)
+		addSubview(verticalLabelsStackView)
+		addSubview(viewQRButton)
+	}
+
+	/// Setup the constraints
+	override func setupViewConstraints() {
+
+		super.setupViewConstraints()
+
+		NSLayoutConstraint.activate([
+			regionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 28),
+			regionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+			regionLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: 16),
+
+			largeIconImageView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
+			largeIconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+
+			titleLabel.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
+			titleLabel.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: 8),
+			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: 16),
+
+			verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: 16),
+			verticalLabelsStackView.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
+			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+
+			viewQRButton.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
+			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
+			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+		])
+	}
+
+	// MARK: - Private funcs
+
+	private func reapplyLabels() {
+
+		// Remove previous labels
+		verticalLabelsStackView.arrangedSubviews.forEach { arrangedView in
+			verticalLabelsStackView.removeArrangedSubview(arrangedView)
+			arrangedView.removeFromSuperview()
+		}
+
+		originRows?.forEach { row in
+			let validityText = row.validityStringEvaluator(Date())
+			guard validityText.kind != .past else { return }
+
+			let qrTypeLabel = Label(body: row.type + ":")
+			qrTypeLabel.numberOfLines = 0
+			verticalLabelsStackView.addArrangedSubview(qrTypeLabel)
+
+			let validUntilLabel = Label(body: validityText.text)
+			validUntilLabel.numberOfLines = 0
+
+			if case .future = validityText.kind {
+				validUntilLabel.textColor = Theme.colors.iosBlue
+			}
+
+			verticalLabelsStackView.addArrangedSubview(validUntilLabel)
+
+			verticalLabelsStackView.setCustomSpacing(22, after: validUntilLabel)
+		}
+
+		if let expiryEvaluator = expiryEvaluator {
+			let validityLabel = Label(bodyBold: expiryEvaluator(Date()))
+			validityLabel.numberOfLines = 0
+			verticalLabelsStackView.addArrangedSubview(validityLabel)
+
+			if let text = expiryEvaluator(Date()) {
+				validityLabel.isHidden = false
+				validityLabel.text = text
+			} else {
+				validityLabel.isHidden = true
+			}
+		}
+
+		verticalLabelsStackView.setNeedsLayout()
+	}
+
+	private func reapplyButtonEnabledState() {
+		if let buttonEnabledEvaluator = buttonEnabledEvaluator {
+			viewQRButton.isEnabled = buttonEnabledEvaluator(Date())
+
+			if shouldStyleForEU {
+				applyEUStyle()
+			}
+		}
+	}
+
+	/// Create the shadow around the view
+	private func createShadow() {
+
 		// Shadow
 		layer.shadowColor = Theme.colors.shadow.cgColor
 		layer.shadowOpacity = ViewTraits.shadowOpacity
@@ -98,214 +196,70 @@ class QRCardView: BaseView {
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
 	}
-	
-	/// Setup the hierarchy
-	override func setupViewHierarchy() {
-		
-		super.setupViewHierarchy()
-		
-		addSubview(backgroundImageView)
-		addSubview(titleLabel)
-		addSubview(identityLabel)
-		addSubview(timeLabel)
 
-		blurView.addSubview(messageLabel)
-		blurView.addSubview(primaryButton)
 
-		addSubview(blurView)
-	}
-	
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-		
-		NSLayoutConstraint.activate([
-			
-			// BackgroundImage
-			backgroundImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			backgroundImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			backgroundImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			backgroundImageView.topAnchor.constraint(equalTo: topAnchor),
-
-			// Title
-			titleLabel.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: ViewTraits.topMargin
-			),
-			titleLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			titleLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			titleLabel.bottomAnchor.constraint(
-				equalTo: identityLabel.topAnchor,
-				constant: -ViewTraits.smallMargin
-			),
-
-			// Identity
-			identityLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			identityLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			identityLabel.bottomAnchor.constraint(
-				equalTo: timeLabel.topAnchor,
-				constant: -24
-			),
-
-			// Time
-			timeLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			timeLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// Time
-			blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			blurView.topAnchor.constraint(equalTo: timeLabel.bottomAnchor, constant: 40),
-
-			// Message
-			messageLabel.leadingAnchor.constraint(
-				equalTo: blurView.leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			messageLabel.topAnchor.constraint(
-				equalTo: blurView.topAnchor,
-				constant: 19
-			),
-
-			// Primary Button
-			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
-			primaryButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			primaryButton.widthAnchor.constraint(
-				greaterThanOrEqualTo: widthAnchor,
-				multiplier: ViewTraits.buttonRatio
-			),
-			primaryButton.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: -16
-			)
-		])
-
-		setupViewConstraintsForBottomBehaviour()
+	private func applyEUStyle() {
+		regionLabel.textColor = Theme.colors.europa
+		viewQRButton.backgroundColor = Theme.colors.europa
+		viewQRButton.setTitleColor(Theme.colors.grey4, for: .normal)
 	}
 
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
+	// MARK: - Callbacks
 
-		super.setupAccessibility()
+	@objc func viewQRButtonTapped() {
 
-		// Time
-		timeLabel.accessibilityTraits = .updatesFrequently
+		viewQRButtonCommand?()
 	}
 
-	func setupViewConstraintsForBottomBehaviour() {
+	// MARK: Public Access
 
-		if traitCollection.preferredContentSizeCategory.isAccessibilityCategory {
-			// Larger font size -> Show message above button
-			NSLayoutConstraint.activate([
-				messageLabel.trailingAnchor.constraint(
-					equalTo: blurView.trailingAnchor,
-					constant: -ViewTraits.margin
-				),
-				messageLabel.bottomAnchor.constraint(
-					equalTo: primaryButton.topAnchor,
-					constant: -19
-				)
-			])
-		} else {
-			// Normal font size -> Show message next to button
-			NSLayoutConstraint.activate([
-				messageLabel.trailingAnchor.constraint(
-					equalTo: primaryButton.leadingAnchor,
-					constant: -10
-				),
-				messageLabel.bottomAnchor.constraint(
-					equalTo: bottomAnchor,
-					constant: -19
-				)
-			])
+	var originRows: [OriginRow]? {
+		didSet {
+			reapplyLabels()
 		}
 	}
-	
-	/// User tapped on the primary button
-	@objc func primaryButtonTapped() {
-		
-		primaryButtonTappedCommand?()
+
+	var expiryEvaluator: ((Date) -> String?)? {
+		didSet {
+			guard expiryEvaluator != nil else { return }
+			reapplyLabels()
+		}
 	}
-	
-	// MARK: Public Access
-	
-	/// The  title
+
+	var buttonEnabledEvaluator: ((Date) -> Bool)? {
+		didSet {
+			guard buttonEnabledEvaluator != nil else { return }
+			reapplyButtonEnabledState()
+		}
+	}
+
+	var region: String? {
+		didSet {
+			regionLabel.text = region
+		}
+	}
+
 	var title: String? {
 		didSet {
-			titleLabel.attributedText = title?.setLineHeight(ViewTraits.titleLineHeight)
-		}
-	}
-	
-	/// The  message
-	var message: String? {
-		didSet {
-			messageLabel.text = message
+			titleLabel.text = title
 		}
 	}
 
-	/// The  identity
-	var identity: String? {
+	var viewQRButtonTitle: String? {
 		didSet {
-			identityLabel.text = identity
+			viewQRButton.titleLabel?.font = Theme.fonts.bodySemiBold
+			viewQRButton.setTitle(viewQRButtonTitle, for: .normal)
 		}
 	}
 
-	/// The  time
-	var time: String? {
+	var viewQRButtonCommand: (() -> Void)?
+
+	/// currently ignores `false`
+	var shouldStyleForEU: Bool = false {
 		didSet {
-			timeLabel.attributedText = .makeFromHtml(
-				text: time,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark,
-				lineHeight: 17.0
-			)
+			guard shouldStyleForEU else { return }
+			applyEUStyle()
 		}
 	}
 
-	/// The accessibility string for the time
-	var timeAccessibility: String? {
-		didSet {
-			timeLabel.accessibilityLabel = timeAccessibility
-		}
-	}
-
-	/// The background image
-	var backgroundImage: UIImage? {
-		didSet {
-			backgroundImageView.image = backgroundImage
-		}
-	}
-	
-	var primaryTitle: String = "" {
-		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
-		}
-	}
-	
-	// MARK: Public Access
-	
-	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
 }
