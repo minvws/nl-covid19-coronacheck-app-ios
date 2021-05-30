@@ -9,17 +9,9 @@ import Foundation
 
 protocol ConfigurationDigidProtocol: AnyObject {
 
-	/// Get the digid host
-	/// - Returns: the digid host
-	func getDigidHost() -> String
-
-	/// Get the authorization url for DigiD
-	/// - Returns: the authorization url for Digid
-	func getAuthorizationURL() -> URL
-
-	/// Get the token url for DigiD
-	/// - Returns: the token url for Digid
-	func getTokenURL() -> URL
+	/// Get the TVS url
+	/// - Returns: the tvs url
+	func getTVSURL() -> URL
 
 	/// Get the consumer ID for DigiD
 	/// - Returns: the consumer ID for DigiD
@@ -34,33 +26,12 @@ protocol ConfigurationDigidProtocol: AnyObject {
 
 extension Configuration: ConfigurationDigidProtocol {
 
-	/// Get the digid host
-	/// - Returns: the digid host
-	func getDigidHost() -> String {
-		guard let value = digid["host"] as? String else {
-			fatalError("Configuration: No DigiD host provided")
-		}
-		return value
-	}
-
-	/// Get the authorization url for DigiD
-	/// - Returns: the authorization url for Digid
-	func getAuthorizationURL() -> URL {
-
-		guard let value = digid["authorizationEndpoint"] as? String,
-			  let url = URL(string: getDigidHost() + value) else {
-			fatalError("Configuration: No DigiD Authorization url provided")
-		}
-		return url
-	}
-
-	/// Get the token url for DigiD
-	/// - Returns: the token url for Digid
-	func getTokenURL() -> URL {
-
-		guard let value = digid["tokenEndpoint"] as? String,
-			  let url = URL(string: getDigidHost() + value) else {
-			fatalError("Configuration: No DigiD Token url provided")
+	/// Get the TVS url
+	/// - Returns: the tvs url
+	func getTVSURL() -> URL {
+		guard let value = digid["host"] as? String,
+			  let url = URL(string: value) else {
+			fatalError("Configuration: No TVS url provided")
 		}
 		return url
 	}
