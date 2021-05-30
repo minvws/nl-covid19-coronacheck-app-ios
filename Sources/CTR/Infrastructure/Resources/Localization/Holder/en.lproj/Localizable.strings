@@ -177,7 +177,8 @@
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
-"holder.enlarged.title" = "My QR code";
+"holder.showqr.domestic.title" = "My QR code";
+"holder.showqr.eu.title" = "European QR code";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Your QR code has been made";

@@ -126,26 +126,16 @@ class CryptoManagerSpy: CryptoManaging {
 
 	var invokedGenerateQRmessage = false
 	var invokedGenerateQRmessageCount = 0
+	var invokedGenerateQRmessageParameters: (credential: Data, Void)?
+	var invokedGenerateQRmessageParametersList = [(credential: Data, Void)]()
 	var stubbedGenerateQRmessageResult: Data!
 
-	func generateQRmessage() -> Data? {
+	func generateQRmessage(_ credential: Data) -> Data? {
 		invokedGenerateQRmessage = true
 		invokedGenerateQRmessageCount += 1
+		invokedGenerateQRmessageParameters = (credential, ())
+		invokedGenerateQRmessageParametersList.append((credential, ()))
 		return stubbedGenerateQRmessageResult
-	}
-
-	var invokedGenerateQRmessageNew = false
-	var invokedGenerateQRmessageNewCount = 0
-	var invokedGenerateQRmessageNewParameters: (credential: Data, Void)?
-	var invokedGenerateQRmessageNewParametersList = [(credential: Data, Void)]()
-	var stubbedGenerateQRmessageNewResult: Data!
-
-	func generateQRmessageNew(_ credential: Data) -> Data? {
-		invokedGenerateQRmessageNew = true
-		invokedGenerateQRmessageNewCount += 1
-		invokedGenerateQRmessageNewParameters = (credential, ())
-		invokedGenerateQRmessageNewParametersList.append((credential, ()))
-		return stubbedGenerateQRmessageNewResult
 	}
 
 	var invokedVerifyQRMessage = false

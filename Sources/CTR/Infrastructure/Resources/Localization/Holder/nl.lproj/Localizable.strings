@@ -201,7 +201,8 @@
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
-"holder.enlarged.title" = "Mijn QR-code";
+"holder.showqr.domestic.title" = "Mijn QR-code";
+"holder.showqr.eu.title" = "Europeese QR-code";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";

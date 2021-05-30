@@ -348,7 +348,7 @@ class ListEventsViewModelTests: XCTestCase {
 			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
 			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beFalse()) // False until eu greencard fixed
+			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue))
