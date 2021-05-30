@@ -93,7 +93,7 @@ final class Services {
 
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
 
-	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.inMemory)
+	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
 
