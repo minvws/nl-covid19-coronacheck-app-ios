@@ -124,14 +124,11 @@ protocol CryptoManaging: AnyObject {
 	func removeCredential()
 	
 	// MARK: QR
-	
-	/// Generate the QR message
-	/// - Returns: the QR message
-	func generateQRmessage() -> Data?
 
 	/// Generate the QR message
+	/// - Parameter credential: the (domestic) credential to generate the QR from
 	/// - Returns: the QR message
-	func generateQRmessageNew(_ credential: Data) -> Data?
+	func generateQRmessage(_ credential: Data) -> Data?
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code

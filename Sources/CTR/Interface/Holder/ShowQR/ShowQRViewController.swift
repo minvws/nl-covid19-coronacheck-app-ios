@@ -43,14 +43,17 @@ class ShowQRViewController: BaseViewController {
 		super.viewDidLoad()
 
 		sceneView.backgroundColor = .white
-		title = .holderEnlargedTitle
-		sceneView.accessibilityDescription = .holderEnlargedTitle
-
+		
 		setupBinding()
 		setupListeners()
 	}
 
 	func setupBinding() {
+
+		viewModel.$title.binding = { [weak self] in
+			self?.title = $0
+			self?.sceneView.accessibilityDescription = $0
+		}
 
 		viewModel.$qrMessage.binding = { [weak self] in
 
@@ -136,8 +139,7 @@ class ShowQRViewController: BaseViewController {
 
 		super.viewWillDisappear(animated)
 		viewModel.setBrightness(reset: true)
-		viewModel.validityTimer?.invalidate()
-		viewModel.validityTimer = nil
+		viewModel.stopValidityTimer()
 		OrientationUtility.lockOrientation(.all, andRotateTo: previousOrientation ?? .portrait)
 	}
 }

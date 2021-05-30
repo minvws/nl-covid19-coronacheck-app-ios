@@ -12,7 +12,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	// MARK: Navigation
 
 	/// Navigate to enlarged QR
-	func navigateToShowQR()
+	/// - Parameter greenCard: the greenCard holding the credential to show
+	func navigateToShowQR(_ greenCard: GreenCard)
 
 	/// Navigate to appointment
 	func navigateToAppointment()
@@ -219,15 +220,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to enlarged QR
-	func navigateToShowQR() {
+	func navigateToShowQR(_ greenCard: GreenCard) {
 
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
 				coordinator: self,
+				greenCard: greenCard,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				maxValidity: maxValidity
+				configuration: generalConfiguration
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
