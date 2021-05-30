@@ -37,7 +37,6 @@ class HolderDashboardView: ScrolledStackView {
 //		return view
 //	}()
 
-
 	/// The create QR Card
 	let makeQRCard: CardView = {
 

@@ -519,7 +519,6 @@ extension HolderDashboardViewModel {
 			let walletManager = Services.walletManager
 			let greencards = walletManager.listGreenCards()
 
-
 			let items = greencards
 				.compactMap { (greencard: GreenCard) -> (GreenCard, [Origin])? in
 					// Get all origins

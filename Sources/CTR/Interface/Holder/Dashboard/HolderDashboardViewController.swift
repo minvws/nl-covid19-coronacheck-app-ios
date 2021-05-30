@@ -98,7 +98,7 @@ class HolderDashboardViewController: BaseViewController {
 
 					case .expiredQR(let message, let didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()
-						expiredQRCard.title = message 
+						expiredQRCard.title = message
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
 
