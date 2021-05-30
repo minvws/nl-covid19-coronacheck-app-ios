@@ -78,7 +78,7 @@ class QRCardView: BaseView {
 	}
 
 	// MARK: - Lifecycle
-	
+
 	/// Setup all the views
 	override func setupViews() {
 
@@ -196,7 +196,6 @@ class QRCardView: BaseView {
 		layer.shouldRasterize = true
 		layer.rasterizationScale = UIScreen.main.scale
 	}
-
 
 	private func applyEUStyle() {
 		regionLabel.textColor = Theme.colors.europa

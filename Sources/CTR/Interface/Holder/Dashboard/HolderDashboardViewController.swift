@@ -98,7 +98,7 @@ class HolderDashboardViewController: BaseViewController {
 
 					case .expiredQR(let message, let didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()
-						expiredQRCard.title = message // TODO: localize
+						expiredQRCard.title = message 
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
 
@@ -123,14 +123,14 @@ class HolderDashboardViewController: BaseViewController {
 
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
-						qrCard.title = "Mijn QR-code"
-						qrCard.viewQRButtonTitle = "Bekijk QR"
+						qrCard.title = .qrTitle
+						qrCard.viewQRButtonTitle = .qrButtonViewQR
 
 						switch card {
 							case .domesticQR:
-								qrCard.region = "Nederland"
+								qrCard.region = .netherlands
 							case .europeanUnionQR:
-								qrCard.region = "Europa"
+								qrCard.region = .europeanUnion
 								qrCard.shouldStyleForEU = true
 							default: break
 						}

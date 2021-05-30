@@ -148,13 +148,11 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	}
 
 	func openUrl(_ url: URL) {
-
 		coordinator?.openUrl(url, inApp: true)
 	}
 
 	func didTapChangeRegion() {
 		coordinator?.userWishesToChangeRegion(currentRegion: state.qrCodeValidityRegion) { [weak self] newRegion in
-			print("new region: ", newRegion)
 			self?.dashboardRegionToggleValue = newRegion
 		}
 	}
@@ -222,7 +220,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
 								else { return nil }
 
-								return "Verloopt in " + relativeDateString
+								return String.qrExpiryDatePrefixExpiresIn + relativeDateString
 							}
 						)
 
@@ -337,9 +335,9 @@ extension HolderDashboardViewModel {
 			// "Recovery" / "Vaccination" / "Negative Test"
 			var localizedTypeName: String {
 				switch type {
-					case "recovery": return "Recovery"
-					case "vaccination": return "Vaccination"
-					case "negativeTest": return "Negative Test"
+					case "recovery": return .qrTypeRecovery
+					case "vaccination": return .qrTypeNegativeTest
+					case "negativeTest": return .qrTypeVaccination
 					default: return type
 				}
 			}
@@ -404,20 +402,20 @@ extension HolderDashboardViewModel {
 			switch self {
 				case .netherlands:
 					if origin.isCurrentlyValid {
-						return "geldig tot en met "
+						return .qrExpiryDatePrefixValidUpToAndIncluding
 					} else {
-						return "Wordt automatisch geldig over "
+						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
 					}
 
 				case .europeanUnion:
 					if origin.isCurrentlyValid {
 						if origin.type == "recovery" {
-							return "geldig vanaf "
+							return .qrValidityDatePrefixValidFrom
 						} else {
 							return ""
 						}
 					} else {
-						return "geldig vanaf "
+						return .qrValidityDatePrefixValidFrom
 					}
 			}
 		}
@@ -521,7 +519,6 @@ extension HolderDashboardViewModel {
 			let walletManager = Services.walletManager
 			let greencards = walletManager.listGreenCards()
 
-			// map DB types to local types to have more control over optionality & avoid worrying about threading
 
 			let items = greencards
 				.compactMap { (greencard: GreenCard) -> (GreenCard, [Origin])? in
@@ -530,6 +527,7 @@ extension HolderDashboardViewModel {
 					let origins = untypedOrigins.compactMap({ $0 as? Origin })
 					return (greencard, origins)
 				}
+				// map DB types to local types to have more control over optionality & avoid worrying about threading
 				.flatMap { (greencard: GreenCard, origins: [Origin]) -> [MyQRCard] in
 
 					// Entries on the Card that represent an Origin.
