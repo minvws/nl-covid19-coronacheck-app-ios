@@ -351,7 +351,7 @@ class ListEventsViewModelTests: XCTestCase {
 			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue))
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue(value: nil)))
 			expect(self.sut.alert).toEventually(beNil())
 		} else {
 			fail("wrong state")

@@ -74,7 +74,7 @@ class VaccinationStartViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue
+		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue(value: nil)
 	}
 
 	func test_secondaryButtonTapped() {
