@@ -87,4 +87,24 @@ class WalletManagerSpy: WalletManaging {
 		invokedImportExistingTestCredentialParametersList.append((data, sampleDate))
 		return stubbedImportExistingTestCredentialResult
 	}
+
+	var invokedListGreenCards = false
+	var invokedListGreenCardsCount = 0
+	var stubbedListGreenCardsResult: [GreenCard]! = []
+
+	func listGreenCards() -> [GreenCard] {
+		invokedListGreenCards = true
+		invokedListGreenCardsCount += 1
+		return stubbedListGreenCardsResult
+	}
+
+	var invokedRemoveExpiredGreenCards = false
+	var invokedRemoveExpiredGreenCardsCount = 0
+	var stubbedRemoveExpiredGreenCardsResult: [String]! = []
+
+	func removeExpiredGreenCards() -> [String] {
+		invokedRemoveExpiredGreenCards = true
+		invokedRemoveExpiredGreenCardsCount += 1
+		return stubbedRemoveExpiredGreenCardsResult
+	}
 }
