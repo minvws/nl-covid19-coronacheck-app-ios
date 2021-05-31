@@ -27,7 +27,7 @@
 			<string>nl.rijksoverheid.ctr</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>coronatester-app-dev</string>
+				<string>coronacheck</string>
 			</array>
 		</dict>
 	</array>

@@ -15,16 +15,12 @@
 	</dict>
 	<key>digid</key>
 	<dict>
-		<key>authorizationEndpoint</key>
-		<string>/coronitacc/oauth2/v1/auth</string>
 		<key>host</key>
-		<string>https://login.ggdghor.nl</string>
-		<key>tokenEndpoint</key>
-		<string>/coronitacc/oauth2/v1/token</string>
+		<string>https://tvs-connect.coronacheck.nl</string>
 		<key>consumerId</key>
-		<string>6456237456911667336</string>
+		<string>test_client</string>
 		<key>redirectUri</key>
-		<string>coronatester-app-dev://auth/login</string>
+		<string>coronacheck://auth/login</string>
 	</dict>
 </dict>
 </plist>
