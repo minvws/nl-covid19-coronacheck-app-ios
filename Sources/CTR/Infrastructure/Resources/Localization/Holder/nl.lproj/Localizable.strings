@@ -78,7 +78,7 @@
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
-"general.europeanUnion" = "Europa";
+"general.europeanUnion" = "Europeese Unie";
 "general.netherlands" = "Nederland";
 "general.error.title" = "Sorry, er ging iets mis";
 "general.error.technical.text" = "Dat komt door een technische fout.";
@@ -174,26 +174,23 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
 "holder.dashboard.intro" = "Voor toegang tot een pilot-event heb je een negatieve testuitslag nodig. Daar maak je een QR-code van. Laat bij de ingang de QR-code én je identiteitsbewijs zien.";
-"holder.dashboard.appointment.title" = "Testafspraak maken";
-"holder.dashboard.appointment.message" = "Wil je een QR-code maken? Laat je dan eerst testen op corona.";
-"holder.dashboard.appointment.action" = "Maak afspraak";
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.change.title" = "QR-code vervangen";
-"holder.dashboard.change.action" = "Vervang QR-code";
-"holder.dashboard.qr.title" = "Mijn QR-code";
-"holder.dashboard.qr.action" = "Bekijk QR";
-"holder.dashboard.qr.subtitle" = "Laat QR-code zien bij ingang";
-"holder.dashboard.qr.message" = "Geldig tot %@";
-"holder.dashboard.qr.message.accessibility" = "Geldig tot %@ %@.";
-"holder.dashboard.qr.expiring" = "Geldig tot %@<br><b>Verloopt in %@</b>";
-"holder.dashboard.qr.expiring.accessibility" = "Geldig tot %@ %@. Verloopt in %@";
-"holder.dashboard.qr.expired" = "Je QR-code is verlopen.\nLaat je opnieuw testen.";
+"holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";
 "holder.dashboard.qr.minutes.long" = "minuten";
+"holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Verloopt in ";
+"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig tot en met ";
+"holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "Wordt automatisch geldig over ";
+"holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
+"holder.dashboard.qr.type.recovery" = "Herstelverklaring";
+"holder.dashboard.qr.type.negativeTest" = "Testbewijs";
+"holder.dashboard.qr.type.vaccination" = "Vaccinatiebewijs";
+"holder.dashboard.qr.title" = "Mijn QR-code";
+"holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis buiten Nederland";
 "holder.dashboard.changeregion.button" = "Aanpassen";
@@ -202,7 +199,12 @@
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
 "holder.showqr.domestic.title" = "Mijn QR-code";
+"holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een groen scherm krijgt. In de QR-code staat niet of je een testbewijs, herstelverklaring of vaccinatie hebt.</p><p>Daarnaast staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Er kunnen gegevens wegvallen om de herleidbaarheid naar jou zo klein mogelijk te maken.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De Europese QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Europeese QR-code";
+"holder.showqr.eu.about.title" = "Over mijn Europese QR-code";
+"holder.showqr.eu.about.message" = "** todo **";
+
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";

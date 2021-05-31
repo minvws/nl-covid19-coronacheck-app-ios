@@ -9,21 +9,25 @@ import UIKit
 
 extension UIImage {
 
-	static var appointment: UIImage? { return UIImage(named: "Appointment") }
+	static var appointment: UIImage? { UIImage(named: "Appointment") }
 
-	static var appointmentTile: UIImage? { return UIImage(named: "AppointmentTile") }
+	static var appointmentTile: UIImage? { UIImage(named: "AppointmentTile") }
 
-	static var create: UIImage? { return UIImage(named: "CreateQR") }
+	static var create: UIImage? { UIImage(named: "CreateQR") }
 
-	static var createTile: UIImage? { return UIImage(named: "CreateTile") }
+	static var createTile: UIImage? { UIImage(named: "CreateTile") }
 
-	static var radio: UIImage? { return UIImage(named: "Radio") }
+	static var radio: UIImage? { UIImage(named: "Radio") }
 
-	static var expiredQR: UIImage? { return UIImage(named: "ExpiredQR") }
+	static var expiredQR: UIImage? { UIImage(named: "ExpiredQR") }
 
-	static var securityBackground: UIImage? { return UIImage(named: "Houses") }
+	static var domesticQRIcon: UIImage? { UIImage(named: "Domestic_QRIcon") }
 
-	static var smallCross: UIImage? { return UIImage(named: "SmallCross") }
+	static var euQRIcon: UIImage? { UIImage(named: "EU_QRIcon") }
 
-	static var myQR: UIImage? { return UIImage(named: "MyQR") }
+	static var securityBackground: UIImage? { UIImage(named: "Houses") }
+
+	static var smallCross: UIImage? { UIImage(named: "SmallCross") }
+
+	static var myQR: UIImage? { UIImage(named: "MyQR") }
 }

@@ -39,6 +39,10 @@ protocol WalletManaging {
 	///   - sampleDate: the sample date of the credential
 	/// - Returns: True if import was successful
 	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool
+
+	func listGreenCards() -> [GreenCard]
+
+	func removeExpiredGreenCards() -> [String]
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -226,12 +230,9 @@ class WalletManager: WalletManaging, Logging {
 
 		var result = true
 
-		if let credentialVersion = domesticCredential.attributes.credentialVersion,
-		   let version = Int32(credentialVersion),
-		   let validFrom = domesticCredential.attributes.validFrom,
-		   let validFromTimeInterval = TimeInterval(validFrom),
-		   let validHours = domesticCredential.attributes.validForHours,
-		   let validHoursInt = Int(validHours),
+		if let version = Int32(domesticCredential.attributes.credentialVersion),
+		   let validFromTimeInterval = TimeInterval(domesticCredential.attributes.validFrom),
+		   let validHoursInt = Int( domesticCredential.attributes.validForHours),
 		   let data = domesticCredential.credential {
 
 			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)

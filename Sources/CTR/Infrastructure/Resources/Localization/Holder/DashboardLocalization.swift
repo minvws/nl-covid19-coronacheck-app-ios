@@ -19,21 +19,6 @@ extension String {
 		return Localization.string(for: "holder.dashboard.intro")
 	}
 
-	static var holderDashboardAppointmentTitle: String {
-
-		return Localization.string(for: "holder.dashboard.appointment.title")
-	}
-
-	static var holderDashboardAppointmentMessage: String {
-
-		return Localization.string(for: "holder.dashboard.appointment.message")
-	}
-
-	static var holderDashboardAppointmentAction: String {
-
-		return Localization.string(for: "holder.dashboard.appointment.action")
-	}
-
 	static var holderDashboardCreateTitle: String {
 
 		return Localization.string(for: "holder.dashboard.create.title")
@@ -47,51 +32,6 @@ extension String {
 	static var holderDashboardCreateAction: String {
 
 		return Localization.string(for: "holder.dashboard.create.action")
-	}
-
-	static var holderDashboardChangeTitle: String {
-
-		return Localization.string(for: "holder.dashboard.change.title")
-	}
-
-	static var holderDashboardChangeAction: String {
-
-		return Localization.string(for: "holder.dashboard.change.action")
-	}
-
-	static var holderDashboardQRTitle: String {
-
-		return Localization.string(for: "holder.dashboard.qr.title")
-	}
-
-	static var holderDashboardQRSubTitle: String {
-
-		return Localization.string(for: "holder.dashboard.qr.subtitle")
-	}
-
-	static var holderDashboardQRAction: String {
-
-		return Localization.string(for: "holder.dashboard.qr.action")
-	}
-
-	static var holderDashboardQRMessage: String {
-
-		return Localization.string(for: "holder.dashboard.qr.message")
-	}
-
-	static var holderDashboardQRMessageAccessibility: String {
-
-		return Localization.string(for: "holder.dashboard.qr.message.accessibility")
-	}
-
-	static var holderDashboardQRExpiring: String {
-
-		return Localization.string(for: "holder.dashboard.qr.expiring")
-	}
-
-	static var holderDashboardQRExpiringAccessibility: String {
-
-		return Localization.string(for: "holder.dashboard.qr.expiring.accessibility")
 	}
 
 	static var holderDashboardQRExpired: String {
@@ -139,5 +79,41 @@ extension String {
 
 	static var changeRegionButton: String {
 		return Localization.string(for: "holder.dashboard.changeregion.button")
+	}
+
+	static var qrTitle: String {
+		return Localization.string(for: "holder.dashboard.qr.title")
+	}
+
+	static var qrButtonViewQR: String {
+		return Localization.string(for: "holder.dashboard.qr.button.viewQR")
+	}
+
+	static var qrExpiryDatePrefixExpiresIn: String {
+		return Localization.string(for: "holder.dashboard.qr.expiryDate.prefix.expiresIn")
+	}
+
+	static var qrExpiryDatePrefixValidUpToAndIncluding: String {
+		return Localization.string(for: "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding")
+	}
+
+	static var qrValidityDatePrefixValidFrom: String {
+		return Localization.string(for: "holder.dashboard.qr.validityDate.prefix.validFrom")
+	}
+
+	static var qrValidityDatePrefixAutomaticallyBecomesValidOn: String {
+		return Localization.string(for: "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn")
+	}
+
+	static var qrTypeRecovery: String {
+		return Localization.string(for: "holder.dashboard.qr.type.recovery")
+	}
+
+	static var qrTypeNegativeTest: String {
+		return Localization.string(for: "holder.dashboard.qr.type.negativeTest")
+	}
+
+	static var qrTypeVaccination: String {
+		return Localization.string(for: "holder.dashboard.qr.type.vaccination")
 	}
 }
