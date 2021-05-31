@@ -67,12 +67,12 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 	func start() {
 
 		logInfo("Starting Forced Information Flow")
-
-		if let forcedInformationConsent = forcedInformationManager.getConsent() {
-			let viewController = ForcedInformationConsentViewController(
-				viewModel: ForcedInformationConsentViewModel(
-					self,
-					forcedInformationConsent: forcedInformationConsent
+		
+		if let forcedInformationPage = forcedInformationManager.getUpdatePage() {
+			let viewController = ForcedInformationPageViewController(
+				viewModel: ForcedInformationPageViewModel(
+					coordinator: self,
+					forcedInfo: forcedInformationPage
 				)
 			)
 			navigationController.viewControllers = [viewController]

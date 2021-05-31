@@ -11,7 +11,7 @@ import UIKit
 struct ForcedInformationPage {
 
 	/// The image of a forced information page
-	let image: UIImage
+	let image: UIImage?
 
 	/// The tagline of a forced information page
 	let tagline: String

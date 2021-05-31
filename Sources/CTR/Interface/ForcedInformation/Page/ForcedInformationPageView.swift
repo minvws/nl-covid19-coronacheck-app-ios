@@ -15,9 +15,12 @@ final class ForcedInformationPageView: ScrolledStackView {
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
 		static let imageHeightPercentage: CGFloat = 0.38
+		static let taglineLineHeight: CGFloat = 22
+		static let taglineKerning: CGFloat = -0.41
 		
 		// Margins
-		static let spacing: CGFloat = 24
+		static let taglineSpacing: CGFloat = 8
+		static let titleSpacing: CGFloat = 24
 	}
 	
 	/// The image view
@@ -35,7 +38,6 @@ final class ForcedInformationPageView: ScrolledStackView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
 		view.alignment = .leading
-		view.spacing = ViewTraits.spacing
 		return view
 	}()
 	
@@ -47,7 +49,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 	
 	private let taglineLabel: Label = {
 		
-		return Label(body: nil)
+		return Label(bodySemiBold: nil)
 	}()
 	
 	private let contentLabel: Label = {
@@ -67,8 +69,10 @@ final class ForcedInformationPageView: ScrolledStackView {
 		
 		super.setupViewHierarchy()
 
-		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.addArrangedSubview(taglineLabel)
+		bottomStackView.setCustomSpacing(ViewTraits.taglineSpacing, after: taglineLabel)
+		bottomStackView.addArrangedSubview(titleLabel)
+		bottomStackView.setCustomSpacing(ViewTraits.titleSpacing, after: titleLabel)
 		bottomStackView.addArrangedSubview(contentLabel)
 
 		stackView.addArrangedSubview(imageView)
@@ -95,7 +99,11 @@ final class ForcedInformationPageView: ScrolledStackView {
 	
 	var tagline: String? {
 		didSet {
-			
+			taglineLabel.attributedText = tagline?.setLineHeight(
+				ViewTraits.taglineLineHeight,
+				kerning: ViewTraits.taglineKerning,
+				textColor: Theme.colors.primary
+			)
 		}
 	}
 	

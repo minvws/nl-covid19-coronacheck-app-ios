@@ -14,6 +14,10 @@ protocol ForcedInformationManaging {
 
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool { get }
+	
+	/// Get the update page
+	/// - Returns: optional page
+	func getUpdatePage() -> ForcedInformationPage?
 
 	/// Get the consent
 	/// - Returns: optional consent
@@ -52,7 +56,12 @@ class ForcedInformationManager: ForcedInformationManaging {
 
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
 	private var information: ForcedInformation = ForcedInformation(
-		pages: [],
+		pages: [ForcedInformationPage(
+			image: .onboardingSafely,
+			tagline: .holderUpdatePageTagline,
+			title: .holderUpdatePageTitle,
+			content: .holderUpdatePageContent
+		)],
 		consent: ForcedInformationConsent(
 			title: .newTermsTitle,
 			highlight: .newTermsHighlights,
@@ -72,6 +81,11 @@ class ForcedInformationManager: ForcedInformationManaging {
 	/// Do we need show any updates? True if we do
 	var needsUpdating: Bool {
 		return data.lastSeenVersion < information.version
+	}
+	
+	func getUpdatePage() -> ForcedInformationPage? {
+		
+		return information.pages.first
 	}
 
 	/// Is there any consent that needs to be displayed?
