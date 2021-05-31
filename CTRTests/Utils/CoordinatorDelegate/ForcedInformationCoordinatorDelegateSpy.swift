@@ -10,16 +10,16 @@ import XCTest
 
 class ForcedInformationCoordinatorDelegateSpy: ForcedInformationCoordinatorDelegate, OpenUrlProtocol {
 
-	var invokedDidFinishConsent = false
-	var invokedDidFinishConsentCount = 0
-	var invokedDidFinishConsentParameters: (result: ForcedInformationResult, Void)?
-	var invokedDidFinishConsentParametersList = [(result: ForcedInformationResult, Void)]()
+	var invokedDidFinish = false
+	var invokedDidFinishCount = 0
+	var invokedDidFinishParameters: (result: ForcedInformationResult, Void)?
+	var invokedDidFinishParametersList = [(result: ForcedInformationResult, Void)]()
 
-	func didFinishConsent(_ result: ForcedInformationResult) {
-		invokedDidFinishConsent = true
-		invokedDidFinishConsentCount += 1
-		invokedDidFinishConsentParameters = (result, ())
-		invokedDidFinishConsentParametersList.append((result, ()))
+	func didFinish(_ result: ForcedInformationResult) {
+		invokedDidFinish = true
+		invokedDidFinishCount += 1
+		invokedDidFinishParameters = (result, ())
+		invokedDidFinishParametersList.append((result, ()))
 	}
 
 	var invokedOpenUrl = false

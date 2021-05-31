@@ -45,4 +45,19 @@ extension String {
 
 		return Localization.string(for: "new.terms.disagree")
 	}
+	
+	static var forcedInformationUpdatePageTitle: String {
+		
+		return Localization.string(for: "forcedinformation.updatepage.title")
+	}
+	
+	static var forcedInformationUpdatePageTagline: String {
+		
+		return Localization.string(for: "forcedinformation.updatepage.tagline")
+	}
+	
+	static var forcedInformationUpdatePageContent: String {
+		
+		return Localization.string(for: "forcedinformation.updatepage.content")
+	}
 }

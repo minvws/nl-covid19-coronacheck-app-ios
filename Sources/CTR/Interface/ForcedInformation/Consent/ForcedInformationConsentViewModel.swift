@@ -82,9 +82,9 @@ class ForcedInformationConsentViewModel {
 		
 		// Notifify coordinator delegate
 		if consent.consentMandatory {
-			coordinator?.didFinishConsent(ForcedInformationResult.consentAgreed)
+			coordinator?.didFinish(.consentAgreed)
 		} else {
-			coordinator?.didFinishConsent(ForcedInformationResult.consentViewed)
+			coordinator?.didFinish(.consentViewed)
 		}
 	}
 

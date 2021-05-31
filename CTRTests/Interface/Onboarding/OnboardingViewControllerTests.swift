@@ -40,11 +40,6 @@ class OnboardingViewControllerTests: XCTestCase {
 		window = UIWindow()
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-	}
-
 	func loadView() {
 
 		_ = sut.view
@@ -109,7 +104,7 @@ class OnboardingViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut.currentIndex = 1
+		sut.primaryButtonTapped()
 
 		// Then
 		XCTAssertNotNil(sut.navigationItem.leftBarButtonItem, "There should be a back button")
@@ -126,7 +121,7 @@ class OnboardingViewControllerTests: XCTestCase {
 			)
 		)
 		loadView()
-		sut.currentIndex = 1
+		sut.primaryButtonTapped()
 
 		// When
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
@@ -146,13 +141,13 @@ class OnboardingViewControllerTests: XCTestCase {
 			)
 		)
 		loadView()
-		sut.currentIndex = 1
+		sut.primaryButtonTapped()
 
 		// When
 		sut.backbuttonTapped()
 
 		// Then
 		XCTAssertFalse(coordinatorSpy.invokedFinishOnboarding, "Method should not be called")
-		XCTAssertEqual(sut?.currentIndex, 0, "Current Index should be 0")
+		XCTAssertTrue(sut.sceneView.primaryButton.isEnabled)
 	}
 }

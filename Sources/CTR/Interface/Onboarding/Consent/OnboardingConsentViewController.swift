@@ -7,20 +7,17 @@
 
 import UIKit
 
-class ConsentViewController: BaseViewController {
+final class OnboardingConsentViewController: BaseViewController {
 
 	/// The model
-	let viewModel: ConsentViewModel
+	let viewModel: OnboardingConsentViewModel
 
 	/// The view
-	let sceneView = ConsentView()
-
-	/// The page controller
-	private var pageViewController: UIPageViewController?
+	let sceneView = OnboardingConsentView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: ConsentViewModel) {
+	init(viewModel: OnboardingConsentViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

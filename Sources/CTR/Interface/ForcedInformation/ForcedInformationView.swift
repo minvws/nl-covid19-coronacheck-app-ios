@@ -7,45 +7,26 @@
 
 import UIKit
 
-class OnboardingView: BaseView {
+final class ForcedInformationView: BaseView {
 	
 	/// The display constants
-	private struct ViewTraits {
+	private enum ViewTraits {
 		
 		// Dimensions
 		static let buttonHeight: CGFloat = 52
+		static let buttonWidth: CGFloat = 182.0
 		
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let ribbonOffset: CGFloat = 15.0
-		static let buttonWidth: CGFloat = 182.0
 		static let pageControlMargin: CGFloat = 12.0
 		static let buttonMargin: CGFloat = 36.0
 	}
-
-	/// The government ribbon
-	private let ribbonView: UIImageView = {
-		
-		let view = UIImageView(image: .ribbon)
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
+	
 	/// The container for the the onboarding views
 	let containerView: UIView = {
 
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
-	/// The control buttons
-	let pageControl: UIPageControl = {
-		
-		let view = UIPageControl()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.pageIndicatorTintColor = Theme.colors.grey2
-		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
 	}()
 	
@@ -68,9 +49,7 @@ class OnboardingView: BaseView {
 	override func setupViewHierarchy() {
 		
 		super.setupViewHierarchy()
-		addSubview(ribbonView)
 		addSubview(containerView)
-		addSubview(pageControl)
 		addSubview(primaryButton)
 	}
 	
@@ -80,16 +59,9 @@ class OnboardingView: BaseView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			
-			// Ribbon
-			ribbonView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			ribbonView.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: UIDevice.current.hasNotch ? 0 : -ViewTraits.ribbonOffset
-			),
 
 			// ImageContainer
-			containerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
+			containerView.topAnchor.constraint(equalTo: topAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
 		])
@@ -102,7 +74,7 @@ class OnboardingView: BaseView {
 			}
 		}())
 	}
-
+	
 	func setupPrimaryButton(useFullWidth: Bool = false) {
 		if useFullWidth {
 			NSLayoutConstraint.activate([
@@ -126,40 +98,11 @@ class OnboardingView: BaseView {
 		NSLayoutConstraint.activate([
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+			primaryButton.topAnchor.constraint(equalTo: containerView.bottomAnchor),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
-		])
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		// Ribbon view
-		ribbonView.isAccessibilityElement = true
-		ribbonView.accessibilityLabel = .governmentLogo
-	}
-
-	override func layoutSubviews() {
-		
-		super.layoutSubviews()
-
-		// Layout page control when the view has a frame
-		NSLayoutConstraint.activate([
-
-			// Message
-			containerView.bottomAnchor.constraint(
-				equalTo: pageControl.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.margin
-			),
-
-			// Page Control
-			pageControl.bottomAnchor.constraint(
-				equalTo: primaryButton.topAnchor,
-				constant: UIDevice.current.isSmallScreen ? 0 : -ViewTraits.pageControlMargin),
-			pageControl.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
 	}
 }

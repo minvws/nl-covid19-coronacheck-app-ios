@@ -126,7 +126,7 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-		// Also mark as complet for forced information
+		// Also mark as complete for forced information
 		forcedInformationManager.consentGiven()
 
 		// Remove child coordinator

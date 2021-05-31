@@ -103,6 +103,11 @@
 "verifier.onboarding.title.who" = "Who is the scanner for?";
 "verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your social, cultural or athletic activity falls under the designated locations.";
 
+/* MARK: - Update Page Forced Information */
+"forcedinformation.updatepage.title" = "Vaccinatiebewijs";
+"forcedinformation.updatepage.tagline" = "Nieuw in de app";
+"forcedinformation.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
+
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
