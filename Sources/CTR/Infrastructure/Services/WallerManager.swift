@@ -29,7 +29,7 @@ protocol WalletManaging {
 
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
 
-	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard) -> Bool
+	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool
 
 	init( dataStoreManager: DataStoreManaging)
 
@@ -273,7 +273,7 @@ class WalletManager: WalletManaging, Logging {
 		}
 	}
 
-	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard) -> Bool {
+	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
 
 		var result = true
 		let context = dataStoreManager.backgroundContext()
@@ -287,12 +287,20 @@ class WalletManager: WalletManaging, Logging {
 						result = result && storeOrigin(remoteOrigin: remoteOrigin, greenCard: greenCard, context: context)
 					}
 
-					// data, version and date should come from the CreateCredential method of the Go Library.
 					let data = Data(remoteEuGreenCard.credential.utf8)
-					if let expireDate = Calendar.current.date(byAdding: .hour, value: 24, to: Date()) {
-						result = result && CredentialModel.create(data: data, validFrom: Date(), expirationTime: expireDate, version: 2, greenCard: greenCard, managedContext: context) != nil
+					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
+						logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+						result = result && CredentialModel.create(
+							data: data,
+							validFrom: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt),
+							expirationTime: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime),
+							version: Int32(euCredentialAttributes.credentialVersion),
+							greenCard: greenCard,
+							managedContext: context) != nil
+						dataStoreManager.save(context)
 					}
-					dataStoreManager.save(context)
+
+					// data, version and date should come from the CreateCredential method of the Go Library.
 				} else {
 					result = false
 				}

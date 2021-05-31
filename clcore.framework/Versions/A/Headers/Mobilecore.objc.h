@@ -35,6 +35,9 @@
 @property (nonatomic) NSString* _Nonnull error;
 @end
 
+/**
+ * Stubs
+ */
 @interface MobilecoreVerifyResult : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
@@ -58,16 +61,13 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
 
-/**
- * Stubs
- */
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDiscloseAllWithTimeQrEncoded(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
-
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreLoadDomesticIssuerPks(NSData* _Nullable annotatedPksJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
+
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
 
 /**
  * TODO: Add checking of verified time 'challenge'
