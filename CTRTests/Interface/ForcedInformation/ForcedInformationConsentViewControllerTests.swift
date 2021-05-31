@@ -94,8 +94,8 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedDidFinishConsent)
-		XCTAssertEqual(coordinatorSpy.invokedDidFinishConsentParameters?.result, ForcedInformationResult.consentViewed)
+		XCTAssertTrue(coordinatorSpy.invokedDidFinish)
+		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, ForcedInformationResult.consentViewed)
 	}
 
 	/// Test the error dialog that should appear after tapping the secondary button

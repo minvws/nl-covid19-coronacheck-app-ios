@@ -10,6 +10,9 @@ import SafariServices
 
 /// The resulting actions in this scene
 enum ForcedInformationResult {
+	
+	/// The user viewed the update page
+	case updatePageViewed
 
 	/// The user gave consent
 	case consentAgreed
@@ -22,7 +25,7 @@ protocol ForcedInformationCoordinatorDelegate: AnyObject {
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene
-	func didFinishConsent(_ result: ForcedInformationResult)
+	func didFinish(_ result: ForcedInformationResult)
 }
 
 protocol ForcedInformationDelegate: AnyObject {
@@ -67,18 +70,17 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 	func start() {
 
 		logInfo("Starting Forced Information Flow")
-
-		if let forcedInformationConsent = forcedInformationManager.getConsent() {
-			let viewController = ForcedInformationConsentViewController(
-				viewModel: ForcedInformationConsentViewModel(
-					self,
-					forcedInformationConsent: forcedInformationConsent
-				)
-			)
+		
+		if let forcedInformationPage = forcedInformationManager.getUpdatePage() {
+			
+			let viewController = ForcedInformationViewController(
+				viewModel: ForcedInformationViewModel(
+					coordinator: self,
+					pages: [forcedInformationPage]))
 			navigationController.viewControllers = [viewController]
 		} else {
 
-			// no consent required
+			// no update required
 			delegate?.finishForcedInformation()
 		}
 	}
@@ -97,19 +99,21 @@ extension ForcedInformationCoordinator: ForcedInformationCoordinatorDelegate, Op
 
 	/// The user did finish the consent scene
 	/// - Parameter result: the result of the scene
-	func didFinishConsent(_ result: ForcedInformationResult) {
+	func didFinish(_ result: ForcedInformationResult) {
 
 		switch result {
+			case .updatePageViewed:
+				logInfo("ForcedInformationCoordinator: Update page was viewed")
+				
 			case .consentAgreed:
 				logInfo("ForcedInformationCoordinator: Consent was given")
-				forcedInformationManager.consentGiven()
-				delegate?.finishForcedInformation()
 
 			case .consentViewed:
 				logInfo("ForcedInformationCoordinator: Consent was viewed")
-				forcedInformationManager.consentGiven()
-				delegate?.finishForcedInformation()
 		}
+		
+		forcedInformationManager.consentGiven()
+		delegate?.finishForcedInformation()
 	}
 
 	/// Open a url

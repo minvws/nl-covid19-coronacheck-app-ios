@@ -11,7 +11,7 @@ import XCTest
 class ConsentViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: ConsentViewController!
+	var sut: OnboardingConsentViewController!
 
 	var coordinatorSpy: OnboardingCoordinatorSpy!
 
@@ -23,8 +23,8 @@ class ConsentViewControllerTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = OnboardingCoordinatorSpy()
-		sut = ConsentViewController(
-			viewModel: ConsentViewModel(
+		sut = OnboardingConsentViewController(
+			viewModel: OnboardingConsentViewModel(
 				coordinator: coordinatorSpy,
 				factory: HolderOnboardingFactory(),
 				shouldHideBackButton: true

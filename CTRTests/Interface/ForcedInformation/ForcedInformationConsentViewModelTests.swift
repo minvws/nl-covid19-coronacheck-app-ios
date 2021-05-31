@@ -82,8 +82,8 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedDidFinishConsent)
-		XCTAssertEqual(coordinatorSpy.invokedDidFinishConsentParameters?.result, ForcedInformationResult.consentAgreed)
+		XCTAssertTrue(coordinatorSpy.invokedDidFinish)
+		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, ForcedInformationResult.consentAgreed)
 	}
 
 	/// Test the primary button without mandatory consent
@@ -100,8 +100,8 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		sut.primaryButtonTapped()
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.invokedDidFinishConsent)
-		XCTAssertEqual(coordinatorSpy.invokedDidFinishConsentParameters?.result, ForcedInformationResult.consentViewed)
+		XCTAssertTrue(coordinatorSpy.invokedDidFinish)
+		XCTAssertEqual(coordinatorSpy.invokedDidFinishParameters?.result, ForcedInformationResult.consentViewed)
 	}
 
 	/// Test the secondary button

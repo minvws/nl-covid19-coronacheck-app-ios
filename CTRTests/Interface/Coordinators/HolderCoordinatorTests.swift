@@ -39,11 +39,11 @@ class HolderCoordinatorTests: XCTestCase {
 
 		let forcedInformationSpy = ForcedInformationManagerSpy()
 		forcedInformationSpy.stubbedNeedsUpdating = true
-		forcedInformationSpy.stubbedGetConsentResult = ForcedInformationConsent(
+		forcedInformationSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+			image: nil,
+			tagline: "test",
 			title: "test",
-			highlight: "test",
-			content: "test",
-			consentMandatory: false
+			content: "test"
 		)
 		sut.forcedInformationManager = forcedInformationSpy
 
