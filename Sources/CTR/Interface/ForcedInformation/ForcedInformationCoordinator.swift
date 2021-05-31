@@ -69,16 +69,15 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 		logInfo("Starting Forced Information Flow")
 		
 		if let forcedInformationPage = forcedInformationManager.getUpdatePage() {
-			let viewController = ForcedInformationPageViewController(
-				viewModel: ForcedInformationPageViewModel(
+			
+			let viewController = ForcedInformationViewController(
+				viewModel: ForcedInformationViewModel(
 					coordinator: self,
-					forcedInfo: forcedInformationPage
-				)
-			)
+					pages: [forcedInformationPage]))
 			navigationController.viewControllers = [viewController]
 		} else {
 
-			// no consent required
+			// no update required
 			delegate?.finishForcedInformation()
 		}
 	}
