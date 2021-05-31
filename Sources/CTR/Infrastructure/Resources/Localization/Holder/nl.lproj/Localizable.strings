@@ -149,10 +149,10 @@
 "holder.onboarding.title.privacy" = "Zo min mogelijk gegevens";
 "holder.onboarding.message.privacy" = "In jouw QR-code staan alleen je negatieve testuitslag (geen corona), het tijdstip van de test en minimale gegevens: de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Dit is ter controle, om zeker te zijn dat de testuitslag bij jou hoort.";
 
-/* MARK: - Holder Update Page */
-"holder.updatepage.title" = "Vaccinatiebewijs";
-"holder.updatepage.tagline" = "Nieuw in de app";
-"holder.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
+/* MARK: - Update Page Forced Information */
+"forcedinformation.updatepage.title" = "Vaccinatiebewijs";
+"forcedinformation.updatepage.tagline" = "Nieuw in de app";
+"forcedinformation.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";

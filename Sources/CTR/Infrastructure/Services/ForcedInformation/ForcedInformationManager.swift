@@ -58,9 +58,9 @@ class ForcedInformationManager: ForcedInformationManaging {
 	private var information: ForcedInformation = ForcedInformation(
 		pages: [ForcedInformationPage(
 			image: .onboardingSafely,
-			tagline: .holderUpdatePageTagline,
-			title: .holderUpdatePageTitle,
-			content: .holderUpdatePageContent
+			tagline: .forcedInformationUpdatePageTagline,
+			title: .forcedInformationUpdatePageTitle,
+			content: .forcedInformationUpdatePageContent
 		)],
 		consent: nil,
 		version: 2
