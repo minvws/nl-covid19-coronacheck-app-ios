@@ -63,11 +63,6 @@ class LoginTVSViewController: BaseViewController {
 		}
 
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
-	}
-
-	override func viewDidAppear(_ animated: Bool) {
-
-		super.viewDidAppear(animated)
 		viewModel.login(self)
 	}
 

@@ -123,7 +123,7 @@ class EventCoordinator: Coordinator, Logging {
 				coordinator: self
 			)
 		)
-		navigationController.pushViewController(viewController, animated: false)
+		navigationController.pushViewController(viewController, animated: true)
 
 	}
 
@@ -134,7 +134,7 @@ class EventCoordinator: Coordinator, Logging {
 				tvsToken: token
 			)
 		)
-		navigationController.pushViewController(viewController, animated: true)
+		navigationController.pushViewController(viewController, animated: false)
 	}
 
 	private func navigateToListEvents(
@@ -153,7 +153,7 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: false)
 	}
 
-	private func navigateToVaccinationEventDetails(_ title: String, body: String) {
+	private func navigateToMoreInformation(_ title: String, body: String) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -168,7 +168,6 @@ class EventCoordinator: Coordinator, Logging {
 		viewController.modalTransitionStyle = .coverVertical
 
 		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
-		
 	}
 }
 
@@ -188,11 +187,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
 			case .continue:
-				// When the digid login is fixed, the default 999999011 should be removed.
-				// Until then, this is the only fake BSN to use to get vaccination events
-				// TODO: Remove default value // swiftlint:disable:this todo
-				// navigateToLogin()
-				navigateToFetchEvents(token: "999999011")
+				navigateToLogin()
 			default:
 				break
 		}
@@ -204,11 +199,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 			case let .continue(value: token):
 				if let token = token {
-					// When the digid login is fixed, the default 999999011 should be removed.
-					// Until then, this is the only fake BSN to use to get vaccination events
-					// TODO: Remove default value // swiftlint:disable:this todo
-					// navigateToFetchEvents(token: token)
-					navigateToFetchEvents(token: "999999011")
+					navigateToFetchEvents(token: token)
 				} else {
 					start()
 				}
@@ -253,7 +244,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					)
 				}
 			case let .moreInformation(title, body):
-				navigateToVaccinationEventDetails(title, body: body)
+				navigateToMoreInformation(title, body: body)
 			default:
 				break
 		}

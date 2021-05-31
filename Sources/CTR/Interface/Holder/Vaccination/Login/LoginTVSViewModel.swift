@@ -45,10 +45,9 @@ class LoginTVSViewModel: Logging {
 			return
 		}
 
-		openIdManager?.requestAccessToken(
-			presenter: viewController) { [weak self] accessToken in
+		openIdManager?.requestAccessToken(presenter: viewController) { [weak self] accessToken in
+
 			self?.shouldShowProgress = false
-			self?.logDebug("Got Acces token: \(accessToken ?? "nil") ")
 
 			if let token = accessToken {
 				self?.coordinator?.loginTVSScreenDidFinish(.continue(value: token))
@@ -59,7 +58,6 @@ class LoginTVSViewModel: Logging {
 					okTitle: .ok
 				)
 			}
-
 		} onError: { [weak self] error in
 			self?.shouldShowProgress = false
 			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
