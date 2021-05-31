@@ -50,20 +50,20 @@ class ForcedInformationManagerTests: XCTestCase {
 		XCTAssertFalse(sut.needsUpdating)
 	}
 
-	func testGetConsent() {
+	func test_getUpdatePage() {
 
 		// Given
-		let expectedConsent = ForcedInformationConsent(
-			title: .newTermsTitle,
-			highlight: .newTermsHighlights,
-			content: .newTermsDescription,
-			consentMandatory: true
+		let expectedPage = ForcedInformationPage(
+			image: .onboardingSafely,
+			tagline: .holderUpdatePageTagline,
+			title: .holderUpdatePageTitle,
+			content: .holderUpdatePageContent
 		)
 
 		// When
-		let actualConsent = sut.getConsent()
+		let actualPage = sut.getUpdatePage()
 
 		// Then
-		XCTAssertEqual(actualConsent, expectedConsent)
+		XCTAssertEqual(actualPage, expectedPage)
 	}
 }

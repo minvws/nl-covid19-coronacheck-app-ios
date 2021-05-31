@@ -62,12 +62,7 @@ class ForcedInformationManager: ForcedInformationManaging {
 			title: .holderUpdatePageTitle,
 			content: .holderUpdatePageContent
 		)],
-		consent: ForcedInformationConsent(
-			title: .newTermsTitle,
-			highlight: .newTermsHighlights,
-			content: .newTermsDescription,
-			consentMandatory: true
-		),
+		consent: nil,
 		version: 2
 	)
 
