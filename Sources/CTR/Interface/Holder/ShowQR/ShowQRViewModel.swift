@@ -25,7 +25,9 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	var greenCard: GreenCard
 
-	@Bindable private(set) var title: String
+	@Bindable private(set) var title: String?
+
+	@Bindable private(set) var infoButtonAccessibility: String?
 
 	/// The cl signed test proof
 	@Bindable private(set) var qrMessage: Data?
@@ -56,7 +58,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		// Start by showing nothing
 		self.showValidQR = false
 
-		title = greenCard.type == GreenCardType.domestic.rawValue ? .holderShowQRDomesticTitle : .holderShowQREuTitle
+		if greenCard.type == GreenCardType.domestic.rawValue {
+			title = .holderShowQRDomesticTitle
+			infoButtonAccessibility = .holderShowQRDomesticAboutTitle
+		} else if greenCard.type == GreenCardType.eu.rawValue {
+			title = .holderShowQREuTitle
+			infoButtonAccessibility = .holderShowQREuAboutTitle
+		}
 
 		super.init()
 		addObserver()
@@ -81,6 +89,30 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			}
 		} else {
 			setQRValid(data)
+		}
+	}
+
+	func showMoreInformation() {
+
+		guard let credential = greenCard.getActiveCredential(), let data = credential.data else {
+			return
+		}
+
+		if greenCard.type == GreenCardType.domestic.rawValue {
+			if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {
+				let identity = domesticCredentialAttributes
+					.mapIdentity(months: String.shortMonths)
+					.map({ $0.isEmpty ? "_" : $0 })
+					.joined(separator: " ")
+				let body: String = String(format: .holderShowQRDomesticAboutMessage, identity)
+				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body)
+			}
+		} else if greenCard.type == GreenCardType.eu.rawValue {
+
+			let body: String = .holderShowQREuAboutMessage
+			// Change body on test / vaccination / recovery.
+			// Blocked by Go library for now, no EU read credentials
+			coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
 		}
 	}
 
