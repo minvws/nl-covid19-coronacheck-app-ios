@@ -62,15 +62,15 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEuGreenCard = false
 	var invokedStoreEuGreenCardCount = 0
-	var invokedStoreEuGreenCardParameters: (remoteEuGreenCard: RemoteGreenCards.EuGreenCard, Void)?
-	var invokedStoreEuGreenCardParametersList = [(remoteEuGreenCard: RemoteGreenCards.EuGreenCard, Void)]()
+	var invokedStoreEuGreenCardParameters: (remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)?
+	var invokedStoreEuGreenCardParametersList = [(remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging)]()
 	var stubbedStoreEuGreenCardResult: Bool! = false
 
-	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard) -> Bool {
+	func storeEuGreenCard(_ remoteEuGreenCard: RemoteGreenCards.EuGreenCard, cryptoManager: CryptoManaging) -> Bool {
 		invokedStoreEuGreenCard = true
 		invokedStoreEuGreenCardCount += 1
-		invokedStoreEuGreenCardParameters = (remoteEuGreenCard, ())
-		invokedStoreEuGreenCardParametersList.append((remoteEuGreenCard, ()))
+		invokedStoreEuGreenCardParameters = (remoteEuGreenCard, cryptoManager)
+		invokedStoreEuGreenCardParametersList.append((remoteEuGreenCard, cryptoManager))
 		return stubbedStoreEuGreenCardResult
 	}
 

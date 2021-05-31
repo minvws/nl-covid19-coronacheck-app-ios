@@ -168,7 +168,7 @@ class CryptoManagerSpy: CryptoManaging {
 	var invokedReadDomesticCredentialsCount = 0
 	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?
 	var invokedReadDomesticCredentialsParametersList = [(data: Data, Void)]()
-	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes?
+	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes!
 
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
 		invokedReadDomesticCredentials = true
@@ -176,5 +176,19 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedReadDomesticCredentialsParameters = (data, ())
 		invokedReadDomesticCredentialsParametersList.append((data, ()))
 		return stubbedReadDomesticCredentialsResult
+	}
+
+	var invokedReadEuCredentials = false
+	var invokedReadEuCredentialsCount = 0
+	var invokedReadEuCredentialsParameters: (data: Data, Void)?
+	var invokedReadEuCredentialsParametersList = [(data: Data, Void)]()
+	var stubbedReadEuCredentialsResult: EuCredentialAttributes!
+
+	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
+		invokedReadEuCredentials = true
+		invokedReadEuCredentialsCount += 1
+		invokedReadEuCredentialsParameters = (data, ())
+		invokedReadEuCredentialsParametersList.append((data, ()))
+		return stubbedReadEuCredentialsResult
 	}
 }
