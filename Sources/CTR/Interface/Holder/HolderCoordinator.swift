@@ -12,10 +12,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
-	/// Navigate to enlarged QR
-	/// - Parameter greenCard: the greenCard holding the credential to show
-	func navigateToShowQR(_ greenCard: GreenCard)
-
 	/// Navigate to About Making a QR
 	func navigateToAboutMakingAQR()
 
@@ -221,7 +217,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to enlarged QR
-	func navigateToShowQR(_ greenCard: GreenCard) {
+	private func navigateToShowQR(_ greenCard: GreenCard) {
 
 		let destination = ShowQRViewController(
 			viewModel: ShowQRViewModel(
@@ -351,9 +347,18 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
 	}
 
-	// probably will take some other params also...
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
-		print("Create a QR here.. ")
+
+		do {
+			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
+				navigateToShowQR(greenCard)
+			} else {
+				print("oops")
+			}
+		} catch {
+			// No card
+			print("oops")
+		}
 	}
 }
 

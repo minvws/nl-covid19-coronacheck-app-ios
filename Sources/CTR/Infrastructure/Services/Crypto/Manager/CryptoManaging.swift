@@ -152,15 +152,15 @@ enum CryptoError: Error {
 
 struct DomesticCredentialAttributes: Codable {
 
-	let birthDay: String?
-	let birthMonth: String?
-	let firstNameInitial: String?
-	let lastNameInitial: String?
-	let credentialVersion: String?
-	let specimen: String?
-	let paperProof: String?
-	let validFrom: String?
-	let validForHours: String?
+	let birthDay: String
+	let birthMonth: String
+	let firstNameInitial: String
+	let lastNameInitial: String
+	let credentialVersion: String
+	let specimen: String
+	let paperProof: String
+	let validFrom: String
+	let validForHours: String
 
 	enum CodingKeys: String, CodingKey {
 
@@ -183,6 +183,33 @@ struct DomesticCredentialAttributes: Codable {
 	var isSpecimen: Bool {
 
 		return specimen == "1"
+	}
+
+	/// Map the identity of the holder
+	/// - Parameter months: the months
+	/// - Returns: mapped identify
+	func mapIdentity(months: [String]) -> [String] {
+
+		var output: [String] = []
+		output.append(firstNameInitial)
+		output.append(lastNameInitial)
+		if let value = Int(birthDay), value > 0 {
+			let formatter = NumberFormatter()
+			formatter.minimumIntegerDigits = 2
+			if let day = formatter.string(from: NSNumber(value: value)) {
+				output.append(day)
+			}
+		} else {
+			output.append(birthDay)
+		}
+
+		if let value = Int(birthMonth), value <= months.count, value > 0 {
+			output.append(months[value - 1])
+		} else {
+			output.append(birthMonth)
+		}
+
+		return output
 	}
 }
 

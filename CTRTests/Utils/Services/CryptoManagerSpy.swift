@@ -168,7 +168,7 @@ class CryptoManagerSpy: CryptoManaging {
 	var invokedReadDomesticCredentialsCount = 0
 	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?
 	var invokedReadDomesticCredentialsParametersList = [(data: Data, Void)]()
-	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes!
+	var stubbedReadDomesticCredentialsResult: DomesticCredentialAttributes?
 
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
 		invokedReadDomesticCredentials = true
