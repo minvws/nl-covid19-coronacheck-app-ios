@@ -441,7 +441,7 @@ class ListEventsViewModel: Logging {
 
 							self?.progressIndicationCounter.decrement()
 							if greenCardsSaved {
-								self?.coordinator?.listEventsScreenDidFinish(.continue)
+								self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil))
 							} else {
 								self?.logError("Failed to save greenCards")
 								self?.shouldPrimaryButtonBeEnabled = true

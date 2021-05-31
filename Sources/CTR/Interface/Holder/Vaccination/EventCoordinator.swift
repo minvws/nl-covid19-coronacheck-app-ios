@@ -17,7 +17,7 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Continue with the next step in the flow
-	case `continue`
+	case `continue`(value: String?)
 
 	/// Show the vaccination events
 	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
@@ -55,6 +55,8 @@ enum EventScreenResult: Equatable {
 protocol EventCoordinatorDelegate: AnyObject {
 
 	func vaccinationStartScreenDidFinish(_ result: EventScreenResult)
+
+	func loginTVSScreenDidFinish(_ result: EventScreenResult)
 
 	func fetchEventsScreenDidFinish(_ result: EventScreenResult)
 
@@ -114,6 +116,17 @@ class EventCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
+	private func navigateToLogin() {
+
+		let viewController = LoginTVSViewController(
+			viewModel: LoginTVSViewModel(
+				coordinator: self
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+
+	}
+
 	private func navigateToFetchEvents(token: String) {
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
@@ -121,7 +134,7 @@ class EventCoordinator: Coordinator, Logging {
 				tvsToken: token
 			)
 		)
-		navigationController.pushViewController(viewController, animated: true)
+		navigationController.pushViewController(viewController, animated: false)
 	}
 
 	private func navigateToListEvents(
@@ -140,7 +153,7 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: false)
 	}
 
-	private func navigateToVaccinationEventDetails(_ title: String, body: String) {
+	private func navigateToMoreInformation(_ title: String, body: String) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -155,7 +168,6 @@ class EventCoordinator: Coordinator, Logging {
 		viewController.modalTransitionStyle = .coverVertical
 
 		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
-		
 	}
 }
 
@@ -175,10 +187,22 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
 			case .continue:
-				// When the digid login is fixed, the default 999999011 should be removed.
-				// Until then, this is the only fake BSN to use to get vaccination events
-				// TODO: Remove default value // swiftlint:disable:this todo
-				navigateToFetchEvents(token: "999999011")
+				navigateToLogin()
+			default:
+				break
+		}
+	}
+
+	func loginTVSScreenDidFinish(_ result: EventScreenResult) {
+
+		switch result {
+
+			case let .continue(value: token):
+				if let token = token {
+					navigateToFetchEvents(token: token)
+				} else {
+					start()
+				}
 			default:
 				break
 		}
@@ -220,7 +244,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					)
 				}
 			case let .moreInformation(title, body):
-				navigateToVaccinationEventDetails(title, body: body)
+				navigateToMoreInformation(title, body: body)
 			default:
 				break
 		}

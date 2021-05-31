@@ -59,6 +59,8 @@ class VaccinationStartViewController: BaseViewController {
 
 			self?.viewModel.openUrl(url)
 		}
+
+		styleBackButton(buttonText: "")
 	}
 
 	@objc func backButtonTapped() {
