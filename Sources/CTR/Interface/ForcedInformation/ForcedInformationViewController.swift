@@ -75,7 +75,7 @@ final class ForcedInformationViewController: BaseViewController {
 		
 		if pageViewController.isLastPage {
 			// We tapped on the last page
-			viewModel.finishForcedInformation()
+			viewModel.finish(.updatePageViewed)
 		} else {
 			// Move to the next page
 			pageViewController.nextPage()

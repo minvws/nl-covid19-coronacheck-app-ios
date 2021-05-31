@@ -34,8 +34,8 @@ final class ForcedInformationViewModel {
 		return viewController
 	}
 	
-	func finishForcedInformation() {
+	func finish(_ result: ForcedInformationResult) {
 		
-		coordinator?.didFinishConsent(.consentViewed)
+		coordinator?.didFinish(result)
 	}
 }
