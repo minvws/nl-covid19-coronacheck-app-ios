@@ -140,6 +140,8 @@ protocol CryptoManaging: AnyObject {
 	func migrateExistingCredential(_ walletManager: WalletManaging)
 
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
+
+	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
 }
 
 /// The errors returned by the crypto library
@@ -238,5 +240,83 @@ struct DomesticCredential: Codable {
 		} else {
 			credential = nil
 		}
+	}
+}
+
+struct EuCredentialAttributes: Codable {
+
+	struct DigitalCovidCertificate: Codable {
+
+		let dateOfBirth: String
+		let name: Name
+		let schemaVersion: String
+		var vaccinations: [Vaccination] = []
+
+		enum CodingKeys: String, CodingKey {
+
+			case dateOfBirth = "dob"
+			case name = "nam"
+			case schemaVersion = "ver"
+			case vaccinations = "v"
+		}
+	}
+
+	struct Name: Codable {
+
+		let firstName: String
+		let standardisedFirstName: String
+		let givenName: String
+		let standardisedGivenName: String
+
+		enum CodingKeys: String, CodingKey {
+
+			case firstName = "fn"
+			case standardisedFirstName = "fnt"
+			case givenName = "gn"
+			case standardisedGivenName = "gnt"
+		}
+	}
+
+	struct Vaccination: Codable {
+
+		let cerficateIdentifier: String
+		let country: String
+		let doseNumber: Int
+		let dateOfVaccination: String
+		let issuer: String
+		let marketingAuthorizationHolder: String
+		let vaccineMedicalProduct: String
+		let totalDose: Int
+		let diseaseAgentTargeted: String
+		let vaccineOrProphylaxis: String
+
+		enum CodingKeys: String, CodingKey {
+
+			case cerficateIdentifier = "ci"
+			case country = "co"
+			case doseNumber = "dn"
+			case dateOfVaccination = "dt"
+			case issuer = "is"
+			case marketingAuthorizationHolder = "ma"
+			case vaccineMedicalProduct = "mp"
+			case totalDose = "sd"
+			case diseaseAgentTargeted = "tg"
+			case vaccineOrProphylaxis = "vp"
+		}
+	}
+
+	let credentialVersion: Int
+	let digitialCovidCertificate: DigitalCovidCertificate
+	let expirationTime: TimeInterval
+	let issuedAt: TimeInterval
+	let issuer: String
+
+	enum CodingKeys: String, CodingKey {
+
+		case credentialVersion
+		case digitialCovidCertificate = "dcc"
+		case expirationTime
+		case issuedAt
+		case issuer
 	}
 }

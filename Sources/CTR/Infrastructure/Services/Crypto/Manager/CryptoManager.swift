@@ -243,6 +243,25 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
+	/// Read the crypto credential
+	/// - Returns: the crypto attributes
+	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
+
+		if let response = MobilecoreReadEuropeanCredential(data) {
+			if let value = response.value {
+				do {
+					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
+					return object
+				} catch {
+					self.logError("Error Deserializing \(EuCredentialAttributes.self): \(error)")
+				}
+			} else {
+				logError("Can't read credential: \(String(describing: response.error))")
+			}
+		}
+		return nil
+	}
+
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not

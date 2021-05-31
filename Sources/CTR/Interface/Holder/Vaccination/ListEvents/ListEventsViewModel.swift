@@ -619,7 +619,7 @@ class ListEventsViewModel: Logging {
 		if let remoteEuGreenCards = response.euGreenCards {
 			for remoteEuGreenCard in remoteEuGreenCards {
 				print(remoteEuGreenCard)
-				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard)
+				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard, cryptoManager: cryptoManager)
 			}
 		}
 
