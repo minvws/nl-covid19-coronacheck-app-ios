@@ -38,7 +38,7 @@ class AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the version information
-	init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation?) {
+	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
 
 		self.coordinator = coordinator
 		title = .updateAppTitle
@@ -68,7 +68,7 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the version information
-	override init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation?) {
+	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
 
 		super.init(coordinator: coordinator, versionInformation: versionInformation)
 

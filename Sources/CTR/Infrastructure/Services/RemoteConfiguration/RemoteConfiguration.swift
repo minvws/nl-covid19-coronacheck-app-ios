@@ -8,7 +8,7 @@
 import Foundation
 
 /// Protocol for app version information
-protocol AppVersionInformation {
+protocol RemoteInformation {
 
 	/// The minimum required version
 	var minimumVersion: String { get }
@@ -50,7 +50,7 @@ protocol AppVersionInformation {
 	var domesticValidityHours: Int? { get }
 }
 
-extension AppVersionInformation {
+extension RemoteInformation {
 
 	/// Is the app deactivated?
 	var isDeactivated: Bool {
@@ -59,7 +59,12 @@ extension AppVersionInformation {
 	}
 }
 
-struct RemoteConfiguration: AppVersionInformation, Codable {
+struct RemoteConfiguration: RemoteInformation, Codable {
+
+	struct Mapping: Codable {
+		let code: String
+		let name: String
+	}
 
 	/// The minimum required version
 	let minimumVersion: String
@@ -100,6 +105,14 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// What is the validity of a domestic  test / vaccination
 	let domesticValidityHours: Int?
 
+	var hpkCodes: [Mapping] = []
+
+	var euBrands: [Mapping] = []
+
+	var euManufacturers: [Mapping] = []
+
+	var euTypes: [Mapping] = []
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -116,6 +129,10 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		case recoveryValidityHours = "recoveryValidity"
 		case testValidityHours = "testValidity"
 		case domesticValidityHours = "domesticValidity"
+		case hpkCodes = "hpkCodes"
+		case euBrands = "euBrands"
+		case euManufacturers = "euManufacturers"
+		case euTypes = "euTypes"
 	}
 
 	init(
@@ -165,5 +182,25 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 			testValidityHours: 40,
 			domesticValidityHours: 40
 		)
+	}
+
+	func getHpkMapping(_ code: String ) -> String? {
+
+		return hpkCodes.first(where: { $0.code == code })?.name
+	}
+
+	func getBrandMapping(_ code: String ) -> String? {
+
+		return euBrands.first(where: { $0.code == code })?.name
+	}
+
+	func getTypeMapping(_ code: String ) -> String? {
+
+		return euTypes.first(where: { $0.code == code })?.name
+	}
+
+	func getManufacturerMapping(_ code: String ) -> String? {
+
+		return euManufacturers.first(where: { $0.code == code })?.name
 	}
 }

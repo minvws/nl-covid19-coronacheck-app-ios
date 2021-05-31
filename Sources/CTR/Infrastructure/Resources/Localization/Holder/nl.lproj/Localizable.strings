@@ -294,7 +294,8 @@
 "holder.vaccination.alert.cancel" = "Nee, terug";
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
-"holder.vaccination.about.body" = "<p><b>Gegevens voor Nederland</b></p><p>Voor een Nederlandse QR-code worden er minimale gegevens opgehaald: je vaccinatiedatum en enkele gegevens van jou. Jouw gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p><b>Gegevens voor Europa</b></p><p>Voor een Europese QR-code zijn meer gegevens nodig, namelijk:</p><p>Naam:  <b>%@</b><br>Geboortedatum:  <b>%@</b><br>Vaccin:  <b>%@</b><br>Prikdatum %@:  <b>%@</b><br></p>";
+"holder.vaccination.about.body" = "<p>De volgende vaccinatie gegevens zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>Unieke identificatiecode: <b>%@</b></p>";
+"holder.vaccination.about.off" = "%@ van %@";
 
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
