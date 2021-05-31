@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoreData
 import XCTest
 @testable import CTR
 
@@ -20,14 +21,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedNavigateToShowQRCount += 1
 		invokedNavigateToShowQRParameters = (greenCard, ())
 		invokedNavigateToShowQRParametersList.append((greenCard, ()))
-	}
-
-	var invokedNavigateToAppointment = false
-	var invokedNavigateToAppointmentCount = 0
-
-	func navigateToAppointment() {
-		invokedNavigateToAppointment = true
-		invokedNavigateToAppointmentCount += 1
 	}
 
 	var invokedNavigateToAboutMakingAQR = false
@@ -152,6 +145,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, inApp)
 		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedUserWishesToViewQR = false
+	var invokedUserWishesToViewQRCount = 0
+	var invokedUserWishesToViewQRParameters: (greenCardObjectID: NSManagedObjectID, Void)?
+	var invokedUserWishesToViewQRParametersList = [(greenCardObjectID: NSManagedObjectID, Void)]()
+
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
+		invokedUserWishesToViewQR = true
+		invokedUserWishesToViewQRCount += 1
+		invokedUserWishesToViewQRParameters = (greenCardObjectID, ())
+		invokedUserWishesToViewQRParametersList.append((greenCardObjectID, ()))
 	}
 
 	var invokedDismiss = false

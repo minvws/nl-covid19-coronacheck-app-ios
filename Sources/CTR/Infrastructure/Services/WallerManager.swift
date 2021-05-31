@@ -39,6 +39,10 @@ protocol WalletManaging {
 	///   - sampleDate: the sample date of the credential
 	/// - Returns: True if import was successful
 	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool
+
+	func listGreenCards() -> [GreenCard]
+
+	func removeExpiredGreenCards() -> [String]
 }
 
 class WalletManager: WalletManaging, Logging {

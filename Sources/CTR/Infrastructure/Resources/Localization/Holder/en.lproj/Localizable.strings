@@ -153,21 +153,9 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
 "holder.dashboard.intro" = "To get access to a pilot event, you need a negative test result. You can convert this into a QR code. Display your QR code and proof of identity at the entrance.";
-"holder.dashboard.appointment.title" = "Book test appointment";
-"holder.dashboard.appointment.message" = "Want to make a QR code? Get tested for coronavirus first.";
-"holder.dashboard.appointment.action" = "Make appointment";
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
-"holder.dashboard.change.title" = "Update QR code";
-"holder.dashboard.change.action" = "Replace QR code";
-"holder.dashboard.qr.title" = "Show QR code";
-"holder.dashboard.qr.action" = "See QR";
-"holder.dashboard.qr.subtitle" = "Show QR code at the entrance";
-"holder.dashboard.qr.message" = "Valid until %@";
-"holder.dashboard.qr.message.accessibility" = "Valid until %@ %@.";
-"holder.dashboard.qr.expiring" = "Valid until %@<br><b>Expires in %@</b>";
-"holder.dashboard.qr.expiring.accessibility" = "Valid until %@ %@. Expires in %@";
 "holder.dashboard.qr.expired" = "Your QR code has expired.\nGet tested again.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
