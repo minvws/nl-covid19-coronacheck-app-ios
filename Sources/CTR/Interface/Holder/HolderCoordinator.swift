@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import CoreData
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
@@ -14,9 +15,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to enlarged QR
 	/// - Parameter greenCard: the greenCard holding the credential to show
 	func navigateToShowQR(_ greenCard: GreenCard)
-
-	/// Navigate to appointment
-	func navigateToAppointment()
 
 	/// Navigate to About Making a QR
 	func navigateToAboutMakingAQR()
@@ -52,7 +50,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
 
 	func openUrl(_ url: URL, inApp: Bool)
+
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) // probably some other params also.
 }
+
 // swiftlint:enable class_delegate_protocol
 
 class HolderCoordinator: SharedCoordinator {
@@ -205,7 +206,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				proofManager: proofManager,
 				configuration: generalConfiguration,
 				maxValidity: maxValidity,
-				qrCodeValidityRegion: .netherlands // HARD-CODED for now
+				dataStoreManager: Services.dataStoreManager
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
@@ -231,18 +232,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to appointment
-	func navigateToAppointment() {
-
-		let destination = AppointmentViewController(
-			viewModel: AppointmentViewModel(
-				coordinator: self,
-				maxValidity: maxValidity
-			)
-		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
@@ -361,6 +350,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
 		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
 	}
+
+	// probably will take some other params also...
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
+		print("Create a QR here.. ")
+	}
 }
 
 // MARK: - MenuDelegate
@@ -462,7 +456,7 @@ extension HolderCoordinator: EventFlowDelegate {
 				proofManager: proofManager,
 				configuration: generalConfiguration,
 				maxValidity: maxValidity,
-				qrCodeValidityRegion: .netherlands // HARD CODED for now
+				dataStoreManager: Services.dataStoreManager
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)

@@ -6,152 +6,86 @@
 */
 
 import UIKit
-
-/// The different kind of cards
-enum CardIdentifier {
-
-	/// Make an appointment to get tested
-	case appointment
-
-	/// Create a QR code
-	case create
-
-	/// The QR code card
-	case qrcode
-}
-
-/// The card information
-struct CardInfo {
-
-	/// The identifier of the card
-	let identifier: CardIdentifier
-
-	/// The title of the card
-	let title: String
-
-	/// The message of the card
-	let message: String
-
-	/// The title on the action button of the card
-	let actionTitle: String
-
-	/// The optional background image
-	let image: UIImage?
-
-	/// The background color
-	let backgroundColor: UIColor?
-}
-
-/// The card information for QR
-struct QRCardInfo {
-
-	/// The identifier of the card
-	let identifier: CardIdentifier
-
-	/// The title of the card
-	let title: String
-
-	/// The message of the card
-	let message: String
-
-	/// The identity of the holder
-	let holder: String
-
-	/// The title on the action button of the card
-	let actionTitle: String
-
-	/// The optional background image
-	let image: UIImage?
-
-	/// the valid until date
-	let validUntil: String
-
-	/// the valid until date pronounced
-	let validUntilAccessibility: String
-}
-
-struct ChangeRegionInfo {
-	let buttonTitle: String
-	let currentLocationTitle: String
-}
+import CoreData
 
 /// Currently used for the NL/EU toggle on the dashboard
 /// but could be expanded elsewhere
-enum QRCodeValidityRegion {
+enum QRCodeValidityRegion: String, Codable {
 	case netherlands
 	case europeanUnion
 }
 
 class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
+	// MARK: - Public properties
+
 	/// The logging category
 	var loggingCategory: String = "HolderDashboardViewModel"
 
-	/// Coordination Delegate
-	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-
-	/// The crypto manager
-	weak var cryptoManager: CryptoManaging?
-
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
-	/// The configuration
-	var configuration: ConfigurationGeneralProtocol
-
-	/// The proof validator
-	var proofValidator: ProofValidatorProtocol
-
-	/// the notification center
-	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-
-	/// The previous brightness
-	var previousBrightness: CGFloat?
-
-	/// A timer to keep refreshing the QR
-	var validityTimer: Timer?
-
 	/// The title of the scene
-	@Bindable private(set) var title: String
-
-	/// The introduction message of the scene
-	@Bindable private(set) var message: String
-
-	/// The message on the expired card
-	@Bindable private(set) var expiredTitle: String?
-
-	/// Show an expired QR Message
-	@Bindable private(set) var showExpiredQR: Bool
+	@Bindable private(set) var title: String = .holderDashboardTitle
 
 	/// Show notification banner
 	@Bindable private(set) var notificationBanner: NotificationBannerContent?
 
-	/// The appointment Card information
-	@Bindable private(set) var appointmentCard: CardInfo
+	@Bindable private(set) var cards = [HolderDashboardViewController.Cards]()
 
-	/// The create QR Card information
-	@Bindable private(set) var createCard: CardInfo
+	// MARK: - Private types
 
-	/// The create QR Card information
-	@Bindable private(set) var qrCard: QRCardInfo?
+	/// Wrapper around some state variables
+	/// that allows us to use a `didSet{}` to
+	/// get a callback if any of them are mutated.
+	private struct State {
+		var myQRCards: [MyQRCard]
+		var expiredGreenCards: [ExpiredQR]
+		var showCreateCard: Bool
+		var qrCodeValidityRegion: QRCodeValidityRegion
+	}
 
-	@Bindable private(set) var changeRegionInfo: ChangeRegionInfo?
+	// MARK: - Private properties
 
-	private var qrCodeValidityRegion: QRCodeValidityRegion {
+	/// Coordination Delegate
+	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+
+	/// The crypto manager
+	private weak var cryptoManager: CryptoManaging?
+
+	/// The proof manager
+	private weak var proofManager: ProofManaging?
+
+	/// The configuration
+	private var configuration: ConfigurationGeneralProtocol
+
+	/// The proof validator
+	private var proofValidator: ProofValidatorProtocol
+
+	/// the notification center
+	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+
+	@UserDefaults(key: "dashboardRegionToggleValue", defaultValue: QRCodeValidityRegion.netherlands)
+	private var dashboardRegionToggleValue: QRCodeValidityRegion { // swiftlint:disable:this let_var_whitespace
 		didSet {
-			changeRegionInfo = ChangeRegionInfo(
-				buttonTitle: .changeRegionButton,
-				currentLocationTitle: {
-					switch qrCodeValidityRegion {
-						case .netherlands:
-							return .changeRegionTitleNL
-						case .europeanUnion:
-							return .changeRegionTitleEU
-					}
-				}()
+			state.qrCodeValidityRegion = dashboardRegionToggleValue
+		}
+	}
+
+	private var state: State {
+		didSet {
+			guard let coordinator = coordinator else { return }
+
+			self.cards = HolderDashboardViewModel.assembleCards(
+				state: state,
+				didTapCloseExpiredQR: { expiredQR in
+					self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
+				},
+				coordinatorDelegate: coordinator
 			)
 		}
 	}
+
+	private let datasource: Datasource
+
+	// MARK: -
 
 	/// Initializer
 	/// - Parameters:
@@ -166,306 +100,624 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
 		maxValidity: Int,
-		qrCodeValidityRegion: QRCodeValidityRegion) {
+		dataStoreManager: DataStoreManaging
+	) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
 		self.configuration = configuration
-		self.title = .holderDashboardTitle
-		self.message = .holderDashboardIntro
-		self.expiredTitle = .holderDashboardQRExpired
-		self.qrCodeValidityRegion = qrCodeValidityRegion
-
-		// Start by showing nothing
-		self.showExpiredQR = false
-
-		self.appointmentCard = CardInfo(
-			identifier: .appointment,
-			title: .holderDashboardAppointmentTitle,
-			message: .holderDashboardAppointmentMessage,
-			actionTitle: .holderDashboardAppointmentAction,
-			image: .appointmentTile,
-			backgroundColor: Theme.colors.appointment
-		)
-		self.createCard = CardInfo(
-			identifier: .create,
-			title: .holderDashboardCreateTitle,
-			message: .holderDashboardCreateMessage,
-			actionTitle: .holderDashboardCreateAction,
-			image: .createTile,
-			backgroundColor: Theme.colors.create
-		)
-
 		self.proofValidator = ProofValidator(maxValidity: maxValidity)
+		self.datasource = Datasource(dataStoreManager: dataStoreManager)
+
+		self.state = State(
+			myQRCards: [],
+			expiredGreenCards: [],
+			showCreateCard: true,
+			qrCodeValidityRegion: .netherlands
+		)
 
 		super.init()
 
-		changeRegionInfo = ChangeRegionInfo(
-			buttonTitle: .changeRegionButton,
-			currentLocationTitle: {
-				switch qrCodeValidityRegion {
-					case .netherlands:
-						return .changeRegionTitleNL
-					case .europeanUnion:
-						return .changeRegionTitleEU
-				}
-			}()
-		)
-	}
-
-	/// The user tapped on one of the cards
-	/// - Parameter identifier: the identifier of the card
-	func cardTapped(_ identifier: CardIdentifier) {
-
-		switch identifier {
-			case .appointment:
-				coordinator?.navigateToAppointment()
-			case .create:
-				coordinator?.navigateToAboutMakingAQR()
-			case .qrcode:
-//				coordinator?.navigateToShowQR()
-			break
+		datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCardTypes: [String]) in
+			DispatchQueue.main.async {
+				self?.state.myQRCards = qrCardDataItems
+				self?.state.expiredGreenCards += expiredGreenCardTypes.map { ExpiredQR(type: $0) }
+			}
 		}
+
+		// Update State from UserDefaults:
+		state.qrCodeValidityRegion = dashboardRegionToggleValue
+
+//		#if DEBUG
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//			injectSampleData(dataStoreManager: dataStoreManager)
+//			self.datasource.reload()
+//		}
+//		#endif
 	}
+
+	func viewWillAppear() {
+		datasource.reload()
+	}
+
+	// MARK: Capture User input:
 
 	@objc func addProofTapped() {
 		coordinator?.navigateToAboutMakingAQR()
 	}
 
-	/// Check the QR Validity
-	@objc func checkQRValidity() {
-
-		guard let credential = cryptoManager?.readCredential() else {
-			qrCard = nil
-			validityTimer?.invalidate()
-			validityTimer = nil
-			setupCreateCard()
-			return
-		}
-
-		if let sampleTimeStamp = TimeInterval(credential.sampleTime) {
-
-			let holder = TestHolderIdentity(
-				firstNameInitial: credential.firstNameInitial ?? "",
-				lastNameInitial: credential.lastNameInitial ?? "",
-				birthDay: credential.birthDay ?? "",
-				birthMonth: credential.birthMonth ?? ""
-			)
-			switch proofValidator.validate(sampleTimeStamp) {
-				case let .valid(validUntilDate):
-					showExpiredQR = false
-					showQRMessageIsValid(validUntilDate, holder: holder)
-					startValidityTimer()
-
-				case let .expiring(validUntilDate, timeLeft):
-					showExpiredQR = false
-					showQRMessageIsExpiring(validUntilDate, timeLeft: timeLeft, holder: holder)
-					startValidityTimer()
-
-				case .expired:
-
-					// Clear the cache
-					cryptoManager?.removeCredential()
-
-					logDebug("Proof is no longer valid")
-					showQRMessageIsExpired()
-					validityTimer?.invalidate()
-					validityTimer = nil
-			}
-		}
-		setupCreateCard()
-	}
-
-	/// Show the QR message is valid
-	/// - Parameters:
-	///   - validUntil: valid until time
-	///   - holder: the holder identity
-	func showQRMessageIsValid(
-		_ validUntil: Date,
-		holder: TestHolderIdentity) {
-
-		let validUntilDateString = printDateFormatter.string(from: validUntil)
-		logDebug("Proof is valid until \(validUntilDateString)")
-		let validUntilString = String(format: .holderDashboardQRMessage, validUntilDateString)
-
-		let accessibilityValidUntilDateString = accessibilityDateFormatter.string(from: validUntil)
-		let acceccibilityTimeString = getAccessibilityTime(validUntil)
-		let accessibiliyValidUntilString = String(format: .holderDashboardQRMessageAccessibility, accessibilityValidUntilDateString, acceccibilityTimeString)
-
-		makeQRCard(
-			validUntil: validUntilString,
-			validUntilAccessibility: accessibiliyValidUntilString,
-			holder: holder
-		)
-	}
-
-	/// Show the QR message is valid, but expiring
-	/// - Parameters:
-	///   - validUntil: valid until time
-	///   - timeLeft: the time left until expiring
-	///   - holder: the holder identity
-	func showQRMessageIsExpiring(
-		_ validUntil: Date,
-		timeLeft: TimeInterval,
-		holder: TestHolderIdentity) {
-
-		let validUntilDateString = printDateFormatter.string(from: validUntil)
-		logDebug("Proof is valid until \(validUntilDateString), expiring in \(timeLeft)")
-
-		let validUntilString = String(format: .holderDashboardQRExpiring, validUntilDateString, timeLeft.stringTime)
-
-		let accessibilityValidUntilDateString = accessibilityDateFormatter.string(from: validUntil)
-		let acceccibilityTimeString = getAccessibilityTime(validUntil)
-		let accessibiliyValidUntilString = String(format: .holderDashboardQRExpiringAccessibility, accessibilityValidUntilDateString, acceccibilityTimeString, timeLeft.accessibilityTime)
-
-		makeQRCard(
-			validUntil: validUntilString,
-			validUntilAccessibility: accessibiliyValidUntilString,
-			holder: holder
-		)
-		
-		// Cut off at the cut off time
-		if timeLeft < 60 {
-			validityTimer?.invalidate()
-			validityTimer = Timer.scheduledTimer(
-				timeInterval: timeLeft,
-				target: self,
-				selector: (#selector(checkQRValidity)),
-				userInfo: nil,
-				repeats: true
-			)
-		}
-	}
-
-	/// Make the QR Card
-	/// - Parameters:
-	///   - validUntil: the valid until time string
-	///   - validUntilAccessibility: the valid until time string for pronunciation
-	///   - holder: the holder identity
-	func makeQRCard(
-		validUntil: String,
-		validUntilAccessibility: String,
-		holder: TestHolderIdentity) {
-
-		let identity = holder
-			.mapIdentity(months: String.shortMonths)
-			.map({ $0.isEmpty ? "_" : $0 })
-			.joined(separator: " ")
-
-		qrCard = QRCardInfo(
-			identifier: .qrcode,
-			title: .holderDashboardQRTitle,
-			message: .holderDashboardQRSubTitle,
-			holder: identity,
-			actionTitle: .holderDashboardQRAction,
-			image: .myQR,
-			validUntil: validUntil,
-			validUntilAccessibility: validUntilAccessibility
-		)
-	}
-
-	/// Show the QR Message is expired
-	func showQRMessageIsExpired() {
-
-		qrCard = nil
-		showExpiredQR = true
-	}
-
-	/// Start the validity timer, check every 10 seconds.
-	func startValidityTimer() {
-
-		guard validityTimer == nil else {
-			return
-		}
-
-		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(60),
-			target: self,
-			selector: (#selector(checkQRValidity)),
-			userInfo: nil,
-			repeats: true
-		)
-	}
-
-	/// User wants to close the expired QR
-	func closeExpiredRQ() {
-
-		showExpiredQR = false
-		checkQRValidity()
-	}
-
-	/// Formatter to print
-	private lazy var printDateFormatter: DateFormatter = {
-		
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE '<br>' d MMMM HH:mm"
-		return dateFormatter
-	}()
-
-	/// Formatter for accessibility
-	private lazy var accessibilityDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM"
-		return dateFormatter
-	}()
-
-	/// Formatter for accessibility
-	private lazy var accessibilityTimeFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "a"
-		dateFormatter.amSymbol = String.am
-		dateFormatter.pmSymbol = String.pm
-		return dateFormatter
-	}()
-
-	/// Get the accessibility time label
-	/// - Parameter date: the date to use
-	/// - Returns: The time of the message as a string
-	private func getAccessibilityTime(_ date: Date) -> String {
-
-		var output = ""
-		var components = Calendar.current.dateComponents([.hour, .minute], from: date)
-
-		// Convert from 24 to 12 hour clock
-		if let hour = components.hour, hour > 12 {
-			components.hour = hour - 12
-		}
-		output = DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
-
-		// Add AM or PM to the end
-		let amOrPm = accessibilityTimeFormatter.string(from: date)
-		output += " \(amOrPm)"
-
-		return output
-	}
-
-	func setupCreateCard() {
-
-		self.createCard = CardInfo(
-			identifier: .create,
-			title: qrCard == nil ? .holderDashboardCreateTitle : .holderDashboardChangeTitle,
-			message: .holderDashboardCreateMessage,
-			actionTitle: qrCard == nil ? .holderDashboardCreateAction : .holderDashboardChangeAction,
-			image: .createTile,
-			backgroundColor: Theme.colors.create
-		)
-	}
-
 	func openUrl(_ url: URL) {
-
 		coordinator?.openUrl(url, inApp: true)
 	}
 
 	func didTapChangeRegion() {
-		coordinator?.userWishesToChangeRegion(currentRegion: qrCodeValidityRegion) { [weak self] newRegion in
-			print("new region: ", newRegion)
-			self?.qrCodeValidityRegion = newRegion
+		coordinator?.userWishesToChangeRegion(currentRegion: state.qrCodeValidityRegion) { [weak self] newRegion in
+			self?.dashboardRegionToggleValue = newRegion
+		}
+	}
+
+	// MARK: - Static Methods
+
+	private static func assembleCards(
+		state: HolderDashboardViewModel.State,
+		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
+		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Cards] {
+		var cards = [HolderDashboardViewController.Cards]()
+
+		cards += [.headerMessage(message: .holderDashboardIntro)]
+
+		cards += state.expiredGreenCards.map { expiredQR in
+			.expiredQR(message: .holderDashboardQRExpired, didTapClose: {
+				didTapCloseExpiredQR(expiredQR)
+			})
+		}
+
+		if state.myQRCards.isEmpty {
+			cards += [
+				.makeQR(
+					title: .holderDashboardCreateTitle,
+					message: .holderDashboardCreateMessage,
+					actionTitle: .holderDashboardCreateAction,
+					didTapMakeQR: { [weak coordinatorDelegate] in
+						coordinatorDelegate?.navigateToAboutMakingAQR()
+					}
+				)
+			]
+		}
+
+		cards += state.myQRCards
+
+			// Map a `MyQRCard` to a `VC.Card`:
+			.map { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Cards in
+				switch qrcardDataItem {
+
+					case .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState):
+						let rows = origins.map { origin in
+							HolderDashboardViewController.Cards.QRCardRow(
+								typeText: origin .localizedTypeName,
+								validityTextEvaluator: { now in
+									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
+								}
+							)
+						}
+
+						return HolderDashboardViewController.Cards.domesticQR(
+							rows: rows,
+							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
+							buttonEnabledEvaluator: evaluateEnabledState,
+							expiryCountdownEvaluator: { now in
+								let mostDistantFutureExpiryDate = origins.reduce(Date()) { result, nextOrigin in
+									nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
+								}
+
+								// if all origins will be expired in next six hours:
+								let sixHours: TimeInterval = 6 * 60 * 60
+								guard mostDistantFutureExpiryDate > Date() && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
+								else { return nil }
+
+								// e.g. "5 uur 59 min"
+								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
+								else { return nil }
+
+								return String.qrExpiryDatePrefixExpiresIn + relativeDateString
+							}
+						)
+
+					case .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState):
+						let rows = origins.map { origin in
+							HolderDashboardViewController.Cards.QRCardRow(
+								typeText: origin .localizedTypeName,
+								validityTextEvaluator: { now in
+									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
+								}
+							)
+						}
+
+						return HolderDashboardViewController.Cards.europeanUnionQR(
+							rows: rows,
+							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
+							buttonEnabledEvaluator: evaluateEnabledState,
+							expiryCountdownEvaluator: nil
+						)
+				}
+			}
+			.filter { card in
+				switch (card, state.qrCodeValidityRegion) {
+					case (.europeanUnionQR, .europeanUnion): return true
+					case (.domesticQR, .netherlands): return true
+					default: return false
+				}
+			}
+
+		cards += [
+			.changeRegion(
+				buttonTitle: .changeRegionButton,
+				currentLocationTitle: {
+					switch state.qrCodeValidityRegion {
+						case .netherlands:
+							return .changeRegionTitleNL
+						case .europeanUnion:
+							return .changeRegionTitleEU
+					}
+				}()
+			)
+		]
+
+		return cards
+	}
+}
+
+//	// MARK: - NSNotification
+//
+//	extension HolderDashboardViewModel {
+//
+//		fileprivate func setupListeners() {
+//
+//			NotificationCenter.default.addObserver(
+//				self,
+//				selector: #selector(receiveWillEnterForegroundNotification),
+//				name: UIApplication.willEnterForegroundNotification,
+//				object: nil
+//			)
+//			NotificationCenter.default.addObserver(
+//				self,
+//				selector: #selector(receiveDidBecomeActiveNotification),
+//				name: UIApplication.didBecomeActiveNotification,
+//				object: nil
+//			)
+//		}
+//
+//		@objc func receiveWillEnterForegroundNotification() {
+//
+//			// Check the Validity of the QR
+//			// checkQRValidity()
+//
+//			// Check if we are being recorded
+//			preventScreenCapture()
+//
+//	//		datasource.reload()
+//		}
+//
+//		@objc func receiveDidBecomeActiveNotification() {
+//
+//			// Check the Validity of the QR
+//			// checkQRValidity()
+//
+//			// Check if we are being recorded
+//			preventScreenCapture()
+//		}
+//	}
+//
+//	deinit {
+//		   NotificationCenter.default.removeObserver(self)
+//	   }
+
+// MARK: - MyQRCard
+
+extension HolderDashboardViewModel {
+
+	/// Represents a Greencard in the UI,
+	/// Contains an array of `MyQRCard.Origin`.
+
+	// Future: it's turned out that this can be converted to a struct with a `.region` enum instead
+	fileprivate enum MyQRCard {
+		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], evaluateEnabledState: (Date) -> Bool)
+		case netherlands(greenCardObjectID: NSManagedObjectID, origins: [Origin], evaluateEnabledState: (Date) -> Bool)
+
+		/// Represents an Origin
+		struct Origin {
+			let type: String // vaccination | test | recovery
+			let eventDate: Date
+			let expirationTime: Date
+			let validFromDate: Date
+
+			// "Recovery" / "Vaccination" / "Negative Test"
+			var localizedTypeName: String {
+				switch type {
+					case "recovery": return .qrTypeRecovery
+					case "vaccination": return .qrTypeNegativeTest
+					case "negativeTest": return .qrTypeVaccination
+					default: return type
+				}
+			}
+
+			/// There is a particular order to sort these onscreen
+			var customSortIndex: Int {
+				switch type {
+					case "vaccination": return 0
+					case "recovery": return 1
+					case "negativeTest": return 2
+					default: return .max
+				}
+			}
+
+			var isCurrentlyValid: Bool {
+				return isValid(duringDate: Date())
+			}
+
+			func isValid(duringDate date: Date) -> Bool {
+				date.isWithinTimeWindow(from: validFromDate, to: expirationTime)
+			}
+		}
+
+		func localizedDateExplanation(forOrigin origin: Origin, forNow now: Date = Date()) -> HolderDashboardViewController.ValidityText {
+			
+			if origin.expirationTime < now { // expired
+				return .init(text: "", kind: .past)
+			} else if origin.validFromDate > now, case .netherlands = self { // not valid yet
+
+				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
+					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
+					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+					return .init(text: prefix + dateString, kind: .future)
+				} else {
+					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
+					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+					return .init(text: prefix + dateString, kind: .future)
+				}
+
+			} else {
+				switch self {
+					// Netherlands uses expireTime
+					case .netherlands:
+						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
+						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+						return .init(text: prefix + dateString, kind: .current)
+
+					// EU cards use Valid From (eventTime) because we don't know the expiry date
+					case .europeanUnion:
+						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.validFromDate)
+						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+						return .init(text: prefix + dateString, kind: .current)
+				}
+			}
+		}
+
+		// MARK: - private
+
+		/// Each origin has its own prefix
+		private func localizedDateExplanationPrefix(forOrigin origin: Origin) -> String {
+
+			switch self {
+				case .netherlands:
+					if origin.isCurrentlyValid {
+						return .qrExpiryDatePrefixValidUpToAndIncluding
+					} else {
+						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
+					}
+
+				case .europeanUnion:
+					if origin.isCurrentlyValid {
+						if origin.type == "recovery" {
+							return .qrValidityDatePrefixValidFrom
+						} else {
+							return ""
+						}
+					} else {
+						return .qrValidityDatePrefixValidFrom
+					}
+			}
+		}
+
+		/// Each origin has a different date/time format
+		/// (Region + Origin) -> DateFormatter
+		private func localizedDateExplanationDateFormatter(forOrigin origin: Origin) -> DateFormatter {
+			switch (self, origin.type) {
+				case (.netherlands, "negativeTest"):
+					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
+
+				case (.netherlands, _):
+					return HolderDashboardViewModel.dateWithoutTimeFormatter
+
+				case (.europeanUnion, "vaccination"):
+					return HolderDashboardViewModel.dateWithoutTimeFormatter
+
+				case (.europeanUnion, "recovery"):
+					return HolderDashboardViewModel.dayAndMonthFormatter
+
+				case (.europeanUnion, "negativeTest"):
+					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
+
+				default:
+					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
+			}
+		}
+
+		/// If at least one origin('s date range) is valid:
+		var isCurrentlyValid: Bool {
+			origins.contains(where: { $0.isCurrentlyValid })
+		}
+
+		/// Without distinguishing NL/EU, just give me the origins:
+		var origins: [Origin] {
+			switch self {
+				case .europeanUnion(_, let origins, _), .netherlands(_, let origins, _):
+					return origins
+			}
+		}
+
+		var effectiveExpiratedAt: Date {
+			return origins.compactMap { $0.expirationTime }.sorted().last ?? .distantPast
+		}
+	}
+
+	struct ExpiredQR {
+		let id = UUID().uuidString
+		let type: String
+	}
+}
+
+// MARK: - DataSource
+
+extension HolderDashboardViewModel {
+
+	fileprivate class Datasource {
+
+		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [String]) -> Void)? {
+			didSet {
+				reload()
+			}
+		}
+
+		private let dataStoreManager: DataStoreManaging
+		private var reloadTimer: Timer?
+
+		init(dataStoreManager: DataStoreManaging) {
+			self.dataStoreManager = dataStoreManager
+			self.reload()
+		}
+
+		// Calls fetch, then updates subscribers.
+
+		func reload() {
+			guard let didUpdate = didUpdate else { return }
+
+			reloadTimer?.invalidate()
+			reloadTimer = nil
+
+			let expiredGreenCards = Services.walletManager.removeExpiredGreenCards()
+			let cards: [HolderDashboardViewModel.MyQRCard] = fetch()
+
+			didUpdate(cards, expiredGreenCards)
+
+			// Schedule a Timer to reload the next time a Greencard will expire:
+			let nextFetchInterval: TimeInterval = cards.reduce(Date.distantFuture) { (result: Date, card: HolderDashboardViewModel.MyQRCard) -> Date in
+				card.effectiveExpiratedAt < result ? card.effectiveExpiratedAt : result
+			}.timeIntervalSinceNow
+
+			guard nextFetchInterval > 0 else { return }
+
+			reloadTimer = Timer.scheduledTimer(withTimeInterval: nextFetchInterval, repeats: false, block: { [weak self] _ in
+				self?.reload()
+			})
+		}
+
+		/// Fetch the Greencards+Origins from Database
+		/// and convert to UI-appropriate model types.
+		private func fetch() -> [HolderDashboardViewModel.MyQRCard] {
+			let walletManager = Services.walletManager
+			let greencards = walletManager.listGreenCards()
+
+			let items = greencards
+				.compactMap { (greencard: GreenCard) -> (GreenCard, [Origin])? in
+					// Get all origins
+					guard let untypedOrigins = greencard.origins else { return nil }
+					let origins = untypedOrigins.compactMap({ $0 as? Origin })
+					return (greencard, origins)
+				}
+				// map DB types to local types to have more control over optionality & avoid worrying about threading
+				.flatMap { (greencard: GreenCard, origins: [Origin]) -> [MyQRCard] in
+
+					// Entries on the Card that represent an Origin.
+					let originEntries = origins
+						.compactMap { origin -> MyQRCard.Origin? in
+							guard let type = origin.type,
+								  let eventDate = origin.eventDate,
+								  let expirationTime = origin.expirationTime,
+								  let validFromDate = origin.validFromDate
+							else { return nil }
+
+							return MyQRCard.Origin(
+								type: type,
+								eventDate: eventDate,
+								expirationTime: expirationTime,
+								validFromDate: validFromDate
+							)
+						}
+						.filter {
+							// Pro-actively remove invalid Origins here, in case the database is laggy:
+							// Future: this could be moved to the DB layer like how greencard.getActiveCredentials does it.
+							Date() < $0.expirationTime
+						}
+						.sorted { $0.customSortIndex < $1.customSortIndex }
+
+					func evaluateButtonEnabledState(date: Date) -> Bool {
+						let activeCredential: Credential? = greencard.getActiveCredential(forDate: date)
+						return !(activeCredential == nil || originEntries.isEmpty)
+					}
+
+					switch greencard.getType() {
+						case .domestic:
+							return [MyQRCard.netherlands(
+								greenCardObjectID: greencard.objectID,
+								origins: originEntries,
+								evaluateEnabledState: evaluateButtonEnabledState
+							)]
+						case .eu:
+							// The EU cards should only have one entry per card, so let's divide them up:
+							return originEntries.map {originEntry in
+								MyQRCard.europeanUnion(
+									greenCardObjectID: greencard.objectID,
+									origins: [originEntry],
+									evaluateEnabledState: evaluateButtonEnabledState
+								)
+							}
+						default:
+							return []
+					}
+				}
+				.filter {
+					// When a GreenCard has no more origins with a
+					// current/future validity, hide the Card
+					!$0.origins.isEmpty
+				}
+				.sorted { qrCardA, qrCardB in
+					qrCardA.effectiveExpiratedAt > qrCardB.effectiveExpiratedAt
+				}
+
+			return items
 		}
 	}
 }
+
+// MARK: - Date Formatters
+
+extension HolderDashboardViewModel {
+
+	fileprivate static let dateWithoutTimeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "d MMM yyyy"
+		return formatter
+	}()
+
+	fileprivate static let dateWithDayAndTimeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "EEEE d MMM HH:mm"
+		return formatter
+	}()
+
+	fileprivate static let dayAndMonthFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "d MMM"
+		return formatter
+	}()
+
+	// e.g. "4 hours, 55 minutes"
+	// 		"59 minutes"
+	// 		"20 seconds"
+	fileprivate static let hmsRelativeFormatter: DateComponentsFormatter = {
+		let hoursFormatter = DateComponentsFormatter()
+		hoursFormatter.unitsStyle = .full
+		hoursFormatter.maximumUnitCount = 2
+		hoursFormatter.allowedUnits = [.hour, .minute, .second]
+		return hoursFormatter
+	}()
+
+	fileprivate static let daysRelativeFormatter: DateComponentsFormatter = {
+		let hoursFormatter = DateComponentsFormatter()
+		hoursFormatter.unitsStyle = .full
+		hoursFormatter.allowedUnits = [.day]
+		return hoursFormatter
+	}()
+}
+
+private extension Date {
+
+	/// to be used like `now.isWithinTimeWindow(.originValidFrom, origin.expireTime)`
+	func isWithinTimeWindow(from: Date, to: Date) -> Bool {
+		(from...to).contains(self)
+	}
+}
+
+#if DEBUG
+// MARK: - Free Functions
+
+private func injectSampleData(dataStoreManager: DataStoreManaging) {
+
+	let context = dataStoreManager.backgroundContext()
+
+	context.performAndWait {
+		_ = Services.walletManager // ensure single entity Wallet is created.
+		guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context)
+		else { fatalError("expecting wallet to have been created") }
+
+		guard (wallet.greenCards ?? [])?.count == 0 else { return } // swiftlint:disable:this empty_count
+
+		guard let domesticGreenCard = GreenCardModel.create(type: .domestic, wallet: wallet, managedContext: context)
+		else { fatalError("Could not creat a green card") }
+
+//		guard let euVaccinationGreenCard = GreenCardModel.create(type: .eu, wallet: wallet, managedContext: context)
+//		else { fatalError("Could not create a green card") }
+
+		/// Event Date: the date of the event that took place e.g. your vaccination.
+		/// Expiration Date: the date it expires
+		/// ValidFrom Date: the date that the QR becomes valid.
+
+		let ago: TimeInterval = -1
+		let fromNow: TimeInterval = 1
+		let seconds: TimeInterval = 1
+		let minutes: TimeInterval = 60
+		let hours: TimeInterval = 60 * minutes
+		let days: TimeInterval = hours * 24
+
+		create( type: .recovery,
+				eventDate: Date().addingTimeInterval(14 * days * ago),
+				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
+				validFromDate: Date().addingTimeInterval(fromNow),
+				greenCard: domesticGreenCard,
+				managedContext: context)
+
+		create( type: .vaccination,
+				eventDate: Date().addingTimeInterval(14 * days * ago),
+				expirationTime: Date().addingTimeInterval((15 * seconds * fromNow)),
+				validFromDate: Date().addingTimeInterval(fromNow),
+				greenCard: domesticGreenCard,
+				managedContext: context)
+
+		create( type: .negativeTest,
+				eventDate: Date().addingTimeInterval(14 * days * ago),
+				expirationTime: Date().addingTimeInterval((20 * seconds * fromNow)),
+				validFromDate: Date().addingTimeInterval(fromNow),
+				greenCard: domesticGreenCard,
+				managedContext: context)
+
+		dataStoreManager.save(context)
+		print("did insert!")
+	}
+}
+
+private func create(
+	type: OriginType,
+	eventDate: Date,
+	expirationTime: Date,
+	validFromDate: Date,
+	greenCard: GreenCard,
+	managedContext: NSManagedObjectContext) {
+
+	OriginModel.create(
+		type: type,
+		eventDate: eventDate,
+		expirationTime: expirationTime,
+		validFromDate: validFromDate,
+		greenCard: greenCard,
+		managedContext: managedContext)
+
+	CredentialModel.create(
+		data: "".data(using: .utf8)!,
+		validFrom: validFromDate,
+		expirationTime: expirationTime,
+		greenCard: greenCard,
+		managedContext: managedContext)
+}
+#endif

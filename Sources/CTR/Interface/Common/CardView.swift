@@ -20,8 +20,8 @@ class CardView: BaseView {
 		static let messageRatio: CGFloat = UIDevice.current.isSmallScreen ? 1 : 0.75
 		static let buttonRatioLandscape: CGFloat = 0.3
 		static let buttonRatioPortrait: CGFloat = 0.5
-		static let shadowRadius: CGFloat = 6
-		static let shadowOpacity: Float = 0.4
+		static let shadowRadius: CGFloat = 24
+		static let shadowOpacity: Float = 0.15
 		
 		// Margins
 		static let textMargin: CGFloat = 16.0
