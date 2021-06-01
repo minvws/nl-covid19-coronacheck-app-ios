@@ -124,14 +124,9 @@ class WalletManager: WalletManaging, Logging {
 							result.append(convertedToString.replacingOccurrences(of: "\\/", with: "/"))
 						}
 
-//						if let data = eventGroup.jsonData,
-//						   //						   let convertedToString = String(data: data, encoding: .utf8) {
-//						   //							result.append(convertedToString.replacingOccurrences(of: "\\/", with: "/"))
-//
-//						   let object = try? JSONDecoder().decode(SignedResponse.self, from: data) {
-//							result.append(object)
-//
-//						}
+						// This should be rewritten to return an array of SignedResponse instead of String
+						// That fails at converting it to json and data in the network manager
+						// let object = try? JSONDecoder().decode(SignedResponse.self, from: data) {
 					}
 				}
 			}
@@ -271,7 +266,6 @@ class WalletManager: WalletManaging, Logging {
 			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
 			if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
 
-
 				result = result && CredentialModel.create(
 					data: data,
 					validFrom: validFromDate,
@@ -318,7 +312,7 @@ class WalletManager: WalletManaging, Logging {
 
 					let data = Data(remoteEuGreenCard.credential.utf8)
 					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
-						logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+						logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 						result = result && CredentialModel.create(
 							data: data,
 							validFrom: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt),
@@ -342,15 +336,14 @@ class WalletManager: WalletManaging, Logging {
 
 		if let type = OriginType(rawValue: remoteOrigin.type) {
 
-			let ccc = OriginModel.create(
+			return OriginModel.create(
 				type: type,
 				eventDate: remoteOrigin.eventTime,
 				expirationTime: remoteOrigin.expirationTime,
 				validFromDate: remoteOrigin.validFrom,
 				greenCard: greenCard,
 				managedContext: context
-			)
-			return ccc != nil
+			) != nil
 
 		} else {
 			return false

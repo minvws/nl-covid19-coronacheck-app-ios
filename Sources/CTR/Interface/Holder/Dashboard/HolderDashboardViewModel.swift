@@ -336,8 +336,8 @@ extension HolderDashboardViewModel {
 			var localizedTypeName: String {
 				switch type {
 					case "recovery": return .qrTypeRecovery
-					case "vaccination": return .qrTypeNegativeTest
-					case "test": return .qrTypeVaccination
+					case "vaccination": return .qrTypeVaccination
+					case "test": return .qrTypeNegativeTest
 					default: return type
 				}
 			}
