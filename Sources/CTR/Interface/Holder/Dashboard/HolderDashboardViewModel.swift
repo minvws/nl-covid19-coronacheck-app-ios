@@ -135,10 +135,10 @@ class HolderDashboardViewModel: Logging {
 			qrCodeValidityRegion: .domestic
 		)
 
-		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCardTypes: [String]) in
+		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {
 				self?.state.myQRCards = qrCardDataItems
-				self?.state.expiredGreenCards += expiredGreenCardTypes.map { ExpiredQR(type: $0) }
+				self?.state.expiredGreenCards += expiredGreenCards
 			}
 		}
 
