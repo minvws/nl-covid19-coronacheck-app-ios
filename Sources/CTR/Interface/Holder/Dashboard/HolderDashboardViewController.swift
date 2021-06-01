@@ -97,7 +97,7 @@ class HolderDashboardViewController: BaseViewController {
 						return headerMessageLabel
 
 					case .expiredQR(let message, let didTapCloseAction):
-						let expiredQRCard = MessageCardView()
+						let expiredQRCard = ExpiredQRView()
 						expiredQRCard.title = message
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard

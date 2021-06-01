@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MessageCardView: BaseView {
+class ExpiredQRView: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
