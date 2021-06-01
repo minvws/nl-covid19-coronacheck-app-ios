@@ -20,6 +20,14 @@ enum QRCodeValidityRegion: String, Codable {
 			case .europeanUnion: return .europeanUnion
 		}
 	}
+
+	/// If there's ever more than 2 regions, will need to rethink usages of this:
+	var opposite: QRCodeValidityRegion {
+		switch self {
+			case .domestic: return .europeanUnion
+			case .europeanUnion: return .domestic
+		}
+	}
 }
 
 enum QRCodeOriginType: String, Codable {
@@ -53,7 +61,7 @@ class HolderDashboardViewModel: Logging {
 	/// Wrapper around some state variables
 	/// that allows us to use a `didSet{}` to
 	/// get a callback if any of them are mutated.
-	private struct State {
+	fileprivate struct State {
 		var myQRCards: [MyQRCard]
 		var expiredGreenCards: [ExpiredQR]
 		var showCreateCard: Bool
@@ -215,12 +223,23 @@ class HolderDashboardViewModel: Logging {
 			]
 		}
 
+		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
+		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
+		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state).map { (originType, message) in
+			return .originNotValidInThisRegion(message: message) {
+				coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+					originType: originType,
+					currentRegion: state.qrCodeValidityRegion,
+					availableRegion: state.qrCodeValidityRegion.opposite)
+			}
+		}
+
 		cards += state.myQRCards
 
 			// Map a `MyQRCard` to a `VC.Card`:
 			.compactMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Card? in
-				switch (state.qrCodeValidityRegion, qrcardDataItem) {
 
+				switch (state.qrCodeValidityRegion, qrcardDataItem) {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
@@ -339,12 +358,24 @@ extension HolderDashboardViewModel {
 				}
 			}
 
+			var isNotYetExpired: Bool {
+				return expirationTime > Date()
+			}
+
 			var isCurrentlyValid: Bool {
 				return isValid(duringDate: Date())
 			}
 
 			func isValid(duringDate date: Date) -> Bool {
 				date.isWithinTimeWindow(from: validFromDate, to: expirationTime)
+			}
+		}
+
+		func isOfRegion(region: QRCodeValidityRegion) -> Bool {
+			switch (self, region) {
+				case (.europeanUnion, .europeanUnion): return true
+				case (.netherlands, .domestic): return true
+				default: return false
 			}
 		}
 
@@ -632,9 +663,46 @@ private extension Date {
 	}
 }
 
-#if DEBUG
 // MARK: - Free Functions
 
+private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State) -> [(originType: QRCodeOriginType, message: String)] {
+
+	// Calculate origins which exist in the other region but are not in this region:
+	let originTypesForCurrentRegion = Set(state.myQRCards
+		.filter { $0.isOfRegion(region: state.qrCodeValidityRegion) }
+		.flatMap { $0.origins }
+		.filter {
+			$0.isNotYetExpired
+		}
+		.compactMap { $0.type }
+	)
+
+	let originTypesForOtherRegion = Set(state.myQRCards
+		.filter { !$0.isOfRegion(region: state.qrCodeValidityRegion) }
+		.flatMap { $0.origins }
+		.filter {
+			$0.isNotYetExpired
+		}
+		.compactMap { $0.type }
+	)
+
+	let originTypesOnlyInOtherRegion = originTypesForOtherRegion
+		.subtracting(originTypesForCurrentRegion)
+
+	// Map it to user messages:
+	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
+		switch state.qrCodeValidityRegion {
+			case .domestic:
+				return (originType, String.holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: originType.localized))
+			case .europeanUnion:
+				return (originType, String.holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: originType.localized))
+		}
+	}
+
+	return userMessages
+}
+
+#if DEBUG
 private func injectSampleData(dataStoreManager: DataStoreManaging) {
 
 	let context = dataStoreManager.backgroundContext()

@@ -19,6 +19,8 @@ class HolderDashboardViewController: BaseViewController {
 
 		case expiredQR(message: String, didTapClose: () -> Void)
 
+		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
+
 		case makeQR(title: String, message: String, actionTitle: String, didTapMakeQR: () -> Void)
 
 		case changeRegion(buttonTitle: String, currentLocationTitle: String)
@@ -101,6 +103,12 @@ class HolderDashboardViewController: BaseViewController {
 						expiredQRCard.title = message
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
+
+					case .originNotValidInThisRegion(let message, let didTapMoreInfo):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.infoButtonTappedCommand = didTapMoreInfo
+						return messageCard
 
 					case .makeQR(let title, let message, let actionTitle, let didTapAction):
 						let makeQRCard = sceneView.makeQRCard

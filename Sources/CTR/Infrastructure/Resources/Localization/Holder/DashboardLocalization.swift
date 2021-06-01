@@ -39,6 +39,14 @@ extension String {
 		return Localization.string(for: "holder.dashboard.qr.expired", comment: "", [localizedRegion, localizedOriginType])
 	}
 
+	static func holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: String) -> String {
+		return Localization.string(for: "holder.dashboard.originNotValidInEUButIsInTheNetherlands", comment: "", [localizedOriginType])
+	}
+
+	static func holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: String) -> String {
+		return Localization.string(for: "holder.dashboard.originNotValidInNetherlandsButIsInEU", comment: "", [localizedOriginType])
+	}
+
 	static var hour: String {
 
 		return Localization.string(for: "holder.dashboard.qr.hour")

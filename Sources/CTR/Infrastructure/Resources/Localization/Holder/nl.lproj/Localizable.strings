@@ -199,6 +199,8 @@
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis buiten Nederland";
 "holder.dashboard.changeregion.button" = "Aanpassen";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt alleen een Europese QR-code.";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
