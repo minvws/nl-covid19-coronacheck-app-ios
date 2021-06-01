@@ -239,7 +239,7 @@ class ListEventsViewModel: Logging {
 						var dosage = ""
 						if let doseNumber = dataRow.event.vaccination?.doseNumber,
 						   let totalDose = dataRow.event.vaccination?.totalDoses {
-							dosage = String(format: .holderVaccinationAboutOf, doseNumber, totalDose)
+							dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
 						}
 
 						self?.coordinator?.listEventsScreenDidFinish(
