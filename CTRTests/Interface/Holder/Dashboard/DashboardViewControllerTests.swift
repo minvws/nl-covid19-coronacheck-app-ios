@@ -69,10 +69,10 @@
 //				.to(equal(.holderDashboardTitle), description: "Title should match")
 //			expect(self.sut.sceneView.message)
 //				.to(equal(.holderDashboardIntro), description: "Message should match")
-//			expect(self.sut.sceneView.expiredQRView.title)
+//			expect(self.sut.sceneView.MessageCardView.title)
 //				.to(equal(.holderDashboardQRExpired), description: "QR Expired title should match")
 //			expect(self.sut.sceneView.qrCardView.isHidden) == true
-//			expect(self.sut.sceneView.expiredQRView.isHidden) == true
+//			expect(self.sut.sceneView.MessageCardView.isHidden) == true
 //
 //			sut.assertImage(containedInNavigationController: true)
 //		}
@@ -130,7 +130,7 @@
 //				.toNot(beNil())
 //			expect(self.sut.sceneView.qrCardView.identity)
 //				.toNot(beNil())
-//			expect(self.sut.sceneView.expiredQRView.isHidden) == true
+//			expect(self.sut.sceneView.MessageCardView.isHidden) == true
 //		}
 //
 //		/// Test the validity of the credential with expired credential
@@ -156,7 +156,7 @@
 //
 //			// Then
 //			expect(self.sut.sceneView.qrCardView.isHidden) == true
-//			expect(self.sut.sceneView.expiredQRView.isHidden) == false
+//			expect(self.sut.sceneView.MessageCardView.isHidden) == false
 //
 //			sut.assertImage()
 //		}
@@ -173,7 +173,7 @@
 //
 //			// Then
 //			expect(self.sut.sceneView.qrCardView.isHidden) == true
-//			expect(self.sut.sceneView.expiredQRView.isHidden) == true
+//			expect(self.sut.sceneView.MessageCardView.isHidden) == true
 //
 //			sut.assertImage()
 //		}
@@ -191,7 +191,7 @@
 //
 //			// Then
 //			expect(self.sut.sceneView.qrCardView.isHidden) == false
-//			expect(self.sut.sceneView.expiredQRView.isHidden) == true
+//			expect(self.sut.sceneView.MessageCardView.isHidden) == true
 //			expect(self.holderCoordinatorDelegateSpy.invokedNavigateToShowQR) == false // broken by the new show QR scene
 //		}
 //
@@ -208,7 +208,7 @@
 //
 //			// Then
 //			expect(self.sut.sceneView.qrCardView.isHidden) == true
-//			expect(self.sut.sceneView.expiredQRView.isHidden) == true
+//			expect(self.sut.sceneView.MessageCardView.isHidden) == true
 //		}
 //
 //		func testCloseExpiredRQ() {
@@ -230,7 +230,7 @@
 //			sut.checkValidity()
 //
 //			// When
-//			sut?.sceneView.expiredQRView.closeButtonTapped()
+//			sut?.sceneView.MessageCardView.closeButtonTapped()
 //
 //			// Then
 //			expect(self.cryptoManagerSpy.invokedRemoveCredential) == true
