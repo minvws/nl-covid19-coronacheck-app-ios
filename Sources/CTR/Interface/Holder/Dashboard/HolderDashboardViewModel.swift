@@ -15,6 +15,20 @@ enum QRCodeValidityRegion: String, Codable {
 	case europeanUnion
 }
 
+enum QRCodeOriginType: String, Codable {
+	case negativeTest
+	case vaccination
+	case recovery
+
+	var localized: String {
+		switch self {
+			case .recovery: return .qrTypeRecovery
+			case .vaccination: return .qrTypeNegativeTest
+			case .negativeTest: return .qrTypeVaccination
+		}
+	}
+}
+
 class HolderDashboardViewModel: Logging {
 
 	// MARK: - Public properties
@@ -196,7 +210,7 @@ class HolderDashboardViewModel: Logging {
 					case .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Cards.QRCardRow(
-								typeText: origin .localizedTypeName,
+								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -228,7 +242,7 @@ class HolderDashboardViewModel: Logging {
 					case .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Cards.QRCardRow(
-								typeText: origin .localizedTypeName,
+								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -302,28 +316,17 @@ extension HolderDashboardViewModel {
 
 		/// Represents an Origin
 		struct Origin {
-			let type: String // vaccination | test | recovery
+			let type: QRCodeOriginType // vaccination | negativeTest | recovery
 			let eventDate: Date
 			let expirationTime: Date
 			let validFromDate: Date
 
-			// "Recovery" / "Vaccination" / "Negative Test"
-			var localizedTypeName: String {
-				switch type {
-					case "recovery": return .qrTypeRecovery
-					case "vaccination": return .qrTypeNegativeTest
-					case "negativeTest": return .qrTypeVaccination
-					default: return type
-				}
-			}
-
 			/// There is a particular order to sort these onscreen
 			var customSortIndex: Int {
 				switch type {
-					case "vaccination": return 0
-					case "recovery": return 1
-					case "negativeTest": return 2
-					default: return .max
+					case .vaccination: return 0
+					case .recovery: return 1
+					case .negativeTest: return 2
 				}
 			}
 
@@ -384,7 +387,7 @@ extension HolderDashboardViewModel {
 
 				case .europeanUnion:
 					if origin.isCurrentlyValid {
-						if origin.type == "recovery" {
+						if origin.type == .recovery {
 							return .qrValidityDatePrefixValidFrom
 						} else {
 							return ""
@@ -399,19 +402,19 @@ extension HolderDashboardViewModel {
 		/// (Region + Origin) -> DateFormatter
 		private func localizedDateExplanationDateFormatter(forOrigin origin: Origin) -> DateFormatter {
 			switch (self, origin.type) {
-				case (.netherlands, "negativeTest"):
+				case (.netherlands, .negativeTest):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
 
 				case (.netherlands, _):
 					return HolderDashboardViewModel.dateWithoutTimeFormatter
 
-				case (.europeanUnion, "vaccination"):
+				case (.europeanUnion, .vaccination):
 					return HolderDashboardViewModel.dateWithoutTimeFormatter
 
-				case (.europeanUnion, "recovery"):
+				case (.europeanUnion, .recovery):
 					return HolderDashboardViewModel.dayAndMonthFormatter
 
-				case (.europeanUnion, "negativeTest"):
+				case (.europeanUnion, .negativeTest):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
 
 				default:
@@ -449,7 +452,7 @@ extension HolderDashboardViewModel {
 
 	fileprivate class Datasource {
 
-		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [String]) -> Void)? {
+		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [QRCodeOriginType]) -> Void)? {
 			didSet {
 				reload()
 			}
