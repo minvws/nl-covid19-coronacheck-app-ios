@@ -128,41 +128,51 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 				logDebug("euCredentialAttributes: \(euCredentialAttributes)")
 
-				var dosage = ""
-				if let doseNumber = euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.doseNumber,
-				   let totalDose = euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.totalDose {
-					dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
+					showMoreInformationVaccination(
+						euCredentialAttributes: euCredentialAttributes,
+						vaccination: vaccination
+					)
 				}
-
-				let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.vaccineOrProphylaxis) ?? ""
-
-				let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.medicalProduct) ?? ""
-
-				let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.marketingAuthorizationHolder) ?? ""
-
-				let body: String = String(
-					format: .holderShowQREuAboutMessage,
-					"\(euCredentialAttributes.digitalCovidCertificate.name.givenName), \(euCredentialAttributes.digitalCovidCertificate.name.firstName)",
-					euCredentialAttributes.digitalCovidCertificate.dateOfBirth,
-					printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt)),
-					printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime)),
-					vaccineType,
-					vaccineBrand,
-					vaccineManufacturer,
-					dosage,
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.dateOfVaccination ?? "",
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.country ?? "",
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.issuer ?? "",
-					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.certificateIdentifier ?? ""
-				)
-				// Change body on test / vaccination / recovery.
-				// Blocked by Go library for now, no EU read credentials
-				coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
 			}
 		}
+	}
+
+	private func showMoreInformationVaccination(euCredentialAttributes: EuCredentialAttributes,  vaccination: EuCredentialAttributes.Vaccination) {
+
+		var dosage = ""
+		if vaccination.doseNumber > 0, vaccination.totalDose > 0 {
+			dosage = String(format: .holderVaccinationAboutOf, "\(vaccination.doseNumber)", "\(vaccination.totalDose)")
+		}
+
+		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
+			vaccination.vaccineOrProphylaxis) ?? ""
+
+		let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
+			vaccination.medicalProduct) ?? ""
+
+		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
+vaccination.marketingAuthorizationHolder) ?? ""
+
+		let body: String = String(
+			format: .holderShowQREuAboutMessage,
+			"\(euCredentialAttributes.digitalCovidCertificate.name.givenName)  \(euCredentialAttributes.digitalCovidCertificate.name.familyName)",
+			euCredentialAttributes.digitalCovidCertificate.dateOfBirth,
+			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt)),
+			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime)),
+			vaccineType,
+			vaccineBrand,
+			vaccineManufacturer,
+			dosage,
+			vaccination.dateOfVaccination,
+			vaccination.country,
+			vaccination.issuer,
+			vaccination.certificateIdentifier
+		)
+		// Change body on test / vaccination / recovery.
+
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+
 	}
 
 	private func setQRValid(_ data: Data) {

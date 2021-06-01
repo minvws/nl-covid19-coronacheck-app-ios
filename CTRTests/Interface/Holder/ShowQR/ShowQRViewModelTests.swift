@@ -321,8 +321,8 @@ class ShowQRViewModelTests: XCTestCase {
 			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
 				dateOfBirth: "2021-06-01",
 				name: EuCredentialAttributes.Name(
-					firstName: "Corona",
-					standardisedFirstName: "CORONA",
+					familyName: "Corona",
+					standardisedFamilyName: "CORONA",
 					givenName: "Check",
 					standardisedGivenName: "CHECK"
 				),
@@ -331,13 +331,13 @@ class ShowQRViewModelTests: XCTestCase {
 					EuCredentialAttributes.Vaccination(
 						certificateIdentifier: "test",
 						country: "NLS",
+						diseaseAgentTargeted: "test",
 						doseNumber: 2,
 						dateOfVaccination: "2021-06-01",
 						issuer: "Test",
 						marketingAuthorizationHolder: "Test",
 						medicalProduct: "Test",
 						totalDose: 2,
-						diseaseAgentTargeted: "test",
 						vaccineOrProphylaxis: "test"
 					)
 				]
