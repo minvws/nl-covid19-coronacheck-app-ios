@@ -138,31 +138,25 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
-	private func showMoreInformationVaccination(euCredentialAttributes: EuCredentialAttributes,  vaccination: EuCredentialAttributes.Vaccination) {
+	private func showMoreInformationVaccination(
+		euCredentialAttributes: EuCredentialAttributes,
+		vaccination: EuCredentialAttributes.Vaccination) {
 
 		var dosage = ""
 		if vaccination.doseNumber > 0, vaccination.totalDose > 0 {
 			dosage = String(format: .holderVaccinationAboutOf, "\(vaccination.doseNumber)", "\(vaccination.totalDose)")
 		}
 
-		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
-			vaccination.vaccineOrProphylaxis) ?? ""
-
 		let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
 			vaccination.medicalProduct) ?? ""
 
-		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
-vaccination.marketingAuthorizationHolder) ?? ""
-
 		let body: String = String(
-			format: .holderShowQREuAboutMessage,
+			format: .holderShowQREuAboutVaccinationMessage,
 			"\(euCredentialAttributes.digitalCovidCertificate.name.givenName)  \(euCredentialAttributes.digitalCovidCertificate.name.familyName)",
 			euCredentialAttributes.digitalCovidCertificate.dateOfBirth,
 			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt)),
 			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime)),
-			vaccineType,
 			vaccineBrand,
-			vaccineManufacturer,
 			dosage,
 			vaccination.dateOfVaccination,
 			vaccination.country,
