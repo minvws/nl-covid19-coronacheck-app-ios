@@ -46,18 +46,6 @@ class ResultView: ScrolledStackWithButtonView {
 		return Label(title3Medium: nil).multiline()
 	}()
 
-	/// The debug label
-	let debugLabel: Label = {
-
-		let label = Label(subhead: nil).multiline()
-		label.isHidden = true
-		label.layer.borderWidth = 2
-		label.layer.borderColor = Theme.colors.dark.cgColor
-		label.backgroundColor = Theme.colors.lightBackground.withAlphaComponent(0.9)
-		label.textColor = Theme.colors.dark
-		return label
-	}()
-
 	private let spacer: UIView = {
 
 		let view = UIView()
@@ -101,7 +89,6 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(imageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(debugLabel)
 		contentView.addSubview(spacer)
 		contentView.addSubview(checkIdentityView)
 		stackView.addArrangedSubview(contentView)
@@ -138,11 +125,6 @@ class ResultView: ScrolledStackWithButtonView {
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.imageMargin - ViewTraits.margin
 			),
-
-			// Debug
-			debugLabel.topAnchor.constraint(equalTo: imageView.topAnchor),
-			debugLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			debugLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
 			// Title
 			titleLabel.topAnchor.constraint(

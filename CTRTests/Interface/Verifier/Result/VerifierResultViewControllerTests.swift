@@ -260,15 +260,4 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
 	}
-
-	func testDebugLinkTapped() throws {
-
-		// Given
-
-		// When
-		sut.debugLinkTapped()
-
-		// Then
-		expect(self.sut.sceneView.debugLabel.isHidden) == false
-	}
 }
