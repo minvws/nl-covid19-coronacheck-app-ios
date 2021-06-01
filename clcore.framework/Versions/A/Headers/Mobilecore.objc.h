@@ -12,8 +12,11 @@
 
 
 @class MobilecoreAnnotatedPk;
+@class MobilecoreDCC;
+@class MobilecoreDCCName;
+@class MobilecoreHCert;
 @class MobilecoreResult;
-@class MobilecoreVerifyResult;
+@class MobilecoreVerificationResult;
 
 @interface MobilecoreAnnotatedPk : NSObject <goSeqRefInterface> {
 }
@@ -23,6 +26,38 @@
 - (nonnull instancetype)init;
 @property (nonatomic) NSString* _Nonnull id_;
 @property (nonatomic) NSData* _Nullable pkXml;
+@end
+
+@interface MobilecoreDCC : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull dateOfBirth;
+@property (nonatomic) MobilecoreDCCName* _Nullable name;
+@end
+
+@interface MobilecoreDCCName : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull givenName;
+@property (nonatomic) NSString* _Nonnull familyName;
+@end
+
+@interface MobilecoreHCert : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) long credentialVersion;
+@property (nonatomic) long expirationTime;
+@property (nonatomic) long issuedAt;
+@property (nonatomic) MobilecoreDCC* _Nullable dcc;
 @end
 
 @interface MobilecoreResult : NSObject <goSeqRefInterface> {
@@ -36,17 +71,19 @@
 @end
 
 /**
- * Stubs
+ * Verification
+FIXME: Mock implementation for now
  */
-@interface MobilecoreVerifyResult : NSObject <goSeqRefInterface> {
+@interface MobilecoreVerificationResult : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic) NSData* _Nullable attributesJson;
-@property (nonatomic) int64_t unixTimeSeconds;
-@property (nonatomic) NSString* _Nonnull error;
+@property (nonatomic) NSString* _Nonnull firstNameInitial;
+@property (nonatomic) NSString* _Nonnull lastNameInitial;
+@property (nonatomic) NSString* _Nonnull birthDay;
+@property (nonatomic) NSString* _Nonnull birthMonth;
 @end
 
 @interface Mobilecore : NSObject
@@ -63,17 +100,14 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullab
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 
+FOUNDATION_EXPORT void MobilecoreInitializeVerifier(NSString* _Nullable configDirectoryPath);
+
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreLoadDomesticIssuerPks(NSData* _Nullable annotatedPksJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
 
-/**
- * TODO: Add checking of verified time 'challenge'
- */
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreVerify(NSData* _Nullable proofBase45);
-
-FOUNDATION_EXPORT MobilecoreVerifyResult* _Nullable MobilecoreVerifyQREncoded(NSData* _Nullable proofQrEncodedAsn1);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded);
 
 #endif
