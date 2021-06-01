@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol RemoteConfigManaging {
+protocol RemoteConfigManaging: AnyObject {
 
 	/// Initialize
 	init()
