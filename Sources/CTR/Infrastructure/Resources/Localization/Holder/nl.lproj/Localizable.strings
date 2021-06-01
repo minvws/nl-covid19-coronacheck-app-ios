@@ -182,7 +182,7 @@
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
+"holder.dashboard.qr.expired" = "De %@ QR-code van je %@ is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";

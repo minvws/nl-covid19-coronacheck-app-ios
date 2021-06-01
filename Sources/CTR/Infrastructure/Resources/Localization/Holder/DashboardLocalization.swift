@@ -34,9 +34,9 @@ extension String {
 		return Localization.string(for: "holder.dashboard.create.action")
 	}
 
-	static var holderDashboardQRExpired: String {
+	static func holderDashboardQRExpired(localizedRegion: String, localizedOriginType: String) -> String {
 
-		return Localization.string(for: "holder.dashboard.qr.expired")
+		return Localization.string(for: "holder.dashboard.qr.expired", comment: "", [localizedRegion, localizedOriginType])
 	}
 
 	static var hour: String {

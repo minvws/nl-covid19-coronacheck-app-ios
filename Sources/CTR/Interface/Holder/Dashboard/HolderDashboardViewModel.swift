@@ -189,8 +189,15 @@ class HolderDashboardViewModel: Logging {
 
 		cards += [.headerMessage(message: .holderDashboardIntro)]
 
-		cards += state.expiredGreenCards.map { expiredQR in
-			.expiredQR(message: .holderDashboardQRExpired, didTapClose: {
+		cards += state.expiredGreenCards.compactMap { expiredQR -> HolderDashboardViewController.Card? in
+			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }
+
+			let message = String.holderDashboardQRExpired(
+				localizedRegion: expiredQR.region.localized,
+				localizedOriginType: expiredQR.type.localized
+			)
+
+			return .expiredQR(message: message, didTapClose: {
 				didTapCloseExpiredQR(expiredQR)
 			})
 		}
@@ -423,9 +430,6 @@ extension HolderDashboardViewModel {
 
 				case (.europeanUnion, .negativeTest):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
-
-				default:
-					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
 			}
 		}
 
@@ -449,7 +453,8 @@ extension HolderDashboardViewModel {
 
 	struct ExpiredQR {
 		let id = UUID().uuidString
-		let type: String
+		let region: QRCodeValidityRegion
+		let type: QRCodeOriginType
 	}
 }
 
@@ -481,7 +486,11 @@ extension HolderDashboardViewModel {
 			reloadTimer?.invalidate()
 			reloadTimer = nil
 
-			let expiredGreenCards = Services.walletManager.removeExpiredGreenCards()
+			let expiredGreenCards: [ExpiredQR] = Services.walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
+				guard let region = QRCodeValidityRegion(rawValue: greencardType) else { return nil }
+				guard let originType = QRCodeOriginType(rawValue: originType) else { return nil }
+				return ExpiredQR(region: region, type: originType)
+			}
 			let cards: [HolderDashboardViewModel.MyQRCard] = fetch()
 
 			didUpdate(cards, expiredGreenCards)
@@ -517,7 +526,8 @@ extension HolderDashboardViewModel {
 					// Entries on the Card that represent an Origin.
 					let originEntries = origins
 						.compactMap { origin -> MyQRCard.Origin? in
-							guard let type = origin.type,
+							guard let typeRawValue = origin.type,
+								  let type = QRCodeOriginType(rawValue: typeRawValue),
 								  let eventDate = origin.eventDate,
 								  let expirationTime = origin.expirationTime,
 								  let validFromDate = origin.validFromDate
