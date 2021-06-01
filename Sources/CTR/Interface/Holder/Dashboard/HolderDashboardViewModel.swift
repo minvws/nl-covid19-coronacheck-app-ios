@@ -490,10 +490,12 @@ extension HolderDashboardViewModel {
 
 			didUpdate(cards, expiredGreenCards)
 
-			// Schedule a Timer to reload the next time a Greencard will expire:
-			let nextFetchInterval: TimeInterval = cards.reduce(Date.distantFuture) { (result: Date, card: HolderDashboardViewModel.MyQRCard) -> Date in
-				card.effectiveExpiratedAt < result ? card.effectiveExpiratedAt : result
-			}.timeIntervalSinceNow
+			// Schedule a Timer to reload the next time an origin will expire:
+			let nextFetchInterval: TimeInterval = cards
+				.flatMap { $0.origins }
+				.reduce(Date.distantFuture) { (result: Date, origin: HolderDashboardViewModel.MyQRCard.Origin) -> Date in
+					origin.expirationTime < result ? origin.expirationTime : result
+				}.timeIntervalSinceNow
 
 			guard nextFetchInterval > 0 else { return }
 
