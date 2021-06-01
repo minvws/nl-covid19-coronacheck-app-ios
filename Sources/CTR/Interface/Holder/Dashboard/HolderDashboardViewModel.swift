@@ -25,9 +25,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = .holderDashboardTitle
 
-	/// Show notification banner
-	@Bindable private(set) var notificationBanner: NotificationBannerContent?
-
 	@Bindable private(set) var cards = [HolderDashboardViewController.Cards]()
 
 	// MARK: - Private types

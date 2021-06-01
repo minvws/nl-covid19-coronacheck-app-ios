@@ -155,15 +155,6 @@ class HolderDashboardViewController: BaseViewController {
 				sceneView.stackView.addArrangedSubview($0)
 			}
 		}
-
-		viewModel.$notificationBanner.binding = { [weak self] in
-
-			if let content = $0 {
-				self?.showNotificationBanner(content)
-			} else {
-				self?.hideNotificationBanner()
-			}
-		}
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -193,37 +184,5 @@ class HolderDashboardViewController: BaseViewController {
 		sceneView.changeRegionView.changeRegionButtonTappedCommand = { [viewModel] in
 			viewModel.didTapChangeRegion()
 		}
-	}
-
-	func showNotificationBanner(_ content: NotificationBannerContent) {
-
-		guard bannerView == nil else {
-			return
-		}
-
-		bannerView = BannerView()
-		bannerView?.translatesAutoresizingMaskIntoConstraints = false
-		bannerView?.title = content.title
-		bannerView?.message = content.message
-		bannerView?.icon = content.icon
-		bannerView?.messageTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
-		}
-
-		bannerView?.primaryButtonTappedCommand = { [weak self] in
-			self?.hideNotificationBanner()
-		}
-		if let newBannerView = bannerView {
-
-			navigationController?.addBannerView(newBannerView)
-			UIAccessibility.post(notification: .screenChanged, argument: newBannerView)
-		}
-	}
-
-	func hideNotificationBanner() {
-
-		bannerView?.removeFromSuperview()
-		bannerView = nil
 	}
 }
