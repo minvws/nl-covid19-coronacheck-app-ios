@@ -13,6 +13,13 @@ import CoreData
 enum QRCodeValidityRegion: String, Codable {
 	case domestic
 	case europeanUnion
+
+	var localized: String {
+		switch self {
+			case .domestic: return .netherlands
+			case .europeanUnion: return .europeanUnion
+		}
+	}
 }
 
 enum QRCodeOriginType: String, Codable {
