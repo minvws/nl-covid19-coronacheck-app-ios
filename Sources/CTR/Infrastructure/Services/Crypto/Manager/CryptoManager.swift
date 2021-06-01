@@ -184,21 +184,21 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 
 		let proofAsn1QREncoded = message.data(using: .utf8)
-		if let result = MobilecoreVerifyQREncoded(proofAsn1QREncoded) {
-
-			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
-				self.logError("Error Proof: \(result.error)")
-				return (attributes: nil, errorMessage: result.error)
-			}
-
-			do {
-				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
-				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
-			} catch {
-				self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
-				return (attributes: nil, errorMessage: error.localizedDescription)
-			}
-		}
+//		if let result = MobilecoreVerifyQREncoded(proofAsn1QREncoded) {
+//
+//			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
+//				self.logError("Error Proof: \(result.error)")
+//				return (attributes: nil, errorMessage: result.error)
+//			}
+//
+//			do {
+//				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
+//				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
+//			} catch {
+//				self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
+//				return (attributes: nil, errorMessage: error.localizedDescription)
+//			}
+//		}
 		return (attributes: nil, errorMessage: "could not verify QR")
 	}
 	
