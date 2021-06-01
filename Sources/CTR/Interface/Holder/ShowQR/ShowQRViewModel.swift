@@ -143,12 +143,16 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		vaccination: EuCredentialAttributes.Vaccination) {
 
 		var dosage = ""
-		if vaccination.doseNumber > 0, vaccination.totalDose > 0 {
-			dosage = String(format: .holderVaccinationAboutOf, "\(vaccination.doseNumber)", "\(vaccination.totalDose)")
+		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
+			dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
 		}
 
+		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
+			vaccination.vaccineOrProphylaxis) ?? ""
 		let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
 			vaccination.medicalProduct) ?? ""
+		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
+			vaccination.marketingAuthorizationHolder) ?? ""
 
 		let body: String = String(
 			format: .holderShowQREuAboutVaccinationMessage,
@@ -157,6 +161,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt)),
 			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime)),
 			vaccineBrand,
+			vaccineType,
+			vaccineManufacturer,
 			dosage,
 			vaccination.dateOfVaccination,
 			vaccination.country,

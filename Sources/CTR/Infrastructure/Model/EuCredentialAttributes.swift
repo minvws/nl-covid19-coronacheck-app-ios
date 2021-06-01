@@ -50,12 +50,12 @@ struct EuCredentialAttributes: Codable {
 		let certificateIdentifier: String
 		let country: String
 		let diseaseAgentTargeted: String
-		let doseNumber: Int
+		let doseNumber: Int?
 		let dateOfVaccination: String
 		let issuer: String
 		let marketingAuthorizationHolder: String
 		let medicalProduct: String
-		let totalDose: Int
+		let totalDose: Int?
 		let vaccineOrProphylaxis: String
 
 		enum CodingKeys: String, CodingKey {
