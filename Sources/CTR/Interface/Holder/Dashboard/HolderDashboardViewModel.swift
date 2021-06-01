@@ -218,10 +218,10 @@ class HolderDashboardViewModel: Logging {
 		cards += state.myQRCards
 
 			// Map a `MyQRCard` to a `VC.Card`:
-			.map { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Card in
-				switch qrcardDataItem {
+			.compactMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Card? in
+				switch (state.qrCodeValidityRegion, qrcardDataItem) {
 
-					case .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState):
+					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
 								typeText: origin.type.localized,
@@ -253,7 +253,7 @@ class HolderDashboardViewModel: Logging {
 							}
 						)
 
-					case .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState):
+					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
 								typeText: origin.type.localized,
@@ -269,13 +269,8 @@ class HolderDashboardViewModel: Logging {
 							buttonEnabledEvaluator: evaluateEnabledState,
 							expiryCountdownEvaluator: nil
 						)
-				}
-			}
-			.filter { card in
-				switch (card, state.qrCodeValidityRegion) {
-					case (.europeanUnionQR, .europeanUnion): return true
-					case (.domesticQR, .domestic): return true
-					default: return false
+
+					default: return nil
 				}
 			}
 
