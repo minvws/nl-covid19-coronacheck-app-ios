@@ -11,7 +11,7 @@ import CoreData
 /// Currently used for the NL/EU toggle on the dashboard
 /// but could be expanded elsewhere
 enum QRCodeValidityRegion: String, Codable {
-	case netherlands
+	case domestic
 	case europeanUnion
 }
 
@@ -59,7 +59,7 @@ class HolderDashboardViewModel: Logging {
 	/// the notification center
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
-	@UserDefaults(key: "dashboardRegionToggleValue", defaultValue: QRCodeValidityRegion.netherlands)
+	@UserDefaults(key: "dashboardRegionToggleValue", defaultValue: QRCodeValidityRegion.domestic)
 	private var dashboardRegionToggleValue: QRCodeValidityRegion { // swiftlint:disable:this let_var_whitespace
 		didSet {
 			state.qrCodeValidityRegion = dashboardRegionToggleValue
@@ -111,7 +111,7 @@ class HolderDashboardViewModel: Logging {
 			myQRCards: [],
 			expiredGreenCards: [],
 			showCreateCard: true,
-			qrCodeValidityRegion: .netherlands
+			qrCodeValidityRegion: .domestic
 		)
 
 		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCardTypes: [String]) in
@@ -246,7 +246,7 @@ class HolderDashboardViewModel: Logging {
 			.filter { card in
 				switch (card, state.qrCodeValidityRegion) {
 					case (.europeanUnionQR, .europeanUnion): return true
-					case (.domesticQR, .netherlands): return true
+					case (.domesticQR, .domestic): return true
 					default: return false
 				}
 			}
@@ -256,7 +256,7 @@ class HolderDashboardViewModel: Logging {
 				buttonTitle: .changeRegionButton,
 				currentLocationTitle: {
 					switch state.qrCodeValidityRegion {
-						case .netherlands:
+						case .domestic:
 							return .changeRegionTitleNL
 						case .europeanUnion:
 							return .changeRegionTitleEU
