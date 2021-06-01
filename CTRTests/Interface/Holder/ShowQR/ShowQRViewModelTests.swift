@@ -316,6 +316,36 @@ class ShowQRViewModelTests: XCTestCase {
 			cryptoManager: cryptoManagerSpy,
 			configuration: configSpy
 		)
+		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(
+			credentialVersion: 1,
+			digitalCovidCertificate: EuCredentialAttributes.DigitalCovidCertificate(
+				dateOfBirth: "2021-06-01",
+				name: EuCredentialAttributes.Name(
+					firstName: "Corona",
+					standardisedFirstName: "CORONA",
+					givenName: "Check",
+					standardisedGivenName: "CHECK"
+				),
+				schemaVersion: "1.0.0",
+				vaccinations: [
+					EuCredentialAttributes.Vaccination(
+						certificateIdentifier: "test",
+						country: "NLS",
+						doseNumber: 2,
+						dateOfVaccination: "2021-06-01",
+						issuer: "Test",
+						marketingAuthorizationHolder: "Test",
+						medicalProduct: "Test",
+						totalDose: 2,
+						diseaseAgentTargeted: "test",
+						vaccineOrProphylaxis: "test"
+					)
+				]
+			),
+			expirationTime: Date().timeIntervalSince1970,
+			issuedAt: Date().timeIntervalSince1970 + 3600,
+			issuer: "NL"
+		)
 
 		// When
 		sut?.showMoreInformation()
