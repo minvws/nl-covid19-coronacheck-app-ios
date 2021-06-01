@@ -55,8 +55,9 @@
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
 @property (nonatomic) long credentialVersion;
-@property (nonatomic) long expirationTime;
+@property (nonatomic) NSString* _Nonnull issuer;
 @property (nonatomic) long issuedAt;
+@property (nonatomic) long expirationTime;
 @property (nonatomic) MobilecoreDCC* _Nullable dcc;
 @end
 

@@ -24,10 +24,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string></string>
+			<string>nl.rijksoverheid.ctr</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>coronacheck-dev</string>
+				<string>coronacheck</string>
 			</array>
 		</dict>
 	</array>
@@ -38,7 +38,6 @@
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>tel</string>
-		<string>coronacheck-dev</string>
 		<string>cydia</string>
 		<string>sileo</string>
 		<string>undecimus</string>
