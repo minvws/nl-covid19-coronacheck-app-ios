@@ -8,7 +8,7 @@
 import Foundation
 
 /// Protocol for app version information
-protocol AppVersionInformation {
+protocol RemoteInformation {
 
 	/// The minimum required version
 	var minimumVersion: String { get }
@@ -50,7 +50,7 @@ protocol AppVersionInformation {
 	var domesticValidityHours: Int? { get }
 }
 
-extension AppVersionInformation {
+extension RemoteInformation {
 
 	/// Is the app deactivated?
 	var isDeactivated: Bool {
@@ -59,7 +59,12 @@ extension AppVersionInformation {
 	}
 }
 
-struct RemoteConfiguration: AppVersionInformation, Codable {
+struct RemoteConfiguration: RemoteInformation, Codable {
+
+	struct Mapping: Codable {
+		let code: String
+		let name: String
+	}
 
 	/// The minimum required version
 	let minimumVersion: String
@@ -100,6 +105,33 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// What is the validity of a domestic  test / vaccination
 	let domesticValidityHours: Int?
 
+	var hpkCodes: [Mapping] = []
+
+	var euBrands: [Mapping] = []
+
+	var euManufacturers: [Mapping] = [
+		Mapping(code: "ORG-100001699", name: "AstraZeneca AB"),
+		Mapping(code: "ORG-100030215", name: "Biontech Manufacturing GmbH"),
+		Mapping(code: "ORG-100001417", name: "Janssen-Cilag International"),
+		Mapping(code: "ORG-100031184", name: "Moderna Biotech Spain S.L."),
+		Mapping(code: "ORG-100006270", name: "Curevac AG"),
+		Mapping(code: "ORG-100013793", name: "CanSino Biologics"),
+		Mapping(code: "ORG-100020693", name: "China Sinopharm International Corp. - Beijing location"),
+		Mapping(code: "ORG-100010771", name: "Sinopharm Weiqida Europe Pharmaceutical s.r.o. - Prague location"),
+		Mapping(code: "ORG-100024420", name: "Sinopharm Zhijun (Shenzhen) Pharmaceutical Co. Ltd. - Shenzhen location"),
+		Mapping(code: "ORG-100032020", name: "Novavax CZ AS"),
+		Mapping(code: "Gamaleya-Research-Institute", name: "Gamaleya Research Institute"),
+		Mapping(code: "Vector-Institute", name: "Vector Institute"),
+		Mapping(code: "Sinovac-Biotech", name: "Sinovac Biotech"),
+		Mapping(code: "Bharat-Biotech", name: "Bharat Biotech")
+	]
+
+	var euTypes: [Mapping] = [
+		Mapping(code: "1119349007", name: "SARS-CoV-2 mRNA vaccine"),
+		Mapping(code: "1119305005", name: "SARS-CoV-2 antigen vaccine"),
+		Mapping(code: "J07BX03", name: "covid-19 vaccines")
+	]
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -116,6 +148,10 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		case recoveryValidityHours = "recoveryValidity"
 		case testValidityHours = "testValidity"
 		case domesticValidityHours = "domesticValidity"
+		case hpkCodes = "hpkCodes"
+		case euBrands = "euBrands"
+//		case euManufacturers = "euManufacturers"
+//		case euTypes = "euTypes"
 	}
 
 	init(
@@ -165,5 +201,25 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 			testValidityHours: 40,
 			domesticValidityHours: 40
 		)
+	}
+
+	func getHpkMapping(_ code: String? ) -> String? {
+
+		return hpkCodes.first(where: { $0.code == code })?.name
+	}
+
+	func getBrandMapping(_ code: String? ) -> String? {
+
+		return euBrands.first(where: { $0.code == code })?.name
+	}
+
+	func getTypeMapping(_ code: String? ) -> String? {
+
+		return euTypes.first(where: { $0.code == code })?.name
+	}
+
+	func getManufacturerMapping(_ code: String? ) -> String? {
+
+		return euManufacturers.first(where: { $0.code == code })?.name
 	}
 }

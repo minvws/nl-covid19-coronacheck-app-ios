@@ -279,26 +279,26 @@ struct EuCredentialAttributes: Codable {
 
 	struct Vaccination: Codable {
 
-		let cerficateIdentifier: String
+		let certificateIdentifier: String
 		let country: String
 		let doseNumber: Int
 		let dateOfVaccination: String
 		let issuer: String
 		let marketingAuthorizationHolder: String
-		let vaccineMedicalProduct: String
+		let medicalProduct: String
 		let totalDose: Int
 		let diseaseAgentTargeted: String
 		let vaccineOrProphylaxis: String
 
 		enum CodingKeys: String, CodingKey {
 
-			case cerficateIdentifier = "ci"
+			case certificateIdentifier = "ci"
 			case country = "co"
 			case doseNumber = "dn"
 			case dateOfVaccination = "dt"
 			case issuer = "is"
 			case marketingAuthorizationHolder = "ma"
-			case vaccineMedicalProduct = "mp"
+			case medicalProduct = "mp"
 			case totalDose = "sd"
 			case diseaseAgentTargeted = "tg"
 			case vaccineOrProphylaxis = "vp"
@@ -306,7 +306,7 @@ struct EuCredentialAttributes: Codable {
 	}
 
 	let credentialVersion: Int
-	let digitialCovidCertificate: DigitalCovidCertificate
+	let digitalCovidCertificate: DigitalCovidCertificate
 	let expirationTime: TimeInterval
 	let issuedAt: TimeInterval
 	let issuer: String
@@ -314,7 +314,7 @@ struct EuCredentialAttributes: Codable {
 	enum CodingKeys: String, CodingKey {
 
 		case credentialVersion
-		case digitialCovidCertificate = "dcc"
+		case digitalCovidCertificate = "dcc"
 		case expirationTime
 		case issuedAt
 		case issuer

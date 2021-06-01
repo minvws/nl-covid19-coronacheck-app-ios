@@ -109,6 +109,11 @@ extension String {
 		return Localization.string(for: "holder.vaccination.about.body")
 	}
 
+	static var holderVaccinationAboutOf: String {
+
+		return Localization.string(for: "holder.vaccination.about.off")
+	}
+
 	static var holderVaccinationListWrong: String {
 
 		return Localization.string(for: "holder.vaccination.list.wrong")
