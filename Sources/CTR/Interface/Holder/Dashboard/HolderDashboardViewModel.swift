@@ -116,7 +116,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 		super.init()
 
-		datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCardTypes: [String]) in
+		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCardTypes: [String]) in
 			DispatchQueue.main.async {
 				self?.state.myQRCards = qrCardDataItems
 				self?.state.expiredGreenCards += expiredGreenCardTypes.map { ExpiredQR(type: $0) }
@@ -124,7 +124,9 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		}
 
 		// Update State from UserDefaults:
-		state.qrCodeValidityRegion = dashboardRegionToggleValue
+		self.state.qrCodeValidityRegion = dashboardRegionToggleValue
+
+		self.setupNotificationListeners()
 
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -132,6 +134,10 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 //			self.datasource.reload()
 //		}
 //		#endif
+	}
+
+	deinit {
+		NotificationCenter.default.removeObserver(self)
 	}
 
 	func viewWillAppear() {
@@ -265,50 +271,24 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	}
 }
 
-//	// MARK: - NSNotification
-//
-//	extension HolderDashboardViewModel {
-//
-//		fileprivate func setupListeners() {
-//
-//			NotificationCenter.default.addObserver(
-//				self,
-//				selector: #selector(receiveWillEnterForegroundNotification),
-//				name: UIApplication.willEnterForegroundNotification,
-//				object: nil
-//			)
-//			NotificationCenter.default.addObserver(
-//				self,
-//				selector: #selector(receiveDidBecomeActiveNotification),
-//				name: UIApplication.didBecomeActiveNotification,
-//				object: nil
-//			)
-//		}
-//
-//		@objc func receiveWillEnterForegroundNotification() {
-//
-//			// Check the Validity of the QR
-//			// checkQRValidity()
-//
-//			// Check if we are being recorded
-//			preventScreenCapture()
-//
-//	//		datasource.reload()
-//		}
-//
-//		@objc func receiveDidBecomeActiveNotification() {
-//
-//			// Check the Validity of the QR
-//			// checkQRValidity()
-//
-//			// Check if we are being recorded
-//			preventScreenCapture()
-//		}
-//	}
-//
-//	deinit {
-//		   NotificationCenter.default.removeObserver(self)
-//	   }
+// MARK: - NSNotification
+
+extension HolderDashboardViewModel {
+
+	fileprivate func setupNotificationListeners() {
+
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(receiveDidBecomeActiveNotification),
+			name: UIApplication.didBecomeActiveNotification,
+			object: nil
+		)
+	}
+
+	@objc func receiveDidBecomeActiveNotification() {
+		datasource.reload()
+	}
+}
 
 // MARK: - MyQRCard
 
