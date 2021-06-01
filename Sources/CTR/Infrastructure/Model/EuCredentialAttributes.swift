@@ -79,6 +79,8 @@ struct EuCredentialAttributes: Codable {
 		let country: String
 		let diseaseAgentTargeted: String
 		let issuer: String
+		let marketingAuthorizationHolder: String?
+		let name: String?
 		let sampleDate: String
 		let testResult: String
 		let testCenter: String
@@ -90,6 +92,8 @@ struct EuCredentialAttributes: Codable {
 			case country = "co"
 			case diseaseAgentTargeted = "tg"
 			case issuer = "is"
+			case marketingAuthorizationHolder = "ma"
+			case name = "nm"
 			case sampleDate = "sc"
 			case testResult = "tr"
 			case testCenter = "tc"

@@ -48,7 +48,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateStyle = .medium
+		dateFormatter.dateFormat = "d MMMM yyyy"
 		return dateFormatter
 	}()
 
@@ -133,6 +133,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 						euCredentialAttributes: euCredentialAttributes,
 						vaccination: vaccination
 					)
+				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
+					showMoreInformationVaccination(
+						euCredentialAttributes: euCredentialAttributes,
+						test: test
+					)
+				} else if let test = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+					// Todo, write more information for recovery.
 				}
 			}
 		}
@@ -142,7 +149,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		euCredentialAttributes: EuCredentialAttributes,
 		vaccination: EuCredentialAttributes.Vaccination) {
 
-		var dosage = ""
+		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
 			dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
 		}
@@ -154,25 +161,53 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? ""
 
+		let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
+			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+
+		let formattedVaccinationDate: String = Formatter().getDateFrom(dateString8601: vaccination.dateOfVaccination)
+			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
+
 		let body: String = String(
 			format: .holderShowQREuAboutVaccinationMessage,
-			"\(euCredentialAttributes.digitalCovidCertificate.name.givenName)  \(euCredentialAttributes.digitalCovidCertificate.name.familyName)",
-			euCredentialAttributes.digitalCovidCertificate.dateOfBirth,
-			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt)),
-			printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime)),
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			formattedBirthDate,
 			vaccineBrand,
 			vaccineType,
 			vaccineManufacturer,
-			dosage,
-			vaccination.dateOfVaccination,
+			dosage ?? " ",
+			formattedVaccinationDate,
 			vaccination.country,
-			vaccination.issuer,
 			vaccination.certificateIdentifier
 		)
-		// Change body on test / vaccination / recovery.
-
 		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+	}
 
+	private func showMoreInformationVaccination(
+		euCredentialAttributes: EuCredentialAttributes,
+		test: EuCredentialAttributes.TestEntry) {
+
+		logDebug("test: \(test)")
+
+		let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
+			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+
+		let formattedTestDate: String = Formatter().getDateFrom(dateString8601: test.sampleDate)
+			.map(printDateFormatter.string) ?? test.sampleDate
+
+		let body: String = String(
+			format: .holderShowQREuAboutTestMessage,
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			formattedBirthDate,
+			test.typeOfTest,
+			test.name ?? "",
+			formattedTestDate,
+			test.testResult,
+			test.testCenter,
+			test.marketingAuthorizationHolder ?? "",
+			test.country,
+			test.certificateIdentifier
+		)
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
 	}
 
 	private func setQRValid(_ data: Data) {

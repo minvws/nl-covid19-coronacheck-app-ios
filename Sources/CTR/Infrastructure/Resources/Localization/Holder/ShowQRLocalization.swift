@@ -48,4 +48,9 @@ extension String {
 
 		return Localization.string(for: "holder.showqr.eu.about.vaccination.message")
 	}
+
+	static var holderShowQREuAboutTestMessage: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.test.message")
+	}
 }
