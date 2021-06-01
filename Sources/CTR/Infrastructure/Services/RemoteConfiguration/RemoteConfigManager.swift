@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol RemoteConfigManaging {
+protocol RemoteConfigManaging: AnyObject {
 
 	/// Initialize
 	init()
@@ -118,7 +118,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	///   - remoteConfiguration: the remote configuration
 	///   - completion: completion handler
 	private func compare(
-		_ remoteConfiguration: AppVersionInformation,
+		_ remoteConfiguration: RemoteInformation,
 		completion: @escaping (LaunchState) -> Void) {
 
 		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)

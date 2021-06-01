@@ -201,8 +201,10 @@ class ListEventsViewModel: Logging {
 
 		var rows = [ListEventsViewController.Row]()
 
+		let filteredDataSource = dataSource.filter { $0.event.type == "vaccination" }
+
 		// Sort the vaccination events in ascending order
-		let sortedDataSource = dataSource.sorted { lhs, rhs in
+		let sortedDataSource = filteredDataSource.sorted { lhs, rhs in
 			if let lhsDate = lhs.event.vaccination?.getDate(with: dateFormatter),
 			   let rhsDate = rhs.event.vaccination?.getDate(with: dateFormatter) {
 				return lhsDate < rhsDate
@@ -218,11 +220,6 @@ class ListEventsViewModel: Logging {
 				.flatMap(Formatter().getDateFrom)
 				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 
-			let domesticIdentity = dataRow.identity
-				.mapIdentity(months: String.shortMonths)
-				.map({ $0.isEmpty ? "_" : $0 })
-				.joined(separator: " ")
-
 			rows.append(
 				ListEventsViewController.Row(
 					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
@@ -233,17 +230,30 @@ class ListEventsViewModel: Logging {
 					),
 					action: { [weak self] in
 
+						var vaccinName = ""
+						if let hpkCode = dataRow.event.vaccination?.hpkCode {
+							vaccinName = self?.remoteConfigManager.getConfiguration().getHpkMapping(hpkCode) ?? ""
+						} else if let brand = dataRow.event.vaccination?.brand {
+							vaccinName = self?.remoteConfigManager.getConfiguration().getBrandMapping(brand) ?? ""
+						}
+						var dosage = ""
+						if let doseNumber = dataRow.event.vaccination?.doseNumber,
+						   let totalDose = dataRow.event.vaccination?.totalDoses {
+							dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+						}
+
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: .holderVaccinationAboutTitle,
 								body: String(
 									format: .holderVaccinationAboutBody,
-									domesticIdentity,
 									dataRow.identity.fullName,
 									formattedBirthDate,
-									dataRow.event.vaccination?.brand ?? "-",
-									"\(index + 1)",
-									formattedShotDate
+									vaccinName,
+									dosage,
+									formattedShotDate,
+									dataRow.event.vaccination?.country ?? "",
+									dataRow.event.unique
 								)
 							)
 						)

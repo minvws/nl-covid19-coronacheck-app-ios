@@ -11,19 +11,18 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	var loggingCategory: String = "ShowQRViewModel"
 
-	weak var coordinator: HolderCoordinatorDelegate?
+	weak private var coordinator: HolderCoordinatorDelegate?
+	weak private var cryptoManager: CryptoManaging?
+	weak private var remoteConfigManager: RemoteConfigManaging?
+	weak private var configuration: ConfigurationGeneralProtocol?
 
-	weak var cryptoManager: CryptoManaging?
-
-	weak var configuration: ConfigurationGeneralProtocol?
-
-	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
 	var previousBrightness: CGFloat?
 
 	weak var validityTimer: Timer?
 
-	var greenCard: GreenCard
+	private var greenCard: GreenCard
 
 	@Bindable private(set) var title: String?
 
@@ -38,6 +37,21 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Show a warning for a screenshot
 	@Bindable private(set) var showScreenshotWarning: Bool = false
 
+	private lazy var dateFormatter: ISO8601DateFormatter = {
+		let dateFormatter = ISO8601DateFormatter()
+		dateFormatter.formatOptions = [.withFullDate]
+		return dateFormatter
+	}()
+
+	/// Formatter to print
+	private lazy var printDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateStyle = .medium
+		return dateFormatter
+	}()
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -48,12 +62,14 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
-		configuration: ConfigurationGeneralProtocol) {
+		configuration: ConfigurationGeneralProtocol,
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
 		self.configuration = configuration
+		self.remoteConfigManager = remoteConfigManager
 
 		// Start by showing nothing
 		self.showValidQR = false
@@ -108,11 +124,44 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
+			if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
 
-			let body: String = .holderShowQREuAboutMessage
-			// Change body on test / vaccination / recovery.
-			// Blocked by Go library for now, no EU read credentials
-			coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+				logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+
+				var dosage = ""
+				if let doseNumber = euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.doseNumber,
+				   let totalDose = euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.totalDose {
+					dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+				}
+
+				let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.vaccineOrProphylaxis) ?? ""
+
+				let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.medicalProduct) ?? ""
+
+				let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.marketingAuthorizationHolder) ?? ""
+
+				let body: String = String(
+					format: .holderShowQREuAboutMessage,
+					"\(euCredentialAttributes.digitalCovidCertificate.name.givenName), \(euCredentialAttributes.digitalCovidCertificate.name.firstName)",
+					euCredentialAttributes.digitalCovidCertificate.dateOfBirth,
+					printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt)),
+					printDateFormatter.string(from: Date(timeIntervalSince1970: euCredentialAttributes.expirationTime)),
+					vaccineType,
+					vaccineBrand,
+					vaccineManufacturer,
+					dosage,
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.dateOfVaccination ?? "",
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.country ?? "",
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.issuer ?? "",
+					euCredentialAttributes.digitalCovidCertificate.vaccinations.first?.certificateIdentifier ?? ""
+				)
+				// Change body on test / vaccination / recovery.
+				// Blocked by Go library for now, no EU read credentials
+				coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+			}
 		}
 	}
 
