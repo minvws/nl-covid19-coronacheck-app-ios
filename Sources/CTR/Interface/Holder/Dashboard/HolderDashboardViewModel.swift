@@ -15,7 +15,7 @@ enum QRCodeValidityRegion: String, Codable {
 	case europeanUnion
 }
 
-class HolderDashboardViewModel: PreventableScreenCapture, Logging {
+class HolderDashboardViewModel: Logging {
 
 	// MARK: - Public properties
 
@@ -113,8 +113,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			showCreateCard: true,
 			qrCodeValidityRegion: .netherlands
 		)
-
-		super.init()
 
 		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCardTypes: [String]) in
 			DispatchQueue.main.async {
