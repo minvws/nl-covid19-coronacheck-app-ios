@@ -39,7 +39,7 @@ class HolderDashboardViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = .holderDashboardTitle
 
-	@Bindable private(set) var cards = [HolderDashboardViewController.Cards]()
+	@Bindable private(set) var cards = [HolderDashboardViewController.Card]()
 
 	// MARK: - Private types
 
@@ -177,8 +177,8 @@ class HolderDashboardViewModel: Logging {
 	private static func assembleCards(
 		state: HolderDashboardViewModel.State,
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
-		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Cards] {
-		var cards = [HolderDashboardViewController.Cards]()
+		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Card] {
+		var cards = [HolderDashboardViewController.Card]()
 
 		cards += [.headerMessage(message: .holderDashboardIntro)]
 
@@ -204,12 +204,12 @@ class HolderDashboardViewModel: Logging {
 		cards += state.myQRCards
 
 			// Map a `MyQRCard` to a `VC.Card`:
-			.map { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Cards in
+			.map { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Card in
 				switch qrcardDataItem {
 
 					case .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState):
 						let rows = origins.map { origin in
-							HolderDashboardViewController.Cards.QRCardRow(
+							HolderDashboardViewController.Card.QRCardRow(
 								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
@@ -217,7 +217,7 @@ class HolderDashboardViewModel: Logging {
 							)
 						}
 
-						return HolderDashboardViewController.Cards.domesticQR(
+						return HolderDashboardViewController.Card.domesticQR(
 							rows: rows,
 							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 							buttonEnabledEvaluator: evaluateEnabledState,
@@ -241,7 +241,7 @@ class HolderDashboardViewModel: Logging {
 
 					case .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState):
 						let rows = origins.map { origin in
-							HolderDashboardViewController.Cards.QRCardRow(
+							HolderDashboardViewController.Card.QRCardRow(
 								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
@@ -249,7 +249,7 @@ class HolderDashboardViewModel: Logging {
 							)
 						}
 
-						return HolderDashboardViewController.Cards.europeanUnionQR(
+						return HolderDashboardViewController.Card.europeanUnionQR(
 							rows: rows,
 							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 							buttonEnabledEvaluator: evaluateEnabledState,

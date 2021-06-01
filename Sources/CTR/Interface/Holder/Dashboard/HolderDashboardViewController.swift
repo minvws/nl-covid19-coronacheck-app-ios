@@ -9,7 +9,7 @@ import UIKit
 
 class HolderDashboardViewController: BaseViewController {
 
-	enum Cards {
+	enum Card {
 		struct QRCardRow {
 			let typeText: String
 			let validityTextEvaluator: (Date) -> ValidityText
@@ -135,7 +135,7 @@ class HolderDashboardViewController: BaseViewController {
 							default: break
 						}
 
-						qrCard.originRows = rows.map { (qrCardRow: Cards.QRCardRow) in
+						qrCard.originRows = rows.map { (qrCardRow: Card.QRCardRow) in
 							QRCardView.OriginRow(type: qrCardRow.typeText, validityStringEvaluator: qrCardRow.validityTextEvaluator)
 						}
 
