@@ -105,9 +105,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// What is the validity of a domestic  test / vaccination
 	let domesticValidityHours: Int?
 
-	var hpkCodes: [Mapping] = []
+//	var hpkCodes: [Mapping] = []
 
-	var euBrands: [Mapping] = []
+//	var euBrands: [Mapping] = []
 
 	var euManufacturers: [Mapping] = [
 		Mapping(code: "ORG-100001699", name: "AstraZeneca AB"),
@@ -148,8 +148,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case recoveryValidityHours = "recoveryValidity"
 		case testValidityHours = "testValidity"
 		case domesticValidityHours = "domesticValidity"
-		case hpkCodes = "hpkCodes"
-		case euBrands = "euBrands"
+//		case hpkCodes = "hpkCodes"
+//		case euBrands = "euBrands"
 //		case euManufacturers = "euManufacturers"
 //		case euTypes = "euTypes"
 	}
@@ -205,12 +205,16 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	func getHpkMapping(_ code: String? ) -> String? {
 
-		return hpkCodes.first(where: { $0.code == code })?.name
+		// TODO: Update
+//		return hpkCodes.first(where: { $0.code == code })?.name
+		return nil
 	}
 
 	func getBrandMapping(_ code: String? ) -> String? {
 
-		return euBrands.first(where: { $0.code == code })?.name
+		// TODO: Update
+//		return euBrands.first(where: { $0.code == code })?.name
+		return nil
 	}
 
 	func getTypeMapping(_ code: String? ) -> String? {
