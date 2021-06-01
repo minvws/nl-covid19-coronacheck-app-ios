@@ -30,8 +30,8 @@ enum QRCodeOriginType: String, Codable {
 	var localized: String {
 		switch self {
 			case .recovery: return .qrTypeRecovery
-			case .vaccination: return .qrTypeNegativeTest
-			case .negativeTest: return .qrTypeVaccination
+			case .vaccination: return .qrTypeVaccination
+			case .negativeTest: return .qrTypeNegativeTest
 		}
 	}
 }
