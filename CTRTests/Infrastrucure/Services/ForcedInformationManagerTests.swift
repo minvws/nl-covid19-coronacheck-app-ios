@@ -55,9 +55,9 @@ class ForcedInformationManagerTests: XCTestCase {
 		// Given
 		let expectedPage = ForcedInformationPage(
 			image: .onboardingSafely,
-			tagline: .forcedInformationUpdatePageTagline,
-			title: .forcedInformationUpdatePageTitle,
-			content: .forcedInformationUpdatePageContent
+			tagline: .holderUpdatePageTagline,
+			title: .holderUpdatePageTitle,
+			content: .holderUpdatePageContent
 		)
 
 		// When
