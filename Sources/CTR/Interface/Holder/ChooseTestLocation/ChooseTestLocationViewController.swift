@@ -7,19 +7,24 @@
 
 import UIKit
 
-class ChooseQRCodeTypeViewController: BaseViewController {
+class ChooseTestLocationViewController: BaseViewController {
 
 	struct ButtonModel {
 		let title: String
-		let subtitle: String
+		let subtitle: String?
 		let action: () -> Void
 	}
 
-	private let viewModel: ChooseQRCodeTypeViewModel
+	struct BottomButtonModel {
+		let title: String
+		let action: () -> Void
+	}
+
+	private let viewModel: ChooseTestLocationViewModel
 
 	let sceneView = ChooseQRCodeTypeView()
 
-	init(viewModel: ChooseQRCodeTypeViewModel) {
+	init(viewModel: ChooseTestLocationViewModel) {
 
 		self.viewModel = viewModel
 
@@ -66,35 +71,40 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 
 			// Add new buttons:
 			buttons
-				.map { buttonModel -> DisclosureSubTitleButton in
-					DisclosureSubTitleButton.makeButton(
-						title: buttonModel.title,
-						subTitle: buttonModel.subtitle,
-						command: buttonModel.action
-					)
+				.map { buttonModel -> UIView in
+					if let subTitle = buttonModel.subtitle {
+
+						return DisclosureSubTitleButton.makeButton(
+							title: buttonModel.title,
+							subTitle: subTitle,
+							command: buttonModel.action
+						)
+					} else {
+						return DisclosureButton.makeButton(
+							title: buttonModel.title,
+							command: buttonModel.action
+						)
+					}
 				}
 				.forEach(self.sceneView.buttonsStackView.addArrangedSubview)
 		}
 	}
 }
 
-extension DisclosureSubTitleButton {
+extension DisclosureButton {
 
 	/// Create a disclosure button with subtitle
 	/// - Parameters:
 	///   - title: the title of the button
-	///   - subTitle: the sub title of the button
 	///   - command: the command to execute when tapped
 	/// - Returns: A disclosure button
 	static func makeButton(
 		title: String,
-		subTitle: String,
-		command: (() -> Void)? ) -> DisclosureSubTitleButton {
+		command: (() -> Void)? ) -> DisclosureButton {
 
-		let button = DisclosureSubTitleButton()
+		let button = DisclosureButton()
 		button.isUserInteractionEnabled = true
 		button.title = title
-		button.subtitle = subTitle
 		button.primaryButtonTappedCommand = command
 		return button
 	}

@@ -338,7 +338,16 @@ Identificatiecode: e31e1bb1134bbbbaa";
 
 "holder.testresults.wrong.body" = "<p>Kloppen jouw gegevens niet met je identiteitsbewijs? Neem contact op met je testlocatie om je  gegevens te laten aanpassen. </p>";
 
-"holder.testresults.about.body" = "<p><b>Gegevens voor Nederland</b></p><p>Voor een Nederlandse QR-code worden er minimale gegevens opgehaald: je vaccinatiedatum en enkele gegevens van jou. Jouw gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p><b>Gegevens voor Europa</b></p><p>Voor een Europese QR-code zijn meer gegevens nodig, namelijk:</p><p>Naam:  <b>%@</b><br>Geboortedatum:  <b>%@</b><br>Type test:  <b>%@</b><br>Testdatum %@:  <b>%@</b><br></p>";
 "holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
 "holder.event.element.subtitle.test3" = "**** Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
 
+"holder.location.title" = "Waar ben je getest?";
+"holder.location.message" = "Geef aan of je bij de GGD of bij een andere testlocatie getest bent.";
+"holder.location.ggd.title" = "GGD";
+"holder.location.ggd.subtitle" = "Login met je DigiD";
+"holder.location.other.title" = "Andere testlocatie";
+"holder.location.notest" = "Ik ben nog niet getest";
+
+"holder.notest.title" = "Ik ben nog niet getest";
+"holder.notest.body" = "<p>Voor een QR-code moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot 40 uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen 40 uur gecheckt is bij de ingang.</p>";
+"holder.notest.action.title" = "Maak een afspraak";

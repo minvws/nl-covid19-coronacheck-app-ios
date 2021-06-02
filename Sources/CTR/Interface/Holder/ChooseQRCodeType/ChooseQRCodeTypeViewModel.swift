@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -12,16 +11,12 @@ class ChooseQRCodeTypeViewModel: Logging {
 
 	// MARK: - Bindable Strings
 
-	/// The navbar title
 	@Bindable private(set) var title: String = .holderChooseQRCodeTypeTitle
-
-	/// The description label underneath the navbar title
 	@Bindable private(set) var message: String
-	private weak var coordinator: HolderCoordinatorDelegate?
-
 	@Bindable private(set) var buttonModels: [ChooseQRCodeTypeViewController.ButtonModel] = []
 
 	// MARK: - Private State:
+	private weak var coordinator: HolderCoordinatorDelegate?
 
 	// MARK: - Initializer
 
@@ -38,7 +33,7 @@ class ChooseQRCodeTypeViewModel: Logging {
 				title: .holderChooseQRCodeTypeOptionNegativeTestTitle,
 				subtitle: .holderChooseQRCodeTypeOptionNegativeTestSubtitle) { [weak self] in
 
-				self?.coordinator?.userWishesToCreateANegativeTestQR()
+				self?.coordinator?.userWishesToChooseLocation()
 			},
 			.init(
 				title: .holderChooseQRCodeTypeOptionVaccineTitle,

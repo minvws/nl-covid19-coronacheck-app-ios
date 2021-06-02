@@ -39,6 +39,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateANegativeTestQR()
 
+	func userWishesToChooseLocation()
+
 	func userWishesToCreateAVaccinationQR()
 
 	func userDidScanRequestToken(requestToken: RequestToken)
@@ -267,6 +269,16 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
+	private func navigateToChooseTestLocation() {
+
+		let destination = ChooseTestLocationViewController(
+			viewModel: ChooseTestLocationViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
 	/// Navigate to About test Result Scene
 	func navigateToAboutTestResult() {
 
@@ -330,6 +342,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToCreateANegativeTestQR() {
 		navigateToTokenEntry()
+	}
+
+	func userWishesToChooseLocation() {
+		navigateToChooseTestLocation()
 	}
 
 	func userWishesToCreateAVaccinationQR() {
