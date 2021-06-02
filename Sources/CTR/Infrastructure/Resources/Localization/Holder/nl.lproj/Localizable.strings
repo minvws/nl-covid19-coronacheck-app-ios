@@ -290,7 +290,7 @@
 "holder.vaccination.start.action" = "Login met DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
-"holder.test.list.title" = "Jouw opgehaalde test";
+"holder.test.list.title" = "Testuitslag ophalen";
 "holder.vaccination.list.message" = "Je kan een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
 "holder.vaccination.list.action" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
