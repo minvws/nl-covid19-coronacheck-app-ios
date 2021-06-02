@@ -44,6 +44,11 @@ extension String {
 		return Localization.string(for: "holder.vaccination.list.title")
 	}
 
+	static var holderTestListTitle: String {
+
+		return Localization.string(for: "holder.test.list.title")
+	}
+
 	static var holderVaccinationListMessage: String {
 
 		return Localization.string(for: "holder.vaccination.list.message")

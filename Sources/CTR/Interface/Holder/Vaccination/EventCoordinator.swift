@@ -108,6 +108,11 @@ class EventCoordinator: Coordinator, Logging {
 		navigateToListEvents([], testEvents: testEvents, sourceMode: .negativeTest)
 	}
 
+	func startWithTVS(mode: LoginTVSMode) {
+		
+		navigateToLogin(mode: mode)
+	}
+
 	// MARK: - Universal Link handling
 
 	func consume(universalLink: UniversalLink) -> Bool {
@@ -116,11 +121,12 @@ class EventCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
-	private func navigateToLogin() {
+	private func navigateToLogin(mode: LoginTVSMode = .vaccination) {
 
 		let viewController = LoginTVSViewController(
 			viewModel: LoginTVSViewModel(
-				coordinator: self
+				coordinator: self,
+				mode: mode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
