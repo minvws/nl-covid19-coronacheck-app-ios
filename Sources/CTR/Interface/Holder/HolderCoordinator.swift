@@ -33,7 +33,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	func presentInformationPage(title: String, body: String)
 
-	func userWishesToMakeQRFromNegativeTest()
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
 
 	func userWishesToCreateAQR()
 
@@ -236,8 +236,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to choose provider
 	func navigateToAboutMakingAQR() {
 
-//		userWishesToMakeQRFromNegativeTest()
-
 		let destination = AboutMakingAQRViewController(
 			viewModel: AboutMakingAQRViewModel(coordinator: self)
 		)
@@ -314,10 +312,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		viewController.modalPresentationStyle = .custom
 		viewController.modalTransitionStyle = .coverVertical
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(viewController, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
+			.present(viewController, animated: true, completion: nil)
 	}
 
-	func userWishesToMakeQRFromNegativeTest() {
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -325,7 +324,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents(testEvents: [])
+			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
 		}
 	}
 

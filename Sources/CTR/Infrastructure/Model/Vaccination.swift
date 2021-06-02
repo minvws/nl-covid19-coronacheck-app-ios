@@ -201,7 +201,7 @@ struct Vaccination {
 
 		var fullName: String {
 
-			"\(lastName), \(firstName) \(infix)".trimmingCharacters(in: .whitespaces)
+			"\(infix) \(lastName), \(firstName)".trimmingCharacters(in: .whitespaces)
 		}
 	}
 

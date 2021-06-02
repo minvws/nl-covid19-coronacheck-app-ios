@@ -81,8 +81,8 @@ struct TrustConfiguration {
 		return Data(TrustConfiguration.sdNPrivateRootString.utf8)
 	}
 
-	static var dstRootISRGX1: Data {
-		return Data(TrustConfiguration.dstRootISRGX1String.utf8)
+	static var rootISRGX1: Data {
+		return Data(TrustConfiguration.rootISRGX1String.utf8)
 	}
 
 	static let sdNRootCAG3String = """
@@ -190,7 +190,7 @@ ljr/Q8Pw+OfUZTzKg4PVDQVfFqKtyosv
 -----END CERTIFICATE-----
 """
 
-	static let dstRootISRGX1String = """
+	static let rootISRGX1String = """
 -----BEGIN CERTIFICATE-----
 MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
 TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh

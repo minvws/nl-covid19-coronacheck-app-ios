@@ -107,6 +107,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var hpkCodes: [Mapping]? = []
 
+	var nlTestTypes: [Mapping]? = []
+
 	var euBrands: [Mapping]? = []
 
 	var euManufacturers: [Mapping]? = [
@@ -154,6 +156,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case domesticValidityHours = "domesticValidity"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
+		// case nlTestTypes = "nlTestTypes"
 //		case euManufacturers = "euManufacturers"
 //		case euTypes = "euTypes"
 //		case euTestTypes = "euTestTypes"
@@ -217,6 +220,11 @@ extension RemoteConfiguration {
 	func getHpkMapping(_ code: String? ) -> String? {
 
 		return hpkCodes?.first(where: { $0.code == code })?.name
+	}
+
+	func getNlTestType(_ code: String? ) -> String? {
+
+		return nlTestTypes?.first(where: { $0.code == code })?.name
 	}
 
 	func getBrandMapping(_ code: String? ) -> String? {
