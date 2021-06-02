@@ -80,25 +80,19 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.publicKeysUrl,
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-
-		func open(result: Result<ArrayEnvelope<IssuerPublicKey>, NetworkError>) {
-			completion(result.map { $0.items })
-		}
-
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodeSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void) {
 		let urlRequest = constructRequest(
 			url: networkConfiguration.remoteConfigurationUrl,
 			method: .GET
@@ -379,8 +373,9 @@ class NetworkManager: NetworkManaging, Logging {
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
-		completion: @escaping (Result<Object, NetworkError>) -> Void) {
-		data(request: request, ignore400: ignore400) { result in
+		completion: @escaping (Result<(Object, Data), NetworkError>) -> Void) {
+		// Fetch data
+		data(request: request, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
 
 			/// Decode to SignedResult
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
@@ -395,11 +390,13 @@ class NetworkManager: NetworkManaging, Logging {
 							if valid {
 								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
-									switch decodedResult {
-										case let .success(object):
-											completion(.success(object))
-										case let .failure(responseError):
+									switch (decodedResult, result.data()) {
+										case (.success(let object), let rawData?):
+											completion(.success((object, rawData)))
+										case (.failure(let responseError), _):
 											completion(.failure(responseError.asNetworkError))
+										case (.success, .none):
+											completion(.failure(NetworkResponseHandleError.unexpectedCondition.asNetworkError))
 									}
 								}
 							} else {
@@ -412,6 +409,25 @@ class NetworkManager: NetworkManaging, Logging {
 					DispatchQueue.main.async {
 						completion(.failure(networkError))
 					}
+			}
+		}
+	}
+	
+	/// Decode a signed response into JSON
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler
+	private func decodeSignedJSONData<Object: Decodable>(
+		request: Result<URLRequest, NetworkError>,
+		ignore400: Bool = false,
+		completion: @escaping (Result<Object, NetworkError>) -> Void) {
+		
+		decodeSignedJSONData(request: request, ignore400: ignore400) { (result: Result<(Object, Data), NetworkError>) in
+			switch result {
+				case .success((let object, _)):
+					completion(.success(object))
+				case .failure(let error):
+					completion(.failure(error))
 			}
 		}
 	}
@@ -630,4 +646,16 @@ class NetworkManager: NetworkManaging, Logging {
 		decoder.source = .api
 		return decoder
 	}()
+}
+
+private extension Result where Success == (URLResponse, Data) {
+	
+	func data() -> Data? {
+		switch self {
+			case .success((_, let data)):
+				return data
+			default:
+				return nil
+		}
+	}
 }

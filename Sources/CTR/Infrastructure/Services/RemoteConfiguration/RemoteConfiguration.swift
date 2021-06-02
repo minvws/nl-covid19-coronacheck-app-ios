@@ -111,28 +111,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var euBrands: [Mapping]? = []
 
-	var euManufacturers: [Mapping]? = [
-		Mapping(code: "ORG-100001699", name: "AstraZeneca AB"),
-		Mapping(code: "ORG-100030215", name: "Biontech Manufacturing GmbH"),
-		Mapping(code: "ORG-100001417", name: "Janssen-Cilag International"),
-		Mapping(code: "ORG-100031184", name: "Moderna Biotech Spain S.L."),
-		Mapping(code: "ORG-100006270", name: "Curevac AG"),
-		Mapping(code: "ORG-100013793", name: "CanSino Biologics"),
-		Mapping(code: "ORG-100020693", name: "China Sinopharm International Corp. - Beijing location"),
-		Mapping(code: "ORG-100010771", name: "Sinopharm Weiqida Europe Pharmaceutical s.r.o. - Prague location"),
-		Mapping(code: "ORG-100024420", name: "Sinopharm Zhijun (Shenzhen) Pharmaceutical Co. Ltd. - Shenzhen location"),
-		Mapping(code: "ORG-100032020", name: "Novavax CZ AS"),
-		Mapping(code: "Gamaleya-Research-Institute", name: "Gamaleya Research Institute"),
-		Mapping(code: "Vector-Institute", name: "Vector Institute"),
-		Mapping(code: "Sinovac-Biotech", name: "Sinovac Biotech"),
-		Mapping(code: "Bharat-Biotech", name: "Bharat Biotech")
-	]
+	var euManufacturers: [Mapping]?
 
-	var euTypes: [Mapping]? = [
-		Mapping(code: "1119349007", name: "SARS-CoV-2 mRNA vaccine"),
-		Mapping(code: "1119305005", name: "SARS-CoV-2 antigen vaccine"),
-		Mapping(code: "J07BX03", name: "covid-19 vaccines")
-	]
+	var euVaccinationTypes: [Mapping]?
 
 	var euTestTypes: [Mapping]? = []
 
@@ -156,11 +137,11 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case domesticValidityHours = "domesticValidity"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
-		// case nlTestTypes = "nlTestTypes"
-//		case euManufacturers = "euManufacturers"
-//		case euTypes = "euTypes"
-//		case euTestTypes = "euTestTypes"
-//		case euTestManufacturers = "euTestManufacturers"
+		case nlTestTypes = "nlTestTypes"
+		case euManufacturers = "euManufacturers"
+		case euVaccinationTypes = "euVaccinations"
+		case euTestTypes = "euTestTypes"
+		case euTestManufacturers = "euTestManufacturers"
 	}
 
 	init(
@@ -234,7 +215,7 @@ extension RemoteConfiguration {
 
 	func getTypeMapping(_ code: String? ) -> String? {
 
-		return euTypes?.first(where: { $0.code == code })?.name
+		return euVaccinationTypes?.first(where: { $0.code == code })?.name
 	}
 
 	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {

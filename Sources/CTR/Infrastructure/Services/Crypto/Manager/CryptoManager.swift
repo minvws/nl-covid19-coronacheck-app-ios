@@ -52,11 +52,16 @@ class CryptoManager: CryptoManaging, Logging {
 	@Keychain(name: "keyData", service: Constants.keychainService, clearOnReinstall: true)
 	private var keyData: KeyData = .empty
 	
+	private let cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
+	
 	/// Initializer
 	required init() {
 		
 		// Public Key
 		loadPublicKeys()
+		
+		// Initialize verifier
+		cryptoVerifierUtility.initialize()
 		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = MobilecoreGenerateHolderSk(),
@@ -93,14 +98,15 @@ class CryptoManager: CryptoManaging, Logging {
 		return cryptoData.stoken
 	}
 	
-	/// Set the issuer public keys
+	/// Set the issuer domestic public keys
 	/// - Parameter keys: the keys
-	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) -> Bool {
+	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool {
 		
-		let keysAsString = generateString(object: keys)
+		let domesticKeys = keys.clKeys
+		let keysAsString = generateString(object: domesticKeys)
 		let keysAsData = Data(keysAsString.bytes)
 		keyData.issuerPublicKeys = keysAsData
-		logInfo("Stored \(keys.count) issuer public keys in the keychain")
+		logInfo("Stored \(domesticKeys.count) issuer domestic public keys in the keychain")
 		return loadPublicKeys()
 	}
 	
@@ -184,6 +190,7 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 
 		let proofAsn1QREncoded = message.data(using: .utf8)
+
 //		if let result = MobilecoreVerifyQREncoded(proofAsn1QREncoded) {
 //
 //			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
