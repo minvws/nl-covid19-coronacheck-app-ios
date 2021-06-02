@@ -142,9 +142,9 @@
 "holder.onboarding.message.privacy" = "Your QR code only states when you tested negative (no coronavirus), the time of testing, and the minimum amount of identifying data: your first name initial, your last name initial, your day of birth, and your month of birth. We verify this information to make sure the test result is yours.";
 
 /* MARK: - Update Page Forced Information */
-"forcedinformation.updatepage.title" = "Vaccinatiebewijs";
-"forcedinformation.updatepage.tagline" = "Nieuw in de app";
-"forcedinformation.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
+"holder.updatepage.title" = "Vaccinatiebewijs";
+"holder.updatepage.tagline" = "Nieuw in de app";
+"holder.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";

@@ -63,14 +63,6 @@ class VerifierCoordinator: SharedCoordinator {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
-		} else if forcedInformationManager.needsUpdating {
-			// Show Forced Information
-			let coordinator = ForcedInformationCoordinator(
-				navigationController: navigationController,
-				forcedInformationManager: forcedInformationManager,
-				delegate: self
-			)
-			startChildCoordinator(coordinator)
 
 		} else {
 			
