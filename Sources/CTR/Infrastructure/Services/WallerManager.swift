@@ -44,7 +44,7 @@ protocol WalletManaging {
 
 	func listGreenCards() -> [GreenCard]
 
-	func removeExpiredGreenCards() -> [String]
+	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -178,9 +178,8 @@ class WalletManager: WalletManaging, Logging {
 
 	/// Remove expired GreenCards that contain no more valid origins
 	/// returns: an array of `Greencard.type` Strings. One for each GreenCard that was deleted.
-	func removeExpiredGreenCards() -> [String] {
-
-		var deletedGreenCardTypes: [String] = []
+	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
+		var deletedGreenCardTypes: [(greencardType: String, originType: String)] = []
 
 		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
@@ -190,16 +189,22 @@ class WalletManager: WalletManaging, Logging {
 				if let greenCards = wallet.greenCards {
 					for case let greenCard as GreenCard in greenCards.allObjects {
 
-						// Does the GreenCard have any valid Origins remaining?
-						let validOrFutureOrigins = greenCard.origins?
-							.compactMap { $0 as? Origin }
-							.contains(where: { (origin: Origin) in
-								(origin.expirationTime ?? .distantPast) > Date()
-							}) ?? false
+						guard let origins = greenCard.origins?.compactMap({ $0 as? Origin }) else {
+							context.delete(greenCard)
+							break
+						}
 
-						if !validOrFutureOrigins {
-							if let type = greenCard.type {
-								deletedGreenCardTypes += [type]
+						// Does the GreenCard have any valid Origins remaining?
+						let hasValidOrFutureOrigins = origins
+							.contains(where: { ($0.expirationTime ?? .distantPast) > Date() })
+
+						if hasValidOrFutureOrigins {
+							break
+						} else {
+							let lastExpiredOrigin = origins.sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) }).last
+
+							if let greencardType = greenCard.type, let originType = lastExpiredOrigin?.type {
+								deletedGreenCardTypes += [(greencardType: greencardType, originType: originType)]
 							}
 							context.delete(greenCard)
 						}

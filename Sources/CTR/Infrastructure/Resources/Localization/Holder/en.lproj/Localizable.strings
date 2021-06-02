@@ -161,7 +161,7 @@
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
-"holder.dashboard.qr.expired" = "Your QR code has expired.\nGet tested again.";
+"holder.dashboard.qr.expired" = "The %@ QR code of your %@ is expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minute";

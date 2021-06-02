@@ -182,7 +182,7 @@
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
+"holder.dashboard.qr.expired" = "De %@ QR-code van je %@ is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";
@@ -192,13 +192,15 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "Wordt automatisch geldig over ";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
 "holder.dashboard.qr.type.recovery" = "Herstelverklaring";
-"holder.dashboard.qr.type.negativeTest" = "Testbewijs";
+"holder.dashboard.qr.type.test" = "Testbewijs";
 "holder.dashboard.qr.type.vaccination" = "Vaccinatiebewijs";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis buiten Nederland";
 "holder.dashboard.changeregion.button" = "Aanpassen";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt alleen een Europese QR-code.";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";

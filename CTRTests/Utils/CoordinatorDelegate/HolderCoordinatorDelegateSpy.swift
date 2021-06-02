@@ -127,6 +127,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		}
 	}
 
+	var invokedUserWishesMoreInfoAboutUnavailableQR = false
+	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
+	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)?
+	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)]()
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+		invokedUserWishesMoreInfoAboutUnavailableQR = true
+		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
+		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion, availableRegion)
+		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
