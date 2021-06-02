@@ -81,5 +81,3 @@ extension Vaccination.AccessToken: Envelopable { static let envelopeName = "toke
 extension Vaccination.EventProvider: Envelopable { static let envelopeName = "event_providers" }
 
 extension TestProvider: Envelopable { static let envelopeName = "corona_test_providers" }
-
-extension IssuerPublicKey: Envelopable { static let envelopeName = "cl_keys" }

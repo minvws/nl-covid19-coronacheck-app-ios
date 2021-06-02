@@ -15,37 +15,25 @@ final class FileStorage: Logging {
 	init(fileManager: FileManager = FileManager.default) {
 		self.fileManager = fileManager
 	}
-	
+
+	/// Get url to documents directory
 	var documentsURL: URL? {
 		return fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
 	}
-	
-	func store<T>(_ object: T, as fileName: String) where T: Encodable {
+
+	/// Store data in documents directory
+	/// - Parameters:
+	///   - data: Store data
+	///   - fileName: Name of file
+	/// - Throws
+	func store(_ data: Data, as fileName: String) throws {
 		guard let url = documentsURL else {
 			logError("Failed to load documents directory")
 			return
 		}
 		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
 		
-		do {
-			try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
-		} catch {
-			logError("Failed to create directory")
-			return
-		}
-		
-		let data: Data
-		do {
-			data = try JSONEncoder().encode(object)
-		} catch {
-			logError("Failed to encode \(fileName)")
-			return
-		}
-		
-		do {
-			try data.write(to: fileUrl)
-		} catch {
-			logError("Failed to write to \(fileName)")
-		}
+		try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
+		try data.write(to: fileUrl)
 	}
 }

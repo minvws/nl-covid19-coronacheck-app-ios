@@ -12,6 +12,7 @@ enum NetworkResponseHandleError: Error {
 	case invalidSignature
 	case cannotDeserialize
 	case invalidPublicKeys
+	case unexpectedCondition
 }
 
 enum NetworkError: Error {
@@ -72,11 +73,11 @@ protocol NetworkManaging {
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void)
+	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void)
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void)
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void)
 	
 	/// - Parameters:
 	///   - dictionary: dictionary

@@ -11,6 +11,7 @@ import Foundation
 final class Services {
 	
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
+	private static var cryptoVerifierUtilityType: CryptoVerifierUtility.Type = CryptoVerifierUtility.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
@@ -93,6 +94,8 @@ final class Services {
 
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
 
+	static private(set) var cryptoVerifierUtility: CryptoVerifierUtility = cryptoVerifierUtilityType.init()
+	
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
