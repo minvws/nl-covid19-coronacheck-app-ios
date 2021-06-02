@@ -336,8 +336,8 @@ extension HolderDashboardViewModel {
 			var localizedTypeName: String {
 				switch type {
 					case "recovery": return .qrTypeRecovery
-					case "vaccination": return .qrTypeNegativeTest
-					case "negativeTest": return .qrTypeVaccination
+					case "vaccination": return .qrTypeVaccination
+					case "test": return .qrTypeNegativeTest
 					default: return type
 				}
 			}
@@ -347,7 +347,7 @@ extension HolderDashboardViewModel {
 				switch type {
 					case "vaccination": return 0
 					case "recovery": return 1
-					case "negativeTest": return 2
+					case "test": return 2
 					default: return .max
 				}
 			}
@@ -424,7 +424,7 @@ extension HolderDashboardViewModel {
 		/// (Region + Origin) -> DateFormatter
 		private func localizedDateExplanationDateFormatter(forOrigin origin: Origin) -> DateFormatter {
 			switch (self, origin.type) {
-				case (.netherlands, "negativeTest"):
+				case (.netherlands, "test"):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
 
 				case (.netherlands, _):
@@ -436,7 +436,7 @@ extension HolderDashboardViewModel {
 				case (.europeanUnion, "recovery"):
 					return HolderDashboardViewModel.dayAndMonthFormatter
 
-				case (.europeanUnion, "negativeTest"):
+				case (.europeanUnion, "test"):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
 
 				default:
@@ -685,7 +685,7 @@ private func injectSampleData(dataStoreManager: DataStoreManaging) {
 				greenCard: domesticGreenCard,
 				managedContext: context)
 
-		create( type: .negativeTest,
+		create( type: .test,
 				eventDate: Date().addingTimeInterval(14 * days * ago),
 				expirationTime: Date().addingTimeInterval((20 * seconds * fromNow)),
 				validFromDate: Date().addingTimeInterval(fromNow),

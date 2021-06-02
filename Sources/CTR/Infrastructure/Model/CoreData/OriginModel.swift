@@ -12,7 +12,7 @@ enum OriginType: String {
 
 	case vaccination
 	case recovery
-	case negativeTest
+	case test
 }
 
 class OriginModel {
