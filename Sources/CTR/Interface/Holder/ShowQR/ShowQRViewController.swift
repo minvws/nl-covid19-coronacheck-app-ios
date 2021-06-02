@@ -63,7 +63,7 @@ class ShowQRViewController: BaseViewController {
 		viewModel.$qrMessage.binding = { [weak self] in
 
 			if let value = $0 {
-				let image = value.generateQRCode()
+				let image = value.data.generateQRCode(correctionLevel: value.correctionLevel)
 				self?.sceneView.qrImage = image
 			} else {
 				self?.sceneView.qrImage = nil
