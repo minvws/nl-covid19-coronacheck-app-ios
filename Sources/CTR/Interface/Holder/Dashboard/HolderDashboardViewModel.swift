@@ -14,10 +14,17 @@ enum QRCodeValidityRegion: String, Codable {
 	case domestic
 	case europeanUnion
 
-	var localized: String {
+	var localizedNoun: String {
 		switch self {
 			case .domestic: return .netherlands
 			case .europeanUnion: return .europeanUnion
+		}
+	}
+
+	var localizedAdjective: String {
+		switch self {
+			case .domestic: return .dutch
+			case .europeanUnion: return .european
 		}
 	}
 
@@ -202,7 +209,7 @@ class HolderDashboardViewModel: Logging {
 			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }
 
 			let message = String.holderDashboardQRExpired(
-				localizedRegion: expiredQR.region.localized,
+				localizedRegion: expiredQR.region.localizedAdjective,
 				localizedOriginType: expiredQR.type.localized
 			)
 

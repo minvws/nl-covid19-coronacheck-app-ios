@@ -80,6 +80,8 @@
 "general.ok" = "Ok";
 "general.europeanUnion" = "Europeese Unie";
 "general.netherlands" = "Nederland";
+"general.dutch" = "Nederlandse";
+"general.european" = "Europese";
 "general.error.title" = "Sorry, er ging iets mis";
 "general.error.technical.text" = "Dat komt door een technische fout.";
 "general.error.technical.custom" = "Dat komt door een technische fout (%@)";
@@ -191,9 +193,9 @@
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig tot en met ";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "Wordt automatisch geldig over ";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
-"holder.dashboard.qr.type.recovery" = "Herstelverklaring";
-"holder.dashboard.qr.type.test" = "Testbewijs";
-"holder.dashboard.qr.type.vaccination" = "Vaccinatiebewijs";
+"holder.dashboard.qr.type.recovery" = "herstelverklaring";
+"holder.dashboard.qr.type.test" = "testbewijs";
+"holder.dashboard.qr.type.vaccination" = "vaccinatiebewijs";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
