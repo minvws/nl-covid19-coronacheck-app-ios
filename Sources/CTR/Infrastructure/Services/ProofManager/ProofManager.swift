@@ -16,6 +16,7 @@ class ProofManager: ProofManaging, Logging {
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 	var walletManager: WalletManaging = Services.walletManager
+	var cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
 
 	internal var testProviders = [TestProvider]()
 	
@@ -99,12 +100,13 @@ class ProofManager: ProofManaging, Logging {
 		
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 			
-			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
+			// Response is of type (Result<(IssuerPublicKeys, Data), NetworkError>)
 			switch resultwrapper {
-				case let .success(keys):
+				case .success((let keys, let data)):
 					
-					if let manager = self?.cryptoManager, manager.setIssuerPublicKeys(keys) {
+					if let manager = self?.cryptoManager, manager.setIssuerDomesticPublicKeys(keys) {
 						self?.keysFetchedTimestamp = Date()
+						self?.cryptoVerifierUtility.store(data, for: .publicKeys)
 						onCompletion?()
 					} else {
 						// Loading of the public keys into the CL Library failed.

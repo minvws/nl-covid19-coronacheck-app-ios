@@ -61,15 +61,25 @@ struct Attributes {
 	let unixTimeStamp: Int64
 }
 
-struct IssuerPublicKey: Codable {
+struct IssuerDomesticPublicKey: Codable {
 	
-	var identifier: String
-	var publicKey: String
+	let identifier: String
+	let publicKey: String
 	
 	enum CodingKeys: String, CodingKey {
 		
 		case identifier = "id"
 		case publicKey = "public_key"
+	}
+}
+
+struct IssuerPublicKeys: Codable {
+	
+	let clKeys: [IssuerDomesticPublicKey]
+	
+	enum CodingKeys: String, CodingKey {
+		
+		case clKeys = "cl_keys"
 	}
 }
 
@@ -97,9 +107,9 @@ protocol CryptoManaging: AnyObject {
 	
 	// MARK: Public Keys
 	
-	/// Set the issuer public keys
+	/// Set the issuer domestic public keys
 	/// - Parameter keys: the keys
-	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) -> Bool
+	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool
 	
 	/// Do we have public keys
 	/// - Returns: True if we do

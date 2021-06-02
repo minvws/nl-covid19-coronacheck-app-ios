@@ -29,14 +29,16 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
+		let publicKeys = IssuerPublicKeys(clKeys: [])
+		let data = Data()
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success((publicKeys, data)), ())
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with no response
@@ -50,7 +52,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -65,23 +67,25 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with invalid keys error
 	func test_fetchIssuerPublicKeys_withInvalidKeysError() {
 
 		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success([]), ())
+		let publicKeys = IssuerPublicKeys(clKeys: [])
+		let data = Data()
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success((publicKeys, data)), ())
 		// Trigger invalid keys
-		cryptoSpy.stubbedSetIssuerPublicKeysResult = false
+		cryptoSpy.stubbedSetIssuerDomesticPublicKeysResult = false
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beTrue())
+		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -96,7 +100,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerPublicKeys).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	func test_fetchTestProviders() {

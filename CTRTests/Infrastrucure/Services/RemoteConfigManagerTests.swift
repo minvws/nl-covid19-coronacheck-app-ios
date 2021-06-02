@@ -76,10 +76,10 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(RemoteConfiguration(
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration(
 				minVersion: "1.0.0",
 				minVersionMessage: "test_remoteConfigManagerUpdate_versionsEqual"
-			)), ())
+			), Data())), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 			self.sut.lastFetchedTimestamp = nil
 
@@ -99,10 +99,10 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(RemoteConfiguration(
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration(
 				minVersion: "1.0",
 				minVersionMessage: "test_emoteConfigManagerUpdate_versionsAlmostEqual"
-			)), ())
+			), Data())), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 			self.sut.lastFetchedTimestamp = nil
 
@@ -126,7 +126,7 @@ class RemoteConfigManagerTests: XCTestCase {
 				minVersion: "1.0.1",
 				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualBug"
 			)
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 			self.sut.lastFetchedTimestamp = nil
 
@@ -150,7 +150,7 @@ class RemoteConfigManagerTests: XCTestCase {
 				minVersion: "4.3.2",
 				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualMajor"
 			)
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
 			self.sut.lastFetchedTimestamp = nil
 
@@ -175,7 +175,7 @@ class RemoteConfigManagerTests: XCTestCase {
 				minVersion: "1.0.0",
 				minVersionMessage: "test_remoteConfigManagerUpdate_existingVersionHigher"
 			)
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
 			self.sut.lastFetchedTimestamp = nil
 
@@ -200,7 +200,7 @@ class RemoteConfigManagerTests: XCTestCase {
 				minVersionMessage: "test_remoteConfigManager_endOfLife",
 				deactivated: true
 			)
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success(configuration), ())
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
 			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 			self.sut.lastFetchedTimestamp = nil
 
