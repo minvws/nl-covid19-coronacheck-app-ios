@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ChooseQRCodeTypeView: ScrolledStackView {
+class ChooseTestLocationView: ScrolledStackView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -35,6 +35,14 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 		return Label(body: nil).multiline()
 	}()
 
+	private let noTestButton: Button = {
+
+		let button = Button(title: "Button 1", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	/// The stack view for the content
 	let buttonsStackView: UIStackView = {
 
@@ -54,6 +62,7 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		stackView.distribution = .fill
+		noTestButton.touchUpInside(self, action: #selector(noTestButtonTapped))
 	}
 
 	/// Setup the hierarchy
@@ -63,6 +72,7 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(buttonsStackView)
+		stackView.addArrangedSubview(noTestButton)
 	}
 
 	override func setupViewConstraints() {
@@ -84,6 +94,12 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 				constant: -ViewTraits.margin
 			)
 		])
+	}
+
+	/// User tapped on the primary button
+	@objc func noTestButtonTapped() {
+
+		noTestButtonTappedCommand?()
 	}
 
 	// MARK: Public Access
@@ -109,4 +125,12 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 			}
 		}
 	}
+
+	var noTestTitle: String = "" {
+		didSet {
+			noTestButton.setTitle(noTestTitle, for: .normal)
+		}
+	}
+
+	var noTestButtonTappedCommand: (() -> Void)?
 }

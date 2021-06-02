@@ -91,6 +91,30 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateANegativeTestQRCount += 1
 	}
 
+	var invokedUserWishesToChooseLocation = false
+	var invokedUserWishesToChooseLocationCount = 0
+
+	func userWishesToChooseLocation() {
+		invokedUserWishesToChooseLocation = true
+		invokedUserWishesToChooseLocationCount += 1
+	}
+
+	var invokedUserHasNotBeenTested = false
+	var invokedUserHasNotBeenTestedCount = 0
+
+	func userHasNotBeenTested() {
+		invokedUserHasNotBeenTested = true
+		invokedUserHasNotBeenTestedCount += 1
+	}
+
+	var invokedUserWishesToCreateANegativeTestQRFromGGD = false
+	var invokedUserWishesToCreateANegativeTestQRFromGGDCount = 0
+
+	func userWishesToCreateANegativeTestQRFromGGD() {
+		invokedUserWishesToCreateANegativeTestQRFromGGD = true
+		invokedUserWishesToCreateANegativeTestQRFromGGDCount += 1
+	}
+
 	var invokedUserWishesToCreateAVaccinationQR = false
 	var invokedUserWishesToCreateAVaccinationQRCount = 0
 
