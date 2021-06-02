@@ -11,18 +11,6 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToShowQR = false
-	var invokedNavigateToShowQRCount = 0
-	var invokedNavigateToShowQRParameters: (greenCard: GreenCard, Void)?
-	var invokedNavigateToShowQRParametersList = [(greenCard: GreenCard, Void)]()
-
-	func navigateToShowQR(_ greenCard: GreenCard) {
-		invokedNavigateToShowQR = true
-		invokedNavigateToShowQRCount += 1
-		invokedNavigateToShowQRParameters = (greenCard, ())
-		invokedNavigateToShowQRParametersList.append((greenCard, ()))
-	}
-
 	var invokedNavigateToAboutMakingAQR = false
 	var invokedNavigateToAboutMakingAQRCount = 0
 
@@ -133,6 +121,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		if let result = stubbedUserWishesToChangeRegionCompletionResult {
 			completion(result.0)
 		}
+	}
+
+	var invokedUserWishesMoreInfoAboutUnavailableQR = false
+	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
+	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)?
+	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)]()
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+		invokedUserWishesMoreInfoAboutUnavailableQR = true
+		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
+		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion, availableRegion)
+		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
 	}
 
 	var invokedOpenUrl = false

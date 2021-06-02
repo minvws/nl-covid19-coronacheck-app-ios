@@ -9,7 +9,7 @@ import UIKit
 
 class HolderDashboardViewController: BaseViewController {
 
-	enum Cards {
+	enum Card {
 		struct QRCardRow {
 			let typeText: String
 			let validityTextEvaluator: (Date) -> ValidityText
@@ -18,6 +18,8 @@ class HolderDashboardViewController: BaseViewController {
 		case headerMessage(message: String)
 
 		case expiredQR(message: String, didTapClose: () -> Void)
+
+		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
 
 		case makeQR(title: String, message: String, actionTitle: String, didTapMakeQR: () -> Void)
 
@@ -102,6 +104,12 @@ class HolderDashboardViewController: BaseViewController {
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
 
+					case .originNotValidInThisRegion(let message, let didTapMoreInfo):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.infoButtonTappedCommand = didTapMoreInfo
+						return messageCard
+
 					case .makeQR(let title, let message, let actionTitle, let didTapAction):
 						let makeQRCard = sceneView.makeQRCard
 						makeQRCard.title = title
@@ -135,7 +143,7 @@ class HolderDashboardViewController: BaseViewController {
 							default: break
 						}
 
-						qrCard.originRows = rows.map { (qrCardRow: Cards.QRCardRow) in
+						qrCard.originRows = rows.map { (qrCardRow: Card.QRCardRow) in
 							QRCardView.OriginRow(type: qrCardRow.typeText, validityStringEvaluator: qrCardRow.validityTextEvaluator)
 						}
 
@@ -153,15 +161,6 @@ class HolderDashboardViewController: BaseViewController {
 
 			cardViews.forEach {
 				sceneView.stackView.addArrangedSubview($0)
-			}
-		}
-
-		viewModel.$notificationBanner.binding = { [weak self] in
-
-			if let content = $0 {
-				self?.showNotificationBanner(content)
-			} else {
-				self?.hideNotificationBanner()
 			}
 		}
 	}
@@ -193,37 +192,5 @@ class HolderDashboardViewController: BaseViewController {
 		sceneView.changeRegionView.changeRegionButtonTappedCommand = { [viewModel] in
 			viewModel.didTapChangeRegion()
 		}
-	}
-
-	func showNotificationBanner(_ content: NotificationBannerContent) {
-
-		guard bannerView == nil else {
-			return
-		}
-
-		bannerView = BannerView()
-		bannerView?.translatesAutoresizingMaskIntoConstraints = false
-		bannerView?.title = content.title
-		bannerView?.message = content.message
-		bannerView?.icon = content.icon
-		bannerView?.messageTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
-		}
-
-		bannerView?.primaryButtonTappedCommand = { [weak self] in
-			self?.hideNotificationBanner()
-		}
-		if let newBannerView = bannerView {
-
-			navigationController?.addBannerView(newBannerView)
-			UIAccessibility.post(notification: .screenChanged, argument: newBannerView)
-		}
-	}
-
-	func hideNotificationBanner() {
-
-		bannerView?.removeFromSuperview()
-		bannerView = nil
 	}
 }

@@ -45,6 +45,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
 
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+	
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) // probably some other params also.
@@ -345,6 +347,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
 		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
+	}
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+		presentInformationPage(title: "Over je vaccinatie [Localize]", body: "\(originType) / \(currentRegion) / \(availableRegion)\nBody text still to come.")
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
