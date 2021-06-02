@@ -20,7 +20,7 @@ class ToggleRegionViewModel: Logging {
 		self.didChangeCallback = didChangeCallback
 
 		segments = [
-			(.netherlands, 0, currentRegion == .netherlands),
+			(.netherlands, 0, currentRegion == .domestic),
 			(.europeanUnion, 1, currentRegion == .europeanUnion)
 		]
 
@@ -32,7 +32,7 @@ class ToggleRegionViewModel: Logging {
 			case .europeanUnion:
 				topText = .holderToggleRegionLabelTopTextEU
 				bottomText = .holderToggleRegionLabelBottomTextEU
-			case .netherlands:
+			case .domestic:
 				topText = .holderToggleRegionLabelTopTextNL
 				bottomText = .holderToggleRegionLabelBottomTextNL
 		}
@@ -42,7 +42,7 @@ class ToggleRegionViewModel: Logging {
 
 		let newRegion: QRCodeValidityRegion? = { [weak self] in
 			switch index {
-				case 0: return .netherlands
+				case 0: return .domestic
 				case 1: return .europeanUnion
 				default:
 					self?.logError("Unknown index for Region selector: \(index)")

@@ -182,7 +182,7 @@
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
-"holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
+"holder.dashboard.qr.expired" = "De %@ QR-code van je %@ is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minuut";
@@ -192,13 +192,15 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "Wordt automatisch geldig over ";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
 "holder.dashboard.qr.type.recovery" = "Herstelverklaring";
-"holder.dashboard.qr.type.negativeTest" = "Testbewijs";
+"holder.dashboard.qr.type.test" = "Testbewijs";
 "holder.dashboard.qr.type.vaccination" = "Vaccinatiebewijs";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis buiten Nederland";
 "holder.dashboard.changeregion.button" = "Aanpassen";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt alleen een Europese QR-code.";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
@@ -210,6 +212,8 @@
 "holder.showqr.eu.about.title" = "Over mijn Europese QR-code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
 "holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test naam: <b>%@</b><br>Testdatum: <b>%@</b><br>TestUitslag: <b>%@</b><br>TestLocatie: <b>%@</b><br>Producent: <b>%@</b><br>Land van test: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
+"holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
+"holder.showqr.eu.about.test.postive" = "postitief (corona)";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
@@ -268,13 +272,12 @@
 "holder.testresults.december" = "DEC";
 "holder.testresults.disclaimer.accessibility" = "Meer informatie over testresultaten";
 
-
 /* MARK: - Holder Test Results About */
-"holder.testresults.about.title" = "Over de testuitslag";
-"holder.testresults.about.section.one" = "In een testuitslag staan de uitslag, het tijdstip van de test en minimale gegevens van jou.";
-"holder.testresults.about.section.two" = "Je gegevens bestaan uit: (1) de eerste letter van je voornaam, (2) de eerste letter van je achternaam, (3) je geboortedag en (4) geboortemaand.";
-"holder.testresults.about.section.three" = "Zijn deze gegevens anders dan op je identiteitsbewijs?";
-"holder.testresults.about.section.four" = "Neem contact op met je testlocatie. Zij kunnen je gegevens aanpassen. ";
+//"holder.testresults.about.title" = "Over de testuitslag";
+//"holder.testresults.about.section.one" = "In een testuitslag staan de uitslag, het tijdstip van de test en minimale gegevens van jou.";
+//"holder.testresults.about.section.two" = "Je gegevens bestaan uit: (1) de eerste letter van je voornaam, (2) de eerste letter van je achternaam, (3) je geboortedag en (4) geboortemaand.";
+//"holder.testresults.about.section.three" = "Zijn deze gegevens anders dan op je identiteitsbewijs?";
+//"holder.testresults.about.section.four" = "Neem contact op met je testlocatie. Zij kunnen je gegevens aanpassen. ";
 
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
@@ -316,8 +319,26 @@
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 
+"holder.event.about.title" = "Wat is er opgehaald?";
+"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+
+"holder.event.about.body.test3" = "De volgende gegevens zijn opgehaald bij de testlocatie:
+
+Naam: van Mosterman, Saskia
+Geboortedatum: 6 augustus 1990
+
+Type test: PCR-test
+Test naam: PCR LAMP
+Testdatum: vrijdag 7 mei 08:00
+Testuitslag: negatief (geen corona)
+Testlocatie: GGD
+Testproducent: Roche Hutselfluts AG
+Identificatiecode: e31e1bb1134bbbbaa";
+"holder.event.about.body.vaccination" = "<p>De volgende vaccinatie gegevens zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p>";
+
 "holder.testresults.wrong.body" = "<p>Kloppen jouw gegevens niet met je identiteitsbewijs? Neem contact op met je testlocatie om je  gegevens te laten aanpassen. </p>";
-"holder.testresults.about.title" = "Over de testuitslag";
+
 "holder.testresults.about.body" = "<p><b>Gegevens voor Nederland</b></p><p>Voor een Nederlandse QR-code worden er minimale gegevens opgehaald: je vaccinatiedatum en enkele gegevens van jou. Jouw gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p><b>Gegevens voor Europa</b></p><p>Voor een Europese QR-code zijn meer gegevens nodig, namelijk:</p><p>Naam:  <b>%@</b><br>Geboortedatum:  <b>%@</b><br>Type test:  <b>%@</b><br>Testdatum %@:  <b>%@</b><br></p>";
-"holder.testresults.element.subtitle" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "**** Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
 

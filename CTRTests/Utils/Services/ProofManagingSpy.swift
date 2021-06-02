@@ -52,13 +52,13 @@ class ProofManagingSpy: ProofManaging {
 	var invokedFetchTestResultCount = 0
 	var invokedFetchTestResultParameters: (token: RequestToken, code: String?, provider: TestProvider)?
 	var invokedFetchTestResultParametersList = [(token: RequestToken, code: String?, provider: TestProvider)]()
-	var stubbedFetchTestResultOnCompletionResult: (Result<TestResultWrapper, Error>, Void)?
+	var stubbedFetchTestResultOnCompletionResult: (Result<RemoteTestEvent, Error>, Void)?
 
 	func fetchTestResult(
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void) {
 		invokedFetchTestResult = true
 		invokedFetchTestResultCount += 1
 		invokedFetchTestResultParameters = (token, code, provider)

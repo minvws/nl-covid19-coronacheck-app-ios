@@ -110,9 +110,9 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExpiredGreenCards = false
 	var invokedRemoveExpiredGreenCardsCount = 0
-	var stubbedRemoveExpiredGreenCardsResult: [String]! = []
+	var stubbedRemoveExpiredGreenCardsResult: [(greencardType: String, originType: String)]! = []
 
-	func removeExpiredGreenCards() -> [String] {
+	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)] {
 		invokedRemoveExpiredGreenCards = true
 		invokedRemoveExpiredGreenCardsCount += 1
 		return stubbedRemoveExpiredGreenCardsResult

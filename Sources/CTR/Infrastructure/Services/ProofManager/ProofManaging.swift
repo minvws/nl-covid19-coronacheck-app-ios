@@ -36,7 +36,7 @@ protocol ProofManaging: AnyObject {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
+		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void)
 
 	/// Create a nonce and a stoken
 	/// - Parameters:

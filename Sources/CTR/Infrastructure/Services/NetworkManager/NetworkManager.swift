@@ -571,10 +571,10 @@ class NetworkManager: NetworkManaging, Logging {
 			self.logVerbose("Response Object: \(object)")
 			return .success(object)
 		} catch {
-			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+//			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
 				self.logDebug("Raw: \(String(decoding: data, as: UTF8.self))")
 //				self.logDebug("Raw JSON: \(json)")
-			}
+//			}
 			self.logError("Error Deserializing \(Object.self): \(error)")
 			return .failure(.cannotDeserialize)
 		}

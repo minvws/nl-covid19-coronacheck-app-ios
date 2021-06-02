@@ -33,7 +33,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	func presentInformationPage(title: String, body: String)
 
-	func userWishesToMakeQRFromNegativeTest()
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
 
 	func userWishesToCreateAQR()
 
@@ -45,6 +45,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
 
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+	
 	func openUrl(_ url: URL, inApp: Bool)
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) // probably some other params also.
@@ -234,8 +236,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to choose provider
 	func navigateToAboutMakingAQR() {
 
-//		userWishesToMakeQRFromNegativeTest()
-
 		let destination = AboutMakingAQRViewController(
 			viewModel: AboutMakingAQRViewModel(coordinator: self)
 		)
@@ -312,10 +312,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		viewController.modalPresentationStyle = .custom
 		viewController.modalTransitionStyle = .coverVertical
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(viewController, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
+			.present(viewController, animated: true, completion: nil)
 	}
 
-	func userWishesToMakeQRFromNegativeTest() {
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -323,7 +324,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents(testEvents: [])
+			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
 		}
 	}
 
@@ -345,6 +346,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
 		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
+	}
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+		presentInformationPage(title: "Over je vaccinatie [Localize]", body: "\(originType) / \(currentRegion) / \(availableRegion)\nBody text still to come.")
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {

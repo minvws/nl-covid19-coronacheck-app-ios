@@ -161,7 +161,7 @@
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
-"holder.dashboard.qr.expired" = "Your QR code has expired.\nGet tested again.";
+"holder.dashboard.qr.expired" = "The %@ QR code of your %@ is expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minute";
@@ -235,13 +235,12 @@
 "holder.testresults.december" = "DEC";
 "holder.testresults.disclaimer.accessibility" = "More information about test results";
 
-
 /* MARK: - Holder Test Results About */
-"holder.testresults.about.title" = "About the test result";
-"holder.testresults.about.section.one" = "The test result contains the result, the time the test was taken and a minimum amount of personal data.";
-"holder.testresults.about.section.two" = "Your details consist of: (1) the first letter of your first name, (2) the first letter of your last name, (3) your date of birth and (4) your month of birth.";
-"holder.testresults.about.section.three" = "Are these details different than the details on your identification card?";
-"holder.testresults.about.section.four" = "Contact your test location. They can edit your details.";
+//"holder.testresults.about.title" = "About the test result";
+//"holder.testresults.about.section.one" = "The test result contains the result, the time the test was taken and a minimum amount of personal data.";
+//"holder.testresults.about.section.two" = "Your details consist of: (1) the first letter of your first name, (2) the first letter of your last name, (3) your date of birth and (4) your month of birth.";
+//"holder.testresults.about.section.three" = "Are these details different than the details on your identification card?";
+//"holder.testresults.about.section.four" = "Contact your test location. They can edit your details.";
 
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
@@ -283,7 +282,25 @@
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 
+"holder.event.about.title" = "Wat is er opgehaald?";
+"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+
+"holder.event.about.body.test3" = "De volgende gegevens zijn opgehaald bij de testlocatie:
+
+Naam: van Mosterman, Saskia
+Geboortedatum: 6 augustus 1990
+
+Type test: PCR-test
+Test naam: PCR LAMP
+Testdatum: vrijdag 7 mei 08:00
+Testuitslag: negatief (geen corona)
+Testlocatie: GGD
+Testproducent: Roche Hutselfluts AG
+Identificatiecode: e31e1bb1134bbbbaa";
+"holder.event.about.body.vaccination" = "<p>De volgende vaccinatie gegevens zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p>";
+
 "holder.testresults.wrong.body" = "<p>Kloppen jouw gegevens niet met je identiteitsbewijs? Neem contact op met je testlocatie om je  gegevens te laten aanpassen. </p>";
-"holder.testresults.about.title" = "Over de testuitslag";
+
 "holder.testresults.about.body" = "<p><b>Gegevens voor Nederland</b></p><p>Voor een Nederlandse QR-code worden er minimale gegevens opgehaald: je vaccinatiedatum en enkele gegevens van jou. Jouw gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand.</p><p>Jouw gegevens: <b>%@</b></p><p></p><p><b>Gegevens voor Europa</b></p><p>Voor een Europese QR-code zijn meer gegevens nodig, namelijk:</p><p>Naam:  <b>%@</b><br>Geboortedatum:  <b>%@</b><br>Type test:  <b>%@</b><br>Testdatum %@:  <b>%@</b><br></p>";
-"holder.testresults.element.subtitle" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "**** Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";

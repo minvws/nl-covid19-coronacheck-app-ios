@@ -28,10 +28,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	/// The cl signed test proof
-	@Bindable private(set) var qrMessage: Data?
+	@Bindable private(set) var qrMessage: (data: Data, correctionLevel: String)?
 
-	/// Show a valid QR Message
 	@Bindable private(set) var showValidQR: Bool
 
 	/// Show a warning for a screenshot
@@ -106,13 +104,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			if let message = self.cryptoManager?.generateQRmessage(data) {
-				setQRValid(message)
+				setQRValid(message, correctionLevel: "M")
 			} else {
 				setQRNotValid()
 				return
 			}
 		} else {
-			setQRValid(data)
+			setQRValid(data, correctionLevel: "Q")
 		}
 	}
 
@@ -233,10 +231,10 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
 	}
 
-	private func setQRValid(_ data: Data) {
+	private func setQRValid(_ data: Data, correctionLevel: String) {
 
 		logDebug("Credential is valid")
-		qrMessage = data
+		qrMessage = (data, correctionLevel)
 		showValidQR = true
 		startValidityTimer()
 	}

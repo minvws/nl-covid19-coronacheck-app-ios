@@ -34,9 +34,17 @@ extension String {
 		return Localization.string(for: "holder.dashboard.create.action")
 	}
 
-	static var holderDashboardQRExpired: String {
+	static func holderDashboardQRExpired(localizedRegion: String, localizedOriginType: String) -> String {
 
-		return Localization.string(for: "holder.dashboard.qr.expired")
+		return Localization.string(for: "holder.dashboard.qr.expired", comment: "", [localizedRegion, localizedOriginType])
+	}
+
+	static func holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: String) -> String {
+		return Localization.string(for: "holder.dashboard.originNotValidInEUButIsInTheNetherlands", comment: "", [localizedOriginType])
+	}
+
+	static func holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: String) -> String {
+		return Localization.string(for: "holder.dashboard.originNotValidInNetherlandsButIsInEU", comment: "", [localizedOriginType])
 	}
 
 	static var hour: String {
@@ -109,8 +117,8 @@ extension String {
 		return Localization.string(for: "holder.dashboard.qr.type.recovery")
 	}
 
-	static var qrTypeNegativeTest: String {
-		return Localization.string(for: "holder.dashboard.qr.type.negativeTest")
+	static var qrTypeTest: String {
+		return Localization.string(for: "holder.dashboard.qr.type.test")
 	}
 
 	static var qrTypeVaccination: String {
