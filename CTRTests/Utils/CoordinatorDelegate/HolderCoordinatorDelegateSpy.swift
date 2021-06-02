@@ -11,18 +11,6 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToShowQR = false
-	var invokedNavigateToShowQRCount = 0
-	var invokedNavigateToShowQRParameters: (greenCard: GreenCard, Void)?
-	var invokedNavigateToShowQRParametersList = [(greenCard: GreenCard, Void)]()
-
-	func navigateToShowQR(_ greenCard: GreenCard) {
-		invokedNavigateToShowQR = true
-		invokedNavigateToShowQRCount += 1
-		invokedNavigateToShowQRParameters = (greenCard, ())
-		invokedNavigateToShowQRParametersList.append((greenCard, ()))
-	}
-
 	var invokedNavigateToAboutMakingAQR = false
 	var invokedNavigateToAboutMakingAQRCount = 0
 
@@ -77,10 +65,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false
 	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
+	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteTestEvent: RemoteTestEvent, Void)?
+	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteTestEvent: RemoteTestEvent, Void)]()
 
-	func userWishesToMakeQRFromNegativeTest() {
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
 		invokedUserWishesToMakeQRFromNegativeTest = true
 		invokedUserWishesToMakeQRFromNegativeTestCount += 1
+		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteTestEvent, ())
+		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteTestEvent, ()))
 	}
 
 	var invokedUserWishesToCreateAQR = false

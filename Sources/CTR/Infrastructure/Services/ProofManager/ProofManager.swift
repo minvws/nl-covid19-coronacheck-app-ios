@@ -230,7 +230,7 @@ class ProofManager: ProofManaging, Logging {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void) {
 		
 		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
@@ -248,7 +248,7 @@ class ProofManager: ProofManaging, Logging {
 						self.proofData.testWrapper = wrapper.0
 						self.proofData.signedWrapper = wrapper.1
 					}
-					onCompletion(.success(wrapper.0))
+					onCompletion(.success(wrapper))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
 					onCompletion(.failure(error))
