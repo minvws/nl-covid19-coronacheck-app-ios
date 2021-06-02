@@ -64,16 +64,18 @@ class NetworkManager: NetworkManaging, Logging {
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: URL(string: "https://qrdaar.scriptbase.org/v3/prepare_issue"),
+			url: URL(string: "https://qrdaar.scriptbase.org/v3/holder/prepare_issue"),
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
-		data(request: urlRequest) { result in
-			DispatchQueue.main.async {
-				completion(self.jsonResponseHandler(result: result))
-
-			}
-		}
+		decodeSignedJSONData(request: urlRequest, completion: completion)
+//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
+//		data(request: urlRequest) { result in
+//			DispatchQueue.main.async {
+//				completion(self.jsonResponseHandler(result: result))
+//
+//			}
+//		}
 	}
 
 	/// Get the public keys
@@ -145,11 +147,12 @@ class NetworkManager: NetworkManaging, Logging {
 				body: jsonData
 			)
 			sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
-			data(request: urlRequest) { result in
-				DispatchQueue.main.async {
-					completion(self.jsonResponseHandler(result: result))
-				}
-			}
+			decodeSignedJSONData(request: urlRequest, completion: completion)
+//			data(request: urlRequest) { result in
+//				DispatchQueue.main.async {
+//					completion(self.jsonResponseHandler(result: result))
+//				}
+//			}
 
 //			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 //			decodeSignedJSONData(request: urlRequest, completion: completion)
@@ -553,7 +556,8 @@ class NetworkManager: NetworkManaging, Logging {
 			return .success(object)
 		} catch {
 			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-				self.logVerbose("Raw JSON: \(json)")
+				self.logDebug("Raw: \(String(decoding: data, as: UTF8.self))")
+//				self.logDebug("Raw JSON: \(json)")
 			}
 			self.logError("Error Deserializing \(Object.self): \(error)")
 			return .failure(.cannotDeserialize)

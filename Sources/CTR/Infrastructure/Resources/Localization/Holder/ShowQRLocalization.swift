@@ -44,8 +44,23 @@ extension String {
 		return Localization.string(for: "holder.showqr.eu.about.title")
 	}
 
-	static var holderShowQREuAboutMessage: String {
+	static var holderShowQREuAboutVaccinationMessage: String {
 
-		return Localization.string(for: "holder.showqr.eu.about.message")
+		return Localization.string(for: "holder.showqr.eu.about.vaccination.message")
+	}
+
+	static var holderShowQREuAboutTestMessage: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.test.message")
+	}
+
+	static var holderShowQREuAboutTestPositive: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.test.positive")
+	}
+
+	static var holderShowQREuAboutTestNegative: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.test.negative")
 	}
 }

@@ -26,6 +26,16 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreEventGroupResult
 	}
 
+	var invokedFetchSignedEvents = false
+	var invokedFetchSignedEventsCount = 0
+	var stubbedFetchSignedEventsResult: [String]! = []
+
+	func fetchSignedEvents() -> [String] {
+		invokedFetchSignedEvents = true
+		invokedFetchSignedEventsCount += 1
+		return stubbedFetchSignedEventsResult
+	}
+
 	var invokedRemoveExistingEventGroups = false
 	var invokedRemoveExistingEventGroupsCount = 0
 	var invokedRemoveExistingEventGroupsParameters: (type: EventType, providerIdentifier: String)?
