@@ -57,6 +57,14 @@ class ListEventsViewModel: Logging {
 		return dateFormatter
 	}()
 
+	private lazy var printTestLongDateFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
+		return dateFormatter
+	}()
+
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	@Bindable internal var viewState: ListEventsViewController.State
@@ -358,23 +366,35 @@ class ListEventsViewModel: Logging {
 		}
 
 		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
+		let printSampleLongDate: String = printTestLongDateFormatter.string(from: sampleDate)
 		let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: sampleDate) ?? sampleDate
 		let printExpireDate: String = printTestDateFormatter.string(from: expireDate)
+
+		let holderID = getDisplayIdentity(result.holder)
 
 		return ListEventsViewController.Row(
 			title: .holderTestResultsNegative,
 			subTitle: String(
-				format: .holderTestElementSubTitle,
+				format: .holderTestElementSubTitle20,
 				printSampleDate,
 				printExpireDate,
-				getDisplayIdentity(result.holder)
+				holderID
 			),
 			action: { [weak self] in
 
+				let body = String(
+					format: .holderEventAboutBodyTest20,
+					holderID,
+					self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType,
+					printSampleLongDate,
+					result.negativeResult ? String.holderShowQREuAboutTestNegative : String.holderShowQREuAboutTestPositive,
+					result.unique
+				)
+
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
-						title: .holderTestAboutTitle,
-						body: .holderTestAboutBody
+						title: .holderEventAboutTitle,
+						body: body
 					)
 				)
 			}

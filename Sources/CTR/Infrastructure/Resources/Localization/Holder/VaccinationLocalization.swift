@@ -167,19 +167,28 @@ extension String {
 		return Localization.string(for: "holder.testresults.wrong.body")
 	}
 
-	static var holderTestAboutTitle: String {
+	static var holderEventAboutTitle: String {
 
-		return Localization.string(for: "holder.testresults.about.title")
+		return Localization.string(for: "holder.event.about.title")
 	}
 
-	static var holderTestAboutBody: String {
+	static var holderEventAboutBodyTest20: String {
 
-		return Localization.string(for: "holder.testresults.about.body")
+		return Localization.string(for: "holder.event.about.body.test2")
 	}
 
-	static var holderTestElementSubTitle: String {
+	static var holderEventAboutBodyTest30: String {
 
-		return Localization.string(for: "holder.testresults.element.subtitle")
+		return Localization.string(for: "holder.event.about.body.test3")
 	}
 
+	static var holderTestElementSubTitle20: String {
+
+		return Localization.string(for: "holder.event.element.subtitle.test2")
+	}
+
+	static var holderTestElementSubTitle30: String {
+
+		return Localization.string(for: "holder.event.element.subtitle.test3")
+	}
 }
