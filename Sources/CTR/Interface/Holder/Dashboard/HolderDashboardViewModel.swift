@@ -294,11 +294,8 @@ class HolderDashboardViewModel: Logging {
 				}
 			}
 
-		// If the other region also has some cards to show, then show the Change Region card:
-		if !state.myQRCards
-			.filter({ $0.isOfRegion(region: state.qrCodeValidityRegion.opposite) })
-			.isEmpty {
-
+		// If there are any cards to show, show the region picker:
+		if !state.myQRCards.isEmpty {
 		cards += [
 			.changeRegion(
 				buttonTitle: .changeRegionButton,
