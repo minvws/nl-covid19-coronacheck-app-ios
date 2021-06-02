@@ -117,7 +117,7 @@ extension String {
 		return Localization.string(for: "holder.dashboard.qr.type.recovery")
 	}
 
-	static var qrTypeNegativeTest: String {
+	static var qrTypeTest: String {
 		return Localization.string(for: "holder.dashboard.qr.type.negativeTest")
 	}
 

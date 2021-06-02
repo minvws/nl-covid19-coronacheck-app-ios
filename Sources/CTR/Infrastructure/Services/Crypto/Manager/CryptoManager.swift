@@ -253,6 +253,7 @@ class CryptoManager: CryptoManaging, Logging {
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
 					return object
 				} catch {
+					self.logError("Error: \(String(decoding: value, as: UTF8.self))")
 					self.logError("Error Deserializing \(EuCredentialAttributes.self): \(error)")
 				}
 			} else {

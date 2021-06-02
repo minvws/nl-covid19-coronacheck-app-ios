@@ -7,9 +7,7 @@
 
 import UIKit
 
-final class ForcedInformationPageViewModel: Logging {
-	
-	var loggingCategory: String = "ForcedInformationPageViewModel"
+final class ForcedInformationPageViewModel {
 	
 	/// Coordination Delegate
 	weak var coordinator: ForcedInformationCoordinatorDelegate?

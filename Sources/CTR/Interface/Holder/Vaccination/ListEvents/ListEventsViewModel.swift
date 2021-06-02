@@ -525,6 +525,8 @@ class ListEventsViewModel: Logging {
 
 	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
 
+		let signedEvents = walletManager.fetchSignedEvents()
+
 		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
@@ -536,7 +538,7 @@ class ListEventsViewModel: Logging {
 		let dictionary: [String: AnyObject] = [
 			//			"test": generateString(object: wrapper) as AnyObject,
 			"stoken": stoken as AnyObject,
-			"events": [] as AnyObject,
+			"events": signedEvents as AnyObject,
 			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
 		]
 
@@ -545,7 +547,7 @@ class ListEventsViewModel: Logging {
 
 			switch result {
 				case let .success(greencardResponse):
-					self.logDebug("ok: \(greencardResponse)")
+					self.logVerbose("ok: \(greencardResponse)")
 					onCompletion(greencardResponse)
 				case let .failure(error):
 					self.logError("error: \(error)")

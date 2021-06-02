@@ -19,6 +19,8 @@ protocol WalletManaging {
 	/// - Returns: True if stored
 	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool
 
+	func fetchSignedEvents() -> [String]
+
 	/// Remove any existing event groups for the type and provider identifier
 	/// - Parameters:
 	///   - type: the type of event group
@@ -104,6 +106,32 @@ class WalletManager: WalletManaging, Logging {
 			}
 		}
 		return success
+	}
+
+	func fetchSignedEvents() -> [String] {
+
+		var result = [String]()
+
+		let context = dataStoreManager.backgroundContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+				if let eventGroups = wallet.eventGroups {
+					for case let eventGroup as EventGroup in eventGroups.allObjects {
+
+						if let data = eventGroup.jsonData,
+						   let convertedToString = String(data: data, encoding: .utf8) {
+							result.append(convertedToString.replacingOccurrences(of: "\\/", with: "/"))
+						}
+
+						// This should be rewritten to return an array of SignedResponse instead of String
+						// That fails at converting it to json and data in the network manager
+						// let object = try? JSONDecoder().decode(SignedResponse.self, from: data) {
+					}
+				}
+			}
+		}
+		return result
 	}
 
 	/// Remove any existing event groups for the type and provider identifier
@@ -212,7 +240,7 @@ class WalletManager: WalletManaging, Logging {
 								result = false
 							case let .success(domesticCredentials):
 								for domesticCredential in domesticCredentials {
-									result = result && storeCredential(domesticCredential: domesticCredential, greenCard: greenCard, context: context)
+									result = result && storeDomesticCredential(domesticCredential, greenCard: greenCard, context: context)
 								}
 						}
 					}
@@ -231,7 +259,7 @@ class WalletManager: WalletManaging, Logging {
 	///   - greenCard: the green card
 	///   - context: the managed object context
 	/// - Returns: True if storing was successful
-	private func storeCredential(domesticCredential: DomesticCredential, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
+	private func storeDomesticCredential(_ domesticCredential: DomesticCredential, greenCard: GreenCard, context: NSManagedObjectContext) -> Bool {
 
 		var result = true
 
@@ -243,9 +271,6 @@ class WalletManager: WalletManaging, Logging {
 			let validFromDate = Date(timeIntervalSince1970: validFromTimeInterval)
 			if let expireDate = Calendar.current.date(byAdding: .hour, value: validHoursInt, to: validFromDate) {
 
-//				logDebug("Added credential from \(validFromDate) to \(expireDate)")
-//				logDebug("data: \(data.map { String(format: "%02x", $0) }.joined())")
-
 				result = result && CredentialModel.create(
 					data: data,
 					validFrom: validFromDate,
@@ -254,8 +279,6 @@ class WalletManager: WalletManaging, Logging {
 					greenCard: greenCard,
 					managedContext: context) != nil
 			}
-//			let check = cryptoManager.readDomesticCredentials(data)
-//			logDebug("check: \(check)")
 		}
 		return result
 	}
@@ -267,7 +290,7 @@ class WalletManager: WalletManaging, Logging {
 			case let .success(credentials):
 				do {
 					let objects = try JSONDecoder().decode([DomesticCredential].self, from: credentials)
-					logDebug("object: \(objects)")
+					logVerbose("object: \(objects)")
 					return .success(objects)
 				} catch {
 					self.logError("Error Deserializing: \(error)")
@@ -294,7 +317,7 @@ class WalletManager: WalletManaging, Logging {
 
 					let data = Data(remoteEuGreenCard.credential.utf8)
 					if let euCredentialAttributes = cryptoManager.readEuCredentials(data) {
-						logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+						logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 						result = result && CredentialModel.create(
 							data: data,
 							validFrom: Date(timeIntervalSince1970: euCredentialAttributes.issuedAt),
@@ -372,7 +395,7 @@ class WalletManager: WalletManaging, Logging {
 
 				if let greenCard = GreenCardModel.create(type: .domestic, wallet: wallet, managedContext: context) {
 					result = result && OriginModel.create(
-						type: .negativeTest,
+						type: .test,
 						eventDate: sampleDate,
 						expirationTime: expireDate,
 						validFromDate: sampleDate, // I guess this is correct?

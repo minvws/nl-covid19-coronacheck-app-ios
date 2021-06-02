@@ -187,7 +187,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
 			case .continue:
-				navigateToLogin()
+//				navigateToLogin()
+			navigateToFetchEvents(token: "")
 			default:
 				break
 		}
