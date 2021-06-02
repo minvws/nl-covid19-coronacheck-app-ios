@@ -9,7 +9,7 @@ import Foundation
 
 extension Formatter {
 
-	func getDateFrom(dateString8601 string: String) -> Date? {
+	static func getDateFrom(dateString8601 string: String) -> Date? {
 
 		let validFormatOptions: [ISO8601DateFormatter.Options] = [
 			[.withInternetDateTime, .withFractionalSeconds, .withTimeZone],

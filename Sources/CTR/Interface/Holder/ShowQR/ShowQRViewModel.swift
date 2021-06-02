@@ -168,10 +168,10 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
-		let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
+		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
 
-		let formattedVaccinationDate: String = Formatter().getDateFrom(dateString8601: vaccination.dateOfVaccination)
+		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
 
 		let body: String = String(
@@ -195,10 +195,10 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		logDebug("test: \(test)")
 
-		let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
+		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
 
-		let formattedTestDate: String = Formatter().getDateFrom(dateString8601: test.sampleDate)
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(printDateTimeFormatter.string) ?? test.sampleDate
 
 		let testType = remoteConfigManager?.getConfiguration().getTestTypeMapping(

@@ -222,10 +222,10 @@ class ListEventsViewModel: Logging {
 
 		for (index, dataRow) in sortedDataSource.enumerated() {
 
-			let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: dataRow.identity.birthDateString)
+			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
 				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
 			let formattedShotDate: String = dataRow.event.vaccination?.dateString
-				.flatMap(Formatter().getDateFrom)
+				.flatMap(Formatter.getDateFrom)
 				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 
 			rows.append(
@@ -369,7 +369,7 @@ class ListEventsViewModel: Logging {
 	private func getTestRow(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.Row? {
 
 		guard let result = remoteTestEvent.wrapper.result,
-			  let sampleDate = Formatter().getDateFrom(dateString8601: result.sampleDate) else {
+			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
 			return nil
 		}
 
@@ -627,7 +627,7 @@ class ListEventsViewModel: Logging {
 
 			// Store the new test events
 			if let result = response.wrapper.result,
-			   let sampleDate = Formatter().getDateFrom(dateString8601: result.sampleDate) {
+			   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
 
 				success = success && walletManager.storeEventGroup(
 					.test,
