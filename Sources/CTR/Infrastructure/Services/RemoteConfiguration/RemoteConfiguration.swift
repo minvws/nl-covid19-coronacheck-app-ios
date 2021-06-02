@@ -109,7 +109,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var euBrands: [Mapping]? = []
 
-	var euManufacturers: [Mapping] = [
+	var euManufacturers: [Mapping]? = [
 		Mapping(code: "ORG-100001699", name: "AstraZeneca AB"),
 		Mapping(code: "ORG-100030215", name: "Biontech Manufacturing GmbH"),
 		Mapping(code: "ORG-100001417", name: "Janssen-Cilag International"),
@@ -126,11 +126,15 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		Mapping(code: "Bharat-Biotech", name: "Bharat Biotech")
 	]
 
-	var euTypes: [Mapping] = [
+	var euTypes: [Mapping]? = [
 		Mapping(code: "1119349007", name: "SARS-CoV-2 mRNA vaccine"),
 		Mapping(code: "1119305005", name: "SARS-CoV-2 antigen vaccine"),
 		Mapping(code: "J07BX03", name: "covid-19 vaccines")
 	]
+
+	var euTestTypes: [Mapping]? = []
+
+	var euTestManufacturers: [Mapping]? = []
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -152,6 +156,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euBrands = "euBrands"
 //		case euManufacturers = "euManufacturers"
 //		case euTypes = "euTypes"
+//		case euTestTypes = "euTestTypes"
+//		case euTestManufacturers = "euTestManufacturers"
 	}
 
 	init(
@@ -202,6 +208,11 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			domesticValidityHours: 40
 		)
 	}
+}
+
+// MARK: Mapping
+
+extension RemoteConfiguration {
 
 	func getHpkMapping(_ code: String? ) -> String? {
 
@@ -215,11 +226,21 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	func getTypeMapping(_ code: String? ) -> String? {
 
-		return euTypes.first(where: { $0.code == code })?.name
+		return euTypes?.first(where: { $0.code == code })?.name
 	}
 
-	func getManufacturerMapping(_ code: String? ) -> String? {
+	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
 
-		return euManufacturers.first(where: { $0.code == code })?.name
+		return euManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestTypeMapping(_ code: String? ) -> String? {
+
+		return euTestTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestManufacturerMapping(_ code: String? ) -> String? {
+
+		return euTestManufacturers?.first(where: { $0.code == code })?.name
 	}
 }

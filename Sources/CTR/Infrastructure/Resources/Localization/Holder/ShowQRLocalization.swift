@@ -53,4 +53,14 @@ extension String {
 
 		return Localization.string(for: "holder.showqr.eu.about.test.message")
 	}
+
+	static var holderShowQREuAboutTestPositive: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.test.positive")
+	}
+
+	static var holderShowQREuAboutTestNegative: String {
+
+		return Localization.string(for: "holder.showqr.eu.about.test.negative")
+	}
 }

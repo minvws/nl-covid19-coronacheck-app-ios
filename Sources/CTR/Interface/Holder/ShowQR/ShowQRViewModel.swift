@@ -52,6 +52,14 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
+	private lazy var printDateTimeFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "EEEE d MMMM HH:MM"
+		return dateFormatter
+	}()
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -138,8 +146,9 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 						euCredentialAttributes: euCredentialAttributes,
 						test: test
 					)
-				} else if let test = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
 					// Todo, write more information for recovery.
+					logDebug("Todo, display recovery: \(recovery)")
 				}
 			}
 		}
@@ -155,11 +164,11 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
-			vaccination.vaccineOrProphylaxis) ?? ""
+			vaccination.vaccineOrProphylaxis) ?? vaccination.vaccineOrProphylaxis
 		let vaccineBrand = remoteConfigManager?.getConfiguration().getBrandMapping(
-			vaccination.medicalProduct) ?? ""
-		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getManufacturerMapping(
-			vaccination.marketingAuthorizationHolder) ?? ""
+			vaccination.medicalProduct) ?? vaccination.medicalProduct
+		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
+			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
 		let formattedBirthDate: String = Formatter().getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
@@ -192,18 +201,32 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
 
 		let formattedTestDate: String = Formatter().getDateFrom(dateString8601: test.sampleDate)
-			.map(printDateFormatter.string) ?? test.sampleDate
+			.map(printDateTimeFormatter.string) ?? test.sampleDate
+
+		let testType = remoteConfigManager?.getConfiguration().getTestTypeMapping(
+			test.typeOfTest) ?? test.typeOfTest
+
+		let manufacturer = remoteConfigManager?.getConfiguration().getTestManufacturerMapping(
+			test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
+
+		var testResult = test.testResult
+		if test.testResult == "260415000" {
+			testResult = .holderShowQREuAboutTestNegative
+		}
+		if test.testResult == "260373001" {
+			testResult = .holderShowQREuAboutTestPositive
+		}
 
 		let body: String = String(
 			format: .holderShowQREuAboutTestMessage,
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
-			test.typeOfTest,
+			testType,
 			test.name ?? "",
 			formattedTestDate,
-			test.testResult,
+			testResult,
 			test.testCenter,
-			test.marketingAuthorizationHolder ?? "",
+			manufacturer,
 			test.country,
 			test.certificateIdentifier
 		)

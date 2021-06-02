@@ -209,13 +209,7 @@
 "holder.showqr.eu.title" = "Europeese QR-code";
 "holder.showqr.eu.about.title" = "Over mijn Europese QR-code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p>
-<p>Ziekteverwekker: <b>COVID-19</b><br>
-Type test: <b>%@</b><br>
-Test naam: <b>%@</b><br>
-Testdatum: <b>%@</b><br>
-TestUitslag: <b>%@</b><br>
-TestLocatie: <b>%@</b><br>Producent: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test naam: <b>%@</b><br>Testdatum: <b>%@</b><br>TestUitslag: <b>%@</b><br>TestLocatie: <b>%@</b><br>Producent: <b>%@</b><br>Land van test: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
