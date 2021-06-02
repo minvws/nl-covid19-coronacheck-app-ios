@@ -118,7 +118,7 @@ extension String {
 	}
 
 	static var qrTypeTest: String {
-		return Localization.string(for: "holder.dashboard.qr.type.negativeTest")
+		return Localization.string(for: "holder.dashboard.qr.type.test")
 	}
 
 	static var qrTypeVaccination: String {
