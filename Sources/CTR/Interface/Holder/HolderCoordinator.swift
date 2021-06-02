@@ -41,6 +41,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToChooseLocation()
 
+	func userHasNotBeenTested()
+
+	func userWishesToCreateANegativeTestQRFromGGD()
+
 	func userWishesToCreateAVaccinationQR()
 
 	func userDidScanRequestToken(requestToken: RequestToken)
@@ -346,6 +350,14 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToChooseLocation() {
 		navigateToChooseTestLocation()
+	}
+
+	func userHasNotBeenTested() {
+		logInfo("userHasNotBeenTested")
+	}
+
+	func userWishesToCreateANegativeTestQRFromGGD() {
+		logInfo("userWishesToCreateANegativeTestQRFromGGD")
 	}
 
 	func userWishesToCreateAVaccinationQR() {

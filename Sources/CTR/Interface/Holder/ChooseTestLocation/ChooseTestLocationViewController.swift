@@ -22,7 +22,7 @@ class ChooseTestLocationViewController: BaseViewController {
 
 	private let viewModel: ChooseTestLocationViewModel
 
-	let sceneView = ChooseQRCodeTypeView()
+	let sceneView = ChooseTestLocationView()
 
 	init(viewModel: ChooseTestLocationViewModel) {
 
@@ -60,6 +60,14 @@ class ChooseTestLocationViewController: BaseViewController {
 
 		viewModel.$message.binding = { [weak self] message in
 			self?.sceneView.message = message
+		}
+
+		viewModel.$bottomButton.binding = { [weak self] button in
+			guard let button = button else {
+				return
+			}
+			self?.sceneView.noTestTitle = button.title
+			self?.sceneView.noTestButtonTappedCommand = button.action
 		}
 
 		viewModel.$buttonModels.binding = { [weak self] buttons in
