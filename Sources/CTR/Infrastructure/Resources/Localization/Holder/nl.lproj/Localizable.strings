@@ -332,19 +332,7 @@ Testuitslag: negatief (geen corona)
 Testlocatie: GGD
 Testproducent: Roche Hutselfluts AG
 Identificatiecode: e31e1bb1134bbbbaa";
-"holder.event.about.body.vaccination" = "De volgende vaccinatie gegevens zijn opgehaald:
-
-Naam: van Mosterman, Saskia
-Geboortedatum: 6 augustus 1990
-
-Ziekteverwekker: COVID-19
-Vaccin: Pfizer
-Vaccin type: MRNA Vaccin
-Producent: Pfizer Biotech
-Doses: 1 van 2
-Prikdatum: 17 maart 2021
-Land van vaccinatie: Nederland
-Identificatiecode: e31e1bb1134bbbbaa?";
+"holder.event.about.body.vaccination" = "<p>De volgende vaccinatie gegevens zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p>";
 
 "holder.testresults.wrong.body" = "<p>Kloppen jouw gegevens niet met je identiteitsbewijs? Neem contact op met je testlocatie om je  gegevens te laten aanpassen. </p>";
 

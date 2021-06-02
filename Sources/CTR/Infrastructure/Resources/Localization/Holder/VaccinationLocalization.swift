@@ -182,6 +182,11 @@ extension String {
 		return Localization.string(for: "holder.event.about.body.test3")
 	}
 
+	static var holderEventAboutBodyVaccination: String {
+
+		return Localization.string(for: "holder.event.about.body.vaccination")
+	}
+
 	static var holderTestElementSubTitle20: String {
 
 		return Localization.string(for: "holder.event.element.subtitle.test2")

@@ -244,6 +244,12 @@ class ListEventsViewModel: Logging {
 						} else if let brand = dataRow.event.vaccination?.brand {
 							vaccinName = self?.remoteConfigManager.getConfiguration().getBrandMapping(brand) ?? ""
 						}
+
+						let vaccineType = self?.remoteConfigManager.getConfiguration().getTypeMapping(
+							dataRow.event.vaccination?.type) ?? dataRow.event.vaccination?.type ?? ""
+						let vaccineManufacturer = self?.remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(
+							dataRow.event.vaccination?.manufacturer) ?? dataRow.event.vaccination?.manufacturer ?? ""
+
 						var dosage = ""
 						if let doseNumber = dataRow.event.vaccination?.doseNumber,
 						   let totalDose = dataRow.event.vaccination?.totalDoses {
@@ -252,12 +258,14 @@ class ListEventsViewModel: Logging {
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
-								title: .holderVaccinationAboutTitle,
+								title: .holderEventAboutTitle,
 								body: String(
-									format: .holderVaccinationAboutBody,
+									format: .holderEventAboutBodyVaccination,
 									dataRow.identity.fullName,
 									formattedBirthDate,
 									vaccinName,
+									vaccineType,
+									vaccineManufacturer,
 									dosage,
 									formattedShotDate,
 									dataRow.event.vaccination?.country ?? "",
