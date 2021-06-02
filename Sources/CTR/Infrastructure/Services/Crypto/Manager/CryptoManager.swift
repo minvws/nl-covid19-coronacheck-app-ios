@@ -191,8 +191,6 @@ class CryptoManager: CryptoManaging, Logging {
 
 		let proofAsn1QREncoded = message.data(using: .utf8)
 
-		// TODO: fix this
-		
 //		if let result = MobilecoreVerifyQREncoded(proofAsn1QREncoded) {
 //
 //			guard result.error.isEmpty, let attributesJson = result.attributesJson else {

@@ -56,18 +56,18 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedGenerateCommitmentMessageResult
 	}
 
-	var invokedSetIssuerPublicKeys = false
-	var invokedSetIssuerPublicKeysCount = 0
-	var invokedSetIssuerPublicKeysParameters: (keys: [IssuerPublicKey], Void)?
-	var invokedSetIssuerPublicKeysParametersList = [(keys: [IssuerPublicKey], Void)]()
-	var stubbedSetIssuerPublicKeysResult: Bool! = false
+	var invokedSetIssuerDomesticPublicKeys = false
+	var invokedSetIssuerDomesticPublicKeysCount = 0
+	var invokedSetIssuerDomesticPublicKeysParameters: (keys: IssuerPublicKeys, Void)?
+	var invokedSetIssuerDomesticPublicKeysParametersList = [(keys: IssuerPublicKeys, Void)]()
+	var stubbedSetIssuerDomesticPublicKeysResult: Bool! = false
 
-	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) -> Bool {
-		invokedSetIssuerPublicKeys = true
-		invokedSetIssuerPublicKeysCount += 1
-		invokedSetIssuerPublicKeysParameters = (keys, ())
-		invokedSetIssuerPublicKeysParametersList.append((keys, ()))
-		return stubbedSetIssuerPublicKeysResult
+	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool {
+		invokedSetIssuerDomesticPublicKeys = true
+		invokedSetIssuerDomesticPublicKeysCount += 1
+		invokedSetIssuerDomesticPublicKeysParameters = (keys, ())
+		invokedSetIssuerDomesticPublicKeysParametersList.append((keys, ()))
+		return stubbedSetIssuerDomesticPublicKeysResult
 	}
 
 	var invokedHasPublicKeys = false
