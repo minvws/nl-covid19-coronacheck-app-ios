@@ -152,7 +152,6 @@
 "holder.consent.message.underlined" = "privacy statement";
 "holder.consent.item.1" = "Your data is <b>not centrally stored anywhere</b>";
 "holder.consent.item.2" = "Your GPS or location data is <b>not used or saved</b>";
-"holder.consent.item.3" = "The QR code contains a minimum amount of <b>data</b>";
 "holder.consent.button" = "I've read the privacy statement and give consent for processing my personal data.";
 
 /* MARK: - Holder Dashboard */
