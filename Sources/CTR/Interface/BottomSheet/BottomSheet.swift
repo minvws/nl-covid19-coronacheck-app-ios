@@ -69,7 +69,9 @@ private final class CloseButtonRowView: UIView {
 		addSubview(button)
 		addConstraints([
 			button.centerYAnchor.constraint(equalTo: centerYAnchor),
-			button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20)
+			button.centerXAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+			button.widthAnchor.constraint(equalToConstant: 43),
+			button.heightAnchor.constraint(equalTo: button.widthAnchor, constant: 0)
 		])
 
 		button.addTarget(self, action: #selector(CloseButtonRowView.didTapButton), for: .touchUpInside)
