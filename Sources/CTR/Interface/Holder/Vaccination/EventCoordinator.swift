@@ -20,7 +20,7 @@ enum EventScreenResult: Equatable {
 	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
-	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
+	case showEvents(events: [RemoteVaccinationEvent], eventMode: EventMode)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String)
@@ -31,9 +31,13 @@ enum EventScreenResult: Equatable {
 				return true
 			case (let .moreInformation(lhsTitle, lhsBody), let .moreInformation(rhsTitle, rhsBody)):
 				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
-			case (let remoteVaccinationEvents(lhsEvents), let remoteVaccinationEvents(rhsEvents)):
+			case (let showEvents(lhsEvents, lhsMode), let showEvents(rhsEvents, rhsMode)):
 
 				if lhsEvents.count != rhsEvents.count {
+					return false
+				}
+
+				if lhsMode != rhsMode {
 					return false
 				}
 
@@ -230,7 +234,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						animated: true
 					)
 				}
-			case let .remoteVaccinationEvents(remoteEvents):
+			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, testEvents: [])
 			default:
 				break

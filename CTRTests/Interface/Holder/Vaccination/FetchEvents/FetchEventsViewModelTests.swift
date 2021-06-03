@@ -22,7 +22,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", networkManager: networkSpy)
+		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -72,19 +72,26 @@ class FetchEventsViewModelTests: XCTestCase {
 			identity: identity,
 			status: .complete,
 			events: [
-				Vaccination.Event(type: "vaccination", unique: "1234", vaccination: vaccinationEvent)
+				Vaccination.Event(
+					type: "vaccination",
+					unique: "1234",
+					isSpecimen: false,
+					vaccination: vaccinationEvent,
+					negativeTest: nil
+				)
 			]
 		)
 
-		networkSpy.stubbedFetchVaccinationAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchVaccinationEventProvidersCompletionResult = (.success([provider]), ())
-		networkSpy.stubbedFetchVaccinationEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchVaccinationEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			eventMode: .vaccination,
 			networkManager: networkSpy
 		)
 
@@ -103,15 +110,16 @@ class FetchEventsViewModelTests: XCTestCase {
 			events: []
 		)
 
-		networkSpy.stubbedFetchVaccinationAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchVaccinationEventProvidersCompletionResult = (.success([provider]), ())
-		networkSpy.stubbedFetchVaccinationEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchVaccinationEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
+			eventMode: .vaccination,
 			networkManager: networkSpy
 		)
 
@@ -158,6 +166,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		manufacturer: nil,
 		brand: nil,
 		completedByMedicalStatement: false,
+		completedByPersonalStatement: false,
 		doseNumber: 1,
 		totalDoses: 2,
 		country: "NLD"

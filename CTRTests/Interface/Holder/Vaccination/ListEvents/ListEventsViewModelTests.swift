@@ -351,7 +351,7 @@ class ListEventsViewModelTests: XCTestCase {
 			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue(value: nil)))
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
 			expect(self.sut.alert).toEventually(beNil())
 		} else {
 			fail("wrong state")
@@ -371,7 +371,9 @@ class ListEventsViewModelTests: XCTestCase {
 					Vaccination.Event(
 						type: "vaccination",
 						unique: "1234",
-						vaccination: vaccinationEvent
+						isSpecimen: false,
+						vaccination: vaccinationEvent,
+						negativeTest: nil
 					)
 				]
 			),
@@ -402,6 +404,7 @@ class ListEventsViewModelTests: XCTestCase {
 		manufacturer: nil,
 		brand: nil,
 		completedByMedicalStatement: false,
+		completedByPersonalStatement: false,
 		doseNumber: 1,
 		totalDoses: 2,
 		country: "NLD"

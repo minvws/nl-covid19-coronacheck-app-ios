@@ -73,7 +73,7 @@ class FetchEventsViewModel: Logging {
 					if remoteEvents.isEmpty {
 						self.viewState = self.emptyEventsState()
 					} else {
-						self.coordinator?.fetchEventsScreenDidFinish(.remoteVaccinationEvents(events: remoteEvents))
+						self.coordinator?.fetchEventsScreenDidFinish(.showEvents(events: remoteEvents, eventMode: self.eventMode))
 					}
 				}
 			}
@@ -94,7 +94,7 @@ class FetchEventsViewModel: Logging {
 
 		navigationAlert = FetchEventsViewController.AlertContent(
 			title: .holderVaccinationAlertTitle,
-			subTitle: .holderVaccinationAlertMessage,
+			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestResultsAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
 			okAction: { _ in
