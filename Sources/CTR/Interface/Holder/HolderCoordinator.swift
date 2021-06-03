@@ -364,7 +364,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithTVS(mode: .test)
+			eventCoordinator.startWithTVS(eventMode: EventMode.test)
 		}
 	}
 

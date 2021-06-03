@@ -207,14 +207,27 @@ struct Vaccination {
 
 	struct Event: Codable, Equatable {
 
-		/// The type of event (vaccination / vaccinationComplete)
+		/// The type of event (vaccination / negativetest)
 		let type: String
 
 		/// The identifier of this event
 		let unique: String
 
+		let isSpecimen: Bool
+
 		/// The vaccination
 		let vaccination: VaccinationEvent?
+
+		let negativeTest: TestEvent?
+
+		enum CodingKeys: String, CodingKey {
+
+			case type
+			case unique
+			case isSpecimen
+			case vaccination
+			case negativeTest = "negativetest"
+		}
 	}
 
 	/// An actual vaccination event
@@ -239,6 +252,9 @@ struct Vaccination {
 		/// Optional
 		let completedByMedicalStatement: Bool?
 
+		/// Optional
+		let completedByPersonalStatement: Bool?
+
 		let doseNumber: Int?
 
 		/// optional, will be based on brand info if left out
@@ -254,6 +270,7 @@ struct Vaccination {
 			case manufacturer
 			case brand
 			case completedByMedicalStatement
+			case completedByPersonalStatement
 			case doseNumber
 			case totalDoses
 			case country
@@ -268,6 +285,34 @@ struct Vaccination {
 				return  dateformatter.date(from: dateString)
 			}
 			return nil
+		}
+	}
+
+	struct TestEvent: Codable, Equatable {
+
+		let sampleDateString: String?
+
+		let resultDateString: String?
+
+		let negativeResult: Bool
+
+		let facility: String?
+
+		let type: String?
+
+		let name: String?
+
+		let manufacturer: String?
+
+		enum CodingKeys: String, CodingKey {
+
+			case sampleDateString = "sampleDate"
+			case resultDateString = "resultDate"
+			case negativeResult
+			case facility
+			case type
+			case name
+			case manufacturer
 		}
 	}
 }

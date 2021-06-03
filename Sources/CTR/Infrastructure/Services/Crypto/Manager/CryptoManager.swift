@@ -174,6 +174,8 @@ class CryptoManager: CryptoManaging, Logging {
 				let message = String(decoding: payload, as: UTF8.self)
 				logDebug("QR message: \(message)")
 				return payload
+			} else if let error = disclosed?.error {
+				logError("generateQRmessage: \(error)")
 			}
 		}
 		

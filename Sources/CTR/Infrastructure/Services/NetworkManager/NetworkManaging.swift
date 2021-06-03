@@ -61,7 +61,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
+	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
@@ -92,7 +92,7 @@ protocol NetworkManaging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void)
+	func fetchEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void)
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
@@ -110,20 +110,24 @@ protocol NetworkManaging {
 		code: String?,
 		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
 
-	/// Get a unomi result
+	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
+	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
-	func fetchVaccinationEventInformation(
+	func fetchEventInformation(
 		provider: Vaccination.EventProvider,
+		filter: String?,
 		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void)
-
-	/// Get  events
+	
+	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
+	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
-	func fetchVaccinationEvents(
+	func fetchEvents(
 		provider: Vaccination.EventProvider,
+		filter: String?,
 		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
 

@@ -29,17 +29,25 @@ class NetworkManager: NetworkManaging, Logging {
 			delegateQueue: nil)
 	}
 
-	/// Get the access tokens
+	/// Get the access tokens for the various event providers
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+	func fetchEventAccessTokens(
+		tvsToken: String,
+		completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(tvsToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
+		]
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.vaccinationAccessTokensUrl,
 			method: .POST,
-			body: ["tvs_token": tvsToken]
+			headers: headers
 		)
+		
 		func open(result: Result<ArrayEnvelope<Vaccination.AccessToken>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
@@ -174,7 +182,7 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
+	func fetchEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,
@@ -222,12 +230,14 @@ class NetworkManager: NetworkManaging, Logging {
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
-	/// Get a unomi result
+	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
+	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
-	func fetchVaccinationEventInformation(
+	func fetchEventInformation(
 		provider: Vaccination.EventProvider,
+		filter: String?,
 		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
@@ -247,17 +257,26 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+
+		var body: Data?
+		if let filter = filter {
+			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
+			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
+		}
+
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
-	/// Get  events
+	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
+	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
-	func fetchVaccinationEvents(
+	func fetchEvents(
 		provider: Vaccination.EventProvider,
+		filter: String?,
 		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.eventURL else {
@@ -277,7 +296,14 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+
+		var body: Data?
+		if let filter = filter {
+			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
+			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
+		}
+
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}

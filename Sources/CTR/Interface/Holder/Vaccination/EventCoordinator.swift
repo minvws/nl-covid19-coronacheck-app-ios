@@ -17,7 +17,7 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Continue with the next step in the flow
-	case `continue`(value: String?)
+	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
 	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
@@ -108,9 +108,9 @@ class EventCoordinator: Coordinator, Logging {
 		navigateToListEvents([], testEvents: testEvents, sourceMode: .negativeTest)
 	}
 
-	func startWithTVS(mode: TVSFetchMode) {
+	func startWithTVS(eventMode: EventMode) {
 		
-		navigateToLogin(mode: mode)
+		navigateToLogin(eventMode: eventMode)
 	}
 
 	// MARK: - Universal Link handling
@@ -121,23 +121,24 @@ class EventCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
-	private func navigateToLogin(mode: TVSFetchMode = .vaccination) {
+	private func navigateToLogin(eventMode: EventMode) {
 
 		let viewController = LoginTVSViewController(
 			viewModel: LoginTVSViewModel(
 				coordinator: self,
-				mode: mode
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
 
 	}
 
-	private func navigateToFetchEvents(token: String) {
+	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
 				coordinator: self,
-				tvsToken: token
+				tvsToken: token,
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -192,8 +193,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
-			case .continue:
-				navigateToLogin()
+			case let .continue(_, eventMode):
+				navigateToLogin(eventMode: eventMode)
 //			navigateToFetchEvents(token: "")
 			default:
 				break
@@ -204,9 +205,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 
-			case let .continue(value: token):
+			case let .continue(value: token, eventMode: eventMode):
 				if let token = token {
-					navigateToFetchEvents(token: token)
+					navigateToFetchEvents(token: token, eventMode: eventMode)
 				} else {
 					start()
 				}

@@ -256,8 +256,8 @@
 "holder.vaccination.list.actiontitle" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
-"holder.vaccination.nolist.title" = "Geen vaccinaties op kunnen halen";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen vaccinatiegegevens beschikbaar.</p><p>Als jouw huisarts niet is aangesloten op de GGD kunnen wij op dit moment geen vaccinatie ophalen. Dit kan over een maand.</p>";
+"holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor meer <a href=\"https://coronacheck.nl\">informatie</a></p> <p>Ben je kortgeleden gevaccineerd? Dan kan het even duren totdat de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.actiontitle" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
