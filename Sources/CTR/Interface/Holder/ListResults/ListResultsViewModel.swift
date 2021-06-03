@@ -122,7 +122,7 @@ class ListResultsViewModel: Logging {
 		self.message = .holderTestResultsResultsText
 		self.buttonTitle = .holderTestResultsResultsButton
 
-		let printDate: String? = Formatter().getDateFrom(dateString8601: result.sampleDate)
+		let printDate: String? = Formatter.getDateFrom(dateString8601: result.sampleDate)
 			.map {
 				printDateFormatter.string(from: $0).capitalizingFirstLetter()
 			}

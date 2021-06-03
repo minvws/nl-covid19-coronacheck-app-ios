@@ -17,10 +17,6 @@ protocol ConfigurationGeneralProtocol: AnyObject {
 	/// - Returns: TTL for a test result warning
 	func getTestResultWarningTTL() -> Int
 
-	/// Get the Grace Period for a QR
-	/// - Returns: TTL for a QR
-	func getQRGracePeriod() -> TimeInterval
-
 	/// Get the Refresh Period for a QR
 	/// - Returns: TTL for a QR
 	func getQRRefreshPeriod() -> TimeInterval
@@ -44,15 +40,6 @@ extension Configuration: ConfigurationGeneralProtocol {
 	func getTestResultWarningTTL() -> Int {
 		guard let value = general["testresultWarningTTL"] as? Int else {
 			fatalError("Configuration: No Test Restult Warning TTL provided")
-		}
-		return value
-	}
-
-	/// Get the TTL for a QR
-	/// - Returns: TTL for a QR
-	func getQRGracePeriod() -> TimeInterval {
-		guard let value = general["QRTTL"] as? TimeInterval else {
-			fatalError("Configuration: No QR Grace Period provided")
 		}
 		return value
 	}

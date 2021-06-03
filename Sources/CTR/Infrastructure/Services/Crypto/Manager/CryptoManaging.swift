@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias CryptoResult = (attributes: Attributes?, errorMessage: String?)
+typealias CryptoResult = (attributes: CryptoAttributes?, errorMessage: String?)
 
 struct NonceEnvelope: Codable {
 	
@@ -25,40 +25,32 @@ struct CryptoAttributes: Codable {
 	
 	let birthDay: String?
 	let birthMonth: String?
+	let credentialVersion: String?
+	let domesticDcc: String?
 	let firstNameInitial: String?
 	let lastNameInitial: String?
-	let sampleTime: String
-	let testType: String
 	let specimen: String?
-	let paperProof: String?
 	
 	enum CodingKeys: String, CodingKey {
 		
 		case birthDay
 		case birthMonth
+		case credentialVersion
+		case domesticDcc = "isNLDCC"
 		case firstNameInitial
 		case lastNameInitial
-		case sampleTime
-		case testType
 		case specimen = "isSpecimen"
-		case paperProof = "isPaperProof"
 	}
 	
-	var isPaperProof: Bool {
+	var isDomesticDcc: Bool {
 		
-		return paperProof == "1"
+		return domesticDcc == "1"
 	}
 	
 	var isSpecimen: Bool {
 		
 		return specimen == "1"
 	}
-}
-
-struct Attributes {
-	
-	let cryptoAttributes: CryptoAttributes
-	let unixTimeStamp: Int64
 }
 
 struct IssuerDomesticPublicKey: Codable {

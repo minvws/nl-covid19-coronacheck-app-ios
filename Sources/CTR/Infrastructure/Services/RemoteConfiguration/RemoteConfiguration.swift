@@ -28,6 +28,9 @@ protocol RemoteInformation {
 	/// What is the TTL of the config
 	var configTTL: Int? { get }
 
+	/// The launch date of the EU greencard functionality
+	var euLaunchDate: String? { get }
+
 	/// What is the validity of a test
 	var maxValidityHours: Int? { get }
 
@@ -84,6 +87,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// What is the TTL of the config
 	let configTTL: Int?
 
+	/// The launch date of the EU greencard functionality
+	let euLaunchDate: String?
+
 	/// What is the validity of a test
 	let maxValidityHours: Int?
 
@@ -128,6 +134,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
+		case euLaunchDate = "euLaunchDate"
 		case maxValidityHours = "maxValidityHours"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
@@ -151,6 +158,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		deactivated: Bool?,
 		informationURL: URL?,
 		configTTL: Int?,
+		euLaunchDate: String?,
 		maxValidityHours: Int?,
 		requireUpdateBefore: TimeInterval?,
 		temporarilyDisabled: Bool?,
@@ -165,6 +173,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
 		self.configTTL = configTTL
+		self.euLaunchDate = euLaunchDate
 		self.maxValidityHours = maxValidityHours
 		self.requireUpdateBefore = requireUpdateBefore
 		self.temporarilyDisabled = temporarilyDisabled
@@ -183,6 +192,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
+			euLaunchDate: nil,
 			maxValidityHours: 40,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,

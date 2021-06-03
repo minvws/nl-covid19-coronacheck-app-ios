@@ -209,7 +209,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity,
 				dataStoreManager: Services.dataStoreManager
 			)
 		)
@@ -504,7 +503,6 @@ extension HolderCoordinator: EventFlowDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity,
 				dataStoreManager: Services.dataStoreManager
 			)
 		)

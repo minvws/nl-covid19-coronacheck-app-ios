@@ -27,19 +27,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoResults: CryptoResult(
-				attributes: Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "test",
-						testType: "test",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: 0
-				),
+				attributes: nil,
 				errorMessage: nil
 			),
 			maxValidity: 48
@@ -56,23 +44,16 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDemo() throws {
 
 		// Given
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
-
 		viewModel.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp40SecAgo)",
-						testType: "pcr",
-						specimen: "1",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp40SecAgo)
-				),
+			attributes: CryptoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				credentialVersion: nil,
+				domesticDcc: "0",
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				specimen: "1"
+			),
 			errorMessage: nil
 		)
 		loadView()
@@ -89,25 +70,12 @@ class VerifierResultViewControllerTests: XCTestCase {
 		sut.assertImage()
 	}
 
-	func testDemoFaultTime() throws {
+	func testDeniedInvalidQR() throws {
 
 		// Given
 		viewModel.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "test",
-						testType: "pcr",
-						specimen: "1",
-						paperProof: "0"
-					),
-					unixTimeStamp: 0
-				),
-			errorMessage: nil
+			attributes: nil,
+			errorMessage: "Invalid QR"
 		)
 		loadView()
 
@@ -122,26 +90,21 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Snapshot
 		sut.assertImage()
 	}
-
-	func testDenied() throws {
-
+	
+	func testDeniedDomesticDcc() throws {
+		
 		// Given
 		viewModel.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "test",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: 0
-				),
-			errorMessage: nil
+			attributes: CryptoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				credentialVersion: nil,
+				domesticDcc: "1",
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				specimen: nil
+			),
+			errorMessage: "Invalid QR"
 		)
 		loadView()
 
@@ -149,43 +112,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
-		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
-		expect(self.sut.sceneView.imageView.image) == UIImage.denied
-
-		// Snapshot
-		sut.assertImage()
-	}
-
-	func testDenied48hours() throws {
-
-		// Given
-		let timeStamp48HoursAgo = Date().timeIntervalSince1970 - (48 * 60 * 60) - 40
-		viewModel.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp48HoursAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(Date().timeIntervalSince1970)
-				),
-			errorMessage: nil
-		)
-		loadView()
-
-		// When
-		viewModel.checkAttributes()
-
-		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
-		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
+		expect(self.sut.sceneView.title) == .verifierResultDeniedRegionTitle
+		expect(self.sut.sceneView.message) == .verifierResultDeniedRegionMessage
 		expect(self.sut.sceneView.imageView.image) == UIImage.denied
 
 		// Snapshot
@@ -195,22 +123,16 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testVerified() throws {
 
 		// Given
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
 		viewModel.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp40SecAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp40SecAgo)
-				),
+			attributes: CryptoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				credentialVersion: nil,
+				domesticDcc: "0",
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				specimen: "0"
+			),
 			errorMessage: nil
 		)
 		loadView()
