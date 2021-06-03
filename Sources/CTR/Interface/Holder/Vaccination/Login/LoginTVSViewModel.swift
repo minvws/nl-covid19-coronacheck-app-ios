@@ -7,10 +7,18 @@
 
 import UIKit
 
+enum TVSFetchMode {
+	// case recovery
+	case test
+	case vaccination
+}
+
 class LoginTVSViewModel: Logging {
 
 	weak var coordinator: EventCoordinatorDelegate?
 	weak var openIdManager: OpenIdManaging?
+
+	var mode: TVSFetchMode
 
 	@Bindable private(set) var title: String
 
@@ -20,12 +28,14 @@ class LoginTVSViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate,
+		mode: TVSFetchMode = .vaccination,
 		openIdManager: OpenIdManaging = Services.openIdManager) {
 
 		self.coordinator = coordinator
 		self.openIdManager = openIdManager
+		self.mode = mode
 
-		self.title = .holderVaccinationStartTitle
+		self.title = mode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle
 	}
 
 	/// Login at the GGD

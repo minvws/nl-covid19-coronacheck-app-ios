@@ -108,6 +108,11 @@ class EventCoordinator: Coordinator, Logging {
 		navigateToListEvents([], testEvents: testEvents, sourceMode: .negativeTest)
 	}
 
+	func startWithTVS(mode: TVSFetchMode) {
+		
+		navigateToLogin(mode: mode)
+	}
+
 	// MARK: - Universal Link handling
 
 	func consume(universalLink: UniversalLink) -> Bool {
@@ -116,11 +121,12 @@ class EventCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
-	private func navigateToLogin() {
+	private func navigateToLogin(mode: TVSFetchMode = .vaccination) {
 
 		let viewController = LoginTVSViewController(
 			viewModel: LoginTVSViewModel(
-				coordinator: self
+				coordinator: self,
+				mode: mode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -187,8 +193,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
 			case .continue:
-//				navigateToLogin()
-			navigateToFetchEvents(token: "")
+				navigateToLogin()
+//			navigateToFetchEvents(token: "")
 			default:
 				break
 		}

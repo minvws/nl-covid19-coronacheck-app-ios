@@ -357,7 +357,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
-		logInfo("userWishesToCreateANegativeTestQRFromGGD")
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithTVS(mode: .test)
+		}
 	}
 
 	func userWishesToCreateAVaccinationQR() {

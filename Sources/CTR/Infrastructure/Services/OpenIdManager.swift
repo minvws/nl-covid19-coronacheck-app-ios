@@ -74,7 +74,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 		onError: @escaping (Error?) -> Void) {
 
 		let request = generateRequest(serviceConfiguration: serviceConfiguration)
-		self.logInfo("Initiating authorization request with scope: \(request.scope ?? "nil")")
+		self.logInfo("OpenIdManager: authorization request: \(request)")
 
 		if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
 
@@ -84,14 +84,14 @@ class OpenIdManager: OpenIdManaging, Logging {
 				// Request the access token
 				OIDAuthState.authState(byPresenting: request, presenting: presenter) { authState, error in
 					DispatchQueue.main.async {
+						self.logDebug("OpenIdManager: authState: \(String(describing: authState))")
 						if let authState = authState {
-							self.logDebug("Got access tokens. Access token: " +
+							self.logDebug("OpenIdManager: Got access tokens. Access token: " +
 											"\(authState.lastTokenResponse?.accessToken ?? "nil")")
 
-							onCompletion(authState.lastTokenResponse?.accessToken)
+							onCompletion(authState.lastTokenResponse?.idToken)
 						} else {
-							self.logError("\(String(describing: error))")
-
+							self.logError("OpenIdManager: \(String(describing: error))")
 							onError(error)
 						}
 					}
