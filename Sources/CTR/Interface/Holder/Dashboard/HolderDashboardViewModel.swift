@@ -90,9 +90,6 @@ class HolderDashboardViewModel: Logging {
 	/// The configuration
 	private var configuration: ConfigurationGeneralProtocol
 
-	/// The proof validator
-	private var proofValidator: ProofValidatorProtocol
-
 	/// the notification center
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
@@ -127,13 +124,12 @@ class HolderDashboardViewModel: Logging {
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
 	///   - configuration: the configuration
-	///   - maxValidity: the maximum validity of a test in hours
+	///   - dataStoreManager: the data store manager
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
-		maxValidity: Int,
 		dataStoreManager: DataStoreManaging
 	) {
 
@@ -141,7 +137,6 @@ class HolderDashboardViewModel: Logging {
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
 		self.configuration = configuration
-		self.proofValidator = ProofValidator(maxValidity: maxValidity)
 		self.datasource = Datasource(dataStoreManager: dataStoreManager)
 
 		self.state = State(
