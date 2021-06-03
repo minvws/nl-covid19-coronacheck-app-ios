@@ -200,6 +200,18 @@
 "holder.dashboard.changeregion.button" = "Aanpassen";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt alleen een Europese QR-code.";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet (meer) geldig in Nederland. Daarom is er alleen een Europese QR-code gemaakt. Deze is geldig in de Europese Unie.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je maar één prik hebt gehad.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet geldig in de Europese Unie. Daarom is er alleen een Nederlandse QR-code gemaakt. Deze is geldig in Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je type vaccinatie niet geaccepteerd wordt in de Europese Unie.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet (meer) geldig in Nederland. Daarom is er alleen een Europese QR-code gemaakt. Deze is geldig in de Europese Unie.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat de geldigheidsduur in Nederland (40 uur) korter is dan de geldigheidsduur in de Europese Unie.</p><p>Wil je reizen binnen de Europese Unie? Bekijk op <a href=\"https://coronacheck.nl/nl/\">deze pagina</a> waar je je kan laten testen.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet geldig in de Europese Unie. Daarom is er alleen een Nederlandse QR-code gemaakt. Deze is geldig in Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je type test niet geaccepteerd wordt in de Europese Unie.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
