@@ -160,7 +160,6 @@
 "holder.consent.message.underlined" = "privacyverklaring";
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
 "holder.consent.item.2" = "Je GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b>";
-"holder.consent.item.3" = "In de QR-code staan minimale <b>persoonsgegevens</b>";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en geef toestemming voor het verwerken van mijn persoonsgegevens.";
 
 /* MARK: - Choose QR Code Type */
