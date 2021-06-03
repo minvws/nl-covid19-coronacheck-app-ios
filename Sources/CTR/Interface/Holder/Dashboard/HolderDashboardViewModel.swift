@@ -245,7 +245,7 @@ class HolderDashboardViewModel: Logging {
 		cards += state.myQRCards
 
 			// Map a `MyQRCard` to a `VC.Card`:
-			.compactMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> HolderDashboardViewController.Card? in
+			.flatMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> [HolderDashboardViewController.Card] in
 
 				switch (state.qrCodeValidityRegion, qrcardDataItem) {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
@@ -258,7 +258,7 @@ class HolderDashboardViewModel: Logging {
 							)
 						}
 
-						return HolderDashboardViewController.Card.domesticQR(
+						return [HolderDashboardViewController.Card.domesticQR(
 							rows: rows,
 							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 							buttonEnabledEvaluator: evaluateEnabledState,
@@ -278,7 +278,7 @@ class HolderDashboardViewModel: Logging {
 
 								return String.qrExpiryDatePrefixExpiresIn + relativeDateString
 							}
-						)
+						)]
 
 					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
@@ -290,14 +290,22 @@ class HolderDashboardViewModel: Logging {
 							)
 						}
 
-						return HolderDashboardViewController.Card.europeanUnionQR(
+						var cards = [HolderDashboardViewController.Card.europeanUnionQR(
 							rows: rows,
 							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 							buttonEnabledEvaluator: evaluateEnabledState,
 							expiryCountdownEvaluator: nil
-						)
+						)]
 
-					default: return nil
+						// 📝 Can be removed after EU launch:
+						if let origin = origins.first(where: { $0.shouldConsiderEULaunchDate }), origin.euLaunchDate > Date() {
+							let message = String.qrEULaunchCardFooterMessage(forEULaunchDate: origin.euLaunchDate)
+							cards += [.cardFooter(message: message)]
+						}
+
+						return cards
+
+					default: return []
 				}
 			}
 
@@ -354,10 +362,30 @@ extension HolderDashboardViewModel {
 
 		/// Represents an Origin
 		struct Origin {
+
 			let type: QRCodeOriginType // vaccination | test | recovery
 			let eventDate: Date
 			let expirationTime: Date
-			let validFromDate: Date
+			// let validFromDate: Date
+
+			// ⬇️⬇️⬇️ -- Temporary, this block can be deleted after EU launch -- ~~~
+			var validFromDate: Date {
+				guard shouldConsiderEULaunchDate else { return realValidFromDate }
+				return realValidFromDate < euLaunchDate ? euLaunchDate : realValidFromDate
+			}
+			let shouldConsiderEULaunchDate: Bool
+			let euLaunchDate: Date
+			private let realValidFromDate: Date
+
+			init(type: QRCodeOriginType, eventDate: Date, expirationTime: Date, validFromDate: Date, euLaunchDate: Date, shouldConsiderEULaunchDate: Bool) {
+				self.type = type
+				self.eventDate = eventDate
+				self.expirationTime = expirationTime
+				self.realValidFromDate = validFromDate
+				self.euLaunchDate = euLaunchDate
+				self.shouldConsiderEULaunchDate = shouldConsiderEULaunchDate
+			}
+			// ⬆️⬆️⬆️ --- end EU launch code ----------------------------------- ~~~
 
 			/// There is a particular order to sort these onscreen
 			var customSortIndex: Int {
@@ -547,6 +575,8 @@ extension HolderDashboardViewModel {
 			let walletManager = Services.walletManager
 			let greencards = walletManager.listGreenCards()
 
+			/* Can be removed after EU Launch! */ let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom) ?? .distantFuture
+
 			let items = greencards
 				.compactMap { (greencard: GreenCard) -> (GreenCard, [Origin])? in
 					// Get all origins
@@ -571,7 +601,9 @@ extension HolderDashboardViewModel {
 								type: type,
 								eventDate: eventDate,
 								expirationTime: expirationTime,
-								validFromDate: validFromDate
+								validFromDate: validFromDate,
+								euLaunchDate: euLaunchDate,
+								shouldConsiderEULaunchDate: greencard.getType() == .eu
 							)
 						}
 						.filter {
@@ -665,7 +697,8 @@ private extension Date {
 
 	/// to be used like `now.isWithinTimeWindow(.originValidFrom, origin.expireTime)`
 	func isWithinTimeWindow(from: Date, to: Date) -> Bool {
-		(from...to).contains(self)
+		guard from <= to else { return false } // otherwise it can crash
+		return (from...to).contains(self)
 	}
 }
 

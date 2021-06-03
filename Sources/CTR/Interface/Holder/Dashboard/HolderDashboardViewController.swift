@@ -28,6 +28,8 @@ class HolderDashboardViewController: BaseViewController {
 		case domesticQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case europeanUnionQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+
+		case cardFooter(message: String)
 	}
 
 	struct ValidityText {
@@ -151,6 +153,12 @@ class HolderDashboardViewController: BaseViewController {
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
 
 						return qrCard
+
+					case .cardFooter(let message):
+
+						let cardFooterView = CardFooterView()
+						cardFooterView.title = message
+						return cardFooterView
 				}
 			}
 
@@ -161,6 +169,22 @@ class HolderDashboardViewController: BaseViewController {
 
 			cardViews.forEach {
 				sceneView.stackView.addArrangedSubview($0)
+			}
+
+			// Hack to fix the spacing between EU Launch message and a EU Card.
+			// 📝 Can be removed once EU Launch date is passed:
+			for (index, view) in cardViews.enumerated() {
+				guard view is CardFooterView else { continue }
+
+				// Try to get previous view, which would be an EU card:
+				let previousIndex = index - 1
+
+				guard previousIndex >= 0 else { continue }
+
+				// Check that previous view is a QRCardView:
+				guard let previousCardView = cardViews[previousIndex] as? QRCardView else { continue }
+
+				sceneView.stackView.setCustomSpacing(16, after: previousCardView)
 			}
 		}
 	}

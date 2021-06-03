@@ -198,6 +198,7 @@
 "holder.dashboard.qr.type.vaccination" = "vaccinatiebewijs";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
+"holder.dashboard.qr.eulaunchcardfootermessage" = "Je Europese QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis buiten Nederland";
 "holder.dashboard.changeregion.button" = "Aanpassen";
