@@ -146,6 +146,8 @@
 "verifier.result.denied.title" = "Invalid QR code";
 "verifier.result.denied.message" = "The visitor doesn't have a valid negative test declaration. See possible causes.";
 "verifier.result.denied.link" = "See possible causes.";
+"verifier.result.denied.region.title" = "Dit is een Europese QR-code";
+"verifier.result.denied.region.message" = "Dit is geen geldig bewijs in Nederland. Vraag de bezoeker een Nederlandse QR-code te laten zien.";
 "verifier.result.next" = "Scan next";
 "holder.testresults.january" = "JAN";
 "holder.testresults.february" = "FEB";
