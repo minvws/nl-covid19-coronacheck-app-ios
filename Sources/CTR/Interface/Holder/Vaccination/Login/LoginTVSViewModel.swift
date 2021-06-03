@@ -7,7 +7,8 @@
 
 import UIKit
 
-enum LoginTVSMode {
+enum TVSFetchMode {
+	// case recovery
 	case test
 	case vaccination
 }
@@ -17,7 +18,7 @@ class LoginTVSViewModel: Logging {
 	weak var coordinator: EventCoordinatorDelegate?
 	weak var openIdManager: OpenIdManaging?
 
-	var mode: LoginTVSMode
+	var mode: TVSFetchMode
 
 	@Bindable private(set) var title: String
 
@@ -27,7 +28,7 @@ class LoginTVSViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate,
-		mode: LoginTVSMode = .vaccination,
+		mode: TVSFetchMode = .vaccination,
 		openIdManager: OpenIdManaging = Services.openIdManager) {
 
 		self.coordinator = coordinator
