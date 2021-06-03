@@ -157,6 +157,7 @@ extension String {
 			case (.recovery, .europeanUnion):
 				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message")
 		}
+	}
     
 	// Can be deleted after EU launch: 
 	static func qrEULaunchCardFooterMessage(forEULaunchDate date: Date) -> String {
