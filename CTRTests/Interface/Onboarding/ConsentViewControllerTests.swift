@@ -58,7 +58,7 @@ class ConsentViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.title, .holderConsentTitle, "Title should match")
 		XCTAssertEqual(sut.sceneView.message, .holderConsentMessage, "Message should match")
 		XCTAssertEqual(sut.sceneView.consent, .holderConsentButtonTitle, "Consent should match")
-		XCTAssertEqual(sut.sceneView.itemStackView.arrangedSubviews.count, 3, "There should be 3 items")
+		XCTAssertEqual(sut.sceneView.itemStackView.arrangedSubviews.count, 2, "There should be 2 items")
 	}
 
 	/// Test the user tapped on the link
