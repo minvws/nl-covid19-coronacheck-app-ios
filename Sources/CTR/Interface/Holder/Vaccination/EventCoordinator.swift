@@ -17,10 +17,10 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Continue with the next step in the flow
-	case `continue`(value: String?)
+	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
-	case remoteVaccinationEvents(events: [RemoteVaccinationEvent])
+	case showEvents(events: [RemoteVaccinationEvent], eventMode: EventMode)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String)
@@ -31,9 +31,13 @@ enum EventScreenResult: Equatable {
 				return true
 			case (let .moreInformation(lhsTitle, lhsBody), let .moreInformation(rhsTitle, rhsBody)):
 				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
-			case (let remoteVaccinationEvents(lhsEvents), let remoteVaccinationEvents(rhsEvents)):
+			case (let showEvents(lhsEvents, lhsMode), let showEvents(rhsEvents, rhsMode)):
 
 				if lhsEvents.count != rhsEvents.count {
+					return false
+				}
+
+				if lhsMode != rhsMode {
 					return false
 				}
 
@@ -105,12 +109,12 @@ class EventCoordinator: Coordinator, Logging {
 
 	func startWithListTestEvents(testEvents: [RemoteTestEvent]) {
 
-		navigateToListEvents([], testEvents: testEvents, sourceMode: .negativeTest)
+		navigateToListEvents([], testEvents: testEvents, eventMode: .test, sourceMode: .commercial)
 	}
 
-	func startWithTVS(mode: TVSFetchMode) {
+	func startWithTVS(eventMode: EventMode) {
 		
-		navigateToLogin(mode: mode)
+		navigateToLogin(eventMode: eventMode)
 	}
 
 	// MARK: - Universal Link handling
@@ -121,23 +125,24 @@ class EventCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
-	private func navigateToLogin(mode: TVSFetchMode = .vaccination) {
+	private func navigateToLogin(eventMode: EventMode) {
 
 		let viewController = LoginTVSViewController(
 			viewModel: LoginTVSViewModel(
 				coordinator: self,
-				mode: mode
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
 
 	}
 
-	private func navigateToFetchEvents(token: String) {
+	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
 		let viewController = FetchEventsViewController(
 			viewModel: FetchEventsViewModel(
 				coordinator: self,
-				tvsToken: token
+				tvsToken: token,
+				eventMode: eventMode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -146,12 +151,14 @@ class EventCoordinator: Coordinator, Logging {
 	private func navigateToListEvents(
 		_ vaccinationEvents: [RemoteVaccinationEvent],
 		testEvents: [RemoteTestEvent],
-		sourceMode: ListEventSourceMode = .vaccination) {
+		eventMode: EventMode,
+		sourceMode: ListEventSourceMode = .ggd) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				sourceMode: sourceMode,
+				eventMode: eventMode,
 				remoteVaccinationEvents: vaccinationEvents,
 				remoteTestEvents: testEvents
 			)
@@ -175,13 +182,17 @@ class EventCoordinator: Coordinator, Logging {
 
 		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
 	}
-}
 
-extension EventCoordinator: Dismissable {
+	private func navigateBackToVaccinationStart() {
 
-	func dismiss() {
+		if let vaccineStartViewController = navigationController.viewControllers
+			.first(where: { $0 is VaccinationStartViewController }) {
 
-		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+			navigationController.popToViewController(
+				vaccineStartViewController,
+				animated: true
+			)
+		}
 	}
 }
 
@@ -192,9 +203,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .back, .stop:
 				delegate?.eventFlowDidCancel()
-			case .continue:
-				navigateToLogin()
-//			navigateToFetchEvents(token: "")
+			case let .continue(_, eventMode):
+				navigateToLogin(eventMode: eventMode)
 			default:
 				break
 		}
@@ -204,9 +214,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 		switch result {
 
-			case let .continue(value: token):
+			case let .continue(value: token, eventMode: eventMode):
 				if let token = token {
-					navigateToFetchEvents(token: token)
+					navigateToFetchEvents(token: token, eventMode: eventMode)
 				} else {
 					start()
 				}
@@ -221,16 +231,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .stop:
 				delegate?.eventFlowDidComplete()
 			case .back:
-				if let vaccineStartViewController = navigationController.viewControllers
-					.first(where: { $0 is VaccinationStartViewController }) {
-
-					navigationController.popToViewController(
-						vaccineStartViewController,
-						animated: true
-					)
-				}
-			case let .remoteVaccinationEvents(remoteEvents):
-				navigateToListEvents(remoteEvents, testEvents: [])
+				navigateBackToVaccinationStart()
+			case let .showEvents(remoteEvents, eventMode):
+				navigateToListEvents(remoteEvents, testEvents: [], eventMode: eventMode)
 			default:
 				break
 		}
@@ -242,14 +245,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .stop, .continue:
 				delegate?.eventFlowDidComplete()
 			case .back:
-				if let vaccineStartViewController = navigationController.viewControllers
-					.first(where: { $0 is VaccinationStartViewController }) {
-
-					navigationController.popToViewController(
-						vaccineStartViewController,
-						animated: true
-					)
-				}
+				navigateBackToVaccinationStart()
 			case let .moreInformation(title, body):
 				navigateToMoreInformation(title, body: body)
 			default:
@@ -278,5 +274,13 @@ extension EventCoordinator: OpenUrlProtocol {
 		} else {
 			UIApplication.shared.open(url)
 		}
+	}
+}
+
+extension EventCoordinator: Dismissable {
+
+	func dismiss() {
+
+		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
 	}
 }

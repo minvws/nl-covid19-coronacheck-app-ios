@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum TVSFetchMode {
+enum EventMode {
 	// case recovery
 	case test
 	case vaccination
@@ -15,10 +15,10 @@ enum TVSFetchMode {
 
 class LoginTVSViewModel: Logging {
 
-	weak var coordinator: EventCoordinatorDelegate?
-	weak var openIdManager: OpenIdManaging?
+	private weak var coordinator: EventCoordinatorDelegate?
+	private weak var openIdManager: OpenIdManaging?
 
-	var mode: TVSFetchMode
+	private var eventMode: EventMode
 
 	@Bindable private(set) var title: String
 
@@ -28,14 +28,14 @@ class LoginTVSViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate,
-		mode: TVSFetchMode = .vaccination,
+		eventMode: EventMode,
 		openIdManager: OpenIdManaging = Services.openIdManager) {
 
 		self.coordinator = coordinator
 		self.openIdManager = openIdManager
-		self.mode = mode
+		self.eventMode = eventMode
 
-		self.title = mode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle
+		self.title = eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle
 	}
 
 	/// Login at the GGD
@@ -59,8 +59,8 @@ class LoginTVSViewModel: Logging {
 
 			self?.shouldShowProgress = false
 
-			if let token = accessToken {
-				self?.coordinator?.loginTVSScreenDidFinish(.continue(value: token))
+			if let token = accessToken, let eventMode = self?.eventMode {
+				self?.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: eventMode))
 			} else {
 				self?.alert = LoginTVSViewController.AlertContent(
 					title: .errorTitle,

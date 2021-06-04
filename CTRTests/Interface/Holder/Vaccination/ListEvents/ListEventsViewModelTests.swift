@@ -28,6 +28,7 @@ class ListEventsViewModelTests: XCTestCase {
 		cryptoSpy = CryptoManagerSpy()
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -99,6 +100,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -128,6 +130,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -152,6 +155,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -181,6 +185,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -212,6 +217,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -286,6 +292,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -324,6 +331,7 @@ class ListEventsViewModelTests: XCTestCase {
 		// Given
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
 			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
 			remoteTestEvents: [],
 			networkManager: networkSpy,
@@ -351,7 +359,7 @@ class ListEventsViewModelTests: XCTestCase {
 			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
 			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue(value: nil)))
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0).toEventually(equal(EventScreenResult.continue(value: nil, eventMode: .test)))
 			expect(self.sut.alert).toEventually(beNil())
 		} else {
 			fail("wrong state")
@@ -362,16 +370,18 @@ class ListEventsViewModelTests: XCTestCase {
 
 	private func defaultremoteVaccinationEvent() -> RemoteVaccinationEvent {
 		return RemoteVaccinationEvent(
-			wrapper: Vaccination.EventResultWrapper(
+			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "CC",
 				protocolVersion: "3.0",
 				identity: identity,
 				status: .complete,
 				events: [
-					Vaccination.Event(
+					EventFlow.Event(
 						type: "vaccination",
 						unique: "1234",
-						vaccination: vaccinationEvent
+						isSpecimen: false,
+						vaccination: vaccinationEvent,
+						negativeTest: nil
 					)
 				]
 			),
@@ -388,20 +398,21 @@ class ListEventsViewModelTests: XCTestCase {
 		secondaryAction: nil
 	)
 
-	private let identity = Vaccination.Identity(
+	private let identity = EventFlow.Identity(
 		infix: "",
 		firstName: "Corona",
 		lastName: "Check",
 		birthDateString: "2021-05-16"
 	)
 
-	private let vaccinationEvent = Vaccination.VaccinationEvent(
+	private let vaccinationEvent = EventFlow.VaccinationEvent(
 		dateString: "2021-05-16",
 		hpkCode: nil,
 		type: nil,
 		manufacturer: nil,
 		brand: nil,
 		completedByMedicalStatement: false,
+		completedByPersonalStatement: false,
 		doseNumber: 1,
 		totalDoses: 2,
 		country: "NLD"

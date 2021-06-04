@@ -84,6 +84,21 @@ extension String {
 		return Localization.string(for: "holder.vaccination.nolist.action")
 	}
 
+	static var holderTestNoListTitle: String {
+
+		return Localization.string(for: "holder.test.nolist.title")
+	}
+
+	static var holderTestNoListMessage: String {
+
+		return Localization.string(for: "holder.test.nolist.message")
+	}
+
+	static var holderTestNoListActionTitle: String {
+
+		return Localization.string(for: "holder.test.nolist.action")
+	}
+
 	static var holderVaccinationAlertTitle: String {
 
 		return Localization.string(for: "holder.vaccination.alert.title")

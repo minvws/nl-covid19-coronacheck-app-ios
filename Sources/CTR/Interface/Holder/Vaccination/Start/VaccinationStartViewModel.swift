@@ -23,7 +23,12 @@ class VaccinationStartViewModel: Logging {
 
 	func primaryButtonTapped() {
 
-		coordinator?.vaccinationStartScreenDidFinish(.continue(value: nil))
+		coordinator?.vaccinationStartScreenDidFinish(
+			.continue(
+				value: nil,
+				eventMode: EventMode.vaccination
+			)
+		)
 	}
 
 	func openUrl(_ url: URL) {

@@ -7,9 +7,9 @@
 
 import Foundation
 
-typealias RemoteVaccinationEvent = (wrapper: Vaccination.EventResultWrapper, signedResponse: SignedResponse)
+typealias RemoteVaccinationEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
 
-struct Vaccination {
+struct EventFlow {
 
 	/// The access token used to fetch fat and thin ID Hashes
 	struct AccessToken: Codable, Equatable {
@@ -148,6 +148,26 @@ struct Vaccination {
 			return maxIssuedAt
 		}
 
+		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
+
+			let maxIssuedAt: Date? = events
+				.compactMap { $0.negativeTest?.sampleDateString }
+				.compactMap { dateFormatter.date(from: $0) }
+				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
+
+					switch latestDateFound {
+						case let latestDateFound? where nextDate > latestDateFound:
+							return nextDate
+						case .none:
+							return nextDate
+						default:
+							return latestDateFound
+					}
+				}
+
+			return maxIssuedAt
+		}
+
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
@@ -207,14 +227,27 @@ struct Vaccination {
 
 	struct Event: Codable, Equatable {
 
-		/// The type of event (vaccination / vaccinationComplete)
+		/// The type of event (vaccination / negativetest)
 		let type: String
 
 		/// The identifier of this event
 		let unique: String
 
+		let isSpecimen: Bool
+
 		/// The vaccination
 		let vaccination: VaccinationEvent?
+
+		let negativeTest: TestEvent?
+
+		enum CodingKeys: String, CodingKey {
+
+			case type
+			case unique
+			case isSpecimen
+			case vaccination
+			case negativeTest = "negativetest"
+		}
 	}
 
 	/// An actual vaccination event
@@ -239,6 +272,9 @@ struct Vaccination {
 		/// Optional
 		let completedByMedicalStatement: Bool?
 
+		/// Optional
+		let completedByPersonalStatement: Bool?
+
 		let doseNumber: Int?
 
 		/// optional, will be based on brand info if left out
@@ -254,6 +290,7 @@ struct Vaccination {
 			case manufacturer
 			case brand
 			case completedByMedicalStatement
+			case completedByPersonalStatement
 			case doseNumber
 			case totalDoses
 			case country
@@ -270,39 +307,40 @@ struct Vaccination {
 			return nil
 		}
 	}
-}
 
-struct RemoteGreenCards: Codable {
+	struct TestEvent: Codable, Equatable {
 
-	struct Response: Codable {
+		let sampleDateString: String?
 
-		let domesticGreenCard: DomesticGreenCard?
-		let euGreenCards: [EuGreenCard]?
+		let negativeResult: Bool
+
+		let facility: String?
+
+		let type: String?
+
+		let name: String?
+
+		let manufacturer: String?
 
 		enum CodingKeys: String, CodingKey {
 
-			case domesticGreenCard = "domesticGreencard"
-			case euGreenCards = "euGreencards"
+			case sampleDateString = "sampleDate"
+			case negativeResult
+			case facility
+			case type
+			case name
+			case manufacturer
 		}
-	}
 
-	struct DomesticGreenCard: Codable {
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
 
-		let origins: [RemoteGreenCards.Origin]
-		let createCredentialMessages: String?
-	}
-
-	struct EuGreenCard: Codable {
-
-		let origins: [RemoteGreenCards.Origin]
-		let credential: String
-	}
-
-	struct Origin: Codable {
-
-		let type: String
-		let eventTime: Date
-		let expirationTime: Date
-		let validFrom: Date
+			if let dateString = sampleDateString {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
+		}
 	}
 }

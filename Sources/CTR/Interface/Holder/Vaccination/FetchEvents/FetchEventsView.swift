@@ -24,9 +24,11 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	private let messageLabel: Label = {
+	let contentTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		let view = TextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 
 	/// The spinner
@@ -55,7 +57,7 @@ class FetchEventsView: ScrolledStackWithButtonView {
 
 		addSubview(spinner)
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(contentTextView)
 	}
 
 	/// Setup the constraints
@@ -93,11 +95,7 @@ class FetchEventsView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			contentTextView.html(message)
 		}
 	}
 }

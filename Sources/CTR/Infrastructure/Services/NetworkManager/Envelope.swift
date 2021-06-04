@@ -76,8 +76,8 @@ struct Envelope<Item: Envelopable & Codable>: Codable {
     }
 }
 
-extension Vaccination.AccessToken: Envelopable { static let envelopeName = "tokens" }
+extension EventFlow.AccessToken: Envelopable { static let envelopeName = "tokens" }
 
-extension Vaccination.EventProvider: Envelopable { static let envelopeName = "event_providers" }
+extension EventFlow.EventProvider: Envelopable { static let envelopeName = "event_providers" }
 
 extension TestProvider: Envelopable { static let envelopeName = "corona_test_providers" }

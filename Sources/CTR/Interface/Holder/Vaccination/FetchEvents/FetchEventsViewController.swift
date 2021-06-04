@@ -82,6 +82,11 @@ class FetchEventsViewController: BaseViewController {
 		viewModel.$navigationAlert.binding = { [weak self] in
 			self?.showAlert($0)
 		}
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
 	}
 
 	@objc func backButtonTapped() {
