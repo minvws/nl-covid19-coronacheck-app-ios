@@ -182,6 +182,7 @@ class HolderDashboardViewModel: Logging {
 	}
 
 	func openUrl(_ url: URL) {
+
 		coordinator?.openUrl(url, inApp: true)
 	}
 

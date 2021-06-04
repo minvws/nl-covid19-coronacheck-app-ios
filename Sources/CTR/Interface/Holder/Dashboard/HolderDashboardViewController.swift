@@ -81,7 +81,6 @@ class HolderDashboardViewController: BaseViewController {
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 		setupPlusButton()
-		setupChangeRegionButton()
 	}
 
 	private func setupBindings() {
@@ -89,16 +88,19 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
 		// Receive an array of cards,
-		viewModel.$cards.binding = { [sceneView] cards in
+		viewModel.$cards.binding = { [sceneView, weak viewModel] cards in
 			let cardViews = cards
 				.compactMap { card -> UIView? in
 
 				switch card {
 
 					case .headerMessage(let message):
-						let headerMessageLabel = sceneView.headerMessageLabel
-						headerMessageLabel.text = message
-						return headerMessageLabel
+
+						let text = TextView(htmlText: message)
+						text.linkTouched { [weak self] url in
+							self?.viewModel.openUrl(url)
+						}
+						return text
 
 					case .expiredQR(let message, let didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()
@@ -113,7 +115,7 @@ class HolderDashboardViewController: BaseViewController {
 						return messageCard
 
 					case .makeQR(let title, let message, let actionTitle, let didTapAction):
-						let makeQRCard = sceneView.makeQRCard
+						let makeQRCard = CardView()
 						makeQRCard.title = title
 						makeQRCard.message = message
 						makeQRCard.primaryTitle = actionTitle
@@ -123,9 +125,12 @@ class HolderDashboardViewController: BaseViewController {
 						return makeQRCard
 
 					case .changeRegion(let buttonTitle, let currentLocationTitle):
-						let changeRegionCard = sceneView.changeRegionView
+						let changeRegionCard = ChangeRegionView()
 						changeRegionCard.changeRegionButtonTitle = buttonTitle
 						changeRegionCard.currentLocationTitle = currentLocationTitle
+						changeRegionCard.changeRegionButtonTappedCommand = {
+							viewModel?.didTapChangeRegion()
+						}
 						return changeRegionCard
 
 					case .domesticQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator),
@@ -210,11 +215,5 @@ class HolderDashboardViewController: BaseViewController {
 		)
 		plusbutton.accessibilityLabel = .add
 		navigationItem.rightBarButtonItem = plusbutton
-	}
-
-	func setupChangeRegionButton() {
-		sceneView.changeRegionView.changeRegionButtonTappedCommand = { [viewModel] in
-			viewModel.didTapChangeRegion()
-		}
 	}
 }
