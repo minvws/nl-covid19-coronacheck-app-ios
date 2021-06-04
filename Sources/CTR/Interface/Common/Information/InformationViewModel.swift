@@ -20,6 +20,9 @@ class InformationViewModel {
 	/// The message of the information page
 	@Bindable private(set) var message: String
 
+	// MARK: - Private
+	private let linkTapHander: ((URL) -> Void)?
+
 	// MARK: - Initializer
 
 	/// Initializer
@@ -30,11 +33,13 @@ class InformationViewModel {
 	init(
 		coordinator: Dismissable,
 		title: String,
-		message: String) {
+		message: String,
+		linkTapHander: ((URL) -> Void)? = nil) {
 
 		self.coordinator = coordinator
 		self.title = title
 		self.message = message
+		self.linkTapHander = linkTapHander
 	}
 
 	// MARK: - Methods
@@ -44,5 +49,9 @@ class InformationViewModel {
 
 		// Notify the coordinator
 		coordinator?.dismiss()
+	}
+
+	func userDidTapURL(url: URL) {
+		linkTapHander?(url)
 	}
 }

@@ -37,9 +37,8 @@ class InformationView: BaseView {
 	}()
 
 	/// The message label
-	private let messageLabel: Label = {
-
-		return Label(body: nil).multiline()
+	private let messageLabel: TextView = {
+		return TextView()
 	}()
 
 	/// The bottom constraint
@@ -106,6 +105,13 @@ class InformationView: BaseView {
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark
 			)
+		}
+	}
+
+	var linkTapHandler: ((URL) -> Void)? {
+		didSet {
+			guard let linkTapHandler = linkTapHandler else { return }
+			messageLabel.linkTouched(handler: linkTapHandler)
 		}
 	}
 }
