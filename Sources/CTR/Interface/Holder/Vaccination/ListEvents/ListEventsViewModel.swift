@@ -26,6 +26,8 @@ class ListEventsViewModel: Logging {
 		remoteConfigManager.getConfiguration().maxValidityHours ?? 40
 	}
 
+	private var eventMode: EventMode
+
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
 			// Do not increment/decrement progress within this closure
@@ -38,8 +40,6 @@ class ListEventsViewModel: Logging {
 		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
-
-	/// Formatter to print
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
@@ -47,8 +47,6 @@ class ListEventsViewModel: Logging {
 		dateFormatter.dateFormat = "dd MMMM yyyy"
 		return dateFormatter
 	}()
-
-	/// Formatter to print
 	private lazy var printTestDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
@@ -56,7 +54,6 @@ class ListEventsViewModel: Logging {
 		dateFormatter.dateFormat = "EE d MMMM HH:mm"
 		return dateFormatter
 	}()
-
 	private lazy var printTestLongDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
@@ -80,6 +77,7 @@ class ListEventsViewModel: Logging {
 	init(
 		coordinator: EventCoordinatorDelegate,
 		sourceMode: ListEventSourceMode = .vaccination,
+		eventMode: EventMode,
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
 		remoteTestEvents: [RemoteTestEvent],
 		networkManager: NetworkManaging = Services.networkManager,
@@ -89,6 +87,7 @@ class ListEventsViewModel: Logging {
 	) {
 
 		self.coordinator = coordinator
+		self.eventMode = eventMode
 		self.networkManager = networkManager
 		self.walletManager = walletManager
 		self.cryptoManager = cryptoManager
@@ -209,7 +208,9 @@ class ListEventsViewModel: Logging {
 
 		var rows = [ListEventsViewController.Row]()
 
+		logDebug("Before filter: \(dataSource.count) rows")
 		let filteredDataSource = dataSource.filter { $0.event.type == "vaccination" }
+		logDebug("After filter: \(filteredDataSource.count) rows")
 
 		// Sort the vaccination events in ascending order
 		let sortedDataSource = filteredDataSource.sorted { lhs, rhs in
@@ -280,6 +281,218 @@ class ListEventsViewModel: Logging {
 
 		return rows
 	}
+
+	// MARK: Sign the events
+
+	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent], onError: @escaping () -> Void) {
+
+		shouldPrimaryButtonBeEnabled = false
+		progressIndicationCounter.increment()
+
+		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
+
+			guard saved else {
+				self.progressIndicationCounter.decrement()
+				self.shouldPrimaryButtonBeEnabled = true
+				onError()
+				return
+			}
+
+			self.signTheEventsIntoGreenCardsAndCredentials(onError: onError)
+		}
+	}
+
+	private func signTheEventsIntoGreenCardsAndCredentials(onError: @escaping () -> Void) {
+
+		self.prepareIssue { [weak self] prepareIssueEnvelope in
+			if let envelope = prepareIssueEnvelope,
+			   let nonce = envelope.prepareIssueMessage.base64Decoded() {
+				self?.cryptoManager.setNonce(nonce)
+				self?.cryptoManager.setStoken(envelope.stoken)
+
+				self?.fetchGreenCards { [weak self] response in
+					if let greenCardResponse = response {
+
+						self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
+
+							self?.progressIndicationCounter.decrement()
+							if greenCardsSaved {
+								// Todo: Change mode
+								self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
+							} else {
+								self?.logError("Failed to save greenCards")
+								self?.shouldPrimaryButtonBeEnabled = true
+								onError()
+							}
+						}
+					} else {
+						self?.logError("No greencards")
+						self?.progressIndicationCounter.decrement()
+						self?.shouldPrimaryButtonBeEnabled = true
+						onError()
+					}
+				}
+
+			} else {
+				self?.logError("Can't save the nonce / prepareIssueMessage")
+				self?.progressIndicationCounter.decrement()
+				self?.shouldPrimaryButtonBeEnabled = true
+			}
+		}
+	}
+
+	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
+
+		alert = ListEventsViewController.AlertContent(
+			title: .errorTitle,
+			subTitle: .holderVaccinationErrorMessage,
+			cancelAction: nil,
+			cancelTitle: .holderVaccinationErrorClose,
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
+					self?.showVaccinationError(remoteEvents: remoteEvents)
+				}
+			},
+			okTitle: .holderVaccinationErrorAgain
+		)
+	}
+
+	// MARK: API Calls
+
+	/// Prepare the cryptoManager
+	/// - Parameter onCompletion: completion handler
+	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
+
+		networkManager.prepareIssue { result in
+			// Result<PrepareIssueEnvelope, NetworkError>
+			switch result {
+				case let .success(prepareIssueEnvelope):
+					self.logDebug("ok: \(prepareIssueEnvelope)")
+					onCompletion(prepareIssueEnvelope)
+				case let .failure(error):
+					self.logError("error: \(error)")
+					onCompletion(nil)
+			}
+		}
+	}
+
+	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
+
+		let signedEvents = walletManager.fetchSignedEvents()
+
+		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
+			let utf8 = issueCommitmentMessage.data(using: .utf8),
+			let stoken = cryptoManager.getStoken()
+		else {
+			//					onError(ProofError.missingParams)
+			return
+		}
+
+		let dictionary: [String: AnyObject] = [
+			"stoken": stoken as AnyObject,
+			"events": signedEvents as AnyObject,
+			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
+		]
+
+		self.networkManager.fetchGreencards(dictionary: dictionary) { result in
+			//	Result<RemoteGreenCards.Response, NetworkError>
+
+			switch result {
+				case let .success(greencardResponse):
+					self.logVerbose("ok: \(greencardResponse)")
+					onCompletion(greencardResponse)
+				case let .failure(error):
+					self.logError("error: \(error)")
+					onCompletion(nil)
+			}
+		}
+	}
+
+	// MARK: Store vaccination events
+
+	private func storeVaccinationEvent(
+		remoteEvents: [RemoteVaccinationEvent],
+		onCompletion: @escaping (Bool) -> Void) {
+
+		var success = true
+		for response in remoteEvents where response.wrapper.status == .complete {
+
+			// Remove any existing vaccination events for the provider
+			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+
+			// Store the new vaccination events
+
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
+				success = success && walletManager.storeEventGroup(
+					.vaccination,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					signedResponse: response.signedResponse,
+					issuedAt: maxIssuedAt
+				)
+				if !success {
+					break
+				}
+			}
+		}
+		onCompletion(success)
+	}
+
+	// MARK: Store test events
+
+	private func storeTestEvent(
+		remoteEvents: [RemoteTestEvent],
+		onCompletion: @escaping (Bool) -> Void) {
+
+		var success = true
+		for response in remoteEvents where response.wrapper.status == .complete {
+
+			// Remove any existing test events for the provider
+			walletManager.removeExistingEventGroups(type: .test, providerIdentifier: response.wrapper.providerIdentifier)
+
+			// Store the new test events
+			if let result = response.wrapper.result,
+			   let sampleDate = Formatter().getDateFrom(dateString8601: result.sampleDate) {
+
+				success = success && walletManager.storeEventGroup(
+					.test,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					signedResponse: response.signedResponse,
+					issuedAt: sampleDate
+				)
+				if !success {
+					break
+				}
+			}
+		}
+		onCompletion(success)
+	}
+
+	// MARK: Store green cards
+
+	private func storeGreenCards(
+		response: RemoteGreenCards.Response,
+		onCompletion: @escaping (Bool) -> Void) {
+
+		var success = true
+
+		walletManager.removeExistingGreenCards()
+
+		if let domestic = response.domesticGreenCard {
+			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
+		}
+		if let remoteEuGreenCards = response.euGreenCards {
+			for remoteEuGreenCard in remoteEuGreenCards {
+				print(remoteEuGreenCard)
+				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard, cryptoManager: cryptoManager)
+			}
+		}
+		onCompletion(success)
+	}
+}
+
+// MARK: Test 2.0
+
+extension ListEventsViewModel {
 
 	private func getViewState(
 		from remoteEvent: [RemoteTestEvent]) -> ListEventsViewController.State {
@@ -427,25 +640,6 @@ class ListEventsViewModel: Logging {
 		return output.trimmingCharacters(in: .whitespaces)
 	}
 
-	// MARK: Sign the events
-
-	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent], onError: @escaping () -> Void) {
-
-		shouldPrimaryButtonBeEnabled = false
-		progressIndicationCounter.increment()
-
-		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
-
-			guard saved else {
-				self.progressIndicationCounter.decrement()
-				self.shouldPrimaryButtonBeEnabled = true
-				onError()
-				return
-			}
-
-			self.signTheEventsIntoGreenCardsAndCredentials(onError: onError)
-		}
-	}
 
 	private func userWantsToMakeQR(remoteEvents: [RemoteTestEvent], onError: @escaping () -> Void) {
 
@@ -464,60 +658,6 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	private func signTheEventsIntoGreenCardsAndCredentials(onError: @escaping () -> Void) {
-
-		self.prepareIssue { [weak self] prepareIssueEnvelope in
-			if let envelope = prepareIssueEnvelope,
-			   let nonce = envelope.prepareIssueMessage.base64Decoded() {
-				self?.cryptoManager.setNonce(nonce)
-				self?.cryptoManager.setStoken(envelope.stoken)
-
-				self?.fetchGreenCards { [weak self] response in
-					if let greenCardResponse = response {
-
-						self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
-
-							self?.progressIndicationCounter.decrement()
-							if greenCardsSaved {
-								self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil))
-							} else {
-								self?.logError("Failed to save greenCards")
-								self?.shouldPrimaryButtonBeEnabled = true
-								onError()
-							}
-						}
-					} else {
-						self?.logError("No greencards")
-						self?.progressIndicationCounter.decrement()
-						self?.shouldPrimaryButtonBeEnabled = true
-						onError()
-					}
-				}
-
-			} else {
-				self?.logError("Can't save the nonce / prepareIssueMessage")
-				self?.progressIndicationCounter.decrement()
-				self?.shouldPrimaryButtonBeEnabled = true
-			}
-		}
-	}
-
-	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
-
-		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
-			subTitle: .holderVaccinationErrorMessage,
-			cancelAction: nil,
-			cancelTitle: .holderVaccinationErrorClose,
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
-					self?.showVaccinationError(remoteEvents: remoteEvents)
-				}
-			},
-			okTitle: .holderVaccinationErrorAgain
-		)
-	}
-
 	private func showTestError(remoteEvents: [RemoteTestEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
@@ -532,137 +672,5 @@ class ListEventsViewModel: Logging {
 			},
 			okTitle: .holderVaccinationErrorAgain
 		)
-	}
-
-	/// Prepare the cryptoManager
-	/// - Parameter onCompletion: completion handler
-	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
-
-		networkManager.prepareIssue { result in
-			// Result<PrepareIssueEnvelope, NetworkError>
-			switch result {
-				case let .success(prepareIssueEnvelope):
-					self.logDebug("ok: \(prepareIssueEnvelope)")
-					onCompletion(prepareIssueEnvelope)
-				case let .failure(error):
-					self.logError("error: \(error)")
-					onCompletion(nil)
-			}
-		}
-	}
-
-	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
-
-		let signedEvents = walletManager.fetchSignedEvents()
-
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
-			let utf8 = issueCommitmentMessage.data(using: .utf8),
-			let stoken = cryptoManager.getStoken()
-		else {
-			//					onError(ProofError.missingParams)
-			return
-		}
-
-		let dictionary: [String: AnyObject] = [
-			//			"test": generateString(object: wrapper) as AnyObject,
-			"stoken": stoken as AnyObject,
-			"events": signedEvents as AnyObject,
-			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
-		]
-
-		self.networkManager.fetchGreencards(dictionary: dictionary) { result in
-			//				Result<RemoteGreenCards.Response, NetworkError>
-
-			switch result {
-				case let .success(greencardResponse):
-					self.logVerbose("ok: \(greencardResponse)")
-					onCompletion(greencardResponse)
-				case let .failure(error):
-					self.logError("error: \(error)")
-					onCompletion(nil)
-			}
-		}
-	}
-
-	// MARK: Store vaccination events
-
-	private func storeVaccinationEvent(
-		remoteEvents: [RemoteVaccinationEvent],
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-		for response in remoteEvents where response.wrapper.status == .complete {
-
-			// Remove any existing vaccination events for the provider
-			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
-
-			// Store the new vaccination events
-
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
-				success = success && walletManager.storeEventGroup(
-					.vaccination,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
-					issuedAt: maxIssuedAt
-				)
-				if !success {
-					break
-				}
-			}
-		}
-		onCompletion(success)
-	}
-
-	// MARK: Store vaccination events
-
-	private func storeTestEvent(
-		remoteEvents: [RemoteTestEvent],
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-		for response in remoteEvents where response.wrapper.status == .complete {
-
-			// Remove any existing test events for the provider
-			walletManager.removeExistingEventGroups(type: .test, providerIdentifier: response.wrapper.providerIdentifier)
-
-			// Store the new test events
-			if let result = response.wrapper.result,
-			   let sampleDate = Formatter().getDateFrom(dateString8601: result.sampleDate) {
-
-				success = success && walletManager.storeEventGroup(
-					.test,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
-					issuedAt: sampleDate
-				)
-				if !success {
-					break
-				}
-			}
-		}
-		onCompletion(success)
-	}
-
-	// MARK: Store green cards
-
-	private func storeGreenCards(
-		response: RemoteGreenCards.Response,
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-
-		walletManager.removeExistingGreenCards()
-
-		if let domestic = response.domesticGreenCard {
-			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
-		}
-		if let remoteEuGreenCards = response.euGreenCards {
-			for remoteEuGreenCard in remoteEuGreenCards {
-				print(remoteEuGreenCard)
-				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard, cryptoManager: cryptoManager)
-			}
-		}
-
-		onCompletion(success)
 	}
 }

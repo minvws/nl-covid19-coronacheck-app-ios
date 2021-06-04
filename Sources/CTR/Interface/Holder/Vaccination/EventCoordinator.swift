@@ -109,7 +109,7 @@ class EventCoordinator: Coordinator, Logging {
 
 	func startWithListTestEvents(testEvents: [RemoteTestEvent]) {
 
-		navigateToListEvents([], testEvents: testEvents, sourceMode: .negativeTest)
+		navigateToListEvents([], testEvents: testEvents, eventMode: .test, sourceMode: .negativeTest)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -151,12 +151,14 @@ class EventCoordinator: Coordinator, Logging {
 	private func navigateToListEvents(
 		_ vaccinationEvents: [RemoteVaccinationEvent],
 		testEvents: [RemoteTestEvent],
+		eventMode: EventMode,
 		sourceMode: ListEventSourceMode = .vaccination) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				sourceMode: sourceMode,
+				eventMode: eventMode,
 				remoteVaccinationEvents: vaccinationEvents,
 				remoteTestEvents: testEvents
 			)
@@ -180,13 +182,17 @@ class EventCoordinator: Coordinator, Logging {
 
 		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
 	}
-}
 
-extension EventCoordinator: Dismissable {
+	private func navigateBackToVaccinationStart() {
 
-	func dismiss() {
+		if let vaccineStartViewController = navigationController.viewControllers
+			.first(where: { $0 is VaccinationStartViewController }) {
 
-		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+			navigationController.popToViewController(
+				vaccineStartViewController,
+				animated: true
+			)
+		}
 	}
 }
 
@@ -199,7 +205,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				delegate?.eventFlowDidCancel()
 			case let .continue(_, eventMode):
 				navigateToLogin(eventMode: eventMode)
-//			navigateToFetchEvents(token: "")
 			default:
 				break
 		}
@@ -226,16 +231,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .stop:
 				delegate?.eventFlowDidComplete()
 			case .back:
-				if let vaccineStartViewController = navigationController.viewControllers
-					.first(where: { $0 is VaccinationStartViewController }) {
-
-					navigationController.popToViewController(
-						vaccineStartViewController,
-						animated: true
-					)
-				}
+				navigateBackToVaccinationStart()
 			case let .showEvents(remoteEvents, eventMode):
-				navigateToListEvents(remoteEvents, testEvents: [])
+				navigateToListEvents(remoteEvents, testEvents: [], eventMode: eventMode)
 			default:
 				break
 		}
@@ -247,14 +245,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .stop, .continue:
 				delegate?.eventFlowDidComplete()
 			case .back:
-				if let vaccineStartViewController = navigationController.viewControllers
-					.first(where: { $0 is VaccinationStartViewController }) {
-
-					navigationController.popToViewController(
-						vaccineStartViewController,
-						animated: true
-					)
-				}
+				navigateBackToVaccinationStart()
 			case let .moreInformation(title, body):
 				navigateToMoreInformation(title, body: body)
 			default:
@@ -283,5 +274,13 @@ extension EventCoordinator: OpenUrlProtocol {
 		} else {
 			UIApplication.shared.open(url)
 		}
+	}
+}
+
+extension EventCoordinator: Dismissable {
+
+	func dismiss() {
+
+		navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
 	}
 }
