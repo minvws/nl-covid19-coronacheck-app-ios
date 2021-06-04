@@ -35,7 +35,7 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - completion: completion handler
 	func fetchEventAccessTokens(
 		tvsToken: String,
-		completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+		completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
 
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(tvsToken)",
@@ -48,7 +48,7 @@ class NetworkManager: NetworkManaging, Logging {
 			headers: headers
 		)
 		
-		func open(result: Result<ArrayEnvelope<Vaccination.AccessToken>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<EventFlow.AccessToken>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
@@ -182,13 +182,13 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,
 			method: .GET
 		)
-		func open(result: Result<ArrayEnvelope<Vaccination.EventProvider>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<EventFlow.EventProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 
@@ -236,9 +236,9 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
 	func fetchEventInformation(
-		provider: Vaccination.EventProvider,
+		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -275,9 +275,9 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
 	func fetchEvents(
-		provider: Vaccination.EventProvider,
+		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.eventURL else {
 			self.logError("No url provided for \(provider.name)")

@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -144,7 +143,7 @@ class ListEventsViewModel: Logging {
 	private func getViewState(
 		from remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
-		var listDataSource = [(Vaccination.Identity, Vaccination.Event)]()
+		var listDataSource = [(EventFlow.Identity, EventFlow.Event)]()
 
 		for eventResponse in remoteEvents {
 			let identity = eventResponse.wrapper.identity
@@ -177,7 +176,7 @@ class ListEventsViewModel: Logging {
 	}
 
 	private func listVaccinationEventsState(
-		_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)],
+		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)],
 		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
@@ -204,7 +203,7 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func getSortedRowsFromEvents(_ dataSource: [(identity: Vaccination.Identity, event: Vaccination.Event)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromEvents(_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 
@@ -639,7 +638,6 @@ extension ListEventsViewModel {
 		}
 		return output.trimmingCharacters(in: .whitespaces)
 	}
-
 
 	private func userWantsToMakeQR(remoteEvents: [RemoteTestEvent], onError: @escaping () -> Void) {
 

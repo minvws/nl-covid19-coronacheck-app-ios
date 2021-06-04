@@ -26,9 +26,9 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchEventAccessTokensCount = 0
 	var invokedFetchEventAccessTokensParameters: (tvsToken: String, Void)?
 	var invokedFetchEventAccessTokensParametersList = [(tvsToken: String, Void)]()
-	var stubbedFetchEventAccessTokensCompletionResult: (Result<[Vaccination.AccessToken], NetworkError>, Void)?
+	var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], NetworkError>, Void)?
 
-	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
 		invokedFetchEventAccessTokens = true
 		invokedFetchEventAccessTokensCount += 1
 		invokedFetchEventAccessTokensParameters = (tvsToken, ())
@@ -118,9 +118,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEventProviders = false
 	var invokedFetchEventProvidersCount = 0
-	var stubbedFetchEventProvidersCompletionResult: (Result<[Vaccination.EventProvider], NetworkError>, Void)?
+	var stubbedFetchEventProvidersCompletionResult: (Result<[EventFlow.EventProvider], NetworkError>, Void)?
 
-	func fetchEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
 		invokedFetchEventProviders = true
 		invokedFetchEventProvidersCount += 1
 		if let result = stubbedFetchEventProvidersCompletionResult {
@@ -168,14 +168,14 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEventInformation = false
 	var invokedFetchEventInformationCount = 0
-	var invokedFetchEventInformationParameters: (provider: Vaccination.EventProvider, filter: String?)?
-	var invokedFetchEventInformationParametersList = [(provider: Vaccination.EventProvider, filter: String?)]()
-	var stubbedFetchEventInformationCompletionResult: (Result<Vaccination.EventInformationAvailable, NetworkError>, Void)?
+	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, filter: String?)?
+	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
+	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, NetworkError>, Void)?
 
 	func fetchEventInformation(
-		provider: Vaccination.EventProvider,
+		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 		invokedFetchEventInformation = true
 		invokedFetchEventInformationCount += 1
 		invokedFetchEventInformationParameters = (provider, filter)
@@ -187,14 +187,14 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEvents = false
 	var invokedFetchEventsCount = 0
-	var invokedFetchEventsParameters: (provider: Vaccination.EventProvider, filter: String?)?
-	var invokedFetchEventsParametersList = [(provider: Vaccination.EventProvider, filter: String?)]()
-	var stubbedFetchEventsCompletionResult: (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>, Void)?
+	var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, filter: String?)?
+	var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
+	var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>, Void)?
 
 	func fetchEvents(
-		provider: Vaccination.EventProvider,
+		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 		invokedFetchEvents = true
 		invokedFetchEventsCount += 1
 		invokedFetchEventsParameters = (provider, filter)

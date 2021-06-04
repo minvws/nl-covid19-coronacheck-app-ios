@@ -133,14 +133,14 @@ class FetchEventsViewModel: Logging {
 	// MARK: Fetch access tokens and event providers
 
 	private func startFetchingEventProvidersWithAccessTokens(
-		_ onCompletion: @escaping ([Vaccination.EventProvider]) -> Void) {
+		_ onCompletion: @escaping ([EventFlow.EventProvider]) -> Void) {
 
-		var accessTokenResult: Result<[Vaccination.AccessToken], NetworkError>?
+		var accessTokenResult: Result<[EventFlow.AccessToken], NetworkError>?
 		fetchEventAccessTokens { result in
 			accessTokenResult = result
 		}
 
-		var vaccinationEventProvidersResult: Result<[Vaccination.EventProvider], NetworkError>?
+		var vaccinationEventProvidersResult: Result<[EventFlow.EventProvider], NetworkError>?
 		fetchEventProviders { result in
 			vaccinationEventProvidersResult = result
 		}
@@ -170,7 +170,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchEventAccessTokens(completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
 
 		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
@@ -181,7 +181,7 @@ class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
+	private func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
 
 		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
@@ -194,9 +194,9 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Fetch event information
 
-	private func fetchHasEventInformation(eventProviders: [Vaccination.EventProvider], filter: String?, onCompletion: @escaping ([Vaccination.EventProvider]) -> Void) {
+	private func fetchHasEventInformation(eventProviders: [EventFlow.EventProvider], filter: String?, onCompletion: @escaping ([EventFlow.EventProvider]) -> Void) {
 
-		var eventInformationAvailableResults = [Vaccination.EventInformationAvailable]()
+		var eventInformationAvailableResults = [EventFlow.EventInformationAvailable]()
 
 		for provider in eventProviders {
 			fetchHasEventInformationResponse(from: provider, filter: filter) { result in
@@ -222,9 +222,9 @@ class FetchEventsViewModel: Logging {
 	}
 
 	private func fetchHasEventInformationResponse(
-		from provider: Vaccination.EventProvider,
+		from provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
 		if let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") {
 
@@ -244,7 +244,7 @@ class FetchEventsViewModel: Logging {
 	// MARK: Fetch vaccination events
 
 	private func fetchVaccinationEvents(
-		eventProviders: [Vaccination.EventProvider],
+		eventProviders: [EventFlow.EventProvider],
 		filter: String?,
 		onCompletion: @escaping ( [RemoteVaccinationEvent]) -> Void) {
 
@@ -267,9 +267,9 @@ class FetchEventsViewModel: Logging {
 	}
 
 	private func fetchVaccinationEvent(
-		from provider: Vaccination.EventProvider,
+		from provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		if let url = provider.eventURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https"),
 		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {

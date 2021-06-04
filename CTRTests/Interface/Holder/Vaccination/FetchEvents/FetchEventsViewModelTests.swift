@@ -66,13 +66,13 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_happyFlow_willInvokeCoordinator() {
 
 		// Given
-		let eventWrapper = Vaccination.EventResultWrapper(
+		let eventWrapper = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: identity,
 			status: .complete,
 			events: [
-				Vaccination.Event(
+				EventFlow.Event(
 					type: "vaccination",
 					unique: "1234",
 					isSpecimen: false,
@@ -102,7 +102,7 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_happyFlow_noEvents() {
 
 		// Given
-		let eventWrapper = Vaccination.EventResultWrapper(
+		let eventWrapper = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: identity,
@@ -129,13 +129,13 @@ class FetchEventsViewModelTests: XCTestCase {
 
 	// MARK: Default values
 
-	let accessToken = Vaccination.AccessToken(
+	let accessToken = EventFlow.AccessToken(
 		providerIdentifier: "CC",
 		unomiAccessToken: "unomi test",
 		eventAccessToken: "event test"
 	)
 
-	let provider = Vaccination.EventProvider(
+	let provider = EventFlow.EventProvider(
 		identifier: "CC",
 		name: "CoronaCheck",
 		unomiURL: URL(string: "https://coronacheck.nl"),
@@ -146,20 +146,20 @@ class FetchEventsViewModelTests: XCTestCase {
 		eventInformationAvailable: nil
 	)
 
-	let eventInformationAvailable = Vaccination.EventInformationAvailable(
+	let eventInformationAvailable = EventFlow.EventInformationAvailable(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
 		informationAvailable: true
 	)
 
-	let identity = Vaccination.Identity(
+	let identity = EventFlow.Identity(
 		infix: "",
 		firstName: "Corona",
 		lastName: "Check",
 		birthDateString: "2021-05-16"
 	)
 
-	let vaccinationEvent = Vaccination.VaccinationEvent(
+	let vaccinationEvent = EventFlow.VaccinationEvent(
 		dateString: "2021-05-16",
 		hpkCode: nil,
 		type: nil,
