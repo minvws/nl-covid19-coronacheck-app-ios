@@ -31,18 +31,14 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoResults: CryptoResult(
-				attributes: Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "test",
-						testType: "test",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: 0
+				attributes: CryptoAttributes(
+					birthDay: nil,
+					birthMonth: nil,
+					credentialVersion: nil,
+					domesticDcc: "0",
+					firstNameInitial: nil,
+					lastNameInitial: nil,
+					specimen: "0"
 				),
 				errorMessage: nil
 			),
@@ -52,24 +48,19 @@ class VerifierResultViewModelTests: XCTestCase {
 	
 	// MARK: - Tests
 	
-	func testDemo() {
+	func test_checkAttributes_shouldDisplayDemo() {
 		
 		// Given
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
 		sut.cryptoResults = CryptoResult(
 			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp40SecAgo)",
-						testType: "pcr",
-						specimen: "1",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp40SecAgo)
+				CryptoAttributes(
+					birthDay: nil,
+					birthMonth: nil,
+					credentialVersion: nil,
+					domesticDcc: "0",
+					firstNameInitial: nil,
+					lastNameInitial: nil,
+					specimen: "1"
 				),
 			errorMessage: nil
 		)
@@ -83,24 +74,11 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 	
-	func testDemoButFaultyTime() {
+	func test_checkAttributes_whenNoAttributesAreSet_shouldDisplayDeniedInvalidQR() {
 		
 		// Given
 		sut.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "test",
-						testType: "pcr",
-						specimen: "1",
-						paperProof: "0"
-					),
-					unixTimeStamp: 0
-				),
+			attributes: nil,
 			errorMessage: nil
 		)
 		
@@ -113,24 +91,19 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.message) == .verifierResultDeniedMessage
 	}
 	
-	func testDenied() {
+	func test_checkAttributes_shouldDisplayDeniedDomesticDcc() {
 		
 		// Given
 		sut.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "test",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: 0
-				),
+			attributes: CryptoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				credentialVersion: nil,
+				domesticDcc: "1",
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				specimen: "0"
+			),
 			errorMessage: nil
 		)
 		
@@ -139,93 +112,23 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == .verifierResultDeniedTitle
-		expect(self.sut.message) == .verifierResultDeniedMessage
+		expect(self.sut.title) == .verifierResultDeniedRegionTitle
+		expect(self.sut.message) == .verifierResultDeniedRegionMessage
 	}
 	
-	func testAllow() {
+	func test_checkAttributes_whenSpecimenIsSet_shouldDisplayDeniedDomesticDcc() {
 		
 		// Given
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40
 		sut.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp40SecAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp40SecAgo)
-				),
-			errorMessage: nil
-		)
-		
-		// When
-		sut.checkAttributes()
-		
-		// Then
-		expect(self.sut.allowAccess) == .verified
-		expect(self.sut.title) == .verifierResultAccessTitle
-		expect(self.sut.message).to(beNil(), description: "Message should be nil")
-	}
-	
-	func testAllowWithInGracePeriod() {
-		
-		// Given
-		let timeStamp175SecFromNow = Date().timeIntervalSince1970 + 175 // QR Time
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40 // Sample Time
-		sut.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp40SecAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp175SecFromNow)
-				),
-			errorMessage: nil
-		)
-		
-		// When
-		sut.checkAttributes()
-		
-		// Then
-		expect(self.sut.allowAccess) == .verified
-		expect(self.sut.title) == .verifierResultAccessTitle
-		expect(self.sut.message).to(beNil(), description: "Message should be nil")
-	}
-	
-	func testDeniedOutsideInGracePeriod() {
-		
-		// Given
-		let timeStamp185SecFromNow = Date().timeIntervalSince1970 + 185 // QR Time
-		let timeStamp40SecAgo = Date().timeIntervalSince1970 - 40 // Sample Time
-		sut?.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp40SecAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp185SecFromNow)
-				),
+			attributes: CryptoAttributes(
+				birthDay: nil,
+				birthMonth: nil,
+				credentialVersion: nil,
+				domesticDcc: "1",
+				firstNameInitial: nil,
+				lastNameInitial: nil,
+				specimen: "1"
+			),
 			errorMessage: nil
 		)
 		
@@ -234,58 +137,23 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == .verifierResultDeniedTitle
-		expect(self.sut.message) == .verifierResultDeniedMessage
+		expect(self.sut.title) == .verifierResultDeniedRegionTitle
+		expect(self.sut.message) == .verifierResultDeniedRegionMessage
 	}
 	
-	func testExpiredTimeStamp() {
+	func test_checkAttributes_shouldDisplayVerified() {
 		
 		// Given
-		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
-		sut?.cryptoResults = CryptoResult(
+		sut.cryptoResults = CryptoResult(
 			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp310SecAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "0"
-					),
-					unixTimeStamp: Int64(timeStamp310SecAgo)
-				),
-			errorMessage: nil
-		)
-		// When
-		sut.checkAttributes()
-		
-		// Then
-		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == .verifierResultDeniedTitle
-		expect(self.sut.message) == .verifierResultDeniedMessage
-	}
-	
-	func testExpiredUnixTimeStampButPaperProof() {
-		
-		// Given
-		let timeStamp310SecAgo = Date().timeIntervalSince1970 - 310 // TTL is 300
-		sut?.cryptoResults = CryptoResult(
-			attributes:
-				Attributes(
-					cryptoAttributes: CryptoAttributes(
-						birthDay: nil,
-						birthMonth: nil,
-						firstNameInitial: nil,
-						lastNameInitial: nil,
-						sampleTime: "\(timeStamp310SecAgo)",
-						testType: "pcr",
-						specimen: "0",
-						paperProof: "1"
-					),
-					unixTimeStamp: Int64(timeStamp310SecAgo)
+				CryptoAttributes(
+					birthDay: nil,
+					birthMonth: nil,
+					credentialVersion: nil,
+					domesticDcc: "0",
+					firstNameInitial: nil,
+					lastNameInitial: nil,
+					specimen: "0"
 				),
 			errorMessage: nil
 		)
@@ -302,18 +170,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_allNil() {
 
 		// Given
-		let attributes = Attributes(
-			cryptoAttributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				sampleTime: "0",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "1"
-			),
-			unixTimeStamp: 0
+		let attributes = CryptoAttributes(
+			birthDay: nil,
+			birthMonth: nil,
+			credentialVersion: nil,
+			domesticDcc: "0",
+			firstNameInitial: nil,
+			lastNameInitial: nil,
+			specimen: "0"
 		)
 
 		// When
@@ -329,18 +193,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_allEmpty() {
 
 		// Given
-		let attributes = Attributes(
-			cryptoAttributes: CryptoAttributes(
-				birthDay: "",
-				birthMonth: "",
-				firstNameInitial: "",
-				lastNameInitial: "",
-				sampleTime: "0",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "1"
-			),
-			unixTimeStamp: Int64(0)
+		let attributes = CryptoAttributes(
+			birthDay: "",
+			birthMonth: "",
+			credentialVersion: "",
+			domesticDcc: "0",
+			firstNameInitial: "",
+			lastNameInitial: "",
+			specimen: "0"
 		)
 
 		// When
@@ -356,18 +216,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_allNotEmpty() {
 
 		// Given
-		let attributes = Attributes(
-			cryptoAttributes: CryptoAttributes(
-				birthDay: "5",
-				birthMonth: "5",
-				firstNameInitial: "R",
-				lastNameInitial: "P",
-				sampleTime: "0",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "1"
-			),
-			unixTimeStamp: Int64(0)
+		let attributes = CryptoAttributes(
+			birthDay: "5",
+			birthMonth: "5",
+			credentialVersion: nil,
+			domesticDcc: "0",
+			firstNameInitial: "R",
+			lastNameInitial: "P",
+			specimen: "0"
 		)
 
 		// When
@@ -383,18 +239,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_dateOfBirthUnknown() {
 
 		// Given
-		let attributes = Attributes(
-			cryptoAttributes: CryptoAttributes(
-				birthDay: "X",
-				birthMonth: "X",
-				firstNameInitial: "",
-				lastNameInitial: "",
-				sampleTime: "0",
-				testType: "pcr",
-				specimen: "0",
-				paperProof: "1"
-			),
-			unixTimeStamp: Int64(0)
+		let attributes = CryptoAttributes(
+			birthDay: "X",
+			birthMonth: "X",
+			credentialVersion: "",
+			domesticDcc: "0",
+			firstNameInitial: "",
+			lastNameInitial: "",
+			specimen: "0"
 		)
 
 		// When

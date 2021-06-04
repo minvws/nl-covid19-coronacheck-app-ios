@@ -42,6 +42,10 @@ class HolderDashboardView: ScrolledStackView {
 		return view
 	}()
 
+	override func setupViews() {
+		super.setupViews()
+		stackView.distribution = .fill
+	}
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()

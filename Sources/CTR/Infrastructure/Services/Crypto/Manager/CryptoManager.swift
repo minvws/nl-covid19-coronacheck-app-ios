@@ -190,25 +190,25 @@ class CryptoManager: CryptoManaging, Logging {
 		guard hasPublicKeys() else {
 			return (attributes: nil, errorMessage: "no public keys")
 		}
-
-		let proofAsn1QREncoded = message.data(using: .utf8)
-
-//		if let result = MobilecoreVerifyQREncoded(proofAsn1QREncoded) {
-//
-//			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
-//				self.logError("Error Proof: \(result.error)")
-//				return (attributes: nil, errorMessage: result.error)
-//			}
-//
-//			do {
-//				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
-//				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
-//			} catch {
-//				self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
-//				return (attributes: nil, errorMessage: error.localizedDescription)
-//			}
-//		}
-		return (attributes: nil, errorMessage: "could not verify QR")
+		
+		let proofQREncoded = message.data(using: .utf8)
+		
+		guard let result = MobilecoreVerify(proofQREncoded) else {
+			return (attributes: nil, errorMessage: "could not verify QR")
+		}
+		
+		guard result.error.isEmpty, let value = result.value else {
+			self.logError("Error Proof: \(result.error)")
+			return (attributes: nil, errorMessage: result.error)
+		}
+		
+		do {
+			let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
+			return (attributes: object, errorMessage: nil)
+		} catch {
+			self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
+			return (attributes: nil, errorMessage: error.localizedDescription)
+		}
 	}
 	
 	// MARK: - Credential
@@ -303,11 +303,10 @@ class CryptoManager: CryptoManaging, Logging {
 	/// Migrate existing credential to the wallet
 	/// - Parameter walletManager: the wallet manager
 	func migrateExistingCredential(_ walletManager: WalletManaging) {
-
+		
+		// Sample time is not returned, use current date for now
 		if let existingCredential = cryptoData.credential,
-		   let cryptoAttributes = readCredential(),
-			let sampleTime = TimeInterval(cryptoAttributes.sampleTime),
-			walletManager.importExistingTestCredential(existingCredential, sampleDate: Date(timeIntervalSince1970: sampleTime)) {
+			walletManager.importExistingTestCredential(existingCredential, sampleDate: Date()) {
 
 				removeCredential()
 		}

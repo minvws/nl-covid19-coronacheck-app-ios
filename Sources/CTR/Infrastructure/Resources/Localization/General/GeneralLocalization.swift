@@ -124,4 +124,12 @@ extension String {
 	static var netherlands: String {
 		Localization.string(for: "general.netherlands")
 	}
+
+	static var european: String {
+		Localization.string(for: "general.european")
+	}
+
+	static var dutch: String {
+		Localization.string(for: "general.dutch")
+	}
 }

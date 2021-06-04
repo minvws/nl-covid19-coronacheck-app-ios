@@ -209,7 +209,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity,
 				dataStoreManager: Services.dataStoreManager
 			)
 		)
@@ -385,7 +384,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
-		presentInformationPage(title: "Over je vaccinatie [Localize]", body: "\(originType) / \(currentRegion) / \(availableRegion)\nBody text still to come.")
+
+		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		presentInformationPage(title: title, body: message)
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
@@ -501,7 +503,6 @@ extension HolderCoordinator: EventFlowDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity,
 				dataStoreManager: Services.dataStoreManager
 			)
 		)
