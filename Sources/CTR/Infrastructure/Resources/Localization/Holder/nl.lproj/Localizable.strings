@@ -340,24 +340,14 @@
 "holder.event.about.title" = "Wat is er opgehaald?";
 "holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
-"holder.event.about.body.test3" = "De volgende gegevens zijn opgehaald bij de testlocatie:
+"holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br>Test naam: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Testproducent: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
-Naam: van Mosterman, Saskia
-Geboortedatum: 6 augustus 1990
-
-Type test: PCR-test
-Test naam: PCR LAMP
-Testdatum: vrijdag 7 mei 08:00
-Testuitslag: negatief (geen corona)
-Testlocatie: GGD
-Testproducent: Roche Hutselfluts AG
-Identificatiecode: e31e1bb1134bbbbaa";
 "holder.event.about.body.vaccination" = "<p>De volgende vaccinatie gegevens zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p>";
 
 "holder.testresults.wrong.body" = "<p>Kloppen jouw gegevens niet met je identiteitsbewijs? Neem contact op met je testlocatie om je  gegevens te laten aanpassen. </p>";
 
 "holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
-"holder.event.element.subtitle.test3" = "**** Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "Testdatum: %@<br>Geldig tot: %@<br>Naam: %@<br>Geboortedatum %@";
 
 "holder.location.title" = "Waar ben je getest?";
 "holder.location.message" = "Geef aan of je bij de GGD of bij een andere testlocatie getest bent.";

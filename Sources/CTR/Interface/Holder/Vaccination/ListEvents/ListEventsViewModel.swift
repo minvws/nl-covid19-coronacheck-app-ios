@@ -8,8 +8,8 @@
 import Foundation
 
 enum ListEventSourceMode {
-	case vaccination
-	case negativeTest
+	case ggd
+	case commercial
 }
 
 class ListEventsViewModel: Logging {
@@ -75,7 +75,7 @@ class ListEventsViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate,
-		sourceMode: ListEventSourceMode = .vaccination,
+		sourceMode: ListEventSourceMode = .ggd,
 		eventMode: EventMode,
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
 		remoteTestEvents: [RemoteTestEvent],
@@ -94,7 +94,7 @@ class ListEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
-				title: sourceMode == .vaccination ? .holderVaccinationLoadingTitle : .holderTestResultsResultsTitle,
+				title: sourceMode == .ggd ? (eventMode == .test ? .holderTestResultsResultsTitle : .holderVaccinationLoadingTitle) : .holderTestResultsResultsTitle,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -102,7 +102,7 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
-		if sourceMode == .vaccination {
+		if sourceMode == .ggd {
 			viewState = getViewState(from: remoteVaccinationEvents)
 		} else {
 			viewState = getViewState(from: remoteTestEvents)
@@ -123,7 +123,7 @@ class ListEventsViewModel: Logging {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .holderVaccinationAlertTitle,
-			subTitle: .holderVaccinationAlertMessage,
+			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestResultsAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
 			okAction: { [weak self] _ in
@@ -153,19 +153,19 @@ class ListEventsViewModel: Logging {
 		}
 
 		if listDataSource.isEmpty {
-			return emptyVaccinationEventsState()
+			return emptyEventsState()
 		} else {
-			return listVaccinationEventsState(listDataSource, remoteEvents: remoteEvents)
+			return listEventsState(listDataSource, remoteEvents: remoteEvents)
 		}
 	}
 
-	private func emptyVaccinationEventsState() -> ListEventsViewController.State {
+	private func emptyEventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
-				title: .holderVaccinationNoListTitle,
-				subTitle: .holderVaccinationNoListMessage,
-				primaryActionTitle: .holderVaccinationNoListActionTitle,
+				title: eventMode == .vaccination ? .holderVaccinationNoListTitle : .holderTestNoListTitle,
+				subTitle: eventMode == .vaccination ? .holderVaccinationNoListMessage : .holderTestNoListMessage,
+				primaryActionTitle: eventMode == .vaccination ? .holderVaccinationNoListActionTitle : .holderTestNoListActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -175,14 +175,14 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func listVaccinationEventsState(
+	private func listEventsState(
 		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)],
 		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
 			content: ListEventsViewController.Content(
-				title: .holderVaccinationListTitle,
-				subTitle: .holderVaccinationListMessage,
+				title: eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestResultsResultsTitle,
+				subTitle: eventMode == .vaccination ? .holderVaccinationListMessage : .holderTestResultsResultsText,
 				primaryActionTitle: .holderVaccinationListActionTitle,
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
@@ -194,7 +194,7 @@ class ListEventsViewModel: Logging {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: .holderVaccinationWrongBody
+							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody
 						)
 					)
 				}
@@ -205,20 +205,94 @@ class ListEventsViewModel: Logging {
 
 	private func getSortedRowsFromEvents(_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
 
+		if eventMode == .vaccination {
+			let sortedDataSource = dataSource.sorted { lhs, rhs in
+				if let lhsDate = lhs.event.vaccination?.getDate(with: dateFormatter),
+				   let rhsDate = rhs.event.vaccination?.getDate(with: dateFormatter) {
+					return lhsDate < rhsDate
+				}
+				return false
+			}
+			return getSortedRowsFromVaccinationEvents(sortedDataSource)
+		} else {
+			let sortedDataSource = dataSource.sorted { lhs, rhs in
+				if let lhsDate = lhs.event.negativeTest?.getDate(with: dateFormatter),
+				   let rhsDate = rhs.event.negativeTest?.getDate(with: dateFormatter) {
+					return lhsDate > rhsDate
+				}
+				return false
+			}
+			return getSortedRowsFromTestEvents(sortedDataSource)
+		}
+	}
+
+	private func getSortedRowsFromTestEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
+
 		var rows = [ListEventsViewController.Row]()
 
-		logDebug("Before filter: \(dataSource.count) rows")
-		let filteredDataSource = dataSource.filter { $0.event.type == "vaccination" }
-		logDebug("After filter: \(filteredDataSource.count) rows")
+		for dataRow in sortedDataSource {
 
-		// Sort the vaccination events in ascending order
-		let sortedDataSource = filteredDataSource.sorted { lhs, rhs in
-			if let lhsDate = lhs.event.vaccination?.getDate(with: dateFormatter),
-			   let rhsDate = rhs.event.vaccination?.getDate(with: dateFormatter) {
-				return lhsDate < rhsDate
+			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
+				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			let formattedTestLongDate: String = dataRow.event.negativeTest?.sampleDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printTestLongDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+
+			var expireDate = ""
+			if let sampleDate = dataRow.event.negativeTest?.sampleDateString
+				.flatMap(Formatter.getDateFrom) {
+				expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: sampleDate)
+					.flatMap(printTestDateFormatter.string) ?? ""
 			}
-			return false
+
+			rows.append(
+				ListEventsViewController.Row(
+					title: .holderTestResultsNegative,
+					subTitle: String(
+						format: .holderTestElementSubTitle30,
+						formattedTestDate,
+						expireDate,
+						dataRow.identity.fullName,
+						formattedBirthDate
+					),
+					action: { [weak self] in
+
+						let testType = self?.remoteConfigManager.getConfiguration().getTestTypeMapping(
+							dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
+
+						let manufacturer = self?.remoteConfigManager.getConfiguration().getTestManufacturerMapping(
+							dataRow.event.negativeTest?.manufacturer) ?? (dataRow.event.negativeTest?.manufacturer ?? "")
+
+						self?.coordinator?.listEventsScreenDidFinish(
+							.moreInformation(
+								title: .holderEventAboutTitle,
+								body: String(
+									format: .holderEventAboutBodyTest30,
+									dataRow.identity.fullName,
+									formattedBirthDate,
+									testType,
+									dataRow.event.negativeTest?.name ?? "",
+									formattedTestLongDate,
+									String.holderShowQREuAboutTestNegative,
+									dataRow.event.negativeTest?.facility ?? "",
+									manufacturer,
+									dataRow.event.unique
+								)
+							)
+						)
+					}
+				)
+			)
 		}
+		return rows
+	}
+
+	private func getSortedRowsFromVaccinationEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
+
+		var rows = [ListEventsViewController.Row]()
 
 		for (index, dataRow) in sortedDataSource.enumerated() {
 
@@ -417,13 +491,15 @@ class ListEventsViewModel: Logging {
 		for response in remoteEvents where response.wrapper.status == .complete {
 
 			// Remove any existing vaccination events for the provider
-			walletManager.removeExistingEventGroups(type: .vaccination, providerIdentifier: response.wrapper.providerIdentifier)
+			walletManager.removeExistingEventGroups(
+				type: eventMode == .vaccination ? .vaccination : .test,
+				providerIdentifier: response.wrapper.providerIdentifier
+			)
 
 			// Store the new vaccination events
-
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter) {
+			if let maxIssuedAt = eventMode == .vaccination ? response.wrapper.getMaxIssuedAt(dateFormatter) : response.wrapper.getMaxSampleDate(dateFormatter) {
 				success = success && walletManager.storeEventGroup(
-					.vaccination,
+					eventMode == .vaccination ? .vaccination : .test,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					signedResponse: response.signedResponse,
 					issuedAt: maxIssuedAt
@@ -501,21 +577,21 @@ extension ListEventsViewModel {
 			switch event.wrapper.status {
 				case .complete:
 					if let result = event.wrapper.result, result.negativeResult {
-						return listTestEventsState(event)
+						return listTest20EventsState(event)
 					} else {
-						return emptyTestEventsState()
+						return emptyTest20EventsState()
 					}
 				case .pending:
-					return pendingTestEventsState()
+					return pendingTest20EventsState()
 				default:
-					return emptyTestEventsState()
+					return emptyTest20EventsState()
 			}
 		}
 
-		return emptyTestEventsState()
+		return emptyTest20EventsState()
 	}
 
-	private func pendingTestEventsState() -> ListEventsViewController.State {
+	private func pendingTest20EventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
@@ -531,7 +607,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func emptyTestEventsState() -> ListEventsViewController.State {
+	private func emptyTest20EventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
@@ -547,10 +623,10 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func listTestEventsState(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.State {
+	private func listTest20EventsState(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.State {
 
 		var rows = [ListEventsViewController.Row]()
-		if let row = getTestRow(remoteTestEvent) {
+		if let row = getTest20Row(remoteTestEvent) {
 			rows.append(row)
 		}
 
@@ -578,7 +654,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getTestRow(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.Row? {
+	private func getTest20Row(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.Row? {
 
 		guard let result = remoteTestEvent.wrapper.result,
 			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {

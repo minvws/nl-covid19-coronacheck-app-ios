@@ -148,6 +148,26 @@ struct EventFlow {
 			return maxIssuedAt
 		}
 
+		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
+
+			let maxIssuedAt: Date? = events
+				.compactMap { $0.negativeTest?.sampleDateString }
+				.compactMap { dateFormatter.date(from: $0) }
+				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
+
+					switch latestDateFound {
+						case let latestDateFound? where nextDate > latestDateFound:
+							return nextDate
+						case .none:
+							return nextDate
+						default:
+							return latestDateFound
+					}
+				}
+
+			return maxIssuedAt
+		}
+
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
@@ -292,8 +312,6 @@ struct EventFlow {
 
 		let sampleDateString: String?
 
-		let resultDateString: String?
-
 		let negativeResult: Bool
 
 		let facility: String?
@@ -307,12 +325,22 @@ struct EventFlow {
 		enum CodingKeys: String, CodingKey {
 
 			case sampleDateString = "sampleDate"
-			case resultDateString = "resultDate"
 			case negativeResult
 			case facility
 			case type
 			case name
 			case manufacturer
+		}
+
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+			if let dateString = sampleDateString {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
 		}
 	}
 }

@@ -109,7 +109,7 @@ class EventCoordinator: Coordinator, Logging {
 
 	func startWithListTestEvents(testEvents: [RemoteTestEvent]) {
 
-		navigateToListEvents([], testEvents: testEvents, eventMode: .test, sourceMode: .negativeTest)
+		navigateToListEvents([], testEvents: testEvents, eventMode: .test, sourceMode: .commercial)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -152,7 +152,7 @@ class EventCoordinator: Coordinator, Logging {
 		_ vaccinationEvents: [RemoteVaccinationEvent],
 		testEvents: [RemoteTestEvent],
 		eventMode: EventMode,
-		sourceMode: ListEventSourceMode = .vaccination) {
+		sourceMode: ListEventSourceMode = .ggd) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
