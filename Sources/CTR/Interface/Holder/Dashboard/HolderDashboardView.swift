@@ -12,5 +12,6 @@ class HolderDashboardView: ScrolledStackView {
 	override func setupViews() {
 		super.setupViews()
 		stackView.distribution = .fill
+		stackView.spacing = 40
 	}
 }

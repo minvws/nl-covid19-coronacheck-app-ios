@@ -34,7 +34,7 @@ class QRCardView: BaseView {
 	}()
 
 	private let titleLabel: Label = {
-		return Label(title3: nil, montserrat: true)
+		return Label(title3: nil, montserrat: true).multiline()
 	}()
 
 	private let verticalLabelsStackView: UIStackView = {
@@ -57,6 +57,7 @@ class QRCardView: BaseView {
 
 		let view = UIImageView(image: .domesticQRIcon)
 		view.translatesAutoresizingMaskIntoConstraints = false
+		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
 	}()
 
@@ -108,7 +109,7 @@ class QRCardView: BaseView {
 		NSLayoutConstraint.activate([
 			regionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 28),
 			regionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-			regionLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: 16),
+			regionLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
 			largeIconImageView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
 			largeIconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
@@ -116,13 +117,14 @@ class QRCardView: BaseView {
 
 			titleLabel.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
 			titleLabel.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: 8),
-			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: 16),
+			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
 			verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: 16),
 			verticalLabelsStackView.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
 			viewQRButton.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
+			viewQRButton.trailingAnchor.constraint(equalTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
 			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
 		])
