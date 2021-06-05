@@ -41,5 +41,9 @@ class InformationViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+
+		sceneView.linkTapHandler = { [viewModel] url in
+			viewModel.userDidTapURL(url: url)
+		}
 	}
 }

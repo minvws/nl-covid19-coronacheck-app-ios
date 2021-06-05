@@ -320,7 +320,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body
+				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				}
 			)
 		)
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
