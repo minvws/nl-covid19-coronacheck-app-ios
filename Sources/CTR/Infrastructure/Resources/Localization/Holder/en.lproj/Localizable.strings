@@ -290,3 +290,7 @@
 
 "holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
 "holder.event.element.subtitle.test3" = "**** Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+
+"holder.notest.title" = "Ik ben nog niet getest";
+"holder.notest.body" = "<p>Voor een QR-code moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot 40 uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen 40 uur gecheckt is bij de ingang.</p>";
+"holder.notest.button.title" = "Maak een afspraak";
