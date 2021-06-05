@@ -179,7 +179,7 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Voor toegang tot een pilot-event heb je een negatieve testuitslag nodig. Daar maak je een QR-code van. Laat bij de ingang de QR-code én je identiteitsbewijs zien.";
+"holder.dashboard.intro" = "Je kunt op twee manieren een bewijs krijgen. Dat kan als je gevaccineerd bent of door een test te doen bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. Daarna kun je een QR-code maken.";
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
