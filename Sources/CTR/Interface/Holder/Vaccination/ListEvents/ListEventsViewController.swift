@@ -97,6 +97,11 @@ class ListEventsViewController: BaseViewController {
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
 			self?.sceneView.primaryButton.isEnabled = $0
 		}
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
+		}
 	}
 
 	@objc func backButtonTapped() {

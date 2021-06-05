@@ -88,7 +88,6 @@ class OpenIdManager: OpenIdManaging, Logging {
 						if let authState = authState {
 							self.logDebug("OpenIdManager: Got access tokens. Access token: " +
 											"\(authState.lastTokenResponse?.accessToken ?? "nil")")
-
 							onCompletion(authState.lastTokenResponse?.idToken)
 						} else {
 							self.logError("OpenIdManager: \(String(describing: error))")

@@ -44,6 +44,8 @@ protocol WalletManaging {
 
 	func listGreenCards() -> [GreenCard]
 
+	func listOrigins(type: OriginType) -> [Origin]
+
 	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
 }
 
@@ -413,6 +415,31 @@ class WalletManager: WalletManaging, Logging {
 				}
 			} else {
 				result = false
+			}
+		}
+		return result
+	}
+
+	/// List all the origins for a type (across greenCards)
+	/// - Parameter type: the type or origin ( vaccination, test, recovery)
+	/// - Returns: array of origins. (no specific order)
+	func listOrigins(type: OriginType) -> [Origin] {
+
+		var result = [Origin]()
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+				guard let greenCards = wallet.greenCards?.allObjects as? [GreenCard] else {
+					return
+				}
+				for greenCard in greenCards {
+
+					if let origins = greenCard.origins?.allObjects as? [Origin] {
+						result.append(contentsOf: origins.filter { $0.type == type.rawValue })
+					}
+				}
 			}
 		}
 		return result

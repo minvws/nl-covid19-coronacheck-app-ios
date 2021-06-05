@@ -15,7 +15,7 @@ enum ListEventSourceMode {
 
 class ListEventsViewModel: Logging {
 
-	weak var coordinator: EventCoordinatorDelegate?
+	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private var walletManager: WalletManaging
 	private var networkManager: NetworkManaging
@@ -75,7 +75,7 @@ class ListEventsViewModel: Logging {
 	private let eventFetchingGroup = DispatchGroup()
 
 	init(
-		coordinator: EventCoordinatorDelegate,
+		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		sourceMode: ListEventSourceMode = .ggd,
 		eventMode: EventMode,
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
@@ -103,6 +103,7 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
+
 		if sourceMode == .ggd {
 			viewState = getViewState(from: remoteVaccinationEvents)
 		} else {
@@ -137,6 +138,11 @@ class ListEventsViewModel: Logging {
 	func goBack() {
 
 		coordinator?.listEventsScreenDidFinish(.back)
+	}
+
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
 	}
 
 	// MARK: State Helpers
@@ -391,8 +397,18 @@ class ListEventsViewModel: Logging {
 
 							self?.progressIndicationCounter.decrement()
 							if greenCardsSaved {
-								// Todo: Change mode
-								self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
+
+								let numberOfOrigins = self?.walletManager.listOrigins(type: self?.eventMode == .vaccination ? .vaccination : .test).count
+								self?.logVerbose("Origins for \(String(describing: self?.eventMode)): \(String(describing: numberOfOrigins))")
+								if numberOfOrigins == 0 {
+									// No origins for this type means something went wrong.
+									if let state = self?.cannotCreateEventsState() {
+										self?.viewState = state
+									}
+								} else {
+									self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
+								}
+
 							} else {
 								self?.logError("Failed to save greenCards")
 								self?.shouldPrimaryButtonBeEnabled = true
@@ -563,6 +579,22 @@ class ListEventsViewModel: Logging {
 			}
 		}
 		onCompletion(success)
+	}
+
+	private func cannotCreateEventsState() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: .holderVaccinationOriginMismatchTitle,
+				subTitle: eventMode == .vaccination ? .holderVaccinationOriginMismatchMessage : .holderTestOriginMismatchMessage,
+				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
 	}
 }
 
