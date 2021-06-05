@@ -44,6 +44,6 @@ final class MakeTestAppointmentViewController: BaseViewController {
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		viewModel.$buttonTitle.binding = { [weak self] in self?.sceneView.buttonTitle = $0 }
 		
-		sceneView.button.touchUpInside(viewModel, action: #selector(MakeAppointmentViewModel.onTap))
+		sceneView.button.touchUpInside(viewModel, action: #selector(MakeTestAppointmentViewModel.onTap))
 	}
 }
