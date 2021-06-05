@@ -108,6 +108,20 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedListGreenCardsResult
 	}
 
+	var invokedListOrigins = false
+	var invokedListOriginsCount = 0
+	var invokedListOriginsParameters: (type: OriginType, Void)?
+	var invokedListOriginsParametersList = [(type: OriginType, Void)]()
+	var stubbedListOriginsResult: [Origin]! = []
+
+	func listOrigins(type: OriginType) -> [Origin] {
+		invokedListOrigins = true
+		invokedListOriginsCount += 1
+		invokedListOriginsParameters = (type, ())
+		invokedListOriginsParametersList.append((type, ()))
+		return stubbedListOriginsResult
+	}
+
 	var invokedRemoveExpiredGreenCards = false
 	var invokedRemoveExpiredGreenCardsCount = 0
 	var stubbedRemoveExpiredGreenCardsResult: [(greencardType: String, originType: String)]! = []

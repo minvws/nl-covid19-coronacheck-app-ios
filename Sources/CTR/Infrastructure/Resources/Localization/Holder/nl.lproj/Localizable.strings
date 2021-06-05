@@ -359,3 +359,7 @@
 "holder.notest.title" = "Ik ben nog niet getest";
 "holder.notest.body" = "<p>Voor een QR-code moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot 40 uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen 40 uur gecheckt is bij de ingang.</p>";
 "holder.notest.action.title" = "Maak een afspraak";
+
+"holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
+"holder.event.originmismatch.vaccination.body" = "Op dit moment kunnen we geen bewijs maken van jouw vaccinatie. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl\">Lees hier meer.</a>";
+"holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl\">Lees hier meer.</a>";

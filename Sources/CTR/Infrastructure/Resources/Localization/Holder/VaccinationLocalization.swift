@@ -44,11 +44,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.list.title")
 	}
 
-	static var holderTestListTitle: String {
-
-		return Localization.string(for: "holder.test.list.title")
-	}
-
 	static var holderVaccinationListMessage: String {
 
 		return Localization.string(for: "holder.vaccination.list.message")
@@ -82,21 +77,6 @@ extension String {
 	static var holderVaccinationNoListActionTitle: String {
 
 		return Localization.string(for: "holder.vaccination.nolist.action")
-	}
-
-	static var holderTestNoListTitle: String {
-
-		return Localization.string(for: "holder.test.nolist.title")
-	}
-
-	static var holderTestNoListMessage: String {
-
-		return Localization.string(for: "holder.test.nolist.message")
-	}
-
-	static var holderTestNoListActionTitle: String {
-
-		return Localization.string(for: "holder.test.nolist.action")
 	}
 
 	static var holderVaccinationAlertTitle: String {
@@ -178,6 +158,16 @@ extension String {
 
 		return Localization.string(for: "holder.vaccination.error.message.toobusy")
 	}
+
+	static var holderVaccinationOriginMismatchTitle: String {
+
+		return Localization.string(for: "holder.event.originmismatch.title")
+	}
+
+	static var holderVaccinationOriginMismatchMessage: String {
+
+		return Localization.string(for: "holder.event.originmismatch.vaccination.body")
+	}
 }
 
 extension String {
@@ -215,5 +205,30 @@ extension String {
 	static var holderTestElementSubTitle30: String {
 
 		return Localization.string(for: "holder.event.element.subtitle.test3")
+	}
+
+	static var holderTestNoListTitle: String {
+
+		return Localization.string(for: "holder.test.nolist.title")
+	}
+
+	static var holderTestNoListMessage: String {
+
+		return Localization.string(for: "holder.test.nolist.message")
+	}
+
+	static var holderTestNoListActionTitle: String {
+
+		return Localization.string(for: "holder.test.nolist.action")
+	}
+
+	static var holderTestListTitle: String {
+
+		return Localization.string(for: "holder.test.list.title")
+	}
+
+	static var holderTestOriginMismatchMessage: String {
+
+		return Localization.string(for: "holder.event.originmismatch.test.body")
 	}
 }

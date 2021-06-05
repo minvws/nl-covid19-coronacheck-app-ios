@@ -326,6 +326,46 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 	}
 
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveGreencard_noOrigins() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
+			remoteTestEvents: [],
+			networkManager: networkSpy,
+			walletManager: walletSpy,
+			cryptoManager: cryptoSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedStoreEuGreenCardResult = true
+		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedListOriginsResult = []
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
+			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
+			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+			expect(self.sut.alert).toEventually(beNil())
+		} else {
+			fail("wrong state")
+		}
+	}
+
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveGreencardNoError() {
 
 		// Given
@@ -342,7 +382,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+		walletSpy.stubbedListOriginsResult = [Origin()]
+			networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
