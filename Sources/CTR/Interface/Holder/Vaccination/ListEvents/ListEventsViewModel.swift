@@ -401,7 +401,7 @@ class ListEventsViewModel: Logging {
 								let numberOfOrigins = self?.walletManager.listOrigins(type: self?.eventMode == .vaccination ? .vaccination : .test).count
 								self?.logVerbose("Origins for \(String(describing: self?.eventMode)): \(String(describing: numberOfOrigins))")
 								if numberOfOrigins == 0 {
-									//No origins for this type means something went wrong.
+									// No origins for this type means something went wrong.
 									if let state = self?.cannotCreateEventsState() {
 										self?.viewState = state
 									}
