@@ -8,10 +8,10 @@
 
 import Foundation
 
-final class MakeTestAppointmentViewModel {
+final class MakeTestAppointmentViewModel: Logging {
 	
-	/// Dismissable Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
+	/// OpenUrlProtocol
+	weak var coordinator: OpenUrlProtocol?
 
 	// MARK: - Bindable
 
@@ -28,12 +28,12 @@ final class MakeTestAppointmentViewModel {
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the coordinator delegate
+	///   - coordinator: OpenUrlProtocol
 	///   - title: The title of the page
 	///   - message: The message of the page
 	///   - buttonTitle: The title of the button
 	init(
-		coordinator: HolderCoordinatorDelegate,
+		coordinator: OpenUrlProtocol,
 		title: String,
 		message: String,
 		buttonTitle: String) {
@@ -50,6 +50,9 @@ final class MakeTestAppointmentViewModel {
 	@objc func onTap() {
 
 		// Notify the coordinator
-//		coordinator?.dismiss()
+		logInfo("Create appointment tapped")
+		if let url = URL(string: .holderUrlAppointment) {
+			coordinator?.openUrl(url, inApp: true)
+		}
 	}
 }
