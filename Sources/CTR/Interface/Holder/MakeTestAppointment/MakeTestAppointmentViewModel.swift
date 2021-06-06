@@ -10,7 +10,7 @@ import Foundation
 
 final class MakeTestAppointmentViewModel: Logging {
 	
-	/// OpenUrlProtocol
+	/// The coordinator to open Url
 	weak var coordinator: OpenUrlProtocol?
 
 	// MARK: - Bindable
@@ -28,7 +28,7 @@ final class MakeTestAppointmentViewModel: Logging {
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: OpenUrlProtocol
+	///   - coordinator: The coordinator to open Url
 	///   - title: The title of the page
 	///   - message: The message of the page
 	///   - buttonTitle: The title of the button

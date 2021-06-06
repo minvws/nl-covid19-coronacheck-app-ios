@@ -13,10 +13,6 @@ final class MakeTestAppointmentView: BaseView {
 	/// The display constants
 	private enum ViewTraits {
 		
-		enum Height {
-			static let button: CGFloat = 52
-		}
-
 		enum Margin {
 			static let top: CGFloat = 6
 			static let edge: CGFloat = 20
