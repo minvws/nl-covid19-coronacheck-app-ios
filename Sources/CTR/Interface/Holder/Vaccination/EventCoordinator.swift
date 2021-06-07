@@ -267,7 +267,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					let alertController: UIAlertController
 
 					switch error {
-						case let error? where (error as NSError).domain == "org.openid.appauth.oauth_token":
+						case let error? where (error as NSError).domain.contains("org.openid.appauth"):
 							alertController = UIAlertController(
 								title: .holderGGDLoginFailureVaccineGeneralTitle,
 								message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
