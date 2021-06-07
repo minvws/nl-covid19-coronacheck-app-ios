@@ -57,7 +57,13 @@ final class CryptoVerifierUtility: Logging {
 		
 		// Initialize verifier and have path to stored files as parameter
 		let path = fileStorage.documentsURL?.path
-		MobilecoreInitializeVerifier(path)
+		let result = MobilecoreInitializeVerifier(path)
+		
+		if let result = result, !result.error.isEmpty {
+			logError("Error initializing verifier: \(result.error)")
+		} else {
+			logInfo("Initializing verifier succeeded")
+		}
 	}
 	
 	/// Store data in documents directory

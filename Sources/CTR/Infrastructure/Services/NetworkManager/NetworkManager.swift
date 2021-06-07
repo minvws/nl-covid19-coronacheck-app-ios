@@ -362,13 +362,11 @@ class NetworkManager: NetworkManaging, Logging {
 							if valid {
 								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
-									switch (decodedResult, result.data()) {
-										case (.success(let object), let rawData?):
-											completion(.success((object, rawData)))
+									switch (decodedResult, decodedPayloadData) {
+										case (.success(let object), let decodedPayloadData):
+											completion(.success((object, decodedPayloadData)))
 										case (.failure(let responseError), _):
 											completion(.failure(responseError.asNetworkError))
-										case (.success, .none):
-											completion(.failure(NetworkResponseHandleError.unexpectedCondition.asNetworkError))
 									}
 								}
 							} else {
