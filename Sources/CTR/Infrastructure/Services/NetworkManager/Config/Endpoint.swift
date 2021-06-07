@@ -28,6 +28,10 @@ struct Endpoint {
 	
 	/// Endpoint for the nonce
 	static let nonce = Path(components: "holder", "nonce")
+
+	static let prepareIssue = Path(components: "holder", "prepare_issue")
+
+	static let getCredentials = Path(components: "holder", "credentials")
 	
 	/// Endpoint for the public keys
 	static let publicKeys = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "public_keys")

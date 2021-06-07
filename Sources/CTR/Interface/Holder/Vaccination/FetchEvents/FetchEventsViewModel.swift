@@ -22,21 +22,6 @@ class FetchEventsViewModel: Logging {
 		}
 	}()
 
-	private lazy var dateFormatter: ISO8601DateFormatter = {
-		let dateFormatter = ISO8601DateFormatter()
-		dateFormatter.formatOptions = [.withFullDate]
-		return dateFormatter
-	}()
-
-	/// Formatter to print
-	private lazy var printDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM"
-		return dateFormatter
-	}()
-
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
 	@Bindable internal var viewState: FetchEventsViewController.State
@@ -194,7 +179,10 @@ class FetchEventsViewModel: Logging {
 
 	// MARK: Fetch event information
 
-	private func fetchHasEventInformation(eventProviders: [EventFlow.EventProvider], filter: String?, onCompletion: @escaping ([EventFlow.EventProvider]) -> Void) {
+	private func fetchHasEventInformation(
+		eventProviders: [EventFlow.EventProvider],
+		filter: String?,
+		onCompletion: @escaping ([EventFlow.EventProvider]) -> Void) {
 
 		var eventInformationAvailableResults = [EventFlow.EventInformationAvailable]()
 
@@ -202,7 +190,7 @@ class FetchEventsViewModel: Logging {
 			fetchHasEventInformationResponse(from: provider, filter: filter) { result in
 				switch result {
 					case let .failure(error):
-						self.logError("Error getting unomi: \(error)")
+						self.logError("Error getting unomi: \(error) for \(provider.identifier)")
 					case let .success(response):
 						eventInformationAvailableResults.append(response)
 				}
@@ -233,7 +221,7 @@ class FetchEventsViewModel: Logging {
 			progressIndicationCounter.increment()
 			hasEventInformationFetchingGroup.enter()
 			networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
-				// Result<Vaccination.EventInformationAvailable, NetworkError>
+				// Result<EventFlow.EventInformationAvailable, NetworkError>
 				completion(result)
 				self?.progressIndicationCounter.decrement()
 				self?.hasEventInformationFetchingGroup.leave()
