@@ -7,12 +7,6 @@
 
 import UIKit
 
-enum EventMode {
-	// case recovery
-	case test
-	case vaccination
-}
-
 class LoginTVSViewModel: Logging {
 
 	private weak var coordinator: EventCoordinatorDelegate?
@@ -55,29 +49,23 @@ class LoginTVSViewModel: Logging {
 			return
 		}
 
-		openIdManager?.requestAccessToken(presenter: viewController) { [weak self] accessToken in
+		openIdManager?.requestAccessToken(presenter: viewController) { accessToken in
 
-			self?.shouldShowProgress = false
+			self.shouldShowProgress = false
 
-			if let token = accessToken, let eventMode = self?.eventMode {
-				self?.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: eventMode))
+			if let token = accessToken {
+				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
 			} else {
-				self?.alert = LoginTVSViewController.AlertContent(
+				self.alert = LoginTVSViewController.AlertContent(
 					title: .errorTitle,
 					subTitle: .technicalErrorText,
 					okTitle: .ok
 				)
 			}
-		} onError: { [weak self] error in
-			self?.shouldShowProgress = false
-			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-				self?.alert = LoginTVSViewController.AlertContent(
-					title: .errorTitle,
-					subTitle: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
-					okTitle: .ok
-				)
-			}
+		} onError: {  error in
+			self.shouldShowProgress = false
+			self.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+			self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(error: error, eventMode: self.eventMode))
 		}
 	}
 }

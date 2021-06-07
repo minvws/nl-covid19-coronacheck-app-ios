@@ -8,6 +8,19 @@
 import UIKit
 import SafariServices
 
+enum EventMode {
+	// case recovery
+	case test
+	case vaccination
+
+	var localized: String {
+		switch self {
+			case .test: return .testresult
+			case .vaccination: return .vaccination
+		}
+	}
+}
+
 enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
@@ -15,6 +28,9 @@ enum EventScreenResult: Equatable {
 
 	/// Stop with vaccination flow,
 	case stop
+
+	/// Skip back to the beginning of the flow
+	case errorRequiringRestart(error: Error?, eventMode: EventMode)
 
 	/// Continue with the next step in the flow
 	case `continue`(value: String?, eventMode: EventMode)
@@ -145,6 +161,7 @@ class EventCoordinator: Coordinator, Logging {
 				eventMode: eventMode
 			)
 		)
+
 		navigationController.pushViewController(viewController, animated: false)
 	}
 
@@ -220,6 +237,46 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				} else {
 					start()
 				}
+
+			case .errorRequiringRestart(let error, let eventMode):
+				let popback = navigationController.viewControllers.first {
+					// arrange `case`s in the order of matching priority
+					switch $0 {
+						case is VaccinationStartViewController:
+							return true
+						case is ChooseTestLocationViewController:
+							return true
+						default:
+							return false
+					}
+				}
+
+				let presentError = {
+					let alertController: UIAlertController
+
+					switch error {
+						case let error? where (error as NSError).domain == "org.openid.appauth.oauth_token":
+							alertController = UIAlertController(
+								title: .holderGGDLoginFailureVaccineGeneralTitle,
+								message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
+								preferredStyle: .alert)
+						default:
+							alertController = UIAlertController(
+								title: .errorTitle,
+								message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
+								preferredStyle: .alert)
+					}
+
+					alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+					self.navigationController.present(alertController, animated: true, completion: nil)
+				}
+
+				if let popback = popback {
+					navigationController.popToViewController(popback, animated: true, completion: presentError)
+				} else {
+					navigationController.popToRootViewController(animated: true, completion: presentError)
+				}
+
 			default:
 				break
 		}

@@ -95,6 +95,8 @@
 "general.menu.open" = "Open zijmenu";
 "general.menu.close" = "Sluit zijmenu";
 "general.list.accessibility" = "%@ van %@.";
+"general.vaccination" = "vaccinatie";
+"general.testresult" = "testuitslag";
 
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland, maar binnen Europa? Gebruik dan je Europese bewijs.";
@@ -336,6 +338,9 @@
 "holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je geprikt bent en geef de foutcode (%@) door.";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
+
+"holder.ggdlogin.failure.general.title" = "Inloggen is niet gelukt";
+"holder.ggdlogin.failure.general.message" = "Je kunt opnieuw inloggen om je %@ op te halen.";
 
 "holder.event.about.title" = "Wat is er opgehaald?";
 "holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";

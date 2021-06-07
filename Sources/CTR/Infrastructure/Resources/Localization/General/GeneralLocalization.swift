@@ -132,4 +132,12 @@ extension String {
 	static var dutch: String {
 		Localization.string(for: "general.dutch")
 	}
+
+	static var vaccination: String {
+		Localization.string(for: "general.vaccination")
+	}
+
+	static var testresult: String {
+		Localization.string(for: "general.testresult")
+	}
 }
