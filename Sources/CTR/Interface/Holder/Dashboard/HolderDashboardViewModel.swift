@@ -15,6 +15,14 @@ enum QRCodeValidityRegion: String, Codable {
 	case domestic
 	case europeanUnion
 
+	init?(rawValue: String) {
+		switch rawValue {
+			case "europeanUnion", "eu": self = .europeanUnion
+			case "domestic": self = .domestic
+			default: return nil
+		}
+	}
+	
 	var localizedNoun: String {
 		switch self {
 			case .domestic: return .netherlands
