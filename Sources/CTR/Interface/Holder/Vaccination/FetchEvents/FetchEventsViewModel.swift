@@ -52,7 +52,11 @@ class FetchEventsViewModel: Logging {
 		)
 		let filter = eventMode == .vaccination ? "vaccination" : "negativetest"
 		startFetchingEventProvidersWithAccessTokens { eventProviders in
+
+			// (Unomi call). If there's a 429 here, abort.
 			self.fetchHasEventInformation(eventProviders: eventProviders, filter: filter) { eventProvidersWithEventInformation in
+
+				// Event call. If there's a 429 for one of these, continue.
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation, filter: filter) { [self] remoteEvents in
 
 					if remoteEvents.isEmpty {
