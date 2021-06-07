@@ -356,7 +356,21 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userHasNotBeenTested() {
-		logInfo("userHasNotBeenTested")
+		
+		let viewController = MakeTestAppointmentViewController(
+			viewModel: MakeTestAppointmentViewModel(
+				coordinator: self,
+				title: .holderNoTestTitle,
+				message: .holderNoTestBody,
+				buttonTitle: .holderNoTestButtonTitle
+			)
+		)
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
+			.present(viewController, animated: true, completion: nil)
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
