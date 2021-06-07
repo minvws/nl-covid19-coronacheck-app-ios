@@ -166,6 +166,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 	@objc func showSidePanel() {
 
+		overlayMainView.alpha = 0
 		overlayMainView.isHidden = false
 		UIView.animate(withDuration: animationSpeed, animations: {
             self.updateSidePanelConstraints(
