@@ -36,4 +36,19 @@ final class FileStorage: Logging {
 		try fileManager.createDirectory(atPath: url.path, withIntermediateDirectories: true, attributes: nil)
 		try data.write(to: fileUrl)
 	}
+	
+	/// Log items on disk for debug mode
+	func debugLogItems() {
+		guard let path = documentsURL?.path else { return }
+
+		do {
+			let items = try fileManager.contentsOfDirectory(atPath: path)
+
+			for item in items {
+				logDebug("Found \(item)")
+			}
+		} catch {
+			logError("Failed to read directory \(error)")
+		}
+	}
 }
