@@ -113,6 +113,15 @@ class ListEventsViewController: BaseViewController {
 
 		sceneView.spinner.isHidden = false
 		displayContent(content)
+
+		removeExistingRows()
+	}
+
+	private func removeExistingRows() {
+		// Remove previously added rows:
+		sceneView.eventStackView.subviews
+			.forEach { $0.removeFromSuperview()
+		}
 	}
 
 	private func setForListEvents(_ content: Content, rows: [Row]) {
@@ -121,8 +130,7 @@ class ListEventsViewController: BaseViewController {
 		displayContent(content)
 
 		// Remove previously added rows:
-		sceneView.eventStackView.subviews
-			.forEach { $0.removeFromSuperview() }
+		removeExistingRows()
 
 		sceneView.addSeparator()
 
@@ -142,6 +150,7 @@ class ListEventsViewController: BaseViewController {
 
 		sceneView.spinner.isHidden = true
 		displayContent(content)
+		removeExistingRows()
 	}
 
 	private func displayContent(_ content: Content) {

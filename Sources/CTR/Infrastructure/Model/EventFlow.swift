@@ -269,12 +269,6 @@ struct EventFlow {
 		/// the brand of the vaccine
 		let brand: String?
 
-		/// Optional
-		let completedByMedicalStatement: Bool?
-
-		/// Optional
-		let completedByPersonalStatement: Bool?
-
 		let doseNumber: Int?
 
 		/// optional, will be based on brand info if left out
@@ -289,8 +283,6 @@ struct EventFlow {
 			case type
 			case manufacturer
 			case brand
-			case completedByMedicalStatement
-			case completedByPersonalStatement
 			case doseNumber
 			case totalDoses
 			case country
