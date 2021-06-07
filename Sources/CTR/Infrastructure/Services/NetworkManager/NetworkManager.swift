@@ -63,15 +63,8 @@ class NetworkManager: NetworkManaging, Logging {
 			url: networkConfiguration.prepareIssueUrl,
 			method: .GET
 		)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 		decodeSignedJSONData(request: urlRequest, completion: completion)
-//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
-//		data(request: urlRequest) { result in
-//			DispatchQueue.main.async {
-//				completion(self.jsonResponseHandler(result: result))
-//
-//			}
-//		}
 	}
 
 	/// Get the public keys
@@ -108,16 +101,8 @@ class NetworkManager: NetworkManaging, Logging {
 				method: .POST,
 				body: jsonData
 			)
-			sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
+			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 			decodeSignedJSONData(request: urlRequest, completion: completion)
-//			data(request: urlRequest) { result in
-//				DispatchQueue.main.async {
-//					completion(self.jsonResponseHandler(result: result))
-//				}
-//			}
-
-//			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-//			decodeSignedJSONData(request: urlRequest, completion: completion)
 		} catch {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
