@@ -11,55 +11,73 @@
 #include "Universe.objc.h"
 
 
-@class MobilecoreAnnotatedPk;
-@class MobilecoreDCC;
-@class MobilecoreDCCName;
-@class MobilecoreHCert;
+@class MobilecoreAnnotatedDomesticPk;
+@class MobilecoreAnnotatedEuropeanPk;
+@class MobilecoreCreateCredentialResultValue;
+@class MobilecorePublicKeysConfig;
 @class MobilecoreResult;
 @class MobilecoreVerificationResult;
-@class MobilecoreVerifyResult;
 
-@interface MobilecoreAnnotatedPk : NSObject <goSeqRefInterface> {
+@interface MobilecoreAnnotatedDomesticPk : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic) NSString* _Nonnull id_;
 @property (nonatomic) NSData* _Nullable pkXml;
+// skipped field AnnotatedDomesticPk.LoadedPk with unsupported type: *github.com/privacybydesign/gabi.PublicKey
+
+/**
+ * DEPRECATED: Remove this field together with LegacyDomesticPks
+ */
+@property (nonatomic) NSString* _Nonnull kid;
 @end
 
-@interface MobilecoreDCC : NSObject <goSeqRefInterface> {
+@interface MobilecoreAnnotatedEuropeanPk : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic) NSString* _Nonnull dateOfBirth;
-@property (nonatomic) MobilecoreDCCName* _Nullable name;
+@property (nonatomic) NSData* _Nullable subjectPk;
+// skipped field AnnotatedEuropeanPk.KeyUsage with unsupported type: []string
+
+// skipped field AnnotatedEuropeanPk.LoadedPk with unsupported type: interface{}
+
 @end
 
-@interface MobilecoreDCCName : NSObject <goSeqRefInterface> {
+@interface MobilecoreCreateCredentialResultValue : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
-@property (nonatomic) NSString* _Nonnull givenName;
-@property (nonatomic) NSString* _Nonnull familyName;
+// skipped field CreateCredentialResultValue.Credential with unsupported type: *github.com/privacybydesign/gabi.Credential
+
+// skipped field CreateCredentialResultValue.Attributes with unsupported type: map[string]string
+
 @end
 
-@interface MobilecoreHCert : NSObject <goSeqRefInterface> {
+@interface MobilecorePublicKeysConfig : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
-@property (nonatomic) long credentialVersion;
-@property (nonatomic) NSString* _Nonnull issuer;
-@property (nonatomic) long issuedAt;
-@property (nonatomic) long expirationTime;
-@property (nonatomic) MobilecoreDCC* _Nullable dcc;
+- (nullable instancetype)init:(NSString* _Nullable)pksPath expectEuropeanKeys:(BOOL)expectEuropeanKeys;
+// skipped field PublicKeysConfig.DomesticPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-mobile-core.DomesticPksLookup
+
+// skipped field PublicKeysConfig.EuropeanPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-mobile-core.EuropeanPksLookup
+
+// skipped field PublicKeysConfig.LegacyDomesticPks with unsupported type: []*github.com/minvws/nl-covid19-coronacheck-mobile-core.AnnotatedDomesticPk
+
+// skipped method PublicKeysConfig.FindAndCacheDomestic with unsupported parameter or return types
+
+// skipped method PublicKeysConfig.FindAndCacheEuropean with unsupported parameter or return types
+
+/**
+ * DEPRECATED: Remove this legacy transformation together with LegacyDomesticPks
+ */
+- (void)transformLegacyDomesticPks;
 @end
 
 @interface MobilecoreResult : NSObject <goSeqRefInterface> {
@@ -73,8 +91,8 @@
 @end
 
 /**
- * Verification
-FIXME: Mock implementation for now
+ * VerificationResult very much mimics the domestic verifier attributes, with only string type values,
+ to minimize app-side changes. In the future, both should return properly typed values.
  */
 @interface MobilecoreVerificationResult : NSObject <goSeqRefInterface> {
 }
@@ -82,27 +100,25 @@ FIXME: Mock implementation for now
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
+@property (nonatomic) NSString* _Nonnull credentialVersion;
+@property (nonatomic) NSString* _Nonnull isSpecimen;
 @property (nonatomic) NSString* _Nonnull firstNameInitial;
 @property (nonatomic) NSString* _Nonnull lastNameInitial;
 @property (nonatomic) NSString* _Nonnull birthDay;
 @property (nonatomic) NSString* _Nonnull birthMonth;
+@property (nonatomic) NSString* _Nonnull isNLDCC;
 @end
 
-/**
- * Temporary mocks for compatibility reasons while the app is being rewritten
- */
-@interface MobilecoreVerifyResult : NSObject <goSeqRefInterface> {
-}
-@property(strong, readonly) _Nonnull id _ref;
-
-- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
-@property (nonatomic) NSData* _Nullable attributesJson;
-@property (nonatomic) int64_t unixTimeSeconds;
-@property (nonatomic) NSString* _Nonnull error;
-@end
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
+FOUNDATION_EXPORT const double MobilecoreQR_VALID_FOR_SECONDS;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
 
 @interface Mobilecore : NSObject
+/**
+ * DEPRECATED: See deprecation of LoadDomesticIssuerPks
+ */
 + (BOOL) hasLoadedDomesticIssuerPks;
 + (void) setHasLoadedDomesticIssuerPks:(BOOL)v;
 
@@ -114,11 +130,21 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreCreateCredentials(NSData
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreDisclose(NSData* _Nullable holderSkJson, NSData* _Nullable credJson);
 
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreErrorResult(NSError* _Nullable err);
+
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreGenerateHolderSk(void);
 
-FOUNDATION_EXPORT void MobilecoreInitializeVerifier(NSString* _Nullable configDirectoryPath);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeHolder(NSString* _Nullable configDirectoryPath);
 
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreInitializeVerifier(NSString* _Nullable configDirectoryPath);
+
+/**
+ * DEPRECATED: Remove this method when the mobile apps have migrated to using
+ InitializeHolder and the holder package directly
+ */
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreLoadDomesticIssuerPks(NSData* _Nullable annotatedPksJson);
+
+FOUNDATION_EXPORT MobilecorePublicKeysConfig* _Nullable MobilecoreNewPublicKeysConfig(NSString* _Nullable pksPath, BOOL expectEuropeanKeys, NSError* _Nullable* _Nullable error);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(NSData* _Nullable credJson);
 
@@ -126,6 +152,6 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(N
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded);
 
-FOUNDATION_EXPORT MobilecoreVerifyResult* _Nullable MobilecoreVerifyQREncoded(NSData* _Nullable proofQrEncodedAsn1);
+FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreWrappedErrorResult(NSError* _Nullable err, NSString* _Nullable prefix);
 
 #endif
