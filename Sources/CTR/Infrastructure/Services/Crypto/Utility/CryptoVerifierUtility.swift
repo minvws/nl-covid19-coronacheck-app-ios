@@ -56,7 +56,7 @@ final class CryptoVerifierUtility: Logging {
 		}
 		
 		// Initialize verifier and have path to stored files as parameter
-		let path = fileStorage.documentsURL?.absoluteString
+		let path = fileStorage.documentsURL?.path
 		MobilecoreInitializeVerifier(path)
 	}
 	
