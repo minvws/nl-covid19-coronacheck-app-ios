@@ -24,7 +24,7 @@ enum EventMode {
 enum EventScreenResult: Equatable {
 
 	/// The user wants to go back a scene
-	case back
+	case back(eventMode: EventMode)
 
 	/// Stop with vaccination flow,
 	case stop
@@ -211,6 +211,18 @@ class EventCoordinator: Coordinator, Logging {
 			)
 		}
 	}
+
+	private func navigateBackToTestStart() {
+
+		if let chooseTestLocationViewController = navigationController.viewControllers
+			.first(where: { $0 is ChooseTestLocationViewController }) {
+
+			navigationController.popToViewController(
+				chooseTestLocationViewController,
+				animated: true
+			)
+		}
+	}
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
@@ -287,8 +299,13 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
-			case .back:
-				navigateBackToVaccinationStart()
+			case .back(let eventMode):
+				switch eventMode {
+					case .test:
+						navigateBackToTestStart()
+					case .vaccination:
+						navigateBackToVaccinationStart()
+				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, testEvents: [], eventMode: eventMode)
 			default:
@@ -301,8 +318,13 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop, .continue:
 				delegate?.eventFlowDidComplete()
-			case .back:
-				navigateBackToVaccinationStart()
+			case .back(let eventMode):
+				switch eventMode {
+					case .test:
+						navigateBackToTestStart()
+					case .vaccination:
+						navigateBackToVaccinationStart()
+				}
 			case let .moreInformation(title, body):
 				navigateToMoreInformation(title, body: body)
 			default:

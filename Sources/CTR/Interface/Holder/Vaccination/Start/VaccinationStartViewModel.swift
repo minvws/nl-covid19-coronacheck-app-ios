@@ -18,7 +18,7 @@ class VaccinationStartViewModel: Logging {
 
 	func backButtonTapped() {
 		
-		coordinator?.vaccinationStartScreenDidFinish(.back)
+		coordinator?.vaccinationStartScreenDidFinish(.back(eventMode: .vaccination))
 	}
 
 	func primaryButtonTapped() {
