@@ -25,9 +25,6 @@ struct Endpoint {
 
 	/// Endpoint for access tokens
 	static let accessTokens = Path(components: "holder", "access_tokens")
-	
-	/// Endpoint for the nonce
-	static let nonce = Path(components: "holder", "nonce")
 
 	static let prepareIssue = Path(components: "holder", "prepare_issue")
 
@@ -41,7 +38,4 @@ struct Endpoint {
 	
 	/// Endpoint for test providers
 	static let providers = Path(components: "holder", "config_providers")
-	
-	/// Endpoint for test results as ism
-	static let sign = Path(components: "holder", "sign")
 }
