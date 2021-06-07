@@ -38,22 +38,6 @@ protocol ProofManaging: AnyObject {
 		provider: TestProvider,
 		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void)
 
-	/// Create a nonce and a stoken
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchNonce(
-		onCompletion: @escaping (() -> Void),
-		onError: @escaping ((Error) -> Void))
-
-	/// Fetch the signed Test Result
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchSignedTestResult(
-		onCompletion: @escaping ((SignedTestResultState) -> Void),
-		onError: @escaping ((Error) -> Void))
-
 	/// Get the provider for a test token
 	/// - Parameter token: the test token
 	/// - Returns: the test provider

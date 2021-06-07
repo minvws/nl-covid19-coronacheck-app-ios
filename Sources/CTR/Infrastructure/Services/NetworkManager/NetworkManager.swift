@@ -57,33 +57,14 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void) {
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.nonceUrl,
+			url: networkConfiguration.prepareIssueUrl,
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 		decodeSignedJSONData(request: urlRequest, completion: completion)
-	}
-
-	/// Get the nonce
-	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
-
-		let urlRequest = constructRequest(
-			url: URL(string: "https://qrdaar.scriptbase.org/v3/holder/prepare_issue"),
-			method: .GET
-		)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
-		decodeSignedJSONData(request: urlRequest, completion: completion)
-//		sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
-//		data(request: urlRequest) { result in
-//			DispatchQueue.main.async {
-//				completion(self.jsonResponseHandler(result: result))
-//
-//			}
-//		}
 	}
 
 	/// Get the public keys
@@ -109,34 +90,6 @@ class NetworkManager: NetworkManaging, Logging {
 		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
-	/// Fetch the test results with issue signature message
-	/// - Parameters:
-	///   - dictionary: dictionary
-	///   - completionHandler: the completion handler
-	func fetchTestResultsWithISM(
-		dictionary: [String: AnyObject],
-		completion: @escaping (Result<Data, NetworkError>) -> Void) {
-
-		do {
-			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-			let urlRequest = constructRequest(
-				url: networkConfiguration.signUrl,
-				method: .POST,
-				body: jsonData
-			)
-			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-			decodedSignedData(request: urlRequest, ignore400: true) { resultwrapper in
-				DispatchQueue.main.async {
-
-					completion(resultwrapper)
-				}
-			}
-		} catch {
-			logError("Could not serialize dictionary")
-			completion(.failure(.encodingError))
-		}
-	}
-
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
@@ -144,20 +97,12 @@ class NetworkManager: NetworkManaging, Logging {
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 			let urlRequest = constructRequest(
-				url: URL(string: "https://qrdaar.scriptbase.org/v3/get_credentials"),
+				url: networkConfiguration.credentialUrl,
 				method: .POST,
 				body: jsonData
 			)
-			sessionDelegate?.setSecurityStrategy(SecurityStrategy.none)
+			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
 			decodeSignedJSONData(request: urlRequest, completion: completion)
-//			data(request: urlRequest) { result in
-//				DispatchQueue.main.async {
-//					completion(self.jsonResponseHandler(result: result))
-//				}
-//			}
-
-//			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-//			decodeSignedJSONData(request: urlRequest, completion: completion)
 		} catch {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
@@ -266,6 +211,7 @@ class NetworkManager: NetworkManaging, Logging {
 
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		
 		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 

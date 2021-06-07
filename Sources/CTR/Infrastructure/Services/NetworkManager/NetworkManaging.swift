@@ -65,10 +65,6 @@ protocol NetworkManaging {
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void)
-
-	/// Get the nonce
-	/// - Parameter completion: completion handler
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void)
 	
 	/// Get the public keys
@@ -78,13 +74,6 @@ protocol NetworkManaging {
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void)
-	
-	/// - Parameters:
-	///   - dictionary: dictionary
-	///   - completionHandler: the completion handler
-	func fetchTestResultsWithISM(
-		dictionary: [String: AnyObject],
-		completion: @escaping (Result<Data, NetworkError>) -> Void)
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
