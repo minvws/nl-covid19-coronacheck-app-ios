@@ -452,8 +452,6 @@ class ListEventsViewModelTests: XCTestCase {
 		type: nil,
 		manufacturer: nil,
 		brand: nil,
-		completedByMedicalStatement: false,
-		completedByPersonalStatement: false,
 		doseNumber: 1,
 		totalDoses: 2,
 		country: "NLD"
