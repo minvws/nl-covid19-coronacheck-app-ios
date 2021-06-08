@@ -354,3 +354,7 @@ Nog geen prik gehad? Laat je dan eerst vaccineren.";
 "holder.notest.title" = "Ik ben nog niet getest";
 "holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat de QR-code binnen %@ uur gecheckt is bij de ingang.</p>";
 "holder.notest.action.title" = "Maak een afspraak";
+
+"holder.test.nolist.title" = "Geen testuitslag beschikbaar";
+"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.test.nolist.action" = "Naar Mijn overzicht";

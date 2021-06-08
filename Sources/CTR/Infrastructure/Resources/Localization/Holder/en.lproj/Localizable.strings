@@ -347,3 +347,7 @@ Didn't get a jab yet? Get vaccinated first.";
 "holder.notest.title" = "I haven't been tested yet";
 "holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p><p>A test certificate is valid until %@ hours after the moment you were tested. So schedule your test on time. And make sure your QR code has been checked at the entrance within %@ hours.</p>";
 "holder.notest.action.title" = "Make an appointment";
+
+"holder.test.nolist.title" = "Geen testuitslag beschikbaar";
+"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.test.nolist.action" = "Naar Mijn overzicht";
