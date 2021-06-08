@@ -41,6 +41,6 @@ extension String {
 	
 	static var holderNoTestButtonTitle: String {
 		
-		return Localization.string(for: "holder.notest.button.title")
+		return Localization.string(for: "holder.notest.action.title")
 	}
 }

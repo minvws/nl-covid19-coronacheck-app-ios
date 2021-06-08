@@ -345,5 +345,5 @@ Didn't get a jab yet? Get vaccinated first.";
 "holder.location.notest" = "I haven't been tested yet";
 
 "holder.notest.title" = "I haven't been tested yet";
-"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p><p>A test certificate is valid until 40 hours after the moment you were tested. So schedule your test on time. And make sure your QR code has been checked at the entrance within 40 hours.</p>";
+"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p><p>A test certificate is valid until %@ hours after the moment you were tested. So schedule your test on time. And make sure your QR code has been checked at the entrance within %@ hours.</p>";
 "holder.notest.action.title" = "Make an appointment";
