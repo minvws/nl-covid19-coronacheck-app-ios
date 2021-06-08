@@ -54,7 +54,7 @@ class FetchEventsViewModel: Logging {
 		startFetchingEventProvidersWithAccessTokens { eventProviders in
 
 			// (Unomi call). If there's a 429 here, abort.
-			self.fetchHasEventInformation(eventProviders: eventProviders, filter: filter) { eventProvidersWithEventInformation in
+			self.fetchHasEventInformation(forEventProviders: eventProviders, filter: filter) { eventProvidersWithEventInformation in
 
 				// Event call. If there's a 429 for one of these, continue.
 				self.fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation, filter: filter) { [self] remoteEvents in
@@ -184,7 +184,7 @@ class FetchEventsViewModel: Logging {
 	// MARK: Fetch event information
 
 	private func fetchHasEventInformation(
-		eventProviders: [EventFlow.EventProvider],
+		forEventProviders eventProviders: [EventFlow.EventProvider],
 		filter: String?,
 		onCompletion: @escaping ([EventFlow.EventProvider]) -> Void) {
 
