@@ -125,13 +125,17 @@ class FetchEventsViewModel: Logging {
 		_ onCompletion: @escaping ([EventFlow.EventProvider]) -> Void) {
 
 		var accessTokenResult: Result<[EventFlow.AccessToken], NetworkError>?
+		prefetchingGroup.enter()
 		fetchEventAccessTokens { result in
 			accessTokenResult = result
+			self.prefetchingGroup.leave()
 		}
 
 		var vaccinationEventProvidersResult: Result<[EventFlow.EventProvider], NetworkError>?
+		prefetchingGroup.enter()
 		fetchEventProviders { result in
 			vaccinationEventProvidersResult = result
+			self.prefetchingGroup.leave()
 		}
 
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
@@ -161,23 +165,19 @@ class FetchEventsViewModel: Logging {
 
 	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
 
-		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
 		networkManager.fetchEventAccessTokens(tvsToken: tvsToken) { [weak self] result in
 			completion(result)
 			self?.progressIndicationCounter.decrement()
-			self?.prefetchingGroup.leave()
 		}
 	}
 
 	private func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
 
-		prefetchingGroup.enter()
 		progressIndicationCounter.increment()
 		networkManager.fetchEventProviders { [weak self] result in
 			completion(result)
 			self?.progressIndicationCounter.decrement()
-			self?.prefetchingGroup.leave()
 		}
 	}
 
@@ -191,6 +191,8 @@ class FetchEventsViewModel: Logging {
 		var eventInformationAvailableResults = [EventFlow.EventInformationAvailable]()
 
 		for provider in eventProviders {
+
+			hasEventInformationFetchingGroup.enter()
 			fetchHasEventInformationResponse(from: provider, filter: filter) { result in
 				switch result {
 					case let .failure(error):
@@ -198,6 +200,7 @@ class FetchEventsViewModel: Logging {
 					case let .success(response):
 						eventInformationAvailableResults.append(response)
 				}
+				self.hasEventInformationFetchingGroup.leave()
 			}
 		}
 
@@ -223,12 +226,10 @@ class FetchEventsViewModel: Logging {
 			self.logInfo("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 			progressIndicationCounter.increment()
-			hasEventInformationFetchingGroup.enter()
 			networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
 				// Result<EventFlow.EventInformationAvailable, NetworkError>
 				completion(result)
 				self?.progressIndicationCounter.decrement()
-				self?.hasEventInformationFetchingGroup.leave()
 			}
 		}
 	}
@@ -243,6 +244,7 @@ class FetchEventsViewModel: Logging {
 		var eventResponses = [RemoteVaccinationEvent]()
 
 		for provider in eventProviders {
+			eventFetchingGroup.enter()
 			fetchVaccinationEvent(from: provider, filter: filter) { result in
 				switch result {
 					case let .failure(error):
@@ -250,6 +252,7 @@ class FetchEventsViewModel: Logging {
 					case let .success(response):
 						eventResponses.append(response)
 				}
+				self.eventFetchingGroup.leave()
 			}
 		}
 
@@ -267,12 +270,11 @@ class FetchEventsViewModel: Logging {
 		   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
 
 			progressIndicationCounter.increment()
-			eventFetchingGroup.enter()
+
 			networkManager.fetchEvents(provider: provider, filter: filter) { [weak self] result in
 				// (Result<(TestResultWrapper, SignedResponse), NetworkError>
 				completion(result)
 				self?.progressIndicationCounter.decrement()
-				self?.eventFetchingGroup.leave()
 			}
 		}
 	}
