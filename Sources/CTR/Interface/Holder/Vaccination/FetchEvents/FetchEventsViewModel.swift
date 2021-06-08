@@ -198,7 +198,7 @@ class FetchEventsViewModel: Logging {
 					case let .failure(error):
 						self.logError("Error getting unomi: \(error) for \(provider.identifier)")
 					case let .success(response):
-						eventInformationAvailableResults.append(response)
+						eventInformationAvailableResults += [response]
 				}
 				self.hasEventInformationFetchingGroup.leave()
 			}
@@ -250,7 +250,7 @@ class FetchEventsViewModel: Logging {
 					case let .failure(error):
 						self.logError("Error getting event: \(error)")
 					case let .success(response):
-						eventResponses.append(response)
+						eventResponses += [response]
 				}
 				self.eventFetchingGroup.leave()
 			}
