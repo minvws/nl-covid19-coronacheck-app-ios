@@ -421,6 +421,7 @@ class ListEventsViewModel: Logging {
 									// No origins for this type means something went wrong.
 									if let state = self?.cannotCreateEventsState() {
 										self?.viewState = state
+										self?.shouldPrimaryButtonBeEnabled = true
 									}
 								} else {
 									self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
