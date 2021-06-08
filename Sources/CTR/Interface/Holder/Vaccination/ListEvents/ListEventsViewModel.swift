@@ -190,7 +190,7 @@ class ListEventsViewModel: Logging {
 	}
 
 	private func listEventsState(
-		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, String)],
+		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
 		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
