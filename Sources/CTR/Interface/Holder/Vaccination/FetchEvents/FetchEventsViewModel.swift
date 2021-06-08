@@ -91,7 +91,7 @@ class FetchEventsViewModel: Logging {
 
 	func goBack() {
 
-		coordinator?.fetchEventsScreenDidFinish(.back)
+		coordinator?.fetchEventsScreenDidFinish(.back(eventMode: eventMode))
 	}
 
 	func openUrl(_ url: URL) {

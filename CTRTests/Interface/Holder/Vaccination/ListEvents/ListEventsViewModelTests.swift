@@ -64,7 +64,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == EventScreenResult.back
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .test)
 	}
 
 	func test_backButtonTapped_listState() {

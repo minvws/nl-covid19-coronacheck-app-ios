@@ -48,7 +48,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == EventScreenResult.back
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .test)
 	}
 
 	func test_warnBeforeGoBack() {
@@ -124,7 +124,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue(), timeout: .seconds(5))
 	}
 
 	// MARK: Default values
