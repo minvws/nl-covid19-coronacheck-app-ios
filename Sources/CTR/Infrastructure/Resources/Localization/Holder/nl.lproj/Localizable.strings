@@ -307,7 +307,7 @@ Nog geen prik gehad? Laat je dan eerst vaccineren.";
 "holder.vaccination.list.message" = "Je kunt een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
 "holder.vaccination.list.action" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
-"holder.vaccination.element.subtitle" = "Vaccinatiedatum: %@";
+"holder.vaccination.element.subtitle" = "Naam: %@<br>Vaccinatiedatum: %@";
 "holder.vaccination.nolist.title" = "Vaccinaties niet opgehaald";
 "holder.vaccination.nolist.message" = "<p>Geen vaccinaties beschikbaar</p><p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie. Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
@@ -352,5 +352,5 @@ Nog geen prik gehad? Laat je dan eerst vaccineren.";
 "holder.location.notest" = "Ik ben nog niet getest";
 
 "holder.notest.title" = "Ik ben nog niet getest";
-"holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot 40 uur na het moment van testen. Plan je test dus op tijd. En zorg dat de QR-code binnen 40 uur gecheckt is bij de ingang.</p>";
+"holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat de QR-code binnen %@ uur gecheckt is bij de ingang.</p>";
 "holder.notest.action.title" = "Maak een afspraak";
