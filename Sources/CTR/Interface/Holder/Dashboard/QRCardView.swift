@@ -144,7 +144,7 @@ class QRCardView: BaseView {
 			let validityText = row.validityStringEvaluator(Date())
 			guard validityText.kind != .past else { return }
 
-			let qrTypeLabel = Label(body: row.type + ":")
+			let qrTypeLabel = Label(body: row.type + (validityText.text.isEmpty ? "" : ":"))
 			qrTypeLabel.numberOfLines = 0
 			verticalLabelsStackView.addArrangedSubview(qrTypeLabel)
 

@@ -1,3 +1,6 @@
+"holder.event.originmismatch.title" = "We can't make a certificate";
+"holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. This can have various causes. <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
+"holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your test result. This can have various causes.  <a href=\"https://coronacheck.nl/en/guidepost\">Lees hier meer.</a>";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
 
@@ -5,7 +8,7 @@
 "holder.about.readmore" = "Read more";
 
 /* Alert titel voor rooted device */
-"jailbroken.title" = "There are security risks";
+"jailbroken.title" = "Security risks were found";
 
 /* Alert content voor rooted device */
 "jailbroken.message" = "Beware: your device is rooted. Your data may not be secure.";
@@ -14,7 +17,7 @@
 "holder.menu.accessibility" = "Accessibility";
 
 "holder.tokenentry.modal.notoken.title" = "I don't have a code";
-"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p>It's possible you need to get tested again.</p>";
+"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p></p>";
 "holder.tokenentry.regularflow.button.notoken" = "I don't have a code";
 
 /* Voice over voor begin van een lijst */
@@ -45,7 +48,7 @@
 /* Link to the privacy policy for the holder */
 "holder.url.privacy" = "https://coronacheck.nl/en/privacy-in-app";
 
-"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/en/faq-in-app\">Learn more</a> about which information the QR code contains.";
+"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Go here</a> to read which information the QR code contains.";
 
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.regularflow.title" = "Retrieve test result";
@@ -78,6 +81,10 @@
 "general.next" = "Next";
 "general.done" = "Done";
 "general.ok" = "OK";
+"general.europeanUnion" = "European Union";
+"general.netherlands" = "the Netherlands";
+"general.dutch" = "Dutch";
+"general.european" = "European";
 "general.error.title" = "Sorry, something went wrong";
 "general.error.technical.text" = "Because of a technical error.";
 "general.error.technical.custom" = "Because of a technical error (%@)";
@@ -92,10 +99,16 @@
 "general.menu.close" = "Close side menu";
 "general.list.accessibility" = "%@ of %@.";
 
+/* MARK: - Toggle Region */
+"toggleRegion.label.topText.eu" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands but within the European Union? Then use your European QR code.";
+"toggleRegion.label.topText.nl" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands but within the European Union? Then use your European certificate.";
+"toggleRegion.label.bottomText.eu" = "The European QR code contains more details: your name, date of birth, the type of vaccine and the batch number.";
+"toggleRegion.label.bottomText.nl" = "The Dutch QR code only contains your initials, your birth month, and your day of birth.";
+
 /* MARK: - Update App */
 "updateApp.error.message" = "Can't open App Store";
 "updateApp.title" = "Time for an update";
-"updateApp.content" = "To continue, download the latest version of the app.";
+"updateApp.content" = "To continue, install the latest version of the app.";
 "updateApp.button" = "Install update";
 
 /* MARK: - EndOfLife */
@@ -132,19 +145,19 @@
 "holder.menu.privacy" = "Privacy statement";
 
 /* MARK: - Holder Onboarding */
-"holder.onboarding.title.safely" = "Only access after testing";
-"holder.onboarding.message.safely" = "Your health and other people's health matters. Get tested when visiting certain social, cultural or sports events. Even when you've already been vaccinated. Does your test prove you don't have coronavirus (negative test result)? Then you can get access.";
-"holder.onboarding.title.yourqr" = "Your QR code in your pocket";
-"holder.onboarding.message.yourqr" = "If your test proves you don't have coronavirus, you can make a personal QR code in this app. This will be your test declaration. The QR code is scanned before you get access.";
-"holder.onboarding.title.validity" = "Validity of your negative test declaration";
-"holder.onboarding.message.validity" = "Want access to a certain social, cultural or sports events? Make sure your QR code is scanned at the entrance within %@ hour(s) after the moment you've been tested. When your negative test declaration expires, the QR code disappears from the app.";
-"holder.onboarding.title.privacy" = "Minimum amount of data";
-"holder.onboarding.message.privacy" = "Your QR code only states when you tested negative (no coronavirus), the time of testing, and the minimum amount of identifying data: your first name initial, your last name initial, your day of birth, and your month of birth. We verify this information to make sure the test result is yours.";
+"holder.onboarding.title.safely" = "Access only with a certificate";
+"holder.onboarding.message.safely" = "Your health and other people's health matters. Get tested and/or vaccinated when you’re travelling. Or when you attend certain locations or activities. Do you have proof you don’t have corona or that you have been vaccinated? Then you’re allowed access.";
+"holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
+"holder.onboarding.message.yourqr" = "You can generate a proof if you have been vaccinated. Or if you have a negative test result that confirms you don’t have corona. Good to know: you can have multiple proofs.";
+"holder.onboarding.title.validity" = "QR code = your proof";
+"holder.onboarding.message.validity" = "This app generates a QR code with your test result or proof of vaccination. This QR code is scanned to give you access to certain locations or activities as well as when you travel within the European Union. If your declaration expires, the QR code disappears from the app.";
+"holder.onboarding.title.privacy" = "QR codes for the Netherlands and Europe";
+"holder.onboarding.message.privacy" = "This app generates a QR code for the Netherlands and a QR code for Europe. You can find both QR codes in the app. Travelling outside of the Netherlands, but within the European Union? Then use your European QR code.";
 
 /* MARK: - Update Page Forced Information */
-"holder.updatepage.title" = "Vaccinatiebewijs";
-"holder.updatepage.tagline" = "Nieuw in de app";
-"holder.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
+"holder.updatepage.title" = "Vaccination certificate";
+"holder.updatepage.tagline" = "New in the app";
+"holder.updatepage.content" = "Have you been vaccinated? You can now retrieve your vaccination certificate in the app. And make a personal QR code of it. This gives you access to certain locations or activities. You'll also get a QR code to travel within the European Union.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
@@ -152,32 +165,69 @@
 "holder.consent.message.underlined" = "privacy statement";
 "holder.consent.item.1" = "Your data is <b>not centrally stored anywhere</b>";
 "holder.consent.item.2" = "Your GPS or location data is <b>not used or saved</b>";
-"holder.consent.button" = "I've read the privacy statement and give consent for processing my personal data.";
+"holder.consent.button" = "I have read the privacy statement and understand how CoronaCheck processes my data.";
+
+/* MARK: - Choose QR Code Type */
+"holder.chooseqrcodetype.title" = "What will you make a QR code of?";
+"holder.chooseqrcodetype.message" = "You can make a QR code of a negative test result or of a vaccination.";
+"holder.chooseqrcodetype.option.negativetest.title" = "A negative test result";
+"holder.chooseqrcodetype.option.negativetest.subtitle" = "The test proves I do not have coronavirus";
+"holder.chooseqrcodetype.option.vaccine.title" = "A vaccination";
+"holder.chooseqrcodetype.option.vaccine.subtitle" = "I've had my jab or jabs";
+
+/* MARK: - About Making a QR */
+"holder.aboutmakingaqr.title" = "Make QR code";
+"holder.aboutmakingaqr.header" = "Make a QR code";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in 3 steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> You can have a QR code made of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data </b></p> <p> The app directly retrieves the data of your vaccination or rest result. </p> <br/> <p><b>3. Check data </b></p> <p> Check if the data of your vaccination and/or test result is correct.  </p> <br/> <p><b>Going abroad?</b></p> <p> The app makes 2 QR codes: 1 for the Netherlands and 1 for Europe. Travelling outside the Netherlands, but within the European Union? Then use your European QR code. In <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\"> this overview</a>, you'll find whether a QR code is valid in the country you're visiting.</p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
-"holder.dashboard.intro" = "To get access to a pilot event, you need a negative test result. You can convert this into a QR code. Display your QR code and proof of identity at the entrance.";
+"holder.dashboard.intro" = "There are 2 ways to get a certificate. If you're vaccinated or by taking a test at an affiliated test location. In both cases, you can make a QR code afterwards.";
 "holder.dashboard.create.title" = "Make QR code";
-"holder.dashboard.create.message" = "Turn your negative test result into a personal QR code.";
+"holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
-"holder.dashboard.qr.expired" = "The %@ QR code of your %@ is expired.";
+"holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
 "holder.dashboard.qr.minute.long" = "minute";
 "holder.dashboard.qr.minutes.long" = "minutes";
-
+"holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Expires in";
+"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "valid until";
+"holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
+"holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
+"holder.dashboard.qr.type.recovery" = "Recovery statement";
+"holder.dashboard.qr.type.test" = "Test certificate";
+"holder.dashboard.qr.type.vaccination" = "Vaccination certificate";
+"holder.dashboard.qr.title" = "Show QR code";
+"holder.dashboard.qr.button.viewQR" = "View QR";
+"holder.dashboard.qr.eulaunchcardfootermessage" = "Your European QR code will automatically become valid when the European legislation goes into effect (from %@).";
+"holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
+"holder.dashboard.changeregion.title.eu" = "I'm travelling within the European Union";
+"holder.dashboard.changeregion.button" = "Edit to NL";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid in Europe. You've only got a Dutch QR code.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got a European QR code.";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate is not (or no longer) valid in The Netherlands. That's why only a European QR code was made. This QR code is valid in the European Union. </p><p>There are various causes. For example, it's possible you've only had 1 jab. </p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate is not valid in the European Union. That's why only a Dutch QR code was made. This QR code is valid in the Netherlands. </p><p>There are various causes. For example, it's possible your type of vaccination isn't accepted in the European Union. </p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate is not (or no longer) valid in the Netherlands. That's why only a European QR code was made. This QR code is valid in the European Union. </p><p>There are various causes. For example, the validity period in the Netherlands (40 hours) is shorter than the validity period in the European Union. </p><p>Want to travel within the European Union? See on <a href=\"https://coronacheck.nl/nl/\">this page</a> where you can get tested.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate is not valid in the European Union. That's why only a Dutch QR code was made. This QR code is valid in the Netherlands. </p><p>There are various causes. For example, it's possible your type of test isn't accepted in the European Union. </p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "(an empty phrase)";
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
 "holder.showqr.domestic.title" = "My QR code";
-"holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
-"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat dat je een groen scherm krijgt. In de QR-code staat niet of je een testbewijs, herstelverklaring of vaccinatie hebt.</p><p>Daarnaast staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Er kunnen gegevens wegvallen om de herleidbaarheid naar jou zo klein mogelijk te maken.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De Europese QR-code is niet geldig in Nederland.</p>";
-"holder.showqr.eu.title" = "EU QR code";
-"holder.showqr.eu.about.title" = "Over mijn Europese QR-code";
-"holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Vaccin Type: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test naam: <b>%@</b><br>Testdatum: <b>%@</b><br>TestUitslag: <b>%@</b><br>TestLocatie: <b>%@</b><br>Producent: <b>%@</b><br>Land van test: <b>%@</b><br>IdentificatieCode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
-"holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
-"holder.showqr.eu.about.test.postive" = "postitief (corona)";
+"holder.showqr.domestic.about.title" = "About my Dutch QR code";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. 
+The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The European QR code isn't valid in the Netherlands.</p>";
+"holder.showqr.eu.title" = "European QR code";
+"holder.showqr.eu.about.title" = "About my European QR code";
+"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands, but within the European Union? Then more data is required. That's why the European QR code contains the following details:</p><p>Name<b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Date of injection: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b><br></p><p>Always use the European QR code in other European countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands but within the European Union? This requires more data. That's why the European QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Identification code: <b>%@</b><br></p><p>Always use the European QR code in other European countries. The Dutch QR code is not valid outside the Netherlands.</p>";
+"holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
+"holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Your QR code has been made";
@@ -193,18 +243,18 @@
 "holder.provider.message" = "Does your test prove you don't have coronavirus at that time? Then you can make a QR code out of the test result.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Log in with your DigiD";
-"holder.provider.commercial.title" = "Testen voor Toegang";
+"holder.provider.commercial.title" = "Other test location";
 
 /* MARK: - Holder Token Scan */
 "holder.tokenscan.title" = "Scan QR code";
-"holder.tokenscan.message" = "Point your device at the QR code the test location gave you.";
+"holder.tokenscan.message" = "Point your phone at the QR code the test location gave you.";
 "holder.tokenscan.torch.accessibility" = "Turn on the flashlight.";
 "holder.tokenscan.error.title" = "Invalid QR code";
 "holder.tokenscan.error.message" = "This QR code isn't valid. Scan the QR code given to you by the test location.";
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Check your test result";
-"holder.testresults.results.text" = "This test result is retrieved from the test location.<br\>Is the below correct? Then you can convert the negative test result into a QR code. This is your test declaration.";
+"holder.testresults.results.text" = "This test result is retrieved from the test location.<br\>Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.";
 "holder.testresults.results.button" = "Make QR code";
 "holder.testresults.noresults.title" = "No negative test result";
 "holder.testresults.noresults.text" = "No negative test result available";
@@ -234,63 +284,66 @@
 "holder.testresults.december" = "DEC";
 "holder.testresults.disclaimer.accessibility" = "More information about test results";
 
-/* MARK: - Holder Test Results About */
-//"holder.testresults.about.title" = "About the test result";
-//"holder.testresults.about.section.one" = "The test result contains the result, the time the test was taken and a minimum amount of personal data.";
-//"holder.testresults.about.section.two" = "Your details consist of: (1) the first letter of your first name, (2) the first letter of your last name, (3) your date of birth and (4) your month of birth.";
-//"holder.testresults.about.section.three" = "Are these details different than the details on your identification card?";
-//"holder.testresults.about.section.four" = "Contact your test location. They can edit your details.";
-
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
-"holder.about.text" = "CoronaCheck is created so that people can visit social, cultural and sports locations again. With this app, visitors are able to prove they've recently tested negative for corona. This way, the Netherlands can head out more often.";
+"holder.about.text" = "CoronaCheck is created to reopen society step by step. With this app, visitors are able to prove they're vaccinated or they’ve recently tested negative for corona. This way, the Netherlands can head out more often and travel abroad within the European Union.";
 "holder.about.link" = "Read the privacy statement here";
 
-"holder.vaccination.start.title" = "Vaccinatie ophalen";
-"holder.vaccination.start.message" = "<p>Heb je een of meer prikken gekregen? Dan kan je een Europees bewijs maken.<p><p>Vragen over vaccinaties? <a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier meer.</a></p>";
-"holder.vaccination.start.action" = "Login met DigiD";
-"holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
-"holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
-"holder.vaccination.list.message" = "Je kan een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
-"holder.vaccination.list.actiontitle" = "Maak QR-code";
-"holder.vaccination.element.title" = "Vaccinatie %@";
-"holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
-"holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor meer <a href=\"https://coronacheck.nl\">informatie</a></p> <p>Ben je kortgeleden gevaccineerd? Dan kan het even duren totdat de gegevens beschikbaar zijn.</p>";
-"holder.vaccination.nolist.actiontitle" = "Naar Mijn Overzicht";
-"holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
-"holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
-"holder.vaccination.alert.cancel" = "Nee, terug";
-"holder.vaccination.alert.ok" = "Ja, stop";
-"holder.vaccination.about.text" = "Over jouw vaccinatie";
-"holder.vaccination.about.body" = "<p>De volgende vaccinatie gegevens zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Land van vaccinatie: <b>%@</b><br>Unieke identificatiecode: <b>%@</b></p>";
+"holder.vaccination.start.title" = "Retrieve vaccination details";
+"holder.vaccination.start.message" = "<p>Got vaccinated? Log in with DigiD. Details regarding your vaccination will be retrieved automatically. You only need one jab to make a European QR-code. For a Dutch QR-code you need to be fully vaccinated. 
+
+Didn't get a jab yet? Get vaccinated first.";
+"holder.vaccination.start.action" = "Log in with DigiD";
+"holder.vaccination.loading.title" = "Retrieving your vaccinations";
+"holder.vaccination.list.title" = "Your retrieved vaccinations";
+"holder.test.list.title" = "Retrieve test result";
+"holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
+"holder.vaccination.list.action" = "Make QR code";
+"holder.vaccination.element.title" = "Vaccination %@";
+"holder.vaccination.element.subtitle" = "Vaccination date: %@";
+"holder.vaccination.nolist.title" = "Vaccinations not retrieved";
+"holder.vaccination.nolist.message" = "<p>Vaccinations not available.</p><p>There is no available vaccination data. This can have various causes. </p> Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information. Got vaccinated recently? It can take a few hours until your details are available. </p>";
+"holder.vaccination.nolist.action" = "To My Overview";
+"holder.vaccination.alert.title" = "Are you sure you want to stop?";
+"holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
+"holder.vaccination.alert.cancel" = "No, go back";
+"holder.vaccination.alert.ok" = "Yes, stop";
+"holder.vaccination.about.text" = "About your vaccination";
+"holder.vaccination.about.body" = "<p>These details regarding your vaccination were retrieved:</p><p>Name:<b>%@</b><br>Date of birth:<b>%@</b><br></p><p> For the Dutch QR code, minimal data is collected. Your data consists of your vaccination date and a few of your details. Your details consist of first letter of your first name, the first letter of your last name, your birth month, and your day of birth. </p><p>Your datas: <b>%@</b></p><p></p><p><b>Data for Europe</b></p><p>A European QR code requires more data, namely:</p><p>Name: <b>%@</b><br>Date of birth:  <b>%@</b><br>Vaccine:  <b>%@</b><br>Vaccination date %@: <b>%@</b><br></p>%@";
 "holder.vaccination.about.off" = "%@ of %@";
 
+"holder.vaccination.list.wrong" = "Is something wrong?";
+"holder.vaccination.wrong.title" = "Something is wrong";
+"holder.vaccination.wrong.body" = "<p>Is your name or date of birth wrong? Contact your doctor and let them know.</p><p>Missing a jab? Contact the location where you were vaccinated.</p>";
 
-"holder.vaccination.list.wrong" = "Klopt er iets niet?";
-"holder.vaccination.wrong.title" = "Er klopt iets niet";
-"holder.vaccination.wrong.body" = "<p>Klopt je naam of geboortedatum niet? Neem contact op met je huisarts. Deze kan je gegevens aanpassen.</p><p>Mist er een prik? Neem contact op met de locatie waar je je vaccinatie hebt gekregen. Zij kunnen je gegevens aanpassen.</p>";
+"holder.vaccination.start.nodigid" = "I don't have DigiD";
+"holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
 
-"holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
-"holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
+"holder.vaccination.error.again" = "Try again";
+"holder.vaccination.error.close" = "Close";
+"holder.vaccination.error.message" = "Couldn't retrieve the vaccination. Please try again.";
+"holder.vaccination.error.message.code" = "Can't read the vaccination. Contact the location where you were vaccinated and give them the error code (%@).";
+"holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
+"holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 
-"holder.vaccination.error.again" = "Probeer opnieuw";
-"holder.vaccination.error.close" = "Sluiten";
-"holder.vaccination.error.message" = "Het is niet gelukt om de vaccinatie op te halen. Probeer het nog eens.";
-"holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je geprikt bent en geef de foutcode (%@) door.";
-"holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
-"holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
+"holder.event.about.title" = "What was retrieved?";
+"holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
-"holder.event.about.title" = "Wat is er opgehaald?";
-"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br> Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Identification code: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:<p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b><br></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b><br></p>";
 
-"holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br>Test naam: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Testproducent: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+"holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
-"holder.testresults.wrong.body" = "<p>Kloppen jouw gegevens niet met je identiteitsbewijs? Neem contact op met je testlocatie om je  gegevens te laten aanpassen. </p>";
+"holder.event.element.subtitle.test2" = "Test date: %@<br>Valid until:%@<br>Your details: %@";
+"holder.event.element.subtitle.test3" = "**** Test date: %@<br>Valid until:%@<br>Your details: %@";
 
-"holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
-"holder.event.element.subtitle.test3" = "**** Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.location.title" = "Where were you tested?";
+"holder.location.message" = "Indicate whether you were tested at the GGD or at a different test location.";
+"holder.location.ggd.title" = "GGD";
+"holder.location.ggd.subtitle" = "Log in with DigiD";
+"holder.location.other.title" = "Other test location";
+"holder.location.notest" = "I haven't been tested yet";
 
-"holder.notest.title" = "Ik ben nog niet getest";
-"holder.notest.body" = "<p>Voor een QR-code moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot 40 uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen 40 uur gecheckt is bij de ingang.</p>";
-"holder.notest.button.title" = "Maak een afspraak";
+"holder.notest.title" = "I haven't been tested yet";
+"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p><p>A test certificate is valid until 40 hours after the moment you were tested. So schedule your test on time. And make sure your QR code has been checked at the entrance within 40 hours.</p>";
+"holder.notest.action.title" = "Make an appointment";
