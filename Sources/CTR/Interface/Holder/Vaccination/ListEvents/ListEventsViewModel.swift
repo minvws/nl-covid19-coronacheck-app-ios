@@ -157,12 +157,18 @@ class ListEventsViewModel: Logging {
 	private func getViewState(
 		from remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
-		var listDataSource = [(EventFlow.Identity, EventFlow.Event, String)]()
+		var listDataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
 
 		for eventResponse in remoteEvents {
 			let identity = eventResponse.wrapper.identity
 			for event in eventResponse.wrapper.events {
-				listDataSource.append((identity, event, eventResponse.wrapper.providerIdentifier))
+				listDataSource.append(
+					(
+						identity: identity,
+						event: event,
+						providerIdentifier: eventResponse.wrapper.providerIdentifier
+					)
+				)
 			}
 		}
 
