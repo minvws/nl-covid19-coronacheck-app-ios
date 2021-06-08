@@ -125,6 +125,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var euTestManufacturers: [Mapping]? = []
 
+	var providerIdentifiers: [Mapping]? = []
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -149,6 +151,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euVaccinationTypes = "euVaccinations"
 		case euTestTypes = "euTestTypes"
 		case euTestManufacturers = "euTestManufacturers"
+		case providerIdentifiers = "providerIdentifiers"
 	}
 
 	init(
@@ -241,5 +244,10 @@ extension RemoteConfiguration {
 	func getTestManufacturerMapping(_ code: String? ) -> String? {
 
 		return euTestManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	func getProviderIdentifierMapping(_ code: String? ) -> String? {
+
+		return providerIdentifiers?.first(where: { $0.code == code })?.name
 	}
 }

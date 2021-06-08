@@ -216,7 +216,7 @@ class FetchEventsViewModel: Logging {
 
 		if let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") {
 
-			self.logInfo("evenprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
+			self.logInfo("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 			progressIndicationCounter.increment()
 			hasEventInformationFetchingGroup.enter()

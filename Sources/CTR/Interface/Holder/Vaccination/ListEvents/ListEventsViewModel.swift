@@ -61,6 +61,13 @@ class ListEventsViewModel: Logging {
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
+	private lazy var printMonthFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
+		dateFormatter.dateFormat = "MMMM"
+		return dateFormatter
+	}()
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
@@ -150,12 +157,18 @@ class ListEventsViewModel: Logging {
 	private func getViewState(
 		from remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
-		var listDataSource = [(EventFlow.Identity, EventFlow.Event)]()
+		var listDataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
 
 		for eventResponse in remoteEvents {
 			let identity = eventResponse.wrapper.identity
 			for event in eventResponse.wrapper.events {
-				listDataSource.append((identity, event))
+				listDataSource.append(
+					(
+						identity: identity,
+						event: event,
+						providerIdentifier: eventResponse.wrapper.providerIdentifier
+					)
+				)
 			}
 		}
 
@@ -183,7 +196,7 @@ class ListEventsViewModel: Logging {
 	}
 
 	private func listEventsState(
-		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)],
+		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
 		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
@@ -210,7 +223,7 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func getSortedRowsFromEvents(_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromEvents(_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
 
 		if eventMode == .vaccination {
 			let sortedDataSource = dataSource.sorted { lhs, rhs in
@@ -233,7 +246,7 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	private func getSortedRowsFromTestEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromTestEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 
@@ -297,21 +310,25 @@ class ListEventsViewModel: Logging {
 		return rows
 	}
 
-	private func getSortedRowsFromVaccinationEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromVaccinationEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 
-		for (index, dataRow) in sortedDataSource.enumerated() {
+		for dataRow in sortedDataSource {
 
 			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
 				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
 			let formattedShotDate: String = dataRow.event.vaccination?.dateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
+			let formattedShotMonth: String = dataRow.event.vaccination?.dateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printMonthFormatter.string) ?? ""
+			let provider: String = remoteConfigManager.getConfiguration().getProviderIdentifierMapping(dataRow.providerIdentifier) ?? ""
 
 			rows.append(
 				ListEventsViewController.Row(
-					title: String(format: .holderVaccinationElementTitle, "\(index + 1)"),
+					title: String(format: .holderVaccinationElementTitle, "\(formattedShotMonth) (\(provider))"),
 					subTitle: String(
 						format: .holderVaccinationElementSubTitle,
 						dataRow.identity.fullName,
