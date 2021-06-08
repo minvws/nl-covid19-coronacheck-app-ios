@@ -1,3 +1,8 @@
+"verifier.result.denied.region.title" = "This is a European QR code";
+"verifier.result.denied.region.message" = "This is not a valid certificate in the Netherlands. Ask the visitor to show a Dutch QR code.";
+"verifier.result.identity.label" = "Characteristic %@ is %@";
+"verifier.instructions.access.image" = "Person is holding a phone with a green screen and a black check mark.";
+"verifier.instructions.denied.image" = "Person is holding a phone with a red screen and a black cross.";
 "general.government.logo" = "Logo of Central Government";
 
 /* Link naar web accessibility pagina */
@@ -58,7 +63,7 @@
 /* MARK: - Update App */
 "updateApp.error.message" = "Can't open the App Store.";
 "updateApp.title" = "Time for an update";
-"updateApp.content" = "To continue, download the latest version of the app";
+"updateApp.content" = "To continue, install the latest version of the app";
 "updateApp.button" = "Install update";
 
 /* MARK: - EndOfLife */
@@ -94,21 +99,21 @@
 "verifier.menu.privacy" = "Acceptable use policy";
 
 /* MARK: - Verifier Onboarding */
-"verifier.onboarding.title.safely" = "Only access after testing";
-"verifier.onboarding.message.safely" = "Visitors of certain social, cultural or athletic activities must take a coronavirus test first. Even if they're vaccinated. Visitors only get access when the test proves they do not have coronavirus.";
+"verifier.onboarding.title.safely" = "Access only with a certificate";
+"verifier.onboarding.message.safely" = "Visitors of certain locations or activities must be vaccinated or having taken a coronavirus test. Does the person at the entrance show proof of vaccination or a negative test result (no coronavirus)? Then they can enter.";
 "verifier.onboarding.title.scanqr" = "Scan QR code for access";
-"verifier.onboarding.message.scanqr" = "The visitor shows a QR code. This is the valid negative test declaration. With this app, you scan the visitor's QR code. The QR code must be scanned within %@ hours after testing.";
+"verifier.onboarding.message.scanqr" = "Visitors first make a QR code of their vaccination or test result. Then you use this app to check the QR codes and see who is allowed to enter.";
 "verifier.onboarding.title.access" = "Proof of identity check";
-"verifier.onboarding.message.access" = "Green screen? Ask the visitor to show their proof of identity. Check whether the data on your screen match the data on the proof of identity. This way, you're sure the test result belongs to the visitor and you can give them access.";
+"verifier.onboarding.message.access" = "Green screen? Ask the visitor to show proof of identity. Check whether the data on your screen matches the data on the proof of identity. This goes for visitors from The Netherlands and visitors from other countries within the European Union.";
 "verifier.onboarding.title.who" = "Who is the scanner for?";
-"verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your social, cultural or athletic activity falls under the designated locations.";
+"verifier.onboarding.message.who" = "With this app, you can receive visitors again. But only if your location or activity falls under the designated locations.";
 
 /* MARK: - Verifier Consent */
 "verifier.consent.title" = "Acceptable use policy";
 "verifier.consent.message" = "The acceptable use policy details how CoronaCheck Scanner uses your data and what your rights are.";
 "verifier.consent.message.underlined" = "acceptable use policy";
-"verifier.consent.item.1" = "The QR code contains <b>minimal data</b> of the visitor";
-"verifier.consent.item.2" = "You're only allowed to use this data to <b>check the valid negative test declaration</b>";
+"verifier.consent.item.1" = "GPS or location data are <b>not saved or used</b>";
+"verifier.consent.item.2" = "You're only allowed to use the visitor's details to <b>check the certificate</b>";
 "verifier.consent.item.3" = "The visitor's data is <b>not centrally stored anywhere</b>";
 "verifier.consent.button" = "I've read and agree to the acceptable use policy.";
 
@@ -122,19 +127,17 @@
 /* MARK: - Verifier Scan Instructions */
 "verifier.instructions.title" = "How scanning works";
 "verifier.instructions.distance.title" = "1. Keep a distance";
-"verifier.instructions.distance.text" = "Press the 'Start Scanning' button and ask the visitor to show their QR code. They can show their code using the CoronaCheck app or the paper version. The QR code acts as a valid negative test declaration and can be read at a safe distance.";
+"verifier.instructions.distance.text" = "Press the 'Start Scanning' button and ask the visitor to show their QR code. They can show their code using the CoronaCheck app or the paper version. The QR code acts as a certificate and can be read at a safe distance.";
 "verifier.instructions.scan.title" = "2. Scan the QR code";
-"verifier.instructions.scan.text" = "Point your phone camera at the visitor's valid negative test declaration. Scan the QR code.";
-"verifier.instructions.access.image" = "Person is holding a phone with a green screen and a black check mark.";
+"verifier.instructions.scan.text" = "Point your phone camera at the visitor's valid negative test certificate. Scan the QR code.";
 "verifier.instructions.access.title" = "3. Green screen";
-"verifier.instructions.access.text" = "Green screen? The visitor has a valid negative test declaration. Now check whether the data on the green screen match the data on the proof of identity. All good? Then the visitor may enter. They might also need an entrance ticket.";
-"verifier.instructions.denied.image" = "Person is holding a phone with a red screen and a black cross.";
+"verifier.instructions.access.text" = "Green screen? The visitor has a valid negative test certificate. Now check whether the data on the green screen matches the data on the proof of identity. All good? Then the visitor may enter. They might also need an entrance ticket.";
 "verifier.instructions.denied.title" = "4. Red screen";
-"verifier.instructions.denied.text" = "Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a recent negative test result. Here's what you can do: <br\><br\><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a negative test result? Direct the visitor to our help desk. Phone number: <a href=\"tel:\\08001421\">0800-1421</a>.</li></ul> <br\>A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter. Find more information <a href=\"https://coronacheck.nl/en/scanner\">here</a>.";
+"verifier.instructions.denied.text" = "Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a vaccination or a negative test result. Here's what you can do: <br\><br\><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Check whether the visitor show a Dutch QR code. A Europese QR code results in a red screen. </li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a negative test result? Direct the visitor to our help desk. Phone number: <a href=\"tel:\\08001421\">0800-1421</a>.</li></ul> <br\>A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter. Find more information <a href=\"https://coronacheck.nl/en/scanner\">here</a>.";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR code";
-"verifier.scan.message" = "Point your device at the QR code on the visitor's screen. Or at the paper version of their valid negative test declaration.";
+"verifier.scan.message" = "Point your device at the QR code on the visitor's screen. Or at the paper version of their valid negative test certificate.";
 "verifier.scan.torch.accessibility" = "Turn the flashlight on.";
 "verifier.scan.permission.title" = "No access to camera";
 "verifier.scan.permission.message" = "The app wants to access the camera to scan the QR code.";
@@ -144,10 +147,8 @@
 "verifier.result.access.title" = "Valid QR code";
 "verifier.result.demo.title" = "Demo QR code scanned";
 "verifier.result.denied.title" = "Invalid QR code";
-"verifier.result.denied.message" = "The visitor doesn't have a valid negative test declaration. See possible causes.";
+"verifier.result.denied.message" = "The visitor doesn't have a valid certificate. See possible causes.";
 "verifier.result.denied.link" = "See possible causes.";
-"verifier.result.denied.region.title" = "Dit is een Europese QR-code";
-"verifier.result.denied.region.message" = "Dit is geen geldig bewijs in Nederland. Vraag de bezoeker een Nederlandse QR-code te laten zien.";
 "verifier.result.next" = "Scan next";
 "holder.testresults.january" = "JAN";
 "holder.testresults.february" = "FEB";
@@ -166,9 +167,9 @@
 "verifier.result.check.title" = "About the check";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Invalid QR code";
-"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b><ul><li>The person hasn't been tested</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li></ul></p>";
-"verifier.denied.message.two" = "<p><b>What to do now?</b><br>Ask the visitor to take a test first. Once the test result is known, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
+"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b><ul><li>The person hasn't been tested</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul></p>";
+"verifier.denied.message.two" = "<p><b>What to do now?</b><br>Ask the visitor to get vaccinated or to take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";
-"verifier.about.text" = "CoronaCheck Scanner is created so that social, cultural and sports locations can open their doors again. Think for example of events, museums and concerts. With this app, only visitors that are able to prove they’ve recently tested negative for corona can get access. This way, the Netherlands can head out more often.";
+"verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. With this app, visitors are able to prove they're vaccinated or they’ve recently tested negative for corona. This way, the Netherlands can head out more often.";
