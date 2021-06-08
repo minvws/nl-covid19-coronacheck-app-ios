@@ -248,7 +248,7 @@ class HolderDashboardViewModel: Logging {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized,
+								typeText: origin.type.localized.capitalized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -280,7 +280,7 @@ class HolderDashboardViewModel: Logging {
 					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized,
+								typeText: origin.type.localized.capitalized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -404,6 +404,11 @@ extension HolderDashboardViewModel {
 			func isValid(duringDate date: Date) -> Bool {
 				date.isWithinTimeWindow(from: validFromDate, to: expirationTime)
 			}
+
+			var expiryIsBeyondThreeYearsFromNow: Bool {
+				let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
+				return expirationTime > Date(timeIntervalSinceNow: threeYearsFromNow)
+			}
 		}
 
 		func isOfRegion(region: QRCodeValidityRegion) -> Bool {
@@ -434,9 +439,14 @@ extension HolderDashboardViewModel {
 				switch self {
 					// Netherlands uses expireTime
 					case .netherlands:
+						if origin.expiryIsBeyondThreeYearsFromNow {
+							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+							return .init(text: prefix, kind: .future)
+						} else {
 						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
 						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
 						return .init(text: prefix + dateString, kind: .current)
+						}
 
 					// EU cards use Valid From (eventTime) because we don't know the expiry date
 					case .europeanUnion:
@@ -455,7 +465,13 @@ extension HolderDashboardViewModel {
 			switch self {
 				case .netherlands:
 					if origin.isCurrentlyValid {
+
+						if origin.expiryIsBeyondThreeYearsFromNow {
+							return ""
+						} else {
 						return .qrExpiryDatePrefixValidUpToAndIncluding
+						}
+
 					} else {
 						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
 					}
