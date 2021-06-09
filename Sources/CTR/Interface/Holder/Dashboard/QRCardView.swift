@@ -30,7 +30,9 @@ class QRCardView: BaseView {
 	// MARK: - Private properties
 
 	private let regionLabel: Label = {
-		return Label(title3: nil).multiline().header()
+		let label = Label(title3: nil).multiline().header()
+		label.textColor = Theme.colors.primary
+		return label
 	}()
 
 	private let titleLabel: Label = {
