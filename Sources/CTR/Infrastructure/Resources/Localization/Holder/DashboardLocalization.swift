@@ -85,8 +85,12 @@ extension String {
 		return Localization.string(for: "holder.dashboard.changeregion.title.eu")
 	}
 
-	static var changeRegionButton: String {
-		return Localization.string(for: "holder.dashboard.changeregion.button")
+	static var changeRegionButtonEU: String {
+		return Localization.string(for: "holder.dashboard.changeregion.button.eu")
+	}
+	
+	static var changeRegionButtonNL: String {
+		return Localization.string(for: "holder.dashboard.changeregion.button.nl")
 	}
 
 	static var qrTitle: String {

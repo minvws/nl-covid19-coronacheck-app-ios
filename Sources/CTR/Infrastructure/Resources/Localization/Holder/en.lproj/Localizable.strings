@@ -203,7 +203,8 @@
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your European QR code will automatically become valid when the European legislation goes into effect (from %@).";
 "holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
 "holder.dashboard.changeregion.title.eu" = "I'm travelling within the European Union";
-"holder.dashboard.changeregion.button" = "Edit to NL";
+"holder.dashboard.changeregion.button.eu" = "Edit to international";
+"holder.dashboard.changeregion.button.nl" = "Edit to NL";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid in Europe. You've only got a Dutch QR code.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got a European QR code.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
