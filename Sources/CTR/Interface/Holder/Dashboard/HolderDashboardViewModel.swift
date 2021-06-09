@@ -434,11 +434,17 @@ extension HolderDashboardViewModel {
 				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
 					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
-					return .init(text: prefix + dateString, kind: .future)
+					return .init(
+						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+						kind: .future
+					)
 				} else {
 					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
-					return .init(text: prefix + dateString, kind: .future)
+					return .init(
+						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+						kind: .future
+					)
 				}
 
 			} else {
@@ -451,14 +457,20 @@ extension HolderDashboardViewModel {
 						} else {
 						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
 						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
-						return .init(text: prefix + dateString, kind: .current)
+							return .init(
+								text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+								kind: .current
+							)
 						}
 
 					// EU cards use Valid From (eventTime) because we don't know the expiry date
 					case .europeanUnion:
 						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.validFromDate)
 						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
-						return .init(text: prefix + dateString, kind: .current)
+						return .init(
+							text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+							kind: .current
+						)
 				}
 			}
 		}
