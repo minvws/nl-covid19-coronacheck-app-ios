@@ -35,7 +35,7 @@ class VerifierIdentityView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .horizontal
 		view.alignment = .leading
-		view.distribution = .fillProportionally
+		view.distribution = .fill
 		view.spacing = ViewTraits.spacing
 		return view
 	}()
@@ -74,11 +74,6 @@ class VerifierIdentityView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
-
-	override func setupViews() {
-
-		super.setupViews()
-	}
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
