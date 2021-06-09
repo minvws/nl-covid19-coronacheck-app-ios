@@ -63,6 +63,7 @@ class ConsentViewController: BaseViewController {
 				self?.sceneView.addPrivacyItem(item, number: index + 1, total: total)
 			}
 		}
+		viewModel.$shouldHideBackButton.binding = { [weak self] in self?.navigationItem.hidesBackButton = $0 }
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -88,7 +89,7 @@ class ConsentViewController: BaseViewController {
 	/// User tapped on the link
 	@objc func linkTapped() {
 
-		viewModel.linkTapped(self)
+		viewModel.linkTapped()
 	}
 
 	/// The user tapped on the primary button

@@ -86,14 +86,6 @@ class CryptoManager: CryptoManaging, Logging {
 		cryptoData.stoken = stoken
 	}
 	
-	/// Set the signature message
-	/// - Parameter proof: the signature message (signed proof)
-	func setTestProof(_ proof: Data?) {
-		
-		cryptoData.ism = proof
-		cryptoData.credential = nil
-	}
-	
 	/// Get the stoken
 	/// - Returns: the stoken
 	func getStoken() -> String? {
@@ -214,10 +206,10 @@ class CryptoManager: CryptoManaging, Logging {
 			}
 			
 			do {
-				let object = try JSONDecoder().decode(CrypoAttributes.self, from: attributesJson)
+				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
 				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
 			} catch {
-				self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+				self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
 				return (attributes: nil, errorMessage: error.localizedDescription)
 			}
 		}
@@ -228,16 +220,16 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	/// Read the crypto credential
 	/// - Returns: the crypto attributes
-	func readCredential() -> CrypoAttributes? {
+	func readCredential() -> CryptoAttributes? {
 		
 		if let cryptoDataValue = cryptoData.credential,
 		   let response = ClmobileReadCredential(cryptoDataValue) {
 			if let value = response.value {
 				do {
-					let object = try JSONDecoder().decode(CrypoAttributes.self, from: value)
+					let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
 					return object
 				} catch {
-					self.logError("Error Deserializing \(CrypoAttributes.self): \(error)")
+					self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
 				}
 			} else {
 				logError("Can't read credential: \(String(describing: response.error))")
@@ -245,23 +237,34 @@ class CryptoManager: CryptoManaging, Logging {
 		}
 		return nil
 	}
-	
-	/// Create the credential
-	func createCredential() {
+
+	/// Create the credential from the issuer commit message
+	/// - Parameter ism: the issuer commit message (signed testproof)
+	/// - Returns: Credential data if success, error if not
+	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
 		
-		guard let holderSecretKey = cryptoData.holderSecretKey,
-			  let ism = cryptoData.ism else {
-			return
+		guard let holderSecretKey = cryptoData.holderSecretKey else {
+			return .failure(CryptoError.keyMissing)
 		}
+
 		let result = ClmobileCreateCredential(holderSecretKey, ism)
 		if let credential = result?.value {
-			cryptoData.credential = credential
-		} else {
-			logError("Can't create credential: \(String(describing: result?.error))")
+			return .success(credential)
+		} else if let reason = result?.error {
+			logError("Can't create credential: \(String(describing: reason))")
+			return .failure(CryptoError.credentialCreateFail(reason: reason))
 		}
+		return .failure(CryptoError.unknown)
+	}
+
+	/// Store the credential in the vault
+	/// - Parameter credential: the credential
+	func storeCredential(_ credential: Data) {
+
+		cryptoData.credential = credential
 	}
 	
-	/// Remove the credial
+	/// Remove the credential
 	func removeCredential() {
 		
 		cryptoData.credential = nil

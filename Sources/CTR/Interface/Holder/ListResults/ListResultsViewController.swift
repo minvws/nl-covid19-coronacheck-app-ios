@@ -73,16 +73,15 @@ class ListResultsViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$showProgress.binding = { [weak self] in
+		viewModel.$shouldShowProgress.binding = { [weak self] in
 
 			guard let strongSelf = self else {
 				return
 			}
 
 			if $0 {
-				let hud = MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
-				hud.accessibilityLabel = .loading
-				UIAccessibility.post(notification: .screenChanged, argument: hud)
+				MBProgressHUD.showAdded(to: strongSelf.sceneView, animated: true)
+				strongSelf.announce(.loading)
 				strongSelf.sceneView.primaryButton.isEnabled = false
 			} else {
 				MBProgressHUD.hide(for: strongSelf.sceneView, animated: true)

@@ -7,20 +7,16 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class AppointmentViewControllerTests: XCTestCase {
 
 	/// Subject under test
-	var sut: AppointmentViewController?
+	private var sut: AppointmentViewController!
 
-	/// The coordinator spy
-	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
+	private var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 
-	/// Configuration spy
-	var configurationSpy = ConfigurationGeneralSpy()
-
-	/// The view model
-	var viewModel: AppointmentViewModel?
+	private var viewModel: AppointmentViewModel!
 
 	var window = UIWindow()
 
@@ -29,14 +25,11 @@ class AppointmentViewControllerTests: XCTestCase {
 
 		super.setUp()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		configurationSpy = ConfigurationGeneralSpy()
-
 		viewModel = AppointmentViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			maxValidity: "test",
-			configuration: configurationSpy
+			maxValidity: 40
 		)
-		sut = AppointmentViewController(viewModel: viewModel!)
+		sut = AppointmentViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 
@@ -47,10 +40,8 @@ class AppointmentViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
@@ -62,9 +53,9 @@ class AppointmentViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.primaryButtonTapped()
+		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		XCTAssertTrue(holderCoordinatorDelegateSpy.openUrlCalled, "Delegate should be called")
+		expect(self.holderCoordinatorDelegateSpy.openUrlCalled) == true
 	}
 }

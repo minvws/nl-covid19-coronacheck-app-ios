@@ -38,14 +38,4 @@ extension String {
 
 		return Localization.string(for: "holder.provider.commercial.title")
 	}
-
-	static var holderChooseProviderCommercialSubtitle: String {
-
-		return Localization.string(for: "holder.provider.commercial.subtitle")
-	}
-
-	static var holderChooseProviderNoDigiD: String {
-
-		return Localization.string(for: "holder.provider.nodigid")
-	}
 }

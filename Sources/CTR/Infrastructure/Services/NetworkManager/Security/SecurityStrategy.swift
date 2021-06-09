@@ -214,25 +214,25 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 				if let name = serverCert.commonName {
 					if name.lowercased() == challenge.protectionSpace.host.lowercased() {
 						foundValidFullyQualifiedDomainName = true
-						logDebug("Host matched CN \(name)")
+						logVerbose("Host matched CN \(name)")
 					}
 					for trustedName in trustedNames {
 						if name.lowercased().hasSuffix(trustedName.lowercased()) {
 							foundValidCommonNameEndsWithTrustedName = true
-							logDebug("Found a valid name \(name)")
+							logVerbose("Found a valid name \(name)")
 						}
 					}
 				}
 				if let san = openssl.getSubjectAlternativeName(serverCert.data), !foundValidFullyQualifiedDomainName {
 					if compareSan(san, name: challenge.protectionSpace.host.lowercased()) {
 						foundValidFullyQualifiedDomainName = true
-						logDebug("Host matched SAN \(san)")
+						logVerbose("Host matched SAN \(san)")
 					}
 				}
 				for trustedCertificate in trustedCertificates {
 
 					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-						logDebug("Found a match with a trusted Certificate")
+						logVerbose("Found a match with a trusted Certificate")
 						foundValidCertificate = true
 					}
 				}
@@ -241,7 +241,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 
 		if foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName {
 			// all good
-			logDebug("Certificate signature is good for \(challenge.protectionSpace.host)")
+			logVerbose("Certificate signature is good for \(challenge.protectionSpace.host)")
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 		} else {
  			logError("Invalid server trust")
@@ -297,19 +297,19 @@ class SecurityCheckerProvider: SecurityChecker {
 				if let name = serverCert.commonName, !foundValidFullyQualifiedDomainName {
 					if name.lowercased() == challenge.protectionSpace.host.lowercased() {
 						foundValidFullyQualifiedDomainName = true
-						logDebug("Host matched CN \(name)")
+						logVerbose("Host matched CN \(name)")
 					}
 				}
 				if let san = openssl.getSubjectAlternativeName(serverCert.data), !foundValidFullyQualifiedDomainName {
 					if compareSan(san, name: challenge.protectionSpace.host.lowercased()) {
 						foundValidFullyQualifiedDomainName = true
-						logDebug("Host matched SAN \(san)")
+						logVerbose("Host matched SAN \(san)")
 					}
 				}
 				for trustedCertificate in trustedCertificates {
 
 					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-						logDebug("Found a match with a trusted Certificate")
+						logVerbose("Found a match with a trusted Certificate")
 						foundValidCertificate = true
 					}
 				}
@@ -318,7 +318,7 @@ class SecurityCheckerProvider: SecurityChecker {
 
 		if foundValidCertificate && foundValidFullyQualifiedDomainName {
 			// all good
-			logDebug("Certificate signature is good for \(challenge.protectionSpace.host)")
+			logVerbose("Certificate signature is good for \(challenge.protectionSpace.host)")
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 		} else {
 			logError("Invalid server trust")

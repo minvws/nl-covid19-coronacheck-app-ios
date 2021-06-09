@@ -53,9 +53,9 @@ class AppointmentViewController: BaseViewController {
 			self?.viewModel.buttonTapped()
 		}
 
-		sceneView.contentTextView.linkTouched { [weak self] _ in
+		sceneView.contentTextView.linkTouched { [weak self] url in
 
-			self?.viewModel.linkedTapped()
+			self?.viewModel.openUrl(url)
 		}
 	}
 

@@ -90,9 +90,6 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// The proof validator
 	var proofValidator: ProofValidatorProtocol
 
-	/// The banner manager
-	var bannerManager: NotificationBannerManaging = NotificationBannerManager.shared
-
 	/// the notification center
 	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
@@ -113,6 +110,9 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 
 	/// Show an expired QR Message
 	@Bindable private(set) var showExpiredQR: Bool
+
+	/// Show notification banner
+	@Bindable private(set) var notificationBanner: NotificationBannerContent?
 
 	/// The appointment Card information
 	@Bindable private(set) var appointmentCard: CardInfo
@@ -175,7 +175,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// - Parameter identifier: the identifier of the card
 	func cardTapped(_ identifier: CardIdentifier) {
 
-		bannerManager.hideBanner()
+		notificationBanner = nil
 		switch identifier {
 			case .appointment:
 				coordinator?.navigateToAppointment()
@@ -294,7 +294,7 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 	/// Make the QR Card
 	/// - Parameters:
 	///   - validUntil: the valid until time string
-	///   - validUntilAccessibility: the valid until time string for pronouncation
+	///   - validUntilAccessibility: the valid until time string for pronunciation
 	///   - holder: the holder identity
 	func makeQRCard(
 		validUntil: String,
@@ -368,30 +368,45 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 		return dateFormatter
 	}()
 
+	/// Formatter for accessibility
+	private lazy var accessibilityTimeFormatter: DateFormatter = {
+
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(abbreviation: "CET")
+		dateFormatter.locale = Locale(identifier: "nl_NL")
+		dateFormatter.dateFormat = "a"
+		dateFormatter.amSymbol = String.am
+		dateFormatter.pmSymbol = String.pm
+		return dateFormatter
+	}()
+
 	/// Get the accessibility time label
 	/// - Parameter date: the date to use
 	/// - Returns: The time of the message as a string
-	func getAccessibilityTime(_ date: Date) -> String {
+	private func getAccessibilityTime(_ date: Date) -> String {
 
-		let components = Calendar.current.dateComponents([.hour, .minute], from: date)
-		return DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
+		var output = ""
+		var components = Calendar.current.dateComponents([.hour, .minute], from: date)
+
+		// Convert from 24 to 12 hour clock
+		if let hour = components.hour, hour > 12 {
+			components.hour = hour - 12
+		}
+		output = DateComponentsFormatter.localizedString(from: components, unitsStyle: .spellOut) ?? ""
+
+		// Add AM or PM to the end
+		let amOrPm = accessibilityTimeFormatter.string(from: date)
+		output += " \(amOrPm)"
+
+		return output
 	}
 
 	@objc func showBanner() {
 
-		bannerManager.showBanner(
-			content: NotificationBannerContent(
-				title: .holderBannerNewQRTitle,
-				message: .holderBannerNewQRMessage,
-				link: .holderBannerNewQRMessageLink,
-				icon: UIImage.alert
-			),
-			callback: { [weak self] in
-
-				if let url = self?.configuration.getHolderFAQURL() {
-					self?.coordinator?.openUrl(url, inApp: true)
-				}
-			}
+		notificationBanner = NotificationBannerContent(
+			title: .holderBannerNewQRTitle,
+			message: .holderBannerNewQRMessage,
+			icon: UIImage.alert
 		)
 	}
 
@@ -405,6 +420,11 @@ class HolderDashboardViewModel: PreventableScreenCapture, Logging {
 			image: .createTile,
 			backgroundColor: Theme.colors.create
 		)
+	}
+
+	func openUrl(_ url: URL) {
+
+		coordinator?.openUrl(url, inApp: true)
 	}
 }
 

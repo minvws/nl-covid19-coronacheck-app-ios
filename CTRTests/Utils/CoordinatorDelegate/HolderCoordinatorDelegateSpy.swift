@@ -13,7 +13,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	var navigateToAppointmentCalled = false
 	var navigateToEnlargedQRCalled = false
 	var navigateToChooseProviderCalled = false
-	var navigateToTokenOverviewCalled = false
 	var navigateToTokenScanCalled = false
 	var navigateToTokenEntryCalled = false
 	var navigateToListResultsCalled = false
@@ -36,11 +35,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func navigateToChooseProvider() {
 
 		navigateToChooseProviderCalled = true
-	}
-
-	func navigateToTokenOverview() {
-
-		navigateToTokenOverviewCalled = true
 	}
 
 	func navigateToTokenScan() {

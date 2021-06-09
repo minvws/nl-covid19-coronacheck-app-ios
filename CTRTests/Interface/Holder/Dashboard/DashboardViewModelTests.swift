@@ -122,7 +122,7 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -156,7 +156,7 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 20
-		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -203,7 +203,7 @@ class DashboardViewModelTests: XCTestCase {
 
 		// Given
 		let sampleTime = Date().timeIntervalSince1970 - 3608
-		cryptoManagerSpy.crypoAttributes = CrypoAttributes(
+		cryptoManagerSpy.crypoAttributes = CryptoAttributes(
 			birthDay: nil,
 			birthMonth: nil,
 			firstNameInitial: nil,
@@ -223,5 +223,69 @@ class DashboardViewModelTests: XCTestCase {
 		expect(self.cryptoManagerSpy.removeCredentialCalled) == true
 		expect(self.cryptoManagerSpy.crypoAttributes)
 			.to(beNil())
+	}
+
+	func test_qrcard_withValidAMTime() {
+
+		// Given
+		let holder = TestHolderIdentity(
+			firstNameInitial: "R",
+			lastNameInitial: "P",
+			birthDay: "27",
+			birthMonth: "5"
+		)
+		// Date and time (GMT): Wednesday, 28 April 2021 02:00:00
+		let date = Date(timeIntervalSince1970: 1619575200)
+
+		// When
+		sut.showQRMessageIsValid(date, holder: holder)
+
+		// Then
+		expect(self.sut.qrCard?.identifier) == .qrcode
+		expect(self.sut.qrCard?.title) == .holderDashboardQRTitle
+		expect(self.sut.qrCard?.message) == .holderDashboardQRSubTitle
+		expect(self.sut.qrCard?.holder) == "R P 27 MEI"
+		expect(self.sut.qrCard?.actionTitle) == .holderDashboardQRAction
+		expect(self.sut.qrCard?.image) == .myQR
+		expect(self.sut.qrCard?.validUntil.contains("28")) == true
+		expect(self.sut.qrCard?.validUntil.contains("april")) == true
+		expect(self.sut.qrCard?.validUntil.contains("04:00")) == true
+		expect(self.sut.qrCard?.validUntil.contains(String.am)) == false
+		expect(self.sut.qrCard?.validUntilAccessibility.contains("28")) == true
+		expect(self.sut.qrCard?.validUntilAccessibility.contains("april")) == true
+		expect(self.sut.qrCard?.validUntilAccessibility.contains("04:00")) == false
+		expect(self.sut.qrCard?.validUntilAccessibility.contains(String.am)) == true
+	}
+
+	func test_qrcard_withValidPMTime() {
+
+		// Given
+		let holder = TestHolderIdentity(
+			firstNameInitial: "R",
+			lastNameInitial: "P",
+			birthDay: "27",
+			birthMonth: "5"
+		)
+		// Date and time (GMT): Wednesday, 28 April 2021 14:00:00
+		let date = Date(timeIntervalSince1970: 1619618400)
+
+		// When
+		sut.showQRMessageIsValid(date, holder: holder)
+
+		// Then
+		expect(self.sut.qrCard?.identifier) == .qrcode
+		expect(self.sut.qrCard?.title) == .holderDashboardQRTitle
+		expect(self.sut.qrCard?.message) == .holderDashboardQRSubTitle
+		expect(self.sut.qrCard?.holder) == "R P 27 MEI"
+		expect(self.sut.qrCard?.actionTitle) == .holderDashboardQRAction
+		expect(self.sut.qrCard?.image) == .myQR
+		expect(self.sut.qrCard?.validUntil.contains("28")) == true
+		expect(self.sut.qrCard?.validUntil.contains("april")) == true
+		expect(self.sut.qrCard?.validUntil.contains("16:00")) == true
+		expect(self.sut.qrCard?.validUntil.contains(String.pm)) == false
+		expect(self.sut.qrCard?.validUntilAccessibility.contains("28")) == true
+		expect(self.sut.qrCard?.validUntilAccessibility.contains("april")) == true
+		expect(self.sut.qrCard?.validUntilAccessibility.contains("16:00")) == false
+		expect(self.sut.qrCard?.validUntilAccessibility.contains(String.pm)) == true
 	}
 }

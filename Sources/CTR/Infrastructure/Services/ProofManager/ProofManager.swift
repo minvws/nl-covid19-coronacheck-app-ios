@@ -241,10 +241,29 @@ class ProofManager: ProofManaging, Logging {
 			onCompletion(ismResponse.asSignedTestResultState())
 			
 		} catch {
-			// Success, no error!
-			cryptoManager.setTestProof(data)
-			cryptoManager.createCredential()
-			onCompletion(SignedTestResultState.valid)
+			// No error from the signer. Let's create the credential from the proof
+			let result = cryptoManager.createCredential(data)
+			switch result {
+				case let .success(credential):
+					cryptoManager.storeCredential(credential)
+					onCompletion(SignedTestResultState.valid)
+				case let .failure(error):
+					logError("Can't create credential: \(error.localizedDescription)")
+					cryptoManager.removeCredential()
+
+					let response: SignedTestResultErrorResponse
+
+					switch error {
+						case CryptoError.keyMissing:
+							response = SignedTestResultErrorResponse(status: error.localizedDescription, code: 19991)
+						case let CryptoError.credentialCreateFail(reason):
+							response = SignedTestResultErrorResponse(status: reason, code: 19992)
+						default:
+							response = SignedTestResultErrorResponse(status: error.localizedDescription, code: 19990)
+					}
+
+					onCompletion(SignedTestResultState.unknown(response: response))
+			}
 		}
 	}
 	
@@ -310,7 +329,7 @@ class ProofManager: ProofManaging, Logging {
 		
 		if let data = try? JSONEncoder().encode(object),
 		   let convertedToString = String(data: data, encoding: .utf8) {
-			logDebug("ProofManager: Convert to \(convertedToString)")
+			logVerbose("ProofManager: Convert to \(convertedToString)")
 			return convertedToString
 		}
 		return ""

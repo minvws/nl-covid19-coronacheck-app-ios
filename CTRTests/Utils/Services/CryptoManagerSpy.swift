@@ -22,7 +22,7 @@ class CryptoManagerSpy: CryptoManaging {
 	var proofs: Data?
 
 	var readCredentialCalled = false
-	var crypoAttributes: CrypoAttributes?
+	var crypoAttributes: CryptoAttributes?
 	var removeCredentialCalled = false
 
 	var generateQRmessageCalled = false
@@ -93,14 +93,19 @@ class CryptoManagerSpy: CryptoManaging {
 		removeCredentialCalled = true
 	}
 
-	func createCredential() {
-		// Nothing yet
+	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
+
+		return .failure(.unknown)
 	}
 
-	func readCredential() -> CrypoAttributes? {
+	func readCredential() -> CryptoAttributes? {
 
 		readCredentialCalled = true
 
 		return crypoAttributes
+	}
+
+	func storeCredential(_ credential: Data) {
+		// Nothing yet
 	}
 }

@@ -23,12 +23,13 @@ class ConsentViewModel {
 	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var consentText: String?
 	@Bindable private(set) var summary: [String]
+	@Bindable private(set) var shouldHideBackButton: Bool
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - factory: The factory for onboarding content
-	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol) {
+	init(coordinator: OnboardingCoordinatorDelegate, factory: OnboardingFactoryProtocol, shouldHideBackButton: Bool) {
 
 		self.coordinator = coordinator
 		self.factory = factory
@@ -38,9 +39,10 @@ class ConsentViewModel {
 		self.consentText = factory.getConsentButtonTitle()
 		self.summary = factory.getConsentItems()
 		self.isContinueButtonEnabled = false
+		self.shouldHideBackButton = shouldHideBackButton
 	}
 
-	/// The user tapped on the consent buton
+	/// The user tapped on the consent button
 	/// - Parameter given: True if consent is given
 	func consentGiven(_ given: Bool) {
 
@@ -48,10 +50,9 @@ class ConsentViewModel {
 	}
 
 	/// The user tapped on the privacy link
-	/// - Parameter viewController: the presenting view controller
-	func linkTapped(_ presentingViewController: UIViewController) {
+	func linkTapped() {
 
-		coordinator?.showPrivacyPage(presentingViewController)
+		coordinator?.showPrivacyPage()
 	}
 
 	/// The user tapped on the primary button

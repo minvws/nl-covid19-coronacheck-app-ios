@@ -11,14 +11,17 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome()
-	
-	/// Show the scan instructions
-	/// - Parameter present: present
-	func navigateToScanInstruction(present: Bool)
-	
-	/// Navigate to the QR scanner
+
+	/// The user finished the start scene
+	/// - Parameter result: the result of the start scene
+	func didFinish(_ result: VerifierStartResult)
+
+	/// The user finished the instruction scene
+	/// - Parameter result: the result of the instruction scene
+	func didFinish(_ result: ScanInstructionsResult)
+
 	func navigateToScan()
-	
+
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned attributes
 	func navigateToScanResult(_ scanResult: CryptoResult)
@@ -44,7 +47,7 @@ class VerifierCoordinator: SharedCoordinator {
 				navigationController: navigationController,
 				onboardingDelegate: self,
 				factory: onboardingFactory,
-				maxValidity: String(maxValidity)
+				maxValidity: maxValidity
 			)
 			startChildCoordinator(coordinator)
 			
@@ -54,10 +57,10 @@ class VerifierCoordinator: SharedCoordinator {
 				navigationController: navigationController,
 				onboardingDelegate: self,
 				factory: onboardingFactory,
-				maxValidity: String(maxValidity)
+				maxValidity: maxValidity
 			)
 			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent()
+			coordinator.navigateToConsent(shouldHideBackButton: true)
 		} else if forcedInformationManager.needsUpdating {
 			// Show Forced Information
 			let coordinator = ForcedInformationCoordinator(
@@ -93,64 +96,29 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				proofManager: proofManager
 			)
 		)
-		dashboardNavigationContoller = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationContoller
+		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationController
 		
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
 	}
-	
-	/// Show the scan instructions
-	/// - Parameter present: present
-	func navigateToScanInstruction(present: Bool = false) {
-		
-		let destination = ScanInstructionsViewController(
-			viewModel: ScanInstructionsViewModel(
-				coordinator: self,
-				presented: present,
-				maxValidity: String(maxValidity)
-			)
-		)
-		if present {
-			let navigationController = UINavigationController(rootViewController: destination)
-			sidePanel?.selectedViewController?.present(navigationController, animated: true, completion: nil)
-		} else {
-			(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+
+	func didFinish(_ result: VerifierStartResult) {
+
+		switch result {
+			case .userTappedProceedToScan:
+				navigateToScan()
+
+			case .userTappedProceedToScanInstructions:
+				navigateToScanInstruction()
 		}
 	}
-	
-	/// Navigate to the QR scanner
-	func navigateToScan() {
-		
-		//		navigateToScanResult(
-		//			CryptoResult(
-		//				attributes:
-		//					Attributes(
-		//						cryptoAttributes:
-		//							CrypoAttributes(
-		//								birthDay: "27",
-		//								birthMonth: "5",
-		//								firstNameInitial: nil, // "R",
-		//								lastNameInitial: "P",
-		//								sampleTime: "1617689091",
-		//								testType: "PCR",
-		//								specimen: "1",
-		//								paperProof: "0"
-		//							),
-		//						unixTimeStamp: Int64(Date().timeIntervalSince1970)
-		//					),
-		//				errorMessage: nil
-		//			)
-		//		)
-		
-		let destination = VerifierScanViewController(
-			viewModel: VerifierScanViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager
-			)
-		)
-		
-        (sidePanel?.selectedViewController as? UINavigationController)?.setViewControllers([destination], animated: true)
+
+	/// The user finished the instruction scene
+	/// - Parameter result: the result of the instruction scene
+	func didFinish(_ result: ScanInstructionsResult) {
+
+		navigateToScan()
 	}
 	
 	/// Navigate to the scan result
@@ -183,8 +151,51 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let destination = UINavigationController(rootViewController: viewController)
 		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
 	}
-}
 
+	private func navigateToScanInstruction() {
+
+		let destination = ScanInstructionsViewController(
+			viewModel: ScanInstructionsViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
+	/// Navigate to the QR scanner
+	func navigateToScan() {
+
+		//		navigateToScanResult(
+		//			CryptoResult(
+		//				attributes:
+		//					Attributes(
+		//						cryptoAttributes:
+		//							CrypoAttributes(
+		//								birthDay: "27",
+		//								birthMonth: "5",
+		//								firstNameInitial: nil, // "R",
+		//								lastNameInitial: "P",
+		//								sampleTime: "1617689091",
+		//								testType: "PCR",
+		//								specimen: "1",
+		//								paperProof: "0"
+		//							),
+		//						unixTimeStamp: Int64(Date().timeIntervalSince1970)
+		//					),
+		//				errorMessage: nil
+		//			)
+		//		)
+
+		let destination = VerifierScanViewController(
+			viewModel: VerifierScanViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager
+			)
+		)
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.setViewControllers([destination], animated: true)
+	}
+}
 // MARK: - MenuDelegate
 
 extension VerifierCoordinator: MenuDelegate {
@@ -201,11 +212,14 @@ extension VerifierCoordinator: MenuDelegate {
 		
 		switch identifier {
 			case .overview:
-				dashboardNavigationContoller?.popToRootViewController(animated: false)
-				sidePanel?.selectedViewController = dashboardNavigationContoller
-				
+				dashboardNavigationController?.popToRootViewController(animated: false)
+				sidePanel?.selectedViewController = dashboardNavigationController
+
 			case .support:
-				let faqUrl = generalConfiguration.getVerifierFAQURL()
+				guard let faqUrl = URL(string: .verifierUrlFAQ) else {
+					logError("No verifier faq url")
+					return
+				}
 				openUrl(faqUrl, inApp: true)
 				
 			case .about :
@@ -215,11 +229,14 @@ extension VerifierCoordinator: MenuDelegate {
 						flavor: AppFlavor.flavor
 					)
 				)
-				aboutNavigationContoller = UINavigationController(rootViewController: destination)
-				sidePanel?.selectedViewController = aboutNavigationContoller
+				aboutNavigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = aboutNavigationController
 				
 			case .privacy :
-				let privacyUrl = generalConfiguration.getPrivacyPolicyURL()
+				guard let privacyUrl = URL(string: .verifierUrlPrivacy) else {
+					logError("No holder privacy url")
+					return
+				}
 				openUrl(privacyUrl, inApp: true)
 				
 			default:
@@ -229,6 +246,14 @@ extension VerifierCoordinator: MenuDelegate {
 				destinationViewController.placeholder = "\(identifier)"
 				let navigationController = UINavigationController(rootViewController: destinationViewController)
 				sidePanel?.selectedViewController = navigationController
+		}
+		fixRotation()
+	}
+
+	func fixRotation() {
+		
+		if let frame = sidePanel?.view.frame {
+			sidePanel?.selectedViewController?.view.frame = frame
 		}
 	}
 	

@@ -53,12 +53,12 @@ class ProofValidator: ProofValidatorProtocol, Logging {
 		let now = Date().timeIntervalSince1970
 		let validity = TimeInterval(maxValidity * 60 * 60)
 		let warningPeriod = TimeInterval(6 * 60 * 60)
-		logDebug("Checking with \(maxValidity) hours")
+		logVerbose("Checking with \(maxValidity) hours")
 		if (sampleTimeStamp + validity) > now && sampleTimeStamp < now {
 
 			let validUntilDate = Date(timeIntervalSince1970: sampleTimeStamp + validity)
 			let timeLeft = sampleTimeStamp + validity - now
-			logDebug("timeLeft: \(timeLeft), warningPeriod: \(warningPeriod)")
+			logVerbose("timeLeft: \(timeLeft), warningPeriod: \(warningPeriod)")
 
 			if timeLeft < warningPeriod {
 				return .expiring(validUntilDate, timeLeft)

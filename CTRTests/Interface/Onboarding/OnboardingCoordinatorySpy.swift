@@ -12,34 +12,47 @@ import XCTest
 
 class OnboardingCoordinatorSpy: OnboardingCoordinatorDelegate {
 
-	var finishOnboardingCalled = false
-	var dismissCalled = false
-	var showPrivacyPageCalled = false
-	var consentGivenCalled = false
-	var navigateToConsentCalled = false
+	var invokedShowPrivacyPage = false
+	var invokedShowPrivacyPageCount = 0
+
+	func showPrivacyPage() {
+		invokedShowPrivacyPage = true
+		invokedShowPrivacyPageCount += 1
+	}
+
+	var invokedDismiss = false
+	var invokedDismissCount = 0
 
 	func dismiss() {
-
-		dismissCalled = true
+		invokedDismiss = true
+		invokedDismissCount += 1
 	}
 
-	func showPrivacyPage(_ viewController: UIViewController) {
-
-		showPrivacyPageCalled = true
-	}
+	var invokedFinishOnboarding = false
+	var invokedFinishOnboardingCount = 0
 
 	func finishOnboarding() {
-
-		finishOnboardingCalled = true
+		invokedFinishOnboarding = true
+		invokedFinishOnboardingCount += 1
 	}
+
+	var invokedNavigateToConsent = false
+	var invokedNavigateToConsentCount = 0
+	var invokedNavigateToConsentParameters: (shouldHideBackButton: Bool, Void)?
+	var invokedNavigateToConsentParametersList = [(shouldHideBackButton: Bool, Void)]()
+
+	func navigateToConsent(shouldHideBackButton: Bool) {
+		invokedNavigateToConsent = true
+		invokedNavigateToConsentCount += 1
+		invokedNavigateToConsentParameters = (shouldHideBackButton, ())
+		invokedNavigateToConsentParametersList.append((shouldHideBackButton, ()))
+	}
+
+	var invokedConsentGiven = false
+	var invokedConsentGivenCount = 0
 
 	func consentGiven() {
-
-		consentGivenCalled = true
-	}
-
-	func navigateToConsent() {
-
-		navigateToConsentCalled = true
+		invokedConsentGiven = true
+		invokedConsentGivenCount += 1
 	}
 }

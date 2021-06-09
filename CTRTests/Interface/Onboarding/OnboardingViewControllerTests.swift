@@ -11,9 +11,9 @@ import XCTest
 class OnboardingViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: OnboardingViewController?
+	var sut: OnboardingViewController!
 
-	var coordinatorSpy = OnboardingCoordinatorSpy()
+	var coordinatorSpy: OnboardingCoordinatorSpy!
 
 	let page = OnboardingPage(
 		title: "Onboarding Title",
@@ -47,10 +47,7 @@ class OnboardingViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		_ = sut.view
 	}
 
 	// MARK: Test
@@ -64,8 +61,7 @@ class OnboardingViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		let strongSut = try XCTUnwrap(sut)
-		XCTAssertEqual(strongSut.sceneView.primaryButton.titleLabel?.text, .next, "Button title should match")
+		XCTAssertEqual(sut.sceneView.primaryButton.titleLabel?.text, .next, "Button title should match")
 	}
 
 	/// Test tap on the next button with only one item
@@ -75,10 +71,10 @@ class OnboardingViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.finishOnboardingCalled, "Method should be called")
+		XCTAssertTrue(coordinatorSpy.invokedFinishOnboarding, "Method should be called")
 	}
 
 	/// Test tap on the next button with two items
@@ -94,10 +90,10 @@ class OnboardingViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertFalse(coordinatorSpy.finishOnboardingCalled, "Method should NOT be called")
+		XCTAssertFalse(coordinatorSpy.invokedFinishOnboarding, "Method should NOT be called")
 	}
 
 	/// Test tap on the next button with two items while on the second page
@@ -113,10 +109,10 @@ class OnboardingViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		sut?.currentIndex = 1
+		sut.currentIndex = 1
 
 		// Then
-		XCTAssertNotNil(sut?.navigationItem.leftBarButtonItem, "There should be a back button")
+		XCTAssertNotNil(sut.navigationItem.leftBarButtonItem, "There should be a back button")
 	}
 
 	/// Test tap on the next button with two items while on the second page
@@ -130,13 +126,13 @@ class OnboardingViewControllerTests: XCTestCase {
 			)
 		)
 		loadView()
-		sut?.currentIndex = 1
+		sut.currentIndex = 1
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		XCTAssertTrue(coordinatorSpy.finishOnboardingCalled, "Method should be called")
+		XCTAssertTrue(coordinatorSpy.invokedFinishOnboarding, "Method should be called")
 	}
 
 	/// Test tap on the next button with two items while on the second page
@@ -150,13 +146,13 @@ class OnboardingViewControllerTests: XCTestCase {
 			)
 		)
 		loadView()
-		sut?.currentIndex = 1
+		sut.currentIndex = 1
 
 		// When
-		sut?.backbuttonTapped()
+		sut.backbuttonTapped()
 
 		// Then
-		XCTAssertFalse(coordinatorSpy.finishOnboardingCalled, "Method should not be called")
+		XCTAssertFalse(coordinatorSpy.invokedFinishOnboarding, "Method should not be called")
 		XCTAssertEqual(sut?.currentIndex, 0, "Current Index should be 0")
 	}
 }

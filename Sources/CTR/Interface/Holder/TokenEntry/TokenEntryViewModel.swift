@@ -9,44 +9,105 @@ import UIKit
 
 class TokenEntryViewModel {
 
+	/// There are four "modes" for user entry
+	/// that determine which fields (if any) should be shown at one time.
+	fileprivate enum InputMode {
+		case none // hide all fields
+		case inputToken
+		case inputTokenWithVerificationCode
+		case inputVerificationCode
+	}
+
+	fileprivate enum InitializationMode: Equatable {
+		case regular
+		case withRequestTokenProvided(originalRequestToken: RequestToken)
+	}
+
 	// MARK: - Bindables
 
-	@Bindable private(set) var token: String?
-	@Bindable private(set) var showProgress: Bool = false
-	@Bindable private(set) var showVerification: Bool = false
+	/// The navbar title
+	@Bindable private(set) var title: String = ""
 
-	/// True if we should enable the next button
-	@Bindable private(set) var enableNextButton: Bool = false
+	/// The description label underneath the navbar title
+	@Bindable private(set) var message: String?
+	@Bindable private(set) var tokenEntryHeaderTitle = ""
+	@Bindable private(set) var tokenEntryPlaceholder = ""
+	@Bindable private(set) var verificationEntryHeaderTitle = ""
+	@Bindable private(set) var verificationInfo = ""
+	@Bindable private(set) var verificationPlaceholder = ""
+	@Bindable private(set) var primaryTitle = ""
 
-	/// An error message
-    @Bindable private(set) var errorMessage: String?
+	/// Do not set directly. Instead, increment or decrement `var inProgressCount: Int`.
+	@Bindable private(set) var shouldShowProgress: Bool = false {
+		didSet {
+			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
+		}
+	}
 
-	/// The title for the secondary button
-	@Bindable private(set) var secondaryButtonTitle: String?
+	@Bindable private(set) var shouldShowTokenEntryField: Bool = false
+	@Bindable private(set) var shouldShowVerificationEntryField: Bool = false
+	@Bindable private(set) var shouldShowNextButton: Bool = true
+	@Bindable private(set) var enableNextButton: Bool = false {
+		didSet {
+			recalculateAndUpdateUI(tokenValidityIndicator: requestToken != nil)
+		}
+	}
+	@Bindable private(set) var fieldErrorMessage: String?
+	@Bindable private(set) var userNeedsATokenButtonTitle: String?
+	@Bindable private(set) var shouldShowUserNeedsATokenButton: Bool = true
+	@Bindable private(set) var resendVerificationButtonTitle: String?
+	@Bindable private(set) var resendVerificationButtonEnabled: Bool = true
+	@Bindable private(set) var confirmResendVerificationAlertTitle: String?
+	@Bindable private(set) var confirmResendVerificationAlertMessage: String?
+	@Bindable private(set) var confirmResendVerificationAlertOkayButton: String?
+	@Bindable private(set) var confirmResendVerificationAlertCancelButton: String?
 
-	/// Is the secondary button enabled?
-	@Bindable private(set) var secondaryButtonEnabled: Bool = false
+	@Bindable private(set) var shouldShowResendVerificationButton: Bool = false
 
 	/// Show internet error
-	@Bindable private(set) var showError: Bool = false
+	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
 
-    // MARK: - Private vars
+	// MARK: - Private vars
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-
 	private let proofManager: ProofManaging?
-
 	private var requestToken: RequestToken?
-
 	private let tokenValidator: TokenValidatorProtocol
-
-    /// A timer to enable resending of the verification code
-    private var resendTimer: Timer?
-
-	private var verificationCode: String?
 
 	// Counter that tracks the countdown before the SMS can be resent
 	private var resendCountdownCounter = 10
+	private var initializationMode: InitializationMode
+	private var hasEverMadeFieldsVisible: Bool = false
+
+	// Hopefully can remove this after a refactor.
+	// Indicates that we've forwarded to the coordinator and there's nothing left to do
+	private var screenHasCompleted: Bool = false {
+		didSet {
+			recalculateAndUpdateUI(tokenValidityIndicator: true)
+		}
+	}
+
+	private var verificationCodeIsKnownToBeRequired = false {
+		didSet {
+			recalculateAndUpdateUI(tokenValidityIndicator: true)
+		}
+	}
+
+	private var inProgressCount = 0 {
+		didSet {
+			objc_sync_enter(self)
+			defer { objc_sync_exit(self) }
+
+			guard inProgressCount >= 0 else { return }
+
+			let newState = inProgressCount > 0
+			// Prevent multiple applications of same shouldShowProgress
+			// state, showing multiple spinners..
+			if shouldShowProgress != newState {
+				shouldShowProgress = newState
+			}
+		}
+	}
 
 	// MARK: - Initializer
 
@@ -63,14 +124,19 @@ class TokenEntryViewModel {
 		self.coordinator = coordinator
 		self.proofManager = proofManager
 		self.requestToken = requestToken
-        self.tokenValidator = tokenValidator
+		self.tokenValidator = tokenValidator
+		self.message = nil
 
 		if let unwrappedToken = requestToken {
-			fetchProviders(unwrappedToken)
-			self.token = "\(unwrappedToken.providerIdentifier)-\(unwrappedToken.token)"
+			self.initializationMode = .withRequestTokenProvided(originalRequestToken: unwrappedToken)
 		} else {
-			self.token = nil
+			self.initializationMode = .regular
 		}
+
+		if let unwrappedToken = requestToken {
+			self.fetchProviders(unwrappedToken, verificationCode: nil)
+		}
+		recalculateAndUpdateUI(tokenValidityIndicator: nil)
 	}
 
 	// MARK: Handling user input
@@ -81,166 +147,477 @@ class TokenEntryViewModel {
 	///   - verificationInput: the verification input
 	func handleInput(_ tokenInput: String?, verificationInput: String?) {
 
-		errorMessage = nil
-		guard let tokenInput = tokenInput else {
-			enableNextButton = false
-			return
+		fieldErrorMessage = nil
+
+		let sanitizedTokenInput = tokenInput.map({ sanitize($0) })
+		let sanitizedVerificationInput = verificationInput.map({ sanitize($0) })
+		let receivedNonemptyVerificationInput = !(sanitizedVerificationInput ?? "").isEmpty
+
+		switch initializationMode {
+			case .regular:
+				guard let sanitizedTokenInput = sanitizedTokenInput, !sanitizedTokenInput.isEmpty else {
+					enableNextButton = false
+					return
+				}
+				let validToken = tokenValidator.validate(sanitizedTokenInput)
+
+				if verificationCodeIsKnownToBeRequired {
+					enableNextButton = validToken && receivedNonemptyVerificationInput
+				} else {
+					enableNextButton = validToken
+				}
+
+			case .withRequestTokenProvided:
+				// Then we don't care about the tokenInput parameter, because it's hidden
+				guard verificationCodeIsKnownToBeRequired else {
+					logWarning("Input in `withRequestTokenProvided` mode without `verificationCodeIsKnownToBeRequired` being set, is unexpected.")
+					return
+				}
+
+				enableNextButton = receivedNonemptyVerificationInput
 		}
-
-		if !tokenInput.isEmpty { // && !showVerification {
-
-			let validToken = tokenValidator.validate(tokenInput)
-			enableNextButton = validToken
-			showVerification = validToken && showVerification
-			return
-		}
-
-		if let verification = verificationInput, verification.isEmpty {
-			enableNextButton = false
-			return
-		}
-
-		enableNextButton = true
 	}
 
 	/// User tapped the next button
 	/// - Parameters:
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
-    func nextButtonPressed(_ tokenInput: String?, verificationInput: String?) {
-        errorMessage = nil
+	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
 
-        guard let tokenInput = tokenInput else {
-            return
-        }
+		switch initializationMode {
+			case .regular:
+				handleNextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
+			case .withRequestTokenProvided:
+				handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
+		}
+	}
+
+	/// tokenInput can be nil in the case of `wasInitializedWithARequestToken`
+	func resendVerificationCodeButtonTapped() {
+		fieldErrorMessage = nil
+
+		if let requestToken = requestToken {
+			self.fetchProviders(requestToken, verificationCode: nil)
+		}
+	}
+
+	func userHasNoTokenButtonTapped() {
+
+		coordinator?.presentInformationPage(
+			title: .holderTokenEntryModalNoTokenTitle,
+			body: .holderTokenEntryModalNoTokenDetails,
+			showBottomCloseButton: false
+		)
+	}
+
+	// MARK: - Private tap handlers:
+
+	private func handleNextButtonPressedDuringRegularFlow(_ tokenInput: String?, verificationInput: String?) {
+		fieldErrorMessage = nil
+
+		guard let tokenInput = tokenInput else {
+			return
+		}
 
 		if let verification = verificationInput, !verification.isEmpty {
-			verificationCode = verification.uppercased()
-			errorMessage = nil
+			fieldErrorMessage = nil
 			if let token = requestToken {
-				fetchProviders(token)
+				fetchProviders(token, verificationCode: sanitize(verification))
 			}
 		} else {
-			if let requestToken = RequestToken(input: tokenInput.uppercased(), tokenValidator: tokenValidator) {
+			if let requestToken = RequestToken(input: sanitize(tokenInput), tokenValidator: tokenValidator) {
 				self.requestToken = requestToken
-				fetchProviders(requestToken)
+				fetchProviders(requestToken, verificationCode: nil)
 			} else {
-				errorMessage = .holderTokenEntryErrorInvalidCode
+				fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
 			}
 		}
 	}
 
+	private func handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: String?) {
+		fieldErrorMessage = nil
+
+		guard let requestToken = requestToken else { return }
+
+		if let sanitizedVerification = verificationInput.map({ sanitize($0) }),
+		   !sanitizedVerification.isEmpty {
+
+			fieldErrorMessage = nil
+			fetchProviders(requestToken, verificationCode: sanitizedVerification)
+		}
+	}
+
+	// MARK: - Networking:
+
 	/// Fetch the providers
 	/// - Parameter requestToken: the request token
-	private func fetchProviders(_ requestToken: RequestToken) {
+	private func fetchProviders(_ requestToken: RequestToken, verificationCode: String?) {
 
-		showProgress = true
+		incrementProgressCount()
+
 		proofManager?.fetchCoronaTestProviders(
 			onCompletion: { [weak self] in
 
-				self?.showProgress = false
-				self?.fetchResult(requestToken)
+				self?.fetchResult(requestToken, verificationCode: verificationCode)
+				self?.decrementProgressCount()
 
 			}, onError: { [weak self] error in
-
-				self?.showProgress = false
-				self?.showError = true
+				self?.decideWhetherToAbortRequestTokenProvidedMode()
+				self?.showTechnicalErrorAlert = true
+				self?.decrementProgressCount()
 			}
 		)
 	}
 
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
-	private func fetchResult(_ requestToken: RequestToken) {
-
+	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
 		guard let provider = proofManager?.getTestProvider(requestToken) else {
-			showProgress = false
-			errorMessage = .holderTokenEntryErrorInvalidCode
+			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
+			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 
-		showProgress = true
+		incrementProgressCount()
+
 		proofManager?.fetchTestResult(
 			requestToken,
 			code: verificationCode,
 			provider: provider) {  [weak self] response in
+			guard let self = self else { return }
 
-			self?.showProgress = false
-			self?.errorMessage = nil
+			self.fieldErrorMessage = nil
 
 			switch response {
 				case let .success(wrapper):
 					switch wrapper.status {
 						case .complete, .pending:
-							self?.coordinator?.navigateToListResults()
+							self.screenHasCompleted = true
+							self.coordinator?.navigateToListResults()
 						case .verificationRequired:
-							self?.handleVerificationRequired()
-						case .invalid:
-							self?.errorMessage = .holderTokenEntryErrorInvalidCode
-						default:
-							self?.logDebug("Unhandled test result status: \(wrapper.status)")
-							self?.errorMessage = "Unhandled: \(wrapper.status)"
-					}
-				case let .failure(error):
+							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+								// the user has just submitted a wrong verification code & should see an error message
+								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+							}
+							self.enableNextButton = false
+							self.verificationCodeIsKnownToBeRequired = true
 
+						case .invalid:
+							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+
+						default:
+							self.logDebug("Unhandled test result status: \(wrapper.status)")
+							self.fieldErrorMessage = "Unhandled: \(wrapper.status)"
+							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+					}
+
+				case let .failure(error):
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self?.errorMessage = .holderTokenEntryErrorInvalidCode
+						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 					} else {
 						// For now, display the network error.
-						self?.errorMessage = error.localizedDescription
-						self?.showError = true
+						self.fieldErrorMessage = error.localizedDescription
+						self.showTechnicalErrorAlert = true
 					}
+					self.decideWhetherToAbortRequestTokenProvidedMode()
+			}
+
+			self.decrementProgressCount()
+		}
+	}
+
+	/// If the path where `.withRequestTokenProvided` fails due to networking,
+	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
+	private func decideWhetherToAbortRequestTokenProvidedMode() {
+		switch self.initializationMode {
+			case .regular:
+				// There must have been a token already entered, so this can be assumed:
+				self.enableNextButton = true
+			case .withRequestTokenProvided:
+				if verificationCodeIsKnownToBeRequired {
+					// in this situation, we know we definitely loaded a requestToken successfully the
+					// first time, so no need to exit `.withRequestTokenProvided` mode.
+					self.enableNextButton = true
+				} else {
+					// The `.withRequestTokenProvided` mode failed at some point
+					// during `init`, so abort & reset to `.regular` mode.
+					self.initializationMode = .regular
+					self.enableNextButton = false
+				}
+		}
+	}
+
+	/// Calls `calculateInputMode()` with the correct values, passing result to `update(inputMode:)`.
+	private func recalculateAndUpdateUI(tokenValidityIndicator: Bool?) {
+		update(inputMode: TokenEntryViewModel.calculateInputMode(
+				tokenValidityIndicator: tokenValidityIndicator,
+				initializationMode: initializationMode,
+				verificationCodeIsKnownToBeRequired: verificationCodeIsKnownToBeRequired,
+				isInProgress: shouldShowProgress,
+				hasEverMadeFieldsVisible: hasEverMadeFieldsVisible,
+				screenHasCompleted: screenHasCompleted)
+		)
+	}
+
+	/// Retains the current applied value of InputMode, for comparison with
+	/// future applications.
+	private var currentInputMode: InputMode? {
+		didSet {
+			if currentInputMode != TokenEntryViewModel.InputMode.none {
+				hasEverMadeFieldsVisible = true
 			}
 		}
 	}
 
-	/// Handle the verification required response
-	private func handleVerificationRequired() {
+	// Applies a new InputMode to the UI bindables
+	// Should **not** not make any decisions
+	private func update(inputMode newInputMode: InputMode) {
+		guard newInputMode != currentInputMode else { return }
+		currentInputMode = newInputMode
 
-		if let code = verificationCode, !code.isEmpty {
-			// We are showing the verification entry, so this is a wrong verification code
-			errorMessage = .holderTokenEntryErrorInvalidCode
+		switch newInputMode {
+			case .none:
+				shouldShowTokenEntryField = false
+				shouldShowVerificationEntryField = false
+				shouldShowNextButton = false
+				shouldShowResendVerificationButton = false
+				shouldShowUserNeedsATokenButton = false
+
+			case .inputToken:
+				shouldShowTokenEntryField = true
+				shouldShowVerificationEntryField = false
+				shouldShowNextButton = true
+				shouldShowResendVerificationButton = false
+				shouldShowUserNeedsATokenButton = true
+
+			case .inputTokenWithVerificationCode:
+				shouldShowTokenEntryField = true
+				shouldShowVerificationEntryField = true
+				shouldShowNextButton = true
+				shouldShowResendVerificationButton = true
+				shouldShowUserNeedsATokenButton = false
+
+			case .inputVerificationCode:
+				shouldShowTokenEntryField = false
+				shouldShowVerificationEntryField = true
+				shouldShowNextButton = true
+				shouldShowResendVerificationButton = true
+				shouldShowUserNeedsATokenButton = false
 		}
-		resetCountdownCounter()
-		startResendTimer()
-		showVerification = true
-		enableNextButton = false
+
+		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
+		title = Strings.title(forMode: initializationMode)
+		tokenEntryHeaderTitle = Strings.tokenEntryHeaderTitle(forMode: initializationMode)
+		tokenEntryPlaceholder = Strings.tokenEntryPlaceholder(forMode: initializationMode)
+		verificationEntryHeaderTitle = Strings.verificationEntryHeaderTitle(forMode: initializationMode)
+		verificationInfo = Strings.verificationInfo(forMode: initializationMode)
+		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
+		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
+		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
+		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
+		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
+		confirmResendVerificationAlertCancelButton = Strings.confirmResendVerificationAlertCancelButton(forMode: initializationMode)
 	}
 
-	// MARK: Resend SMS Countdown
+	// MARK: - +/- Progress Counter
 
-	private func resetCountdownCounter() {
-		resendCountdownCounter = 10
+	private func incrementProgressCount() {
+		objc_sync_enter(self)
+		defer { objc_sync_exit(self) }
+		inProgressCount += 1
 	}
 
-	private func startResendTimer() {
+	private func decrementProgressCount() {
+		objc_sync_enter(self)
+		defer { objc_sync_exit(self) }
+		inProgressCount -= 1
+	}
 
-		guard resendTimer == nil else {
-			return
+	// MARK: - Static private functions
+
+	private static func calculateInputMode(
+		tokenValidityIndicator: Bool?, // IF we've validated the token, then provide the result here.
+		initializationMode: InitializationMode,
+		verificationCodeIsKnownToBeRequired: Bool,
+		isInProgress: Bool,
+		hasEverMadeFieldsVisible: Bool,
+		screenHasCompleted: Bool
+	) -> TokenEntryViewModel.InputMode {
+
+		switch initializationMode {
+			case .regular:
+				if tokenValidityIndicator == true && verificationCodeIsKnownToBeRequired {
+					return .inputTokenWithVerificationCode
+				} else {
+					return .inputToken
+				}
+			case .withRequestTokenProvided:
+				if hasEverMadeFieldsVisible {
+					return .inputVerificationCode
+				} else {
+					if isInProgress || screenHasCompleted {
+						return .none
+					} else {
+						return .inputVerificationCode
+					}
+				}
 		}
-		// Show immediately, and repeat every second
-		resendTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(1),
-			target: self,
-			selector: (#selector(updateResendButtonState)),
-			userInfo: nil,
-			repeats: true
-		)
-		resendTimer?.fire()
 	}
 
-	@objc func updateResendButtonState() {
+	/// Sanitize userInput of token & validation
+	private func sanitize(_ input: String) -> String {
 
-		if resendCountdownCounter > 0 {
-			secondaryButtonTitle = String(format: .holderTokenEntryRetryCountdown, "\(resendCountdownCounter)")
-			secondaryButtonEnabled = false
-			resendCountdownCounter -= 1
-		} else {
-			resendCountdownCounter = 10
-			resendTimer?.invalidate()
-			resendTimer = nil
-			secondaryButtonTitle = .holderTokenEntryRetryTitle
-			secondaryButtonEnabled = true
+		return input
+			.trimmingCharacters(in: .whitespacesAndNewlines)
+			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+			.uppercased()
+	}
+}
+
+/// Mechanism for dynamically retrieving Strings depending on the `InitializationMode`:
+extension TokenEntryViewModel {
+
+	struct Strings {
+		fileprivate static func title(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowTitle
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowTitle
+			}
+		}
+
+		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
+			switch (initializationMode, inputMode) {
+				case (_, .none):
+					return nil
+				case (.regular, _):
+					return .holderTokenEntryRegularFlowText
+				case (.withRequestTokenProvided, _):
+					return .holderTokenEntryUniversalLinkFlowText
+			}
+		}
+
+		fileprivate static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowRetryTitle
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowRetryTitle
+			}
+		}
+
+		fileprivate static func errorInvalidCode(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowErrorInvalidCode
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowErrorInvalidCode
+			}
+		}
+
+		fileprivate static func tokenEntryHeaderTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowTokenTitle
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowTokenTitle
+			}
+		}
+
+		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowTokenPlaceholder
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
+			}
+		}
+
+		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowVerificationTitle
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowVerificationTitle
+			}
+		}
+
+		fileprivate static func verificationInfo(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowVerificationInfo
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowVerificationInfo
+			}
+		}
+
+		fileprivate static func verificationPlaceholder(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowVerificationPlaceholder
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowVerificationPlaceholder
+			}
+		}
+
+		fileprivate static func primaryTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowNext
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowNext
+			}
+		}
+
+		// SMS Resend Verification Alert
+
+		fileprivate static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertTitle
+			}
+		}
+
+		fileprivate static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertMessage
+			}
+		}
+
+		fileprivate static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertOkayButton
+			}
+		}
+
+		fileprivate static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowConfirmResendVerificationCancelButton
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton
+			}
+		}
+
+		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular:
+					return .holderTokenEntryRegularFlowNoTokenButton
+				case .withRequestTokenProvided:
+					return .holderTokenEntryUniversalLinkFlowNoTokenButton
+			}
 		}
 	}
 }

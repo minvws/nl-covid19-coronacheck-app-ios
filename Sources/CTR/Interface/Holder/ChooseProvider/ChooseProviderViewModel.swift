@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// The identty of a provider
+/// The identity of a provider
 enum ProviderIdentifier: String {
 
 	// A Commercial Test Provider
@@ -20,14 +20,33 @@ enum ProviderIdentifier: String {
 /// Struct for information to display the different test providers
 struct DisplayProvider {
 
-	/// The identifer
+	/// The identifier
 	let identifier: ProviderIdentifier
 
 	/// The name
 	let name: String
 
-	/// The subtite
-	let subTitle: String
+	/// The subtitle
+	let subTitle: String?
+}
+
+extension DisplayProvider {
+
+	static var commercialDisplayProvider: DisplayProvider {
+		return DisplayProvider(
+			identifier: .commercial,
+			name: .holderChooseProviderCommercialTitle,
+			subTitle: nil
+		)
+	}
+
+	static var ggdDisplayProvider: DisplayProvider {
+		return DisplayProvider(
+			identifier: .ggd,
+			name: .holderChooseProviderGGDTitle,
+			subTitle: .holderChooseProviderGGDSubtitle
+		)
+	}
 }
 
 class ChooseProviderViewModel: Logging {
@@ -36,7 +55,7 @@ class ChooseProviderViewModel: Logging {
 	var loggingCategory: String = "ChooseProviderViewModel"
 
 	/// Coordination Delegate
-	weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: HolderCoordinatorDelegate?
 
 	/// The proof manager
 	weak var proofManager: ProofManaging?
@@ -57,15 +76,17 @@ class ChooseProviderViewModel: Logging {
 	@Bindable private(set) var body: String
 
 	/// The Test Provider options
-	@Bindable private(set) var providers: [DisplayProvider]
+	@Bindable private(set) var providers: [DisplayProvider] = []
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - openIdManager: the open ID manager
+	///   - openIdManager: the open ID manager (for GGD)
+	///   - enableGGD: True if we want to enable the GGD option
 	init(
-		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		openIdManager: OpenIdManaging) {
+		coordinator: HolderCoordinatorDelegate,
+		openIdManager: OpenIdManaging,
+		enableGGD: Bool = false) {
 
 		self.coordinator = coordinator
 		self.openIdManager = openIdManager
@@ -73,24 +94,25 @@ class ChooseProviderViewModel: Logging {
 		header = .holderChooseProviderHeader
 		body = .holderChooseProviderMessage
 		image = .create
-		providers = [
-			DisplayProvider(
-				identifier: .commercial,
-				name: .holderChooseProviderCommercialTitle,
-				subTitle: .holderChooseProviderCommercialSubtitle
-			)
-//			DisplayProvider(
-//				identifier: .ggd,
-//				name: .holderChooseProviderGGDTitle,
-//				subTitle: .holderChooseProviderGGDSubtitle
-//			)
-		]
+		setupProviders(includeGGD: enableGGD)
+	}
+
+	private func setupProviders(includeGGD: Bool) {
+
+		// use internal var to prevent updating the @binding providers too often
+		var providerList = [DisplayProvider]()
+		providerList.append(DisplayProvider.commercialDisplayProvider)
+		if includeGGD {
+			providerList.append(DisplayProvider.ggdDisplayProvider)
+		}
+
+		providers = providerList
 	}
 
 	/// The user selected a provider
 	/// - Parameters:
 	///   - identifier: the identifier of the provider
-	///   - presentingViewController: The presenting viewcontroller
+	///   - presentingViewController: The presenting view controller
 	func providerSelected(
 		_ identifier: ProviderIdentifier,
 		presentingViewController: UIViewController?) {
@@ -100,48 +122,39 @@ class ChooseProviderViewModel: Logging {
 		if identifier == ProviderIdentifier.commercial {
 			loginCommercial()
 		} else if identifier == ProviderIdentifier.ggd {
-			loginGGD(presentingViewController)
+//			loginGGD(presentingViewController)
 		}
 	}
 
 	/// Login at a commercial tester
-	func loginCommercial() {
+	private func loginCommercial() {
 
-		coordinator?.navigateToTokenOverview()
+		coordinator?.navigateToTokenEntry(nil)
 	}
 
-	/// Login at the GGD
-	/// - Parameter presentingViewController: the presenting viewcontroller
-	func loginGGD(_ presentingViewController: UIViewController?) {
-
-		guard let viewController = presentingViewController else {
-			self.logError("Can't present login for GGD")
-			return
-		}
-
-		openIdManager?.requestAccessToken(
-			presenter: viewController) { [weak self] accessToken in
-			self?.logDebug("Got Acces token: \(accessToken ?? "nil") ")
-
-			// Can't deal with token just yet.
-			//			if let token = accessToken {
-			//				self?.getTestResults(token)
-			//			}
-			// For now, reset test results
-			self?.proofManager?.removeTestWrapper()
-			self?.coordinator?.navigateToListResults()
-
-		} onError: { [weak self] error in
-			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
-		}
-	}
-
-	/// The user has no DigiD
-	func noDidiD() {
-
-		logInfo("Provider selected: no DigiD")
-		if let url = URL(string: "https://digid.nl/aanvragen") {
-			coordinator?.openUrl(url, inApp: false)
-		}
-	}
+//	/// Login at the GGD
+//	/// - Parameter presentingViewController: the presenting view controller
+//	private func loginGGD(_ presentingViewController: UIViewController?) {
+//
+//		guard let viewController = presentingViewController else {
+//			self.logError("Can't present login for GGD")
+//			return
+//		}
+//
+//		openIdManager?.requestAccessToken(
+//			presenter: viewController) { [weak self] accessToken in
+//			self?.logDebug("Got Acces token: \(accessToken ?? "nil") ")
+//
+//			// Can't deal with token just yet.
+//			//			if let token = accessToken {
+//			//				self?.getTestResults(token)
+//			//			}
+//			// For now, reset test results
+//			self?.proofManager?.removeTestWrapper()
+//			self?.coordinator?.navigateToListResults()
+//
+//		} onError: { [weak self] error in
+//			self?.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
+//		}
+//	}
 }

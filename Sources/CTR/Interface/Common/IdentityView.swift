@@ -14,18 +14,50 @@ class IdentityElementView: BaseView {
 
 		// Dimensions
 		static let width: CGFloat = 56.0
-		static let height: CGFloat = 44.0
 		static let headerLineHeight: CGFloat = 16.0
 		static let titleLineHeight: CGFloat = 28
 		static let titleKerning: CGFloat = -0.20
-		static let borderWidth: CGFloat = 2.0
 		static let cornerRadius: CGFloat = 4.0
 
 		// Margins
 		static let margin: CGFloat = 10.0
 		static let titleOffset: CGFloat = 2.0
-
+		static let minimalTextTopMargin: CGFloat = 4.0
+		static let minimalTextMargin: CGFloat = 7.0
 	}
+
+	/// Initialize the identity element view
+	/// - Parameters:
+	///   - borderHeight: the height of the border
+	///   - borderWidth: the width of the border
+	///   - borderColor: the color of the border
+	///   - headerAlignment: the text alignment of the header text
+	///   - bodyFont: the font of the body
+	init(
+		borderHeight: CGFloat = 44.0,
+		borderWidth: CGFloat = 2.0,
+		borderColor: UIColor = Theme.colors.dark,
+		headerAlignment: NSTextAlignment = .center,
+		bodyFont: UIFont = Theme.fonts.headlineBold) {
+
+		self.borderHeight = borderHeight
+		self.borderWidth = borderWidth
+		self.borderColor = borderColor
+		self.headerAlignment = headerAlignment
+		self.bodyFont = bodyFont
+		super.init(frame: .zero)
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+
+	var borderWidth: CGFloat
+	var borderHeight: CGFloat
+	var borderColor: UIColor
+
+	var headerAlignment: NSTextAlignment
+	var bodyFont: UIFont
 
 	/// The title label
 	private let headerLabel: Label = {
@@ -50,8 +82,9 @@ class IdentityElementView: BaseView {
 		super.setupViews()
 
 		borderView.layer.cornerRadius = ViewTraits.cornerRadius
-		borderView.layer.borderWidth = ViewTraits.borderWidth
-		borderView.layer.borderColor = Theme.colors.dark.cgColor
+		borderView.layer.borderWidth = borderWidth
+		borderView.layer.borderColor = borderColor.cgColor
+		bodyLabel.font = bodyFont
 	}
 
 	/// Setup the hierarchy
@@ -73,8 +106,9 @@ class IdentityElementView: BaseView {
 
 			// Header
 			headerLabel.topAnchor.constraint(equalTo: topAnchor),
-			headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-			headerLabel.heightAnchor.constraint(equalToConstant: ViewTraits.headerLineHeight),
+			headerLabel.leadingAnchor.constraint(equalTo: borderView.leadingAnchor),
+			headerLabel.trailingAnchor.constraint(equalTo: borderView.trailingAnchor),
+			headerLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.headerLineHeight),
 
 			// Border / Background
 			borderView.topAnchor.constraint(
@@ -84,17 +118,27 @@ class IdentityElementView: BaseView {
 			borderView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			borderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			borderView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			borderView.widthAnchor.constraint(equalToConstant: ViewTraits.width),
-			borderView.heightAnchor.constraint(equalToConstant: ViewTraits.height),
+			borderView.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.width),
+			borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: borderHeight),
 
 			// Title
 			bodyLabel.centerYAnchor.constraint(
-				equalTo: borderView.centerYAnchor,
+				lessThanOrEqualTo: borderView.centerYAnchor,
 				constant: -ViewTraits.titleOffset
 			),
 			bodyLabel.centerXAnchor.constraint(equalTo: borderView.centerXAnchor),
-			bodyLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-			bodyLabel.trailingAnchor.constraint(equalTo: trailingAnchor)
+			bodyLabel.leadingAnchor.constraint(
+				greaterThanOrEqualTo: borderView.leadingAnchor,
+				constant: ViewTraits.minimalTextMargin
+			),
+			bodyLabel.trailingAnchor.constraint(
+				greaterThanOrEqualTo: borderView.trailingAnchor,
+				constant: -ViewTraits.minimalTextMargin
+			),
+			bodyLabel.topAnchor.constraint(
+				greaterThanOrEqualTo: borderView.topAnchor,
+				constant: ViewTraits.minimalTextTopMargin
+			)
 		])
 	}
 
@@ -103,7 +147,10 @@ class IdentityElementView: BaseView {
 	/// The title
 	var header: String? {
 		didSet {
-			headerLabel.attributedText = header?.setLineHeight( ViewTraits.headerLineHeight, alignment: .center)
+			headerLabel.attributedText = header?.setLineHeight(
+				ViewTraits.headerLineHeight,
+				alignment: headerAlignment
+			)
 		}
 	}
 
@@ -142,12 +189,14 @@ class IdentityView: BaseView {
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
+		super.setupViewHierarchy()
 		addSubview(stackView)
 	}
 
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
+		super.setupViewConstraints()
 		NSLayoutConstraint.activate([
 
 			stackView.topAnchor.constraint(equalTo: topAnchor),

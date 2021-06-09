@@ -14,13 +14,8 @@ extension String {
 		return Localization.string(for: "verifier.result.check.title")
 	}
 
-	static var verifierResultCheckMessageOne: String {
+	static var verifierResultCheckText: String {
 
-		return Localization.string(for: "verifier.result.check.section.one")
-	}
-
-	static var verifierResultCheckMessageTwo: String {
-
-		return Localization.string(for: "verifier.result.check.section.two")
+		return Localization.string(for: "verifier.result.check.text")
 	}
 }

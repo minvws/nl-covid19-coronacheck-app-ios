@@ -11,35 +11,31 @@ import XCTest
 class AppointmentViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: AppointmentViewModel?
+	var sut: AppointmentViewModel!
 
 	/// The coordinator spy
-	var holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-
-	/// Configuration spy
-	var configurationSpy = ConfigurationGeneralSpy()
+	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 
 	override func setUp() {
 
 		super.setUp()
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		configurationSpy = ConfigurationGeneralSpy()
 		sut = AppointmentViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
-			maxValidity: "test",
-			configuration: configurationSpy
+			maxValidity: 40
 		)
 	}
 
 	// MARK: - Tests
 
 	/// Test the tap on the link
-	func testLinkTapped() {
+	func test_openUrl() throws {
 
 		// Given
+		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
 
 		// When
-		sut?.linkedTapped()
+		sut?.openUrl(url)
 
 		// Then
 		XCTAssertTrue(holderCoordinatorDelegateSpy.openUrlCalled, "Delegate should be called")

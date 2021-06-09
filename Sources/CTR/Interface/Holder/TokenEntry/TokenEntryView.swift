@@ -8,16 +8,16 @@
 import UIKit
 
 class TokenEntryView: ScrolledStackWithButtonView {
-
+	
 	/// The display constants
 	private struct ViewTraits {
-
+		
 		// Dimensions
 		static let titleLineHeight: CGFloat = 26
 		static let titleKerning: CGFloat = -0.26
 		static let messageLineHeight: CGFloat = 22
 		static let gradientHeight: CGFloat = 30.0
-
+		
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let buttonMargin: CGFloat = 54.0
@@ -26,22 +26,22 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		static let entryMargin: CGFloat = 16.0
 		static let errorMargin: CGFloat = 8.0
 	}
-
+	
 	/// The title label
 	private let titleLabel: Label = {
-
+		
 		return Label(title1: nil, montserrat: true).multiline()
 	}()
-
+	
 	/// The message label
 	private let messageLabel: Label = {
-
+		
 		return Label(body: nil).multiline()
 	}()
-
+	
 	/// The request token entry view
 	let tokenEntryView: EntryView = {
-
+		
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.inputField.autocapitalizationType = .allCharacters
@@ -50,10 +50,10 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		}
 		return view
 	}()
-
+	
 	/// The verification entry view
 	let verificationEntryView: EntryView = {
-
+		
 		let view = EntryView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.inputField.autocapitalizationType = .allCharacters
@@ -61,26 +61,25 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		if #available(iOS 12.0, *) {
 			view.inputField.textContentType = .oneTimeCode
 		}
-
+		
 		return view
 	}()
-
+	
 	let errorView: ErrorView = {
-
+		
 		let view = ErrorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.isHidden = true
 		return view
 	}()
-
+	
 	/// The message label
 	let textLabel: Label = {
-
+		
 		return Label(subhead: nil).multiline()
 	}()
 
-	/// the secondary button
-	let secondaryButton: Button = {
+	let resendVerificationCodeButton: Button = {
 
 		let button = Button(title: "Button 1", style: .tertiary)
 		button.translatesAutoresizingMaskIntoConstraints = false
@@ -89,68 +88,90 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		return button
 	}()
 
+	let userNeedsATokenButton: Button = {
+		
+		let button = Button(title: "", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+	
 	private let spacer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = .clear
 		return view
 	}()
-
+	
 	/// Setup all the views
 	override func setupViews() {
-
+		
 		super.setupViews()
 		stackView.distribution = .fill
-		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
+		resendVerificationCodeButton.touchUpInside(self, action: #selector(resendVerificationCodeButtonTapped))
+		userNeedsATokenButton.touchUpInside(self, action: #selector(userNeedsATokenButtonTapped))
 	}
-
+	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
-
+		
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
+
 		stackView.addArrangedSubview(tokenEntryView)
-		stackView.setCustomSpacing(0, after: tokenEntryView)
+		stackView.setCustomSpacing(8, after: tokenEntryView)
+
+		stackView.addArrangedSubview(userNeedsATokenButton)
+		stackView.setCustomSpacing(0, after: userNeedsATokenButton)
+
 		stackView.addArrangedSubview(verificationEntryView)
 		stackView.setCustomSpacing(8, after: verificationEntryView)
+
 		stackView.addArrangedSubview(errorView)
 		stackView.setCustomSpacing(0, after: errorView)
+
 		stackView.addArrangedSubview(textLabel)
 		stackView.setCustomSpacing(8, after: textLabel)
-		stackView.addArrangedSubview(secondaryButton)
+
+		stackView.addArrangedSubview(resendVerificationCodeButton)
 		stackView.addArrangedSubview(spacer)
 	}
-
+	
 	override func setupViewConstraints() {
-
+		
 		super.setupViewConstraints()
-
+		
 		NSLayoutConstraint.activate([
-
-			secondaryButton.heightAnchor.constraint(equalToConstant: 40),
+			userNeedsATokenButton.heightAnchor.constraint(equalToConstant: 40),
+			resendVerificationCodeButton.heightAnchor.constraint(equalToConstant: 40),
 			spacer.heightAnchor.constraint(equalTo: primaryButton.heightAnchor, multiplier: 2.0)
 		])
-
+		
 		setupPrimaryButton()
 	}
-
+	
 	/// Setup all the accessibility traits
 	override func setupAccessibility() {
-
+		
 		super.setupAccessibility()
 		// Title
 		titleLabel.accessibilityTraits = .header
 	}
+	
+	@objc func userNeedsATokenButtonTapped() {
 
-	/// User tapped on the primary button
-	@objc func secondaryButtonTapped() {
-
-		secondaryButtonTappedCommand?()
+		userNeedsATokenButtonTappedCommand?()
 	}
 
+	@objc func resendVerificationCodeButtonTapped() {
+		
+		resendVerificationCodeButtonTappedCommand?()
+	}
+	
 	// MARK: Public Access
-
+	
 	/// The  title
 	var title: String? {
 		didSet {
@@ -160,28 +181,60 @@ class TokenEntryView: ScrolledStackWithButtonView {
 			)
 		}
 	}
-
-	/// The  message
+	
+	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(ViewTraits.messageLineHeight)
+			if let message = message {
+				messageLabel.attributedText = message.setLineHeight(ViewTraits.messageLineHeight)
+				messageLabel.isHidden = false
+			} else {
+				messageLabel.isHidden = true
+			}
 		}
 	}
-
+	
 	/// The  message
 	var text: String? {
 		didSet {
 			textLabel.text = text
 		}
 	}
-
-	/// The title of the secondary button
-	var secondaryTitle: String? {
+	
+	var userNeedsATokenButtonTitle: String? {
 		didSet {
-			secondaryButton.setTitle(secondaryTitle, for: .normal)
+			userNeedsATokenButton.setTitle(userNeedsATokenButtonTitle, for: .normal)
 		}
 	}
+	var resendVerificationCodeButtonTitle: String? {
+		didSet {
+			resendVerificationCodeButton.setTitle(resendVerificationCodeButtonTitle, for: .normal)
+		}
+	}
+	
+	var resendVerificationCodeButtonTappedCommand: (() -> Void)?
 
-	/// The user tapped on the secondary button
-	var secondaryButtonTappedCommand: (() -> Void)?
+	var userNeedsATokenButtonTappedCommand: (() -> Void)?
+	
+	var tokenEntryFieldPlaceholder: String? {
+		didSet {
+			tokenEntryView.inputField.attributedPlaceholder = tokenEntryFieldPlaceholder.map {
+				NSAttributedString(
+					string: $0,
+					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+				)
+			}
+		}
+	}
+	
+	var verificationEntryFieldPlaceholder: String? {
+		didSet {
+			verificationEntryView.inputField.attributedPlaceholder = verificationEntryFieldPlaceholder.map {
+				NSAttributedString(
+					string: $0,
+					attributes: [NSAttributedString.Key.foregroundColor: Theme.colors.grey1]
+				)
+			}
+		}
+	}
 }

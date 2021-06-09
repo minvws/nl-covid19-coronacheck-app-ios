@@ -24,11 +24,6 @@ extension String {
 		return Localization.string(for: "holder.appointment.body")
 	}
 
-	static var holderAppointmentLink: String {
-
-		return Localization.string(for: "holder.appointment.link")
-	}
-
 	static var holderAppointmentButtonTitle: String {
 
 		return Localization.string(for: "holder.appointment.button.title")

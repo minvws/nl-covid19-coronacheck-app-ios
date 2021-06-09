@@ -9,19 +9,17 @@ import UIKit
 import SafariServices
 
 protocol OnboardingCoordinatorDelegate: AnyObject {
+
+	func showPrivacyPage()
 	
-	/// Show the privacy page
-	/// - Parameter viewController: the presenting viewcontroller
-	func showPrivacyPage(_ viewController: UIViewController)
-	
-	/// Dismiss the presented viewcontroller
+	/// Dismiss the presented viewController
 	func dismiss()
 	
 	/// The onboarding is finished
 	func finishOnboarding()
 
 	/// Navigate to the consent page
-	func navigateToConsent()
+	func navigateToConsent(shouldHideBackButton: Bool)
 
 	/// Consent was given
 	func consentGiven()
@@ -63,7 +61,7 @@ class OnboardingCoordinator: Coordinator, Logging {
 		navigationController: UINavigationController,
 		onboardingDelegate: OnboardingDelegate,
 		factory: OnboardingFactoryProtocol,
-		maxValidity: String) {
+		maxValidity: Int) {
 		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate
@@ -84,6 +82,13 @@ class OnboardingCoordinator: Coordinator, Logging {
 		let viewController = OnboardingViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
 	}
+
+    // MARK: - Universal Link handling
+
+    /// Override point for coordinators which wish to deal with universal links.
+    func consume(universalLink: UniversalLink) -> Bool {
+        return false
+    }
 }
 
 // MARK: - OpenUrlProtocol
@@ -106,14 +111,24 @@ extension OnboardingCoordinator: OpenUrlProtocol {
 
 extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 	
-	/// Show the privacy page
-	/// - Parameter viewController: the presenting view controller
-	func showPrivacyPage(_ viewController: UIViewController) {
+	func showPrivacyPage() {
 
-		openUrl( generalConfiguration.getPrivacyPolicyURL(), inApp: true)
+		let urlString: String
+
+		if AppFlavor.flavor == .holder {
+			urlString = .holderUrlPrivacy
+		} else {
+			urlString = .verifierUrlPrivacy
+		}
+
+		guard let privacyUrl = URL(string: urlString) else {
+			logError("No privacy url for \(urlString)")
+			return
+		}
+		openUrl(privacyUrl, inApp: true)
 	}
 
-	/// Dismiss the presented viewcontroller
+	/// Dismiss the presented viewController
 	func dismiss() {
 		
 		presentingViewController?.dismiss(animated: true, completion: nil)
@@ -127,16 +142,17 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		onboardingDelegate?.finishOnboarding()
 
 		// Go to consent
-		navigateToConsent()
+		navigateToConsent(shouldHideBackButton: false)
 	}
 
 	/// Navigate to the consent page
-	func navigateToConsent() {
+	func navigateToConsent(shouldHideBackButton: Bool) {
 
 		let viewController = ConsentViewController(
 			viewModel: ConsentViewModel(
 				coordinator: self,
-				factory: onboardingFactory
+				factory: onboardingFactory,
+				shouldHideBackButton: shouldHideBackButton
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
