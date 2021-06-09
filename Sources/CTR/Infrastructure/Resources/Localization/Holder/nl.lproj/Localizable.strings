@@ -335,7 +335,7 @@ Nog geen prik gehad? Laat je dan eerst vaccineren.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 
 "holder.event.about.title" = "Wat is er opgehaald?";
-"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testlocatie<b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
 "holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br>Naam test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Testproducent: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 "holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p>";
