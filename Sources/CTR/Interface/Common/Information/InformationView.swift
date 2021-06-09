@@ -19,14 +19,6 @@ class InformationView: BaseView {
 		static let margin: CGFloat = 20.0
 	}
 
-	/// The internal scroll view
-	private let scrollView: UIScrollView = {
-
-		let scrollView = UIScrollView(frame: .zero)
-		scrollView.translatesAutoresizingMaskIntoConstraints = false
-		return scrollView
-	}()
-
 	/// The stackview
 	private let stackView: UIStackView = {
 
@@ -41,24 +33,12 @@ class InformationView: BaseView {
 
 	/// The title label
 	private let titleLabel: Label = {
-
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label
-	private let messageLabel: Label = {
-
-		return Label(body: nil).multiline()
-	}()
-
-	/// the close button
-	let closeButton: Button = {
-
-		let button = Button(title: "", style: .secondary)
-		button.setAttributedTitle(String.close.underline(underlined: .close), for: .normal)
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.isHidden = true
-		return button
+	private let messageLabel: TextView = {
+		return TextView()
 	}()
 
 	/// The bottom constraint
@@ -78,10 +58,8 @@ class InformationView: BaseView {
 
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
-		scrollView.addSubview(stackView)
 
-		addSubview(scrollView)
-		addSubview(closeButton)
+		addSubview(stackView)
 	}
 
 	/// Setup the constraints
@@ -91,53 +69,23 @@ class InformationView: BaseView {
 
 		NSLayoutConstraint.activate([
 
-			// Scrollview
-			scrollView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
-			scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-
-			// StackView
-			stackView.widthAnchor.constraint(
-				equalTo: scrollView.widthAnchor,
-				constant: -2.0 * ViewTraits.margin
-			),
-			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
 			stackView.topAnchor.constraint(
-				equalTo: scrollView.topAnchor,
+				equalTo: safeAreaLayoutGuide.topAnchor,
 				constant: ViewTraits.margin
 			),
 			stackView.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
+				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
 			),
 			stackView.leadingAnchor.constraint(
-				equalTo: scrollView.leadingAnchor,
+				equalTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			stackView.trailingAnchor.constraint(
-				equalTo: scrollView.trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-
-			// Button
-			closeButton.heightAnchor.constraint(equalToConstant: ViewTraits.buttonHeight),
-			closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			closeButton.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			closeButton.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			),
-			closeButton.bottomAnchor.constraint(
-				equalTo: safeAreaLayoutGuide.bottomAnchor,
+				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
-
-		bottomConstraint = scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
-		bottomConstraint?.isActive = true
 	}
 
 	// MARK: Public Access
@@ -160,14 +108,10 @@ class InformationView: BaseView {
 		}
 	}
 
-	var closeButtonIsHidden: Bool = true {
+	var linkTapHandler: ((URL) -> Void)? {
 		didSet {
-			closeButton.isHidden = closeButtonIsHidden
-			if closeButtonIsHidden {
-				bottomConstraint?.constant = 0
-			} else {
-				bottomConstraint?.constant = -ViewTraits.buttonHeight
-			}
+			guard let linkTapHandler = linkTapHandler else { return }
+			messageLabel.linkTouched(handler: linkTapHandler)
 		}
 	}
 }

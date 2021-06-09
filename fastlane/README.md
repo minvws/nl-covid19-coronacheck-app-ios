@@ -15,27 +15,20 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
+### remove_temp_keychain
+```
+fastlane remove_temp_keychain
+```
+
+
+----
+
 ## iOS
 ### ios test_ci
 ```
 fastlane ios test_ci
 ```
 Run tests for integration purposes
-### ios deploy_test_ci
-```
-fastlane ios deploy_test_ci
-```
-Build and deploy the apps for Test via Firebase from CI
-### ios deploy_acc_ci
-```
-fastlane ios deploy_acc_ci
-```
-Build and deploy the apps for Acc via Firebase from CI
-### ios deploy_prod_ci
-```
-fastlane ios deploy_prod_ci
-```
-Build and deploy the apps for Prod via Firebase from CI
 ### ios deploy_holder_test_ci
 ```
 fastlane ios deploy_holder_test_ci

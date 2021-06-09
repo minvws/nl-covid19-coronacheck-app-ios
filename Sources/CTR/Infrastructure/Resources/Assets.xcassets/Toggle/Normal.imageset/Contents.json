@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "icon_unchecked.png",
+      "filename" : "Unchecked.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icon_unchecked-1.png",
+      "filename" : "Unchecked@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icon_unchecked-2.png",
+      "filename" : "Unchecked@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

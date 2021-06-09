@@ -7,8 +7,7 @@
 
 import Foundation
 
-/// - Tag: RemoteConfigManaging
-protocol RemoteConfigManaging {
+protocol RemoteConfigManaging: AnyObject {
 
 	/// Initialize
 	init()
@@ -23,9 +22,11 @@ protocol RemoteConfigManaging {
 	/// Get the configuration
 	/// - Returns: the remote configuration
 	func getConfiguration() -> RemoteConfiguration
+
+	func reset()
 }
 
-/// The remote configuration mananger
+/// The remote configuration manager
 class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// Category for logging
@@ -40,11 +41,14 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
+	
+	/// The crypto verifier utility
+	var cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
 
 	/// The current app version
 	var appVersion: String {
 
-		return versionSupplier.getCurrentVersion()
+		versionSupplier.getCurrentVersion()
 	}
 
 	/// Persist the remote configuration in the keychain
@@ -70,20 +74,22 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 		}
 	}
 
-	/// Handle the resultwrapper response from the get remote configuration calll
+	/// Handle the resultwrapper response from the get remote configuration call
 	/// - Parameters:
 	///   - resultWrapper: the result wrapper
 	///   - completion: completion handler
 	private func handleResultWrapper(
-		_ resultWrapper: Result<RemoteConfiguration, NetworkError>,
+		_ resultWrapper: Result<(RemoteConfiguration, Data), NetworkError>,
 		completion: @escaping (LaunchState) -> Void) {
 
 		switch resultWrapper {
-			case let .success(remoteConfiguration):
+			case .success((let remoteConfiguration, let data)):
 				// Update the last fetch time
 				lastFetchedTimestamp = Date()
 				// Persist the remote configuration
 				storedConfiguration = remoteConfiguration
+				// Store as JSON file
+				cryptoVerifierUtility.store(data, for: .remoteConfiguration)
 				// Decide what to do
 				compare(remoteConfiguration, completion: completion)
 
@@ -114,10 +120,10 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// Compare the remote configuration against the app version
 	/// - Parameters:
-	///   - remoteConfiguration: the remote confiiguration
+	///   - remoteConfiguration: the remote configuration
 	///   - completion: completion handler
 	private func compare(
-		_ remoteConfiguration: AppVersionInformation,
+		_ remoteConfiguration: RemoteInformation,
 		completion: @escaping (LaunchState) -> Void) {
 
 		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)
@@ -151,5 +157,10 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	func getConfiguration() -> RemoteConfiguration {
 
 		return storedConfiguration
+	}
+
+	func reset() {
+
+		storedConfiguration = .default
 	}
 }

@@ -29,7 +29,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	let contentTextView: TextView = {
@@ -163,13 +163,6 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 				constant: -ViewTraits.margin
 			)
 		])
-	}
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 	}
 
 	/// User tapped on the primary button

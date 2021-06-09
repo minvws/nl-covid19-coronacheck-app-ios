@@ -20,6 +20,7 @@ class OnboardingView: BaseView {
 		static let ribbonOffset: CGFloat = 15.0
 		static let buttonWidth: CGFloat = 182.0
 		static let pageControlMargin: CGFloat = 12.0
+		static let buttonMargin: CGFloat = 36.0
 	}
 
 	/// The government ribbon
@@ -43,7 +44,6 @@ class OnboardingView: BaseView {
 		
 		let view = UIPageControl()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		view.isUserInteractionEnabled = false
 		view.pageIndicatorTintColor = Theme.colors.grey2
 		view.currentPageIndicatorTintColor = Theme.colors.primary
 		return view
@@ -91,13 +91,41 @@ class OnboardingView: BaseView {
 			// ImageContainer
 			containerView.topAnchor.constraint(equalTo: ribbonView.bottomAnchor),
 			containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			containerView.trailingAnchor.constraint(equalTo: trailingAnchor)
+		])
 
-			// Button
+		setupPrimaryButton(useFullWidth: {
+			switch traitCollection.preferredContentSizeCategory {
+				case .unspecified: return true
+				case let size where size > .extraLarge: return true
+				default: return false
+			}
+		}())
+	}
+
+	func setupPrimaryButton(useFullWidth: Bool = false) {
+		if useFullWidth {
+			NSLayoutConstraint.activate([
+
+				primaryButton.leadingAnchor.constraint(
+					equalTo: safeAreaLayoutGuide.leadingAnchor,
+					constant: ViewTraits.buttonMargin
+				),
+				primaryButton.trailingAnchor.constraint(
+					equalTo: safeAreaLayoutGuide.trailingAnchor,
+					constant: -ViewTraits.buttonMargin
+				)
+			])
+		} else {
+			NSLayoutConstraint.activate([
+				primaryButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
+				primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth)
+			])
+		}
+
+		NSLayoutConstraint.activate([
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
-			primaryButton.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
 			primaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
@@ -111,7 +139,7 @@ class OnboardingView: BaseView {
 		super.setupAccessibility()
 		// Ribbon view
 		ribbonView.isAccessibilityElement = true
-		ribbonView.accessibilityLabel = .government
+		ribbonView.accessibilityLabel = .governmentLogo
 	}
 
 	override func layoutSubviews() {

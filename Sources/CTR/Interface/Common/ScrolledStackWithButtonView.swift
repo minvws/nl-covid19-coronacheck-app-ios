@@ -53,6 +53,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 
 		let button = Button(title: "Button 1", style: .primary)
 		button.rounded = true
+		button.titleLabel?.textAlignment = .center
 		return button
 	}()
 
@@ -171,7 +172,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 	// MARK: Public Access
 
 	/// The title for the primary button
-	var primaryTitle: String = "" {
+	var primaryTitle: String? {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
 		}

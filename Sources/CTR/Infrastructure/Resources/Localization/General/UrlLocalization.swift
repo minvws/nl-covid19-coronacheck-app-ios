@@ -25,6 +25,11 @@ extension String {
 
 		return Localization.string(for: "holder.url.privacy")
 	}
+
+	static var holderUrlAccessibility: String {
+
+		return Localization.string(for: "holder.url.accessibility")
+	}
 }
 
 // MARK: - Verifier
@@ -39,5 +44,10 @@ extension String {
 	static var verifierUrlPrivacy: String {
 
 		return Localization.string(for: "verifier.url.privacy")
+	}
+
+	static var verifierUrlAccessibility: String {
+
+		return Localization.string(for: "verifier.url.accessibility")
 	}
 }

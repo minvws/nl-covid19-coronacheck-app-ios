@@ -104,7 +104,14 @@ extension SharedCoordinator: OpenUrlProtocol {
 
 		if shouldOpenInApp {
 			let safariController = SFSafariViewController(url: url)
-			sidePanel?.selectedViewController?.present(safariController, animated: true)
+
+			if let presentedViewController = sidePanel?.selectedViewController?.presentedViewController {
+				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+					self.sidePanel?.selectedViewController?.present(safariController, animated: true)
+				})
+			} else {
+				sidePanel?.selectedViewController?.present(safariController, animated: true)
+			}
 		} else {
 			UIApplication.shared.open(url)
 		}
@@ -126,7 +133,7 @@ extension SharedCoordinator: OnboardingDelegate {
 
 		// Mark as complete
 		onboardingManager.consentGiven()
-		// Also mark as complet for forced information
+		// Also mark as complete for forced information
 		forcedInformationManager.consentGiven()
 
 		// Remove child coordinator

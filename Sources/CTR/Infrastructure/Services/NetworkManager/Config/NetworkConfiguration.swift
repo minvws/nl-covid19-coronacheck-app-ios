@@ -26,13 +26,13 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-ct.bananenhalen.nl",
             port: nil,
-            path: ["v3"]
+            path: ["v4"]
         ),
 		cdn: .init(
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		)
     )
 
@@ -42,13 +42,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		)
     )
 
@@ -58,13 +58,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		)
 	)
 
@@ -83,10 +83,23 @@ struct NetworkConfiguration {
 			path: ["v3"]
 		)
 	)
-	/// The nonce url
-	var nonceUrl: URL? {
 
-		return self.combine(path: Endpoint.nonce, fromCdn: false)
+	/// The access tokens url
+	var vaccinationAccessTokensUrl: URL? {
+
+		return self.combine(path: Endpoint.accessTokens, fromCdn: false)
+	}
+
+	/// The nonce url
+	var prepareIssueUrl: URL? {
+
+		return self.combine(path: Endpoint.prepareIssue, fromCdn: false)
+	}
+
+	/// The nonce url
+	var credentialUrl: URL? {
+
+		return self.combine(path: Endpoint.getCredentials, fromCdn: false)
 	}
 
 	/// The public keys url
@@ -101,22 +114,10 @@ struct NetworkConfiguration {
 		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
     }
 
-	/// The nonce url
-	var testResultIsmUrl: URL? {
-
-		return self.combine(path: Endpoint.testResultIsm, fromCdn: false)
-	}
-
 	/// The providers url
-	var testProvidersUrl: URL? {
+	var providersUrl: URL? {
 
-		return self.combine(path: Endpoint.testProviders, fromCdn: false)
-	}
-
-	/// The types url
-	var testTypesUrl: URL? {
-
-		return self.combine(path: Endpoint.testTypes, fromCdn: false)
+		return self.combine(path: Endpoint.providers, fromCdn: false)
 	}
 
 	/// Combine the endpoint info into an url

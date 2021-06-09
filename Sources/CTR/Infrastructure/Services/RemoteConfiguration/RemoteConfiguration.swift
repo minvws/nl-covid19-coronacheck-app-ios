@@ -8,12 +8,12 @@
 import Foundation
 
 /// Protocol for app version information
-protocol AppVersionInformation {
+protocol RemoteInformation {
 
 	/// The minimum required version
 	var minimumVersion: String { get }
 
-	/// The message for the minium required version
+	/// The message for the minimum required version
 	var minimumVersionMessage: String? { get }
 
 	/// The url to the appStore
@@ -22,17 +22,38 @@ protocol AppVersionInformation {
 	/// The url to the site
 	var informationURL: URL? { get }
 
-	/// Is the app deactvated?
+	/// Is the app deactivated?
 	var appDeactivated: Bool? { get }
 
 	/// What is the TTL of the config
 	var configTTL: Int? { get }
 
-	/// What is the TTL of a test
+	/// The launch date of the EU greencard functionality
+	var euLaunchDate: String? { get }
+
+	/// What is the validity of a test
 	var maxValidityHours: Int? { get }
+
+	/// When should we update
+	var requireUpdateBefore: TimeInterval? { get }
+
+	/// Is the app temporarily disabled?
+	var temporarilyDisabled: Bool? { get }
+
+	/// What is the validity of a vaccination
+	var vaccinationValidityHours: Int? { get }
+
+	/// What is the validity of a recovery
+	var recoveryValidityHours: Int? { get }
+
+	/// What is the validity of a test
+	var testValidityHours: Int? { get }
+
+	/// What is the validity of a domestic test / vaccination
+	var domesticValidityHours: Int? { get }
 }
 
-extension AppVersionInformation {
+extension RemoteInformation {
 
 	/// Is the app deactivated?
 	var isDeactivated: Bool {
@@ -41,12 +62,17 @@ extension AppVersionInformation {
 	}
 }
 
-struct RemoteConfiguration: AppVersionInformation, Codable {
+struct RemoteConfiguration: RemoteInformation, Codable {
+
+	struct Mapping: Codable {
+		let code: String
+		let name: String
+	}
 
 	/// The minimum required version
 	let minimumVersion: String
 
-	/// The message for the minium required version
+	/// The message for the minimum required version
 	let minimumVersionMessage: String?
 
 	/// The url to the appStore
@@ -55,14 +81,51 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 	/// The url to the site
 	let informationURL: URL?
 
-	/// Is the app deactvated?
+	/// Is the app deactivated?
 	let appDeactivated: Bool?
 
 	/// What is the TTL of the config
 	let configTTL: Int?
 
-	/// What is the TTL of a test
-	var maxValidityHours: Int?
+	/// The launch date of the EU greencard functionality
+	let euLaunchDate: String?
+
+	/// What is the validity of a test
+	let maxValidityHours: Int?
+
+	/// When should we update
+	let requireUpdateBefore: TimeInterval?
+
+	/// Is the app temporarily disabled?
+	let temporarilyDisabled: Bool?
+
+	/// What is the validity of a vaccination
+	let vaccinationValidityHours: Int?
+
+	/// What is the validity of a recovery
+	let recoveryValidityHours: Int?
+
+	/// What is the validity of a test
+	let testValidityHours: Int?
+
+	/// What is the validity of a domestic  test / vaccination
+	let domesticValidityHours: Int?
+
+	var hpkCodes: [Mapping]? = []
+
+	var nlTestTypes: [Mapping]? = []
+
+	var euBrands: [Mapping]? = []
+
+	var euManufacturers: [Mapping]?
+
+	var euVaccinationTypes: [Mapping]?
+
+	var euTestTypes: [Mapping]? = []
+
+	var euTestManufacturers: [Mapping]? = []
+
+	var providerIdentifiers: [Mapping]? = []
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -73,18 +136,24 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
+		case euLaunchDate = "euLaunchDate"
 		case maxValidityHours = "maxValidityHours"
+		case requireUpdateBefore = "requireUpdateBefore"
+		case temporarilyDisabled = "temporarilyDisabled"
+		case vaccinationValidityHours = "vaccinationValidity"
+		case recoveryValidityHours = "recoveryValidity"
+		case testValidityHours = "testValidity"
+		case domesticValidityHours = "domesticValidity"
+		case hpkCodes = "hpkCodes"
+		case euBrands = "euBrands"
+		case nlTestTypes = "nlTestTypes"
+		case euManufacturers = "euManufacturers"
+		case euVaccinationTypes = "euVaccinations"
+		case euTestTypes = "euTestTypes"
+		case euTestManufacturers = "euTestManufacturers"
+		case providerIdentifiers = "providerIdentifiers"
 	}
 
-	/// Initializer
-	/// - Parameters:
-	///   - minVersion: The minimum required version
-	///   - minVersionMessage: The message for the minium required version
-	///   - storeUrl: The url to the appStore
-	///   - deactiviated: The deactivation String
-	///   - informationURL: The information url
-	///   - configTTL: The TTL of the config
-	///   - maxValidityHours: The TTL of the test proof
 	init(
 		minVersion: String,
 		minVersionMessage: String?,
@@ -92,7 +161,14 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		deactivated: Bool?,
 		informationURL: URL?,
 		configTTL: Int?,
-		maxValidityHours: Int?) {
+		euLaunchDate: String?,
+		maxValidityHours: Int?,
+		requireUpdateBefore: TimeInterval?,
+		temporarilyDisabled: Bool?,
+		vaccinationValidityHours: Int?,
+		recoveryValidityHours: Int?,
+		testValidityHours: Int?,
+		domesticValidityHours: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -100,7 +176,14 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
 		self.configTTL = configTTL
+		self.euLaunchDate = euLaunchDate
 		self.maxValidityHours = maxValidityHours
+		self.requireUpdateBefore = requireUpdateBefore
+		self.temporarilyDisabled = temporarilyDisabled
+		self.vaccinationValidityHours = vaccinationValidityHours
+		self.recoveryValidityHours = recoveryValidityHours
+		self.testValidityHours = testValidityHours
+		self.domesticValidityHours = domesticValidityHours
 	}
 
 	/// Default remote configuration
@@ -112,7 +195,59 @@ struct RemoteConfiguration: AppVersionInformation, Codable {
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			euLaunchDate: nil,
+			maxValidityHours: 40,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
+	}
+}
+
+// MARK: Mapping
+
+extension RemoteConfiguration {
+
+	func getHpkMapping(_ code: String? ) -> String? {
+
+		return hpkCodes?.first(where: { $0.code == code })?.name
+	}
+
+	func getNlTestType(_ code: String? ) -> String? {
+
+		return nlTestTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getBrandMapping(_ code: String? ) -> String? {
+
+		return euBrands?.first(where: { $0.code == code })?.name
+	}
+
+	func getTypeMapping(_ code: String? ) -> String? {
+
+		return euVaccinationTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getVaccinationManufacturerMapping(_ code: String? ) -> String? {
+
+		return euManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestTypeMapping(_ code: String? ) -> String? {
+
+		return euTestTypes?.first(where: { $0.code == code })?.name
+	}
+
+	func getTestManufacturerMapping(_ code: String? ) -> String? {
+
+		return euTestManufacturers?.first(where: { $0.code == code })?.name
+	}
+
+	func getProviderIdentifierMapping(_ code: String? ) -> String? {
+
+		return providerIdentifiers?.first(where: { $0.code == code })?.name
 	}
 }

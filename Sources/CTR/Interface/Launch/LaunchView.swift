@@ -46,7 +46,7 @@ class LaunchView: BaseView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label
@@ -145,7 +145,7 @@ class LaunchView: BaseView {
 			// Title
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-			titleLabel.heightAnchor.constraint(equalToConstant: ViewTraits.titleMargin),
+			titleLabel.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
 
 			// stackView
 			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),

@@ -1,0 +1,361 @@
+"holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
+"holder.event.originmismatch.vaccination.body" = "Op dit moment kunnen we van jouw vaccinatie geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
+"holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
+/* Link naar web accessibility pagina */
+"holder.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
+
+/* Koptekst in de over de app pagina */
+"holder.about.readmore" = "Lees meer";
+
+/* Alert titel voor rooted device */
+"jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
+
+/* Alert content voor rooted device */
+"jailbroken.message" = "Let op: je apparaat is geroot. Je gegevens zijn mogelijk niet veilig.";
+
+/* Menu item over toegankelijkheid. */
+"holder.menu.accessibility" = "Toegankelijkheid";
+
+"holder.tokenentry.modal.notoken.title" = "Ik heb geen code";
+"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
+"holder.tokenentry.regularflow.button.notoken" = "Ik heb geen code";
+
+/* Voice over voor begin van een lijst */
+"general.list.accessibility.start" = "Begin van lijst.";
+
+/* Voice over voor einde van een lijst */
+"general.list.accessibility.end" = "Eind van lijst.";
+"holder.tokenentry.regularflow.confirmresendverificationalert.title" = "Nieuwe verificatiecode nodig?";
+"holder.tokenentry.regularflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
+"holder.tokenentry.regularflow.confirmresendverificationalert.okaybutton" = "Stuur code";
+"holder.tokenentry.regularflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
+
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.title" = "Nieuwe verificatiecode nodig?";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.message" = "Je krijgt de verificatiecode via een sms of e-mail van de testlocatie. Niet ontvangen? Dan kun je een nieuwe code krijgen.";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.okaybutton" = "Stuur code";
+"holder.tokenentry.universallinkflow.confirmresendverificationalert.cancelbutton" = "Sluiten";
+
+
+/* Voice over voor geldigheid QR code */
+"holder.dashboard.qr.am" = "'s morgens";
+
+/* Voice over voor geldigheid QR code */
+"holder.dashboard.qr.pm" = "'s middags";
+/* Link to the faq for the holder */
+"holder.url.faq" = "https://coronacheck.nl/nl/faq-in-app";
+/* MARK: - URL */
+"holder.url.appointment" = "https://coronacheck.nl/nl/testafspraak-in-app";
+/* Link to the privacy policy for the holder */
+"holder.url.privacy" = "https://coronacheck.nl/nl/privacy-in-app";
+
+"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
+
+/* MARK: - Holder Token entry - Regular Flow */
+"holder.tokenentry.regularflow.title" = "Testuitslag ophalen";
+"holder.tokenentry.regularflow.text" = "Vul jouw ophaalcode in. Deze heb je van je testlocatie gekregen.";
+"holder.tokenentry.regularflow.token.title" = "Ophaalcode";
+"holder.tokenentry.regularflow.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.regularflow.verification.info" = "Je krijgt een code via sms of e-mail";
+"holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
+"holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
+"holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige combinatie";
+"holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
+"holder.tokenentry.regularflow.next" = "Haal testuitslag op";
+/* MARK: - Holder Token entry - Universal Link flow */
+"holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
+"holder.tokenentry.universallinkflow.text" = "Vul jouw verificatiecode in om je negatieve testuitslag op te halen.";
+"holder.tokenentry.universallinkflow.token.title" = "Code";
+"holder.tokenentry.universallinkflow.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.universallinkflow.verification.info" = "Je krijgt een code via sms of e-mail";
+"holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
+"holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
+"holder.tokenentry.universallinkflow.error.invalid.code" = "Geen geldige combinatie";
+"holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
+"holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
+/* MARK: - General */
+"general.cancel" = "Annuleer";
+/* MARK: - General */
+"general.close" = "Sluiten";
+"general.previous" = "Vorige";
+"general.back" = "Terug";
+"general.next" = "Volgende";
+"general.done" = "Klaar";
+"general.ok" = "Ok";
+"general.europeanUnion" = "Europese Unie";
+"general.netherlands" = "Nederland";
+"general.dutch" = "Nederlandse";
+"general.european" = "Europese";
+"general.error.title" = "Sorry, er ging iets mis";
+"general.error.technical.text" = "Dat komt door een technische fout.";
+"general.error.technical.custom" = "Dat komt door een technische fout (%@)";
+"general.error.nointernet.title" = "Geen internetverbinding";
+"general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
+"general.menu.version" = "App versie %@ (%@)";
+"general.government" = "Rijksoverheid";
+"general.government.logo" = "Logo Rijksoverheid";
+"general.loading" = "Bezig met laden";
+"general.notification" = "Let op!";
+"general.menu.open" = "Open zijmenu";
+"general.menu.close" = "Sluit zijmenu";
+"general.list.accessibility" = "%@ van %@.";
+
+/* MARK: - Toggle Region */
+"toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland, maar binnen de Europese Unie? Gebruik dan je Europese bewijs.";
+"toggleRegion.label.topText.nl" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland, maar binnen de Europese Unie? Gebruik dan je Europese bewijs.";
+"toggleRegion.label.bottomText.eu" = "In de Europese QR-code staan meer gegevens: je naam, geboortedatum, het type vaccin en batchnummer.";
+"toggleRegion.label.bottomText.nl" = "In de Nederlandse QR-code staan alleen je initialen, je geboortedag en je geboortemaand.";
+
+/* MARK: - Update App */
+"updateApp.error.message" = "De App Store kan niet geopend worden.";
+"updateApp.title" = "Tijd voor een update";
+"updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
+"updateApp.button" = "Installeer update";
+
+/* MARK: - EndOfLife */
+"endOfLife.error.message" = "De website kan niet geopend worden.";
+"endOfLife.title" = "App buiten werking";
+"endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"endOfLife.button" = "Ga naar CoronaCheck.nl";
+
+/* MARK: - Internet Required */
+"internet.required.button" = "Probeer opnieuw";
+"internet.required.text" = "Om de app op te starten heb je internet nodig.";
+"internet.required.title" = "Je hebt geen internetverbinding";
+
+/* MARK: - New Terms */
+"new.terms.title" = "Onze voorwaarden zijn vernieuwd";
+"new.terms.highlights" = "<b>Dit is veranderd</b><br\><ul><li> Initialen en geboortedag en -maand zijn opgenomen in QR-code</li><li>Deze gegevens worden getoond op de Scanner-app voor controle van het identiteitsbewijs</li></ul>";
+"new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/privacy-in-app\">hier</a> de volledige privacyverklaring.";
+"new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
+"new.terms.error.message" = "Zonder akkoord met de bijgewerkte voorwaarden heb je geen toegang tot de CoronaCheck-app.";
+"new.terms.agree" = "Akkoord";
+"new.terms.disagree" = "Niet akkoord";
+
+/* MARK: - Holder Launch */
+"holder.launch.title" = "CoronaCheck";
+"holder.launch.text" = "We starten de app voor je op...";
+"holder.launch.version" = "App versie %@ (build %@)";
+
+/* MARK: - Holder Menu */
+"holder.menu.dashboard" = "Mijn overzicht";
+"holder.menu.settings" = "Instellingen";
+"holder.menu.faq" = "Meestgestelde vragen";
+"holder.menu.about" = "Over deze app";
+"holder.menu.feedback" = "Geef ons feedback";
+"holder.menu.privacy" = "Privacyverklaring";
+
+/* MARK: - Holder Onboarding */
+"holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
+"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Laat je daarom testen en/of vaccineren als je op reis gaat. Of als je bepaalde activiteiten of locaties bezoekt. Kun je bewijzen dat je gevaccineerd bent of geen corona hebt? Dan krijg je toegang.";
+"holder.onboarding.title.yourqr" = "Bewijs van test of vaccinatie";
+"holder.onboarding.message.yourqr" = "Je kunt een bewijs maken als je bent gevaccineerd. Of als uit een test blijkt dat je geen corona hebt. Goed om te weten: je kunt meerdere bewijzen tegelijk hebben.";
+"holder.onboarding.title.validity" = "QR-code = jouw bewijs";
+"holder.onboarding.message.validity" = "Deze app maakt van jouw testuitslag of vaccinatie een QR-code. Dat is jouw bewijs. Je hebt dit bewijs nodig om toegang te krijgen tot bepaalde locaties of activiteiten. En als je reist binnen de Europese Unie. Verloopt je bewijs? Dan verdwijnt de QR-code.";
+"holder.onboarding.title.privacy" = "QR-codes voor Nederland en Europa";
+"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: één voor Nederland en één voor Europa. Beide QR-codes vind je in de app. Reis je buiten Nederland, maar binnen de Europese Unie? Gebruik dan je Europese QR-code.";
+
+/* MARK: - Update Page Forced Information */
+"holder.updatepage.title" = "Vaccinatiebewijs";
+"holder.updatepage.tagline" = "Nieuw in de app";
+"holder.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om te reizen binnen de Europese Unie.";
+
+/* MARK: - Holder Consent */
+"holder.consent.title" = "Zo gebruikt de app jouw gegevens";
+"holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
+"holder.consent.message.underlined" = "privacyverklaring";
+"holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
+"holder.consent.item.2" = "Je GPS- of locatiegegevens worden <b>niet gebruikt of bewaard</b>";
+"holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app met mijn gegevens omgaat.";
+
+/* MARK: - Choose QR Code Type */
+"holder.chooseqrcodetype.title" = "Waar wil je een QR-code van maken?";
+"holder.chooseqrcodetype.message" = "Je kunt een QR-code maken van een negatieve testuitslag of van een vaccinatie.";
+"holder.chooseqrcodetype.option.negativetest.title" = "Een negatieve testuitslag";
+"holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
+"holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatie";
+"holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb mijn prik of prikken gehad";
+
+/* MARK: - About Making a QR */
+"holder.aboutmakingaqr.title" = "QR-code maken";
+"holder.aboutmakingaqr.header" = "Een QR-code maken";
+"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen </b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>  3. Gegevens controleren </b></p> <p>Check of de gegevens van je vaccinatie en/of testuitslag kloppen. </p> <br/> <p><b>Ga je naar het buitenland?</b></p> <p> De app maakt twee QR-codes: één voor Nederland en één voor Europa. Reis je buiten Nederland, maar binnen Europa? Gebruik dan je Europese QR-code. In <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">dit overzicht</a> lees je of een QR-code geldig is in het land dat je bezoekt.</p>";
+
+/* MARK: - Holder Dashboard */
+"holder.dashboard.title" = "Mijn overzicht";
+"holder.dashboard.intro" = "Je kunt op twee manieren een bewijs krijgen. Dat kan als je gevaccineerd bent of door een test te doen bij een aangesloten testlocatie. Daarna kun je een QR-code maken.";
+"holder.dashboard.create.title" = "QR-code maken";
+"holder.dashboard.create.message" = "Zet jouw negatieve testuitslag om in een persoonlijke QR-code.";
+"holder.dashboard.create.action" = "Maak QR-code";
+"holder.dashboard.qr.expired" = "Je QR-code is verlopen.
+Laat je opnieuw testen.";
+"holder.dashboard.qr.hour" = "uur";
+"holder.dashboard.qr.minute" = "min";
+"holder.dashboard.qr.minute.long" = "minuut";
+"holder.dashboard.qr.minutes.long" = "minuten";
+"holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Verloopt over";
+"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig t/m";
+"holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
+"holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
+"holder.dashboard.qr.type.recovery" = "herstelverklaring";
+"holder.dashboard.qr.type.test" = "Testdatum";
+"holder.dashboard.qr.type.vaccination" = "Vaccinatiedatum";
+"holder.dashboard.qr.title" = "Mijn QR-code";
+"holder.dashboard.qr.button.viewQR" = "Bekijk QR";
+"holder.dashboard.qr.eulaunchcardfootermessage" = "Je Europese QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
+"holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
+"holder.dashboard.changeregion.title.eu" = "Ik reis binnen de Europese Unie";
+"holder.dashboard.changeregion.button.eu" = "Aanpassen naar internationaal";
+"holder.dashboard.changeregion.button.nl" = "Aanpassen naar NL";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt alleen een Europese QR-code.";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet (meer) geldig in Nederland. Daarom is er alleen een Europese QR-code gemaakt. Deze is geldig in de Europese Unie.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je maar één prik hebt gehad.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet geldig in de Europese Unie. Daarom is er alleen een Nederlandse QR-code gemaakt. Deze is geldig in Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je type vaccinatie niet geaccepteerd wordt in de Europese Unie.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet (meer) geldig in Nederland. Daarom is er alleen een Europese QR-code gemaakt. Deze is geldig in de Europese Unie.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat de geldigheidsduur in Nederland (40 uur) korter is dan de geldigheidsduur in de Europese Unie.</p><p>Wil je reizen binnen de Europese Unie? Bekijk op <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">deze pagina</a> waar je je kan laten testen.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet geldig in de Europese Unie. Daarom is er alleen een Nederlandse QR-code gemaakt. Deze is geldig in Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je type test niet geaccepteerd wordt in de Europese Unie.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "";
+
+/* MARK: - Holder Enlarged */
+"holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
+"holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
+"holder.showqr.domestic.title" = "Mijn QR-code";
+"holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort.
+De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Uit veiligheidsredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De Europese QR-code is niet geldig in Nederland.</p>";
+"holder.showqr.eu.title" = "Europese QR-code";
+"holder.showqr.eu.about.title" = "Over mijn Europese QR-code";
+"holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland, maar binnen de Europese Unie? Dan zijn er meer gegevens nodig. Daarom staan in de Europese QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Producent: <b>%@</b><br>Getest in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p><p>Gebruik in de andere Europese landen altijd de Europese QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
+"holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
+"holder.showqr.eu.about.test.postive" = "positief (corona)";
+
+/* MARK: - Holder Banner */
+"holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
+/* MARK: - Holder Appointment */
+"holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.<p><p>Je QR-code is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat jouw QR-code binnen %@ uur gescand is bij de ingang.</p>";
+"holder.appointment.title" = "Testafspraak maken";
+"holder.appointment.header" = "Testafspraak maken";
+"holder.appointment.button.title" = "Maak een afspraak";
+
+/* MARK: - Holder Choose Provider */
+"holder.provider.title" = "QR-code maken";
+"holder.provider.header" = "Waar ben je getest?";
+"holder.provider.message" = "Blijkt uit de test dat je geen corona hebt? Dan kan je van de testuitslag een QR-code maken. Geef aan waar je getest bent.";
+"holder.provider.ggd.title" = "GGD";
+"holder.provider.ggd.subtitle" = "Log in met je DigiD";
+"holder.provider.commercial.title" = "Andere testlocatie";
+
+/* MARK: - Holder Token Scan */
+"holder.tokenscan.title" = "Scan QR-code";
+"holder.tokenscan.message" = "Richt je telefoon op de QR-code die je van de testlocatie hebt gekregen.";
+"holder.tokenscan.torch.accessibility" = "Zet de zaklamp aan.";
+"holder.tokenscan.error.title" = "Ongeldige QR-code";
+"holder.tokenscan.error.message" = "Deze QR-code is niet geldig. Scan de QR-code die je van je testlocatie hebt gekregen.";
+
+/* MARK: - Holder Test Results */
+"holder.testresults.results.title" = "Controleer je testuitslag";
+"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
+"holder.testresults.results.button" = "Maak QR-code";
+"holder.testresults.noresults.title" = "Geen negatieve testuitslag";
+"holder.testresults.noresults.text" = "Er is geen negatieve testuitslag beschikbaar.";
+"holder.testresults.back.button" = "Naar Mijn overzicht";
+"holder.testresults.pending.title" = "Testuitslag nog niet bekend";
+"holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
+"holder.testresults.already.title" = "Testuitslag is al opgehaald";
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p>
+<p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>
+";
+"holder.testresults.recent" = "Opgehaalde testuitslag";
+"holder.testresults.negative" = "Negatieve testuitslag";
+"holder.testresults.identity" = "Identificatiegegevens: %@";
+"holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
+"holder.testresults.alert.message" = "Je moet dan later opnieuw met de code je testuitslag ophalen.";
+"holder.testresults.alert.ok" = "Ja, stop";
+"holder.testresults.alert.cancel" = "Nee, terug";
+"holder.testresults.january" = "JAN";
+"holder.testresults.february" = "FEB";
+"holder.testresults.march" = "MAA";
+"holder.testresults.april" = "APR";
+"holder.testresults.may" = "MEI";
+"holder.testresults.june" = "JUN";
+"holder.testresults.july" = "JUL";
+"holder.testresults.august" = "AUG";
+"holder.testresults.september" = "SEP";
+"holder.testresults.october" = "OKT";
+"holder.testresults.november" = "NOV";
+"holder.testresults.december" = "DEC";
+"holder.testresults.disclaimer.accessibility" = "Meer informatie over testresultaten";
+
+/* MARK: - Holder About */
+"holder.about.title" = "Over deze app";
+"holder.about.text" = "CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Met behulp van deze app bewijzen bezoekers dat ze gevaccineerd zijn. Of dat ze kortgeleden negatief getest zijn op corona. Zo kunnen Nederlanders meer buiten de deur doen en weer op reis binnen de Europese Unie.";
+"holder.about.link" = "Lees hier de privacyverklaring";
+
+"holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
+"holder.vaccination.start.message" = "Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.  Om een Europese QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn. 
+
+Nog geen prik gehad? Laat je dan eerst vaccineren.";
+"holder.vaccination.start.action" = "Log in met DigiD";
+"holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
+"holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
+"holder.test.list.title" = "Testuitslag ophalen";
+"holder.vaccination.list.message" = "Je kunt een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
+"holder.vaccination.list.action" = "Maak QR-code";
+"holder.vaccination.element.title" = "Vaccinatie %@";
+"holder.vaccination.element.subtitle" = "Naam: %@<br>Vaccinatiedatum: %@";
+"holder.vaccination.nolist.title" = "Vaccinaties niet opgehaald";
+"holder.vaccination.nolist.message" = "<p>Geen vaccinaties beschikbaar</p><p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie. Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
+"holder.vaccination.nolist.action" = "Naar Mijn overzicht";
+"holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
+"holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
+"holder.vaccination.alert.cancel" = "Nee, terug";
+"holder.vaccination.alert.ok" = "Ja, stop";
+"holder.vaccination.about.text" = "Over jouw vaccinatie";
+"holder.vaccination.about.body" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+"holder.vaccination.about.off" = "%@ van %@";
+
+"holder.vaccination.list.wrong" = "Klopt er iets niet?";
+"holder.vaccination.wrong.title" = "Er klopt iets niet";
+"holder.vaccination.wrong.body" = "<p>Klopt je naam of geboortedatum niet? Neem contact op met je huisarts. Deze kan je gegevens aanpassen.</p><p>Mist er een prik? Neem contact op met de locatie waar je je vaccinatie hebt gekregen. Zij kunnen je gegevens aanpassen.</p>";
+
+"holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
+"holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
+
+"holder.vaccination.error.again" = "Probeer opnieuw";
+"holder.vaccination.error.close" = "Sluiten";
+"holder.vaccination.error.message" = "Het is niet gelukt om de vaccinatie op te halen. Probeer het nog eens.";
+"holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je gevaccineerd bent en geef de foutcode (%@) door.";
+"holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
+"holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
+
+"holder.event.about.title" = "Wat is er opgehaald?";
+"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testlocatie<b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+
+"holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br>Naam test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Testproducent: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p>";
+
+"holder.testresults.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen. </p>";
+
+"holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "Testdatum: %@<br>Geldig tot: %@<br>Naam: %@<br>Geboortedatum %@";
+
+"holder.location.title" = "Waar ben je getest?";
+"holder.location.message" = "Geef aan of je bij de GGD of bij een andere testlocatie getest bent.";
+"holder.location.ggd.title" = "GGD";
+"holder.location.ggd.subtitle" = "Log in met je DigiD";
+"holder.location.other.title" = "Andere testlocatie";
+"holder.location.notest" = "Ik ben nog niet getest";
+
+"holder.notest.title" = "Ik ben nog niet getest";
+"holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>Een testbewijs is geldig tot %@ uur na het moment van testen. Plan je test dus op tijd. En zorg dat de QR-code binnen %@ uur gecheckt is bij de ingang.</p>";
+"holder.notest.action.title" = "Maak een afspraak";
+
+"holder.test.nolist.title" = "Geen testuitslag beschikbaar";
+"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.test.nolist.action" = "Naar Mijn overzicht";

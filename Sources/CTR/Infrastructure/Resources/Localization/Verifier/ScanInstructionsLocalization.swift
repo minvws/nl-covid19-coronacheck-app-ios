@@ -34,6 +34,11 @@ extension String {
 		return Localization.string(for: "verifier.instructions.scan.text")
 	}
 
+    static var verifierScanInstructionsAccessImage: String {
+
+        return Localization.string(for: "verifier.instructions.access.image")
+    }
+    
 	static var verifierScanInstructionsAccessTitle: String {
 
 		return Localization.string(for: "verifier.instructions.access.title")
@@ -44,6 +49,11 @@ extension String {
 		return Localization.string(for: "verifier.instructions.access.text")
 	}
 
+    static var verifierScanInstructionsDeniedImage: String {
+
+        return Localization.string(for: "verifier.instructions.denied.image")
+    }
+    
 	static var verifierScanInstructionsDeniedTitle: String {
 
 		return Localization.string(for: "verifier.instructions.denied.title")

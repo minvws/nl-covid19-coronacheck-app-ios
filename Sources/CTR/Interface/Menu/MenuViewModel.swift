@@ -26,6 +26,7 @@ protocol MenuDelegate: AnyObject {
 enum MenuIdentifier {
 
 	case overview
+	case qrCodeMaken
 	case scan
 	case support
 	case settings
@@ -71,7 +72,7 @@ class MenuViewModel {
 	}
 
 	/// Close the menu
-	func clossButtonTapped() {
+	func closeButtonTapped() {
 
 		menuDelegate?.closeMenu()
 	}

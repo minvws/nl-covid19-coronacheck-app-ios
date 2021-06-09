@@ -37,25 +37,13 @@ class ResultView: ScrolledStackWithButtonView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The message label
 	let messageLabel: Label = {
 
 		return Label(title3Medium: nil).multiline()
-	}()
-
-	/// The debug label
-	let debugLabel: Label = {
-
-		let label = Label(subhead: nil).multiline()
-		label.isHidden = true
-		label.layer.borderWidth = 2
-		label.layer.borderColor = Theme.colors.dark.cgColor
-		label.backgroundColor = Theme.colors.lightBackground.withAlphaComponent(0.9)
-		label.textColor = Theme.colors.dark
-		return label
 	}()
 
 	private let spacer: UIView = {
@@ -101,7 +89,6 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(imageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(debugLabel)
 		contentView.addSubview(spacer)
 		contentView.addSubview(checkIdentityView)
 		stackView.addArrangedSubview(contentView)
@@ -111,7 +98,13 @@ class ResultView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton()
+		setupPrimaryButton(useFullWidth: {
+			switch traitCollection.preferredContentSizeCategory {
+				case .unspecified: return true
+				case let size where size > .extraLarge: return true
+				default: return false
+			}
+		}())
 
 		// disable the bottom constraint of the scroll view, add our own
 		bottomScrollViewConstraint?.isActive = false
@@ -132,11 +125,6 @@ class ResultView: ScrolledStackWithButtonView {
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.imageMargin - ViewTraits.margin
 			),
-
-			// Debug
-			debugLabel.topAnchor.constraint(equalTo: imageView.topAnchor),
-			debugLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			debugLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 
 			// Title
 			titleLabel.topAnchor.constraint(
@@ -198,14 +186,6 @@ class ResultView: ScrolledStackWithButtonView {
 		)
 		imageHeightConstraint?.isActive = false
 
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 	}
 
 	// MARK: Public Access

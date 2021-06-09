@@ -65,13 +65,13 @@ class MenuViewController: BaseViewController {
 			}
 		}
 
-		addMenuCloseButton(action: #selector(clossButtonTapped), accessibilityLabel: .closeMenu)
+		addMenuCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .closeMenu)
 	}
 
 	/// User tapped on the close button
-	@objc func clossButtonTapped() {
+	@objc func closeButtonTapped() {
 
-		viewModel.clossButtonTapped()
+		viewModel.closeButtonTapped()
 	}
 
 	/// Add a close button to the navigation bar.
@@ -91,7 +91,7 @@ class MenuViewController: BaseViewController {
 			)
 			button.accessibilityIdentifier = "CloseButton"
 			button.accessibilityLabel = accessibilityLabel
-			button.accessibilityTraits = UIAccessibilityTraits.button
+			button.accessibilityTraits = .button
 			button.tintColor = Theme.colors.secondary
 			navigationItem.hidesBackButton = true
 			navigationItem.leftBarButtonItem = button

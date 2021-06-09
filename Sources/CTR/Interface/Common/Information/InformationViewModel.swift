@@ -20,8 +20,8 @@ class InformationViewModel {
 	/// The message of the information page
 	@Bindable private(set) var message: String
 
-	/// Show Bottom Close Button
-	@Bindable private(set) var showBottomCloseButton: Bool
+	// MARK: - Private
+	private let linkTapHander: ((URL) -> Void)?
 
 	// MARK: - Initializer
 
@@ -30,17 +30,16 @@ class InformationViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - title: The title of the page
 	///   - message: The message of the page
-	///   - showBottomCloseButton: True if we want to show a close button at the bottom
 	init(
 		coordinator: Dismissable,
 		title: String,
 		message: String,
-		showBottomCloseButton: Bool) {
+		linkTapHander: ((URL) -> Void)? = nil) {
 
 		self.coordinator = coordinator
 		self.title = title
 		self.message = message
-		self.showBottomCloseButton = showBottomCloseButton
+		self.linkTapHander = linkTapHander
 	}
 
 	// MARK: - Methods
@@ -50,5 +49,9 @@ class InformationViewModel {
 
 		// Notify the coordinator
 		coordinator?.dismiss()
+	}
+
+	func userDidTapURL(url: URL) {
+		linkTapHander?(url)
 	}
 }

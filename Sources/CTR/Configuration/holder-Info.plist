@@ -5,7 +5,7 @@
 	<key>APP_FLAVOR</key>
 	<string>${APP_FLAVOR}</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<string>nl_NL</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,7 +27,7 @@
 			<string>nl.rijksoverheid.ctr</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>coronatester-app-dev</string>
+				<string>coronacheck</string>
 			</array>
 		</dict>
 	</array>
@@ -35,6 +35,14 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+		<string>cydia</string>
+		<string>sileo</string>
+		<string>undecimus</string>
+		<string>zbra</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NETWORK_CONFIGURATION</key>

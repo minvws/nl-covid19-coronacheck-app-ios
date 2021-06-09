@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// Viewmodel for updating the application
+/// View Model for updating the application
 class AppUpdateViewModel {
 
 	/// The url to the app store
@@ -37,8 +37,8 @@ class AppUpdateViewModel {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - versionInformation: the verion information
-	init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation?) {
+	///   - versionInformation: the version information
+	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
 
 		self.coordinator = coordinator
 		title = .updateAppTitle
@@ -47,7 +47,7 @@ class AppUpdateViewModel {
 		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
 		errorMessage = .updateAppErrorMessage
-		self.image = .warning
+		self.image = .updateRequired
 	}
 
 	/// User tapped on the update button
@@ -61,14 +61,14 @@ class AppUpdateViewModel {
 	}
 }
 
-/// Viewmodel when the app is deactivated
+/// View Model when the app is deactivated
 class EndOfLifeViewModel: AppUpdateViewModel {
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - versionInformation: the verion information
-	override init(coordinator: AppCoordinatorDelegate, versionInformation: AppVersionInformation?) {
+	///   - versionInformation: the version information
+	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
 
 		super.init(coordinator: coordinator, versionInformation: versionInformation)
 
@@ -78,12 +78,12 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 		self.actionTitle = .endOfLifeButton
 		self.updateURL = versionInformation?.informationURL
 		self.errorMessage = .endOfLifeErrorMessage
-		self.image = .warning
+		self.image = .endOfLife
 		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
 }
 
-/// Viewmodel when the app is deactivated
+/// View Model when there is no internet
 class InternetRequiredViewModel: AppUpdateViewModel {
 
 	/// Initializer
@@ -96,6 +96,7 @@ class InternetRequiredViewModel: AppUpdateViewModel {
 		self.title = .internetRequiredTitle
 		self.message = .internetRequiredText
 		self.actionTitle = .internetRequiredButton
+		self.image = .noInternet
 	}
 
 	/// User tapped on the update button

@@ -20,8 +20,8 @@ class CardView: BaseView {
 		static let messageRatio: CGFloat = UIDevice.current.isSmallScreen ? 1 : 0.75
 		static let buttonRatioLandscape: CGFloat = 0.3
 		static let buttonRatioPortrait: CGFloat = 0.5
-		static let shadowRadius: CGFloat = 6
-		static let shadowOpacity: Float = 0.4
+		static let shadowRadius: CGFloat = 24
+		static let shadowOpacity: Float = 0.15
 		
 		// Margins
 		static let textMargin: CGFloat = 16.0
@@ -34,7 +34,7 @@ class CardView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 		
-		return Label(title3: nil, montserrat: true).multiline()
+        return Label(title3: nil, montserrat: true).multiline().header()
 	}()
 	
 	/// The message label
@@ -180,14 +180,6 @@ class CardView: BaseView {
 			multiplier: ViewTraits.buttonRatioLandscape
 		)
 		buttonWidthConstraintLandscape?.isActive = false
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 	}
 
 	private func setupGradient() {

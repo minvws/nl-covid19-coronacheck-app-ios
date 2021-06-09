@@ -51,10 +51,10 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
         setupLeftBarButtonItem()
 
         if let selectedViewController = selectedViewController, let mainView = mainView {
-            addChild(selectedViewController)
-            mainView.addSubview(selectedViewController.view)
-            selectedViewController.didMove(toParent: self)
-            hideSidePanel()
+			hideSidePanel()
+			addChild(selectedViewController)
+			mainView.addSubview(selectedViewController.view)
+			selectedViewController.didMove(toParent: self)
         }
     }
 
@@ -135,6 +135,8 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 	}
 
 	@objc func hideSidePanel() {
+		
+		guard sidePanelIsVisible else { return }
 
 		UIView.animate(withDuration: animationSpeed, animations: {
             self.updateSidePanelConstraints(
@@ -164,6 +166,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 	@objc func showSidePanel() {
 
+		overlayMainView.alpha = 0
 		overlayMainView.isHidden = false
 		UIView.animate(withDuration: animationSpeed, animations: {
             self.updateSidePanelConstraints(

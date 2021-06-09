@@ -34,15 +34,15 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 
 	// MARK: - Tests
 
-	/// Test the start method with consent content
-	func testStartWithConsent() {
+	/// Test the start method with update page
+	func test_start_shouldInvokeFinishForcedInformation() {
 
 		// Given
-		managerSpy.stubbedGetConsentResult = ForcedInformationConsent(
-			title: "Test",
-			highlight: "Test",
-			content: "Test",
-			consentMandatory: true
+		managerSpy.stubbedGetUpdatePageResult = ForcedInformationPage(
+			image: nil,
+			tagline: "test",
+			title: "test",
+			content: "test"
 		)
 
 		// When
@@ -51,6 +51,20 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		// Then
 		XCTAssertTrue(navigationSpy.viewControllers.count == 1)
 		XCTAssertFalse(delegateSpy.invokedFinishForcedInformation)
+	}
+	
+	/// Test the start methoud without update page
+	func test_start_withoutUpdatePage() {
+		
+		// Given
+		managerSpy.stubbedGetUpdatePageResult = nil
+
+		// When
+		sut.start()
+
+		// Then
+		XCTAssertTrue(navigationSpy.viewControllers.isEmpty)
+		XCTAssertTrue(delegateSpy.invokedFinishForcedInformation)
 	}
 
 	/// Test the start method without consent content
@@ -74,7 +88,7 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		let result = ForcedInformationResult.consentAgreed
 
 		// When
-		sut.didFinishConsent(result)
+		sut.didFinish(result)
 
 		// Then
 		XCTAssertTrue(managerSpy.invokedConsentGiven)
@@ -88,7 +102,7 @@ class ForcedInformationCoordinatorTests: XCTestCase {
 		let result = ForcedInformationResult.consentViewed
 
 		// When
-		sut.didFinishConsent(result)
+		sut.didFinish(result)
 
 		// Then
 		XCTAssertTrue(managerSpy.invokedConsentGiven)

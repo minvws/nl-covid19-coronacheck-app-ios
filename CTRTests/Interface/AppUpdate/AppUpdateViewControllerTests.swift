@@ -8,12 +8,14 @@
 import XCTest
 import ViewControllerPresentationSpy
 @testable import CTR
+import Nimble
+import SnapshotTesting
 
 class AppUpdateViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	var sut: AppUpdateViewController?
-	var appCoordinatorSpy = AppCoordinatorSpy()
+	private var sut: AppUpdateViewController!
+	private var appCoordinatorSpy: AppCoordinatorSpy!
 
 	var window = UIWindow()
 
@@ -27,12 +29,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionInformation: RemoteConfiguration(
 				minVersion: "1.0",
-				minVersionMessage: "AppUpdateViewControllerTests",
-				storeUrl: nil,
-				deactivated: nil,
-				informationURL: nil,
-				configTTL: 3600,
-				maxValidityHours: 48
+				minVersionMessage: "AppUpdateViewControllerTests"
 			)
 		)
 
@@ -47,37 +44,21 @@ class AppUpdateViewControllerTests: XCTestCase {
 
 	func loadView() {
 
-		if let sut = sut {
-			window.addSubview(sut.view)
-			RunLoop.current.run(until: Date())
-		}
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: Test
 
-	/// Test all the content
-	func testContent() {
-
-		// Given
-
-		// When
-		loadView()
-
-		// Then
-		XCTAssertEqual(sut?.sceneView.titleLabel.text, .updateAppTitle, "Text should match")
-		XCTAssertEqual(sut?.sceneView.messageLabel.text, "AppUpdateViewControllerTests", "Text should match")
-		XCTAssertEqual(sut?.sceneView.primaryButton.titleLabel?.text, .updateAppButton, "Text should match")
-	}
-
 	/// Test showing the alert (should happen if no url is provided)
-	func testAlert() {
+	func test_alert() {
 
 		// Given
 		let alertVerifier = AlertVerifier()
 		loadView()
 
 		// When
-		sut?.sceneView.primaryButton.sendActions(for: .touchUpInside)
+		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
 		alertVerifier.verify(
@@ -89,5 +70,72 @@ class AppUpdateViewControllerTests: XCTestCase {
 			],
 			presentingViewController: sut
 		)
+	}
+
+	func test_updateRequired() {
+
+		// Given
+		let viewModel = AppUpdateViewModel(
+			coordinator: appCoordinatorSpy,
+			versionInformation: RemoteConfiguration(
+				minVersion: "1.0",
+				minVersionMessage: nil
+			)
+		)
+		sut = AppUpdateViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == .updateAppTitle
+		expect(self.sut.sceneView.message) == .updateAppContent
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .updateAppButton
+		expect(self.sut.sceneView.image) == .updateRequired
+
+		sut.assertImage()
+	}
+
+	func test_endOfLife() {
+
+		// Given
+		let viewModel = EndOfLifeViewModel(
+			coordinator: appCoordinatorSpy,
+			versionInformation: RemoteConfiguration(
+				minVersion: "1.0",
+				minVersionMessage: nil,
+				deactivated: true
+			)
+		)
+		sut = AppUpdateViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == .endOfLifeTitle
+		expect(self.sut.sceneView.message) == .endOfLifeDescription
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .endOfLifeButton
+		expect(self.sut.sceneView.image) == .endOfLife
+
+		sut.assertImage()
+	}
+
+	func test_noInternet() {
+
+		// Given
+		let viewModel = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
+		sut = AppUpdateViewController(viewModel: viewModel)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == .internetRequiredTitle
+		expect(self.sut.sceneView.message) == .internetRequiredText
+		expect(self.sut.sceneView.primaryButton.titleLabel?.text) == .internetRequiredButton
+		expect(self.sut.sceneView.image) == .noInternet
+
+		sut.assertImage()
 	}
 }

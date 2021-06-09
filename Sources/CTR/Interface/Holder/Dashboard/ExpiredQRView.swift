@@ -14,8 +14,8 @@ class ExpiredQRView: BaseView {
 
 		// Dimensions
 		static let cornerRadius: CGFloat = 15
-		static let shadowRadius: CGFloat = 8
-		static let shadowOpacity: Float = 0.3
+		static let shadowRadius: CGFloat = 24
+		static let shadowOpacity: Float = 0.15
 		static let buttonSize: CGFloat = 40
 		static let imageWidth: CGFloat = 30
 		static let imageHeight: CGFloat = 32
@@ -36,7 +36,7 @@ class ExpiredQRView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(body: nil).multiline()
+        return Label(body: nil).multiline().header()
 	}()
 
 	/// The close button
@@ -122,8 +122,6 @@ class ExpiredQRView: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 		// Button
 		closeButton.accessibilityLabel = .close
 	}

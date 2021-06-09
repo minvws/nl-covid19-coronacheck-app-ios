@@ -7,15 +7,20 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class RemoteConfigManagerTests: XCTestCase {
 	
 	// MARK: - Setup
-	var sut = RemoteConfigManager()
+	private var sut: RemoteConfigManager!
+	private var networkSpy: NetworkSpy!
 
 	override func setUp() {
 
 		sut = RemoteConfigManager()
+		sut.reset()
+		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		sut.networkManager = networkSpy
 		super.setUp()
 	}
 	
@@ -27,228 +32,210 @@ class RemoteConfigManagerTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test the remote config manager update call no result from the api
-	func testRemoteConfigManagerUpdateNoResultFromApi() {
+	func test_remoteConfigManagerUpdate_errorFromApi() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config no result from api")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		networkSpy.remoteConfig = nil
-		sut.networkManager = networkSpy
-		sut.lastFetchedTimestamp = nil
+		waitUntil(timeout: .seconds(10)) { done in
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest), ())
+			self.sut.lastFetchedTimestamp = nil
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.internetRequired, "State should match")
-
-			expectation.fulfill()
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.internetRequired
+				done()
+			}
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 
 	/// Test the remote config manager update call no result from the api
-	func testRemoteConfigManagerUpdateNoResultFromApiWithinTTL() {
+	func test_remoteConfigManagerUpdate_errorFromApi_withinTTL() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config no result from api")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		networkSpy.remoteConfig = nil
-		sut.networkManager = networkSpy
-		sut.lastFetchedTimestamp = Date()
+		waitUntil(timeout: .seconds(100)) { done in
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.failure(NetworkError.invalidRequest), ())
+			self.sut.lastFetchedTimestamp = Date()
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
-
-			expectation.fulfill()
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.noActionNeeded
+				done()
+			}
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 
 	/// Test the remote config manager update call with equal version numbers
-	func testRemoteConfigManagerUpdateVersionsEqual() {
+	func test_remoteConfigManagerUpdate_versionsEqual() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config versions are equal")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		networkSpy.remoteConfig = RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
-		)
-		sut.networkManager = networkSpy
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.lastFetchedTimestamp = nil
+		waitUntil(timeout: .seconds(10)) { done in
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration(
+				minVersion: "1.0.0",
+				minVersionMessage: "test_remoteConfigManagerUpdate_versionsEqual"
+			), Data())), ())
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+			self.sut.lastFetchedTimestamp = nil
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
-
-			expectation.fulfill()
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.noActionNeeded
+				done()
+			}
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 
 	/// Test the remote config manager update call with equal version numbers
-	func testRemoteConfigManagerUpdateVersionsAlmostEqual() {
+	func test_emoteConfigManagerUpdate_versionsAlmostEqual() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config versions are almost equal")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		networkSpy.remoteConfig = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: "testRemoteConfigManagerUpdateVersionsEqual",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
-		)
-		sut.networkManager = networkSpy
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.lastFetchedTimestamp = nil
+		waitUntil(timeout: .seconds(10)) { done in
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration(
+				minVersion: "1.0",
+				minVersionMessage: "test_emoteConfigManagerUpdate_versionsAlmostEqual"
+			), Data())), ())
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+			self.sut.lastFetchedTimestamp = nil
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
-
-			expectation.fulfill()
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.noActionNeeded
+				done()
+			}
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 
 	/// Test the remote config manager update call with unequal version numbers
-	func testRemoteConfigManagerUpdateVersionsUnEqualBug() {
+	func test_remoteConfigManagerUpdate_versionsUnEqualBug() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config update required on bug")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		let configuration = RemoteConfiguration(
-			minVersion: "1.0.1",
-			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualBug",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
-		)
-		networkSpy.remoteConfig = configuration
-		sut.networkManager = networkSpy
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.lastFetchedTimestamp = nil
+		waitUntil(timeout: .seconds(10)) { done in
+			let configuration = RemoteConfiguration(
+				minVersion: "1.0.1",
+				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualBug"
+			)
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+			self.sut.lastFetchedTimestamp = nil
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
-
-			expectation.fulfill()
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.actionRequired(configuration)
+				done()
+			}
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 
 	/// Test the remote config manager update call with unequal version numbers
-	func testRemoteConfigManagerUpdateVersionsUnEqualMajor() {
+	func test_remoteConfigManagerUpdate_versionsUnEqualMajor() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config update required on major")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		let configuration = RemoteConfiguration(
-			minVersion: "4.3.2",
-			minVersionMessage: "testRemoteConfigManagerUpdateVersionsUnEqualMajor",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
-		)
-		networkSpy.remoteConfig = configuration
-		sut.networkManager = networkSpy
-		sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
-		sut.lastFetchedTimestamp = nil
+		waitUntil(timeout: .seconds(10)) { done in
+			let configuration = RemoteConfiguration(
+				minVersion: "4.3.2",
+				minVersionMessage: "test_remoteConfigManagerUpdate_versionsUnEqualMajor"
+			)
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "2.3.4")
+			self.sut.lastFetchedTimestamp = nil
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.actionRequired(configuration)
+				done()
+			}
 
-			expectation.fulfill()
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
-
+	//
 	/// Test the remote config manager update call with unequal version numbers
-	func testRemoteConfigManagerUpdateExistingVersionHigher() {
+	func test_remoteConfigManagerUpdate_existingVersionHigher() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config current version higher")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		let configuration = RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			maxValidityHours: 48
-		)
-		networkSpy.remoteConfig = configuration
-		sut.networkManager = networkSpy
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
-		sut.lastFetchedTimestamp = nil
+		waitUntil(timeout: .seconds(10)) { done in
+			let configuration = RemoteConfiguration(
+				minVersion: "1.0.0",
+				minVersionMessage: "test_remoteConfigManagerUpdate_existingVersionHigher"
+			)
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.1")
+			self.sut.lastFetchedTimestamp = nil
 
-		// When
-		sut.update { state in
+			// When
+			self.sut.update { state in
 
-			// Then
-			XCTAssertEqual(state, LaunchState.noActionNeeded, "State should match")
-
-			expectation.fulfill()
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.noActionNeeded
+				done()
+			}
 		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 
 	/// Test the remote config manager update call with end of life
-	func testRemoteConfigManagerEndOfLife() {
+	func test_remoteConfigManager_endOfLife() {
 
 		// Given
-		let expectation = self.expectation(description: "remote config current version higher")
-		let networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		let configuration = RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "testRemoteConfigManagerUpdateExistingVersionHigher",
+		waitUntil(timeout: .seconds(10)) { done in
+			let configuration = RemoteConfiguration(
+				minVersion: "1.0.0",
+				minVersionMessage: "test_remoteConfigManager_endOfLife",
+				deactivated: true
+			)
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((configuration, Data())), ())
+			self.sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
+			self.sut.lastFetchedTimestamp = nil
+
+			// When
+			self.sut.update { state in
+
+				// Then
+				expect(self.networkSpy.invokedGetRemoteConfiguration) == true
+				expect(state) == LaunchState.actionRequired(configuration)
+				done()
+			}
+		}
+	}
+}
+
+extension RemoteConfiguration {
+
+	init(minVersion: String, minVersionMessage: String?, deactivated: Bool? = nil) {
+
+		self.init(
+			minVersion: minVersion,
+			minVersionMessage: minVersionMessage,
 			storeUrl: nil,
-			deactivated: true,
+			deactivated: deactivated,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48
+			euLaunchDate: "2021-06-03T14:00:00+00:00",
+			maxValidityHours: 48,
+			requireUpdateBefore: nil,
+			temporarilyDisabled: false,
+			vaccinationValidityHours: 14600,
+			recoveryValidityHours: 7300,
+			testValidityHours: 40,
+			domesticValidityHours: 40
 		)
-		networkSpy.remoteConfig = configuration
-		sut.networkManager = networkSpy
-		sut.versionSupplier = AppVersionSupplierSpy(version: "1.0.0")
-		sut.lastFetchedTimestamp = nil
 
-		// When
-		sut.update { state in
-
-			// Then
-			XCTAssertEqual(state, LaunchState.actionRequired(configuration))
-
-			expectation.fulfill()
-		}
-		waitForExpectations(timeout: 10, handler: nil)
 	}
 }

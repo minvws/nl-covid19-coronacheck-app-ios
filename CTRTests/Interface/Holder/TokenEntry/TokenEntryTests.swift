@@ -38,10 +38,9 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryRegularFlowRetryTitle
-		expect(self.sut.resendVerificationButtonEnabled) == true
 		expect(self.sut.showTechnicalErrorAlert) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -62,11 +61,10 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowNextButton) == false
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryRegularFlowRetryTitle
-		expect(self.sut.resendVerificationButtonEnabled) == true
 		expect(self.sut.showTechnicalErrorAlert) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
@@ -91,11 +89,11 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput(nil, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: nil, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
@@ -112,12 +110,12 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = false
 
 		// Act
-		sut.handleInput(invalidToken, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: invalidToken, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidToken
 
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -137,11 +135,11 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput(validToken, verificationInput: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: nil)
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validToken
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -159,11 +157,11 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput("", verificationInput: emptyVerificationInput)
+		sut.userDidUpdateVerificationField(rawVerificationInput: emptyVerificationInput, currentValueOfTokenInput: "")
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidate) == false
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
@@ -179,11 +177,11 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: nil)
 
 		// Act
-		sut.handleInput("", verificationInput: nonemptyVerificationInput)
+		sut.userDidUpdateVerificationField(rawVerificationInput: nonemptyVerificationInput, currentValueOfTokenInput: "")
 
 		// Assert
 		expect(self.tokenValidatorSpy.invokedValidate) == false
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
@@ -198,17 +196,17 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		let nonemptyVerificationInput = "1234"
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Act
-		sut.handleInput("", verificationInput: nonemptyVerificationInput)
+		sut.userDidUpdateVerificationField(rawVerificationInput: nonemptyVerificationInput, currentValueOfTokenInput: "")
 
 		// Assertn
 		expect(self.tokenValidatorSpy.invokedValidate) == false
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
@@ -230,7 +228,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
@@ -251,7 +249,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -276,7 +274,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 		expect(self.sut.showTechnicalErrorAlert) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
@@ -305,7 +303,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowResendVerificationButton) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -333,7 +331,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowResendVerificationButton) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -354,7 +352,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -376,7 +374,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -397,7 +395,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -408,13 +406,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
@@ -427,13 +425,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakePending), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
@@ -446,19 +444,17 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
-
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonEnabled) == true
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
@@ -471,8 +467,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
-
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -483,7 +478,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -494,7 +489,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -506,7 +501,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -528,7 +523,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -551,7 +546,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 
 		expect(self.sut.shouldShowNextButton) == true
 
@@ -565,7 +560,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -584,7 +579,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.showTechnicalErrorAlert) == false
 
@@ -596,7 +591,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -604,7 +599,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: "1234")
@@ -618,7 +613,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Nevertheless, the progress should be stopped.
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
@@ -632,7 +627,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -653,7 +648,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -664,7 +659,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -681,7 +676,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -694,7 +689,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -712,7 +707,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -723,7 +718,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -731,13 +726,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
@@ -750,7 +745,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -758,13 +753,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
@@ -777,7 +772,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = RequestToken.fake.token
 		let verificationInput = "1234"
 
@@ -786,18 +781,17 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryUniversalLinkFlowErrorInvalidCode
-		expect(self.sut.resendVerificationButtonEnabled) == true
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
@@ -811,7 +805,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -819,7 +813,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -830,7 +824,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -841,7 +835,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -849,7 +843,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -859,7 +853,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -870,7 +864,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -889,7 +883,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -900,7 +894,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -920,7 +914,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -940,7 +934,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == invalidTokenInput
 		expect(self.sut.fieldErrorMessage) == String.holderTokenEntryRegularFlowErrorInvalidCode
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
@@ -963,7 +957,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validLowercaseToken.uppercased()
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -985,7 +979,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == "XXX-yyyyyyyyyyyy-z2".uppercased()
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1005,7 +999,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1026,7 +1020,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1049,7 +1043,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.proofManagerSpy.invokedGetTestProvider) == false
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
@@ -1071,7 +1065,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1094,7 +1088,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1118,7 +1112,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
 		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
 		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1132,7 +1126,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1140,7 +1134,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
@@ -1153,7 +1147,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakePending), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1161,7 +1155,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
@@ -1173,7 +1167,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1182,11 +1176,68 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.sut.resendVerificationButtonEnabled) == true
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_clearTokenField_resetsUIForTokenEntry() {
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		let validToken = "xxx-yyyyyyyyyyyy-z2"
+
+		sut = mockedViewModel(withRequestToken: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: "")
+
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == true
+
+		// Act
+		sut.userDidUpdateTokenField(rawTokenInput: "", currentValueOfVerificationInput: "")
+
+		// Assert
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldEnableNextButton) == false
+		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
+		expect(self.sut.message) == .holderTokenEntryRegularFlowText
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_changeTokenField_resetsUIForTokenEntry() {
+		// Arrange
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		let validToken = "xxx-yyyyyyyyyyyy-z2"
+
+		sut = mockedViewModel(withRequestToken: nil)
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: "")
+
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == true
+
+		// Act
+		sut.userDidUpdateTokenField(rawTokenInput: String(validToken.dropLast()), currentValueOfVerificationInput: "")
+
+		// Assert
+		expect(self.sut.shouldShowVerificationEntryField) == false
+		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
+		expect(self.sut.shouldShowTokenEntryField) == true
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1200,7 +1251,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1209,7 +1260,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1223,7 +1274,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1232,7 +1283,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "Unhandled: unknown"
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1255,7 +1306,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == .holderTokenEntryRegularFlowErrorInvalidCode
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
@@ -1279,39 +1330,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
 		expect(self.sut.showTechnicalErrorAlert) == true
-		expect(self.sut.enableNextButton) == true
+		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
-		expect(self.sut.message) == .holderTokenEntryRegularFlowText
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
-	func test_withoutInitialRequestToken_handleInput_withValidToken_showingVerification_showsVerification() {
-
-		// Arrange
-		let validToken = "XXX-YYYYYYYYYYYY-Z2"
-
-		tokenValidatorSpy.stubbedValidateResult = true
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
-
-		sut = mockedViewModel(withRequestToken: nil)
-
-		sut.nextButtonTapped(validToken, verificationInput: "") // setup sut so that shouldShowVerificationEntryField == true
-
-		// Act
-		sut.handleInput(validToken, verificationInput: nil)
-
-		// Assert
-		expect(self.tokenValidatorSpy.invokedValidateParameters?.token) == validToken
-		expect(self.sut.enableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowUserNeedsATokenButton) == false
-		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
@@ -1322,9 +1342,9 @@ class TokenEntryViewModelTests: XCTestCase {
 
 	func test_withInitialRequestToken_whenNoVerificationIsRequired_shouldHideTheInputFields() {
 		// Arrange
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 
 		// Act
@@ -1334,16 +1354,15 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonEnabled) == true
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
 		expect(self.sut.showTechnicalErrorAlert) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
-		expect(self.holderCoordinatorSpy.navigateToListResultsCalled) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1371,7 +1390,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 		sut.nextButtonTapped(validToken, verificationInput: "")
@@ -1394,14 +1413,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
  		sut.resendVerificationCodeButtonTapped()
@@ -1411,14 +1430,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.enableNextButton) == false
+		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
 		expect(self.sut.resendVerificationButtonTitle) == .holderTokenEntryUniversalLinkFlowRetryTitle
 		expect(self.sut.showTechnicalErrorAlert) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.fieldErrorMessage).to(beNil())
-		expect(self.sut.resendVerificationButtonEnabled) == true
 
 		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token) == .fake
 		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
@@ -1436,9 +1454,52 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.userHasNoTokenButtonTapped()
 
 		// Assert
-		expect(self.holderCoordinatorSpy.presentInformationPageCalled) == true
+		expect(self.holderCoordinatorSpy.invokedPresentInformationPage) == true
 	}
 
+	// MARK: - Other
+
+	func test_withoutInitialRequestToken_withAnInitialFetch_typedVerificationCode_clearTokenField_retypeToken_shouldIgnoreExistingVerificationCodeFieldValue() {
+		// Arrange
+		let validToken = "XXX-YYYYYYYYYYYY-Z2"
+
+		tokenValidatorSpy.stubbedValidateResult = true
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+
+		sut = mockedViewModel(withRequestToken: nil)
+
+		sut.userDidUpdateTokenField(rawTokenInput: validToken, currentValueOfVerificationInput: "")
+		sut.nextButtonTapped(validToken, verificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == true
+
+		// Act
+		// Clear the token field
+		sut.userDidUpdateTokenField(rawTokenInput: "", currentValueOfVerificationInput: "")
+		expect(self.sut.shouldShowVerificationEntryField) == false
+
+		// Update the token field again:
+		// Simulate having entered a value into verification code before it was hidden
+
+		let nextValidToken = "TTTTTTTTTTTT"
+		let currentValueOfVerificationInput = "1234"
+		sut.userDidUpdateTokenField(rawTokenInput: "XXX-\(nextValidToken)-Z2", currentValueOfVerificationInput: currentValueOfVerificationInput)
+
+		proofManagerSpy.reset()
+		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+		proofManagerSpy.stubbedGetTestProviderResult = .fake
+
+		sut.nextButtonTapped("XXX-\(nextValidToken)-Z2", verificationInput: currentValueOfVerificationInput)
+
+		// Assert
+
+		// The VM should ignore the verification input because it should be still in `inputToken` mode
+		// So it should submit to fetchTestResult with a nil Verification Code:
+		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == nextValidToken
+		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+	}
+	
 	// MARK: - Sugar
 
 	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {

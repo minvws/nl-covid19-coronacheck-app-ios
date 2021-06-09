@@ -11,7 +11,7 @@ import Foundation
 enum LaunchState: Equatable {
 
 	/// The app should be updated
-	case actionRequired(AppVersionInformation)
+	case actionRequired(RemoteInformation)
 
 	/// The app is fine.
 	case noActionNeeded

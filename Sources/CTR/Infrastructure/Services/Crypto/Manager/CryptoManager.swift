@@ -52,14 +52,19 @@ class CryptoManager: CryptoManaging, Logging {
 	@Keychain(name: "keyData", service: Constants.keychainService, clearOnReinstall: true)
 	private var keyData: KeyData = .empty
 	
+	private let cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
+	
 	/// Initializer
 	required init() {
 		
 		// Public Key
 		loadPublicKeys()
 		
+		// Initialize verifier
+		cryptoVerifierUtility.initialize()
+		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
-			if let result = ClmobileGenerateHolderSk(),
+			if let result = MobilecoreGenerateHolderSk(),
 			   let data = result.value {
 				self.cryptoData = CryptoData(
 					holderSecretKey: data,
@@ -93,14 +98,15 @@ class CryptoManager: CryptoManaging, Logging {
 		return cryptoData.stoken
 	}
 	
-	/// Set the issuer public keys
+	/// Set the issuer domestic public keys
 	/// - Parameter keys: the keys
-	func setIssuerPublicKeys(_ keys: [IssuerPublicKey]) -> Bool {
+	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool {
 		
-		let keysAsString = generateString(object: keys)
+		let domesticKeys = keys.clKeys
+		let keysAsString = generateString(object: domesticKeys)
 		let keysAsData = Data(keysAsString.bytes)
 		keyData.issuerPublicKeys = keysAsData
-		logInfo("Stored \(keys.count) issuer public keys in the keychain")
+		logInfo("Stored \(domesticKeys.count) issuer domestic public keys in the keychain")
 		return loadPublicKeys()
 	}
 	
@@ -120,7 +126,7 @@ class CryptoManager: CryptoManaging, Logging {
 	@discardableResult func loadPublicKeys() -> Bool {
 
 		guard let keysAsData = keyData.issuerPublicKeys,
-			  let result = ClmobileLoadIssuerPks(keysAsData) else {
+			  let result = MobilecoreLoadDomesticIssuerPks(keysAsData) else {
 
 			return false
 		}
@@ -144,7 +150,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func generateCommitmentMessage() -> String? {
 		
 		if let nonce = cryptoData.nonce,
-		   let result = ClmobileCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
+		   let result = MobilecoreCreateCommitmentMessage(cryptoData.holderSecretKey, Data(nonce.bytes)) {
 			if let value = result.value, result.error.isEmpty {
 				let string = String(decoding: value, as: UTF8.self)
 				return string
@@ -156,35 +162,23 @@ class CryptoManager: CryptoManaging, Logging {
 	}
 	
 	// MARK: - QR
-	
+
 	/// Generate the QR message
+	/// - Parameter credential: the (domestic) credential to generate the QR from
 	/// - Returns: the QR message
-	func generateQRmessage() -> Data? {
-		
-		if let credential = cryptoData.credential, let holderSecretKey = cryptoData.holderSecretKey {
-			return createQRMessage(credential, holderSecretKey: holderSecretKey)
+	func generateQRmessage(_ credential: Data) -> Data? {
+
+		if let holderSecretKey = cryptoData.holderSecretKey, hasPublicKeys() {
+			let disclosed = MobilecoreDisclose(holderSecretKey, credential)
+			if let payload = disclosed?.value {
+				let message = String(decoding: payload, as: UTF8.self)
+				logDebug("QR message: \(message)")
+				return payload
+			} else if let error = disclosed?.error {
+				logError("generateQRmessage: \(error)")
+			}
 		}
 		
-		return nil
-	}
-	
-	/// Create the QR Message
-	/// - Parameters:
-	///   - credential: the credential
-	///   - holderSecretKey: the holder Secret Key
-	/// - Returns: QR Messaga as Data
-	private func createQRMessage(_ credential: Data?, holderSecretKey: Data) -> Data? {
-		
-		guard hasPublicKeys() else {
-			return nil
-		}
-		
-		let disclosed = ClmobileDiscloseAllWithTimeQrEncoded(holderSecretKey, credential)
-		if let payload = disclosed?.value {
-			let message = String(decoding: payload, as: UTF8.self)
-			logDebug("QR message: \(message)")
-			return payload
-		}
 		return nil
 	}
 	
@@ -197,23 +191,24 @@ class CryptoManager: CryptoManaging, Logging {
 			return (attributes: nil, errorMessage: "no public keys")
 		}
 		
-		let proofAsn1QREncoded = message.data(using: .utf8)
-		if let result = ClmobileVerifyQREncoded(proofAsn1QREncoded) {
-			
-			guard result.error.isEmpty, let attributesJson = result.attributesJson else {
-				self.logError("Error Proof: \(result.error)")
-				return (attributes: nil, errorMessage: result.error)
-			}
-			
-			do {
-				let object = try JSONDecoder().decode(CryptoAttributes.self, from: attributesJson)
-				return (Attributes(cryptoAttributes: object, unixTimeStamp: result.unixTimeSeconds), nil)
-			} catch {
-				self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
-				return (attributes: nil, errorMessage: error.localizedDescription)
-			}
+		let proofQREncoded = message.data(using: .utf8)
+		
+		guard let result = MobilecoreVerify(proofQREncoded) else {
+			return (attributes: nil, errorMessage: "could not verify QR")
 		}
-		return (attributes: nil, errorMessage: "could not verify QR")
+		
+		guard result.error.isEmpty, let value = result.value else {
+			self.logError("Error Proof: \(result.error)")
+			return (attributes: nil, errorMessage: result.error)
+		}
+		
+		do {
+			let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
+			return (attributes: object, errorMessage: nil)
+		} catch {
+			self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
+			return (attributes: nil, errorMessage: error.localizedDescription)
+		}
 	}
 	
 	// MARK: - Credential
@@ -223,7 +218,7 @@ class CryptoManager: CryptoManaging, Logging {
 	func readCredential() -> CryptoAttributes? {
 		
 		if let cryptoDataValue = cryptoData.credential,
-		   let response = ClmobileReadCredential(cryptoDataValue) {
+		   let response = MobilecoreReadDomesticCredential(cryptoDataValue) {
 			if let value = response.value {
 				do {
 					let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
@@ -238,16 +233,51 @@ class CryptoManager: CryptoManaging, Logging {
 		return nil
 	}
 
+	/// Read the crypto credential
+	/// - Returns: the crypto attributes
+	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes? {
+
+		if let response = MobilecoreReadDomesticCredential(data) {
+			if let value = response.value {
+				do {
+					let object = try JSONDecoder().decode(DomesticCredentialAttributes.self, from: value)
+					return object
+				} catch {
+					self.logError("Error Deserializing \(DomesticCredentialAttributes.self): \(error)")
+				}
+			} else {
+				logError("Can't read credential: \(String(describing: response.error))")
+			}
+		}
+		return nil
+	}
+
+	/// Read the crypto credential
+	/// - Returns: the crypto attributes
+	func readEuCredentials(_ data: Data) -> EuCredentialAttributes? {
+
+		if let response = MobilecoreReadEuropeanCredential(data) {
+			if let value = response.value {
+				do {
+					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
+					return object
+				} catch {
+					self.logError("Error: \(String(decoding: value, as: UTF8.self))")
+					self.logError("Error Deserializing \(EuCredentialAttributes.self): \(error)")
+				}
+			} else {
+				logError("Can't read credential: \(String(describing: response.error))")
+			}
+		}
+		return nil
+	}
+
 	/// Create the credential from the issuer commit message
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError> {
-		
-		guard let holderSecretKey = cryptoData.holderSecretKey else {
-			return .failure(CryptoError.keyMissing)
-		}
 
-		let result = ClmobileCreateCredential(holderSecretKey, ism)
+		let result = MobilecoreCreateCredentials(ism)
 		if let credential = result?.value {
 			return .success(credential)
 		} else if let reason = result?.error {
@@ -268,5 +298,17 @@ class CryptoManager: CryptoManaging, Logging {
 	func removeCredential() {
 		
 		cryptoData.credential = nil
+	}
+
+	/// Migrate existing credential to the wallet
+	/// - Parameter walletManager: the wallet manager
+	func migrateExistingCredential(_ walletManager: WalletManaging) {
+		
+		// Sample time is not returned, use current date for now
+		if let existingCredential = cryptoData.credential,
+			walletManager.importExistingTestCredential(existingCredential, sampleDate: Date()) {
+
+				removeCredential()
+		}
 	}
 }

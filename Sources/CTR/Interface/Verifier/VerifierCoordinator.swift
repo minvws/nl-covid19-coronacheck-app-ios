@@ -38,6 +38,8 @@ class VerifierCoordinator: SharedCoordinator {
 	/// The factory for onboarding pages
 	var onboardingFactory: OnboardingFactoryProtocol = VerifierOnboardingFactory()
 
+	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
+
 	// Designated starter method
 	override func start() {
 		
@@ -61,14 +63,6 @@ class VerifierCoordinator: SharedCoordinator {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
-		} else if forcedInformationManager.needsUpdating {
-			// Show Forced Information
-			let coordinator = ForcedInformationCoordinator(
-				navigationController: navigationController,
-				forcedInformationManager: forcedInformationManager,
-				delegate: self
-			)
-			startChildCoordinator(coordinator)
 
 		} else {
 			
@@ -148,8 +142,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				content: content
 			)
 		)
-		let destination = UINavigationController(rootViewController: viewController)
-		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
 	}
 
 	private func navigateToScanInstruction() {
@@ -170,7 +168,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		//				attributes:
 		//					Attributes(
 		//						cryptoAttributes:
-		//							CrypoAttributes(
+		//							CryptoAttributes(
 		//								birthDay: "27",
 		//								birthMonth: "5",
 		//								firstNameInitial: nil, // "R",
@@ -225,19 +223,13 @@ extension VerifierCoordinator: MenuDelegate {
 			case .about :
 				let destination = AboutViewController(
 					viewModel: AboutViewModel(
+						coordinator: self,
 						versionSupplier: versionSupplier,
 						flavor: AppFlavor.flavor
 					)
 				)
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
-				
-			case .privacy :
-				guard let privacyUrl = URL(string: .verifierUrlPrivacy) else {
-					logError("No holder privacy url")
-					return
-				}
-				openUrl(privacyUrl, inApp: true)
 				
 			default:
 				self.logInfo("User tapped on \(identifier), not implemented")
@@ -271,8 +263,7 @@ extension VerifierCoordinator: MenuDelegate {
 		
 		return [
 			MenuItem(identifier: .support, title: .verifierMenuSupport),
-			MenuItem(identifier: .about, title: .verifierMenuAbout),
-			MenuItem(identifier: .privacy, title: .verifierMenuPrivacy)
+			MenuItem(identifier: .about, title: .verifierMenuAbout)
 		]
 	}
 }

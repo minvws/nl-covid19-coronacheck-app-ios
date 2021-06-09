@@ -31,7 +31,7 @@ class BannerView: BaseView {
 
 	/// The banner image
 	let bannerImageView: UIImageView = {
-		let view = UIImageView(image: .alert)
+		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.tintColor = Theme.colors.secondary
 		return view
@@ -50,7 +50,7 @@ class BannerView: BaseView {
 	/// The title label
 	let titleLabel: Label = {
 
-		return Label(bodySemiBold: nil).multiline()
+        return Label(bodySemiBold: nil).multiline().header()
 	}()
 
 	/// The message text view
@@ -145,7 +145,6 @@ class BannerView: BaseView {
 
 		super.setupAccessibility()
 
-		titleLabel.accessibilityTraits = .header
 		closeButton.accessibilityLabel = .close
 		bannerImageView.isAccessibilityElement = true
 		bannerImageView.accessibilityTraits = .staticText

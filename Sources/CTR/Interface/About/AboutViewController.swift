@@ -43,6 +43,22 @@ class AboutViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$listHeader.binding = { [weak self] in self?.sceneView.listHeader = $0 }
 		viewModel.$version.binding = { [weak self] in self?.sceneView.version = $0 }
+
+		setupMenuOptions()
+	}
+
+	private func setupMenuOptions() {
+
+		for item in viewModel.menu {
+
+			let button = SimpleDisclosureButton()
+			button.title = item.name
+			button.primaryButtonTappedCommand = { [weak self] in
+				self?.viewModel.menuOptionSelected(item.identifier)
+			}
+			sceneView.itemStackView.addArrangedSubview(button)
+		}
 	}
 }

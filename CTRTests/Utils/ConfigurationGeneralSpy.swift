@@ -18,10 +18,6 @@ class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 		return 10
 	}
 
-	func getQRGracePeriod() -> TimeInterval {
-		return 10
-	}
-
 	func getQRRefreshPeriod() -> TimeInterval {
 		return 10
 	}

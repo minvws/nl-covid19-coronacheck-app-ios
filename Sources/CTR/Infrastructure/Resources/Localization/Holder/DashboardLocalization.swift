@@ -19,21 +19,6 @@ extension String {
 		return Localization.string(for: "holder.dashboard.intro")
 	}
 
-	static var holderDashboardAppointmentTitle: String {
-
-		return Localization.string(for: "holder.dashboard.appointment.title")
-	}
-
-	static var holderDashboardAppointmentMessage: String {
-
-		return Localization.string(for: "holder.dashboard.appointment.message")
-	}
-
-	static var holderDashboardAppointmentAction: String {
-
-		return Localization.string(for: "holder.dashboard.appointment.action")
-	}
-
 	static var holderDashboardCreateTitle: String {
 
 		return Localization.string(for: "holder.dashboard.create.title")
@@ -49,54 +34,17 @@ extension String {
 		return Localization.string(for: "holder.dashboard.create.action")
 	}
 
-	static var holderDashboardChangeTitle: String {
+	static func holderDashboardQRExpired(localizedRegion: String, localizedOriginType: String) -> String {
 
-		return Localization.string(for: "holder.dashboard.change.title")
+		return Localization.string(for: "holder.dashboard.qr.expired", comment: "", [localizedRegion, localizedOriginType])
 	}
 
-	static var holderDashboardChangeAction: String {
-
-		return Localization.string(for: "holder.dashboard.change.action")
+	static func holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: String) -> String {
+		return Localization.string(for: "holder.dashboard.originNotValidInEUButIsInTheNetherlands", comment: "", [localizedOriginType])
 	}
 
-	static var holderDashboardQRTitle: String {
-
-		return Localization.string(for: "holder.dashboard.qr.title")
-	}
-
-	static var holderDashboardQRSubTitle: String {
-
-		return Localization.string(for: "holder.dashboard.qr.subtitle")
-	}
-
-	static var holderDashboardQRAction: String {
-
-		return Localization.string(for: "holder.dashboard.qr.action")
-	}
-
-	static var holderDashboardQRMessage: String {
-
-		return Localization.string(for: "holder.dashboard.qr.message")
-	}
-
-	static var holderDashboardQRMessageAccessibility: String {
-
-		return Localization.string(for: "holder.dashboard.qr.message.accessibility")
-	}
-
-	static var holderDashboardQRExpiring: String {
-
-		return Localization.string(for: "holder.dashboard.qr.expiring")
-	}
-
-	static var holderDashboardQRExpiringAccessibility: String {
-
-		return Localization.string(for: "holder.dashboard.qr.expiring.accessibility")
-	}
-
-	static var holderDashboardQRExpired: String {
-
-		return Localization.string(for: "holder.dashboard.qr.expired")
+	static func holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: String) -> String {
+		return Localization.string(for: "holder.dashboard.originNotValidInNetherlandsButIsInEU", comment: "", [localizedOriginType])
 	}
 
 	static var hour: String {
@@ -127,5 +75,101 @@ extension String {
 	static var pm: String {
 
 		return Localization.string(for: "holder.dashboard.qr.pm")
+	}
+
+	static var changeRegionTitleNL: String {
+		return Localization.string(for: "holder.dashboard.changeregion.title.nl")
+	}
+
+	static var changeRegionTitleEU: String {
+		return Localization.string(for: "holder.dashboard.changeregion.title.eu")
+	}
+
+	static var changeRegionButtonEU: String {
+		return Localization.string(for: "holder.dashboard.changeregion.button.eu")
+	}
+	
+	static var changeRegionButtonNL: String {
+		return Localization.string(for: "holder.dashboard.changeregion.button.nl")
+	}
+
+	static var qrTitle: String {
+		return Localization.string(for: "holder.dashboard.qr.title")
+	}
+
+	static var qrButtonViewQR: String {
+		return Localization.string(for: "holder.dashboard.qr.button.viewQR")
+	}
+
+	static var qrExpiryDatePrefixExpiresIn: String {
+		return Localization.string(for: "holder.dashboard.qr.expiryDate.prefix.expiresIn")
+	}
+
+	static var qrExpiryDatePrefixValidUpToAndIncluding: String {
+		return Localization.string(for: "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding")
+	}
+
+	static var qrValidityDatePrefixValidFrom: String {
+		return Localization.string(for: "holder.dashboard.qr.validityDate.prefix.validFrom")
+	}
+
+	static var qrValidityDatePrefixAutomaticallyBecomesValidOn: String {
+		return Localization.string(for: "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn")
+	}
+
+	static var qrTypeRecovery: String {
+		return Localization.string(for: "holder.dashboard.qr.type.recovery")
+	}
+
+	static var qrTypeTest: String {
+		return Localization.string(for: "holder.dashboard.qr.type.test")
+	}
+
+	static var qrTypeVaccination: String {
+		return Localization.string(for: "holder.dashboard.qr.type.vaccination")
+	}
+
+	static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
+		switch (originType, currentRegion) {
+			case (.vaccination, .domestic):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title")
+			case (.vaccination, .europeanUnion):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title")
+			case (.test, .domestic):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.test.title")
+			case (.test, .europeanUnion):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.test.title")
+			case (.recovery, .domestic):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title")
+			case (.recovery, .europeanUnion):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title")
+		}
+	}
+
+	static func holderDashboardNotValidInThisRegionScreenMessage(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
+		switch (originType, currentRegion) {
+			case (.vaccination, .domestic):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message")
+			case (.vaccination, .europeanUnion):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message")
+			case (.test, .domestic):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.test.message")
+			case (.test, .europeanUnion):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.test.message")
+			case (.recovery, .domestic):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message")
+			case (.recovery, .europeanUnion):
+				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message")
+		}
+	}
+    
+	// Can be deleted after EU launch: 
+	static func qrEULaunchCardFooterMessage(forEULaunchDate date: Date) -> String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "d MMMM"
+
+		let dateString = dateFormatter.string(from: date)
+
+		return Localization.string(for: "holder.dashboard.qr.eulaunchcardfootermessage", comment: "", [dateString])
 	}
 }

@@ -12,8 +12,8 @@ struct SigningCertificate {
 	/// The name of the certificate
 	let name: String
 
-	/// The base64 encoded certificate
-	let base64: String
+	/// The certificate
+	let certificate: String
 
 //	/// The Authority key
 //	let authorityKey: Data
@@ -27,7 +27,7 @@ struct SigningCertificate {
 	/// Get the certificate data
 	/// - Returns: the certificate data
 	func getCertificateData() -> Data {
-		return Data(base64.utf8)
+		return Data(certificate.utf8)
 	}
 }
 
@@ -35,7 +35,7 @@ struct TrustConfiguration {
 
 	static let sdNRootCAG3Certificate = SigningCertificate(
 		name: "Staat der Nederlanden Root CA - G3",
-		base64: TrustConfiguration.sdNRootCAG3String
+		certificate: TrustConfiguration.sdNRootCAG3String
 //		authorityKey: Data([0x04, 0x14, /* keyID starts here: */ 0x08, 0x4A, 0xAA, 0xBB, 0x99, 0x24, 0x6F, 0xBE, 0x5B, 0x07, 0xF1, 0xA5, 0x8A, 0x99, 0x5B, 0x2D, 0x47, 0xEF, 0xB9, 0x3C]),
 //		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x54, 0xAD, 0xFA, 0xC7, 0x92, 0x57, 0xAE, 0xCA, 0x35, 0x9C, 0x2E, 0x12, 0xFB, 0xE4, 0xBA, 0xD5, 0x20, 0xDC, 0x94, 0x57]),
 //		serialNumber: 10003001
@@ -43,7 +43,7 @@ struct TrustConfiguration {
 
 	static let sdNEVRootCACertificate = SigningCertificate(
 		name: "Staat der Nederlanden EV Root CA",
-		base64: TrustConfiguration.sdNEVRootCAString
+		certificate: TrustConfiguration.sdNEVRootCAString
 //		authorityKey: Data([0x04, 0x14, /* keyID starts here: */ 0x08, 0x4A, 0xAA, 0xBB, 0x99, 0x24, 0x6F, 0xBE, 0x5B, 0x07, 0xF1, 0xA5, 0x8A, 0x99, 0x5B, 0x2D, 0x47, 0xEF, 0xB9, 0x3C]),
 //		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0xFE, 0xAB, 0x00, 0x90, 0x98, 0x9E, 0x24, 0xFC, 0xA9, 0xCC, 0x1A, 0x8A, 0xFB, 0x27, 0xB8, 0xBF, 0x30, 0x6E, 0xA8, 0x3B]),
 //		serialNumber: 10000013
@@ -51,7 +51,7 @@ struct TrustConfiguration {
 
 	static let sdNPrivateRootCertificate = SigningCertificate(
 		name: "Staat der Nederlanden Private Root CA - G1",
-		base64: TrustConfiguration.sdNPrivateRootString
+		certificate: TrustConfiguration.sdNPrivateRootString
 //		authorityKey: Data([0x04, 0x14, /* keyID starts here: */ 0x08, 0x4A, 0xAA, 0xBB, 0x99, 0x24, 0x6F, 0xBE, 0x5B, 0x07, 0xF1, 0xA5, 0x8A, 0x99, 0x5B, 0x2D, 0x47, 0xEF, 0xB9, 0x3C]),
 //		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x2A, 0xFD, 0x0B9, 0x2B, 0x1E, 0xFA, 0xC3, 0x84, 0x87, 0x06, 0xD8, 0x81, 0xFF, 0x86, 0x07, 0x75, 0x0D, 0xEB, 0x01, 0x8B]),
 //		serialNumber: 10004001
@@ -59,7 +59,7 @@ struct TrustConfiguration {
 
 	static let zorgCspPrivateRootCertificate = SigningCertificate(
 		name: "TEST Zorg CSP Private Root CA G1",
-		base64: TrustConfiguration.zorgCspPrivateRootString
+		certificate: TrustConfiguration.zorgCspPrivateRootString
 //		authorityKey: Data([0x04, 0x14, /* keyID starts here: */ 0x08, 0x4A, 0xAA, 0xBB, 0x99, 0x24, 0x6F, 0xBE, 0x5B, 0x07, 0xF1, 0xA5, 0x8A, 0x99, 0x5B, 0x2D, 0x47, 0xEF, 0xB9, 0x3C]),
 //		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0xD3, 0xF4, 0x0E0, 0x22, 0xAF, 0x77, 0x50, 0xA6, 0x20, 0xD2, 0x9D, 0x81, 0x65, 0x52, 0xA6, 0x93, 0xC4, 0x45, 0x53, 0x95]),
 //		serialNumber: 3015956797798922908
@@ -81,8 +81,8 @@ struct TrustConfiguration {
 		return Data(TrustConfiguration.sdNPrivateRootString.utf8)
 	}
 
-	static var dstRootCAX3: Data {
-		return Data(TrustConfiguration.dstRootCAX3String.utf8)
+	static var rootISRGX1: Data {
+		return Data(TrustConfiguration.rootISRGX1String.utf8)
 	}
 
 	static let sdNRootCAG3String = """
@@ -190,26 +190,36 @@ ljr/Q8Pw+OfUZTzKg4PVDQVfFqKtyosv
 -----END CERTIFICATE-----
 """
 
-	static let dstRootCAX3String = """
+	static let rootISRGX1String = """
 -----BEGIN CERTIFICATE-----
-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
+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
+nLRbwHOoq7hHwg==
 -----END CERTIFICATE-----
 """
 

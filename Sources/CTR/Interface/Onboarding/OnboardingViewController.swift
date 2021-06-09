@@ -16,20 +16,7 @@ class OnboardingViewController: BaseViewController {
 	let sceneView = OnboardingView()
 	
 	/// The page controller
-	private var pageViewController: UIPageViewController?
-	
-	/// The current index of the visbile page
-	var currentIndex: Int? {
-		didSet {
-			if let index = currentIndex {
-				sceneView.pageControl.currentPage = index
-				navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
-			}
-		}
-	}
-	
-	/// the possibile next index of the page
-	private var pendingIndex: Int?
+	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 	
 	/// Initializer
 	/// - Parameter viewModel: view model
@@ -51,9 +38,6 @@ class OnboardingViewController: BaseViewController {
 		view = sceneView
 	}
 	
-	/// the onboarding viewcontrollers
-	private var viewControllers = [UIViewController]()
-	
 	// the back button
 	private var backButton: UIBarButtonItem?
 	
@@ -64,20 +48,17 @@ class OnboardingViewController: BaseViewController {
 		setupPageController()
 		viewModel.$pages.binding = { [weak self] in
 
-			guard let strongSelf = self else {
+			guard let self = self else {
 				return
 			}
-
-			strongSelf.currentIndex = 0
-			for page in $0 {
-				strongSelf.viewControllers.append(strongSelf.viewModel.getOnboardingStep(page))
+			
+			self.pageViewController.pages = $0.compactMap { page in
+				guard let onboardingPageViewController = self.viewModel.getOnboardingStep(page) as? OnboardingPageViewController else { return nil }
+				onboardingPageViewController.delegate = self
+				return onboardingPageViewController
 			}
-			if let firstVC = strongSelf.viewControllers.first {
-				strongSelf.pageViewController?.setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)
-				strongSelf.pageViewController?.didMove(toParent: self)
-			}
-			strongSelf.sceneView.pageControl.numberOfPages = $0.count
-			strongSelf.sceneView.pageControl.currentPage = 0
+			self.sceneView.pageControl.numberOfPages = $0.count
+			self.sceneView.pageControl.currentPage = 0
 		}
 		
 		sceneView.primaryButton.setTitle(.next, for: .normal)
@@ -110,9 +91,6 @@ class OnboardingViewController: BaseViewController {
 		// Handle touches
 		button.addTarget(self, action: #selector(backbuttonTapped), for: .touchUpInside)
 
-		// Accessibility
-		button.accessibilityLabel = .back
-
 		// Make sure the text won't be truncated if the user opts for bold texts
 		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
 		
@@ -122,142 +100,70 @@ class OnboardingViewController: BaseViewController {
 	/// The user tapped on the back button
 	@objc func backbuttonTapped() {
 		
-		if var index = currentIndex, index > 0 {
-			// Move to the previous page
-			index -= 1
-			let nextVC = viewControllers[index]
-			self.pageViewController?.setViewControllers([nextVC], direction: .reverse, animated: true, completion: nil)
-			currentIndex = index
-			self.sceneView.primaryButton.isEnabled = true
-		}
+		// Move to the previous page
+		pageViewController.previousPage()
+		sceneView.primaryButton.isEnabled = true
 	}
-	
+    
 	/// Setup the page controller
 	private func setupPageController() {
 		
-		let pageCtrl = UIPageViewController(
-			transitionStyle: .scroll,
-			navigationOrientation: .horizontal,
-			options: nil
-		)
-		self.pageViewController = pageCtrl
-		pageCtrl.dataSource = self
-		pageCtrl.delegate = self
-		pageCtrl.view.backgroundColor = .clear
+		pageViewController.pageViewControllerDelegate = self
+		pageViewController.view.backgroundColor = .clear
 		
-		pageCtrl.view.frame = sceneView.containerView.frame
-		sceneView.containerView.addSubview(pageCtrl.view)
-		self.addChild(pageCtrl)
-		pageCtrl.didMove(toParent: self)
+		pageViewController.view.frame = sceneView.containerView.frame
+		sceneView.containerView.addSubview(pageViewController.view)
+		addChild(pageViewController)
+		pageViewController.didMove(toParent: self)
 		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
 	}
 	
 	/// User tapped on the button
 	@objc func primaryButtonTapped() {
 		
-		if var index = currentIndex {
-			
-			if index == viewControllers.count - 1 {
-				// We tapped on the last page
-				viewModel.finishOnboarding()
-			} else {
-				// Move to the next page
-				index += 1
-				let nextVC = viewControllers[index]
-				self.pageViewController?.setViewControllers([nextVC], direction: .forward, animated: true, completion: nil)
-				currentIndex = index
-				UIAccessibility.post(notification: .screenChanged, argument: nextVC)
-			}
+		if pageViewController.isLastPage {
+			// We tapped on the last page
+			viewModel.finishOnboarding()
+		} else {
+			// Move to the next page
+			pageViewController.nextPage()
 		}
 	}
 
 	/// User tapped on the page control
-	@objc func valueChanged() {
+	@objc func valueChanged(_ pageControl: UIPageControl) {
 
-		let index = sceneView.pageControl.currentPage
-		let direction = index > currentIndex ?? 0 ? UIPageViewController.NavigationDirection.forward : UIPageViewController.NavigationDirection.reverse
-
-		let nextVC = viewControllers[index]
-		self.pageViewController?.setViewControllers([nextVC], direction: direction, animated: true, completion: nil)
-		currentIndex = index
-		UIAccessibility.post(notification: .screenChanged, argument: nextVC)
+		if pageControl.currentPage > pageViewController.currentIndex {
+			pageViewController.nextPage()
+		} else {
+			pageViewController.previousPage()
+		}
 	}
 }
 
-// MARK: - UIPageViewControllerDataSource & UIPageViewControllerDelegate
+// MARK: - PageViewControllerDelegate
 
-extension OnboardingViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+extension OnboardingViewController: PageViewControllerDelegate {
 	
-	/// Get the view controller before the current
-	/// - Parameters:
-	///   - pageViewController: the page view controller
-	///   - viewController: the current view controller
-	/// - Returns: The previous view controller or nil if there is none.
-	func pageViewController(
-		_ pageViewController: UIPageViewController,
-		viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		
-		guard let viewControllerIndex = viewControllers.firstIndex(of: viewController) else {
-			return nil
-		}
-		
-		currentIndex = viewControllerIndex
-		if currentIndex == 0 {
-			return nil
-		}
-		let previousIndex = abs((viewControllerIndex - 1) % viewControllers.count)
-		return viewControllers[previousIndex]
+	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
+		sceneView.pageControl.currentPage = index
+		navigationItem.leftBarButtonItem = index > 0 ? backButton: nil
 	}
-	/// Get the view controller after the current
-	/// - Parameters:
-	///   - pageViewController: the page view controller
-	///   - viewController: the current view controller
-	/// - Returns: The next view controller or nil if there is none.
-	func pageViewController(
-		_ pageViewController: UIPageViewController,
-		viewControllerAfter viewController: UIViewController) -> UIViewController? {
-		
-		guard let viewControllerIndex = viewControllers.firstIndex(of: viewController) else {
-			return nil
-		}
-		
-		currentIndex = viewControllerIndex
-		if viewControllerIndex == viewControllers.count - 1 {
-			return nil
-		}
-		
-		let nextIndex = abs((viewControllerIndex + 1) % viewControllers.count)
-		return viewControllers[nextIndex]
-	}
-	
-	/// The page view controller will move to the another view controller
-	/// - Parameters:
-	///   - pageViewController: the page view controller
-	///   - pendingViewControllers: the next view controller
-	func pageViewController(
-		_ pageViewController: UIPageViewController,
-		willTransitionTo pendingViewControllers: [UIViewController]) {
-		
-		if let first = pendingViewControllers.first, let viewControllerIndex = viewControllers.firstIndex(of: first) {
-			
-			pendingIndex = viewControllerIndex
-		}
-	}
-	
-	/// The page view controller has moved the another view controller
-	/// - Parameters:
-	///   - pageViewController: the page view controller
-	///   - finished: True if the animation is finished
-	///   - previousViewControllers: the previous view controller
-	///   - completed: True if the transistion is finished
-	func pageViewController(
-		_ pageViewController: UIPageViewController,
-		didFinishAnimating finished: Bool,
-		previousViewControllers: [UIViewController],
-		transitionCompleted completed: Bool) {
-		
-		if completed {
-			currentIndex = pendingIndex
-		}
-	}
+}
+
+// MARK: - OnboardingPageViewControllerDelegate
+
+extension OnboardingViewController: OnboardingPageViewControllerDelegate {
+    
+    /// Enables swipe to navigate behaviour for assistive technologies
+    func onAccessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
+        if direction == .right {
+            backbuttonTapped()
+            return true
+        } else if direction == .left {
+            primaryButtonTapped()
+            return true
+        }
+        return false
+    }
 }

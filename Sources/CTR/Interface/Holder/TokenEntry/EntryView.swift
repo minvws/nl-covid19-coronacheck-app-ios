@@ -32,12 +32,13 @@ class EntryView: BaseView {
 		
 		let field = UITextField()
 		field.translatesAutoresizingMaskIntoConstraints = false
-		field.returnKeyType = .default
+		field.returnKeyType = .send
 		field.autocorrectionType = .no
 		field.autocapitalizationType = .none
+		field.font = UIFont.preferredFont(forTextStyle: .body)
 		return field
 	}()
-
+	
 	private let lineView: UIView = {
 		
 		let view = UIView()
@@ -55,6 +56,14 @@ class EntryView: BaseView {
 			action: #selector(handleSingleTap(sender:))
 		)
 		self.addGestureRecognizer(tapGestureRecognizer)
+	}
+
+	override func setupAccessibility() {
+		super.setupAccessibility()
+
+		// Don't wish to read the header via VoiceOver - instead
+		// the field will be given the header as it's Title.
+		headerLabel.isAccessibilityElement = false
 	}
 	
 	/// User tapped on the view
@@ -91,7 +100,7 @@ class EntryView: BaseView {
 			inputField.leadingAnchor.constraint(equalTo: leadingAnchor),
 			inputField.trailingAnchor.constraint(equalTo: trailingAnchor),
 			inputField.bottomAnchor.constraint(equalTo: lineView.topAnchor),
-			inputField.heightAnchor.constraint(equalToConstant: ViewTraits.inputHeight),
+			inputField.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.inputHeight),
 			
 			// Line
 			lineView.heightAnchor.constraint(equalToConstant: ViewTraits.lineHeight),
@@ -107,6 +116,9 @@ class EntryView: BaseView {
 	var header: String? {
 		didSet {
 			headerLabel.text = header
+
+			// For voiceover, the field should have the header as it's label: 
+			inputField.accessibilityLabel = header
 		}
 	}
 }

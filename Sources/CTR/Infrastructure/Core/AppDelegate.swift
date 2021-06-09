@@ -30,7 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		styleUI()
 		previousBrightness = UIScreen.main.brightness
 
-		if Configuration().getEnvironment() != "production", !ProcessInfo.processInfo.isTesting {
+		if Configuration().getEnvironment() != "production",
+		   Configuration().getEnvironment() != "development",
+		   !ProcessInfo.processInfo.isTesting {
+
 			FirebaseApp.configure()
 		}
 

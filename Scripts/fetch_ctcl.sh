@@ -1,9 +1,13 @@
 export PATH=$PATH:~/go/bin
-git clone git@github.com:minvws/nl-covid19-coronatester-ctcl-core-private.git tmp-ctcl
-cd tmp-ctcl
+git clone git@github.com:minvws/nl-covid19-coronacheck-mobile-core-private.git tmp-clcore
+cd tmp-clcore
 git checkout main
-gomobile bind -target ios -o ctcl.framework github.com/minvws/nl-covid19-coronatester-ctcl-core/clmobile
+git submodule init
+git submodule update
+go mod download golang.org/x/mobile
+gomobile init
+gomobile bind -target ios -o clcore.framework github.com/minvws/nl-covid19-coronacheck-mobile-core
 cd ../
-rm -rf ctcl.framework
-cp -R tmp-ctcl/ctcl.framework .
-rm -rf tmp-ctcl
+rm -rf clcore.framework
+cp -R tmp-clcore/clcore.framework .
+rm -rf tmp-clcore

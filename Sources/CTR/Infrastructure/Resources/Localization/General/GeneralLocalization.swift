@@ -42,6 +42,11 @@ extension String {
 		return Localization.string(for: "general.back")
 	}
 
+	static var add: String {
+
+		return Localization.string(for: "general.add")
+	}
+
 	static var errorTitle: String {
 
 		return Localization.string(for: "general.error.title")
@@ -72,6 +77,11 @@ extension String {
 		return Localization.string(for: "general.government")
 	}
 
+    static var governmentLogo: String {
+
+        return Localization.string(for: "general.government.logo")
+    }
+    
 	static var loading: String {
 
 		return Localization.string(for: "general.loading")
@@ -105,5 +115,29 @@ extension String {
 	static var listAccessibilityEnd: String {
 
 		return Localization.string(for: "general.list.accessibility.end")
+	}
+
+	static var europeanUnion: String {
+		Localization.string(for: "general.europeanUnion")
+	}
+
+	static var netherlands: String {
+		Localization.string(for: "general.netherlands")
+	}
+
+	static var european: String {
+		Localization.string(for: "general.european")
+	}
+
+	static var dutch: String {
+		Localization.string(for: "general.dutch")
+	}
+
+	static var vaccination: String {
+		Localization.string(for: "general.vaccination")
+	}
+
+	static var testresult: String {
+		Localization.string(for: "general.testresult")
 	}
 }

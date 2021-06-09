@@ -79,7 +79,7 @@ class AppCoordinator: Coordinator, Logging {
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
 
-        navigationController.pushViewController(destination, animated: false)
+        navigationController.viewControllers = [destination]
     }
 
     /// Start the real application
@@ -113,7 +113,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
-	private func showActionRequired(with versionInformation: AppVersionInformation) {
+	private func showActionRequired(with versionInformation: RemoteInformation) {
 		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
 		if versionInformation.isDeactivated {
 			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)
@@ -191,11 +191,13 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// Retry loading the requirements
     func retry() {
 
-        guard let topController = window.rootViewController else { return }
-
-        topController.dismiss(animated: true) {
-            ((topController as? UINavigationController)?.viewControllers.first as? LaunchViewController)?.checkRequirements()
-        }
+		if let presentedViewController = navigationController.presentedViewController {
+			presentedViewController.dismiss(animated: true) { [weak self] in
+				self?.startLauncher()
+			}
+		} else {
+			startLauncher()
+		}
     }
 }
 

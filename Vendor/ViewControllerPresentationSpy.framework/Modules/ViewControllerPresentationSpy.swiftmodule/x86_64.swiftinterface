@@ -1,0 +1,72 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.4 (swiftlang-1205.0.26.9 clang-1205.0.19.55)
+// swift-module-flags: -target x86_64-apple-ios9.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name ViewControllerPresentationSpy
+import Foundation
+import Swift
+import UIKit
+@_exported import ViewControllerPresentationSpy
+import XCTest
+@_inheritsConvenienceInitializers @objc(QCOPresentationVerifier) public class PresentationVerifier : ObjectiveC.NSObject {
+  @objc public var presentedCount: Swift.Int
+  @objc public var presentedViewController: UIKit.UIViewController?
+  @objc public var presentingViewController: UIKit.UIViewController?
+  @objc public var animated: Swift.Bool
+  @objc public var capturedCompletion: (() -> Swift.Void)?
+  @objc public var testCompletion: (() -> Swift.Void)?
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension PresentationVerifier {
+  @discardableResult
+  public func verify<VC>(animated: Swift.Bool, presentingViewController: UIKit.UIViewController? = nil, file: Swift.StaticString = #file, line: Swift.UInt = #line) -> VC? where VC : UIKit.UIViewController
+}
+@_inheritsConvenienceInitializers @objc(QCOAlertVerifier) public class AlertVerifier : ObjectiveC.NSObject {
+  @objc public var presentedCount: Swift.Int
+  @objc public var presentingViewController: UIKit.UIViewController?
+  @objc public var animated: Swift.Bool
+  @objc public var title: Swift.String?
+  @objc public var message: Swift.String?
+  @objc public var preferredStyle: UIKit.UIAlertController.Style
+  @objc public var actions: [UIKit.UIAlertAction]
+  @objc public var preferredAction: UIKit.UIAlertAction?
+  @objc public var popover: UIKit.UIPopoverPresentationController?
+  @objc public var textFields: [UIKit.UITextField]?
+  @objc public var capturedCompletion: (() -> Swift.Void)?
+  @objc public var testCompletion: (() -> Swift.Void)?
+  @objc override dynamic public init()
+  @objc deinit
+  @objc(executeActionForButton:andReturnError:) public func executeAction(forButton title: Swift.String) throws
+}
+extension AlertVerifier {
+  public func verify(title: Swift.String?, message: Swift.String?, animated: Swift.Bool, actions: [ViewControllerPresentationSpy.AlertVerifier.Action], preferredStyle: UIKit.UIAlertController.Style = .alert, presentingViewController: UIKit.UIViewController? = nil, file: Swift.StaticString = #file, line: Swift.UInt = #line)
+}
+extension AlertVerifier {
+  public enum Action : Swift.Equatable {
+    case `default`(Swift.String?)
+    case cancel(Swift.String?)
+    case destructive(Swift.String?)
+    public static func == (a: ViewControllerPresentationSpy.AlertVerifier.Action, b: ViewControllerPresentationSpy.AlertVerifier.Action) -> Swift.Bool
+  }
+}
+extension AlertVerifier.Action : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+@objc(QCOClosureContainer) public class ClosureContainer : ObjectiveC.NSObject {
+  @objc public init(closure: (() -> Swift.Void)?)
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc(QCODismissalVerifier) public class DismissalVerifier : ObjectiveC.NSObject {
+  @objc public var dismissedCount: Swift.Int
+  @objc public var dismissedViewController: UIKit.UIViewController?
+  @objc public var animated: Swift.Bool
+  @objc public var capturedCompletion: (() -> Swift.Void)?
+  @objc public var testCompletion: (() -> Swift.Void)?
+  @objc override dynamic public init()
+  @objc deinit
+}
+extension DismissalVerifier {
+  public func verify(animated: Swift.Bool, dismissedViewController: UIKit.UIViewController? = nil, file: Swift.StaticString = #file, line: Swift.UInt = #line)
+}

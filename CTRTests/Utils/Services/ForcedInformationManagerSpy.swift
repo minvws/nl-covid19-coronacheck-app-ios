@@ -22,9 +22,19 @@ class ForcedInformationManagerSpy: ForcedInformationManaging {
 		return stubbedNeedsUpdating
 	}
 
+	var invokedGetUpdatePage = false
+	var invokedGetUpdatePageCount = 0
+	var stubbedGetUpdatePageResult: ForcedInformationPage!
+
+	func getUpdatePage() -> ForcedInformationPage? {
+		invokedGetUpdatePage = true
+		invokedGetUpdatePageCount += 1
+		return stubbedGetUpdatePageResult
+	}
+
 	var invokedGetConsent = false
 	var invokedGetConsentCount = 0
-	var stubbedGetConsentResult: ForcedInformationConsent?
+	var stubbedGetConsentResult: ForcedInformationConsent!
 
 	func getConsent() -> ForcedInformationConsent? {
 		invokedGetConsent = true

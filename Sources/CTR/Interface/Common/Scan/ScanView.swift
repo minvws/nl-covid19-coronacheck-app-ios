@@ -19,7 +19,7 @@ class ScanView: BaseView {
 		// Margins
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 20.0
-		static let maskOffset: CGFloat = UIDevice.current.isSmallScreen ? 200.0 : 100.0
+		static let maskOffset: CGFloat = 100.0
 	}
 
 	/// The message label
@@ -41,6 +41,23 @@ class ScanView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = .clear
 		return view
+	}()
+
+	// A dummy view to move the scrollview below the mask on the overlay
+	let dummyView: UIView = {
+
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = .clear
+		return view
+	}()
+
+	let scrollView: UIScrollView = {
+
+		let scrollView = UIScrollView(frame: .zero)
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.backgroundColor = .clear
+		return scrollView
 	}()
 
 	let sampleMask: UIView = {
@@ -67,7 +84,10 @@ class ScanView: BaseView {
 		cameraView.embed(in: self)
 		overlayView.embed(in: self)
 		overlayView.addSubview(sampleMask)
-		addSubview(messageLabel)
+
+		addSubview(dummyView)
+		addSubview(scrollView)
+		scrollView.addSubview(messageLabel)
 	}
 
 	/// Setup the constraints
@@ -75,16 +95,39 @@ class ScanView: BaseView {
 
 		NSLayoutConstraint.activate([
 
-			messageLabel.topAnchor.constraint(
+			// Dummy
+			dummyView.topAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.topAnchor,
-				constant: ViewTraits.topMargin
+				constant: ViewTraits.margin
 			),
+			dummyView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			dummyView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			dummyView.heightAnchor.constraint(equalTo: widthAnchor),
+
+			// ScrollView
+			scrollView.topAnchor.constraint(equalTo: dummyView.bottomAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+			// Message
+			messageLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			messageLabel.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.margin
 			),
 			messageLabel.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
+				equalTo: scrollView.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+			// Extra constraints to make the message scrollable
+			messageLabel.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -2 * ViewTraits.margin
+			),
+			messageLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			messageLabel.bottomAnchor.constraint(
+				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
 		])
@@ -118,7 +161,7 @@ class ScanView: BaseView {
 		let rectPath = UIBezierPath(
 			roundedRect: CGRect(
 				x: ViewTraits.margin,
-				y: (sampleMask.frame.size.height - rectWidth + ViewTraits.maskOffset) / 2,
+				y: ViewTraits.maskOffset,
 				width: rectWidth,
 				height: rectWidth
 			),
@@ -131,7 +174,7 @@ class ScanView: BaseView {
 	}
 
 	// MARK: Public Access
-
+	
 	/// The message
 	var message: String? {
 		didSet {

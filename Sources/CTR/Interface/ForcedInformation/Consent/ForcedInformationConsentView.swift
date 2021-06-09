@@ -49,7 +49,7 @@ class ForcedInformationConsentView: BaseView {
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline()
+        return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
 	/// The view containing the highlight
@@ -191,14 +191,6 @@ class ForcedInformationConsentView: BaseView {
 		// Default disabled, the primary button to the top of the secondary button
 		primaryButtonToSecondaryButtonConstraint = primaryButton.bottomAnchor.constraint(equalTo: secondaryButton.topAnchor)
 		primaryButtonToSecondaryButtonConstraint?.isActive = false
-	}
-
-	/// Setup all the accessibility traits
-	override func setupAccessibility() {
-
-		super.setupAccessibility()
-		// Title
-		titleLabel.accessibilityTraits = .header
 	}
 
 	// MARK: - Interaction
