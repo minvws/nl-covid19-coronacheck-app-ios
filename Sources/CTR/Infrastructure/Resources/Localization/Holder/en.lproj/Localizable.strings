@@ -196,7 +196,7 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.qr.type.recovery" = "Recovery statement";
-"holder.dashboard.qr.type.test" = "Test certificate";
+"holder.dashboard.qr.type.test" = "Test date";
 "holder.dashboard.qr.type.vaccination" = "Vaccination date";
 "holder.dashboard.qr.title" = "Show QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
