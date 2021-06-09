@@ -310,7 +310,6 @@ Didn't get a jab yet? Get vaccinated first.";
 "holder.vaccination.alert.cancel" = "No, go back";
 "holder.vaccination.alert.ok" = "Yes, stop";
 "holder.vaccination.about.text" = "About your vaccination";
-"holder.vaccination.about.body" = "<p>These details regarding your vaccination were retrieved:</p><p>Name:<b>%@</b><br>Date of birth:<b>%@</b><br></p><p> For the Dutch QR code, minimal data is collected. Your data consists of your vaccination date and a few of your details. Your details consist of first letter of your first name, the first letter of your last name, your birth month, and your day of birth. </p><p>Your datas: <b>%@</b></p><p></p><p><b>Data for Europe</b></p><p>A European QR code requires more data, namely:</p><p>Name: <b>%@</b><br>Date of birth:  <b>%@</b><br>Vaccine:  <b>%@</b><br>Vaccination date %@: <b>%@</b><br></p>%@";
 "holder.vaccination.about.off" = "%@ of %@";
 
 "holder.vaccination.list.wrong" = "Is something wrong?";

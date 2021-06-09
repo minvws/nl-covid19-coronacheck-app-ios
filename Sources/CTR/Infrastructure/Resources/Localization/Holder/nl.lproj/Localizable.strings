@@ -317,7 +317,6 @@ Nog geen prik gehad? Laat je dan eerst vaccineren.";
 "holder.vaccination.alert.cancel" = "Nee, terug";
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
-"holder.vaccination.about.body" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 "holder.vaccination.about.off" = "%@ van %@";
 
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
