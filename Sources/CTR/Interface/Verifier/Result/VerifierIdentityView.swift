@@ -35,7 +35,7 @@ class VerifierIdentityView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .horizontal
 		view.alignment = .leading
-		view.distribution = .fill
+		view.distribution = .fillProportionally
 		view.spacing = ViewTraits.spacing
 		return view
 	}()
