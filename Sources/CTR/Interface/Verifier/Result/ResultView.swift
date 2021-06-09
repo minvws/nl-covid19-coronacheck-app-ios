@@ -46,14 +46,6 @@ class ResultView: ScrolledStackWithButtonView {
 		return Label(title3Medium: nil).multiline()
 	}()
 
-	private let spacer: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
-		return view
-	}()
-
 	let checkIdentityView: VerifierCheckIdentityView = {
 
 		let view = VerifierCheckIdentityView()
@@ -89,7 +81,6 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(imageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(spacer)
 		stackView.addArrangedSubview(contentView)
 		scrollView.addSubview(checkIdentityView)
 	}
@@ -149,13 +140,10 @@ class ResultView: ScrolledStackWithButtonView {
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-
-			// Spacer
-			spacer.topAnchor.constraint(equalTo: messageLabel.bottomAnchor),
-			spacer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			spacer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			spacer.heightAnchor.constraint(equalTo: footerBackground.heightAnchor),
-			spacer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+			messageLabel.bottomAnchor.constraint(
+				lessThanOrEqualTo: footerBackground.topAnchor,
+				constant: -ViewTraits.margin
+			),
 			
 			// CheckIdentityView
 			checkIdentityView.topAnchor.constraint(
