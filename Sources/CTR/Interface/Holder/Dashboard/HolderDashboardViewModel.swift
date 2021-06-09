@@ -316,20 +316,18 @@ class HolderDashboardViewModel: Logging {
 
 		// If there are any cards to show, show the region picker:
 		if !state.myQRCards.isEmpty {
-		cards += [
-			.changeRegion(
-				buttonTitle: .changeRegionButton,
-				currentLocationTitle: {
-					switch state.qrCodeValidityRegion {
-						case .domestic:
-							return .changeRegionTitleNL
-						case .europeanUnion:
-							return .changeRegionTitleEU
-					}
-				}()
-			)
-		]
+			switch state.qrCodeValidityRegion {
+				case .domestic:
+					cards += [
+						.changeRegion(buttonTitle: .changeRegionButtonEU, currentLocationTitle: .changeRegionTitleNL)
+					]
+				case .europeanUnion:
+					cards += [
+						.changeRegion(buttonTitle: .changeRegionButtonNL, currentLocationTitle: .changeRegionTitleEU)
+					]
+			}
 		}
+
 		return cards
 	}
 }
