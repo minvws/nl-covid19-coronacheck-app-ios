@@ -197,7 +197,7 @@
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.qr.type.recovery" = "Recovery statement";
 "holder.dashboard.qr.type.test" = "Test certificate";
-"holder.dashboard.qr.type.vaccination" = "Vaccination certificate";
+"holder.dashboard.qr.type.vaccination" = "Vaccination date";
 "holder.dashboard.qr.title" = "Show QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your European QR code will automatically become valid when the European legislation goes into effect (from %@).";

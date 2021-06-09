@@ -198,7 +198,7 @@ Laat je opnieuw testen.";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
 "holder.dashboard.qr.type.recovery" = "herstelverklaring";
 "holder.dashboard.qr.type.test" = "Testbewijs";
-"holder.dashboard.qr.type.vaccination" = "Vaccinatiebewijs";
+"holder.dashboard.qr.type.vaccination" = "Vaccinatiedatum";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je Europese QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
