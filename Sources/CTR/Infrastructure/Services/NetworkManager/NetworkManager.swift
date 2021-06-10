@@ -578,6 +578,8 @@ class NetworkManager: NetworkManaging, Logging {
 				return .responseCached
 			case 300 ... 399:
 				return .redirection
+			case 429:
+				return .serverBusy
 			case 400 ... 499:
 				return .resourceNotFound
 			case 500 ... 599:

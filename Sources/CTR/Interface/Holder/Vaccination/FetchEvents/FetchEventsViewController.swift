@@ -22,12 +22,12 @@ class FetchEventsViewController: BaseViewController {
 	}
 
 	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let cancelAction: ((UIAlertAction) -> Void)?
-		let cancelTitle: String
-		let okAction: ((UIAlertAction) -> Void)
-		let okTitle: String
+		var title: String
+		var subTitle: String
+		var cancelAction: ((UIAlertAction) -> Void)?
+		var cancelTitle: String?
+		var okAction: ((UIAlertAction) -> Void)?
+		var okTitle: String
 	}
 
 	private let viewModel: FetchEventsViewModel
@@ -146,13 +146,17 @@ class FetchEventsViewController: BaseViewController {
 				handler: content.okAction
 			)
 		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.cancelTitle,
-				style: .default,
-				handler: content.cancelAction
+
+		// Optional cancel button:
+		if let cancelTitle = content.cancelTitle {
+			alertController.addAction(
+				UIAlertAction(
+					title: cancelTitle,
+					style: .cancel,
+					handler: content.cancelAction
+				)
 			)
-		)
+		}
 		present(alertController, animated: true, completion: nil)
 	}
 }

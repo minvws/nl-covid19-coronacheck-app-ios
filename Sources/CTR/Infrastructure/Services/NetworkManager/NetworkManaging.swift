@@ -24,6 +24,7 @@ enum NetworkError: Error {
 	case resourceNotFound
 	case encodingError
 	case redirection
+	case serverBusy
 }
 
 extension NetworkResponseHandleError {
