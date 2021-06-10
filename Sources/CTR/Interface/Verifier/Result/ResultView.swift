@@ -242,6 +242,8 @@ class ResultView: ScrolledStackWithButtonView {
 			self.footerGradientView.alpha = 100
 			self.contentView.alpha = 0
 		} completion: { _ in
+			// Make disclaimer button tappable
+			self.stackView.isHidden = true
 			self.accessibilityElements = [self.checkIdentityView, self.primaryButton]
 			UIAccessibility.post(notification: .screenChanged, argument: self.checkIdentityView)
 			onCompletion?()
