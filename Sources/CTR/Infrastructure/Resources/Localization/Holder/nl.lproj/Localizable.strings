@@ -152,7 +152,7 @@
 "holder.onboarding.title.validity" = "QR-code = jouw bewijs";
 "holder.onboarding.message.validity" = "Deze app maakt van jouw testuitslag of vaccinatie een QR-code. Dat is jouw bewijs. De QR-code wordt gecheckt bij de ingang van locaties en activiteiten. Of aan de grens. Verloopt je bewijs? Dan verdwijnt de QR-code.";
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
-"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: één voor Nederland en één internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code. Je kunt de internationale QR-code vanaf 1 juli gebruiken.";
+"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: één voor Nederland en één internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code. Je kunt de internationale QR-code gebruiken vanaf %@.";
 
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title" = "Vaccinatiebewijs";
@@ -305,8 +305,8 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.list.action" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br>Vaccinatiedatum: %@";
-"holder.vaccination.nolist.title" = "Vaccinaties niet opgehaald";
-"holder.vaccination.nolist.message" = "<p>Geen vaccinaties beschikbaar</p><p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie. Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
+"holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie. Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie. Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
@@ -320,7 +320,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
-"holder.vaccination.wrong.body" = "<p>Klopt je naam of geboortedatum niet? Neem contact op met je huisarts. Deze kan je gegevens aanpassen.</p><p>Mist er een prik? Neem contact op met de locatie waar je je vaccinatie hebt gekregen. Zij kunnen je gegevens aanpassen.</p>";
+"holder.vaccination.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Of staat er onjuiste informatie over je vaccinatie? Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p>";
 
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
@@ -363,7 +363,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl/wegwijzer\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.test.nolist.action" = "Naar Mijn overzicht";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";

@@ -82,12 +82,25 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				image: .onboardingValidity,
 				step: .validity
 			),
-			OnboardingPage(
-				title: .holderOnboardingTitlePrivacy,
-				message: .holderOnboardingMessagePrivacy,
-				image: .onboardingPrivacy,
-				step: .who
-			)
+			{
+				let shortDateFormatter: DateFormatter = {
+					let formatter = DateFormatter()
+					formatter.dateFormat = "d MMMM"
+					return formatter
+				}()
+
+				let euLaunchDateString = Services.remoteConfigManager.getConfiguration().euLaunchDate
+					.flatMap(Formatter.getDateFrom)
+					.flatMap { shortDateFormatter.string(from: $0) }
+				?? "-"
+
+				return OnboardingPage(
+					title: .holderOnboardingTitlePrivacy,
+					message: .holderOnboardingMessagePrivacy(localizedEULaunchDate: euLaunchDateString),
+					image: .onboardingPrivacy,
+					step: .who
+				)
+			}()
 		]
 
 		return pages.sorted { $0.step.rawValue < $1.step.rawValue }

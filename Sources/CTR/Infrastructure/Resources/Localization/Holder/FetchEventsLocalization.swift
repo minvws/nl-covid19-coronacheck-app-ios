@@ -32,10 +32,7 @@ extension String {
 
 	static func holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventType: String) -> String {
 
-		return localizedStringWithFormat(Localization.string(
-			for: "holder.fetchevents.error.noresults.networkerror.message"),
-			[localizedEventType]
-		)
+		return Localization.string(for: "holder.fetchevents.error.noresults.networkerror.message", comment: "", [localizedEventType])
 	}
 
 	static var holderFetchEventsErrorNoResultsNetworkErrorButton: String {
