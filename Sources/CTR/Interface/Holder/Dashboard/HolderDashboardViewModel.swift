@@ -256,7 +256,7 @@ class HolderDashboardViewModel: Logging {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized.capitalized,
+								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -288,7 +288,7 @@ class HolderDashboardViewModel: Logging {
 					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized.capitalized,
+								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
