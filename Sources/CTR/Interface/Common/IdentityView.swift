@@ -132,14 +132,20 @@ class IdentityElementView: BaseView {
 				constant: ViewTraits.minimalTextMargin
 			),
 			bodyLabel.trailingAnchor.constraint(
-				greaterThanOrEqualTo: borderView.trailingAnchor,
+				lessThanOrEqualTo: borderView.trailingAnchor,
 				constant: -ViewTraits.minimalTextMargin
 			),
 			bodyLabel.topAnchor.constraint(
 				greaterThanOrEqualTo: borderView.topAnchor,
 				constant: ViewTraits.minimalTextTopMargin
+			),
+			bodyLabel.bottomAnchor.constraint(
+				lessThanOrEqualTo: borderView.bottomAnchor,
+				constant: -ViewTraits.minimalTextMargin
 			)
 		])
+		
+		borderView.setContentHuggingPriority(.required, for: .vertical)
 	}
 
 	// MARK: Public Access

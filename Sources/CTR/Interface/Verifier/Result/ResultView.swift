@@ -46,15 +46,7 @@ class ResultView: ScrolledStackWithButtonView {
 		return Label(title3Medium: nil).multiline()
 	}()
 
-	private let spacer: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
-		return view
-	}()
-
-	var checkIdentityView: VerifierCheckIdentityView = {
+	let checkIdentityView: VerifierCheckIdentityView = {
 
 		let view = VerifierCheckIdentityView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -89,9 +81,8 @@ class ResultView: ScrolledStackWithButtonView {
 		contentView.addSubview(imageView)
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(messageLabel)
-		contentView.addSubview(spacer)
-		contentView.addSubview(checkIdentityView)
 		stackView.addArrangedSubview(contentView)
+		scrollView.addSubview(checkIdentityView)
 	}
 
 	/// Setup the constraints
@@ -149,29 +140,33 @@ class ResultView: ScrolledStackWithButtonView {
 				equalTo: contentView.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-
-			// Message
+			messageLabel.bottomAnchor.constraint(
+				lessThanOrEqualTo: footerBackground.topAnchor,
+				constant: -ViewTraits.margin
+			),
+			
+			// CheckIdentityView
 			checkIdentityView.topAnchor.constraint(
-				equalTo: contentView.topAnchor,
-				constant: ViewTraits.margin
+				equalTo: scrollView.topAnchor,
+				constant: stackViewInset.top
 			),
 			checkIdentityView.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor
+				equalTo: scrollView.leadingAnchor,
+				constant: stackViewInset.left
 			),
 			checkIdentityView.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor
+				equalTo: scrollView.trailingAnchor,
+				constant: -stackViewInset.right
 			),
 			checkIdentityView.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
-				constant: 200
+				equalTo: scrollView.bottomAnchor,
+				constant: -stackViewInset.bottom
 			),
-
-			// Spacer
-			spacer.topAnchor.constraint(equalTo: messageLabel.bottomAnchor),
-			spacer.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-			spacer.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-			spacer.heightAnchor.constraint(equalTo: footerBackground.heightAnchor),
-			spacer.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+			checkIdentityView.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -stackViewInset.left - stackViewInset.right
+			),
+			checkIdentityView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
 		])
 
 		messageTopConstraint = messageLabel.topAnchor.constraint(
@@ -245,6 +240,7 @@ class ResultView: ScrolledStackWithButtonView {
 			self.checkIdentityView.alpha = 100
 			self.footerBackground.alpha = 100
 			self.footerGradientView.alpha = 100
+			self.contentView.alpha = 0
 		} completion: { _ in
 			self.accessibilityElements = [self.checkIdentityView, self.primaryButton]
 			UIAccessibility.post(notification: .screenChanged, argument: self.checkIdentityView)
