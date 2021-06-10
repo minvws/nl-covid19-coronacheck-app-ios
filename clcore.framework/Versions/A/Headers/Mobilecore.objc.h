@@ -112,15 +112,75 @@
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
 FOUNDATION_EXPORT const double MobilecoreQR_VALID_FOR_SECONDS;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreV1_VALIDITY_HOURS_STR;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMM_FORMAT;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYY_FORMAT;
 
 @interface Mobilecore : NSObject
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (NSString* _Nonnull) diseasE_TARGETED_COVID_19;
++ (void) setDISEASE_TARGETED_COVID_19:(NSString* _Nonnull)v;
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (int64_t) hcerT_SPECIMEN_EXPIRATION_TIME;
++ (void) setHCERT_SPECIMEN_EXPIRATION_TIME:(int64_t)v;
+
 /**
  * DEPRECATED: See deprecation of LoadDomesticIssuerPks
  */
 + (BOOL) hasLoadedDomesticIssuerPks;
 + (void) setHasLoadedDomesticIssuerPks:(BOOL)v;
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (long) recoverY_VALID_FROM_DAYS;
++ (void) setRECOVERY_VALID_FROM_DAYS:(long)v;
+
+// skipped variable RECOVERY_VALID_FROM_DURATION with unsupported type: time.Duration
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (long) recoverY_VALID_UNTIL_DAYS;
++ (void) setRECOVERY_VALID_UNTIL_DAYS:(long)v;
+
+// skipped variable RECOVERY_VALID_UNTIL_DURATION with unsupported type: time.Duration
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (NSString* _Nonnull) tesT_RESULT_NOT_DETECTED;
++ (void) setTEST_RESULT_NOT_DETECTED:(NSString* _Nonnull)v;
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (NSString* _Nonnull) tesT_TYPE_NAA;
++ (void) setTEST_TYPE_NAA:(NSString* _Nonnull)v;
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (NSString* _Nonnull) tesT_TYPE_RAT;
++ (void) setTEST_TYPE_RAT:(NSString* _Nonnull)v;
+
+// skipped variable TEST_VALIDITY_DURATION with unsupported type: time.Duration
+
+/**
+ * These constants can be moved to the verifier configuration file in the future
+ */
++ (long) tesT_VALIDITY_HOURS;
++ (void) setTEST_VALIDITY_HOURS:(long)v;
+
+// skipped variable VACCINE_ALLOWED_MPS with unsupported type: []string
 
 @end
 
