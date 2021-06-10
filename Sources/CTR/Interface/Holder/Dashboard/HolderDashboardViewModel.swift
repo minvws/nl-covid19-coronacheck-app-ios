@@ -167,6 +167,15 @@ class HolderDashboardViewModel: Logging {
 
 		self.setupNotificationListeners()
 
+		// Remove after EU Launch:
+		if let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom), euLaunchDate > Date() {
+			let secondsUntilEULaunchDate = euLaunchDate.timeIntervalSinceNow
+			DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilEULaunchDate) {
+				// Purpose: to remove the EU Launch footer ""
+				self.datasource.reload()
+			}
+		}
+
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
 //			injectSampleData(dataStoreManager: dataStoreManager)
@@ -256,7 +265,7 @@ class HolderDashboardViewModel: Logging {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized.capitalized,
+								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -288,7 +297,7 @@ class HolderDashboardViewModel: Logging {
 					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized.capitalized,
+								typeText: origin.type.localized,
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -429,8 +438,7 @@ extension HolderDashboardViewModel {
 			
 			if origin.expirationTime < now { // expired
 				return .init(text: "", kind: .past)
-			} else if origin.validFromDate > now, case .netherlands = self { // not valid yet
-
+			} else if origin.validFromDate > now {
 				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
 					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
@@ -446,7 +454,6 @@ extension HolderDashboardViewModel {
 						kind: .future
 					)
 				}
-
 			} else {
 				switch self {
 					// Netherlands uses expireTime
@@ -473,7 +480,6 @@ extension HolderDashboardViewModel {
 						)
 				}
 			}
-
 		}
 
 		/// There is a particular order to sort these onscreen
@@ -490,7 +496,6 @@ extension HolderDashboardViewModel {
 			switch self {
 				case .netherlands:
 					if origin.isCurrentlyValid {
-
 						if origin.expiryIsBeyondThreeYearsFromNow {
 							return ""
 						} else {
@@ -502,15 +507,11 @@ extension HolderDashboardViewModel {
 					}
 
 				case .europeanUnion:
-					if origin.isCurrentlyValid {
-						if origin.type == .recovery {
-							return .qrValidityDatePrefixValidFrom
+					if !origin.isCurrentlyValid && origin.isNotYetExpired {
+						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
 						} else {
 							return ""
 						}
-					} else {
-						return .qrValidityDatePrefixValidFrom
-					}
 			}
 		}
 
