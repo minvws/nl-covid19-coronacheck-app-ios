@@ -58,6 +58,15 @@ enum QRCodeOriginType: String, Codable {
 			case .test: return .qrTypeTest
 		}
 	}
+
+	/// There is a particular order to sort these onscreen
+	var customSortIndex: Int {
+		switch self {
+			case .vaccination: return 0
+			case .recovery: return 1
+			case .test: return 2
+		}
+	}
 }
 
 class HolderDashboardViewModel: Logging {
@@ -247,14 +256,16 @@ class HolderDashboardViewModel: Logging {
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state).map { originType, message in
-			return .originNotValidInThisRegion(message: message) {
-				coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-					originType: originType,
-					currentRegion: state.qrCodeValidityRegion,
-					availableRegion: state.qrCodeValidityRegion.opposite)
+		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state)
+			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex } )
+			.map { originType, message in
+				return .originNotValidInThisRegion(message: message) {
+					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+						originType: originType,
+						currentRegion: state.qrCodeValidityRegion,
+						availableRegion: state.qrCodeValidityRegion.opposite)
+				}
 			}
-		}
 
 		cards += state.myQRCards
 
@@ -401,19 +412,15 @@ extension HolderDashboardViewModel {
 
 			/// There is a particular order to sort these onscreen
 			var customSortIndex: Int {
-				switch type {
-					case .vaccination: return 0
-					case .recovery: return 1
-					case .test: return 2
-				}
+				type.customSortIndex
 			}
 
 			var isNotYetExpired: Bool {
-				return expirationTime > Date()
+				expirationTime > Date()
 			}
 
 			var isCurrentlyValid: Bool {
-				return isValid(duringDate: Date())
+				isValid(duringDate: Date())
 			}
 
 			func isValid(duringDate date: Date) -> Bool {
