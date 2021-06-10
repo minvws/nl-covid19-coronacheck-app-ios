@@ -287,16 +287,16 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 
 		cardWrapperView.addSubview(topCloseButtonRow)
 		NSLayoutConstraint.activate([
-			topCloseButtonRow.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor),
-			topCloseButtonRow.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor),
+			topCloseButtonRow.leadingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.leadingAnchor),
+			topCloseButtonRow.trailingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.trailingAnchor),
 			topCloseButtonRow.topAnchor.constraint(equalTo: cardWrapperView.topAnchor),
 			topCloseButtonRow.heightAnchor.constraint(equalToConstant: heightOfButtonRow)
 		])
 
 		cardWrapperView.addSubview(scrollView)
 		NSLayoutConstraint.activate([
-			scrollView.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.trailingAnchor),
 			scrollView.topAnchor.constraint(equalTo: topCloseButtonRow.bottomAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: cardWrapperView.bottomAnchor)
 		])
