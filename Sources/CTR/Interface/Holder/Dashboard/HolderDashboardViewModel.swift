@@ -281,7 +281,7 @@ class HolderDashboardViewModel: Logging {
 								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
 								else { return nil }
 
-								return String.qrExpiryDatePrefixExpiresIn + relativeDateString
+								return (String.qrExpiryDatePrefixExpiresIn + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 							}
 						)]
 
@@ -473,6 +473,13 @@ extension HolderDashboardViewModel {
 						)
 				}
 			}
+
+		}
+
+		/// There is a particular order to sort these onscreen
+		var customSortIndex: Int {
+			guard let firstOrigin = origins.first else { return .max }
+			return firstOrigin.customSortIndex
 		}
 
 		// MARK: - private
@@ -675,7 +682,7 @@ extension HolderDashboardViewModel {
 					!$0.origins.isEmpty
 				}
 				.sorted { qrCardA, qrCardB in
-					qrCardA.effectiveExpiratedAt > qrCardB.effectiveExpiratedAt
+					qrCardA.customSortIndex < qrCardB.customSortIndex
 				}
 
 			return items
