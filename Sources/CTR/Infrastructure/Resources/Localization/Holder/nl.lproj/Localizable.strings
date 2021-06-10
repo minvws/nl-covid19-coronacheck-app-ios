@@ -178,7 +178,7 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "QR-code maken";
 "holder.aboutmakingaqr.header" = "Een QR-code maken";
-"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>  3. Gegevens controleren</b></p> <p>Check of de gegevens van je vaccinatie en/of testuitslag kloppen. </p> <br/> <p><b>Ga je naar het buitenland?</b></p> <p> De app maakt twee QR-codes: één voor Nederland en één voor Europa. Reis je buiten Nederland, maar binnen Europa? Gebruik dan je Europese QR-code. In <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">dit overzicht</a> lees je of een QR-code geldig is in het land dat je bezoekt.</p>";
+"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>3. Gegevens controleren</b></p> <p>Check of de gegevens van je vaccinatie en/of testuitslag kloppen. </p> <br/> <p><b>Ga je naar het buitenland?</b></p> <p>De app maakt twee QR-codes: één voor Nederland en één internationale. Reis je buiten Nederland? Gebruik dan je internationale QR-code. In <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">dit overzicht</a> lees je of een QR-code geldig is in het land dat je bezoekt.</p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
@@ -204,7 +204,7 @@
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis internationaal";
 "holder.dashboard.changeregion.button.eu" = "Aanpassen naar internationaal";
-"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code.";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet geldig in andere landen. Je hebt alleen een Nederlandse QR-code.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt alleen een internationale QR-code.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet (meer) geldig in Nederland. Daarom is er alleen een internationale QR-code gemaakt. Deze is geldig buiten Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je maar één prik hebt gehad.</p>";
@@ -373,6 +373,6 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
 "holder.fetchevents.error.noresults.networkerror.button" = "Naar Mijn overzicht";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
-"holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
+"holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
