@@ -16,7 +16,7 @@
 	<key>digid</key>
 	<dict>
 		<key>host</key>
-		<string>https://tvs-connect.acc.coronacheck.nl</string>
+		<string>https://tvs.acc.coronacheck.nl</string>
 		<key>consumerId</key>
 		<string>test_client</string>
 		<key>redirectUri</key>
