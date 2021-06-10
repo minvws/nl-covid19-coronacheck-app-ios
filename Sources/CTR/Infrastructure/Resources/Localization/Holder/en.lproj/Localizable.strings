@@ -102,7 +102,7 @@
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
 "toggleRegion.label.topText.nl" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
-"toggleRegion.label.bottomText.eu" = "The international QR code contains more details: your name, date of birth, the type of vaccine and the batch number.";
+"toggleRegion.label.bottomText.eu" = "The international QR code contains more details: your name, date of birth, and the type of vaccine.";
 "toggleRegion.label.bottomText.nl" = "The Dutch QR code only contains your initials, your birth month, and your day of birth.";
 
 /* MARK: - Update App */
@@ -182,7 +182,7 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
-"holder.dashboard.intro" = "There are two ways to get a certificate. If you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>. In both cases, you can make a QR code afterwards.";
+"holder.dashboard.intro" = "There are two ways to get a certificate: if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>. In both cases, you can make a QR code afterwards.";
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
@@ -367,6 +367,6 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
 "holder.fetchevents.error.noresults.networkerror.button" = "To My Overview";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
-"holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our partners, details might be missing. Please try again later.";
+"holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
-"holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our partners, details might be missing. Please try again later.";
+"holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
