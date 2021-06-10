@@ -63,5 +63,3 @@ extension String {
 		return Localization.string(for: "holder.fetchevents.warning.someresults.networkerror.message")
 	}
 }
-
-
