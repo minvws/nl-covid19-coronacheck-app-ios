@@ -257,7 +257,7 @@ class HolderDashboardViewModel: Logging {
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
 		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state)
-			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex } )
+			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
 				return .originNotValidInThisRegion(message: message) {
 					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
