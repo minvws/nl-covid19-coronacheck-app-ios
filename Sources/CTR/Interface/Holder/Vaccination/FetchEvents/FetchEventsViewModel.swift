@@ -137,7 +137,7 @@ final class FetchEventsViewModel: Logging {
 	func handleFetchVaccinationEventsResponse(remoteEvents: [RemoteVaccinationEvent], networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
-		let someNetworkDidError: Bool = true // !someNetworkWasTooBusy && !networkErrors.isEmpty
+		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
 
 		// Needed because we can't present an Alert at the same time as change the navigation stack
 		// so sometimes the next step must be triggered as we dismiss the Alert.
