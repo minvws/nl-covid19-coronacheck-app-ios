@@ -211,7 +211,7 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet geldig over de grens. Daarom is er alleen een Nederlandse QR-code gemaakt. Deze is geldig in Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je type vaccinatie niet geaccepteerd wordt in het buitenland.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\"><p>Jouw testbewijs is niet (meer) geldig in Nederland. Daarom is er alleen een internationale QR-code gemaakt. Deze is geldig buiten Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat de geldigheidsduur in Nederland (40 uur) korter is dan de geldigheidsduur in andere landen.</p><p>Wil je internationaal reizen? Bekijk op <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">deze pagina</a> waar je je kan laten testen.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet (meer) geldig in Nederland. Daarom is er alleen een internationale QR-code gemaakt. Deze is geldig buiten Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat de geldigheidsduur in Nederland (40 uur) korter is dan de geldigheidsduur in andere landen.</p><p>Wil je internationaal reizen? Bekijk op <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">deze pagina</a> waar je je kan laten testen.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet geldig over de grens. Daarom is er alleen een Nederlandse QR-code gemaakt. Deze is geldig in Nederland.</p><p>Dit kan verschillende oorzaken hebben. Het kan bijvoorbeeld zijn dat je type test niet geaccepteerd wordt in andere landen.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "";
@@ -296,7 +296,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
-"holder.vaccination.start.message" = "Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.   Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.<br/><br/>Nog geen prik gehad? Laat je dan eerst vaccineren.";
+"holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
 "holder.vaccination.start.action" = "Log in met DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
@@ -309,7 +309,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.nolist.message" = "<p>Geen vaccinaties beschikbaar</p><p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie. Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a>.</p><p>voor meer informatie. Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie. Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";

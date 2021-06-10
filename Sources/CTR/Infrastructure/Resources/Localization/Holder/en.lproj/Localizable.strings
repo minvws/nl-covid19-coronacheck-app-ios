@@ -298,11 +298,12 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
 "holder.vaccination.list.action" = "Make QR code";
 "holder.vaccination.element.title" = "Vaccination %@";
-"holder.vaccination.element.subtitle" = "Your details: %@<br/>Vaccination date: %@";
+"holder.vaccination.element.subtitle" = "Name: %@<br>Vaccination date: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not retrieved";
 "holder.vaccination.nolist.message" = "<p>Vaccinations not available.</p><p>There is no available vaccination data. This can have various causes. </p> Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information. Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To My Overview";
 "holder.event.nolist.title" = "No test result available";
+"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> </p><p>for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.action" = "To My Overview";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
