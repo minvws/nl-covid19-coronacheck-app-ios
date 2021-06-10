@@ -653,7 +653,7 @@ extension HolderDashboardViewModel {
 
 					func evaluateButtonEnabledState(date: Date) -> Bool {
 						let activeCredential: Credential? = greencard.getActiveCredential(forDate: date)
-						return !(activeCredential == nil || originEntries.isEmpty)
+						return !(activeCredential == nil || originEntries.isEmpty) && originEntries.contains(where: { $0.isCurrentlyValid })
 					}
 
 					switch greencard.getType() {
