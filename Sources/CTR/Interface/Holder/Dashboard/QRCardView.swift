@@ -180,9 +180,9 @@ class QRCardView: BaseView {
 
 	private func reapplyButtonEnabledState() {
 		if let buttonEnabledEvaluator = buttonEnabledEvaluator {
-			viewQRButton.isEnabled = buttonEnabledEvaluator(Date())
-
-			if shouldStyleForEU {
+			let enabledState = buttonEnabledEvaluator(Date())
+			viewQRButton.isEnabled = enabledState
+			if shouldStyleForEU && enabledState {
 				applyEUStyle()
 			}
 		}

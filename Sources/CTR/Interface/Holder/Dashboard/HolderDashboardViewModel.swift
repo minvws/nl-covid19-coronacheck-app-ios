@@ -169,7 +169,7 @@ class HolderDashboardViewModel: Logging {
 
 		// Remove after EU Launch:
 		if let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom), euLaunchDate > Date() {
-			let secondsUntilEULaunchDate = euLaunchDate.timeIntervalSinceNow + 2
+			let secondsUntilEULaunchDate = euLaunchDate.timeIntervalSinceNow
 			DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilEULaunchDate) {
 				// Purpose: to remove the EU Launch footer ""
 				self.datasource.reload()
