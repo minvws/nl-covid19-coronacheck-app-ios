@@ -18,6 +18,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	let sceneView = ScanView()
 
 	var previousOrientation: UIInterfaceOrientation?
+    
+    var torchButton: UIBarButtonItem?
+    var torchEnableLabel: String?
+    var torchDisableLabel: String?
 
 	// MARK: View lifecycle
 	override func loadView() {
@@ -156,30 +160,37 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	/// Toggle the torch
 	@objc func toggleTorch() {
 
-		guard let device = AVCaptureDevice.default(for: AVMediaType.video), device.hasTorch else {
+		guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else {
 			// No camera or no torch
 			return
 		}
 		do {
 			try device.lockForConfiguration()
-			if device.torchMode == AVCaptureDevice.TorchMode.on {
-				device.torchMode = AVCaptureDevice.TorchMode.off
+            if device.torchMode == .on {
+				device.torchMode = .off
+                torchChanged(enabled: false)
 			} else {
 				try device.setTorchModeOn(level: 1.0)
+                torchChanged(enabled: true)
 			}
 			device.unlockForConfiguration()
 		} catch {
 			self.logError("toggleTorch: \(error)")
 		}
 	}
+    
+    func torchChanged(enabled: Bool) {
+        torchButton?.accessibilityLabel = enabled ? torchDisableLabel : torchEnableLabel
+    }
 
-	/// Add a close button to the navigation bar.
+	/// Add a torch button to the navigation bar.
 	/// - Parameters:
-	///   - action: the action when the users taps the close button
+	///   - action: the action when the users taps the torch button
 	///   - accessibilityLabel: the label for Voice Over
 	func addTorchButton(
 		action: Selector?,
-		accessibilityLabel: String) {
+		enableLabel: String?,
+        disableLabel: String?) {
 
 		let button = UIBarButtonItem(
 			image: .torch,
@@ -188,9 +199,13 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			action: action
 		)
 		button.accessibilityIdentifier = "TorchButton"
-		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityLabel = enableLabel
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button
 		navigationController?.navigationItem.rightBarButtonItem = button
+        
+        self.torchButton = button
+        self.torchEnableLabel = enableLabel
+        self.torchDisableLabel = disableLabel
 	}
 }

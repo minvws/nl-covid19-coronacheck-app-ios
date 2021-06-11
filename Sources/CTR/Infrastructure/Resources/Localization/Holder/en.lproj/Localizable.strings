@@ -248,7 +248,8 @@ The details consist of the first letter of your first name, the first letter of 
 /* MARK: - Holder Token Scan */
 "holder.tokenscan.title" = "Scan QR code";
 "holder.tokenscan.message" = "Point your phone at the QR code the test location gave you.";
-"holder.tokenscan.torch.accessibility" = "Turn on the flashlight.";
+"holder.tokenscan.torch.enable" = "Turn the flashlight on.";
+"holder.tokenscan.torch.disable" = "Turn the flashlight off.";
 "holder.tokenscan.error.title" = "Invalid QR code";
 "holder.tokenscan.error.message" = "This QR code isn't valid. Scan the QR code given to you by the test location.";
 

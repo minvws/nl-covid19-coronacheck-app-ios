@@ -19,10 +19,15 @@ extension String {
 		return Localization.string(for: "verifier.scan.message")
 	}
 
-	static var verifierScanTorchAccessibility: String {
+	static var verifierScanTorchEnable: String {
 
-		return Localization.string(for: "verifier.scan.torch.accessibility")
+		return Localization.string(for: "verifier.scan.torch.enable")
 	}
+    
+    static var verifierScanTorchDisable: String {
+
+        return Localization.string(for: "verifier.scan.torch.disable")
+    }
 
 	static var verifierScanPermissionTitle: String {
 

@@ -49,11 +49,13 @@ class TokenScanViewController: ScanViewController {
 				self?.captureSession.startRunning()
 			}
 		}
-		viewModel.$torchAccessibility.binding = { [weak self] in
-			guard let strongSelf = self else {
-				return
-			}
-			strongSelf.addTorchButton(action: #selector(strongSelf.toggleTorch), accessibilityLabel: $0)
+		viewModel.$torchLabels.binding = { [weak self] in
+			guard let strongSelf = self else { return }
+			strongSelf.addTorchButton(
+                action: #selector(strongSelf.toggleTorch),
+                enableLabel: $0.first,
+                disableLabel: $0.last
+            )
 		}
 		viewModel.$showError.binding = { [weak self] in
 			guard let strongSelf = self else {

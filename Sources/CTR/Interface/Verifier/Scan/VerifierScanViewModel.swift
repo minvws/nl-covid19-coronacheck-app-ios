@@ -24,8 +24,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// The message of the scene
 	@Bindable private(set) var message: String
 
-	/// The accessibility message for the torch
-	@Bindable private(set) var torchAccessibility: String
+	/// The accessibility labels for the torch
+	@Bindable private(set) var torchLabels: [String]
 
 	/// Start scanning
 	@Bindable private(set) var startScanning: Bool = false
@@ -43,7 +43,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 		self.title = .verifierScanTitle
 		self.message = .verifierScanMessage
-		self.torchAccessibility = .verifierScanTorchAccessibility
+		self.torchLabels = [.verifierScanTorchEnable, .verifierScanTorchDisable]
 
 		super.init(coordinator: coordinator)
 	}

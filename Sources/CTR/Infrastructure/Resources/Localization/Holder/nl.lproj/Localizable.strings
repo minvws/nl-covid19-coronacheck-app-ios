@@ -256,7 +256,8 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 /* MARK: - Holder Token Scan */
 "holder.tokenscan.title" = "Scan QR-code";
 "holder.tokenscan.message" = "Richt je telefoon op de QR-code die je van de testlocatie hebt gekregen.";
-"holder.tokenscan.torch.accessibility" = "Zet de zaklamp aan.";
+"holder.tokenscan.torch.enable" = "Zet de zaklamp aan.";
+"holder.tokenscan.torch.disable" = "Zet de zaklamp uit.";
 "holder.tokenscan.error.title" = "Ongeldige QR-code";
 "holder.tokenscan.error.message" = "Deze QR-code is niet geldig. Scan de QR-code die je van je testlocatie hebt gekregen.";
 
