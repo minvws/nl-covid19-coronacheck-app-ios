@@ -299,7 +299,7 @@ class ListEventsViewModel: Logging {
 									String.holderShowQREuAboutTestNegative,
 									dataRow.event.negativeTest?.facility ?? "",
 									manufacturer,
-									dataRow.event.unique
+									dataRow.event.unique ?? ""
 								)
 							)
 						)
@@ -367,7 +367,7 @@ class ListEventsViewModel: Logging {
 									dosage,
 									formattedShotDate,
 									dataRow.event.vaccination?.country ?? "",
-									dataRow.event.unique
+									dataRow.event.unique ?? ""
 								)
 							)
 						)
@@ -471,14 +471,21 @@ class ListEventsViewModel: Logging {
 	/// - Parameter onCompletion: completion handler
 	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
 
-		networkManager.prepareIssue { result in
+		networkManager.prepareIssue { [weak self] result in
 			// Result<PrepareIssueEnvelope, NetworkError>
 			switch result {
 				case let .success(prepareIssueEnvelope):
-					self.logDebug("ok: \(prepareIssueEnvelope)")
+					self?.logDebug("ok: \(prepareIssueEnvelope)")
 					onCompletion(prepareIssueEnvelope)
 				case let .failure(error):
-					self.logError("error: \(error)")
+					self?.logError("error: \(error)")
+
+					if error == .serverBusy {
+						//	self.showServerTooBusyError()
+					} else {
+						// self.showError
+					}
+
 					onCompletion(nil)
 			}
 		}

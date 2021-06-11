@@ -210,7 +210,7 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))		
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
