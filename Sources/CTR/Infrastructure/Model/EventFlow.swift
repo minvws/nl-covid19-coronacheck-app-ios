@@ -97,7 +97,7 @@ struct EventFlow {
 		let providerIdentifier: String
 
 		/// The protocol version
-		let protocolVersion: String
+		let protocolVersion: String?
 
 		/// The event access token
 		let informationAvailable: Bool
@@ -231,9 +231,9 @@ struct EventFlow {
 		let type: String
 
 		/// The identifier of this event
-		let unique: String
+		let unique: String?
 
-		let isSpecimen: Bool
+		let isSpecimen: Bool?
 
 		/// The vaccination
 		let vaccination: VaccinationEvent?

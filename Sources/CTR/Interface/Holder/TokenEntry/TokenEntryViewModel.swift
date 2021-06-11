@@ -73,6 +73,7 @@ class TokenEntryViewModel {
 	// MARK: - Bindables, other
 
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
+	@Bindable private(set) var serverTooBusyAlert: TokenEntryViewController.AlertContent?
 
 	// MARK: - Private Dependencies:
 
@@ -301,10 +302,30 @@ class TokenEntryViewModel {
 				self?.progressIndicationCounter.decrement()
 
 			}, onError: { [weak self] error in
+
+				if let networkError = error as? NetworkError,
+				   networkError == .serverBusy {
+					self?.showServerTooBusyError()
+				} else {
+					self?.showTechnicalErrorAlert = true
+				}
 				self?.decideWhetherToAbortRequestTokenProvidedMode()
-				self?.showTechnicalErrorAlert = true
 				self?.progressIndicationCounter.decrement()
 			}
+		)
+	}
+
+	private func showServerTooBusyError() {
+
+		self.serverTooBusyAlert = TokenEntryViewController.AlertContent(
+			title: .serverTooBusyErrorTitle,
+			subTitle: .serverTooBusyErrorText,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.coordinator?.navigateBackToStart()
+			},
+			okTitle: .serverTooBusyErrorButton
 		)
 	}
 
@@ -332,7 +353,6 @@ class TokenEntryViewModel {
 					switch remoteTestEvent.wrapper.status {
 						case .complete, .pending:
 							self.screenHasCompleted = true
-//							self.coordinator?.navigateToListResults()
 							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteTestEvent)
 						case .verificationRequired:
 							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
@@ -355,6 +375,8 @@ class TokenEntryViewModel {
 				case let .failure(error):
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
+						self.showServerTooBusyError()
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription

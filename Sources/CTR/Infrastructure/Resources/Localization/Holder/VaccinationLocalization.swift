@@ -226,4 +226,9 @@ extension String {
 
 		return Localization.string(for: "holder.event.originmismatch.test.body")
 	}
+
+	static var holderTestAlertMessage: String {
+
+		return Localization.string(for: "holder.test.alert.message")
+	}
 }

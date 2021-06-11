@@ -78,7 +78,7 @@ protocol NetworkManaging {
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
@@ -94,7 +94,7 @@ protocol NetworkManaging {
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
-	func getTestResult(
+	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
@@ -108,8 +108,8 @@ protocol NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void)
-	
+		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void)
+
 	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider

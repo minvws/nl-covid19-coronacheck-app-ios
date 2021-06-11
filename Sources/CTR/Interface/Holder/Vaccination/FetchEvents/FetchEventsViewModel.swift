@@ -58,15 +58,26 @@ final class FetchEventsViewModel: Logging {
 		switch eventProvidersResult {
 			case .failure(let networkError):
 				// No error tolerance here, if any failures then bail out.
-				self.coordinator?.fetchEventsScreenDidFinish(.errorRequiringRestart(error: networkError, eventMode: self.eventMode))
+				self.coordinator?.fetchEventsScreenDidFinish(
+					.errorRequiringRestart(
+						error: networkError,
+						eventMode: self.eventMode
+					)
+				)
 
 			case .success(let eventProviders):
-				// Unomi call
-				self.fetchHasEventInformation(forEventProviders: eventProviders, filter: eventMode.queryFilterValue, completion: handleFetchHasEventInformationResponse)
+				// Do the Unomi call
+				self.fetchHasEventInformation(
+					forEventProviders: eventProviders,
+					filter: eventMode.queryFilterValue,
+					completion: handleFetchHasEventInformationResponse
+				)
 		}
 	}
 
-	func handleFetchHasEventInformationResponse(eventProvidersWithEventInformation: [EventFlow.EventProvider], networkErrors: [NetworkError]) {
+	func handleFetchHasEventInformationResponse(
+		eventProvidersWithEventInformation: [EventFlow.EventProvider],
+		networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
@@ -365,8 +376,15 @@ final class FetchEventsViewModel: Logging {
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
 
-			// Result<EventFlow.EventInformationAvailable, NetworkError>
-			completion(result)
+			// Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>
+			switch result {
+				case let .success(result):
+					self?.logDebug("EventInformationAvailable: \(result.0)")
+					completion(.success(result.0))
+				case let .failure(error):
+					completion(.failure(error))
+			}
+
 			self?.progressIndicationCounter.decrement()
 		}
 	}

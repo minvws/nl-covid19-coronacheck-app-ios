@@ -62,7 +62,7 @@ class ProofManager: ProofManaging, Logging {
 		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 		
-		networkManager.getTestProviders { [weak self] response in
+		networkManager.fetchTestProviders { [weak self] response in
 			
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
@@ -145,7 +145,7 @@ class ProofManager: ProofManaging, Logging {
 			return
 		}
 		
-		networkManager.getTestResult(provider: provider, token: token, code: code) { response in
+		networkManager.fetchTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
 			
 			switch response {
