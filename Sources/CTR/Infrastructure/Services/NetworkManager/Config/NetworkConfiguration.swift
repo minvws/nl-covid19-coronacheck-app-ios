@@ -26,13 +26,13 @@ struct NetworkConfiguration {
             scheme: "https",
             host: "api-ct.bananenhalen.nl",
             port: nil,
-            path: ["v3"]
+            path: ["v4"]
         ),
 		cdn: .init(
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		)
     )
 
@@ -42,13 +42,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: "api-ct.bananenhalen.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		)
     )
 
@@ -58,13 +58,13 @@ struct NetworkConfiguration {
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		),
 		cdn: .init(
 			scheme: "https",
 			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
-			path: ["v3"]
+			path: ["v4"]
 		)
 	)
 
@@ -91,9 +91,15 @@ struct NetworkConfiguration {
 	}
 
 	/// The nonce url
-	var nonceUrl: URL? {
+	var prepareIssueUrl: URL? {
 
-		return self.combine(path: Endpoint.nonce, fromCdn: false)
+		return self.combine(path: Endpoint.prepareIssue, fromCdn: false)
+	}
+
+	/// The nonce url
+	var credentialUrl: URL? {
+
+		return self.combine(path: Endpoint.getCredentials, fromCdn: false)
 	}
 
 	/// The public keys url
@@ -107,12 +113,6 @@ struct NetworkConfiguration {
 
 		return self.combine(path: Endpoint.remoteConfiguration, fromCdn: false)
     }
-
-	/// The sign url
-	var signUrl: URL? {
-
-		return self.combine(path: Endpoint.sign, fromCdn: false)
-	}
 
 	/// The providers url
 	var providersUrl: URL? {

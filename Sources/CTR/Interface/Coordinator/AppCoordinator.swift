@@ -113,7 +113,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// Show the Action Required View
 	/// - Parameter versionInformation: the version information
-	private func showActionRequired(with versionInformation: AppVersionInformation) {
+	private func showActionRequired(with versionInformation: RemoteInformation) {
 		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
 		if versionInformation.isDeactivated {
 			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)

@@ -63,14 +63,6 @@ class VerifierCoordinator: SharedCoordinator {
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
-		} else if forcedInformationManager.needsUpdating {
-			// Show Forced Information
-			let coordinator = ForcedInformationCoordinator(
-				navigationController: navigationController,
-				forcedInformationManager: forcedInformationManager,
-				delegate: self
-			)
-			startChildCoordinator(coordinator)
 
 		} else {
 			
@@ -171,26 +163,18 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to the QR scanner
 	func navigateToScan() {
 
-		//		navigateToScanResult(
-		//			CryptoResult(
-		//				attributes:
-		//					Attributes(
-		//						cryptoAttributes:
-		//							CryptoAttributes(
-		//								birthDay: "27",
-		//								birthMonth: "5",
-		//								firstNameInitial: nil, // "R",
-		//								lastNameInitial: "P",
-		//								sampleTime: "1617689091",
-		//								testType: "PCR",
-		//								specimen: "1",
-		//								paperProof: "0"
-		//							),
-		//						unixTimeStamp: Int64(Date().timeIntervalSince1970)
-		//					),
-		//				errorMessage: nil
-		//			)
-		//		)
+//		navigateToScanResult(
+//			(attributes: CryptoAttributes(
+//				birthDay: "27",
+//				birthMonth: "5",
+//				credentialVersion: "1",
+//				domesticDcc: "0",
+//				firstNameInitial: "G",
+//				lastNameInitial: "C",
+//				specimen: "0"),
+//			 errorMessage: nil
+//			)
+//		)
 
 		let destination = VerifierScanViewController(
 			viewModel: VerifierScanViewModel(

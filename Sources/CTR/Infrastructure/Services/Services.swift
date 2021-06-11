@@ -11,6 +11,7 @@ import Foundation
 final class Services {
 	
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
+	private static var cryptoVerifierUtilityType: CryptoVerifierUtility.Type = CryptoVerifierUtility.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
@@ -18,6 +19,7 @@ final class Services {
 	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
 	private static var proofManagerType: ProofManaging.Type = ProofManager.self
 	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
+	private static var walletManagingType: WalletManaging.Type = WalletManager.self
 
 	/// Override the CryptoManaging type that will be instantiated
 	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
@@ -92,6 +94,8 @@ final class Services {
 
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
 
+	static private(set) var cryptoVerifierUtility: CryptoVerifierUtility = cryptoVerifierUtilityType.init()
+	
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
@@ -103,4 +107,6 @@ final class Services {
 	static private(set) var openIdManager: OpenIdManaging = openIdManagerType.init()
 
 	static private(set) var proofManager: ProofManaging = proofManagerType.init()
+
+	static private(set) var walletManager: WalletManaging = walletManagingType.init(dataStoreManager: dataStoreManager)
 }

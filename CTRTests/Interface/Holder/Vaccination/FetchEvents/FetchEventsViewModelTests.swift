@@ -15,7 +15,6 @@ class FetchEventsViewModelTests: XCTestCase {
 	var sut: FetchEventsViewModel!
 	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
 	var networkSpy: NetworkSpy!
-	var walletSpy: WalletManagerSpy!
 
 	override func setUp() {
 
@@ -23,8 +22,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
-		walletSpy = WalletManagerSpy()
-		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", networkManager: networkSpy, walletManager: walletSpy)
+		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
 	}
 
 	func test_backButtonTapped_loadingState() {
@@ -50,20 +48,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == VaccinationScreenResult.back
-	}
-
-	func test_backButtonTapped_listState() {
-
-		// Given
-		sut.viewState = .listEvents(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil), rows: [])
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .test)
 	}
 
 	func test_warnBeforeGoBack() {
@@ -78,42 +63,46 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.navigationAlert).toNot(beNil())
 	}
 
-	func test_happyFlow_willStoreEventGroup() {
+	func test_happyFlow_willInvokeCoordinator() {
 
 		// Given
-		let eventWrapper = Vaccination.EventResultWrapper(
+		let eventWrapper = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: identity,
 			status: .complete,
 			events: [
-				Vaccination.Event(type: "vaccination", unique: "1234", vaccination: vaccinationEvent)
+				EventFlow.Event(
+					type: "vaccination",
+					unique: "1234",
+					isSpecimen: false,
+					vaccination: vaccinationEvent,
+					negativeTest: nil
+				)
 			]
 		)
 
-		networkSpy.stubbedFetchVaccinationAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchVaccinationEventProvidersCompletionResult = (.success([provider]), ())
-		networkSpy.stubbedFetchVaccinationEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchVaccinationEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			eventMode: .vaccination,
+			networkManager: networkSpy
 		)
 
 		// Then
-		expect(self.walletSpy.invokedRemoveExistingEventGroups).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEventGroup).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEventGroupCount) == 1
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
 	}
 
 	func test_happyFlow_noEvents() {
 
 		// Given
-		let eventWrapper = Vaccination.EventResultWrapper(
+		let eventWrapper = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
 			identity: identity,
@@ -121,33 +110,32 @@ class FetchEventsViewModelTests: XCTestCase {
 			events: []
 		)
 
-		networkSpy.stubbedFetchVaccinationAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchVaccinationEventProvidersCompletionResult = (.success([provider]), ())
-		networkSpy.stubbedFetchVaccinationEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchVaccinationEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
 
 		// When
 		sut = FetchEventsViewModel(
 			coordinator: coordinatorSpy,
 			tvsToken: "test",
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			eventMode: .vaccination,
+			networkManager: networkSpy
 		)
 
 		// Then
-		expect(self.walletSpy.invokedRemoveExistingEventGroups).toEventually(beTrue())
-		expect(self.walletSpy.invokedStoreEventGroup).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue(), timeout: .seconds(5))
 	}
 
 	// MARK: Default values
 
-	let accessToken = Vaccination.AccessToken(
+	let accessToken = EventFlow.AccessToken(
 		providerIdentifier: "CC",
 		unomiAccessToken: "unomi test",
 		eventAccessToken: "event test"
 	)
 
-	let provider = Vaccination.EventProvider(
+	let provider = EventFlow.EventProvider(
 		identifier: "CC",
 		name: "CoronaCheck",
 		unomiURL: URL(string: "https://coronacheck.nl"),
@@ -158,28 +146,28 @@ class FetchEventsViewModelTests: XCTestCase {
 		eventInformationAvailable: nil
 	)
 
-	let eventInformationAvailable = Vaccination.EventInformationAvailable(
+	let eventInformationAvailable = EventFlow.EventInformationAvailable(
 		providerIdentifier: "CC",
 		protocolVersion: "3.0",
 		informationAvailable: true
 	)
 
-	let identity = Vaccination.Identity(
+	let identity = EventFlow.Identity(
 		infix: "",
 		firstName: "Corona",
 		lastName: "Check",
 		birthDateString: "2021-05-16"
 	)
 
-	let vaccinationEvent = Vaccination.VaccinationEvent(
+	let vaccinationEvent = EventFlow.VaccinationEvent(
 		dateString: "2021-05-16",
 		hpkCode: nil,
 		type: nil,
 		manufacturer: nil,
 		brand: nil,
-		completedByMedicalStatement: false,
 		doseNumber: 1,
-		totalDoses: 2
+		totalDoses: 2,
+		country: "NLD"
 	)
 
 	let signedResponse = SignedResponse(

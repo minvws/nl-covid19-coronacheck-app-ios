@@ -196,7 +196,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		let nonemptyVerificationInput = "1234"
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -406,13 +406,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
@@ -425,13 +425,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakePending), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
@@ -444,8 +444,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
-
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -468,8 +467,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
-
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -491,7 +489,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -562,7 +560,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -593,7 +591,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -601,7 +599,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: "1234")
@@ -629,7 +627,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -661,7 +659,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -691,7 +689,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -720,7 +718,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -728,13 +726,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
@@ -747,7 +745,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -755,13 +753,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message) == .holderTokenEntryUniversalLinkFlowText
@@ -774,7 +772,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = RequestToken.fake.token
 		let verificationInput = "1234"
 
@@ -783,7 +781,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
@@ -807,7 +805,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -815,7 +813,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -837,7 +835,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -845,7 +843,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -866,7 +864,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -896,7 +894,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -1128,7 +1126,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1136,7 +1134,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
@@ -1149,7 +1147,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakePending), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1157,7 +1155,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 		expect(self.sut.title) == .holderTokenEntryRegularFlowTitle
 		expect(self.sut.message) == .holderTokenEntryRegularFlowText
 
@@ -1169,7 +1167,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1194,7 +1192,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1223,7 +1221,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1253,7 +1251,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeInvalid), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1276,7 +1274,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeUnknown), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1344,9 +1342,9 @@ class TokenEntryViewModelTests: XCTestCase {
 
 	func test_withInitialRequestToken_whenNoVerificationIsRequired_shouldHideTheInputFields() {
 		// Arrange
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeComplete), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 
 		// Act
@@ -1364,7 +1362,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.showTechnicalErrorAlert) == false
 		expect(self.sut.title) == .holderTokenEntryUniversalLinkFlowTitle
 		expect(self.sut.message).to(beNil())
-		expect(self.holderCoordinatorSpy.invokedNavigateToListResults) == true
+		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1392,7 +1390,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 		sut.nextButtonTapped(validToken, verificationInput: "")
@@ -1415,14 +1413,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		proofManagerSpy.reset()
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
  		sut.resendVerificationCodeButtonTapped()
@@ -1468,7 +1466,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		tokenValidatorSpy.stubbedValidateResult = true
 		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
 		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(.fakeVerificationRequired), ())
+		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteTestEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 

@@ -328,11 +328,12 @@ class TokenEntryViewModel {
 			self.fieldErrorMessage = nil
 
 			switch response {
-				case let .success(wrapper):
-					switch wrapper.status {
+				case let .success(remoteTestEvent):
+					switch remoteTestEvent.wrapper.status {
 						case .complete, .pending:
 							self.screenHasCompleted = true
-							self.coordinator?.navigateToListResults()
+//							self.coordinator?.navigateToListResults()
+							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteTestEvent)
 						case .verificationRequired:
 							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 								// the user has just submitted a wrong verification code & should see an error message
@@ -346,8 +347,8 @@ class TokenEntryViewModel {
 							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 						default:
-							self.logDebug("Unhandled test result status: \(wrapper.status)")
-							self.fieldErrorMessage = "Unhandled: \(wrapper.status)"
+							self.logDebug("Unhandled test result status: \(remoteTestEvent.wrapper.status)")
+							self.fieldErrorMessage = "Unhandled: \(remoteTestEvent.wrapper.status)"
 							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 					}
 

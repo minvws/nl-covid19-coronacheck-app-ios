@@ -5,26 +5,11 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import CoreData
 import XCTest
 @testable import CTR
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
-
-	var invokedNavigateToEnlargedQR = false
-	var invokedNavigateToEnlargedQRCount = 0
-
-	func navigateToEnlargedQR() {
-		invokedNavigateToEnlargedQR = true
-		invokedNavigateToEnlargedQRCount += 1
-	}
-
-	var invokedNavigateToAppointment = false
-	var invokedNavigateToAppointmentCount = 0
-
-	func navigateToAppointment() {
-		invokedNavigateToAppointment = true
-		invokedNavigateToAppointmentCount += 1
-	}
 
 	var invokedNavigateToAboutMakingAQR = false
 	var invokedNavigateToAboutMakingAQRCount = 0
@@ -78,6 +63,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentInformationPageParametersList.append((title, body))
 	}
 
+	var invokedUserWishesToMakeQRFromNegativeTest = false
+	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
+	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteTestEvent: RemoteTestEvent, Void)?
+	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteTestEvent: RemoteTestEvent, Void)]()
+
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+		invokedUserWishesToMakeQRFromNegativeTest = true
+		invokedUserWishesToMakeQRFromNegativeTestCount += 1
+		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteTestEvent, ())
+		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteTestEvent, ()))
+	}
+
 	var invokedUserWishesToCreateAQR = false
 	var invokedUserWishesToCreateAQRCount = 0
 
@@ -92,6 +89,30 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToCreateANegativeTestQR() {
 		invokedUserWishesToCreateANegativeTestQR = true
 		invokedUserWishesToCreateANegativeTestQRCount += 1
+	}
+
+	var invokedUserWishesToChooseLocation = false
+	var invokedUserWishesToChooseLocationCount = 0
+
+	func userWishesToChooseLocation() {
+		invokedUserWishesToChooseLocation = true
+		invokedUserWishesToChooseLocationCount += 1
+	}
+
+	var invokedUserHasNotBeenTested = false
+	var invokedUserHasNotBeenTestedCount = 0
+
+	func userHasNotBeenTested() {
+		invokedUserHasNotBeenTested = true
+		invokedUserHasNotBeenTestedCount += 1
+	}
+
+	var invokedUserWishesToCreateANegativeTestQRFromGGD = false
+	var invokedUserWishesToCreateANegativeTestQRFromGGDCount = 0
+
+	func userWishesToCreateANegativeTestQRFromGGD() {
+		invokedUserWishesToCreateANegativeTestQRFromGGD = true
+		invokedUserWishesToCreateANegativeTestQRFromGGDCount += 1
 	}
 
 	var invokedUserWishesToCreateAVaccinationQR = false
@@ -114,6 +135,34 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserDidScanRequestTokenParametersList.append((requestToken, ()))
 	}
 
+	var invokedUserWishesToChangeRegion = false
+	var invokedUserWishesToChangeRegionCount = 0
+	var invokedUserWishesToChangeRegionParameters: (currentRegion: QRCodeValidityRegion, Void)?
+	var invokedUserWishesToChangeRegionParametersList = [(currentRegion: QRCodeValidityRegion, Void)]()
+	var stubbedUserWishesToChangeRegionCompletionResult: (QRCodeValidityRegion, Void)?
+
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
+		invokedUserWishesToChangeRegion = true
+		invokedUserWishesToChangeRegionCount += 1
+		invokedUserWishesToChangeRegionParameters = (currentRegion, ())
+		invokedUserWishesToChangeRegionParametersList.append((currentRegion, ()))
+		if let result = stubbedUserWishesToChangeRegionCompletionResult {
+			completion(result.0)
+		}
+	}
+
+	var invokedUserWishesMoreInfoAboutUnavailableQR = false
+	var invokedUserWishesMoreInfoAboutUnavailableQRCount = 0
+	var invokedUserWishesMoreInfoAboutUnavailableQRParameters: (originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)?
+	var invokedUserWishesMoreInfoAboutUnavailableQRParametersList = [(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)]()
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+		invokedUserWishesMoreInfoAboutUnavailableQR = true
+		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
+		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion, availableRegion)
+		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
@@ -124,6 +173,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedOpenUrlCount += 1
 		invokedOpenUrlParameters = (url, inApp)
 		invokedOpenUrlParametersList.append((url, inApp))
+	}
+
+	var invokedUserWishesToViewQR = false
+	var invokedUserWishesToViewQRCount = 0
+	var invokedUserWishesToViewQRParameters: (greenCardObjectID: NSManagedObjectID, Void)?
+	var invokedUserWishesToViewQRParametersList = [(greenCardObjectID: NSManagedObjectID, Void)]()
+
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
+		invokedUserWishesToViewQR = true
+		invokedUserWishesToViewQRCount += 1
+		invokedUserWishesToViewQRParameters = (greenCardObjectID, ())
+		invokedUserWishesToViewQRParametersList.append((greenCardObjectID, ()))
 	}
 
 	var invokedDismiss = false

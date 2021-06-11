@@ -8,7 +8,41 @@
 import UIKit
 
 class HolderDashboardViewController: BaseViewController {
-	
+
+	enum Card {
+		struct QRCardRow {
+			let typeText: String
+			let validityTextEvaluator: (Date) -> ValidityText
+		}
+
+		case headerMessage(message: String)
+
+		case expiredQR(message: String, didTapClose: () -> Void)
+
+		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
+
+		case makeQR(title: String, message: String, actionTitle: String, didTapMakeQR: () -> Void)
+
+		case changeRegion(buttonTitle: String, currentLocationTitle: String)
+
+		case domesticQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+
+		case europeanUnionQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+
+		case cardFooter(message: String)
+	}
+
+	struct ValidityText {
+		enum Kind {
+			case past
+			case future
+			case current
+		}
+
+		let text: String
+		let kind: Kind
+	}
+
 	private let viewModel: HolderDashboardViewModel
 	
 	let sceneView = HolderDashboardView()
@@ -43,7 +77,6 @@ class HolderDashboardViewController: BaseViewController {
 		super.viewDidLoad()
 		
 		setupBindings()
-		setupListeners()
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
@@ -53,135 +86,125 @@ class HolderDashboardViewController: BaseViewController {
 	private func setupBindings() {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$expiredTitle.binding = { [weak self] in self?.sceneView.expiredQRView.title = $0 }
-		viewModel.$appointmentCard.binding = { [weak self] in
-			guard let strongSelf = self else { return }
-			strongSelf.styleCard(strongSelf.sceneView.appointmentCard, cardInfo: $0)
-		}
-		viewModel.$createCard.binding = { [weak self] in
-			guard let strongSelf = self else { return }
-			strongSelf.styleCard(strongSelf.sceneView.createCard, cardInfo: $0)
-		}
 
-		viewModel.$qrCard.binding = { [weak self] in
+		// Receive an array of cards,
+		viewModel.$cards.binding = { [sceneView, weak viewModel] cards in
+			let cardViews = cards
+				.compactMap { card -> UIView? in
 
-			guard let strongSelf = self else { return }
-			if let cardInfo = $0 {
-				strongSelf.sceneView.qrCardView.isHidden = false
-				strongSelf.styleQRCard(strongSelf.sceneView.qrCardView, cardInfo: cardInfo)
-			} else {
-				// hide for capture checks the time,
-				// set to nil to prevent showing qr card.
-				strongSelf.sceneView.qrCardView.time = nil
-				strongSelf.sceneView.qrCardView.title = nil
-				strongSelf.sceneView.qrCardView.identity = nil
-				strongSelf.sceneView.qrCardView.message = nil
-				strongSelf.sceneView.qrCardView.isHidden = true
-			}
-		}
+				switch card {
 
-		viewModel.$showExpiredQR.binding = { [weak self] in
+					case .headerMessage(let message):
 
-			if $0 {
-				self?.sceneView.expiredQRView.isHidden = false
-				self?.sceneView.expiredQRView.closeButtonTappedCommand = { [weak self] in
-					self?.viewModel.closeExpiredRQ()
+						let text = TextView(htmlText: message)
+						text.linkTouched { [weak self] url in
+							self?.viewModel.openUrl(url)
+						}
+						return text
+
+					case .expiredQR(let message, let didTapCloseAction):
+						let expiredQRCard = ExpiredQRView()
+						expiredQRCard.title = message
+						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
+						return expiredQRCard
+
+					case .originNotValidInThisRegion(let message, let didTapMoreInfo):
+						let messageCard = MessageCardView()
+						messageCard.title = message
+						messageCard.infoButtonTappedCommand = didTapMoreInfo
+						return messageCard
+
+					case .makeQR(let title, let message, let actionTitle, let didTapAction):
+						let makeQRCard = CardView()
+						makeQRCard.title = title
+						makeQRCard.message = message
+						makeQRCard.primaryTitle = actionTitle
+						makeQRCard.backgroundImage = .createTile
+						makeQRCard.color = Theme.colors.create
+						makeQRCard.primaryButtonTappedCommand = didTapAction
+						return makeQRCard
+
+					case .changeRegion(let buttonTitle, let currentLocationTitle):
+						let changeRegionCard = ChangeRegionView()
+						changeRegionCard.changeRegionButtonTitle = buttonTitle
+						changeRegionCard.currentLocationTitle = currentLocationTitle
+						changeRegionCard.changeRegionButtonTappedCommand = {
+							viewModel?.didTapChangeRegion()
+						}
+						return changeRegionCard
+
+					case .domesticQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator),
+						 .europeanUnionQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator):
+
+						let qrCard = QRCardView()
+						qrCard.viewQRButtonCommand = didTapViewQR
+						qrCard.title = .qrTitle
+						qrCard.viewQRButtonTitle = .qrButtonViewQR
+
+						switch card {
+							case .domesticQR:
+								qrCard.region = .netherlands
+							case .europeanUnionQR:
+								qrCard.region = .europeanUnion
+								qrCard.shouldStyleForEU = true
+							default: break
+						}
+
+						qrCard.originRows = rows.map { (qrCardRow: Card.QRCardRow) in
+							QRCardView.OriginRow(type: qrCardRow.typeText, validityStringEvaluator: qrCardRow.validityTextEvaluator)
+						}
+
+						qrCard.expiryEvaluator = expiryCountdownEvaluator
+						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
+
+						return qrCard
+
+					case .cardFooter(let message):
+
+						let cardFooterView = CardFooterView()
+						cardFooterView.title = message
+						return cardFooterView
 				}
-			} else {
-				self?.sceneView.expiredQRView.isHidden = true
+			}
+
+			sceneView.stackView.arrangedSubviews.forEach {
+				sceneView.stackView.removeArrangedSubview($0)
+				$0.removeFromSuperview()
+			}
+
+			cardViews.forEach {
+				sceneView.stackView.addArrangedSubview($0)
+			}
+
+			// Hack to fix the spacing between EU Launch message and a EU Card.
+			// 📝 Can be removed once EU Launch date is passed:
+			for (index, view) in cardViews.enumerated() {
+				guard view is CardFooterView else { continue }
+
+				// Try to get previous view, which would be an EU card:
+				let previousIndex = index - 1
+
+				guard previousIndex >= 0 else { continue }
+
+				// Check that previous view is a QRCardView:
+				guard let previousCardView = cardViews[previousIndex] as? QRCardView else { continue }
+
+				sceneView.stackView.setCustomSpacing(16, after: previousCardView)
 			}
 		}
-
-		viewModel.$hideForCapture.binding = { [weak self] in
-
-			self?.sceneView.hideQRImage = $0
-		}
-
-		viewModel.$notificationBanner.binding = { [weak self] in
-
-			if let content = $0 {
-				self?.showNotificationBanner(content)
-			} else {
-				self?.hideNotificationBanner()
-			}
-		}
-	}
-
-	private func setupListeners() {
-
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(checkValidity),
-			name: UIApplication.willEnterForegroundNotification,
-			object: nil
-		)
-		NotificationCenter.default.addObserver(
-			self,
-			selector: #selector(checkValidity),
-			name: UIApplication.didBecomeActiveNotification,
-			object: nil
-		)
-	}
-
-	/// Check the validity of the scene
-	@objc func checkValidity() {
-
-		// Check the Validity of the QR
-		viewModel.checkQRValidity()
-
-		// Check if we are being recorded
-		viewModel.preventScreenCapture()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		checkValidity()
-
+		
 		// Scroll to top
 		sceneView.scrollView.setContentOffset(.zero, animated: false)
-	}
 
-	deinit {
-		NotificationCenter.default.removeObserver(self)
+		viewModel.viewWillAppear()
 	}
 
 	// MARK: Helper methods
-
-	/// Style a dashboard card view
-	/// - Parameters:
-	///   - card: the card view
-	///   - cardInfo: the card information
-	func styleCard(_ card: CardView, cardInfo: CardInfo) {
-
-		card.title = cardInfo.title
-		card.message = cardInfo.message
-		card.primaryTitle = cardInfo.actionTitle
-		card.backgroundImage = cardInfo.image
-		card.color = cardInfo.backgroundColor
-		card.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.cardTapped(cardInfo.identifier)
-		}
-	}
-
-	/// Style a dashboard card view
-	/// - Parameters:
-	///   - card: the card view
-	///   - cardInfo: the card information
-	func styleQRCard(_ card: QRCardView, cardInfo: QRCardInfo) {
-
-		card.title = cardInfo.title
-		card.message = cardInfo.message
-		card.primaryTitle = cardInfo.actionTitle
-		card.backgroundImage = cardInfo.image
-		card.time = cardInfo.validUntil
-		card.timeAccessibility = cardInfo.validUntilAccessibility
-		card.identity = cardInfo.holder
-		card.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.cardTapped(cardInfo.identifier)
-		}
-	}
 
 	func setupPlusButton() {
 		let plusbutton = UIBarButtonItem(
@@ -192,37 +215,5 @@ class HolderDashboardViewController: BaseViewController {
 		)
 		plusbutton.accessibilityLabel = .add
 		navigationItem.rightBarButtonItem = plusbutton
-	}
-
-	func showNotificationBanner(_ content: NotificationBannerContent) {
-
-		guard bannerView == nil else {
-			return
-		}
-
-		bannerView = BannerView()
-		bannerView?.translatesAutoresizingMaskIntoConstraints = false
-		bannerView?.title = content.title
-		bannerView?.message = content.message
-		bannerView?.icon = content.icon
-		bannerView?.messageTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
-		}
-
-		bannerView?.primaryButtonTappedCommand = { [weak self] in
-			self?.hideNotificationBanner()
-		}
-		if let newBannerView = bannerView {
-
-			navigationController?.addBannerView(newBannerView)
-			UIAccessibility.post(notification: .screenChanged, argument: newBannerView)
-		}
-	}
-
-	func hideNotificationBanner() {
-
-		bannerView?.removeFromSuperview()
-		bannerView = nil
 	}
 }

@@ -33,7 +33,7 @@ class VaccinationStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .back
+		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
 	}
 
 	func test_primaryButtonTapped() {
@@ -45,7 +45,7 @@ class VaccinationStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue
+		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
 	}
 
 	func test_openUrl() throws {

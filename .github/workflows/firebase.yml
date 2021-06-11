@@ -46,6 +46,10 @@ jobs:
       run: |
         make generate_project
 
+    - name: Run homebrew
+      run: |
+        make homebrew_ci
+
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -90,6 +94,10 @@ jobs:
       run: |
         make generate_project
 
+    - name: Run homebrew
+      run: |
+        make homebrew_ci
+
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -125,6 +133,10 @@ jobs:
       with:
         key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
         path: Vendor/XcodeGen/.build
+
+    - name: Run homebrew
+      run: |
+        make homebrew_ci
 
     - name: Build XcodeGen (if necessary)
       run: |
@@ -178,6 +190,10 @@ jobs:
       run: |
         make generate_project
 
+    - name: Run homebrew
+      run: |
+        make homebrew_ci
+
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -222,6 +238,10 @@ jobs:
       run: |
         make generate_project
 
+    - name: Run homebrew
+      run: |
+        make homebrew_ci
+
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -265,6 +285,10 @@ jobs:
     - name: Run XcodeGen
       run: |
         make generate_project
+
+    - name: Run homebrew
+      run: |
+        make homebrew_ci
 
     - name: Build and deploy
       timeout-minutes: 45

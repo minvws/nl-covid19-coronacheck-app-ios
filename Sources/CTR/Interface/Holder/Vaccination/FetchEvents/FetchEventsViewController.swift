@@ -11,7 +11,6 @@ class FetchEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
-		case listEvents(content: Content, rows: [Row])
 		case emptyEvents(content: Content)
 	}
 
@@ -22,19 +21,13 @@ class FetchEventsViewController: BaseViewController {
 		let action: (() -> Void)?
 	}
 
-	struct Row {
-		let title: String
-		let subTitle: String
-		let action: (() -> Void)?
-	}
-
 	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let cancelAction: ((UIAlertAction) -> Void)?
-		let cancelTitle: String
-		let okAction: ((UIAlertAction) -> Void)
-		let okTitle: String
+		var title: String
+		var subTitle: String
+		var cancelAction: ((UIAlertAction) -> Void)?
+		var cancelTitle: String?
+		var okAction: ((UIAlertAction) -> Void)?
+		var okTitle: String
 	}
 
 	private let viewModel: FetchEventsViewModel
@@ -83,13 +76,16 @@ class FetchEventsViewController: BaseViewController {
 					self?.setForNoEvents(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
-				case let .listEvents(content, rows):
-					self?.setForListEvents(content, rows: rows)
 			}
 		}
 
 		viewModel.$navigationAlert.binding = { [weak self] in
 			self?.showAlert($0)
+		}
+
+		sceneView.contentTextView.linkTouched { [weak self] url in
+
+			self?.viewModel.openUrl(url)
 		}
 	}
 
@@ -102,29 +98,6 @@ class FetchEventsViewController: BaseViewController {
 
 		sceneView.spinner.isHidden = false
 		displayContent(content)
-	}
-
-	private func setForListEvents(_ content: Content, rows: [Row]) {
-
-		sceneView.spinner.isHidden = true
-		displayContent(content)
-
-		// Remove previously added rows:
-		sceneView.eventStackView.subviews
-			.forEach { $0.removeFromSuperview() }
-
-		sceneView.addSeparator()
-
-		// Add new rows:
-		rows
-			.map { rowModel -> VaccinationEventView in
-				VaccinationEventView.makeView(
-					title: rowModel.title,
-					subTitle: rowModel.subTitle,
-					command: rowModel.action
-				)
-			}
-			.forEach(self.sceneView.addVaccinationEventView)
 	}
 
 	private func setForNoEvents(_ content: Content) {
@@ -173,35 +146,17 @@ class FetchEventsViewController: BaseViewController {
 				handler: content.okAction
 			)
 		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.cancelTitle,
-				style: .default,
-				handler: content.cancelAction
+
+		// Optional cancel button:
+		if let cancelTitle = content.cancelTitle {
+			alertController.addAction(
+				UIAlertAction(
+					title: cancelTitle,
+					style: .cancel,
+					handler: content.cancelAction
+				)
 			)
-		)
+		}
 		present(alertController, animated: true, completion: nil)
-	}
-}
-
-extension VaccinationEventView {
-
-	/// Create a vaccination event view
-	/// - Parameters:
-	///   - title: the title of the view
-	///   - subTitle: the sub title of the view
-	///   - command: the command to execute when tapped
-	/// - Returns: a vaccination event view
-	fileprivate static func makeView(
-		title: String,
-		subTitle: String,
-		command: (() -> Void)? ) -> VaccinationEventView {
-
-		let view = VaccinationEventView()
-		view.isUserInteractionEnabled = true
-		view.title = title
-		view.subTitle = subTitle
-		view.disclaimerButtonTappedCommand = command
-		return view
 	}
 }

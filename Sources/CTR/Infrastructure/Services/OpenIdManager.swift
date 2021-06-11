@@ -14,7 +14,7 @@ protocol OpenIdManaging: AnyObject {
 
 	/// Request an access token
 	/// - Parameters:
-	///   - presenter: the presenting viewconroller
+	///   - presenter: the presenting view controller
 	///   - onCompletion: completion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
@@ -30,9 +30,6 @@ class OpenIdManager: OpenIdManaging, Logging {
 	/// The digid configuration
 	var configuration: ConfigurationDigidProtocol
 
-	/// authorization State
-	private var authorizationState: OIDAuthState?
-
 	required init() {
 		configuration = Configuration()
 	}
@@ -46,7 +43,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 	/// Request an access token
 	/// - Parameters:
-	///   - presenter: the presenting viewconroller
+	///   - presenter: the presenting view controller
 	///   - onCompletion: completion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
@@ -54,11 +51,30 @@ class OpenIdManager: OpenIdManaging, Logging {
 		onCompletion: @escaping (String?) -> Void,
 		onError: @escaping (Error?) -> Void) {
 
-		// Generate the authorization request
-		let request = generateRequest()
+		discoverServiceConfiguration { [weak self] result in
+			switch result {
+				case let .success(serviceConfiguration):
+					self?.requestAuthorization(
+						serviceConfiguration,
+						presenter: presenter,
+						onCompletion: onCompletion,
+						onError: onError
+					)
 
-		// performs authentication request
-		self.logInfo("Initiating authorization request with scope: \(request.scope ?? "nil")")
+				case let .failure(error):
+					onError(error)
+			}
+		}
+	}
+
+	private func requestAuthorization(
+		_ serviceConfiguration: OIDServiceConfiguration,
+		presenter: UIViewController,
+		onCompletion: @escaping (String?) -> Void,
+		onError: @escaping (Error?) -> Void) {
+
+		let request = generateRequest(serviceConfiguration: serviceConfiguration)
+		self.logVerbose("OpenIdManager: authorization request: \(request)")
 
 		if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
 
@@ -67,30 +83,45 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 				// Request the access token
 				OIDAuthState.authState(byPresenting: request, presenting: presenter) { authState, error in
-					if let authState = authState {
-						self.authorizationState = authState
-						self.logDebug("Got access tokens. Access token: " +
-								"\(authState.lastTokenResponse?.accessToken ?? "nil")")
-
-						onCompletion(authState.lastTokenResponse?.accessToken)
-					} else {
-						self.authorizationState = nil
-						onError(error)
+					DispatchQueue.main.async {
+						self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
+						if let authState = authState {
+							self.logDebug("OpenIdManager: Got access tokens. Access token: " +
+											"\(authState.lastTokenResponse?.accessToken ?? "nil")")
+							onCompletion(authState.lastTokenResponse?.idToken)
+						} else {
+							self.logError("OpenIdManager: \(String(describing: error))")
+							onError(error)
+						}
 					}
 				}
 		}
 	}
 
+	/// Discover the configuration file for the open ID connection
+	/// - Parameter onCompletion: Service Configuration or error
+	private func discoverServiceConfiguration(_ onCompletion: @escaping (Result<OIDServiceConfiguration, Error>) -> Void) {
+
+		let issuer = configuration.getTVSURL()
+		OIDAuthorizationService.discoverConfiguration(forIssuer: issuer) { serviceConfiguration, error in
+			DispatchQueue.main.async {
+				if let service = serviceConfiguration {
+					onCompletion(.success(service))
+				} else if let error = error {
+					onCompletion(.failure(error))
+				}
+			}
+		}
+	}
+
 	/// Generate an Authorization Request
+	/// - Parameter serviceConfiguration: Service Configuration
 	/// - Returns: Open Id Authorization Request
-	private func generateRequest() -> OIDAuthorizationRequest {
+	private func generateRequest(serviceConfiguration: OIDServiceConfiguration) -> OIDAuthorizationRequest {
 
 		// builds authentication request
 		let request = OIDAuthorizationRequest(
-			configuration: OIDServiceConfiguration(
-				authorizationEndpoint: configuration.getAuthorizationURL(),
-				tokenEndpoint: configuration.getTokenURL()
-			),
+			configuration: serviceConfiguration,
 			clientId: configuration.getConsumerId(),
 			scopes: [OIDScopeOpenID],
 			redirectURL: configuration.getRedirectUri(),

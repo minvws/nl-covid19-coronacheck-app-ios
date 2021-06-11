@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -48,8 +47,8 @@ private final class RoundedCornerWithShadowsView: UIView {
 		shadowLayer.shadowColor = UIColor.black.cgColor
 		shadowLayer.shadowPath = shadowLayer.path
 		shadowLayer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-		shadowLayer.shadowOpacity = 0.3
-		shadowLayer.shadowRadius = 40
+		shadowLayer.shadowOpacity = 0.5
+		shadowLayer.shadowRadius = 20
 	}
 }
 
@@ -70,7 +69,9 @@ private final class CloseButtonRowView: UIView {
 		addSubview(button)
 		addConstraints([
 			button.centerYAnchor.constraint(equalTo: centerYAnchor),
-			button.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20)
+			button.centerXAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+			button.widthAnchor.constraint(equalToConstant: 43),
+			button.heightAnchor.constraint(equalTo: button.widthAnchor, constant: 0)
 		])
 
 		button.addTarget(self, action: #selector(CloseButtonRowView.didTapButton), for: .touchUpInside)
@@ -106,7 +107,7 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 		super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
 
 		dimmingView.translatesAutoresizingMaskIntoConstraints = false
-		dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+		dimmingView.backgroundColor = UIColor(white: 0, alpha: 0.32) // yes, exactly 32%.
 		dimmingView.accessibilityIdentifier = "dimmingView"
 
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapShroud))
@@ -212,7 +213,7 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 					cardWrapperViewBottomConstraint?.constant = 0
 					cardWrapperViewTopConstraint?.constant = 0
 					UIView.animate(withDuration: 0.3) {
-						self.containerView?.layoutSubviews()
+						self.containerView?.layoutIfNeeded()
 					}
 				}
 
@@ -286,16 +287,16 @@ private final class BottomSheetPresenter: UIPresentationController, UIGestureRec
 
 		cardWrapperView.addSubview(topCloseButtonRow)
 		NSLayoutConstraint.activate([
-			topCloseButtonRow.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor),
-			topCloseButtonRow.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor),
+			topCloseButtonRow.leadingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.leadingAnchor),
+			topCloseButtonRow.trailingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.trailingAnchor),
 			topCloseButtonRow.topAnchor.constraint(equalTo: cardWrapperView.topAnchor),
 			topCloseButtonRow.heightAnchor.constraint(equalToConstant: heightOfButtonRow)
 		])
 
 		cardWrapperView.addSubview(scrollView)
 		NSLayoutConstraint.activate([
-			scrollView.leadingAnchor.constraint(equalTo: cardWrapperView.leadingAnchor),
-			scrollView.trailingAnchor.constraint(equalTo: cardWrapperView.trailingAnchor),
+			scrollView.leadingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.leadingAnchor),
+			scrollView.trailingAnchor.constraint(equalTo: cardWrapperView.layoutMarginsGuide.trailingAnchor),
 			scrollView.topAnchor.constraint(equalTo: topCloseButtonRow.bottomAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: cardWrapperView.bottomAnchor)
 		])

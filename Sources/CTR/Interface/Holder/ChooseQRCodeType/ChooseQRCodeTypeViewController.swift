@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -87,7 +86,7 @@ extension DisclosureSubTitleButton {
 	///   - subTitle: the sub title of the button
 	///   - command: the command to execute when tapped
 	/// - Returns: A disclosure button
-	fileprivate static func makeButton(
+	static func makeButton(
 		title: String,
 		subTitle: String,
 		command: (() -> Void)? ) -> DisclosureSubTitleButton {

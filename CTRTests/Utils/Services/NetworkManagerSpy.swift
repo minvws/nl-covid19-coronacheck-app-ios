@@ -22,18 +22,18 @@ class NetworkSpy: NetworkManaging {
 		return stubbedNetworkConfiguration
 	}
 
-	var invokedFetchVaccinationAccessTokens = false
-	var invokedFetchVaccinationAccessTokensCount = 0
-	var invokedFetchVaccinationAccessTokensParameters: (tvsToken: String, Void)?
-	var invokedFetchVaccinationAccessTokensParametersList = [(tvsToken: String, Void)]()
-	var stubbedFetchVaccinationAccessTokensCompletionResult: (Result<[Vaccination.AccessToken], NetworkError>, Void)?
+	var invokedFetchEventAccessTokens = false
+	var invokedFetchEventAccessTokensCount = 0
+	var invokedFetchEventAccessTokensParameters: (tvsToken: String, Void)?
+	var invokedFetchEventAccessTokensParametersList = [(tvsToken: String, Void)]()
+	var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], NetworkError>, Void)?
 
-	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
-		invokedFetchVaccinationAccessTokens = true
-		invokedFetchVaccinationAccessTokensCount += 1
-		invokedFetchVaccinationAccessTokensParameters = (tvsToken, ())
-		invokedFetchVaccinationAccessTokensParametersList.append((tvsToken, ()))
-		if let result = stubbedFetchVaccinationAccessTokensCompletionResult {
+	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
+		invokedFetchEventAccessTokens = true
+		invokedFetchEventAccessTokensCount += 1
+		invokedFetchEventAccessTokensParameters = (tvsToken, ())
+		invokedFetchEventAccessTokensParametersList.append((tvsToken, ()))
+		if let result = stubbedFetchEventAccessTokensCompletionResult {
 			completion(result.0)
 		}
 	}
@@ -50,11 +50,23 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
+	var invokedPrepareIssue = false
+	var invokedPrepareIssueCount = 0
+	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, NetworkError>, Void)?
+
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
+		invokedPrepareIssue = true
+		invokedPrepareIssueCount += 1
+		if let result = stubbedPrepareIssueCompletionResult {
+			completion(result.0)
+		}
+	}
+
 	var invokedGetPublicKeys = false
 	var invokedGetPublicKeysCount = 0
-	var stubbedGetPublicKeysCompletionResult: (Result<[IssuerPublicKey], NetworkError>, Void)?
+	var stubbedGetPublicKeysCompletionResult: (Result<(IssuerPublicKeys, Data), NetworkError>, Void)?
 
-	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void) {
 		invokedGetPublicKeys = true
 		invokedGetPublicKeysCount += 1
 		if let result = stubbedGetPublicKeysCompletionResult {
@@ -64,9 +76,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedGetRemoteConfiguration = false
 	var invokedGetRemoteConfigurationCount = 0
-	var stubbedGetRemoteConfigurationCompletionResult: (Result<RemoteConfiguration, NetworkError>, Void)?
+	var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data), NetworkError>, Void)?
 
-	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void) {
 		invokedGetRemoteConfiguration = true
 		invokedGetRemoteConfigurationCount += 1
 		if let result = stubbedGetRemoteConfigurationCompletionResult {
@@ -104,14 +116,32 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchVaccinationEventProviders = false
-	var invokedFetchVaccinationEventProvidersCount = 0
-	var stubbedFetchVaccinationEventProvidersCompletionResult: (Result<[Vaccination.EventProvider], NetworkError>, Void)?
+	var invokedFetchEventProviders = false
+	var invokedFetchEventProvidersCount = 0
+	var stubbedFetchEventProvidersCompletionResult: (Result<[EventFlow.EventProvider], NetworkError>, Void)?
 
-	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
-		invokedFetchVaccinationEventProviders = true
-		invokedFetchVaccinationEventProvidersCount += 1
-		if let result = stubbedFetchVaccinationEventProvidersCompletionResult {
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
+		invokedFetchEventProviders = true
+		invokedFetchEventProvidersCount += 1
+		if let result = stubbedFetchEventProvidersCompletionResult {
+			completion(result.0)
+		}
+	}
+
+	var invokedFetchGreencards = false
+	var invokedFetchGreencardsCount = 0
+	var invokedFetchGreencardsParameters: (dictionary: [String: AnyObject], Void)?
+	var invokedFetchGreencardsParametersList = [(dictionary: [String: AnyObject], Void)]()
+	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, NetworkError>, Void)?
+
+	func fetchGreencards(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+		invokedFetchGreencards = true
+		invokedFetchGreencardsCount += 1
+		invokedFetchGreencardsParameters = (dictionary, ())
+		invokedFetchGreencardsParametersList.append((dictionary, ()))
+		if let result = stubbedFetchGreencardsCompletionResult {
 			completion(result.0)
 		}
 	}
@@ -136,38 +166,40 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchVaccinationEventInformation = false
-	var invokedFetchVaccinationEventInformationCount = 0
-	var invokedFetchVaccinationEventInformationParameters: (provider: Vaccination.EventProvider, Void)?
-	var invokedFetchVaccinationEventInformationParametersList = [(provider: Vaccination.EventProvider, Void)]()
-	var stubbedFetchVaccinationEventInformationCompletionResult: (Result<Vaccination.EventInformationAvailable, NetworkError>, Void)?
+	var invokedFetchEventInformation = false
+	var invokedFetchEventInformationCount = 0
+	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, filter: String?)?
+	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
+	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, NetworkError>, Void)?
 
-	func fetchVaccinationEventInformation(
-		provider: Vaccination.EventProvider,
-		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
-		invokedFetchVaccinationEventInformation = true
-		invokedFetchVaccinationEventInformationCount += 1
-		invokedFetchVaccinationEventInformationParameters = (provider, ())
-		invokedFetchVaccinationEventInformationParametersList.append((provider, ()))
-		if let result = stubbedFetchVaccinationEventInformationCompletionResult {
+	func fetchEventInformation(
+		provider: EventFlow.EventProvider,
+		filter: String?,
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		invokedFetchEventInformation = true
+		invokedFetchEventInformationCount += 1
+		invokedFetchEventInformationParameters = (provider, filter)
+		invokedFetchEventInformationParametersList.append((provider, filter))
+		if let result = stubbedFetchEventInformationCompletionResult {
 			completion(result.0)
 		}
 	}
 
-	var invokedFetchVaccinationEvents = false
-	var invokedFetchVaccinationEventsCount = 0
-	var invokedFetchVaccinationEventsParameters: (provider: Vaccination.EventProvider, Void)?
-	var invokedFetchVaccinationEventsParametersList = [(provider: Vaccination.EventProvider, Void)]()
-	var stubbedFetchVaccinationEventsCompletionResult: (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>, Void)?
+	var invokedFetchEvents = false
+	var invokedFetchEventsCount = 0
+	var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, filter: String?)?
+	var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
+	var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>, Void)?
 
-	func fetchVaccinationEvents(
-		provider: Vaccination.EventProvider,
-		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
-		invokedFetchVaccinationEvents = true
-		invokedFetchVaccinationEventsCount += 1
-		invokedFetchVaccinationEventsParameters = (provider, ())
-		invokedFetchVaccinationEventsParametersList.append((provider, ()))
-		if let result = stubbedFetchVaccinationEventsCompletionResult {
+	func fetchEvents(
+		provider: EventFlow.EventProvider,
+		filter: String?,
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		invokedFetchEvents = true
+		invokedFetchEventsCount += 1
+		invokedFetchEventsParameters = (provider, filter)
+		invokedFetchEventsParametersList.append((provider, filter))
+		if let result = stubbedFetchEventsCompletionResult {
 			completion(result.0)
 		}
 	}

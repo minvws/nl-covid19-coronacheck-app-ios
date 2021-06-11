@@ -71,7 +71,8 @@ public extension NSAttributedString {
 		boldTextColor: UIColor? = nil,
 		textAlignment: NSTextAlignment = .left,
 		lineHeight: CGFloat = 22,
-		underlineColor: UIColor? = nil) -> NSAttributedString {
+		underlineColor: UIColor? = nil,
+		kern: CGFloat = -0.41) -> NSAttributedString {
 
 		guard !ProcessInfo.processInfo.isTesting else {
 
@@ -103,7 +104,7 @@ public extension NSAttributedString {
 		var attributes: [Key: Any] = [
 			.foregroundColor: textColor,
 			.paragraphStyle: paragraphStyle,
-			.kern: -0.41
+			.kern: kern
 		]
 		if let underlineColor = underlineColor {
 			attributes[.underlineColor] = underlineColor

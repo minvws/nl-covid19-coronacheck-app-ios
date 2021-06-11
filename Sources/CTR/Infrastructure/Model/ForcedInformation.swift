@@ -7,11 +7,11 @@
 
 import UIKit
 
-/// the what's new pages content for the forced information
-struct ForcedInformationPage {
+/// The what's new pages content for the forced information
+struct ForcedInformationPage: Equatable {
 
 	/// The image of a forced information page
-	let image: UIImage
+	let image: UIImage?
 
 	/// The tagline of a forced information page
 	let tagline: String

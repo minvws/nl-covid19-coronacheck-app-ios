@@ -293,7 +293,7 @@ targets:
             - CFBundleTypeRole: Editor
               CFBundleURLName: nl.rijksoverheid.ctr
               CFBundleURLSchemes:
-                - coronatester-app-dev
+                - coronacheck
         UILaunchStoryboardName: LaunchScreenHolder
   
   Verifier:
@@ -403,6 +403,8 @@ schemes:
       appTargetName: Holder
       testTargetName: CTRTests
       configEnvironment: Development
+    run:
+      language: nl
 
   Holder Test:
     templates:
@@ -438,6 +440,8 @@ schemes:
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: Development
+    run: 
+      language: nl
 
   Verifier Test:
     templates:

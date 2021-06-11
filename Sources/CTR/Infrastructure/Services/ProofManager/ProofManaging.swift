@@ -36,23 +36,7 @@ protocol ProofManaging: AnyObject {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void)
-
-	/// Create a nonce and a stoken
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchNonce(
-		onCompletion: @escaping (() -> Void),
-		onError: @escaping ((Error) -> Void))
-
-	/// Fetch the signed Test Result
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchSignedTestResult(
-		onCompletion: @escaping ((SignedTestResultState) -> Void),
-		onError: @escaping ((Error) -> Void))
+		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void)
 
 	/// Get the provider for a test token
 	/// - Parameter token: the test token
@@ -69,6 +53,8 @@ protocol ProofManaging: AnyObject {
 
 	/// Remove the test wrapper
 	func removeTestWrapper()
+
+	func migrateExistingProof()
 }
 
 enum ProofError: Error {

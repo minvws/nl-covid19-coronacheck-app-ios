@@ -75,11 +75,6 @@ class VerifierIdentityView: BaseView {
 		return view
 	}()
 
-	override func setupViews() {
-
-		super.setupViews()
-	}
-
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 

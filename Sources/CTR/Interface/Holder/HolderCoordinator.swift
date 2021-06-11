@@ -6,16 +6,11 @@
 */
 
 import UIKit
+import CoreData
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
-
-	/// Navigate to enlarged QR
-	func navigateToEnlargedQR()
-
-	/// Navigate to appointment
-	func navigateToAppointment()
 
 	/// Navigate to About Making a QR
 	func navigateToAboutMakingAQR()
@@ -38,16 +33,31 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	func presentInformationPage(title: String, body: String)
 
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
+
 	func userWishesToCreateAQR()
 
 	func userWishesToCreateANegativeTestQR()
+
+	func userWishesToChooseLocation()
+
+	func userHasNotBeenTested()
+
+	func userWishesToCreateANegativeTestQRFromGGD()
 
 	func userWishesToCreateAVaccinationQR()
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+	
 	func openUrl(_ url: URL, inApp: Bool)
+
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) // probably some other params also.
 }
+
 // swiftlint:enable class_delegate_protocol
 
 class HolderCoordinator: SharedCoordinator {
@@ -55,7 +65,6 @@ class HolderCoordinator: SharedCoordinator {
 	var networkManager: NetworkManaging = Services.networkManager
 	var openIdManager: OpenIdManaging = Services.openIdManager
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
-
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	// Designated starter method
@@ -135,14 +144,14 @@ class HolderCoordinator: SharedCoordinator {
         }
     }
 
-	func startVaccinationEventFlow() {
+	func startEventFlow() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
-			let vaccinationCoordinator = VaccinationCoordinator(
+			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
 				delegate: self
 			)
-			startChildCoordinator(vaccinationCoordinator)
+			startChildCoordinator(eventCoordinator)
 		}
 	}
 
@@ -169,6 +178,15 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
+
+	func presentChangeRegionBottomSheet(currentRegion: QRCodeValidityRegion, callback: @escaping (QRCodeValidityRegion) -> Void) {
+		let viewController = ToggleRegionViewController(viewModel: ToggleRegionViewModel(currentRegion: currentRegion, didChangeCallback: callback))
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.present(viewController, animated: true, completion: nil)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -191,7 +209,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity
+				dataStoreManager: Services.dataStoreManager
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
@@ -206,30 +224,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	/// Navigate to enlarged QR
-	func navigateToEnlargedQR() {
+	private func navigateToShowQR(_ greenCard: GreenCard) {
 
-		let destination = EnlargedQRViewController(
-			viewModel: EnlargedQRViewModel(
+		let destination = ShowQRViewController(
+			viewModel: ShowQRViewModel(
 				coordinator: self,
+				greenCard: greenCard,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				maxValidity: maxValidity
+				configuration: generalConfiguration
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to appointment
-	func navigateToAppointment() {
-
-		let destination = AppointmentViewController(
-			viewModel: AppointmentViewModel(
-				coordinator: self,
-				maxValidity: maxValidity
-			)
-		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
@@ -267,6 +272,16 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
+	private func navigateToChooseTestLocation() {
+
+		let destination = ChooseTestLocationViewController(
+			viewModel: ChooseTestLocationViewModel(
+				coordinator: self
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
 	/// Navigate to About test Result Scene
 	func navigateToAboutTestResult() {
 
@@ -277,10 +292,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 
-		let navController = UINavigationController(rootViewController: destination)
+		destination.transitioningDelegate = bottomSheetTransitioningDelegate
+		destination.modalPresentationStyle = .custom
+		destination.modalTransitionStyle = .coverVertical
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
-			navController,
+			destination,
 			animated: true,
 			completion: nil
 		)
@@ -303,24 +320,73 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body
+				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				}
 			)
 		)
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
 		viewController.modalPresentationStyle = .custom
 		viewController.modalTransitionStyle = .coverVertical
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(viewController, animated: true, completion: nil)
-//		let destination = UINavigationController(rootViewController: viewController)
-//		sidePanel?.selectedViewController?.present(destination, animated: true, completion: nil)
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
+			.present(viewController, animated: true, completion: nil)
+	}
+
+	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
+		}
 	}
 
 	func userWishesToCreateANegativeTestQR() {
 		navigateToTokenEntry()
 	}
 
+	func userWishesToChooseLocation() {
+		navigateToChooseTestLocation()
+	}
+
+	func userHasNotBeenTested() {
+		
+		let viewController = MakeTestAppointmentViewController(
+			viewModel: MakeTestAppointmentViewModel(
+				coordinator: self,
+				title: .holderNoTestTitle,
+				message: String(format: .holderNoTestBody, "\(maxValidity)", "\(maxValidity)"),
+				buttonTitle: .holderNoTestButtonTitle
+			)
+		)
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
+			.present(viewController, animated: true, completion: nil)
+	}
+
+	func userWishesToCreateANegativeTestQRFromGGD() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithTVS(eventMode: EventMode.test)
+		}
+	}
+
 	func userWishesToCreateAVaccinationQR() {
-		startVaccinationEventFlow()
+		startEventFlow()
 	}
 
 	func userWishesToCreateAQR() {
@@ -329,6 +395,31 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userDidScanRequestToken(requestToken: RequestToken) {
 		navigateToTokenEntry(requestToken)
+	}
+
+	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
+		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
+	}
+
+	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
+
+		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
+		presentInformationPage(title: title, body: message)
+	}
+
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
+
+		do {
+			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
+				navigateToShowQR(greenCard)
+			} else {
+				print("oops")
+			}
+		} catch {
+			// No card
+			print("oops")
+		}
 	}
 }
 
@@ -414,9 +505,9 @@ extension HolderCoordinator: MenuDelegate {
 	}
 }
 
-extension HolderCoordinator: VaccinationFlowDelegate {
+extension HolderCoordinator: EventFlowDelegate {
 
-	func vaccinationFlowDidComplete() {
+	func eventFlowDidComplete() {
 
 		/// The user canceled the vaccination flow. Go back to the dashboard.
 
@@ -430,14 +521,14 @@ extension HolderCoordinator: VaccinationFlowDelegate {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				maxValidity: maxValidity
+				dataStoreManager: Services.dataStoreManager
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
 
-	func vaccinationFlowDidCancel() {
+	func eventFlowDidCancel() {
 
 		/// The user cancelled the flow. Go back one page
 

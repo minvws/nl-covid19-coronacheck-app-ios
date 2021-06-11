@@ -61,7 +61,7 @@ class VaccinationStartViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .back
+		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
 	}
 
 	func test_primaryButtonTapped() {
@@ -74,6 +74,19 @@ class VaccinationStartViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue
+		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+	}
+
+	func test_secondaryButtonTapped() {
+
+		// Given
+		loadView()
+
+		// When
+		sut.sceneView.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedOpenUrl) == true
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: .holderVaccinationStartNoDigiDURL)
 	}
 }

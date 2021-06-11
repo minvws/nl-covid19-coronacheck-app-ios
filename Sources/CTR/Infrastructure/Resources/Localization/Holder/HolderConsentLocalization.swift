@@ -36,16 +36,6 @@ extension String {
 		return Localization.string(for: "holder.consent.item.2")
 	}
 
-	static var holderConsentItemThree: String {
-
-		return Localization.string(for: "holder.consent.item.3")
-	}
-
-	static var holderConsentItemFour: String {
-
-		return Localization.string(for: "holder.consent.item.4")
-	}
-
 	static var holderConsentButtonTitle: String {
 
 		return Localization.string(for: "holder.consent.button")

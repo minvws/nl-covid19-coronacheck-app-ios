@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -19,7 +18,6 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 		static let messageLineHeight: CGFloat = 22
 
 		// Margins
-		static let margin: CGFloat = 20.0
 		static let spacing: CGFloat = 24.0
 		static let stackviewVerticalMargin: CGFloat = 32.0
 	}
@@ -63,6 +61,7 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
+		stackView.setCustomSpacing(ViewTraits.stackviewVerticalMargin, after: messageLabel)
 		stackView.addArrangedSubview(buttonsStackView)
 	}
 
@@ -72,18 +71,8 @@ class ChooseQRCodeTypeView: ScrolledStackView {
 
 		NSLayoutConstraint.activate([
 			// StackView
-			buttonsStackView.topAnchor.constraint(
-				equalTo: messageLabel.bottomAnchor,
-				constant: ViewTraits.stackviewVerticalMargin
-			),
-			buttonsStackView.leadingAnchor.constraint(
-				equalTo: leadingAnchor,
-				constant: ViewTraits.margin
-			),
-			buttonsStackView.trailingAnchor.constraint(
-				equalTo: trailingAnchor,
-				constant: -ViewTraits.margin
-			)
+			buttonsStackView.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
+			buttonsStackView.trailingAnchor.constraint(equalTo: stackView.trailingAnchor)
 		])
 	}
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol RemoteConfigManaging {
+protocol RemoteConfigManaging: AnyObject {
 
 	/// Initialize
 	init()
@@ -41,6 +41,9 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
+	
+	/// The crypto verifier utility
+	var cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
 
 	/// The current app version
 	var appVersion: String {
@@ -76,15 +79,17 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	///   - resultWrapper: the result wrapper
 	///   - completion: completion handler
 	private func handleResultWrapper(
-		_ resultWrapper: Result<RemoteConfiguration, NetworkError>,
+		_ resultWrapper: Result<(RemoteConfiguration, Data), NetworkError>,
 		completion: @escaping (LaunchState) -> Void) {
 
 		switch resultWrapper {
-			case let .success(remoteConfiguration):
+			case .success((let remoteConfiguration, let data)):
 				// Update the last fetch time
 				lastFetchedTimestamp = Date()
 				// Persist the remote configuration
 				storedConfiguration = remoteConfiguration
+				// Store as JSON file
+				cryptoVerifierUtility.store(data, for: .remoteConfiguration)
 				// Decide what to do
 				compare(remoteConfiguration, completion: completion)
 
@@ -118,7 +123,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	///   - remoteConfiguration: the remote configuration
 	///   - completion: completion handler
 	private func compare(
-		_ remoteConfiguration: AppVersionInformation,
+		_ remoteConfiguration: RemoteInformation,
 		completion: @escaping (LaunchState) -> Void) {
 
 		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)

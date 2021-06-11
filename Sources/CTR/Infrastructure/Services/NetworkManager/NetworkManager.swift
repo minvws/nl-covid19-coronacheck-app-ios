@@ -29,18 +29,26 @@ class NetworkManager: NetworkManaging, Logging {
 			delegateQueue: nil)
 	}
 
-	/// Get the access tokens
+	/// Get the access tokens for the various event providers
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func fetchVaccinationAccessTokens(tvsToken: String, completion: @escaping (Result<[Vaccination.AccessToken], NetworkError>) -> Void) {
+	func fetchEventAccessTokens(
+		tvsToken: String,
+		completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
+
+		let headers: [HTTPHeaderKey: String] = [
+			HTTPHeaderKey.authorization: "Bearer \(tvsToken)",
+			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
+		]
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.vaccinationAccessTokensUrl,
 			method: .POST,
-			body: ["tvs_token": tvsToken]
+			headers: headers
 		)
-		func open(result: Result<ArrayEnvelope<Vaccination.AccessToken>, NetworkError>) {
+		
+		func open(result: Result<ArrayEnvelope<EventFlow.AccessToken>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
@@ -49,10 +57,10 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void) {
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
-			url: networkConfiguration.nonceUrl,
+			url: networkConfiguration.prepareIssueUrl,
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
@@ -61,25 +69,19 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<[IssuerPublicKey], NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.publicKeysUrl,
 			method: .GET
 		)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-
-		func open(result: Result<ArrayEnvelope<IssuerPublicKey>, NetworkError>) {
-			completion(result.map { $0.items })
-		}
-
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-		decodeSignedJSONData(request: urlRequest, completion: open)
+		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<RemoteConfiguration, NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void) {
 		let urlRequest = constructRequest(
 			url: networkConfiguration.remoteConfigurationUrl,
 			method: .GET
@@ -88,28 +90,19 @@ class NetworkManager: NetworkManaging, Logging {
 		decodeSignedJSONData(request: urlRequest, completion: completion)
 	}
 
-	/// Fetch the test results with issue signature message
-	/// - Parameters:
-	///   - dictionary: dictionary
-	///   - completionHandler: the completion handler
-	func fetchTestResultsWithISM(
+	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<Data, NetworkError>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
 
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 			let urlRequest = constructRequest(
-				url: networkConfiguration.signUrl,
+				url: networkConfiguration.credentialUrl,
 				method: .POST,
 				body: jsonData
 			)
 			sessionDelegate?.setSecurityStrategy(SecurityStrategy.data)
-			decodedSignedData(request: urlRequest, ignore400: true) { resultwrapper in
-				DispatchQueue.main.async {
-
-					completion(resultwrapper)
-				}
-			}
+			decodeSignedJSONData(request: urlRequest, completion: completion)
 		} catch {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
@@ -134,13 +127,13 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchVaccinationEventProviders(completion: @escaping (Result<[Vaccination.EventProvider], NetworkError>) -> Void) {
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,
 			method: .GET
 		)
-		func open(result: Result<ArrayEnvelope<Vaccination.EventProvider>, NetworkError>) {
+		func open(result: Result<ArrayEnvelope<EventFlow.EventProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
 
@@ -182,13 +175,15 @@ class NetworkManager: NetworkManaging, Logging {
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
-	/// Get a unomi result
+	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
 	///   - provider: the event provider
+	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
-	func fetchVaccinationEventInformation(
-		provider: Vaccination.EventProvider,
-		completion: @escaping (Result<Vaccination.EventInformationAvailable, NetworkError>) -> Void) {
+	func fetchEventInformation(
+		provider: EventFlow.EventProvider,
+		filter: String?,
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -207,18 +202,28 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+
+		var body: Data?
+		if let filter = filter {
+			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
+			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
+		}
+
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
+		
 		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
-	/// Get  events
+	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
+	///   - filter: filter on test or vaccination
 	///   - completion: the completion handler
-	func fetchVaccinationEvents(
-		provider: Vaccination.EventProvider,
-		completion: @escaping (Result<(Vaccination.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+	func fetchEvents(
+		provider: EventFlow.EventProvider,
+		filter: String?,
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.eventURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -237,7 +242,14 @@ class NetworkManager: NetworkManaging, Logging {
 			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, headers: headers)
+
+		var body: Data?
+		if let filter = filter {
+			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
+			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
+		}
+
+		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
 		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
@@ -333,8 +345,9 @@ class NetworkManager: NetworkManaging, Logging {
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
-		completion: @escaping (Result<Object, NetworkError>) -> Void) {
-		data(request: request, ignore400: ignore400) { result in
+		completion: @escaping (Result<(Object, Data), NetworkError>) -> Void) {
+		// Fetch data
+		data(request: request, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
 
 			/// Decode to SignedResult
 			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
@@ -349,10 +362,10 @@ class NetworkManager: NetworkManaging, Logging {
 							if valid {
 								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
-									switch decodedResult {
-										case let .success(object):
-											completion(.success(object))
-										case let .failure(responseError):
+									switch (decodedResult, decodedPayloadData) {
+										case (.success(let object), let decodedPayloadData):
+											completion(.success((object, decodedPayloadData)))
+										case (.failure(let responseError), _):
 											completion(.failure(responseError.asNetworkError))
 									}
 								}
@@ -366,6 +379,25 @@ class NetworkManager: NetworkManaging, Logging {
 					DispatchQueue.main.async {
 						completion(.failure(networkError))
 					}
+			}
+		}
+	}
+	
+	/// Decode a signed response into JSON
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler
+	private func decodeSignedJSONData<Object: Decodable>(
+		request: Result<URLRequest, NetworkError>,
+		ignore400: Bool = false,
+		completion: @escaping (Result<Object, NetworkError>) -> Void) {
+		
+		decodeSignedJSONData(request: request, ignore400: ignore400) { (result: Result<(Object, Data), NetworkError>) in
+			switch result {
+				case .success((let object, _)):
+					completion(.success(object))
+				case .failure(let error):
+					completion(.failure(error))
 			}
 		}
 	}
@@ -509,9 +541,10 @@ class NetworkManager: NetworkManaging, Logging {
 			self.logVerbose("Response Object: \(object)")
 			return .success(object)
 		} catch {
-			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-				self.logVerbose("Raw JSON: \(json)")
-			}
+//			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+				self.logDebug("Raw: \(String(decoding: data, as: UTF8.self))")
+//				self.logDebug("Raw JSON: \(json)")
+//			}
 			self.logError("Error Deserializing \(Object.self): \(error)")
 			return .failure(.cannotDeserialize)
 		}
@@ -523,7 +556,10 @@ class NetworkManager: NetworkManaging, Logging {
 		switch result {
 			case let .success(result):
 				return decodeJson(data: result.1)
-					.mapError { $0.asNetworkError }
+					.mapError {
+						$0.asNetworkError
+						
+					}
 			case let .failure(error):
 				return .failure(error)
 		}
@@ -542,6 +578,8 @@ class NetworkManager: NetworkManaging, Logging {
 				return .responseCached
 			case 300 ... 399:
 				return .redirection
+			case 429:
+				return .serverBusy
 			case 400 ... 499:
 				return .resourceNotFound
 			case 500 ... 599:
@@ -575,8 +613,21 @@ class NetworkManager: NetworkManaging, Logging {
 	
 	private lazy var jsonDecoder: JSONDecoder = {
 		let decoder = JSONDecoder()
-		decoder.dateDecodingStrategy = .formatted(dateFormatter)
+//		decoder.dateDecodingStrategy = .formatted(dateFormatter)
+		decoder.dateDecodingStrategy = .iso8601
 		decoder.source = .api
 		return decoder
 	}()
+}
+
+private extension Result where Success == (URLResponse, Data) {
+	
+	func data() -> Data? {
+		switch self {
+			case .success((_, let data)):
+				return data
+			default:
+				return nil
+		}
+	}
 }

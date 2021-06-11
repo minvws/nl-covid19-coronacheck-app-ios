@@ -39,6 +39,7 @@ class VaccinationStartViewController: BaseViewController {
 		sceneView.title = .holderVaccinationStartTitle
 		sceneView.message = .holderVaccinationStartMessage
 		sceneView.primaryTitle = .holderVaccinationStartAction
+		sceneView.secondaryButtonTitle = .holderVaccinationStartNoDigiD
 		navigationItem.hidesBackButton = true
 		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
 
@@ -47,10 +48,19 @@ class VaccinationStartViewController: BaseViewController {
 			self?.viewModel.primaryButtonTapped()
 		}
 
+		sceneView.secondaryButtonTappedCommand = { [weak self] in
+
+			if let url = URL(string: .holderVaccinationStartNoDigiDURL) {
+				self?.viewModel.openUrl(url)
+			}
+		}
+
 		sceneView.contentTextView.linkTouched { [weak self] url in
 
 			self?.viewModel.openUrl(url)
 		}
+
+		styleBackButton(buttonText: "")
 	}
 
 	@objc func backButtonTapped() {

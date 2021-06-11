@@ -63,4 +63,14 @@ extension String {
 
 		return Localization.string(for: "verifier.result.identity.monthofbirth")
 	}
+
+	static var verifierResultDeniedRegionTitle: String {
+		
+		return Localization.string(for: "verifier.result.denied.region.title")
+	}
+	
+	static var verifierResultDeniedRegionMessage: String {
+		
+		return Localization.string(for: "verifier.result.denied.region.message")
+	}
 }

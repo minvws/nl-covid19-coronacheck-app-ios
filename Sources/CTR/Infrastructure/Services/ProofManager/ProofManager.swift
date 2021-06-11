@@ -15,11 +15,13 @@ class ProofManager: ProofManaging, Logging {
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
+	var walletManager: WalletManaging = Services.walletManager
+	var cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
 
 	internal var testProviders = [TestProvider]()
 	
 	/// Structure to hold proof data
-	private struct ProofData: Codable {
+	internal struct ProofData: Codable {
 		
 		/// The key of the holder
 		var testTypes: [TestType]
@@ -43,7 +45,7 @@ class ProofManager: ProofManaging, Logging {
 	
 	/// The proof data stored in the keychain
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
-	private var proofData: ProofData = .empty
+	internal var proofData: ProofData = .empty
 
 	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
 	var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
@@ -52,7 +54,7 @@ class ProofManager: ProofManaging, Logging {
 	required init() {
 		// Required by protocol
 		
-		removeTestWrapper()
+//		removeTestWrapper()
 	}
 	
 	/// Get the providers
@@ -98,12 +100,13 @@ class ProofManager: ProofManaging, Logging {
 		
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 			
-			// Response is of type (Result<[IssuerPublicKey], NetworkError>)
+			// Response is of type (Result<(IssuerPublicKeys, Data), NetworkError>)
 			switch resultwrapper {
-				case let .success(keys):
+				case .success((let keys, let data)):
 					
-					if let manager = self?.cryptoManager, manager.setIssuerPublicKeys(keys) {
+					if let manager = self?.cryptoManager, manager.setIssuerDomesticPublicKeys(keys) {
 						self?.keysFetchedTimestamp = Date()
+						self?.cryptoVerifierUtility.store(data, for: .publicKeys)
 						onCompletion?()
 					} else {
 						// Loading of the public keys into the CL Library failed.
@@ -125,101 +128,6 @@ class ProofManager: ProofManaging, Logging {
 		}
 	}
 	
-	/// Create a nonce and a stoken
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchNonce(
-		onCompletion: @escaping (() -> Void),
-		onError: @escaping ((Error) -> Void)) {
-		
-		networkManager.getNonce { [weak self] resultwrapper in
-			
-			switch resultwrapper {
-				case let .success(envelope):
-					self?.cryptoManager.setNonce(envelope.nonce)
-					self?.cryptoManager.setStoken(envelope.stoken)
-					onCompletion()
-					
-				case let .failure(networkError):
-					self?.logError("Can't fetch the nonce: \(networkError.localizedDescription)")
-					onError(networkError)
-			}
-		}
-	}
-	
-	/// Fetch the signed Test Result
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchSignedTestResult(
-		onCompletion: @escaping ((SignedTestResultState) -> Void),
-		onError: @escaping ((Error) -> Void)) {
-		
-		guard let icm = cryptoManager.generateCommitmentMessage(),
-			  let icmDictionary = icm.convertToDictionary(),
-			  let stoken = cryptoManager.getStoken(),
-			  let wrapper = getSignedWrapper() else {
-			
-			onError(ProofError.missingParams)
-			return
-		}
-		
-		let dictionary: [String: AnyObject] = [
-			"test": generateString(object: wrapper) as AnyObject,
-			"stoken": stoken as AnyObject,
-			"icm": icmDictionary as AnyObject
-		]
-		
-		networkManager.fetchTestResultsWithISM(dictionary: dictionary) { [weak self] resultwrapper in
-			
-			switch resultwrapper {
-				case let .success(data):
-					self?.parseSignedTestResult(data, onCompletion: onCompletion)
-					
-				case let .failure(networkError):
-					self?.logError("Can't fetch the signed test result: \(networkError.localizedDescription)")
-					onError(networkError)
-			}
-		}
-	}
-	
-	private func parseSignedTestResult(_ data: Data, onCompletion: @escaping ((SignedTestResultState) -> Void)) {
-		
-		logDebug("ISM Response: \(String(decoding: data, as: UTF8.self))")
-		
-		removeTestWrapper()
-		do {
-			let ismResponse = try JSONDecoder().decode(SignedTestResultErrorResponse.self, from: data)
-			onCompletion(ismResponse.asSignedTestResultState())
-			
-		} catch {
-			// No error from the signer. Let's create the credential from the proof
-			let result = cryptoManager.createCredential(data)
-			switch result {
-				case let .success(credential):
-					cryptoManager.storeCredential(credential)
-					onCompletion(SignedTestResultState.valid)
-				case let .failure(error):
-					logError("Can't create credential: \(error.localizedDescription)")
-					cryptoManager.removeCredential()
-
-					let response: SignedTestResultErrorResponse
-
-					switch error {
-						case CryptoError.keyMissing:
-							response = SignedTestResultErrorResponse(status: error.localizedDescription, code: 19991)
-						case let CryptoError.credentialCreateFail(reason):
-							response = SignedTestResultErrorResponse(status: reason, code: 19992)
-						default:
-							response = SignedTestResultErrorResponse(status: error.localizedDescription, code: 19990)
-					}
-
-					onCompletion(SignedTestResultState.unknown(response: response))
-			}
-		}
-	}
-	
 	/// Get the test result for a token
 	/// - Parameters:
 	///   - token: the request token
@@ -229,7 +137,7 @@ class ProofManager: ProofManaging, Logging {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<TestResultWrapper, Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void) {
 		
 		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
@@ -247,7 +155,7 @@ class ProofManager: ProofManaging, Logging {
 						self.proofData.testWrapper = wrapper.0
 						self.proofData.signedWrapper = wrapper.1
 					}
-					onCompletion(.success(wrapper.0))
+					onCompletion(.success(wrapper))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
 					onCompletion(.failure(error))
@@ -287,5 +195,29 @@ class ProofManager: ProofManaging, Logging {
 		}
 		return ""
 	}
-	
+
+	// MARK: - Migrating to Database
+
+	func migrateExistingProof() {
+
+		if let testEvent = getTestWrapper(),
+		   let signedProof = getSignedWrapper(),
+		   let sampleDate = testEvent.result?.sampleDate,
+		   let sampleTime = TimeInterval(sampleDate),
+		   testEvent.status == .complete {
+
+			// Convert to eventGroup
+			_ = walletManager.storeEventGroup(
+				.test,
+				providerIdentifier: testEvent.providerIdentifier,
+				signedResponse: signedProof,
+				issuedAt: Date(timeIntervalSince1970: sampleTime)
+			)
+			// Remove old data
+			removeTestWrapper()
+		}
+
+		// Convert Credential
+		cryptoManager.migrateExistingCredential(walletManager)
+	}
 }

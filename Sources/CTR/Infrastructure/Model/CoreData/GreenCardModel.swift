@@ -35,3 +35,32 @@ class GreenCardModel {
 		return nil
 	}
 }
+
+extension GreenCard {
+
+	/// Get the type of a greenCard as a GreenCardType
+	/// - Returns: greenCard type
+	func getType() -> GreenCardType? {
+		if let type = type {
+			return GreenCardType(rawValue: type)
+		}
+		return nil
+	}
+
+	/// Get the active credential with the longest lifetime for a date
+	/// - Parameter now: the date for the credential (defaults to now)
+	/// - Returns: the active credential
+	func getActiveCredential(forDate now: Date = Date()) -> Credential? {
+
+		if let list = credentials?.allObjects as? [Credential] {
+			return list
+				.filter { $0.expirationTime != nil }
+				.filter { $0.validFrom != nil }
+				.filter { $0.expirationTime! > now }
+				.filter { $0.validFrom! < now }
+				.sorted { $0.validFrom! < $1.validFrom! }
+				.last
+		}
+		return nil
+	}
+}
