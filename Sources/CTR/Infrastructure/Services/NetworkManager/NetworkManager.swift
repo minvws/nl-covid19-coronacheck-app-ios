@@ -183,7 +183,7 @@ class NetworkManager: NetworkManaging, Logging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -210,9 +210,8 @@ class NetworkManager: NetworkManaging, Logging {
 		}
 
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
-		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
-		
-		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
+		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))		
+		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
 	/// Get  events from an event provider
