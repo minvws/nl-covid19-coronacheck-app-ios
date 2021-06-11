@@ -108,8 +108,8 @@ protocol NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) 
-	
+		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void)
+
 	/// Get  events from an event provider
 	/// - Parameters:
 	///   - provider: the event provider
