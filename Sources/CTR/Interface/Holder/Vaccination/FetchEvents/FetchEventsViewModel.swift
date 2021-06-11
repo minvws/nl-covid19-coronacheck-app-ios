@@ -58,15 +58,26 @@ final class FetchEventsViewModel: Logging {
 		switch eventProvidersResult {
 			case .failure(let networkError):
 				// No error tolerance here, if any failures then bail out.
-				self.coordinator?.fetchEventsScreenDidFinish(.errorRequiringRestart(error: networkError, eventMode: self.eventMode))
+				self.coordinator?.fetchEventsScreenDidFinish(
+					.errorRequiringRestart(
+						error: networkError,
+						eventMode: self.eventMode
+					)
+				)
 
 			case .success(let eventProviders):
-				// Unomi call
-				self.fetchHasEventInformation(forEventProviders: eventProviders, filter: eventMode.queryFilterValue, completion: handleFetchHasEventInformationResponse)
+				// Do the Unomi call
+				self.fetchHasEventInformation(
+					forEventProviders: eventProviders,
+					filter: eventMode.queryFilterValue,
+					completion: handleFetchHasEventInformationResponse
+				)
 		}
 	}
 
-	func handleFetchHasEventInformationResponse(eventProvidersWithEventInformation: [EventFlow.EventProvider], networkErrors: [NetworkError]) {
+	func handleFetchHasEventInformationResponse(
+		eventProvidersWithEventInformation: [EventFlow.EventProvider],
+		networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty

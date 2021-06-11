@@ -111,7 +111,7 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,

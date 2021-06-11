@@ -78,7 +78,7 @@ protocol NetworkManaging {
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler

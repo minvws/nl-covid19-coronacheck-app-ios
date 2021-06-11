@@ -62,6 +62,21 @@ extension String {
 		return Localization.string(for: "general.error.technical.custom")
 	}
 
+	static var serverTooBusyErrorTitle: String {
+
+		return Localization.string(for: "general.networkwasbusy.title")
+	}
+
+	static var serverTooBusyErrorText: String {
+
+		return Localization.string(for: "general.networkwasbusy.text")
+	}
+
+	static var serverTooBusyErrorButton: String {
+
+		return Localization.string(for: "general.networkwasbusy.button")
+	}
+
 	static var menuVersion: String {
 
 		return Localization.string(for: "general.menu.version")
