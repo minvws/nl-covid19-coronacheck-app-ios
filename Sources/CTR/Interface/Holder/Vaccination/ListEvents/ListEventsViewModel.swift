@@ -132,7 +132,7 @@ class ListEventsViewModel: Logging {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .holderVaccinationAlertTitle,
-			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestResultsAlertMessage,
+			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
 			okAction: { [weak self] _ in

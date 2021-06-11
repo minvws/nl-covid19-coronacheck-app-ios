@@ -99,6 +99,10 @@
 "general.vaccination" = "vaccinatie";
 "general.testresult" = "testuitslag";
 
+"general.networkwasbusy.title" = "Sorry, het is erg druk";
+"general.networkwasbusy.text" = "Het is erg druk, probeer het later op de dag nog eens";
+"general.networkwasbusy.button" = "Naar Mijn overzicht";
+
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
 "toggleRegion.label.topText.nl" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
@@ -313,6 +317,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.event.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
+"holder.test.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je test uitslag op te halen.";
 "holder.vaccination.alert.cancel" = "Nee, terug";
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
