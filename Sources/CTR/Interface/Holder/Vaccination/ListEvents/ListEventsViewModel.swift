@@ -88,7 +88,7 @@ class ListEventsViewModel: Logging {
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
 		remoteTestEvents: [RemoteTestEvent],
 		networkManager: NetworkManaging = Services.networkManager,
-		walletManager: WalletManaging = WalletManager(),
+		walletManager: WalletManaging = Services.walletManager,
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	) {

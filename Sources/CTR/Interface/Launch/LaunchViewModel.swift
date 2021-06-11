@@ -13,6 +13,7 @@ class LaunchViewModel {
 
 	private var versionSupplier: AppVersionSupplierProtocol
 	private var remoteConfigManager: RemoteConfigManaging
+	private var walletManager: WalletManaging
 	private var proofManager: ProofManaging
 	private var jailBreakDetector: JailBreakProtocol
 	private var userSettings: UserSettingsProtocol
@@ -46,7 +47,8 @@ class LaunchViewModel {
 		remoteConfigManager: RemoteConfigManaging,
 		proofManager: ProofManaging,
 		jailBreakDetector: JailBreakProtocol = JailBreakDetector(),
-		userSettings: UserSettingsProtocol = UserSettings()) {
+		userSettings: UserSettingsProtocol = UserSettings(),
+		walletManager: WalletManaging = Services.walletManager) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
@@ -55,6 +57,7 @@ class LaunchViewModel {
 		self.flavor = flavor
 		self.jailBreakDetector = jailBreakDetector
 		self.userSettings = userSettings
+		self.walletManager = walletManager
 
 		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
 		message = flavor == .holder  ? .holderLaunchText : .verifierLaunchText
@@ -121,9 +124,20 @@ class LaunchViewModel {
 		remoteConfigManager.update { [weak self] updateState in
 
 			self?.configStatus = updateState
+			self?.checkWallet()
 			self?.isUpdatingConfiguration = false
 			self?.handleState()
 		}
+	}
+
+	private func checkWallet() {
+
+		let configuration = remoteConfigManager.getConfiguration()
+		walletManager.expireEventGroups(
+			vaccinationValidity: configuration.vaccinationEventValidity,
+			recoveryValidity: configuration.recoveryEventValidity,
+			testValidity: configuration.testEventValidity
+		)
 	}
 
 	/// Update the Issuer Public keys
