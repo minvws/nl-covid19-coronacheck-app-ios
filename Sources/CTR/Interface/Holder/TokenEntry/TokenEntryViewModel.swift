@@ -375,6 +375,8 @@ class TokenEntryViewModel {
 				case let .failure(error):
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
+						self.showServerTooBusyError()
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription

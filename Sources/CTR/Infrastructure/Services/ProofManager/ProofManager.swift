@@ -145,7 +145,7 @@ class ProofManager: ProofManaging, Logging {
 			return
 		}
 		
-		networkManager.getTestResult(provider: provider, token: token, code: code) { response in
+		networkManager.fetchTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
 			
 			switch response {

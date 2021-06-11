@@ -152,7 +152,7 @@ class NetworkSpy: NetworkManaging {
 	var invokedGetTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
 	var stubbedGetTestResultCompletionResult: (Result<(TestResultWrapper, SignedResponse), NetworkError>, Void)?
 
-	func getTestResult(
+	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,

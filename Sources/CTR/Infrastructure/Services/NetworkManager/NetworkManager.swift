@@ -147,7 +147,7 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
-	func getTestResult(
+	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
