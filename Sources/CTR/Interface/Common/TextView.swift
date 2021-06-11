@@ -113,4 +113,9 @@ class TextView: UITextView, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         textChangedHandlers.forEach { $0(textView.text) }
     }
+	
+	func textViewDidChangeSelection(_ textView: UITextView) {
+		// Allows links to be tapped but disables text selection
+		textView.selectedTextRange = nil
+	}
 }
