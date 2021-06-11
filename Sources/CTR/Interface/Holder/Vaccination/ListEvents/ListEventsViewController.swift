@@ -34,8 +34,8 @@ class ListEventsViewController: BaseViewController {
 		let title: String
 		let subTitle: String
 		let cancelAction: ((UIAlertAction) -> Void)?
-		let cancelTitle: String
-		let okAction: ((UIAlertAction) -> Void)
+		let cancelTitle: String?
+		let okAction: ((UIAlertAction) -> Void)?
 		let okTitle: String
 	}
 
@@ -195,13 +195,15 @@ class ListEventsViewController: BaseViewController {
 				handler: content.okAction
 			)
 		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.cancelTitle,
-				style: .default,
-				handler: content.cancelAction
+		if let cancelTitle = content.cancelTitle {
+			alertController.addAction(
+				UIAlertAction(
+					title: cancelTitle,
+					style: .default,
+					handler: content.cancelAction
+				)
 			)
-		)
+		}
 		present(alertController, animated: true, completion: nil)
 	}
 }
