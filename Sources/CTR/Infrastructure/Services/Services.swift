@@ -10,8 +10,8 @@ import Foundation
 /// Global container for the different services used in the app
 final class Services {
 	
+	private static var cryptoLibUtilityType: CryptoLibUtility.Type = CryptoLibUtility.self
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
-	private static var cryptoVerifierUtilityType: CryptoVerifierUtility.Type = CryptoVerifierUtility.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
@@ -92,9 +92,9 @@ final class Services {
         return networkManagingType.init(configuration: networkConfiguration, validator: validator)
     }()
 
-	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
+	static private(set) var cryptoLibUtility: CryptoLibUtility = cryptoLibUtilityType.init()
 
-	static private(set) var cryptoVerifierUtility: CryptoVerifierUtility = cryptoVerifierUtilityType.init()
+	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
 	
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 

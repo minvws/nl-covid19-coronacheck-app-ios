@@ -58,6 +58,9 @@
 "general.menu.open" = "Open zijmenu";
 "general.menu.close" = "Sluit zijmenu";
 "general.list.accessibility" = "%@ van %@.";
+"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
+"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"general.error.cryptolib.retry" = "Probeer opnieuw";
 
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
