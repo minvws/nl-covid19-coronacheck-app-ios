@@ -108,7 +108,7 @@ class NetworkSpy: NetworkManaging {
 	var invokedGetTestProvidersCount = 0
 	var stubbedGetTestProvidersCompletionResult: (Result<[TestProvider], NetworkError>, Void)?
 
-	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
 		invokedGetTestProviders = true
 		invokedGetTestProvidersCount += 1
 		if let result = stubbedGetTestProvidersCompletionResult {
