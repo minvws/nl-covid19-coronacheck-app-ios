@@ -102,6 +102,9 @@
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.networkwasbusy.text" = "Het is erg druk, probeer het later op de dag nog eens";
 "general.networkwasbusy.button" = "Naar Mijn overzicht";
+"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
+"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"general.error.cryptolib.retry" = "Probeer opnieuw";
 
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";

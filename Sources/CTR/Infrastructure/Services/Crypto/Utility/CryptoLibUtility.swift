@@ -9,7 +9,22 @@
 import Foundation
 import Clcore
 
-final class CryptoVerifierUtility: Logging {
+protocol CryptoLibUtilityProtocol: AnyObject {
+	
+	/// Return true when core library is initialized
+	var isInitialized: Bool { get }
+	
+	/// Initialize core library
+	func initialize()
+	
+	/// Store data in documents directory
+	/// - Parameters:
+	///   - data: Data that needs to be saved
+	///   - file: File type
+	func store(_ data: Data, for file: CryptoLibUtility.File)
+}
+
+final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	
 	struct File: OptionSet {
 		static let publicKeys = File(rawValue: 1 << 0)
@@ -27,6 +42,9 @@ final class CryptoVerifierUtility: Logging {
 			}
 		}
 	}
+	
+	/// Returns true when core library is initialized
+	private(set) var isInitialized: Bool = false
 	
 	private var shouldInitialize: File {
 		didSet {
@@ -52,6 +70,7 @@ final class CryptoVerifierUtility: Logging {
 	func initialize() {
 		
 		guard flavor == .verifier else {
+			isInitialized = true
 			return
 		}
 		
@@ -61,8 +80,10 @@ final class CryptoVerifierUtility: Logging {
 		
 		if let result = result, !result.error.isEmpty {
 			logError("Error initializing verifier: \(result.error)")
+			isInitialized = false
 		} else {
 			logInfo("Initializing verifier succeeded")
+			isInitialized = true
 		}
 	}
 	
