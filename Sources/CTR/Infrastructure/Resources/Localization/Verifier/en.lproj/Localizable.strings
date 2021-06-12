@@ -137,7 +137,8 @@
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR code";
 "verifier.scan.message" = "Point your device at the QR code on the visitor's screen. Or point it at the paper version of their valid certificate.";
-"verifier.scan.torch.accessibility" = "Turn the flashlight on.";
+"verifier.scan.torch.enable" = "Turn the flashlight on.";
+"verifier.scan.torch.disable" = "Turn the flashlight off.";
 "verifier.scan.permission.title" = "No access to camera";
 "verifier.scan.permission.message" = "The app wants to access the camera to scan the QR code.";
 "verifier.scan.permission.settings" = "To settings";

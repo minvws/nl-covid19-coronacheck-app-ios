@@ -140,7 +140,8 @@
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
 "verifier.scan.message" = "Richt je telefoon op de QR-code op het scherm van de bezoeker. Of op het papieren bewijs.";
-"verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
+"verifier.scan.torch.enable" = "Zet de zaklamp aan.";
+"verifier.scan.torch.disable" = "Zet de zaklamp uit.";
 "verifier.scan.permission.title" = "Geen toegang tot camera";
 "verifier.scan.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
 "verifier.scan.permission.settings" = "Naar instellingen";
