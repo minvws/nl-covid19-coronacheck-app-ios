@@ -131,4 +131,16 @@ class WalletManagerSpy: WalletManaging {
 		invokedRemoveExpiredGreenCardsCount += 1
 		return stubbedRemoveExpiredGreenCardsResult
 	}
+
+	var invokedExpireEventGroups = false
+	var invokedExpireEventGroupsCount = 0
+	var invokedExpireEventGroupsParameters: (vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)?
+	var invokedExpireEventGroupsParametersList = [(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)]()
+
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?) {
+		invokedExpireEventGroups = true
+		invokedExpireEventGroupsCount += 1
+		invokedExpireEventGroupsParameters = (vaccinationValidity, recoveryValidity, testValidity)
+		invokedExpireEventGroupsParametersList.append((vaccinationValidity, recoveryValidity, testValidity))
+	}
 }
