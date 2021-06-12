@@ -190,8 +190,8 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	func addTorchButton(
 		action: Selector?,
 		enableLabel: String?,
-        disableLabel: String?) {
-
+		disableLabel: String?) {
+		
 		let button = UIBarButtonItem(
 			image: .torch,
 			style: .plain,
