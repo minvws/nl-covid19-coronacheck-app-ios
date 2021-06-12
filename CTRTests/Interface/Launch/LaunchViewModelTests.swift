@@ -28,7 +28,28 @@ class LaunchViewModelTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		userSettingsSpy = UserSettingsSpy()
+		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 	}
+
+	let remoteConfig = RemoteConfiguration(
+		minVersion: "1.0",
+		minVersionMessage: "test message",
+		storeUrl: URL(string: "https://apple.com"),
+		deactivated: nil,
+		informationURL: nil,
+		configTTL: 3600,
+		euLaunchDate: "2021-06-03T14:00:00+00:00",
+		maxValidityHours: 48,
+		requireUpdateBefore: nil,
+		temporarilyDisabled: false,
+		vaccinationValidityHours: 14600,
+		recoveryValidityHours: 7300,
+		testValidityHours: 40,
+		domesticValidityHours: 40,
+		vaccinationEventValidity: 14600,
+		recoveryEventValidity: 7300,
+		testEventValidity: 40
+	)
 
 	// MARK: Tests
 
