@@ -19,10 +19,15 @@ extension String {
 		return Localization.string(for: "holder.tokenscan.message")
 	}
 
-	static var holderTokenScanTorchAccessibility: String {
+	static var holderTokenScanTorchEnable: String {
 
-		return Localization.string(for: "holder.tokenscan.torch.accessibility")
+		return Localization.string(for: "holder.tokenscan.torch.enable")
 	}
+    
+    static var holderTokenScanTorchDisable: String {
+
+        return Localization.string(for: "holder.tokenscan.torch.disable")
+    }
 
 	static var holderTokenScanErrorTitle: String {
 

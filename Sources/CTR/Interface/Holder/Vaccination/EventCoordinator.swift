@@ -251,43 +251,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				}
 
 			case .errorRequiringRestart(let error, let eventMode):
-				let popback = navigationController.viewControllers.first {
-					// arrange `case`s in the order of matching priority
-					switch $0 {
-						case is VaccinationStartViewController:
-							return true
-						case is ChooseTestLocationViewController:
-							return true
-						default:
-							return false
-					}
-				}
-
-				let presentError = {
-					let alertController: UIAlertController
-
-					switch error {
-						case let error? where (error as NSError).domain.contains("org.openid.appauth"):
-							alertController = UIAlertController(
-								title: .holderGGDLoginFailureVaccineGeneralTitle,
-								message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
-								preferredStyle: .alert)
-						default:
-							alertController = UIAlertController(
-								title: .errorTitle,
-								message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
-								preferredStyle: .alert)
-					}
-
-					alertController.addAction(.init(title: .ok, style: .default, handler: nil))
-					self.navigationController.present(alertController, animated: true, completion: nil)
-				}
-
-				if let popback = popback {
-					navigationController.popToViewController(popback, animated: true, completion: presentError)
-				} else {
-					navigationController.popToRootViewController(animated: true, completion: presentError)
-				}
+				handleErrorRequiringRestart(error: error, eventMode: eventMode)
 
 			default:
 				break
@@ -299,6 +263,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
+				
 			case .back(let eventMode):
 				switch eventMode {
 					case .test:
@@ -308,6 +273,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, testEvents: [], eventMode: eventMode)
+
+			case .errorRequiringRestart(let error, let eventMode):
+				handleErrorRequiringRestart(error: error, eventMode: eventMode)
 			default:
 				break
 		}
@@ -329,6 +297,46 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				navigateToMoreInformation(title, body: body)
 			default:
 				break
+		}
+	}
+
+	private func handleErrorRequiringRestart(error: Error?, eventMode: EventMode) {
+		let popback = navigationController.viewControllers.first {
+			// arrange `case`s in the order of matching priority
+			switch $0 {
+				case is VaccinationStartViewController:
+					return true
+				case is ChooseTestLocationViewController:
+					return true
+				default:
+					return false
+			}
+		}
+
+		let presentError = {
+			let alertController: UIAlertController
+
+			switch error {
+				case let error? where (error as NSError).domain.contains("org.openid.appauth"):
+					alertController = UIAlertController(
+						title: .holderGGDLoginFailureVaccineGeneralTitle,
+						message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
+						preferredStyle: .alert)
+				default:
+					alertController = UIAlertController(
+						title: .errorTitle,
+						message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
+						preferredStyle: .alert)
+			}
+
+			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			self.navigationController.present(alertController, animated: true, completion: nil)
+		}
+
+		if let popback = popback {
+			navigationController.popToViewController(popback, animated: true, completion: presentError)
+		} else {
+			navigationController.popToRootViewController(animated: true, completion: presentError)
 		}
 	}
 }

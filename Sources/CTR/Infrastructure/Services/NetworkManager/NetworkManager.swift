@@ -111,7 +111,7 @@ class NetworkManager: NetworkManaging, Logging {
 
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.providersUrl,
@@ -147,7 +147,7 @@ class NetworkManager: NetworkManaging, Logging {
 	///   - token: the token to fetch
 	///   - code: the code for verification
 	///   - completion: the completion handler
-	func getTestResult(
+	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
@@ -183,7 +183,7 @@ class NetworkManager: NetworkManaging, Logging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -211,8 +211,7 @@ class NetworkManager: NetworkManaging, Logging {
 
 		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
 		sessionDelegate?.setSecurityStrategy(SecurityStrategy.provider(provider))
-		
-		decodeSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
+		decodedAndReturnSignedJSONData(request: urlRequest, ignore400: true, completion: completion)
 	}
 
 	/// Get  events from an event provider
@@ -578,6 +577,8 @@ class NetworkManager: NetworkManaging, Logging {
 				return .responseCached
 			case 300 ... 399:
 				return .redirection
+			case 429:
+				return .serverBusy
 			case 400 ... 499:
 				return .resourceNotFound
 			case 500 ... 599:

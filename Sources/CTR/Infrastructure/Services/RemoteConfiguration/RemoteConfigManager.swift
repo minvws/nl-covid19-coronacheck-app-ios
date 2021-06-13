@@ -42,8 +42,8 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 	/// The network manager
 	var networkManager: NetworkManaging = Services.networkManager
 	
-	/// The crypto verifier utility
-	var cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
+	/// The crypto library utility
+	var cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
 
 	/// The current app version
 	var appVersion: String {
@@ -89,7 +89,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 				// Persist the remote configuration
 				storedConfiguration = remoteConfiguration
 				// Store as JSON file
-				cryptoVerifierUtility.store(data, for: .remoteConfiguration)
+				cryptoLibUtility.store(data, for: .remoteConfiguration)
 				// Decide what to do
 				compare(remoteConfiguration, completion: completion)
 

@@ -120,11 +120,34 @@ class AppCoordinator: Coordinator, Logging {
 		}
 		navigateToAppUpdate(with: viewModel)
 	}
-
+	
+	/// Show the Internet Required View
 	private func showInternetRequired() {
 
 		let viewModel = InternetRequiredViewModel(coordinator: self)
 		navigateToAppUpdate(with: viewModel)
+	}
+	
+	/// Show the error alert when crypto library is not initialized
+	private func showCryptoLibNotInitializedError() {
+		
+		let message = String(format: .cryptoLibNotInitializedMessage, "\(142)")
+		
+		let alertController = UIAlertController(
+			title: .cryptoLibNotInitializedTitle,
+			message: message,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .cryptoLibNotInitializedRetry,
+				style: .cancel,
+				handler: { [weak self] _ in
+					self?.retry()
+				}
+			)
+		)
+		window.rootViewController?.present(alertController, animated: true)
 	}
 
 	/// Show the Action Required View
@@ -185,6 +208,9 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
             case let .actionRequired(versionInformation):
                 showActionRequired(with: versionInformation)
+				
+            case .cryptoLibNotInitialized:
+				showCryptoLibNotInitializedError()
         }
     }
 

@@ -112,6 +112,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 			primaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonHeight),
 			primaryButton.centerXAnchor.constraint(equalTo: centerXAnchor)
 		])
+		primaryButton.setContentHuggingPriority(.required, for: .vertical)
 
 		if useFullWidth {
 			NSLayoutConstraint.activate([

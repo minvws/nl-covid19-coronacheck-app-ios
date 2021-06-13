@@ -16,7 +16,7 @@ class ProofManager: ProofManaging, Logging {
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 	var walletManager: WalletManaging = Services.walletManager
-	var cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
+	var cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
 
 	internal var testProviders = [TestProvider]()
 	
@@ -62,7 +62,7 @@ class ProofManager: ProofManaging, Logging {
 		onCompletion: (() -> Void)?,
 		onError: ((Error) -> Void)?) {
 		
-		networkManager.getTestProviders { [weak self] response in
+		networkManager.fetchTestProviders { [weak self] response in
 			
 			// Response is of type (Result<[TestProvider], NetworkError>)
 			switch response {
@@ -106,7 +106,7 @@ class ProofManager: ProofManaging, Logging {
 					
 					if let manager = self?.cryptoManager, manager.setIssuerDomesticPublicKeys(keys) {
 						self?.keysFetchedTimestamp = Date()
-						self?.cryptoVerifierUtility.store(data, for: .publicKeys)
+						self?.cryptoLibUtility.store(data, for: .publicKeys)
 						onCompletion?()
 					} else {
 						// Loading of the public keys into the CL Library failed.
@@ -145,7 +145,7 @@ class ProofManager: ProofManaging, Logging {
 			return
 		}
 		
-		networkManager.getTestResult(provider: provider, token: token, code: code) { response in
+		networkManager.fetchTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
 			
 			switch response {

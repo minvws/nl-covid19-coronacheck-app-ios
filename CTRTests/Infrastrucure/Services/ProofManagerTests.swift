@@ -106,7 +106,7 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchTestProviders() {
 
 		// Given
-		networkSpy.stubbedGetTestProvidersCompletionResult = (
+		networkSpy.stubbedFetchTestProvidersCompletionResult = (
 			.success(
 				[
 					TestProvider(
@@ -123,7 +123,7 @@ class ProofManagerTests: XCTestCase {
 		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
 
 		// Then
-		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchTestProviders).toEventually(beTrue())
 		expect(self.sut.testProviders).toEventually(haveCount(1))
 		expect(self.sut.testProviders.first?.identifier).toEventually(equal("test_fetchTestProviders"))
 	}
@@ -131,13 +131,13 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchTestProviders_withError() {
 
 		// Given
-		networkSpy.stubbedGetTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest), ())
+		networkSpy.stubbedFetchTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest), ())
 
 		// When
 		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
 
 		// Then
-		expect(self.networkSpy.invokedGetTestProviders).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchTestProviders).toEventually(beTrue())
 		expect(self.sut.testProviders).toEventually(beEmpty())
 	}
 

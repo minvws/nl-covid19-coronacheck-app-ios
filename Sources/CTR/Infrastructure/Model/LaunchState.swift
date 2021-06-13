@@ -18,6 +18,9 @@ enum LaunchState: Equatable {
 
 	/// The app needs internet
 	case internetRequired
+	
+	/// The crypto library needs to be initialized
+	case cryptoLibNotInitialized
 
 	// MARK: Equatable
 
@@ -40,6 +43,8 @@ enum LaunchState: Equatable {
 					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
 					lhsVersion.configTTL == rhsVersion.configTTL &&
 					lhsVersion.maxValidityHours == rhsVersion.maxValidityHours
+			case (.cryptoLibNotInitialized, cryptoLibNotInitialized):
+				return true
 			default:
 				return false
 		}

@@ -18,6 +18,7 @@ class LaunchViewModelTests: XCTestCase {
 	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
 
 	override func setUp() {
 		super.setUp()
@@ -28,7 +29,29 @@ class LaunchViewModelTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		userSettingsSpy = UserSettingsSpy()
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy()
+		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 	}
+
+	let remoteConfig = RemoteConfiguration(
+		minVersion: "1.0",
+		minVersionMessage: "test message",
+		storeUrl: URL(string: "https://apple.com"),
+		deactivated: nil,
+		informationURL: nil,
+		configTTL: 3600,
+		euLaunchDate: "2021-06-03T14:00:00+00:00",
+		maxValidityHours: 48,
+		requireUpdateBefore: nil,
+		temporarilyDisabled: false,
+		vaccinationValidityHours: 14600,
+		recoveryValidityHours: 7300,
+		testValidityHours: 40,
+		domesticValidityHours: 40,
+		vaccinationEventValidity: 14600,
+		recoveryEventValidity: 7300,
+		testEventValidity: 40
+	)
 
 	// MARK: Tests
 
@@ -78,6 +101,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.noActionNeeded, ())
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
 		// When
 		sut = LaunchViewModel(
@@ -87,7 +111,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy
 		)
 
 		// Then
@@ -96,7 +121,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
 		expect(self.sut.interruptForJailBreakDialog) == false
-
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == true
 	}
 
 	/// Test internet required for the remote config
@@ -106,6 +131,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.internetRequired, ())
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
 		// When
 		sut = LaunchViewModel(
@@ -115,7 +141,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy
 		)
 
 		// Then
@@ -124,6 +151,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
 	/// Test internet required for the issuer public keys
@@ -137,6 +165,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
 		// When
 		sut = LaunchViewModel(
@@ -146,7 +175,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy
 		)
 
 		// Then
@@ -155,6 +185,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
@@ -168,6 +199,7 @@ class LaunchViewModelTests: XCTestCase {
 		)
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
 		// When
 		sut = LaunchViewModel(
@@ -177,7 +209,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy
 		)
 
 		// Then
@@ -186,6 +219,7 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
 	/// Test update required
@@ -197,6 +231,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.actionRequired(remoteConfig), ())
 		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
 		// When
 		sut = LaunchViewModel(
@@ -206,7 +241,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy
 		)
 
 		// Then
@@ -215,6 +251,37 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
+	}
+	
+	/// Test crypto library not initialized
+	func test_cryptoLibNotInitialized() {
+
+		// Given
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.cryptoLibNotInitialized, ())
+		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = false
+
+		// When
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy
+		)
+
+		// Then
+		expect(self.remoteConfigSpy.invokedUpdate) == true
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.cryptoLibNotInitialized
+		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == true
 	}
 
 	func test_checkForJailBreak_broken_shouldwarn() {

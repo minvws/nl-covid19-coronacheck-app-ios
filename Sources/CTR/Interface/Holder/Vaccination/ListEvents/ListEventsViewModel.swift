@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 
 import Foundation
 
@@ -88,7 +88,7 @@ class ListEventsViewModel: Logging {
 		remoteVaccinationEvents: [RemoteVaccinationEvent],
 		remoteTestEvents: [RemoteTestEvent],
 		networkManager: NetworkManaging = Services.networkManager,
-		walletManager: WalletManaging = WalletManager(),
+		walletManager: WalletManaging = Services.walletManager,
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	) {
@@ -132,7 +132,7 @@ class ListEventsViewModel: Logging {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .holderVaccinationAlertTitle,
-			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestResultsAlertMessage,
+			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
 			okAction: { [weak self] _ in
@@ -299,7 +299,7 @@ class ListEventsViewModel: Logging {
 									String.holderShowQREuAboutTestNegative,
 									dataRow.event.negativeTest?.facility ?? "",
 									manufacturer,
-									dataRow.event.unique
+									dataRow.event.unique ?? ""
 								)
 							)
 						)
@@ -367,7 +367,7 @@ class ListEventsViewModel: Logging {
 									dosage,
 									formattedShotDate,
 									dataRow.event.vaccination?.country ?? "",
-									dataRow.event.unique
+									dataRow.event.unique ?? ""
 								)
 							)
 						)
@@ -467,21 +467,59 @@ class ListEventsViewModel: Logging {
 
 	// MARK: API Calls
 
-	/// Prepare the cryptoManager
+	/// Prepare the issue (get nonce)
 	/// - Parameter onCompletion: completion handler
 	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
 
-		networkManager.prepareIssue { result in
+		networkManager.prepareIssue { [weak self] result in
 			// Result<PrepareIssueEnvelope, NetworkError>
 			switch result {
 				case let .success(prepareIssueEnvelope):
-					self.logDebug("ok: \(prepareIssueEnvelope)")
+					self?.logDebug("ok: \(prepareIssueEnvelope)")
 					onCompletion(prepareIssueEnvelope)
 				case let .failure(error):
-					self.logError("error: \(error)")
+					self?.logError("error: \(error)")
+
+					if error == .serverBusy {
+						self?.showServerTooBusyError()
+					} else {
+						self?.showTechnicalError("117 prepareIssue")
+					}
 					onCompletion(nil)
 			}
 		}
+	}
+
+	private func showServerTooBusyError() {
+
+		alert = ListEventsViewController.AlertContent(
+			title: .serverTooBusyErrorTitle,
+			subTitle: .serverTooBusyErrorText,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			okTitle: .serverTooBusyErrorButton
+		)
+	}
+
+	private func showTechnicalError(_ customCode: String?) {
+
+		var subTitle = String.technicalErrorText
+		if let code = customCode {
+			subTitle = String(format: .technicalErrorCustom, code)
+		}
+		alert = ListEventsViewController.AlertContent(
+			title: .errorTitle,
+			subTitle: subTitle,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.goBack()
+			},
+			okTitle: .close
+		)
 	}
 
 	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
@@ -492,7 +530,7 @@ class ListEventsViewModel: Logging {
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
 		else {
-			//					onError(ProofError.missingParams)
+			self.showTechnicalError("118 stoken")
 			return
 		}
 
@@ -502,15 +540,22 @@ class ListEventsViewModel: Logging {
 			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
 		]
 
-		self.networkManager.fetchGreencards(dictionary: dictionary) { result in
+		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] result in
 			//	Result<RemoteGreenCards.Response, NetworkError>
 
 			switch result {
 				case let .success(greencardResponse):
-					self.logVerbose("ok: \(greencardResponse)")
+					self?.logVerbose("ok: \(greencardResponse)")
 					onCompletion(greencardResponse)
 				case let .failure(error):
-					self.logError("error: \(error)")
+					self?.logError("error: \(error)")
+
+					if error == .serverBusy {
+						self?.showServerTooBusyError()
+					} else {
+						self?.showTechnicalError("118 credentials")
+					}
+
 					onCompletion(nil)
 			}
 		}
