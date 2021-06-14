@@ -13,8 +13,6 @@ class ShowQRViewController: BaseViewController {
 
 	let sceneView = ShowQRImageView()
 
-	var screenCaptureInProgress = false
-
 	var previousOrientation: UIInterfaceOrientation?
 
 	// MARK: Initializers
@@ -81,7 +79,6 @@ class ShowQRViewController: BaseViewController {
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
-			self?.screenCaptureInProgress = $0
 			self?.sceneView.hideQRImage = $0
 		}
 

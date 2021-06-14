@@ -45,5 +45,10 @@ class InformationViewController: BaseViewController {
 		sceneView.linkTapHandler = { [viewModel] url in
 			viewModel.userDidTapURL(url: url)
 		}
+
+		viewModel.$hideForCapture.binding = { [weak self] in
+
+			self?.sceneView.handleScreenCapture(shouldHide: $0)
+		}
 	}
 }
