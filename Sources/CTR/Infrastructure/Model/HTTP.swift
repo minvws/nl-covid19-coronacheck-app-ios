@@ -13,9 +13,6 @@ enum HTTPHeaderField: String {
 	/// Accept-Encoding
 	case acceptEncoding = "Accept-Encoding"
 
-	/// Accept
-	case acceptType = "Accept"
-
 	/// Authorization
 	case authorization = "Authorization"
 
