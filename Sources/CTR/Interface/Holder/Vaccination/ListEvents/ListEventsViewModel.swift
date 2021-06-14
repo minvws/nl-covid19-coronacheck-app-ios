@@ -252,8 +252,9 @@ class ListEventsViewModel: Logging {
 
 		for dataRow in sortedDataSource {
 
-			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
-				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedBirthDate: String = dataRow.identity.birthDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 			let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
@@ -316,8 +317,9 @@ class ListEventsViewModel: Logging {
 
 		for dataRow in sortedDataSource {
 
-			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
-				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedBirthDate: String = dataRow.identity.birthDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 			let formattedShotDate: String = dataRow.event.vaccination?.dateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")

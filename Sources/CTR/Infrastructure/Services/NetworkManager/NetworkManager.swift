@@ -38,8 +38,7 @@ class NetworkManager: NetworkManaging, Logging {
 		completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
 
 		let headers: [HTTPHeaderKey: String] = [
-			HTTPHeaderKey.authorization: "Bearer \(tvsToken)",
-			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue
+			HTTPHeaderKey.authorization: "Bearer \(tvsToken)"
 		]
 
 		let urlRequest = constructRequest(
@@ -161,7 +160,6 @@ class NetworkManager: NetworkManaging, Logging {
 
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(token.token)",
-			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
 		var body: Data?
@@ -199,7 +197,6 @@ class NetworkManager: NetworkManaging, Logging {
 
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
-			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
 
@@ -238,7 +235,6 @@ class NetworkManager: NetworkManaging, Logging {
 
 		let headers: [HTTPHeaderKey: String] = [
 			HTTPHeaderKey.authorization: "Bearer \(accessToken)",
-			HTTPHeaderKey.acceptedContentType: HTTPContentType.json.rawValue,
 			HTTPHeaderKey.tokenProtocolVersion: "3.0"
 		]
 
