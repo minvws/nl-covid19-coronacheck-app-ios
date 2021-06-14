@@ -176,7 +176,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let body: String = String(
 			format: .holderShowQREuAboutVaccinationMessage,
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			vaccineBrand,
 			vaccineType,
