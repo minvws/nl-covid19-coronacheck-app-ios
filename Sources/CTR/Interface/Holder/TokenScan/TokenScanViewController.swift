@@ -38,6 +38,8 @@ class TokenScanViewController: ScanViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		configureTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
