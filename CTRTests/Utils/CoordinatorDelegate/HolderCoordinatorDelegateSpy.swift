@@ -53,14 +53,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
 
-	func presentInformationPage(title: String, body: String) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body)
-		invokedPresentInformationPageParametersList.append((title, body))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false

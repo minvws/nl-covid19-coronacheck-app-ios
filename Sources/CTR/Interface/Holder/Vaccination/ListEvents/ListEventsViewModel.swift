@@ -13,7 +13,7 @@ enum ListEventSourceMode {
 	case commercial
 }
 
-class ListEventsViewModel: Logging {
+class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -110,6 +110,8 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
+
+		super.init()
 
 		if sourceMode == .ggd {
 			viewState = getViewState(from: remoteVaccinationEvents)
@@ -214,7 +216,8 @@ class ListEventsViewModel: Logging {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody
+							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody,
+							hideBodyForScreenCapture: false
 						)
 					)
 				}
@@ -301,7 +304,8 @@ class ListEventsViewModel: Logging {
 									dataRow.event.negativeTest?.facility ?? "",
 									manufacturer,
 									dataRow.event.unique ?? ""
-								)
+								),
+								hideBodyForScreenCapture: true
 							)
 						)
 					}
@@ -370,7 +374,8 @@ class ListEventsViewModel: Logging {
 									formattedShotDate,
 									dataRow.event.vaccination?.country ?? "",
 									dataRow.event.unique ?? ""
-								)
+								),
+								hideBodyForScreenCapture: true
 							)
 						)
 					}
@@ -742,7 +747,8 @@ extension ListEventsViewModel {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: .holderTestWrongBody
+							body: .holderTestWrongBody,
+							hideBodyForScreenCapture: false
 						)
 					)
 				}
@@ -787,7 +793,8 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
 						title: .holderEventAboutTitle,
-						body: body
+						body: body,
+						hideBodyForScreenCapture: true
 					)
 				)
 			}

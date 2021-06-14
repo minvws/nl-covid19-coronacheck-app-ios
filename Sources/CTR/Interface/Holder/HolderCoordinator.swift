@@ -31,7 +31,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	func presentInformationPage(title: String, body: String)
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
 
@@ -314,7 +315,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	func presentInformationPage(title: String, body: String) {
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -324,7 +326,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)
-				}
+				},
+				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
@@ -405,7 +408,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
-		presentInformationPage(title: title, body: message)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {

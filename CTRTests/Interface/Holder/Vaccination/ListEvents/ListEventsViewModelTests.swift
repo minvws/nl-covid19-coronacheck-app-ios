@@ -114,8 +114,9 @@ class ListEventsViewModelTests: XCTestCase {
 			// Then
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-			if case let .moreInformation(title, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+			if case let .moreInformation(title, _, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
 				expect(title) == .holderEventAboutTitle
+				expect(hide) == true
 			} else {
 				fail("wrong information")
 			}
@@ -144,7 +145,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 			// Then
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: .holderVaccinationWrongTitle, body: .holderVaccinationWrongBody)
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: .holderVaccinationWrongTitle, body: .holderVaccinationWrongBody, hideBodyForScreenCapture: false)
 		} else {
 			fail("wrong state")
 		}

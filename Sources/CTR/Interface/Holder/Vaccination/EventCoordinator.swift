@@ -39,14 +39,14 @@ enum EventScreenResult: Equatable {
 	case showEvents(events: [RemoteVaccinationEvent], eventMode: EventMode)
 
 	/// Show some more information
-	case moreInformation(title: String, body: String)
+	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
 			case (.back, .back), (.stop, .stop), (.continue, .continue):
 				return true
-			case (let .moreInformation(lhsTitle, lhsBody), let .moreInformation(rhsTitle, rhsBody)):
-				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
+			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
+				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
 			case (let showEvents(lhsEvents, lhsMode), let showEvents(rhsEvents, rhsMode)):
 
 				if lhsEvents.count != rhsEvents.count {
@@ -183,13 +183,14 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: false)
 	}
 
-	private func navigateToMoreInformation(_ title: String, body: String) {
+	private func navigateToMoreInformation(_ title: String, body: String, hideBodyForScreenCapture: Bool) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body
+				message: body,
+				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
 
@@ -293,8 +294,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .vaccination:
 						navigateBackToVaccinationStart()
 				}
-			case let .moreInformation(title, body):
-				navigateToMoreInformation(title, body: body)
+			case let .moreInformation(title, body, hideBodyForScreenCapture):
+				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			default:
 				break
 		}

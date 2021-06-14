@@ -161,4 +161,10 @@ class ListEventsView: ScrolledStackWithButtonView {
 		eventStackView.addArrangedSubview(eventView)
 		addSeparator()
 	}
+
+	var hideForCapture: Bool = false {
+		didSet {
+			eventStackView.isHidden = hideForCapture
+		}
+	}
 }

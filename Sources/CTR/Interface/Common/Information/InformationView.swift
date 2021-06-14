@@ -114,4 +114,9 @@ class InformationView: BaseView {
 			messageLabel.linkTouched(handler: linkTapHandler)
 		}
 	}
+
+	func handleScreenCapture(shouldHide: Bool) {
+		messageLabel.isHidden = shouldHide
+	}
+
 }
