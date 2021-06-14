@@ -13,7 +13,7 @@ enum ListEventSourceMode {
 	case commercial
 }
 
-class ListEventsViewModel: Logging {
+class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -110,6 +110,8 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
+
+		super.init()
 
 		if sourceMode == .ggd {
 			viewState = getViewState(from: remoteVaccinationEvents)
