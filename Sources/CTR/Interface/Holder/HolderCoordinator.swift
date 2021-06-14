@@ -361,7 +361,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: MakeTestAppointmentViewModel(
 				coordinator: self,
 				title: .holderNoTestTitle,
-				message: String(format: .holderNoTestBody, "\(maxValidity)", "\(maxValidity)"),
+				message: String(format: .holderNoTestBody),
 				buttonTitle: .holderNoTestButtonTitle
 			)
 		)
