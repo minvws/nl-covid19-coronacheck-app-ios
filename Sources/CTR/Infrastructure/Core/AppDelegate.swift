@@ -147,16 +147,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func styleUI() {
 
         // Custom navigation bar appearance
-        UINavigationBar.appearance().barTintColor = .clear
         UINavigationBar.appearance().titleTextAttributes = [
             NSAttributedString.Key.foregroundColor: Theme.colors.dark,
             NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
         ]
-        UINavigationBar.appearance().isTranslucent = true
+		UINavigationBar.appearance().tintColor = Theme.colors.dark
+		
+		// White navigation bar without bottom separator
+        UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        UINavigationBar.appearance().backgroundColor = .clear
-
-        UINavigationBar.appearance().tintColor = Theme.colors.dark
+		UINavigationBar.appearance().backgroundColor = Theme.colors.viewControllerBackground
     }
 }
