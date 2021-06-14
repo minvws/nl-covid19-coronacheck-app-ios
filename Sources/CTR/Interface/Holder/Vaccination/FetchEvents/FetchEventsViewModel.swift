@@ -293,6 +293,10 @@ final class FetchEventsViewModel: Logging {
 							eventProviders[index].accessToken = accessToken
 						}
 					}
+					if self.eventMode == .test {
+						// only retrieve negative test 3.0 from the GGD
+						eventProviders = eventProviders.filter { $0.identifier.lowercased() == "ggd" }
+					}
 					completion(.success(eventProviders))
 
 				case (.failure(let error), _):
