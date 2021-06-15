@@ -1,3 +1,7 @@
+"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
+"general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
+"general.error.cryptolib.retry" = "Probeer opnieuw";
+
 "holder.tokenscan.torch.enable" = "Zet de zaklamp aan.";
 "holder.tokenscan.torch.disable" = "Zet de zaklamp uit.";
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
@@ -111,10 +115,6 @@
 "general.testdate" = "testdatum";
 "general.vaccinationdate" = "vaccinatiedatum";
 
-"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
-"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
-"general.error.cryptolib.retry" = "Probeer opnieuw";
-
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
 "toggleRegion.label.topText.nl" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
@@ -194,7 +194,7 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "QR-code maken";
 "holder.aboutmakingaqr.header" = "Een QR-code maken";
-"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>3. Gegevens controleren</b></p> <p>Check of de gegevens van je vaccinatie en/of testuitslag kloppen. </p> <br/> <p><b>Ga je naar het buitenland?</b></p> <p>De app maakt twee QR-codes: één voor Nederland en één internationale. Reis je buiten Nederland? Gebruik dan je internationale QR-code. In <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">dit overzicht</a> lees je of een QR-code geldig is in het land dat je bezoekt.</p>";
+"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>3. Gegevens controleren</b></p> <p>Check of de gegevens van je vaccinatie en/of testuitslag kloppen. </p> <br/> <p><b>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
@@ -249,6 +249,13 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
 
+
+/* MARK: - Holder Appointment */
+"holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.<p><p>";
+
+"holder.appointment.title" = "Testafspraak maken";
+"holder.appointment.header" = "Testafspraak maken";
+"holder.appointment.button.title" = "Maak een afspraak";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "QR-code maken";
 "holder.provider.header" = "Waar ben je getest?";
@@ -304,7 +311,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
 "holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
-"holder.vaccination.start.action" = "Log in met DigiD";
+"holder.vaccination.start.action" = "Je wordt doorgestuurd naar DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
 "holder.test.list.title" = "Testuitslag ophalen";
@@ -352,7 +359,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.testresults.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen. </p>";
 
 "holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
-"holder.event.element.subtitle.test3" = "Testdatum: %@<br>Geldig tot: %@<br>Naam: %@<br>Geboortedatum %@";
+"holder.event.element.subtitle.test3" = "Testdatum: %@<br>Geldig tot: %@<br>Naam: %@<br>Geboortedatum: %@";
 
 "holder.location.title" = "Waar ben je getest?";
 "holder.location.message" = "Geef aan of je bij de GGD of bij een andere testlocatie getest bent.";

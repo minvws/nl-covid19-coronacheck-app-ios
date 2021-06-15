@@ -190,7 +190,7 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "Make QR code";
 "holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. Check data</b></p><p> Check if the details about your vaccination and/or test result are correct. </p> <br/> <p><b>Going abroad?</b></p> <p> The app creates two QR codes: one for the Netherlands, one for other countries. When travelling outside the Netherlands, please use your international QR code. In <a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\"> this overview</a>, you’ll find if the QR code is valid in the country you’re planning to visit.</p>";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. Check data</b></p><p> Check if the details about your vaccination and/or test result are correct. </p> <br/> <p><b>Going abroad?</b></p> <p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
@@ -241,6 +241,13 @@ The details consist of the first letter of your first name, the first letter of 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Your QR code has been made";
 
+
+/* MARK: - Holder Appointment */
+"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.<p><p>";
+
+"holder.appointment.title" = "Make test appointment";
+"holder.appointment.header" = "Book test appointment";
+"holder.appointment.button.title" = "Make an appointment";
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "Make QR code";
 "holder.provider.header" = "Where were you tested?";
@@ -294,7 +301,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
 "holder.vaccination.start.message" = "<p>Got vaccinated? Log in with DigiD. Details regarding your vaccination will be retrieved automatically. </p><p>You only need one injection to make an international QR-code. For a Dutch QR-code you need to be fully vaccinated. </p><p>Didn't get an injection yet? Get vaccinated first.</p>";
-"holder.vaccination.start.action" = "Log in with DigiD";
+"holder.vaccination.start.action" = "You’ll be redirected to DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
 "holder.test.list.title" = "Retrieve test result";
@@ -330,7 +337,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 
 "holder.ggdlogin.failure.general.title" = "Couldn't log in to DigiD";
-"holder.ggdlogin.failure.general.message" = "You can try to retrieve your vaccination certificate again later.";
+"holder.ggdlogin.failure.general.message" = "You can try again later.";
 
 "holder.event.about.title" = "What was retrieved?";
 "holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Identification code: <b>%@</b></p>";
