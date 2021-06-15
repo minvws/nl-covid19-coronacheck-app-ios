@@ -321,7 +321,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				case let error? where (error as NSError).domain.contains("org.openid.appauth"):
 					alertController = UIAlertController(
 						title: .holderGGDLoginFailureVaccineGeneralTitle,
-						message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
+						message: .holderGGDLoginFailureGeneralMessage(localizedEventMode: eventMode.localized),
 						preferredStyle: .alert)
 				default:
 					alertController = UIAlertController(

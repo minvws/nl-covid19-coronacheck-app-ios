@@ -16,7 +16,7 @@ extension String {
 	}
 
 	/// localizedEventMode: vaccine, testresult etc.
-	static func holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: String) -> String {
+	static func holderGGDLoginFailureGeneralMessage(localizedEventMode: String) -> String {
 
 		return String(format: Localization.string(for: "holder.ggdlogin.failure.general.message"), arguments: [localizedEventMode])
 	}
