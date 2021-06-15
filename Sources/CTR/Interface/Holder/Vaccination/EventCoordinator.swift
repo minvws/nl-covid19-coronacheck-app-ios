@@ -219,7 +219,8 @@ class EventCoordinator: Coordinator, Logging {
 
 	private func navigateBackToTestStart() {
 		
-		let popToViewController = navigationController.viewControllers.first {
+		let popBackToViewController = navigationController.viewControllers.first {
+			
 			switch $0 {
 				case is ChooseTestLocationViewController:
 					return true
@@ -230,13 +231,13 @@ class EventCoordinator: Coordinator, Logging {
 					return false
 			}
 		}
-		guard let popToViewController = popToViewController else {
-			return
+		if let popBackToViewController = popBackToViewController {
+			
+			navigationController.popToViewController(
+				popBackToViewController,
+				animated: true
+			)
 		}
-		navigationController.popToViewController(
-			popToViewController,
-			animated: true
-		)
 	}
 }
 
