@@ -21,9 +21,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to List Results Scene
 	func navigateToListResults()
 
-	/// Navigate to About test Result Scene
-	func navigateToAboutTestResult()
-
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
 
@@ -286,27 +283,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to About test Result Scene
-	func navigateToAboutTestResult() {
-
-		let destination = AboutTestResultViewController(
-			viewModel: AboutTestResultViewModel(
-				coordinator: self,
-				proofManager: proofManager
-			)
-		)
-
-		destination.transitioningDelegate = bottomSheetTransitioningDelegate
-		destination.modalPresentationStyle = .custom
-		destination.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
-			destination,
-			animated: true,
-			completion: nil
-		)
 	}
 
 	/// Navigate to the start fo the holder flow

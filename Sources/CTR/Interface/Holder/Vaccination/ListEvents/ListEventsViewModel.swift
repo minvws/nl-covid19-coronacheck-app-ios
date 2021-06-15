@@ -482,7 +482,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			// Result<PrepareIssueEnvelope, NetworkError>
 			switch result {
 				case let .success(prepareIssueEnvelope):
-					self?.logDebug("ok: \(prepareIssueEnvelope)")
+					self?.logVerbose("ok: \(prepareIssueEnvelope)")
 					onCompletion(prepareIssueEnvelope)
 				case let .failure(error):
 					self?.logError("error: \(error)")

@@ -97,8 +97,8 @@ class HolderDashboardViewController: BaseViewController {
 					case .headerMessage(let message):
 
 						let text = TextView(htmlText: message)
-						text.linkTouched { [weak self] url in
-							self?.viewModel.openUrl(url)
+						text.linkTouched { url in
+							viewModel?.openUrl(url)
 						}
 						return text
 
