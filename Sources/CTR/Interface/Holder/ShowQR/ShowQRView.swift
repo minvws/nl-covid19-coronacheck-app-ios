@@ -25,14 +25,6 @@ class ShowQRImageView: BaseView {
 		return view
 	}()
 
-	let accessibilityView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
-		return view
-	}()
-
 	/// The security features
 	let securityView: SecurityFeaturesView = {
 
@@ -53,7 +45,6 @@ class ShowQRImageView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(securityView)
-		addSubview(accessibilityView)
 		addSubview(largeQRimageView)
 	}
 	/// Setup the constraints
@@ -78,12 +69,6 @@ class ShowQRImageView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Accessibility View
-			accessibilityView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
-			accessibilityView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
-			accessibilityView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
-			accessibilityView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
-
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -93,19 +78,18 @@ class ShowQRImageView: BaseView {
 			)
 		])
 
-		bringSubviewToFront(accessibilityView)
+		bringSubviewToFront(largeQRimageView)
 	}
 
 	/// Setup all the accessibility traits
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-		// Security
-		securityView.isAccessibilityElement = false
-		securityView.primaryButton.isAccessibilityElement = false
-		largeQRimageView.accessibilityTraits = .none
-		accessibilityView.isAccessibilityElement = true
-		accessibilityView.accessibilityTraits = .image
+
+        largeQRimageView.isAccessibilityElement = true
+        largeQRimageView.accessibilityTraits = .image
+        
+        accessibilityElements = [largeQRimageView]
 	}
 
 	// MARK: Public Access
@@ -120,7 +104,7 @@ class ShowQRImageView: BaseView {
 	/// The accessibility description
 	var accessibilityDescription: String? {
 		didSet {
-			accessibilityView.accessibilityLabel = accessibilityDescription
+            largeQRimageView.accessibilityLabel = accessibilityDescription
 		}
 	}
 
