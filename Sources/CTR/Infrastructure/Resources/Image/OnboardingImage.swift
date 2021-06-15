@@ -14,8 +14,10 @@ extension UIImage {
 	static var onboardingYourQR: UIImage? { return UIImage(named: "YourQR") }
 
 	static var onboardingValidity: UIImage? { return UIImage(named: "Validity") }
-	
-	static var onboardingPrivacy: UIImage? { return UIImage(named: "Privacy") }
+
+	static var onboardingInternational: UIImage? { return UIImage(named: "International") }
+
+	static var onboardingIdentity: UIImage? { return UIImage(named: "Identity") }
 
 	static var onboardingScan: UIImage? { return UIImage(named: "Scan") }
 

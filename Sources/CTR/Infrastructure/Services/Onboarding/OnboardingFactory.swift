@@ -97,7 +97,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 				return OnboardingPage(
 					title: .holderOnboardingTitlePrivacy,
 					message: .holderOnboardingMessagePrivacy(localizedEULaunchDate: euLaunchDateString),
-					image: .onboardingPrivacy,
+					image: .onboardingInternational,
 					step: .who
 				)
 			}()
@@ -162,7 +162,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: .verifierOnboardingTitleAccess,
 				message: .verifierOnboardingMessageAccess,
-				image: .onboardingPrivacy,
+				image: .onboardingIdentity,
 				step: .access
 			),
 			OnboardingPage(
