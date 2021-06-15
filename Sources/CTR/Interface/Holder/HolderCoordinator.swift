@@ -18,9 +18,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
-	/// Navigate to List Results Scene
-	func navigateToListResults()
-
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
 
@@ -254,19 +251,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to List Results Scene
-	func navigateToListResults() {
-
-		let destination = ListResultsViewController(
-			viewModel: ListResultsViewModel(
-				coordinator: self,
-				proofManager: proofManager,
-				maxValidity: maxValidity
-			)
-		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 

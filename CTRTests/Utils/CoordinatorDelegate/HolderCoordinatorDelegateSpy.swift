@@ -27,14 +27,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedNavigateToTokenScanCount += 1
 	}
 
-	var invokedNavigateToListResults = false
-	var invokedNavigateToListResultsCount = 0
-
-	func navigateToListResults() {
-		invokedNavigateToListResults = true
-		invokedNavigateToListResultsCount += 1
-	}
-
 	var invokedNavigateBackToStart = false
 	var invokedNavigateBackToStartCount = 0
 

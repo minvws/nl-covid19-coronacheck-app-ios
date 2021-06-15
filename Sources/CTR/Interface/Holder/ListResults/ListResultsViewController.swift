@@ -8,29 +8,29 @@
 import UIKit
 import MBProgressHUD
 
-class ListResultsViewController: BaseViewController {
-	
-	private let viewModel: ListResultsViewModel
-
-	let sceneView = ListResultsView()
-
-	init(viewModel: ListResultsViewModel) {
-
-		self.viewModel = viewModel
-
-		super.init(nibName: nil, bundle: nil)
-	}
-
-	required init?(coder: NSCoder) {
-
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	// MARK: View lifecycle
-	override func loadView() {
-
-		view = sceneView
-	}
+//class ListResultsViewController: BaseViewController {
+//
+//	private let viewModel: ListResultsViewModel
+//
+//	let sceneView = ListResultsView()
+//
+//	init(viewModel: ListResultsViewModel) {
+//
+//		self.viewModel = viewModel
+//
+//		super.init(nibName: nil, bundle: nil)
+//	}
+//
+//	required init?(coder: NSCoder) {
+//
+//		fatalError("init(coder:) has not been implemented")
+//	}
+//
+//	// MARK: View lifecycle
+//	override func loadView() {
+//
+//		view = sceneView
+//	}
 
 //	override func viewDidLoad() {
 //
@@ -143,4 +143,4 @@ class ListResultsViewController: BaseViewController {
 //		)
 //		present(alertController, animated: true, completion: nil)
 //	}
-}
+//}

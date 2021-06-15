@@ -106,11 +106,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		super.init()
 
-//		if sourceMode == .ggd {
-//			viewState = getViewState(from: remoteVaccinationEvents)
-//		} else {
-//			viewState = getViewState(from: remoteTestEvents)
-//		}
+		viewState = getViewState(from: remoteEvents)
 	}
 
 	func backButtonTapped() {
@@ -152,13 +148,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private func getViewState(
 		from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
-		var listDataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
+		var event30DataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
 
 		for eventResponse in remoteEvents {
 			if let identity = eventResponse.wrapper.identity,
 			   let events30 = eventResponse.wrapper.events {
 				for event in events30 {
-					listDataSource.append(
+					event30DataSource.append(
 						(
 							identity: identity,
 							event: event,
@@ -169,11 +165,26 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			}
 		}
 
-		if listDataSource.isEmpty {
-			return emptyEventsState()
+		if event30DataSource.isEmpty {
+
+			if let event = remoteEvents.first, event.wrapper.protocolVersion == "2.0" {
+				// A test 2.0
+				switch event.wrapper.status {
+					case .complete:
+						if let result = event.wrapper.result, result.negativeResult {
+							return listTest20EventsState(event)
+						}
+					case .pending:
+						return pendingEventsState()
+					default:
+						break
+				}
+			}
 		} else {
-			return listEventsState(listDataSource, remoteEvents: remoteEvents)
+			return listEventsState(event30DataSource, remoteEvents: remoteEvents)
 		}
+
+		return emptyEventsState()
 	}
 
 	private func emptyEventsState() -> ListEventsViewController.State {
@@ -594,10 +605,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		onCompletion(success)
 	}
 
-	// MARK: Store test events
+	// MARK: Store test 2.0 events
 
-	private func storeTestEvent(
-		remoteEvents: [RemoteTestEvent],
+	private func storeTest20Event(
+		remoteEvents: [RemoteEvent],
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
@@ -651,7 +662,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationOriginMismatchTitle,
 				subTitle: eventMode == .vaccination ? .holderVaccinationOriginMismatchMessage : .holderTestOriginMismatchMessage,
-				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryActionTitle: eventMode == .vaccination ? .holderVaccinationNoListActionTitle : .holderTestNoListActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -666,35 +677,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 extension ListEventsViewModel {
 
-	private func getViewState(
-		from remoteEvent: [RemoteTestEvent]) -> ListEventsViewController.State {
-
-		if let event = remoteEvent.first {
-
-			switch event.wrapper.status {
-				case .complete:
-					if let result = event.wrapper.result, result.negativeResult {
-						return listTest20EventsState(event)
-					} else {
-						return emptyTest20EventsState()
-					}
-				case .pending:
-					return pendingTest20EventsState()
-				default:
-					return emptyTest20EventsState()
-			}
-		}
-
-		return emptyTest20EventsState()
-	}
-
-	private func pendingTest20EventsState() -> ListEventsViewController.State {
+	private func pendingEventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
 				title: .holderTestResultsPendingTitle,
 				subTitle: .holderTestResultsPendingText,
-				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryActionTitle: .holderTestNoListActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -704,26 +693,10 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func emptyTest20EventsState() -> ListEventsViewController.State {
-
-		return .emptyEvents(
-			content: ListEventsViewController.Content(
-				title: .holderTestResultsNoResultsTitle,
-				subTitle: .holderTestResultsNoResultsText,
-				primaryActionTitle: .holderTestResultsBackToMenuButton,
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-
-	private func listTest20EventsState(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.State {
+	private func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListEventsViewController.State {
 
 		var rows = [ListEventsViewController.Row]()
-		if let row = getTest20Row(remoteTestEvent) {
+		if let row = getTest20Row(remoteEvent) {
 			rows.append(row)
 		}
 
@@ -733,9 +706,9 @@ extension ListEventsViewModel {
 				subTitle: .holderTestResultsResultsText,
 				primaryActionTitle: .holderTestResultsResultsButton,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: [remoteTestEvent], onError: {
-
-					})
+					self?.userWantsToMakeTest20QR(remoteEvents: [remoteEvent]) {
+						self?.showTestError(remoteEvents: [remoteEvent])
+					}
 				},
 				secondaryActionTitle: .holderVaccinationListWrong,
 				secondaryAction: { [weak self] in
@@ -752,9 +725,9 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getTest20Row(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.Row? {
+	private func getTest20Row(_ remoteEvent: RemoteEvent) -> ListEventsViewController.Row? {
 
-		guard let result = remoteTestEvent.wrapper.result,
+		guard let result = remoteEvent.wrapper.result,
 			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
 			return nil
 		}
@@ -814,12 +787,12 @@ extension ListEventsViewModel {
 		return output.trimmingCharacters(in: .whitespaces)
 	}
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteTestEvent], onError: @escaping () -> Void) {
+	private func userWantsToMakeTest20QR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeTestEvent(remoteEvents: remoteEvents) { saved in
+		storeTest20Event(remoteEvents: remoteEvents) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
@@ -831,7 +804,7 @@ extension ListEventsViewModel {
 		}
 	}
 
-	private func showTestError(remoteEvents: [RemoteTestEvent]) {
+	private func showTestError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,

@@ -7,64 +7,64 @@
 
 import UIKit
 
-struct ListResultItem {
-
-	let identifier: String
-	let date: String?
-	let holder: String
-}
-
-class ListResultsViewModel: Logging {
-
-	var loggingCategory: String = "ListResultsViewModel"
-
-	/// Coordination Delegate
-	weak var coordinator: HolderCoordinatorDelegate?
-
-	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-
-	var maxValidity: Int
-
-	/// The proof manager
-	weak var proofManager: ProofManaging?
-
-	@Bindable private(set) var title: String
-	@Bindable private(set) var message: String
-	@Bindable private(set) var buttonTitle: String
-	@Bindable private(set) var recentHeader: String
-	@Bindable var showAlert: Bool = false
-	@Bindable var showError: Bool = false
-	@Bindable var errorMessage: String?
-	@Bindable var listItem: ListResultItem?
-	@Bindable private(set) var shouldShowProgress: Bool = false
-
-	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
-		ProgressIndicationCounter { [weak self] in
-			// Do not increment/decrement progress within this closure
-			self?.shouldShowProgress = $0
-		}
-	}()
-
-	/// Initializer
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
-	///   - maxValidity: the maximum validity of a test result
-	init(
-		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
-		maxValidity: Int) {
-
-		self.coordinator = coordinator
-		self.proofManager = proofManager
-		self.maxValidity = maxValidity
-
-		self.title = .holderTestResultsNoResultsTitle
-		self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
-		self.buttonTitle = .holderTestResultsBackToMenuButton
-		self.recentHeader = .holderTestResultsRecent
-		self.listItem = nil
-	}
+//struct ListResultItem {
+//
+//	let identifier: String
+//	let date: String?
+//	let holder: String
+//}
+//
+//class ListResultsViewModel: Logging {
+//
+//	var loggingCategory: String = "ListResultsViewModel"
+//
+//	/// Coordination Delegate
+//	weak var coordinator: HolderCoordinatorDelegate?
+//
+//	var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+//
+//	var maxValidity: Int
+//
+//	/// The proof manager
+//	weak var proofManager: ProofManaging?
+//
+//	@Bindable private(set) var title: String
+//	@Bindable private(set) var message: String
+//	@Bindable private(set) var buttonTitle: String
+//	@Bindable private(set) var recentHeader: String
+//	@Bindable var showAlert: Bool = false
+//	@Bindable var showError: Bool = false
+//	@Bindable var errorMessage: String?
+//	@Bindable var listItem: ListResultItem?
+//	@Bindable private(set) var shouldShowProgress: Bool = false
+//
+//	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
+//		ProgressIndicationCounter { [weak self] in
+//			// Do not increment/decrement progress within this closure
+//			self?.shouldShowProgress = $0
+//		}
+//	}()
+//
+//	/// Initializer
+//	/// - Parameters:
+//	///   - coordinator: the coordinator delegate
+//	///   - proofManager: the proof manager
+//	///   - maxValidity: the maximum validity of a test result
+//	init(
+//		coordinator: HolderCoordinatorDelegate,
+//		proofManager: ProofManaging,
+//		maxValidity: Int) {
+//
+//		self.coordinator = coordinator
+//		self.proofManager = proofManager
+//		self.maxValidity = maxValidity
+//
+//		self.title = .holderTestResultsNoResultsTitle
+//		self.message = String(format: .holderTestResultsNoResultsText, String(maxValidity))
+//		self.buttonTitle = .holderTestResultsBackToMenuButton
+//		self.recentHeader = .holderTestResultsRecent
+//		self.listItem = nil
+//	}
 //
 //	/// The te test result
 //	func checkResult() {
@@ -268,4 +268,4 @@ class ListResultsViewModel: Logging {
 //		}
 //		return output.trimmingCharacters(in: .whitespaces)
 //	}
-}
+//}

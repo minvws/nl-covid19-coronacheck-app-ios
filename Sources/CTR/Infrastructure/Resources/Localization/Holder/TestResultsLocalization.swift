@@ -44,21 +44,6 @@ extension String {
 		return Localization.string(for: "holder.testresults.results.button")
 	}
 
-	static var holderTestResultsNoResultsTitle: String {
-
-		return Localization.string(for: "holder.testresults.noresults.title")
-	}
-
-	static var holderTestResultsNoResultsText: String {
-
-		return Localization.string(for: "holder.testresults.noresults.text")
-	}
-
-	static var holderTestResultsBackToMenuButton: String {
-
-		return Localization.string(for: "holder.testresults.back.button")
-	}
-
 	static var holderTestResultsRecent: String {
 
 		return Localization.string(for: "holder.testresults.recent")

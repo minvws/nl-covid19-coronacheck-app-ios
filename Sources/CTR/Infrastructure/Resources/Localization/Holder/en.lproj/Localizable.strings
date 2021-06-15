@@ -268,9 +268,6 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.testresults.results.title" = "Check your test result";
 "holder.testresults.results.text" = "This test result is retrieved from the test location.<br\>Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.";
 "holder.testresults.results.button" = "Make QR code";
-"holder.testresults.noresults.title" = "No negative test result";
-"holder.testresults.noresults.text" = "No negative test result available";
-"holder.testresults.back.button" = "To my overview";
 "holder.testresults.pending.title" = "Test result not yet known";
 "holder.testresults.pending.text" = "<p>Please try again later.</p><p></p><p>If you have any questions, contact your test location.</p>";
 "holder.testresults.already.title" = "Test result already retrieved";
