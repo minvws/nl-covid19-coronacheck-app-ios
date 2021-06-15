@@ -204,7 +204,8 @@ class QRCardView: BaseView {
 	private func applyEUStyle() {
 		regionLabel.textColor = Theme.colors.europa
 		viewQRButton.backgroundColor = Theme.colors.europa
-		viewQRButton.setTitleColor(Theme.colors.grey4, for: .normal)
+		viewQRButton.setTitleColor(Theme.colors.greenGrey, for: .normal)
+		largeIconImageView.image = .euQRIcon
 	}
 
 	// MARK: - Callbacks

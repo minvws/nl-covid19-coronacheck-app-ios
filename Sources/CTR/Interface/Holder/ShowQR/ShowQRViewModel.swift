@@ -25,6 +25,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	private var greenCard: GreenCard
 
 	@Bindable private(set) var title: String?
+    
+    @Bindable private(set) var qrAccessibility: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
@@ -82,9 +84,11 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = .holderShowQRDomesticTitle
+            qrAccessibility = .holderShowQRDomesticQRTitle
 			infoButtonAccessibility = .holderShowQRDomesticAboutTitle
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = .holderShowQREuTitle
+            qrAccessibility = .holderShowQRDomesticQRTitle
 			infoButtonAccessibility = .holderShowQREuAboutTitle
 		}
 
@@ -176,7 +180,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let body: String = String(
 			format: .holderShowQREuAboutVaccinationMessage,
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			vaccineBrand,
 			vaccineType,
@@ -217,7 +221,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let body: String = String(
 			format: .holderShowQREuAboutTestMessage,
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			testType,
 			test.name ?? "",
