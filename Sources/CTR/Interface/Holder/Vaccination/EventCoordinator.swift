@@ -190,6 +190,10 @@ class EventCoordinator: Coordinator, Logging {
 				coordinator: self,
 				title: title,
 				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
@@ -358,7 +362,13 @@ extension EventCoordinator: OpenUrlProtocol {
 
 		if shouldOpenInApp {
 			let safariController = SFSafariViewController(url: url)
-			navigationController.viewControllers.last?.present(safariController, animated: true)
+			if let presentedViewController = navigationController.presentedViewController {
+				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+					self.navigationController.viewControllers.last?.present(safariController, animated: true)
+				})
+			} else {
+				navigationController.viewControllers.last?.present(safariController, animated: true)
+			}
 		} else {
 			UIApplication.shared.open(url)
 		}
