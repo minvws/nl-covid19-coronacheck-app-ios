@@ -1,3 +1,10 @@
+"general.recoverystatement" = "recovery statement";
+"general.recoverydate" = "recovery date";
+"general.testcertificate" = "test certificate";
+"general.vaccinationcertificate" = "vaccination certificate";
+"general.testdate" = "test date";
+"general.vaccinationdate" = "vaccination date";
+
 "holder.tokenscan.torch.enable" = "Turn the flashlight on.";
 "holder.tokenscan.torch.disable" = "Turn the flashlight off.";
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
@@ -104,13 +111,6 @@
 "general.list.accessibility" = "%@ of %@.";
 "general.vaccination" = "vaccination";
 "general.testresult" = "test result";
-"general.recoverystatement" = "recovery statement";
-"general.recoverydate" = "recovery date";
-"general.testcertificate" = "test certificate";
-"general.testdate" = "test date";
-"general.vaccinationcertificate" = "vaccination certificate";
-"general.vaccinationdate" = "vaccination date";
-
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
 "toggleRegion.label.topText.nl" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
@@ -309,7 +309,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
 "holder.vaccination.list.action" = "Make QR code";
 "holder.vaccination.element.title" = "Vaccination %@";
-"holder.vaccination.element.subtitle" = "Name: %@<br>Vaccination date: %@";
+"holder.vaccination.element.subtitle" = "Name: %@<br>Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. </p><p>Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information. <br/><br/>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To My Overview";
