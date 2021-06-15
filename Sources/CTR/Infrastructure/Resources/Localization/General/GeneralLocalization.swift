@@ -155,4 +155,28 @@ extension String {
 	static var testresult: String {
 		Localization.string(for: "general.testresult")
 	}
+
+	static var recoverystatement: String {
+		Localization.string(for: "general.recoverystatement")
+	}
+
+	static var recoverydate: String {
+		Localization.string(for: "general.recoverydate")
+	}
+
+	static var testcertificate: String {
+		Localization.string(for: "general.testcertificate")
+	}
+
+	static var testdate: String {
+		Localization.string(for: "general.testdate")
+	}
+
+	static var vaccinationcertificate: String {
+		Localization.string(for: "general.vaccinationcertificate")
+	}
+
+	static var vaccinationdate: String {
+		Localization.string(for: "general.vaccinationdate")
+	}
 }

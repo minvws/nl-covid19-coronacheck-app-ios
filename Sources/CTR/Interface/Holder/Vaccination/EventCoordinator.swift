@@ -190,6 +190,10 @@ class EventCoordinator: Coordinator, Logging {
 				coordinator: self,
 				title: title,
 				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
@@ -321,7 +325,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				case let error? where (error as NSError).domain.contains("org.openid.appauth"):
 					alertController = UIAlertController(
 						title: .holderGGDLoginFailureVaccineGeneralTitle,
-						message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
+						message: .holderGGDLoginFailureGeneralMessage(localizedEventMode: eventMode.localized),
 						preferredStyle: .alert)
 				default:
 					alertController = UIAlertController(
@@ -358,7 +362,13 @@ extension EventCoordinator: OpenUrlProtocol {
 
 		if shouldOpenInApp {
 			let safariController = SFSafariViewController(url: url)
-			navigationController.viewControllers.last?.present(safariController, animated: true)
+			if let presentedViewController = navigationController.presentedViewController {
+				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+					self.navigationController.viewControllers.last?.present(safariController, animated: true)
+				})
+			} else {
+				navigationController.viewControllers.last?.present(safariController, animated: true)
+			}
 		} else {
 			UIApplication.shared.open(url)
 		}

@@ -34,6 +34,8 @@ class MenuViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		configureTranslucentNavigationBar()
 
 		viewModel.$topMenu.binding = { [weak self] items in
 

@@ -32,6 +32,8 @@ class VerifierScanViewController: ScanViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		configureTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 

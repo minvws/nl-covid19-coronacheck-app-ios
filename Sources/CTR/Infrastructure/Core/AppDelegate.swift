@@ -152,6 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			NSAttributedString.Key.font: Theme.fonts.bodyMontserratFixed
 		]
 		UINavigationBar.appearance().tintColor = Theme.colors.dark
+		UINavigationBar.appearance().barTintColor = Theme.colors.viewControllerBackground
 		
 		// White navigation bar without bottom separator
 		UINavigationBar.appearance().isTranslucent = false

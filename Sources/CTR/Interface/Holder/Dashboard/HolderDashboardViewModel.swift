@@ -51,11 +51,21 @@ enum QRCodeOriginType: String, Codable {
 	case vaccination
 	case recovery
 
-	var localized: String {
+	// e.g. "Test Certificate", "Vaccination Certificate"
+	var localizedProof: String {
 		switch self {
-			case .recovery: return .qrTypeRecovery
-			case .vaccination: return .qrTypeVaccination
-			case .test: return .qrTypeTest
+			case .recovery: return .recoverystatement
+			case .vaccination: return .vaccinationcertificate
+			case .test: return .testcertificate
+		}
+	}
+
+	// e.g. "Test Date", "Vaccination Date" etc.
+	var localizedEvent: String {
+		switch self {
+			case .recovery: return .recoverydate
+			case .vaccination: return .vaccinationdate
+			case .test: return .testdate
 		}
 	}
 
@@ -233,7 +243,7 @@ class HolderDashboardViewModel: Logging {
 
 			let message = String.holderDashboardQRExpired(
 				localizedRegion: expiredQR.region.localizedAdjective,
-				localizedOriginType: expiredQR.type.localized
+				localizedOriginType: expiredQR.type.localizedProof
 			)
 
 			return .expiredQR(message: message, didTapClose: {
@@ -276,7 +286,7 @@ class HolderDashboardViewModel: Logging {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized,
+								typeText: origin.type.localizedProof.capitalizingFirstLetter(),
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -308,7 +318,7 @@ class HolderDashboardViewModel: Logging {
 					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized,
+								typeText: origin.type.localizedEvent.capitalizingFirstLetter(),
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -778,9 +788,9 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
 		switch state.qrCodeValidityRegion {
 			case .domestic:
-				return (originType, String.holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: originType.localized))
+				return (originType, String.holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: originType.localizedProof))
 			case .europeanUnion:
-				return (originType, String.holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: originType.localized))
+				return (originType, String.holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: originType.localizedProof))
 		}
 	}
 

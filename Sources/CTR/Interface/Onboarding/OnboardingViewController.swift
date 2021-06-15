@@ -45,6 +45,8 @@ class OnboardingViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
+		configureTranslucentNavigationBar()
+		
 		setupPageController()
 		viewModel.$pages.binding = { [weak self] in
 
