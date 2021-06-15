@@ -68,6 +68,11 @@ class HolderCoordinator: SharedCoordinator {
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
+	/// Restricts access to GGD test provider login
+	private var isGGDEnabled: Bool {
+		return remoteConfigManager.getConfiguration().isGGDEnabled == true
+	}
+	
 	// Designated starter method
 	override func start() {
 
@@ -150,7 +155,8 @@ class HolderCoordinator: SharedCoordinator {
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
-				delegate: self
+				delegate: self,
+				isGGDEnabled: isGGDEnabled
 			)
 			startChildCoordinator(eventCoordinator)
 		}
@@ -343,7 +349,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
-				delegate: self
+				delegate: self,
+				isGGDEnabled: isGGDEnabled
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
@@ -355,7 +362,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToChooseLocation() {
-		navigateToChooseTestLocation()
+		if isGGDEnabled {
+			navigateToChooseTestLocation()
+		} else {
+			// Fallback when GGD is not available
+			navigateToTokenEntry()
+		}
 	}
 
 	func userHasNotBeenTested() {
@@ -381,7 +393,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
-				delegate: self
+				delegate: self,
+				isGGDEnabled: isGGDEnabled
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithTVS(eventMode: EventMode.test)
