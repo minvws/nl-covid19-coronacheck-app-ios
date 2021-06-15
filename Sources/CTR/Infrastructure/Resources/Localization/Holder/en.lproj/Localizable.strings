@@ -104,6 +104,12 @@
 "general.list.accessibility" = "%@ of %@.";
 "general.vaccination" = "vaccination";
 "general.testresult" = "test result";
+"general.recoverystatement" = "recovery statement";
+"general.recoverydate" = "recovery date";
+"general.testcertificate" = "test certificate";
+"general.testdate" = "test date";
+"general.vaccinationcertificate" = "vaccination certificate";
+"general.vaccinationdate" = "vaccination date";
 
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
@@ -201,9 +207,6 @@
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "valid until";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
-"holder.dashboard.qr.type.recovery" = "Recovery statement";
-"holder.dashboard.qr.type.test" = "test certificate";
-"holder.dashboard.qr.type.vaccination" = "vaccination certificate";
 "holder.dashboard.qr.title" = "Show QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the legislation goes into effect (from %@).";

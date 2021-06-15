@@ -117,18 +117,6 @@ extension String {
 		return Localization.string(for: "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn")
 	}
 
-	static var qrTypeRecovery: String {
-		return Localization.string(for: "holder.dashboard.qr.type.recovery")
-	}
-
-	static var qrTypeTest: String {
-		return Localization.string(for: "holder.dashboard.qr.type.test")
-	}
-
-	static var qrTypeVaccination: String {
-		return Localization.string(for: "holder.dashboard.qr.type.vaccination")
-	}
-
 	static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
 		switch (originType, currentRegion) {
 			case (.vaccination, .domestic):
