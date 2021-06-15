@@ -52,55 +52,19 @@ class ProofManagingSpy: ProofManaging {
 	var invokedFetchTestResultCount = 0
 	var invokedFetchTestResultParameters: (token: RequestToken, code: String?, provider: TestProvider)?
 	var invokedFetchTestResultParametersList = [(token: RequestToken, code: String?, provider: TestProvider)]()
-	var stubbedFetchTestResultOnCompletionResult: (Result<RemoteTestEvent, Error>, Void)?
+	var stubbedFetchTestResultOnCompletionResult: (Result<RemoteEvent, Error>, Void)?
 
 	func fetchTestResult(
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void) {
 		invokedFetchTestResult = true
 		invokedFetchTestResultCount += 1
 		invokedFetchTestResultParameters = (token, code, provider)
 		invokedFetchTestResultParametersList.append((token, code, provider))
 		if let result = stubbedFetchTestResultOnCompletionResult {
 			onCompletion(result.0)
-		}
-	}
-
-	var invokedFetchNonce = false
-	var invokedFetchNonceCount = 0
-	var shouldInvokeFetchNonceOnCompletion = false
-	var stubbedFetchNonceOnErrorResult: (Error, Void)?
-
-	func fetchNonce(
-		onCompletion: @escaping (() -> Void),
-		onError: @escaping ((Error) -> Void)) {
-		invokedFetchNonce = true
-		invokedFetchNonceCount += 1
-		if shouldInvokeFetchNonceOnCompletion {
-			onCompletion()
-		}
-		if let result = stubbedFetchNonceOnErrorResult {
-			onError(result.0)
-		}
-	}
-
-	var invokedFetchSignedTestResult = false
-	var invokedFetchSignedTestResultCount = 0
-	var stubbedFetchSignedTestResultOnCompletionResult: (SignedTestResultState, Void)?
-	var stubbedFetchSignedTestResultOnErrorResult: (Error, Void)?
-
-	func fetchSignedTestResult(
-		onCompletion: @escaping ((SignedTestResultState) -> Void),
-		onError: @escaping ((Error) -> Void)) {
-		invokedFetchSignedTestResult = true
-		invokedFetchSignedTestResultCount += 1
-		if let result = stubbedFetchSignedTestResultOnCompletionResult {
-			onCompletion(result.0)
-		}
-		if let result = stubbedFetchSignedTestResultOnErrorResult {
-			onError(result.0)
 		}
 	}
 

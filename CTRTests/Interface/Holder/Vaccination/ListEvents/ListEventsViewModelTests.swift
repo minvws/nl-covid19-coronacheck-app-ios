@@ -29,8 +29,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [],
-			remoteTestEvents: [],
+			remoteEvents: [],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -101,8 +100,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -132,8 +130,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -157,8 +154,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -187,8 +183,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -219,8 +214,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -294,8 +288,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -333,8 +326,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -373,8 +365,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -411,12 +402,13 @@ class ListEventsViewModelTests: XCTestCase {
 	// MARK: Default values
 
 	private func defaultremoteVaccinationEvent() -> RemoteEvent {
-		return RemoteVaccinationEvent(
+		return RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "CC",
 				protocolVersion: "3.0",
 				identity: identity,
 				status: .complete,
+				result: nil,
 				events: [
 					EventFlow.Event(
 						type: "vaccination",

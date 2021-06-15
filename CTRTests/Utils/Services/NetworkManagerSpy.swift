@@ -120,13 +120,13 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchTestResultCount = 0
 	var invokedFetchTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
 	var invokedFetchTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
-	var stubbedFetchTestResultCompletionResult: (Result<(TestResultWrapper, SignedResponse), NetworkError>, Void)?
+	var stubbedFetchTestResultCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>, Void)?
 
 	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 		invokedFetchTestResult = true
 		invokedFetchTestResultCount += 1
 		invokedFetchTestResultParameters = (provider, token, code)

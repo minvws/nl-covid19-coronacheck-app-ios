@@ -9,6 +9,7 @@ import UIKit
 import SafariServices
 
 enum EventMode {
+
 	// case recovery
 	case test
 	case vaccination
@@ -123,9 +124,9 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	func startWithListTestEvents(testEvents: [RemoteTestEvent]) {
+	func startWithListTestEvents(_ testEvents: [RemoteEvent]) {
 
-		navigateToListEvents([], testEvents: testEvents, eventMode: .test, sourceMode: .commercial)
+		navigateToListEvents(testEvents, eventMode: .test)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -166,18 +167,14 @@ class EventCoordinator: Coordinator, Logging {
 	}
 
 	private func navigateToListEvents(
-		_ vaccinationEvents: [RemoteEvent],
-		testEvents: [RemoteTestEvent],
-		eventMode: EventMode,
-		sourceMode: ListEventSourceMode = .ggd) {
+		_ remoteEvents: [RemoteEvent],
+		eventMode: EventMode) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
-				sourceMode: sourceMode,
 				eventMode: eventMode,
-				remoteVaccinationEvents: vaccinationEvents,
-				remoteTestEvents: testEvents
+				remoteEvents: remoteEvents
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -277,7 +274,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToVaccinationStart()
 				}
 			case let .showEvents(remoteEvents, eventMode):
-				navigateToListEvents(remoteEvents, testEvents: [], eventMode: eventMode)
+				navigateToListEvents(remoteEvents, eventMode: eventMode)
 
 			case .errorRequiringRestart(let error, let eventMode):
 				handleErrorRequiringRestart(error: error, eventMode: eventMode)

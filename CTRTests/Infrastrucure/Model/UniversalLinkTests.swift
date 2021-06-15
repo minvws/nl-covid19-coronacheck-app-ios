@@ -19,7 +19,7 @@ class UniversalLinkTests: XCTestCase {
 
         let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
             token: "YYYYYYYYYYYY",
-            protocolVersion: "2.0",
+            protocolVersion: "3.0",
             providerIdentifier: "XXX"
         ))
 

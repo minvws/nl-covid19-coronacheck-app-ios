@@ -8,11 +8,6 @@
 
 import Foundation
 
-enum ListEventSourceMode {
-	case ggd
-	case commercial
-}
-
 class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
@@ -83,10 +78,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		sourceMode: ListEventSourceMode = .ggd,
 		eventMode: EventMode,
-		remoteVaccinationEvents: [RemoteEvent],
-		remoteTestEvents: [RemoteTestEvent],
+		remoteEvents: [RemoteEvent],
 		networkManager: NetworkManaging = Services.networkManager,
 		walletManager: WalletManaging = Services.walletManager,
 		cryptoManager: CryptoManaging = Services.cryptoManager,
@@ -102,7 +95,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
-				title: sourceMode == .ggd ? (eventMode == .test ? .holderTestResultsResultsTitle : .holderVaccinationLoadingTitle) : .holderTestResultsResultsTitle,
+				title: eventMode == .test ? .holderTestResultsResultsTitle : .holderVaccinationLoadingTitle,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -113,11 +106,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		super.init()
 
-		if sourceMode == .ggd {
-			viewState = getViewState(from: remoteVaccinationEvents)
-		} else {
-			viewState = getViewState(from: remoteTestEvents)
-		}
+//		if sourceMode == .ggd {
+//			viewState = getViewState(from: remoteVaccinationEvents)
+//		} else {
+//			viewState = getViewState(from: remoteTestEvents)
+//		}
 	}
 
 	func backButtonTapped() {

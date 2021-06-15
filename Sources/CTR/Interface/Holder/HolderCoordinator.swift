@@ -31,7 +31,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
 	func userWishesToCreateAQR()
 
@@ -314,7 +314,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			.present(viewController, animated: true, completion: nil)
 	}
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -322,7 +322,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
+			eventCoordinator.startWithListTestEvents([remoteEvent])
 		}
 	}
 

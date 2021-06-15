@@ -33,27 +33,57 @@ extension TestProvider {
     }
 }
 
-extension TestResultWrapper {
-
-    static var fakeComplete: TestResultWrapper {
-        TestResultWrapper(providerIdentifier: "", protocolVersion: "", result: nil, status: .complete)
-    }
-
-    static var fakePending: TestResultWrapper {
-        TestResultWrapper(providerIdentifier: "", protocolVersion: "", result: nil, status: .pending)
-    }
-
-    static var fakeVerificationRequired: TestResultWrapper {
-        TestResultWrapper(providerIdentifier: "", protocolVersion: "", result: nil, status: .verificationRequired)
-    }
-
-    static var fakeInvalid: TestResultWrapper {
-        TestResultWrapper(providerIdentifier: "", protocolVersion: "", result: nil, status: .invalid)
-    }
-
-    static var fakeUnknown: TestResultWrapper {
-        TestResultWrapper(providerIdentifier: "", protocolVersion: "", result: nil, status: .unknown)
-    }
+extension EventFlow.EventResultWrapper {
+	
+	static var fakeComplete: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "",
+			identity: nil,
+			status: .complete,
+			result: nil
+		)
+	}
+	
+	static var fakePending: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "",
+			identity: nil,
+			status: .pending,
+			result: nil
+		)
+	}
+	
+	static var fakeVerificationRequired: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "",
+			identity: nil,
+			status: .verificationRequired,
+			result: nil
+		)
+	}
+	
+	static var fakeInvalid: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "",
+			identity: nil,
+			status: .invalid,
+			result: nil
+		)
+	}
+	
+	static var fakeUnknown: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "",
+			protocolVersion: "",
+			identity: nil,
+			status: .unknown,
+			result: nil
+		)
+	}
 }
 
 extension RequestToken {
