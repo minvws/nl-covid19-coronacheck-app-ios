@@ -24,11 +24,11 @@ extension String {
 		return Localization.string(for: "holder.showqr.domestic.title")
 	}
 
-	static var holderShowQREuTitle: String {
+    static var holderShowQRDomesticQRTitle: String {
 
-		return Localization.string(for: "holder.showqr.eu.title")
-	}
-
+        return Localization.string(for: "holder.showqr.domestic.qr.title")
+    }
+    
 	static var holderShowQRDomesticAboutTitle: String {
 
 		return Localization.string(for: "holder.showqr.domestic.about.title")
@@ -38,6 +38,16 @@ extension String {
 
 		return Localization.string(for: "holder.showqr.domestic.about.message")
 	}
+    
+    static var holderShowQREuTitle: String {
+
+        return Localization.string(for: "holder.showqr.eu.title")
+    }
+    
+    static var holderShowQREuQRTitle: String {
+
+        return Localization.string(for: "holder.showqr.eu.qr.title")
+    }
 
 	static var holderShowQREuAboutTitle: String {
 
