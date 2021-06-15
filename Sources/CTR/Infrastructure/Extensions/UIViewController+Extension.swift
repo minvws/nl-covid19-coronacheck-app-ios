@@ -14,5 +14,6 @@ extension UIViewController {
 	func configureTranslucentNavigationBar() {
 		navigationController?.navigationBar.isTranslucent = true
 		navigationController?.navigationBar.backgroundColor = .clear
+		navigationController?.navigationBar.barTintColor = .clear
 	}
 }
