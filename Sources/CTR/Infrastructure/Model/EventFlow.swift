@@ -202,13 +202,13 @@ struct EventFlow {
 
 	struct Identity: Codable, Equatable {
 
-		let infix: String
+		let infix: String?
 
-		let firstName: String
+		let firstName: String?
 
-		let lastName: String
+		let lastName: String?
 
-		let birthDateString: String
+		let birthDateString: String?
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -221,7 +221,7 @@ struct EventFlow {
 
 		var fullName: String {
 
-			"\(infix) \(lastName), \(firstName)".trimmingCharacters(in: .whitespaces)
+			"\(infix ?? "") \(lastName ?? ""), \(firstName ?? "")".trimmingCharacters(in: .whitespaces)
 		}
 	}
 

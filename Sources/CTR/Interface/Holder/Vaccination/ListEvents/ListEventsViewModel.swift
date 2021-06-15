@@ -13,7 +13,7 @@ enum ListEventSourceMode {
 	case commercial
 }
 
-class ListEventsViewModel: Logging {
+class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -110,6 +110,8 @@ class ListEventsViewModel: Logging {
 				secondaryAction: nil
 			)
 		)
+
+		super.init()
 
 		if sourceMode == .ggd {
 			viewState = getViewState(from: remoteVaccinationEvents)
@@ -214,7 +216,8 @@ class ListEventsViewModel: Logging {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody
+							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody,
+							hideBodyForScreenCapture: false
 						)
 					)
 				}
@@ -252,8 +255,9 @@ class ListEventsViewModel: Logging {
 
 		for dataRow in sortedDataSource {
 
-			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
-				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedBirthDate: String = dataRow.identity.birthDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 			let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
@@ -300,7 +304,8 @@ class ListEventsViewModel: Logging {
 									dataRow.event.negativeTest?.facility ?? "",
 									manufacturer,
 									dataRow.event.unique ?? ""
-								)
+								),
+								hideBodyForScreenCapture: true
 							)
 						)
 					}
@@ -316,8 +321,9 @@ class ListEventsViewModel: Logging {
 
 		for dataRow in sortedDataSource {
 
-			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
-				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedBirthDate: String = dataRow.identity.birthDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 			let formattedShotDate: String = dataRow.event.vaccination?.dateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
@@ -368,7 +374,8 @@ class ListEventsViewModel: Logging {
 									formattedShotDate,
 									dataRow.event.vaccination?.country ?? "",
 									dataRow.event.unique ?? ""
-								)
+								),
+								hideBodyForScreenCapture: true
 							)
 						)
 					}
@@ -740,7 +747,8 @@ extension ListEventsViewModel {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: .holderTestWrongBody
+							body: .holderTestWrongBody,
+							hideBodyForScreenCapture: false
 						)
 					)
 				}
@@ -785,7 +793,8 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
 						title: .holderEventAboutTitle,
-						body: body
+						body: body,
+						hideBodyForScreenCapture: true
 					)
 				)
 			}

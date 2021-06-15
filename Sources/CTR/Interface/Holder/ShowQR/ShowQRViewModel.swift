@@ -127,7 +127,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 					.map({ $0.isEmpty ? "_" : $0 })
 					.joined(separator: " ")
 				let body: String = String(format: .holderShowQRDomesticAboutMessage, identity)
-				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body)
+				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body, hideBodyForScreenCapture: true)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
@@ -186,7 +186,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			vaccination.country,
 			vaccination.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
 	}
 
 	private func showMoreInformationVaccination(
@@ -228,7 +228,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			test.country,
 			test.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
 	}
 
 	private func setQRValid(_ data: Data, correctionLevel: String) {

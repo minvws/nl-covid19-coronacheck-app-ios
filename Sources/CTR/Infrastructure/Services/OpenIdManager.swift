@@ -86,8 +86,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 					DispatchQueue.main.async {
 						self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 						if let authState = authState {
-							self.logDebug("OpenIdManager: Got access tokens. Access token: " +
-											"\(authState.lastTokenResponse?.accessToken ?? "nil")")
+							self.logDebug("OpenIdManager: We got the idToken")
 							onCompletion(authState.lastTokenResponse?.idToken)
 						} else {
 							self.logError("OpenIdManager: \(String(describing: error))")

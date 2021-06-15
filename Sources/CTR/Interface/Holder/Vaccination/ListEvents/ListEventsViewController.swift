@@ -102,6 +102,11 @@ class ListEventsViewController: BaseViewController {
 
 			self?.viewModel.openUrl(url)
 		}
+
+		viewModel.$hideForCapture.binding = { [weak self] in
+
+			self?.sceneView.hideForCapture = $0
+		}
 	}
 
 	@objc func backButtonTapped() {

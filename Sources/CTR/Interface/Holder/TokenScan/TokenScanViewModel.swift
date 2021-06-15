@@ -27,8 +27,8 @@ class TokenScanViewModel: ScanPermissionViewModel {
 	/// Show the error?
 	@Bindable private(set) var showError: Bool
 
-	/// The accessibility message for the torch
-	@Bindable private(set) var torchAccessibility: String
+	/// The accessibility labels for the torch
+	@Bindable private(set) var torchLabels: [String]
 
 	/// Start scanning
 	@Bindable private(set) var startScanning: Bool = false
@@ -41,7 +41,7 @@ class TokenScanViewModel: ScanPermissionViewModel {
 		self.theCoordinator = coordinator
 		self.title = .holderTokenScanTitle
 		self.message = .holderTokenScanMessage
-		self.torchAccessibility = .holderTokenScanTorchAccessibility
+		self.torchLabels = [.holderTokenScanTorchEnable, .holderTokenScanTorchDisable]
 		self.errorTitle = .holderTokenScanErrorTitle
 		self.errorMessage = .holderTokenScanErrorMessage
 		self.showError = false

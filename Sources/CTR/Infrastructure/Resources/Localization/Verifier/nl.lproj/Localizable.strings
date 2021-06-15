@@ -1,3 +1,5 @@
+"verifier.scan.torch.enable" = "Zet de zaklamp aan.";
+"verifier.scan.torch.disable" = "Zet de zaklamp uit.";
 "verifier.result.denied.region.title" = "Dit is een internationale QR-code";
 "verifier.result.denied.region.message" = "Dit is geen geldig bewijs in Nederland. Vraag de bezoeker een Nederlandse QR-code te laten zien.";
 "verifier.result.identity.label" = "Kenmerk %@ is %@";
@@ -106,7 +108,7 @@
 "verifier.onboarding.title.scanqr" = "Scan QR-code voor toegang";
 "verifier.onboarding.message.scanqr" = "Bezoekers maken eerst een QR-code van hun vaccinatie of testuitslag. Daarna check je met deze app de QR-codes en zie je wie toegang mag krijgen.";
 "verifier.onboarding.title.access" = "Controle van identiteitsbewijs";
-"verifier.onboarding.message.access" = "Groen scherm? Vraag de bezoeker een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Dit geldt voor bezoekers uit Nederland en bezoekers uit andere landen binnen de Europese Unie.";
+"verifier.onboarding.message.access" = "Groen scherm? Vraag de bezoeker een identiteitsbewijs te laten zien. Controleer of de gegevens op jouw scherm hetzelfde zijn als op het identiteitsbewijs. Check? Dan kan de bezoeker naar binnen.";
 "verifier.onboarding.title.who" = "Voor wie is de scanner?";
 "verifier.onboarding.message.who" = "Met behulp van deze app kun je weer bezoekers ontvangen. Maar alleen als jouw locatie of activiteit onder de aangewezen locaties valt.";
 
@@ -129,7 +131,7 @@
 /* MARK: - Verifier Scan Instructions */
 "verifier.instructions.title" = "Zo werkt scannen";
 "verifier.instructions.distance.title" = "1. Houd afstand";
-"verifier.instructions.distance.text" = "Druk op de knop ‘Start Scannen’ en vraag de bezoeker de QR-code te laten zien. Dat mag zowel via de CoronaCheck-app als op papier. De QR-code geldt als bewijs en kan op veilige afstand uitgelezen worden.";
+"verifier.instructions.distance.text" = "Druk op de knop ‘Start scannen’ en vraag de bezoeker de QR-code te laten zien. Dat mag zowel via de CoronaCheck-app als op papier. De QR-code geldt als bewijs en kan op veilige afstand uitgelezen worden.";
 "verifier.instructions.scan.title" = "2. Scan de QR-code";
 "verifier.instructions.scan.text" = "Richt de camera van je telefoon op het test- of vaccinatiebewijs van de bezoeker en scan de QR-code.";
 "verifier.instructions.access.title" = "3. Groen scherm";
@@ -140,7 +142,6 @@
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
 "verifier.scan.message" = "Richt je telefoon op de QR-code op het scherm van de bezoeker. Of op het papieren bewijs.";
-"verifier.scan.torch.accessibility" = "Zet de zaklamp aan.";
 "verifier.scan.permission.title" = "Geen toegang tot camera";
 "verifier.scan.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
 "verifier.scan.permission.settings" = "Naar instellingen";
@@ -169,7 +170,7 @@
 "verifier.result.check.title" = "Over de controle";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Ongeldige QR-code";
-"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De persoon is niet getest</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li><li>De tijd op de telefoon van de bezoeker wijkt af</li></ul></p>";
+"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De QR-code van de internationale bezoeker voldoet niet aan Nederlandse toegangseisen</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li><li>De tijdinstellingen op de telefoon van de bezoeker wijken af</li></ul></p>";
 "verifier.denied.message.two" = "<p><b>Wat nu?</b><br>Vraag de bezoeker eerst een test te doen of zich te laten vaccineren. Daarna kan de bezoeker er in de CoronaCheck-app een QR-code van maken.</p>";
 
 /* MARK: - Verifier About */

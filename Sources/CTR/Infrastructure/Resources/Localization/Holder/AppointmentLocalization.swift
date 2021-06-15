@@ -8,26 +8,6 @@
 import Foundation
 
 extension String {
-
-	static var holderAppointmentTitle: String {
-
-		return Localization.string(for: "holder.appointment.title")
-	}
-
-	static var holderAppointmentHeader: String {
-
-		return Localization.string(for: "holder.appointment.header")
-	}
-
-	static var holderAppointmentBody: String {
-
-		return Localization.string(for: "holder.appointment.body")
-	}
-
-	static var holderAppointmentButtonTitle: String {
-
-		return Localization.string(for: "holder.appointment.button.title")
-	}
 	
 	static var holderNoTestTitle: String {
 		
