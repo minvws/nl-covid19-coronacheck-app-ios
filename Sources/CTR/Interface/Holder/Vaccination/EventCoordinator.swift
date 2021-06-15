@@ -100,7 +100,6 @@ class EventCoordinator: Coordinator, Logging {
 	weak var delegate: EventFlowDelegate?
 
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-	private let isGGDEnabled: Bool
 
 	/// Initiailzer
 	/// - Parameters:
@@ -108,12 +107,10 @@ class EventCoordinator: Coordinator, Logging {
 	///   - delegate: the vaccination flow delegate
 	init(
 		navigationController: UINavigationController,
-		delegate: EventFlowDelegate,
-		isGGDEnabled: Bool) {
+		delegate: EventFlowDelegate) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
-		self.isGGDEnabled = isGGDEnabled
 	}
 
 	func start() {
@@ -221,29 +218,25 @@ class EventCoordinator: Coordinator, Logging {
 	}
 
 	private func navigateBackToTestStart() {
-
-		if isGGDEnabled {
-			
-			if let chooseTestLocationViewController = navigationController.viewControllers
-				.first(where: { $0 is ChooseTestLocationViewController }) {
-
-				navigationController.popToViewController(
-					chooseTestLocationViewController,
-					animated: true
-				)
-			}
-		} else {
-			
-			// Fallback when GGD is not available
-			if let chooseQRCodeTypeViewController = navigationController.viewControllers
-				.first(where: { $0 is ChooseQRCodeTypeViewController }) {
-
-				navigationController.popToViewController(
-					chooseQRCodeTypeViewController,
-					animated: true
-				)
+		
+		let popToViewController = navigationController.viewControllers.first {
+			switch $0 {
+				case is ChooseTestLocationViewController:
+					return true
+				// Fallback when GGD is not available
+				case is ChooseQRCodeTypeViewController:
+					return true
+				default:
+					return false
 			}
 		}
+		guard let popToViewController = popToViewController else {
+			return
+		}
+		navigationController.popToViewController(
+			popToViewController,
+			animated: true
+		)
 	}
 }
 

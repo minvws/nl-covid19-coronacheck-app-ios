@@ -155,8 +155,7 @@ class HolderCoordinator: SharedCoordinator {
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
-				delegate: self,
-				isGGDEnabled: isGGDEnabled
+				delegate: self
 			)
 			startChildCoordinator(eventCoordinator)
 		}
@@ -349,8 +348,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
-				delegate: self,
-				isGGDEnabled: isGGDEnabled
+				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
@@ -393,8 +391,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
-				delegate: self,
-				isGGDEnabled: isGGDEnabled
+				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
 			eventCoordinator.startWithTVS(eventMode: EventMode.test)
