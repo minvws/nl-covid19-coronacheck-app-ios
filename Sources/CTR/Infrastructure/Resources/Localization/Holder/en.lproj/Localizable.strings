@@ -194,7 +194,8 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
-"holder.dashboard.intro" = "You can get a certificate if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
+"holder.dashboard.intro.domestic" = "holder.dashboard.intro.domestic";
+"holder.dashboard.intro.international" = "holder.dashboard.intro.international";
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";

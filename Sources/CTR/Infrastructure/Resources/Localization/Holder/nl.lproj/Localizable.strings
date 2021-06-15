@@ -198,7 +198,8 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro" = "Je kunt een QR-code maken als je gevaccineerd bent. Of door eerst een test te doen bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.";
+"holder.dashboard.intro.domestic" = "holder.dashboard.intro.domestic";
+"holder.dashboard.intro.international" = "holder.dashboard.intro.international";
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw vaccinatie of negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
