@@ -35,14 +35,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedNavigateToListResultsCount += 1
 	}
 
-	var invokedNavigateToAboutTestResult = false
-	var invokedNavigateToAboutTestResultCount = 0
-
-	func navigateToAboutTestResult() {
-		invokedNavigateToAboutTestResult = true
-		invokedNavigateToAboutTestResultCount += 1
-	}
-
 	var invokedNavigateBackToStart = false
 	var invokedNavigateBackToStartCount = 0
 

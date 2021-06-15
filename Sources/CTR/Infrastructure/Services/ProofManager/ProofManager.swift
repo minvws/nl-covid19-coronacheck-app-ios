@@ -151,10 +151,6 @@ class ProofManager: ProofManaging, Logging {
 			switch response {
 				case let .success(wrapper):
 					self.logDebug("We got \(wrapper.0.status) wrapper.")
-					if wrapper.0.status == .complete || wrapper.0.status == .pending {
-						self.proofData.testWrapper = wrapper.0
-						self.proofData.signedWrapper = wrapper.1
-					}
 					onCompletion(.success(wrapper))
 				case let .failure(error):
 					self.logError("Error getting the result: \(error)")
