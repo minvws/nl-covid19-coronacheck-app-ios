@@ -1,3 +1,5 @@
+"holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
+"holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "general.recoverystatement" = "recovery statement";
 "general.recoverydate" = "recovery date";
 "general.testcertificate" = "test certificate";
@@ -190,12 +192,12 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "Make QR code";
 "holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. Check data</b></p><p> Check if the details about your vaccination and/or test result are correct. </p> <br/> <p><b>Going abroad?</b></p> <p>";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries.  </p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
-"holder.dashboard.intro.domestic" = "holder.dashboard.intro.domestic";
-"holder.dashboard.intro.international" = "holder.dashboard.intro.international";
+"holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
+"holder.dashboard.intro.emptystate" = "You can get a certificate if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
@@ -235,7 +237,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Date of injection: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Identification code: <b>%@</b><br></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Identification code: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
 
@@ -254,7 +256,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.provider.header" = "Where were you tested?";
 "holder.provider.message" = "Does your test prove you don't have coronavirus at that time? Then you can make a QR code out of the test result.";
 "holder.provider.ggd.title" = "GGD";
-"holder.provider.ggd.subtitle" = "Log in with your DigiD";
+"holder.provider.ggd.subtitle" = "You’ll be redirected to DigiD";
 "holder.provider.commercial.title" = "Other test location";
 
 /* MARK: - Holder Token Scan */
@@ -302,7 +304,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
 "holder.vaccination.start.message" = "<p>Got vaccinated? Log in with DigiD. Details regarding your vaccination will be retrieved automatically. </p><p>You only need one injection to make an international QR-code. For a Dutch QR-code you need to be fully vaccinated. </p><p>Didn't get an injection yet? Get vaccinated first.</p>";
-"holder.vaccination.start.action" = "You’ll be redirected to DigiD";
+"holder.vaccination.start.action" = "Log in with your DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
 "holder.test.list.title" = "Retrieve test result";
@@ -345,7 +347,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br> Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:<p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b><br></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b><br></p>";
+"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:<p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 

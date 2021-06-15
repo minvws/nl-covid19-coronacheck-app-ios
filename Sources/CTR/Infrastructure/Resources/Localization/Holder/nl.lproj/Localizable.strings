@@ -1,11 +1,13 @@
+"holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
+"holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";
 
 "general.recoverystatement" = "Herstelverklaring";
 "general.recoverydate" = "hersteldatum";
-"general.testcertificate" = "Testbewijs";
-"general.vaccinationcertificate" = "Vaccinatiebewijs";
+"general.testcertificate" = "testbewijs";
+"general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.testdate" = "Testdatum";
 "general.vaccinationdate" = "Vaccinatiedatum";
 
@@ -194,12 +196,13 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "QR-code maken";
 "holder.aboutmakingaqr.header" = "Een QR-code maken";
-"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>3. Gegevens controleren</b></p> <p>Check of de gegevens van je vaccinatie en/of testuitslag kloppen. </p> <br/> <p><b>";
+"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw persoonlijke bewijs.</p> <br/> <p><b>1. Vaccinatie- of testbewijs?</b></p> <p>Je kunt een QR-code laten maken van een vaccinatie of van een negatieve testuitslag.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie of je testuitslag op.</p> <br/> <p><b>3. QR-codes staan klaar</b></p> <p>De app maakt twee QR-codes: één voor Nederland en één internationale. </p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
-"holder.dashboard.intro.domestic" = "holder.dashboard.intro.domestic";
-"holder.dashboard.intro.international" = "holder.dashboard.intro.international";
+"holder.dashboard.intro.domestic" = "Laat de QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";
+"holder.dashboard.intro.international" = "Reis je buiten Nederland? Gebruik dan je internationale QR-code. Check <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">dit overzicht</a> voor vertrek. Daar staat of jouw QR-code geldig is in het land dat je bezoekt.";
+"holder.dashboard.intro.emptystate" = "Je kunt een QR-code maken als je gevaccineerd bent. Of door eerst een test te doen bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.";
 "holder.dashboard.create.title" = "QR-code maken";
 "holder.dashboard.create.message" = "Zet jouw vaccinatie of negatieve testuitslag om in een persoonlijke QR-code.";
 "holder.dashboard.create.action" = "Maak QR-code";
@@ -242,8 +245,8 @@
 De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Uit veiligheidsredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
-"holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Producent: <b>%@</b><br>Getest in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
+"holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Producent: <b>%@</b><br>Getest in: <b>%@</b><br>Identificatiecode: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
 "holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
 
@@ -262,7 +265,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.provider.header" = "Waar ben je getest?";
 "holder.provider.message" = "Blijkt uit de test dat je geen corona hebt? Dan kan je van de testuitslag een QR-code maken. Geef aan waar je getest bent.";
 "holder.provider.ggd.title" = "GGD";
-"holder.provider.ggd.subtitle" = "Log in met je DigiD";
+"holder.provider.ggd.subtitle" = "Je wordt doorgestuurd naar DigiD";
 "holder.provider.commercial.title" = "Andere testlocatie";
 
 /* MARK: - Holder Token Scan */
@@ -312,7 +315,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
 "holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
-"holder.vaccination.start.action" = "Je wordt doorgestuurd naar DigiD";
+"holder.vaccination.start.action" = "Log in met je DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
 "holder.test.list.title" = "Testuitslag ophalen";
@@ -355,7 +358,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br>Naam test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Testproducent: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b><br></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b><br></p>";
+"holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen. </p>";
 

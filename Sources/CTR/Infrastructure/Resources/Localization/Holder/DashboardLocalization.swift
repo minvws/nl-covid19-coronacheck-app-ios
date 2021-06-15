@@ -24,6 +24,11 @@ extension String {
 		return Localization.string(for: "holder.dashboard.intro.international")
 	}
 
+	static var holderDashboardIntroEmptyState: String {
+
+		return Localization.string(for: "holder.dashboard.intro.emptystate")
+	}
+
 	static var holderDashboardCreateTitle: String {
 
 		return Localization.string(for: "holder.dashboard.create.title")
