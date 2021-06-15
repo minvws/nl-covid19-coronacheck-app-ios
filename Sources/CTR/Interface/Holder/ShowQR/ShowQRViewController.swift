@@ -49,9 +49,14 @@ class ShowQRViewController: BaseViewController {
 	private func setupBinding() {
 
 		viewModel.$title.binding = { [weak self] in
+            
 			self?.title = $0
-			self?.sceneView.accessibilityDescription = $0
 		}
+        
+        viewModel.$qrAccessibility.binding = { [weak self] in
+            
+            self?.sceneView.accessibilityDescription = $0
+        }
 
 		viewModel.$infoButtonAccessibility.binding = { [weak self] in
 
