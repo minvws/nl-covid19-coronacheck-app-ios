@@ -354,7 +354,7 @@ class TokenEntryViewModel {
 					switch remoteTestEvent.wrapper.status {
 						case .complete, .pending:
 							self.screenHasCompleted = true
-							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteTestEvent)
+//							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteTestEvent)
 						case .verificationRequired:
 							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 								// the user has just submitted a wrong verification code & should see an error message

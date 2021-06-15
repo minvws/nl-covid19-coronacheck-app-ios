@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias RemoteVaccinationEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
+typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
 
 struct EventFlow {
 
@@ -120,17 +120,20 @@ struct EventFlow {
 		/// The protocol version
 		let protocolVersion: String
 
-		let identity: Identity
+		let identity: Identity?
 
 		/// The state of the test
 		let status: EventState
 
+		/// The test result
+		let result: TestResult?
+
 		/// The vaccination events
-		var events: [Event] = []
+		var events: [Event]? = []
 
 		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
-			let maxIssuedAt: Date? = events
+			let maxIssuedAt: Date? = events?
 				.compactMap { $0.vaccination?.dateString }
 				.compactMap { dateFormatter.date(from: $0) }
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
@@ -150,7 +153,7 @@ struct EventFlow {
 
 		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
-			let maxIssuedAt: Date? = events
+			let maxIssuedAt: Date? = events?
 				.compactMap { $0.negativeTest?.sampleDateString }
 				.compactMap { dateFormatter.date(from: $0) }
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
@@ -176,6 +179,7 @@ struct EventFlow {
 			case providerIdentifier
 			case status
 			case events
+			case result
 		}
 	}
 
@@ -188,6 +192,12 @@ struct EventFlow {
 		/// The vaccination result is complete
 		/// This refers to the data-completeness, not vaccination status.
 		case complete
+
+		/// The test is invalid
+		case invalid = "invalid_token"
+
+		/// Verification is required before we can fetch the result
+		case verificationRequired = "verification_required"
 
 		/// Unknown state
 		case unknown

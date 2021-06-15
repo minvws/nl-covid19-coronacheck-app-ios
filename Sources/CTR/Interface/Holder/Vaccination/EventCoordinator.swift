@@ -36,7 +36,7 @@ enum EventScreenResult: Equatable {
 	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
-	case showEvents(events: [RemoteVaccinationEvent], eventMode: EventMode)
+	case showEvents(events: [RemoteEvent], eventMode: EventMode)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
@@ -166,7 +166,7 @@ class EventCoordinator: Coordinator, Logging {
 	}
 
 	private func navigateToListEvents(
-		_ vaccinationEvents: [RemoteVaccinationEvent],
+		_ vaccinationEvents: [RemoteEvent],
 		testEvents: [RemoteTestEvent],
 		eventMode: EventMode,
 		sourceMode: ListEventSourceMode = .ggd) {

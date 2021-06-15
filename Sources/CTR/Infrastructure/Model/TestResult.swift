@@ -8,7 +8,7 @@
 import Foundation
 
 /// A test result
-struct TestResult: Codable {
+struct TestResult: Codable, Equatable {
 
 	/// The identifier of the test result
 	let unique: String

@@ -410,7 +410,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 	// MARK: Default values
 
-	private func defaultremoteVaccinationEvent() -> RemoteVaccinationEvent {
+	private func defaultremoteVaccinationEvent() -> RemoteEvent {
 		return RemoteVaccinationEvent(
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "CC",

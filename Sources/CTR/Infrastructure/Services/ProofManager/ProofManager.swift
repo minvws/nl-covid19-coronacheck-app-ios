@@ -137,7 +137,7 @@ class ProofManager: ProofManaging, Logging {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void) {
+		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void) {
 		
 		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")

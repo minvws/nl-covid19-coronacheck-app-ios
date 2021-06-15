@@ -145,7 +145,7 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	func handleFetchVaccinationEventsResponse(remoteEvents: [RemoteVaccinationEvent], networkErrors: [NetworkError]) {
+	func handleFetchVaccinationEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
@@ -398,9 +398,9 @@ final class FetchEventsViewModel: Logging {
 	private func fetchVaccinationEvents(
 		eventProviders: [EventFlow.EventProvider],
 		filter: String?,
-		completion: @escaping ([RemoteVaccinationEvent], [NetworkError]) -> Void) {
+		completion: @escaping ([RemoteEvent], [NetworkError]) -> Void) {
 
-		var eventResponseResults = [Result<RemoteVaccinationEvent, NetworkError>]()
+		var eventResponseResults = [Result<RemoteEvent, NetworkError>]()
 
 		for provider in eventProviders {
 

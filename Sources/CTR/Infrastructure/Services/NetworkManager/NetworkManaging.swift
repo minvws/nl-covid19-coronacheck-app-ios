@@ -98,7 +98,7 @@ protocol NetworkManaging {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
 
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:

@@ -85,7 +85,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		sourceMode: ListEventSourceMode = .ggd,
 		eventMode: EventMode,
-		remoteVaccinationEvents: [RemoteVaccinationEvent],
+		remoteVaccinationEvents: [RemoteEvent],
 		remoteTestEvents: [RemoteTestEvent],
 		networkManager: NetworkManaging = Services.networkManager,
 		walletManager: WalletManaging = Services.walletManager,
@@ -157,20 +157,22 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	// MARK: State Helpers
 
 	private func getViewState(
-		from remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
+		from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
 		var listDataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
 
 		for eventResponse in remoteEvents {
-			let identity = eventResponse.wrapper.identity
-			for event in eventResponse.wrapper.events {
-				listDataSource.append(
-					(
-						identity: identity,
-						event: event,
-						providerIdentifier: eventResponse.wrapper.providerIdentifier
+			if let identity = eventResponse.wrapper.identity,
+			   let events30 = eventResponse.wrapper.events {
+				for event in events30 {
+					listDataSource.append(
+						(
+							identity: identity,
+							event: event,
+							providerIdentifier: eventResponse.wrapper.providerIdentifier
+						)
 					)
-				)
+				}
 			}
 		}
 
@@ -199,7 +201,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func listEventsState(
 		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
-		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
+		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
 			content: ListEventsViewController.Content(
@@ -388,7 +390,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	// MARK: Sign the events
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent], onError: @escaping () -> Void) {
+	private func userWantsToMakeQR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
@@ -456,7 +458,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
-	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
+	private func showVaccinationError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,
@@ -571,7 +573,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	// MARK: Store vaccination events
 
 	private func storeVaccinationEvent(
-		remoteEvents: [RemoteVaccinationEvent],
+		remoteEvents: [RemoteEvent],
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
