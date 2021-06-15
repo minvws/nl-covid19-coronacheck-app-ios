@@ -35,22 +35,22 @@ class ToggleRegionViewController: UIViewController {
 
 		setupBindings()
 
-		sceneView.toggleRegionSelectedIndexChangedCommand = { [viewModel] in
-			viewModel.didSelectIndex($0)
+		sceneView.toggleRegionSelectedIndexChangedCommand = { [weak viewModel] in
+			viewModel?.didSelectIndex($0)
 		}
 	}
 
 	private func setupBindings() {
-		viewModel.$topText.binding = { [sceneView] in
-			sceneView.topText = $0
+		viewModel.$topText.binding = { [weak sceneView] in
+			sceneView?.topText = $0
 		}
 
-		viewModel.$bottomText.binding = { [sceneView] in
-			sceneView.bottomText = $0
+		viewModel.$bottomText.binding = { [weak sceneView] in
+			sceneView?.bottomText = $0
 		}
 
-		viewModel.$segments.binding = { [sceneView] in
-			sceneView.segmentValues = $0
+		viewModel.$segments.binding = { [weak sceneView] in
+			sceneView?.segmentValues = $0
 		}
 	}
 }
