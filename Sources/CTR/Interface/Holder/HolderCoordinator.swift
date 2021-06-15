@@ -65,6 +65,11 @@ class HolderCoordinator: SharedCoordinator {
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
+	/// Restricts access to GGD test provider login
+	private var isGGDEnabled: Bool {
+		return remoteConfigManager.getConfiguration().isGGDEnabled == true
+	}
+	
 	// Designated starter method
 	override func start() {
 
@@ -331,7 +336,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToChooseLocation() {
-		navigateToChooseTestLocation()
+		if isGGDEnabled {
+			navigateToChooseTestLocation()
+		} else {
+			// Fallback when GGD is not available
+			navigateToTokenEntry()
+		}
 	}
 
 	func userHasNotBeenTested() {

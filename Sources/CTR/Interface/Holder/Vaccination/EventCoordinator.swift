@@ -218,12 +218,23 @@ class EventCoordinator: Coordinator, Logging {
 	}
 
 	private func navigateBackToTestStart() {
-
-		if let chooseTestLocationViewController = navigationController.viewControllers
-			.first(where: { $0 is ChooseTestLocationViewController }) {
-
+		
+		let popBackToViewController = navigationController.viewControllers.first {
+			
+			switch $0 {
+				case is ChooseTestLocationViewController:
+					return true
+				// Fallback when GGD is not available
+				case is ChooseQRCodeTypeViewController:
+					return true
+				default:
+					return false
+			}
+		}
+		if let popBackToViewController = popBackToViewController {
+			
 			navigationController.popToViewController(
-				chooseTestLocationViewController,
+				popBackToViewController,
 				animated: true
 			)
 		}

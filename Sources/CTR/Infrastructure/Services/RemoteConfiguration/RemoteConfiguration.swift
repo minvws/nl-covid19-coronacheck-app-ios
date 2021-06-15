@@ -140,6 +140,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	var euTestManufacturers: [Mapping]? = []
 
 	var providerIdentifiers: [Mapping]? = []
+	
+	/// Restricts access to GGD test provider login
+	var isGGDEnabled: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -169,6 +172,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euTestTypes = "euTestTypes"
 		case euTestManufacturers = "euTestManufacturers"
 		case providerIdentifiers = "providerIdentifiers"
+		case isGGDEnabled = "ggdEnabled"
 	}
 
 	init(
@@ -188,7 +192,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		domesticValidityHours: Int?,
 		vaccinationEventValidity: Int?,
 		recoveryEventValidity: Int?,
-		testEventValidity: Int?) {
+		testEventValidity: Int?,
+		isGGDEnabled: Bool?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -207,6 +212,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.vaccinationEventValidity = vaccinationEventValidity
 		self.recoveryEventValidity = recoveryEventValidity
 		self.testEventValidity = testEventValidity
+		self.isGGDEnabled = isGGDEnabled
 	}
 
 	/// Default remote configuration
@@ -228,7 +234,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
-			testEventValidity: 40
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 	}
 }
