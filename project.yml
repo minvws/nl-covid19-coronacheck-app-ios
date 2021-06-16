@@ -173,7 +173,7 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift"
+          rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string
         inputFiles: 
           - $TEMP_DIR/rswift-lastrun
         outputFiles: 
