@@ -1,3 +1,12 @@
+"holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
+"holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
+"general.recoverystatement" = "recovery statement";
+"general.recoverydate" = "recovery date";
+"general.testcertificate" = "test certificate";
+"general.vaccinationcertificate" = "vaccination certificate";
+"general.testdate" = "test date";
+"general.vaccinationdate" = "vaccination date";
+
 "holder.tokenscan.torch.enable" = "Turn the flashlight on.";
 "holder.tokenscan.torch.disable" = "Turn the flashlight off.";
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
@@ -104,13 +113,6 @@
 "general.list.accessibility" = "%@ of %@.";
 "general.vaccination" = "vaccination";
 "general.testresult" = "test result";
-"general.recoverystatement" = "recovery statement";
-"general.recoverydate" = "recovery date";
-"general.testcertificate" = "test certificate";
-"general.testdate" = "test date";
-"general.vaccinationcertificate" = "vaccination certificate";
-"general.vaccinationdate" = "vaccination date";
-
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
 "toggleRegion.label.topText.nl" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
@@ -190,11 +192,12 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "Make QR code";
 "holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. Check data</b></p><p> Check if the details about your vaccination and/or test result are correct. </p> <br/> <p><b>Going abroad?</b></p> <p>";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries.  </p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
-"holder.dashboard.intro" = "You can get a certificate if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
+"holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
+"holder.dashboard.intro.emptystate" = "You can get a certificate if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
 "holder.dashboard.create.action" = "Make QR code";
@@ -255,7 +258,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.provider.header" = "Where were you tested?";
 "holder.provider.message" = "Does your test prove you don't have coronavirus at that time? Then you can make a QR code out of the test result.";
 "holder.provider.ggd.title" = "GGD";
-"holder.provider.ggd.subtitle" = "Log in with your DigiD";
+"holder.provider.ggd.subtitle" = "You’ll be redirected to DigiD";
 "holder.provider.commercial.title" = "Other test location";
 
 /* MARK: - Holder Token Scan */
@@ -303,14 +306,14 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
 "holder.vaccination.start.message" = "<p>Got vaccinated? Log in with DigiD. Details regarding your vaccination will be retrieved automatically. </p><p>You only need one injection to make an international QR-code. For a Dutch QR-code you need to be fully vaccinated. </p><p>Didn't get an injection yet? Get vaccinated first.</p>";
-"holder.vaccination.start.action" = "You’ll be redirected to DigiD";
+"holder.vaccination.start.action" = "Log in with your DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
 "holder.test.list.title" = "Retrieve test result";
 "holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
 "holder.vaccination.list.action" = "Make QR code";
 "holder.vaccination.element.title" = "Vaccination %@";
-"holder.vaccination.element.subtitle" = "Name: %@<br>Birth date: %@";
+"holder.vaccination.element.subtitle" = "Name: %@<br>Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. </p><p>Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information. <br/><br/>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To My Overview";

@@ -236,7 +236,14 @@ class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
-		cards += [.headerMessage(message: .holderDashboardIntro)]
+		cards += [.headerMessage(
+			message: {
+				guard !state.myQRCards.isEmpty else { return .holderDashboardIntroEmptyState }
+				return state.qrCodeValidityRegion == .domestic
+					? .holderDashboardIntroDomestic
+					: .holderDashboardIntroInternational
+			}())
+		]
 
 		cards += state.expiredGreenCards.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }

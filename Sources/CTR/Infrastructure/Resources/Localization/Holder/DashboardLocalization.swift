@@ -14,9 +14,19 @@ extension String {
 		return Localization.string(for: "holder.dashboard.title")
 	}
 
-	static var holderDashboardIntro: String {
+	static var holderDashboardIntroDomestic: String {
 
-		return Localization.string(for: "holder.dashboard.intro")
+		return Localization.string(for: "holder.dashboard.intro.domestic")
+	}
+
+	static var holderDashboardIntroInternational: String {
+
+		return Localization.string(for: "holder.dashboard.intro.international")
+	}
+
+	static var holderDashboardIntroEmptyState: String {
+
+		return Localization.string(for: "holder.dashboard.intro.emptystate")
 	}
 
 	static var holderDashboardCreateTitle: String {
