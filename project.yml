@@ -263,6 +263,8 @@ targets:
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
           - "CTR/Configuration/verifier-Info.plist"
+      - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
+        optional: true
     settings:
       base: 
         APP_FLAVOR: holder
@@ -319,6 +321,8 @@ targets:
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
+      - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
+        optional: true
     settings:
       base: 
         APP_FLAVOR: verifier
