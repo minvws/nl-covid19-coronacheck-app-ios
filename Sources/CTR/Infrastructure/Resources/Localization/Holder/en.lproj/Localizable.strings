@@ -201,6 +201,7 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
 "holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
+"holder.dashboard.intro.international" = "Travelling outside the Netherlands? Then use your international QR code. In <a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">this overview</a>, you'll find if the QR code is valid in the country you’re planning to visit.";
 "holder.dashboard.intro.emptystate" = "You can get a certificate if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
 "holder.dashboard.create.title" = "Make QR code";
 "holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
