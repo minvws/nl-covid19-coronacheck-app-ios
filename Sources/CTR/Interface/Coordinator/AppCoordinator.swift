@@ -33,6 +33,8 @@ class AppCoordinator: Coordinator, Logging {
 	
 	private var privacySnapshotWindow: UIWindow?
 
+	private var shouldUsePrivacySnapShot = true
+
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, navigationController: UINavigationController) {
@@ -231,6 +233,12 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 // MARK: - Notification observations
 
+public extension Notification.Name {
+
+	static let disablePrivacySnapShot = Notification.Name("nl.rijksoverheid.ctr.disablePrivacySnapShot")
+	static let enablePrivacySnapShot = Notification.Name("nl.rijksoverheid.ctr.enablePrivacySnapShot")
+}
+
 extension AppCoordinator {
 	
 	private enum Constants {
@@ -240,7 +248,7 @@ extension AppCoordinator {
     /// Handle the event the application will resign active
 	@objc func onWillResignActiveNotification() {
 
-		guard #available(iOS 13.0, *) else {
+		guard shouldUsePrivacySnapShot else {
 			return
 		}
 		
@@ -283,6 +291,14 @@ extension AppCoordinator {
 		}
 	}
 
+	@objc private func enablePrivacySnapShot() {
+		shouldUsePrivacySnapShot = true
+	}
+
+	@objc private func disablePrivacySnapShot() {
+		shouldUsePrivacySnapShot = false
+	}
+
     private func addObservers() {
 
         NotificationCenter.default.addObserver(
@@ -295,6 +311,18 @@ extension AppCoordinator {
 			self,
 			selector: #selector(onDidBecomeActiveNotification),
 			name: UIApplication.didBecomeActiveNotification,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(disablePrivacySnapShot),
+			name: Notification.Name.disablePrivacySnapShot,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(enablePrivacySnapShot),
+			name: Notification.Name.enablePrivacySnapShot,
 			object: nil
 		)
     }

@@ -78,11 +78,16 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 		if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
 
+			if #available(iOS 13, *) { } else {
+				NotificationCenter.default.post(name: .disablePrivacySnapShot, object: nil)
+			}
+
 			// Store the flow
 			appDelegate.currentAuthorizationFlow =
 
 				// Request the access token
 				OIDAuthState.authState(byPresenting: request, presenting: presenter) { authState, error in
+					NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 					DispatchQueue.main.async {
 						self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 						if let authState = authState {
