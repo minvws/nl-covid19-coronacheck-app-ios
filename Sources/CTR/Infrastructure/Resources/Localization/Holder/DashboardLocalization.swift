@@ -15,30 +15,6 @@ extension String {
 		L.holderDashboardQrExpired()
 	}
 
-	static var hour: String {
-		L.holderDashboardQrHour()
-	}
-
-	static var minute: String {
-		L.holderDashboardQrMinute()
-	}
-
-	static var longMinutes: String {
-		L.holderDashboardQrMinutesLong()
-	}
-
-	static var longMinute: String {
-		L.holderDashboardQrMinute()
-	}
-
-	static var am: String {
-		L.holderDashboardQrAm()
-	}
-
-	static var pm: String {
-		L.holderDashboardQrPm()
-	}
-
 	static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {
 		switch (originType, currentRegion) {
 			case (.vaccination, .domestic):
