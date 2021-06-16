@@ -215,7 +215,7 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.showScreenshotWarning) == true
+		expect(self.sut.screenshotWasTaken) == true
 	}
 
 	func test_moreInformation_noValidCredential() throws {

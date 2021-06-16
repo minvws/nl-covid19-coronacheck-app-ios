@@ -87,7 +87,7 @@ class ShowQRViewController: BaseViewController {
 			self?.sceneView.hideQRImage = $0
 		}
 
-		viewModel.$showScreenshotWarning.binding = { [weak self] in
+		viewModel.$screenshotWasTaken.binding = { [weak self] in
 
 			if $0 {
 				self?.showError(
@@ -108,8 +108,8 @@ class ShowQRViewController: BaseViewController {
 			object: nil
 		)
 		NotificationCenter.default.addObserver(
-			self, selector:
-				#selector(checkValidity),
+			self,
+			selector: #selector(checkValidity),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
