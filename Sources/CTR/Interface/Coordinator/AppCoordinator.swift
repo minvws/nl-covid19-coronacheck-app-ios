@@ -239,6 +239,10 @@ extension AppCoordinator {
 
     /// Handle the event the application will resign active
 	@objc func onWillResignActiveNotification() {
+
+		guard #available(iOS 13.0, *) else {
+			return
+		}
 		
 		/// Show the snapshot (logo) view to hide sensitive data
 		if #available(iOS 13.0, *) {
@@ -250,7 +254,7 @@ extension AppCoordinator {
 			// Fallback on earlier versions
 			privacySnapshotWindow = UIWindow(frame: UIScreen.main.bounds)
 		}
-		
+
 		let shapshotViewController = SnapshotViewController(
 			viewModel: SnapshotViewModel(
 				versionSupplier: AppVersionSupplier(),
