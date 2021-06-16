@@ -170,7 +170,7 @@
 "holder.onboarding.title.validity" = "QR-code = jouw bewijs";
 "holder.onboarding.message.validity" = "Deze app maakt van jouw testuitslag of vaccinatie een QR-code. Dat is jouw bewijs. De QR-code wordt gecheckt bij de ingang van locaties en activiteiten. Of aan de grens. Verloopt je bewijs? Dan verdwijnt de QR-code.";
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
-"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: één voor Nederland en één internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code. Je kunt de internationale QR-code gebruiken vanaf %@.";
+"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code. Je kunt de internationale QR-code gebruiken vanaf %@.";
 
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title" = "Vaccinatiebewijs";
