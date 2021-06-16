@@ -36,7 +36,7 @@ class Button: UIButton {
 
     override var isEnabled: Bool {
         didSet {
-            updateButtonType()
+			updatePrimaryStyleColors()
         }
     }
 
@@ -106,13 +106,7 @@ class Button: UIButton {
 		
 		switch style {
 			case .primary:
-				if isEnabled {
-					backgroundColor = Theme.colors.primary
-					setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
-				} else {
-					backgroundColor = Theme.colors.tertiary
-					setTitleColor(Theme.colors.gray, for: .normal)
-				}
+				updatePrimaryStyleColors()
 				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
 			case .secondary:
 				backgroundColor = Theme.colors.secondary
@@ -127,6 +121,19 @@ class Button: UIButton {
 				
 		}
 		tintColor = Theme.colors.viewControllerBackground
+	}
+	
+	private func updatePrimaryStyleColors() {
+		
+		guard style == .primary else { return }
+		
+		if isEnabled {
+			backgroundColor = Theme.colors.primary
+			setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
+		} else {
+			backgroundColor = Theme.colors.tertiary
+			setTitleColor(Theme.colors.gray, for: .normal)
+		}
 	}
 
     private func updateRoundedCorners() {
