@@ -18,8 +18,11 @@ homebrew_dev:
 	@brew install swiftlint xcodegen git-lfs
 
 homebrew_ci:
-	@brew install imagemagick swiftlint xcodegen
+	@brew install xcodegen
 	
+homebrew_ci_imagemagick: 
+	@brew install imagemagick
+
 # -- generate -- 
 
 generate_project: 
