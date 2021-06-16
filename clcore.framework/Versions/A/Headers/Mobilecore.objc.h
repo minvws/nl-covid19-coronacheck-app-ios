@@ -111,7 +111,6 @@
 
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
-FOUNDATION_EXPORT const double MobilecoreQR_VALID_FOR_SECONDS;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreV1_VALIDITY_HOURS_STR;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
@@ -141,46 +140,8 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYY_FORMAT;
 /**
  * These constants can be moved to the verifier configuration file in the future
  */
-+ (long) recoverY_VALID_FROM_DAYS;
-+ (void) setRECOVERY_VALID_FROM_DAYS:(long)v;
-
-// skipped variable RECOVERY_VALID_FROM_DURATION with unsupported type: time.Duration
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (long) recoverY_VALID_UNTIL_DAYS;
-+ (void) setRECOVERY_VALID_UNTIL_DAYS:(long)v;
-
-// skipped variable RECOVERY_VALID_UNTIL_DURATION with unsupported type: time.Duration
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
 + (NSString* _Nonnull) tesT_RESULT_NOT_DETECTED;
 + (void) setTEST_RESULT_NOT_DETECTED:(NSString* _Nonnull)v;
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (NSString* _Nonnull) tesT_TYPE_NAA;
-+ (void) setTEST_TYPE_NAA:(NSString* _Nonnull)v;
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (NSString* _Nonnull) tesT_TYPE_RAT;
-+ (void) setTEST_TYPE_RAT:(NSString* _Nonnull)v;
-
-// skipped variable TEST_VALIDITY_DURATION with unsupported type: time.Duration
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (long) tesT_VALIDITY_HOURS;
-+ (void) setTEST_VALIDITY_HOURS:(long)v;
-
-// skipped variable VACCINE_ALLOWED_MPS with unsupported type: []string
 
 @end
 
