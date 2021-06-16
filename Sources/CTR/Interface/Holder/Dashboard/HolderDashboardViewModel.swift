@@ -236,12 +236,12 @@ class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
-		cards += [.headerMessage( // TODO: L.holderDashboardIntro()
+		cards += [.headerMessage(
 			message: {
-				guard !state.myQRCards.isEmpty else { return .holderDashboardIntroEmptyState }
+				guard !state.myQRCards.isEmpty else { return L.holderDashboardIntroEmptystate() }
 				return state.qrCodeValidityRegion == .domestic
-					? .holderDashboardIntroDomestic
-					: .holderDashboardIntroInternational
+					? L.holderDashboardIntroDomestic()
+					: L.holderDashboardIntroInternational()
 			}())
 		]
 
