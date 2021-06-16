@@ -16,8 +16,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	weak private var remoteConfigManager: RemoteConfigManaging?
 	weak private var configuration: ConfigurationGeneralProtocol?
 
-	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
-
 	var previousBrightness: CGFloat?
 
 	weak var validityTimer: Timer?
@@ -33,9 +31,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	@Bindable private(set) var qrMessage: (data: Data, correctionLevel: String)?
 
 	@Bindable private(set) var showValidQR: Bool
-
-	/// Show a warning for a screenshot
-	@Bindable private(set) var showScreenshotWarning: Bool = false
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -93,7 +88,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		super.init()
-		addObserver()
 	}
 
 	/// Check the QR Validity
@@ -283,22 +277,5 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	func stopValidityTimer() {
 		validityTimer?.invalidate()
 		validityTimer = nil
-	}
-
-	/// Add an observer for the userDidTakeScreenshotNotification notification
-	private func addObserver() {
-
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(handleScreenShot),
-			name: UIApplication.userDidTakeScreenshotNotification,
-			object: nil
-		)
-	}
-
-	/// handle a screen shot taken
-	@objc internal func handleScreenShot() {
-
-		showScreenshotWarning = true
 	}
 }
