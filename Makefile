@@ -26,7 +26,7 @@ homebrew_ci_imagemagick:
 # -- generate -- 
 
 generate_project: 
-	Vendor/XcodeGen/.build/release/xcodegen  --spec project.yml
+	xcodegen  --spec project.yml
 
 open_project: 
 	open CTR.xcodeproj
@@ -42,7 +42,7 @@ install_githooks: install_githooks_gitlfs install_githooks_xcodegen
 	@echo "All githooks are installed"
 
 install_githooks_xcodegen:
-	@echo "\nVendor/XcodeGen/.build/release/xcodegen generate --spec project.yml --use-cache" >> .git/hooks/post-checkout
+	@echo "\nxcodegen generate --spec project.yml --use-cache" >> .git/hooks/post-checkout
 	@chmod +x .git/hooks/post-checkout
 
 install_githooks_gitlfs:
