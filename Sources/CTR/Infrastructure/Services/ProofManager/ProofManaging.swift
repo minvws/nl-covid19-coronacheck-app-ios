@@ -36,7 +36,7 @@ protocol ProofManaging: AnyObject {
 		_ token: RequestToken,
 		code: String?,
 		provider: TestProvider,
-		onCompletion: @escaping (Result<RemoteTestEvent, Error>) -> Void)
+		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void)
 
 	/// Get the provider for a test token
 	/// - Parameter token: the test token

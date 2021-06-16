@@ -150,7 +150,7 @@ class NetworkManager: NetworkManaging, Logging {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.resultURL else {
 			self.logError("No url provided for \(provider)")

@@ -280,16 +280,10 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.testresults.results.title" = "Controleer je testuitslag";
 "holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br\>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak QR-code";
-"holder.testresults.noresults.title" = "Geen negatieve testuitslag";
-"holder.testresults.noresults.text" = "Er is geen negatieve testuitslag beschikbaar.";
-"holder.testresults.back.button" = "Naar Mijn overzicht";
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p>
-<p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>
-";
-"holder.testresults.recent" = "Opgehaalde testuitslag";
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p><p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.negative" = "Negatieve testuitslag";
 "holder.testresults.identity" = "Identificatiegegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";

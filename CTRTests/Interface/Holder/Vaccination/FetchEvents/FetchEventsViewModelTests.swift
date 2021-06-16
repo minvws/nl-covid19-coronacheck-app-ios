@@ -71,6 +71,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			protocolVersion: "3.0",
 			identity: identity,
 			status: .complete,
+			result: nil,
 			events: [
 				EventFlow.Event(
 					type: "vaccination",
@@ -107,6 +108,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			protocolVersion: "3.0",
 			identity: identity,
 			status: .complete,
+			result: nil,
 			events: []
 		)
 

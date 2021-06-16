@@ -39,7 +39,8 @@ class RequestTokenTests: XCTestCase {
         XCTAssertNotNil(sut)
         XCTAssertEqual(sut?.providerIdentifier, inputProvider)
         XCTAssertEqual(sut?.token, inputToken)
-        XCTAssertEqual(sut?.protocolVersion, expectedVersion)
+        XCTAssertNotEqual(sut?.protocolVersion, expectedVersion)
+		XCTAssertEqual(sut?.protocolVersion, "3.0")
 
         // Should also have called the validator:
         XCTAssert(tokenValidatorSpy.invokedValidate)

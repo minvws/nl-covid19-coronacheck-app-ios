@@ -27,14 +27,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedNavigateToTokenScanCount += 1
 	}
 
-	var invokedNavigateToListResults = false
-	var invokedNavigateToListResultsCount = 0
-
-	func navigateToListResults() {
-		invokedNavigateToListResults = true
-		invokedNavigateToListResultsCount += 1
-	}
-
 	var invokedNavigateBackToStart = false
 	var invokedNavigateBackToStartCount = 0
 
@@ -57,14 +49,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false
 	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
-	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteTestEvent: RemoteTestEvent, Void)?
-	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteTestEvent: RemoteTestEvent, Void)]()
+	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?
+	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteEvent: RemoteEvent, Void)]()
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
 		invokedUserWishesToMakeQRFromNegativeTest = true
 		invokedUserWishesToMakeQRFromNegativeTestCount += 1
-		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteTestEvent, ())
-		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteTestEvent, ()))
+		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteEvent, ())
+		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteEvent, ()))
 	}
 
 	var invokedUserWishesToCreateAQR = false

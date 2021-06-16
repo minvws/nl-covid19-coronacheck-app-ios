@@ -18,9 +18,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
-	/// Navigate to List Results Scene
-	func navigateToListResults()
-
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
 
@@ -31,7 +28,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
 	func userWishesToCreateAQR()
 
@@ -262,19 +259,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to List Results Scene
-	func navigateToListResults() {
-
-		let destination = ListResultsViewController(
-			viewModel: ListResultsViewModel(
-				coordinator: self,
-				proofManager: proofManager,
-				maxValidity: maxValidity
-			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
 	private func navigateToChooseTestLocation() {
 
 		let destination = ChooseTestLocationViewController(
@@ -319,7 +303,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			.present(viewController, animated: true, completion: nil)
 	}
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -327,7 +311,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
+			eventCoordinator.startWithListTestEvents([remoteEvent])
 		}
 	}
 

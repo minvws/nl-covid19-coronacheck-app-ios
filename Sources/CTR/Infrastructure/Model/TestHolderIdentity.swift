@@ -8,7 +8,7 @@
 import Foundation
 
 /// The credentials of the the holder of the test
-struct TestHolderIdentity: Codable {
+struct TestHolderIdentity: Codable, Equatable {
 
 	/// The first letter of the first name
 	let firstNameInitial: String
