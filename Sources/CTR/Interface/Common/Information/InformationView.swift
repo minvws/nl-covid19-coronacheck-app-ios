@@ -48,6 +48,7 @@ class InformationView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
+		titleLabel.textColor = Theme.colors.dark
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 
