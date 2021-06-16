@@ -15,12 +15,12 @@ endif
 	bundle install
 
 homebrew_dev:
-	@brew install swiftlint xcodegen git-lfs
+	@brew bundle --file Brewfile
 
 homebrew_ci:
-	@brew install xcodegen
+	@brew bundle --file Brewfile_CI
 	
-homebrew_ci_imagemagick: 
+homebrew_ci_imagemagick: # only needed for specific context & takes time, so not adding to Brewfile_CI.
 	@brew install imagemagick
 
 # -- generate -- 
