@@ -52,6 +52,7 @@ class QRCardView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
 		button.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
+		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
 	}()
 
@@ -126,7 +127,7 @@ class QRCardView: BaseView {
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
 			viewQRButton.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
-			viewQRButton.trailingAnchor.constraint(equalTo: largeIconImageView.trailingAnchor),
+			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
 			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
 		])
