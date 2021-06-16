@@ -240,12 +240,10 @@
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
 "holder.showqr.domestic.title" = "Mijn QR-code";
-"holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort.
 De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Uit veiligheidsredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
-"holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
 "holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Producent: <b>%@</b><br>Getest in: <b>%@</b><br>Identificatiecode: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
@@ -283,7 +281,9 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p><p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p>
+<p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>
+";
 "holder.testresults.negative" = "Negatieve testuitslag";
 "holder.testresults.identity" = "Identificatiegegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
@@ -320,7 +320,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie. Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie. Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";

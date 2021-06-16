@@ -1,3 +1,7 @@
+"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
+"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
+"general.error.cryptolib.retry" = "Probeer opnieuw";
+
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
 "verifier.result.denied.region.title" = "Dit is een internationale QR-code";
@@ -60,10 +64,6 @@
 "general.menu.open" = "Open zijmenu";
 "general.menu.close" = "Sluit zijmenu";
 "general.list.accessibility" = "%@ van %@.";
-"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
-"general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
-"general.error.cryptolib.retry" = "Probeer opnieuw";
-
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";

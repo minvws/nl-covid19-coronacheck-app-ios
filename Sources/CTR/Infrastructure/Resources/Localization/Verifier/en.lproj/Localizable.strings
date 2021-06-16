@@ -60,7 +60,6 @@
 "general.menu.open" = "Open side menu";
 "general.menu.close" = "Close side menu";
 "general.list.accessibility" = "%@ of %@.";
-
 /* MARK: - Update App */
 "updateApp.error.message" = "Can't open the App Store.";
 "updateApp.title" = "Time for an update";
@@ -167,7 +166,7 @@
 "verifier.result.check.title" = "About the check";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Invalid QR code";
-"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b><ul><li>The visitor shows an international QR code</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul></p>";
+"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b><ul><li>The QR code of the visitor does not conform to the Dutch entry requirements</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul></p>";
 "verifier.denied.message.two" = "<p><b>What to do now?</b><br>Ask the visitor to get vaccinated or to take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
 
 /* MARK: - Verifier About */

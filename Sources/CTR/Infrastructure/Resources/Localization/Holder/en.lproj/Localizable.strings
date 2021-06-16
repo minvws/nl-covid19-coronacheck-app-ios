@@ -1,5 +1,9 @@
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
+"general.error.cryptolib.title" = "Sorry, something went wrong";
+"general.error.cryptolib.message" = "Contact our helpdesk and give them error code (%@) or try again later.";
+"general.error.cryptolib.retry" = "Try again";
+
 "general.recoverystatement" = "recovery statement";
 "general.recoverydate" = "recovery date";
 "general.testcertificate" = "test certificate";
@@ -231,12 +235,10 @@
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
 "holder.showqr.domestic.title" = "My QR code";
-"holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. 
 The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
 "holder.showqr.eu.title" = "International QR code";
-"holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Date of injection: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
 "holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Identification code: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
@@ -311,7 +313,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.element.subtitle" = "Name: %@<br>Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
-"holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. </p><p>Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information. <br/><br/>Got vaccinated recently? It can take a few hours until your details are available. </p>";
+"holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To My Overview";
 "holder.event.nolist.title" = "No test result available";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> </p><p>for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
