@@ -61,14 +61,14 @@ jobs:
         bundle exec fastlane ios deploy_holder_test_ci
 
     - name: Archive App
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
         name: App
         path: CTR ACC.ipa
         retention-days: 10
 
     - name: Archive dSYMs
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
         name: dSYMs
         path: CTR ACC.app.dSYM.zip
