@@ -108,6 +108,9 @@ class QRCardView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
+		let topVerticalLabelSpacing: CGFloat = 16
 
 		NSLayoutConstraint.activate([
 			regionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 28),
@@ -122,14 +125,21 @@ class QRCardView: BaseView {
 			titleLabel.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: 8),
 			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
-			verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: 16),
+			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: topVerticalLabelSpacing),
 			verticalLabelsStackView.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
 			viewQRButton.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
 			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
-			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+			
+			// Break constraint when title label increases in size
+			{
+				let constraint = verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: topVerticalLabelSpacing)
+				constraint.priority = .defaultLow
+				return constraint
+			}()
 		])
 	}
 
