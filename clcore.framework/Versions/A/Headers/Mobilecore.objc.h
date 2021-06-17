@@ -109,39 +109,23 @@
 @property (nonatomic) NSString* _Nonnull isNLDCC;
 @end
 
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDOB_EMPTY_VALUE;
+FOUNDATION_EXPORT const int64_t MobilecoreHCERT_SPECIMEN_EXPIRATION_TIME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreTEST_RESULT_NOT_DETECTED;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreV1_VALIDITY_HOURS_STR;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
-FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMM_FORMAT;
-FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYY_FORMAT;
 
 @interface Mobilecore : NSObject
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (NSString* _Nonnull) diseasE_TARGETED_COVID_19;
-+ (void) setDISEASE_TARGETED_COVID_19:(NSString* _Nonnull)v;
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (int64_t) hcerT_SPECIMEN_EXPIRATION_TIME;
-+ (void) setHCERT_SPECIMEN_EXPIRATION_TIME:(int64_t)v;
-
 /**
  * DEPRECATED: See deprecation of LoadDomesticIssuerPks
  */
 + (BOOL) hasLoadedDomesticIssuerPks;
 + (void) setHasLoadedDomesticIssuerPks:(BOOL)v;
-
-/**
- * These constants can be moved to the verifier configuration file in the future
- */
-+ (NSString* _Nonnull) tesT_RESULT_NOT_DETECTED;
-+ (void) setTEST_RESULT_NOT_DETECTED:(NSString* _Nonnull)v;
 
 @end
 
