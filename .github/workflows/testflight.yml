@@ -28,22 +28,10 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Cache XcodeGen builds
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-XcodeGen-builds
-        with:
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-          path: Vendor/XcodeGen/.build
-
-      - name: Build XcodeGen (if necessary)
+      - name: Setup CI environment
         run: |
-          make build_xcodegen_ci
-          
-      - name: Run XcodeGen
-        run: |
-          make generate_project
-      
+          make ci
+                
       - name: Write p8 Key
         if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
         env:
