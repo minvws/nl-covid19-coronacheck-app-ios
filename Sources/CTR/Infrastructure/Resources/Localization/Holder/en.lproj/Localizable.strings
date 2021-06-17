@@ -72,6 +72,7 @@
 "holder.tokenentry.regularflow.text" = "Enter your retrieval code. The test location sent it to you.";
 "holder.tokenentry.regularflow.token.title" = "Retrieval code";
 "holder.tokenentry.regularflow.token.placeholder" = "E.g. BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.regularflow.token.placeholder.screenreader" = "Enter your code here";
 "holder.tokenentry.regularflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.regularflow.verification.title" = "Verification code";
 "holder.tokenentry.regularflow.verification.placeholder" = "E.g. 123456";
@@ -83,6 +84,7 @@
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
 "holder.tokenentry.universallinkflow.token.title" = "Code";
 "holder.tokenentry.universallinkflow.token.placeholder" = "E.g. BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.universallinkflow.token.placeholder.screenreader" = "Enter your code here";
 "holder.tokenentry.universallinkflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";

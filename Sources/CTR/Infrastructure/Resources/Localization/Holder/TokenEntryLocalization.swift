@@ -42,6 +42,11 @@ extension String {
 
         return Localization.string(for: "holder.tokenentry.regularflow.token.placeholder")
 	}
+    
+    static var holderTokenEntryRegularFlowTokenPlaceholderForScreenReader: String {
+
+        return Localization.string(for: "holder.tokenentry.regularflow.token.placeholder.screenreader")
+    }
 
 	static var holderTokenEntryRegularFlowVerificationTitle: String {
 
@@ -120,6 +125,11 @@ extension String {
     static var holderTokenEntryUniversalLinkFlowTokenPlaceholder: String {
 
         return Localization.string(for: "holder.tokenentry.universallinkflow.token.placeholder")
+    }
+    
+    static var holderTokenEntryUniversalLinkFlowTokenPlaceholderForScreenReader: String {
+
+        return Localization.string(for: "holder.tokenentry.universallinkflow.token.placeholder.screenreader")
     }
 
     static var holderTokenEntryUniversalLinkFlowVerificationTitle: String {
