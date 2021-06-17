@@ -44,7 +44,7 @@ platform :ios do
       targetname: "Holder",
       schemename:  "Holder AppStore",
       configuration: "AppStore",
-      provisioningprofilename: "CoronaCheck App Store",
+      provisioningprofilename: "CoronaCheck Holder AppStore",
       bundleid: "nl.rijksoverheid.ctr"
     )
   end
@@ -57,7 +57,7 @@ platform :ios do
       targetname: "Verifier",
       schemename:  "Verifier AppStore",
       configuration: "AppStore",
-      provisioningprofilename: "CoronaCheck Scanner App Store",
+      provisioningprofilename: "CoronaCheck Verifier AppStore",
       bundleid: "nl.rijksoverheid.ctr.verifier"
     )
   end
