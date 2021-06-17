@@ -154,10 +154,10 @@ class ShowQRViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.invokedGenerateQRmessage) == true
-		expect(self.sut.showValidQR) == true
-		expect(self.sut.qrMessage).toNot(beNil())
-		expect(self.sut.validityTimer).toNot(beNil())
+		expect(self.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beTrue())
+		expect(self.sut.showValidQR).toEventually(beTrue())
+		expect(self.sut.qrImage).toEventuallyNot(beNil())
+		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == false
 	}
 
@@ -182,10 +182,10 @@ class ShowQRViewModelTests: XCTestCase {
 		sut?.checkQRValidity()
 
 		// Then
-		expect(self.cryptoManagerSpy.invokedGenerateQRmessage) == false
-		expect(self.sut.showValidQR) == true
-		expect(self.sut.qrMessage).toNot(beNil())
-		expect(self.sut.validityTimer).toNot(beNil())
+		expect(self.cryptoManagerSpy.invokedGenerateQRmessage).toEventually(beFalse())
+		expect(self.sut.showValidQR).toEventually(beTrue())
+		expect(self.sut.qrImage).toEventuallyNot(beNil())
+		expect(self.sut.validityTimer).toEventuallyNot(beNil())
 		expect(self.holderCoordinatorDelegateSpy.invokedNavigateBackToStart) == false
 	}
 

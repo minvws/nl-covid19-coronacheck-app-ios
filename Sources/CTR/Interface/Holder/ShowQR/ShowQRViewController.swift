@@ -63,15 +63,7 @@ class ShowQRViewController: BaseViewController {
 			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
 		}
 
-		viewModel.$qrMessage.binding = { [weak self] in
-
-			if let value = $0 {
-				let image = value.data.generateQRCode(correctionLevel: value.correctionLevel)
-				self?.sceneView.qrImage = image
-			} else {
-				self?.sceneView.qrImage = nil
-			}
-		}
+		viewModel.$qrImage.binding = { [weak self] in self?.sceneView.qrImage = $0 }
 
 		viewModel.$showValidQR.binding = { [weak self] in
 
@@ -135,11 +127,15 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		checkValidity()
 		sceneView.play()
-
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+
+		super.viewDidAppear(animated)
+		checkValidity()
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {
