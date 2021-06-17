@@ -36,7 +36,7 @@ jobs:
 
     - name: Setup Imagemagick for icon overlays
       run: |
-        homebrew_ci_imagemagick
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -72,7 +72,7 @@ jobs:
 
     - name: Setup Imagemagick for icon overlays
       run: |
-        homebrew_ci_imagemagick
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -108,7 +108,7 @@ jobs:
     
     - name: Setup Imagemagick for icon overlays
       run: |
-        homebrew_ci_imagemagick
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -144,7 +144,7 @@ jobs:
 
     - name: Setup Imagemagick for icon overlays
       run: |
-        homebrew_ci_imagemagick
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -178,6 +178,10 @@ jobs:
       run: |
         make ci
 
+    - name: Setup Imagemagick for icon overlays
+      run: |
+        make homebrew_ci_imagemagick
+
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -209,6 +213,10 @@ jobs:
     - name: Setup CI environment
       run: |
         make ci
+        
+    - name: Setup Imagemagick for icon overlays
+      run: |
+        make homebrew_ci_imagemagick
         
     - name: Build and deploy
       timeout-minutes: 45
