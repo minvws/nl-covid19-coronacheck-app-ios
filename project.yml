@@ -285,7 +285,7 @@ targets:
           DISPLAY_NAME: CoronaCheck
           PRODUCT_NAME: CTR
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck App Store
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder App Store
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Prod.entitlements
     info:
       path: Sources/CTR/Configuration/holder-Info.plist
@@ -331,7 +331,7 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
         AppStore:
           DISPLAY_NAME: Scanner
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Scanner App Store
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier App Store
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
     info:
       path: Sources/CTR/Configuration/verifier-Info.plist
