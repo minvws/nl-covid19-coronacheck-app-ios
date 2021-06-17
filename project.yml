@@ -163,6 +163,7 @@ targetTemplates:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
+        UIUserInterfaceStyle: Light
         UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
       - name: Run SwiftLint
