@@ -82,12 +82,8 @@ class OpenIdManager: OpenIdManaging, Logging {
 				NotificationCenter.default.post(name: .disablePrivacySnapShot, object: nil)
 			}
 
-			let browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+			let callBack: OIDAuthStateAuthorizationCallback = { authState, error in
 
-			appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
-				byPresenting: request,
-				externalUserAgent: browser) { authState, error in
-				
 				self.logDebug("OpenIdManager: authState: \(String(describing: authState))")
 				NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 				DispatchQueue.main.async {
@@ -99,6 +95,20 @@ class OpenIdManager: OpenIdManaging, Logging {
 						onError(error)
 					}
 				}
+			}
+			if Configuration().getEnvironment() == "production" {
+				let browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
+					byPresenting: request,
+					externalUserAgent: browser,
+					callback: callBack
+				)
+			} else {
+				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
+					byPresenting: request,
+					presenting: presenter,
+					callback: callBack
+				)
 			}
 		}
 	}
