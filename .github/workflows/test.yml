@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+env: 
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+  
 jobs:
   swiftlint:
     runs-on: macos-latest
