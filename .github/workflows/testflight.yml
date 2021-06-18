@@ -17,6 +17,7 @@ env:
 
 jobs:
   upload:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     
     steps:
