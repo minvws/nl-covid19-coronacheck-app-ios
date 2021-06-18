@@ -60,6 +60,21 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_holder_test_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Holder App
+        path: CTR TEST.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Holder App dSYMs
+        path: CTR TEST.app.dSYM.zip
+        retention-days: 10
+
+
   firebase-deploy-verifier-test:
     runs-on: macos-latest
     steps:
@@ -106,7 +121,22 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
-        bundle exec fastlane ios deploy_verifier_test_ci       
+        bundle exec fastlane ios deploy_verifier_test_ci    
+
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Verifier App
+        path: Verifier.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Verifier App dSYMs
+        path: Verifier.app.dSYM.zip
+        retention-days: 10
+
 
   firebase-deploy-holder-acc:
     runs-on: macos-latest
@@ -156,6 +186,21 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_holder_acc_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Holder App
+        path: CTR ACC.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Holder App dSYMs
+        path: CTR ACC.app.dSYM.zip
+        retention-days: 10
+
+
   firebase-deploy-verifier-acc:
     runs-on: macos-latest
     steps:
@@ -203,6 +248,21 @@ jobs:
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
         bundle exec fastlane ios deploy_verifier_acc_ci
+
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Verifier App
+        path: Verifier.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Verifier App dSYMs
+        path: Verifier.app.dSYM.zip
+        retention-days: 10
+
 
   firebase-deploy-holder-prod:
     runs-on: macos-latest
@@ -252,6 +312,21 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_holder_prod_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Holder App
+        path: CTR.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Holder App dSYMs
+        path: CTR.app.dSYM.zip
+        retention-days: 10
+
+        
   firebase-deploy-verifier-prod:
     runs-on: macos-latest
     steps:
@@ -299,3 +374,17 @@ jobs:
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
         bundle exec fastlane ios deploy_verifier_prod_ci
+
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Verifier App
+        path: Verifier.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Verifier App dSYMs
+        path: Verifier.app.dSYM.zip
+        retention-days: 10
