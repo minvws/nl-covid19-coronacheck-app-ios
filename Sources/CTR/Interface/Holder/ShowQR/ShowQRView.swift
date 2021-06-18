@@ -17,6 +17,21 @@ class ShowQRImageView: BaseView {
 		static let securityMargin: CGFloat = 38.0
 	}
 
+	/// The spinner
+	let spinner: UIActivityIndicatorView = {
+
+		let view = UIActivityIndicatorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		if #available(iOS 13.0, *) {
+			view.style = .large
+		} else {
+			view.style = .whiteLarge
+		}
+		view.color = Theme.colors.primary
+		view.hidesWhenStopped = true
+		return view
+	}()
+
 	/// The image view for the QR image
 	internal let largeQRimageView: UIImageView = {
 
@@ -37,14 +52,15 @@ class ShowQRImageView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-
-		// Fixed white background, no inverted QR in dark mode
+		spinner.startAnimating()
 	}
+	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
 		addSubview(securityView)
+		addSubview(spinner)
 		addSubview(largeQRimageView)
 	}
 	/// Setup the constraints
@@ -68,6 +84,9 @@ class ShowQRImageView: BaseView {
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
+
+			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
+			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
 
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -98,6 +117,7 @@ class ShowQRImageView: BaseView {
 	var qrImage: UIImage? {
 		didSet {
 			largeQRimageView.image = qrImage
+			qrImage == nil ? spinner.startAnimating() : spinner.stopAnimating()
 		}
 	}
 

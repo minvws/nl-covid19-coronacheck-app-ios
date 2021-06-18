@@ -578,12 +578,20 @@ extension TokenEntryViewModel {
 		}
 
 		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return .holderTokenEntryRegularFlowTokenPlaceholder
-				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
-			}
+            switch mode {
+                case .regular:
+                    if UIAccessibility.isVoiceOverRunning {
+                        return .holderTokenEntryRegularFlowTokenPlaceholderForScreenReader
+                    } else {
+                        return .holderTokenEntryRegularFlowTokenPlaceholder
+                    }
+                case .withRequestTokenProvided:
+                    if UIAccessibility.isVoiceOverRunning {
+                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholderForScreenReader
+                    } else {
+                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
+                    }
+            }
 		}
 
 		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {

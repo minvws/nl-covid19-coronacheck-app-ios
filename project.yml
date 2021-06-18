@@ -74,7 +74,7 @@ settings:
 
 # - Target Templates (i.e. shared default settings for targets):
 
-targetTemplates: 
+targetTemplates:
   Standard_iOS:
     platform: iOS
     type: application
@@ -100,8 +100,8 @@ targetTemplates:
         embed: false
     settings:
       base:
-        MARKETING_VERSION: 2.0.0
-        CURRENT_PROJECT_VERSION: 27
+        MARKETING_VERSION: 2.0.1
+        CURRENT_PROJECT_VERSION: 31
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
@@ -125,7 +125,7 @@ targetTemplates:
           NETWORK_CONFIGURATION: Production
         AppStore:
           NETWORK_CONFIGURATION: Production
-    info: 
+    info:
       properties:
         # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
         NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
@@ -168,6 +168,7 @@ targetTemplates:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
+        UIUserInterfaceStyle: Light
         UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
       - name: Run R.Swift
@@ -191,7 +192,7 @@ targetTemplates:
         basedOnDependencyAnalysis: false
         script: |
           if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
-          then 
+          then
             # Get a reference to the folder which contains the configuration subfolders.
             CONFIGURATIONS_FOLDER=Sources/CTR/Configuration/Firebase/${APP_FLAVOR}/${CONFIGURATION}
             # Get a reference to the filename of a 'GoogleService-Info.plist' file.
@@ -208,11 +209,11 @@ targetTemplates:
 
             # Get a reference to the destination location for the GoogleService-Info.plist.
             GOOGLESERVICE_INFO_PLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app
-            
+
             # Copy 'GoogleService-Info.plist' for current configution to destination.
             cp "${GOOGLESERVICE_INFO_PLIST_LOCATION}" "${GOOGLESERVICE_INFO_PLIST_DESTINATION}"
             echo "Successfully copied the '${GOOGLESERVICE_INFO_PLIST}' file for the '${CONFIGURATION}' configuration from '${GOOGLESERVICE_INFO_PLIST_LOCATION}' to '${GOOGLESERVICE_INFO_PLIST_DESTINATION}'."
-          else 
+          else
             echo "Skipping adding Google Service Plist as Configuration is '$CONFIGURATION'"
           fi
     postBuildScripts:
@@ -223,13 +224,13 @@ targetTemplates:
           - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
         script: |
           if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
-          then 
+          then
             if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
               "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-            else 
+            else
               "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
             fi
-          else 
+          else
             echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
           fi
 
@@ -249,12 +250,12 @@ targetTemplates:
         embed: true
     settings:
       TEST_HOST: "$(BUILT_PRODUCTS_DIR)/CTR.app/CTR"
-      
+
 # - Targets
 
 targets:
   Holder:
-    templates: 
+    templates:
       - Standard_iOS
     sources:
       - path: Sources
@@ -266,11 +267,11 @@ targets:
       - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
         optional: true
     settings:
-      base: 
+      base:
         APP_FLAVOR: holder
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconHolder
         INFOPLIST_FILE: Sources/CTR/Configuration/holder-Info.plist
-        
+
       configs:
         Development:
           DISPLAY_NAME: "🤖 Dev Holder"
@@ -299,7 +300,7 @@ targets:
           DISPLAY_NAME: CoronaCheck
           PRODUCT_NAME: CTR
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck App Store
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder AppStore
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Prod.entitlements
     info:
       path: Sources/CTR/Configuration/holder-Info.plist
@@ -310,9 +311,9 @@ targets:
               CFBundleURLSchemes:
                 - coronacheck
         UILaunchStoryboardName: LaunchScreenHolder
-  
+
   Verifier:
-    templates: 
+    templates:
       - Standard_iOS
     sources:
       - path: Sources
@@ -324,7 +325,7 @@ targets:
       - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
         optional: true
     settings:
-      base: 
+      base:
         APP_FLAVOR: verifier
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIconVerifier
         INFOPLIST_FILE: Sources/CTR/Configuration/verifier-Info.plist
@@ -347,7 +348,7 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
         AppStore:
           DISPLAY_NAME: Scanner
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Scanner App Store
+          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier AppStore
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier
     info:
       path: Sources/CTR/Configuration/verifier-Info.plist
@@ -367,15 +368,15 @@ targets:
 schemeTemplates:
 
   # Template for Development/Test/Acc/Production/AppStore varieties
-  ConfigScheme: 
+  ConfigScheme:
     build:
       config: ${configEnvironment} #not sure if needed.
       targets:
         ${appTargetName}: all
-    test: 
+    test:
       config: ${configEnvironment}
     run:
-      config: ${configEnvironment} 
+      config: ${configEnvironment}
     profile:
       config: ${configEnvironment}
     analyze:
@@ -391,20 +392,20 @@ schemeTemplates:
       commandLineArguments:
         # Enable CoreData debug flags:
         # See: https://www.donnywals.com/using-launch-arguments-for-easier-core-data-debugging/
-       # "-com.apple.CoreData.SQLDebug 2": YES # choose a level from 1-4 
+       # "-com.apple.CoreData.SQLDebug 2": YES # choose a level from 1-4
         "-com.apple.CoreData.ConcurrencyDebug 1": YES # crash with stacktrace on concurrency mistakes
 
   # Template for adding unit tests to a scheme:
   TestScheme:
     test:
-      commandLineArguments: 
+      commandLineArguments:
         "--unittesting": true
       language: nl
       region: NL
       gatherCoverageData: true
       coverageTargets:
         - ${appTargetName}
-      targets: 
+      targets:
         - name: ${testTargetName}
           parallelizable: false
           randomExecutionOrder: false
@@ -457,7 +458,7 @@ schemes:
     templateAttributes:
       appTargetName: Verifier
       configEnvironment: Development
-    run: 
+    run:
       language: nl
 
   Verifier Test:

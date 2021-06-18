@@ -48,7 +48,7 @@ jobs:
 
       - name: Ship Holder to TestFlight
         if: ${{ !contains(github.ref, 'Verifier') }}
-        timeout-minutes: 45
+        timeout-minutes: 120
         env:
           CERTIFICATE_PATH: fastlane/certificates/distribution.p12
           CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
@@ -58,9 +58,25 @@ jobs:
         run: |
           bundle exec fastlane ios ship_holder_to_testflight
 
+      - name: Archive Holder
+        if: ${{ !contains(github.ref, 'Verifier') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Holder App
+          path: CTR.ipa
+          retention-days: 30
+
+      - name: Archive Holder dSYMs
+        if: ${{ !contains(github.ref, 'Verifier') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Holder App dSYMs
+          path: CTR.app.dSYM.zip
+          retention-days: 30
+
       - name: Ship Verifier to TestFlight
         if: ${{ !contains(github.ref, 'Holder') }}
-        timeout-minutes: 45
+        timeout-minutes: 120
         env:
           CERTIFICATE_PATH: fastlane/certificates/distribution.p12
           CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
@@ -69,3 +85,19 @@ jobs:
           APP_STORE_API_KEY_ISSUER: ${{ secrets.APP_STORE_API_KEY_ISSUER }}
         run: |
           bundle exec fastlane ios ship_verifier_to_testflight
+
+      - name: Archive Verifier
+        if: ${{ !contains(github.ref, 'Holder') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Verifier App
+          path: Verifier.ipa
+          retention-days: 30
+
+      - name: Archive Verifier dSYMs
+        if: ${{ !contains(github.ref, 'Holder') }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: Verifier App dSYMs
+          path: Verifier.app.dSYM.zip
+          retention-days: 30

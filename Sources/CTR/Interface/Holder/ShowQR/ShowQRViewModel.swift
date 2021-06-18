@@ -9,6 +9,9 @@ import UIKit
 
 class ShowQRViewModel: PreventableScreenCapture, Logging {
 
+	static let domesticCorrectionLevel = "M"
+	static let internationalCorrectionLevel = "Q"
+
 	var loggingCategory: String = "ShowQRViewModel"
 
 	weak private var coordinator: HolderCoordinatorDelegate?
@@ -28,7 +31,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var qrMessage: (data: Data, correctionLevel: String)?
+	@Bindable private(set) var qrImage: UIImage?
 
 	@Bindable private(set) var showValidQR: Bool
 
@@ -76,6 +79,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		// Start by showing nothing
 		self.showValidQR = false
+		self.qrImage = nil
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = .holderShowQRDomesticTitle
@@ -93,7 +97,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credential = greenCard.getActiveCredential(),
+		guard let credential = self.greenCard.getActiveCredential(),
 			  let data = credential.data,
 			  let expirationTime = credential.expirationTime, expirationTime > Date() else {
 			setQRNotValid()
@@ -101,14 +105,26 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			if let message = self.cryptoManager?.generateQRmessage(data) {
-				setQRValid(message, correctionLevel: "M")
-			} else {
-				setQRNotValid()
-				return
+			DispatchQueue.global(qos: .userInitiated).async {
+				if let message = self.cryptoManager?.generateQRmessage(data),
+				   let image = message.generateQRCode(correctionLevel: ShowQRViewModel.domesticCorrectionLevel) {
+					DispatchQueue.main.async {
+						self.setQRValid(image: image)
+					}
+				} else {
+					DispatchQueue.main.async {
+						self.setQRNotValid()
+					}
+				}
 			}
 		} else {
-			setQRValid(data, correctionLevel: "Q")
+			DispatchQueue.global(qos: .userInitiated).async {
+				// International
+				let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel)
+				DispatchQueue.main.async {
+					self.setQRValid(image: image)
+				}
+			}
 		}
 	}
 
@@ -229,18 +245,18 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
 	}
 
-	private func setQRValid(_ data: Data, correctionLevel: String) {
+	private func setQRValid(image: UIImage?) {
 
 		logDebug("Credential is valid")
-		qrMessage = (data, correctionLevel)
+		qrImage = image
 		showValidQR = true
 		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
 
-		logDebug("Credential is not valid")
-		qrMessage = nil
+		logWarning("Credential is not valid")
+		qrImage = nil
 		showValidQR = false
 		stopValidityTimer()
 		coordinator?.navigateBackToStart()

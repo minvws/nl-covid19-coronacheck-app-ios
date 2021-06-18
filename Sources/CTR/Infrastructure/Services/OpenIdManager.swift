@@ -78,22 +78,28 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 		if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
 
-			// Store the flow
-			appDelegate.currentAuthorizationFlow =
+			if #available(iOS 13, *) { } else {
+				NotificationCenter.default.post(name: .disablePrivacySnapShot, object: nil)
+			}
 
-				// Request the access token
-				OIDAuthState.authState(byPresenting: request, presenting: presenter) { authState, error in
-					DispatchQueue.main.async {
-						self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
-						if let authState = authState {
-							self.logDebug("OpenIdManager: We got the idToken")
-							onCompletion(authState.lastTokenResponse?.idToken)
-						} else {
-							self.logError("OpenIdManager: \(String(describing: error))")
-							onError(error)
-						}
+			let browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+
+			appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
+				byPresenting: request,
+				externalUserAgent: browser) { authState, error in
+				
+				self.logDebug("OpenIdManager: authState: \(String(describing: authState))")
+				NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
+				DispatchQueue.main.async {
+					if let authState = authState {
+						self.logDebug("OpenIdManager: We got the idToken")
+						onCompletion(authState.lastTokenResponse?.idToken)
+					} else {
+						self.logError("OpenIdManager: \(String(describing: error))")
+						onError(error)
 					}
 				}
+			}
 		}
 	}
 
