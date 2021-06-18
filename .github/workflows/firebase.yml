@@ -30,25 +30,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -93,25 +81,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -156,25 +132,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
-
-    - name: Run homebrew
+    - name: Setup CI environment
       run: |
-        make homebrew_ci
-
-    - name: Build XcodeGen (if necessary)
+        make ci
+    
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -219,25 +183,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -282,25 +234,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -345,26 +285,14 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
-
-    - name: Build XcodeGen (if necessary)
+    - name: Setup CI environment
       run: |
-        make build_xcodegen_ci
+        make ci
         
-    - name: Run XcodeGen
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
-
+        make homebrew_ci_imagemagick
+        
     - name: Build and deploy
       timeout-minutes: 45
       env:
