@@ -256,14 +256,14 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Prod Holder App
-        path: CTR.ipa
+        path: CTR PROD.ipa
         retention-days: 10
 
     - name: Archive dSYMs
       uses: actions/upload-artifact@v2
       with:
         name: Prod Holder App dSYMs
-        path: CTR.app.dSYM.zip
+        path: CTR PROD.app.dSYM.zip
         retention-days: 10
 
         
