@@ -75,7 +75,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == .holderShowQRDomesticTitle
-		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
@@ -102,7 +101,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == .holderShowQREuTitle
-		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
@@ -145,7 +143,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
-		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
 	}
 
 	/// Test the security features
@@ -160,7 +157,6 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
-		expect(self.sut.sceneView.largeQRimageView.image).toNot(beNil())
 		expect(self.sut.sceneView.securityView.currentAnimation) == .cyclistRightToLeft
 	}
 

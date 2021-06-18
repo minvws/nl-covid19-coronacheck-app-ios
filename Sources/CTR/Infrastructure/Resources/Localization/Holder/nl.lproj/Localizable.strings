@@ -72,6 +72,7 @@
 "holder.tokenentry.regularflow.text" = "Vul jouw ophaalcode in. Deze heb je van je testlocatie gekregen.";
 "holder.tokenentry.regularflow.token.title" = "Ophaalcode";
 "holder.tokenentry.regularflow.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.regularflow.token.placeholder.screenreader" = "Vul hier je ophaalcode in";
 "holder.tokenentry.regularflow.verification.info" = "Je krijgt een code via sms of e-mail";
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
@@ -83,6 +84,7 @@
 "holder.tokenentry.universallinkflow.text" = "Vul jouw verificatiecode in om je negatieve testuitslag op te halen.";
 "holder.tokenentry.universallinkflow.token.title" = "Code";
 "holder.tokenentry.universallinkflow.token.placeholder" = "Bijv. BRB-YYYYYYYYYY-Z2";
+"holder.tokenentry.universallinkflow.token.placeholder.screenreader" = "Vul hier je ophaalcode in";
 "holder.tokenentry.universallinkflow.verification.info" = "Je krijgt een code via sms of e-mail";
 "holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
@@ -170,7 +172,7 @@
 "holder.onboarding.title.validity" = "QR-code = jouw bewijs";
 "holder.onboarding.message.validity" = "Deze app maakt van jouw testuitslag of vaccinatie een QR-code. Dat is jouw bewijs. De QR-code wordt gecheckt bij de ingang van locaties en activiteiten. Of aan de grens. Verloopt je bewijs? Dan verdwijnt de QR-code.";
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
-"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: één voor Nederland en één internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code. Je kunt de internationale QR-code gebruiken vanaf %@.";
+"holder.onboarding.message.privacy" = "De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code. Deze kun je gebruiken vanaf %@.";
 
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title" = "Vaccinatiebewijs";
@@ -217,7 +219,7 @@
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
-"holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de regelgeving ingaat (vanaf %@).";
+"holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis internationaal";
 "holder.dashboard.changeregion.button.eu" = "Aanpassen naar internationaal";
@@ -281,9 +283,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en in een QR-code verwerkt.</p><p></p>
-<p> Klopt dit niet? Neem dan contact op met de testlocatie.</p>
-";
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en omgezet in een QR-code.</p><p></p> <p>Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.negative" = "Negatieve testuitslag";
 "holder.testresults.identity" = "Identificatiegegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
@@ -320,10 +320,10 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn. </p>";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie. Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
@@ -356,7 +356,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:<p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
-"holder.testresults.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen. </p>";
+"holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p>";
 
 "holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
 "holder.event.element.subtitle.test3" = "Testdatum: %@<br>Geldig tot: %@<br>Naam: %@<br>Geboortedatum: %@";

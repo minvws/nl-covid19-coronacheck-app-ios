@@ -46,6 +46,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         appCoordinator?.receive(universalLink: activity)
     }
 
+	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+
+//		print("ScanDelete openURLContexts: \(URLContexts.first?.url)")
+		if let url = URLContexts.first?.url,
+		   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+		   let authorizationFlow = appDelegate.currentAuthorizationFlow,
+		   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+			appDelegate.currentAuthorizationFlow = nil
+		}
+	}
+
 	func sceneDidDisconnect(_ scene: UIScene) {
 		// Called as the scene is being released by the system.
 		// This occurs shortly after the scene enters the background, or when its session is discarded.
