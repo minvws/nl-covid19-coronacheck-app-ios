@@ -66,13 +66,7 @@ class VaccinationStartView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
-		setupPrimaryButton(useFullWidth: {
-			switch traitCollection.preferredContentSizeCategory {
-				case .unspecified: return true
-				case let size where size > .extraLarge: return true
-				default: return false
-			}
-		}())
+		setupPrimaryButton(useFullWidth: true)
 
 		bottomButtonConstraint?.isActive = false
 

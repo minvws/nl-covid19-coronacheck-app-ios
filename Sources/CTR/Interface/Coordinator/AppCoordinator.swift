@@ -30,6 +30,10 @@ class AppCoordinator: Coordinator, Logging {
 	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 
 	private var proofManager: ProofManaging = Services.proofManager
+	
+	private var privacySnapshotWindow: UIWindow?
+
+	private var shouldUsePrivacySnapShot = true
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -120,11 +124,34 @@ class AppCoordinator: Coordinator, Logging {
 		}
 		navigateToAppUpdate(with: viewModel)
 	}
-
+	
+	/// Show the Internet Required View
 	private func showInternetRequired() {
 
 		let viewModel = InternetRequiredViewModel(coordinator: self)
 		navigateToAppUpdate(with: viewModel)
+	}
+	
+	/// Show the error alert when crypto library is not initialized
+	private func showCryptoLibNotInitializedError() {
+		
+		let message = String(format: .cryptoLibNotInitializedMessage, "\(142)")
+		
+		let alertController = UIAlertController(
+			title: .cryptoLibNotInitializedTitle,
+			message: message,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: .cryptoLibNotInitializedRetry,
+				style: .cancel,
+				handler: { [weak self] _ in
+					self?.retry()
+				}
+			)
+		)
+		window.rootViewController?.present(alertController, animated: true)
 	}
 
 	/// Show the Action Required View
@@ -185,6 +212,9 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
             case let .actionRequired(versionInformation):
                 showActionRequired(with: versionInformation)
+				
+            case .cryptoLibNotInitialized:
+				showCryptoLibNotInitializedError()
         }
     }
 
@@ -203,34 +233,97 @@ extension AppCoordinator: AppCoordinatorDelegate {
 
 // MARK: - Notification observations
 
+public extension Notification.Name {
+
+	static let disablePrivacySnapShot = Notification.Name("nl.rijksoverheid.ctr.disablePrivacySnapShot")
+	static let enablePrivacySnapShot = Notification.Name("nl.rijksoverheid.ctr.enablePrivacySnapShot")
+}
+
 extension AppCoordinator {
+	
+	private enum Constants {
+		static let privacyWindowAnimationDuration: TimeInterval = 0.15
+	}
 
-    /// Handle the event the application did enter the background
-    @objc func onApplicationDidEnterBackground() {
+    /// Handle the event the application will resign active
+	@objc func onWillResignActiveNotification() {
 
-        /// Show the snapshot (logo) view to hide sensitive data
-        let shapshotViewController = SnapshotViewController(
-            viewModel: SnapshotViewModel(
-                versionSupplier: AppVersionSupplier(),
-                flavor: AppFlavor.flavor
-            )
-        )
-        shapshotViewController.modalPresentationStyle = .fullScreen
-        guard let topController = window.rootViewController else { return }
-        if topController is UINavigationController {
-            (topController as? UINavigationController)?.viewControllers.last?.present(shapshotViewController, animated: true)
-        } else {
-            topController.present(shapshotViewController, animated: true)
-        }
+		guard shouldUsePrivacySnapShot else {
+			return
+		}
+		
+		/// Show the snapshot (logo) view to hide sensitive data
+		if #available(iOS 13.0, *) {
+			guard let windowScene = window.windowScene else {
+				return
+			}
+			privacySnapshotWindow = UIWindow(windowScene: windowScene)
+		} else {
+			// Fallback on earlier versions
+			privacySnapshotWindow = UIWindow(frame: UIScreen.main.bounds)
+		}
+
+		let shapshotViewController = SnapshotViewController(
+			viewModel: SnapshotViewModel(
+				versionSupplier: AppVersionSupplier(),
+				flavor: AppFlavor.flavor
+			)
+		)
+		privacySnapshotWindow?.rootViewController = shapshotViewController
+		// Present window above alert controllers
+		privacySnapshotWindow?.windowLevel = .alert + 1
+		privacySnapshotWindow?.alpha = 0
+		privacySnapshotWindow?.makeKeyAndVisible()
+		UIView.animate(withDuration: Constants.privacyWindowAnimationDuration) {
+			self.privacySnapshotWindow?.alpha = 1
+		}
     }
+	
+	/// Handle the event the application did become active
+	@objc func onDidBecomeActiveNotification() {
+		
+		// Hide when app becomes active
+		UIView.animate(withDuration: Constants.privacyWindowAnimationDuration) {
+			self.privacySnapshotWindow?.alpha = 0
+		} completion: { _ in
+			self.privacySnapshotWindow?.isHidden = true
+			self.privacySnapshotWindow = nil
+		}
+	}
+
+	@objc private func enablePrivacySnapShot() {
+		shouldUsePrivacySnapShot = true
+	}
+
+	@objc private func disablePrivacySnapShot() {
+		shouldUsePrivacySnapShot = false
+	}
 
     private func addObservers() {
 
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(onApplicationDidEnterBackground),
-            name: UIApplication.didEnterBackgroundNotification,
+            selector: #selector(onWillResignActiveNotification),
+            name: UIApplication.willResignActiveNotification,
             object: nil
         )
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(onDidBecomeActiveNotification),
+			name: UIApplication.didBecomeActiveNotification,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(disablePrivacySnapShot),
+			name: Notification.Name.disablePrivacySnapShot,
+			object: nil
+		)
+		NotificationCenter.default.addObserver(
+			self,
+			selector: #selector(enablePrivacySnapShot),
+			name: Notification.Name.enablePrivacySnapShot,
+			object: nil
+		)
     }
 }

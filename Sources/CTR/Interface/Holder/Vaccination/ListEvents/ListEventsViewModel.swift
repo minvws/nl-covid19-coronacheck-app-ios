@@ -4,16 +4,11 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 
 import Foundation
 
-enum ListEventSourceMode {
-	case ggd
-	case commercial
-}
-
-class ListEventsViewModel: Logging {
+class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -83,12 +78,10 @@ class ListEventsViewModel: Logging {
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
-		sourceMode: ListEventSourceMode = .ggd,
 		eventMode: EventMode,
-		remoteVaccinationEvents: [RemoteVaccinationEvent],
-		remoteTestEvents: [RemoteTestEvent],
+		remoteEvents: [RemoteEvent],
 		networkManager: NetworkManaging = Services.networkManager,
-		walletManager: WalletManaging = WalletManager(),
+		walletManager: WalletManaging = Services.walletManager,
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	) {
@@ -102,7 +95,7 @@ class ListEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
-				title: sourceMode == .ggd ? (eventMode == .test ? .holderTestResultsResultsTitle : .holderVaccinationLoadingTitle) : .holderTestResultsResultsTitle,
+				title: eventMode == .test ? .holderTestResultsResultsTitle : .holderVaccinationLoadingTitle,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -111,11 +104,9 @@ class ListEventsViewModel: Logging {
 			)
 		)
 
-		if sourceMode == .ggd {
-			viewState = getViewState(from: remoteVaccinationEvents)
-		} else {
-			viewState = getViewState(from: remoteTestEvents)
-		}
+		super.init()
+
+		viewState = getViewState(from: remoteEvents)
 	}
 
 	func backButtonTapped() {
@@ -132,7 +123,7 @@ class ListEventsViewModel: Logging {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .holderVaccinationAlertTitle,
-			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestResultsAlertMessage,
+			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestAlertMessage,
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationAlertCancel,
 			okAction: { [weak self] _ in
@@ -155,28 +146,45 @@ class ListEventsViewModel: Logging {
 	// MARK: State Helpers
 
 	private func getViewState(
-		from remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
+		from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
-		var listDataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
+		var event30DataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
 
 		for eventResponse in remoteEvents {
-			let identity = eventResponse.wrapper.identity
-			for event in eventResponse.wrapper.events {
-				listDataSource.append(
-					(
-						identity: identity,
-						event: event,
-						providerIdentifier: eventResponse.wrapper.providerIdentifier
+			if let identity = eventResponse.wrapper.identity,
+			   let events30 = eventResponse.wrapper.events {
+				for event in events30 {
+					event30DataSource.append(
+						(
+							identity: identity,
+							event: event,
+							providerIdentifier: eventResponse.wrapper.providerIdentifier
+						)
 					)
-				)
+				}
 			}
 		}
 
-		if listDataSource.isEmpty {
-			return emptyEventsState()
+		if event30DataSource.isEmpty {
+
+			if let event = remoteEvents.first, event.wrapper.protocolVersion == "2.0" {
+				// A test 2.0
+				switch event.wrapper.status {
+					case .complete:
+						if let result = event.wrapper.result, result.negativeResult {
+							return listTest20EventsState(event)
+						}
+					case .pending:
+						return pendingEventsState()
+					default:
+						break
+				}
+			}
 		} else {
-			return listEventsState(listDataSource, remoteEvents: remoteEvents)
+			return listEventsState(event30DataSource, remoteEvents: remoteEvents)
 		}
+
+		return emptyEventsState()
 	}
 
 	private func emptyEventsState() -> ListEventsViewController.State {
@@ -197,7 +205,7 @@ class ListEventsViewModel: Logging {
 
 	private func listEventsState(
 		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
-		remoteEvents: [RemoteVaccinationEvent]) -> ListEventsViewController.State {
+		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
 		return .listEvents(
 			content: ListEventsViewController.Content(
@@ -214,7 +222,8 @@ class ListEventsViewModel: Logging {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody
+							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody,
+							hideBodyForScreenCapture: false
 						)
 					)
 				}
@@ -252,8 +261,9 @@ class ListEventsViewModel: Logging {
 
 		for dataRow in sortedDataSource {
 
-			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
-				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedBirthDate: String = dataRow.identity.birthDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 			let formattedTestDate: String = dataRow.event.negativeTest?.sampleDateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
@@ -299,8 +309,9 @@ class ListEventsViewModel: Logging {
 									String.holderShowQREuAboutTestNegative,
 									dataRow.event.negativeTest?.facility ?? "",
 									manufacturer,
-									dataRow.event.unique
-								)
+									dataRow.event.unique ?? ""
+								),
+								hideBodyForScreenCapture: true
 							)
 						)
 					}
@@ -316,8 +327,9 @@ class ListEventsViewModel: Logging {
 
 		for dataRow in sortedDataSource {
 
-			let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: dataRow.identity.birthDateString)
-				.map(printDateFormatter.string) ?? dataRow.identity.birthDateString
+			let formattedBirthDate: String = dataRow.identity.birthDateString
+				.flatMap(Formatter.getDateFrom)
+				.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 			let formattedShotDate: String = dataRow.event.vaccination?.dateString
 				.flatMap(Formatter.getDateFrom)
 				.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
@@ -367,8 +379,9 @@ class ListEventsViewModel: Logging {
 									dosage,
 									formattedShotDate,
 									dataRow.event.vaccination?.country ?? "",
-									dataRow.event.unique
-								)
+									dataRow.event.unique ?? ""
+								),
+								hideBodyForScreenCapture: true
 							)
 						)
 					}
@@ -381,7 +394,7 @@ class ListEventsViewModel: Logging {
 
 	// MARK: Sign the events
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteVaccinationEvent], onError: @escaping () -> Void) {
+	private func userWantsToMakeQR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
@@ -449,7 +462,7 @@ class ListEventsViewModel: Logging {
 		}
 	}
 
-	private func showVaccinationError(remoteEvents: [RemoteVaccinationEvent]) {
+	private func showVaccinationError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,
@@ -467,21 +480,59 @@ class ListEventsViewModel: Logging {
 
 	// MARK: API Calls
 
-	/// Prepare the cryptoManager
+	/// Prepare the issue (get nonce)
 	/// - Parameter onCompletion: completion handler
 	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
 
-		networkManager.prepareIssue { result in
+		networkManager.prepareIssue { [weak self] result in
 			// Result<PrepareIssueEnvelope, NetworkError>
 			switch result {
 				case let .success(prepareIssueEnvelope):
-					self.logDebug("ok: \(prepareIssueEnvelope)")
+					self?.logVerbose("ok: \(prepareIssueEnvelope)")
 					onCompletion(prepareIssueEnvelope)
 				case let .failure(error):
-					self.logError("error: \(error)")
+					self?.logError("error: \(error)")
+
+					if error == .serverBusy {
+						self?.showServerTooBusyError()
+					} else {
+						self?.showTechnicalError("117 prepareIssue")
+					}
 					onCompletion(nil)
 			}
 		}
+	}
+
+	private func showServerTooBusyError() {
+
+		alert = ListEventsViewController.AlertContent(
+			title: .serverTooBusyErrorTitle,
+			subTitle: .serverTooBusyErrorText,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			okTitle: .serverTooBusyErrorButton
+		)
+	}
+
+	private func showTechnicalError(_ customCode: String?) {
+
+		var subTitle = String.technicalErrorText
+		if let code = customCode {
+			subTitle = String(format: .technicalErrorCustom, code)
+		}
+		alert = ListEventsViewController.AlertContent(
+			title: .errorTitle,
+			subTitle: subTitle,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.goBack()
+			},
+			okTitle: .close
+		)
 	}
 
 	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
@@ -492,7 +543,7 @@ class ListEventsViewModel: Logging {
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
 		else {
-			//					onError(ProofError.missingParams)
+			self.showTechnicalError("118 stoken")
 			return
 		}
 
@@ -502,15 +553,22 @@ class ListEventsViewModel: Logging {
 			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
 		]
 
-		self.networkManager.fetchGreencards(dictionary: dictionary) { result in
+		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] result in
 			//	Result<RemoteGreenCards.Response, NetworkError>
 
 			switch result {
 				case let .success(greencardResponse):
-					self.logVerbose("ok: \(greencardResponse)")
+					self?.logVerbose("ok: \(greencardResponse)")
 					onCompletion(greencardResponse)
 				case let .failure(error):
-					self.logError("error: \(error)")
+					self?.logError("error: \(error)")
+
+					if error == .serverBusy {
+						self?.showServerTooBusyError()
+					} else {
+						self?.showTechnicalError("118 credentials")
+					}
+
 					onCompletion(nil)
 			}
 		}
@@ -519,7 +577,7 @@ class ListEventsViewModel: Logging {
 	// MARK: Store vaccination events
 
 	private func storeVaccinationEvent(
-		remoteEvents: [RemoteVaccinationEvent],
+		remoteEvents: [RemoteEvent],
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
@@ -547,10 +605,10 @@ class ListEventsViewModel: Logging {
 		onCompletion(success)
 	}
 
-	// MARK: Store test events
+	// MARK: Store test 2.0 events
 
-	private func storeTestEvent(
-		remoteEvents: [RemoteTestEvent],
+	private func storeTest20Event(
+		remoteEvents: [RemoteEvent],
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
@@ -604,7 +662,7 @@ class ListEventsViewModel: Logging {
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationOriginMismatchTitle,
 				subTitle: eventMode == .vaccination ? .holderVaccinationOriginMismatchMessage : .holderTestOriginMismatchMessage,
-				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryActionTitle: eventMode == .vaccination ? .holderVaccinationNoListActionTitle : .holderTestNoListActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -619,35 +677,13 @@ class ListEventsViewModel: Logging {
 
 extension ListEventsViewModel {
 
-	private func getViewState(
-		from remoteEvent: [RemoteTestEvent]) -> ListEventsViewController.State {
-
-		if let event = remoteEvent.first {
-
-			switch event.wrapper.status {
-				case .complete:
-					if let result = event.wrapper.result, result.negativeResult {
-						return listTest20EventsState(event)
-					} else {
-						return emptyTest20EventsState()
-					}
-				case .pending:
-					return pendingTest20EventsState()
-				default:
-					return emptyTest20EventsState()
-			}
-		}
-
-		return emptyTest20EventsState()
-	}
-
-	private func pendingTest20EventsState() -> ListEventsViewController.State {
+	private func pendingEventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
 				title: .holderTestResultsPendingTitle,
 				subTitle: .holderTestResultsPendingText,
-				primaryActionTitle: .holderTestResultsBackToMenuButton,
+				primaryActionTitle: .holderTestNoListActionTitle,
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -657,26 +693,10 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func emptyTest20EventsState() -> ListEventsViewController.State {
-
-		return .emptyEvents(
-			content: ListEventsViewController.Content(
-				title: .holderTestResultsNoResultsTitle,
-				subTitle: .holderTestResultsNoResultsText,
-				primaryActionTitle: .holderTestResultsBackToMenuButton,
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-
-	private func listTest20EventsState(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.State {
+	private func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListEventsViewController.State {
 
 		var rows = [ListEventsViewController.Row]()
-		if let row = getTest20Row(remoteTestEvent) {
+		if let row = getTest20Row(remoteEvent) {
 			rows.append(row)
 		}
 
@@ -686,16 +706,17 @@ extension ListEventsViewModel {
 				subTitle: .holderTestResultsResultsText,
 				primaryActionTitle: .holderTestResultsResultsButton,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: [remoteTestEvent], onError: {
-
-					})
+					self?.userWantsToMakeTest20QR(remoteEvents: [remoteEvent]) {
+						self?.showTestError(remoteEvents: [remoteEvent])
+					}
 				},
 				secondaryActionTitle: .holderVaccinationListWrong,
 				secondaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: .holderVaccinationWrongTitle,
-							body: .holderTestWrongBody
+							body: .holderTestWrongBody,
+							hideBodyForScreenCapture: false
 						)
 					)
 				}
@@ -704,9 +725,9 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getTest20Row(_ remoteTestEvent: RemoteTestEvent) -> ListEventsViewController.Row? {
+	private func getTest20Row(_ remoteEvent: RemoteEvent) -> ListEventsViewController.Row? {
 
-		guard let result = remoteTestEvent.wrapper.result,
+		guard let result = remoteEvent.wrapper.result,
 			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
 			return nil
 		}
@@ -740,7 +761,8 @@ extension ListEventsViewModel {
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
 						title: .holderEventAboutTitle,
-						body: body
+						body: body,
+						hideBodyForScreenCapture: true
 					)
 				)
 			}
@@ -765,12 +787,12 @@ extension ListEventsViewModel {
 		return output.trimmingCharacters(in: .whitespaces)
 	}
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteTestEvent], onError: @escaping () -> Void) {
+	private func userWantsToMakeTest20QR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeTestEvent(remoteEvents: remoteEvents) { saved in
+		storeTest20Event(remoteEvents: remoteEvents) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
@@ -782,7 +804,7 @@ extension ListEventsViewModel {
 		}
 	}
 
-	private func showTestError(remoteEvents: [RemoteTestEvent]) {
+	private func showTestError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,

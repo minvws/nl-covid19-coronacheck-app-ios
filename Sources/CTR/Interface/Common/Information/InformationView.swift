@@ -48,6 +48,7 @@ class InformationView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
+		titleLabel.textColor = Theme.colors.dark
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 
@@ -114,4 +115,9 @@ class InformationView: BaseView {
 			messageLabel.linkTouched(handler: linkTapHandler)
 		}
 	}
+
+	func handleScreenCapture(shouldHide: Bool) {
+		messageLabel.isHidden = shouldHide
+	}
+
 }

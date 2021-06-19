@@ -9,6 +9,7 @@ import UIKit
 import SafariServices
 
 enum EventMode {
+
 	// case recovery
 	case test
 	case vaccination
@@ -36,17 +37,17 @@ enum EventScreenResult: Equatable {
 	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
-	case showEvents(events: [RemoteVaccinationEvent], eventMode: EventMode)
+	case showEvents(events: [RemoteEvent], eventMode: EventMode)
 
 	/// Show some more information
-	case moreInformation(title: String, body: String)
+	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
 			case (.back, .back), (.stop, .stop), (.continue, .continue):
 				return true
-			case (let .moreInformation(lhsTitle, lhsBody), let .moreInformation(rhsTitle, rhsBody)):
-				return (lhsTitle, lhsBody) == (rhsTitle, rhsBody)
+			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
+				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
 			case (let showEvents(lhsEvents, lhsMode), let showEvents(rhsEvents, rhsMode)):
 
 				if lhsEvents.count != rhsEvents.count {
@@ -123,9 +124,9 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.pushViewController(viewController, animated: true)
 	}
 
-	func startWithListTestEvents(testEvents: [RemoteTestEvent]) {
+	func startWithListTestEvents(_ testEvents: [RemoteEvent]) {
 
-		navigateToListEvents([], testEvents: testEvents, eventMode: .test, sourceMode: .commercial)
+		navigateToListEvents(testEvents, eventMode: .test)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -166,30 +167,31 @@ class EventCoordinator: Coordinator, Logging {
 	}
 
 	private func navigateToListEvents(
-		_ vaccinationEvents: [RemoteVaccinationEvent],
-		testEvents: [RemoteTestEvent],
-		eventMode: EventMode,
-		sourceMode: ListEventSourceMode = .ggd) {
+		_ remoteEvents: [RemoteEvent],
+		eventMode: EventMode) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
-				sourceMode: sourceMode,
 				eventMode: eventMode,
-				remoteVaccinationEvents: vaccinationEvents,
-				remoteTestEvents: testEvents
+				remoteEvents: remoteEvents
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
 	}
 
-	private func navigateToMoreInformation(_ title: String, body: String) {
+	private func navigateToMoreInformation(_ title: String, body: String, hideBodyForScreenCapture: Bool) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
 				coordinator: self,
 				title: title,
-				message: body
+				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
+				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
 
@@ -213,12 +215,23 @@ class EventCoordinator: Coordinator, Logging {
 	}
 
 	private func navigateBackToTestStart() {
-
-		if let chooseTestLocationViewController = navigationController.viewControllers
-			.first(where: { $0 is ChooseTestLocationViewController }) {
-
+		
+		let popBackToViewController = navigationController.viewControllers.first {
+			
+			switch $0 {
+				case is ChooseTestLocationViewController:
+					return true
+				// Fallback when GGD is not available
+				case is ChooseQRCodeTypeViewController:
+					return true
+				default:
+					return false
+			}
+		}
+		if let popBackToViewController = popBackToViewController {
+			
 			navigationController.popToViewController(
-				chooseTestLocationViewController,
+				popBackToViewController,
 				animated: true
 			)
 		}
@@ -251,43 +264,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				}
 
 			case .errorRequiringRestart(let error, let eventMode):
-				let popback = navigationController.viewControllers.first {
-					// arrange `case`s in the order of matching priority
-					switch $0 {
-						case is VaccinationStartViewController:
-							return true
-						case is ChooseTestLocationViewController:
-							return true
-						default:
-							return false
-					}
-				}
-
-				let presentError = {
-					let alertController: UIAlertController
-
-					switch error {
-						case let error? where (error as NSError).domain.contains("org.openid.appauth"):
-							alertController = UIAlertController(
-								title: .holderGGDLoginFailureVaccineGeneralTitle,
-								message: .holderGGDLoginFailureVaccineGeneralMessage(localizedEventMode: eventMode.localized),
-								preferredStyle: .alert)
-						default:
-							alertController = UIAlertController(
-								title: .errorTitle,
-								message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
-								preferredStyle: .alert)
-					}
-
-					alertController.addAction(.init(title: .ok, style: .default, handler: nil))
-					self.navigationController.present(alertController, animated: true, completion: nil)
-				}
-
-				if let popback = popback {
-					navigationController.popToViewController(popback, animated: true, completion: presentError)
-				} else {
-					navigationController.popToRootViewController(animated: true, completion: presentError)
-				}
+				handleErrorRequiringRestart(error: error, eventMode: eventMode)
 
 			default:
 				break
@@ -299,6 +276,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		switch result {
 			case .stop:
 				delegate?.eventFlowDidComplete()
+				
 			case .back(let eventMode):
 				switch eventMode {
 					case .test:
@@ -307,7 +285,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToVaccinationStart()
 				}
 			case let .showEvents(remoteEvents, eventMode):
-				navigateToListEvents(remoteEvents, testEvents: [], eventMode: eventMode)
+				navigateToListEvents(remoteEvents, eventMode: eventMode)
+
+			case .errorRequiringRestart(let error, let eventMode):
+				handleErrorRequiringRestart(error: error, eventMode: eventMode)
 			default:
 				break
 		}
@@ -325,10 +306,50 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .vaccination:
 						navigateBackToVaccinationStart()
 				}
-			case let .moreInformation(title, body):
-				navigateToMoreInformation(title, body: body)
+			case let .moreInformation(title, body, hideBodyForScreenCapture):
+				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			default:
 				break
+		}
+	}
+
+	private func handleErrorRequiringRestart(error: Error?, eventMode: EventMode) {
+		let popback = navigationController.viewControllers.first {
+			// arrange `case`s in the order of matching priority
+			switch $0 {
+				case is VaccinationStartViewController:
+					return true
+				case is ChooseTestLocationViewController:
+					return true
+				default:
+					return false
+			}
+		}
+
+		let presentError = {
+			let alertController: UIAlertController
+
+			switch error {
+				case let error? where (error as NSError).domain.contains("org.openid.appauth"):
+					alertController = UIAlertController(
+						title: .holderGGDLoginFailureVaccineGeneralTitle,
+						message: .holderGGDLoginFailureGeneralMessage(localizedEventMode: eventMode.localized),
+						preferredStyle: .alert)
+				default:
+					alertController = UIAlertController(
+						title: .errorTitle,
+						message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
+						preferredStyle: .alert)
+			}
+
+			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			self.navigationController.present(alertController, animated: true, completion: nil)
+		}
+
+		if let popback = popback {
+			navigationController.popToViewController(popback, animated: true, completion: presentError)
+		} else {
+			navigationController.popToRootViewController(animated: true, completion: presentError)
 		}
 	}
 }
@@ -349,7 +370,13 @@ extension EventCoordinator: OpenUrlProtocol {
 
 		if shouldOpenInApp {
 			let safariController = SFSafariViewController(url: url)
-			navigationController.viewControllers.last?.present(safariController, animated: true)
+			if let presentedViewController = navigationController.presentedViewController {
+				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+					self.navigationController.viewControllers.last?.present(safariController, animated: true)
+				})
+			} else {
+				navigationController.viewControllers.last?.present(safariController, animated: true)
+			}
 		} else {
 			UIApplication.shared.open(url)
 		}

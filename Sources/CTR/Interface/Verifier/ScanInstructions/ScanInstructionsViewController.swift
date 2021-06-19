@@ -62,7 +62,7 @@ class ScanInstructionsViewController: BaseViewController {
 				sceneView.stackView.setCustomSpacing(32, after: imageView)
 			}
             
-            let label = Label(title3: item.title, montserrat: true).header()
+            let label = Label(title3: item.title, montserrat: true).multiline().header()
 			sceneView.stackView.addArrangedSubview(label)
 			sceneView.stackView.setCustomSpacing(8, after: label)
 

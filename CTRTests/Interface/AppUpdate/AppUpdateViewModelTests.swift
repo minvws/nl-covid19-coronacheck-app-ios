@@ -33,7 +33,11 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationValidityHours: 14600,
 			recoveryValidityHours: 7300,
 			testValidityHours: 40,
-			domesticValidityHours: 40
+			domesticValidityHours: 40,
+			vaccinationEventValidity: 14600,
+			recoveryEventValidity: 7300,
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -100,7 +104,11 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationValidityHours: 14600,
 			recoveryValidityHours: 7300,
 			testValidityHours: 40,
-			domesticValidityHours: 40
+			domesticValidityHours: 40,
+			vaccinationEventValidity: 14600,
+			recoveryEventValidity: 7300,
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -131,7 +139,11 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationValidityHours: 14600,
 			recoveryValidityHours: 7300,
 			testValidityHours: 40,
-			domesticValidityHours: 40
+			domesticValidityHours: 40,
+			vaccinationEventValidity: 14600,
+			recoveryEventValidity: 7300,
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 
 		// When
@@ -160,7 +172,11 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationValidityHours: 14600,
 			recoveryValidityHours: 7300,
 			testValidityHours: 40,
-			domesticValidityHours: 40
+			domesticValidityHours: 40,
+			vaccinationEventValidity: 14600,
+			recoveryEventValidity: 7300,
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 
 		// When

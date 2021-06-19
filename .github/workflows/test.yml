@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+env: 
+  FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT: 180
+  FASTLANE_XCODEBUILD_SETTINGS_RETRIES: 10
+  
 jobs:
   swiftlint:
     runs-on: macos-latest
@@ -18,18 +22,6 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-
-      - name: Cache SwiftLint builds
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-SwiftLint-builds
-        with:
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/SwiftLint/**') }}
-          path: Vendor/SwiftLint/.build
-
-      - name: Build SwiftLint (if necessary)
-        run: |
-          make build_swiftlint_ci
           
       - name: Run SwiftLint 
         run: |
@@ -49,32 +41,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
 
-      - name: Checkout LFS resources
-        run: |
-          git lfs install
-          git lfs pull
-          git checkout .
-
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-
-      - name: Cache XcodeGen builds
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-XcodeGen-builds
-        with:
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-          path: Vendor/XcodeGen/.build
-
-      - name: Build XcodeGen (if necessary)
+      
+      - name: Setup CI environment
         run: |
-          make build_xcodegen_ci
-          
-      - name: Run XcodeGen
+          make ci
+
+      - name: Checkout LFS resources
         run: |
-          make generate_project
+          git lfs pull
+          git checkout .
 
       - name: Build and test
         env:

@@ -17,19 +17,26 @@ class ShowQRImageView: BaseView {
 		static let securityMargin: CGFloat = 38.0
 	}
 
+	/// The spinner
+	let spinner: UIActivityIndicatorView = {
+
+		let view = UIActivityIndicatorView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		if #available(iOS 13.0, *) {
+			view.style = .large
+		} else {
+			view.style = .whiteLarge
+		}
+		view.color = Theme.colors.primary
+		view.hidesWhenStopped = true
+		return view
+	}()
+
 	/// The image view for the QR image
 	internal let largeQRimageView: UIImageView = {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
-	let accessibilityView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = .clear
 		return view
 	}()
 
@@ -45,15 +52,15 @@ class ShowQRImageView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
-
-		// Fixed white background, no inverted QR in dark mode
+		spinner.startAnimating()
 	}
+	
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
 		addSubview(securityView)
-		addSubview(accessibilityView)
+		addSubview(spinner)
 		addSubview(largeQRimageView)
 	}
 	/// Setup the constraints
@@ -78,11 +85,8 @@ class ShowQRImageView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
-			// Accessibility View
-			accessibilityView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
-			accessibilityView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
-			accessibilityView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
-			accessibilityView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
+			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
 
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -93,19 +97,18 @@ class ShowQRImageView: BaseView {
 			)
 		])
 
-		bringSubviewToFront(accessibilityView)
+		bringSubviewToFront(largeQRimageView)
 	}
 
 	/// Setup all the accessibility traits
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-		// Security
-		securityView.isAccessibilityElement = false
-		securityView.primaryButton.isAccessibilityElement = false
-		largeQRimageView.accessibilityTraits = .none
-		accessibilityView.isAccessibilityElement = true
-		accessibilityView.accessibilityTraits = .image
+
+        largeQRimageView.isAccessibilityElement = true
+        largeQRimageView.accessibilityTraits = .image
+        
+        accessibilityElements = [largeQRimageView]
 	}
 
 	// MARK: Public Access
@@ -114,13 +117,14 @@ class ShowQRImageView: BaseView {
 	var qrImage: UIImage? {
 		didSet {
 			largeQRimageView.image = qrImage
+			qrImage == nil ? spinner.startAnimating() : spinner.stopAnimating()
 		}
 	}
 
 	/// The accessibility description
 	var accessibilityDescription: String? {
 		didSet {
-			accessibilityView.accessibilityLabel = accessibilityDescription
+            largeQRimageView.accessibilityLabel = accessibilityDescription
 		}
 	}
 

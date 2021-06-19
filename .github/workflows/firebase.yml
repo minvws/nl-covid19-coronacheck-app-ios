@@ -14,6 +14,7 @@ env:
 
 jobs:
   firebase-deploy-holder-test:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -30,25 +31,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -60,7 +49,23 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_holder_test_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Holder App
+        path: CTR TEST.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Holder App dSYMs
+        path: CTR TEST.app.dSYM.zip
+        retention-days: 10
+
+
   firebase-deploy-verifier-test:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -78,25 +83,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -106,9 +99,25 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
-        bundle exec fastlane ios deploy_verifier_test_ci       
+        bundle exec fastlane ios deploy_verifier_test_ci    
+
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Verifier App
+        path: Verifier.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Test Verifier App dSYMs
+        path: Verifier.app.dSYM.zip
+        retention-days: 10
+
 
   firebase-deploy-holder-acc:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -126,25 +135,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
-
-    - name: Run homebrew
+    - name: Setup CI environment
       run: |
-        make homebrew_ci
-
-    - name: Build XcodeGen (if necessary)
+        make ci
+    
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -156,7 +153,23 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_holder_acc_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Holder App
+        path: CTR ACC.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Holder App dSYMs
+        path: CTR ACC.app.dSYM.zip
+        retention-days: 10
+
+
   firebase-deploy-verifier-acc:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -174,25 +187,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -204,7 +205,23 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_verifier_acc_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Verifier App
+        path: Verifier.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Acc Verifier App dSYMs
+        path: Verifier.app.dSYM.zip
+        retention-days: 10
+
+
   firebase-deploy-holder-prod:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -222,25 +239,13 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
+    - name: Setup CI environment
+      run: |
+        make ci
 
-    - name: Build XcodeGen (if necessary)
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make build_xcodegen_ci
-        
-    - name: Run XcodeGen
-      run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
+        make homebrew_ci_imagemagick
 
     - name: Build and deploy
       timeout-minutes: 45
@@ -252,7 +257,23 @@ jobs:
       run: |
         bundle exec fastlane ios deploy_holder_prod_ci
 
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Holder App
+        path: CTR PROD.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Holder App dSYMs
+        path: CTR PROD.app.dSYM.zip
+        retention-days: 10
+
+        
   firebase-deploy-verifier-prod:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -270,26 +291,14 @@ jobs:
       with:
         bundler-cache: true
 
-    - name: Cache XcodeGen builds
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-XcodeGen-builds
-      with:
-        key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('Vendor/XcodeGen/**') }}
-        path: Vendor/XcodeGen/.build
-
-    - name: Build XcodeGen (if necessary)
+    - name: Setup CI environment
       run: |
-        make build_xcodegen_ci
+        make ci
         
-    - name: Run XcodeGen
+    - name: Setup Imagemagick for icon overlays
       run: |
-        make generate_project
-
-    - name: Run homebrew
-      run: |
-        make homebrew_ci
-
+        make homebrew_ci_imagemagick
+        
     - name: Build and deploy
       timeout-minutes: 45
       env:
@@ -299,3 +308,17 @@ jobs:
         SLACK_URL: ${{ secrets.SLACK_URL }}
       run: |
         bundle exec fastlane ios deploy_verifier_prod_ci
+
+    - name: Archive App
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Verifier App
+        path: Verifier.ipa
+        retention-days: 10
+
+    - name: Archive dSYMs
+      uses: actions/upload-artifact@v2
+      with:
+        name: Prod Verifier App dSYMs
+        path: Verifier.app.dSYM.zip
+        retention-days: 10

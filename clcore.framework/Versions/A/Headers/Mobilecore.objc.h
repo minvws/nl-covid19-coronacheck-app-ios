@@ -109,11 +109,16 @@
 @property (nonatomic) NSString* _Nonnull isNLDCC;
 @end
 
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDOB_EMPTY_VALUE;
+FOUNDATION_EXPORT const int64_t MobilecoreHCERT_SPECIMEN_EXPIRATION_TIME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
-FOUNDATION_EXPORT const double MobilecoreQR_VALID_FOR_SECONDS;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreTEST_RESULT_NOT_DETECTED;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreV1_VALIDITY_HOURS_STR;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 
 @interface Mobilecore : NSObject
 /**

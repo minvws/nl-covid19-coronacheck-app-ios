@@ -52,7 +52,7 @@ class CryptoManager: CryptoManaging, Logging {
 	@Keychain(name: "keyData", service: Constants.keychainService, clearOnReinstall: true)
 	private var keyData: KeyData = .empty
 	
-	private let cryptoVerifierUtility: CryptoVerifierUtility = Services.cryptoVerifierUtility
+	private let cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
 	
 	/// Initializer
 	required init() {
@@ -60,8 +60,8 @@ class CryptoManager: CryptoManaging, Logging {
 		// Public Key
 		loadPublicKeys()
 		
-		// Initialize verifier
-		cryptoVerifierUtility.initialize()
+		// Initialize crypto library
+		cryptoLibUtility.initialize()
 		
 		if cryptoData.holderSecretKey == nil && AppFlavor.flavor == .holder {
 			if let result = MobilecoreGenerateHolderSk(),

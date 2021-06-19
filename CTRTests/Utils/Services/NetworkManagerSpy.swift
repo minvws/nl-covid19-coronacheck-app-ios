@@ -38,18 +38,6 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedGetNonce = false
-	var invokedGetNonceCount = 0
-	var stubbedGetNonceCompletionResult: (Result<NonceEnvelope, NetworkError>, Void)?
-
-	func getNonce(completion: @escaping (Result<NonceEnvelope, NetworkError>) -> Void) {
-		invokedGetNonce = true
-		invokedGetNonceCount += 1
-		if let result = stubbedGetNonceCompletionResult {
-			completion(result.0)
-		}
-	}
-
 	var invokedPrepareIssue = false
 	var invokedPrepareIssueCount = 0
 	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, NetworkError>, Void)?
@@ -86,32 +74,14 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedFetchTestResultsWithISM = false
-	var invokedFetchTestResultsWithISMCount = 0
-	var invokedFetchTestResultsWithISMParameters: (dictionary: [String: AnyObject], Void)?
-	var invokedFetchTestResultsWithISMParametersList = [(dictionary: [String: AnyObject], Void)]()
-	var stubbedFetchTestResultsWithISMCompletionResult: (Result<Data, NetworkError>, Void)?
+	var invokedFetchTestProviders = false
+	var invokedFetchTestProvidersCount = 0
+	var stubbedFetchTestProvidersCompletionResult: (Result<[TestProvider], NetworkError>, Void)?
 
-	func fetchTestResultsWithISM(
-		dictionary: [String: AnyObject],
-		completion: @escaping (Result<Data, NetworkError>) -> Void) {
-		invokedFetchTestResultsWithISM = true
-		invokedFetchTestResultsWithISMCount += 1
-		invokedFetchTestResultsWithISMParameters = (dictionary, ())
-		invokedFetchTestResultsWithISMParametersList.append((dictionary, ()))
-		if let result = stubbedFetchTestResultsWithISMCompletionResult {
-			completion(result.0)
-		}
-	}
-
-	var invokedGetTestProviders = false
-	var invokedGetTestProvidersCount = 0
-	var stubbedGetTestProvidersCompletionResult: (Result<[TestProvider], NetworkError>, Void)?
-
-	func getTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
-		invokedGetTestProviders = true
-		invokedGetTestProvidersCount += 1
-		if let result = stubbedGetTestProvidersCompletionResult {
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+		invokedFetchTestProviders = true
+		invokedFetchTestProvidersCount += 1
+		if let result = stubbedFetchTestProvidersCompletionResult {
 			completion(result.0)
 		}
 	}
@@ -146,22 +116,22 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 
-	var invokedGetTestResult = false
-	var invokedGetTestResultCount = 0
-	var invokedGetTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
-	var invokedGetTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
-	var stubbedGetTestResultCompletionResult: (Result<(TestResultWrapper, SignedResponse), NetworkError>, Void)?
+	var invokedFetchTestResult = false
+	var invokedFetchTestResultCount = 0
+	var invokedFetchTestResultParameters: (provider: TestProvider, token: RequestToken, code: String?)?
+	var invokedFetchTestResultParametersList = [(provider: TestProvider, token: RequestToken, code: String?)]()
+	var stubbedFetchTestResultCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>, Void)?
 
-	func getTestResult(
+	func fetchTestResult(
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(TestResultWrapper, SignedResponse), NetworkError>) -> Void) {
-		invokedGetTestResult = true
-		invokedGetTestResultCount += 1
-		invokedGetTestResultParameters = (provider, token, code)
-		invokedGetTestResultParametersList.append((provider, token, code))
-		if let result = stubbedGetTestResultCompletionResult {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		invokedFetchTestResult = true
+		invokedFetchTestResultCount += 1
+		invokedFetchTestResultParameters = (provider, token, code)
+		invokedFetchTestResultParametersList.append((provider, token, code))
+		if let result = stubbedFetchTestResultCompletionResult {
 			completion(result.0)
 		}
 	}
@@ -170,12 +140,12 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchEventInformationCount = 0
 	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, filter: String?)?
 	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
-	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, NetworkError>, Void)?
+	var stubbedFetchEventInformationCompletionResult: (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>, Void)?
 
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) {
 		invokedFetchEventInformation = true
 		invokedFetchEventInformationCount += 1
 		invokedFetchEventInformationParameters = (provider, filter)

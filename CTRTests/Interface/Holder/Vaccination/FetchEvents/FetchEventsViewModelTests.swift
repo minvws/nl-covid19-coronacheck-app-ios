@@ -71,6 +71,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			protocolVersion: "3.0",
 			identity: identity,
 			status: .complete,
+			result: nil,
 			events: [
 				EventFlow.Event(
 					type: "vaccination",
@@ -107,6 +108,7 @@ class FetchEventsViewModelTests: XCTestCase {
 			protocolVersion: "3.0",
 			identity: identity,
 			status: .complete,
+			result: nil,
 			events: []
 		)
 
@@ -146,10 +148,13 @@ class FetchEventsViewModelTests: XCTestCase {
 		eventInformationAvailable: nil
 	)
 
-	let eventInformationAvailable = EventFlow.EventInformationAvailable(
-		providerIdentifier: "CC",
-		protocolVersion: "3.0",
-		informationAvailable: true
+	let eventInformationAvailable = (
+		EventFlow.EventInformationAvailable(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			informationAvailable: true
+		),
+		SignedResponse(payload: "test", signature: "test")
 	)
 
 	let identity = EventFlow.Identity(

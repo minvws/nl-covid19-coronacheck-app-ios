@@ -51,6 +51,11 @@ protocol RemoteInformation {
 
 	/// What is the validity of a domestic test / vaccination
 	var domesticValidityHours: Int? { get }
+
+	var vaccinationEventValidity: Int? { get }
+	var recoveryEventValidity: Int? { get }
+	var testEventValidity: Int? { get }
+
 }
 
 extension RemoteInformation {
@@ -111,6 +116,15 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// What is the validity of a domestic  test / vaccination
 	let domesticValidityHours: Int?
 
+	/// Max validity of a vaccination
+	var vaccinationEventValidity: Int?
+
+	/// max validity of a recovery
+	var recoveryEventValidity: Int?
+
+	/// max validity of a test
+	var testEventValidity: Int?
+
 	var hpkCodes: [Mapping]? = []
 
 	var nlTestTypes: [Mapping]? = []
@@ -126,6 +140,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	var euTestManufacturers: [Mapping]? = []
 
 	var providerIdentifiers: [Mapping]? = []
+	
+	/// Restricts access to GGD test provider login
+	var isGGDEnabled: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -144,6 +161,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case recoveryValidityHours = "recoveryValidity"
 		case testValidityHours = "testValidity"
 		case domesticValidityHours = "domesticValidity"
+		case vaccinationEventValidity = "vaccinationEventValidity"
+		case recoveryEventValidity = "recoveryEventValidity"
+		case testEventValidity = "testEventValidity"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
 		case nlTestTypes = "nlTestTypes"
@@ -152,6 +172,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euTestTypes = "euTestTypes"
 		case euTestManufacturers = "euTestManufacturers"
 		case providerIdentifiers = "providerIdentifiers"
+		case isGGDEnabled = "ggdEnabled"
 	}
 
 	init(
@@ -168,7 +189,11 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		vaccinationValidityHours: Int?,
 		recoveryValidityHours: Int?,
 		testValidityHours: Int?,
-		domesticValidityHours: Int?) {
+		domesticValidityHours: Int?,
+		vaccinationEventValidity: Int?,
+		recoveryEventValidity: Int?,
+		testEventValidity: Int?,
+		isGGDEnabled: Bool?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -184,6 +209,10 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.recoveryValidityHours = recoveryValidityHours
 		self.testValidityHours = testValidityHours
 		self.domesticValidityHours = domesticValidityHours
+		self.vaccinationEventValidity = vaccinationEventValidity
+		self.recoveryEventValidity = recoveryEventValidity
+		self.testEventValidity = testEventValidity
+		self.isGGDEnabled = isGGDEnabled
 	}
 
 	/// Default remote configuration
@@ -202,7 +231,11 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			vaccinationValidityHours: 14600,
 			recoveryValidityHours: 7300,
 			testValidityHours: 40,
-			domesticValidityHours: 40
+			domesticValidityHours: 40,
+			vaccinationEventValidity: 14600,
+			recoveryEventValidity: 7300,
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 	}
 }

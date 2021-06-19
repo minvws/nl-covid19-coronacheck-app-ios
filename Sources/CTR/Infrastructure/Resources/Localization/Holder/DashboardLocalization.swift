@@ -14,9 +14,19 @@ extension String {
 		return Localization.string(for: "holder.dashboard.title")
 	}
 
-	static var holderDashboardIntro: String {
+	static var holderDashboardIntroDomestic: String {
 
-		return Localization.string(for: "holder.dashboard.intro")
+		return Localization.string(for: "holder.dashboard.intro.domestic")
+	}
+
+	static var holderDashboardIntroInternational: String {
+
+		return Localization.string(for: "holder.dashboard.intro.international")
+	}
+
+	static var holderDashboardIntroEmptyState: String {
+
+		return Localization.string(for: "holder.dashboard.intro.emptystate")
 	}
 
 	static var holderDashboardCreateTitle: String {
@@ -115,18 +125,6 @@ extension String {
 
 	static var qrValidityDatePrefixAutomaticallyBecomesValidOn: String {
 		return Localization.string(for: "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn")
-	}
-
-	static var qrTypeRecovery: String {
-		return Localization.string(for: "holder.dashboard.qr.type.recovery")
-	}
-
-	static var qrTypeTest: String {
-		return Localization.string(for: "holder.dashboard.qr.type.test")
-	}
-
-	static var qrTypeVaccination: String {
-		return Localization.string(for: "holder.dashboard.qr.type.vaccination")
 	}
 
 	static func holderDashboardNotValidInThisRegionScreenTitle(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) -> String {

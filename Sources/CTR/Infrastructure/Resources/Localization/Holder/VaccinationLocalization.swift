@@ -104,11 +104,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.about.text")
 	}
 
-	static var holderVaccinationAboutBody: String {
-
-		return Localization.string(for: "holder.vaccination.about.body")
-	}
-
 	static var holderVaccinationAboutOf: String {
 
 		return Localization.string(for: "holder.vaccination.about.off")
@@ -230,5 +225,10 @@ extension String {
 	static var holderTestOriginMismatchMessage: String {
 
 		return Localization.string(for: "holder.event.originmismatch.test.body")
+	}
+
+	static var holderTestAlertMessage: String {
+
+		return Localization.string(for: "holder.test.alert.message")
 	}
 }

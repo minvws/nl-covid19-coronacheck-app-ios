@@ -9,14 +9,15 @@ import UIKit
 
 class ShowQRViewModel: PreventableScreenCapture, Logging {
 
+	static let domesticCorrectionLevel = "M"
+	static let internationalCorrectionLevel = "Q"
+
 	var loggingCategory: String = "ShowQRViewModel"
 
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
 	weak private var configuration: ConfigurationGeneralProtocol?
-
-	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
 	var previousBrightness: CGFloat?
 
@@ -25,15 +26,14 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	private var greenCard: GreenCard
 
 	@Bindable private(set) var title: String?
+    
+    @Bindable private(set) var qrAccessibility: String?
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var qrMessage: (data: Data, correctionLevel: String)?
+	@Bindable private(set) var qrImage: UIImage?
 
 	@Bindable private(set) var showValidQR: Bool
-
-	/// Show a warning for a screenshot
-	@Bindable private(set) var showScreenshotWarning: Bool = false
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -79,23 +79,25 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		// Start by showing nothing
 		self.showValidQR = false
+		self.qrImage = nil
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = .holderShowQRDomesticTitle
+            qrAccessibility = .holderShowQRDomesticQRTitle
 			infoButtonAccessibility = .holderShowQRDomesticAboutTitle
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = .holderShowQREuTitle
+            qrAccessibility = .holderShowQRDomesticQRTitle
 			infoButtonAccessibility = .holderShowQREuAboutTitle
 		}
 
 		super.init()
-		addObserver()
 	}
 
 	/// Check the QR Validity
 	@objc func checkQRValidity() {
 
-		guard let credential = greenCard.getActiveCredential(),
+		guard let credential = self.greenCard.getActiveCredential(),
 			  let data = credential.data,
 			  let expirationTime = credential.expirationTime, expirationTime > Date() else {
 			setQRNotValid()
@@ -103,14 +105,26 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		}
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			if let message = self.cryptoManager?.generateQRmessage(data) {
-				setQRValid(message, correctionLevel: "M")
-			} else {
-				setQRNotValid()
-				return
+			DispatchQueue.global(qos: .userInitiated).async {
+				if let message = self.cryptoManager?.generateQRmessage(data),
+				   let image = message.generateQRCode(correctionLevel: ShowQRViewModel.domesticCorrectionLevel) {
+					DispatchQueue.main.async {
+						self.setQRValid(image: image)
+					}
+				} else {
+					DispatchQueue.main.async {
+						self.setQRNotValid()
+					}
+				}
 			}
 		} else {
-			setQRValid(data, correctionLevel: "Q")
+			DispatchQueue.global(qos: .userInitiated).async {
+				// International
+				let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel)
+				DispatchQueue.main.async {
+					self.setQRValid(image: image)
+				}
+			}
 		}
 	}
 
@@ -127,7 +141,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 					.map({ $0.isEmpty ? "_" : $0 })
 					.joined(separator: " ")
 				let body: String = String(format: .holderShowQRDomesticAboutMessage, identity)
-				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body)
+				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body, hideBodyForScreenCapture: true)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
@@ -176,7 +190,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let body: String = String(
 			format: .holderShowQREuAboutVaccinationMessage,
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			vaccineBrand,
 			vaccineType,
@@ -186,7 +200,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			vaccination.country,
 			vaccination.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
 	}
 
 	private func showMoreInformationVaccination(
@@ -217,7 +231,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let body: String = String(
 			format: .holderShowQREuAboutTestMessage,
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName),   \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			testType,
 			test.name ?? "",
@@ -228,21 +242,21 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			test.country,
 			test.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body)
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
 	}
 
-	private func setQRValid(_ data: Data, correctionLevel: String) {
+	private func setQRValid(image: UIImage?) {
 
 		logDebug("Credential is valid")
-		qrMessage = (data, correctionLevel)
+		qrImage = image
 		showValidQR = true
 		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
 
-		logDebug("Credential is not valid")
-		qrMessage = nil
+		logWarning("Credential is not valid")
+		qrImage = nil
 		showValidQR = false
 		stopValidityTimer()
 		coordinator?.navigateBackToStart()
@@ -279,22 +293,5 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	func stopValidityTimer() {
 		validityTimer?.invalidate()
 		validityTimer = nil
-	}
-
-	/// Add an observer for the userDidTakeScreenshotNotification notification
-	private func addObserver() {
-
-		notificationCenter.addObserver(
-			self,
-			selector: #selector(handleScreenShot),
-			name: UIApplication.userDidTakeScreenshotNotification,
-			object: nil
-		)
-	}
-
-	/// handle a screen shot taken
-	@objc internal func handleScreenShot() {
-
-		showScreenshotWarning = true
 	}
 }

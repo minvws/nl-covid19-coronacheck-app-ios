@@ -27,22 +27,6 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedNavigateToTokenScanCount += 1
 	}
 
-	var invokedNavigateToListResults = false
-	var invokedNavigateToListResultsCount = 0
-
-	func navigateToListResults() {
-		invokedNavigateToListResults = true
-		invokedNavigateToListResultsCount += 1
-	}
-
-	var invokedNavigateToAboutTestResult = false
-	var invokedNavigateToAboutTestResultCount = 0
-
-	func navigateToAboutTestResult() {
-		invokedNavigateToAboutTestResult = true
-		invokedNavigateToAboutTestResultCount += 1
-	}
-
 	var invokedNavigateBackToStart = false
 	var invokedNavigateBackToStartCount = 0
 
@@ -53,26 +37,26 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
 
-	func presentInformationPage(title: String, body: String) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body)
-		invokedPresentInformationPageParametersList.append((title, body))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false
 	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
-	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteTestEvent: RemoteTestEvent, Void)?
-	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteTestEvent: RemoteTestEvent, Void)]()
+	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?
+	var invokedUserWishesToMakeQRFromNegativeTestParametersList = [(remoteEvent: RemoteEvent, Void)]()
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
 		invokedUserWishesToMakeQRFromNegativeTest = true
 		invokedUserWishesToMakeQRFromNegativeTestCount += 1
-		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteTestEvent, ())
-		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteTestEvent, ()))
+		invokedUserWishesToMakeQRFromNegativeTestParameters = (remoteEvent, ())
+		invokedUserWishesToMakeQRFromNegativeTestParametersList.append((remoteEvent, ()))
 	}
 
 	var invokedUserWishesToCreateAQR = false

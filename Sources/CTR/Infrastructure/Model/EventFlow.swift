@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias RemoteVaccinationEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
+typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
 
 struct EventFlow {
 
@@ -97,7 +97,7 @@ struct EventFlow {
 		let providerIdentifier: String
 
 		/// The protocol version
-		let protocolVersion: String
+		let protocolVersion: String?
 
 		/// The event access token
 		let informationAvailable: Bool
@@ -120,17 +120,20 @@ struct EventFlow {
 		/// The protocol version
 		let protocolVersion: String
 
-		let identity: Identity
+		let identity: Identity?
 
 		/// The state of the test
 		let status: EventState
 
+		/// The test result
+		let result: TestResult?
+
 		/// The vaccination events
-		var events: [Event] = []
+		var events: [Event]? = []
 
 		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
-			let maxIssuedAt: Date? = events
+			let maxIssuedAt: Date? = events?
 				.compactMap { $0.vaccination?.dateString }
 				.compactMap { dateFormatter.date(from: $0) }
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
@@ -150,7 +153,7 @@ struct EventFlow {
 
 		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
-			let maxIssuedAt: Date? = events
+			let maxIssuedAt: Date? = events?
 				.compactMap { $0.negativeTest?.sampleDateString }
 				.compactMap { dateFormatter.date(from: $0) }
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
@@ -176,6 +179,7 @@ struct EventFlow {
 			case providerIdentifier
 			case status
 			case events
+			case result
 		}
 	}
 
@@ -188,6 +192,12 @@ struct EventFlow {
 		/// The vaccination result is complete
 		/// This refers to the data-completeness, not vaccination status.
 		case complete
+
+		/// The test is invalid
+		case invalid = "invalid_token"
+
+		/// Verification is required before we can fetch the result
+		case verificationRequired = "verification_required"
 
 		/// Unknown state
 		case unknown
@@ -202,13 +212,13 @@ struct EventFlow {
 
 	struct Identity: Codable, Equatable {
 
-		let infix: String
+		let infix: String?
 
-		let firstName: String
+		let firstName: String?
 
-		let lastName: String
+		let lastName: String?
 
-		let birthDateString: String
+		let birthDateString: String?
 
 		// Key mapping
 		enum CodingKeys: String, CodingKey {
@@ -221,7 +231,7 @@ struct EventFlow {
 
 		var fullName: String {
 
-			"\(infix) \(lastName), \(firstName)".trimmingCharacters(in: .whitespaces)
+			"\(infix ?? "") \(lastName ?? ""), \(firstName ?? "")".trimmingCharacters(in: .whitespaces)
 		}
 	}
 
@@ -231,9 +241,9 @@ struct EventFlow {
 		let type: String
 
 		/// The identifier of this event
-		let unique: String
+		let unique: String?
 
-		let isSpecimen: Bool
+		let isSpecimen: Bool?
 
 		/// The vaccination
 		let vaccination: VaccinationEvent?

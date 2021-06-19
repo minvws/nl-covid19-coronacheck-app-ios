@@ -47,6 +47,13 @@ protocol WalletManaging {
 	func listOrigins(type: OriginType) -> [Origin]
 
 	func removeExpiredGreenCards() -> [(greencardType: String, originType: String)]
+
+	/// Expire event groups that are no longer valid
+	/// - Parameters:
+	///   - vaccinationValidity: the max validity for vaccination
+	///   - recoveryValidity: the max validity for recovery
+	///   - testValidity: the max validity for test
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -108,6 +115,52 @@ class WalletManager: WalletManaging, Logging {
 			}
 		}
 		return success
+	}
+
+	/// Expire event groups that are no longer valid
+	/// - Parameters:
+	///   - vaccinationValidity: the max validity for vaccination
+	///   - recoveryValidity: the max validity for recovery
+	///   - testValidity: the max validity for test
+	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?) {
+
+		if let maxValidity = vaccinationValidity {
+			findAndExpireEventGroups(for: .vaccination, maxValidity: maxValidity)
+		}
+
+		if let maxValidity = recoveryValidity {
+			findAndExpireEventGroups(for: .recovery, maxValidity: maxValidity)
+		}
+
+		if let maxValidity = testValidity {
+			findAndExpireEventGroups(for: .test, maxValidity: maxValidity)
+		}
+	}
+
+	/// Find event groups that exceed their validity and remove them from the database
+	/// - Parameters:
+	///   - type: the type of event group (vaccination, test, recovery)
+	///   - maxValidity: the max validity (in HOURS) of the event group beyond the max issued at date. (from remote config)
+	private func findAndExpireEventGroups(for type: EventType, maxValidity: Int) {
+
+		let context = dataStoreManager.backgroundContext()
+		context.performAndWait {
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let eventGroups = wallet.eventGroups {
+				for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
+					if let maxIssuedAt = eventGroup.maxIssuedAt,
+					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
+						if expireDate > Date() {
+							logDebug("Shantey, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+						} else {
+							logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							context.delete(eventGroup)
+						}
+					}
+				}
+				dataStoreManager.save(context)
+			}
+		}
 	}
 
 	func fetchSignedEvents() -> [String] {

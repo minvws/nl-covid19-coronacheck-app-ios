@@ -13,7 +13,7 @@ struct RequestToken: Codable, Equatable {
     /// The current highest known protocol version
     /// 1.0: Checksum
     /// 2.0: Initials + Birthday/month
-    static let highestKnownProtocolVersion = "2.0"
+    static let highestKnownProtocolVersion = "3.0"
 
 	/// The request token
 	let token: String

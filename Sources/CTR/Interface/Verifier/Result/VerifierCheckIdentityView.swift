@@ -20,6 +20,7 @@ class VerifierCheckIdentityView: BaseView {
 		static let identityTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 48.0
 		static let identitySideMargin: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 48.0
 		static let headerTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 40.0
+		static let bottomMargin: CGFloat = 300.0
 	}
 
 	/// The title label
@@ -113,7 +114,7 @@ class VerifierCheckIdentityView: BaseView {
 			),
 			identity.bottomAnchor.constraint(
 				lessThanOrEqualTo: bottomAnchor,
-				constant: -ViewTraits.margin
+				constant: -ViewTraits.bottomMargin
 			)
 		])
 	}

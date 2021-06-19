@@ -25,6 +25,9 @@ class QRCardView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 24
 		static let shadowOpacity: Float = 0.15
+		
+		// Spacing
+		static let topVerticalLabelSpacing: CGFloat = 16
 	}
 
 	// MARK: - Private properties
@@ -52,6 +55,7 @@ class QRCardView: BaseView {
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
 		button.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
+		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
 	}()
 
@@ -107,6 +111,8 @@ class QRCardView: BaseView {
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
+		
+		largeIconImageView.setContentHuggingPriority(.required, for: .vertical)
 
 		NSLayoutConstraint.activate([
 			regionLabel.topAnchor.constraint(equalTo: topAnchor, constant: 28),
@@ -121,14 +127,21 @@ class QRCardView: BaseView {
 			titleLabel.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: 8),
 			titleLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
-			verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: 16),
+			verticalLabelsStackView.topAnchor.constraint(greaterThanOrEqualTo: titleLabel.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing),
 			verticalLabelsStackView.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
 			verticalLabelsStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
 
 			viewQRButton.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
-			viewQRButton.trailingAnchor.constraint(equalTo: largeIconImageView.trailingAnchor),
+			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
-			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+			
+			// Break constraint when title label increases in size
+			{
+				let constraint = verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing)
+				constraint.priority = .defaultLow
+				return constraint
+			}()
 		])
 	}
 
@@ -180,9 +193,9 @@ class QRCardView: BaseView {
 
 	private func reapplyButtonEnabledState() {
 		if let buttonEnabledEvaluator = buttonEnabledEvaluator {
-			viewQRButton.isEnabled = buttonEnabledEvaluator(Date())
-
-			if shouldStyleForEU {
+			let enabledState = buttonEnabledEvaluator(Date())
+			viewQRButton.isEnabled = enabledState
+			if shouldStyleForEU && enabledState {
 				applyEUStyle()
 			}
 		}
@@ -204,7 +217,8 @@ class QRCardView: BaseView {
 	private func applyEUStyle() {
 		regionLabel.textColor = Theme.colors.europa
 		viewQRButton.backgroundColor = Theme.colors.europa
-		viewQRButton.setTitleColor(Theme.colors.grey4, for: .normal)
+		viewQRButton.setTitleColor(Theme.colors.greenGrey, for: .normal)
+		largeIconImageView.image = .euQRIcon
 	}
 
 	// MARK: - Callbacks

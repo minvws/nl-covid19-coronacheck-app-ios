@@ -9,8 +9,10 @@ import UIKit
 
 class PreventableScreenCapture {
 
-	/// Hide for screen capture
+	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+
 	@Bindable var hideForCapture: Bool = false
+	@Bindable var screenshotWasTaken: Bool = false
 
 	/// Initializer
 	init() {
@@ -21,43 +23,56 @@ class PreventableScreenCapture {
 
 	deinit {
 
-		NotificationCenter.default.removeObserver(self)
+		notificationCenter.removeObserver(self)
 	}
 
 	// MARK: - capturedDidChangeNotification
 
-	/// Add  observesr to prevent screen capture
+	/// Add  observers to prevent screen capture
 	func addObservers() {
 
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(preventScreenCapture),
 			name: UIScreen.capturedDidChangeNotification,
 			object: nil
 		)
 
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(preventScreenCapture),
 			name: UIApplication.willEnterForegroundNotification,
 			object: nil
 		)
 		
-		NotificationCenter.default.addObserver(
+		notificationCenter.addObserver(
 			self,
 			selector: #selector(preventScreenCapture),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
+
+		notificationCenter.addObserver(
+			self,
+			selector: #selector(handleScreenShot),
+			name: UIApplication.userDidTakeScreenshotNotification,
+			object: nil
+		)
 	}
 
 	/// Prevent screen capture
-	@objc func preventScreenCapture() {
+	@objc internal func preventScreenCapture() {
 		
 		if UIScreen.main.isCaptured {
 			hideForCapture = true
 		} else {
 			hideForCapture = false
 		}
+	}
+
+	/// handle a screen shot taken
+	@objc internal func handleScreenShot() {
+
+		screenshotWasTaken = true
 	}
 }

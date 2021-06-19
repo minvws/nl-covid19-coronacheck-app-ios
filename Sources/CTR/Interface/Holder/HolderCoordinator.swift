@@ -18,12 +18,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
-	/// Navigate to List Results Scene
-	func navigateToListResults()
-
-	/// Navigate to About test Result Scene
-	func navigateToAboutTestResult()
-
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
 
@@ -31,9 +25,10 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	func presentInformationPage(title: String, body: String)
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent)
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
 	func userWishesToCreateAQR()
 
@@ -67,6 +62,11 @@ class HolderCoordinator: SharedCoordinator {
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
+	/// Restricts access to GGD test provider login
+	private var isGGDEnabled: Bool {
+		return remoteConfigManager.getConfiguration().isGGDEnabled == true
+	}
+	
 	// Designated starter method
 	override func start() {
 
@@ -259,19 +259,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to List Results Scene
-	func navigateToListResults() {
-
-		let destination = ListResultsViewController(
-			viewModel: ListResultsViewModel(
-				coordinator: self,
-				proofManager: proofManager,
-				maxValidity: maxValidity
-			)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
 	private func navigateToChooseTestLocation() {
 
 		let destination = ChooseTestLocationViewController(
@@ -280,27 +267,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to About test Result Scene
-	func navigateToAboutTestResult() {
-
-		let destination = AboutTestResultViewController(
-			viewModel: AboutTestResultViewModel(
-				coordinator: self,
-				proofManager: proofManager
-			)
-		)
-
-		destination.transitioningDelegate = bottomSheetTransitioningDelegate
-		destination.modalPresentationStyle = .custom
-		destination.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?.present(
-			destination,
-			animated: true,
-			completion: nil
-		)
 	}
 
 	/// Navigate to the start fo the holder flow
@@ -314,7 +280,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// - Parameters:
 	///   - title: the title of the page
 	///   - body: the body of the page
-	func presentInformationPage(title: String, body: String) {
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -324,7 +291,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				linkTapHander: { [weak self] url in
 
 					self?.openUrl(url, inApp: true)
-				}
+				},
+				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
@@ -335,7 +303,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			.present(viewController, animated: true, completion: nil)
 	}
 
-	func userWishesToMakeQRFromNegativeTest(_ remoteTestEvent: RemoteTestEvent) {
+	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
@@ -343,7 +311,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				delegate: self
 			)
 			addChildCoordinator(eventCoordinator)
-			eventCoordinator.startWithListTestEvents(testEvents: [remoteTestEvent])
+			eventCoordinator.startWithListTestEvents([remoteEvent])
 		}
 	}
 
@@ -352,7 +320,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToChooseLocation() {
-		navigateToChooseTestLocation()
+		if isGGDEnabled {
+			navigateToChooseTestLocation()
+		} else {
+			// Fallback when GGD is not available
+			navigateToTokenEntry()
+		}
 	}
 
 	func userHasNotBeenTested() {
@@ -361,7 +334,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: MakeTestAppointmentViewModel(
 				coordinator: self,
 				title: .holderNoTestTitle,
-				message: String(format: .holderNoTestBody, "\(maxValidity)", "\(maxValidity)"),
+				message: String(format: .holderNoTestBody),
 				buttonTitle: .holderNoTestButtonTitle
 			)
 		)
@@ -405,7 +378,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
-		presentInformationPage(title: title, body: message)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {

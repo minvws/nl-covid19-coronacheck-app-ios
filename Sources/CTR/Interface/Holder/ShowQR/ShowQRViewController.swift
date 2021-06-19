@@ -13,8 +13,6 @@ class ShowQRViewController: BaseViewController {
 
 	let sceneView = ShowQRImageView()
 
-	var screenCaptureInProgress = false
-
 	var previousOrientation: UIInterfaceOrientation?
 
 	// MARK: Initializers
@@ -51,24 +49,21 @@ class ShowQRViewController: BaseViewController {
 	private func setupBinding() {
 
 		viewModel.$title.binding = { [weak self] in
+            
 			self?.title = $0
-			self?.sceneView.accessibilityDescription = $0
 		}
+        
+        viewModel.$qrAccessibility.binding = { [weak self] in
+            
+            self?.sceneView.accessibilityDescription = $0
+        }
 
 		viewModel.$infoButtonAccessibility.binding = { [weak self] in
 
 			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
 		}
 
-		viewModel.$qrMessage.binding = { [weak self] in
-
-			if let value = $0 {
-				let image = value.data.generateQRCode(correctionLevel: value.correctionLevel)
-				self?.sceneView.qrImage = image
-			} else {
-				self?.sceneView.qrImage = nil
-			}
-		}
+		viewModel.$qrImage.binding = { [weak self] in self?.sceneView.qrImage = $0 }
 
 		viewModel.$showValidQR.binding = { [weak self] in
 
@@ -81,11 +76,10 @@ class ShowQRViewController: BaseViewController {
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
-			self?.screenCaptureInProgress = $0
 			self?.sceneView.hideQRImage = $0
 		}
 
-		viewModel.$showScreenshotWarning.binding = { [weak self] in
+		viewModel.$screenshotWasTaken.binding = { [weak self] in
 
 			if $0 {
 				self?.showError(
@@ -106,8 +100,8 @@ class ShowQRViewController: BaseViewController {
 			object: nil
 		)
 		NotificationCenter.default.addObserver(
-			self, selector:
-				#selector(checkValidity),
+			self,
+			selector: #selector(checkValidity),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
@@ -133,11 +127,15 @@ class ShowQRViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		checkValidity()
 		sceneView.play()
-
 		previousOrientation = OrientationUtility.currentOrientation()
 		OrientationUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+	}
+
+	override func viewDidAppear(_ animated: Bool) {
+
+		super.viewDidAppear(animated)
+		checkValidity()
 	}
 
 	override func viewWillDisappear(_ animated: Bool) {

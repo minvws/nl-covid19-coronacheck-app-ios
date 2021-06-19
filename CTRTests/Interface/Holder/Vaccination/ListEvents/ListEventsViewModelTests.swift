@@ -29,8 +29,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [],
-			remoteTestEvents: [],
+			remoteEvents: [],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -101,8 +100,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -114,8 +112,9 @@ class ListEventsViewModelTests: XCTestCase {
 			// Then
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-			if case let .moreInformation(title, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+			if case let .moreInformation(title, _, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
 				expect(title) == .holderEventAboutTitle
+				expect(hide) == true
 			} else {
 				fail("wrong information")
 			}
@@ -131,8 +130,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -144,7 +142,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 			// Then
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: .holderVaccinationWrongTitle, body: .holderVaccinationWrongBody)
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: .holderVaccinationWrongTitle, body: .holderVaccinationWrongBody, hideBodyForScreenCapture: false)
 		} else {
 			fail("wrong state")
 		}
@@ -156,8 +154,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -186,8 +183,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy
 		)
@@ -218,8 +214,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -293,8 +288,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -332,8 +326,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -372,8 +365,7 @@ class ListEventsViewModelTests: XCTestCase {
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
-			remoteVaccinationEvents: [defaultremoteVaccinationEvent()],
-			remoteTestEvents: [],
+			remoteEvents: [defaultremoteVaccinationEvent()],
 			networkManager: networkSpy,
 			walletManager: walletSpy,
 			cryptoManager: cryptoSpy
@@ -409,13 +401,14 @@ class ListEventsViewModelTests: XCTestCase {
 
 	// MARK: Default values
 
-	private func defaultremoteVaccinationEvent() -> RemoteVaccinationEvent {
-		return RemoteVaccinationEvent(
+	private func defaultremoteVaccinationEvent() -> RemoteEvent {
+		return RemoteEvent(
 			wrapper: EventFlow.EventResultWrapper(
 				providerIdentifier: "CC",
 				protocolVersion: "3.0",
 				identity: identity,
 				status: .complete,
+				result: nil,
 				events: [
 					EventFlow.Event(
 						type: "vaccination",

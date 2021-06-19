@@ -51,11 +51,30 @@ enum QRCodeOriginType: String, Codable {
 	case vaccination
 	case recovery
 
-	var localized: String {
+	// e.g. "Test Certificate", "Vaccination Certificate"
+	var localizedProof: String {
 		switch self {
-			case .recovery: return .qrTypeRecovery
-			case .vaccination: return .qrTypeVaccination
-			case .test: return .qrTypeTest
+			case .recovery: return .recoverystatement
+			case .vaccination: return .vaccinationcertificate
+			case .test: return .testcertificate
+		}
+	}
+
+	// e.g. "Test Date", "Vaccination Date" etc.
+	var localizedEvent: String {
+		switch self {
+			case .recovery: return .recoverydate
+			case .vaccination: return .vaccinationdate
+			case .test: return .testdate
+		}
+	}
+
+	/// There is a particular order to sort these onscreen
+	var customSortIndex: Int {
+		switch self {
+			case .vaccination: return 0
+			case .recovery: return 1
+			case .test: return 2
 		}
 	}
 }
@@ -167,6 +186,15 @@ class HolderDashboardViewModel: Logging {
 
 		self.setupNotificationListeners()
 
+		// Remove after EU Launch:
+		if let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom), euLaunchDate > Date() {
+			let secondsUntilEULaunchDate = euLaunchDate.timeIntervalSinceNow
+			DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilEULaunchDate) {
+				// Purpose: to remove the EU Launch footer ""
+				self.datasource.reload()
+			}
+		}
+
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
 //			injectSampleData(dataStoreManager: dataStoreManager)
@@ -208,14 +236,21 @@ class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
-		cards += [.headerMessage(message: .holderDashboardIntro)]
+		cards += [.headerMessage(
+			message: {
+				guard !state.myQRCards.isEmpty else { return .holderDashboardIntroEmptyState }
+				return state.qrCodeValidityRegion == .domestic
+					? .holderDashboardIntroDomestic
+					: .holderDashboardIntroInternational
+			}())
+		]
 
 		cards += state.expiredGreenCards.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }
 
 			let message = String.holderDashboardQRExpired(
 				localizedRegion: expiredQR.region.localizedAdjective,
-				localizedOriginType: expiredQR.type.localized
+				localizedOriginType: expiredQR.type.localizedProof
 			)
 
 			return .expiredQR(message: message, didTapClose: {
@@ -238,14 +273,16 @@ class HolderDashboardViewModel: Logging {
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state).map { originType, message in
-			return .originNotValidInThisRegion(message: message) {
-				coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
-					originType: originType,
-					currentRegion: state.qrCodeValidityRegion,
-					availableRegion: state.qrCodeValidityRegion.opposite)
+		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state)
+			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
+			.map { originType, message in
+				return .originNotValidInThisRegion(message: message) {
+					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+						originType: originType,
+						currentRegion: state.qrCodeValidityRegion,
+						availableRegion: state.qrCodeValidityRegion.opposite)
+				}
 			}
-		}
 
 		cards += state.myQRCards
 
@@ -256,7 +293,7 @@ class HolderDashboardViewModel: Logging {
 					case (.domestic, .netherlands(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized.capitalized,
+								typeText: origin.type.localizedProof.capitalizingFirstLetter(),
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -281,14 +318,14 @@ class HolderDashboardViewModel: Logging {
 								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
 								else { return nil }
 
-								return String.qrExpiryDatePrefixExpiresIn + relativeDateString
+								return (String.qrExpiryDatePrefixExpiresIn + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 							}
 						)]
 
 					case (.europeanUnion, .europeanUnion(let greenCardObjectID, let origins, let evaluateEnabledState)):
 						let rows = origins.map { origin in
 							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localized.capitalized,
+								typeText: origin.type.localizedEvent.capitalizingFirstLetter(),
 								validityTextEvaluator: { now in
 									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 								}
@@ -392,19 +429,15 @@ extension HolderDashboardViewModel {
 
 			/// There is a particular order to sort these onscreen
 			var customSortIndex: Int {
-				switch type {
-					case .vaccination: return 0
-					case .recovery: return 1
-					case .test: return 2
-				}
+				type.customSortIndex
 			}
 
 			var isNotYetExpired: Bool {
-				return expirationTime > Date()
+				expirationTime > Date()
 			}
 
 			var isCurrentlyValid: Bool {
-				return isValid(duringDate: Date())
+				isValid(duringDate: Date())
 			}
 
 			func isValid(duringDate date: Date) -> Bool {
@@ -429,8 +462,7 @@ extension HolderDashboardViewModel {
 			
 			if origin.expirationTime < now { // expired
 				return .init(text: "", kind: .past)
-			} else if origin.validFromDate > now, case .netherlands = self { // not valid yet
-
+			} else if origin.validFromDate > now {
 				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
 					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
@@ -446,7 +478,6 @@ extension HolderDashboardViewModel {
 						kind: .future
 					)
 				}
-
 			} else {
 				switch self {
 					// Netherlands uses expireTime
@@ -475,6 +506,12 @@ extension HolderDashboardViewModel {
 			}
 		}
 
+		/// There is a particular order to sort these onscreen
+		var customSortIndex: Int {
+			guard let firstOrigin = origins.first else { return .max }
+			return firstOrigin.customSortIndex
+		}
+
 		// MARK: - private
 
 		/// Each origin has its own prefix
@@ -483,7 +520,6 @@ extension HolderDashboardViewModel {
 			switch self {
 				case .netherlands:
 					if origin.isCurrentlyValid {
-
 						if origin.expiryIsBeyondThreeYearsFromNow {
 							return ""
 						} else {
@@ -495,15 +531,11 @@ extension HolderDashboardViewModel {
 					}
 
 				case .europeanUnion:
-					if origin.isCurrentlyValid {
-						if origin.type == .recovery {
-							return .qrValidityDatePrefixValidFrom
+					if !origin.isCurrentlyValid && origin.isNotYetExpired {
+						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
 						} else {
 							return ""
 						}
-					} else {
-						return .qrValidityDatePrefixValidFrom
-					}
 			}
 		}
 
@@ -646,7 +678,7 @@ extension HolderDashboardViewModel {
 
 					func evaluateButtonEnabledState(date: Date) -> Bool {
 						let activeCredential: Credential? = greencard.getActiveCredential(forDate: date)
-						return !(activeCredential == nil || originEntries.isEmpty)
+						return !(activeCredential == nil || originEntries.isEmpty) && originEntries.contains(where: { $0.isCurrentlyValid })
 					}
 
 					switch greencard.getType() {
@@ -675,7 +707,7 @@ extension HolderDashboardViewModel {
 					!$0.origins.isEmpty
 				}
 				.sorted { qrCardA, qrCardB in
-					qrCardA.effectiveExpiratedAt > qrCardB.effectiveExpiratedAt
+					qrCardA.customSortIndex < qrCardB.customSortIndex
 				}
 
 			return items
@@ -763,9 +795,9 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
 		switch state.qrCodeValidityRegion {
 			case .domestic:
-				return (originType, String.holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: originType.localized))
+				return (originType, String.holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: originType.localizedProof))
 			case .europeanUnion:
-				return (originType, String.holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: originType.localized))
+				return (originType, String.holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: originType.localizedProof))
 		}
 	}
 

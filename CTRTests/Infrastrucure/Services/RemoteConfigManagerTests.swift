@@ -234,7 +234,11 @@ extension RemoteConfiguration {
 			vaccinationValidityHours: 14600,
 			recoveryValidityHours: 7300,
 			testValidityHours: 40,
-			domesticValidityHours: 40
+			domesticValidityHours: 40,
+			vaccinationEventValidity: 14600,
+			recoveryEventValidity: 7300,
+			testEventValidity: 40,
+			isGGDEnabled: true
 		)
 
 	}

@@ -13,9 +13,11 @@ class LaunchViewModel {
 
 	private var versionSupplier: AppVersionSupplierProtocol
 	private var remoteConfigManager: RemoteConfigManaging
+	private var walletManager: WalletManaging
 	private var proofManager: ProofManaging
 	private var jailBreakDetector: JailBreakProtocol
 	private var userSettings: UserSettingsProtocol
+	private let cryptoLibUtility: CryptoLibUtilityProtocol
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -39,6 +41,7 @@ class LaunchViewModel {
 	///   - proofManager: the proof manager for fetching the keys
 	///   - jailBreakDetector: the detector for detecting jailbreaks
 	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
+	///   - cryptoLibUtility: the crypto library utility
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol,
@@ -46,7 +49,9 @@ class LaunchViewModel {
 		remoteConfigManager: RemoteConfigManaging,
 		proofManager: ProofManaging,
 		jailBreakDetector: JailBreakProtocol = JailBreakDetector(),
-		userSettings: UserSettingsProtocol = UserSettings()) {
+		userSettings: UserSettingsProtocol = UserSettings(),
+		cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility,
+		walletManager: WalletManaging = Services.walletManager) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
@@ -55,6 +60,8 @@ class LaunchViewModel {
 		self.flavor = flavor
 		self.jailBreakDetector = jailBreakDetector
 		self.userSettings = userSettings
+		self.cryptoLibUtility = cryptoLibUtility
+		self.walletManager = walletManager
 
 		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
 		message = flavor == .holder  ? .holderLaunchText : .verifierLaunchText
@@ -121,9 +128,20 @@ class LaunchViewModel {
 		remoteConfigManager.update { [weak self] updateState in
 
 			self?.configStatus = updateState
+			self?.checkWallet()
 			self?.isUpdatingConfiguration = false
 			self?.handleState()
 		}
+	}
+
+	private func checkWallet() {
+
+		let configuration = remoteConfigManager.getConfiguration()
+		walletManager.expireEventGroups(
+			vaccinationValidity: configuration.vaccinationEventValidity,
+			recoveryValidity: configuration.recoveryEventValidity,
+			testValidity: configuration.testEventValidity
+		)
 	}
 
 	/// Update the Issuer Public keys
@@ -158,13 +176,16 @@ class LaunchViewModel {
 			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
 			return
 		}
-
+		
 		if case .actionRequired = configStatus {
 			// show action
 			coordinator?.handleLaunchState(configStatus)
 		} else if configStatus == .internetRequired || issuerPublicKeysStatus == .internetRequired {
 			// Show no internet
 			coordinator?.handleLaunchState(.internetRequired)
+		} else if !cryptoLibUtility.isInitialized {
+			// Show crypto lib not initialized error
+			coordinator?.handleLaunchState(.cryptoLibNotInitialized)
 		} else {
 			// Start application
 			coordinator?.handleLaunchState(.noActionNeeded)

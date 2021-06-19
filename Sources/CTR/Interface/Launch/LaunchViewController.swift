@@ -40,6 +40,8 @@ class LaunchViewController: BaseViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		configureTranslucentNavigationBar()
 
 		// Bindings
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }

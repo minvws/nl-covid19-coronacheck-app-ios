@@ -73,6 +73,7 @@ class TokenEntryViewModel {
 	// MARK: - Bindables, other
 
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
+	@Bindable private(set) var serverTooBusyAlert: TokenEntryViewController.AlertContent?
 
 	// MARK: - Private Dependencies:
 
@@ -246,7 +247,8 @@ class TokenEntryViewModel {
 
 		coordinator?.presentInformationPage(
 			title: .holderTokenEntryModalNoTokenTitle,
-			body: .holderTokenEntryModalNoTokenDetails
+			body: .holderTokenEntryModalNoTokenDetails,
+			hideBodyForScreenCapture: false
 		)
 	}
 
@@ -301,10 +303,30 @@ class TokenEntryViewModel {
 				self?.progressIndicationCounter.decrement()
 
 			}, onError: { [weak self] error in
+
+				if let networkError = error as? NetworkError,
+				   networkError == .serverBusy {
+					self?.showServerTooBusyError()
+				} else {
+					self?.showTechnicalErrorAlert = true
+				}
 				self?.decideWhetherToAbortRequestTokenProvidedMode()
-				self?.showTechnicalErrorAlert = true
 				self?.progressIndicationCounter.decrement()
 			}
+		)
+	}
+
+	private func showServerTooBusyError() {
+
+		self.serverTooBusyAlert = TokenEntryViewController.AlertContent(
+			title: .serverTooBusyErrorTitle,
+			subTitle: .serverTooBusyErrorText,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.coordinator?.navigateBackToStart()
+			},
+			okTitle: .serverTooBusyErrorButton
 		)
 	}
 
@@ -328,12 +350,11 @@ class TokenEntryViewModel {
 			self.fieldErrorMessage = nil
 
 			switch response {
-				case let .success(remoteTestEvent):
-					switch remoteTestEvent.wrapper.status {
+				case let .success(remoteEvent):
+					switch remoteEvent.wrapper.status {
 						case .complete, .pending:
 							self.screenHasCompleted = true
-//							self.coordinator?.navigateToListResults()
-							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteTestEvent)
+							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
 						case .verificationRequired:
 							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
 								// the user has just submitted a wrong verification code & should see an error message
@@ -347,14 +368,16 @@ class TokenEntryViewModel {
 							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
 						default:
-							self.logDebug("Unhandled test result status: \(remoteTestEvent.wrapper.status)")
-							self.fieldErrorMessage = "Unhandled: \(remoteTestEvent.wrapper.status)"
+							self.logDebug("Unhandled test result status: \(remoteEvent.wrapper.status)")
+							self.fieldErrorMessage = "Unhandled: \(remoteEvent.wrapper.status)"
 							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 					}
 
 				case let .failure(error):
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
+						self.showServerTooBusyError()
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription
@@ -555,12 +578,20 @@ extension TokenEntryViewModel {
 		}
 
 		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return .holderTokenEntryRegularFlowTokenPlaceholder
-				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
-			}
+            switch mode {
+                case .regular:
+                    if UIAccessibility.isVoiceOverRunning {
+                        return .holderTokenEntryRegularFlowTokenPlaceholderForScreenReader
+                    } else {
+                        return .holderTokenEntryRegularFlowTokenPlaceholder
+                    }
+                case .withRequestTokenProvided:
+                    if UIAccessibility.isVoiceOverRunning {
+                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholderForScreenReader
+                    } else {
+                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
+                    }
+            }
 		}
 
 		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
