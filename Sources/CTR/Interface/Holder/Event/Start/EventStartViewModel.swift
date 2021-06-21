@@ -17,16 +17,29 @@ class EventStartViewModel: Logging {
 
 	// MARK: - Bindable
 
-	@Bindable private(set) var title: String
-	@Bindable private(set) var message: String
+	@Bindable private(set) var title: String?
+	@Bindable private(set) var message: String?
 
-	init(coordinator: EventCoordinatorDelegate & OpenUrlProtocol, eventMode: EventMode) {
+	init(
+		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
+		eventMode: EventMode,
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 
-		self.title = .holderVaccinationStartTitle
-		self.message = .holderVaccinationStartMessage
+		switch eventMode {
+			case .vaccination:
+				self.title = L.holderVaccinationStartTitle()
+				self.message = L.holderVaccinationStartMessage()
+			case .recovery:
+				self.title = L.holderRecoveryStartTitle()
+				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriod ?? 11
+				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
+			default:
+				break
+		}
 	}
 
 	func backButtonTapped() {

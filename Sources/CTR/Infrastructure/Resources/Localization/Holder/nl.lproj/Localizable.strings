@@ -313,6 +313,8 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
 "holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
+"holder.recovery.start.title" = "Herstelverklaring ophalen";
+"holder.recovery.start.message" = "<p>Met een positieve testuitslag van de GGD kan je een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
 "holder.vaccination.start.action" = "Log in met je DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";

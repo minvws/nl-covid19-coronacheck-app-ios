@@ -24,6 +24,28 @@ class EventStartViewModelTests: XCTestCase {
 		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
 	}
 
+	func test_content_vaccinationMode() {
+
+		// Given
+
+		// When
+
+		// Then
+		expect(self.sut.title) == L.holderVaccinationStartTitle()
+		expect(self.sut.message) == L.holderVaccinationStartMessage()
+	}
+
+	func test_content_recoveryMode() {
+
+		// Given
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		// When
+
+		// Then
+		expect(self.sut.title) == L.holderRecoveryStartTitle()
+		expect(self.sut.message) == L.holderRecoveryStartMessage("11")
+	}
+
 	func test_backButtonTapped() {
 
 		// Given
@@ -36,7 +58,7 @@ class EventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
 	}
 
-	func test_primaryButtonTapped() {
+	func test_primaryButtonTapped_vaccinationMode() {
 
 		// Given
 
@@ -46,6 +68,19 @@ class EventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+	}
+
+	func test_primaryButtonTapped_recoveryMode() {
+
+		// Given
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+
+		// When
+		sut.primaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .recovery)
 	}
 
 	func test_openUrl() throws {

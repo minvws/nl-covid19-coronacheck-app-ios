@@ -229,6 +229,7 @@ extension RemoteConfiguration {
 			configTTL: 3600,
 			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
+			recoveryWaitingPeriod: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
 			vaccinationValidityHours: 14600,

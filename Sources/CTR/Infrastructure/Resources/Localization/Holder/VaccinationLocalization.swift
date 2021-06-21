@@ -9,26 +9,6 @@ import Foundation
 
 extension String {
 
-	static var holderVaccinationStartTitle: String {
-
-		return Localization.string(for: "holder.vaccination.start.title")
-	}
-
-	static var holderVaccinationStartMessage: String {
-
-		return Localization.string(for: "holder.vaccination.start.message")
-	}
-
-	static var holderRecoveryStartTitle: String {
-
-		return Localization.string(for: "holder.recovery.start.title")
-	}
-
-	static var holderRecoveryStartMessage: String {
-
-		return Localization.string(for: "holder.recovery.start.message")
-	}
-
 	static var holderEventStartAction: String {
 
 		return Localization.string(for: "holder.vaccination.start.action")
