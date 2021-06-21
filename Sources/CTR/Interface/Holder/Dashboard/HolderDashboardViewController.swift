@@ -138,8 +138,8 @@ class HolderDashboardViewController: BaseViewController {
 
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
-						qrCard.title = .qrTitle
-						qrCard.viewQRButtonTitle = .qrButtonViewQR
+						qrCard.title = L.holderDashboardQrTitle()
+						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
 
 						switch card {
 							case .domesticQR:

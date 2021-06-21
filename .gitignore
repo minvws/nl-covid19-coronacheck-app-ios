@@ -38,3 +38,4 @@ report.xml
 /CTR.xcodeproj/xcshareddata
 /CTR.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 /CTR.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+/Sources/CTR/Infrastructure/Resources/R.generated.swift
