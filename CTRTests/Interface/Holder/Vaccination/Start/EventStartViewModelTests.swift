@@ -9,10 +9,10 @@
 import XCTest
 import Nimble
 
-class VaccinationStartViewModelTests: XCTestCase {
+class EventStartViewModelTests: XCTestCase {
 
 	/// Subject under test
-	private var sut: VaccinationStartViewModel!
+	private var sut: EventStartViewModel!
 
 	private var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
 
@@ -21,7 +21,7 @@ class VaccinationStartViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
-		sut = VaccinationStartViewModel(coordinator: coordinatorSpy)
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
 	}
 
 	func test_backButtonTapped() {

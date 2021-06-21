@@ -7,14 +7,14 @@
 
 import UIKit
 
-class VaccinationStartViewController: BaseViewController {
+class EventStartViewController: BaseViewController {
 
-	private let viewModel: VaccinationStartViewModel
-	internal let sceneView = VaccinationStartView()
+	private let viewModel: EventStartViewModel
+	internal let sceneView = EventStartView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: VaccinationStartViewModel) {
+	init(viewModel: EventStartViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)

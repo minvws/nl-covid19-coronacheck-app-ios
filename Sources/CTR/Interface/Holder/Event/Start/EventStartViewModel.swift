@@ -7,18 +7,21 @@
 
 import Foundation
 
-class VaccinationStartViewModel: Logging {
+class EventStartViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	init(coordinator: EventCoordinatorDelegate & OpenUrlProtocol) {
+	private var eventMode: EventMode
+
+	init(coordinator: EventCoordinatorDelegate & OpenUrlProtocol, eventMode: EventMode) {
 
 		self.coordinator = coordinator
+		self.eventMode = eventMode
 	}
 
 	func backButtonTapped() {
 		
-		coordinator?.vaccinationStartScreenDidFinish(.back(eventMode: .vaccination))
+		coordinator?.vaccinationStartScreenDidFinish(.back(eventMode: eventMode))
 	}
 
 	func primaryButtonTapped() {
@@ -26,7 +29,7 @@ class VaccinationStartViewModel: Logging {
 		coordinator?.vaccinationStartScreenDidFinish(
 			.continue(
 				value: nil,
-				eventMode: EventMode.vaccination
+				eventMode: eventMode
 			)
 		)
 	}

@@ -10,12 +10,12 @@ import XCTest
 import Nimble
 import SnapshotTesting
 
-class VaccinationStartViewControllerTests: XCTestCase {
+class EventStartViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	private var sut: VaccinationStartViewController!
+	private var sut: EventStartViewController!
 	private var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
-	private var viewModel: VaccinationStartViewModel!
+	private var viewModel: EventStartViewModel!
 
 	var window = UIWindow()
 
@@ -24,8 +24,8 @@ class VaccinationStartViewControllerTests: XCTestCase {
 
 		super.setUp()
 		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
-		viewModel = VaccinationStartViewModel(coordinator: coordinatorSpy)
-		sut = VaccinationStartViewController(viewModel: viewModel)
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
+		sut = EventStartViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 

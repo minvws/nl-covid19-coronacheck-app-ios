@@ -116,9 +116,10 @@ class EventCoordinator: Coordinator, Logging {
 
 	func start() {
 
-		let viewController = VaccinationStartViewController(
-			viewModel: VaccinationStartViewModel(
-				coordinator: self
+		let viewController = EventStartViewController(
+			viewModel: EventStartViewModel(
+				coordinator: self,
+				eventMode: .vaccination
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -205,7 +206,7 @@ class EventCoordinator: Coordinator, Logging {
 	private func navigateBackToVaccinationStart() {
 
 		if let vaccineStartViewController = navigationController.viewControllers
-			.first(where: { $0 is VaccinationStartViewController }) {
+			.first(where: { $0 is EventStartViewController }) {
 
 			navigationController.popToViewController(
 				vaccineStartViewController,
@@ -317,7 +318,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
-				case is VaccinationStartViewController:
+				case is EventStartViewController:
 					return true
 				case is ChooseTestLocationViewController:
 					return true
