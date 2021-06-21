@@ -19,17 +19,27 @@ extension String {
 		return Localization.string(for: "holder.vaccination.start.message")
 	}
 
-	static var holderVaccinationStartAction: String {
+	static var holderRecoveryStartTitle: String {
+
+		return Localization.string(for: "holder.recovery.start.title")
+	}
+
+	static var holderRecoveryStartMessage: String {
+
+		return Localization.string(for: "holder.recovery.start.message")
+	}
+
+	static var holderEventStartAction: String {
 
 		return Localization.string(for: "holder.vaccination.start.action")
 	}
 
-	static var holderVaccinationStartNoDigiD: String {
+	static var holderEventStartNoDigiD: String {
 
 		return Localization.string(for: "holder.vaccination.start.nodigid")
 	}
 
-	static var holderVaccinationStartNoDigiDURL: String {
+	static var holderEventStartNoDigiDURL: String {
 
 		return Localization.string(for: "holder.vaccination.start.nodigid.url")
 	}

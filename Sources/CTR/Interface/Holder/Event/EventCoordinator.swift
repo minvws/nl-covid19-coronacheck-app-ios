@@ -10,12 +10,13 @@ import SafariServices
 
 enum EventMode {
 
-	// case recovery
+	case recovery
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
+			case .recovery: return .recovery
 			case .test: return .testresult
 			case .vaccination: return .vaccination
 		}
@@ -75,7 +76,7 @@ enum EventScreenResult: Equatable {
 
 protocol EventCoordinatorDelegate: AnyObject {
 
-	func vaccinationStartScreenDidFinish(_ result: EventScreenResult)
+	func eventStartScreenDidFinish(_ result: EventScreenResult)
 
 	func loginTVSScreenDidFinish(_ result: EventScreenResult)
 
@@ -116,9 +117,10 @@ class EventCoordinator: Coordinator, Logging {
 
 	func start() {
 
-		let viewController = VaccinationStartViewController(
-			viewModel: VaccinationStartViewModel(
-				coordinator: self
+		let viewController = EventStartViewController(
+			viewModel: EventStartViewModel(
+				coordinator: self,
+				eventMode: .vaccination
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
@@ -205,7 +207,7 @@ class EventCoordinator: Coordinator, Logging {
 	private func navigateBackToVaccinationStart() {
 
 		if let vaccineStartViewController = navigationController.viewControllers
-			.first(where: { $0 is VaccinationStartViewController }) {
+			.first(where: { $0 is EventStartViewController }) {
 
 			navigationController.popToViewController(
 				vaccineStartViewController,
@@ -240,7 +242,7 @@ class EventCoordinator: Coordinator, Logging {
 
 extension EventCoordinator: EventCoordinatorDelegate {
 
-	func vaccinationStartScreenDidFinish(_ result: EventScreenResult) {
+	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case .back, .stop:
@@ -283,6 +285,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination:
 						navigateBackToVaccinationStart()
+					case .recovery:
+						logWarning("Todo!!!")
 				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, eventMode: eventMode)
@@ -305,6 +309,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination:
 						navigateBackToVaccinationStart()
+					case .recovery:
+						logWarning("Todo!!!")
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
@@ -317,7 +323,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
-				case is VaccinationStartViewController:
+				case is EventStartViewController:
 					return true
 				case is ChooseTestLocationViewController:
 					return true

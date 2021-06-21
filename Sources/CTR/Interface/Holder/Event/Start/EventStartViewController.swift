@@ -7,20 +7,20 @@
 
 import UIKit
 
-class VaccinationStartViewController: BaseViewController {
+class EventStartViewController: BaseViewController {
 
-	private let viewModel: VaccinationStartViewModel
-	internal let sceneView = VaccinationStartView()
+	private let viewModel: EventStartViewModel
+	internal let sceneView = EventStartView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: VaccinationStartViewModel) {
+	init(viewModel: EventStartViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
 	}
 
-	/// Required initialzer
+	/// Required initializer
 	/// - Parameter coder: the code
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -36,21 +36,28 @@ class VaccinationStartViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		sceneView.title = .holderVaccinationStartTitle
-		sceneView.message = .holderVaccinationStartMessage
-		sceneView.primaryTitle = .holderVaccinationStartAction
-		sceneView.secondaryButtonTitle = .holderVaccinationStartNoDigiD
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
+		setupBinding()
+		setupInteraction()
+	}
 
+	private func setupBinding() {
+
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+	}
+
+	private func setupInteraction() {
+
+		sceneView.primaryTitle = .holderEventStartAction
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.primaryButtonTapped()
 		}
 
+		sceneView.secondaryButtonTitle = .holderEventStartNoDigiD
 		sceneView.secondaryButtonTappedCommand = { [weak self] in
 
-			if let url = URL(string: .holderVaccinationStartNoDigiDURL) {
+			if let url = URL(string: .holderEventStartNoDigiDURL) {
 				self?.viewModel.openUrl(url)
 			}
 		}
@@ -60,6 +67,7 @@ class VaccinationStartViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 
+		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
 		styleBackButton(buttonText: "")
 	}
 

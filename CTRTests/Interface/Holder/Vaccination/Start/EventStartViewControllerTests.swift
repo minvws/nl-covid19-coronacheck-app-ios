@@ -10,12 +10,12 @@ import XCTest
 import Nimble
 import SnapshotTesting
 
-class VaccinationStartViewControllerTests: XCTestCase {
+class EventStartViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
-	private var sut: VaccinationStartViewController!
-	private var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
-	private var viewModel: VaccinationStartViewModel!
+	private var sut: EventStartViewController!
+	private var coordinatorSpy: EventCoordinatorDelegateSpy!
+	private var viewModel: EventStartViewModel!
 
 	var window = UIWindow()
 
@@ -23,9 +23,9 @@ class VaccinationStartViewControllerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
-		viewModel = VaccinationStartViewModel(coordinator: coordinatorSpy)
-		sut = VaccinationStartViewController(viewModel: viewModel)
+		coordinatorSpy = EventCoordinatorDelegateSpy()
+		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
+		sut = EventStartViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
 
@@ -60,8 +60,8 @@ class VaccinationStartViewControllerTests: XCTestCase {
 		sut.backButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
 	}
 
 	func test_primaryButtonTapped() {
@@ -73,8 +73,8 @@ class VaccinationStartViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
 	}
 
 	func test_secondaryButtonTapped() {
@@ -87,6 +87,6 @@ class VaccinationStartViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: .holderVaccinationStartNoDigiDURL)
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.0) == URL(string: .holderEventStartNoDigiDURL)
 	}
 }

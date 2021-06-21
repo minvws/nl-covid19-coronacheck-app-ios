@@ -152,6 +152,10 @@ extension String {
 		Localization.string(for: "general.vaccination")
 	}
 
+	static var recovery: String {
+		Localization.string(for: "general.recovery")
+	}
+
 	static var testresult: String {
 		Localization.string(for: "general.testresult")
 	}

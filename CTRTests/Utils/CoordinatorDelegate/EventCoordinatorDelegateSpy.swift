@@ -8,18 +8,18 @@
 import XCTest
 @testable import CTR
 
-class VaccinationCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
+class EventCoordinatorDelegateSpy: EventCoordinatorDelegate, OpenUrlProtocol {
 
-	var invokedVaccinationStartScreenDidFinish = false
-	var invokedVaccinationStartScreenDidFinishCount = 0
-	var invokedVaccinationStartScreenDidFinishParameters: (result: EventScreenResult, Void)?
-	var invokedVaccinationStartScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
+	var invokedEventStartScreenDidFinish = false
+	var invokedEventStartScreenDidFinishCount = 0
+	var invokedEventStartScreenDidFinishParameters: (result: EventScreenResult, Void)?
+	var invokedEventStartScreenDidFinishParametersList = [(result: EventScreenResult, Void)]()
 
-	func vaccinationStartScreenDidFinish(_ result: EventScreenResult) {
-		invokedVaccinationStartScreenDidFinish = true
-		invokedVaccinationStartScreenDidFinishCount += 1
-		invokedVaccinationStartScreenDidFinishParameters = (result, ())
-		invokedVaccinationStartScreenDidFinishParametersList.append((result, ()))
+	func eventStartScreenDidFinish(_ result: EventScreenResult) {
+		invokedEventStartScreenDidFinish = true
+		invokedEventStartScreenDidFinishCount += 1
+		invokedEventStartScreenDidFinishParameters = (result, ())
+		invokedEventStartScreenDidFinishParametersList.append((result, ()))
 	}
 
 	var invokedLoginTVSScreenDidFinish = false

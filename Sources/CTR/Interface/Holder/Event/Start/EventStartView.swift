@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VaccinationStartView: ScrolledStackWithButtonView {
+class EventStartView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {
