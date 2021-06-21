@@ -14,6 +14,7 @@ env:
 
 jobs:
   firebase-deploy-holder-test:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -64,6 +65,7 @@ jobs:
 
 
   firebase-deploy-verifier-test:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -115,6 +117,7 @@ jobs:
 
 
   firebase-deploy-holder-acc:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -166,6 +169,7 @@ jobs:
 
 
   firebase-deploy-verifier-acc:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -217,6 +221,7 @@ jobs:
 
 
   firebase-deploy-holder-prod:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
@@ -256,18 +261,19 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Prod Holder App
-        path: CTR.ipa
+        path: CTR PROD.ipa
         retention-days: 10
 
     - name: Archive dSYMs
       uses: actions/upload-artifact@v2
       with:
         name: Prod Holder App dSYMs
-        path: CTR.app.dSYM.zip
+        path: CTR PROD.app.dSYM.zip
         retention-days: 10
 
         
   firebase-deploy-verifier-prod:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: macos-latest
     steps:
     - name: Checkout
