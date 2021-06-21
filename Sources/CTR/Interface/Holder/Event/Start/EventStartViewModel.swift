@@ -9,14 +9,24 @@ import Foundation
 
 class EventStartViewModel: Logging {
 
-	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
+	// MARK: - Private variables
+
+	weak private var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private var eventMode: EventMode
+
+	// MARK: - Bindable
+
+	@Bindable private(set) var title: String
+	@Bindable private(set) var message: String
 
 	init(coordinator: EventCoordinatorDelegate & OpenUrlProtocol, eventMode: EventMode) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
+
+		self.title = .holderVaccinationStartTitle
+		self.message = .holderVaccinationStartMessage
 	}
 
 	func backButtonTapped() {
