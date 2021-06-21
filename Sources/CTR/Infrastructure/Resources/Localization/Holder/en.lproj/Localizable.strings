@@ -314,6 +314,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.start.action" = "Log in with your DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
+"holder.recovery.list.title" = "Jouw positieve testuitslag";
 "holder.test.list.title" = "Retrieve test result";
 "holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
 "holder.vaccination.list.action" = "Make QR code";

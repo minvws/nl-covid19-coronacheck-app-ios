@@ -29,7 +29,14 @@ class LoginTVSViewModel: Logging {
 		self.openIdManager = openIdManager
 		self.eventMode = eventMode
 
-		self.title = eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle
+		switch eventMode {
+			case .recovery:
+				title = L.holderRecoveryListTitle()
+			case .test:
+				title = L.holderTestListTitle()
+			case .vaccination:
+				title = L.holderVaccinationListTitle()
+		}
 	}
 
 	/// Login at the GGD

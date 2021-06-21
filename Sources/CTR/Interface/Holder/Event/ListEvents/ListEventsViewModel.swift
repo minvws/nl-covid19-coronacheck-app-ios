@@ -209,7 +209,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		return .listEvents(
 			content: ListEventsViewController.Content(
-				title: eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestResultsResultsTitle,
+				title: eventMode == .vaccination ? L.holderVaccinationListTitle() : .holderTestResultsResultsTitle,
 				subTitle: eventMode == .vaccination ? .holderVaccinationListMessage : .holderTestResultsResultsText,
 				primaryActionTitle: .holderVaccinationListActionTitle,
 				primaryAction: { [weak self] in

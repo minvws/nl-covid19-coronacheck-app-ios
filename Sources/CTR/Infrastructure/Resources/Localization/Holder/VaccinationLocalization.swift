@@ -29,11 +29,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.loading.title")
 	}
 
-	static var holderVaccinationListTitle: String {
-
-		return Localization.string(for: "holder.vaccination.list.title")
-	}
-
 	static var holderVaccinationListMessage: String {
 
 		return Localization.string(for: "holder.vaccination.list.message")
@@ -205,11 +200,6 @@ extension String {
 	static var holderTestNoListActionTitle: String {
 
 		return Localization.string(for: "holder.test.nolist.action")
-	}
-
-	static var holderTestListTitle: String {
-
-		return Localization.string(for: "holder.test.list.title")
 	}
 
 	static var holderTestOriginMismatchMessage: String {

@@ -44,7 +44,7 @@ final class FetchEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: FetchEventsViewController.Content(
-				title: eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle,
+				title: eventMode == .vaccination ? L.holderVaccinationListTitle() : L.holderTestListTitle(),
 				subTitle: nil,
 				actionTitle: nil,
 				action: nil
