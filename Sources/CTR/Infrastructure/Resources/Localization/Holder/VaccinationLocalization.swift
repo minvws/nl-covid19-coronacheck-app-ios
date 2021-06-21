@@ -24,11 +24,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.start.nodigid.url")
 	}
 
-	static var holderVaccinationLoadingTitle: String {
-
-		return Localization.string(for: "holder.vaccination.loading.title")
-	}
-
 	static var holderVaccinationListMessage: String {
 
 		return Localization.string(for: "holder.vaccination.list.message")
@@ -47,21 +42,6 @@ extension String {
 	static var holderVaccinationElementSubTitle: String {
 
 		return Localization.string(for: "holder.vaccination.element.subtitle")
-	}
-
-	static var holderVaccinationNoListTitle: String {
-
-		return Localization.string(for: "holder.vaccination.nolist.title")
-	}
-
-	static var holderVaccinationNoListMessage: String {
-
-		return Localization.string(for: "holder.vaccination.nolist.message")
-	}
-
-	static var holderVaccinationNoListActionTitle: String {
-
-		return Localization.string(for: "holder.vaccination.nolist.action")
 	}
 
 	static var holderVaccinationAlertTitle: String {
@@ -185,21 +165,6 @@ extension String {
 	static var holderTestElementSubTitle30: String {
 
 		return Localization.string(for: "holder.event.element.subtitle.test3")
-	}
-
-	static var holderTestNoListTitle: String {
-
-		return Localization.string(for: "holder.test.nolist.title")
-	}
-
-	static var holderTestNoListMessage: String {
-
-		return Localization.string(for: "holder.test.nolist.message")
-	}
-
-	static var holderTestNoListActionTitle: String {
-
-		return Localization.string(for: "holder.test.nolist.action")
 	}
 
 	static var holderTestOriginMismatchMessage: String {

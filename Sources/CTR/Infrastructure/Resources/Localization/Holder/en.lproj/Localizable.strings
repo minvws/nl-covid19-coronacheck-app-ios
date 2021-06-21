@@ -14,6 +14,7 @@
 "holder.tokenscan.torch.enable" = "Turn the flashlight on.";
 "holder.tokenscan.torch.disable" = "Turn the flashlight off.";
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
+"holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.button" = "To My overview";
