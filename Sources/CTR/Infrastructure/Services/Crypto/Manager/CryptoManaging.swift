@@ -99,10 +99,6 @@ protocol CryptoManaging: AnyObject {
 	
 	// MARK: Public Keys
 	
-	/// Set the issuer domestic public keys
-	/// - Parameter keys: the keys
-	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool
-	
 	/// Do we have public keys
 	/// - Returns: True if we do
 	func hasPublicKeys() -> Bool

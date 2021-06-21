@@ -102,17 +102,11 @@ class ProofManager: ProofManaging, Logging {
 			
 			// Response is of type (Result<(IssuerPublicKeys, Data), NetworkError>)
 			switch resultwrapper {
-				case .success((let keys, let data)):
+				case .success((_, let data)):
 					
-					if let manager = self?.cryptoManager, manager.setIssuerDomesticPublicKeys(keys) {
-						self?.keysFetchedTimestamp = Date()
-						self?.cryptoLibUtility.store(data, for: .publicKeys)
-						onCompletion?()
-					} else {
-						// Loading of the public keys into the CL Library failed.
-						// This is pretty much a dead end for the user.
-						onError?(NetworkResponseHandleError.invalidPublicKeys)
-					}
+					self?.keysFetchedTimestamp = Date()
+					self?.cryptoLibUtility.store(data, for: .publicKeys)
+					onCompletion?()
 				case let .failure(error):
 					
 					self?.logError("Error getting the issuers public keys: \(error)")

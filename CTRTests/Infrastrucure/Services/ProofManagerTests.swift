@@ -38,7 +38,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with no response
@@ -52,7 +51,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -85,7 +83,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with an network error

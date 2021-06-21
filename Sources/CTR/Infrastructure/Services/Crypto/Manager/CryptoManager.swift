@@ -11,18 +11,6 @@ import Clcore
 /// The cryptography manager
 class CryptoManager: CryptoManaging, Logging {
 	
-	/// Structure to hold key data
-	private struct KeyData: Codable {
-		
-		/// The issuer public keys
-		var issuerPublicKeys: Data?
-		
-		/// Empty key data
-		static var empty: KeyData {
-			return KeyData(issuerPublicKeys: nil)
-		}
-	}
-	
 	/// Structure to hold cryptography data
 	private struct CryptoData: Codable {
 		
@@ -48,17 +36,10 @@ class CryptoManager: CryptoManaging, Logging {
 	@Keychain(name: "cryptoData", service: Constants.keychainService, clearOnReinstall: true)
 	private var cryptoData: CryptoData = .empty
 	
-	/// The key data stored in the keychain
-	@Keychain(name: "keyData", service: Constants.keychainService, clearOnReinstall: true)
-	private var keyData: KeyData = .empty
-	
 	private let cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
 	
 	/// Initializer
 	required init() {
-		
-		// Public Key
-		loadPublicKeys()
 		
 		// Initialize crypto library
 		cryptoLibUtility.initialize()
@@ -98,51 +79,11 @@ class CryptoManager: CryptoManaging, Logging {
 		return cryptoData.stoken
 	}
 	
-	/// Set the issuer domestic public keys
-	/// - Parameter keys: the keys
-	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool {
-		
-		let domesticKeys = keys.clKeys
-		let keysAsString = generateString(object: domesticKeys)
-		let keysAsData = Data(keysAsString.bytes)
-		keyData.issuerPublicKeys = keysAsData
-		logInfo("Stored \(domesticKeys.count) issuer domestic public keys in the keychain")
-		return loadPublicKeys()
-	}
-	
-	/// Generate a string from a codable object
-	/// - Parameter object: the object to flatten into a string
-	/// - Returns: flattend object
-	private func generateString<T>(object: T) -> String where T: Codable {
-		
-		if let data = try? JSONEncoder().encode(object),
-		   let convertedToString = String(data: data, encoding: .utf8) {
-			return convertedToString
-		}
-		return ""
-	}
-	
-	/// Load the public keys
-	@discardableResult func loadPublicKeys() -> Bool {
-
-		guard let keysAsData = keyData.issuerPublicKeys,
-			  let result = MobilecoreLoadDomesticIssuerPks(keysAsData) else {
-
-			return false
-		}
-
-		if !result.error.isEmpty {
-			logError("Error loading public keys: \(result.error)")
-		}
-
-		return result.error.isEmpty
-	}
-	
 	/// Do we have public keys
 	/// - Returns: True if we do
 	func hasPublicKeys() -> Bool {
 		
-		return keyData.issuerPublicKeys != nil
+		return cryptoLibUtility.hasPublicKeys
 	}
 	
 	/// Generate the commitment message
