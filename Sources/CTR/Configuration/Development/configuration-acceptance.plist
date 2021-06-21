@@ -18,7 +18,7 @@
 		<key>host</key>
 		<string>https://tvs.acc.coronacheck.nl</string>
 		<key>consumerId</key>
-		<string>test_client</string>
+		<string>cc_app</string>
 		<key>redirectUri</key>
 		<string>coronacheck://auth/login</string>
 	</dict>
