@@ -17,8 +17,8 @@ class EventStartViewModel: Logging {
 
 	// MARK: - Bindable
 
-	@Bindable private(set) var title: String?
-	@Bindable private(set) var message: String?
+	@Bindable private(set) var title: String
+	@Bindable private(set) var message: String
 
 	init(
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
@@ -37,8 +37,10 @@ class EventStartViewModel: Logging {
 				self.title = L.holderRecoveryStartTitle()
 				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays ?? 11
 				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
-			default:
-				break
+			case .test:
+				// Should be changed when we want test 3.0 to use this page. Skipped in the current flow.
+				self.title = ""
+				self.message = ""
 		}
 	}
 
