@@ -34,6 +34,9 @@ protocol RemoteInformation {
 	/// What is the validity of a test
 	var maxValidityHours: Int? { get }
 
+	/// What is the waiting period before a recovery is valid?
+	var recoveryWaitingPeriodDays: Int? { get }
+
 	/// When should we update
 	var requireUpdateBefore: TimeInterval? { get }
 
@@ -99,7 +102,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	let maxValidityHours: Int?
 
 	/// What is the waiting period before a recovery is valid?
-	let recoveryWaitingPeriod: Int?
+	let recoveryWaitingPeriodDays: Int?
 
 	/// When should we update
 	let requireUpdateBefore: TimeInterval?
@@ -158,7 +161,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case configTTL = "configTTL"
 		case euLaunchDate = "euLaunchDate"
 		case maxValidityHours = "maxValidityHours"
-		case recoveryWaitingPeriod = "recoveryWaitingPeriod"
+		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
 		case vaccinationValidityHours = "vaccinationValidity"
@@ -188,7 +191,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		configTTL: Int?,
 		euLaunchDate: String?,
 		maxValidityHours: Int?,
-		recoveryWaitingPeriod: Int?,
+		recoveryWaitingPeriodDays: Int?,
 		requireUpdateBefore: TimeInterval?,
 		temporarilyDisabled: Bool?,
 		vaccinationValidityHours: Int?,
@@ -208,7 +211,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.configTTL = configTTL
 		self.euLaunchDate = euLaunchDate
 		self.maxValidityHours = maxValidityHours
-		self.recoveryWaitingPeriod = recoveryWaitingPeriod
+		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
 		self.requireUpdateBefore = requireUpdateBefore
 		self.temporarilyDisabled = temporarilyDisabled
 		self.vaccinationValidityHours = vaccinationValidityHours
@@ -232,7 +235,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			configTTL: 3600,
 			euLaunchDate: nil,
 			maxValidityHours: 40,
-			recoveryWaitingPeriod: 11,
+			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
 			vaccinationValidityHours: 14600,

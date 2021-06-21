@@ -35,7 +35,7 @@ class EventStartViewModel: Logging {
 				self.message = L.holderVaccinationStartMessage()
 			case .recovery:
 				self.title = L.holderRecoveryStartTitle()
-				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriod ?? 11
+				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays ?? 11
 				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
 			default:
 				break

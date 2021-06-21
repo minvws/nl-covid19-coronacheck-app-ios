@@ -25,7 +25,7 @@ class EventStartViewModelTests: XCTestCase {
 		configTTL: 3600,
 		euLaunchDate: "2021-06-03T14:00:00+00:00",
 		maxValidityHours: 48,
-		recoveryWaitingPeriod: 11,
+		recoveryWaitingPeriodDays: 11,
 		requireUpdateBefore: nil,
 		temporarilyDisabled: false,
 		vaccinationValidityHours: 14600,
@@ -71,7 +71,7 @@ class EventStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.title) == L.holderRecoveryStartTitle()
-		expect(self.sut.message) == L.holderRecoveryStartMessage("\(remoteConfig.recoveryWaitingPeriod!)")
+		expect(self.sut.message) == L.holderRecoveryStartMessage("\(remoteConfig.recoveryWaitingPeriodDays!)")
 	}
 
 	func test_backButtonTapped() {
