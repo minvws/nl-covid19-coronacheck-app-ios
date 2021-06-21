@@ -21,12 +21,12 @@ class EventStartViewModel: Logging {
 
 	func backButtonTapped() {
 		
-		coordinator?.vaccinationStartScreenDidFinish(.back(eventMode: eventMode))
+		coordinator?.eventStartScreenDidFinish(.back(eventMode: eventMode))
 	}
 
 	func primaryButtonTapped() {
 
-		coordinator?.vaccinationStartScreenDidFinish(
+		coordinator?.eventStartScreenDidFinish(
 			.continue(
 				value: nil,
 				eventMode: eventMode

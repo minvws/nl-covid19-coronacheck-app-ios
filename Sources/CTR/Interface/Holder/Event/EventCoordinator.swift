@@ -75,7 +75,7 @@ enum EventScreenResult: Equatable {
 
 protocol EventCoordinatorDelegate: AnyObject {
 
-	func vaccinationStartScreenDidFinish(_ result: EventScreenResult)
+	func eventStartScreenDidFinish(_ result: EventScreenResult)
 
 	func loginTVSScreenDidFinish(_ result: EventScreenResult)
 
@@ -241,7 +241,7 @@ class EventCoordinator: Coordinator, Logging {
 
 extension EventCoordinator: EventCoordinatorDelegate {
 
-	func vaccinationStartScreenDidFinish(_ result: EventScreenResult) {
+	func eventStartScreenDidFinish(_ result: EventScreenResult) {
 
 		switch result {
 			case .back, .stop:

@@ -13,7 +13,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 	/// Subject under test
 	var sut: ListEventsViewModel!
-	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
+	var coordinatorSpy: EventCoordinatorDelegateSpy!
 	var networkSpy: NetworkSpy!
 	var walletSpy: WalletManagerSpy!
 	var cryptoSpy: CryptoManagerSpy!
@@ -22,7 +22,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		super.setUp()
 
-		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
+		coordinatorSpy = EventCoordinatorDelegateSpy()
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		cryptoSpy = CryptoManagerSpy()

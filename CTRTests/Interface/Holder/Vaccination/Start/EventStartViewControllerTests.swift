@@ -14,7 +14,7 @@ class EventStartViewControllerTests: XCTestCase {
 
 	// MARK: Subject under test
 	private var sut: EventStartViewController!
-	private var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
+	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var viewModel: EventStartViewModel!
 
 	var window = UIWindow()
@@ -23,7 +23,7 @@ class EventStartViewControllerTests: XCTestCase {
 	override func setUp() {
 
 		super.setUp()
-		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
+		coordinatorSpy = EventCoordinatorDelegateSpy()
 		viewModel = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
 		sut = EventStartViewController(viewModel: viewModel)
 		window = UIWindow()
@@ -60,8 +60,8 @@ class EventStartViewControllerTests: XCTestCase {
 		sut.backButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
 	}
 
 	func test_primaryButtonTapped() {
@@ -73,8 +73,8 @@ class EventStartViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButtonTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedVaccinationStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
 	}
 
 	func test_secondaryButtonTapped() {

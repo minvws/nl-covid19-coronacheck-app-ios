@@ -13,14 +13,14 @@ class FetchEventsViewModelTests: XCTestCase {
 
 	/// Subject under test
 	var sut: FetchEventsViewModel!
-	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
+	var coordinatorSpy: EventCoordinatorDelegateSpy!
 	var networkSpy: NetworkSpy!
 
 	override func setUp() {
 
 		super.setUp()
 
-		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
+		coordinatorSpy = EventCoordinatorDelegateSpy()
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
 	}
