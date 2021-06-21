@@ -10,12 +10,13 @@ import SafariServices
 
 enum EventMode {
 
-	// case recovery
+	case recovery
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
+			case .recovery: return .recovery
 			case .test: return .testresult
 			case .vaccination: return .vaccination
 		}
@@ -284,6 +285,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination:
 						navigateBackToVaccinationStart()
+					case .recovery:
+						logWarning("Todo!!!")
 				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, eventMode: eventMode)
@@ -306,6 +309,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination:
 						navigateBackToVaccinationStart()
+					case .recovery:
+						logWarning("Todo!!!")
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)

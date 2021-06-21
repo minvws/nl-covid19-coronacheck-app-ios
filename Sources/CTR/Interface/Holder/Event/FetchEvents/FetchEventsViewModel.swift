@@ -447,6 +447,7 @@ private extension EventMode {
 	/// Translate EventMode into a string that can be passed to the network as a query string
 	var queryFilterValue: String {
 		switch self {
+			case .recovery: return "recovery"
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
 		}
