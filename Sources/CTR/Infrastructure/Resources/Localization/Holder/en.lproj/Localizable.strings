@@ -309,8 +309,6 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
 "holder.vaccination.start.message" = "<p>Got vaccinated? Log in with DigiD. Details regarding your vaccination will be retrieved automatically. </p><p>You only need one injection to make an international QR-code. For a Dutch QR-code you need to be fully vaccinated. </p><p>Didn't get an injection yet? Get vaccinated first.</p>";
-"holder.recovery.start.title" = "Herstelverklaring ophalen";
-"holder.recovery.start.message" = "<p>Met een positieve testuitslag van de GGD kan je een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
 "holder.vaccination.start.action" = "Log in with your DigiD";
 "holder.vaccination.loading.title" = "Retrieving your vaccinations";
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
