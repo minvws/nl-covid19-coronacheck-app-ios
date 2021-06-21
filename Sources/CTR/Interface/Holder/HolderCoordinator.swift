@@ -146,14 +146,27 @@ class HolderCoordinator: SharedCoordinator {
         }
     }
 
-	func startEventFlow() {
+	private func startEventFlowForVaccination() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
 				delegate: self
 			)
-			startChildCoordinator(eventCoordinator)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithVaccination()
+		}
+	}
+
+	private func startEventFlowForRecovery() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithRecovery()
 		}
 	}
 
@@ -361,11 +374,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateAVaccinationQR() {
-		startEventFlow()
+		startEventFlowForVaccination()
 	}
 
 	func userWishesToCreateARecoveryQR() {
-
+		startEventFlowForRecovery()
 	}
 
 	func userWishesToCreateAQR() {
