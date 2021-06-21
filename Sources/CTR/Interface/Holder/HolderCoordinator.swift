@@ -42,6 +42,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateAVaccinationQR()
 
+	func userWishesToCreateARecoveryQR()
+
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
@@ -360,6 +362,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userWishesToCreateAVaccinationQR() {
 		startEventFlow()
+	}
+
+	func userWishesToCreateARecoveryQR() {
+
 	}
 
 	func userWishesToCreateAQR() {

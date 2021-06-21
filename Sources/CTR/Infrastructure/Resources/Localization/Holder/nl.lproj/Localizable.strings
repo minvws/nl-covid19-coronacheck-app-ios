@@ -188,11 +188,13 @@
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app met mijn gegevens omgaat.";
 
 /* MARK: - Choose QR Code Type */
-"holder.chooseqrcodetype.title" = "Waar wil je een QR-code van maken?";
-"holder.chooseqrcodetype.message" = "Je kunt een QR-code maken van een negatieve testuitslag of van een vaccinatie.";
-"holder.chooseqrcodetype.option.negativetest.title" = "Een negatieve testuitslag";
+"holder.chooseqrcodetype.title" = "Welk bewijs wil je toevoegen";
+"holder.chooseqrcodetype.message" = "Geef aan wat voor bewijs je wil toevoegen. Je kan meerdere bewijzen tegelijk hebben.";
+"holder.chooseqrcodetype.option.negativetest.title" = "Testbewijs";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
-"holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatie";
+"holder.chooseqrcodetype.option.recovery.title" = "Herstelbewijs";
+"holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb";
+"holder.chooseqrcodetype.option.vaccine.title" = "Vaccinatiebewijs";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb mijn prik of prikken gehad";
 
 /* MARK: - About Making a QR */

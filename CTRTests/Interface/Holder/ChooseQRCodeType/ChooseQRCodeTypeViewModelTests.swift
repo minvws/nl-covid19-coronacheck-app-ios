@@ -27,7 +27,8 @@ class ChooseQRCodeTypeViewModelTests: XCTestCase {
 		// Act
 
 		// Assert
-		expect(self.sut.title) == .holderChooseQRCodeTypeTitle
-		expect(self.sut.message) == .holderChooseQRCodeTypeMessage(testHoursValidity: 40, vaccineDaysValidity: 365)
+		expect(self.sut.title) == L.holderChooseqrcodetypeTitle()
+		expect(self.sut.message) == L.holderChooseqrcodetypeMessage()
+		expect(self.sut.buttonModels).to(haveCount(3))
 	}
 }

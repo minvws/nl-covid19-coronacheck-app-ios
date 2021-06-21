@@ -107,6 +107,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToCreateAVaccinationQRCount += 1
 	}
 
+	var invokedUserWishesToCreateARecoveryQR = false
+	var invokedUserWishesToCreateARecoveryQRCount = 0
+
+	func userWishesToCreateARecoveryQR() {
+		invokedUserWishesToCreateARecoveryQR = true
+		invokedUserWishesToCreateARecoveryQRCount += 1
+	}
+
 	var invokedUserDidScanRequestToken = false
 	var invokedUserDidScanRequestTokenCount = 0
 	var invokedUserDidScanRequestTokenParameters: (requestToken: RequestToken, Void)?
