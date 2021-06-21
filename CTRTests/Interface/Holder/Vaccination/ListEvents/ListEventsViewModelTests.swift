@@ -415,7 +415,8 @@ class ListEventsViewModelTests: XCTestCase {
 						unique: "1234",
 						isSpecimen: false,
 						vaccination: vaccinationEvent,
-						negativeTest: nil
+						negativeTest: nil,
+						positiveTest: nil
 					)
 				]
 			),

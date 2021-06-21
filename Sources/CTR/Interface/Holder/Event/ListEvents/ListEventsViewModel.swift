@@ -189,11 +189,23 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func emptyEventsState() -> ListEventsViewController.State {
 
+		switch eventMode {
+			case .recovery:
+				return emptyRecoveryState()
+			case .test:
+				return emptyTestState()
+			case .vaccination:
+				return emptyVaccinationState()
+		}
+	}
+
+	private func emptyVaccinationState() -> ListEventsViewController.State {
+
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
-				title: eventMode == .vaccination ? .holderVaccinationNoListTitle : .holderTestNoListTitle,
-				subTitle: eventMode == .vaccination ? .holderVaccinationNoListMessage : .holderTestNoListMessage,
-				primaryActionTitle: eventMode == .vaccination ? .holderVaccinationNoListActionTitle : .holderTestNoListActionTitle,
+				title: L.holderVaccinationNolistTitle(),
+				subTitle: L.holderVaccinationNolistMessage(),
+				primaryActionTitle: L.holderVaccinationNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -203,6 +215,38 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		)
 	}
 
+	private func emptyTestState() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: L.holderTestNolistTitle(),
+				subTitle: L.holderTestNolistMessage(),
+				primaryActionTitle: L.holderTestNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	private func emptyRecoveryState() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: L.holderRecoveryNolistTitle(),
+				subTitle: L.holderRecoveryNolistMessage(),
+				primaryActionTitle: L.holderRecoveryNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+	
 	private func listEventsState(
 		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
 		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
@@ -662,7 +706,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationOriginMismatchTitle,
 				subTitle: eventMode == .vaccination ? .holderVaccinationOriginMismatchMessage : .holderTestOriginMismatchMessage,
-				primaryActionTitle: eventMode == .vaccination ? .holderVaccinationNoListActionTitle : .holderTestNoListActionTitle,
+				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
@@ -683,7 +727,7 @@ extension ListEventsViewModel {
 			content: ListEventsViewController.Content(
 				title: .holderTestResultsPendingTitle,
 				subTitle: .holderTestResultsPendingText,
-				primaryActionTitle: .holderTestNoListActionTitle,
+				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},

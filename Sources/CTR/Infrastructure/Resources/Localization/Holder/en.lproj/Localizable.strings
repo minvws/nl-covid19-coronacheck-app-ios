@@ -326,6 +326,9 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.event.nolist.title" = "No test result available";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> </p><p>for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.action" = "To My Overview";
+"holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
+"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.<p><p>Ben je net getest? Het kan even duren voordat je positieve test verwerkt wordt. Probeer het dan later nog eens.</p>";
+"holder.recovery.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
 "holder.vaccination.alert.cancel" = "No, go back";

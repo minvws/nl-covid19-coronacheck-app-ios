@@ -168,7 +168,6 @@ class EventCoordinator: Coordinator, Logging {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
-
 	}
 
 	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
