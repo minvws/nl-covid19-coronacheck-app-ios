@@ -12,7 +12,7 @@ env:
   
 jobs:
   swiftlint:
-    runs-on: macos-latest
+    runs-on: macos-11
     
     steps:
       - name: Checkout
@@ -28,7 +28,7 @@ jobs:
           make run_swiftlint
 
   test:
-    runs-on: macos-latest
+    runs-on: macos-11
     timeout-minutes: 30
     needs: swiftlint # only run tests (which is resource intensive) after swiftlint passes
     steps:
