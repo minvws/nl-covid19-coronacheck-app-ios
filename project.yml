@@ -225,11 +225,7 @@ targetTemplates:
         script: |
           if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
           then
-            if command -v "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" > /dev/null; then
-              "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-            else
-              "${BUILD_DIR%Build/*}SourcePackages/checkouts/Crashlytics/run"
-            fi
+            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" 
           else
             echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
           fi
