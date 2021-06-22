@@ -198,8 +198,8 @@ class ProofManager: ProofManaging, Logging {
 
 		if let testEvent = getTestWrapper(),
 		   let signedProof = getSignedWrapper(),
-		   let sampleDate = testEvent.result?.sampleDate,
-		   let sampleTime = TimeInterval(sampleDate),
+		   let sampleDateString = testEvent.result?.sampleDate,
+		   let sampleDate = Formatter.getDateFrom(dateString8601: sampleDateString),
 		   testEvent.status == .complete {
 
 			// Convert to eventGroup
@@ -207,13 +207,13 @@ class ProofManager: ProofManaging, Logging {
 				.test,
 				providerIdentifier: testEvent.providerIdentifier,
 				signedResponse: signedProof,
-				issuedAt: Date(timeIntervalSince1970: sampleTime)
+				issuedAt: sampleDate
 			)
 			// Remove old data
 			removeTestWrapper()
+			
+			// Convert Credential
+			cryptoManager.migrateExistingCredential(walletManager, sampleDate: sampleDate)
 		}
-
-		// Convert Credential
-		cryptoManager.migrateExistingCredential(walletManager)
 	}
 }
