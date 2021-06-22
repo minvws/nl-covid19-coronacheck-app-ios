@@ -166,7 +166,7 @@
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
-"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Laat je daarom testen en/of vaccineren als je op reis gaat. Of als je bepaalde activiteiten of locaties bezoekt. Kun je bewijzen dat je gevaccineerd bent of geen corona hebt? Dan krijg je toegang.";
+"holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Daarom vragen sommige landen of plekken om een coronabewijs. Alleen met dit bewijs krijg je toegang.";
 "holder.onboarding.title.yourqr" = "Bewijs van test of vaccinatie";
 "holder.onboarding.message.yourqr" = "Je kunt een bewijs maken als je bent gevaccineerd. Of als uit een test blijkt dat je geen corona hebt. Vanaf begin juli kun je ook een bewijs maken als je corona hebt gehad en bent hersteld (herstelbewijs).";
 "holder.onboarding.title.validity" = "QR-code = jouw bewijs";
@@ -177,7 +177,7 @@
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title" = "Vaccinatiebewijs";
 "holder.updatepage.tagline" = "Nieuw in de app";
-"holder.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een persoonlijke QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om internationaal te reizen.";
+"holder.updatepage.content" = "Ben je gevaccineerd? Je kunt nu ook je vaccinatiebewijs ophalen in de app. En daar een QR-code van maken. Hiermee krijg je toegang tot bepaalde locaties of activiteiten. Ook krijg je een QR-code om internationaal te reizen.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
@@ -310,7 +310,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
-"holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens over je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
+"holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens van je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
 "holder.vaccination.start.action" = "Log in met je DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
@@ -320,10 +320,10 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.event.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
@@ -377,7 +377,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl/wegwijzer\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.test.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl/wegwijzer\"\>meer informatie</a>.<p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.test.nolist.action" = "Naar Mijn overzicht";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
