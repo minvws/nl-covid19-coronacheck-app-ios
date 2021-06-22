@@ -1,14 +1,3 @@
-"holder.event.about.body.recovery" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br>Geldig vanaf: <b>%@</b><br>Geldig tot: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
-"holder.testresults.positive" = "Positieve testuitslag";
-"holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
-"holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.<p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p>";
-"holder.recovery.nolist.action" = "Naar Mijn overzicht";
-"holder.recovery.list.title" = "Jouw positieve testuitslag";
-"holder.recovery.start.title" = "Herstelverklaring ophalen";
-"holder.recovery.start.message" = "<p>Met een positieve testuitslag van de GGD kan je een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
-"holder.chooseqrcodetype.option.recovery.title" = "Herstelbewijs";
-"holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";

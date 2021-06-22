@@ -1,7 +1,3 @@
-"holder.testresults.positive" = "Positive test result";
-"holder.recovery.nolist.title" = "No positive test result available";
-"holder.recovery.nolist.message" = "<p>There is no positive test result available.<p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
-"holder.recovery.list.title" = "Your positive test result";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
