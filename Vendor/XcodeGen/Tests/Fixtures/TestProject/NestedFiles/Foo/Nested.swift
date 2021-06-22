@@ -1,3 +1,0 @@
-func nested() -> String {
-    "Nested"
-}

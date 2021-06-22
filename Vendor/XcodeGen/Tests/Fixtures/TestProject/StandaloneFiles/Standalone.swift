@@ -1,3 +1,0 @@
-func standaloneHello() -> String {
-    "Hello"
-}
