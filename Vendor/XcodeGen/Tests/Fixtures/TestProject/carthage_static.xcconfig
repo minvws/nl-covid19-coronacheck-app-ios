@@ -1,2 +1,0 @@
-#include "xcode12_workaround.xcconfig"
-MACH_O_TYPE = staticlib
