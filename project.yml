@@ -171,34 +171,10 @@ targetTemplates:
         UIUserInterfaceStyle: Light
         UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
-      - name: Merge English Localizations
+      - name: Merge Localizations
         basedOnDependencyAnalysis: true
         script: |
-          COMBINED_PATH="Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings"
-
-          cat Localizations/CoronaCheck\ holder/en/Localizable.strings > $COMBINED_PATH
-          cat Localizations/CoronaCheck\ verifier/en/Localizable.strings >> $COMBINED_PATH
-
-          # Count duplicate lines
-          DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | uniq -d | wc -l | xargs)
-
-          if (( $DUPLICATE_LINE_COUNT != 0 )); then
-            echo "warning: The English localized copy has ${DUPLICATE_LINE_COUNT} duplicate keys"
-          fi
-      - name: Merge Dutch Localizations
-        basedOnDependencyAnalysis: true
-        script: |
-          COMBINED_PATH="Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings"
-
-          cat Localizations/CoronaCheck\ holder/nl/Localizable.strings > $COMBINED_PATH
-          cat Localizations/CoronaCheck\ verifier/nl/Localizable.strings >> $COMBINED_PATH
-
-          # Count duplicate lines
-          DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | uniq -d | wc -l | xargs)
-
-          if (( $DUPLICATE_LINE_COUNT != 0 )); then
-            echo "warning: The Dutch localized copy has ${DUPLICATE_LINE_COUNT} duplicate keys"
-          fi
+          Scripts/merge_localizations.sh
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
