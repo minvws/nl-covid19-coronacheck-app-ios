@@ -762,19 +762,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				type: eventMode,
 				providerIdentifier: response.wrapper.providerIdentifier
 			)
-			var maxIssuedAt: Date?
-			switch eventMode {
-				case .vaccination:
-					maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter)
-				case .recovery:
-					maxIssuedAt = response.wrapper.getMaxRecoverySampleDate()
-					
-				case .test:
-					maxIssuedAt = response.wrapper.getMaxSampleDate(dateFormatter)
-			}
 
-			// Store the new vaccination events
-			if let maxIssuedAt = maxIssuedAt {
+			// Store the new events
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt() {
 				success = success && walletManager.storeEventGroup(
 					eventMode,
 					providerIdentifier: response.wrapper.providerIdentifier,

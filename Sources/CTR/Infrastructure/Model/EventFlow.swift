@@ -121,56 +121,22 @@ struct EventFlow {
 		let result: TestResult? // 2.0
 		var events: [Event]? = [] // 3.0
 
-		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
-
-			let maxIssuedAt: Date? = events?
-				.compactMap { $0.vaccination?.dateString }
-				.compactMap { dateFormatter.date(from: $0) }
-				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
-
-					switch latestDateFound {
-						case let latestDateFound? where nextDate > latestDateFound:
-							return nextDate
-						case .none:
-							return nextDate
-						default:
-							return latestDateFound
-					}
-				}
-
-			return maxIssuedAt
-		}
-
-		func getMaxRecoverySampleDate() -> Date? {
+		func getMaxIssuedAt() -> Date? {
 
 			let maxIssuedAt: Date? = events?
 				.compactMap {
+					if $0.vaccination != nil {
+						return $0.vaccination?.dateString
+					}
+					if $0.negativeTest != nil {
+						return $0.negativeTest?.sampleDateString
+					}
 					if $0.recovery != nil {
 						return $0.recovery?.sampleDate
 					}
 					return $0.positiveTest?.sampleDateString
 				}
 				.compactMap(Formatter.getDateFrom)
-				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
-
-					switch latestDateFound {
-						case let latestDateFound? where nextDate > latestDateFound:
-							return nextDate
-						case .none:
-							return nextDate
-						default:
-							return latestDateFound
-					}
-				}
-
-			return maxIssuedAt
-		}
-
-		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
-
-			let maxIssuedAt: Date? = events?
-				.compactMap { $0.negativeTest?.sampleDateString }
-				.compactMap { dateFormatter.date(from: $0) }
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
 					switch latestDateFound {
