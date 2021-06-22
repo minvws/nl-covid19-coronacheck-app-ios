@@ -165,7 +165,7 @@
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Only access with a certificate";
-"holder.onboarding.message.safely" = "Your health and other people's health matters. Get tested and/or vaccinated when you’re travelling or when you attend certain locations or activities. Do you have proof you don’t have corona or that you have been vaccinated? Then you’re allowed access.";
+"holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a coronavirus pass. You’re only allowed to enter carrying this pass.";
 "holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
 "holder.onboarding.message.yourqr" = "You can generate a certificate if you have been vaccinated or if you have a negative test result that confirms you don’t have corona. From the beginning of July, you can also make a certificate if you've had coronavirus (certificate of recovery).";
 "holder.onboarding.title.validity" = "QR code = your proof";
@@ -176,7 +176,7 @@
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title" = "Vaccination certificate";
 "holder.updatepage.tagline" = "New in the app";
-"holder.updatepage.content" = "Have you been vaccinated? You can now retrieve your vaccination certificate in the app and make a personal QR code of it. This gives you access to certain locations or activities. You'll also get a QR code to travel internationally.";
+"holder.updatepage.content" = "Have you been vaccinated? You can now retrieve your vaccination certificate in the app and make a QR code of it. This gives you access to certain locations or activities. You'll also get a QR code to travel internationally.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
