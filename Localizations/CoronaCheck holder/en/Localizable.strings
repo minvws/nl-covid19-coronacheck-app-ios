@@ -1,3 +1,7 @@
+"holder.testresults.positive" = "Positive test result";
+"holder.recovery.nolist.title" = "No positive test result available";
+"holder.recovery.nolist.message" = "<p>There is no positive test result available.<p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
+"holder.recovery.list.title" = "Your positive test result";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
@@ -165,7 +169,7 @@
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Only access with a certificate";
-"holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a corona certificate. You’re only allowed to enter carrying this certificate.";
+"holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a coronavirus pass. You’re only allowed to enter carrying this pass.";
 "holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
 "holder.onboarding.message.yourqr" = "You can generate a certificate if you have been vaccinated or if you have a negative test result that confirms you don’t have corona. From the beginning of July, you can also make a certificate if you've had coronavirus (certificate of recovery).";
 "holder.onboarding.title.validity" = "QR code = your proof";

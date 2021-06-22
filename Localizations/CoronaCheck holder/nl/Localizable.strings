@@ -2,7 +2,7 @@
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.<p><p>Ben je net getest? Het kan even duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p>";
+"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.<p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p>";
 "holder.recovery.nolist.action" = "Naar Mijn overzicht";
 "holder.recovery.list.title" = "Jouw positieve testuitslag";
 "holder.recovery.start.title" = "Herstelverklaring ophalen";
