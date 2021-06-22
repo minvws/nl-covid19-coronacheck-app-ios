@@ -8,19 +8,12 @@
 import Foundation
 import CoreData
 
-enum EventType: String {
-
-	case recovery
-	case test
-	case vaccination
-}
-
 class EventGroupModel {
 
 	static let entityName = "EventGroup"
 
 	@discardableResult class func create(
-		type: EventType,
+		type: EventMode,
 		providerIdentifier: String,
 		maxIssuedAt: Date,
 		jsonData: Data,

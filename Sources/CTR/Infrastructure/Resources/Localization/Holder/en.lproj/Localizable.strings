@@ -283,6 +283,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.testresults.already.title" = "Test result already retrieved";
 "holder.testresults.already.text" = "<p>Your test result has already been retrieved and made into a QR code.</p><p></p><p>Is this not correct? Contact the test location.</p>";
 "holder.testresults.negative" = "Negative test result";
+"holder.testresults.positive" = "Positive test result";
 "holder.testresults.identity" = "Identification details: %@";
 "holder.testresults.alert.title" = "Are you sure you want to stop?";
 "holder.testresults.alert.message" = "If you stop, you will have to retype your code to get your test result later.";

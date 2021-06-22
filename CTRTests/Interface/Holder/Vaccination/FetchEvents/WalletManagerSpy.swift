@@ -14,11 +14,11 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)?
-	var invokedStoreEventGroupParametersList = [(type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)]()
 	var stubbedStoreEventGroupResult: Bool! = false
 
-	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool {
+	func storeEventGroup(_ type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
 		invokedStoreEventGroupParameters = (type, providerIdentifier, signedResponse, issuedAt)
@@ -38,10 +38,10 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingEventGroups = false
 	var invokedRemoveExistingEventGroupsCount = 0
-	var invokedRemoveExistingEventGroupsParameters: (type: EventType, providerIdentifier: String)?
-	var invokedRemoveExistingEventGroupsParametersList = [(type: EventType, providerIdentifier: String)]()
+	var invokedRemoveExistingEventGroupsParameters: (type: EventMode, providerIdentifier: String)?
+	var invokedRemoveExistingEventGroupsParametersList = [(type: EventMode, providerIdentifier: String)]()
 
-	func removeExistingEventGroups(type: EventType, providerIdentifier: String) {
+	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
 		invokedRemoveExistingEventGroups = true
 		invokedRemoveExistingEventGroupsCount += 1
 		invokedRemoveExistingEventGroupsParameters = (type, providerIdentifier)

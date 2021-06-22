@@ -141,6 +141,26 @@ struct EventFlow {
 			return maxIssuedAt
 		}
 
+		func getMaxRecoverySampleDate() -> Date? {
+
+			let maxIssuedAt: Date? = events?
+				.compactMap { $0.recovery?.sampleDate }
+				.compactMap (Formatter.getDateFrom)
+				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
+
+					switch latestDateFound {
+						case let latestDateFound? where nextDate > latestDateFound:
+							return nextDate
+						case .none:
+							return nextDate
+						default:
+							return latestDateFound
+					}
+				}
+
+			return maxIssuedAt
+		}
+
 		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
 
 			let maxIssuedAt: Date? = events?
@@ -229,6 +249,7 @@ struct EventFlow {
 		let vaccination: VaccinationEvent?
 		let negativeTest: TestEvent?
 		let positiveTest: TestEvent?
+		let recovery: RecoveryEvent?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -238,7 +259,15 @@ struct EventFlow {
 			case vaccination
 			case negativeTest = "negativetest"
 			case positiveTest = "positivetest"
+			case recovery
 		}
+	}
+
+	struct RecoveryEvent: Codable, Equatable {
+
+		let sampleDate: String?
+		let validFrom: String?
+		let validUntil: String?
 	}
 
 	/// An actual vaccination event

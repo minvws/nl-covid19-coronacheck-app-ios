@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum EventMode {
+enum EventMode: String {
 
 	case recovery
 	case test

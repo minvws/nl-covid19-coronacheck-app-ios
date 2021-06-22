@@ -35,6 +35,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
+	
 	private lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
@@ -309,6 +310,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				return false
 			}
 			return getSortedRowsFromVaccinationEvents(sortedDataSource)
+		} else if eventMode == .recovery {
+			// Todo: Sort
+			return getSortedRowsFromRecoveryEvents(dataSource)
 		} else {
 			let sortedDataSource = dataSource.sorted { lhs, rhs in
 				if let lhsDate = lhs.event.negativeTest?.getDate(with: dateFormatter),
@@ -339,9 +343,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 			rows.append(
 				ListEventsViewController.Row(
-					title: .holderTestResultsNegative,
-					subTitle: String(
-						format: .holderTestElementSubTitle30,
+					title: L.holderTestresultsNegative(),
+					subTitle: L.holderEventElementSubtitleTest3(
 						formattedTestDate,
 						dataRow.identity.fullName,
 						formattedBirthDate
@@ -356,7 +359,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
-								title: .holderEventAboutTitle,
+								title:  L.holderEventAboutTitle(),
 								body: String(
 									format: .holderEventAboutBodyTest30,
 									dataRow.identity.fullName,
@@ -426,7 +429,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
-								title: .holderEventAboutTitle,
+								title:  L.holderEventAboutTitle(),
 								body: String(
 									format: .holderEventAboutBodyVaccination,
 									dataRow.identity.fullName,
@@ -448,6 +451,65 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 
 		return rows
+	}
+
+	private func getSortedRowsFromRecoveryEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
+
+		var rows = [ListEventsViewController.Row]()
+		for dataRow in sortedDataSource {
+
+			if dataRow.event.recovery != nil {
+				rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
+			} else if dataRow.event.positiveTest != nil {
+				// Todo
+			}
+		}
+		return rows
+	}
+
+	private func getRowFromRecoveryEvent(dataRow: (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)) -> ListEventsViewController.Row {
+
+		let formattedBirthDate: String = dataRow.identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+		let formattedTestDate: String = dataRow.event.recovery?.sampleDate
+			.flatMap(Formatter.getDateFrom)
+			.map(printTestDateFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+		let formattedShortTestDate: String = dataRow.event.recovery?.sampleDate
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.sampleDate ?? "")
+		let formattedShortValidFromDate: String = dataRow.event.recovery?.validFrom
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validFrom ?? "")
+		let formattedShortValidUntilDate: String = dataRow.event.recovery?.validUntil
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
+
+		return
+			ListEventsViewController.Row(
+				title: L.holderTestresultsPositive(),
+				subTitle: L.holderEventElementSubtitleTest3(
+					formattedTestDate,
+					dataRow.identity.fullName,
+					formattedBirthDate
+				),
+				action: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(
+						EventScreenResult.moreInformation(
+							title: L.holderEventAboutTitle(),
+							body: L.holderEventAboutBodyRecovery(
+								dataRow.identity.fullName,
+								formattedBirthDate,
+								formattedShortTestDate,
+								formattedShortValidFromDate,
+								formattedShortValidUntilDate,
+								dataRow.event.unique ?? ""
+							),
+							hideBodyForScreenCapture: true
+						)
+					)
+				}
+			)
 	}
 
 	// MARK: Sign the events
@@ -486,7 +548,16 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 							self?.progressIndicationCounter.decrement()
 							if greenCardsSaved {
 
-								let numberOfOrigins = self?.walletManager.listOrigins(type: self?.eventMode == .vaccination ? .vaccination : .test).count
+								var originType: OriginType = .vaccination
+								if self?.eventMode == .vaccination {
+									originType = .vaccination
+								} else if self?.eventMode == .recovery {
+									originType = .recovery
+								} else if self?.eventMode == .test {
+									originType = .test
+								}
+
+								let numberOfOrigins = self?.walletManager.listOrigins(type: originType).count
 								self?.logVerbose("Origins for \(String(describing: self?.eventMode)): \(String(describing: numberOfOrigins))")
 								if numberOfOrigins == 0 {
 									// No origins for this type means something went wrong.
@@ -616,7 +687,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 			switch result {
 				case let .success(greencardResponse):
-					self?.logVerbose("ok: \(greencardResponse)")
+					self?.logDebug("ok: \(greencardResponse)")
 					onCompletion(greencardResponse)
 				case let .failure(error):
 					self?.logError("error: \(error)")
@@ -643,14 +714,23 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 			// Remove any existing vaccination events for the provider
 			walletManager.removeExistingEventGroups(
-				type: eventMode == .vaccination ? .vaccination : .test,
+				type: eventMode,
 				providerIdentifier: response.wrapper.providerIdentifier
 			)
+			var maxIssuedAt: Date?
+			switch eventMode {
+				case .vaccination:
+					maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter)
+				case .recovery:
+					maxIssuedAt = response.wrapper.getMaxRecoverySampleDate()
+				case .test:
+					maxIssuedAt = response.wrapper.getMaxSampleDate(dateFormatter)
+			}
 
 			// Store the new vaccination events
-			if let maxIssuedAt = eventMode == .vaccination ? response.wrapper.getMaxIssuedAt(dateFormatter) : response.wrapper.getMaxSampleDate(dateFormatter) {
+			if let maxIssuedAt = maxIssuedAt {
 				success = success && walletManager.storeEventGroup(
-					eventMode == .vaccination ? .vaccination : .test,
+					eventMode,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					signedResponse: response.signedResponse,
 					issuedAt: maxIssuedAt
@@ -795,7 +875,7 @@ extension ListEventsViewModel {
 		let holderID = getDisplayIdentity(result.holder)
 
 		return ListEventsViewController.Row(
-			title: .holderTestResultsNegative,
+			title: L.holderTestresultsNegative(),
 			subTitle: String(
 				format: .holderTestElementSubTitle20,
 				printSampleDate,
@@ -814,7 +894,7 @@ extension ListEventsViewModel {
 
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
-						title: .holderEventAboutTitle,
+						title: L.holderEventAboutTitle(),
 						body: body,
 						hideBodyForScreenCapture: true
 					)

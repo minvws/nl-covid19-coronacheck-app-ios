@@ -114,7 +114,7 @@ final class FetchEventsViewModel: Logging {
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
 					title: .holderFetchEventsErrorNoResultsNetworkErrorTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventType: eventMode.localized),
+					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
@@ -177,7 +177,7 @@ final class FetchEventsViewModel: Logging {
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
 					title: .holderFetchEventsErrorNoResultsNetworkErrorTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventType: eventMode.localized),
+					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
@@ -334,8 +334,17 @@ final class FetchEventsViewModel: Logging {
 			let successfulEventInformationAvailable = eventInformationAvailableResults.compactMap { $0.successValue }
 			let outputEventProviders = eventProviders.map { eventProvider -> EventFlow.EventProvider in
 				var eventProvider = eventProvider
-				for response in successfulEventInformationAvailable where eventProvider.identifier == response.providerIdentifier {
-					eventProvider.eventInformationAvailable = response
+				for response in successfulEventInformationAvailable {
+					if Configuration().getEnvironment() == "production" {
+						if eventProvider.identifier == response.providerIdentifier {
+							eventProvider.eventInformationAvailable = response
+						}
+					} else {
+						if eventProvider.identifier == response.providerIdentifier ||
+							(eventProvider.name == "FakeGGD" && response.providerIdentifier == "ZZZ") {
+							eventProvider.eventInformationAvailable = response
+						}
+					}
 				}
 				return eventProvider
 			}

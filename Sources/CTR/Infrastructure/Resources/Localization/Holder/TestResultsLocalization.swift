@@ -29,11 +29,6 @@ extension String {
 		return Localization.string(for: "holder.testresults.results.button")
 	}
 
-	static var holderTestResultsNegative: String {
-
-		return Localization.string(for: "holder.testresults.negative")
-	}
-
 	static var holderTestResultsIdentity: String {
 
 		return Localization.string(for: "holder.testresults.identity")

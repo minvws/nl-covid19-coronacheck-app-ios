@@ -137,11 +137,6 @@ extension String {
 		return Localization.string(for: "holder.testresults.wrong.body")
 	}
 
-	static var holderEventAboutTitle: String {
-
-		return Localization.string(for: "holder.event.about.title")
-	}
-
 	static var holderEventAboutBodyTest20: String {
 
 		return Localization.string(for: "holder.event.about.body.test2")
@@ -160,11 +155,6 @@ extension String {
 	static var holderTestElementSubTitle20: String {
 
 		return Localization.string(for: "holder.event.element.subtitle.test2")
-	}
-
-	static var holderTestElementSubTitle30: String {
-
-		return Localization.string(for: "holder.event.element.subtitle.test3")
 	}
 
 	static var holderTestOriginMismatchMessage: String {

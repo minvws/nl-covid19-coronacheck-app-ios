@@ -66,7 +66,8 @@ class FetchEventsViewModelTests: XCTestCase {
 					isSpecimen: false,
 					vaccination: vaccinationEvent,
 					negativeTest: nil,
-					positiveTest: nil
+					positiveTest: nil,
+					recovery: nil
 				)
 			]
 		)
