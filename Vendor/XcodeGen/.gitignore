@@ -1,9 +1,0 @@
-.DS_Store
-.swiftpm
-/.build
-/Packages
-xcuserdata
-*.xccheckout
-*.xcuserstate
-XcodeGen.xcodeproj
-xcodegen.zip
