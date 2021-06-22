@@ -84,7 +84,6 @@
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
 "holder.tokenentry.universallinkflow.token.title" = "Code";
 "holder.tokenentry.universallinkflow.token.placeholder" = "E.g. BRB-YYYYYYYYYY-Z2";
-"holder.tokenentry.universallinkflow.token.placeholder.screenreader" = "Enter your code here";
 "holder.tokenentry.universallinkflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
@@ -354,8 +353,8 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
-"holder.event.element.subtitle.test2" = "Test date: %@<br>Valid until: %@<br>Your details: %@";
-"holder.event.element.subtitle.test3" = "Test date: %@<br>Valid until: %@<br>Name: %@<br>Date of birth: %@";
+"holder.event.element.subtitle.test2" = "Test date: %@<br>Your details: %@";
+"holder.event.element.subtitle.test3" = "Test date: %@<br>Name: %@<br>Date of birth: %@";
 
 "holder.location.title" = "Where were you tested?";
 "holder.location.message" = "Indicate whether you were tested at the GGD or at a different test location.";
@@ -370,7 +369,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.event.originmismatch.title" = "We can't make a certificate";
 "holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. This can have various causes. <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
-"holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your test result. This can have various causes.  <a href=\"https://coronacheck.nl/en/guidepost\">Lees hier meer.</a>";
+"holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your test result. This can have various causes.  <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
 "holder.notest.action.title" = "Make an appointment";
 "holder.test.nolist.title" = "No test result available";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> </p><p>for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";

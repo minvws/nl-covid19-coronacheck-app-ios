@@ -358,8 +358,8 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p>";
 
-"holder.event.element.subtitle.test2" = "Testdatum: %@<br>Geldig tot: %@<br>Jouw gegevens: %@";
-"holder.event.element.subtitle.test3" = "Testdatum: %@<br>Geldig tot: %@<br>Naam: %@<br>Geboortedatum: %@";
+"holder.event.element.subtitle.test2" = "Testdatum: %@<br>Jouw gegevens: %@";
+"holder.event.element.subtitle.test3" = "Testdatum: %@<br>Naam: %@<br>Geboortedatum: %@";
 
 "holder.location.title" = "Waar ben je getest?";
 "holder.location.message" = "Geef aan of je bij de GGD of bij een andere testlocatie getest bent.";
