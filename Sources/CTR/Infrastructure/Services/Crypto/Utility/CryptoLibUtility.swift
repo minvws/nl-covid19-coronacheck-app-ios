@@ -88,10 +88,10 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		}
 		
 		if let result = result, !result.error.isEmpty {
-			logError("Error initializing verifier: \(result.error)")
+			logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logInfo("Initializing verifier successful")
+			logInfo("Initializing library successful")
 			isInitialized = true
 		}
 	}
