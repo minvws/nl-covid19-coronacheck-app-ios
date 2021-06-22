@@ -140,8 +140,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 					.mapIdentity(months: String.shortMonths)
 					.map({ $0.isEmpty ? "_" : $0 })
 					.joined(separator: " ")
-				let body: String = String(format: .holderShowQRDomesticAboutMessage, identity)
-				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body, hideBodyForScreenCapture: true)
+
+				coordinator?.presentInformationPage(
+					title: L.holderShowqrDomesticAboutTitle(),
+					body: L.holderShowqrDomesticAboutMessage(identity),
+					hideBodyForScreenCapture: true
+				)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
@@ -149,18 +153,11 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 				logDebug("euCredentialAttributes: \(euCredentialAttributes)")
 
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-					showMoreInformationVaccination(
-						euCredentialAttributes: euCredentialAttributes,
-						vaccination: vaccination
-					)
+					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-					showMoreInformationVaccination(
-						euCredentialAttributes: euCredentialAttributes,
-						test: test
-					)
+					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, test: test)
 				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-					// Todo, write more information for recovery.
-					logDebug("Todo, display recovery: \(recovery)")
+					showMoreInformationRecovery(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 				}
 			}
 		}
@@ -243,6 +240,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			test.certificateIdentifier
 		)
 		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
+	}
+
+	private func showMoreInformationRecovery(
+		euCredentialAttributes: EuCredentialAttributes,
+		recovery: EuCredentialAttributes.RecoveryEntry) {
+
 	}
 
 	private func setQRValid(image: UIImage?) {

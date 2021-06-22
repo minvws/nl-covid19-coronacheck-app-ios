@@ -912,22 +912,16 @@ extension ListEventsViewModel {
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
-			subTitle: String(
-				format: .holderTestElementSubTitle20,
-				printSampleDate,
-				holderID
-			),
+			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
 			action: { [weak self] in
 
-				let body = String(
-					format: .holderEventAboutBodyTest20,
+				let body = L.holderEventAboutBodyTest2(
 					holderID,
 					self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType,
 					printSampleLongDate,
-					result.negativeResult ? String.holderShowQREuAboutTestNegative : String.holderShowQREuAboutTestPositive,
+					L.holderShowqrEuAboutTestNegative(),
 					result.unique
 				)
-
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
 						title: L.holderEventAboutTitle(),
