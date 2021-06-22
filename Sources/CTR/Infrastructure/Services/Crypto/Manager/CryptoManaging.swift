@@ -139,7 +139,7 @@ protocol CryptoManaging: AnyObject {
 
 	// MARK: Migration
 
-	func migrateExistingCredential(_ walletManager: WalletManaging)
+	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date)
 
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
 

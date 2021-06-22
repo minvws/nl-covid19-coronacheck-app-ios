@@ -356,8 +356,8 @@ The details consist of the first letter of your first name, the first letter of 
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
-"holder.event.element.subtitle.test2" = "Test date: %@<br>Valid until: %@<br>Your details: %@";
-"holder.event.element.subtitle.test3" = "Test date: %@<br>Valid until: %@<br>Name: %@<br>Date of birth: %@";
+"holder.event.element.subtitle.test2" = "Test date: %@<br>Your details: %@";
+"holder.event.element.subtitle.test3" = "Test date: %@<br>Name: %@<br>Date of birth: %@";
 
 "holder.location.title" = "Where were you tested?";
 "holder.location.message" = "Indicate whether you were tested at the GGD or at a different test location.";

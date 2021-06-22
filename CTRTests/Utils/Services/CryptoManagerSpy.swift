@@ -154,14 +154,14 @@ class CryptoManagerSpy: CryptoManaging {
 
 	var invokedMigrateExistingCredential = false
 	var invokedMigrateExistingCredentialCount = 0
-	var invokedMigrateExistingCredentialParameters: (walletManager: WalletManaging, Void)?
-	var invokedMigrateExistingCredentialParametersList = [(walletManager: WalletManaging, Void)]()
+	var invokedMigrateExistingCredentialParameters: (walletManager: WalletManaging, sampleDate: Date)?
+	var invokedMigrateExistingCredentialParametersList = [(walletManager: WalletManaging, sampleDate: Date)]()
 
-	func migrateExistingCredential(_ walletManager: WalletManaging) {
+	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date) {
 		invokedMigrateExistingCredential = true
 		invokedMigrateExistingCredentialCount += 1
-		invokedMigrateExistingCredentialParameters = (walletManager, ())
-		invokedMigrateExistingCredentialParametersList.append((walletManager, ()))
+		invokedMigrateExistingCredentialParameters = (walletManager, sampleDate)
+		invokedMigrateExistingCredentialParametersList.append((walletManager, sampleDate))
 	}
 
 	var invokedReadDomesticCredentials = false

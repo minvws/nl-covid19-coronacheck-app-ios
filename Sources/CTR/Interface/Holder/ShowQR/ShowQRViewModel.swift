@@ -54,7 +54,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:MM"
+		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
 

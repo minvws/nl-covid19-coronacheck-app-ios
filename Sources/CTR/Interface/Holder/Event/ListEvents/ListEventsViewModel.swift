@@ -337,20 +337,12 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				.flatMap(Formatter.getDateFrom)
 				.map(printTestLongDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
-			var expireDate = ""
-			if let sampleDate = dataRow.event.negativeTest?.sampleDateString
-				.flatMap(Formatter.getDateFrom) {
-				expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: sampleDate)
-					.flatMap(printTestDateFormatter.string) ?? ""
-			}
-
 			rows.append(
 				ListEventsViewController.Row(
 					title: .holderTestResultsNegative,
 					subTitle: String(
 						format: .holderTestElementSubTitle30,
 						formattedTestDate,
-						expireDate,
 						dataRow.identity.fullName,
 						formattedBirthDate
 					),
@@ -800,9 +792,6 @@ extension ListEventsViewModel {
 
 		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
 		let printSampleLongDate: String = printTestLongDateFormatter.string(from: sampleDate)
-		let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: sampleDate) ?? sampleDate
-		let printExpireDate: String = printTestDateFormatter.string(from: expireDate)
-
 		let holderID = getDisplayIdentity(result.holder)
 
 		return ListEventsViewController.Row(
@@ -810,7 +799,6 @@ extension ListEventsViewModel {
 			subTitle: String(
 				format: .holderTestElementSubTitle20,
 				printSampleDate,
-				printExpireDate,
 				holderID
 			),
 			action: { [weak self] in
