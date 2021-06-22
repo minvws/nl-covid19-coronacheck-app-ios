@@ -359,7 +359,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
-								title:  L.holderEventAboutTitle(),
+								title: L.holderEventAboutTitle(),
 								body: String(
 									format: .holderEventAboutBodyTest30,
 									dataRow.identity.fullName,
@@ -429,7 +429,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
-								title:  L.holderEventAboutTitle(),
+								title: L.holderEventAboutTitle(),
 								body: String(
 									format: .holderEventAboutBodyVaccination,
 									dataRow.identity.fullName,
@@ -461,7 +461,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			if dataRow.event.recovery != nil {
 				rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
 			} else if dataRow.event.positiveTest != nil {
-				// Todo
+				rows.append(getRowFromPositiveTestEvent(dataRow: dataRow))
 			}
 		}
 		return rows
@@ -485,31 +485,76 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			.flatMap(Formatter.getDateFrom)
 			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
 
-		return
-			ListEventsViewController.Row(
-				title: L.holderTestresultsPositive(),
-				subTitle: L.holderEventElementSubtitleTest3(
-					formattedTestDate,
-					dataRow.identity.fullName,
-					formattedBirthDate
-				),
-				action: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(
-						EventScreenResult.moreInformation(
-							title: L.holderEventAboutTitle(),
-							body: L.holderEventAboutBodyRecovery(
-								dataRow.identity.fullName,
-								formattedBirthDate,
-								formattedShortTestDate,
-								formattedShortValidFromDate,
-								formattedShortValidUntilDate,
-								dataRow.event.unique ?? ""
-							),
-							hideBodyForScreenCapture: true
-						)
+		return ListEventsViewController.Row(
+			title: L.holderTestresultsPositive(),
+			subTitle: L.holderEventElementSubtitleTest3(
+				formattedTestDate,
+				dataRow.identity.fullName,
+				formattedBirthDate
+			),
+			action: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(
+					EventScreenResult.moreInformation(
+						title: L.holderEventAboutTitle(),
+						body: L.holderEventAboutBodyRecovery(
+							dataRow.identity.fullName,
+							formattedBirthDate,
+							formattedShortTestDate,
+							formattedShortValidFromDate,
+							formattedShortValidUntilDate,
+							dataRow.event.unique ?? ""
+						),
+						hideBodyForScreenCapture: true
 					)
-				}
-			)
+				)
+			}
+		)
+	}
+
+	private func getRowFromPositiveTestEvent(dataRow: (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)) -> ListEventsViewController.Row {
+
+		let formattedBirthDate: String = dataRow.identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+		let formattedTestDate: String = dataRow.event.positiveTest?.sampleDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printTestDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+		let formattedTestLongDate: String = dataRow.event.positiveTest?.sampleDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printTestLongDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+
+		return ListEventsViewController.Row(
+			title: L.holderTestresultsPositive(),
+			subTitle: L.holderEventElementSubtitleTest3(
+				formattedTestDate,
+				dataRow.identity.fullName,
+				formattedBirthDate
+			),
+			action: { [weak self] in
+
+				let testType = self?.remoteConfigManager.getConfiguration().getTestTypeMapping(
+					dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
+
+				let manufacturer = self?.remoteConfigManager.getConfiguration().getTestManufacturerMapping(
+					dataRow.event.positiveTest?.manufacturer) ?? (dataRow.event.positiveTest?.manufacturer ?? "")
+
+				self?.coordinator?.listEventsScreenDidFinish(
+					.moreInformation(
+						title: L.holderEventAboutTitle(),
+						body: L.holderEventAboutBodyTest3(
+							dataRow.identity.fullName,
+							formattedBirthDate,
+							testType, dataRow.event.positiveTest?.name ?? "",
+							formattedTestLongDate,
+							L.holderShowqrEuAboutTestPostive(),
+							dataRow.event.positiveTest?.facility ?? "",
+							manufacturer, dataRow.event.unique ?? ""
+						),
+						hideBodyForScreenCapture: true
+					)
+				)
+			}
+		)
 	}
 
 	// MARK: Sign the events
@@ -723,6 +768,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					maxIssuedAt = response.wrapper.getMaxIssuedAt(dateFormatter)
 				case .recovery:
 					maxIssuedAt = response.wrapper.getMaxRecoverySampleDate()
+					
 				case .test:
 					maxIssuedAt = response.wrapper.getMaxSampleDate(dateFormatter)
 			}

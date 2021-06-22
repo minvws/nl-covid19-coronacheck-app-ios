@@ -144,8 +144,13 @@ struct EventFlow {
 		func getMaxRecoverySampleDate() -> Date? {
 
 			let maxIssuedAt: Date? = events?
-				.compactMap { $0.recovery?.sampleDate }
-				.compactMap (Formatter.getDateFrom)
+				.compactMap {
+					if $0.recovery != nil {
+						return $0.recovery?.sampleDate
+					}
+					return $0.positiveTest?.sampleDateString
+				}
+				.compactMap(Formatter.getDateFrom)
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
 					switch latestDateFound {
