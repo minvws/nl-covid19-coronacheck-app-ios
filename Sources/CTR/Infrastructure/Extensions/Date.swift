@@ -10,10 +10,14 @@ import Foundation
 
 extension Date {
 
-	/// Return date at second of source date
-	var timeAtMidnight: Date {
-		let cal = Calendar.current
-		let components = cal.dateComponents([.day, .month, .year], from: self)
-		return cal.date(from: components)!
+	/// Return date one second before midnight for source date
+	var oneSecondBeforeMidnight: Date? {
+		let startOfDay = Calendar.current.startOfDay(for: self)
+		var components = DateComponents()
+		components.hour = 23
+		components.minute = 59
+		components.second = 59
+		let endOfDay = Calendar.current.date(byAdding: components, to: startOfDay)
+		return endOfDay
 	}
 }
