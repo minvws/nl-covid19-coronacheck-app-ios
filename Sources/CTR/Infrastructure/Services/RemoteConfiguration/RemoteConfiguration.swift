@@ -43,15 +43,6 @@ protocol RemoteInformation {
 	/// Is the app temporarily disabled?
 	var temporarilyDisabled: Bool? { get }
 
-	/// What is the validity of a vaccination
-	var vaccinationValidityHours: Int? { get }
-
-	/// What is the validity of a recovery
-	var recoveryValidityHours: Int? { get }
-
-	/// What is the validity of a test
-	var testValidityHours: Int? { get }
-
 	/// What is the validity of a domestic test / vaccination
 	var domesticValidityHours: Int? { get }
 
@@ -110,15 +101,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// Is the app temporarily disabled?
 	let temporarilyDisabled: Bool?
 
-	/// What is the validity of a vaccination
-	let vaccinationValidityHours: Int?
-
-	/// What is the validity of a recovery
-	let recoveryValidityHours: Int?
-
-	/// What is the validity of a test
-	let testValidityHours: Int?
-
 	/// What is the validity of a domestic  test / vaccination
 	let domesticValidityHours: Int?
 
@@ -164,9 +146,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
-		case vaccinationValidityHours = "vaccinationValidity"
-		case recoveryValidityHours = "recoveryValidity"
-		case testValidityHours = "testValidity"
 		case domesticValidityHours = "domesticValidity"
 		case vaccinationEventValidity = "vaccinationEventValidity"
 		case recoveryEventValidity = "recoveryEventValidity"
@@ -194,9 +173,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		recoveryWaitingPeriodDays: Int?,
 		requireUpdateBefore: TimeInterval?,
 		temporarilyDisabled: Bool?,
-		vaccinationValidityHours: Int?,
-		recoveryValidityHours: Int?,
-		testValidityHours: Int?,
 		domesticValidityHours: Int?,
 		vaccinationEventValidity: Int?,
 		recoveryEventValidity: Int?,
@@ -214,9 +190,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
 		self.requireUpdateBefore = requireUpdateBefore
 		self.temporarilyDisabled = temporarilyDisabled
-		self.vaccinationValidityHours = vaccinationValidityHours
-		self.recoveryValidityHours = recoveryValidityHours
-		self.testValidityHours = testValidityHours
 		self.domesticValidityHours = domesticValidityHours
 		self.vaccinationEventValidity = vaccinationEventValidity
 		self.recoveryEventValidity = recoveryEventValidity
@@ -238,9 +211,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
-			vaccinationValidityHours: 14600,
-			recoveryValidityHours: 7300,
-			testValidityHours: 40,
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
