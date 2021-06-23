@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import SwiftRichString
 
 class InformationView: BaseView {
 
@@ -101,11 +102,60 @@ class InformationView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+
+			guard let message = message else { return }
+
+
+			let normal = Style {
+				$0.font = Theme.fonts.body
+				$0.color = Theme.colors.dark
+			}
+
+			let bold = Style {
+				$0.font = Theme.fonts.bodyBold
+				$0.color = UIColor.red
+			}
+
+			let italic = normal.byAdding {
+				$0.traitVariants = .italic
+			}
+
+			let html = """
+			<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p>
+			<p>Name: <b>Bouwer, Bob</b>
+			Date of birth: <b>1 January 1960</b></p>
+			<p>Pathogen: <b>COVID-19</b>
+			<br />Vaccine: <b>MODERNA</b>
+			<br />Vaccine type: <b>SARS-CoV-2 mRNA vaccine</b>
+			<br />Manufacturer: <b>Biontech Manufacturing GmbH</b>
+			<br />Doses: <b>2 of 2</b>
+			<br />Date of injection: <b>21 June 2021</b>
+			<br />Vaccinated in: <b>NL</b>
+			<br />Identification code:
+			</p>
+			<p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>
+
+			"""
+
+//			let html = "<html><head></head><body>"
+//				+ (message
+//				.replacingOccurrences(of: "<br>", with: "<br />")
+//				.replacingOccurrences(of: "\\", with: "")
+//				)
+//				+ "</body></html>"
+
+			let myGroup = StyleXML(base: normal, ["bold": bold, "italic": italic])
+			messageLabel.attributedText = html.set(style: myGroup)
+
+
+
+
+
+//			messageLabel.attributedText = .makeFromHtml(
+//				text: message,
+//				font: Theme.fonts.body,
+//				textColor: Theme.colors.dark
+//			)
 		}
 	}
 
