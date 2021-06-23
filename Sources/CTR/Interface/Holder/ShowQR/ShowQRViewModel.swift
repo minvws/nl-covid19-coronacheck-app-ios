@@ -246,6 +246,28 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		euCredentialAttributes: EuCredentialAttributes,
 		recovery: EuCredentialAttributes.RecoveryEntry) {
 
+		logDebug("recovery: \(recovery)")
+
+		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
+			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+
+		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
+		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
+			.map(printDateFormatter.string) ?? recovery.validFrom
+		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
+			.map(printDateFormatter.string) ?? recovery.expiresAt
+
+		let body: String = L.holderShowqrEuAboutRecoveryMessage(
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			formattedBirthDate,
+			formattedFirstPostiveDate,
+			formattedValidFromDate,
+			formattedValidUntilDate,
+			recovery.country,
+			recovery.certificateIdentifier
+		)
+		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
 	}
 
 	private func setQRValid(image: UIImage?) {
