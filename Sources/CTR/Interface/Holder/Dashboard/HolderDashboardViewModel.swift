@@ -214,7 +214,7 @@ class HolderDashboardViewModel: Logging {
 	// MARK: Capture User input:
 
 	@objc func addProofTapped() {
-		coordinator?.navigateToAboutMakingAQR()
+		coordinator?.userWishesToCreateAQR()
 	}
 
 	func openUrl(_ url: URL) {
@@ -265,7 +265,7 @@ class HolderDashboardViewModel: Logging {
 					message: L.holderDashboardCreateMessage(),
 					actionTitle: L.holderDashboardCreateAction(),
 					didTapMakeQR: { [weak coordinatorDelegate] in
-						coordinatorDelegate?.navigateToAboutMakingAQR()
+						coordinatorDelegate?.userWishesToCreateAQR()
 					}
 				)
 			]

@@ -11,14 +11,6 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToAboutMakingAQR = false
-	var invokedNavigateToAboutMakingAQRCount = 0
-
-	func navigateToAboutMakingAQR() {
-		invokedNavigateToAboutMakingAQR = true
-		invokedNavigateToAboutMakingAQRCount += 1
-	}
-
 	var invokedNavigateToTokenScan = false
 	var invokedNavigateToTokenScanCount = 0
 

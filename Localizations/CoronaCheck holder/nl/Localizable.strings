@@ -163,6 +163,7 @@
 "holder.menu.about" = "Over deze app";
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
+"holder.menu.proof" = "Bewijs toevoegen";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
