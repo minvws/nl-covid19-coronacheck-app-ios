@@ -200,6 +200,7 @@ class CryptoManager: CryptoManaging, Logging {
 		if let response = MobilecoreReadEuropeanCredential(data) {
 			if let value = response.value {
 				do {
+					logDebug("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
 					return object
 				} catch {

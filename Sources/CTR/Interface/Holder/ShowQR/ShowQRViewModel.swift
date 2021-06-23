@@ -204,8 +204,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		euCredentialAttributes: EuCredentialAttributes,
 		test: EuCredentialAttributes.TestEntry) {
 
-		logDebug("test: \(test)")
-
 		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
 
