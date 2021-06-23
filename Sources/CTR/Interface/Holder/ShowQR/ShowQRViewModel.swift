@@ -82,13 +82,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		self.qrImage = nil
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			title = .holderShowQRDomesticTitle
-            qrAccessibility = .holderShowQRDomesticQRTitle
-			infoButtonAccessibility = .holderShowQRDomesticAboutTitle
+			title = L.holderShowqrDomesticTitle()
+			qrAccessibility = L.holderShowqrDomesticQrTitle()
+			infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
 		} else if greenCard.type == GreenCardType.eu.rawValue {
-			title = .holderShowQREuTitle
-            qrAccessibility = .holderShowQRDomesticQRTitle
-			infoButtonAccessibility = .holderShowQREuAboutTitle
+			title = L.holderShowqrEuTitle()
+            qrAccessibility = L.holderShowqrEuTitle()
+			infoButtonAccessibility = L.holderShowqrEuAboutTitle()
 		}
 
 		super.init()
@@ -150,7 +150,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
 
-				logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+				logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
@@ -169,7 +169,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
@@ -185,8 +185,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
 
-		let body: String = String(
-			format: .holderShowQREuAboutVaccinationMessage,
+		let body: String = L.holderShowqrEuAboutVaccinationMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			vaccineBrand,
@@ -197,7 +196,11 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			vaccination.country,
 			vaccination.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
+		coordinator?.presentInformationPage(
+			title: L.holderShowqrEuAboutTitle(),
+			body: body,
+			hideBodyForScreenCapture: true
+		)
 	}
 
 	private func showMoreInformationVaccination(
@@ -218,14 +221,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		var testResult = test.testResult
 		if test.testResult == "260415000" {
-			testResult = .holderShowQREuAboutTestNegative
+			testResult = L.holderShowqrEuAboutTestNegative()
 		}
 		if test.testResult == "260373001" {
-			testResult = .holderShowQREuAboutTestPositive
+			testResult = L.holderShowqrEuAboutTestPostive()
 		}
 
-		let body: String = String(
-			format: .holderShowQREuAboutTestMessage,
+		let body: String = L.holderShowqrEuAboutTestMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			testType,
@@ -237,14 +239,16 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			test.country,
 			test.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
+		coordinator?.presentInformationPage(
+			title: L.holderShowqrEuAboutTitle(),
+			body: body,
+			hideBodyForScreenCapture: true
+		)
 	}
 
 	private func showMoreInformationRecovery(
 		euCredentialAttributes: EuCredentialAttributes,
 		recovery: EuCredentialAttributes.RecoveryEntry) {
-
-		logDebug("recovery: \(recovery)")
 
 		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
@@ -266,7 +270,11 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			formattedValidUntilDate,
 			recovery.certificateIdentifier
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
+		coordinator?.presentInformationPage(
+			title: L.holderShowqrEuAboutTitle(),
+			body: body,
+			hideBodyForScreenCapture: true
+		)
 	}
 
 	private func setQRValid(image: UIImage?) {

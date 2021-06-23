@@ -53,8 +53,8 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.showValidQR) == false
 		expect(self.sut.hideForCapture) == false
-		expect(self.sut.title) == .holderShowQRDomesticTitle
-		expect(self.sut.infoButtonAccessibility) == .holderShowQRDomesticAboutTitle
+		expect(self.sut.title) == L.holderShowqrDomesticTitle()
+		expect(self.sut.infoButtonAccessibility) == L.holderShowqrDomesticAboutTitle()
 	}
 
 	/// Test all the default content
@@ -80,8 +80,8 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.showValidQR) == false
 		expect(self.sut.hideForCapture) == false
-		expect(self.sut.title) == .holderShowQREuTitle
-		expect(self.sut.infoButtonAccessibility) == .holderShowQREuAboutTitle
+		expect(self.sut.title) == L.holderShowqrEuTitle()
+		expect(self.sut.infoButtonAccessibility) == L.holderShowqrEuAboutTitle()
 	}
 
 	func test_validity_withDomesticGreenCard_withoutCredential() throws {
@@ -273,7 +273,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == .holderShowQRDomesticAboutTitle
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrDomesticAboutTitle()
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.body).to(contain("R P 30"))
 	}
 
@@ -352,7 +352,7 @@ class ShowQRViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == .holderShowQREuAboutTitle
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrEuAboutTitle()
 	}
 }
 

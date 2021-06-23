@@ -367,7 +367,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 									testType,
 									dataRow.event.negativeTest?.name ?? "",
 									formattedTestLongDate,
-									String.holderShowQREuAboutTestNegative,
+									L.holderShowqrEuAboutTestNegative(),
 									dataRow.event.negativeTest?.facility ?? "",
 									manufacturer,
 									dataRow.event.unique ?? ""

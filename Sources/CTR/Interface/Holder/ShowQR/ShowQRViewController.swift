@@ -83,8 +83,8 @@ class ShowQRViewController: BaseViewController {
 
 			if $0 {
 				self?.showError(
-					.holderEnlargedScreenshotTitle,
-					message: .holderEnlargedScreenshotMessage
+					L.holderEnlargedScreenshotTitle(),
+					message: L.holderEnlargedScreenshotMessage()
 				)
 			}
 		}

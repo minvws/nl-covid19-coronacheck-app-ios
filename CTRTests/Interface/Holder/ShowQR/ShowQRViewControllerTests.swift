@@ -74,7 +74,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == .holderShowQRDomesticTitle
+		expect(self.sut.title) == L.holderShowqrDomesticTitle()
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
@@ -100,7 +100,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == .holderShowQREuTitle
+		expect(self.sut.title) == L.holderShowqrEuTitle()
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
 	}
 
@@ -172,8 +172,8 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		alertVerifier.verify(
-			title: .holderEnlargedScreenshotTitle,
-			message: .holderEnlargedScreenshotMessage,
+			title: L.holderEnlargedScreenshotTitle(),
+			message: L.holderEnlargedScreenshotMessage(),
 			animated: true,
 			actions: [
 				.default(.ok)
