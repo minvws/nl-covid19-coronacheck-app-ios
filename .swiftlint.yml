@@ -21,7 +21,6 @@ opt_in_rules:
 excluded:
   - Pods
   - Vendor
-  - Sources/CTR/Infrastructure/Resources/R.generated.swift
 force_cast: warning
 force_try:
   severity: warning

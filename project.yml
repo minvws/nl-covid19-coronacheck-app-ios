@@ -33,9 +33,6 @@ packages:
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
-  RSwiftLibrary:
-    github: mac-cain13/R.swift.Library
-    majorVersion: 5.4.0
 
 # - Configurations:
 
@@ -91,8 +88,6 @@ targetTemplates:
       - package: Lottie
       - package: Firebase
         product: FirebaseCrashlytics
-      - package: RSwiftLibrary
-        product: Rswift
       - package: IOSSecuritySuite
       - framework: clcore.framework
         embed: false
@@ -171,14 +166,6 @@ targetTemplates:
         UIUserInterfaceStyle: Light
         UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
-      - name: Run R.Swift
-        basedOnDependencyAnalysis: true
-        script: |
-          rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string
-        inputFiles: 
-          - $TEMP_DIR/rswift-lastrun
-        outputFiles: 
-          - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
         script: |
@@ -260,8 +247,6 @@ targets:
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
           - "CTR/Configuration/verifier-Info.plist"
-      - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
-        optional: true
     settings:
       base:
         APP_FLAVOR: holder
@@ -318,8 +303,6 @@ targets:
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
-      - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
-        optional: true
     settings:
       base:
         APP_FLAVOR: verifier
