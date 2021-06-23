@@ -260,9 +260,10 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			formattedFirstPostiveDate,
+			recovery.country,
+			recovery.issuer,
 			formattedValidFromDate,
 			formattedValidUntilDate,
-			recovery.country,
 			recovery.certificateIdentifier
 		)
 		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
