@@ -268,6 +268,16 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case .errorRequiringRestart(let error, let eventMode):
 				handleErrorRequiringRestart(error: error, eventMode: eventMode)
 
+			case .back(let eventMode):
+				switch eventMode {
+					case .test:
+						navigateBackToTestStart()
+					case .vaccination:
+						navigateBackToVaccinationStart()
+					case .recovery:
+						logWarning("Todo!!!")
+				}
+
 			default:
 				break
 		}
