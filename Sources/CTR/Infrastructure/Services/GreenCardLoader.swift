@@ -85,7 +85,6 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		}
 	}
 
-
 	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
@@ -120,7 +119,6 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			}
 		}
 	}
-
 
 	// MARK: Store green cards
 
