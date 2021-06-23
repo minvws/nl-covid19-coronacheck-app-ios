@@ -464,7 +464,14 @@ extension HolderDashboardViewModel {
 				return .init(text: "", kind: .past)
 			} else if origin.validFromDate > now {
 				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
-					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
+					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(
+						from: Date(),
+						// we want "full" days in future, so calculate by midnight of the next day.
+						// (note, when there is <1 day remaining, it switches to counting down in
+						// hours/minutes using `HolderDashboardViewModel.hmsRelativeFormatter`
+						// elsewhere, so this doesn't apply there anyway.
+						to: origin.validFromDate.addingTimeInterval(60*60*24).timeAtMidnight
+					) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
 					return .init(
 						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
@@ -486,12 +493,12 @@ extension HolderDashboardViewModel {
 							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
 							return .init(text: prefix, kind: .future)
 						} else {
-						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
-						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
-							return .init(
-								text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-								kind: .current
-							)
+							let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
+							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+								return .init(
+									text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+									kind: .current
+								)
 						}
 
 					// EU cards use Valid From (eventTime) because we don't know the expiry date
@@ -523,7 +530,7 @@ extension HolderDashboardViewModel {
 						if origin.expiryIsBeyondThreeYearsFromNow {
 							return ""
 						} else {
-						return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+							return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 						}
 
 					} else {
@@ -533,9 +540,9 @@ extension HolderDashboardViewModel {
 				case .europeanUnion:
 					if !origin.isCurrentlyValid && origin.isNotYetExpired {
 						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
-						} else {
-							return ""
-						}
+					} else {
+						return ""
+					}
 			}
 		}
 
