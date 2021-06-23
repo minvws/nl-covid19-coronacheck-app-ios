@@ -10,6 +10,16 @@ import XCTest
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
+	var invokedHasPublicKeysGetter = false
+	var invokedHasPublicKeysGetterCount = 0
+	var stubbedHasPublicKeys: Bool! = false
+
+	var hasPublicKeys: Bool {
+		invokedHasPublicKeysGetter = true
+		invokedHasPublicKeysGetterCount += 1
+		return stubbedHasPublicKeys
+	}
+
 	var invokedIsInitializedGetter = false
 	var invokedIsInitializedGetterCount = 0
 	var stubbedIsInitialized: Bool! = false

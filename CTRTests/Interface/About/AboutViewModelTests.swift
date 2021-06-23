@@ -66,7 +66,7 @@ class AboutViewModelTests: XCTestCase {
 		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu.first?.identifier) == .terms
 		expect(self.sut.menu.last?.identifier) == .accessibility
-		expect(self.sut.version.contains("testInitVerifier")) == false // verifier version not in target language file.
+		expect(self.sut.version.contains("testInitVerifier")) == true
 	}
 
 	func test_menuOptionSelected_privacy() {
