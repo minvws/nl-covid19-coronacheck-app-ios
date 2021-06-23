@@ -176,7 +176,8 @@ class EventCoordinator: Coordinator, Logging {
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				remoteEvents: remoteEvents
+				remoteEvents: remoteEvents,
+				greenCardLoader: Services.greenCardLoader
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
