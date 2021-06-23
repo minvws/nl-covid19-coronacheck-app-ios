@@ -90,10 +90,10 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	let appDeactivated: Bool?
 
 	/// What is the TTL of the config
-	let configTTL: Int?
+	var configTTL: Int?
 
 	/// The launch date of the EU greencard functionality
-	let euLaunchDate: String?
+	var euLaunchDate: String?
 
 	/// What is the validity of a test
 	let maxValidityHours: Int?
