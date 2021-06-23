@@ -25,15 +25,15 @@ enum QRCodeValidityRegion: String, Codable {
 	
 	var localizedNoun: String {
 		switch self {
-			case .domestic: return L.generalNetherlands()
-			case .europeanUnion: return L.generalEuropeanUnion()
+			case .domestic: return .netherlands
+			case .europeanUnion: return .europeanUnion
 		}
 	}
 
 	var localizedAdjective: String {
 		switch self {
-			case .domestic: return L.generalDutch()
-			case .europeanUnion: return L.generalEuropean()
+			case .domestic: return .dutch
+			case .europeanUnion: return .european
 		}
 	}
 
@@ -54,18 +54,18 @@ enum QRCodeOriginType: String, Codable {
 	// e.g. "Test Certificate", "Vaccination Certificate"
 	var localizedProof: String {
 		switch self {
-			case .recovery: return L.generalRecoverystatement()
-			case .vaccination: return L.generalVaccinationcertificate()
-			case .test: return L.generalTestcertificate()
+			case .recovery: return .recoverystatement
+			case .vaccination: return .vaccinationcertificate
+			case .test: return .testcertificate
 		}
 	}
 
 	// e.g. "Test Date", "Vaccination Date" etc.
 	var localizedEvent: String {
 		switch self {
-			case .recovery: return L.generalRecoverydate()
-			case .vaccination: return L.generalVaccinationdate()
-			case .test: return L.generalTestdate()
+			case .recovery: return .recoverydate
+			case .vaccination: return .vaccinationdate
+			case .test: return .testdate
 		}
 	}
 
@@ -87,7 +87,7 @@ class HolderDashboardViewModel: Logging {
 	var loggingCategory: String = "HolderDashboardViewModel"
 
 	/// The title of the scene
-	@Bindable private(set) var title: String = L.holderDashboardTitle()
+	@Bindable private(set) var title: String = .holderDashboardTitle
 
 	@Bindable private(set) var cards = [HolderDashboardViewController.Card]()
 
@@ -238,10 +238,10 @@ class HolderDashboardViewModel: Logging {
 
 		cards += [.headerMessage(
 			message: {
-				guard !state.myQRCards.isEmpty else { return L.holderDashboardIntroEmptystate() }
+				guard !state.myQRCards.isEmpty else { return .holderDashboardIntroEmptyState }
 				return state.qrCodeValidityRegion == .domestic
-					? L.holderDashboardIntroDomestic()
-					: L.holderDashboardIntroInternational()
+					? .holderDashboardIntroDomestic
+					: .holderDashboardIntroInternational
 			}())
 		]
 
@@ -261,9 +261,9 @@ class HolderDashboardViewModel: Logging {
 		if state.myQRCards.isEmpty {
 			cards += [
 				.makeQR(
-					title: L.holderDashboardCreateTitle(),
-					message: L.holderDashboardCreateMessage(),
-					actionTitle: L.holderDashboardCreateAction(),
+					title: .holderDashboardCreateTitle,
+					message: .holderDashboardCreateMessage,
+					actionTitle: .holderDashboardCreateAction,
 					didTapMakeQR: { [weak coordinatorDelegate] in
 						coordinatorDelegate?.navigateToAboutMakingAQR()
 					}
@@ -318,7 +318,7 @@ class HolderDashboardViewModel: Logging {
 								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
 								else { return nil }
 
-								return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+								return (String.qrExpiryDatePrefixExpiresIn + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 							}
 						)]
 
@@ -356,11 +356,11 @@ class HolderDashboardViewModel: Logging {
 			switch state.qrCodeValidityRegion {
 				case .domestic:
 					cards += [
-						.changeRegion(buttonTitle: L.holderDashboardChangeregionButtonEu(), currentLocationTitle: L.holderDashboardChangeregionTitleNl())
+						.changeRegion(buttonTitle: .changeRegionButtonEU, currentLocationTitle: .changeRegionTitleNL)
 					]
 				case .europeanUnion:
 					cards += [
-						.changeRegion(buttonTitle: L.holderDashboardChangeregionButtonNl(), currentLocationTitle: L.holderDashboardChangeregionTitleEu())
+						.changeRegion(buttonTitle: .changeRegionButtonNL, currentLocationTitle: .changeRegionTitleEU)
 					]
 			}
 		}
@@ -523,16 +523,16 @@ extension HolderDashboardViewModel {
 						if origin.expiryIsBeyondThreeYearsFromNow {
 							return ""
 						} else {
-						return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+						return .qrExpiryDatePrefixValidUpToAndIncluding
 						}
 
 					} else {
-						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
+						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
 					}
 
 				case .europeanUnion:
 					if !origin.isCurrentlyValid && origin.isNotYetExpired {
-						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
+						return .qrValidityDatePrefixAutomaticallyBecomesValidOn
 						} else {
 							return ""
 						}
@@ -795,9 +795,9 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
 		switch state.qrCodeValidityRegion {
 			case .domestic:
-				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
+				return (originType, String.holderDashboardOriginNotValidInNetherlandsButIsInEurope(localizedOriginType: originType.localizedProof))
 			case .europeanUnion:
-				return (originType, L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(originType.localizedProof))
+				return (originType, String.holderDashboardOriginNotValidInEuropeButIsInTheNetherlands(localizedOriginType: originType.localizedProof))
 		}
 	}
 

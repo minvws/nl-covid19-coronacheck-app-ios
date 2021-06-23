@@ -20,39 +20,34 @@ extension TimeInterval {
 	}
 
 	var stringTime: String {
-		let localizedHour = L.holderDashboardQrHour()
-		let localizedMinute = L.holderDashboardQrMinute()
 
 		if hours != 0 {
-			return "\(hours) \(localizedHour) \(minutes) \(localizedMinute)"
+			return "\(hours) \(String.hour) \(minutes) \(String.minute)"
 		} else if minutes != 0 {
-			return "\(minutes) \(localizedMinute)"
+			return "\(minutes) \(String.minute)"
 		} else {
-			return  "1 \(localizedMinute)"
+			return  "1 \(String.minute)"
 		}
 	}
 
 	var accessibilityTime: String {
-		let localizedHour = L.holderDashboardQrHour()
-		let localizedMinute = L.holderDashboardQrMinute()
-		let localizedMinutes = L.holderDashboardQrMinutesLong()
 
 		if hours != 0 {
 			if minutes > 1 {
-				return "\(hours) \(localizedHour) \(minutes) \(localizedMinutes)"
+				return "\(hours) \(String.hour) \(minutes) \(String.longMinutes)"
 			} else if minutes == 0 {
-				return "\(hours) \(localizedHour)"
+				return "\(hours) \(String.hour)"
 			} else {
-				return "\(hours) \(localizedHour) \(minutes) \(localizedMinute)"
+				return "\(hours) \(String.hour) \(minutes) \(String.longMinute)"
 			}
 		} else if minutes != 0 {
 			if minutes > 1 {
-				return "\(minutes) \(localizedMinutes)"
+				return "\(minutes) \(String.longMinutes)"
 			} else {
-				return "\(minutes) \(localizedMinute)"
+				return "\(minutes) \(String.longMinute)"
 			}
 		} else {
-			return  "1 \(localizedMinute)"
+			return  "1 \(String.longMinute)"
 		}
 	}
 }
