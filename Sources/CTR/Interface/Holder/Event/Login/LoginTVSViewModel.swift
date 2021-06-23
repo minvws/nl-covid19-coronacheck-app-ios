@@ -32,6 +32,11 @@ class LoginTVSViewModel: Logging {
 		self.title = eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle
 	}
 
+	func cancel() {
+
+		self.coordinator?.loginTVSScreenDidFinish(.back(eventMode: eventMode))
+	}
+
 	/// Login at the GGD
 	/// - Parameter presentingViewController: the presenting view controller
 	func login(_ presentingViewController: UIViewController?) {

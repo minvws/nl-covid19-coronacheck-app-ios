@@ -44,10 +44,8 @@ class LoginTVSViewController: BaseViewController {
 
 		// Hide button part
 		sceneView.showLineView = false
-		sceneView.primaryTitle = nil
-		sceneView.footerBackground.isHidden = true
-		sceneView.primaryButton.isHidden = true
-		sceneView.footerGradientView.isHidden = true
+		sceneView.primaryTitle = .cancel
+		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.cancel() }
 
 		// Binding
 
