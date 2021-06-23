@@ -13,7 +13,7 @@ extension Date {
 	/// Return date at second of source date
 	var timeAtMidnight: Date {
 		let cal = NSCalendar(calendarIdentifier: .gregorian)!
-		let components = cal.components([.day , .month, .year ], from: self)
+		let components = cal.components([.day, .month, .year], from: self)
 		return cal.date(from: components)!
 	}
 }

@@ -470,7 +470,7 @@ extension HolderDashboardViewModel {
 						// (note, when there is <1 day remaining, it switches to counting down in
 						// hours/minutes using `HolderDashboardViewModel.hmsRelativeFormatter`
 						// elsewhere, so this doesn't apply there anyway.
-						to: origin.validFromDate.addingTimeInterval(60*60*24).timeAtMidnight
+						to: origin.validFromDate.addingTimeInterval(60 * 60 * 24).timeAtMidnight
 					) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
 					return .init(
