@@ -410,7 +410,7 @@ extension HolderDashboardViewModel {
 
 			// ⬇️⬇️⬇️ -- Temporary, this block can be deleted after EU launch -- ~~~
 			var validFromDate: Date {
-				guard shouldConsiderEULaunchDate else { return realValidFromDate }
+				guard shouldConsiderEULaunchDate && euLaunchDate > Date() else { return realValidFromDate }
 				return realValidFromDate < euLaunchDate ? euLaunchDate : realValidFromDate
 			}
 			let shouldConsiderEULaunchDate: Bool
