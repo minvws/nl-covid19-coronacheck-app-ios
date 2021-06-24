@@ -410,7 +410,7 @@ extension HolderDashboardViewModel {
 
 			// ⬇️⬇️⬇️ -- Temporary, this block can be deleted after EU launch -- ~~~
 			var validFromDate: Date {
-				guard shouldConsiderEULaunchDate else { return realValidFromDate }
+				guard shouldConsiderEULaunchDate && euLaunchDate > Date() else { return realValidFromDate }
 				return realValidFromDate < euLaunchDate ? euLaunchDate : realValidFromDate
 			}
 			let shouldConsiderEULaunchDate: Bool
@@ -464,7 +464,17 @@ extension HolderDashboardViewModel {
 				return .init(text: "", kind: .past)
 			} else if origin.validFromDate > now {
 				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
-					let dateString = HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
+
+					// we want "full" days in future, so calculate by midnight of the validFromDate day, minus 1 second.
+					// (note, when there is <1 day remaining, it switches to counting down in
+					// hours/minutes using `HolderDashboardViewModel.hmsRelativeFormatter`
+					// elsewhere, so this doesn't apply there anyway.
+					let validFromDateEndOfDay: Date? = origin.validFromDate.oneSecondBeforeMidnight
+
+					let dateString = validFromDateEndOfDay.flatMap {
+						HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: $0)
+					} ?? "-"
+
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
 					return .init(
 						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
@@ -486,12 +496,12 @@ extension HolderDashboardViewModel {
 							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
 							return .init(text: prefix, kind: .future)
 						} else {
-						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
-						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
-							return .init(
-								text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-								kind: .current
-							)
+							let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
+							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+								return .init(
+									text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+									kind: .current
+								)
 						}
 
 					// EU cards use Valid From (eventTime) because we don't know the expiry date
@@ -523,7 +533,7 @@ extension HolderDashboardViewModel {
 						if origin.expiryIsBeyondThreeYearsFromNow {
 							return ""
 						} else {
-						return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+							return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
 						}
 
 					} else {
@@ -533,9 +543,9 @@ extension HolderDashboardViewModel {
 				case .europeanUnion:
 					if !origin.isCurrentlyValid && origin.isNotYetExpired {
 						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
-						} else {
-							return ""
-						}
+					} else {
+						return ""
+					}
 			}
 		}
 
@@ -639,6 +649,7 @@ extension HolderDashboardViewModel {
 			let greencards = walletManager.listGreenCards()
 
 			/* Can be removed after EU Launch! */ let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom) ?? .distantFuture
+			// let euLaunchDate = Formatter.getDateFrom(dateString8601: "2021-06-30T22:00:00Z") ?? .distantFuture
 
 			let items = greencards
 				.compactMap { (greencard: GreenCard) -> (GreenCard, [Origin])? in

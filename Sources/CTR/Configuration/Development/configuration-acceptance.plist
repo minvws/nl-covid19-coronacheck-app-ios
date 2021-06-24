@@ -20,7 +20,7 @@
 		<key>consumerId</key>
 		<string>cc_app</string>
 		<key>redirectUri</key>
-		<string>coronacheck-dev://auth/login</string>
+		<string>coronacheck-acc://auth/login</string>
 	</dict>
 </dict>
 </plist>

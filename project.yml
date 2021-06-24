@@ -310,6 +310,14 @@ targets:
               CFBundleURLName: nl.rijksoverheid.ctr
               CFBundleURLSchemes:
                 - coronacheck
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.dev
+              CFBundleURLSchemes:
+                - coronacheck-dev
+            - CFBundleTypeRole: Editor
+              CFBundleURLName: nl.rijksoverheid.ctr.acc
+              CFBundleURLSchemes:
+                - coronacheck-acc
         UILaunchStoryboardName: LaunchScreenHolder
 
   Verifier:
