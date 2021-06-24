@@ -60,7 +60,6 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			}
 			
 			initialize()
-			shouldInitialize = .empty
 		}
 	}
 	

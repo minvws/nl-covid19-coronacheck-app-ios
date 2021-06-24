@@ -189,8 +189,8 @@ targetTemplates:
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
         script: |
-          if which Vendor/SwiftLint/.build/release/swiftlint >/dev/null; then
-            Vendor/SwiftLint/.build/release/swiftlint --quiet --config=./.swiftlint.yml
+          if which swiftlint >/dev/null; then
+            swiftlint --quiet --config=./.swiftlint.yml
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
