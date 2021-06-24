@@ -341,8 +341,8 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 
-"holder.ggdlogin.failure.general.title" = "Couldn't log in to DigiD";
-"holder.ggdlogin.failure.general.message" = "You can try again later.";
+"holder.ggdlogin.failure.general.title" = "Retrieval is cancelled";
+"holder.ggdlogin.failure.general.message" = "It might be too busy. Please try again later.";
 
 "holder.event.about.title" = "What was retrieved?";
 "holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Identification code: <b>%@</b></p>";
