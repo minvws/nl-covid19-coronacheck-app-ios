@@ -286,10 +286,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				switch eventMode {
 					case .test:
 						navigateBackToTestStart()
-					case .vaccination:
-						navigateBackToVaccinationStart()
-					case .recovery:
-						logWarning("Todo!!!")
+					case .vaccination, .recovery:
+						navigateBackToEventStart()
 				}
 
 			default:
