@@ -39,6 +39,11 @@ class LoginTVSViewModel: Logging {
 		}
 	}
 
+	func cancel() {
+
+		self.coordinator?.loginTVSScreenDidFinish(.back(eventMode: eventMode))
+	}
+
 	/// Login at the GGD
 	/// - Parameter presentingViewController: the presenting view controller
 	func login(_ presentingViewController: UIViewController?) {

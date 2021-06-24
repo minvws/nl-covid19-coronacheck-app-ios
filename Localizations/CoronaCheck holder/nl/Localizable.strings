@@ -396,7 +396,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.test.nolist.action" = "Naar Mijn overzicht";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
-"holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
+"holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
 "holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar Mijn overzicht";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";

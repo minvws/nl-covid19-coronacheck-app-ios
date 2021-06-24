@@ -220,7 +220,7 @@
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.qr.title" = "Show QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
-"holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the legislation goes into effect (from %@).";
+"holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
 "holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
 "holder.dashboard.changeregion.title.eu" = "I'm travelling internationally";
 "holder.dashboard.changeregion.button.eu" = "Change to international";
@@ -379,7 +379,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.test.nolist.action" = "To My Overview";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
-"holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website. We can't retrieve your details now. Please try again later.";
+"holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
 "holder.fetchevents.error.noresults.networkwasbusy.button" = "To My Overview";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
