@@ -69,7 +69,7 @@ class LoginTVSViewModel: Logging {
 					okTitle: .ok
 				)
 			}
-		} onError: {  error in
+		} onError: { error in
 			self.shouldShowProgress = false
 			self.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
 			self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(error: error, eventMode: self.eventMode))

@@ -79,11 +79,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.error.close")
 	}
 
-	static var holderVaccinationErrorMessage: String {
-
-		return Localization.string(for: "holder.vaccination.error.message")
-	}
-
 	static var holderVaccinationErrorMessageCode: String {
 
 		return Localization.string(for: "holder.vaccination.error.message.code")

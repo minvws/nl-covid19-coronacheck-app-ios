@@ -705,7 +705,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,
-			subTitle: .holderVaccinationErrorMessage,
+			subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationErrorClose,
 			okAction: { [weak self] _ in
@@ -1037,11 +1037,11 @@ extension ListEventsViewModel {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,
-			subTitle: .holderVaccinationErrorMessage,
+			subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationErrorClose,
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
+				self?.userWantsToMakeTest20QR(remoteEvents: remoteEvents) { [weak self] in
 					self?.showTestError(remoteEvents: remoteEvents)
 				}
 			},
