@@ -179,7 +179,6 @@ class HolderDashboardViewModel: Logging {
 				self?.state.expiredGreenCards += expiredGreenCards
 			}
 		}
-		self.datasource.reload()
 
 		// Update State from UserDefaults:
 		self.state.qrCodeValidityRegion = dashboardRegionToggleValue
@@ -601,14 +600,18 @@ extension HolderDashboardViewModel {
 
 	fileprivate class Datasource {
 
-		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)?
+		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)? {
+			didSet {
+				guard didUpdate != nil else { return }
+				reload()
+			}
+		}
 
 		private let dataStoreManager: DataStoreManaging
 		private var reloadTimer: Timer?
 
 		init(dataStoreManager: DataStoreManaging) {
 			self.dataStoreManager = dataStoreManager
-			self.reload()
 		}
 
 		// Calls fetch, then updates subscribers.
