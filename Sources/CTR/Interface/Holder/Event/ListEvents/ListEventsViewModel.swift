@@ -274,22 +274,36 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
 		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
+		var title = ""
+		var subTitle = ""
+		switch eventMode {
+			case .vaccination:
+				title = L.holderVaccinationListTitle()
+				subTitle = L.holderVaccinationListMessage()
+			case .recovery:
+				title = L.holderRecoveryListTitle()
+				subTitle = L.holderRecoveryListMessage()
+			case .test:
+				title = L.holderTestresultsResultsTitle()
+				subTitle = L.holderTestresultsResultsText()
+		}
+
 		return .listEvents(
 			content: ListEventsViewController.Content(
-				title: eventMode == .vaccination ? L.holderVaccinationListTitle() : L.holderTestresultsResultsTitle(),
-				subTitle: eventMode == .vaccination ? .holderVaccinationListMessage : .holderTestResultsResultsText,
+				title: title,
+				subTitle: subTitle,
 				primaryActionTitle: .holderVaccinationListActionTitle,
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
 						self?.showVaccinationError(remoteEvents: remoteEvents)
 					}
 				},
-				secondaryActionTitle: .holderVaccinationListWrong,
+				secondaryActionTitle: L.holderVaccinationListWrong(),
 				secondaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
-							title: .holderVaccinationWrongTitle,
-							body: self?.eventMode == .vaccination ? .holderVaccinationWrongBody : .holderTestWrongBody,
+							title: L.holderVaccinationWrongTitle(),
+							body: self?.eventMode == .vaccination ? L.holderVaccinationWrongBody() : L.holderTestresultsWrongBody(),
 							hideBodyForScreenCapture: false
 						)
 					)
@@ -311,8 +325,27 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			}
 			return getSortedRowsFromVaccinationEvents(sortedDataSource)
 		} else if eventMode == .recovery {
-			// Todo: Sort
-			return getSortedRowsFromRecoveryEvents(dataSource)
+
+			let sortedDataSource = dataSource.sorted { lhs, rhs in
+				if let lhsDate = lhs.event.recovery?.getDate(with: dateFormatter),
+				   let rhsDate = rhs.event.recovery?.getDate(with: dateFormatter) {
+					return lhsDate < rhsDate
+				}
+				if let lhsDate = lhs.event.recovery?.getDate(with: dateFormatter),
+				   let rhsDate = rhs.event.positiveTest?.getDate(with: dateFormatter) {
+					return lhsDate < rhsDate
+				}
+				if let lhsDate = lhs.event.positiveTest?.getDate(with: dateFormatter),
+				   let rhsDate = rhs.event.recovery?.getDate(with: dateFormatter) {
+					return lhsDate < rhsDate
+				}
+				if let lhsDate = lhs.event.positiveTest?.getDate(with: dateFormatter),
+				   let rhsDate = rhs.event.positiveTest?.getDate(with: dateFormatter) {
+					return lhsDate < rhsDate
+				}
+				return false
+			}
+			return getSortedRowsFromRecoveryEvents(sortedDataSource)
 		} else {
 			let sortedDataSource = dataSource.sorted { lhs, rhs in
 				if let lhsDate = lhs.event.negativeTest?.getDate(with: dateFormatter),
@@ -877,19 +910,19 @@ extension ListEventsViewModel {
 		return .listEvents(
 			content: ListEventsViewController.Content(
 				title: L.holderTestresultsResultsTitle(),
-				subTitle: .holderTestResultsResultsText,
+				subTitle: L.holderTestresultsResultsText(),
 				primaryActionTitle: .holderTestResultsResultsButton,
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeTest20QR(remoteEvents: [remoteEvent]) {
 						self?.showTestError(remoteEvents: [remoteEvent])
 					}
 				},
-				secondaryActionTitle: .holderVaccinationListWrong,
+				secondaryActionTitle: L.holderVaccinationListWrong(),
 				secondaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
-							title: .holderVaccinationWrongTitle,
-							body: .holderTestWrongBody,
+							title: L.holderVaccinationWrongTitle(),
+							body: L.holderTestresultsWrongBody(),
 							hideBodyForScreenCapture: false
 						)
 					)

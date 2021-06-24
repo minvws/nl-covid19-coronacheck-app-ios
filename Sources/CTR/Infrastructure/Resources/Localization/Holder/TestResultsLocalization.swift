@@ -9,11 +9,6 @@ import Foundation
 
 extension String {
 
-	static var holderTestResultsResultsText: String {
-
-		return Localization.string(for: "holder.testresults.results.text")
-	}
-
 	static var holderTestResultsPendingTitle: String {
 
 		return Localization.string(for: "holder.testresults.pending.title")

@@ -24,11 +24,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.start.nodigid.url")
 	}
 
-	static var holderVaccinationListMessage: String {
-
-		return Localization.string(for: "holder.vaccination.list.message")
-	}
-
 	static var holderVaccinationListActionTitle: String {
 
 		return Localization.string(for: "holder.vaccination.list.action")
@@ -74,21 +69,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.about.off")
 	}
 
-	static var holderVaccinationListWrong: String {
-
-		return Localization.string(for: "holder.vaccination.list.wrong")
-	}
-
-	static var holderVaccinationWrongTitle: String {
-
-		return Localization.string(for: "holder.vaccination.wrong.title")
-	}
-
-	static var holderVaccinationWrongBody: String {
-
-		return Localization.string(for: "holder.vaccination.wrong.body")
-	}
-
 	static var holderVaccinationErrorAgain: String {
 
 		return Localization.string(for: "holder.vaccination.error.again")
@@ -131,11 +111,6 @@ extension String {
 }
 
 extension String {
-
-	static var holderTestWrongBody: String {
-
-		return Localization.string(for: "holder.testresults.wrong.body")
-	}
 
 	static var holderEventAboutBodyTest20: String {
 

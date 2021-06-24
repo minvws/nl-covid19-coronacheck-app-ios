@@ -142,7 +142,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 			// Then
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: .holderVaccinationWrongTitle, body: .holderVaccinationWrongBody, hideBodyForScreenCapture: false)
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: L.holderVaccinationWrongTitle(), body: L.holderVaccinationWrongBody(), hideBodyForScreenCapture: false)
 		} else {
 			fail("wrong state")
 		}

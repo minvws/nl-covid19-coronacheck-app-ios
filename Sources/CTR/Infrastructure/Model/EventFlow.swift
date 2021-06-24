@@ -239,6 +239,17 @@ struct EventFlow {
 		let sampleDate: String?
 		let validFrom: String?
 		let validUntil: String?
+
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+			if let dateString = sampleDate {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
+		}
 	}
 
 	/// An actual vaccination event
