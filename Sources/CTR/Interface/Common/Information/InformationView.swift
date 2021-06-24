@@ -116,7 +116,7 @@ class InformationView: BaseView {
 			let styleGroup = StyleXML(base: base, ["b": bold])
 			messageLabel.attributedText = message
 				.replacingOccurrences(of: "<br>", with: "\n")
-				.replacingOccurrences(of: "</p>", with: "</p>\n")
+				.replacingOccurrences(of: "</p>", with: "</p>\n\n")
 				.set(style: styleGroup)
 		}
 	}
