@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
+
 class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
@@ -164,10 +166,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	// MARK: State Helpers
 
-	private func getViewState(
-		from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
+	private func getViewState(from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
-		var event30DataSource = [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]()
+		var event30DataSource = [EventDataTuple]()
 
 		for eventResponse in remoteEvents {
 			if let identity = eventResponse.wrapper.identity,
@@ -271,8 +272,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	// MARK: List State
 
 	private func listEventsState(
-		_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)],
+		_ dataSource: [EventDataTuple],
 		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
+
+		let rows = getSortedRowsFromEvents(dataSource)
+		guard !rows.isEmpty else {
+			return emptyEventsState()
+		}
 
 		var title = ""
 		var subTitle = ""
@@ -309,11 +315,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					)
 				}
 			),
-			rows: getSortedRowsFromEvents(dataSource)
+			rows: rows
 		)
 	}
 
-	private func getSortedRowsFromEvents(_ dataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
 		if eventMode == .vaccination {
 			let sortedDataSource = dataSource.sorted { lhs, rhs in
@@ -326,7 +332,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			return getSortedRowsFromVaccinationEvents(sortedDataSource)
 		} else if eventMode == .recovery {
 
-			let sortedDataSource = dataSource.sorted { lhs, rhs in
+			let filteredDataSource = filterTooOldRecoveryEvents(dataSource)
+
+			let sortedDataSource = filteredDataSource.sorted { lhs, rhs in
 				if let lhsDate = lhs.event.recovery?.getDate(with: dateFormatter),
 				   let rhsDate = rhs.event.recovery?.getDate(with: dateFormatter) {
 					return lhsDate < rhsDate
@@ -358,7 +366,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
-	private func getSortedRowsFromTestEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromTestEvents(_ sortedDataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 
@@ -415,7 +423,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		return rows
 	}
 
-	private func getSortedRowsFromVaccinationEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromVaccinationEvents(_ sortedDataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 
@@ -486,7 +494,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		return rows
 	}
 
-	private func getSortedRowsFromRecoveryEvents(_ sortedDataSource: [(identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)]) -> [ListEventsViewController.Row] {
+	private func getSortedRowsFromRecoveryEvents(_ sortedDataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
 		var rows = [ListEventsViewController.Row]()
 		for dataRow in sortedDataSource {
@@ -500,7 +508,31 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		return rows
 	}
 
-	private func getRowFromRecoveryEvent(dataRow: (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)) -> ListEventsViewController.Row {
+	/// Filter out all recovery / positive tests that are older than 180 days (config recoveryEventValidity)
+	/// - Parameter dataSource: the complete data source
+	/// - Returns: the filtered data source
+	private func filterTooOldRecoveryEvents(_ dataSource: [EventDataTuple]) -> [EventDataTuple] {
+
+		guard let recoveryEventValidity = remoteConfigManager.getConfiguration().recoveryEventValidity else {
+			return dataSource
+		}
+
+		let now = Date()
+
+		return dataSource.filter { dataRow in
+			if let sampleDate = dataRow.event.positiveTest?.getDate(with: dateFormatter),
+			   let validUntil = Calendar.current.date(byAdding: .hour, value: recoveryEventValidity, to: sampleDate) {
+				return validUntil > now
+
+			} else if let validUntilString = dataRow.event.recovery?.validUntil,
+					  let validUntilDate = dateFormatter.date(from: validUntilString) {
+				return validUntilDate > now
+			}
+			return false
+		}
+	}
+
+	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -544,7 +576,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		)
 	}
 
-	private func getRowFromPositiveTestEvent(dataRow: (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)) -> ListEventsViewController.Row {
+	private func getRowFromPositiveTestEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
