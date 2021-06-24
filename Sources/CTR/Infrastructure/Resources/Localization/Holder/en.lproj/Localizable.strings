@@ -341,7 +341,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 
-"holder.ggdlogin.failure.general.title" = "Couldn't log in to DigiD";
+"holder.ggdlogin.failure.general.title" = "Couldn't log in";
 "holder.ggdlogin.failure.general.message" = "You can try again later.";
 
 "holder.event.about.title" = "What was retrieved?";

@@ -346,7 +346,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 
-"holder.ggdlogin.failure.general.title" = "Inloggen bij DigiD is niet gelukt";
+"holder.ggdlogin.failure.general.title" = "Inloggen is niet gelukt";
 "holder.ggdlogin.failure.general.message" = "Je kunt het later opnieuw proberen.";
 
 "holder.event.about.title" = "Wat is er opgehaald?";
