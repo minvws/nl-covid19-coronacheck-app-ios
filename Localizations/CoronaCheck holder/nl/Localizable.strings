@@ -97,6 +97,7 @@
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
 "general.back" = "Terug";
+"general.add" = "Toevoegen";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
