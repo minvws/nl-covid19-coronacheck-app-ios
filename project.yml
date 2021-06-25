@@ -33,6 +33,9 @@ packages:
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
+  SwiftRichString:
+    github: malcommac/SwiftRichString
+    majorVersion: 3.7.2
   RSwiftLibrary:
     github: mac-cain13/R.swift.Library
     majorVersion: 5.4.0
@@ -94,6 +97,8 @@ targetTemplates:
       - package: RSwiftLibrary
         product: Rswift
       - package: IOSSecuritySuite
+      - package: SwiftRichString
+        product: SwiftRichString
       - framework: clcore.framework
         embed: false
       - framework: openssl.framework
