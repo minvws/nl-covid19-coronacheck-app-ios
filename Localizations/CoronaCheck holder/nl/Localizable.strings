@@ -359,8 +359,8 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 
-"holder.ggdlogin.failure.general.title" = "Inloggen bij DigiD is niet gelukt";
-"holder.ggdlogin.failure.general.message" = "Je kunt het later opnieuw proberen.";
+"holder.ggdlogin.failure.general.title" = "Het ophalen is afgebroken";
+"holder.ggdlogin.failure.general.message" = "Mogelijk is het te druk, probeer het later opnieuw.";
 
 "holder.event.about.title" = "Wat is er opgehaald?";
 "holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
