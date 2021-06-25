@@ -9,8 +9,6 @@ import UIKit
 import MBProgressHUD
 
 class TokenEntryViewController: BaseViewController {
-
-
 	
 	/// Used for identifying textFields via the UITextField.tag value
 	private enum TextFieldTag: Int {
