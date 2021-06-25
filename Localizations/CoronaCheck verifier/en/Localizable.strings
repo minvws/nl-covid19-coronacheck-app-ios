@@ -48,6 +48,7 @@
 "general.close" = "Close";
 "general.previous" = "Previous";
 "general.back" = "Back";
+"general.add" = "Add";
 "general.next" = "Next";
 "general.done" = "Done";
 "general.ok" = "OK";
