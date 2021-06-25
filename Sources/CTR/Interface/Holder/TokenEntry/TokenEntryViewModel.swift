@@ -73,7 +73,7 @@ class TokenEntryViewModel {
 	// MARK: - Bindables, other
 
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
-	@Bindable private(set) var serverTooBusyAlert: TokenEntryViewController.AlertContent?
+	@Bindable private(set) var serverTooBusyAlert: AlertContent?
 
 	// MARK: - Private Dependencies:
 
@@ -318,7 +318,7 @@ class TokenEntryViewModel {
 
 	private func showServerTooBusyError() {
 
-		self.serverTooBusyAlert = TokenEntryViewController.AlertContent(
+		self.serverTooBusyAlert = AlertContent(
 			title: .serverTooBusyErrorTitle,
 			subTitle: .serverTooBusyErrorText,
 			cancelAction: nil,
