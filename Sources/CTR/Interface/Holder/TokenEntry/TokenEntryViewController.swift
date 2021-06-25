@@ -9,15 +9,6 @@ import UIKit
 import MBProgressHUD
 
 class TokenEntryViewController: BaseViewController {
-
-	struct AlertContent {
-		var title: String
-		var subTitle: String
-		var cancelAction: ((UIAlertAction) -> Void)?
-		var cancelTitle: String?
-		var okAction: ((UIAlertAction) -> Void)?
-		var okTitle: String
-	}
 	
 	/// Used for identifying textFields via the UITextField.tag value
 	private enum TextFieldTag: Int {
@@ -281,38 +272,6 @@ class TokenEntryViewController: BaseViewController {
 		))
 
 		self.present(alertController, animated: true)
-	}
-
-	func showAlert(_ alertContent: AlertContent?) {
-
-		guard let content = alertContent else {
-			return
-		}
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: content.okAction
-			)
-		)
-
-		// Optional cancel button:
-		if let cancelTitle = content.cancelTitle {
-			alertController.addAction(
-				UIAlertAction(
-					title: cancelTitle,
-					style: .cancel,
-					handler: content.cancelAction
-				)
-			)
-		}
-		present(alertController, animated: true, completion: nil)
 	}
 }
 
