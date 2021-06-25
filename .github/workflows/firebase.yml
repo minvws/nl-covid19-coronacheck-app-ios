@@ -19,6 +19,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0
     - name: Load certificate
       env:
         CERTIFICATE_CONTENTS: ${{ secrets.DIST_CERT_CONTENTS }}
@@ -70,6 +72,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0
       
     - name: Load certificate
       env:
@@ -122,6 +126,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0      
 
     - name: Load certificate
       env:
@@ -174,6 +180,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0      
       
     - name: Load certificate
       env:
@@ -226,6 +234,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0      
 
     - name: Load certificate
       env:
@@ -263,7 +273,6 @@ jobs:
         name: Prod Holder App
         path: CTR PROD.ipa
         retention-days: 10
-
     - name: Archive dSYMs
       uses: actions/upload-artifact@v2
       with:
@@ -278,6 +287,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
+      with:
+        fetch-depth: 0      
 
     - name: Load certificate
       env:

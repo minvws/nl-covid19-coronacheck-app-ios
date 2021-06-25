@@ -36,6 +36,9 @@ packages:
   SwiftRichString:
     github: malcommac/SwiftRichString
     majorVersion: 3.7.2
+  RSwiftLibrary:
+    github: mac-cain13/R.swift.Library
+    majorVersion: 5.4.0
 
 # - Configurations:
 
@@ -91,6 +94,8 @@ targetTemplates:
       - package: Lottie
       - package: Firebase
         product: FirebaseCrashlytics
+      - package: RSwiftLibrary
+        product: Rswift
       - package: IOSSecuritySuite
       - package: SwiftRichString
         product: SwiftRichString
@@ -100,7 +105,7 @@ targetTemplates:
         embed: false
     settings:
       base:
-        MARKETING_VERSION: 2.0.2
+        MARKETING_VERSION: 2.1.0
         CURRENT_PROJECT_VERSION: 32
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
@@ -171,11 +176,23 @@ targetTemplates:
         UIUserInterfaceStyle: Light
         UIViewControllerBasedStatusBarAppearance: true
     preBuildScripts:
+      - name: Merge Localizations
+        basedOnDependencyAnalysis: true
+        script: |
+          Scripts/merge_localizations.sh
+      - name: Run R.Swift
+        basedOnDependencyAnalysis: true
+        script: |
+          rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string
+        inputFiles: 
+          - $TEMP_DIR/rswift-lastrun
+        outputFiles: 
+          - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
         script: |
-          if which Vendor/SwiftLint/.build/release/swiftlint >/dev/null; then
-            Vendor/SwiftLint/.build/release/swiftlint --quiet --config=./.swiftlint.yml
+          if which swiftlint >/dev/null; then
+            swiftlint --quiet --config=./.swiftlint.yml
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
@@ -252,6 +269,8 @@ targets:
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
           - "CTR/Configuration/verifier-Info.plist"
+      - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
+        optional: true
     settings:
       base:
         APP_FLAVOR: holder
@@ -316,6 +335,8 @@ targets:
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
+      - path: Sources/CTR/Infrastructure/Resources/R.generated.swift
+        optional: true
     settings:
       base:
         APP_FLAVOR: verifier

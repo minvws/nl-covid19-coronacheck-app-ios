@@ -1,4 +1,0 @@
-disabled_rules:
-  - force_try
-
-parent_config: Sub/.swiftlint.yml
