@@ -87,10 +87,7 @@ class RemoteConfigManager: RemoteConfigManaging, Logging {
 				// Update the last fetch time
 				lastFetchedTimestamp = Date()
 				// Persist the remote configuration
-
-				var remoteConfig = remoteConfiguration
-				remoteConfig.euLaunchDate = "2021-05-30T22:00:00Z"
-				storedConfiguration = remoteConfig
+				storedConfiguration = remoteConfiguration
 				// Store as JSON file
 				cryptoLibUtility.store(data, for: .remoteConfiguration)
 				// Decide what to do
