@@ -1,3 +1,4 @@
+
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -56,6 +57,8 @@ protocol RemoteInformation {
 	var recoveryEventValidity: Int? { get }
 	var testEventValidity: Int? { get }
 
+	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
+	var credentialRenewalDays: Int? { get }
 }
 
 extension RemoteInformation {
@@ -144,6 +147,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
 
+	var credentialRenewalDays: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -173,6 +178,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euTestManufacturers = "euTestManufacturers"
 		case providerIdentifiers = "providerIdentifiers"
 		case isGGDEnabled = "ggdEnabled"
+		case credentialRenewalDays = "credentialRenewalDays"
 	}
 
 	init(
@@ -193,7 +199,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		vaccinationEventValidity: Int?,
 		recoveryEventValidity: Int?,
 		testEventValidity: Int?,
-		isGGDEnabled: Bool?) {
+		isGGDEnabled: Bool?,
+		credentialRenewalDays: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -213,6 +220,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.recoveryEventValidity = recoveryEventValidity
 		self.testEventValidity = testEventValidity
 		self.isGGDEnabled = isGGDEnabled
+		self.credentialRenewalDays = credentialRenewalDays
 	}
 
 	/// Default remote configuration
@@ -235,7 +243,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			credentialRenewalDays: 5
 		)
 	}
 }
