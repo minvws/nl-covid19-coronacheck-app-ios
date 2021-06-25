@@ -252,7 +252,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.<p><p>";
+"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.<p>";
 
 "holder.appointment.title" = "Make test appointment";
 "holder.appointment.header" = "Book test appointment";
@@ -347,9 +347,9 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.event.about.title" = "What was retrieved?";
 "holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
-"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br> Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Identification code: <b>%@</b></p>";
+"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br>Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:<p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
