@@ -900,7 +900,16 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
 				title: .holderVaccinationOriginMismatchTitle,
-				subTitle: eventMode == .vaccination ? .holderVaccinationOriginMismatchMessage : .holderTestOriginMismatchMessage,
+				subTitle: {
+					switch eventMode {
+						case .recovery:
+							return L.holderEventOriginmismatchRecoveryBody()
+						case .test:
+							return L.holderEventOriginmismatchVaccinationBody()
+						case .vaccination:
+							return L.holderEventOriginmismatchTestBody()
+					}
+				}(),
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)

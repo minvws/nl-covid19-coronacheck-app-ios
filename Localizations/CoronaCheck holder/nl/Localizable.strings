@@ -404,6 +404,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
 "holder.event.originmismatch.vaccination.body" = "Op dit moment kunnen we van jouw vaccinatie geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
+"holder.event.originmismatch.recovery.body" = "Op dit moment kunnen we geen bewijs maken van jouw positieve test. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
 "holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. <a href=\"https://coronacheck.nl/wegwijzer\">Lees hier meer.</a>";
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
