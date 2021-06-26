@@ -93,16 +93,6 @@ extension String {
 
 		return Localization.string(for: "holder.vaccination.error.message.toobusy")
 	}
-
-	static var holderVaccinationOriginMismatchTitle: String {
-
-		return Localization.string(for: "holder.event.originmismatch.title")
-	}
-
-	static var holderVaccinationOriginMismatchMessage: String {
-
-		return Localization.string(for: "holder.event.originmismatch.vaccination.body")
-	}
 }
 
 extension String {

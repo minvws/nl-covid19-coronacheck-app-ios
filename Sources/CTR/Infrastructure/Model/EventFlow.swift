@@ -123,6 +123,13 @@ struct EventFlow {
 
 		func getMaxIssuedAt() -> Date? {
 
+			// 2.0
+			if let result = result,
+			   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
+				return sampleDate
+			}
+
+			// 3.0
 			let maxIssuedAt: Date? = events?
 				.compactMap {
 					if $0.vaccination != nil {

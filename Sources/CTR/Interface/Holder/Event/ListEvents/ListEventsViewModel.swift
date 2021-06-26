@@ -15,9 +15,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private var walletManager: WalletManaging
-	private var networkManager: NetworkManaging
-	private var cryptoManager: CryptoManaging
 	private var remoteConfigManager: RemoteConfigManaging
+	private let greenCardLoader: GreenCardLoading
 
 	var maxValidity: Int {
 		remoteConfigManager.getConfiguration().maxValidityHours ?? 40
@@ -83,18 +82,16 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		networkManager: NetworkManaging = Services.networkManager,
+		greenCardLoader: GreenCardLoading,
 		walletManager: WalletManaging = Services.walletManager,
-		cryptoManager: CryptoManaging = Services.cryptoManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
-		self.networkManager = networkManager
 		self.walletManager = walletManager
-		self.cryptoManager = cryptoManager
 		self.remoteConfigManager = remoteConfigManager
+		self.greenCardLoader = greenCardLoader
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -300,8 +297,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				subTitle: subTitle,
 				primaryActionTitle: .holderVaccinationListActionTitle,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
-						self?.showVaccinationError(remoteEvents: remoteEvents)
+					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+						if !success {
+							self?.showEventError(remoteEvents: remoteEvents)
+						}
 					}
 				},
 				secondaryActionTitle: L.holderVaccinationListWrong(),
@@ -624,84 +623,68 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	// MARK: Sign the events
 
-	private func userWantsToMakeQR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
+	private func userWantsToMakeQR(remoteEvents: [RemoteEvent], completion: @escaping (Bool) -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeVaccinationEvent(remoteEvents: remoteEvents) { saved in
+		storeEvent(remoteEvents: remoteEvents) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
-				onError()
+				completion(false)
 				return
 			}
 
-			self.signTheEventsIntoGreenCardsAndCredentials(onError: onError)
-		}
-	}
+			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+				self.progressIndicationCounter.decrement()
 
-	private func signTheEventsIntoGreenCardsAndCredentials(onError: @escaping () -> Void) {
-
-		self.prepareIssue { [weak self] prepareIssueEnvelope in
-			if let envelope = prepareIssueEnvelope,
-			   let nonce = envelope.prepareIssueMessage.base64Decoded() {
-				self?.cryptoManager.setNonce(nonce)
-				self?.cryptoManager.setStoken(envelope.stoken)
-
-				self?.fetchGreenCards { [weak self] response in
-					if let greenCardResponse = response {
-
-						self?.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
-
-							self?.progressIndicationCounter.decrement()
-							if greenCardsSaved {
-
-								var originType: OriginType = .vaccination
-								if self?.eventMode == .vaccination {
-									originType = .vaccination
-								} else if self?.eventMode == .recovery {
-									originType = .recovery
-								} else if self?.eventMode == .test {
-									originType = .test
-								}
-
-								let numberOfOrigins = self?.walletManager.listOrigins(type: originType).count
-								self?.logVerbose("Origins for \(String(describing: self?.eventMode)): \(String(describing: numberOfOrigins))")
-								if numberOfOrigins == 0 {
-									// No origins for this type means something went wrong.
-									if let state = self?.cannotCreateEventsState() {
-										self?.viewState = state
-										self?.shouldPrimaryButtonBeEnabled = true
-									}
-								} else {
-									self?.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
-								}
-
-							} else {
-								self?.logError("Failed to save greenCards")
-								self?.shouldPrimaryButtonBeEnabled = true
-								onError()
-							}
+				switch result {
+					case .success:
+						var originType: OriginType = .vaccination
+						if self.eventMode == .vaccination {
+							originType = .vaccination
+						} else if self.eventMode == .recovery {
+							originType = .recovery
+						} else if self.eventMode == .test {
+							originType = .test
 						}
-					} else {
-						self?.logError("No greencards")
-						self?.progressIndicationCounter.decrement()
-						self?.shouldPrimaryButtonBeEnabled = true
-						onError()
-					}
-				}
 
-			} else {
-				self?.logError("Can't save the nonce / prepareIssueMessage")
-				self?.progressIndicationCounter.decrement()
-				self?.shouldPrimaryButtonBeEnabled = true
+						let numberOfOrigins = self.walletManager.listOrigins(type: originType).count
+						self.logVerbose("Origins for \(String(describing: self.eventMode)): \(String(describing: numberOfOrigins))")
+						if numberOfOrigins == 0 {
+							// No origins for this type means something went wrong.
+							self.viewState = self.cannotCreateEventsState()
+							self.shouldPrimaryButtonBeEnabled = true
+						} else {
+							self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
+						}
+
+					case .failure(.failedToSave):
+						self.shouldPrimaryButtonBeEnabled = true
+						completion(false)
+
+					case .failure(.failedToPrepareIssue):
+						self.showTechnicalError("116 decodePrepareIssueMessage")
+
+					case .failure(.serverBusy):
+						self.showServerTooBusyError()
+
+					case .failure(.preparingIssue117):
+						self.showTechnicalError("117 prepareIssue")
+
+					case .failure(.stoken118):
+						self.showTechnicalError("118 stoken")
+
+					case .failure(.credentials119):
+						self.showTechnicalError("118 credentials")
+				}
 			}
 		}
 	}
 
-	private func showVaccinationError(remoteEvents: [RemoteEvent]) {
+	private func showEventError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,
@@ -709,8 +692,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			cancelAction: nil,
 			cancelTitle: .holderVaccinationErrorClose,
 			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] in
-					self?.showVaccinationError(remoteEvents: remoteEvents)
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					if !success {
+						self?.showEventError(remoteEvents: remoteEvents)
+					}
 				}
 			},
 			okTitle: .holderVaccinationErrorAgain
@@ -718,29 +703,6 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	}
 
 	// MARK: API Calls
-
-	/// Prepare the issue (get nonce)
-	/// - Parameter onCompletion: completion handler
-	private func prepareIssue(_ onCompletion: @escaping (PrepareIssueEnvelope?) -> Void) {
-
-		networkManager.prepareIssue { [weak self] result in
-			// Result<PrepareIssueEnvelope, NetworkError>
-			switch result {
-				case let .success(prepareIssueEnvelope):
-					self?.logVerbose("ok: \(prepareIssueEnvelope)")
-					onCompletion(prepareIssueEnvelope)
-				case let .failure(error):
-					self?.logError("error: \(error)")
-
-					if error == .serverBusy {
-						self?.showServerTooBusyError()
-					} else {
-						self?.showTechnicalError("117 prepareIssue")
-					}
-					onCompletion(nil)
-			}
-		}
-	}
 
 	private func showServerTooBusyError() {
 
@@ -767,55 +729,16 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			subTitle: subTitle,
 			cancelAction: nil,
 			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.goBack()
+			okAction: { _ in
+				self.coordinator?.listEventsScreenDidFinish(.back(eventMode: self.eventMode))
 			},
 			okTitle: .close
 		)
 	}
 
-	private func fetchGreenCards(_ onCompletion: @escaping (RemoteGreenCards.Response?) -> Void) {
+	// MARK: Store events
 
-		let signedEvents = walletManager.fetchSignedEvents()
-
-		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
-			let utf8 = issueCommitmentMessage.data(using: .utf8),
-			let stoken = cryptoManager.getStoken()
-		else {
-			self.showTechnicalError("118 stoken")
-			return
-		}
-
-		let dictionary: [String: AnyObject] = [
-			"stoken": stoken as AnyObject,
-			"events": signedEvents as AnyObject,
-			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
-		]
-
-		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] result in
-			//	Result<RemoteGreenCards.Response, NetworkError>
-
-			switch result {
-				case let .success(greencardResponse):
-					self?.logDebug("ok: \(greencardResponse)")
-					onCompletion(greencardResponse)
-				case let .failure(error):
-					self?.logError("error: \(error)")
-
-					if error == .serverBusy {
-						self?.showServerTooBusyError()
-					} else {
-						self?.showTechnicalError("118 credentials")
-					}
-
-					onCompletion(nil)
-			}
-		}
-	}
-
-	// MARK: Store vaccination events
-
-	private func storeVaccinationEvent(
+	private func storeEvent(
 		remoteEvents: [RemoteEvent],
 		onCompletion: @escaping (Bool) -> Void) {
 
@@ -844,62 +767,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		onCompletion(success)
 	}
 
-	// MARK: Store test 2.0 events
-
-	private func storeTest20Event(
-		remoteEvents: [RemoteEvent],
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-		for response in remoteEvents where response.wrapper.status == .complete {
-
-			// Remove any existing test events for the provider
-			walletManager.removeExistingEventGroups(type: .test, providerIdentifier: response.wrapper.providerIdentifier)
-
-			// Store the new test events
-			if let result = response.wrapper.result,
-			   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
-
-				success = success && walletManager.storeEventGroup(
-					.test,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
-					issuedAt: sampleDate
-				)
-				if !success {
-					break
-				}
-			}
-		}
-		onCompletion(success)
-	}
-
-	// MARK: Store green cards
-
-	private func storeGreenCards(
-		response: RemoteGreenCards.Response,
-		onCompletion: @escaping (Bool) -> Void) {
-
-		var success = true
-
-		walletManager.removeExistingGreenCards()
-
-		if let domestic = response.domesticGreenCard {
-			success = success && walletManager.storeDomesticGreenCard(domestic, cryptoManager: cryptoManager)
-		}
-		if let remoteEuGreenCards = response.euGreenCards {
-			for remoteEuGreenCard in remoteEuGreenCards {
-				success = success && walletManager.storeEuGreenCard(remoteEuGreenCard, cryptoManager: cryptoManager)
-			}
-		}
-		onCompletion(success)
-	}
-
 	private func cannotCreateEventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
-				title: .holderVaccinationOriginMismatchTitle,
+				title: L.holderEventOriginmismatchTitle(),
 				subTitle: {
 					switch eventMode {
 						case .recovery:
@@ -954,8 +826,10 @@ extension ListEventsViewModel {
 				subTitle: L.holderTestresultsResultsText(),
 				primaryActionTitle: .holderTestResultsResultsButton,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeTest20QR(remoteEvents: [remoteEvent]) {
-						self?.showTestError(remoteEvents: [remoteEvent])
+					self?.userWantsToMakeQR(remoteEvents: [remoteEvent]) { [weak self] success in
+						if !success {
+							self?.showEventError(remoteEvents: [remoteEvent])
+						}
 					}
 				},
 				secondaryActionTitle: L.holderVaccinationListWrong(),
@@ -1023,38 +897,5 @@ extension ListEventsViewModel {
 			output.append(" ")
 		}
 		return output.trimmingCharacters(in: .whitespaces)
-	}
-
-	private func userWantsToMakeTest20QR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
-
-		shouldPrimaryButtonBeEnabled = false
-		progressIndicationCounter.increment()
-
-		storeTest20Event(remoteEvents: remoteEvents) { saved in
-
-			guard saved else {
-				self.progressIndicationCounter.decrement()
-				self.shouldPrimaryButtonBeEnabled = true
-				onError()
-				return
-			}
-			self.signTheEventsIntoGreenCardsAndCredentials(onError: onError)
-		}
-	}
-
-	private func showTestError(remoteEvents: [RemoteEvent]) {
-
-		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
-			subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
-			cancelAction: nil,
-			cancelTitle: .holderVaccinationErrorClose,
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeTest20QR(remoteEvents: remoteEvents) { [weak self] in
-					self?.showTestError(remoteEvents: remoteEvents)
-				}
-			},
-			okTitle: .holderVaccinationErrorAgain
-		)
 	}
 }
