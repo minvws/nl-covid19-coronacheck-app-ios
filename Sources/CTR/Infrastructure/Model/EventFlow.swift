@@ -155,7 +155,6 @@ struct EventFlow {
 							return latestDateFound
 					}
 				}
-
 			return maxIssuedAt
 		}
 
@@ -238,6 +237,20 @@ struct EventFlow {
 			case negativeTest = "negativetest"
 			case positiveTest = "positivetest"
 			case recovery
+		}
+
+		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+			if vaccination != nil {
+				return vaccination?.getDate(with: dateformatter)
+			}
+			if negativeTest != nil {
+				return negativeTest?.getDate(with: dateformatter)
+			}
+			if recovery != nil {
+				return recovery?.getDate(with: dateformatter)
+			}
+			return positiveTest?.getDate(with: dateformatter)
 		}
 	}
 

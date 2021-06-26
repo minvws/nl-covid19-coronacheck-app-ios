@@ -272,13 +272,18 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		_ dataSource: [EventDataTuple],
 		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
+		var dataSource = dataSource
+		if eventMode == .recovery {
+			dataSource = filterTooOldRecoveryEvents(dataSource)
+		}
+
 		let rows = getSortedRowsFromEvents(dataSource)
 		guard !rows.isEmpty else {
 			return emptyEventsState()
 		}
 
-		var title = ""
-		var subTitle = ""
+		let title: String
+		let subTitle: String
 		switch eventMode {
 			case .vaccination:
 				title = L.holderVaccinationListTitle()
@@ -295,7 +300,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			content: ListEventsViewController.Content(
 				title: title,
 				subTitle: subTitle,
-				primaryActionTitle: .holderVaccinationListActionTitle,
+				primaryActionTitle: L.holderVaccinationListAction(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
 						if !success {
@@ -320,48 +325,21 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
-		if eventMode == .vaccination {
-			let sortedDataSource = dataSource.sorted { lhs, rhs in
-				if let lhsDate = lhs.event.vaccination?.getDate(with: dateFormatter),
-				   let rhsDate = rhs.event.vaccination?.getDate(with: dateFormatter) {
-					return lhsDate < rhsDate
-				}
-				return false
+		let sortedDataSource = dataSource.sorted { lhs, rhs in
+			if let lhsDate = lhs.event.getSortDate(with: dateFormatter),
+			   let rhsDate = rhs.event.getSortDate(with: dateFormatter) {
+				return lhsDate < rhsDate
 			}
-			return getSortedRowsFromVaccinationEvents(sortedDataSource)
-		} else if eventMode == .recovery {
+			return false
+		}
 
-			let filteredDataSource = filterTooOldRecoveryEvents(dataSource)
-
-			let sortedDataSource = filteredDataSource.sorted { lhs, rhs in
-				if let lhsDate = lhs.event.recovery?.getDate(with: dateFormatter),
-				   let rhsDate = rhs.event.recovery?.getDate(with: dateFormatter) {
-					return lhsDate < rhsDate
-				}
-				if let lhsDate = lhs.event.recovery?.getDate(with: dateFormatter),
-				   let rhsDate = rhs.event.positiveTest?.getDate(with: dateFormatter) {
-					return lhsDate < rhsDate
-				}
-				if let lhsDate = lhs.event.positiveTest?.getDate(with: dateFormatter),
-				   let rhsDate = rhs.event.recovery?.getDate(with: dateFormatter) {
-					return lhsDate < rhsDate
-				}
-				if let lhsDate = lhs.event.positiveTest?.getDate(with: dateFormatter),
-				   let rhsDate = rhs.event.positiveTest?.getDate(with: dateFormatter) {
-					return lhsDate < rhsDate
-				}
-				return false
-			}
-			return getSortedRowsFromRecoveryEvents(sortedDataSource)
-		} else {
-			let sortedDataSource = dataSource.sorted { lhs, rhs in
-				if let lhsDate = lhs.event.negativeTest?.getDate(with: dateFormatter),
-				   let rhsDate = rhs.event.negativeTest?.getDate(with: dateFormatter) {
-					return lhsDate > rhsDate
-				}
-				return false
-			}
-			return getSortedRowsFromTestEvents(sortedDataSource)
+		switch eventMode {
+			case .recovery:
+				return getSortedRowsFromRecoveryEvents(sortedDataSource)
+			case .test:
+				return getSortedRowsFromTestEvents(sortedDataSource)
+			case .vaccination:
+				return getSortedRowsFromVaccinationEvents(sortedDataSource)
 		}
 	}
 
