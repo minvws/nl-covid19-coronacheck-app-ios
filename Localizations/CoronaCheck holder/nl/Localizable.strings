@@ -10,8 +10,6 @@
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Herstelverklaring ophalen";
 "holder.recovery.start.message" = "<p>Met een positieve testuitslag van de GGD kan je een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
-"holder.chooseqrcodetype.option.recovery.title" = "Herstelbewijs";
-"holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";

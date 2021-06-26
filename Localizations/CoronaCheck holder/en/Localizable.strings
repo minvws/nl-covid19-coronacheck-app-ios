@@ -6,8 +6,6 @@
 "holder.recovery.nolist.action" = "To My overview";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery statement";
-"holder.chooseqrcodetype.option.recovery.title" = "Certificate of recovery";
-"holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
@@ -202,8 +200,8 @@
 "holder.chooseqrcodetype.message" = "You can make a QR code of a negative test result or of a vaccination.";
 "holder.chooseqrcodetype.option.negativetest.title" = "A negative test result";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "The test proves I do not have coronavirus";
-"holder.chooseqrcodetype.option.recovery.title" = "Recovery";
-"holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I do have coronavirus";
+"holder.chooseqrcodetype.option.recovery.title" = "Certificate of recovery";
+"holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
 "holder.chooseqrcodetype.option.vaccine.title" = "A vaccination";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "I've had my injection or injections";
 
