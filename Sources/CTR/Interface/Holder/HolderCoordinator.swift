@@ -382,16 +382,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
-
 		do {
 			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
 				navigateToShowQR(greenCard)
 			} else {
-				print("oops")
+				let alertController = UIAlertController(
+					title: .errorTitle,
+					message: String(format: .technicalErrorCustom, "150"),
+					preferredStyle: .alert)
+
+				alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 			}
-		} catch {
-			// No card
-			print("oops")
+		} catch let error {
+			let alertController = UIAlertController(
+				title: .errorTitle,
+				message: String(format: .technicalErrorCustom, "CD_\((error as NSError).code))"),
+				preferredStyle: .alert)
+
+			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 		}
 	}
 }
