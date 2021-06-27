@@ -4,7 +4,8 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-  
+// swiftlint:disable type_body_length
+
 @testable import CTR
 import XCTest
 import Nimble
