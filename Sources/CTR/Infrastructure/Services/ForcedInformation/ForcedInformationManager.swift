@@ -58,12 +58,12 @@ class ForcedInformationManager: ForcedInformationManaging {
 	private var information: ForcedInformation = ForcedInformation(
 		pages: [ForcedInformationPage(
 			image: .onboardingSafely,
-			tagline: .holderUpdatePageTagline,
-			title: .holderUpdatePageTitle,
-			content: .holderUpdatePageContent
+			tagline: L.holderUpdatepageTagline(),
+			title: L.holderUpdatepageTitle(),
+			content: L.holderUpdatepageContent()
 		)],
 		consent: nil,
-		version: 2
+		version: 3
 	)
 
 	// MARK: - ForcedInformationManaging
