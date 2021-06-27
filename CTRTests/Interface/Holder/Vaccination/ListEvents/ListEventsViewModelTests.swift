@@ -159,7 +159,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_makeQR_saveEventGroupError() {
+	func test_makeQR_saveEventGroupError_eventModeVaccination() {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -180,6 +180,69 @@ class ListEventsViewModelTests: XCTestCase {
 
 			// Then
 			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == false
+			expect(self.networkSpy.invokedFetchGreencards) == false
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
+			expect(self.sut.alert).toNot(beNil())
+
+		} else {
+			fail("wrong state")
+		}
+	}
+
+	func test_makeQR_saveEventGroupError_eventModeRecovery() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .recovery,
+			remoteEvents: [defaultRemoteRecoveryEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = false
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+			expect(self.networkSpy.invokedFetchGreencards) == false
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
+			expect(self.sut.alert).toNot(beNil())
+
+		} else {
+			fail("wrong state")
+		}
+	}
+
+	func test_makeQR_saveEventGroupError_eventModeTest() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .test,
+			remoteEvents: [defaultremoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = false
+
+		if case let .listEvents(content: content, rows: _) = sut.viewState {
+
+			// When
+			content.primaryAction?()
+
+			// Then
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedFetchGreencards) == false
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
 			expect(self.sut.alert).toNot(beNil())
@@ -437,6 +500,36 @@ class ListEventsViewModelTests: XCTestCase {
 			signedResponse: signedResponse
 		)
 	}
+
+	private func defaultRemoteRecoveryEvent() -> RemoteEvent {
+		return RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: "CC",
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				result: nil,
+				events: [
+					EventFlow.Event(
+						type: "recovery",
+						unique: "1234",
+						isSpecimen: false,
+						vaccination: nil,
+						negativeTest: nil,
+						positiveTest: nil,
+						recovery: recoveryEvent
+					)
+				]
+			),
+			signedResponse: signedResponse
+		)
+	}
+
+	private let recoveryEvent = EventFlow.RecoveryEvent(
+		sampleDate: "2021-07-01",
+		validFrom: "2021-07-12",
+		validUntil: "2022-12-31" // This will fail the test after 2022-12-31
+	)
 
 	private let defaultContent = ListEventsViewController.Content(
 		title: "test",

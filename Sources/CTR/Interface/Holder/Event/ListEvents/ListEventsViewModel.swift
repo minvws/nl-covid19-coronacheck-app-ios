@@ -723,11 +723,16 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		var success = true
 		for response in remoteEvents where response.wrapper.status == .complete {
 
-			// Remove any existing vaccination events for the provider
-			walletManager.removeExistingEventGroups(
-				type: eventMode,
-				providerIdentifier: response.wrapper.providerIdentifier
-			)
+			if eventMode == .vaccination {
+				// Remove any existing vaccination events
+				walletManager.removeExistingEventGroups(type: eventMode)
+			} else {
+				// Remove any existing events for the provider
+				walletManager.removeExistingEventGroups(
+					type: eventMode,
+					providerIdentifier: response.wrapper.providerIdentifier
+				)
+			}
 
 			// Store the new events
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt() {
