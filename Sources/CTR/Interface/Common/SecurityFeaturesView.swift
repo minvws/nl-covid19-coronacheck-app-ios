@@ -42,7 +42,7 @@ class SecurityFeaturesView: BaseView, Logging {
 	}()
 
 	/// The current animation
-	var currentAnimation: SecurityAnimation = .cyclistLeftToRight
+	var currentAnimation: SecurityAnimation = .domesticAnimation
 
 	/// Setup all the views
 	override func setupViews() {
@@ -104,16 +104,16 @@ class SecurityFeaturesView: BaseView, Logging {
 	func resume() {
 
 		if !animationView.isAnimationPlaying {
-			logDebug("Animation resuming")
+			logVerbose("Animation resuming")
 			playCurrentAnimation()
 		} else {
-			logDebug("Animation is playing!")
+			logVerbose("Animation is playing!")
 		}
 	}
 
 	func setupForInternational() {
 
-		currentAnimation = .internationalLeftToRight
+		currentAnimation = .internationalAnimation
 		backgroundImageView.isHidden = true
 	}
 }

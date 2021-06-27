@@ -14,10 +14,12 @@ class ShowQRImageView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 10.0
-		static let securityMargin: CGFloat = 38.0
+		static let domesticSecurityMargin: CGFloat = 38.0
+		static let internationalSecurityMargin: CGFloat = 46.0
 	}
 
 	var securityViewBottomConstraint: NSLayoutConstraint?
+	var securityViewHeightConstraint: NSLayoutConstraint?
 
 	/// The spinner
 	let spinner: UIActivityIndicatorView = {
@@ -94,13 +96,14 @@ class ShowQRImageView: BaseView {
 
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor)
+			securityView.trailingAnchor.constraint(equalTo: trailingAnchor)
 		])
+
+		securityViewHeightConstraint = securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor)
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
 			equalTo: bottomAnchor,
-			constant: ViewTraits.securityMargin
+			constant: ViewTraits.domesticSecurityMargin
 		)
 		securityViewBottomConstraint?.isActive = true
 
@@ -157,6 +160,7 @@ class ShowQRImageView: BaseView {
 	func setupForInternational() {
 
 		securityView.setupForInternational()
-		securityViewBottomConstraint?.constant = 46
+		securityViewBottomConstraint?.constant = ViewTraits.internationalSecurityMargin
+		securityViewHeightConstraint?.isActive = true
 	}
 }
