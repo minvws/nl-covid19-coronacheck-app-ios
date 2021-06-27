@@ -35,6 +35,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable private(set) var showValidQR: Bool
 
+	@Bindable private(set) var showInternationalAnimation: Bool = false
+
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
@@ -85,10 +87,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			title = .holderShowQRDomesticTitle
             qrAccessibility = .holderShowQRDomesticQRTitle
 			infoButtonAccessibility = .holderShowQRDomesticAboutTitle
+			showInternationalAnimation = false
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = .holderShowQREuTitle
             qrAccessibility = .holderShowQRDomesticQRTitle
 			infoButtonAccessibility = .holderShowQREuAboutTitle
+			showInternationalAnimation = true
 		}
 
 		super.init()

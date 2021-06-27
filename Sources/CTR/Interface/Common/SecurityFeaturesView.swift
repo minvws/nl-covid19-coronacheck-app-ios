@@ -12,6 +12,8 @@ class SecurityFeaturesView: BaseView, Logging {
 
 	var loggingCategory: String = "SecurityFeaturesView"
 
+	private var animatingLeftToRight = true
+
 	/// The animation view
 	private let animationView: AnimationView = {
 
@@ -22,7 +24,7 @@ class SecurityFeaturesView: BaseView, Logging {
 		return view
 	}()
 
-	/// The image view for the backgrounc image
+	/// The image view for the background image
 	private let backgroundImageView: UIImageView = {
 
 		let view = UIImageView()
@@ -73,12 +75,13 @@ class SecurityFeaturesView: BaseView, Logging {
 	/// User tapped on the primary button
 	@objc func primaryButtonTapped() {
 
-		if currentAnimation == .cyclistRightToLeft {
-			currentAnimation = .cyclistLeftToRight
+		animatingLeftToRight.toggle()
+
+		if animatingLeftToRight {
+			animationView.transform = CGAffineTransform(scaleX: 1, y: 1)
 		} else {
-			currentAnimation = .cyclistRightToLeft
+			animationView.transform = CGAffineTransform(scaleX: -1, y: 1)
 		}
-		playCurrentAnimation()
 	}
 
 	/// Play the animation
@@ -102,9 +105,15 @@ class SecurityFeaturesView: BaseView, Logging {
 
 		if !animationView.isAnimationPlaying {
 			logDebug("Animation resuming")
-			animationView.play()
+			playCurrentAnimation()
 		} else {
 			logDebug("Animation is playing!")
 		}
+	}
+
+	func setupForInternational() {
+
+		currentAnimation = .internationalLeftToRight
+		backgroundImageView.isHidden = true
 	}
 }

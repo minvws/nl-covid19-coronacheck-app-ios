@@ -60,4 +60,7 @@ extension SecurityAnimation {
 
 	/// A security animation
 	static let cyclistRightToLeft = SecurityAnimation(name: "CyclistRightToLeft", fileName: "fietser_RL_335x256")
+
+	///
+	static let internationalLeftToRight = SecurityAnimation(name: "CyclistRightToLeft", fileName: "lf20_fnpdb2ex")
 }

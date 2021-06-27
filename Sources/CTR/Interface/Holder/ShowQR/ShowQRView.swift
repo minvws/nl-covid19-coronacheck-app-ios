@@ -17,6 +17,8 @@ class ShowQRImageView: BaseView {
 		static let securityMargin: CGFloat = 38.0
 	}
 
+	var securityViewBottomConstraint: NSLayoutConstraint?
+
 	/// The spinner
 	let spinner: UIActivityIndicatorView = {
 
@@ -44,6 +46,7 @@ class ShowQRImageView: BaseView {
 	let securityView: SecurityFeaturesView = {
 
 		let view = SecurityFeaturesView()
+		view.contentMode = .bottom
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -63,6 +66,7 @@ class ShowQRImageView: BaseView {
 		addSubview(spinner)
 		addSubview(largeQRimageView)
 	}
+
 	/// Setup the constraints
 	override func setupViewConstraints() {
 
@@ -91,11 +95,14 @@ class ShowQRImageView: BaseView {
 			// Security
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			securityView.bottomAnchor.constraint(
-				equalTo: bottomAnchor,
-				constant: ViewTraits.securityMargin
-			)
+			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor)
 		])
+
+		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
+			equalTo: bottomAnchor,
+			constant: ViewTraits.securityMargin
+		)
+		securityViewBottomConstraint?.isActive = true
 
 		bringSubviewToFront(largeQRimageView)
 	}
@@ -145,5 +152,11 @@ class ShowQRImageView: BaseView {
 	func resume() {
 
 		securityView.resume()
+	}
+
+	func setupForInternational() {
+
+		securityView.setupForInternational()
+		securityViewBottomConstraint?.constant = 46
 	}
 }
