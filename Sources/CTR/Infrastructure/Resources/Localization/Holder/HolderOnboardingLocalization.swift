@@ -40,14 +40,4 @@ extension String {
 
 		return Localization.string(for: "holder.onboarding.message.validity")
 	}
-
-	static var holderOnboardingTitlePrivacy: String {
-
-		return Localization.string(for: "holder.onboarding.title.privacy")
-	}
-
-	static func holderOnboardingMessagePrivacy(localizedEULaunchDate: String) -> String {
-
-		return Localization.string(for: "holder.onboarding.message.privacy", comment: "", [localizedEULaunchDate])
-	}
 }
