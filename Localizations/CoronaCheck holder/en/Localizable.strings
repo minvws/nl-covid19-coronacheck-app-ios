@@ -227,7 +227,7 @@
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "valid until";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
-"holder.dashboard.qr.title" = "Show QR code";
+"holder.dashboard.qr.title" = "My QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
 "holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
