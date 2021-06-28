@@ -99,10 +99,8 @@ class HolderCoordinator: SharedCoordinator {
 				delegate: self
 			)
 			startChildCoordinator(coordinator)
+        } else if hasFaultyVaccinationOn28June() {
 
-        }
-		else if hasFaultyVaccinationOn28June() {
-			
 			//	Is so, delete all greencards and credentials
 			Services.walletManager.removeExistingGreenCards()
 
@@ -134,8 +132,7 @@ class HolderCoordinator: SharedCoordinator {
 
 				self.navigationController.present(alertController, animated: true, completion: nil)
 			}
-		}
-		else if let unhandledUniversalLink = unhandledUniversalLink {
+		} else if let unhandledUniversalLink = unhandledUniversalLink {
 
             // Attempt to consume the universal link again:
             self.unhandledUniversalLink = nil // prevent potential infinite loops
