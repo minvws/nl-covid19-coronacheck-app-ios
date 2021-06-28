@@ -157,7 +157,7 @@ class ShowQRViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == false
-		expect(self.sut.sceneView.securityView.currentAnimation) == .cyclistRightToLeft
+		expect(self.sut.sceneView.securityView.currentAnimation) == .domesticAnimation
 	}
 
 	/// Test showing the alert dialog for screen shots
