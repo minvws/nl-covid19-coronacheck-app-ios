@@ -44,7 +44,16 @@ final class FetchEventsViewModel: Logging {
 
 		viewState = .loading(
 			content: FetchEventsViewController.Content(
-				title: eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle,
+				title: {
+					switch eventMode {
+						case .recovery:
+							return L.holderRecoveryListTitle()
+						case .test:
+							return L.holderTestListTitle()
+						case .vaccination:
+							return L.holderVaccinationListTitle()
+					}
+				}(),
 				subTitle: nil,
 				actionTitle: nil,
 				action: nil
@@ -85,7 +94,7 @@ final class FetchEventsViewModel: Logging {
 		// Needed because we can't present an Alert at the same time as change the navigation stack
 		// so sometimes the next step must be triggered as we dismiss the Alert.
 		func nextStep() {
-			fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchVaccinationEventsResponse)
+			fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
 		}
 
 		switch (eventProvidersWithEventInformation.isEmpty, someNetworkWasTooBusy, someNetworkDidError) {
@@ -105,7 +114,7 @@ final class FetchEventsViewModel: Logging {
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
 					title: .holderFetchEventsErrorNoResultsNetworkErrorTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventType: eventMode.localized),
+					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
@@ -134,18 +143,13 @@ final class FetchEventsViewModel: Logging {
 				okTitle: .ok
 			   )
 
-			// No results and yet no errors:
-			case (true, false, false):
-
-				self.viewState = self.emptyEventsState()
-
-			// 🥳 Some results and no network was busy or had an error:
-			case (false, false, false):
+			// 🥳 Some or no results and no network was busy or had an error:
+			case (_, false, false):
 				nextStep()
 		}
 	}
 
-	func handleFetchVaccinationEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
+	func handleFetchEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
@@ -173,7 +177,7 @@ final class FetchEventsViewModel: Logging {
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
 					title: .holderFetchEventsErrorNoResultsNetworkErrorTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventType: eventMode.localized),
+					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
@@ -201,14 +205,8 @@ final class FetchEventsViewModel: Logging {
 				   },
 					okTitle: .ok
 			   )
-
-			// No results and yet no errors:
-			case (true, false, false):
-
-				self.viewState = self.emptyEventsState()
-
-			// 🥳 Some results and no network was busy or had an error:
-			case (false, false, false):
+			// 🥳 Some or no results and no network was busy or had an error:
+			case (_, false, false):
 
 				nextStep()
 		}
@@ -216,12 +214,7 @@ final class FetchEventsViewModel: Logging {
 
 	func backButtonTapped() {
 
-		switch viewState {
-			case .loading:
-				warnBeforeGoBack()
-			case .emptyEvents:
-				goBack()
-		}
+		warnBeforeGoBack()
 	}
 
 	func warnBeforeGoBack() {
@@ -246,22 +239,6 @@ final class FetchEventsViewModel: Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
-	}
-
-	// MARK: State Helpers
-
-	private func emptyEventsState() -> FetchEventsViewController.State {
-
-		return .emptyEvents(
-			content: FetchEventsViewController.Content(
-				title: eventMode == .vaccination ? .holderVaccinationNoListTitle : .holderTestNoListTitle,
-				subTitle: eventMode == .vaccination ? .holderVaccinationNoListMessage : .holderTestNoListMessage,
-				actionTitle: eventMode == .vaccination ? .holderVaccinationNoListActionTitle : .holderTestNoListActionTitle,
-				action: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				}
-			)
-		)
 	}
 
 	// MARK: Fetch access tokens and event providers
@@ -293,8 +270,8 @@ final class FetchEventsViewModel: Logging {
 							eventProviders[index].accessToken = accessToken
 						}
 					}
-					if self.eventMode == .test {
-						// only retrieve negative test 3.0 from the GGD
+					if self.eventMode == .test || self.eventMode == .recovery {
+						// only retrieve negative / positive test 3.0 from the GGD
 						eventProviders = eventProviders.filter { $0.identifier.lowercased() == "ggd" }
 					}
 					completion(.success(eventProviders))
@@ -357,8 +334,17 @@ final class FetchEventsViewModel: Logging {
 			let successfulEventInformationAvailable = eventInformationAvailableResults.compactMap { $0.successValue }
 			let outputEventProviders = eventProviders.map { eventProvider -> EventFlow.EventProvider in
 				var eventProvider = eventProvider
-				for response in successfulEventInformationAvailable where eventProvider.identifier == response.providerIdentifier {
-					eventProvider.eventInformationAvailable = response
+				for response in successfulEventInformationAvailable {
+					if Configuration().getEnvironment() == "production" {
+						if eventProvider.identifier == response.providerIdentifier {
+							eventProvider.eventInformationAvailable = response
+						}
+					} else {
+						if eventProvider.identifier == response.providerIdentifier ||
+							(eventProvider.name == "FakeGGD" && response.providerIdentifier == "ZZZ") {
+							eventProvider.eventInformationAvailable = response
+						}
+					}
 				}
 				return eventProvider
 			}
@@ -447,7 +433,7 @@ private extension EventMode {
 	/// Translate EventMode into a string that can be passed to the network as a query string
 	var queryFilterValue: String {
 		switch self {
-			case .recovery: return "recovery"
+			case .recovery: return "positivetest,recovery"
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
 		}

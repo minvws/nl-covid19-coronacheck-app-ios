@@ -29,9 +29,9 @@ extension String {
 		return Localization.string(for: "holder.fetchevents.error.noresults.networkerror.title")
 	}
 
-	static func holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventType: String) -> String {
+	static func holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: String) -> String {
 
-		return Localization.string(for: "holder.fetchevents.error.noresults.networkerror.message", comment: "", [localizedEventType])
+		return Localization.string(for: "holder.fetchevents.error.noresults.networkerror.message", comment: "", [localizedEventMode])
 	}
 
 	static var holderFetchEventsErrorNoResultsNetworkErrorButton: String {

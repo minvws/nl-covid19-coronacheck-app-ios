@@ -84,7 +84,7 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 			let callBack: OIDAuthStateAuthorizationCallback = { authState, error in
 
-				self.logDebug("OpenIdManager: authState: \(String(describing: authState))")
+				self.logVerbose("OpenIdManager: authState: \(String(describing: authState))")
 				NotificationCenter.default.post(name: .enablePrivacySnapShot, object: nil)
 				DispatchQueue.main.async {
 					if let authState = authState {

@@ -15,13 +15,61 @@ class EventStartViewModelTests: XCTestCase {
 	private var sut: EventStartViewModel!
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
+	private var remoteConfigManagingSpy: RemoteConfigManagingSpy!
+	private let remoteConfig = RemoteConfiguration(
+		minVersion: "1.0",
+		minVersionMessage: "test message",
+		storeUrl: URL(string: "https://apple.com"),
+		deactivated: nil,
+		informationURL: nil,
+		configTTL: 3600,
+		euLaunchDate: "2021-06-03T14:00:00+00:00",
+		maxValidityHours: 48,
+		recoveryWaitingPeriodDays: 11,
+		requireUpdateBefore: nil,
+		temporarilyDisabled: false,
+		domesticValidityHours: 40,
+		vaccinationEventValidity: 14600,
+		recoveryEventValidity: 7300,
+		testEventValidity: 40,
+		isGGDEnabled: true,
+		recoveryExpirationDays: 180
+	)
 
 	override func setUp() {
 
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .vaccination)
+		remoteConfigManagingSpy = RemoteConfigManagingSpy()
+		remoteConfigManagingSpy.stubbedGetConfigurationResult = remoteConfig
+		sut = EventStartViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteConfigManager: remoteConfigManagingSpy
+		)
+	}
+
+	func test_content_vaccinationMode() {
+
+		// Given
+
+		// When
+
+		// Then
+		expect(self.sut.title) == L.holderVaccinationStartTitle()
+		expect(self.sut.message) == L.holderVaccinationStartMessage()
+	}
+
+	func test_content_recoveryMode() {
+
+		// Given
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+		// When
+
+		// Then
+		expect(self.sut.title) == L.holderRecoveryStartTitle()
+		expect(self.sut.message) == L.holderRecoveryStartMessage("\(remoteConfig.recoveryWaitingPeriodDays!)")
 	}
 
 	func test_backButtonTapped() {
@@ -36,7 +84,7 @@ class EventStartViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .back(eventMode: .test)
 	}
 
-	func test_primaryButtonTapped() {
+	func test_primaryButtonTapped_vaccinationMode() {
 
 		// Given
 
@@ -46,6 +94,19 @@ class EventStartViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .vaccination)
+	}
+
+	func test_primaryButtonTapped_recoveryMode() {
+
+		// Given
+		sut = EventStartViewModel(coordinator: coordinatorSpy, eventMode: .recovery)
+
+		// When
+		sut.primaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinish) == true
+		expect(self.coordinatorSpy.invokedEventStartScreenDidFinishParameters?.0) == .continue(value: nil, eventMode: .recovery)
 	}
 
 	func test_openUrl() throws {

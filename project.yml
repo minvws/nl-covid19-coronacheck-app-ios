@@ -51,6 +51,9 @@ configs:
 
 # - Project Level settings:
 
+options:
+  developmentLanguage: nl
+
 settings:
   base:
     IPHONEOS_DEPLOYMENT_TARGET: 11.0

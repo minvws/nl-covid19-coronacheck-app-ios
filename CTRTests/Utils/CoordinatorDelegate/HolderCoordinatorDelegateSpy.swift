@@ -11,14 +11,6 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToAboutMakingAQR = false
-	var invokedNavigateToAboutMakingAQRCount = 0
-
-	func navigateToAboutMakingAQR() {
-		invokedNavigateToAboutMakingAQR = true
-		invokedNavigateToAboutMakingAQRCount += 1
-	}
-
 	var invokedNavigateToTokenScan = false
 	var invokedNavigateToTokenScanCount = 0
 
@@ -105,6 +97,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 	func userWishesToCreateAVaccinationQR() {
 		invokedUserWishesToCreateAVaccinationQR = true
 		invokedUserWishesToCreateAVaccinationQRCount += 1
+	}
+
+	var invokedUserWishesToCreateARecoveryQR = false
+	var invokedUserWishesToCreateARecoveryQRCount = 0
+
+	func userWishesToCreateARecoveryQR() {
+		invokedUserWishesToCreateARecoveryQR = true
+		invokedUserWishesToCreateARecoveryQRCount += 1
 	}
 
 	var invokedUserDidScanRequestToken = false

@@ -17,7 +17,7 @@ protocol WalletManaging {
 	///   - signedResponse: the json of the signed response to store
 	///   - issuedAt: when was this event administered?
 	/// - Returns: True if stored
-	func storeEventGroup(_ type: EventType, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool
+	func storeEventGroup(_ type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool
 
 	func fetchSignedEvents() -> [String]
 
@@ -25,7 +25,12 @@ protocol WalletManaging {
 	/// - Parameters:
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
-	func removeExistingEventGroups(type: EventType, providerIdentifier: String)
+	func removeExistingEventGroups(type: EventMode, providerIdentifier: String)
+
+	/// Remove any existing event groups for the type
+	/// - Parameters:
+	///   - type: the type of event group
+	func removeExistingEventGroups(type: EventMode)
 
 	func removeExistingGreenCards()
 
@@ -89,7 +94,7 @@ class WalletManager: WalletManaging, Logging {
 	///   - issuedAt: when was this event administered?
 	/// - Returns: optional event group
 	@discardableResult func storeEventGroup(
-		_ type: EventType,
+		_ type: EventMode,
 		providerIdentifier: String,
 		signedResponse: SignedResponse,
 		issuedAt: Date) -> Bool {
@@ -141,7 +146,7 @@ class WalletManager: WalletManaging, Logging {
 	/// - Parameters:
 	///   - type: the type of event group (vaccination, test, recovery)
 	///   - maxValidity: the max validity (in HOURS) of the event group beyond the max issued at date. (from remote config)
-	private func findAndExpireEventGroups(for type: EventType, maxValidity: Int) {
+	private func findAndExpireEventGroups(for type: EventMode, maxValidity: Int) {
 
 		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
@@ -151,7 +156,7 @@ class WalletManager: WalletManaging, Logging {
 					if let maxIssuedAt = eventGroup.maxIssuedAt,
 					   let expireDate = Calendar.current.date(byAdding: .hour, value: maxValidity, to: maxIssuedAt) {
 						if expireDate > Date() {
-							logDebug("Shantey, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
+							logDebug("Shantay, you stay \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 						} else {
 							logDebug("Sashay away \(String(describing: eventGroup.providerIdentifier)) \(type) \(String(describing: eventGroup.maxIssuedAt))")
 							context.delete(eventGroup)
@@ -193,7 +198,7 @@ class WalletManager: WalletManaging, Logging {
 	/// - Parameters:
 	///   - type: the type of event group
 	///   - providerIdentifier: the identifier of the the provider
-	func removeExistingEventGroups(type: EventType, providerIdentifier: String) {
+	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
 
 		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
@@ -206,6 +211,27 @@ class WalletManager: WalletManaging, Logging {
 							self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 							context.delete(eventGroup)
 						}
+					}
+					dataStoreManager.save(context)
+				}
+			}
+		}
+	}
+
+	/// Remove any existing event groups for the type
+	/// - Parameters:
+	///   - type: the type of event group
+	func removeExistingEventGroups(type: EventMode) {
+
+		let context = dataStoreManager.backgroundContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let eventGroups = wallet.eventGroups {
+					for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
+						self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+						context.delete(eventGroup)
 					}
 					dataStoreManager.save(context)
 				}

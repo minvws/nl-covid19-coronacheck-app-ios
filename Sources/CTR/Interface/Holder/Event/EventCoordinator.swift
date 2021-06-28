@@ -8,7 +8,7 @@
 import UIKit
 import SafariServices
 
-enum EventMode {
+enum EventMode: String {
 
 	case recovery
 	case test
@@ -117,13 +117,17 @@ class EventCoordinator: Coordinator, Logging {
 
 	func start() {
 
-		let viewController = EventStartViewController(
-			viewModel: EventStartViewModel(
-				coordinator: self,
-				eventMode: .vaccination
-			)
-		)
-		navigationController.pushViewController(viewController, animated: true)
+		startWithVaccination()
+	}
+
+	func startWithVaccination() {
+
+		startWith(.vaccination)
+	}
+
+	func startWithRecovery() {
+
+		startWith(.recovery)
 	}
 
 	func startWithListTestEvents(_ testEvents: [RemoteEvent]) {
@@ -144,6 +148,17 @@ class EventCoordinator: Coordinator, Logging {
 
 	// MARK: Private functions
 
+	private func startWith(_ eventMode: EventMode) {
+
+		let viewController = EventStartViewController(
+			viewModel: EventStartViewModel(
+				coordinator: self,
+				eventMode: eventMode
+			)
+		)
+		navigationController.pushViewController(viewController, animated: true)
+	}
+
 	private func navigateToLogin(eventMode: EventMode) {
 
 		let viewController = LoginTVSViewController(
@@ -153,7 +168,6 @@ class EventCoordinator: Coordinator, Logging {
 			)
 		)
 		navigationController.pushViewController(viewController, animated: true)
-
 	}
 
 	private func navigateToFetchEvents(token: String, eventMode: EventMode) {
@@ -205,13 +219,13 @@ class EventCoordinator: Coordinator, Logging {
 		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
 	}
 
-	private func navigateBackToVaccinationStart() {
+	private func navigateBackToEventStart() {
 
-		if let vaccineStartViewController = navigationController.viewControllers
+		if let eventStartViewController = navigationController.viewControllers
 			.first(where: { $0 is EventStartViewController }) {
 
 			navigationController.popToViewController(
-				vaccineStartViewController,
+				eventStartViewController,
 				animated: true
 			)
 		}
@@ -273,10 +287,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				switch eventMode {
 					case .test:
 						navigateBackToTestStart()
-					case .vaccination:
-						navigateBackToVaccinationStart()
-					case .recovery:
-						logWarning("Todo!!!")
+					case .vaccination, .recovery:
+						navigateBackToEventStart()
 				}
 
 			default:
@@ -294,10 +306,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				switch eventMode {
 					case .test:
 						navigateBackToTestStart()
-					case .vaccination:
-						navigateBackToVaccinationStart()
-					case .recovery:
-						logWarning("Todo!!!")
+					case .recovery, .vaccination:
+						navigateBackToEventStart()
 				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, eventMode: eventMode)
@@ -318,10 +328,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				switch eventMode {
 					case .test:
 						navigateBackToTestStart()
-					case .vaccination:
-						navigateBackToVaccinationStart()
-					case .recovery:
-						logWarning("Todo!!!")
+					case .recovery, .vaccination:
+						navigateBackToEventStart()
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)

@@ -9,16 +9,6 @@ import Foundation
 
 extension String {
 
-	static var holderTestResultsResultsTitle: String {
-
-		return Localization.string(for: "holder.testresults.results.title")
-	}
-
-	static var holderTestResultsResultsText: String {
-
-		return Localization.string(for: "holder.testresults.results.text")
-	}
-
 	static var holderTestResultsPendingTitle: String {
 
 		return Localization.string(for: "holder.testresults.pending.title")
@@ -29,24 +19,9 @@ extension String {
 		return Localization.string(for: "holder.testresults.pending.text")
 	}
 
-//	static var holderTestResultsAlreadyHandledTitle: String {
-//
-//		return Localization.string(for: "holder.testresults.already.title")
-//	}
-//
-//	static var holderTestResultsAlreadyHandledText: String {
-//
-//		return Localization.string(for: "holder.testresults.already.text")
-//	}
-
 	static var holderTestResultsResultsButton: String {
 
 		return Localization.string(for: "holder.testresults.results.button")
-	}
-
-	static var holderTestResultsNegative: String {
-
-		return Localization.string(for: "holder.testresults.negative")
 	}
 
 	static var holderTestResultsIdentity: String {

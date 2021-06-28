@@ -34,20 +34,14 @@ protocol RemoteInformation {
 	/// What is the validity of a test
 	var maxValidityHours: Int? { get }
 
+	/// What is the waiting period before a recovery is valid?
+	var recoveryWaitingPeriodDays: Int? { get }
+
 	/// When should we update
 	var requireUpdateBefore: TimeInterval? { get }
 
 	/// Is the app temporarily disabled?
 	var temporarilyDisabled: Bool? { get }
-
-	/// What is the validity of a vaccination
-	var vaccinationValidityHours: Int? { get }
-
-	/// What is the validity of a recovery
-	var recoveryValidityHours: Int? { get }
-
-	/// What is the validity of a test
-	var testValidityHours: Int? { get }
 
 	/// What is the validity of a domestic test / vaccination
 	var domesticValidityHours: Int? { get }
@@ -56,6 +50,7 @@ protocol RemoteInformation {
 	var recoveryEventValidity: Int? { get }
 	var testEventValidity: Int? { get }
 
+	var recoveryExpirationDays: Int? { get }
 }
 
 extension RemoteInformation {
@@ -98,20 +93,14 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// What is the validity of a test
 	let maxValidityHours: Int?
 
+	/// What is the waiting period before a recovery is valid?
+	let recoveryWaitingPeriodDays: Int?
+
 	/// When should we update
 	let requireUpdateBefore: TimeInterval?
 
 	/// Is the app temporarily disabled?
 	let temporarilyDisabled: Bool?
-
-	/// What is the validity of a vaccination
-	let vaccinationValidityHours: Int?
-
-	/// What is the validity of a recovery
-	let recoveryValidityHours: Int?
-
-	/// What is the validity of a test
-	let testValidityHours: Int?
 
 	/// What is the validity of a domestic  test / vaccination
 	let domesticValidityHours: Int?
@@ -124,6 +113,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// max validity of a test
 	var testEventValidity: Int?
+
+	var recoveryExpirationDays: Int?
 
 	var hpkCodes: [Mapping]? = []
 
@@ -155,15 +146,14 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case configTTL = "configTTL"
 		case euLaunchDate = "euLaunchDate"
 		case maxValidityHours = "maxValidityHours"
+		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
-		case vaccinationValidityHours = "vaccinationValidity"
-		case recoveryValidityHours = "recoveryValidity"
-		case testValidityHours = "testValidity"
 		case domesticValidityHours = "domesticValidity"
 		case vaccinationEventValidity = "vaccinationEventValidity"
 		case recoveryEventValidity = "recoveryEventValidity"
 		case testEventValidity = "testEventValidity"
+		case recoveryExpirationDays = "recoveryExpirationDays"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
 		case nlTestTypes = "nlTestTypes"
@@ -184,16 +174,15 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		configTTL: Int?,
 		euLaunchDate: String?,
 		maxValidityHours: Int?,
+		recoveryWaitingPeriodDays: Int?,
 		requireUpdateBefore: TimeInterval?,
 		temporarilyDisabled: Bool?,
-		vaccinationValidityHours: Int?,
-		recoveryValidityHours: Int?,
-		testValidityHours: Int?,
 		domesticValidityHours: Int?,
 		vaccinationEventValidity: Int?,
 		recoveryEventValidity: Int?,
 		testEventValidity: Int?,
-		isGGDEnabled: Bool?) {
+		isGGDEnabled: Bool?,
+		recoveryExpirationDays: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -203,16 +192,15 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.configTTL = configTTL
 		self.euLaunchDate = euLaunchDate
 		self.maxValidityHours = maxValidityHours
+		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
 		self.requireUpdateBefore = requireUpdateBefore
 		self.temporarilyDisabled = temporarilyDisabled
-		self.vaccinationValidityHours = vaccinationValidityHours
-		self.recoveryValidityHours = recoveryValidityHours
-		self.testValidityHours = testValidityHours
 		self.domesticValidityHours = domesticValidityHours
 		self.vaccinationEventValidity = vaccinationEventValidity
 		self.recoveryEventValidity = recoveryEventValidity
 		self.testEventValidity = testEventValidity
 		self.isGGDEnabled = isGGDEnabled
+		self.recoveryExpirationDays = recoveryExpirationDays
 	}
 
 	/// Default remote configuration
@@ -226,16 +214,15 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			configTTL: 3600,
 			euLaunchDate: nil,
 			maxValidityHours: 40,
+			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
-			vaccinationValidityHours: 14600,
-			recoveryValidityHours: 7300,
-			testValidityHours: 40,
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			recoveryExpirationDays: 180
 		)
 	}
 }

@@ -12,9 +12,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
-	/// Navigate to About Making a QR
-	func navigateToAboutMakingAQR()
-
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
@@ -41,6 +38,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToCreateANegativeTestQRFromGGD()
 
 	func userWishesToCreateAVaccinationQR()
+
+	func userWishesToCreateARecoveryQR()
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
@@ -144,14 +143,27 @@ class HolderCoordinator: SharedCoordinator {
         }
     }
 
-	func startEventFlow() {
+	private func startEventFlowForVaccination() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
 				delegate: self
 			)
-			startChildCoordinator(eventCoordinator)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithVaccination()
+		}
+	}
+
+	private func startEventFlowForRecovery() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithRecovery()
 		}
 	}
 
@@ -235,15 +247,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
-	/// Navigate to choose provider
-	func navigateToAboutMakingAQR() {
-
-		let destination = AboutMakingAQRViewController(
-			viewModel: AboutMakingAQRViewModel(coordinator: self)
-		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
@@ -359,7 +362,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateAVaccinationQR() {
-		startEventFlow()
+		startEventFlowForVaccination()
+	}
+
+	func userWishesToCreateARecoveryQR() {
+		startEventFlowForRecovery()
 	}
 
 	func userWishesToCreateAQR() {
@@ -434,8 +441,10 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .qrCodeMaken:
-				let destination = AboutMakingAQRViewController(
-					viewModel: AboutMakingAQRViewModel(coordinator: self)
+				let destination = ChooseQRCodeTypeViewController(
+					viewModel: ChooseQRCodeTypeViewModel(
+						coordinator: self
+					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
@@ -471,9 +480,9 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .qrCodeMaken, title: .holderAboutMakingAQRTitle),
-			MenuItem(identifier: .faq, title: .holderMenuFaq),
-			MenuItem(identifier: .about, title: .holderMenuAbout)
+			MenuItem(identifier: .qrCodeMaken, title: L.holderMenuProof()),
+			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
+			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
 	}
 }

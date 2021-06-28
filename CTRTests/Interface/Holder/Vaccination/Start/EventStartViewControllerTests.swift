@@ -45,8 +45,8 @@ class EventStartViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) ==  .holderVaccinationStartTitle
-		expect(self.sut.sceneView.message) ==  .holderVaccinationStartMessage
+		expect(self.sut.sceneView.title) == L.holderVaccinationStartTitle()
+		expect(self.sut.sceneView.message) == L.holderVaccinationStartMessage()
 
 		sut.assertImage(containedInNavigationController: true)
 	}
