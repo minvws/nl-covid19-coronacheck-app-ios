@@ -847,24 +847,24 @@ private func injectSampleData(dataStoreManager: DataStoreManaging) {
 		let hours: TimeInterval = 60 * minutes
 		let days: TimeInterval = hours * 24
 
-		create( type: .recovery,
-				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
-				validFromDate: Date().addingTimeInterval(fromNow),
-				greenCard: domesticGreenCard,
-				managedContext: context)
+//		create( type: .recovery,
+//				eventDate: Date().addingTimeInterval(14 * days * ago),
+//				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
+//				validFromDate: Date().addingTimeInterval(fromNow),
+//				greenCard: domesticGreenCard,
+//				managedContext: context)
 
 		create( type: .vaccination,
 				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((15 * seconds * fromNow)),
+				expirationTime: Date().addingTimeInterval((365 * 4 * days * fromNow)),
 				validFromDate: Date().addingTimeInterval(fromNow),
 				greenCard: domesticGreenCard,
 				managedContext: context)
 
 		create( type: .test,
-				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((20 * seconds * fromNow)),
-				validFromDate: Date().addingTimeInterval(fromNow),
+				eventDate: Date().addingTimeInterval(20 * hours * ago),
+				expirationTime: Date().addingTimeInterval((20 * hours * fromNow)),
+				validFromDate: Date().addingTimeInterval(20 * hours * ago),
 				greenCard: domesticGreenCard,
 				managedContext: context)
 

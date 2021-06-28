@@ -100,7 +100,7 @@ class HolderCoordinator: SharedCoordinator {
 			startChildCoordinator(coordinator)
 
         }
-		else if hasFaultyEmergencyOn28June() {
+		else if hasFaultyVaccinationOn28June() {
 			
 			//	Is so, delete all greencards and credentials
 			Services.walletManager.removeExistingGreenCards()
@@ -143,21 +143,18 @@ class HolderCoordinator: SharedCoordinator {
 		}
 	}
 
+	func hasFaultyVaccinationOn28June() -> Bool {
 
-
-
-	/// check if there is a domestic green card with origins 'vaccination' AND 'negativetest',
-	/// where any of the origins are older than June 28 11:00 AM GMT+1.
-	func hasFaultyEmergencyOn28June() -> Bool {
-return true
+		/// check if there is a domestic green card with origins 'vaccination' AND 'negativetest'
 		let domesticTestOrigins = Services.walletManager.listOrigins(type: .test).filter { $0.greenCard?.getType() == .domestic }
 		let domesticVaccineOrigins = Services.walletManager.listOrigins(type: .vaccination).filter { $0.greenCard?.getType() == .domestic }
 
 		guard !domesticTestOrigins.isEmpty && !domesticVaccineOrigins.isEmpty
 		else { return false }
 
+		/// where any of the origins are older than June 28 11:00 AM GMT+1.
 		let allOrigins = (domesticTestOrigins + domesticVaccineOrigins)
-
+		
 		guard let oldestOrigin = allOrigins
 			.sorted(by: { ($0.validFromDate ?? .distantPast) < ($1.validFromDate ?? .distantPast) })
 			.first
