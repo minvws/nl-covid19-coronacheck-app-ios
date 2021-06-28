@@ -274,7 +274,14 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		var dataSource = dataSource
 		if eventMode == .recovery {
-			dataSource = filterTooOldRecoveryEvents(dataSource)
+
+			let recoveryExpirationDays = remoteConfigManager.getConfiguration().recoveryExpirationDays ?? 180
+			let result = filterTooOldRecoveryEvents(dataSource, recoveryEventExpirationDays: recoveryExpirationDays)
+			if result.hasTooOldEvents && result.filteredDataSource.isEmpty {
+				return recoveryEventsTooOld()
+			} else {
+				dataSource = result.filteredDataSource
+			}
 		}
 
 		let rows = getSortedRowsFromEvents(dataSource)
@@ -488,17 +495,15 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	/// Filter out all recovery / positive tests that are older than 180 days (config recoveryEventValidity)
 	/// - Parameter dataSource: the complete data source
 	/// - Returns: the filtered data source
-	private func filterTooOldRecoveryEvents(_ dataSource: [EventDataTuple]) -> [EventDataTuple] {
-
-		guard let recoveryEventValidity = remoteConfigManager.getConfiguration().recoveryEventValidity else {
-			return dataSource
-		}
+	private func filterTooOldRecoveryEvents(
+		_ dataSource: [EventDataTuple],
+		recoveryEventExpirationDays: Int) -> (filteredDataSource: [EventDataTuple], hasTooOldEvents: Bool) {
 
 		let now = Date()
 
-		return dataSource.filter { dataRow in
+		let filteredSource = dataSource.filter { dataRow in
 			if let sampleDate = dataRow.event.positiveTest?.getDate(with: dateFormatter),
-			   let validUntil = Calendar.current.date(byAdding: .hour, value: recoveryEventValidity, to: sampleDate) {
+			   let validUntil = Calendar.current.date(byAdding: .day, value: recoveryEventExpirationDays, to: sampleDate) {
 				return validUntil > now
 
 			} else if let validUntilString = dataRow.event.recovery?.validUntil,
@@ -507,6 +512,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			}
 			return false
 		}
+		return (filteredDataSource: filteredSource, hasTooOldEvents: filteredSource.count != dataSource.count)
 	}
 
 	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
@@ -766,6 +772,22 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					}
 				}(),
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	private func recoveryEventsTooOld() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: L.holderRecoveryTooOldTitle(),
+				subTitle: L.holderRecoveryTooOldMessage(),
+				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
