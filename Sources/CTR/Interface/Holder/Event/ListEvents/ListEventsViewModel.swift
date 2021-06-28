@@ -600,8 +600,10 @@ extension ListEventsViewModel {
 				subTitle: .holderTestResultsResultsText,
 				primaryActionTitle: .holderTestResultsResultsButton,
 				primaryAction: { [weak self] in
-					self?.userWantsToMakeTest20QR(remoteEvents: [remoteEvent]) {
-						self?.showTestError(remoteEvents: [remoteEvent])
+					self?.userWantsToMakeTest20QR(remoteEvents: [remoteEvent]) { success in
+						if !success {
+							self?.showTestError(remoteEvents: [remoteEvent])
+						}
 					}
 				},
 				secondaryActionTitle: .holderVaccinationListWrong,
@@ -677,7 +679,7 @@ extension ListEventsViewModel {
 		return output.trimmingCharacters(in: .whitespaces)
 	}
 
-	private func userWantsToMakeTest20QR(remoteEvents: [RemoteEvent], onError: @escaping () -> Void) {
+	private func userWantsToMakeTest20QR(remoteEvents: [RemoteEvent], completion: @escaping (Bool) -> Void) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
@@ -687,12 +689,44 @@ extension ListEventsViewModel {
 			guard saved else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
-				onError()
+				completion(false)
 				return
 			}
 
 			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
-				// (onError: onError)
+				self.progressIndicationCounter.decrement()
+
+				switch result {
+					case .success:
+						let numberOfOrigins = self.walletManager.listOrigins(type: .test).count
+						self.logVerbose("Origins for \(String(describing: self.eventMode)): \(String(describing: numberOfOrigins))")
+						if numberOfOrigins == 0 {
+							// No origins for this type means something went wrong.
+							self.viewState = self.cannotCreateEventsState()
+							self.shouldPrimaryButtonBeEnabled = true
+						} else {
+							self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .test))
+						}
+
+					case .failure(.failedToSave), .failure(.noEvents):
+						self.shouldPrimaryButtonBeEnabled = true
+						completion(false)
+
+					case .failure(.failedToPrepareIssue):
+						self.showTechnicalError("116 decodePrepareIssueMessage")
+
+					case .failure(.serverBusy):
+						self.showServerTooBusyError()
+
+					case .failure(.preparingIssue117):
+						self.showTechnicalError("117 prepareIssue")
+
+					case .failure(.stoken118):
+						self.showTechnicalError("118 stoken")
+
+					case .failure(.credentials119):
+						self.showTechnicalError("118 credentials")
+				}
 			}
 		}
 	}
