@@ -2,7 +2,7 @@
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
-"holder.recovery.nolist.message" = "<p>There is no positive test result available.<p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
+"holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
 "holder.recovery.nolist.action" = "To My overview";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery statement";
@@ -240,9 +240,9 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of vaccination isn't accepted abroad.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "(an empty phrase)";
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
@@ -263,7 +263,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.<p>";
+"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.</p>";
 
 "holder.appointment.title" = "Make test appointment";
 "holder.appointment.header" = "Book test appointment";
@@ -376,7 +376,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.location.notest" = "I haven't been tested yet";
 
 "holder.notest.title" = "I haven't been tested yet";
-"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p><p>";
+"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p>";
 "holder.notest.button.title" = "Make an appointment";
 
 "holder.event.originmismatch.title" = "We can't make a certificate";
