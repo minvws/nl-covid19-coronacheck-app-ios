@@ -385,3 +385,8 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
+
+"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Due to a technical error you’ve wrongly received a Dutch vaccination certificate.";
+"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "This was corrected.";
+"holder.faultyvaccination28June.failedtoreload.alert.title" = "Something went wrong while refreshing your details";
+"holder.faultyvaccination28June.failedtoreload.alert.message" = "Please retrieve your details again via the app.";
