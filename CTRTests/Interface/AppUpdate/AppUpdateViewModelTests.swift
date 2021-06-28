@@ -37,7 +37,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			credentialRenewalDays: 5
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -108,7 +109,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			credentialRenewalDays: 5
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -143,7 +145,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			credentialRenewalDays: 5
 		)
 
 		// When
@@ -176,7 +179,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			credentialRenewalDays: 5
 		)
 
 		// When
