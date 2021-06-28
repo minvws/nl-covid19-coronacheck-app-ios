@@ -67,7 +67,9 @@ class ShowQRViewController: BaseViewController {
 
 		viewModel.$showValidQR.binding = { [weak self] in
 
-			if $0 {
+			let hideForCapture = self?.sceneView.hideQRImage ?? false
+
+			if $0 && !hideForCapture {
 				self?.sceneView.largeQRimageView.isHidden = false
 			} else {
 				self?.sceneView.largeQRimageView.isHidden = true
