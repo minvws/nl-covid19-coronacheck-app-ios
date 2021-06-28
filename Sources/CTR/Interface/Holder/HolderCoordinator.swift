@@ -99,7 +99,36 @@ class HolderCoordinator: SharedCoordinator {
 			)
 			startChildCoordinator(coordinator)
 
-        } else if let unhandledUniversalLink = unhandledUniversalLink {
+        }
+		else if hasFaultyEmergencyOn28June() {
+			
+			//	Is so, delete all greencards and credentials
+			Services.walletManager.removeExistingGreenCards()
+
+			//	If so, send all events to the signer and retrieve new greencards/credentials.
+			Services.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+				switch result {
+					case .failure(let error):
+						// show an alert ..
+						break
+
+					case .success:
+						// TODO: Alert: "In verband met een mogelijk foutieve QR code zijn de QR codes opnieuw gegenereerd".
+
+						let alertController = UIAlertController(
+							title: .errorTitle,
+							message: String(format: .technicalErrorCustom, "150"), preferredStyle: .alert
+						)
+
+						alertController.addAction(.init(title: .ok, style: .default, handler: { _ in
+							self.start()
+						}))
+
+						self.navigationController.present(alertController, animated: true, completion: nil)
+				}
+			}
+		}
+		else if let unhandledUniversalLink = unhandledUniversalLink {
 
             // Attempt to consume the universal link again:
             self.unhandledUniversalLink = nil // prevent potential infinite loops
@@ -112,6 +141,36 @@ class HolderCoordinator: SharedCoordinator {
 			// Start with the holder app
 			navigateToHolderStart()
 		}
+	}
+
+
+
+
+	/// check if there is a domestic green card with origins 'vaccination' AND 'negativetest',
+	/// where any of the origins are older than June 28 11:00 AM GMT+1.
+	func hasFaultyEmergencyOn28June() -> Bool {
+return true
+		let domesticTestOrigins = Services.walletManager.listOrigins(type: .test).filter { $0.greenCard?.getType() == .domestic }
+		let domesticVaccineOrigins = Services.walletManager.listOrigins(type: .vaccination).filter { $0.greenCard?.getType() == .domestic }
+
+		guard !domesticTestOrigins.isEmpty && !domesticVaccineOrigins.isEmpty
+		else { return false }
+
+		let allOrigins = (domesticTestOrigins + domesticVaccineOrigins)
+
+		guard let oldestOrigin = allOrigins
+			.sorted(by: { ($0.validFromDate ?? .distantPast) < ($1.validFromDate ?? .distantPast) })
+			.first
+		else {
+			return false
+		}
+
+		guard let oldestOriginValidFrom = oldestOrigin.validFromDate else { return false }
+
+		// Having any origins older than this triggers a refresh:
+		let thresholdValidityDate = Date(timeIntervalSince1970: 1624870800)
+
+		return oldestOriginValidFrom < thresholdValidityDate
 	}
 
     // MARK: - Universal Links
