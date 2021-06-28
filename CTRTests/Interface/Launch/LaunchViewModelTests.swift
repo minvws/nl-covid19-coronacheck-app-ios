@@ -49,7 +49,8 @@ class LaunchViewModelTests: XCTestCase {
 		vaccinationEventValidity: 14600,
 		recoveryEventValidity: 7300,
 		testEventValidity: 40,
-		isGGDEnabled: true
+		isGGDEnabled: true,
+		recoveryExpirationDays: 180
 	)
 
 	// MARK: Tests

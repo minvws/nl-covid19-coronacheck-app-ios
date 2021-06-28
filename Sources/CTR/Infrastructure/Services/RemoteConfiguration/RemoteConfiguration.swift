@@ -50,6 +50,7 @@ protocol RemoteInformation {
 	var recoveryEventValidity: Int? { get }
 	var testEventValidity: Int? { get }
 
+	var recoveryExpirationDays: Int? { get }
 }
 
 extension RemoteInformation {
@@ -113,6 +114,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// max validity of a test
 	var testEventValidity: Int?
 
+	var recoveryExpirationDays: Int?
+
 	var hpkCodes: [Mapping]? = []
 
 	var nlTestTypes: [Mapping]? = []
@@ -150,6 +153,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case vaccinationEventValidity = "vaccinationEventValidity"
 		case recoveryEventValidity = "recoveryEventValidity"
 		case testEventValidity = "testEventValidity"
+		case recoveryExpirationDays = "recoveryExpirationDays"
 		case hpkCodes = "hpkCodes"
 		case euBrands = "euBrands"
 		case nlTestTypes = "nlTestTypes"
@@ -177,7 +181,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		vaccinationEventValidity: Int?,
 		recoveryEventValidity: Int?,
 		testEventValidity: Int?,
-		isGGDEnabled: Bool?) {
+		isGGDEnabled: Bool?,
+		recoveryExpirationDays: Int?) {
 		
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -195,6 +200,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.recoveryEventValidity = recoveryEventValidity
 		self.testEventValidity = testEventValidity
 		self.isGGDEnabled = isGGDEnabled
+		self.recoveryExpirationDays = recoveryExpirationDays
 	}
 
 	/// Default remote configuration
@@ -215,7 +221,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			recoveryExpirationDays: 180
 		)
 	}
 }
