@@ -19,16 +19,16 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var stubbedScanInstructionShown: Bool! = false
 
 	var scanInstructionShown: Bool {
-		get {
-			invokedScanInstructionShownGetter = true
-			invokedScanInstructionShownGetterCount += 1
-			return stubbedScanInstructionShown
-		}
 		set {
 			invokedScanInstructionShownSetter = true
 			invokedScanInstructionShownSetterCount += 1
 			invokedScanInstructionShown = newValue
 			invokedScanInstructionShownList.append(newValue)
+		}
+		get {
+			invokedScanInstructionShownGetter = true
+			invokedScanInstructionShownGetterCount += 1
+			return stubbedScanInstructionShown
 		}
 	}
 
@@ -41,16 +41,38 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var stubbedJailbreakWarningShown: Bool! = false
 
 	var jailbreakWarningShown: Bool {
-		get {
-			invokedJailbreakWarningShownGetter = true
-			invokedJailbreakWarningShownGetterCount += 1
-			return stubbedJailbreakWarningShown
-		}
 		set {
 			invokedJailbreakWarningShownSetter = true
 			invokedJailbreakWarningShownSetterCount += 1
 			invokedJailbreakWarningShown = newValue
 			invokedJailbreakWarningShownList.append(newValue)
+		}
+		get {
+			invokedJailbreakWarningShownGetter = true
+			invokedJailbreakWarningShownGetterCount += 1
+			return stubbedJailbreakWarningShown
+		}
+	}
+
+	var invokedExecutedJun28PatchSetter = false
+	var invokedExecutedJun28PatchSetterCount = 0
+	var invokedExecutedJun28Patch: Bool?
+	var invokedExecutedJun28PatchList = [Bool]()
+	var invokedExecutedJun28PatchGetter = false
+	var invokedExecutedJun28PatchGetterCount = 0
+	var stubbedExecutedJun28Patch: Bool! = false
+
+	var executedJun28Patch: Bool {
+		set {
+			invokedExecutedJun28PatchSetter = true
+			invokedExecutedJun28PatchSetterCount += 1
+			invokedExecutedJun28Patch = newValue
+			invokedExecutedJun28PatchList.append(newValue)
+		}
+		get {
+			invokedExecutedJun28PatchGetter = true
+			invokedExecutedJun28PatchGetterCount += 1
+			return stubbedExecutedJun28Patch
 		}
 	}
 }

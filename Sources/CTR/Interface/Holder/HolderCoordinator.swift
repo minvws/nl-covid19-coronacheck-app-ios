@@ -59,6 +59,7 @@ class HolderCoordinator: SharedCoordinator {
 
 	var networkManager: NetworkManaging = Services.networkManager
 	var openIdManager: OpenIdManaging = Services.openIdManager
+	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
@@ -107,6 +108,8 @@ class HolderCoordinator: SharedCoordinator {
 
 			//	If so, send all events to the signer and retrieve new greencards/credentials.
 			Services.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+
+				self.userSettings.executedJun28Patch = true
 				switch result {
 					case .failure(let error):
 						// show an alert ..
@@ -144,6 +147,10 @@ class HolderCoordinator: SharedCoordinator {
 	}
 
 	func hasFaultyVaccinationOn28June() -> Bool {
+
+		guard !userSettings.executedJun28Patch else {
+			return false
+		}
 
 		/// check if there is a domestic green card with origins 'vaccination' AND 'negativetest'
 		let domesticTestOrigins = Services.walletManager.listOrigins(type: .test).filter { $0.greenCard?.getType() == .domestic }
