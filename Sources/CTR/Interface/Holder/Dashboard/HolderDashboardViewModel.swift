@@ -179,7 +179,6 @@ class HolderDashboardViewModel: Logging {
 				self?.state.expiredGreenCards += expiredGreenCards
 			}
 		}
-		self.datasource.reload()
 
 		// Update State from UserDefaults:
 		self.state.qrCodeValidityRegion = dashboardRegionToggleValue
@@ -601,14 +600,18 @@ extension HolderDashboardViewModel {
 
 	fileprivate class Datasource {
 
-		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)?
+		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)? {
+			didSet {
+				guard didUpdate != nil else { return }
+				reload()
+			}
+		}
 
 		private let dataStoreManager: DataStoreManaging
 		private var reloadTimer: Timer?
 
 		init(dataStoreManager: DataStoreManaging) {
 			self.dataStoreManager = dataStoreManager
-			self.reload()
 		}
 
 		// Calls fetch, then updates subscribers.
@@ -844,24 +847,24 @@ private func injectSampleData(dataStoreManager: DataStoreManaging) {
 		let hours: TimeInterval = 60 * minutes
 		let days: TimeInterval = hours * 24
 
-		create( type: .recovery,
-				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
-				validFromDate: Date().addingTimeInterval(fromNow),
-				greenCard: domesticGreenCard,
-				managedContext: context)
+//		create( type: .recovery,
+//				eventDate: Date().addingTimeInterval(14 * days * ago),
+//				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
+//				validFromDate: Date().addingTimeInterval(fromNow),
+//				greenCard: domesticGreenCard,
+//				managedContext: context)
 
 		create( type: .vaccination,
 				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((15 * seconds * fromNow)),
+				expirationTime: Date().addingTimeInterval((365 * 4 * days * fromNow)),
 				validFromDate: Date().addingTimeInterval(fromNow),
 				greenCard: domesticGreenCard,
 				managedContext: context)
 
 		create( type: .test,
-				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((20 * seconds * fromNow)),
-				validFromDate: Date().addingTimeInterval(fromNow),
+				eventDate: Date().addingTimeInterval(20 * hours * ago),
+				expirationTime: Date().addingTimeInterval((20 * hours * fromNow)),
+				validFromDate: Date().addingTimeInterval(20 * hours * ago),
 				greenCard: domesticGreenCard,
 				managedContext: context)
 

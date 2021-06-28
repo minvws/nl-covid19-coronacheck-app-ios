@@ -42,7 +42,7 @@ packages:
 configs:
   Development: debug
   FirebaseTest: debug
-  FirebaseAcceptance: debug
+  FirebaseAcceptance: release
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
@@ -100,8 +100,8 @@ targetTemplates:
         embed: false
     settings:
       base:
-        MARKETING_VERSION: 2.0.3
-        CURRENT_PROJECT_VERSION: 33
+        MARKETING_VERSION: 2.0.4
+        CURRENT_PROJECT_VERSION: 34
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
@@ -174,8 +174,8 @@ targetTemplates:
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
         script: |
-          if which Vendor/SwiftLint/.build/release/swiftlint >/dev/null; then
-            Vendor/SwiftLint/.build/release/swiftlint --quiet --config=./.swiftlint.yml
+          if which swiftlint >/dev/null; then
+            swiftlint --quiet --config=./.swiftlint.yml
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi

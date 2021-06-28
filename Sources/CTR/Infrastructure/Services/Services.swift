@@ -20,6 +20,7 @@ final class Services {
 	private static var proofManagerType: ProofManaging.Type = ProofManager.self
 	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
 	private static var walletManagingType: WalletManaging.Type = WalletManager.self
+	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
 
 	/// Override the CryptoManaging type that will be instantiated
 	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
@@ -67,6 +68,12 @@ final class Services {
 		proofManagerType = proofManager
 	}
 
+	/// Override the GreenCardLoading type that will be instantiated
+	/// - parameter greenCardLoader: The type conforming to ProofManaging to be used as the global proof manager
+	static func use(_ greenCardLoader: GreenCardLoading.Type) {
+		greenCardLoadingType = greenCardLoader
+	}
+
 	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
@@ -99,6 +106,8 @@ final class Services {
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
+
+	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(networkManager: networkManager, cryptoManager: cryptoManager, walletManager: walletManager)
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
 

@@ -17,6 +17,8 @@ class ListEventsViewModelTests: XCTestCase {
 	var networkSpy: NetworkSpy!
 	var walletSpy: WalletManagerSpy!
 	var cryptoSpy: CryptoManagerSpy!
+	var greenCardLoader: GreenCardLoader!
+	var remoteConfigSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
 
@@ -26,13 +28,20 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		cryptoSpy = CryptoManagerSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy()
+
+		/// Not using a GreenCardLoader Spy here because all its dependencies are already spies here.
+		greenCardLoader = GreenCardLoader(networkManager: networkSpy, cryptoManager: cryptoSpy, walletManager: walletSpy)
+
+		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
+		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [],
-			networkManager: networkSpy,
+			greenCardLoader: greenCardLoader,
 			walletManager: walletSpy,
-			cryptoManager: cryptoSpy
+			remoteConfigManager: remoteConfigSpy
 		)
 	}
 
@@ -101,8 +110,9 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		if case let .listEvents(content: _, rows: rows) = sut.viewState {
@@ -131,8 +141,9 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		if case let .listEvents(content: content, rows: _) = sut.viewState {
@@ -155,8 +166,9 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = false
@@ -184,8 +196,9 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
-			walletManager: walletSpy
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
@@ -215,12 +228,13 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
+			greenCardLoader: greenCardLoader,
 			walletManager: walletSpy,
-			cryptoManager: cryptoSpy
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.failure(NetworkError.invalidResponse), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -289,14 +303,15 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
+			greenCardLoader: greenCardLoader,
 			walletManager: walletSpy,
-			cryptoManager: cryptoSpy
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = false
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -327,14 +342,15 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
+			greenCardLoader: greenCardLoader,
 			walletManager: walletSpy,
-			cryptoManager: cryptoSpy
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		walletSpy.stubbedListOriginsResult = []
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -366,14 +382,15 @@ class ListEventsViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination,
 			remoteEvents: [defaultremoteVaccinationEvent()],
-			networkManager: networkSpy,
+			greenCardLoader: greenCardLoader,
 			walletManager: walletSpy,
-			cryptoManager: cryptoSpy
+			remoteConfigManager: remoteConfigSpy
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		walletSpy.stubbedListOriginsResult = [Origin()]
 			networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())

@@ -131,11 +131,11 @@ struct EventFlow {
 		/// The vaccination events
 		var events: [Event]? = []
 
-		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
+		func getMaxIssuedAt() -> Date? {
 
 			let maxIssuedAt: Date? = events?
 				.compactMap { $0.vaccination?.dateString }
-				.compactMap { dateFormatter.date(from: $0) }
+				.compactMap(Formatter.getDateFrom)
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
 					switch latestDateFound {
@@ -151,11 +151,11 @@ struct EventFlow {
 			return maxIssuedAt
 		}
 
-		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
+		func getMaxSampleDate() -> Date? {
 
 			let maxIssuedAt: Date? = events?
 				.compactMap { $0.negativeTest?.sampleDateString }
-				.compactMap { dateFormatter.date(from: $0) }
+				.compactMap(Formatter.getDateFrom)
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
 					switch latestDateFound {
