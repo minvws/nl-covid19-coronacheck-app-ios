@@ -126,11 +126,15 @@ class LaunchViewModel {
 		isUpdatingConfiguration = true
 
 		remoteConfigManager.update { [weak self] updateState in
+			guard let self = self else { return }
+			self.configStatus = updateState
 
-			self?.configStatus = updateState
-			self?.checkWallet()
-			self?.isUpdatingConfiguration = false
-			self?.handleState()
+			if self.flavor == .holder {
+				self.checkWallet()
+			}
+
+			self.isUpdatingConfiguration = false
+			self.handleState()
 		}
 	}
 
