@@ -152,15 +152,11 @@ class HolderCoordinator: SharedCoordinator {
 
 	func hasFaultyVaccinationOn28June() -> Bool {
 
-<<<<<<< HEAD
 		guard !userSettings.executedJun28Patch else {
 			return false
 		}
 
-		/// check if there is a domestic green card with origins 'vaccination' AND 'negativetest'
-=======
 		// check if there is a domestic green card with origins 'vaccination' AND 'negativetest'...
->>>>>>> 05bf5a7ae4405fe3e74dac50135aef3b7500e534
 		let domesticTestOrigins = Services.walletManager.listOrigins(type: .test).filter { $0.greenCard?.getType() == .domestic }
 		let domesticVaccineOrigins = Services.walletManager.listOrigins(type: .vaccination).filter { $0.greenCard?.getType() == .domestic }
 
