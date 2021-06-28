@@ -52,7 +52,8 @@ class AboutMakingAQRViewController: BaseViewController {
 		sceneView.button.touchUpInside(viewModel, action: #selector(AboutMakingAQRViewModel.userTappedNext))
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+//		styleBackButton(buttonText: "")
+		addBackButton()
 	}
 
 	override func viewWillAppear(_ animated: Bool) {

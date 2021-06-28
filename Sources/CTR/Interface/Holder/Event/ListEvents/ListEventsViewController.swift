@@ -66,8 +66,7 @@ class ListEventsViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
+		addBackButton(action: #selector(backButtonTapped))
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 

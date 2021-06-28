@@ -44,7 +44,8 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 		setupBinding()
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+//		styleBackButton(buttonText: "")
+		addBackButton()
 	}
 
 	func setupBinding() {

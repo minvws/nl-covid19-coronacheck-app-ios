@@ -8,6 +8,12 @@
 import UIKit
 
 class BaseViewController: UIViewController {
+	
+	var disableSwipeBack: Bool = false {
+		didSet {
+			navigationController?.interactivePopGestureRecognizer?.delegate = disableSwipeBack ? nil : self
+		}
+	}
 
 	override var preferredStatusBarStyle: UIStatusBarStyle {
 
@@ -26,7 +32,8 @@ class BaseViewController: UIViewController {
 			// Always adopt a light interface style.
 			overrideUserInterfaceStyle = .light
 		}
-		styleBackButton()
+		
+		navigationController?.interactivePopGestureRecognizer?.delegate = self
 	}
 
 	func styleBackButton(buttonText: String = .previous) {
@@ -111,24 +118,25 @@ class BaseViewController: UIViewController {
 	/// Add a close button to the navigation bar.
 	/// - Parameters:
 	///   - action: the action when the users taps the close button
-	///   - accessibilityLabel: the label for Voice Over
-	func addCustomBackButton(
-		action: Selector?,
-		accessibilityLabel: String) {
+	func addBackButton(action: Selector? = nil) {
+		
+		var backAction = action
+		if backAction == nil {
+			backAction = #selector(onBack)
+		}
 
 		let button = UIBarButtonItem(
 			image: .backArrow,
 			style: .plain,
 			target: self,
-			action: action
+			action: backAction
 		)
 		button.accessibilityIdentifier = "BackButton"
-		button.accessibilityLabel = accessibilityLabel
+		button.accessibilityLabel = .back
 		button.accessibilityTraits = .button
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button
 		navigationController?.navigationItem.leftBarButtonItem = button
-		navigationController?.navigationBar.backgroundColor = Theme.colors.viewControllerBackground
 	}
 
 	/// Show alert
@@ -147,5 +155,21 @@ class BaseViewController: UIViewController {
 			)
 		)
 		present(alertController, animated: true, completion: nil)
+	}
+}
+
+private extension BaseViewController {
+	
+	@objc
+	func onBack() {
+		navigationController?.popViewController(animated: true)
+	}
+}
+
+extension BaseViewController: UIGestureRecognizerDelegate {
+	
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//		return !disableSwipeBack
+		return true
 	}
 }

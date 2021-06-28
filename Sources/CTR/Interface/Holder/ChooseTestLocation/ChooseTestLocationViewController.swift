@@ -49,7 +49,10 @@ class ChooseTestLocationViewController: BaseViewController {
 		setupBinding()
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+//		styleBackButton(buttonText: "")
+		addBackButton()
+		
+		disableSwipeBack = true
 	}
 
 	func setupBinding() {

@@ -67,7 +67,7 @@ class EventStartViewController: BaseViewController {
 			self?.viewModel.openUrl(url)
 		}
 
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: .back)
+		addBackButton(action: #selector(backButtonTapped))
 		styleBackButton(buttonText: "")
 	}
 
