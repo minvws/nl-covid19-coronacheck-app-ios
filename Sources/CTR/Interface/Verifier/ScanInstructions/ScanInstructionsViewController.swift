@@ -68,7 +68,7 @@ class ScanInstructionsViewController: BaseViewController {
 
 			let text = TextView(htmlText: item.text)
 			text.linkTouched { [weak self] url in
-				print("tapped on \(url)")
+				logDebug("tapped on \(url)")
 				self?.viewModel.linkTapped(url)
 			}
 			sceneView.stackView.addArrangedSubview(text)
