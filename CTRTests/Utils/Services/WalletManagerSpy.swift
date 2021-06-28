@@ -36,16 +36,28 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedFetchSignedEventsResult
 	}
 
-	var invokedRemoveExistingEventGroups = false
-	var invokedRemoveExistingEventGroupsCount = 0
-	var invokedRemoveExistingEventGroupsParameters: (type: EventMode, providerIdentifier: String)?
-	var invokedRemoveExistingEventGroupsParametersList = [(type: EventMode, providerIdentifier: String)]()
+	var invokedRemoveExistingEventGroupsType = false
+	var invokedRemoveExistingEventGroupsTypeCount = 0
+	var invokedRemoveExistingEventGroupsTypeParameters: (type: EventMode, providerIdentifier: String)?
+	var invokedRemoveExistingEventGroupsTypeParametersList = [(type: EventMode, providerIdentifier: String)]()
 
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String) {
+		invokedRemoveExistingEventGroupsType = true
+		invokedRemoveExistingEventGroupsTypeCount += 1
+		invokedRemoveExistingEventGroupsTypeParameters = (type, providerIdentifier)
+		invokedRemoveExistingEventGroupsTypeParametersList.append((type, providerIdentifier))
+	}
+
+	var invokedRemoveExistingEventGroups = false
+	var invokedRemoveExistingEventGroupsCount = 0
+	var invokedRemoveExistingEventGroupsParameters: (type: EventMode, Void)?
+	var invokedRemoveExistingEventGroupsParametersList = [(type: EventMode, Void)]()
+
+	func removeExistingEventGroups(type: EventMode) {
 		invokedRemoveExistingEventGroups = true
 		invokedRemoveExistingEventGroupsCount += 1
-		invokedRemoveExistingEventGroupsParameters = (type, providerIdentifier)
-		invokedRemoveExistingEventGroupsParametersList.append((type, providerIdentifier))
+		invokedRemoveExistingEventGroupsParameters = (type, ())
+		invokedRemoveExistingEventGroupsParametersList.append((type, ()))
 	}
 
 	var invokedRemoveExistingGreenCards = false

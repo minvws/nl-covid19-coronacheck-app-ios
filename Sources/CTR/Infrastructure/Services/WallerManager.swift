@@ -27,6 +27,11 @@ protocol WalletManaging {
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String)
 
+	/// Remove any existing event groups for the type
+	/// - Parameters:
+	///   - type: the type of event group
+	func removeExistingEventGroups(type: EventMode)
+
 	func removeExistingGreenCards()
 
 	func storeDomesticGreenCard(_ remoteGreenCard: RemoteGreenCards.DomesticGreenCard, cryptoManager: CryptoManaging) -> Bool
@@ -206,6 +211,27 @@ class WalletManager: WalletManaging, Logging {
 							self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 							context.delete(eventGroup)
 						}
+					}
+					dataStoreManager.save(context)
+				}
+			}
+		}
+	}
+
+	/// Remove any existing event groups for the type
+	/// - Parameters:
+	///   - type: the type of event group
+	func removeExistingEventGroups(type: EventMode) {
+
+		let context = dataStoreManager.backgroundContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
+
+				if let eventGroups = wallet.eventGroups {
+					for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
+						self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
+						context.delete(eventGroup)
 					}
 					dataStoreManager.save(context)
 				}
