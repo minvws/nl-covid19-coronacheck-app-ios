@@ -88,6 +88,12 @@ class ShowQRViewController: BaseViewController {
 				)
 			}
 		}
+
+		viewModel.$showInternationalAnimation.binding = { [weak self] in
+			if $0 {
+				self?.sceneView.setupForInternational()
+			}
+		}
 	}
 
 	private func setupListeners() {
