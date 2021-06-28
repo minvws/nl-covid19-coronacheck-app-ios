@@ -505,7 +505,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			)
 
 			// Store the new vaccination events
-			if let maxIssuedAt = eventMode == .vaccination ? response.wrapper.getMaxIssuedAt(dateFormatter) : response.wrapper.getMaxSampleDate(dateFormatter) {
+			if let maxIssuedAt = eventMode == .vaccination ? response.wrapper.getMaxIssuedAt() : response.wrapper.getMaxSampleDate() {
 				success = success && walletManager.storeEventGroup(
 					eventMode == .vaccination ? .vaccination : .test,
 					providerIdentifier: response.wrapper.providerIdentifier,
