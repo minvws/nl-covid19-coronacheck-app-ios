@@ -17,7 +17,7 @@
 #import <Security/Security.h>
 #import <stdio.h>
 
-// #define __DEBUG
+#define __DEBUG
 
 #ifdef __DEBUG
 #warning "Warning: DEBUGing compiled in"
@@ -298,7 +298,7 @@ errit:
         authorityKeyIdentifier:(NSData *)expectedAuthorityKeyIdentifierDataOrNil
      requiredCommonNameContent:(NSString *)requiredCommonNameContentOrNil
       requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffixOrNil {
-    int result = NO;
+    bool result = NO;
     BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL,*cmsBlob = NULL;
     X509_VERIFY_PARAM *verifyParameters = NULL;
     STACK_OF(X509) *signers = NULL;
@@ -413,7 +413,6 @@ errit:
     } else
         if ((requiredCommonNameSuffixOrNil.length) || (requiredCommonNameContentOrNil.length))
             EXITOUT("incomplete common fields to compare against");
-    result = YES;
     
 #ifdef __DEBUG
     fprintf(stderr,"=== signature is valid - and meets the rules ===\n");
