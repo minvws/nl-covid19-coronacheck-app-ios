@@ -8,7 +8,7 @@
 import UIKit
 import Lottie
 
-class SecurityFeaturesView: BaseView, Logging {
+class SecurityFeaturesView: BaseView {
 
 	var loggingCategory: String = "SecurityFeaturesView"
 

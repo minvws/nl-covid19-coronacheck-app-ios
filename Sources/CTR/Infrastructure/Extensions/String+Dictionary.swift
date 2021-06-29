@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension String {
+extension String: Logging {
 
 	func convertToDictionary() -> [String: AnyObject]? {
 
@@ -15,7 +15,7 @@ extension String {
 			do {
 				return try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject]
 			} catch {
-				print(error.localizedDescription)
+				logError(error.localizedDescription)
 			}
 		}
 		return nil

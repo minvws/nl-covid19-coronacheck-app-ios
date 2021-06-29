@@ -12,6 +12,9 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
+	/// Navigate to About Making a QR
+	func navigateToAboutMakingAQR()
+
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
@@ -316,6 +319,15 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
+	/// Navigate to choose provider
+	func navigateToAboutMakingAQR() {
+
+		let destination = AboutMakingAQRViewController(
+			viewModel: AboutMakingAQRViewModel(coordinator: self)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
+
 	/// Navigate to the token scanner
 	func navigateToTokenScan() {
 
@@ -517,10 +529,8 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = aboutNavigationController
 
 			case .qrCodeMaken:
-				let destination = ChooseQRCodeTypeViewController(
-					viewModel: ChooseQRCodeTypeViewModel(
-						coordinator: self
-					)
+				let destination = AboutMakingAQRViewController(
+					viewModel: AboutMakingAQRViewModel(coordinator: self)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
@@ -556,7 +566,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .qrCodeMaken, title: L.holderMenuProof()),
+			MenuItem(identifier: .qrCodeMaken, title: L.holderAboutmakingaqrTitle()),
 			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]

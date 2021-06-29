@@ -1,5 +1,5 @@
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
-"holder.recovery.tooOld.message" = "Ben je langer dan 180 dagen geleden getest? Dan is je testuitslag niet meer geldig, en kan je geen herstelverklaring maken.";
+"holder.recovery.tooOld.message" = "Is het langer dan 180 dagen geleden dat je getest bent? Dan is je testuitslag niet meer geldig. Je kunt dan geen herstelbewijs maken.";
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
 "holder.menu.proof" = "Bewijs toevoegen";
 "holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br>Getest in: <b>%@</b><br>Afgever certificaat: <b>%@</b><br>Geldig vanaf: <b>%@</b><br>Geldig tot: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
@@ -12,7 +12,7 @@
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag van de GGD een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
-"holder.chooseqrcodetype.option.recovery.title" = "Herstelbewijs";
+"holder.chooseqrcodetype.option.recovery.title" = "Een herstelbewijs";
 "holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb gehad";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
@@ -112,7 +112,6 @@
 "general.close" = "Sluiten";
 "general.previous" = "Vorige";
 "general.back" = "Terug";
-"general.add" = "Toevoegen";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
@@ -128,6 +127,7 @@
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
 "general.government.logo" = "Logo Rijksoverheid";
+
 "general.loading" = "Bezig met laden";
 "general.notification" = "Let op!";
 "general.menu.open" = "Open zijmenu";
@@ -179,14 +179,13 @@
 "holder.menu.about" = "Over deze app";
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
-"holder.menu.proof" = "Bewijs toevoegen";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
 "holder.onboarding.message.safely" = "Jouw gezondheid en die van anderen is belangrijk. Daarom vragen sommige landen of plekken om een coronabewijs. Alleen met dit bewijs krijg je toegang.";
 "holder.onboarding.title.yourqr" = "Bewijs van test of vaccinatie";
 "holder.onboarding.message.yourqr" = "De app kan een coronabewijs voor jou maken als:<br/><br/>
-<ul><li>Je bent gevaccineerd</li><li>Als uit een test blijkt dat je geen corona hebt</li><li>Uit een test blijkt dat je corona hebt gehad en bent hersteld</li></ul>";
+<ul><li>Je bent gevaccineerd</li><li>Uit een test blijkt dat je geen corona hebt</li><li>Uit een test blijkt dat je corona hebt gehad en bent hersteld</li></ul>";
 "holder.onboarding.title.validity" = "QR-code = jouw bewijs";
 "holder.onboarding.message.validity" = "Deze app maakt van jouw vaccinatie, testuitslag of herstel een QR-code. Dat is jouw bewijs. De QR-code wordt gecheckt bij de ingang van plekken en activiteiten. Of aan de grens. Verloopt je bewijs? Dan verdwijnt de QR-code.";
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
@@ -208,9 +207,9 @@
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Welk bewijs wil je toevoegen?";
 "holder.chooseqrcodetype.message" = "Geef aan wat voor bewijs je wil toevoegen. Je kunt meerdere bewijzen tegelijk hebben.";
-"holder.chooseqrcodetype.option.negativetest.title" = "Een negatieve testuitslag";
+"holder.chooseqrcodetype.option.negativetest.title" = "Een testbewijs";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "Uit de test blijkt dat ik geen corona heb";
-"holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatie";
+"holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatiebewijs";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb mijn prik of prikken gehad";
 
 /* MARK: - About Making a QR */
@@ -246,11 +245,11 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet geldig in Nederland. Je hebt wel een internationale QR-code.</p><p>Het kan bijvoorbeeld zijn dat je maar één prik hebt gehad. Voeg je tweede prik toe om een bewijs te maken dat ook in Nederland geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen doordat jouw type vaccin niet geaccepteerd wordt in het buitenland.";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen doordat jouw type vaccin niet geaccepteerd wordt in het buitenland.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationale QR-code.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationale QR-code.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "";
@@ -266,7 +265,6 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
-"holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br>Getest in: <b>%@</b><br>Afgever certificaat: <b>%@</b><br>Geldig vanaf: <b>%@</b><br>Geldig tot: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
 "holder.showqr.eu.about.test.message" = " <p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Type test: <b>%@</b><br>Test: <b>%@</b><br>Testdatum: <b>%@</b><br>Testuitslag: <b>%@</b><br>Testlocatie: <b>%@</b><br>Producent: <b>%@</b><br>Getest in: <b>%@</b><br>Identificatiecode: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
 "holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
@@ -276,7 +274,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.<p>";
+"holder.appointment.body" = "<p>Je moet je eerst laten testen voordat je een QR-code maakt. Alleen van een negatieve testuitslag kan je een QR-code maken.</p>";
 
 "holder.appointment.title" = "Testafspraak maken";
 "holder.appointment.header" = "Testafspraak maken";
@@ -304,7 +302,6 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
 "holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en omgezet in een QR-code.</p><p></p> <p>Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.negative" = "Negatieve testuitslag";
-"holder.testresults.positive" = "Positieve testuitslag";
 "holder.testresults.identity" = "Identificatiegegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.testresults.alert.message" = "Je moet dan later opnieuw met de code je testuitslag ophalen.";
@@ -327,20 +324,18 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
-"holder.about.text" = "CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen Nederlanders steeds meer plekken bezoeken en weer op reis.<br/>CoronaCheck maakt een coronabewijs van jouw vaccinatie, van jouw negatieve testuitslag of als je corona hebt gehad en bent hersteld. Een coronabewijs bestaat uit twee verschillende QR-codes. De een is voor toegang tot plekken in Nederland, de ander is om internationaal mee te reizen (het EU Digitaal Corona Certificaat).";
+"holder.about.text" = "CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen Nederlanders steeds meer plekken bezoeken en weer op reis.
+
+CoronaCheck maakt een coronabewijs van jouw vaccinatie, van jouw negatieve testuitslag of als je corona hebt gehad en bent hersteld. Een coronabewijs bestaat uit twee verschillende QR-codes. De een is voor toegang tot plekken in Nederland, de ander is om internationaal mee te reizen (het EU Digitaal Corona Certificaat).";
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
-"holder.recovery.start.title" = "Herstelverklaring ophalen";
-"holder.recovery.start.message" = "<p>Met een positieve testuitslag van de GGD kan je een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
 "holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens van je vaccinatie worden dan automatisch opgehaald.</p><p>Om een internationale QR-code te maken heb je aan één vaccinatie voldoende. Voor een Nederlandse QR-code moet je volledig gevaccineerd zijn.</p><p>Nog geen prik gehad? Laat je dan eerst vaccineren.</p>";
 "holder.vaccination.start.action" = "Log in met je DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
-"holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.test.list.title" = "Testuitslag ophalen";
 "holder.vaccination.list.message" = "Je kunt een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
-"holder.recovery.list.message" = "Als je gegevens kloppen dan kun je een QR-code maken van je positieve testuitslag. Dat is jouw bewijs.";
 "holder.vaccination.list.action" = "Maak QR-code";
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br>Geboortedatum: %@";
@@ -350,16 +345,13 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.action" = "Naar Mijn Overzicht";
-"holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.<p><p>Ben je net getest? Het kan even duren voordat je positieve test verwerkt wordt. Probeer het dan later nog eens.</p>";
-"holder.recovery.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
 "holder.vaccination.alert.cancel" = "Nee, terug";
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
 "holder.vaccination.about.off" = "%@ van %@";
-"holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
+
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
 "holder.vaccination.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Of staat er onjuiste informatie over je vaccinatie? Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p>";
@@ -397,7 +389,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.location.notest" = "Ik ben nog niet getest";
 
 "holder.notest.title" = "Ik ben nog niet getest";
-"holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p><p>";
+"holder.notest.body" = "<p>Voor een testbewijs moet je eerst een test doen. Blijkt uit de test dat je geen corona hebt? Dan kan je jouw QR-code maken.</p>";
 "holder.notest.button.title" = "Maak een afspraak";
 
 "holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
