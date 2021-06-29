@@ -649,7 +649,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 							self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
 						}
 
-					case .failure(.failedToSave):
+					case .failure(.failedToSave), .failure(.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 

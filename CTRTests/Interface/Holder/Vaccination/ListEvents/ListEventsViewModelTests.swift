@@ -298,6 +298,7 @@ class ListEventsViewModelTests: XCTestCase {
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.failure(NetworkError.invalidResponse), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -374,6 +375,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = false
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -412,6 +414,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		walletSpy.stubbedListOriginsResult = []
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
@@ -451,6 +454,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		walletSpy.stubbedListOriginsResult = [Origin()]
 			networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())

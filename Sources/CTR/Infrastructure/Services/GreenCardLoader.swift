@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -16,6 +15,8 @@ protocol GreenCardLoading {
 class GreenCardLoader: GreenCardLoading, Logging {
 
 	enum Error: Swift.Error {
+		case noEvents
+
 		case failedToSave
 		case failedToPrepareIssue
 		
@@ -88,6 +89,11 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
+
+		guard !signedEvents.isEmpty else {
+			onCompletion(.failure(.noEvents))
+			return
+		}
 
 		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
