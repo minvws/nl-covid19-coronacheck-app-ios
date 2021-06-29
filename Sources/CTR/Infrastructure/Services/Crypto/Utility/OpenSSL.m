@@ -9,13 +9,15 @@
 #import <openssl/err.h>
 #import <openssl/pem.h>
 #import <openssl/pkcs7.h>
+#import <openssl/cms.h>
 #import <openssl/safestack.h>
 #import <openssl/x509.h>
 #import <openssl/x509v3.h>
 #import <openssl/x509_vfy.h>
 #import <Security/Security.h>
+#import <stdio.h>
 
-//#define __DEBUG
+// #define __DEBUG
 
 #ifdef __DEBUG
 #warning "Warning: DEBUGing compiled in"
@@ -39,10 +41,11 @@ void print_certificate(X509* cert) {
     X509_NAME * xn_issuer = X509_get_issuer_name(cert);
     if (xn_issuer)
         X509_NAME_oneline(xn_issuer, issuer, MAX_LENGTH);
-    
-    fprintf(stderr,"certificate: %s/%p\n", subj,xn_subject);
-    fprintf(stderr,"\tissuer: %s\n", issuer);
-    fprintf(stderr,"\tserial: %s\n", i2s_ASN1_INTEGER(NULL,X509_get_serialNumber(cert)));
+
+    fprintf(stderr,"\n");
+    fprintf(stderr," certificate: %s/%p\n", subj,xn_subject);
+    fprintf(stderr,"      issuer: %s\n", issuer);
+    fprintf(stderr,"      serial: %s\n", i2s_ASN1_INTEGER(NULL,X509_get_serialNumber(cert)));
 }
 void print_stack(STACK_OF(X509)* sk)
 {
@@ -324,7 +327,7 @@ errit:
 		fprintf(stderr,"#%d\t",cnt+1);
 		print_certificate(cert);
 #endif
-		X509_free(cert);
+        X509_free(cert);
 	};
 	ERR_clear_error();
 
@@ -349,7 +352,6 @@ errit:
 		bptr->data[ bptr->length] = 0;
 		printf("Blob <%s>\n", bptr->data);
 	}
-
 	result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
 
 #ifdef __DEBUG
@@ -364,6 +366,9 @@ errit:
 #endif
 
 errit:
+#ifdef __DEBUG
+    fflush(stderr);
+#endif
 
 	if (verifyParameters) X509_VERIFY_PARAM_free(verifyParameters);
 
@@ -384,13 +389,12 @@ errit:
      requiredCommonNameContent:(NSString *)requiredCommonNameContent
       requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffix {
     int result = NO;
-    BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL;
+    BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL,*cmsBlob = NULL;
     X509_VERIFY_PARAM *verifyParameters = NULL;
     STACK_OF(X509) *signers = NULL;
     X509_STORE *store = NULL;
     X509 *signingCert = NULL;
     PKCS7 *p7 = NULL;
-    
     
     if (NULL == (signatureBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
         EXITOUT("invalid  signatureBlob");
@@ -400,7 +404,7 @@ errit:
     
     if (NULL == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
         EXITOUT("invalid certificateBlob");
-    
+
     if (NULL == (p7 = d2i_PKCS7_bio(signatureBlob, NULL)))
         EXITOUT("invalid PKCS#7 structure in signatureBlob");
 
@@ -411,6 +415,12 @@ errit:
         EXITOUT("Not exactly one signer in PCKS#7 signatureBlob");
 
     signingCert = sk_X509_value(signers, 0);
+
+#ifdef __DEBUG
+    fprintf(stderr,"Signing certificate:\t");
+    print_certificate(signingCert);
+#endif
+
     if (![self validateAuthorityKeyIdentifierData:expectedAuthorityKeyIdentifierData
                                                                signingCertificate:signingCert])
         EXITOUT("invalids isAuthorityKeyIdentifierValid");
@@ -444,7 +454,7 @@ errit:
     
     if (cnt == 0)
         EXITOUT("no trust chain of any length");
-    
+#if 0
     if (NULL == (verifyParameters = X509_VERIFY_PARAM_new()))
         EXITOUT("Could create verifyParameters");
     
@@ -456,7 +466,7 @@ errit:
     
     if (X509_STORE_set1_param(store, verifyParameters) != 1)
         EXITOUT("Could not set verifyParameters on the store");
-    
+#endif
     if (/* DISABLES CODE */ (0)) {
         BUF_MEM *bptr;
         BIO_get_mem_ptr(contentBlob, &bptr);
@@ -464,12 +474,21 @@ errit:
         printf("Blob <%s>\n", bptr->data);
     }
 
-    result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
+    // result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
+    
+    if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
+        EXITOUT("Could not create cms Blob");
+
+    CMS_ContentInfo * cms = d2i_CMS_bio(cmsBlob, NULL);
+    if (NULL == cms)
+        EXITOUT("Could not create CMS structure from PKCS#7");
+
+    result = CMS_verify(cms, NULL, store, contentBlob, NULL, CMS_BINARY);
     
 #ifdef __DEBUG
     if (result != 1) {
         char buff[1024];
-        EXITOUT("PKCS7_verify fail (%d.%s", result,ERR_error_string(ERR_get_error(), buff));
+        EXITOUT("PKCS7_verify fail (%d.%s)!", result,ERR_error_string(ERR_get_error(), buff));
     };
 #endif
     
@@ -484,6 +503,7 @@ errit:
     if (store) X509_STORE_free(store);
     if (p7) PKCS7_free(p7);
 
+    if (cmsBlob) BIO_free(cmsBlob);
     if (signatureBlob) BIO_free(signatureBlob);
     if (contentBlob) BIO_free(contentBlob);
     if (certificateBlob) BIO_free(certificateBlob);
