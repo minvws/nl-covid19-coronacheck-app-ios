@@ -1,19 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "Selected.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "Selected@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "Selected@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "Selected.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
@@ -21,6 +10,6 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "template"
+    "template-rendering-intent" : "original"
   }
 }
