@@ -109,6 +109,7 @@ targetTemplates:
     settings:
       base:
         MARKETING_VERSION: 2.1.0
+        CURRENT_PROJECT_VERSION: 35
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
