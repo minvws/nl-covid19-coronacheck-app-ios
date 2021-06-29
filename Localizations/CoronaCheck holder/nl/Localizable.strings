@@ -384,8 +384,6 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 
 "holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Prikdatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
 
-"holder.event.about.body.recovery" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br>Geldig vanaf: <b>%@</b><br>Geldig tot: <b>%@</b><br>Identificatiecode: <b>%@</b></p>";
-
 "holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p>";
 
 "holder.event.element.subtitle.test2" = "Testdatum: %@<br>Jouw gegevens: %@";
@@ -421,3 +419,8 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
+
+"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Door een technische fout had u ten onrechte een Nederlands vaccinatiebewijs ontvangen.";
+"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Dit is gecorrigeerd.";
+"holder.faultyvaccination28June.failedtoreload.alert.title" = "Er is iets mis gegaan bij het verversen van uw gegevens";
+"holder.faultyvaccination28June.failedtoreload.alert.message" = "Haal via de app uw gegevens opnieuw op.";

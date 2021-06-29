@@ -50,7 +50,11 @@ protocol RemoteInformation {
 	var recoveryEventValidity: Int? { get }
 	var testEventValidity: Int? { get }
 
+	// The number of days before a recovery expires
 	var recoveryExpirationDays: Int? { get }
+
+	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
+	var credentialRenewalDays: Int? { get }
 }
 
 extension RemoteInformation {
@@ -135,6 +139,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
 
+	var credentialRenewalDays: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -163,6 +169,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euTestManufacturers = "euTestManufacturers"
 		case providerIdentifiers = "providerIdentifiers"
 		case isGGDEnabled = "ggdEnabled"
+		case credentialRenewalDays = "credentialRenewalDays"
 	}
 
 	init(
@@ -182,8 +189,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		recoveryEventValidity: Int?,
 		testEventValidity: Int?,
 		isGGDEnabled: Bool?,
-		recoveryExpirationDays: Int?) {
-		
+		recoveryExpirationDays: Int?,
+		credentialRenewalDays: Int?) {
+
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
 		self.appStoreURL = storeUrl
@@ -201,6 +209,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.testEventValidity = testEventValidity
 		self.isGGDEnabled = isGGDEnabled
 		self.recoveryExpirationDays = recoveryExpirationDays
+		self.credentialRenewalDays = credentialRenewalDays
 	}
 
 	/// Default remote configuration
@@ -222,7 +231,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
 			isGGDEnabled: true,
-			recoveryExpirationDays: 180
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 	}
 }

@@ -62,6 +62,8 @@ class DataStoreManager: DataStoreManaging, Logging {
 				self.excludeFromBackup(fileUrl: url)
 			}
 		})
+
+		container.viewContext.automaticallyMergesChangesFromParent = true
 		return container
 	}()
 

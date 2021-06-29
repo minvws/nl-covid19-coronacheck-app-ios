@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length file_length
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -645,7 +645,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 							self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
 						}
 
-					case .failure(.failedToSave):
+					case .failure(.failedToSave), .failure(.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 
