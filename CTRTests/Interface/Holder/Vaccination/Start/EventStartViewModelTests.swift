@@ -33,7 +33,8 @@ class EventStartViewModelTests: XCTestCase {
 		recoveryEventValidity: 7300,
 		testEventValidity: 40,
 		isGGDEnabled: true,
-		recoveryExpirationDays: 180
+		recoveryExpirationDays: 180,
+		credentialRenewalDays: 5
 	)
 
 	override func setUp() {
