@@ -30,9 +30,9 @@ class AboutMakingAQRViewModel: Logging {
 	init(coordinator: HolderCoordinatorDelegate) {
 
 		self.coordinator = coordinator
-		title = .holderAboutMakingAQRTitle
-		header = .holderAboutMakingAQRHeader
-		body = .holderAboutMakingAQRBody
+		title = L.holderAboutmakingaqrTitle()
+		header = L.holderAboutmakingaqrHeader()
+		body = L.holderAboutmakingaqrBody()
 		image = .create
 	}
 
