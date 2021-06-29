@@ -394,11 +394,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
 				navigateToShowQR(greenCard)
 			} else {
-				print("oops")
+				logError("Could not fetch existing green card")
 			}
 		} catch {
 			// No card
-			print("oops")
+			logError("Could not fetch existing green card")
 		}
 	}
 }

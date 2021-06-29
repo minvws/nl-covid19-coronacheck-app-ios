@@ -63,7 +63,7 @@ extension UILayoutGuide: Embeddable {
 
 }
 
-extension UIView {
+extension UIView: Logging {
 
 	/// Convenience method for a common layout where a subview is added to a view and needs constraints for all four sides.
 	///
@@ -86,7 +86,7 @@ extension UIView {
 		preservesSuperviewLayoutMargins: Bool = true) -> Self {
 
 		guard let view = embeddable.view else {
-			print("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
+			logError("Warning: could not embed view(\(self)) to embeddable(\(embeddable))")
 			return self
 		}
 
@@ -167,7 +167,7 @@ extension UIView {
 		preservesSuperviewLayoutMargins: Bool = true) -> Self {
 
 		guard let view = embeddable.view else {
-			print("Warning: could not snap view(\(self)) to embeddable(\(embeddable))")
+			logError("Warning: could not snap view(\(self)) to embeddable(\(embeddable))")
 			return self
 		}
 
