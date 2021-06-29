@@ -113,8 +113,9 @@ class QRCardView: BaseView {
 		addSubview(viewQRButton)
 		addSubview(loadingButtonOverlay)
 
+		// This has a edge-case bug if you set it in the `let viewQRButton: Button = {}` declaration, so setting it here instead.
+		// (was only applicable when Settings->Accessibility->Keyboard->Full Keyboard Access was enabled)
 		viewQRButton.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
-
 	}
 
 	/// Setup the constraints
