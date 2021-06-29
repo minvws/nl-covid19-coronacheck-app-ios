@@ -45,7 +45,7 @@ packages:
 configs:
   Development: debug
   FirebaseTest: debug
-  FirebaseAcceptance: release
+  FirebaseAcceptance: debug
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
