@@ -13,10 +13,6 @@ class ConsentButton: UIButton {
 		didSet { applyState() }
 	}
 
-	override var isEnabled: Bool {
-		didSet { applyState() }
-	}
-
     override var accessibilityTraits: UIAccessibilityTraits {
         get { return UISwitch().accessibilityTraits }
         set { super.accessibilityTraits = newValue }
@@ -31,7 +27,7 @@ class ConsentButton: UIButton {
 
 	required init(title: String = "", selected: Bool = false) {
 
-		icon = ImageView( imageName: "Toggle/Normal", highlightedImageName: "Toggle/Selected")
+		icon = ImageView(imageName: "Toggle/Normal", highlightedImageName: "Toggle/Selected")
 
 		super.init(frame: .zero)
 
@@ -43,9 +39,7 @@ class ConsentButton: UIButton {
 		addTarget(self, action: #selector(toggle), for: .touchUpInside)
 		addTarget(self, action: #selector(touchDownAnimation), for: .touchDown)
 
-		icon.tintColor = Theme.colors.primary
-
-		icon.contentMode = .center
+		icon.contentMode = .scaleAspectFit
 		icon.snap(to: .left, of: self, insets: .left(16))
 
 		isSelected = selected
@@ -71,7 +65,7 @@ class ConsentButton: UIButton {
 
 		tintColor = Theme.colors.viewControllerBackground
 		backgroundColor = Theme.colors.tertiary
-		setTitleColor(UIColor(white: 0.235, alpha: 0.85), for: .normal)
+		setTitleColor(Theme.colors.dark, for: .normal)
 		contentHorizontalAlignment = .left
 
 		applyState()
@@ -97,17 +91,7 @@ class ConsentButton: UIButton {
 	}
 
 	private func applyState() {
-		switch (isSelected, isEnabled) {
-			case (true, true):
-				icon.tintColor = Theme.colors.primary
-				icon.isHighlighted = true
-			case (true, false):
-				icon.tintColor = Theme.colors.disabledIcon
-				icon.isHighlighted = true
-			default:
-				icon.tintColor = Theme.colors.primary
-				icon.isHighlighted = false
-		}
+		icon.isHighlighted = isSelected
 	}
 
 	@objc private func toggle() {
