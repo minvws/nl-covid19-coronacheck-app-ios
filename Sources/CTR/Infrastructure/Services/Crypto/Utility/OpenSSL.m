@@ -284,110 +284,20 @@ errit:
 				   contentData:(NSData *)contentData
 			   certificateData:(NSData *)certificateData {
 
-	int result = NO;
-	BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL;
-	X509_VERIFY_PARAM *verifyParameters = NULL;
-	STACK_OF(X509) *signers = NULL;
-	X509_STORE *store = NULL;
-	PKCS7 *p7 = NULL;
-
-	if (NULL == (signatureBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
-		EXITOUT("invalid  signatureBlob");
-
-	if (NULL == (contentBlob = BIO_new_mem_buf(contentData.bytes, (int)contentData.length)))
-		EXITOUT("invalid  contentBlob");
-
-	if (NULL == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
-		EXITOUT("invalid certificateBlob");
-
-	if (NULL == (p7 = d2i_PKCS7_bio(signatureBlob, NULL)))
-		EXITOUT("invalid PKCS#7 structure in signatureBlob");
-
-	if (NULL == (signers = PKCS7_get0_signers(p7, NULL, 0)))
-		EXITOUT("No signers in PCKS#7 signatureBlob");
-
-	if (sk_X509_num(signers) != 1)
-		EXITOUT("Not exactly one signer in PCKS#7 signatureBlob");
-
-	if ((NULL == (store = X509_STORE_new())))
-		EXITOUT("store");
-
-	int cnt = 0;
-#ifdef __DEBUG
-	fprintf(stderr, "Chain:\n");
-#endif
-	for(X509 *cert = NULL;;cnt++) {
-		if (NULL == (cert = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
-			break;
-
-		if (X509_STORE_add_cert(store, cert) != 1)
-			EXITOUT("Could not add cert %d to chain.",1+cnt);
-
-#ifdef __DEBUG
-		fprintf(stderr,"#%d\t",cnt+1);
-		print_certificate(cert);
-#endif
-        X509_free(cert);
-	};
-	ERR_clear_error();
-
-	if (cnt == 0)
-		EXITOUT("no trust chain of any length");
-
-	if (NULL == (verifyParameters = X509_VERIFY_PARAM_new()))
-		EXITOUT("Could create verifyParameters");
-
-	if (X509_VERIFY_PARAM_set_flags(verifyParameters, X509_V_FLAG_CRL_CHECK_ALL | X509_V_FLAG_POLICY_CHECK) != 1)
-		EXITOUT("Could not set CRL/Policy check on verifyParameters");
-
-	if (X509_VERIFY_PARAM_set_purpose(verifyParameters, X509_PURPOSE_ANY) != 1)
-		EXITOUT("Could not set purpose on verifyParameters");
-
-	if (X509_STORE_set1_param(store, verifyParameters) != 1)
-		EXITOUT("Could not set verifyParameters on the store");
-
-	if (/* DISABLES CODE */ (0)) {
-		BUF_MEM *bptr;
-		BIO_get_mem_ptr(contentBlob, &bptr);
-		bptr->data[ bptr->length] = 0;
-		printf("Blob <%s>\n", bptr->data);
-	}
-	result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
-
-#ifdef __DEBUG
-	if (result != 1) {
-		char buff[1024];
-		EXITOUT("PKCS7_verify fail (%d.%s", result,ERR_error_string(ERR_get_error(), buff));
-	};
-#endif
-
-#ifdef __DEBUG
-	fprintf(stderr,"=== signature is valid ===\n");
-#endif
-
-errit:
-#ifdef __DEBUG
-    fflush(stderr);
-#endif
-
-	if (verifyParameters) X509_VERIFY_PARAM_free(verifyParameters);
-
-	if (store) X509_STORE_free(store);
-	if (p7) PKCS7_free(p7);
-
-	if (signatureBlob) BIO_free(signatureBlob);
-	if (contentBlob) BIO_free(contentBlob);
-	if (certificateBlob) BIO_free(certificateBlob);
-
-	return result == 1;
+    return [self validatePKCS7Signature:signatureData
+                                  contentData:contentData
+                              certificateData:certificateData
+                       authorityKeyIdentifier:nil
+                    requiredCommonNameContent:nil
+                     requiredCommonNameSuffix:nil];
 }
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
                    contentData:(NSData *)contentData
                certificateData:(NSData *)certificateData
-        authorityKeyIdentifier:(NSData *)expectedAuthorityKeyIdentifierData
-     requiredCommonNameContent:(NSString *)requiredCommonNameContent
-      requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffix {
+        authorityKeyIdentifier:(NSData *)expectedAuthorityKeyIdentifierDataOrNil
+     requiredCommonNameContent:(NSString *)requiredCommonNameContentOrNil
+      requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffixOrNil {
     int result = NO;
     BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL,*cmsBlob = NULL;
     X509_VERIFY_PARAM *verifyParameters = NULL;
@@ -421,14 +331,19 @@ errit:
     print_certificate(signingCert);
 #endif
 
-    if (![self validateAuthorityKeyIdentifierData:expectedAuthorityKeyIdentifierData
+    if (expectedAuthorityKeyIdentifierDataOrNil)
+        if (![self validateAuthorityKeyIdentifierData:expectedAuthorityKeyIdentifierDataOrNil
                                                                signingCertificate:signingCert])
         EXITOUT("invalids isAuthorityKeyIdentifierValid");
 
+    if (requiredCommonNameSuffixOrNil && requiredCommonNameContentOrNil ) {
     if (![self validateCommonNameForCertificate:signingCert
-                                                    requiredContent:requiredCommonNameContent
-                                                     requiredSuffix:requiredCommonNameSuffix])
+                                                    requiredContent:requiredCommonNameContentOrNil
+                                                     requiredSuffix:requiredCommonNameSuffixOrNil])
         EXITOUT("invalids isCommonNameValid");
+    } else
+        if (requiredCommonNameSuffixOrNil || requiredCommonNameContentOrNil)
+        EXITOUT("incomplete common fields to compare against");
 
     if ((NULL == (store = X509_STORE_new())))
         EXITOUT("store");
@@ -474,11 +389,15 @@ errit:
         printf("Blob <%s>\n", bptr->data);
     }
 
-    // result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
-    
     if (NULL == (cmsBlob = BIO_new_mem_buf(signatureData.bytes, (int)signatureData.length)))
         EXITOUT("Could not create cms Blob");
 
+    // It appears that the PKCS7 family of OpenSSL does not support all the forms
+    // of paddings; including PSS padding (which is the SOGIS recommendation).
+    // So we use the more modern CMS family of functions.
+    //
+    // result = PKCS7_verify(p7, NULL, store, contentBlob, NULL, PKCS7_BINARY);
+    
     CMS_ContentInfo * cms = d2i_CMS_bio(cmsBlob, NULL);
     if (NULL == cms)
         EXITOUT("Could not create CMS structure from PKCS#7");
@@ -497,7 +416,6 @@ errit:
 #endif
     
 errit:
-
     if (verifyParameters) X509_VERIFY_PARAM_free(verifyParameters);
     
     if (store) X509_STORE_free(store);
