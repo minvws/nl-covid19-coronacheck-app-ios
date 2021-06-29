@@ -53,7 +53,6 @@ class QRCardView: BaseView {
 		let button = Button(title: "", style: .primary)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
-		button.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
 	}()
@@ -113,6 +112,9 @@ class QRCardView: BaseView {
 		addSubview(verticalLabelsStackView)
 		addSubview(viewQRButton)
 		addSubview(loadingButtonOverlay)
+
+		viewQRButton.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
+
 	}
 
 	/// Setup the constraints
