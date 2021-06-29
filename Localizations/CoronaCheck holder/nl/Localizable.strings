@@ -420,7 +420,7 @@ De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van j
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
 
-"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Door een technische fout had u ten onrechte een Nederlands vaccinatiebewijs ontvangen.";
-"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Dit is gecorrigeerd.";
+"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Vaccinatiebewijs gecorrigeerd";
+"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Door een technische fout heeft u onterecht een Nederlands vaccinatiebewijs gekregen. Dit is nu gecorrigeerd.";
 "holder.faultyvaccination28June.failedtoreload.alert.title" = "Er is iets mis gegaan bij het verversen van uw gegevens";
 "holder.faultyvaccination28June.failedtoreload.alert.message" = "Haal via de app uw gegevens opnieuw op.";
