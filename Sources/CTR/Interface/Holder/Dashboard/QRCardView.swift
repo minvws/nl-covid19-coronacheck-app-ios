@@ -53,7 +53,6 @@ class QRCardView: BaseView {
 		let button = Button(title: "", style: .primary)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
-		button.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
 	}()
@@ -113,6 +112,10 @@ class QRCardView: BaseView {
 		addSubview(verticalLabelsStackView)
 		addSubview(viewQRButton)
 		addSubview(loadingButtonOverlay)
+
+		// This has a edge-case bug if you set it in the `let viewQRButton: Button = {}` declaration, so setting it here instead.
+		// (was only applicable when Settings->Accessibility->Keyboard->Full Keyboard Access was enabled)
+		viewQRButton.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
 	}
 
 	/// Setup the constraints
