@@ -201,7 +201,7 @@
 "holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
 "holder.consent.message.underlined" = "privacyverklaring";
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
-"holder.consent.item.2" = "Er worden geen locatiegegevens <b>gebruikt of bewaard</b>";
+"holder.consent.item.2" = "Er worden <b>geen locatiegegevens</b> gebruikt of bewaard";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app met mijn gegevens omgaat.";
 
 /* MARK: - Choose QR Code Type */
@@ -334,7 +334,7 @@
 "holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.action" = "Naar Mijn overzicht";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.event.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a></p><p>voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.event.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.action" = "Naar Mijn Overzicht";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";

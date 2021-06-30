@@ -194,7 +194,7 @@
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title" = "Recovery certificate";
 "holder.updatepage.tagline" = "New in the app";
-"holder.updatepage.content" = "From now on, you can create a certificate of recovery using this app. This is proof you had a positive test result. This way, you show you’ve had coronavirus. This way you gain access to certain locations and activities. You may also use it to travel internationally.";
+"holder.updatepage.content" = "From now on, you can create a certificate of recovery using this app. This is proof you have had a positive test result. You can use it to show you’ve had coronavirus. This way you gain access to certain locations and activities. You may also use it to travel internationally.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
@@ -334,7 +334,7 @@
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To My Overview";
 "holder.event.nolist.title" = "No test result available";
-"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> </p><p>for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> for more information.</p><p>Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.action" = "To My Overview";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
