@@ -1,3 +1,16 @@
+"holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
+"holder.menu.proof" = "Add certificate";
+"holder.event.about.body.recovery" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Date of birth: <b>%@</b><br>Test date: <b>%@</b><br>Valid from: <b>%@</b><br>Valid until: <b>%@</b><br>Unique certificate number: <b>%@</b></p>";
+"holder.testresults.positive" = "Positive test result";
+"holder.recovery.alert.message" = "You can retrieve your positive test result again later";
+"holder.recovery.nolist.title" = "No positive test result available";
+"holder.recovery.nolist.message" = "<p>There is no positive test result available.<p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
+"holder.recovery.nolist.action" = "To My overview";
+"holder.recovery.list.title" = "Your positive test result";
+"holder.recovery.start.title" = "Retrieve recovery details";
+"holder.recovery.start.message" = "<p>Have you had coronavirus? Then you can make a recovery certificate of the positive test result from the GGD. Log in with DigiD to retrieve your test result.</p><p>Your recovery certificate will be valid %@ days after the positive test result.</p>";
+"holder.chooseqrcodetype.option.recovery.title" = "Certificate of recovery";
+"holder.chooseqrcodetype.option.recovery.subtitle" = "The test proves I have had coronavirus";
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
@@ -29,7 +42,6 @@
 
 /* Alert content voor rooted device */
 "jailbroken.message" = "Beware: your device is jailbroken. Your data may not be secure.";
-
 /* Menu item over toegankelijkheid. */
 "holder.menu.accessibility" = "Accessibility";
 
@@ -96,7 +108,6 @@
 "general.close" = "Close";
 "general.previous" = "Previous";
 "general.back" = "Back";
-"general.add" = "Add";
 "general.next" = "Next";
 "general.done" = "Done";
 "general.ok" = "OK";
@@ -112,6 +123,7 @@
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";
+
 "general.loading" = "Loading";
 "general.notification" = "Watch out!";
 "general.menu.open" = "Open side menu";
@@ -168,16 +180,17 @@
 "holder.onboarding.title.safely" = "Only access with a certificate";
 "holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a coronavirus pass. You’re only allowed to enter carrying this pass.";
 "holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
-"holder.onboarding.message.yourqr" = "You can generate a certificate if you have been vaccinated or if you have a negative test result that confirms you don’t have corona. From the beginning of July, you can also make a certificate if you've had coronavirus (certificate of recovery).";
+"holder.onboarding.message.yourqr" = "The app can generate a coronavirus pass if:<br/>
+<ul><li>You have been vaccinated</li><li>A test result confirms you don’t have corona.</li><li>A test result confirms you've had coronavirus and are recovered.</li></ul>";
 "holder.onboarding.title.validity" = "QR code = your proof";
-"holder.onboarding.message.validity" = "This app generates a QR code with your test result or vaccination. That is your certificate. This QR code will be checked at the entrance of locations or activities or at the border. If your declaration expires, the QR code disappears from the app.";
+"holder.onboarding.message.validity" = "This app generates a QR code with your vaccination, test result or recovery. That is your certificate. This QR code will be checked at the entrance of places or activities or at the border. If your certificate expires, the QR code disappears from the app.";
 "holder.onboarding.title.privacy" = "QR codes for the Netherlands and international";
-"holder.onboarding.message.privacy" = "This app generates a QR code for the Netherlands and one for other countries. You can find both QR codes in the app. Travelling outside of the Netherlands? Then use your international QR code. You can use it from %@.";
+"holder.onboarding.message.privacy" = "This app generates a QR code for the Netherlands and one for other countries. You can find both QR codes in the app. Travelling outside of the Netherlands? Then use your international QR code.";
 
 /* MARK: - Update Page Forced Information */
-"holder.updatepage.title" = "Vaccination certificate";
+"holder.updatepage.title" = "Recovery certificate";
 "holder.updatepage.tagline" = "New in the app";
-"holder.updatepage.content" = "Have you been vaccinated? You can now retrieve your vaccination certificate in the app and make a QR code of it. This gives you access to certain locations or activities. You'll also get a QR code to travel internationally.";
+"holder.updatepage.content" = "From now on, you can create a certificate of recovery using this app. This is proof you had a positive test result. This way, you show you’ve had coronavirus. This way you gain access to certain locations and activities. You may also use it to travel internationally.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
@@ -188,25 +201,25 @@
 "holder.consent.button" = "I have read the privacy statement and understand how CoronaCheck processes my data.";
 
 /* MARK: - Choose QR Code Type */
-"holder.chooseqrcodetype.title" = "What are you making a QR code from?";
-"holder.chooseqrcodetype.message" = "You can make a QR code of a negative test result or of a vaccination.";
-"holder.chooseqrcodetype.option.negativetest.title" = "A negative test result";
+"holder.chooseqrcodetype.title" = "What kind of certificate would you like to add?";
+"holder.chooseqrcodetype.message" = "Indicate what kind of certificate you would like to add. You can have multiple certificates.";
+"holder.chooseqrcodetype.option.negativetest.title" = "A test certificate";
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "The test proves I do not have coronavirus";
-"holder.chooseqrcodetype.option.vaccine.title" = "A vaccination";
+"holder.chooseqrcodetype.option.vaccine.title" = "A vaccination certificate";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "I've had my injection or injections";
 
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "Make QR code";
 "holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Vaccination or test certificate?</b></p><p> Choose to create a QR code of a vaccination or of a negative test result. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination or test result. </p> <br/> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries.  </p>";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Choose your certificate</b></p><p> You can create a vaccination certificate, a test certificate or a recovery certificate. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination, test result or recovery. </p> <br/> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries. </p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
 "holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "Travelling outside the Netherlands? Then use your international QR code. In <a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">this overview</a>, you'll find if the QR code is valid in the country you’re planning to visit.";
-"holder.dashboard.intro.emptystate" = "You can get a certificate if you're vaccinated or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
+"holder.dashboard.intro.emptystate" = "You can create a QR-code if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
 "holder.dashboard.create.title" = "Make QR code";
-"holder.dashboard.create.message" = "Turn your negative test result or vaccination into a personal QR code.";
+"holder.dashboard.create.message" = "Turn your vaccination, negative test result or recovery into a QR code.";
 "holder.dashboard.create.action" = "Make QR code";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
@@ -217,7 +230,7 @@
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "valid until";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
-"holder.dashboard.qr.title" = "Show QR code";
+"holder.dashboard.qr.title" = "My QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
 "holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
@@ -230,9 +243,9 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of vaccination isn't accepted abroad.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "(an empty phrase)";
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
@@ -243,8 +256,8 @@
 The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
-"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Date of injection: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Identification code: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Vaccination date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
 
@@ -253,7 +266,7 @@ The details consist of the first letter of your first name, the first letter of 
 
 
 /* MARK: - Holder Appointment */
-"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.<p><p>";
+"holder.appointment.body" = "<p>To make a QR code, you must get tested first. You can only turn a negative test result into a QR code.</p>";
 
 "holder.appointment.title" = "Make test appointment";
 "holder.appointment.header" = "Book test appointment";
@@ -298,6 +311,7 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.testresults.october" = "OCT";
 "holder.testresults.november" = "NOV";
 "holder.testresults.december" = "DEC";
+
 "holder.testresults.disclaimer.accessibility" = "More information about test results";
 
 /* MARK: - Holder About */
@@ -346,11 +360,11 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.ggdlogin.failure.general.message" = "It might be too busy. Please try again later.";
 
 "holder.event.about.title" = "What was retrieved?";
-"holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Identification code: <b>%@</b></p>";
+"holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p>";
 
-"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br> Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Identification code: <b>%@</b></p>";
+"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br>Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:<p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Injection date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Identification code: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
@@ -365,11 +379,12 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.location.notest" = "I haven't been tested yet";
 
 "holder.notest.title" = "I haven't been tested yet";
-"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p><p>";
+"holder.notest.body" = "<p>For a test certificate, you must take a test first. Does the test prove you don't have coronavirus? Then you can make your QR code.</p>";
 "holder.notest.button.title" = "Make an appointment";
 
 "holder.event.originmismatch.title" = "We can't make a certificate";
 "holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. This can have various causes. <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
+"holder.event.originmismatch.recovery.body" = "At this moment, we can't make a certificate from your postive test result. This can have various causes.  <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
 "holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your test result. This can have various causes.  <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
 "holder.notest.action.title" = "Make an appointment";
 "holder.test.nolist.title" = "No test result available";
@@ -386,3 +401,8 @@ The details consist of the first letter of your first name, the first letter of 
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
+
+"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Vaccination certificate corrected";
+"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Due to a technical error you’ve wrongly received a Dutch vaccination certificate. This was corrected.";
+"holder.faultyvaccination28June.failedtoreload.alert.title" = "Something went wrong while refreshing your details";
+"holder.faultyvaccination28June.failedtoreload.alert.message" = "Please retrieve your details again via the app.";

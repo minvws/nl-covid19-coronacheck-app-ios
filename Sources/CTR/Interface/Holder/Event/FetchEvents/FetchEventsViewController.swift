@@ -11,7 +11,6 @@ class FetchEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
-		case emptyEvents(content: Content)
 	}
 
 	struct Content {
@@ -71,8 +70,6 @@ class FetchEventsViewController: BaseViewController {
 		viewModel.$viewState.binding = { [weak self] in
 
 			switch $0 {
-				case let .emptyEvents(content):
-					self?.setForNoEvents(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
 			}
@@ -96,12 +93,6 @@ class FetchEventsViewController: BaseViewController {
 	private func setForLoadingState(_ content: Content) {
 
 		sceneView.spinner.isHidden = false
-		displayContent(content)
-	}
-
-	private func setForNoEvents(_ content: Content) {
-
-		sceneView.spinner.isHidden = true
 		displayContent(content)
 	}
 

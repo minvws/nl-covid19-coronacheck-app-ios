@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import SwiftRichString
 
 class InformationView: BaseView {
 
@@ -101,11 +102,22 @@ class InformationView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			guard let message = message else { return }
+
+			let base = Style {
+				$0.font = Theme.fonts.body
+				$0.color = Theme.colors.dark
+			}
+
+			let bold = Style {
+				$0.font = Theme.fonts.bodyBold
+			}
+
+			let styleGroup = StyleXML(base: base, ["b": bold])
+			messageLabel.attributedText = message
+				.replacingOccurrences(of: "<br>", with: "\n")
+				.replacingOccurrences(of: "</p>", with: "</p>\n\n")
+				.set(style: styleGroup)
 		}
 	}
 

@@ -9,26 +9,6 @@ import Foundation
 
 extension String {
 
-	static var holderVaccinationStartTitle: String {
-
-		return Localization.string(for: "holder.vaccination.start.title")
-	}
-
-	static var holderVaccinationStartMessage: String {
-
-		return Localization.string(for: "holder.vaccination.start.message")
-	}
-
-	static var holderRecoveryStartTitle: String {
-
-		return Localization.string(for: "holder.recovery.start.title")
-	}
-
-	static var holderRecoveryStartMessage: String {
-
-		return Localization.string(for: "holder.recovery.start.message")
-	}
-
 	static var holderEventStartAction: String {
 
 		return Localization.string(for: "holder.vaccination.start.action")
@@ -44,26 +24,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.start.nodigid.url")
 	}
 
-	static var holderVaccinationLoadingTitle: String {
-
-		return Localization.string(for: "holder.vaccination.loading.title")
-	}
-
-	static var holderVaccinationListTitle: String {
-
-		return Localization.string(for: "holder.vaccination.list.title")
-	}
-
-	static var holderVaccinationListMessage: String {
-
-		return Localization.string(for: "holder.vaccination.list.message")
-	}
-
-	static var holderVaccinationListActionTitle: String {
-
-		return Localization.string(for: "holder.vaccination.list.action")
-	}
-
 	static var holderVaccinationElementTitle: String {
 
 		return Localization.string(for: "holder.vaccination.element.title")
@@ -72,21 +32,6 @@ extension String {
 	static var holderVaccinationElementSubTitle: String {
 
 		return Localization.string(for: "holder.vaccination.element.subtitle")
-	}
-
-	static var holderVaccinationNoListTitle: String {
-
-		return Localization.string(for: "holder.vaccination.nolist.title")
-	}
-
-	static var holderVaccinationNoListMessage: String {
-
-		return Localization.string(for: "holder.vaccination.nolist.message")
-	}
-
-	static var holderVaccinationNoListActionTitle: String {
-
-		return Localization.string(for: "holder.vaccination.nolist.action")
 	}
 
 	static var holderVaccinationAlertTitle: String {
@@ -119,21 +64,6 @@ extension String {
 		return Localization.string(for: "holder.vaccination.about.off")
 	}
 
-	static var holderVaccinationListWrong: String {
-
-		return Localization.string(for: "holder.vaccination.list.wrong")
-	}
-
-	static var holderVaccinationWrongTitle: String {
-
-		return Localization.string(for: "holder.vaccination.wrong.title")
-	}
-
-	static var holderVaccinationWrongBody: String {
-
-		return Localization.string(for: "holder.vaccination.wrong.body")
-	}
-
 	static var holderVaccinationErrorAgain: String {
 
 		return Localization.string(for: "holder.vaccination.error.again")
@@ -142,11 +72,6 @@ extension String {
 	static var holderVaccinationErrorClose: String {
 
 		return Localization.string(for: "holder.vaccination.error.close")
-	}
-
-	static var holderVaccinationErrorMessage: String {
-
-		return Localization.string(for: "holder.vaccination.error.message")
 	}
 
 	static var holderVaccinationErrorMessageCode: String {
@@ -163,29 +88,9 @@ extension String {
 
 		return Localization.string(for: "holder.vaccination.error.message.toobusy")
 	}
-
-	static var holderVaccinationOriginMismatchTitle: String {
-
-		return Localization.string(for: "holder.event.originmismatch.title")
-	}
-
-	static var holderVaccinationOriginMismatchMessage: String {
-
-		return Localization.string(for: "holder.event.originmismatch.vaccination.body")
-	}
 }
 
 extension String {
-
-	static var holderTestWrongBody: String {
-
-		return Localization.string(for: "holder.testresults.wrong.body")
-	}
-
-	static var holderEventAboutTitle: String {
-
-		return Localization.string(for: "holder.event.about.title")
-	}
 
 	static var holderEventAboutBodyTest20: String {
 
@@ -205,31 +110,6 @@ extension String {
 	static var holderTestElementSubTitle20: String {
 
 		return Localization.string(for: "holder.event.element.subtitle.test2")
-	}
-
-	static var holderTestElementSubTitle30: String {
-
-		return Localization.string(for: "holder.event.element.subtitle.test3")
-	}
-
-	static var holderTestNoListTitle: String {
-
-		return Localization.string(for: "holder.test.nolist.title")
-	}
-
-	static var holderTestNoListMessage: String {
-
-		return Localization.string(for: "holder.test.nolist.message")
-	}
-
-	static var holderTestNoListActionTitle: String {
-
-		return Localization.string(for: "holder.test.nolist.action")
-	}
-
-	static var holderTestListTitle: String {
-
-		return Localization.string(for: "holder.test.list.title")
 	}
 
 	static var holderTestOriginMismatchMessage: String {

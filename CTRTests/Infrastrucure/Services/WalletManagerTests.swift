@@ -78,7 +78,25 @@ class WalletManagerTests: XCTestCase {
 		expect(wallet?.eventGroups).to(haveCount(1))
 	}
 
-	func test_removeExistingEventGroups() {
+	func test_removeExistingEventGroups_withoutProviderIdentifier() {
+
+		// Given
+		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "CoronaCheck",
+			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			issuedAt: Date()
+		)
+
+		// When
+		sut.removeExistingEventGroups(type: .vaccination)
+
+		// Then
+		expect(wallet?.eventGroups).to(beEmpty())
+	}
+
+	func test_removeExistingEventGroups_withProviderIdentifier() {
 
 		// Given
 		let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: dataStoreManager.managedObjectContext())

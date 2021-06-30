@@ -29,7 +29,14 @@ class LoginTVSViewModel: Logging {
 		self.openIdManager = openIdManager
 		self.eventMode = eventMode
 
-		self.title = eventMode == .vaccination ? .holderVaccinationListTitle : .holderTestListTitle
+		switch eventMode {
+			case .recovery:
+				title = L.holderRecoveryListTitle()
+			case .test:
+				title = L.holderTestListTitle()
+			case .vaccination:
+				title = L.holderVaccinationListTitle()
+		}
 	}
 
 	func cancel() {
@@ -67,7 +74,7 @@ class LoginTVSViewModel: Logging {
 					okTitle: .ok
 				)
 			}
-		} onError: {  error in
+		} onError: { error in
 			self.shouldShowProgress = false
 			self.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
 			self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(error: error, eventMode: self.eventMode))

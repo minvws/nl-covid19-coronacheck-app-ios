@@ -28,16 +28,16 @@ class AppUpdateViewModelTests: XCTestCase {
 			configTTL: 3600,
 			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
+			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
-			vaccinationValidityHours: 14600,
-			recoveryValidityHours: 7300,
-			testValidityHours: 40,
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -99,16 +99,16 @@ class AppUpdateViewModelTests: XCTestCase {
 			configTTL: 3600,
 			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
+			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
-			vaccinationValidityHours: 14600,
-			recoveryValidityHours: 7300,
-			testValidityHours: 40,
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -134,16 +134,16 @@ class AppUpdateViewModelTests: XCTestCase {
 			configTTL: 3600,
 			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
+			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
-			vaccinationValidityHours: 14600,
-			recoveryValidityHours: 7300,
-			testValidityHours: 40,
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 
 		// When
@@ -167,16 +167,16 @@ class AppUpdateViewModelTests: XCTestCase {
 			configTTL: 3600,
 			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
+			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,
-			vaccinationValidityHours: 14600,
-			recoveryValidityHours: 7300,
-			testValidityHours: 40,
 			domesticValidityHours: 40,
 			vaccinationEventValidity: 14600,
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
-			isGGDEnabled: true
+			isGGDEnabled: true,
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 
 		// When

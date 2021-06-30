@@ -58,6 +58,14 @@ class QRCardView: BaseView {
 		return button
 	}()
 
+	private lazy var loadingButtonOverlay: ButtonLoadingOverlayView = {
+		let overlay = ButtonLoadingOverlayView()
+		overlay.backgroundColor = Theme.colors.tertiary
+		overlay.translatesAutoresizingMaskIntoConstraints = false
+		overlay.isHidden = true
+		return overlay
+	}()
+
 	private let largeIconImageView: UIImageView = {
 
 		let view = UIImageView(image: .domesticQRIcon)
@@ -104,6 +112,7 @@ class QRCardView: BaseView {
 		addSubview(largeIconImageView)
 		addSubview(verticalLabelsStackView)
 		addSubview(viewQRButton)
+		addSubview(loadingButtonOverlay)
 	}
 
 	/// Setup the constraints
@@ -134,7 +143,12 @@ class QRCardView: BaseView {
 			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
 			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
-			
+
+			loadingButtonOverlay.leadingAnchor.constraint(equalTo: viewQRButton.leadingAnchor),
+			loadingButtonOverlay.trailingAnchor.constraint(equalTo: viewQRButton.trailingAnchor),
+			loadingButtonOverlay.topAnchor.constraint(equalTo: viewQRButton.topAnchor),
+			loadingButtonOverlay.bottomAnchor.constraint(equalTo: viewQRButton.bottomAnchor),
+
 			// Break constraint when title label increases in size
 			{
 				let constraint = verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing)
@@ -265,6 +279,12 @@ class QRCardView: BaseView {
 		didSet {
 			viewQRButton.titleLabel?.font = Theme.fonts.bodySemiBold
 			viewQRButton.setTitle(viewQRButtonTitle, for: .normal)
+		}
+	}
+
+	var isLoading: Bool = false {
+		didSet {
+			loadingButtonOverlay.isHidden = !isLoading
 		}
 	}
 

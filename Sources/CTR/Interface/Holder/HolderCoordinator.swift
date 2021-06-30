@@ -42,6 +42,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userWishesToCreateAVaccinationQR()
 
+	func userWishesToCreateARecoveryQR()
+
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
@@ -59,6 +61,7 @@ class HolderCoordinator: SharedCoordinator {
 
 	var networkManager: NetworkManaging = Services.networkManager
 	var openIdManager: OpenIdManaging = Services.openIdManager
+	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
@@ -98,8 +101,40 @@ class HolderCoordinator: SharedCoordinator {
 				delegate: self
 			)
 			startChildCoordinator(coordinator)
+        } else if hasFaultyVaccinationOn28June() {
 
-        } else if let unhandledUniversalLink = unhandledUniversalLink {
+			//	Is so, delete all greencards and credentials
+			Services.walletManager.removeExistingGreenCards()
+
+			//	If so, send all events to the signer and retrieve new greencards/credentials.
+			Services.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+
+				self.userSettings.executedJun28Patch = true
+
+				let alertController: UIAlertController
+
+				switch result {
+					case .failure:
+						alertController = UIAlertController(
+							title: String.holderFaultyVaccination28JuneFailedToReloadAlertTitle,
+							message: String.holderFaultyVaccination28JuneFailedToReloadAlertMessage,
+							preferredStyle: .alert
+						)
+
+					case .success:
+						alertController = UIAlertController(
+							title: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertTitle,
+							message: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertMessage,
+							preferredStyle: .alert
+						)
+				}
+				alertController.addAction(.init(title: String.close, style: .default, handler: { _ in
+					self.start()
+				}))
+
+				self.navigationController.present(alertController, animated: true, completion: nil)
+			}
+		} else if let unhandledUniversalLink = unhandledUniversalLink {
 
             // Attempt to consume the universal link again:
             self.unhandledUniversalLink = nil // prevent potential infinite loops
@@ -112,6 +147,39 @@ class HolderCoordinator: SharedCoordinator {
 			// Start with the holder app
 			navigateToHolderStart()
 		}
+	}
+
+	func hasFaultyVaccinationOn28June() -> Bool {
+
+		guard !userSettings.executedJun28Patch else {
+			return false
+		}
+
+		// check if there is a domestic green card with origins 'vaccination' AND 'negativetest'...
+		let domesticTestOrigins = Services.walletManager.listOrigins(type: .test).filter { $0.greenCard?.getType() == .domestic }
+		let domesticVaccineOrigins = Services.walletManager.listOrigins(type: .vaccination).filter { $0.greenCard?.getType() == .domestic }
+
+		guard !domesticTestOrigins.isEmpty && !domesticVaccineOrigins.isEmpty
+		else { return false }
+
+		// ... where any of the origins are older than June 28 11:00 AM GMT+1:
+
+		// Find the earliest origin:
+		let allOrigins = (domesticTestOrigins + domesticVaccineOrigins)
+		
+		guard let oldestOrigin = allOrigins
+			.sorted(by: { ($0.validFromDate ?? .distantPast) < ($1.validFromDate ?? .distantPast) })
+			.first
+		else {
+			return false
+		}
+
+		guard let oldestOriginValidFrom = oldestOrigin.validFromDate else { return false }
+
+		// Having any origins older than this triggers a refresh:
+		let thresholdValidityDate = Date(timeIntervalSince1970: 1624870800)
+
+		return oldestOriginValidFrom < thresholdValidityDate
 	}
 
     // MARK: - Universal Links
@@ -144,14 +212,27 @@ class HolderCoordinator: SharedCoordinator {
         }
     }
 
-	func startEventFlow() {
+	private func startEventFlowForVaccination() {
 
 		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
 			let eventCoordinator = EventCoordinator(
 				navigationController: navController,
 				delegate: self
 			)
-			startChildCoordinator(eventCoordinator)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithVaccination()
+		}
+	}
+
+	private func startEventFlowForRecovery() {
+
+		if let navController = (sidePanel?.selectedViewController as? UINavigationController) {
+			let eventCoordinator = EventCoordinator(
+				navigationController: navController,
+				delegate: self
+			)
+			addChildCoordinator(eventCoordinator)
+			eventCoordinator.startWithRecovery()
 		}
 	}
 
@@ -359,7 +440,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToCreateAVaccinationQR() {
-		startEventFlow()
+		startEventFlowForVaccination()
+	}
+
+	func userWishesToCreateARecoveryQR() {
+		startEventFlowForRecovery()
 	}
 
 	func userWishesToCreateAQR() {
@@ -382,16 +467,26 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
-
 		do {
 			if let greenCard = try Services.dataStoreManager.managedObjectContext().existingObject(with: greenCardObjectID) as? GreenCard {
 				navigateToShowQR(greenCard)
 			} else {
-				print("oops")
+				let alertController = UIAlertController(
+					title: .errorTitle,
+					message: String(format: .technicalErrorCustom, "150"),
+					preferredStyle: .alert)
+
+				alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 			}
-		} catch {
-			// No card
-			print("oops")
+		} catch let error {
+			let alertController = UIAlertController(
+				title: .errorTitle,
+				message: String(format: .technicalErrorCustom, "CD_\((error as NSError).code))"),
+				preferredStyle: .alert)
+
+			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 		}
 	}
 }
@@ -471,9 +566,9 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .qrCodeMaken, title: .holderAboutMakingAQRTitle),
-			MenuItem(identifier: .faq, title: .holderMenuFaq),
-			MenuItem(identifier: .about, title: .holderMenuAbout)
+			MenuItem(identifier: .qrCodeMaken, title: L.holderAboutmakingaqrTitle()),
+			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
+			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
 	}
 }

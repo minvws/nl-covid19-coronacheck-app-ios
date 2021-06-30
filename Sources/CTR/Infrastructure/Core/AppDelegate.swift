@@ -10,7 +10,7 @@ import AppAuth
 import Firebase
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
 
 	/// The app coordinator for routing
 	var appCoordinator: AppCoordinator?
@@ -78,11 +78,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 
 		// Incoming url
-		print("CTR: AppDelegate -> url = \(url)")
+		logVerbose("CTR: AppDelegate -> url = \(url)")
 
 		// Determine who sent the URL.
 		let sendingAppID = options[.sourceApplication]
-		print("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
+		logVerbose("CTR: AppDelegate -> source application = \(sendingAppID ?? "Unknown")")
 
 		// Sends the URL to the current authorization flow (if any) which will
 		// process it if it relates to an authorization response.

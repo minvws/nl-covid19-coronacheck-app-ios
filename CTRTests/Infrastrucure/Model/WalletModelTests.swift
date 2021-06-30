@@ -114,7 +114,7 @@ class WalletModelTests: XCTestCase {
 				
 				// When
 				eventGroup = EventGroupModel.create(
-					type: EventType.recovery,
+					type: EventMode.recovery,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: date,
 					jsonData: json,
@@ -141,7 +141,7 @@ class WalletModelTests: XCTestCase {
 			if let wallet = WalletModel.createTestWallet(managedContext: context),
 			   let json = "test_removeEvent".data(using: .utf8),
 			   let eventGroup = EventGroupModel.create(
-				type: EventType.recovery,
+				type: EventMode.recovery,
 				providerIdentifier: "CoronaCheck",
 				maxIssuedAt: Date(),
 				jsonData: json,

@@ -67,7 +67,9 @@ class ShowQRViewController: BaseViewController {
 
 		viewModel.$showValidQR.binding = { [weak self] in
 
-			if $0 {
+			let hideForCapture = self?.sceneView.hideQRImage ?? false
+
+			if $0 && !hideForCapture {
 				self?.sceneView.largeQRimageView.isHidden = false
 			} else {
 				self?.sceneView.largeQRimageView.isHidden = true
@@ -83,9 +85,15 @@ class ShowQRViewController: BaseViewController {
 
 			if $0 {
 				self?.showError(
-					.holderEnlargedScreenshotTitle,
-					message: .holderEnlargedScreenshotMessage
+					L.holderEnlargedScreenshotTitle(),
+					message: L.holderEnlargedScreenshotMessage()
 				)
+			}
+		}
+
+		viewModel.$showInternationalAnimation.binding = { [weak self] in
+			if $0 {
+				self?.sceneView.setupForInternational()
 			}
 		}
 	}

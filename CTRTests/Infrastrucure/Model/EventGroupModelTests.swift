@@ -34,7 +34,7 @@ class EventGroupModelTests: XCTestCase {
 
 				// When
 				eventGroup = EventGroupModel.create(
-					type: EventType.test,
+					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: date,
 					jsonData: unwrappedJson,
@@ -45,7 +45,7 @@ class EventGroupModelTests: XCTestCase {
 		}
 
 		// Then
-		expect(eventGroup?.type).toEventually(equal(EventType.test.rawValue))
+		expect(eventGroup?.type).toEventually(equal(EventMode.test.rawValue))
 		expect(eventGroup?.providerIdentifier).toEventually(equal("CoronaCheck"))
 		expect(eventGroup?.maxIssuedAt).toEventually(equal(date))
 		expect(eventGroup?.jsonData).toEventually(equal(json))
@@ -65,7 +65,7 @@ class EventGroupModelTests: XCTestCase {
 
 				// When
 				EventGroupModel.create(
-					type: EventType.test,
+					type: EventMode.test,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
 					jsonData: json,
@@ -73,7 +73,7 @@ class EventGroupModelTests: XCTestCase {
 					managedContext: context
 				)
 				EventGroupModel.create(
-					type: EventType.vaccination,
+					type: EventMode.vaccination,
 					providerIdentifier: "CoronaCheck",
 					maxIssuedAt: Date(),
 					jsonData: json,

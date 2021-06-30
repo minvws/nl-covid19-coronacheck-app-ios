@@ -53,4 +53,26 @@ class UserSettingsSpy: UserSettingsProtocol {
 			invokedJailbreakWarningShownList.append(newValue)
 		}
 	}
+
+	var invokedExecutedJun28PatchSetter = false
+	var invokedExecutedJun28PatchSetterCount = 0
+	var invokedExecutedJun28Patch: Bool?
+	var invokedExecutedJun28PatchList = [Bool]()
+	var invokedExecutedJun28PatchGetter = false
+	var invokedExecutedJun28PatchGetterCount = 0
+	var stubbedExecutedJun28Patch: Bool! = false
+
+	var executedJun28Patch: Bool {
+		get {
+			invokedExecutedJun28PatchGetter = true
+			invokedExecutedJun28PatchGetterCount += 1
+			return stubbedExecutedJun28Patch
+		}
+		set {
+			invokedExecutedJun28PatchSetter = true
+			invokedExecutedJun28PatchSetterCount += 1
+			invokedExecutedJun28Patch = newValue
+			invokedExecutedJun28PatchList.append(newValue)
+		}
+	}
 }
