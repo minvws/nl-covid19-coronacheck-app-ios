@@ -735,19 +735,19 @@ extension HolderDashboardViewModel {
 
 	fileprivate static let dateWithoutTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMM yyyy"
+		formatter.dateFormat = "d MMMM yyyy"
 		return formatter
 	}()
 
 	fileprivate static let dateWithDayAndTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "EEEE d MMM HH:mm"
+		formatter.dateFormat = "EEEE d MMMM HH:mm"
 		return formatter
 	}()
 
 	fileprivate static let dayAndMonthFormatter: DateFormatter = {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMM"
+		formatter.dateFormat = "d MMMM"
 		return formatter
 	}()
 
