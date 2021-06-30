@@ -167,7 +167,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		var event30DataSource = [EventDataTuple]()
 
-		if remoteEvents.count == 1 && remoteEvents.first?.wrapper.status == .pending && remoteEvents.first?.wrapper.events?.first?.positiveTest != nil {
+		// If there is just one pending negative/positive test: Pending State.
+		if remoteEvents.count == 1 &&
+			remoteEvents.first?.wrapper.status == .pending &&
+			(remoteEvents.first?.wrapper.events?.first?.negativeTest != nil || remoteEvents.first?.wrapper.events?.first?.positiveTest != nil) {
 			return pendingEventsState()
 		}
 
