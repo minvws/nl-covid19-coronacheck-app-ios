@@ -389,7 +389,7 @@
 "holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your test result. This can have various causes.  <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
 "holder.notest.action.title" = "Make an appointment";
 "holder.test.nolist.title" = "No test result available";
-"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> </p><p>for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.test.nolist.action" = "To My Overview";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
