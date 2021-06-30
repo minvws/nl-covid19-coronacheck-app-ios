@@ -1,7 +1,4 @@
-"general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
-"general.error.cryptolib.retry" = "Probeer opnieuw";
-
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
 "verifier.result.denied.region.title" = "Dit is een internationale QR-code";
@@ -9,8 +6,6 @@
 "verifier.result.identity.label" = "Kenmerk %@ is %@";
 "verifier.instructions.access.image" = "Persoon houdt een telefoon vast met een groen scherm en een zwart vinkje.";
 "verifier.instructions.denied.image" = "Persoon houdt een telefoon vast met een rood scherm en een zwart kruis.";
-"general.government.logo" = "Logo Rijksoverheid";
-
 /* Link naar web accessibility pagina */
 "verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 
@@ -20,11 +15,6 @@
 /* Menu item voor Toegankelijkheid */
 "verifier.menu.accessibility" = "Toegankelijkheid";
 
-/* Alert titel voor rooted device */
-"jailbroken.title" = "Er zijn beveiligingsrisico’s gevonden";
-
-/* Alert content voor rooted device */
-"jailbroken.message" = "Let op: je apparaat is gejailbreakt. Je gegevens zijn mogelijk niet veilig.";
 /* MARK: - URL */
 "verifier.url.faq" = "https://coronacheck.nl/nl/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app";
@@ -38,58 +28,9 @@
 "verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
 
 
-/* Voice over voor begin van een lijst */
-"general.list.accessibility.start" = "Begin van lijst.";
-
-/* Voice over voor einde van een lijst */
-"general.list.accessibility.end" = "Eind van lijst.";
-/* MARK: - General */
-"general.cancel" = "Annuleer";
-/* MARK: - General */
-"general.close" = "Sluiten";
-"general.previous" = "Vorige";
-"general.back" = "Terug";
-"general.next" = "Volgende";
-"general.done" = "Klaar";
-"general.ok" = "Ok";
-"general.error.title" = "Sorry, er ging iets mis";
-"general.error.technical.text" = "Dat komt door een technische fout.";
-"general.error.technical.custom" = "Dat komt door een technische fout (%@)";
-"general.error.nointernet.title" = "Geen internetverbinding";
-"general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
-"general.menu.version" = "App versie %@ (%@)";
-"general.government" = "Rijksoverheid";
-"general.loading" = "Bezig met laden";
-"general.notification" = "Let op!";
-"general.menu.open" = "Open zijmenu";
-"general.menu.close" = "Sluit zijmenu";
-"general.list.accessibility" = "%@ van %@.";
-/* MARK: - Update App */
-"updateApp.error.message" = "De App Store kan niet geopend worden.";
-"updateApp.title" = "Tijd voor een update";
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
-"updateApp.button" = "Installeer update";
-
-/* MARK: - EndOfLife */
-"endOfLife.error.message" = "De website kan niet geopend worden.";
-"endOfLife.title" = "App buiten werking";
-"endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar Coronacheck.nl";
-"endOfLife.button" = "Ga naar CoronaCheck.nl";
-
-/* MARK: - Internet Requird */
-"internet.required.button" = "Probeer opnieuw";
-"internet.required.text" = "Om de app op te starten heb je internet nodig.";
-"internet.required.title" = "Je hebt geen internetverbinding";
-
-/* MARK: - New Terms */
-"new.terms.title" = "Onze voorwaarden zijn vernieuwd";
-"new.terms.highlights" = "<b>Dit is veranderd</b><br\><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
+"new.terms.highlights" = "<b>Dit is veranderd</b><br /><ul><li>Beschrijving van gebruiksregels</li><li>Uitleg over gebruik van de app</li><li>Toestemming voor gebruik camera</li></ul>";
 "new.terms.description" = "Lees <a href=\"https://coronacheck.nl/nl/gebruikersvoorwaarden-in-app\">hier</a> de volledige gebruikersvoorwaarden.";
-"new.terms.error.title" = "Je kan niet verder als je niet akkoord gaat";
-"new.terms.error.message" = "Je hebt geen toegang de CoronaCheck Scanner-app zonder akkoord te gaan met de bijgewerkte voorwaarden.";
-"new.terms.agree" = "Akkoord";
-"new.terms.disagree" = "Niet akkoord";
-
 /* MARK: - Verifier Launch */
 "verifier.launch.title" = "CoronaCheck Scanner";
 "verifier.launch.text" = "We starten de app voor je op...";
@@ -135,9 +76,9 @@
 "verifier.instructions.scan.title" = "2. Scan de QR-code";
 "verifier.instructions.scan.text" = "Richt de camera van je telefoon op het bewijs van de bezoeker en scan de QR-code.";
 "verifier.instructions.access.title" = "3. Groen scherm";
-"verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldig bewijs. Controleer nu of de gegevens op het groene scherm hetzelfde zijn als de gegevens op het identiteitsbewijs. Om privacy te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</li><li>Check? Dan mag de bezoeker naar binnen. Het kan zijn dat er ook een toegangskaartje nodig is.";
+"verifier.instructions.access.text" = "Groen scherm? De bezoeker heeft een geldig bewijs. Controleer nu of de gegevens op het groene scherm hetzelfde zijn als de gegevens op het identiteitsbewijs. Om privacy te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.<br /><br />Check? Dan mag de bezoeker naar binnen. Het kan zijn dat er ook een toegangskaartje nodig is.";
 "verifier.instructions.denied.title" = "4. Rood scherm";
-"verifier.instructions.denied.text" = "Rood scherm? Dat betekent niet dat de bezoeker corona heeft. Het betekent alleen dat de QR-code ongeldig is. Of dat de QR-code niet aan de eisen voor gebruik in Nederland voldoet. Er is dus geen bewijs dat de bezoeker al corona gehad heeft, gevaccineerd is of een negatieve testuitslag heeft. Dit kun je doen:<br\><br\><ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck-app laat zien. Een schermafbeelding of kopie van een QR-code uit de app geeft altijd een rood scherm.</li><li>Controleer of de bezoeker een Nederlandse QR-code laat zien. Een internationale QR-code kan een rood scherm geven.</li><li> Vraag de bezoeker de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li><li>Blijft er een rood scherm komen, terwijl de bezoeker wel een geldig coronabewijs heeft? Stuur de bezoeker naar onze helpdesk, telefoonnummer: <a href=\"tel:08001421\">0800-1421</a>.</li></ul> <br\>Er is altijd een groen scherm nodig voor toegang. Heeft de bezoeker geen (geldige) QR-code? Dan kun je de bezoeker niet binnenlaten.<br/><a href=\"https://coronacheck.nl/nl/scanner\">Lees meer over bezoekers binnenlaten.</a>";
+"verifier.instructions.denied.text" = "Rood scherm? Dat betekent niet dat de bezoeker corona heeft. Het betekent alleen dat de QR-code ongeldig is. Of dat de QR-code niet aan de eisen voor gebruik in Nederland voldoet. Er is dus geen bewijs dat de bezoeker al corona gehad heeft, gevaccineerd is of een negatieve testuitslag heeft. Dit kun je doen:<br /><br /><ul><li>Controleer of de bezoeker de QR-code vanuit de CoronaCheck-app laat zien. Een schermafbeelding of kopie van een QR-code uit de app geeft altijd een rood scherm.</li><li>Controleer of de bezoeker een Nederlandse QR-code laat zien. Een internationale QR-code kan een rood scherm geven.</li><li> Vraag de bezoeker de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li><li>Blijft er een rood scherm komen, terwijl de bezoeker wel een geldig coronabewijs heeft? Stuur de bezoeker naar onze helpdesk, telefoonnummer: <a href=\"tel:08001421\">0800-1421</a>.</li></ul> <br />Er is altijd een groen scherm nodig voor toegang. Heeft de bezoeker geen (geldige) QR-code? Dan kun je de bezoeker niet binnenlaten.<br /><a href=\"https://coronacheck.nl/nl/scanner\">Lees meer over bezoekers binnenlaten.</a>";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
@@ -153,19 +94,6 @@
 "verifier.result.denied.message" = "De bezoeker heeft geen geldig coronabewijs. Lees mogelijke oorzaken.";
 "verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
-"holder.testresults.january" = "JAN";
-"holder.testresults.february" = "FEB";
-"holder.testresults.march" = "MAA";
-"holder.testresults.april" = "APR";
-"holder.testresults.may" = "MEI";
-"holder.testresults.june" = "JUN";
-"holder.testresults.july" = "JUL";
-"holder.testresults.august" = "AUG";
-"holder.testresults.september" = "SEP";
-"holder.testresults.october" = "OKT";
-"holder.testresults.november" = "NOV";
-"holder.testresults.december" = "DEC";
-
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Over de controle";
 /* MARK: - Verifier Denied Instructions */
