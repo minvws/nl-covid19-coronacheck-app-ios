@@ -17,7 +17,7 @@
 #import <Security/Security.h>
 #import <stdio.h>
 
-#define __DEBUG
+//#define __DEBUG
 
 #ifdef __DEBUG
 #warning "Warning: DEBUGing compiled in"
