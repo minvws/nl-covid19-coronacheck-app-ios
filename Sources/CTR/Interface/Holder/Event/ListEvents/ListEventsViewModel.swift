@@ -167,7 +167,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		var event30DataSource = [EventDataTuple]()
 
-		if remoteEvents.count == 1 && remoteEvents.first?.wrapper.status == .pending && remoteEvents.first?.wrapper.events?.first?.positiveTest != nil {
+		// If there is just one pending negative/positive test: Pending State.
+		if remoteEvents.count == 1 &&
+			remoteEvents.first?.wrapper.status == .pending &&
+			(remoteEvents.first?.wrapper.events?.first?.negativeTest != nil || remoteEvents.first?.wrapper.events?.first?.positiveTest != nil) {
 			return pendingEventsState()
 		}
 
@@ -625,29 +628,33 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				return
 			}
 
-			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
+				// Check if we have any origin for the event mode
+				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
+				// > 0 -> Success
+
+				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
+					.filter { $0.type == self?.eventMode.rawValue }
+					.count ?? 0
+				let internationalOrigins: Int = remoteResponse.euGreenCards?
+					.flatMap { $0.origins }
+					.filter { $0.type == self?.eventMode.rawValue }
+					.count ?? 0
+
+				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(String(describing: self?.eventMode.rawValue))")
+				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(String(describing: self?.eventMode.rawValue))")
+				return internationalOrigins + domesticOrigins > 0
+
+			}, completion: { result in
 				self.progressIndicationCounter.decrement()
 
 				switch result {
 					case .success:
-						var originType: OriginType = .vaccination
-						if self.eventMode == .vaccination {
-							originType = .vaccination
-						} else if self.eventMode == .recovery {
-							originType = .recovery
-						} else if self.eventMode == .test {
-							originType = .test
-						}
+						self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: self.eventMode))
 
-						let numberOfOrigins = self.walletManager.listOrigins(type: originType).count
-						self.logVerbose("Origins for \(String(describing: self.eventMode)): \(String(describing: numberOfOrigins))")
-						if numberOfOrigins == 0 {
-							// No origins for this type means something went wrong.
-							self.viewState = self.cannotCreateEventsState()
-							self.shouldPrimaryButtonBeEnabled = true
-						} else {
-							self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
-						}
+					case .failure(.didNotEvaluate):
+						self.viewState = self.cannotCreateEventsState()
+						self.shouldPrimaryButtonBeEnabled = true
 
 					case .failure(.failedToSave), .failure(.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
@@ -668,7 +675,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					case .failure(.credentials119):
 						self.showTechnicalError("118 credentials")
 				}
-			}
+			})
 		}
 	}
 
@@ -770,9 +777,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						case .recovery:
 							return L.holderEventOriginmismatchRecoveryBody()
 						case .test:
-							return L.holderEventOriginmismatchVaccinationBody()
-						case .vaccination:
 							return L.holderEventOriginmismatchTestBody()
+						case .vaccination:
+							return L.holderEventOriginmismatchVaccinationBody()
 					}
 				}(),
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
