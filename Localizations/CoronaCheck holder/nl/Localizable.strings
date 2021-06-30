@@ -138,7 +138,7 @@
 /* MARK: - Toggle Region */
 "toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
 "toggleRegion.label.topText.nl" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
-"toggleRegion.label.bottomText.eu" = "In de internationale QR-code staan meer gegevens: je naam, geboortedatum, het type vaccin en batchnummer.";
+"toggleRegion.label.bottomText.eu" = "In de internationale QR-code staan meer gegevens: je naam, geboortedatum en het type vaccin.";
 "toggleRegion.label.bottomText.nl" = "In de Nederlandse QR-code staan alleen je initialen, je geboortedag en je geboortemaand.";
 
 /* MARK: - Update App */
@@ -255,7 +255,7 @@
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
 "holder.showqr.domestic.title" = "Mijn QR-code";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
-"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Uit veiligheidsredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";
+"holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Om privacyredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam: <b>%@</b><br>Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br>Vaccin: <b>%@</b><br>Type vaccin: <b>%@</b><br>Producent: <b>%@</b><br>Doses: <b>%@</b><br>Vaccinatiedatum: <b>%@</b><br>Gevaccineerd in: <b>%@</b><br>Uniek certificaatnummer: <b>%@</b></p><p>Gebruik in de andere landen altijd de internationale QR-code. De Nederlandse QR-code is niet geldig buiten Nederland.</p>";
