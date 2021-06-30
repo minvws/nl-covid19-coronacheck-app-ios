@@ -107,7 +107,7 @@ class HolderCoordinator: SharedCoordinator {
 			Services.walletManager.removeExistingGreenCards()
 
 			//	If so, send all events to the signer and retrieve new greencards/credentials.
-			Services.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+			Services.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { (result: Result<Void, GreenCardLoader.Error>) in
 
 				self.userSettings.executedJun28Patch = true
 
