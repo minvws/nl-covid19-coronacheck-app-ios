@@ -68,9 +68,6 @@ struct SecurityCheckerFactory {
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
 //			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
 //			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
-			if networkConfiguration.name != "Production" {
-				trustedSigners.append(TrustConfiguration.zorgCspPrivateRootCertificate)
-			}
 
 			return SecurityCheckerProvider(
 				trustedCertificates: trustedCertificates,
