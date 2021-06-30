@@ -9,13 +9,16 @@ import Foundation
 
 protocol GreenCardLoading {
 	init(networkManager: NetworkManaging, cryptoManager: CryptoManaging, walletManager: WalletManaging)
-	func signTheEventsIntoGreenCardsAndCredentials(completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void)
+	func signTheEventsIntoGreenCardsAndCredentials(
+		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
+		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
 	enum Error: Swift.Error {
 		case noEvents
+		case didNotEvaluate
 
 		case failedToSave
 		case failedToPrepareIssue
@@ -41,7 +44,9 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		self.walletManager = walletManager
 	}
 
-	func signTheEventsIntoGreenCardsAndCredentials(completion: @escaping (Result<Void, Error>) -> Void) {
+	func signTheEventsIntoGreenCardsAndCredentials(
+		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
+		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void) {
 
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
 
@@ -71,6 +76,12 @@ class GreenCardLoader: GreenCardLoading, Logging {
 							case .failure(let error):
 								completion(.failure(error))
 							case .success(let greenCardResponse):
+
+								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
+									completion(.failure(.didNotEvaluate))
+									return
+								}
+
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self.logError("Failed to save greenCards")
