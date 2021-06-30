@@ -267,7 +267,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		let body: String = L.holderShowqrEuAboutRecoveryMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
-			recovery.diseaseAgentTargeted,
 			formattedFirstPostiveDate,
 			recovery.country,
 			recovery.issuer,
