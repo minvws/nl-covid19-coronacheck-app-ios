@@ -10,7 +10,7 @@ do
     cat Localizations/CoronaCheck\ verifier/$i/Localizable.strings >> $COMBINED_PATH
 
     # Count duplicate lines
-    DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | uniq -d | wc -l | xargs)
+    DUPLICATE_LINE_COUNT=$(sort $COMBINED_PATH | sed '/\/\*/d' | sed '/^$/d' | uniq -d | wc -l | xargs)
 
     if (( $DUPLICATE_LINE_COUNT != 0 )); then
     echo "warning: The ${i} localized copy has ${DUPLICATE_LINE_COUNT} duplicate keys"
