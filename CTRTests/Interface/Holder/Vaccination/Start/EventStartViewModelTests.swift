@@ -23,7 +23,6 @@ class EventStartViewModelTests: XCTestCase {
 		deactivated: nil,
 		informationURL: nil,
 		configTTL: 3600,
-		euLaunchDate: "2021-06-03T14:00:00+00:00",
 		maxValidityHours: 48,
 		recoveryWaitingPeriodDays: 11,
 		requireUpdateBefore: nil,
