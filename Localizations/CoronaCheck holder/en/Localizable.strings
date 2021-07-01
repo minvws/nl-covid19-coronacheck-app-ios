@@ -34,6 +34,7 @@
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.button" = "To My overview";
 "holder.dashboard.changeregion.button.nl" = "Change to NL";
+"general.add" = "Add";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
 
