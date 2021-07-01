@@ -101,6 +101,10 @@ class InformationView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
+
+			// Prevents a crash!
+			let message = message?.replacingOccurrences(of: "<br>", with: "<br />")
+
 			messageLabel.attributedText = .makeFromHtml(
 				text: message,
 				font: Theme.fonts.body,
