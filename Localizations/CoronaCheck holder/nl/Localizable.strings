@@ -213,11 +213,6 @@
 "holder.chooseqrcodetype.option.vaccine.title" = "Een vaccinatiebewijs";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "Ik heb mijn prik of prikken gehad";
 
-/* MARK: - About Making a QR */
-"holder.aboutmakingaqr.title" = "QR-code maken";
-"holder.aboutmakingaqr.header" = "Een QR-code maken";
-"holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p> <br/> <p><b>1. Kies het soort bewijs</b></p> <p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p> <br/> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p> <br/> <p><b>3. QR-codes staan klaar</b></p> <p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. </p>";
-
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn overzicht";
 "holder.dashboard.intro.domestic" = "Laat de QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";

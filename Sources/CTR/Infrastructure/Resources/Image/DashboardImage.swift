@@ -13,8 +13,6 @@ extension UIImage {
 
 	static var appointmentTile: UIImage? { UIImage(named: "AppointmentTile") }
 
-	static var create: UIImage? { UIImage(named: "CreateQR") }
-
 	static var createTile: UIImage? { UIImage(named: "CreateTile") }
 
 	static var radio: UIImage? { UIImage(named: "Radio") }

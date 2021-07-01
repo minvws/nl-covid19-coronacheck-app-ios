@@ -213,11 +213,6 @@
 "holder.chooseqrcodetype.option.vaccine.title" = "A vaccination certificate";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "I've had my injection or injections";
 
-/* MARK: - About Making a QR */
-"holder.aboutmakingaqr.title" = "Make QR code";
-"holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Choose your certificate</b></p><p> You can create a vaccination certificate, a test certificate or a recovery certificate. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination, test result or recovery. </p> <br/> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries. </p>";
-
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
 "holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
