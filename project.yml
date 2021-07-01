@@ -33,9 +33,6 @@ packages:
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
-  SwiftRichString:
-    github: malcommac/SwiftRichString
-    majorVersion: 3.7.2
   RSwiftLibrary:
     github: mac-cain13/R.swift.Library
     majorVersion: 5.4.0
@@ -100,8 +97,6 @@ targetTemplates:
       - package: RSwiftLibrary
         product: Rswift
       - package: IOSSecuritySuite
-      - package: SwiftRichString
-        product: SwiftRichString
       - framework: clcore.framework
         embed: false
       - framework: openssl.framework
@@ -188,18 +183,18 @@ targetTemplates:
         script: |
           TEMP_DIR=`mktemp -d`
 
-          #Compile script: 
+          #Compile script:
           xcrun --sdk macosx swiftc Scripts/check_localization_html_tags.swift -o $TEMP_DIR/check_localization_html_tags
 
-          #Run script: 
+          #Run script:
           $TEMP_DIR/check_localization_html_tags Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings && $TEMP_DIR/check_localization_html_tags Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
           rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string
-        inputFiles: 
+        inputFiles:
           - $TEMP_DIR/rswift-lastrun
-        outputFiles: 
+        outputFiles:
           - $SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift
       - name: Run SwiftLint
         basedOnDependencyAnalysis: true
@@ -247,7 +242,7 @@ targetTemplates:
         script: |
           if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
           then
-            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run" 
+            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
           else
             echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
           fi
