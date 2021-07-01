@@ -203,7 +203,17 @@ class QRCardView: BaseView {
 				validityLabel.isHidden = true
 			}
 		}
-
+        
+        // Group accessibility labels together for two reasons:
+        // 1. Fix focus order issues caused by frequently removing and adding subviews
+        // 2. Clearer for users to hear all information at once
+        let groupedAccessibilityLabel = verticalLabelsStackView.arrangedSubviews.compactMap { arrangedView in
+            arrangedView.accessibilityLabel
+        }.joined(separator: " ")
+        verticalLabelsStackView.isAccessibilityElement = true
+        verticalLabelsStackView.shouldGroupAccessibilityChildren = true
+        verticalLabelsStackView.accessibilityLabel = groupedAccessibilityLabel
+        
 		verticalLabelsStackView.setNeedsLayout()
 	}
 
