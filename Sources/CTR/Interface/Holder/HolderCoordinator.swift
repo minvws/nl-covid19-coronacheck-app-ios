@@ -558,7 +558,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .overview, title: .holderMenuDashboard)
+			MenuItem(identifier: .overview, title: L.holderMenuDashboard())
 		]
 	}
 	/// Get the items for the bottom menu

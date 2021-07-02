@@ -74,8 +74,8 @@ class AboutViewModel: Logging {
 	private func setupMenuHolder() {
 
 		menu = [
-			AboutMenuOption(identifier: .privacyStatement, name: .holderMenuPrivacy) ,
-			AboutMenuOption(identifier: .accessibility, name: .holderMenuAccessibility)
+			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
+			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility())
 		]
 	}
 
