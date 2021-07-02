@@ -57,16 +57,13 @@ class AboutViewModel: Logging {
 		self.coordinator = coordinator
 		self.flavor = flavor
 
-		self.title = flavor == .holder ? .holderAboutTitle : .verifierAboutTitle
-		self.message = flavor == .holder ? .holderAboutText : .verifierAboutText
-		self.listHeader = flavor == .holder ? .holderAboutReadMore : .verifierAboutReadMore
+		self.title = flavor == .holder ? L.holderAboutTitle() : L.verifierAboutTitle()
+		self.message = flavor == .holder ? L.holderAboutText() : L.verifierAboutText()
+		self.listHeader = flavor == .holder ? L.holderAboutReadmore() : L.verifierAboutReadmore()
 
-		let versionString: String = flavor == .holder ? .holderLaunchVersion : .verifierLaunchVersion
-		version = String(
-			format: versionString,
-			versionSupplier.getCurrentVersion(),
-			versionSupplier.getCurrentBuild()
-		)
+		version = flavor == .holder
+			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 
 		flavor == .holder ? setupMenuHolder() : setupMenuVerifier()
 	}
@@ -91,14 +88,14 @@ class AboutViewModel: Logging {
 
 		switch identifier {
 			case .privacyStatement:
-				openUrlString(.holderUrlPrivacy)
+				openUrlString(L.holderUrlPrivacy())
 			case .terms:
-				openUrlString(.verifierUrlPrivacy)
+				openUrlString(L.verifierUrlPrivacy())
 			case .accessibility:
 				if flavor == .holder {
-					openUrlString(.holderUrlAccessibility)
+					openUrlString(L.holderUrlAccessibility())
 				} else {
-					openUrlString(.verifierUrlAccessibility)
+					openUrlString(L.verifierUrlAccessibility())
 				}
 		}
 	}

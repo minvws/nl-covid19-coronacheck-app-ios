@@ -16,9 +16,9 @@ enum EventMode: String {
 
 	var localized: String {
 		switch self {
-			case .recovery: return .recovery
-			case .test: return .testresult
-			case .vaccination: return .vaccination
+			case .recovery: return L.generalRecoverystatement()
+			case .test: return L.generalTestresult()
+			case .vaccination: return L.generalVaccination()
 		}
 	}
 }
@@ -362,12 +362,12 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						preferredStyle: .alert)
 				default:
 					alertController = UIAlertController(
-						title: .errorTitle,
-						message: String(format: .technicalErrorCustom, error?.localizedDescription ?? ""),
+						title: L.generalErrorTitle(),
+						message: L.generalErrorTechnicalCustom(error?.localizedDescription ?? ""),
 						preferredStyle: .alert)
 			}
 
-			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 			self.navigationController.present(alertController, animated: true, completion: nil)
 		}
 

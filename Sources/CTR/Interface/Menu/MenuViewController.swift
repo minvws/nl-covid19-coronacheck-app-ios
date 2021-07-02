@@ -67,7 +67,7 @@ class MenuViewController: BaseViewController {
 			}
 		}
 
-		addMenuCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: .closeMenu)
+		addMenuCloseButton(action: #selector(closeButtonTapped), accessibilityLabel: L.generalMenuClose())
 	}
 
 	/// User tapped on the close button

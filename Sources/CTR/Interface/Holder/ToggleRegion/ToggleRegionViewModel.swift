@@ -19,8 +19,8 @@ class ToggleRegionViewModel: Logging {
 		self.didChangeCallback = didChangeCallback
 
 		segments = [
-			(.netherlands, 0, currentRegion == .domestic),
-			(.europeanUnion, 1, currentRegion == .europeanUnion)
+			(L.generalNetherlands(), 0, currentRegion == .domestic),
+			(L.generalEuropeanUnion(), 1, currentRegion == .europeanUnion)
 		]
 
 		updateTexts(selectedRegion: currentRegion)

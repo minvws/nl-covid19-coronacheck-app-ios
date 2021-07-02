@@ -98,7 +98,7 @@ class VerifierScanViewController: ScanViewController {
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .cancel,
+				title: L.generalCancel(),
 				style: .cancel,
 				handler: nil
 			)

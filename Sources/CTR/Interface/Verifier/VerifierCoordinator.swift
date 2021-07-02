@@ -206,7 +206,7 @@ extension VerifierCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationController
 
 			case .support:
-				guard let faqUrl = URL(string: .verifierUrlFAQ) else {
+				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
 					logError("No verifier faq url")
 					return
 				}

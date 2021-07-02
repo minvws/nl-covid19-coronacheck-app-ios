@@ -135,16 +135,16 @@ class AppCoordinator: Coordinator, Logging {
 	/// Show the error alert when crypto library is not initialized
 	private func showCryptoLibNotInitializedError() {
 		
-		let message = String(format: .cryptoLibNotInitializedMessage, "\(142)")
+		let message = L.generalErrorCryptolibMessage("\(142)")
 		
 		let alertController = UIAlertController(
-			title: .cryptoLibNotInitializedTitle,
+			title: L.generalErrorCryptolibTitle(),
 			message: message,
 			preferredStyle: .alert
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .cryptoLibNotInitializedRetry,
+				title: L.generalErrorCryptolibRetry(),
 				style: .cancel,
 				handler: { [weak self] _ in
 					self?.retry()

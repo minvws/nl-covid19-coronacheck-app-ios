@@ -54,9 +54,9 @@ class LoginTVSViewModel: Logging {
 			logError("Can't present login for GGD")
 			shouldShowProgress = false
 			alert = LoginTVSViewController.AlertContent(
-				title: .errorTitle,
-				subTitle: .technicalErrorText,
-				okTitle: .ok
+				title: L.generalErrorTitle(),
+				subTitle: L.generalErrorTechnicalText(),
+				okTitle: L.generalOk()
 			)
 			return
 		}
@@ -69,9 +69,9 @@ class LoginTVSViewModel: Logging {
 				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
 			} else {
 				self.alert = LoginTVSViewController.AlertContent(
-					title: .errorTitle,
-					subTitle: .technicalErrorText,
-					okTitle: .ok
+					title: L.generalErrorTitle(),
+					subTitle: L.generalErrorTechnicalText(),
+					okTitle: L.generalOk()
 				)
 			}
 		} onError: { error in

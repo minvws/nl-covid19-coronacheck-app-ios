@@ -128,7 +128,7 @@ class HolderCoordinator: SharedCoordinator {
 							preferredStyle: .alert
 						)
 				}
-				alertController.addAction(.init(title: String.close, style: .default, handler: { _ in
+				alertController.addAction(.init(title: L.generalClose(), style: .default, handler: { _ in
 					self.start()
 				}))
 
@@ -472,20 +472,20 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				navigateToShowQR(greenCard)
 			} else {
 				let alertController = UIAlertController(
-					title: .errorTitle,
-					message: String(format: .technicalErrorCustom, "150"),
+					title: L.generalErrorTitle(),
+					message: String(format: L.generalErrorTechnicalCustom("150")),
 					preferredStyle: .alert)
 
-				alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+				alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 			}
 		} catch let error {
 			let alertController = UIAlertController(
-				title: .errorTitle,
-				message: String(format: .technicalErrorCustom, "CD_\((error as NSError).code))"),
+				title: L.generalErrorTitle(),
+				message: L.generalErrorTechnicalCustom("CD_\((error as NSError).code))"),
 				preferredStyle: .alert)
 
-			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 		}
 	}
@@ -511,7 +511,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationController
 
 			case .faq:
-				guard let faqUrl = URL(string: .holderUrlFAQ) else {
+				guard let faqUrl = URL(string: L.holderUrlFaq()) else {
 					logError("No holder FAQ url")
 					return
 				}

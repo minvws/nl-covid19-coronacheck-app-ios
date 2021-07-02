@@ -319,14 +319,14 @@ class TokenEntryViewModel {
 	private func showServerTooBusyError() {
 
 		self.serverTooBusyAlert = AlertContent(
-			title: .serverTooBusyErrorTitle,
-			subTitle: .serverTooBusyErrorText,
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyText(),
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.coordinator?.navigateBackToStart()
 			},
-			okTitle: .serverTooBusyErrorButton
+			okTitle: L.generalNetworkwasbusyButton()
 		)
 	}
 

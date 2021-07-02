@@ -47,7 +47,7 @@ class VerifierStartViewController: BaseViewController {
 
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
-				self?.showError(.errorTitle, message: L.verifierStartOntimeinternet())
+				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
 			}
 		}
 

@@ -81,7 +81,7 @@ class TokenScanViewController: ScanViewController {
 	/// - Parameters:
 	///   - title: the title
 	///   - message: the message
-	private func showError(title: String = .errorTitle, message: String) {
+	private func showError(title: String = L.generalErrorTitle(), message: String) {
 
 		let alertController = UIAlertController(
 			title: title,
@@ -89,7 +89,7 @@ class TokenScanViewController: ScanViewController {
 			preferredStyle: .alert)
 		alertController.addAction(
 			UIAlertAction(
-				title: .ok,
+				title: L.generalOk(),
 				style: .default,
 				handler: nil
 			)

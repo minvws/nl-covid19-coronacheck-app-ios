@@ -129,7 +129,7 @@ final class FetchEventsViewModel: Logging {
 					okAction: { _ in
 						nextStep()
 					},
-					okTitle: .ok
+					okTitle: L.generalOk()
 				)
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
@@ -140,7 +140,7 @@ final class FetchEventsViewModel: Logging {
 					okAction: { _ in
 						nextStep()
 					},
-					okTitle: .ok
+					okTitle: L.generalOk()
 				)
 
 			// 🥳 Some or no results and no network was busy or had an error:
@@ -192,7 +192,7 @@ final class FetchEventsViewModel: Logging {
 					okAction: { _ in
 						nextStep()
 					},
-					okTitle: .ok
+					okTitle: L.generalOk()
 				)
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
@@ -203,7 +203,7 @@ final class FetchEventsViewModel: Logging {
 				   okAction: { _ in
 					   nextStep()
 				   },
-					okTitle: .ok
+					okTitle: L.generalOk()
 			   )
 			// 🥳 Some or no results and no network was busy or had an error:
 			case (_, false, false):

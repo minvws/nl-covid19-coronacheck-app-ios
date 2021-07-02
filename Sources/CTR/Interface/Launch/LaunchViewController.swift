@@ -82,7 +82,7 @@ class LaunchViewController: BaseViewController {
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .ok,
+				title: L.generalOk(),
 				style: .default,
 				handler: { [weak self] _ in
 					self?.viewModel.userDismissedJailBreakWarning()

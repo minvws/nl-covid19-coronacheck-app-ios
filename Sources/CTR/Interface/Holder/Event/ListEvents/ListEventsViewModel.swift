@@ -676,7 +676,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private func showEventError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
+			title: L.generalErrorTitle(),
 			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 			cancelAction: nil,
 			cancelTitle: L.holderVaccinationErrorClose(),
@@ -696,32 +696,32 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private func showServerTooBusyError() {
 
 		alert = ListEventsViewController.AlertContent(
-			title: .serverTooBusyErrorTitle,
-			subTitle: .serverTooBusyErrorText,
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyText(),
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
 			},
-			okTitle: .serverTooBusyErrorButton
+			okTitle: L.generalNetworkwasbusyButton()
 		)
 	}
 
 	private func showTechnicalError(_ customCode: String?) {
 
-		var subTitle = String.technicalErrorText
+		var subTitle = L.generalErrorTechnicalText()
 		if let code = customCode {
-			subTitle = String(format: .technicalErrorCustom, code)
+			subTitle = L.generalErrorTechnicalCustom(code)
 		}
 		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
+			title: L.generalErrorTitle(),
 			subTitle: subTitle,
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { _ in
 				self.coordinator?.listEventsScreenDidFinish(.back(eventMode: self.eventMode))
 			},
-			okTitle: .close
+			okTitle: L.generalClose()
 		)
 	}
 
