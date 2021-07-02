@@ -65,20 +65,20 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 
 		let pages = [
 			OnboardingPage(
-				title: .holderOnboardingTitleSafely,
-				message: .holderOnboardingMessageSafely,
+				title: L.holderOnboardingTitleSafely(),
+				message: L.holderOnboardingMessageSafely(),
 				image: .onboardingSafely,
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
-				title: .holderOnboardingTitleYourQR,
-				message: .holderOnboardingMessageYourQR,
+				title: L.holderOnboardingTitleYourqr(),
+				message: L.holderOnboardingMessageYourqr(),
 				image: .onboardingYourQR,
 				step: .yourQR
 			),
 			OnboardingPage(
-				title: .holderOnboardingTitleValidity,
-				message: String(format: .holderOnboardingMessageValidity, "\(maxValidity)"),
+				title: L.holderOnboardingTitleValidity(),
+				message: String(format: L.holderOnboardingMessageValidity(), "\(maxValidity)"),
 				image: .onboardingValidity,
 				step: .validity
 			),
