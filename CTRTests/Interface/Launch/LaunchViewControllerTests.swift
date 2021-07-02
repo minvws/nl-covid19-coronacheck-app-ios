@@ -104,8 +104,8 @@ class LaunchViewControllerTests: XCTestCase {
 
 		// Then
 		alertVerifier.verify(
-			title: .jailbrokenTitle,
-			message: .jailbrokenMessage,
+			title: L.jailbrokenTitle(),
+			message: L.jailbrokenMessage(),
 			animated: true,
 			actions: [
 				.default(.ok)
