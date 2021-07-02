@@ -96,32 +96,32 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	/// Get the Consent Title
 	func getConsentTitle() -> String {
 
-		return .holderConsentTitle
+		return L.holderConsentTitle()
 	}
 
 	/// Get the Consent message
 	func getConsentMessage() -> String {
 
-		return .holderConsentMessage
+		return L.holderConsentMessage()
 	}
 	/// Get the Consent underlined message
 	func getConsentLink() -> String {
 
-		return .holderConsentMessageUnderlined
+		return L.holderConsentMessageUnderlined()
 	}
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String {
 
-		return .holderConsentButtonTitle
+		return L.holderConsentButton()
 	}
 
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
 		return [
-			.holderConsentItemOne,
-			.holderConsentItemTwo
+			L.holderConsentItem1(),
+			L.holderConsentItem2()
 		]
 	}
 }
