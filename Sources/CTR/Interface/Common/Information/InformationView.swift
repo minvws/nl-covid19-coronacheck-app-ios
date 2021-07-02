@@ -104,6 +104,7 @@ class InformationView: BaseView {
 			let style = """
 				body {
 					 margin:0px;
+					 word-wrap: break-word;
 				}
 				 p {
 					 font-family: -apple-system;
