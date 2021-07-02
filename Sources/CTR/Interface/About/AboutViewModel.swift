@@ -82,8 +82,8 @@ class AboutViewModel: Logging {
 	private func setupMenuVerifier() {
 
 		menu = [
-			AboutMenuOption(identifier: .terms, name: .verifierMenuPrivacy) ,
-			AboutMenuOption(identifier: .accessibility, name: .verifierMenuAccessibility)
+			AboutMenuOption(identifier: .terms, name: L.verifierMenuPrivacy()) ,
+			AboutMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility())
 		]
 	}
 

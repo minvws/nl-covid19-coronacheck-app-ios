@@ -74,7 +74,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		self.coordinator = coordinator
 		self.cryptoResults = cryptoResults
 
-		primaryButtonTitle = .verifierResultButtonTitle
+		primaryButtonTitle = L.verifierResultNext()
 		super.init()
 
 		checkAttributes()
@@ -181,27 +181,27 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	private func showAccessAllowed() {
 
-		title = .verifierResultAccessTitle
+		title = L.verifierResultAccessTitle()
 		message = nil
 	}
 
 	private func showAccessDeniedInvalidQR() {
 
-		title = .verifierResultDeniedTitle
-		message = .verifierResultDeniedMessage
-		linkedMessage = .verifierResultDeniedLink
+		title = L.verifierResultDeniedTitle()
+		message = L.verifierResultDeniedMessage()
+		linkedMessage = L.verifierResultDeniedLink()
 	}
 
 	private func showAccessDemo() {
 
-		title = .verifierResultDemoTitle
+		title = L.verifierResultDemoTitle()
 		message = nil
 	}
 	
 	private func showAccessDeniedDomesticDcc() {
 		
-		title = .verifierResultDeniedRegionTitle
-		message = .verifierResultDeniedRegionMessage
+		title = L.verifierResultDeniedRegionTitle()
+		message = L.verifierResultDeniedRegionMessage()
 	}
 
 	func dismiss() {
@@ -230,13 +230,13 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(
-			text: .verifierResultCheckText,
+			text: L.verifierResultCheckText(),
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
 
 		coordinator?.displayContent(
-			title: .verifierResultCheckTitle,
+			title: L.verifierResultCheckTitle(),
 			content: [(label, 16)]
 		)
 	}
@@ -245,20 +245,20 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		let label = Label(body: nil).multiline()
 		label.attributedText = .makeFromHtml(
-			text: .verifierDeniedMessageOne,
+			text: L.verifierDeniedMessageOne(),
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
 
 		let label2 = Label(body: nil).multiline()
 		label2.attributedText = .makeFromHtml(
-			text: .verifierDeniedMessageTwo,
+			text: L.verifierDeniedMessageTwo(),
 			font: Theme.fonts.body,
 			textColor: Theme.colors.dark
 		)
 
 		coordinator?.displayContent(
-			title: .verifierDeniedTitle,
+			title: L.verifierDeniedTitle(),
 			content: [(label, 16), (label2, 0)]
 		)
 	}

@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import SnapshotTesting
 import Nimble
+import Rswift
 
 class VerifierResultViewControllerTests: XCTestCase {
 
@@ -62,7 +63,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDemoTitle
+		expect(self.sut.sceneView.title) == L.verifierResultDemoTitle()
 		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
 		expect(self.sut.sceneView.imageView.image) == UIImage.access
 
@@ -83,8 +84,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDeniedTitle
-		expect(self.sut.sceneView.message) == .verifierResultDeniedMessage
+		expect(self.sut.sceneView.title) == L.verifierResultDeniedTitle()
+		expect(self.sut.sceneView.message) == L.verifierResultDeniedMessage()
 		expect(self.sut.sceneView.imageView.image) == UIImage.denied
 
 		// Snapshot
@@ -112,8 +113,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultDeniedRegionTitle
-		expect(self.sut.sceneView.message) == .verifierResultDeniedRegionMessage
+		expect(self.sut.sceneView.title) == L.verifierResultDeniedRegionTitle()
+		expect(self.sut.sceneView.message) == L.verifierResultDeniedRegionMessage()
 		expect(self.sut.sceneView.imageView.image) == UIImage.denied
 
 		// Snapshot
@@ -141,7 +142,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		viewModel.checkAttributes()
 
 		// Then
-		expect(self.sut.sceneView.title) == .verifierResultAccessTitle
+		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
 		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
 		expect(self.sut.sceneView.imageView.image) == UIImage.access
 

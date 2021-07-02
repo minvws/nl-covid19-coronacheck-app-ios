@@ -40,7 +40,6 @@
 "verifier.menu.dashboard" = "Scan QR code";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "About this app";
-"verifier.menu.feedback" = "Give us feedback";
 "verifier.menu.privacy" = "Acceptable use policy";
 
 /* MARK: - Verifier Onboarding */
