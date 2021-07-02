@@ -98,7 +98,7 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Ongeldige QR-code";
 "verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De QR-code van de internationale bezoeker voldoet niet aan Nederlandse toegangseisen</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li><li>De tijdinstellingen op de telefoon van de bezoeker wijken af</li></ul></p>";
-"verifier.denied.message.two" = "<p><b>Wat nu?</b><br>De bezoeker kan een test doen of zich laten vaccineren. Daarna kan in de CoronaCheck-app een geldige QR-code gemaakt worden.</p>";
+"verifier.denied.message.two" = "<p><b>Wat nu?</b><br />De bezoeker kan een test doen of zich laten vaccineren. Daarna kan in de CoronaCheck-app een geldige QR-code gemaakt worden.</p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
