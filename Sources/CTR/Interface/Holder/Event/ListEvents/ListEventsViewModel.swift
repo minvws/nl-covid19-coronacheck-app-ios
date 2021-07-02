@@ -811,8 +811,8 @@ extension ListEventsViewModel {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
-				title: .holderTestResultsPendingTitle,
-				subTitle: .holderTestResultsPendingText,
+				title: L.holderTestresultsPendingTitle(),
+				subTitle: L.holderTestresultsPendingText(),
 				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -834,7 +834,7 @@ extension ListEventsViewModel {
 			content: ListEventsViewController.Content(
 				title: L.holderTestresultsResultsTitle(),
 				subTitle: L.holderTestresultsResultsText(),
-				primaryActionTitle: .holderTestResultsResultsButton,
+				primaryActionTitle: L.holderTestresultsResultsButton(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: [remoteEvent]) { [weak self] success in
 						if !success {
