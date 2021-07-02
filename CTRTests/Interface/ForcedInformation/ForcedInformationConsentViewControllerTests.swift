@@ -55,7 +55,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.title, consent.title)
 		XCTAssertEqual(sut.sceneView.highlight, consent.highlight)
 		XCTAssertEqual(sut.sceneView.content, consent.content)
-		XCTAssertEqual(sut.sceneView.primaryTitle, String.next)
+		XCTAssertEqual(sut.sceneView.primaryTitle, L.generalNext())
 		XCTAssertEqual(sut.sceneView.secondaryTitle, "")
 		XCTAssertTrue(sut.sceneView.secondaryButton.isHidden)
 	}
@@ -80,8 +80,8 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 		XCTAssertEqual(sut.sceneView.highlight, consent.highlight)
 		XCTAssertEqual(sut.sceneView.content, consent.content)
 
-		XCTAssertEqual(sut.sceneView.primaryTitle, String.newTermsAgree)
-		XCTAssertEqual(sut.sceneView.secondaryTitle, String.newTermsDisagree)
+		XCTAssertEqual(sut.sceneView.primaryTitle, L.newTermsAgree())
+		XCTAssertEqual(sut.sceneView.secondaryTitle, L.newTermsDisagree())
 		XCTAssertFalse(sut.sceneView.secondaryButton.isHidden)
 	}
 
@@ -114,7 +114,7 @@ class ForcedInformationConsentViewControllerTests: XCTestCase {
 			message: viewModel.errorMessage,
 			animated: true,
 			actions: [
-				.default(.ok)
+				.default(L.generalOk())
 			],
 			presentingViewController: sut
 		)

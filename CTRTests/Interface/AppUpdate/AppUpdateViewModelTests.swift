@@ -70,7 +70,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, .updateAppContent)
+		XCTAssertEqual(sut.message, L.updateAppContent())
 	}
 
 	/// Test the update button tapped method with an url
@@ -148,7 +148,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, .endOfLifeDescription)
+		XCTAssertEqual(sut.message, L.endOfLifeDescription())
 	}
 
 	/// Test the initializer for end of life
@@ -180,7 +180,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.errorMessage, .endOfLifeErrorMessage)
+		XCTAssertEqual(sut.errorMessage, L.endOfLifeErrorMessage())
 	}
 
 	func test_noInternet() {
@@ -191,9 +191,9 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
 
 		// Then
-		expect(self.sut.title) == .internetRequiredTitle
-		expect(self.sut.message) == .internetRequiredText
-		expect(self.sut.actionTitle) == .internetRequiredButton
+		expect(self.sut.title) == L.internetRequiredTitle()
+		expect(self.sut.message) == L.internetRequiredText()
+		expect(self.sut.actionTitle) == L.internetRequiredButton()
 		expect(self.sut.image) == .noInternet
 	}
 

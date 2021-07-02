@@ -72,8 +72,8 @@ class LaunchViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == .holderLaunchTitle
-		expect(self.sut.sceneView.message) == .holderLaunchText
+		expect(self.sut.sceneView.title) == L.holderLaunchTitle()
+		expect(self.sut.sceneView.message) == L.holderLaunchText()
 		expect(self.sut.sceneView.version).toNot(beNil(), description: "Version should not be nil")
 		expect(self.sut.sceneView.version).toNot(beNil(), description: "AppIcon should not be nil")
 
@@ -108,7 +108,7 @@ class LaunchViewControllerTests: XCTestCase {
 			message: L.jailbrokenMessage(),
 			animated: true,
 			actions: [
-				.default(.ok)
+				.default(L.generalOk())
 			],
 			presentingViewController: sut
 		)
