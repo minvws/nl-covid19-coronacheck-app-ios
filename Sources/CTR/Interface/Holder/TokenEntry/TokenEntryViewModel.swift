@@ -668,14 +668,8 @@ extension TokenEntryViewModel {
 			}
 		}
 
-		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return L.holderTokenentryRegularflowButtonNotoken()
-				case .withRequestTokenProvided:
-					fatalError()
-					// return L.holderTokenEntryUniversalLinkFlowButtonNoToken() // TODO: missing
-			}
+		fileprivate static func userNeedsATokenButtonTitle(forMode _: InitializationMode) -> String {
+			return L.holderTokenentryRegularflowButtonNotoken()
 		}
 	}
 }

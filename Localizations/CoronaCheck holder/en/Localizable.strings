@@ -20,7 +20,7 @@
 "general.error.cryptolib.message" = "Contact our helpdesk and give them error code (%@) or try again later.";
 "general.error.cryptolib.retry" = "Try again";
 
-"general.recoverystatement" = "recovery statement";
+"general.recoverystatement" = "recovery certificate";
 "general.recoverydate" = "recovery date";
 "general.testcertificate" = "test certificate";
 "general.vaccinationcertificate" = "vaccination certificate";
@@ -408,3 +408,5 @@
 "holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Due to a technical error you’ve wrongly received a Dutch vaccination certificate. This was corrected.";
 "holder.faultyvaccination28June.failedtoreload.alert.title" = "Failed to refresh details";
 "holder.faultyvaccination28June.failedtoreload.alert.message" = "Something went wrong while refreshing your details. Please retrieve your details again via the app.";
+
+

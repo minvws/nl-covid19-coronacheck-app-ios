@@ -26,13 +26,9 @@ extension String {
 			case (.test, .europeanUnion):
 				return L.holderDashboardNotValidInThisRegionScreenEuTestTitle()
 			case (.recovery, .domestic):
-				// TODO:
-			fatalError()
-//				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticRecoveryTitle()
 			case (.recovery, .europeanUnion):
-				// TODO:
-			fatalError()
-//				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title")
+				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryTitle()
 		}
 	}
 
@@ -47,13 +43,9 @@ extension String {
 			case (.test, .europeanUnion):
 				return L.holderDashboardNotValidInThisRegionScreenEuTestMessage()
 			case (.recovery, .domestic):
-				// TODO:
-			fatalError()
-//				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message")
+				return L.holderDashboardNotValidInThisRegionScreenDomesticRecoveryMessage()
 			case (.recovery, .europeanUnion):
-				// TODO:
-			fatalError()
-//				return Localization.string(for: "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message")
+				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryMessage()
 		}
 	}
     
