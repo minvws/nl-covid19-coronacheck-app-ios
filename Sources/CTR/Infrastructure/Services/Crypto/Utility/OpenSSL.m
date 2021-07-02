@@ -20,6 +20,8 @@
 #define __DEBUG
 
 #ifdef __DEBUG
+#include <openssl/asn1.h>
+#include <openssl/bn.h>
 #warning "Warning: DEBUGing compiled in"
 #define EOUT(args...) { \
 fprintf(stderr,"%s\n\t%d %s",  __FILE__,  __LINE__, __PRETTY_FUNCTION__);\
@@ -55,6 +57,25 @@ void print_stack(STACK_OF(X509)* sk)
         fprintf(stderr,"#%d\t:",i+1);
         print_certificate(cert);
     }
+}
+void print_octed_as_hex(const ASN1_OCTET_STRING * str) {
+    for(int i = 0; i < str->length; i++) {
+        fprintf(stderr,"%s%02x",i ? ":" : "", str->data[i]);
+    }
+    fprintf(stderr,"\n");
+}
+void print_pkey_as_hex(EVP_PKEY *pkey) {
+
+    char pkr[64*1024] = {0};
+    size_t len = sizeof(pkr);
+    if (!EVP_PKEY_get_raw_public_key(pkey, (unsigned char*)pkr, &len)) {
+        fprintf(stderr,"Failed to map public key to raw\n");
+        return;
+    }
+    for(int i = 0; i < len; i++) {
+        fprintf(stderr,"%s%02x",i ? ":" : "", pkr[i]);
+    }
+    fprintf(stderr,"\n");
 }
 #else
 #define EOUT(args...) { /* no output */ }
@@ -148,7 +169,48 @@ errit:
     
     BOOL subjectKeyMatches = [self compareSubjectKeyIdentifier:certificateData with:trustedCertificateData];
     BOOL serialNumbersMatches = [self compareSerialNumber:certificateData with:trustedCertificateData];
-    return subjectKeyMatches && serialNumbersMatches;
+    BOOL certsMatches = [self compareCerts:certificateData with:trustedCertificateData];
+#ifdef __DEBUG
+    NSLog(@"--- compare result is %s", (subjectKeyMatches && serialNumbersMatches && certsMatches) ? "GOOD": "BAD");
+#endif
+    return subjectKeyMatches && serialNumbersMatches && certsMatches;
+}
+
+- (BOOL)compareCerts:(NSData *)certificateData with:(NSData *)trustedCertificateData {
+    BIO *certificateBlob = NULL;
+    X509 *certificate = NULL;
+    BIO *trustedCertificateBlob = NULL;
+    X509 *trustedCertificate = NULL;
+    BOOL isMatch = NO;
+
+    if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
+        EXITOUT("Cannot allocate certificateBlob");
+    
+    if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
+        EXITOUT("Cannot parse certificateData");
+    
+    if (NULL  == (trustedCertificateBlob = BIO_new_mem_buf(trustedCertificateData.bytes, (int)trustedCertificateData.length)))
+        EXITOUT("Cannot allocate trustedCertificateBlob");
+    
+    if (NULL == (trustedCertificate = PEM_read_bio_X509(trustedCertificateBlob, NULL, 0, NULL)))
+        EXITOUT("Cannot parse trustedCertificate");
+
+    // basically a memcmp() of the hash - eval if good enough
+    //
+    isMatch = (0 == X509_cmp(trustedCertificate, certificate)) ? YES : NO;
+
+    // compare pubkeys properly
+    EVP_PKEY * ptc = X509_get0_pubkey(trustedCertificate);
+    EVP_PKEY * tc = X509_get0_pubkey(certificate);
+    isMatch = isMatch && ((1 == EVP_PKEY_cmp(ptc, tc)) ? YES : NO);
+
+errit:
+    BIO_free(certificateBlob);
+    BIO_free(trustedCertificateBlob);
+    X509_free(certificate);
+    X509_free(trustedCertificate);
+    
+    return isMatch;
 }
 
 - (BOOL)compareSubjectKeyIdentifier:(NSData *)certificateData with:(NSData *)trustedCertificateData {
@@ -180,6 +242,12 @@ errit:
         EXITOUT("Cannot extract certificateSubjectKeyIdentifier");
     
     isMatch = ASN1_OCTET_STRING_cmp(trustedCertificateSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
+
+#ifdef __DEBUG
+    NSLog(@"compareSubjectKeyIdentifier: ");
+    print_octed_as_hex(trustedCertificateSubjectKeyIdentifier);
+    print_octed_as_hex(certificateSubjectKeyIdentifier);
+#endif
     
 errit:
     BIO_free(certificateBlob);
@@ -220,6 +288,13 @@ errit:
     
     isMatch = ASN1_INTEGER_cmp(certificateSerial, trustedCertificateSerial) == 0;
     
+#ifdef __DEBUG
+    char *cs = BN_bn2hex(ASN1_INTEGER_to_BN(certificateSerial, NULL));
+    char *ts = BN_bn2hex(ASN1_INTEGER_to_BN(trustedCertificateSerial, NULL));
+    print_certificate(certificate);
+    print_certificate(trustedCertificate);
+    NSLog(@"compareSerialNumber %s == %s", cs, ts);
+#endif
 errit:
     if (certificateBlob) BIO_free(certificateBlob);
     if (trustedCertificateBlob) BIO_free(trustedCertificateBlob);
@@ -250,7 +325,6 @@ errit:
         EXITOUT("Cannot extract certificateSubjectKeyIdentifier");
     
     isMatch = ASN1_OCTET_STRING_cmp(expectedSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
-    
 errit:
     if (certificateBlob) BIO_free(certificateBlob);
     if (certificate)  X509_free(certificate);

@@ -199,6 +199,76 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		self.completionHandler = completionHandler
 	}
 
+    // Though ATS will validate this (too) - we force an early verification against a known list
+    // ahead of time (defined here, no keychain) - also to trust the (relatively loose) comparisons
+    // later (as we need to work with this data; which otherwise would be untrusted).
+    //
+    func checkATS(serverTrust: SecTrust) -> Bool {
+
+        let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+        if errSecSuccess != SecTrustSetPolicies(serverTrust, policies as CFTypeRef) {
+            logError("SecTrustSetPolicies failed")
+            return false
+        }
+
+        logError("")
+        var trustList: [SecCertificate] = []
+        logError("Bulding up list")
+        // XXX fixme -- propably avail as already convert.
+        for certificateAsPemString in trustedCertificates {
+            // XX fixme - strip off blindly headers, etc.
+            let lenght = certificateAsPemString.count - 26
+            let derb64 = certificateAsPemString.subdata(in: 28 ..< lenght)
+            var str = String(decoding: derb64, as: UTF8.self)
+            str = str.replacingOccurrences(of: "\n", with: "")
+            if let data = Data(base64Encoded: str) {
+                if let cert = SecCertificateCreateWithData(nil, data as CFData) {
+                    logError("Added \(cert)")
+                    trustList.append(cert)
+                }
+            }
+        }
+        let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
+        if errSecSuccess != erm {
+            logError("SecTrustSetAnchorCertificates failed: \(erm)")
+            return false
+        }
+        if errSecSuccess != SecTrustSetAnchorCertificatesOnly(serverTrust, true) {
+            logError("SecTrustSetAnchorCertificatesOnly failed)")
+            return false
+        }
+
+        var result = SecTrustResultType.invalid
+        if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
+            logError("SecTrustEvaluateWithError: \(result)")
+            return false
+        }
+            switch result {
+              case .unspecified:
+                // We should be using SecTrustEvaluateWithError -- but cannot as that is > 12.0
+                // so we have a weakness here - we cannot readily distingish between the users chain
+                // and our own lists. So that is a second stage comparison that we need to do.
+                //
+                logError("SecTrustEvaluateWithError: unspecified - trusted by the OS or Us")
+                return true
+              case .proceed:
+                logError("SecTrustEvaluateWithError: proceed - trusted by the user; but not from our list.")
+              case .deny:
+                logError("SecTrustEvaluateWithError: deny")
+              case .invalid:
+                logError("SecTrustEvaluateWithError: invalid")
+              case .recoverableTrustFailure:
+                logError("SecTrustEvaluateWithError: recoverableTrustFailure")
+              case .fatalTrustFailure:
+                logError("SecTrustEvaluateWithError: fatalTrustFailure")
+              case .otherError:
+                logError("SecTrustEvaluateWithError: otherError")
+              default:
+                logError("SecTrustEvaluateWithError: uknown")
+            }
+            return false
+    }
+    
 	/// Check the SSL Connection
 	 func checkSSL() {
 
@@ -206,13 +276,16 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			  let serverTrust = challenge.protectionSpace.serverTrust else {
 
 			logDebug("No security strategy")
-			completionHandler(.performDefaultHandling, nil)
+            completionHandler(.cancelAuthenticationChallenge, nil)
 			return
 		}
-
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
-		SecTrustSetPolicies(serverTrust, policies as CFTypeRef)
-		let certificateCount = SecTrustGetCertificateCount(serverTrust)
+        if false == checkATS(serverTrust: serverTrust) {
+            logDebug("Bail onm ATS")
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            return
+        }
+        
+        let certificateCount = SecTrustGetCertificateCount(serverTrust)
 
 		var foundValidCertificate = false
 		var foundValidCommonNameEndsWithTrustedName = false
@@ -222,8 +295,10 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 
 			if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
 				let serverCert = Certificate(certificate: serverCertificate)
-
+                logError("Server set at \(index) is \(serverCert)")
+                
 				if let name = serverCert.commonName {
+                    logVerbose("Hostname CN \(name)")
 					if name.lowercased() == challenge.protectionSpace.host.lowercased() {
 						foundValidFullyQualifiedDomainName = true
 						logVerbose("Host matched CN \(name)")
@@ -242,7 +317,6 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 					}
 				}
 				for trustedCertificate in trustedCertificates {
-
 					if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
 						logVerbose("Found a match with a trusted Certificate")
 						foundValidCertificate = true
@@ -250,13 +324,14 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 				}
 			}
 		}
+        logError("server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
 
 		if foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName {
 			// all good
 			logVerbose("Certificate signature is good for \(challenge.protectionSpace.host)")
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 		} else {
- 			logError("Invalid server trust")
+ 			logError("Invalid server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
 			completionHandler(.cancelAuthenticationChallenge, nil)
 		}
 	}
@@ -294,9 +369,12 @@ class SecurityCheckerProvider: SecurityChecker {
 			return
 		}
 
-		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
-		SecTrustSetPolicies(serverTrust, policies as CFTypeRef)
-		let certificateCount = SecTrustGetCertificateCount(serverTrust)
+        if false == checkATS(serverTrust: serverTrust) {
+            completionHandler(.cancelAuthenticationChallenge, nil)
+            logDebug("Bail onm ATS")
+            return
+        }
+        let certificateCount = SecTrustGetCertificateCount(serverTrust)
 
 		var foundValidCertificate = false
 		var foundValidFullyQualifiedDomainName = false
