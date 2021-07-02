@@ -116,15 +116,15 @@ class HolderCoordinator: SharedCoordinator {
 				switch result {
 					case .failure:
 						alertController = UIAlertController(
-							title: String.holderFaultyVaccination28JuneFailedToReloadAlertTitle,
-							message: String.holderFaultyVaccination28JuneFailedToReloadAlertMessage,
+							title: L.holderFaultyvaccination28JuneFailedtoreloadAlertTitle(),
+							message: L.holderFaultyvaccination28JuneFailedtoreloadAlertMessage(),
 							preferredStyle: .alert
 						)
 
 					case .success:
 						alertController = UIAlertController(
-							title: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertTitle,
-							message: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertMessage,
+							title: L.holderFaultyvaccination28JuneSuccessfullyreloadedAlertTitle(),
+							message: L.holderFaultyvaccination28JuneSuccessfullyreloadedAlertMessage(),
 							preferredStyle: .alert
 						)
 				}
