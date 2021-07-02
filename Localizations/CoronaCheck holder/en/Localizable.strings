@@ -251,6 +251,11 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "Your recovery certificate is not valid in the Netherlands, because the type of test is not accepted.<br />You’ve only got an international QR-code.";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Your recovery certificate is not valid internationally. You’ve only got a Dutch QR-code. <br />The reason is that the type of test is not accepted. <br />An international recovery certificate can only be made with a PCR-test";
+
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
