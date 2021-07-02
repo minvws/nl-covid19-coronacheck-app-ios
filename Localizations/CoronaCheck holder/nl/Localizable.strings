@@ -251,6 +251,11 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationale QR-code.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Over je herstelbewijs";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.<br />Dit komt doordat het type test niet voldoet in Nederland.";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.<br />Dit komt doordat het type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden.";
+
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
@@ -318,7 +323,7 @@
 
 /* MARK: - Holder About */
 "holder.about.title" = "Over deze app";
-"holder.about.text" = "CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen Nederlanders steeds meer plekken bezoeken en weer op reis. <br/>CoronaCheck maakt een coronabewijs van jouw vaccinatie, van jouw negatieve testuitslag of als je corona hebt gehad en bent hersteld. Een coronabewijs bestaat uit twee verschillende QR-codes. De een is voor toegang tot plekken in Nederland, de ander is om internationaal mee te reizen (het EU Digitaal Corona Certificaat).";
+"holder.about.text" = "CoronaCheck is ontwikkeld om de samenleving beetje bij beetje te openen. Zo kunnen Nederlanders steeds meer plekken bezoeken en weer op reis.<br/>CoronaCheck maakt een coronabewijs van jouw vaccinatie, van jouw negatieve testuitslag of als je corona hebt gehad en bent hersteld. Een coronabewijs bestaat uit twee verschillende QR-codes. De een is voor toegang tot plekken in Nederland, de ander is om internationaal mee te reizen (het EU Digitaal Corona Certificaat).";
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
@@ -408,3 +413,5 @@
 "holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Door een technische fout heeft u onterecht een Nederlands vaccinatiebewijs gekregen. Dit is nu gecorrigeerd.";
 "holder.faultyvaccination28June.failedtoreload.alert.title" = "Gegevens verversen niet gelukt";
 "holder.faultyvaccination28June.failedtoreload.alert.message" = "Er ging iets mis bij het verversen van je gegevens. Haal je gegevens opnieuw op via de app.";
+
+
