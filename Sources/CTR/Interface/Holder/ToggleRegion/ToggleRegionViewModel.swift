@@ -29,11 +29,11 @@ class ToggleRegionViewModel: Logging {
 	func updateTexts(selectedRegion: QRCodeValidityRegion) {
 		switch selectedRegion {
 			case .europeanUnion:
-				topText = .holderToggleRegionLabelTopTextEU
-				bottomText = .holderToggleRegionLabelBottomTextEU
+				topText = L.toggleRegionLabelTopTextEu()
+				bottomText = L.toggleRegionLabelBottomTextEu()
 			case .domestic:
-				topText = .holderToggleRegionLabelTopTextNL
-				bottomText = .holderToggleRegionLabelBottomTextNL
+				topText = L.toggleRegionLabelTopTextNl()
+				bottomText = L.toggleRegionLabelBottomTextNl()
 		}
 	}
 
