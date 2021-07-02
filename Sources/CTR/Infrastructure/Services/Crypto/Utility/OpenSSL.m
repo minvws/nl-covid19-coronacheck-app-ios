@@ -528,10 +528,18 @@ errit:
     
     if (ASN1_OCTET_STRING_cmp(authorityKeyIdentifier, expectedAuthorityKeyIdentifier) != 0)
         EXITOUT("validateAuthorityKeyIdentifierData mismatch");
-    
     isMatch = YES;
+    
 errit:
-    ASN1_OCTET_STRING_free(expectedAuthorityKeyIdentifier); expectedAuthorityKeyIdentifier = NULL;
+#ifdef __DEBUG
+    fprintf(stderr,"validateAuthorityKeyIdentifierData ");
+    print_octed_as_hex(authorityKeyIdentifier);
+    fprintf(stderr," == expected ");
+    print_octed_as_hex(expectedAuthorityKeyIdentifier);
+    fprintf(stderr," ?? : %s\n", isMatch ? "YES" : "NO");
+#endif
+    ASN1_OCTET_STRING_free(expectedAuthorityKeyIdentifier);
+    expectedAuthorityKeyIdentifier = NULL;
     return isMatch;
 }
 
