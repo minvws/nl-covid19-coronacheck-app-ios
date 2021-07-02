@@ -70,9 +70,14 @@ func checkLine(line: String) throws {
 				}
 
 				// Is the tag a <br> or <br /> or <br/>?
-				guard tagContents != "br /" && tagContents != "br" && tagContents != "br/" else {
+				// Only <br /> is allowed - the others cause an iOS crash!
+				guard tagContents != "br /" else {
 					// <br /> is special cased - it stands alone.
 					continue
+				}
+
+				if tagContents == "br" || tagContents == "br/" {
+					throw ParseError(line: line, position: position, message: "BR tags should only use format `<br />` otherwise it causes a crash")
 				}
 
 				// Append this tag to the Stack
