@@ -48,14 +48,4 @@ extension String {
 				return L.holderDashboardNotValidInThisRegionScreenEuRecoveryMessage()
 		}
 	}
-    
-	// Can be deleted after EU launch: 
-	static func qrEULaunchCardFooterMessage(forEULaunchDate date: Date) -> String {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "d MMMM"
-
-		let dateString = dateFormatter.string(from: date)
-
-		return Localization.string(for: "holder.dashboard.qr.eulaunchcardfootermessage", comment: "", [dateString])
-	}
 }
