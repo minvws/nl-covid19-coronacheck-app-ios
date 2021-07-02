@@ -199,6 +199,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			formattedVaccinationDate,
 			vaccination.country,
 			vaccination.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
 		)
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
@@ -242,6 +243,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			manufacturer,
 			test.country,
 			test.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
 		)
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
@@ -273,6 +275,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			formattedValidFromDate,
 			formattedValidUntilDate,
 			recovery.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
 		)
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
