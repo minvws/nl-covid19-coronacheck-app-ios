@@ -76,8 +76,8 @@ class LaunchViewController: BaseViewController {
 	private func showJailBreakDialog() {
 
 		let alertController = UIAlertController(
-			title: .jailbrokenTitle,
-			message: .jailbrokenMessage,
+			title: L.jailbrokenTitle(),
+			message: L.jailbrokenMessage(),
 			preferredStyle: .alert
 		)
 		alertController.addAction(
