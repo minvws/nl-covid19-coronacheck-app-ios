@@ -25,7 +25,7 @@
 "verifier.result.identity.dayofbirth" = "Geboortedag";
 "verifier.result.identity.monthofbirth" = "Geboortemaand";
 
-"verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
+"verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br />Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br />Dan kun je de bezoeker geen toegang geven.</p>";
 
 
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";

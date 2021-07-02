@@ -185,7 +185,7 @@
 "holder.onboarding.title.safely" = "Only access with a certificate";
 "holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a coronavirus pass. You’re only allowed to enter carrying this pass.";
 "holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
-"holder.onboarding.message.yourqr" = "The app can generate a coronavirus pass if:<br/>
+"holder.onboarding.message.yourqr" = "The app can generate a coronavirus pass if:<br />
 <ul><li>You have been vaccinated</li><li>A test result confirms you don’t have corona.</li><li>A test result confirms you've had coronavirus and are recovered.</li></ul>";
 "holder.onboarding.title.validity" = "QR code = your proof";
 "holder.onboarding.message.validity" = "This app generates a QR code with your vaccination, test result or recovery. That is your certificate. This QR code will be checked at the entrance of places or activities or at the border. If your certificate expires, the QR code disappears from the app.";
@@ -216,7 +216,7 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "Make QR code";
 "holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br/><p><b>1. Choose your certificate</b></p><p> You can create a vaccination certificate, a test certificate or a recovery certificate. </p> <br/> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination, test result or recovery. </p> <br/> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries. </p>";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br /><p><b>1. Choose your certificate</b></p><p> You can create a vaccination certificate, a test certificate or a recovery certificate. </p> <br /> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination, test result or recovery. </p> <br /> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries. </p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
@@ -323,7 +323,7 @@
 
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
-"holder.about.text" = "CoronaCheck is created to reopen society step by step. This way, the Netherlands can head out more often and travel abroad.<br/>CoronaCheck creates a coronavirus pass from your vaccination, your negative test result or if you've had corona and are recovered. A coronavirus pass consists of two QR-codes: one for the Netherlands and one for other countries (the EU Digital COVID Certificate).";
+"holder.about.text" = "CoronaCheck is created to reopen society step by step. This way, the Netherlands can head out more often and travel abroad.<br />CoronaCheck creates a coronavirus pass from your vaccination, your negative test result or if you've had corona and are recovered. A coronavirus pass consists of two QR-codes: one for the Netherlands and one for other countries (the EU Digital COVID Certificate).";
 "holder.about.link" = "Read the privacy statement here";
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
