@@ -477,7 +477,7 @@ class TokenEntryViewModel {
 		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = L.holderTokenentryButtonNotoken()
 		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
@@ -666,10 +666,6 @@ extension TokenEntryViewModel {
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
 			}
-		}
-
-		fileprivate static func userNeedsATokenButtonTitle(forMode _: InitializationMode) -> String {
-			return L.holderTokenentryRegularflowButtonNotoken()
 		}
 	}
 }

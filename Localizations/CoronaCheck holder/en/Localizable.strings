@@ -1,3 +1,5 @@
+"holder.tokenentry.button.notoken" = "I don't have a code";
+
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
 "holder.recovery.list.message" = "You can create a recovery statement from the retrieved details.";
@@ -52,8 +54,6 @@
 
 "holder.tokenentry.modal.notoken.title" = "I don't have a code";
 "holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p></p>";
-"holder.tokenentry.regularflow.button.notoken" = "I don't have a code";
-
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 
