@@ -27,16 +27,36 @@ final class LocalizedCopyTests: XCTestCase {
 
 	func testCommonlyWronglyEditedCopy() {
 
-		expect(self.copyValues(key: "general.recoverydate")) == [ .nl: "hersteldatum", .en: "recovery date" ]
-		expect(self.copyValues(key: "general.vaccination")) == [ .nl: "vaccinatie", .en: "vaccination" ]
-		expect(self.copyValues(key: "general.vaccinationcertificate")) == [ .nl: "vaccinatiebewijs", .en: "vaccination certificate" ]
-		expect(self.copyValues(key: "general.testcertificate")) == [ .nl: "testbewijs", .en: "test certificate" ]
-		expect(self.copyValues(key: "general.recoverydate")) == [ .nl: "hersteldatum", .en: "recovery date" ]
-		expect(self.copyValues(key: "general.recoverystatement")) == [ .nl: "herstelverklaring", .en: "recovery statement" ]
-		expect(self.copyValues(key: "general.testdate")) == [ .nl: "Testdatum", .en: "test date" ]
-		expect(self.copyValues(key: "general.vaccinationdate")) == [ .nl: "Vaccinatiedatum", .en: "vaccination date" ]
-	}
+		/* -- These should all be lowercased 👇🏻 -- */
+		expect(self.copyValues(key: "general.recoverydate"))
+			== [ .nl: "hersteldatum", .en: "recovery date" ]
 
+		expect(self.copyValues(key: "general.vaccination"))
+			== [ .nl: "vaccinatie", .en: "vaccination" ]
+
+		expect(self.copyValues(key: "general.vaccinationcertificate"))
+			== [ .nl: "vaccinatiebewijs", .en: "vaccination certificate" ]
+
+		expect(self.copyValues(key: "general.testcertificate"))
+			== [ .nl: "testbewijs", .en: "test certificate" ]
+
+		expect(self.copyValues(key: "general.recoverydate"))
+			== [ .nl: "hersteldatum", .en: "recovery date" ]
+
+		expect(self.copyValues(key: "general.recoverystatement"))
+			== [ .nl: "herstelverklaring", .en: "recovery certificate" ]
+		/* -- (end of lowercased checks) ☝🏻 -- */
+
+		expect(self.copyValues(key: "general.testdate"))
+			== [ .nl: "Testdatum", .en: "test date" ]
+
+		expect(self.copyValues(key: "general.vaccinationdate"))
+			== [ .nl: "Vaccinatiedatum", .en: "vaccination date" ]
+
+		// Should be "recovery certificate"
+		expect(self.copyValue(key: "holder.recovery.list.message", forLocaleIdentifier: .en))
+			== "You can create a recovery certificate from the retrieved details."
+	}
 }
 
 fileprivate extension LocalizedCopyTests {
