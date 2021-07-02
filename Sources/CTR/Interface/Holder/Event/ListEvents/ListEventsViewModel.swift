@@ -131,7 +131,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	func warnBeforeGoBack() {
 
 		alert = ListEventsViewController.AlertContent(
-			title: .holderVaccinationAlertTitle,
+			title: L.holderVaccinationAlertTitle(),
 			subTitle: {
 				switch eventMode {
 					case .recovery:
@@ -143,11 +143,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				}
 			}(),
 			cancelAction: nil,
-			cancelTitle: .holderVaccinationAlertCancel,
+			cancelTitle: L.holderVaccinationAlertCancel(),
 			okAction: { [weak self] _ in
 				self?.goBack()
 			},
-			okTitle: .holderVaccinationAlertOk
+			okTitle: L.holderVaccinationAlertOk()
 		)
 	}
 
@@ -392,8 +392,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: L.holderEventAboutTitle(),
-								body: String(
-									format: .holderEventAboutBodyTest30,
+								body: L.holderEventAboutBodyTest3(
 									dataRow.identity.fullName,
 									formattedBirthDate,
 									testType,
@@ -433,12 +432,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 			rows.append(
 				ListEventsViewController.Row(
-					title: String(format: .holderVaccinationElementTitle, "\(formattedShotMonth) (\(provider))"),
-					subTitle: String(
-						format: .holderVaccinationElementSubTitle,
-						dataRow.identity.fullName,
-						formattedBirthDate
-					),
+					title: L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))"),
+					subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 					action: { [weak self] in
 
 						var vaccinName = ""
@@ -456,14 +451,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						var dosage = ""
 						if let doseNumber = dataRow.event.vaccination?.doseNumber,
 						   let totalDose = dataRow.event.vaccination?.totalDoses {
-							dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+							dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 						}
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: L.holderEventAboutTitle(),
-								body: String(
-									format: .holderEventAboutBodyVaccination,
+								body: L.holderEventAboutBodyVaccination(
 									dataRow.identity.fullName,
 									formattedBirthDate,
 									vaccinName,
@@ -685,7 +679,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			title: .errorTitle,
 			subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
 			cancelAction: nil,
-			cancelTitle: .holderVaccinationErrorClose,
+			cancelTitle: L.holderVaccinationErrorClose(),
 			okAction: { [weak self] _ in
 				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
 					if !success {
@@ -693,7 +687,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					}
 				}
 			},
-			okTitle: .holderVaccinationErrorAgain
+			okTitle: L.holderVaccinationErrorAgain()
 		)
 	}
 

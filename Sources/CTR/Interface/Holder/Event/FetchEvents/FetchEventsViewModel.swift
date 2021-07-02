@@ -220,14 +220,16 @@ final class FetchEventsViewModel: Logging {
 	func warnBeforeGoBack() {
 
 		navigationAlert = FetchEventsViewController.AlertContent(
-			title: .holderVaccinationAlertTitle,
-			subTitle: eventMode == .vaccination ? .holderVaccinationAlertMessage : .holderTestResultsAlertMessage,
+			title: L.holderVaccinationAlertTitle(),
+			subTitle: eventMode == .vaccination
+				? L.holderVaccinationAlertMessage()
+				: L.holderTestresultsAlertMessage(),
 			cancelAction: nil,
-			cancelTitle: .holderVaccinationAlertCancel,
+			cancelTitle: L.holderVaccinationAlertCancel(),
 			okAction: { _ in
 				self.goBack()
 			},
-			okTitle: .holderVaccinationAlertOk
+			okTitle: L.holderVaccinationAlertOk()
 		)
 	}
 
