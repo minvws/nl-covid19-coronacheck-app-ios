@@ -63,7 +63,7 @@ class OnboardingViewController: BaseViewController {
 			self.sceneView.pageControl.currentPage = 0
 		}
 		
-		sceneView.primaryButton.setTitle(.next, for: .normal)
+		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		viewModel.$enabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
@@ -79,7 +79,7 @@ class OnboardingViewController: BaseViewController {
 
 		// Create a button with a back arrow and a .previous title
 		let button = UIButton(type: .custom)
-		button.setTitle(.previous, for: .normal)
+		button.setTitle(L.generalPrevious(), for: .normal)
 		button.setTitleColor(Theme.colors.dark, for: .normal)
 		button.setTitleColor(Theme.colors.gray, for: .highlighted)
 		button.titleLabel?.font = Theme.fonts.bodyBoldFixed

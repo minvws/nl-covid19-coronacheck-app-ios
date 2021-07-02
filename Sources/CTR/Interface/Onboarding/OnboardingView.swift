@@ -139,7 +139,7 @@ class OnboardingView: BaseView {
 		super.setupAccessibility()
 		// Ribbon view
 		ribbonView.isAccessibilityElement = true
-		ribbonView.accessibilityLabel = .governmentLogo
+		ribbonView.accessibilityLabel = L.generalGovernmentLogo()
 	}
 
 	override func layoutSubviews() {

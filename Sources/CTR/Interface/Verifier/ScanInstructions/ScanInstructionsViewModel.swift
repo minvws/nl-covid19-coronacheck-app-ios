@@ -36,28 +36,28 @@ class ScanInstructionsViewModel: Logging {
 	init(coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)) {
 		
 		self.coordinator = coordinator
-		self.title = .verifierScanInstructionsTitle
+		self.title = L.verifierInstructionsTitle()
 		self.content = [
 			(
-				title: .verifierScanInstructionsDistanceTitle,
-				text: .verifierScanInstructionsDistanceText,
+				title: L.verifierInstructionsDistanceTitle(),
+				text: L.verifierInstructionsDistanceText(),
 				image: nil,
                 imageDescription: nil
 			), (
-				title: .verifierScanInstructionsScanTitle,
-				text: .verifierScanInstructionsScanText,
+				title: L.verifierInstructionsScanTitle(),
+				text: L.verifierInstructionsScanText(),
 				image: nil,
                 imageDescription: nil
 			), (
-				title: .verifierScanInstructionsAccessTitle,
-				text: .verifierScanInstructionsAccessText,
+				title: L.verifierInstructionsAccessTitle(),
+				text: L.verifierInstructionsAccessText(),
 				image: .greenScreen,
-                imageDescription: .verifierScanInstructionsAccessImage
+                imageDescription: L.verifierInstructionsAccessImage()
 			), (
-				title: .verifierScanInstructionsDeniedTitle,
-				text: .verifierScanInstructionsDeniedText,
+				title: L.verifierInstructionsDeniedTitle(),
+				text: L.verifierInstructionsDeniedText(),
 				image: .redScreen,
-                imageDescription: .verifierScanInstructionsDeniedImage
+                imageDescription: L.verifierInstructionsDeniedImage()
 			)
 		]
 	}

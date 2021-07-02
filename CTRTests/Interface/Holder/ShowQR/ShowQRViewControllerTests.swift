@@ -176,7 +176,7 @@ class ShowQRViewControllerTests: XCTestCase {
 			message: L.holderEnlargedScreenshotMessage(),
 			animated: true,
 			actions: [
-				.default(.ok)
+				.default(L.generalOk())
 			],
 			presentingViewController: sut
 		)

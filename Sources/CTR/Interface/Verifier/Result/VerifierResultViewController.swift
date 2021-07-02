@@ -135,11 +135,11 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 	private func setupIdentityView() {
 
-		sceneView.checkIdentityView.header = String.verifierResultIdentityTitle
-		sceneView.checkIdentityView.firstNameHeader = .verifierResultIdentityFirstname
-		sceneView.checkIdentityView.lastNameHeader = .verifierResultIdentityLastname
-		sceneView.checkIdentityView.dayOfBirthHeader = .verifierResultIdentityDayOfBirth
-		sceneView.checkIdentityView.monthOfBirthHeader = .verifierResultIdentityMonthOfBirth
+		sceneView.checkIdentityView.header = L.verifierResultIdentityTitle()
+		sceneView.checkIdentityView.firstNameHeader = L.verifierResultIdentityFirstname()
+		sceneView.checkIdentityView.lastNameHeader = L.verifierResultIdentityLastname()
+		sceneView.checkIdentityView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
+		sceneView.checkIdentityView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
 	}
 
 	// Rotation

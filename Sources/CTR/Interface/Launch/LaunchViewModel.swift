@@ -63,16 +63,13 @@ class LaunchViewModel {
 		self.cryptoLibUtility = cryptoLibUtility
 		self.walletManager = walletManager
 
-		title = flavor == .holder ? .holderLaunchTitle : .verifierLaunchTitle
-		message = flavor == .holder  ? .holderLaunchText : .verifierLaunchText
+		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
+		message = flavor == .holder  ? L.holderLaunchText() : L.verifierLaunchText()
 		appIcon = flavor == .holder ? .holderAppIcon : .verifierAppIcon
 
-		let versionString: String = flavor == .holder ? .holderLaunchVersion : .verifierLaunchVersion
-		version = String(
-			format: versionString,
-			versionSupplier.getCurrentVersion(),
-			versionSupplier.getCurrentBuild()
-		)
+		version = flavor == .holder
+			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
 
 		if shouldShowJailBreakAlert() {
 			// Interrupt, do not continu the flow
