@@ -677,7 +677,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		alert = ListEventsViewController.AlertContent(
 			title: .errorTitle,
-			subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
+			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 			cancelAction: nil,
 			cancelTitle: L.holderVaccinationErrorClose(),
 			okAction: { [weak self] _ in

@@ -102,30 +102,30 @@ final class FetchEventsViewModel: Logging {
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
-					title: .holderFetchEventsErrorNoResultsNetworkWasBusyTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkWasBusyMessage,
+					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
+					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
-					okTitle: .holderFetchEventsErrorNoResultsNetworkWasBusyButton
+					okTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyButton()
 				)
 
 			case (true, _, true): // No results and >=1 network had an error (5.5.1)
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
-					title: .holderFetchEventsErrorNoResultsNetworkErrorTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
+					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
+					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
-					okTitle: .holderFetchEventsErrorNoResultsNetworkErrorButton
+					okTitle: L.holderFetcheventsErrorNoresultsNetworkerrorButton()
 				)
 
 			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
-					title: .holderFetchEventsWarningSomeResultsNetworkWasBusyTitle,
-					subTitle: .holderFetchEventsWarningSomeResultsNetworkWasBusyMessage,
+					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
+					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
 					okAction: { _ in
 						nextStep()
 					},
@@ -134,14 +134,14 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
-			   self.navigationAlert = FetchEventsViewController.AlertContent(
-				title: .holderFetchEventsWarningSomeResultsNetworkErrorTitle,
-				subTitle: .holderFetchEventsWarningSomeResultsNetworkErrorMessage,
-				   okAction: { _ in
-					   nextStep()
-				   },
-				okTitle: .ok
-			   )
+				self.navigationAlert = FetchEventsViewController.AlertContent(
+					title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
+					subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
+					okAction: { _ in
+						nextStep()
+					},
+					okTitle: .ok
+				)
 
 			// 🥳 Some or no results and no network was busy or had an error:
 			case (_, false, false):
@@ -165,30 +165,30 @@ final class FetchEventsViewModel: Logging {
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
-					title: .holderFetchEventsErrorNoResultsNetworkWasBusyTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkWasBusyMessage,
+					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
+					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
-					okTitle: .holderFetchEventsErrorNoResultsNetworkWasBusyButton
+					okTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyButton()
 				)
 
 			case (true, _, true): // No results and >=1 network had an error (5.5.1)
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
-					title: .holderFetchEventsErrorNoResultsNetworkErrorTitle,
-					subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
+					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
+					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 					okAction: { _ in
 						self.coordinator?.fetchEventsScreenDidFinish(.stop)
 					},
-					okTitle: .holderFetchEventsErrorNoResultsNetworkErrorButton
+					okTitle: L.holderFetcheventsErrorNoresultsNetworkerrorButton()
 				)
 
 			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
 
 				self.navigationAlert = FetchEventsViewController.AlertContent(
-					title: .holderFetchEventsWarningSomeResultsNetworkWasBusyTitle,
-					subTitle: .holderFetchEventsWarningSomeResultsNetworkWasBusyMessage,
+					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
+					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
 					okAction: { _ in
 						nextStep()
 					},
@@ -198,8 +198,8 @@ final class FetchEventsViewModel: Logging {
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
 			   self.navigationAlert = FetchEventsViewController.AlertContent(
-				title: .holderFetchEventsWarningSomeResultsNetworkErrorTitle,
-				subTitle: .holderFetchEventsWarningSomeResultsNetworkErrorMessage,
+				title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
+				subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
 				   okAction: { _ in
 					   nextStep()
 				   },
