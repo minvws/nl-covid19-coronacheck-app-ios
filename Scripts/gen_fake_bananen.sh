@@ -1,5 +1,11 @@
 #!perl
 
+if ! which -s resign; then
+	echo Check out and compile/install https://github.com/ehn-dcc-development/x509-resign.git
+  	echo first
+	exit 1
+fi
+
 my $ca = 'ca.pem';
 # Fetch the root and resign it
 #
