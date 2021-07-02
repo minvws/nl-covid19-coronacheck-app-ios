@@ -414,9 +414,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = MakeTestAppointmentViewController(
 			viewModel: MakeTestAppointmentViewModel(
 				coordinator: self,
-				title: .holderNoTestTitle,
-				message: String(format: .holderNoTestBody),
-				buttonTitle: .holderNoTestButtonTitle
+				title: L.holderNotestTitle(),
+				message: String(format: L.holderNotestBody()),
+				buttonTitle: L.holderNotestButtonTitle()
 			)
 		)
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
