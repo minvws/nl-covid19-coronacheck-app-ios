@@ -39,7 +39,7 @@ class TokenScanViewModel: ScanPermissionViewModel {
 	init(coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)) {
 
 		self.theCoordinator = coordinator
-		self.title =  L.holderTokenscanTitle()
+		self.title = L.holderTokenscanTitle()
 		self.message = L.holderTokenscanMessage()
 		self.torchLabels = [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		self.errorTitle = L.holderTokenscanErrorTitle()
