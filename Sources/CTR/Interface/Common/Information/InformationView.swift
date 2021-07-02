@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import WebKit
 
 class InformationView: BaseView {
 
@@ -19,7 +20,6 @@ class InformationView: BaseView {
 		static let margin: CGFloat = 20.0
 	}
 
-	/// The stackview
 	private let stackView: UIStackView = {
 
 		let view = UIStackView()
@@ -31,20 +31,19 @@ class InformationView: BaseView {
 		return view
 	}()
 
-	/// The title label
 	private let titleLabel: Label = {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 
-	/// The message label
-	private let messageLabel: TextView = {
-		return TextView()
+	private lazy var webView: WKWebView = {
+		let webView = WKWebView()
+		webView.navigationDelegate = self
+		webView.scrollView.showsHorizontalScrollIndicator = false
+		return webView
 	}()
 
-	/// The bottom constraint
 	var bottomConstraint: NSLayoutConstraint?
 
-	/// setup the views
 	override func setupViews() {
 
 		super.setupViews()
@@ -52,18 +51,16 @@ class InformationView: BaseView {
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 
-	/// Setup the hierarchy
 	override func setupViewHierarchy() {
 
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(webView)
 
 		addSubview(stackView)
 	}
 
-	/// Setup the constraints
 	override func setupViewConstraints() {
 
 		super.setupViewConstraints()
@@ -85,7 +82,8 @@ class InformationView: BaseView {
 			stackView.trailingAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
-			)
+			),
+			stackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.height * 0.7) // HOTFIX hack, bottomsheet forced to 70% height.
 		])
 	}
 
@@ -101,27 +99,57 @@ class InformationView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
+			guard let message = message else { return }
 
-			// Prevents a crash!
-			let message = message?.replacingOccurrences(of: "<br>", with: "<br />")
+			let style = """
+				body {
+					 margin:0px;
+				}
+				 p {
+					 font-family: -apple-system;
+					 color: #383836;
+					 font-size: 17px;
+				}
+			"""
 
-			messageLabel.attributedText = .makeFromHtml(
-				text: message,
-				font: Theme.fonts.body,
-				textColor: Theme.colors.dark
-			)
+			let html = """
+				<html>
+					<head>
+						<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'>
+						<style>
+							\(style)
+						</style>
+					</head>
+					<body>\(message)</body>
+				</html>
+			"""
+
+			webView.loadHTMLString(html, baseURL: nil)
 		}
 	}
 
-	var linkTapHandler: ((URL) -> Void)? {
-		didSet {
-			guard let linkTapHandler = linkTapHandler else { return }
-			messageLabel.linkTouched(handler: linkTapHandler)
-		}
-	}
+	var linkTapHandler: ((URL) -> Void)?
 
 	func handleScreenCapture(shouldHide: Bool) {
-		messageLabel.isHidden = shouldHide
+		webView.isHidden = shouldHide
 	}
 
+}
+
+extension InformationView: WKNavigationDelegate {
+
+	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: ((WKNavigationActionPolicy) -> Void)) {
+
+		guard let url = navigationAction.request.url else {
+			decisionHandler(.cancel)
+			return
+		}
+
+		if url.absoluteURL.absoluteString == "about:blank" {
+			decisionHandler(.allow)
+		} else {
+			linkTapHandler?(url)
+			decisionHandler(.cancel)
+		}
+	}
 }
