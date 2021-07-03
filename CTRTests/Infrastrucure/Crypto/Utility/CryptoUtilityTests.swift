@@ -257,12 +257,16 @@ class CryptoUtilityTests: XCTestCase {
         let certWithStuff = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKRENDQWd5Z0F3SUJBZ0lVZVk1Uy9seVFKKzBSN0oxbGRaQWJxL0YwNjBnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0RqRU1NQW9HQTFVRUF3d0RabTl2TUI0WERUSXhNRGN3TXpJd016ZzFNRm9YRFRJeE1EZ3dNakl3TXpnMQpNRm93RGpFTU1Bb0dBMVVFQXd3RFptOXZNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDCkFRRUFzUVdBdU5RYjc5eU1zVFBsbXFIT1RFbVVjWXE5T2NITjZPRVFJbS9JUUZhYkp2UHFOM0ZjNU5LbS9ZMU4KMGJqdXZoM1Z1a0RURFdHSnF1anBYKzJSU3QrOUg5UkFKc09aOHU0MHlBTGxwcnh4UjAvS0RyMStNT2Zwa1dtWQplOVdKSVZFdU1pM29PQ0lmMlF4T202RGJtN2VBNUVEaDF6RFpUUzB0UlNZSWk4eEpBcTU4MnZLVHI4SE40enZ0CmhQTFJwSkFIWjlrZEMrUDdWVEJHdHVYdWlKS0xmMnU3MzE0ZGpoeDVxL3E1aVhsRkw5eUFUWDNqdzQxMldKankKNEVJS1BWUHlSZ1RUTWp5RVVHbHZYZEFZUU1xRkhISnNSYlRxUTNCdHNYcmVSUlZFeXdDMGo3QjI4SmR4RWxHcQpyblBjV0RoL2t4SmRZUFZpS0ZuN1hlVGdad0lEQVFBQm8zb3dlREFkQmdOVkhRNEVGZ1FVQXZia1pOeS9NM3RNCnFLSlZNSlIxNzJ4Ym0yNHdId1lEVlIwakJCZ3dGb0FVQXZia1pOeS9NM3RNcUtKVk1KUjE3MnhibTI0d0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWxCZ05WSFJFRUhqQWNnZ1YwWlhOME1ZSUZkR1Z6ZERLQkJtWnZRR0poY29jRQpBUUlEQkRBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQW54QnZKT29QMEFCSzYwV3JaUmZYbTU4RVd2eGErblc5CkhTZE03R2VQYlNaODBKNjBPUElmMkpiVENkUzFxVFY2c09KK2ZFTHNKNlhkVjE5MldIbGJYR2FtUHdYNm9NbG8KU29FdFkvYXduS3E5cmVqTmRqM29wQ3FySXhhWEdmZkNBNkRiTFoyN1hzZHk2YXJCWVNMU0V6UU9SdkRyOFZGVgpXdUJId2pDSkNlbGMwNVNDNVJUMG1rdnBEeDRoRXNHaGpZN1VHVjVETHhiSk9FZmNTNTFJamJLS1FHVi85M0RPCnFBV20xeld1MkFXMDZ6cTEyUlhwdFN0dGNHcDVoeXFiZC82L3A4V1EyUDE5dmZmb3UvcUphd29hM0podnZZbDkKTUR6N3hsZ1d1OXlLZjUzT3JudXhEMlFTQ3RCY2NhTlFaNFpvOGNmcUdVUUNsUTczT0VJbzRnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")!
         
         let sans2: [String ] = (openssl.getSubjectAlternativeDNSNames(certWithStuff) as! Array<String>?)!
-        XCTAssert(sans2.count == 2)
+        XCTAssert(sans2.count == 2) // check that we skip the IP and email entry.
         XCTAssert(sans2.first == "test1")
         XCTAssert(sans2.last == "test2")
         
         XCTAssert(true == openssl.validateSubjectAlternativeDNSName("test1", forCertificateData: certWithStuff))
         XCTAssert(true == openssl.validateSubjectAlternativeDNSName("test2", forCertificateData: certWithStuff))
+
+        // check that we do not see the non DNS entries. IP address is a bit of an edge case. Perhaps
+        // we should allow that to match.
+        //
         XCTAssert(false == openssl.validateSubjectAlternativeDNSName("fo@bar", forCertificateData: certWithStuff))
     }
 

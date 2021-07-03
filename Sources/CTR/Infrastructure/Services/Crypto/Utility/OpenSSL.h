@@ -11,9 +11,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OpenSSL : NSObject
 
-- (BOOL)validateSerialNumber:(uint64_t)serialNumber forCertificateData:(NSData *)certificateData;
-- (BOOL)validateSubjectKeyIdentifier:(NSData *)subjectKeyIdentifier forCertificateData:(NSData *)certificateData;
-- (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificateData;
+- (BOOL)validateSerialNumber:(uint64_t)serialNumber forCertificateData:(NSData *)certificatePemData;
+- (BOOL)validateSubjectKeyIdentifier:(NSData *)subjectKeyIdentifier forCertificateData:(NSData *)certificatePemData;
+- (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificatePemData;
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
                    contentData:(NSData *)contentData
@@ -29,9 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
 
 // Avoid using this method - as it cannot cope with mutiple Subject Alternative Names,
-// which is rather common.
+// which is rather common. It will only return one entry if there is exactly one. Otherwise
+// it will fail (return a NULL).
 //
 - (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData __deprecated;
+
+// Get all DNS entries (skips IP addresses and anything 'else')
+//
 - (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData;
 
 - (BOOL)inSystemTrustRoots:(NSData *)certData;
