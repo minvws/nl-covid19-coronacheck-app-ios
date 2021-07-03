@@ -7,4 +7,4 @@ echo "  false | openssl s_client -connect api-ct.bananenhalen.nl:4433 -showcerts
 echo
 echo You should see a \"Verify return code: 0 \(ok\)\" near the end.
 echo
-openssl s_server -cert 1002.pem -cert_chain chain.pem
+openssl s_server -cert 1002.pem -cert_chain chain.pem -WWW

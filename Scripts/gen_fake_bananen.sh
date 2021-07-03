@@ -14,6 +14,12 @@ my $ca = 'ca.pem';
 	openssl x509 |\
 	resign -Ksi > $ca` unless -f $ca;
 
+# Create version that can be imported into the emulator
+#
+my $cader = $ca;
+$cader ~= s/\.pem/.crt/g;
+`openssl x509 -in $ca -outform DER -out $cader`;
+
 # Fetch full chain for the bananen API server
 #
 open(STDIN,'false | openssl s_client -connect api-ct.bananenhalen.nl:443 -showcerts |')
