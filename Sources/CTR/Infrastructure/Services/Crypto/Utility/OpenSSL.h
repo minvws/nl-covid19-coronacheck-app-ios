@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData;
 
+- (BOOL)inSystemTrustRoots:(NSData *)certData;
 @end
 
 NS_ASSUME_NONNULL_END

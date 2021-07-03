@@ -542,5 +542,4 @@ errit:
     expectedAuthorityKeyIdentifier = NULL;
     return isMatch;
 }
-
 @end
