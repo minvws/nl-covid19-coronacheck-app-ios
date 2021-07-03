@@ -83,7 +83,7 @@ class InformationView: BaseView {
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
-			stackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.height * 0.7) // HOTFIX hack, bottomsheet forced to 70% height.
+			stackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.height * 0.6) // HOTFIX hack, bottomsheet forced to 60% height.
 		])
 	}
 
@@ -104,6 +104,7 @@ class InformationView: BaseView {
 			let style = """
 				body {
 					 margin:0px;
+					 word-wrap: break-word;
 				}
 				 p {
 					 font-family: -apple-system;
