@@ -28,7 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
 
-- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData;
+// Avoid using this method - as it cannot cope with mutiple Subject Alternative Names,
+// which is rather common.
+//
+- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData __deprecated;
 - (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData;
 
 - (BOOL)inSystemTrustRoots:(NSData *)certData;
