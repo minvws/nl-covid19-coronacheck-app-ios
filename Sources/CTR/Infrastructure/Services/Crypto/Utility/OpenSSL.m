@@ -11,6 +11,7 @@
 #import <openssl/pkcs7.h>
 #import <openssl/cms.h>
 #import <openssl/safestack.h>
+#include <openssl/asn1.h>
 #import <openssl/x509.h>
 #import <openssl/x509v3.h>
 #import <openssl/x509_vfy.h>
@@ -84,9 +85,11 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 
 @implementation OpenSSL
 
-- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData {
+- (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData {
     BIO *certificateBlob = NULL;
     X509 *certificate = NULL;
+    NSString *san = NULL;
+    NSMutableArray * results = [[NSMutableArray alloc] initWithCapacity:4];
     
     if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
         EXITOUT("Cannot allocate certificateBlob");
@@ -94,37 +97,42 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
     if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
         EXITOUT("Cannot parse certificateData");
     
-    int loc = X509_get_ext_by_NID(certificate, NID_subject_alt_name, -1);
-    if (loc >= 0) {
-        X509_EXTENSION * ext = X509_get_ext(certificate, loc);
-        BUF_MEM *bptr = NULL;
-        char *buf = NULL;
-        BIO *bio = BIO_new(BIO_s_mem());
-        if(!X509V3_EXT_print(bio, ext, 0, 0)){
-            
-            EXITOUT("Cannot parse EXT");
+    STACK_OF(GENERAL_NAME) *gens = X509_get_ext_d2i(certificate, NID_subject_alt_name, NULL, NULL);
+    if (gens) {
+        for (int i=0; (i < sk_GENERAL_NAME_num(gens)); i++) {
+            GENERAL_NAME *name = sk_GENERAL_NAME_value(gens, i);
+            if (name && name->type == GEN_DNS) {
+                char *dns_name = (char *) ASN1_STRING_get0_data(name->d.dNSName);
+                san = [NSString stringWithCString:dns_name encoding:NSASCIIStringEncoding];
+                [results addObject:san];
+            }
         }
-        
-        BIO_flush(bio);
-        BIO_get_mem_ptr(bio, &bptr);
-        
-        // now bptr contains the strings of the key_usage, take
-        // care that bptr->data is NOT NULL terminated, so
-        // to print it well, let's do something..
-        
-        buf = (char *)malloc( (bptr->length + 1)*sizeof(char) );
-        memcpy(buf, bptr->data, bptr->length);
-        buf[bptr->length] = '\0';
-        NSString *san = [NSString stringWithUTF8String:buf];
-        if (buf) free(buf);
-        return san;
     }
-    
 errit:
     BIO_free(certificateBlob);
     X509_free(certificate);
     
+    return results;
+}
+
+- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData {
+    NSArray * sans = [self getSubjectAlternativeDNSNames:certificateData];
+    if ([sans count] == 1)
+        return [sans firstObject];
+    NSLog(@"ERROR - getSubjectAlternativeName with mutiple options - returning none.");
     return NULL;
+}
+
+- (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificateData {
+    if (host == NULL)
+        return false;
+
+    NSArray * sans = [self getSubjectAlternativeDNSNames:certificateData];
+    for(NSString * object in sans) {
+        if ([[object lowercaseString] isEqual:host])
+            return true;
+    }
+    return false;
 }
 
 - (BOOL)validateSerialNumber:(uint64_t)serialNumber forCertificateData:(NSData *)certificateData {

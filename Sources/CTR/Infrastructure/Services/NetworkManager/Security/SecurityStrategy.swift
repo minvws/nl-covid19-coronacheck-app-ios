@@ -255,6 +255,72 @@ class SecurityCheckerWorker: Logging {
         logError("SecTrustEvaluateWithError: returning false.")
         return false
     } // checkATS()
+    
+    func checkSSL(serverTrust: SecTrust,
+                  policies: [SecPolicy],
+                  trustedCertificates: [Data],
+                  hostname: String,
+                  trustedNames: [String]
+                  ) -> Bool {
+        let openssl = OpenSSL()
+        let hostnameLC = hostname.lowercased()
+
+        if false == checkATS(serverTrust: serverTrust,
+                             policies: policies,
+                             trustedCertificates: trustedCertificates) {
+            logVerbose("Bail on ATS")
+            return false
+        }
+        
+        let certificateCount = SecTrustGetCertificateCount(serverTrust)
+        
+        var foundValidCertificate = false
+        var foundValidCommonNameEndsWithTrustedName = trustedNames.isEmpty ? true : false
+        var foundValidFullyQualifiedDomainName = false
+        
+        for index in 0 ..< certificateCount {
+            
+            if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
+                let serverCert = Certificate(certificate: serverCertificate)
+                logDebug("Server set at \(index) is \(serverCert)")
+                
+                if let name = serverCert.commonName {
+                    logVerbose("Hostname CN \(name)")
+                    if name.lowercased() == hostnameLC {
+                        foundValidFullyQualifiedDomainName = true
+                        logDebug("Host matched CN \(name)")
+                    }
+                    if !foundValidCommonNameEndsWithTrustedName {
+                        for trustedName in trustedNames {
+                            if name.lowercased().hasSuffix(trustedName.lowercased()) {
+                                foundValidCommonNameEndsWithTrustedName = true
+                                logDebug("Found a valid name \(name)")
+                            }
+                        }
+                    }
+                }
+                if openssl.validateSubjectAlternativeDNSName(hostnameLC, forCertificateData: serverCert.data) {
+                    foundValidFullyQualifiedDomainName = true
+                    logDebug("Host matched SAN \(hostname)")
+                }
+                for trustedCertificate in trustedCertificates {
+                    if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
+                        logDebug("Found a match with a trusted Certificate")
+                        foundValidCertificate = true
+                    }
+                }
+            }
+        }
+        if foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName {
+            // all good
+            logVerbose("Certificate signature is good for \(hostname)")
+            return true
+        };
+        
+        logError("Invalid server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
+        return false
+    } // checkSSL worker
+  
 } // SecurityCheckerWorker
 
 /// Security check for backend communication
@@ -305,61 +371,18 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
             completionHandler(.cancelAuthenticationChallenge, nil)
             return
         }
-        if false == checkATS(serverTrust: serverTrust) {
-            logDebug("Bail onm ATS")
-            completionHandler(.cancelAuthenticationChallenge, nil)
+        let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+
+        if SecurityCheckerWorker().checkSSL(serverTrust: serverTrust,
+                                                policies: policies,
+                                                trustedCertificates: trustedCertificates,
+                                                hostname: challenge.protectionSpace.host,
+                                                trustedNames:trustedNames) {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
             return
         }
-        
-        let certificateCount = SecTrustGetCertificateCount(serverTrust)
-        
-        var foundValidCertificate = false
-        var foundValidCommonNameEndsWithTrustedName = false
-        var foundValidFullyQualifiedDomainName = false
-        
-        for index in 0 ..< certificateCount {
-            
-            if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
-                let serverCert = Certificate(certificate: serverCertificate)
-                logError("Server set at \(index) is \(serverCert)")
-                
-                if let name = serverCert.commonName {
-                    logVerbose("Hostname CN \(name)")
-                    if name.lowercased() == challenge.protectionSpace.host.lowercased() {
-                        foundValidFullyQualifiedDomainName = true
-                        logVerbose("Host matched CN \(name)")
-                    }
-                    for trustedName in trustedNames {
-                        if name.lowercased().hasSuffix(trustedName.lowercased()) {
-                            foundValidCommonNameEndsWithTrustedName = true
-                            logVerbose("Found a valid name \(name)")
-                        }
-                    }
-                }
-                if let san = openssl.getSubjectAlternativeName(serverCert.data), !foundValidFullyQualifiedDomainName {
-                    if compareSan(san, name: challenge.protectionSpace.host.lowercased()) {
-                        foundValidFullyQualifiedDomainName = true
-                        logVerbose("Host matched SAN \(san)")
-                    }
-                }
-                for trustedCertificate in trustedCertificates {
-                    if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-                        logVerbose("Found a match with a trusted Certificate")
-                        foundValidCertificate = true
-                    }
-                }
-            }
-        }
-        logError("server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
-        
-        if foundValidCertificate && foundValidCommonNameEndsWithTrustedName && foundValidFullyQualifiedDomainName {
-            // all good
-            logVerbose("Certificate signature is good for \(challenge.protectionSpace.host)")
-            completionHandler(.useCredential, URLCredential(trust: serverTrust))
-        } else {
-            logError("Invalid server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
-            completionHandler(.cancelAuthenticationChallenge, nil)
-        }
+        completionHandler(.cancelAuthenticationChallenge, nil)
+        return
     }
     
     /// Validate a PKCS7 signature
@@ -389,56 +412,21 @@ class SecurityCheckerProvider: SecurityChecker {
         
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
               let serverTrust = challenge.protectionSpace.serverTrust else {
-            
-            logDebug("No security strategy")
+            logDebug("No policies/security strategy")
             completionHandler(.performDefaultHandling, nil)
             return
         }
-        
-        if false == checkATS(serverTrust: serverTrust) {
-            completionHandler(.cancelAuthenticationChallenge, nil)
-            logDebug("Bail onm ATS")
+        let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+
+        if SecurityCheckerWorker().checkSSL(serverTrust: serverTrust,
+                                                policies: policies,
+                                                trustedCertificates: trustedCertificates,
+                                                hostname: challenge.protectionSpace.host,
+                                                trustedNames: []) {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
             return
         }
-        let certificateCount = SecTrustGetCertificateCount(serverTrust)
-        
-        var foundValidCertificate = false
-        var foundValidFullyQualifiedDomainName = false
-        
-        for index in 0 ..< certificateCount {
-            
-            if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
-                let serverCert = Certificate(certificate: serverCertificate)
-                
-                if let name = serverCert.commonName, !foundValidFullyQualifiedDomainName {
-                    if name.lowercased() == challenge.protectionSpace.host.lowercased() {
-                        foundValidFullyQualifiedDomainName = true
-                        logVerbose("Host matched CN \(name)")
-                    }
-                }
-                if let san = openssl.getSubjectAlternativeName(serverCert.data), !foundValidFullyQualifiedDomainName {
-                    if compareSan(san, name: challenge.protectionSpace.host.lowercased()) {
-                        foundValidFullyQualifiedDomainName = true
-                        logVerbose("Host matched SAN \(san)")
-                    }
-                }
-                for trustedCertificate in trustedCertificates {
-                    
-                    if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-                        logVerbose("Found a match with a trusted Certificate")
-                        foundValidCertificate = true
-                    }
-                }
-            }
-        }
-        
-        if foundValidCertificate && foundValidFullyQualifiedDomainName {
-            // all good
-            logVerbose("Certificate signature is good for \(challenge.protectionSpace.host)")
-            completionHandler(.useCredential, URLCredential(trust: serverTrust))
-        } else {
-            logError("Invalid server trust")
-            completionHandler(.cancelAuthenticationChallenge, nil)
-        }
+        completionHandler(.cancelAuthenticationChallenge, nil)
+        return
     }
 }

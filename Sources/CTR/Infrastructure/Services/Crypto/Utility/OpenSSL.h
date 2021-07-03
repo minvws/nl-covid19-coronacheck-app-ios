@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)validateSerialNumber:(uint64_t)serialNumber forCertificateData:(NSData *)certificateData;
 - (BOOL)validateSubjectKeyIdentifier:(NSData *)subjectKeyIdentifier forCertificateData:(NSData *)certificateData;
+- (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificateData;
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
                    contentData:(NSData *)contentData
@@ -28,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
 
 - (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData;
+- (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData;
 
 - (BOOL)inSystemTrustRoots:(NSData *)certData;
 @end
