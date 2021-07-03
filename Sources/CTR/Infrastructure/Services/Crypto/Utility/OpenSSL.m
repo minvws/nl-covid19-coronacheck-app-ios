@@ -27,12 +27,12 @@
 #include <openssl/asn1.h>
 #include <openssl/bn.h>
 #warning "Warning: DEBUGing compiled in"
-#define EOUT(args...) { \
+#define DEBUGOUT(args...) { \
 fprintf(stderr,"%s\n\t%d %s",  __FILE__,  __LINE__, __PRETTY_FUNCTION__);\
 fprintf(stderr,args); \
 fprintf(stderr,"\n"); \
 }
-#define EXITOUT(args...) { EOUT(args); goto errit; }
+#define EXITOUT(args...) { DEBUGOUT(args); goto errit; }
 #define MAX_LENGTH 1024
 
 void print_certificate(X509* cert) {
@@ -82,7 +82,7 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
     fprintf(stderr,"\n");
 }
 #else
-#define EOUT(args...) { /* no output */ }
+#define DEBUGOUT(args...) { /* no output */ }
 #define EXITOUT(args...) {goto errit; }
 #endif
 
@@ -414,16 +414,7 @@ errit:
     return result == YES;
 }
 
-- (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData {
-    
-    BOOL subjectKeyMatches = [self compareSubjectKeyIdentifier:certificateData with:trustedCertificateData];
-    BOOL serialNumbersMatches = [self compareSerialNumber:certificateData with:trustedCertificateData];
-    BOOL certsMatches = [self compareCerts:certificateData with:trustedCertificateData];
-#ifdef __DEBUG
-    NSLog(@"--- compare result is %s", (subjectKeyMatches && serialNumbersMatches && certsMatches) ? "GOOD": "BAD");
-#endif
-    return subjectKeyMatches && serialNumbersMatches && certsMatches;
-}
+
 
 - (BOOL)compareCerts:(NSData *)certificateData with:(NSData *)trustedCertificateData {
     BIO *certificateBlob = NULL;
@@ -444,11 +435,12 @@ errit:
     if (NULL == (trustedCertificate = PEM_read_bio_X509(trustedCertificateBlob, NULL, 0, NULL)))
         EXITOUT("Cannot parse trustedCertificate");
 
-    // basically a memcmp() of the hash - eval if good enough
+    // basically a memcmp() of the hash (not sure if this is a sha1/md5
+    // or something more modern).
     //
     isMatch = (0 == X509_cmp(trustedCertificate, certificate)) ? YES : NO;
 
-    // compare pubkeys properly
+    // compare public keys too - as we'r not sure of above hash.
     //
     EVP_PKEY * ptc = X509_get0_pubkey(trustedCertificate);
     EVP_PKEY * tc = X509_get0_pubkey(certificate);
@@ -547,5 +539,22 @@ errit:
     X509_free(trustedCertificate);
     
     return isMatch;
+}
+
+- (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData {
+    if (![self compareSubjectKeyIdentifier:certificateData with:trustedCertificateData]) {
+        DEBUGOUT("compareSubjectKeyIdentifier failed");
+        return false;
+    }
+    if (![self compareSerialNumber:certificateData with:trustedCertificateData]) {
+        DEBUGOUT("compareSerialNumber failed");
+        return false;
+    }
+    if (![self compareCerts:certificateData with:trustedCertificateData]) {
+        DEBUGOUT("compareCerts failed");
+        return false;
+    }
+    DEBUGOUT("all 3 good");
+    return true;
 }
 @end
