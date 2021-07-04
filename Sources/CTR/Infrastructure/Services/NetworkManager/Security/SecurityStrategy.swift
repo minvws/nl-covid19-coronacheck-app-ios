@@ -206,13 +206,15 @@ class SecurityCheckerWorker: Logging {
         for certificateAsPemData in trustedCertificates {
             if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
                 trustList.append(cert)
+            } else {
+                logError("checkATS: Trust cert converson failed: \(certificateAsPemData)")
             }
         }
         if trustList.isEmpty {
             // add main chain back in.
             //
             if errSecSuccess != SecTrustSetAnchorCertificatesOnly(serverTrust, false) {
-                logError("SecTrustSetAnchorCertificatesOnly failed)")
+                logError("checkATS: SecTrustSetAnchorCertificatesOnly failed)")
                 return false
             }
         } else {
@@ -220,37 +222,38 @@ class SecurityCheckerWorker: Logging {
             //
             let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
             if errSecSuccess != erm {
-                logError("SecTrustSetAnchorCertificates failed: \(erm)")
+                logError("checkATS: SecTrustSetAnchorCertificates failed: \(erm)")
                 return false
             }
         }
 
         var result = SecTrustResultType.invalid
         if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
-            logError("SecTrustEvaluateWithError: \(result)")
+            logError("checkATS: SecTrustEvaluateWithError: \(result)")
             return false
         }
         switch result {
-        case .unspecified:
+         case .unspecified:
             // We should be using SecTrustEvaluateWithError -- but cannot as that is > 12.0
             // so we have a weakness here - we cannot readily distingish between the users chain
             // and our own lists. So that is a second stage comparison that we need to do.
             //
             logError("SecTrustEvaluateWithError: unspecified - trusted by the OS or Us")
             return true
-        case .proceed:
+         case .proceed:
             logError("SecTrustEvaluateWithError: proceed - trusted by the user; but not from our list.")
-        case .deny:
+         case .deny:
             logError("SecTrustEvaluateWithError: deny")
-        case .invalid:
+         case .invalid:
             logError("SecTrustEvaluateWithError: invalid")
-        case .recoverableTrustFailure:
-            logError("SecTrustEvaluateWithError: recoverableTrustFailure")
-        case .fatalTrustFailure:
+         case .recoverableTrustFailure:
+            dump(SecTrustCopyResult(serverTrust))
+            logError("SecTrustEvaluateWithError: recoverableTrustFailure.")
+         case .fatalTrustFailure:
             logError("SecTrustEvaluateWithError: fatalTrustFailure")
-        case .otherError:
+         case .otherError:
             logError("SecTrustEvaluateWithError: otherError")
-        default:
+         default:
             logError("SecTrustEvaluateWithError: uknown")
         }
         logError("SecTrustEvaluateWithError: returning false.")
