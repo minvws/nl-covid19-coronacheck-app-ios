@@ -319,7 +319,7 @@ class SecurityCheckerWorker: Logging {
             // all good
             logVerbose("Certificate signature is good for \(hostname)")
             return true
-        };
+        }
         
         logError("Invalid server trust v=\(foundValidCertificate), cn=\(foundValidCommonNameEndsWithTrustedName) and fqdn=\(foundValidFullyQualifiedDomainName)")
         return false
@@ -381,7 +381,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
                                                 policies: policies,
                                                 trustedCertificates: trustedCertificates,
                                                 hostname: challenge.protectionSpace.host,
-                                                trustedNames:trustedNames) {
+                                                trustedNames: trustedNames) {
             completionHandler(.useCredential, URLCredential(trust: serverTrust))
             return
         }

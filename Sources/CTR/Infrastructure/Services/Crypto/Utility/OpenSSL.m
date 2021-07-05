@@ -123,7 +123,7 @@ errit:
     if ([sans count] == 1)
         return [sans firstObject];
     
-    NSLog(@"ERROR - getSubjectAlternativeName with mutiple options - returning none.");
+    NSLog(@"ERROR - getSubjectAlternativeName with multiple options - returning none.");
     return NULL;
 }
 
@@ -277,7 +277,7 @@ errit:
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
                    contentData:(NSData *)contentData
                certificateData:(NSData *)certificateData
-        authorityKeyIdentifier:(NSData *)expectedAuthorityKeyIdentifierDataOrNil
+        authorityKeyIdentifier:(nullable NSData *)expectedAuthorityKeyIdentifierDataOrNil
      requiredCommonNameContent:(NSString *)requiredCommonNameContentOrNil
       requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffixOrNil {
     bool result = NO;
