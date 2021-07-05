@@ -32,7 +32,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 		// When
 
 		// Then
-		expect(self.sut.title) == .verifierScanInstructionsTitle
+		expect(self.sut.title) == L.verifierInstructionsTitle()
 		expect(self.sut.content)
 			.to(haveCount(4), description: "Number of elements should match")
 	}

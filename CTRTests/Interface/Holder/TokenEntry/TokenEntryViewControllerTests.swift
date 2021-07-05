@@ -47,12 +47,12 @@ class TokenEntryViewControllerTests: XCTestCase {
 
 		// Assert
 		alertVerifier.verify(
-			title: .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle,
-			message: .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage,
+			title: L.holderTokenentryRegularflowConfirmresendverificationalertTitle(),
+			message: L.holderTokenentryRegularflowConfirmresendverificationalertMessage(),
 			animated: true,
 			actions: [
-				.default(.holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton),
-				.cancel(.holderTokenEntryRegularFlowConfirmResendVerificationCancelButton)
+				.default(L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()),
+				.cancel(L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton())
 			],
 			preferredStyle: .actionSheet,
 			presentingViewController: sut
@@ -72,12 +72,12 @@ class TokenEntryViewControllerTests: XCTestCase {
 
 		// Assert
 		alertVerifier.verify(
-			title: .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle,
-			message: .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage,
+			title: L.holderTokenentryRegularflowConfirmresendverificationalertTitle(),
+			message: L.holderTokenentryRegularflowConfirmresendverificationalertMessage(),
 			animated: true,
 			actions: [
-				.default(.holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton),
-				.cancel(.holderTokenEntryRegularFlowConfirmResendVerificationCancelButton)
+				.default(L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()),
+				.cancel(L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton())
 			],
 			preferredStyle: .actionSheet,
 			presentingViewController: sut

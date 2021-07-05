@@ -18,13 +18,29 @@ struct ParseError: Error {
 
 extension EnumeratedSequence.Iterator where Base == String {
 	
-	mutating func findContentsBeforeClosingTag() throws -> String {
+	mutating func findContentsBeforeSpaceOrClosingTag() throws -> String {
 		
 		var found = ""
 		
 		while let (_, char) = next() {
 			
 			if char == ">" || char == " " { // the space allows for tags with attributes e.g. <a href=""></a>
+				return found
+			} else {
+				found += [char]
+			}
+		}
+		
+		throw "never found the closing tag"
+	}
+
+	mutating func findContentsBeforeClosingTag() throws -> String {
+		
+		var found = ""
+		
+		while let (_, char) = next() {
+			
+			if char == ">" {
 				return found
 			} else {
 				found += [char]
@@ -49,7 +65,7 @@ func checkLine(line: String) throws {
 			// Check if we're currently closing a tag by looking ahead by 1 for a "/":
 			var findSlashIterator = iterator
 			if let (_, slash) = findSlashIterator.next(), slash == "/" {
-				let tagContents = try findSlashIterator.findContentsBeforeClosingTag()
+				let tagContents = try findSlashIterator.findContentsBeforeSpaceOrClosingTag()
 
 				guard !stack.isEmpty
 				else { throw ParseError(line: line, position: position, message: "Closing a tag \"\(tagContents)\" which doesn't have any opening tag.") }
@@ -62,16 +78,20 @@ func checkLine(line: String) throws {
 			// We must be opening a tag, look forwards for the tag name:
 			else {
 				var findClosingIterator = iterator
-				let tagContents = try findClosingIterator.findContentsBeforeClosingTag()
+				let tagContents = try findClosingIterator.findContentsBeforeSpaceOrClosingTag()
 
 				// Is the tag empty? 
 				guard !tagContents.isEmpty else {
 					throw ParseError(line: line, position: position, message: "Found an empty tag")
 				}
 
-				// Is the tag a <br> or <br /> or <br/>?
-				guard tagContents != "br /" && tagContents != "br" && tagContents != "br/" else {
-					// <br /> is special cased - it stands alone.
+				if tagContents == "br" { // || tagContents == "br/"
+					var findClosingWithoutSpaceIterator = iterator
+					let tagContentsIgnoringSpace = try findClosingWithoutSpaceIterator.findContentsBeforeClosingTag()
+
+					guard tagContentsIgnoringSpace == "br /" else {
+						throw ParseError(line: line, position: position, message: "BR tags should only use format `<br />` (not <\(tagContents)>) otherwise it causes a crash")
+					}
 					continue
 				}
 

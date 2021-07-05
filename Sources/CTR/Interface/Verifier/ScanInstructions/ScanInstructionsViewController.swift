@@ -42,7 +42,7 @@ class ScanInstructionsViewController: BaseViewController, Logging {
 			self?.setupContent(list)
 		}
 
-		sceneView.primaryTitle = .verifierStartButtonTitle
+		sceneView.primaryTitle = L.verifierStartButtonTitle()
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.primaryButtonTapped()

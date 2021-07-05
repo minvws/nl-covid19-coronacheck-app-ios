@@ -28,7 +28,7 @@ final class MakeTestAppointmentViewModelTests: XCTestCase {
 	
 	func test_onTap_shouldInvokeAppointmentUrl() {
 		// Given
-		let expectedUrl = URL(string: .holderUrlAppointment)
+		let expectedUrl = URL(string: L.holderUrlAppointment())
 		
 		// When
 		sut.onTap()

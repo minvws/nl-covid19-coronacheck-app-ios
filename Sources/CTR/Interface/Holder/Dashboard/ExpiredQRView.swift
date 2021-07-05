@@ -123,7 +123,7 @@ class ExpiredQRView: BaseView {
 
 		super.setupAccessibility()
 		// Button
-		closeButton.accessibilityLabel = .close
+		closeButton.accessibilityLabel = L.generalClose()
 	}
 
 	/// User tapped on the close button

@@ -1,9 +1,11 @@
+"holder.tokenentry.button.notoken" = "I don't have a code";
+
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
-"holder.recovery.list.message" = "You can create a recovery statement from the retrieved details.";
+"holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
 "holder.menu.proof" = "Add certificate";
-"holder.showqr.eu.about.recovery.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Illness from which recovered:<b>COVID-19</b><br> Test date: <b>%@</b><br> Tested in: <b>%@</b><br> Certificate issuer: <b>%@</b><br> Valid from: <b>%@</b><br> Valid until: <b>%@</b><br></p><p> Unique certificate identifier: <b>%@</b></p><p> Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
-"holder.event.about.body.recovery" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Date of birth: <b>%@</b><br>Test date: <b>%@</b><br>Valid from: <b>%@</b><br>Valid until: <b>%@</b><br>Unique certificate number: <b>%@</b></p>";
+"holder.showqr.eu.about.recovery.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Illness from which recovered:<b>COVID-19</b><br /> Test date: <b>%@</b><br /> Tested in: <b>%@</b><br /> Certificate issuer: <b>%@</b><br /> Valid from: <b>%@</b><br /> Valid until: <b>%@</b><br /></p><p> Unique certificate identifier: <b>%@</b></p><p> Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.event.about.body.recovery" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Date of birth: <b>%@</b><br />Test date: <b>%@</b><br />Valid from: <b>%@</b><br />Valid until: <b>%@</b><br />Unique certificate number: <b>%@</b></p>";
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
@@ -20,7 +22,7 @@
 "general.error.cryptolib.message" = "Contact our helpdesk and give them error code (%@) or try again later.";
 "general.error.cryptolib.retry" = "Try again";
 
-"general.recoverystatement" = "recovery statement";
+"general.recoverystatement" = "recovery certificate";
 "general.recoverydate" = "recovery date";
 "general.testcertificate" = "test certificate";
 "general.vaccinationcertificate" = "vaccination certificate";
@@ -52,8 +54,6 @@
 
 "holder.tokenentry.modal.notoken.title" = "I don't have a code";
 "holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p></p>";
-"holder.tokenentry.regularflow.button.notoken" = "I don't have a code";
-
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 
@@ -185,7 +185,7 @@
 "holder.onboarding.title.safely" = "Only access with a certificate";
 "holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a coronavirus pass. You’re only allowed to enter carrying this pass.";
 "holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
-"holder.onboarding.message.yourqr" = "The app can generate a coronavirus pass if:<br/>
+"holder.onboarding.message.yourqr" = "The app can generate a coronavirus pass if:<br />
 <ul><li>You have been vaccinated</li><li>A test result confirms you don’t have corona.</li><li>A test result confirms you've had coronavirus and are recovered.</li></ul>";
 "holder.onboarding.title.validity" = "QR code = your proof";
 "holder.onboarding.message.validity" = "This app generates a QR code with your vaccination, test result or recovery. That is your certificate. This QR code will be checked at the entrance of places or activities or at the border. If your certificate expires, the QR code disappears from the app.";
@@ -212,6 +212,11 @@
 "holder.chooseqrcodetype.option.negativetest.subtitle" = "The test proves I do not have coronavirus";
 "holder.chooseqrcodetype.option.vaccine.title" = "A vaccination certificate";
 "holder.chooseqrcodetype.option.vaccine.subtitle" = "I've had my injection or injections";
+
+/* MARK: - About Making a QR */
+"holder.aboutmakingaqr.title" = "Make QR code";
+"holder.aboutmakingaqr.header" = "Make a QR code";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br /><p><b>1. Choose your certificate</b></p><p> You can create a vaccination certificate, a test certificate or a recovery certificate. </p> <br /> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination, test result or recovery. </p> <br /> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries. </p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My overview";
@@ -246,6 +251,11 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
+"holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "Your recovery certificate is not valid in the Netherlands, because the type of test is not accepted.<br />You’ve only got an international QR-code.";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Your recovery certificate is not valid internationally. You’ve only got a Dutch QR-code. <br />The reason is that the type of test is not accepted. <br />An international recovery certificate can only be made with a PCR-test";
+
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
@@ -254,8 +264,8 @@
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
-"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Vaccination date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Test type: <b>%@</b><br>Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Manufacturer: <b>%@</b><br>Tested in: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br />Vaccine: <b>%@</b><br />Vaccine type: <b>%@</b><br />Manufacturer: <b>%@</b><br />Doses: <b>%@</b><br />Vaccination date: <b>%@</b><br />Vaccinated in: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
+"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? This requires more data. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br />Test type: <b>%@</b><br />Test name: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Test location: <b>%@</b><br />Manufacturer: <b>%@</b><br />Tested in: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p><p>Always use the international QR code in other countries. The Dutch QR code is not valid outside of the Netherlands.</p>";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
 
@@ -313,7 +323,7 @@
 
 /* MARK: - Holder About */
 "holder.about.title" = "About this app";
-"holder.about.text" = "CoronaCheck is created to reopen society step by step. This way, the Netherlands can head out more often and travel abroad.<br/>CoronaCheck creates a coronavirus pass from your vaccination, your negative test result or if you've had corona and are recovered. A coronavirus pass consists of two QR-codes: one for the Netherlands and one for other countries (the EU Digital COVID Certificate).";
+"holder.about.text" = "CoronaCheck is created to reopen society step by step. This way, the Netherlands can head out more often and travel abroad.<br />CoronaCheck creates a coronavirus pass from your vaccination, your negative test result or if you've had corona and are recovered. A coronavirus pass consists of two QR-codes: one for the Netherlands and one for other countries (the EU Digital COVID Certificate).";
 "holder.about.link" = "Read the privacy statement here";
 
 "holder.vaccination.start.title" = "Retrieve vaccination details";
@@ -325,7 +335,7 @@
 "holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
 "holder.vaccination.list.action" = "Make QR code";
 "holder.vaccination.element.title" = "Vaccination %@";
-"holder.vaccination.element.subtitle" = "Name: %@<br>Date of birth: %@";
+"holder.vaccination.element.subtitle" = "Name: %@<br />Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To My Overview";
@@ -357,16 +367,16 @@
 "holder.ggdlogin.failure.general.message" = "It might be too busy. Please try again later.";
 
 "holder.event.about.title" = "What was retrieved?";
-"holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p>";
+"holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
 
-"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br>Test name: <b>%@</b><br>Test date: <b>%@</b><br>Test result: <b>%@</b><br>Test location: <b>%@</b><br>Test manufacturer: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p>";
+"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br />Test name: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Test location: <b>%@</b><br />Test manufacturer: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br>Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br>Vaccine: <b>%@</b><br>Vaccine type: <b>%@</b><br>Manufacturer: <b>%@</b><br>Doses: <b>%@</b><br>Vaccination date: <b>%@</b><br>Vaccinated in: <b>%@</b><br>Unique certificate identifier: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br />Vaccine: <b>%@</b><br />Vaccine type: <b>%@</b><br />Manufacturer: <b>%@</b><br />Doses: <b>%@</b><br />Vaccination date: <b>%@</b><br />Vaccinated in: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
-"holder.event.element.subtitle.test2" = "Test date: %@<br>Your details: %@";
-"holder.event.element.subtitle.test3" = "Test date: %@<br>Name: %@<br>Date of birth: %@";
+"holder.event.element.subtitle.test2" = "Test date: %@<br />Your details: %@";
+"holder.event.element.subtitle.test3" = "Test date: %@<br />Name: %@<br />Date of birth: %@";
 
 "holder.location.title" = "Where were you tested?";
 "holder.location.message" = "Indicate whether you were tested at the GGD or at a different test location.";
@@ -403,3 +413,5 @@
 "holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Due to a technical error you’ve wrongly received a Dutch vaccination certificate. This was corrected.";
 "holder.faultyvaccination28June.failedtoreload.alert.title" = "Failed to refresh details";
 "holder.faultyvaccination28June.failedtoreload.alert.message" = "Something went wrong while refreshing your details. Please retrieve your details again via the app.";
+
+

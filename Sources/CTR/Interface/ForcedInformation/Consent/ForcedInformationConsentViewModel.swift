@@ -27,10 +27,10 @@ class ForcedInformationConsentViewModel {
 	@Bindable private(set) var secondaryActionTitle: String?
 
 	/// The title of the eror
-	@Bindable private(set) var errorTitle: String = .newTermsErrorTitle
+	@Bindable private(set) var errorTitle: String = L.newTermsErrorTitle()
 
 	/// The message of the eror
-	@Bindable private(set) var errorMessage: String = .newTermsErrorMessage
+	@Bindable private(set) var errorMessage: String = L.newTermsErrorMessage()
 
 	/// Show the error dialog?
 	@Bindable private(set) var showErrorDialog: Bool = false
@@ -65,11 +65,11 @@ class ForcedInformationConsentViewModel {
 		self.content = consent.content
 
 		if consent.consentMandatory {
-			primaryActionTitle = .newTermsAgree
-			secondaryActionTitle = .newTermsDisagree
+			primaryActionTitle = L.newTermsAgree()
+			secondaryActionTitle = L.newTermsDisagree()
 			useSecondaryButton = true
 		} else {
-			primaryActionTitle = .next
+			primaryActionTitle = L.generalNext()
 			secondaryActionTitle = nil
 			useSecondaryButton = false
 		}
@@ -92,8 +92,8 @@ class ForcedInformationConsentViewModel {
 	func secondaryButtonTapped() {
 
 		// Show Error
-		errorTitle = .newTermsErrorTitle
-		errorMessage = .newTermsErrorMessage
+		errorTitle = L.newTermsErrorTitle()
+		errorMessage = L.newTermsErrorMessage()
 		showErrorDialog = true
 	}
 

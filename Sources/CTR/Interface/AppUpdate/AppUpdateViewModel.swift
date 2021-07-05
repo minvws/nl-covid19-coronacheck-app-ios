@@ -41,12 +41,12 @@ class AppUpdateViewModel {
 	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
 
 		self.coordinator = coordinator
-		title = .updateAppTitle
-		message = versionInformation?.minimumVersionMessage ?? .updateAppContent
-		actionTitle = .updateAppButton
+		title = L.updateAppTitle()
+		message = versionInformation?.minimumVersionMessage ?? L.updateAppContent()
+		actionTitle = L.updateAppButton()
 		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
-		errorMessage = .updateAppErrorMessage
+		errorMessage = L.updateAppErrorMessage()
 		self.image = .updateRequired
 	}
 
@@ -72,12 +72,12 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 
 		super.init(coordinator: coordinator, versionInformation: versionInformation)
 
-		self.title = .endOfLifeTitle
-		self.message = .endOfLifeDescription
-		self.errorMessage = .endOfLifeErrorMessage
-		self.actionTitle = .endOfLifeButton
+		self.title = L.endOfLifeTitle()
+		self.message = L.endOfLifeDescription()
+		self.errorMessage = L.endOfLifeErrorMessage()
+		self.actionTitle = L.endOfLifeButton()
 		self.updateURL = versionInformation?.informationURL
-		self.errorMessage = .endOfLifeErrorMessage
+		self.errorMessage = L.endOfLifeErrorMessage()
 		self.image = .endOfLife
 		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
@@ -93,9 +93,9 @@ class InternetRequiredViewModel: AppUpdateViewModel {
 
 		super.init(coordinator: coordinator, versionInformation: nil)
 
-		self.title = .internetRequiredTitle
-		self.message = .internetRequiredText
-		self.actionTitle = .internetRequiredButton
+		self.title = L.internetRequiredTitle()
+		self.message = L.internetRequiredText()
+		self.actionTitle = L.internetRequiredButton()
 		self.image = .noInternet
 	}
 

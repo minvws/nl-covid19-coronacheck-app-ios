@@ -206,7 +206,7 @@ extension VerifierCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationController
 
 			case .support:
-				guard let faqUrl = URL(string: .verifierUrlFAQ) else {
+				guard let faqUrl = URL(string: L.verifierUrlFaq()) else {
 					logError("No verifier faq url")
 					return
 				}
@@ -246,7 +246,7 @@ extension VerifierCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 		
 		return [
-			MenuItem(identifier: .overview, title: .verifierMenuDashboard)
+			MenuItem(identifier: .overview, title: L.verifierMenuDashboard())
 		]
 	}
 	/// Get the items for the bottom menu
@@ -254,8 +254,8 @@ extension VerifierCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 		
 		return [
-			MenuItem(identifier: .support, title: .verifierMenuSupport),
-			MenuItem(identifier: .about, title: .verifierMenuAbout)
+			MenuItem(identifier: .support, title: L.verifierMenuSupport()),
+			MenuItem(identifier: .about, title: L.verifierMenuAbout())
 		]
 	}
 }

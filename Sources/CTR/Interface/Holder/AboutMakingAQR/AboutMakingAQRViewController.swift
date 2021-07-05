@@ -7,13 +7,15 @@
 
 import UIKit
 
-class VerifierStartViewController: BaseViewController {
+class AboutMakingAQRViewController: BaseViewController {
 
-	private let viewModel: VerifierStartViewModel
+	private let viewModel: AboutMakingAQRViewModel
 
-	let sceneView = HeaderTitleMessageButtonView()
+	let sceneView = AboutMakingAQRView()
 
-	init(viewModel: VerifierStartViewModel) {
+	// MARK: Initializers
+
+	init(viewModel: AboutMakingAQRViewModel) {
 
 		self.viewModel = viewModel
 
@@ -26,42 +28,32 @@ class VerifierStartViewController: BaseViewController {
 	}
 
 	// MARK: View lifecycle
+
 	override func loadView() {
 
 		view = sceneView
 	}
 
-    override func viewDidLoad() {
+	override func viewDidLoad() {
 
-        super.viewDidLoad()
+		super.viewDidLoad()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+		viewModel.$header.binding = { [weak self] in self?.sceneView.header = $0 }
+		viewModel.$body.binding = { [weak self] in self?.sceneView.body = $0 }
+		viewModel.$image.binding = { [weak self] in self?.sceneView.headerImage = $0 }
 
-		sceneView.primaryButtonTappedCommand = { [weak self] in
+		sceneView.buttonTitle = L.generalNext()
 
-			self?.viewModel.primaryButtonTapped()
+		sceneView.contentTextView.linkTouched { [weak self] url in
+			self?.viewModel.userTouchedURL(url)
 		}
 
-		viewModel.$showError.binding = { [weak self] in
-			if $0 {
-				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
-			}
-		}
+		sceneView.button.touchUpInside(viewModel, action: #selector(AboutMakingAQRViewModel.userTappedNext))
 
-		sceneView.contentTextView.linkTouched { [weak self] _ in
-
-			self?.viewModel.linkTapped()
-		}
-
-		sceneView.headerImage = .scanStart
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
-    }
-
-	// MARK: User interaction
+	}
 
 	override func viewWillAppear(_ animated: Bool) {
 
@@ -82,7 +74,7 @@ class VerifierStartViewController: BaseViewController {
 	}
 
 	/// Layout for different orientations
-	func layoutForOrientation() {
+	private func layoutForOrientation() {
 
 		if traitCollection.verticalSizeClass == .compact {
 			sceneView.hideImage()

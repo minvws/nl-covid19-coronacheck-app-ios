@@ -19,8 +19,8 @@ class ToggleRegionViewModel: Logging {
 		self.didChangeCallback = didChangeCallback
 
 		segments = [
-			(.netherlands, 0, currentRegion == .domestic),
-			(.europeanUnion, 1, currentRegion == .europeanUnion)
+			(L.generalNetherlands(), 0, currentRegion == .domestic),
+			(L.generalEuropeanUnion(), 1, currentRegion == .europeanUnion)
 		]
 
 		updateTexts(selectedRegion: currentRegion)
@@ -29,11 +29,11 @@ class ToggleRegionViewModel: Logging {
 	func updateTexts(selectedRegion: QRCodeValidityRegion) {
 		switch selectedRegion {
 			case .europeanUnion:
-				topText = .holderToggleRegionLabelTopTextEU
-				bottomText = .holderToggleRegionLabelBottomTextEU
+				topText = L.toggleRegionLabelTopTextEu()
+				bottomText = L.toggleRegionLabelBottomTextEu()
 			case .domestic:
-				topText = .holderToggleRegionLabelTopTextNL
-				bottomText = .holderToggleRegionLabelBottomTextNL
+				topText = L.toggleRegionLabelTopTextNl()
+				bottomText = L.toggleRegionLabelBottomTextNl()
 		}
 	}
 

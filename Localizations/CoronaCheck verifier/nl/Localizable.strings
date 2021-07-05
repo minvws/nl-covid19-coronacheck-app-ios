@@ -25,7 +25,7 @@
 "verifier.result.identity.dayofbirth" = "Geboortedag";
 "verifier.result.identity.monthofbirth" = "Geboortemaand";
 
-"verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br/>Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br/>Dan kun je de bezoeker geen toegang geven.</p>";
+"verifier.result.check.text" = "<p>Controleer of de QR-code ook echt bij de bezoeker hoort. Kijk daarvoor of de gegevens op jouw scherm hetzelfde zijn als de gegevens op het identiteitsbewijs.</p><p><b>Let op: er kunnen gegevens wegvallen</b><br />Om de privacy van de bezoeker te beschermen zie je soms niet alle gegevens op jouw scherm. Dan staat er een streepje (-) in het vak. Controle van de gegevens die je wel ziet is dan voldoende.</p><p><b>Kloppen de gegevens niet?</b><br />Dan kun je de bezoeker geen toegang geven.</p>";
 
 
 "updateApp.content" = "Je hebt de laatste versie van de app nodig om verder te gaan.";
@@ -40,7 +40,6 @@
 "verifier.menu.dashboard" = "Scan QR-code";
 "verifier.menu.support" = "Support";
 "verifier.menu.about" = "Over deze app";
-"verifier.menu.feedback" = "Geef ons feedback";
 "verifier.menu.privacy" = "Gebruikersvoorwaarden";
 
 /* MARK: - Verifier Onboarding */
@@ -99,7 +98,7 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Ongeldige QR-code";
 "verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b><ul><li>De QR-code van de internationale bezoeker voldoet niet aan Nederlandse toegangseisen</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li><li>De tijdinstellingen op de telefoon van de bezoeker wijken af</li></ul></p>";
-"verifier.denied.message.two" = "<p><b>Wat nu?</b><br>De bezoeker kan een test doen of zich laten vaccineren. Daarna kan in de CoronaCheck-app een geldige QR-code gemaakt worden.</p>";
+"verifier.denied.message.two" = "<p><b>Wat nu?</b><br />De bezoeker kan een test doen of zich laten vaccineren. Daarna kan in de CoronaCheck-app een geldige QR-code gemaakt worden.</p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
