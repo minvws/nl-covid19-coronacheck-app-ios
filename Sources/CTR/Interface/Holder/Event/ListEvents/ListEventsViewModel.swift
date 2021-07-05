@@ -668,6 +668,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 					case .failure(.credentials119):
 						self.showTechnicalError("118 credentials")
+
+					case .failure(.serverNotReachable):
+						// TODO: handle this
+						break
 				}
 			})
 		}
