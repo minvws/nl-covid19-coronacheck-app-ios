@@ -295,7 +295,7 @@ errit:
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
                    contentData:(NSData *)contentData
                certificateData:(NSData *)certificateData
-        authorityKeyIdentifier:(NSData *)expectedAuthorityKeyIdentifierDataOrNil
+        authorityKeyIdentifier:(nullable NSData *)expectedAuthorityKeyIdentifierDataOrNil
      requiredCommonNameContent:(NSString *)requiredCommonNameContentOrNil
       requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffixOrNil {
     bool result = NO;
