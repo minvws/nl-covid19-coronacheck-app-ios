@@ -18,12 +18,14 @@ env:
 jobs:
   upload:
     if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
-    runs-on: macos-latest
+    runs-on: macos-11
     
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-          
+        with:
+          fetch-depth: 0
+                    
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:

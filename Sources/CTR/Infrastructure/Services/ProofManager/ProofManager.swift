@@ -102,17 +102,11 @@ class ProofManager: ProofManaging, Logging {
 			
 			// Response is of type (Result<(IssuerPublicKeys, Data), NetworkError>)
 			switch resultwrapper {
-				case .success((let keys, let data)):
+				case .success((_, let data)):
 					
-					if let manager = self?.cryptoManager, manager.setIssuerDomesticPublicKeys(keys) {
-						self?.keysFetchedTimestamp = Date()
-						self?.cryptoLibUtility.store(data, for: .publicKeys)
-						onCompletion?()
-					} else {
-						// Loading of the public keys into the CL Library failed.
-						// This is pretty much a dead end for the user.
-						onError?(NetworkResponseHandleError.invalidPublicKeys)
-					}
+					self?.keysFetchedTimestamp = Date()
+					self?.cryptoLibUtility.store(data, for: .publicKeys)
+					onCompletion?()
 				case let .failure(error):
 					
 					self?.logError("Error getting the issuers public keys: \(error)")
@@ -198,8 +192,8 @@ class ProofManager: ProofManaging, Logging {
 
 		if let testEvent = getTestWrapper(),
 		   let signedProof = getSignedWrapper(),
-		   let sampleDate = testEvent.result?.sampleDate,
-		   let sampleTime = TimeInterval(sampleDate),
+		   let sampleDateString = testEvent.result?.sampleDate,
+		   let sampleDate = Formatter.getDateFrom(dateString8601: sampleDateString),
 		   testEvent.status == .complete {
 
 			// Convert to eventGroup
@@ -207,13 +201,13 @@ class ProofManager: ProofManaging, Logging {
 				.test,
 				providerIdentifier: testEvent.providerIdentifier,
 				signedResponse: signedProof,
-				issuedAt: Date(timeIntervalSince1970: sampleTime)
+				issuedAt: sampleDate
 			)
 			// Remove old data
 			removeTestWrapper()
+			
+			// Convert Credential
+			cryptoManager.migrateExistingCredential(walletManager, sampleDate: sampleDate)
 		}
-
-		// Convert Credential
-		cryptoManager.migrateExistingCredential(walletManager)
 	}
 }

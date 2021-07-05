@@ -38,7 +38,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with no response
@@ -52,7 +51,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -85,7 +83,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beTrue())
 	}
 
 	/// Test the fetch issuers public keys with an network error
@@ -154,6 +151,7 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(walletSpy.invokedStoreEventGroup).toEventually(beFalse())
+		expect(self.cryptoSpy.invokedMigrateExistingCredential).toEventually(beFalse())
 	}
 
 	func test_migrateExistingProof() {
@@ -167,7 +165,7 @@ class ProofManagerTests: XCTestCase {
 			protocolVersion: "2.0",
 			result: TestResult(
 				unique: "1234",
-				sampleDate: "1621852090",
+				sampleDate: "2021-06-21T16:33:26Z",
 				testType: "pcr",
 				negativeResult: true,
 				holder: TestHolderIdentity(
@@ -187,5 +185,6 @@ class ProofManagerTests: XCTestCase {
 		expect(walletSpy.invokedStoreEventGroup).toEventually(beTrue())
 		expect(self.sut.getTestWrapper()).toEventually(beNil())
 		expect(self.sut.getSignedWrapper()).toEventually(beNil())
+		expect(self.cryptoSpy.invokedMigrateExistingCredential).toEventually(beTrue())
 	}
 }

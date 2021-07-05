@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -10,6 +9,9 @@ import Foundation
 import Clcore
 
 protocol CryptoLibUtilityProtocol: AnyObject {
+	
+	/// Returns true when public keys are saved
+	var hasPublicKeys: Bool { get }
 	
 	/// Return true when core library is initialized
 	var isInitialized: Bool { get }
@@ -43,6 +45,11 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 		}
 	}
 	
+	/// Returns true when public keys are saved
+	var hasPublicKeys: Bool {
+		return shouldInitialize.contains(.publicKeys)
+	}
+	
 	/// Returns true when core library is initialized
 	private(set) var isInitialized: Bool = false
 	
@@ -53,7 +60,6 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 			}
 			
 			initialize()
-			shouldInitialize = .empty
 		}
 	}
 	
@@ -69,20 +75,22 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	/// Initialize core library
 	func initialize() {
 		
-		guard flavor == .verifier else {
-			isInitialized = true
-			return
+		let path = fileStorage.documentsURL?.path
+		let result: MobilecoreResult?
+		
+		if flavor == .holder {
+			// Initialize holder and have path to stored files as parameter
+			result = MobilecoreInitializeHolder(path)
+		} else {
+			// Initialize verifier and have path to stored files as parameter
+			result = MobilecoreInitializeVerifier(path)
 		}
 		
-		// Initialize verifier and have path to stored files as parameter
-		let path = fileStorage.documentsURL?.path
-		let result = MobilecoreInitializeVerifier(path)
-		
 		if let result = result, !result.error.isEmpty {
-			logError("Error initializing verifier: \(result.error)")
+			logError("Error initializing library: \(result.error)")
 			isInitialized = false
 		} else {
-			logInfo("Initializing verifier succeeded")
+			logInfo("Initializing library successful")
 			isInitialized = true
 		}
 	}
@@ -92,10 +100,6 @@ final class CryptoLibUtility: CryptoLibUtilityProtocol, Logging {
 	///   - data: Data that needs to be saved
 	///   - file: File type
 	func store(_ data: Data, for file: File) {
-		
-		guard flavor == .verifier else {
-			return
-		}
 		
 		do {
 			try fileStorage.store(data, as: file.name)

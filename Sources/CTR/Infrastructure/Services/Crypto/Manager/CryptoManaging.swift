@@ -99,10 +99,6 @@ protocol CryptoManaging: AnyObject {
 	
 	// MARK: Public Keys
 	
-	/// Set the issuer domestic public keys
-	/// - Parameter keys: the keys
-	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool
-	
 	/// Do we have public keys
 	/// - Returns: True if we do
 	func hasPublicKeys() -> Bool
@@ -139,7 +135,7 @@ protocol CryptoManaging: AnyObject {
 
 	// MARK: Migration
 
-	func migrateExistingCredential(_ walletManager: WalletManaging)
+	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date)
 
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
 

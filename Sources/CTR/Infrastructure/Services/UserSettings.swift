@@ -12,6 +12,8 @@ protocol UserSettingsProtocol {
 	var scanInstructionShown: Bool { get set }
 
 	var jailbreakWarningShown: Bool { get set }
+
+	var executedJun28Patch: Bool { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -21,4 +23,7 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
 	var jailbreakWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "executedJun28Patch", defaultValue: false)
+	var executedJun28Patch: Bool // swiftlint:disable:this let_var_whitespace
 }

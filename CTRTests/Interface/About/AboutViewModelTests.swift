@@ -39,9 +39,9 @@ class AboutViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .holderAboutTitle
-		expect(self.sut.message) == .holderAboutText
-		expect(self.sut.listHeader) == .holderAboutReadMore
+		expect(self.sut.title) == L.holderAboutTitle()
+		expect(self.sut.message) == L.holderAboutText()
+		expect(self.sut.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu.first?.identifier) == .privacyStatement
 		expect(self.sut.menu.last?.identifier) == .accessibility
@@ -60,13 +60,13 @@ class AboutViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .verifierAboutTitle
-		expect(self.sut.message) == .verifierAboutText
-		expect(self.sut.listHeader) == .verifierAboutReadMore
+		expect(self.sut.title) == L.verifierAboutTitle()
+		expect(self.sut.message) == L.verifierAboutText()
+		expect(self.sut.listHeader) == L.verifierAboutReadmore()
 		expect(self.sut.menu).to(haveCount(2))
 		expect(self.sut.menu.first?.identifier) == .terms
 		expect(self.sut.menu.last?.identifier) == .accessibility
-		expect(self.sut.version.contains("testInitVerifier")) == false // verifier version not in target language file.
+		expect(self.sut.version.contains("testInitVerifier")) == true
 	}
 
 	func test_menuOptionSelected_privacy() {
@@ -78,7 +78,7 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlPrivacy
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlPrivacy()
 	}
 
 	func test_menuOptionSelected_terms() {
@@ -90,7 +90,7 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlPrivacy
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierUrlPrivacy()
 	}
 
 	func test_menuOptionSelected_accessibility_forHolder() {
@@ -106,7 +106,7 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.holderUrlAccessibility
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.holderUrlAccessibility()
 	}
 
 	func test_menuOptionSelected_accessibility_forVerifier() {
@@ -123,6 +123,6 @@ class AboutViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedOpenUrl) == true
-		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == String.verifierUrlAccessibility
+		expect(self.coordinatorSpy.invokedOpenUrlParameters?.url.absoluteString) == L.verifierUrlAccessibility()
 	}
 }

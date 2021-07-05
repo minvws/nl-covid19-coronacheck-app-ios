@@ -11,8 +11,8 @@ class ChooseTestLocationViewModel: Logging {
 
 	// MARK: - Bindable Strings
 
-	@Bindable private(set) var title: String = .holderChooseTestLocationTitle
-	@Bindable private(set) var message: String = .holderChooseTestLocationMessage
+	@Bindable private(set) var title: String = L.holderLocationTitle()
+	@Bindable private(set) var message: String = L.holderLocationMessage()
 	@Bindable private(set) var buttonModels: [ChooseTestLocationViewController.ButtonModel] = []
 	@Bindable private(set) var bottomButton: ChooseTestLocationViewController.BottomButtonModel?
 
@@ -29,19 +29,19 @@ class ChooseTestLocationViewModel: Logging {
 		self.coordinator = coordinator
 
 		bottomButton = ChooseTestLocationViewController.BottomButtonModel(
-			title: .holderChooseTestLocationNoTest) { [weak self] in
+			title: L.holderLocationNotest()) { [weak self] in
 			self?.coordinator?.userHasNotBeenTested()
 		}
 
 		buttonModels = [
 			.init(
-				title: .holderChooseTestLocationGGDTitle,
-				subtitle: .holderChooseTestLocationGGDSubTitle) { [weak self] in
+				title: L.holderLocationGgdTitle(),
+				subtitle: L.holderLocationGgdSubtitle()) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
 			},
 			.init(
-				title: .holderChooseTestLocationOtherTitle,
+				title: L.holderLocationOtherTitle(),
 				subtitle: nil) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateANegativeTestQR()

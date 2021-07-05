@@ -56,8 +56,8 @@ struct SecurityAnimation: NamedAnimationProtocol, Equatable {
 extension SecurityAnimation {
 
 	/// A security animation
-	static let cyclistLeftToRight = SecurityAnimation(name: "CyclistLeftToRight", fileName: "fietser_LR_335x256")
+	static let domesticAnimation = SecurityAnimation(name: "domesticAnimation", fileName: "fietser_LR_335x256")
 
-	/// A security animation
-	static let cyclistRightToLeft = SecurityAnimation(name: "CyclistRightToLeft", fileName: "fietser_RL_335x256")
+	///
+	static let internationalAnimation = SecurityAnimation(name: "internationalAnimation", fileName: "lf20_fnpdb2ex")
 }

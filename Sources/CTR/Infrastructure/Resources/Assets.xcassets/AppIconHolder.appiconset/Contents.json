@@ -25,7 +25,7 @@
       "size" : "29x29"
     },
     {
-      "filename" : "Icon-81.png",
+      "filename" : "App_icon_holder_80pt-1.png",
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
@@ -79,7 +79,7 @@
       "size" : "40x40"
     },
     {
-      "filename" : "Icon-80.png",
+      "filename" : "App_icon_holder_80pt.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "40x40"
@@ -97,7 +97,7 @@
       "size" : "76x76"
     },
     {
-      "filename" : "Icon-167.png",
+      "filename" : "App_icon_holder_167pt.png",
       "idiom" : "ipad",
       "scale" : "2x",
       "size" : "83.5x83.5"

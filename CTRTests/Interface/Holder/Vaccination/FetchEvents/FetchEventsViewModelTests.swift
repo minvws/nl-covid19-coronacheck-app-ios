@@ -13,14 +13,14 @@ class FetchEventsViewModelTests: XCTestCase {
 
 	/// Subject under test
 	var sut: FetchEventsViewModel!
-	var coordinatorSpy: VaccinationCoordinatorDelegateSpy!
+	var coordinatorSpy: EventCoordinatorDelegateSpy!
 	var networkSpy: NetworkSpy!
 
 	override func setUp() {
 
 		super.setUp()
 
-		coordinatorSpy = VaccinationCoordinatorDelegateSpy()
+		coordinatorSpy = EventCoordinatorDelegateSpy()
 		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
 	}
@@ -36,19 +36,6 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
 		expect(self.sut.navigationAlert).toNot(beNil())
-	}
-
-	func test_backButtonTapped_emptyState() {
-
-		// Given
-		sut.viewState = .emptyEvents(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil))
-
-		// When
-		sut.backButtonTapped()
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters?.0) == EventScreenResult.back(eventMode: .test)
 	}
 
 	func test_warnBeforeGoBack() {
@@ -78,7 +65,9 @@ class FetchEventsViewModelTests: XCTestCase {
 					unique: "1234",
 					isSpecimen: false,
 					vaccination: vaccinationEvent,
-					negativeTest: nil
+					negativeTest: nil,
+					positiveTest: nil,
+					recovery: nil
 				)
 			]
 		)

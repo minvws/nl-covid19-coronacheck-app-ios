@@ -38,3 +38,8 @@ report.xml
 /CTR.xcodeproj/xcshareddata
 /CTR.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
 /CTR.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+/Sources/CTR/Configuration/holder-Info.plist
+/Sources/CTR/Configuration/verifier-Info.plist
+/Sources/CTR/Infrastructure/Resources/R.generated.swift
+/Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
+/Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings

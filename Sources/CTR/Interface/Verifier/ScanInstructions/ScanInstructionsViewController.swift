@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScanInstructionsViewController: BaseViewController {
+class ScanInstructionsViewController: BaseViewController, Logging {
 
 	private let viewModel: ScanInstructionsViewModel
 
@@ -42,7 +42,7 @@ class ScanInstructionsViewController: BaseViewController {
 			self?.setupContent(list)
 		}
 
-		sceneView.primaryTitle = .verifierStartButtonTitle
+		sceneView.primaryTitle = L.verifierStartButtonTitle()
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 
 			self?.viewModel.primaryButtonTapped()
@@ -68,7 +68,7 @@ class ScanInstructionsViewController: BaseViewController {
 
 			let text = TextView(htmlText: item.text)
 			text.linkTouched { [weak self] url in
-				print("tapped on \(url)")
+				self?.logDebug("tapped on \(url)")
 				self?.viewModel.linkTapped(url)
 			}
 			sceneView.stackView.addArrangedSubview(text)

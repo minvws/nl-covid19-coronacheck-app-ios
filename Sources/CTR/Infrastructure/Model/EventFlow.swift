@@ -114,28 +114,36 @@ struct EventFlow {
 	/// A wrapper around an event result.
 	struct EventResultWrapper: Codable, Equatable {
 
-		/// The provider identifier
 		let providerIdentifier: String
-
-		/// The protocol version
 		let protocolVersion: String
-
-		let identity: Identity?
-
-		/// The state of the test
+		let identity: Identity? // 3.0
 		let status: EventState
+		let result: TestResult? // 2.0
+		var events: [Event]? = [] // 3.0
 
-		/// The test result
-		let result: TestResult?
+		func getMaxIssuedAt() -> Date? {
 
-		/// The vaccination events
-		var events: [Event]? = []
+			// 2.0
+			if let result = result,
+			   let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) {
+				return sampleDate
+			}
 
-		func getMaxIssuedAt(_ dateFormatter: ISO8601DateFormatter) -> Date? {
-
+			// 3.0
 			let maxIssuedAt: Date? = events?
-				.compactMap { $0.vaccination?.dateString }
-				.compactMap { dateFormatter.date(from: $0) }
+				.compactMap {
+					if $0.vaccination != nil {
+						return $0.vaccination?.dateString
+					}
+					if $0.negativeTest != nil {
+						return $0.negativeTest?.sampleDateString
+					}
+					if $0.recovery != nil {
+						return $0.recovery?.sampleDate
+					}
+					return $0.positiveTest?.sampleDateString
+				}
+				.compactMap(Formatter.getDateFrom)
 				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
 
 					switch latestDateFound {
@@ -147,27 +155,6 @@ struct EventFlow {
 							return latestDateFound
 					}
 				}
-
-			return maxIssuedAt
-		}
-
-		func getMaxSampleDate(_ dateFormatter: ISO8601DateFormatter) -> Date? {
-
-			let maxIssuedAt: Date? = events?
-				.compactMap { $0.negativeTest?.sampleDateString }
-				.compactMap { dateFormatter.date(from: $0) }
-				.reduce(nil) { (latestDateFound: Date?, nextDate: Date) -> Date? in
-
-					switch latestDateFound {
-						case let latestDateFound? where nextDate > latestDateFound:
-							return nextDate
-						case .none:
-							return nextDate
-						default:
-							return latestDateFound
-					}
-				}
-
 			return maxIssuedAt
 		}
 
@@ -213,14 +200,10 @@ struct EventFlow {
 	struct Identity: Codable, Equatable {
 
 		let infix: String?
-
 		let firstName: String?
-
 		let lastName: String?
-
 		let birthDateString: String?
 
-		// Key mapping
 		enum CodingKeys: String, CodingKey {
 
 			case infix
@@ -237,18 +220,13 @@ struct EventFlow {
 
 	struct Event: Codable, Equatable {
 
-		/// The type of event (vaccination / negativetest)
 		let type: String
-
-		/// The identifier of this event
 		let unique: String?
-
 		let isSpecimen: Bool?
-
-		/// The vaccination
 		let vaccination: VaccinationEvent?
-
 		let negativeTest: TestEvent?
+		let positiveTest: TestEvent?
+		let recovery: RecoveryEvent?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -257,33 +235,53 @@ struct EventFlow {
 			case isSpecimen
 			case vaccination
 			case negativeTest = "negativetest"
+			case positiveTest = "positivetest"
+			case recovery
+		}
+
+		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+			if vaccination != nil {
+				return vaccination?.getDate(with: dateformatter)
+			}
+			if negativeTest != nil {
+				return negativeTest?.getDate(with: dateformatter)
+			}
+			if recovery != nil {
+				return recovery?.getDate(with: dateformatter)
+			}
+			return positiveTest?.getDate(with: dateformatter)
+		}
+	}
+
+	struct RecoveryEvent: Codable, Equatable {
+
+		let sampleDate: String?
+		let validFrom: String?
+		let validUntil: String?
+
+		/// Get the date for this event
+		/// - Parameter dateformatter: the date formatter
+		/// - Returns: optional date
+		func getDate(with dateformatter: ISO8601DateFormatter) -> Date? {
+
+			if let dateString = sampleDate {
+				return  dateformatter.date(from: dateString)
+			}
+			return nil
 		}
 	}
 
 	/// An actual vaccination event
 	struct VaccinationEvent: Codable, Equatable {
 
-		/// The date of administering the vaccine
 		let dateString: String?
-
-		/// the hpk code of the vaccine (https://hpkcode.nl/)
-		/// If available: type/brand can be left blank.
-		let hpkCode: String?
-
-		/// the type of vaccine
+		let hpkCode: String? /// the hpk code of the vaccine (https://hpkcode.nl/) if available: type/brand can be left blank.
 		let type: String?
-
-		/// The manufacturer of the vaccine
 		let manufacturer: String?
-
-		/// the brand of the vaccine
 		let brand: String?
-
 		let doseNumber: Int?
-
-		/// optional, will be based on brand info if left out
 		let totalDoses: Int?
-
 		let country: String?
 
 		enum CodingKeys: String, CodingKey {
@@ -313,21 +311,18 @@ struct EventFlow {
 	struct TestEvent: Codable, Equatable {
 
 		let sampleDateString: String?
-
-		let negativeResult: Bool
-
+		let negativeResult: Bool?
+		let positiveResult: Bool?
 		let facility: String?
-
 		let type: String?
-
 		let name: String?
-
 		let manufacturer: String?
 
 		enum CodingKeys: String, CodingKey {
 
 			case sampleDateString = "sampleDate"
 			case negativeResult
+			case positiveResult
 			case facility
 			case type
 			case name

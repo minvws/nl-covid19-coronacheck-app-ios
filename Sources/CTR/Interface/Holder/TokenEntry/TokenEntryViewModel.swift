@@ -73,7 +73,7 @@ class TokenEntryViewModel {
 	// MARK: - Bindables, other
 
 	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
-	@Bindable private(set) var serverTooBusyAlert: TokenEntryViewController.AlertContent?
+	@Bindable private(set) var serverTooBusyAlert: AlertContent?
 
 	// MARK: - Private Dependencies:
 
@@ -246,8 +246,8 @@ class TokenEntryViewModel {
 		guard progressIndicationCounter.isInactive else { return }
 
 		coordinator?.presentInformationPage(
-			title: .holderTokenEntryModalNoTokenTitle,
-			body: .holderTokenEntryModalNoTokenDetails,
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
 			hideBodyForScreenCapture: false
 		)
 	}
@@ -318,15 +318,15 @@ class TokenEntryViewModel {
 
 	private func showServerTooBusyError() {
 
-		self.serverTooBusyAlert = TokenEntryViewController.AlertContent(
-			title: .serverTooBusyErrorTitle,
-			subTitle: .serverTooBusyErrorText,
+		self.serverTooBusyAlert = AlertContent(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyText(),
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.coordinator?.navigateBackToStart()
 			},
-			okTitle: .serverTooBusyErrorButton
+			okTitle: L.generalNetworkwasbusyButton()
 		)
 	}
 
@@ -477,7 +477,7 @@ class TokenEntryViewModel {
 		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = L.holderTokenentryButtonNotoken()
 		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
@@ -533,9 +533,9 @@ extension TokenEntryViewModel {
 		fileprivate static func title(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowTitle
+					return L.holderTokenentryRegularflowTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowTitle
+					return L.holderTokenentryUniversallinkflowTitle()
 			}
 		}
 
@@ -544,36 +544,36 @@ extension TokenEntryViewModel {
 				case (_, .none):
 					return nil
 				case (.regular, _):
-					return .holderTokenEntryRegularFlowText
+					return L.holderTokenentryRegularflowText()
 				case (.withRequestTokenProvided, _):
-					return .holderTokenEntryUniversalLinkFlowText
+					return L.holderTokenentryUniversallinkflowText()
 			}
 		}
 
 		fileprivate static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowRetryTitle
+					return L.holderTokenentryRegularflowRetryTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowRetryTitle
+					return L.holderTokenentryUniversallinkflowRetryTitle()
 			}
 		}
 
 		fileprivate static func errorInvalidCode(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowErrorInvalidCode
+					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowErrorInvalidCode
+					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
 			}
 		}
 
 		fileprivate static func tokenEntryHeaderTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowTokenTitle
+					return L.holderTokenentryRegularflowTokenTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowTokenTitle
+					return L.holderTokenentryUniversallinkflowTokenTitle()
 			}
 		}
 
@@ -581,15 +581,15 @@ extension TokenEntryViewModel {
             switch mode {
                 case .regular:
                     if UIAccessibility.isVoiceOverRunning {
-                        return .holderTokenEntryRegularFlowTokenPlaceholderForScreenReader
+                        return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
                     } else {
-                        return .holderTokenEntryRegularFlowTokenPlaceholder
+                        return L.holderTokenentryRegularflowTokenPlaceholder()
                     }
                 case .withRequestTokenProvided:
                     if UIAccessibility.isVoiceOverRunning {
-                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholderForScreenReader
+                        return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
                     } else {
-                        return .holderTokenEntryUniversalLinkFlowTokenPlaceholder
+                        return L.holderTokenentryUniversallinkflowTokenPlaceholder()
                     }
             }
 		}
@@ -597,36 +597,36 @@ extension TokenEntryViewModel {
 		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowVerificationTitle
+					return L.holderTokenentryRegularflowVerificationTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowVerificationTitle
+					return L.holderTokenentryUniversallinkflowVerificationTitle()
 			}
 		}
 
 		fileprivate static func verificationInfo(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowVerificationInfo
+					return L.holderTokenentryRegularflowVerificationInfo()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowVerificationInfo
+					return L.holderTokenentryUniversallinkflowVerificationInfo()
 			}
 		}
 
 		fileprivate static func verificationPlaceholder(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowVerificationPlaceholder
+					return L.holderTokenentryRegularflowVerificationPlaceholder()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowVerificationPlaceholder
+					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
 			}
 		}
 
 		fileprivate static func primaryTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowNext
+					return L.holderTokenentryRegularflowNext()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowNext
+					return L.holderTokenentryUniversallinkflowNext()
 			}
 		}
 
@@ -635,45 +635,36 @@ extension TokenEntryViewModel {
 		fileprivate static func confirmResendVerificationAlertTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertTitle
+					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertTitle
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
 			}
 		}
 
 		fileprivate static func confirmResendVerificationAlertMessage(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertMessage
+					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertMessage
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
 			}
 		}
 
 		fileprivate static func confirmResendVerificationAlertOkayButton(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationAlertOkayButton
+					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationAlertOkayButton
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
 			}
 		}
 
 		fileprivate static func confirmResendVerificationAlertCancelButton(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
-					return .holderTokenEntryRegularFlowConfirmResendVerificationCancelButton
+					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowConfirmResendVerificationCancelButton
-			}
-		}
-
-		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular:
-					return .holderTokenEntryRegularFlowNoTokenButton
-				case .withRequestTokenProvided:
-					return .holderTokenEntryUniversalLinkFlowNoTokenButton
+					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
 			}
 		}
 	}

@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -51,7 +50,7 @@ final class MakeTestAppointmentViewModel: Logging {
 
 		// Notify the coordinator
 		logInfo("Create appointment tapped")
-		if let url = URL(string: .holderUrlAppointment) {
+		if let url = URL(string: L.holderUrlAppointment()) {
 			coordinator?.openUrl(url, inApp: true)
 		}
 	}

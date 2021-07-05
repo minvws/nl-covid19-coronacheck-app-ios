@@ -39,6 +39,7 @@ fi
 # Create a branch where we sync everything from current private main
 echo -e "${GREEN}Ensuring we are in sync with the private repo${ENDCOL}"
 git fetch private-repo 
+git lfs fetch private-repo --all
 
 echo -e "${GREEN}Creating a new sync branch based on private/main${ENDCOL}"
 git branch sync/$TIMESTAMP private-repo/main
@@ -46,6 +47,7 @@ git branch sync/$TIMESTAMP private-repo/main
 # Todo: this could be optimized to only push if there actually are changes between the two branches (if not, this currently creates an empty PR)
 echo -e "${GREEN}Pushing the sync branch to public repo${ENDCOL}"
 git push public-repo sync/$TIMESTAMP
+git lfs push public-repo --all
 
 echo -e "${GREEN}Constructing a PR request and opening it in the browser${ENDCOL}"
 PR_URL="https://github.com/minvws/$BASE_REPONAME/compare/sync/$TIMESTAMP?quick_pull=1&title=${PR_TITLE}&body=${PR_BODY}"

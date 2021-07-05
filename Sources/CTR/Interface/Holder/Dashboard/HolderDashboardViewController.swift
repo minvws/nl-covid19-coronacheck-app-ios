@@ -138,14 +138,14 @@ class HolderDashboardViewController: BaseViewController {
 
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
-						qrCard.title = .qrTitle
-						qrCard.viewQRButtonTitle = .qrButtonViewQR
+						qrCard.title = L.holderDashboardQrTitle()
+						qrCard.viewQRButtonTitle = L.holderDashboardQrButtonViewQR()
 
 						switch card {
 							case .domesticQR:
-								qrCard.region = .netherlands
+								qrCard.region = L.generalNetherlands()
 							case .europeanUnionQR:
-								qrCard.region = .europeanUnion
+								qrCard.region = L.generalEuropeanUnion()
 								qrCard.shouldStyleForEU = true
 							default: break
 						}
@@ -213,7 +213,7 @@ class HolderDashboardViewController: BaseViewController {
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.addProofTapped)
 		)
-		plusbutton.accessibilityLabel = .add
+		plusbutton.accessibilityLabel = L.generalAdd()
 		navigationItem.rightBarButtonItem = plusbutton
 	}
 }

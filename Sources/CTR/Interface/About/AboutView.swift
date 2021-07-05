@@ -83,9 +83,10 @@ class AboutView: ScrolledStackView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = message?.setLineHeight(
-				ViewTraits.messageLineHeight,
-				kerning: ViewTraits.messageLineKerning
+			messageLabel.attributedText = .makeFromHtml(
+				text: message,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark
 			)
 		}
 	}

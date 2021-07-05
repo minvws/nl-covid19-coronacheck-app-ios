@@ -11,8 +11,8 @@ class ChooseQRCodeTypeViewModel: Logging {
 
 	// MARK: - Bindable Strings
 
-	@Bindable private(set) var title: String = .holderChooseQRCodeTypeTitle
-	@Bindable private(set) var message: String
+	@Bindable private(set) var title: String = L.holderChooseqrcodetypeTitle()
+	@Bindable private(set) var message: String = L.holderChooseqrcodetypeMessage()
 	@Bindable private(set) var buttonModels: [ChooseQRCodeTypeViewController.ButtonModel] = []
 
 	// MARK: - Private State:
@@ -26,18 +26,22 @@ class ChooseQRCodeTypeViewModel: Logging {
 
 		self.coordinator = coordinator
 
-		message = .holderChooseQRCodeTypeMessage(testHoursValidity: 40, vaccineDaysValidity: 365)
-		
 		buttonModels = [
-			.init(
-				title: .holderChooseQRCodeTypeOptionNegativeTestTitle,
-				subtitle: .holderChooseQRCodeTypeOptionNegativeTestSubtitle) { [weak self] in
+			ChooseQRCodeTypeViewController.ButtonModel(
+				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
+				subtitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
 
 				self?.coordinator?.userWishesToChooseLocation()
 			},
-			.init(
-				title: .holderChooseQRCodeTypeOptionVaccineTitle,
-				subtitle: .holderChooseQRCodeTypeOptionVaccineSubtitle) { [weak self] in
+			ChooseQRCodeTypeViewController.ButtonModel(
+				title: L.holderChooseqrcodetypeOptionRecoveryTitle(),
+				subtitle: L.holderChooseqrcodetypeOptionRecoverySubtitle()) { [weak self] in
+
+				self?.coordinator?.userWishesToCreateARecoveryQR()
+			},
+			ChooseQRCodeTypeViewController.ButtonModel(
+				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
+				subtitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateAVaccinationQR()
 			}

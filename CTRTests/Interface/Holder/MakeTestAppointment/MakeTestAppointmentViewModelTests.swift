@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -29,7 +28,7 @@ final class MakeTestAppointmentViewModelTests: XCTestCase {
 	
 	func test_onTap_shouldInvokeAppointmentUrl() {
 		// Given
-		let expectedUrl = URL(string: .holderUrlAppointment)
+		let expectedUrl = URL(string: L.holderUrlAppointment())
 		
 		// When
 		sut.onTap()

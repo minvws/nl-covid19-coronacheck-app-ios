@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import SnapshotTesting
+import Rswift
 
 class ScanInstructionsViewControllerTests: XCTestCase {
 
@@ -46,7 +47,7 @@ class ScanInstructionsViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == .verifierScanInstructionsTitle
+		expect(self.sut.title) == L.verifierInstructionsTitle()
 		expect(self.sut.sceneView.stackView.arrangedSubviews)
 			.to(haveCount(10), description: "There should be 10 items")
 

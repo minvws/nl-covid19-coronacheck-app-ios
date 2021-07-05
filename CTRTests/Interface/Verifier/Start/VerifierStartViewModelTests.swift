@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import Rswift
 
 class VerifierStartViewModelTests: XCTestCase {
 
@@ -45,13 +46,13 @@ class VerifierStartViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.sut.primaryButtonTitle)
-			.to(equal(.verifierStartButtonTitle), description: "Button title should match")
+			.to(equal(L.verifierStartButtonTitle()), description: "Button title should match")
 		expect(self.sut.title)
-			.to(equal(.verifierStartTitle), description: "Title should match")
+			.to(equal(L.verifierStartTitle()), description: "Title should match")
 		expect(self.sut.header)
-			.to(equal(.verifierStartHeader), description: "Header should match")
+			.to(equal(L.verifierStartHeader()), description: "Header should match")
 		expect(self.sut.message)
-			.to(equal(.verifierStartMessage), description: "Message should match")
+			.to(equal(L.verifierStartMessage()), description: "Message should match")
 	}
 
 	func test_linkTapped() {

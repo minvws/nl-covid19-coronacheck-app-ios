@@ -21,8 +21,6 @@ platform :ios do
 
   desc "Run tests for integration purposes"
   lane :test_ci do
-    prepare
-
     run_tests(
       app_name: "CTR",
       device: "iPhone 12",
@@ -85,8 +83,7 @@ platform :ios do
      setup_ci(provider: "travis", force: true)
      prepare_certificate
      install_provisioning_profile(path: provisioning_profile_path)
-     prepare
- 
+     
      # Version/Build number
      version = get_version_number(xcodeproj: xcodeproj, target: targetname, configuration: configuration)
      build_number = determine_build_number()
@@ -224,8 +221,7 @@ platform :ios do
     setup_ci(provider: "travis", force: true)
     prepare_certificate
     install_provisioning_profile(path: provisioning_profile_path)
-    prepare
-
+    
     # Version/Build number
     version = get_version_number(xcodeproj: xcodeproj, target: targetname, configuration: configuration)
     build_number = determine_build_number()
@@ -270,12 +266,8 @@ platform :ios do
     )
   end
 
-  private_lane :prepare do
-    xcversion(version: "12.4")
-  end
-
   private_lane :determine_build_number do |options|
-      ENV['GITHUB_RUN_NUMBER']
+    number_of_commits(all: true)
   end
 
   private_lane :inform_slack do |options|

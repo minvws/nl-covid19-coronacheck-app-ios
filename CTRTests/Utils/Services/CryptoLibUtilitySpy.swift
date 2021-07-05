@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -10,6 +9,16 @@ import XCTest
 @testable import CTR
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
+
+	var invokedHasPublicKeysGetter = false
+	var invokedHasPublicKeysGetterCount = 0
+	var stubbedHasPublicKeys: Bool! = false
+
+	var hasPublicKeys: Bool {
+		invokedHasPublicKeysGetter = true
+		invokedHasPublicKeysGetterCount += 1
+		return stubbedHasPublicKeys
+	}
 
 	var invokedIsInitializedGetter = false
 	var invokedIsInitializedGetterCount = 0

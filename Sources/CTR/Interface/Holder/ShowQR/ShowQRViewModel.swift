@@ -35,6 +35,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable private(set) var showValidQR: Bool
 
+	@Bindable private(set) var showInternationalAnimation: Bool = false
+
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
@@ -54,7 +56,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EEEE d MMMM HH:MM"
+		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
 
@@ -82,13 +84,15 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		self.qrImage = nil
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
-			title = .holderShowQRDomesticTitle
-            qrAccessibility = .holderShowQRDomesticQRTitle
-			infoButtonAccessibility = .holderShowQRDomesticAboutTitle
+			title = L.holderShowqrDomesticTitle()
+			qrAccessibility = L.holderShowqrDomesticQrTitle()
+			infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
+			showInternationalAnimation = false
 		} else if greenCard.type == GreenCardType.eu.rawValue {
-			title = .holderShowQREuTitle
-            qrAccessibility = .holderShowQRDomesticQRTitle
-			infoButtonAccessibility = .holderShowQREuAboutTitle
+			title = L.holderShowqrEuTitle()
+            qrAccessibility = L.holderShowqrEuTitle()
+			infoButtonAccessibility = L.holderShowqrEuAboutTitle()
+			showInternationalAnimation = true
 		}
 
 		super.init()
@@ -140,27 +144,24 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 					.mapIdentity(months: String.shortMonths)
 					.map({ $0.isEmpty ? "_" : $0 })
 					.joined(separator: " ")
-				let body: String = String(format: .holderShowQRDomesticAboutMessage, identity)
-				coordinator?.presentInformationPage(title: .holderShowQRDomesticAboutTitle, body: body, hideBodyForScreenCapture: true)
+
+				coordinator?.presentInformationPage(
+					title: L.holderShowqrDomesticAboutTitle(),
+					body: L.holderShowqrDomesticAboutMessage(identity),
+					hideBodyForScreenCapture: true
+				)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			if let euCredentialAttributes = cryptoManager?.readEuCredentials(data) {
 
-				logDebug("euCredentialAttributes: \(euCredentialAttributes)")
+				logVerbose("euCredentialAttributes: \(euCredentialAttributes)")
 
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-					showMoreInformationVaccination(
-						euCredentialAttributes: euCredentialAttributes,
-						vaccination: vaccination
-					)
+					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-					showMoreInformationVaccination(
-						euCredentialAttributes: euCredentialAttributes,
-						test: test
-					)
+					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, test: test)
 				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-					// Todo, write more information for recovery.
-					logDebug("Todo, display recovery: \(recovery)")
+					showMoreInformationRecovery(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 				}
 			}
 		}
@@ -172,7 +173,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
@@ -188,8 +189,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
 
-		let body: String = String(
-			format: .holderShowQREuAboutVaccinationMessage,
+		let body: String = L.holderShowqrEuAboutVaccinationMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			vaccineBrand,
@@ -199,15 +199,18 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			formattedVaccinationDate,
 			vaccination.country,
 			vaccination.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
+		coordinator?.presentInformationPage(
+			title: L.holderShowqrEuAboutTitle(),
+			body: body,
+			hideBodyForScreenCapture: true
+		)
 	}
 
 	private func showMoreInformationVaccination(
 		euCredentialAttributes: EuCredentialAttributes,
 		test: EuCredentialAttributes.TestEntry) {
-
-		logDebug("test: \(test)")
 
 		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
 			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
@@ -223,14 +226,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		var testResult = test.testResult
 		if test.testResult == "260415000" {
-			testResult = .holderShowQREuAboutTestNegative
+			testResult = L.holderShowqrEuAboutTestNegative()
 		}
 		if test.testResult == "260373001" {
-			testResult = .holderShowQREuAboutTestPositive
+			testResult = L.holderShowqrEuAboutTestPostive()
 		}
 
-		let body: String = String(
-			format: .holderShowQREuAboutTestMessage,
+		let body: String = L.holderShowqrEuAboutTestMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			testType,
@@ -241,8 +243,45 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			manufacturer,
 			test.country,
 			test.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
 		)
-		coordinator?.presentInformationPage(title: .holderShowQREuAboutTitle, body: body, hideBodyForScreenCapture: true)
+		coordinator?.presentInformationPage(
+			title: L.holderShowqrEuAboutTitle(),
+			body: body,
+			hideBodyForScreenCapture: true
+		)
+	}
+
+	private func showMoreInformationRecovery(
+		euCredentialAttributes: EuCredentialAttributes,
+		recovery: EuCredentialAttributes.RecoveryEntry) {
+
+		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
+			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+
+		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
+		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
+			.map(printDateFormatter.string) ?? recovery.validFrom
+		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
+			.map(printDateFormatter.string) ?? recovery.expiresAt
+
+		let body: String = L.holderShowqrEuAboutRecoveryMessage(
+			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
+			formattedBirthDate,
+			formattedFirstPostiveDate,
+			recovery.country,
+			recovery.issuer,
+			formattedValidFromDate,
+			formattedValidUntilDate,
+			recovery.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
+		)
+		coordinator?.presentInformationPage(
+			title: L.holderShowqrEuAboutTitle(),
+			body: body,
+			hideBodyForScreenCapture: true
+		)
 	}
 
 	private func setQRValid(image: UIImage?) {

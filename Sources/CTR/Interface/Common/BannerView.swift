@@ -145,10 +145,10 @@ class BannerView: BaseView {
 
 		super.setupAccessibility()
 
-		closeButton.accessibilityLabel = .close
+		closeButton.accessibilityLabel = L.generalClose()
 		bannerImageView.isAccessibilityElement = true
 		bannerImageView.accessibilityTraits = .staticText
-		bannerImageView.accessibilityLabel = .notification
+		bannerImageView.accessibilityLabel = L.generalNotification()
 		accessibilityElements = [bannerImageView, titleLabel, messageTextView, closeButton]
 	}
 

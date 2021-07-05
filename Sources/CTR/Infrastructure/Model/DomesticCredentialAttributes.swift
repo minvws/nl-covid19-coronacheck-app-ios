@@ -27,7 +27,7 @@ struct DomesticCredentialAttributes: Codable {
 		case lastNameInitial
 		case credentialVersion
 		case specimen = "isSpecimen"
-		case paperProof = "stripType"
+		case paperProof = "isPaperProof"
 		case validFrom
 		case validForHours
 	}

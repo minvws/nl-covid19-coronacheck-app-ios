@@ -72,7 +72,8 @@ public extension NSAttributedString {
 		textAlignment: NSTextAlignment = .left,
 		lineHeight: CGFloat = 22,
 		underlineColor: UIColor? = nil,
-		kern: CGFloat = -0.41) -> NSAttributedString {
+		kern: CGFloat = -0.41,
+		paragraphSpacing: CGFloat = 8) -> NSAttributedString {
 
 		guard !ProcessInfo.processInfo.isTesting else {
 
@@ -82,7 +83,7 @@ public extension NSAttributedString {
 		let text = text ?? ""
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.alignment = textAlignment
-		paragraphStyle.paragraphSpacing = 8
+		paragraphStyle.paragraphSpacing = paragraphSpacing
 		paragraphStyle.minimumLineHeight = lineHeight
 
 		let listParagraphStyle = NSMutableParagraphStyle()
