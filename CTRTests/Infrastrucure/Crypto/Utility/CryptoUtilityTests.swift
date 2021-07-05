@@ -432,7 +432,7 @@ class CryptoUtilityTests: XCTestCase {
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
         
-        XCTAssertEqual(true, openssl.validatePKCS7Signature(
+        XCTAssertTrue(openssl.validatePKCS7Signature(
                         signaturePPS,
                         contentData: payload,
                         certificateData: rootCertificateData,
@@ -440,7 +440,7 @@ class CryptoUtilityTests: XCTestCase {
                         requiredCommonNameContent: ".coronatester.n",
                         requiredCommonNameSuffix: ".nl"))
         
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
+        XCTAssertFalse(openssl.validatePKCS7Signature(
                         signaturePPS,
                         contentData: wrongPayload,
                         certificateData: rootCertificateData,
@@ -454,7 +454,7 @@ class CryptoUtilityTests: XCTestCase {
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
         
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
+        XCTAssertFalse(openssl.validatePKCS7Signature(
                         signaturePKCS,
                         contentData: payload,
                         certificateData: rootCertificateData,
@@ -462,7 +462,7 @@ class CryptoUtilityTests: XCTestCase {
                         requiredCommonNameContent: ".xx.n",
                         requiredCommonNameSuffix: ".nl"))
         
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
+        XCTAssertFalse(openssl.validatePKCS7Signature(
                         signaturePKCS,
                         contentData: payload,
                         certificateData: rootCertificateData,
@@ -470,7 +470,7 @@ class CryptoUtilityTests: XCTestCase {
                         requiredCommonNameContent: ".coronatester.n",
                         requiredCommonNameSuffix: ".xx"))
         
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
+        XCTAssertFalse(openssl.validatePKCS7Signature(
                         signaturePKCS,
                         contentData: payload,
                         certificateData: rootCertificateData,
@@ -478,7 +478,7 @@ class CryptoUtilityTests: XCTestCase {
                         requiredCommonNameContent: ".coronatester.n",
                         requiredCommonNameSuffix: ""))
         
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
+        XCTAssertFalse(openssl.validatePKCS7Signature(
                         signaturePKCS,
                         contentData: payload,
                         certificateData: rootCertificateData,
@@ -486,14 +486,15 @@ class CryptoUtilityTests: XCTestCase {
                         requiredCommonNameContent: "",
                         requiredCommonNameSuffix: ".xx"))
         
-        XCTAssertEqual(true, openssl.validatePKCS7Signature(
+        // Sepcial test - with no limits/rules set.
+        //
+        XCTAssertTrue(openssl.validatePKCS7Signature(
                         signaturePKCS,
                         contentData: payload,
                         certificateData: rootCertificateData,
                         authorityKeyIdentifier: authorityKeyIdentifier,
                         requiredCommonNameContent: "",
                         requiredCommonNameSuffix: ""))
-        
     }
     
     func testCMSSignature_verydeep() {
@@ -644,6 +645,14 @@ class CryptoUtilityTests: XCTestCase {
             // succeed if the user has somehow the fake root into the system trust
             // chain -and- set it to 'trusted' (or was fooled/hacked into that).
             //
+            // In theory this requires:
+            // 1) creating the DER version of the fake CA.
+            //     openssl x509 -in ca.pem -out fake.crt -outform DER
+            // 2) Loading this into the emulator via Safari
+            // 3) Hitting install in Settings->General->Profiles
+            // 4) Enabling it as trusted in Settings->About->Certificate Trust settings.
+            // but we've not gotten this to work reliably yet (just once).
+            //
             XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
                                                             policies: [policy],
                                                             trustedCertificates: []))
@@ -653,7 +662,13 @@ class CryptoUtilityTests: XCTestCase {
             XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
                                                             policies: [policy],
                                                             trustedCertificates: [ realRoot ]))
-            
+
+            // This should succeed - as we are giving it the right root to trust.
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: [ fakeRoot ]))
+
         }
         
         // Try again - but now with anything we can think of cert wise.
@@ -728,6 +743,19 @@ class CryptoUtilityTests: XCTestCase {
     func testSha256() {
         
         // Given
+        let data = "SomeString".data(using: .ascii)!
+        
+        // When
+        let sha = sut.sha256(data: data)
+        
+        // Then
+        XCTAssertEqual(sha, "SHA256 digest: 80ed7fe2957fa688284716753d339d019d490d4589ac4999ec8827ef3f84be29")
+    }
+
+    func testSha256withUTF8() {
+        
+        // Given a string that may get a BOM prefix.
+        //
         let data = "SomeString".data(using: .utf8)!
         
         // When
