@@ -30,6 +30,9 @@ packages:
   OHHTTPStubs:
     github: AliSoftware/OHHTTPStubs
     majorVersion: 9.1.0
+  Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
+    github: ashleymills/Reachability.swift
+    majorVersion: 5.1.0
   RSwiftLibrary:
     github: mac-cain13/R.swift.Library
     majorVersion: 5.4.0
