@@ -90,6 +90,19 @@ final class FetchEventsViewModel: Logging {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
+		let networkOffline: Bool = networkErrors.contains { $0 == .serverNotReachable }
+
+		guard !networkOffline else {
+			self.navigationAlert = FetchEventsViewController.AlertContent(
+				title: L.generalErrorNointernetTitle(),
+				subTitle: L.generalErrorNointernetText(),
+				okAction: { _ in
+					self.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				okTitle: L.generalOk()
+			)
+			return
+		}
 
 		// Needed because we can't present an Alert at the same time as change the navigation stack
 		// so sometimes the next step must be triggered as we dismiss the Alert.
@@ -153,6 +166,19 @@ final class FetchEventsViewModel: Logging {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
+		let networkOffline: Bool = networkErrors.contains { $0 == .serverNotReachable }
+		
+		guard !networkOffline else {
+			self.navigationAlert = FetchEventsViewController.AlertContent(
+				title: L.generalErrorNointernetTitle(),
+				subTitle: L.generalErrorNointernetText(),
+				okAction: { _ in
+					self.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				okTitle: L.generalOk()
+			)
+			return
+		}
 
 		// Needed because we can't present an Alert at the same time as change the navigation stack
 		// so sometimes the next step must be triggered as we dismiss the Alert.
