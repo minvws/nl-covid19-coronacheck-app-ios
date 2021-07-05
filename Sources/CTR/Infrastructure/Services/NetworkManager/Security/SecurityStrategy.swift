@@ -69,9 +69,6 @@ struct SecurityCheckerFactory {
             trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
             //			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
             //			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
-            if networkConfiguration.name != "Production" {
-                trustedSigners.append(TrustConfiguration.zorgCspPrivateRootCertificate)
-            }
             
             return SecurityCheckerProvider(
                 trustedCertificates: trustedCertificates,
@@ -106,37 +103,6 @@ protocol SecurityCheckerProtocol: SignatureValidating {
 }
 
 extension SecurityCheckerProtocol {
-    
-    /// Compare the Subject Alternative Name
-    /// - Parameters:
-    ///   - san: the subject alternative name
-    ///   - name: the name to compare
-    /// - Returns: True if the san matches
-    func compareSan(_ san: String, name: String) -> Bool {
-        
-        let sanNames = san.split(separator: ",")
-        for sanName in sanNames {
-            // SanName can be like DNS: *.domain.nl
-            let pattern = String(sanName)
-                .replacingOccurrences(of: "DNS:", with: "", options: .caseInsensitive)
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            if wildcardMatch(name, pattern: pattern) {
-                return true
-            }
-        }
-        return false
-    }
-    
-    /// Wildcard matching
-    /// - Parameters:
-    ///   - string: the string to check
-    ///   - pattern: the pattern to match
-    /// - Returns: True if the string matches the pattern
-    func wildcardMatch(_ string: String, pattern: String) -> Bool {
-        
-        let pred = NSPredicate(format: "self LIKE %@", pattern)
-        return !NSArray(object: string).filtered(using: pred).isEmpty
-    }
     
     /// Validate a PKCS7 Signature
     /// - Parameters:
