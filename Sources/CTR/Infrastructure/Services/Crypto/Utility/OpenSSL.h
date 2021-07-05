@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData;
 
-// Avoid using this method - as it cannot cope with mutiple Subject Alternative Names,
+// Avoid using this method - as it cannot cope with multiple Subject Alternative Names,
 // which is rather common. It will only return one entry if there is exactly one. Otherwise
 // it will fail (return a NULL).
 //
@@ -38,7 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 //
 - (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData;
 
-- (BOOL)inSystemTrustRoots:(NSData *)certData;
 @end
 
 NS_ASSUME_NONNULL_END

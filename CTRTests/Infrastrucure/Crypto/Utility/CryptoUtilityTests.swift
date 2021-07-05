@@ -37,10 +37,10 @@ tx5sCJ8=
 -----END CERTIFICATE-----
 """.data(using: .ascii)!
 
-// Chain that is identical in subjectKeyIdentifier, issuerIdenfifier, etc
+// Chain that is identical in subjectKeyIdentifier, issuerIdentifier, etc
 // to a real one - but fake from the root down.
 //
-// See the Scripts diretory:
+// See the Scripts directory:
 //  gen_fake_bananen.sh         - takes real chain and makes a fake one from it.
 //  gen_fake_cms_signed_json.sh - uses that to sign a bit of json.
 //  gen_code.pl                 - generates below hardcoded data.
@@ -367,13 +367,10 @@ Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
 -----END CERTIFICATE-----
 """.data(using: .ascii)!
 
-
-
-// Generatd with gen_fake_cms_signed_json.sh
+// Generated with gen_fake_cms_signed_json.sh
 //
 let fakePayload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K")!
 let fakeSignature = Data(base64Encoded: "MIISdgYJKoZIhvcNAQcCoIISZzCCEmMCAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBoIIPszCCBRYwggL+oAMCAQICEQCRKwhKzwwYp1P21i4lp19aMA0GCSqGSIb3DQEBCwUAME8xCzAJBgNVBAYTAlVTMSkwJwYDVQQKEyBJbnRlcm5ldCBTZWN1cml0eSBSZXNlYXJjaCBHcm91cDEVMBMGA1UEAxMMSVNSRyBSb290IFgxMB4XDTIwMDkwNDAwMDAwMFoXDTI1MDkxNTE2MDAwMFowMjELMAkGA1UEBhMCVVMxFjAUBgNVBAoTDUxldCdzIEVuY3J5cHQxCzAJBgNVBAMTAlIzMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1MwbbL8adcDFR0IfxNt4DsvA1S77c20WMh7r7f+ShaeVrmbZ+Sv6RdTKZ1IEfm5xZnVR0Xl3m+rpzLnpSyDtfoe9lIDSnFM+I5zNTwLiiDsjpA3EMQkzRSMrLKiyyB6ODmmHhu5NohvweEGg6IbxaNx18a+xG+FZQTyOnYEgdD0XHMdCvK/YiPIMp0T7b0rjbgH281jeS8DcvKim3uHq5C/ZYO0iotQza1KR9I8n9f4vkET15JsmF8WJgduTeLMOrj4SWXzHPCXq0l2gSnmPYt2nH7FdAw6ggs6OSLINAkOgJ8nH5uZUlW1btgSU+BDxEbkHApDLn1YBXfTzJld8/wIDAQABo4IBCDCCAQQwDgYDVR0PAQH/BAQDAgGGMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdDgQWBBQULrMXt1hWy65QCUDmH6+dixTCxjAfBgNVHSMEGDAWgBR5tFnme7bl5AFzgAiIyBpY9umbbjAyBggrBgEFBQcBAQQmMCQwIgYIKwYBBQUHMAKGFmh0dHA6Ly94MS5pLmxlbmNyLm9yZy8wJwYDVR0fBCAwHjAcoBqgGIYWaHR0cDovL3gxLmMubGVuY3Iub3JnLzAiBgNVHSAEGzAZMAgGBmeBDAECATANBgsrBgEEAYLfEwEBATANBgkqhkiG9w0BAQsFAAOCAgEAlb46ZrQGw359GsVDvzaXYPRC8qpwylCiSJayyNPhW8d8j1g/aYtA2sgbiGMZm2zNOZkEai6sVAM7HBIYp9f0zr84KGsCLcf52d+fJUOOIMUKV/5Zj7ya+2htN6yFykSRwusfCAVr3ZzSkoN4MD5qR3hIrGv5oRR7lj68kBYRHpYM3LfFnHKwkSIWb2+TTFWHosumAqyYbF1P1VqkFpAXZTUqQNFuJ6kiJOH9lLSBMKgxz2KIYdSoaDhY6nOHdJFIQal38RT6QvPCMHvlxmorG6fJ15zdv8Z/FAq3LjMunWtkEKDeb3jfZkPhE3JDrPn9K7XeGFaqQhEVXotTuLZ4KO7p9JdZFTc77XtXO3jBOU8hCxoaCGdX9p3jw4wxkVhIxiq6NQlQz9RVxw9RIgYCwkIqdbOGjnYYJZYHhpmEfBdqaGunuRKqWKjBHob85VvJ2iNSSS7Obi94O+nC4+fD02/uftKOEEp6dnm7qkvX3y05QEDDnn9pxFw7W7f09EbVsQkM8T6UYaUOohsiegBiQNrX8dWYZeWB17YTGOdr2WT1VHMOK8PkqmmAOa7TFwMcVkh9RS15emYQZAKRfWDKSM5PBRPrfZq97ACtaLtofpyafU8Nv2YN/cDs7HJh888+7VfQAsf2KZB50dO9eSMAYm80VJU7KUVZ1jt22DmsXO4wggUxMIIEGaADAgECAhID72cI0Xq8I8cR2gGg753J0dEwDQYJKoZIhvcNAQELBQAwMjELMAkGA1UEBhMCVVMxFjAUBgNVBAoTDUxldCdzIEVuY3J5cHQxCzAJBgNVBAMTAlIzMB4XDTIxMDUyMDE1MDcyNVoXDTIxMDgxODE1MDcyNVowITEfMB0GA1UEAxMWYXBpLWN0LmJhbmFuZW5oYWxlbi5ubDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAK057iBGRKwN3/Y/gqycLFpxIGL0nRhLih0n/KFKphaNyIpcqIgmoxR4FxIvPhRG42Z1+/nzyhVoerGqqGTRnH+SZL83vIlYlGA2H8WbE4k9ieSj5glfWSLHnV05FTjsCGc2QixvEagM4EJhz+2yN4DsJeo7zmJPXaDyBXJyki2gb1eBw8H/WaUW3fZR5Ys9Q8ODz1dItZqT7bfWEi5PgXOk2eZnQHW4cr6zn06zQg1NX/2mRqPJ5hNHdESULeqllv41o9nXrpZmtOFpRnioxspebmnA5ve+3M2tz8x+RXBQEOsNMMjXNg7wl0DcsoLo9zvuznXCuc9QKVOpRITp4M0CAwEAAaOCAlAwggJMMA4GA1UdDwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/BAIwADAdBgNVHQ4EFgQUALXX1R2xDhdh6I0aiMtZu2Y2hv0wHwYDVR0jBBgwFoAUFC6zF7dYVsuuUAlA5h+vnYsUwsYwVQYIKwYBBQUHAQEESTBHMCEGCCsGAQUFBzABhhVodHRwOi8vcjMuby5sZW5jci5vcmcwIgYIKwYBBQUHMAKGFmh0dHA6Ly9yMy5pLmxlbmNyLm9yZy8wIQYDVR0RBBowGIIWYXBpLWN0LmJhbmFuZW5oYWxlbi5ubDBMBgNVHSAERTBDMAgGBmeBDAECATA3BgsrBgEEAYLfEwEBATAoMCYGCCsGAQUFBwIBFhpodHRwOi8vY3BzLmxldHNlbmNyeXB0Lm9yZzCCAQMGCisGAQQB1nkCBAIEgfQEgfEA7wB2AESUZS6w7s6vxEAH2Kj+KMDa5oK+2MsxtT/TM5a1toGoAAABeYqIF/EAAAQDAEcwRQIhAImVhTi8w4kyqa3LNb0fstXY0fjCtZsaV6ugqLsK9VMBAiBqDb3uh14HJphrUKEA48HDYoGJXaMfR/ehHRZlkn11VQB1APZclC/RdzAiFFQYCDCUVo7jTRMZM7/fDC8gC8xO8WTjAAABeYqIF+QAAAQDAEYwRAIgL0aIDNMKduthxwHSkWnjlPGecT8Y/QZz54l/ls10m5gCIHmW81Q14ucYCmS+J56l37UCAtygS1/GeJ9etNAKL5xMMA0GCSqGSIb3DQEBCwUAA4IBAQBc8QVcUNpiec2pUQitzaezVkRq8TvsYbyd00s4u5nrASkkHjPbPKOa0gC64ieYi04H2d9xOLxO9G15/aF1+WYjvZ0UV9iVMBbCvwZgyYPk7TDC+p3tEKv+5/Hjkr11t2DLVipz52wcMW57ARHJL9KP2StjHOAeCY/g4EBIq2JXTpX6gn/XQVEA7cPRwcP9tyxaXTveaH+KMtR/bAqUk30dsxmMj+OcpXQ1x2QTETbytwO2TYE00Q8OZdq1VajAA/WLQubg7oFbj3oa7zPHvSXtjIgwwuB+1fVrn8ykYuF1x1yyIAs/YS/2GjICetxVFJHpGK6KQyqX7wrwckhEl1FyMIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMTDkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1owTzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2VhcmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQC2z0CEoNDT7u4IBy47zbQIIoiOV8NT4ruUApbbAq1f/uleLPFY4m2iCAbURZYVlQX2rCb9bxrHk68YLYR112dvhQel8jnOaqv+vqP0fVX9EbJVvV6r5gIFJQ9stN5F7nLDuh2PYqyy/gmXtKWyLpgci4WedUoNTSnNHKxXRmJYn98RUxYGVpS9WqtTmEJAi2ezkG5594B34ElhFMDuixPNt0m6KxagGrG20tn9Zn41cW6psIdWuW3aprkhPdEzL9bfyDRoQNrgTuZPIybOST5VoSwXeC+Jm/IoyGy7KI5BVdX9mBYo+axGWcRPSKDOq4r6jjnr+6lG47oH2rKvbPvb70QcIdmpzhIZqqeNZqBD8DaKjCTJqz8Y594Wc126Qw0B3sk93hbz/j/0+zBvvZrORrZCmAjQHoL24ggdYYJZnrLdpHqMogJvsu34FA2RbuSjPS8gVOKp/uF3g5yd8Ko2pN1A1oFAhDCKeJf4jRZMP9cGCpNCKITCkIVRVDUddYTWabPuXLBZUmEY8GbYFukqwTx9/NNtBn8al5tZQupxP+4Ukxl//aUuxQgdTg4hu1uSmEKK1Q6e/uJGlJmJm6dIxd5x5EMTidYkmQkwFL52rQwoKktrQbCr1Wz9ChxQ/nWp8nJ1DSt3PofzfNZMYafYMLgtRSwOHpOT5MhN3P1E5QIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYwSwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx+tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEBATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQub3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9EU1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26ZtuMA0GCSqGSIb3DQEBCwUAA4IBAQCrpdsaAVcifzsI2erw2vPLx+EZhWheO4l1EKqUCmNsJM7tchmjv5/Vc+gEvAvU7iMjFt+B0LGuOw6h5UL2oxNSJUNZaM1F8swRmXRR8iR6SBKagjA68/+52X+PRVnFJl10VjgY6wNXfUhmI+oeL+vF9S/HuXzBPK1XATZ87U4wuaq6ayOuAZheU/VA8Th16TJ4jk/XwVLI6t+ghopv3iCunerjeGUbaFUWPiKiVpWsePtjFxV2Y9rqULTgU88M32fjKyrlAjz9p5LMF318BqvN9biNEiUAbwWDulAOylQml3CV+5ntVKF7l2UCBeNGQzrFOQDOJQn291zCTEb4yJfWMYICiTCCAoUCAQEwSDAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3MgRW5jcnlwdDELMAkGA1UEAxMCUjMCEgPvZwjRerwjxxHaAaDvncnR0TALBglghkgBZQMEAgGggeQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEwNzA1MTAzMzM1WjAvBgkqhkiG9w0BCQQxIgQgjeoieCXQAb6FG1meoeoz5gIp3ri3LMHlRLGrg6yaUU0weQYJKoZIhvcNAQkPMWwwajALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwPgYJKoZIhvcNAQEKMDGgDTALBglghkgBZQMEAgGhGjAYBgkqhkiG9w0BAQgwCwYJYIZIAWUDBAIBogQCAgDeBIIBACNNpVKbgfaoViD7PGqvIIw0dPI6+xJY2OPVMhziKmL2ois6uYRq/JGk0wc0KaQbpZOVRWilXLwhF1SMbSckL4DM17cyCtpZjL5Olpk6VynJ7PjfYyS+TbhsYyQ8j+nah+ylB0TeHg5FYe6MdAeGiXMrRkYdGqXLYYfDqNzn2t/qQgPNzfFu6NUclgCNYWqecsgw02s0Qkp/3sgDb7AvQVAiNoz8Dutih8UIAIW1EhBLaub5Moap/RpXsxfhtbwfMCnaqT+crlJPecqRMCVP/yPJitrD/9aFST5WjWsQQ174Vz4JfcPgmNq1QI6cbjVQW7NKJIGIzYQ9DmP6YACb2zI=")!
-
 
 class CryptoUtilityTests: XCTestCase {
     
@@ -576,7 +573,7 @@ class CryptoUtilityTests: XCTestCase {
             realCertArray.append(cert!)
         }
         
-        // Create a 'wrorst case' kitchen sink chain with as much in it as we can think off.
+        // Create a 'worst case' kitchen sink chain with as much in it as we can think off.
         //
         let realRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realRoot)
         let fakeRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeRoot)
@@ -590,7 +587,7 @@ class CryptoUtilityTests: XCTestCase {
             let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
             var optionalRealTrust: SecTrust?
             
-            // the first certifcate is the one to check - the rest is to aid validation.
+            // the first certificate is the one to check - the rest is to aid validation.
             //
             XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + realCertArray as CFArray,
                                                               policy,
@@ -604,7 +601,7 @@ class CryptoUtilityTests: XCTestCase {
                                                            policies: [policy],
                                                            trustedCertificates: []))
             
-            // This should succeed - as we explictly rely on the root.
+            // This should succeed - as we explicitly rely on the root.
             //
             XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
                                                            policies: [policy],
@@ -690,7 +687,7 @@ class CryptoUtilityTests: XCTestCase {
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
 
-        // check with Current productin certificate
+        // check with Current production certificate
         //
         let san = openssl.getSubjectAlternativeName(realLeaf) as String?
         XCTAssert(san == "api-ct.bananenhalen.nl")
