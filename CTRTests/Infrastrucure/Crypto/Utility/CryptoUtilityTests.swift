@@ -176,7 +176,7 @@ class CryptoUtilityTests: XCTestCase {
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
 
-        XCTAssert(nil !=  SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: TrustConfiguration.rootISRGX1))
+        XCTAssert(nil != SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: TrustConfiguration.rootISRGX1))
 
         // the authidentifier just above the leaf that signed.
         // fake and real are identical
@@ -256,7 +256,6 @@ class CryptoUtilityTests: XCTestCase {
         XCTAssert(true == SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
                                               policies: [policy],
                                               trustedCertificates: [fakeRoot]))
-        
 
         // This should fail - as the root is not build in. It may however
         // succeed if the user has somehow the fake root into the system trust
@@ -283,12 +282,15 @@ class CryptoUtilityTests: XCTestCase {
         let certPEM = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZNVENDQkJtZ0F3SUJBZ0lTQSs5bkNORjZ2Q1BIRWRvQm9PK2R5ZEhSTUEwR0NTcUdTSWIzRFFFQkN3VUEKTURJeEN6QUpCZ05WQkFZVEFsVlRNUll3RkFZRFZRUUtFdzFNWlhRbmN5QkZibU55ZVhCME1Rc3dDUVlEVlFRRApFd0pTTXpBZUZ3MHlNVEExTWpBeE5UQTNNalZhRncweU1UQTRNVGd4TlRBM01qVmFNQ0V4SHpBZEJnTlZCQU1UCkZtRndhUzFqZEM1aVlXNWhibVZ1YUdGc1pXNHVibXd3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXcKZ2dFS0FvSUJBUURXWHRjazdlK1AwY2V0cGJKVkZNUmVJRTBYTDNWQVJqZ3RpT1ZiRUVvUE80cWdTMzlQOXAwTwp0RnlVcVNna1hpelRnMmxXbk8yQzlhbkRCdnlBNjZZQ20wbDY4UnJxSnhtZjhYRXhjZkYwV1ZhNFZsZnJnZCtCCnBJME1zWDJ6WmV0a2MxZ0VLVzQ3WFZvUGlaWlRUKzQ1VGJtT1VwczNnWXFWMHQrZjZuUUp6a3Y1Nk1ZYlg2ZVcKTWdFcEs0MVFhTXZ6VkxIb0hZYUVacnhTNmllL2NtRVhhbTc3d205anNneXZiY01lVm0yMVM0VUd1aFhON083NwowQ2pyTXhPOHdxa2lQQTVpSE1JbE5ITmRWMkR6dVdqOE9LY0t4WXNvWFhNUGh4VFhNWWc5VWk5Rm11WlNEK2d4Cm9vaFRjTk0zSFBIQWRuS3JyM3VObUZhTFd2OXozWDNQQWdNQkFBR2pnZ0pRTUlJQ1REQU9CZ05WSFE4QkFmOEUKQkFNQ0JhQXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUZCd01DTUF3R0ExVWRFd0VCL3dRQwpNQUF3SFFZRFZSME9CQllFRkFDMTE5VWRzUTRYWWVpTkdvakxXYnRtTm9iOU1COEdBMVVkSXdRWU1CYUFGQlF1CnN4ZTNXRmJMcmxBSlFPWWZyNTJMRk1MR01GVUdDQ3NHQVFVRkJ3RUJCRWt3UnpBaEJnZ3JCZ0VGQlFjd0FZWVYKYUhSMGNEb3ZMM0l6TG04dWJHVnVZM0l1YjNKbk1DSUdDQ3NHQVFVRkJ6QUNoaFpvZEhSd09pOHZjak11YVM1cwpaVzVqY2k1dmNtY3ZNQ0VHQTFVZEVRUWFNQmlDRm1Gd2FTMWpkQzVpWVc1aGJtVnVhR0ZzWlc0dWJtd3dUQVlEClZSMGdCRVV3UXpBSUJnWm5nUXdCQWdFd053WUxLd1lCQkFHQzN4TUJBUUV3S0RBbUJnZ3JCZ0VGQlFjQ0FSWWEKYUhSMGNEb3ZMMk53Y3k1c1pYUnpaVzVqY25sd2RDNXZjbWN3Z2dFREJnb3JCZ0VFQWRaNUFnUUNCSUgwQklIeApBTzhBZGdCRWxHVXVzTzdPcjhSQUI5aW8vaWpBMnVhQ3Z0akxNYlUvMHpPV3RiYUJxQUFBQVhtS2lCZnhBQUFFCkF3QkhNRVVDSVFDSmxZVTR2TU9KTXFtdHl6VzlIN0xWMk5INHdyV2JHbGVyb0tpN0N2VlRBUUlnYWcyOTdvZGUKQnlhWWExQ2hBT1BCdzJLQmlWMmpIMGYzb1IwV1paSjlkVlVBZFFEMlhKUXYwWGN3SWhSVUdBZ3dsRmFPNDAwVApHVE8vM3d3dklBdk1UdkZrNHdBQUFYbUtpQmZrQUFBRUF3QkdNRVFDSUM5R2lBelRDbmJyWWNjQjBwRnA0NVR4Cm5uRS9HUDBHYytlSmY1Yk5kSnVZQWlCNWx2TlVOZUxuR0Fwa3ZpZWVwZCsxQWdMY29FdGZ4bmlmWHJUUUNpK2MKVERBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQU4rQmxnbk16NHhpU3d6djdsNFRuUVV4bE0rVTNsSlJFRlRFTwowUHdCTElLWVg0UkJPOWt2bnczMzZQcTlwWWlTSkkxR3ZLQkx1VjJBK1E5R210UkNSNjlZNEVyTE1oNS9Jcjc2CnJBRUlVWmZuZjNlV0w0Wjg3KzFOaU9UbmlvS1lNUURJSFR3YmpESnhQNi9IclgzaXNsb3NUUk1pcG04ek1Wa2sKMVBuQ2FiT0VTYzhsS0xFa0ZxTmdiL2t4aUNULzBvQWQ2WDJydmJqTkQ5UjRpZTBjRk0zVkhlK25aQ3BLRXllYwpsM2dySEx5OVlGbnJ1c2Z2WXdSOCtMV3FCZjNLU1NzZ3pzMWxCVFpTVjBDWGh3YnlEMlo1bTc0WlIrNDhCbzk3Ck1yV0pWQWhFQ0xSemkxT2lEN3Njc1hXeGVGczRhVU43ZVR3K0JUTUNWRm5rbXR5NVN3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")!
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
-        
+
         let san = openssl.getSubjectAlternativeName(certPEM) as String?
         XCTAssert(san == "api-ct.bananenhalen.nl")
-        
-        let sans: [String ] = (openssl.getSubjectAlternativeDNSNames(certPEM) as! Array<String>?)!
-        XCTAssert(sans.first == "api-ct.bananenhalen.nl")
+
+		if let sans = openssl.getSubjectAlternativeDNSNames(certPEM) as? [String] {
+			XCTAssert(sans.first == "api-ct.bananenhalen.nl")
+		} else {
+			XCTFail("Can't cast to array of strings")
+		}
 
         // Regenerate with openssl req -new -x509 -subj /CN=foo/ \
         //      -addext "subjectAltName=DNS:test1,DNS:test2,email:fo@bar,IP:1.2.3.4"  \
@@ -297,10 +299,13 @@ class CryptoUtilityTests: XCTestCase {
         //
         let certWithStuff = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURKRENDQWd5Z0F3SUJBZ0lVZVk1Uy9seVFKKzBSN0oxbGRaQWJxL0YwNjBnd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0RqRU1NQW9HQTFVRUF3d0RabTl2TUI0WERUSXhNRGN3TXpJd016ZzFNRm9YRFRJeE1EZ3dNakl3TXpnMQpNRm93RGpFTU1Bb0dBMVVFQXd3RFptOXZNSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDCkFRRUFzUVdBdU5RYjc5eU1zVFBsbXFIT1RFbVVjWXE5T2NITjZPRVFJbS9JUUZhYkp2UHFOM0ZjNU5LbS9ZMU4KMGJqdXZoM1Z1a0RURFdHSnF1anBYKzJSU3QrOUg5UkFKc09aOHU0MHlBTGxwcnh4UjAvS0RyMStNT2Zwa1dtWQplOVdKSVZFdU1pM29PQ0lmMlF4T202RGJtN2VBNUVEaDF6RFpUUzB0UlNZSWk4eEpBcTU4MnZLVHI4SE40enZ0CmhQTFJwSkFIWjlrZEMrUDdWVEJHdHVYdWlKS0xmMnU3MzE0ZGpoeDVxL3E1aVhsRkw5eUFUWDNqdzQxMldKankKNEVJS1BWUHlSZ1RUTWp5RVVHbHZYZEFZUU1xRkhISnNSYlRxUTNCdHNYcmVSUlZFeXdDMGo3QjI4SmR4RWxHcQpyblBjV0RoL2t4SmRZUFZpS0ZuN1hlVGdad0lEQVFBQm8zb3dlREFkQmdOVkhRNEVGZ1FVQXZia1pOeS9NM3RNCnFLSlZNSlIxNzJ4Ym0yNHdId1lEVlIwakJCZ3dGb0FVQXZia1pOeS9NM3RNcUtKVk1KUjE3MnhibTI0d0R3WUQKVlIwVEFRSC9CQVV3QXdFQi96QWxCZ05WSFJFRUhqQWNnZ1YwWlhOME1ZSUZkR1Z6ZERLQkJtWnZRR0poY29jRQpBUUlEQkRBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQW54QnZKT29QMEFCSzYwV3JaUmZYbTU4RVd2eGErblc5CkhTZE03R2VQYlNaODBKNjBPUElmMkpiVENkUzFxVFY2c09KK2ZFTHNKNlhkVjE5MldIbGJYR2FtUHdYNm9NbG8KU29FdFkvYXduS3E5cmVqTmRqM29wQ3FySXhhWEdmZkNBNkRiTFoyN1hzZHk2YXJCWVNMU0V6UU9SdkRyOFZGVgpXdUJId2pDSkNlbGMwNVNDNVJUMG1rdnBEeDRoRXNHaGpZN1VHVjVETHhiSk9FZmNTNTFJamJLS1FHVi85M0RPCnFBV20xeld1MkFXMDZ6cTEyUlhwdFN0dGNHcDVoeXFiZC82L3A4V1EyUDE5dmZmb3UvcUphd29hM0podnZZbDkKTUR6N3hsZ1d1OXlLZjUzT3JudXhEMlFTQ3RCY2NhTlFaNFpvOGNmcUdVUUNsUTczT0VJbzRnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")!
         
-        let sans2: [String ] = (openssl.getSubjectAlternativeDNSNames(certWithStuff) as! [String])
-        XCTAssert(sans2.count == 2) // check that we skip the IP and email entry.
-        XCTAssert(sans2.first == "test1")
-        XCTAssert(sans2.last == "test2")
+		if let sans2 = openssl.getSubjectAlternativeDNSNames(certWithStuff) as? [String] {
+			XCTAssert(sans2.count == 2) // check that we skip the IP and email entry.
+			XCTAssert(sans2.first == "test1")
+			XCTAssert(sans2.last == "test2")
+		} else {
+			XCTFail("Can't cast to array of strings")
+		}
         
         XCTAssert(true == openssl.validateSubjectAlternativeDNSName("test1", forCertificateData: certWithStuff))
         XCTAssert(true == openssl.validateSubjectAlternativeDNSName("test2", forCertificateData: certWithStuff))
