@@ -161,8 +161,8 @@ class CryptoUtilityTests: XCTestCase {
         let fakeRoot = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURTakNDQWpLZ0F3SUJBZ0lRUksrd2dOYWpKN3FKTURtR0x2aEFhekFOQmdrcWhraUc5dzBCQVFzRkFEQS8KTVNRd0lnWURWUVFLRXh0RWFXZHBkR0ZzSUZOcFoyNWhkSFZ5WlNCVWNuVnpkQ0JEYnk0eEZ6QVZCZ05WQkFNVApEa1JUVkNCU2IyOTBJRU5CSUZnek1CNFhEVEF3TURrek1ESXhNVEl4T1ZvWERUSXhNRGt6TURFME1ERXhOVm93ClB6RWtNQ0lHQTFVRUNoTWJSR2xuYVhSaGJDQlRhV2R1WVhSMWNtVWdWSEoxYzNRZ1EyOHVNUmN3RlFZRFZRUUQKRXc1RVUxUWdVbTl2ZENCRFFTQllNekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQgpBTi9DaXNIcmFSVHE5TDdDRTJhTS8xeEliWUNBMDNML2NoL1cveWdWTlBheFROUjk4RTYwcitnRllYMVJPNTkzCkFqWGFpaS9aYisrNVpsK2NSZms1Z2tLVEJNRlNMQXg5S0U2bWtmNmRmcHpWVjVTbWJ1YlluVnZQc0dGUnNTMloKTEV2VkpTUFpZdGY1bkNHQ1RPazcwOE0vTkszUE5NLyt3OWt4UUVKbHFyZHpKUHd2cW9DR1BoU3YrVjZvRVh5SAowVDVxZEZlN1FIczRwMkFTaFphMmIxTi9reWZOR1RxQkZpTVdFamJSY0o0SWJyZ2FMMTRZQzdrL1ZmRXg4ZDU2CmhDMGtoZkFQZ1VlblpWT2w4YmNybkdhVHc1a3NDUG9LQXptUHZUaWZRSEJNWktzbEY2UWsxOWUwN1Z2M1dhaDUKVG5iZjEwOU5GQy9LZkpaZCtxV2VsNFVDQXdFQUFhTkNNRUF3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFPQmdOVgpIUThCQWY4RUJBTUNBUVl3SFFZRFZSME9CQllFRk1TbnNhUjdMSEg2MitGTGtIWC94QlZnaFlrUU1BMEdDU3FHClNJYjNEUUVCQ3dVQUE0SUJBUUE2aldBYlVtVDRNYTJIcVBPbDNrdFBlZTA1OE5NQzdLaFF6RkFQRlFucnhOVngKY3BUZFVZbHJOY0dnM3p4NXBpNDdtZzBJV3VmOFVlZlc3dzkzRlB3VG5LVysxM0hHbitqYXhYM2R4NVlKV3lqNQoyeVpER0hraUJuVlFCemRlVG5ZWCtUOGJueXE3ZVRxaWxoWkJGNkFRdWtNQnVUTk9aNGhQSVFSWjBNZnlQVGJJCm5TRGhWSFVZTXM4aXgwWVcwckhtK3dBWjRUa0ltMjBjQ2VWd0l6YXkyZXd3OWNXQmtqMnB5YWhjcUNHT2xiS1kKSVlMdFBxU1hrcDBhdnBVZnkxcHFXRkhTYnN2WE5uRjlpMytpaXQxNE5Za2pKQ3hsaHJRa3BkYnlUd3Q1OTQrdgp4elRqckVkRXZVdnhhamE3aUZEZHpkemM4WldVdDB0bStDaXo3WWZsCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K")!
         let payload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K")!
         let signature = Data(base64Encoded: "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")!
-
-        let realLeaf = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURTakNDQWpLZ0F3SUJBZ0lRUksrd2dOYWpKN3FKTURtR0x2aEFhekFOQmdrcWhraUc5dzBCQVFVRkFEQS8KTVNRd0lnWURWUVFLRXh0RWFXZHBkR0ZzSUZOcFoyNWhkSFZ5WlNCVWNuVnpkQ0JEYnk0eEZ6QVZCZ05WQkFNVApEa1JUVkNCU2IyOTBJRU5CSUZnek1CNFhEVEF3TURrek1ESXhNVEl4T1ZvWERUSXhNRGt6TURFME1ERXhOVm93ClB6RWtNQ0lHQTFVRUNoTWJSR2xuYVhSaGJDQlRhV2R1WVhSMWNtVWdWSEoxYzNRZ1EyOHVNUmN3RlFZRFZRUUQKRXc1RVUxUWdVbTl2ZENCRFFTQllNekNDQVNJd0RRWUpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQgpBTit2NlpkUUNJTlh0TXhpWmZhUWd1ekgweXhyTU1wYjdObkRmY2RBd1JnVWkrRG9NM1pKS3VNL0lVbVRyRTRPCnJ6NUl5Mlh1L05NaEQyWFNLdGt5ajR6bDkzZXdFbnUxbGNDSm82bTY3WE11ZWd3R01vT2lmb29VTU0wUm9PRXEKT0xsNUNqSDlVTDJBWmQrM1VXT0R5T0tJWWVwTFlZSHNVbXU1b3VKTEdpaWZTS09lRE5vSmpqNFhMaDdkSU45Ygp4aXFLcXk2OWNLM0ZDeG9sa0hSeXhYdHFxelRXTUluLzVXZ1RlMVFMeU5hdTdGcWNraDQ5WkxPTXh0Ky95VUZ3CjdCWnkxU2JzT0ZVNVE5RDgvUmhjUVBHWDY5V2FtNDBkdXRvbHVjYlkzOEVWQWpxcjJtN3hQaTcxWEFpY1BOYUQKYWVRUW14a3F0aWxYNCtVOW01L3dBbDBDQXdFQUFhTkNNRUF3RHdZRFZSMFRBUUgvQkFVd0F3RUIvekFPQmdOVgpIUThCQWY4RUJBTUNBUVl3SFFZRFZSME9CQllFRk1TbnNhUjdMSEg2MitGTGtIWC94QlZnaFlrUU1BMEdDU3FHClNJYjNEUUVCQlFVQUE0SUJBUUNqR2l5YkZ3QmNxUjd1S0dZM09yK0R4ejlMd3dtZ2xTQmQ0OWxaUk5JK0RUNjkKaWt1Z2RCL09FSUtjZEJvZGZwZ2EzY3NUUzdNZ1JPU1I2Y3o4ZmFYYmF1WCs1djNnVHQyM0FEcTFjRW12OHVYcgpBdkhSQW9zWnk1UTZYa2pFR0I1WUdWOGVBbHJ3RFBHeHJhbmNXWWFMYnVtUjlZYksrcmxtTTZwWlc4N2lweFp6ClI4c3J6Sm13TjBqUDQxWkw5YzhQREhJeWg4YndSTHRUY20xRDlTWkltbEpudDFpci9tZDJjWGpiRGFKV0ZCTTUKSkRHRm9xZ0NXakJINGQxUUI3d0NDWkFBNjJSallKc1d2SWpKRXViU2ZaR0wrVDB5aldXMDZYeXhWM2JxeGJZbwpPYjhWWlJ6STluZVdhZ3FOZHd2WWtRc0VqZ2ZiS2JZSzdwMkNOVFVRCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K")!
+        
+        let realLeaf = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZNVENDQkJtZ0F3SUJBZ0lTQSs5bkNORjZ2Q1BIRWRvQm9PK2R5ZEhSTUEwR0NTcUdTSWIzRFFFQkN3VUEKTURJeEN6QUpCZ05WQkFZVEFsVlRNUll3RkFZRFZRUUtFdzFNWlhRbmN5QkZibU55ZVhCME1Rc3dDUVlEVlFRRApFd0pTTXpBZUZ3MHlNVEExTWpBeE5UQTNNalZhRncweU1UQTRNVGd4TlRBM01qVmFNQ0V4SHpBZEJnTlZCQU1UCkZtRndhUzFqZEM1aVlXNWhibVZ1YUdGc1pXNHVibXd3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXcKZ2dFS0FvSUJBUUNzbG1nbDRmL3ZLR2tPNlZ4NXBjZ1ZTTjl5ZlpFOWdCWXNnVGZrbzBtU3V3MUNhdmRhcy9CTwpqWU8yOWNWR3kyWU9BYnZXZVV3UlVHYmlVRzhHR1UrNHRta1RUb0p1RGlPMmNNYzd2SXFPb2kzMHowbExYdFVXCi9qNW1xS0x1cnlKL2dONFV4ZTJHNytmUjFqc0wyRWVoLzlLbDJ1MFJIU2x4WWZ1SmdDcjJIekVoZmM1NHRJYkYKaWJrVGtVZEZ4VGtFQkxyYjNZUksxMmVMYi9MN1JEZkxVc1VKTWk3ZGZPeGhwbFMzVkVXMDlBMGpKYUNjWVVDWgpWakI0M1l6V2Q1c3JhV3preDZrT3htYWQvRWJRMi8zeWo2eGdodXlleU5YbHJLcFZBRWRIdnVBVnk5bkpjZ0RjCjdlaER3SXp6aEhGMFRlOUhkU1IyUkcyUThFTTFlZ0NEQWdNQkFBR2pnZ0pRTUlJQ1REQU9CZ05WSFE4QkFmOEUKQkFNQ0JhQXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUZCd01DTUF3R0ExVWRFd0VCL3dRQwpNQUF3SFFZRFZSME9CQllFRkFDMTE5VWRzUTRYWWVpTkdvakxXYnRtTm9iOU1COEdBMVVkSXdRWU1CYUFGQlF1CnN4ZTNXRmJMcmxBSlFPWWZyNTJMRk1MR01GVUdDQ3NHQVFVRkJ3RUJCRWt3UnpBaEJnZ3JCZ0VGQlFjd0FZWVYKYUhSMGNEb3ZMM0l6TG04dWJHVnVZM0l1YjNKbk1DSUdDQ3NHQVFVRkJ6QUNoaFpvZEhSd09pOHZjak11YVM1cwpaVzVqY2k1dmNtY3ZNQ0VHQTFVZEVRUWFNQmlDRm1Gd2FTMWpkQzVpWVc1aGJtVnVhR0ZzWlc0dWJtd3dUQVlEClZSMGdCRVV3UXpBSUJnWm5nUXdCQWdFd053WUxLd1lCQkFHQzN4TUJBUUV3S0RBbUJnZ3JCZ0VGQlFjQ0FSWWEKYUhSMGNEb3ZMMk53Y3k1c1pYUnpaVzVqY25sd2RDNXZjbWN3Z2dFREJnb3JCZ0VFQWRaNUFnUUNCSUgwQklIeApBTzhBZGdCRWxHVXVzTzdPcjhSQUI5aW8vaWpBMnVhQ3Z0akxNYlUvMHpPV3RiYUJxQUFBQVhtS2lCZnhBQUFFCkF3QkhNRVVDSVFDSmxZVTR2TU9KTXFtdHl6VzlIN0xWMk5INHdyV2JHbGVyb0tpN0N2VlRBUUlnYWcyOTdvZGUKQnlhWWExQ2hBT1BCdzJLQmlWMmpIMGYzb1IwV1paSjlkVlVBZFFEMlhKUXYwWGN3SWhSVUdBZ3dsRmFPNDAwVApHVE8vM3d3dklBdk1UdkZrNHdBQUFYbUtpQmZrQUFBRUF3QkdNRVFDSUM5R2lBelRDbmJyWWNjQjBwRnA0NVR4Cm5uRS9HUDBHYytlSmY1Yk5kSnVZQWlCNWx2TlVOZUxuR0Fwa3ZpZWVwZCsxQWdMY29FdGZ4bmlmWHJUUUNpK2MKVERBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQVdFSlV1Z3dNNVpjU0RZK2tFOXZsMklMWUMxbjdFeVRzeEFHYwoxUEo4b2g1YTVVbHRKYko5bks3dW43ZVhSNkttYk5lWUV0b1J5ZHVRbWtXSTdwbkFQV0tpZWZnaHpFS0N1N3JTCmtOYUhLeTBQVm5WWTVpa2dZdWtxM2daVS9DZXZCRmhHbkhnaTk3VDlxM3dDVWpRNmp1SWlpZmVxU29oMURyTncKTnV4bWVrc1lwUFEydXk2K2FKMjVwRGpSTytEWW9vOGVVd2FGR2tiVTNtQlloQWw4VkN3dzJaeTQ0UnFhbk9pbQp3ZFhhaG9FeHB1Zk01MUdpZE5YVUw4aU1QL2pORzk1YStESGFBekd1TmpmV3hSbXJzM0ZsWUdFdk9lOFBhbmhYCk1rTStNLzQ2eWJtM0c0ejl2Y2RRcEo0T1JiWVVnWXZXbEgxTG9LbUFPKy96djd4bTd3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")!
         let fakeLeaf = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZNVENDQkJtZ0F3SUJBZ0lTQSs5bkNORjZ2Q1BIRWRvQm9PK2R5ZEhSTUEwR0NTcUdTSWIzRFFFQkN3VUEKTURJeEN6QUpCZ05WQkFZVEFsVlRNUll3RkFZRFZRUUtFdzFNWlhRbmN5QkZibU55ZVhCME1Rc3dDUVlEVlFRRApFd0pTTXpBZUZ3MHlNVEExTWpBeE5UQTNNalZhRncweU1UQTRNVGd4TlRBM01qVmFNQ0V4SHpBZEJnTlZCQU1UCkZtRndhUzFqZEM1aVlXNWhibVZ1YUdGc1pXNHVibXd3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXcKZ2dFS0FvSUJBUURXWHRjazdlK1AwY2V0cGJKVkZNUmVJRTBYTDNWQVJqZ3RpT1ZiRUVvUE80cWdTMzlQOXAwTwp0RnlVcVNna1hpelRnMmxXbk8yQzlhbkRCdnlBNjZZQ20wbDY4UnJxSnhtZjhYRXhjZkYwV1ZhNFZsZnJnZCtCCnBJME1zWDJ6WmV0a2MxZ0VLVzQ3WFZvUGlaWlRUKzQ1VGJtT1VwczNnWXFWMHQrZjZuUUp6a3Y1Nk1ZYlg2ZVcKTWdFcEs0MVFhTXZ6VkxIb0hZYUVacnhTNmllL2NtRVhhbTc3d205anNneXZiY01lVm0yMVM0VUd1aFhON083NwowQ2pyTXhPOHdxa2lQQTVpSE1JbE5ITmRWMkR6dVdqOE9LY0t4WXNvWFhNUGh4VFhNWWc5VWk5Rm11WlNEK2d4Cm9vaFRjTk0zSFBIQWRuS3JyM3VObUZhTFd2OXozWDNQQWdNQkFBR2pnZ0pRTUlJQ1REQU9CZ05WSFE4QkFmOEUKQkFNQ0JhQXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUZCd01DTUF3R0ExVWRFd0VCL3dRQwpNQUF3SFFZRFZSME9CQllFRkFDMTE5VWRzUTRYWWVpTkdvakxXYnRtTm9iOU1COEdBMVVkSXdRWU1CYUFGQlF1CnN4ZTNXRmJMcmxBSlFPWWZyNTJMRk1MR01GVUdDQ3NHQVFVRkJ3RUJCRWt3UnpBaEJnZ3JCZ0VGQlFjd0FZWVYKYUhSMGNEb3ZMM0l6TG04dWJHVnVZM0l1YjNKbk1DSUdDQ3NHQVFVRkJ6QUNoaFpvZEhSd09pOHZjak11YVM1cwpaVzVqY2k1dmNtY3ZNQ0VHQTFVZEVRUWFNQmlDRm1Gd2FTMWpkQzVpWVc1aGJtVnVhR0ZzWlc0dWJtd3dUQVlEClZSMGdCRVV3UXpBSUJnWm5nUXdCQWdFd053WUxLd1lCQkFHQzN4TUJBUUV3S0RBbUJnZ3JCZ0VGQlFjQ0FSWWEKYUhSMGNEb3ZMMk53Y3k1c1pYUnpaVzVqY25sd2RDNXZjbWN3Z2dFREJnb3JCZ0VFQWRaNUFnUUNCSUgwQklIeApBTzhBZGdCRWxHVXVzTzdPcjhSQUI5aW8vaWpBMnVhQ3Z0akxNYlUvMHpPV3RiYUJxQUFBQVhtS2lCZnhBQUFFCkF3QkhNRVVDSVFDSmxZVTR2TU9KTXFtdHl6VzlIN0xWMk5INHdyV2JHbGVyb0tpN0N2VlRBUUlnYWcyOTdvZGUKQnlhWWExQ2hBT1BCdzJLQmlWMmpIMGYzb1IwV1paSjlkVlVBZFFEMlhKUXYwWGN3SWhSVUdBZ3dsRmFPNDAwVApHVE8vM3d3dklBdk1UdkZrNHdBQUFYbUtpQmZrQUFBRUF3QkdNRVFDSUM5R2lBelRDbmJyWWNjQjBwRnA0NVR4Cm5uRS9HUDBHYytlSmY1Yk5kSnVZQWlCNWx2TlVOZUxuR0Fwa3ZpZWVwZCsxQWdMY29FdGZ4bmlmWHJUUUNpK2MKVERBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQU4rQmxnbk16NHhpU3d6djdsNFRuUVV4bE0rVTNsSlJFRlRFTwowUHdCTElLWVg0UkJPOWt2bnczMzZQcTlwWWlTSkkxR3ZLQkx1VjJBK1E5R210UkNSNjlZNEVyTE1oNS9Jcjc2CnJBRUlVWmZuZjNlV0w0Wjg3KzFOaU9UbmlvS1lNUURJSFR3YmpESnhQNi9IclgzaXNsb3NUUk1pcG04ek1Wa2sKMVBuQ2FiT0VTYzhsS0xFa0ZxTmdiL2t4aUNULzBvQWQ2WDJydmJqTkQ5UjRpZTBjRk0zVkhlK25aQ3BLRXllYwpsM2dySEx5OVlGbnJ1c2Z2WXdSOCtMV3FCZjNLU1NzZ3pzMWxCVFpTVjBDWGh3YnlEMlo1bTc0WlIrNDhCbzk3Ck1yV0pWQWhFQ0xSemkxT2lEN3Njc1hXeGVGczRhVU43ZVR3K0JUTUNWRm5rbXR5NVN3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")!
         let fakeChain = [
             Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZZRENDQkVpZ0F3SUJBZ0lRUUFGM0lUZlU2VUs0N25hcVBHUUt0ekFOQmdrcWhraUc5dzBCQVFzRkFEQS8KTVNRd0lnWURWUVFLRXh0RWFXZHBkR0ZzSUZOcFoyNWhkSFZ5WlNCVWNuVnpkQ0JEYnk0eEZ6QVZCZ05WQkFNVApEa1JUVkNCU2IyOTBJRU5CSUZnek1CNFhEVEl4TURFeU1ERTVNVFF3TTFvWERUSTBNRGt6TURFNE1UUXdNMW93ClR6RUxNQWtHQTFVRUJoTUNWVk14S1RBbkJnTlZCQW9USUVsdWRHVnlibVYwSUZObFkzVnlhWFI1SUZKbGMyVmgKY21Ob0lFZHliM1Z3TVJVd0V3WURWUVFERXd4SlUxSkhJRkp2YjNRZ1dERXdnZ0lpTUEwR0NTcUdTSWIzRFFFQgpBUVVBQTRJQ0R3QXdnZ0lLQW9JQ0FRQ3lhazZQVDQ5TVB4RE1hRkszdmdVTmZoZGFjdTIwQ1RvUWRiUVdzOHFnCmJhaUlLRzJYN3BhNG1JUTE1ejBKTi9wN0pmU0I0dURkaGZXcmVnWmJMZkM1RUduVjdFUkVIR3RHRDAxZ0grdmsKbG85NlduK05tUklWajNyTVN3emhIMUE2TXh1N3Z6ZGtQbDB0ZGZkeTRxNUNlQ2ErdmpkYVJnaXVNTkFhR0puVAo2L0hNTkEvb3pXanNXbW00QWxWdTN6VUZla3VMbVNxdmpEc0c2WkVEbE1DOUkwUk1SOFp6ZTJxQ3FTMlVjcG5PCndodHU5K1FISHVEMzYrRXRHdWljWTRlcTBqN2M1TE1OVlZ2YzNIMDhOWTR4Tks5TlhTN2pOTjREWTNkZ2lIYUkKWDFyeXlOTlgwMGFWUkxONDN4RVkybWthaEgwcU13MmlBTGJ2QUQ4R2JINmRyS0p5NWpZb09Sek4xZmg1c1d1ZwpocjQwWDJvMGJKdFJHdy9HVDZSSmo3SWdNMGRPR1N6RjFUL3Q5NDBZaXE1TWZLSU5UTjBEejFzUWp4MmE0NDYvCjBxQUpRQnVXY0JDSG9oMkRzMlFqZlc5SDI5b0RiWm1DM2JNT2ZUNks4ZTVFYzVlcG00bmQ1UWJYMFVTdDdvN2wKWkxVTEFQbnRFWkQyQVh6U0xHbmVJUWorSHBsZFJBWHB5WndIUm1DeFA2UGFldlJrZFRpMHVKK1ZVUVJLZEZpdgo0UHlNRTRPVWlWMU93dXdpREU0VWFObEJDbTVhYlJhc1orMERpdHpnVEs3Yit2bEFFSmU2NjVDZlcxRHA1UWhUCm9well0TjVzWHVzTmxsM0F0MnV0a2pVQUord0h6R2ora3N2d2VJZVNNTThYYUxvYTdnMjdlL09KcmpkMklpenIKUXdJREFRQUJvNElCUmpDQ0FVSXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU9CZ05WSFE4QkFmOEVCQU1DQVFZdwpTd1lJS3dZQkJRVUhBUUVFUHpBOU1Ec0dDQ3NHQVFVRkJ6QUNoaTlvZEhSd09pOHZZWEJ3Y3k1cFpHVnVkSEoxCmMzUXVZMjl0TDNKdmIzUnpMMlJ6ZEhKdmIzUmpZWGd6TG5BM1l6QWZCZ05WSFNNRUdEQVdnQlRFcDdHa2V5eHgKK3R2aFM1QjEvOFFWWUlXSkVEQlVCZ05WSFNBRVRUQkxNQWdHQm1lQkRBRUNBVEEvQmdzckJnRUVBWUxmRXdFQgpBVEF3TUM0R0NDc0dBUVVGQndJQkZpSm9kSFJ3T2k4dlkzQnpMbkp2YjNRdGVERXViR1YwYzJWdVkzSjVjSFF1CmIzSm5NRHdHQTFVZEh3UTFNRE13TWFBdm9DMkdLMmgwZEhBNkx5OWpjbXd1YVdSbGJuUnlkWE4wTG1OdmJTOUUKVTFSU1QwOVVRMEZZTTBOU1RDNWpjbXd3SFFZRFZSME9CQllFRkhtMFdlWjd0dVhrQVhPQUNJaklHbGoyNlp0dQpNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNCQ296TFRhMEtEeWVuaElCNU42OStZWHRlcHA3aDFNL3orb0ZpCk16dTk1bEVRTkxOTXlJVVFzY3BDaGJiVnFDaGNOWkVRYnhkaHdINmxYcGlvWmVrQlNGUzVlcVJYVVU2bkxZR1IKdUYvNmN2c2RwcmtrWGJ2YVhqa3REZFJQaEQwVXl6U2hEYmNiWkQxNklrdEpWR0FnSlQwU2VDVWpzTnVjOGNzbgphKys5dzRXTmZjOGVrUkU0V3l2TXJ3bDBhQVJnZWRuQjNCbkdMckdYUE5neElMZmFnWHdKV0NmR09QanpOUnFJCm9pWjRmNVZvR3liL1NLRXRTeEdUaEVqRWo1ZmcwZkFaakZjMEFxWXJHWnh4bndhbFFNVTg3WmFaYUM3czl5ckEKa0loMU4yWE9LbjcyUG9URmxxWGxRc3YvQWhBaW5wc09Kc2IxVW94NUpIeDRxelVZCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"),
@@ -175,15 +175,15 @@ class CryptoUtilityTests: XCTestCase {
             Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZGakNDQXY2Z0F3SUJBZ0lSQUpFckNFclBEQmluVS9iV0xpV25YMW93RFFZSktvWklodmNOQVFFTEJRQXcKVHpFTE1Ba0dBMVVFQmhNQ1ZWTXhLVEFuQmdOVkJBb1RJRWx1ZEdWeWJtVjBJRk5sWTNWeWFYUjVJRkpsYzJWaApjbU5vSUVkeWIzVndNUlV3RXdZRFZRUURFd3hKVTFKSElGSnZiM1FnV0RFd0hoY05NakF3T1RBME1EQXdNREF3CldoY05NalV3T1RFMU1UWXdNREF3V2pBeU1Rc3dDUVlEVlFRR0V3SlZVekVXTUJRR0ExVUVDaE1OVEdWMEozTWcKUlc1amNubHdkREVMTUFrR0ExVUVBeE1DVWpNd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFSwpBb0lCQVFDN0FoVW96UGFnbE5NUEV1eU5WWkxEK0lMeG1hWjZRb2luWFNhcXRTdTV4VXl4cjQ1citYWElvOWNQClI1UVVWVFZYako2b29qa1o5WUk4UXFsT2J2VTd3eTdiamNDd1hQTlpPT2Z0ejJud1dnc2J2c0NVSkNXSCtqZHgKc3hQbkhLemhtKy9iNUR0RlVrV1dxY0ZUempUSVV1NjFydTJQM21CdzRxVlVxN1p0RHBlbFFEUnJLOU84WnV0bQpOSHo2YTR1UFZ5bVorREFYWGJweWIvdUJ4YTNTaGxnOUY4Zm5DYnZ4Sy9lRzNNSGFjVjNVUnVQTXJTWEJpTHhnClozVm1zL0VZOTZKYzVsUC9Pb2kyUjZYL0V4anFtQWwzUDUxVCtjOEI1ZldtY0JjVXIyT2svNW16azUzY1U2Y0cKL2tpRkhhRnByaVYxdXhQTVVnUDE3VkdoaTlzVkFnTUJBQUdqZ2dFSU1JSUJCREFPQmdOVkhROEJBZjhFQkFNQwpBWVl3SFFZRFZSMGxCQll3RkFZSUt3WUJCUVVIQXdJR0NDc0dBUVVGQndNQk1CSUdBMVVkRXdFQi93UUlNQVlCCkFmOENBUUF3SFFZRFZSME9CQllFRkJRdXN4ZTNXRmJMcmxBSlFPWWZyNTJMRk1MR01COEdBMVVkSXdRWU1CYUEKRkhtMFdlWjd0dVhrQVhPQUNJaklHbGoyNlp0dU1ESUdDQ3NHQVFVRkJ3RUJCQ1l3SkRBaUJnZ3JCZ0VGQlFjdwpBb1lXYUhSMGNEb3ZMM2d4TG1rdWJHVnVZM0l1YjNKbkx6QW5CZ05WSFI4RUlEQWVNQnlnR3FBWWhoWm9kSFJ3Ck9pOHZlREV1WXk1c1pXNWpjaTV2Y21jdk1DSUdBMVVkSUFRYk1Ca3dDQVlHWjRFTUFRSUJNQTBHQ3lzR0FRUUIKZ3Q4VEFRRUJNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUNBUUNGeWs1SFBxUDNoVVNGdk5WbmVMS1lZNjExVFI2VwpQVE5sY2xRdGdhRHF3KzM0SUw5ZnpMZHdBTGR1Ty9aZWxON2tJSittNzR1eUErZWl0Ulk4a2M2MDdUa0M1M3dsCmlrZm1aVzQvUnZUWjhNNlVLKzVVemhLOGpDZEx1TUdZTDZLdnpYR1JTZ2kzeUxnamV3UXRDUGtJVno2RDJRUXoKQ2tjaGVBbUNKOE1xeUp1NXpsenlaTWpBdm5uQVQ0NXRSQXhla3JzdTk0c1E0ZWdkUkNuYldTRHRZN2toK0JJbQpsSk5Yb0IxbEJNRUtJcTRRRFVPWG9SZ2ZmdURnaGplMVdyRzlNTCtIYmlzcS95Rk9Hd1hEOVJpWDhGNnN3Nlc0CmF2QXV2RHN6dWU1TDNzejg1SytFQzRZL3dGVkROdlpvNFRZWGFvNlowZitsUUtjMHQ4RFFZemsxT1hWdThycDIKeUpNQzZhbExiQmZPREFMWnZZSDduN2RvMUFabHM0STlkMVA0am5rRHJRb3hCM1VxUTloVmwzTEVLUTczeEYxTwp5SzVHaEREWDhvVmZHS0Y1dStkZWNJc0g0WWFUdzdtUDNHRnhKU3F2MyswbFVGSm9pNUxjNWRhMTQ5cDkwSWRzCmhDRXhyb0wxKzdtcnlJa1hQZUZNNVRnTzlyMHJ2WmFCRk92VjJ6MGdwMzVaMCtMNFdQbGJ1RWpOL2x4UEZpbisKSGxVanI4Z1JzSTNxZkpPUUZ5LzlyS0lKUjBZLzhPbXd0LzhvVFdneTFtZGVIbW1qazdqMW5Zc3ZDOUpTUTZadgpNbGRsVFRLQjN6aFRoVjErWFdZcDZyamQ1SlcxemJWV0VrTE54RTdHSlRoRVVHM3N6Z0JWR1A3cFNXVFVUc3FYCm5MUmJ3SE9vcTdoSHdnPT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")]
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
-
+        
         XCTAssert(nil !=  SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: TrustConfiguration.rootISRGX1))
-
+        
         // the authidentifier just above the leaf that signed.
         // fake and real are identical
         //
         let authorityKeyIdentifier = Data([0x04, 0x14,
                                            0x14, 0x2E, 0xB3, 0x17, 0xB7, 0x58, 0x56, 0xCB, 0xAE, 0x50, 0x09, 0x40, 0xE6, 0x1F, 0xAF, 0x9D, 0x8B, 0x14, 0xC2, 0xC6])
-
+        
         // this is a test against the fully fake root and should succeed.
         //
         XCTAssertEqual(true, openssl.validatePKCS7Signature(
@@ -203,82 +203,133 @@ class CryptoUtilityTests: XCTestCase {
                         authorityKeyIdentifier: authorityKeyIdentifier,
                         requiredCommonNameContent: "bananen",
                         requiredCommonNameSuffix: "nl"))
-
-        let fakeCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeLeaf)
-        XCTAssert(fakeCert != nil)
-
-        var fakeCertArray = [ fakeCert ]
+        
+        let fakeLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeLeaf)
+        XCTAssert(fakeLeafCert != nil)
+        
+        var fakeCertArray = [SecCertificate]()
         for certPem in fakeChain {
             let cert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: certPem!)
             XCTAssert(cert != nil)
-            fakeCertArray.append(cert)
+            fakeCertArray.append(cert!)
         }
-
-        let realCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realLeaf)
-        XCTAssert(fakeCert != nil)
-
-        var realCertArray = [ realCert ]
+        
+        let realLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realLeaf)
+        XCTAssert(fakeLeafCert != nil)
+        
+        var realCertArray = [SecCertificate]()
         for certPem in realChain {
             let cert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: certPem!)
             XCTAssert(cert != nil)
-            realCertArray.append(cert)
+            realCertArray.append(cert!)
         }
-
-        let policy = SecPolicyCreateBasicX509(); // true, "api-ct.bananenhalen.nl" as CFString)
-        var optionalFakeTrust: SecTrust?
-        XCTAssert(noErr == SecTrustCreateWithCertificates(fakeCertArray as CFArray,
-                                                    policy,
-                                                    &optionalFakeTrust))
-        XCTAssert(optionalFakeTrust != nil)
-        let fakeServerTrust = optionalFakeTrust!
-
-        var optionalRealTrust: SecTrust?
-        XCTAssert(noErr == SecTrustCreateWithCertificates(realCertArray as CFArray,
-                                                    policy,
-                                                    &optionalRealTrust))
-        XCTAssert(optionalRealTrust != nil)
-        let realServerTrust = optionalRealTrust!
-
-        // This should success - as we rely on the build in well known root.
-        //
-        XCTAssert(true == SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-                                              policies: [policy],
-                                              trustedCertificates: []))
-
-        // This should succeed - as we explictly rely on the root.
-        //
-        XCTAssert(true == SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-                                              policies: [policy],
-                                              trustedCertificates: [ realRoot ]))
         
-        // This should succeed - as we have the fake root as part of our trust
+        // Create a 'wrorst case' kitchen sink chain with as much in it as we can think off.
         //
-        XCTAssert(true == SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-                                              policies: [policy],
-                                              trustedCertificates: [fakeRoot]))
+        let realRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realRoot)
+        let fakeRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeRoot)
+        let allChainCerts = realCertArray + fakeCertArray + [ realRootCert, fakeRootCert]
+        //
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalRealTrust: SecTrust?
+            
+            // the first certifcate is the one to check - the rest is to aid validation.
+            //
+            XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + realCertArray as CFArray,
+                                                              policy,
+                                                              &optionalRealTrust))
+            XCTAssertNotNil(optionalRealTrust)
+            let realServerTrust = optionalRealTrust!
+            
+            // This should success - as we rely on the build in well known root.
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+                                                               policies: [policy],
+                                                               trustedCertificates: []))
+            
+            // This should succeed - as we explictly rely on the root.
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+                                                               policies: [policy],
+                                                               trustedCertificates: [ realRoot ]))
+            
+            // This should fail - as we are giving it the wrong root.
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+                                                                policies: [policy],
+                                                                trustedCertificates: [fakeRoot]))
+            
+        }
         
-
-        // This should fail - as the root is not build in. It may however
-        // succeed if the user has somehow the fake root into the system trust
-        // chain -and- set it to 'trusted' (or was fooled/hacked into that).
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalFakeTrust: SecTrust?
+            XCTAssert(noErr == SecTrustCreateWithCertificates([ fakeLeafCert ] + allChainCerts as CFArray,
+                                                              policy,
+                                                              &optionalFakeTrust))
+            XCTAssertNotNil(optionalFakeTrust)
+            let fakeServerTrust = optionalFakeTrust!
+            
+            // This should succeed - as we have the fake root as part of our trust
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                               policies: [policy],
+                                                               trustedCertificates: [fakeRoot]))
+            
+        }
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalFakeTrust: SecTrust?
+            XCTAssert(noErr == SecTrustCreateWithCertificates([fakeLeafCert ] + fakeCertArray as CFArray,
+                                                              policy,
+                                                              &optionalFakeTrust))
+            XCTAssertNotNil(optionalFakeTrust)
+            let fakeServerTrust = optionalFakeTrust!
+            
+            // This should fail - as the root is not build in. It may however
+            // succeed if the user has somehow the fake root into the system trust
+            // chain -and- set it to 'trusted' (or was fooled/hacked into that).
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                                policies: [policy],
+                                                                trustedCertificates: []))
+            
+            // This should fail - as we are giving it the wrong root to trust.
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                                policies: [policy],
+                                                                trustedCertificates: [ realRoot ]))
+            
+        }
+ 
+        // Try again - but now with anything we can think of cert wise.
         //
-        XCTAssert(false == SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-                                              policies: [policy],
-                                              trustedCertificates: []))
-        
-        // This should fail - as we are giving it the wrong cert..
-        //
-        XCTAssert(false == SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
-                                              policies: [policy],
-                                              trustedCertificates: [ realRoot ]))
-
-        // This should fail - as we are giving it the wrong root.
-        //
-        XCTAssert(false == SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
-                                              policies: [policy],
-                                              trustedCertificates: [fakeRoot]))
-        
-    }
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalFakeTrust: SecTrust?
+            XCTAssert(noErr == SecTrustCreateWithCertificates([ fakeLeafCert ] + allChainCerts as CFArray,
+                                                              policy,
+                                                              &optionalFakeTrust))
+            XCTAssertNotNil(optionalFakeTrust)
+            let fakeServerTrust = optionalFakeTrust!
+            
+            // This should fail - as the root is not build in. It may however
+            // succeed if the user has somehow the fake root into the system trust
+            // chain -and- set it to 'trusted' (or was fooled/hacked into that).
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                                policies: [policy],
+                                                                trustedCertificates: []))
+            
+            // This should fail - as we are giving it the wrong cert..
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                                policies: [policy],
+                                                                trustedCertificates: [ realRoot ]))
+            
+        }
+   }
     func testSubjectAlternativeName() {
         let certPEM = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZNVENDQkJtZ0F3SUJBZ0lTQSs5bkNORjZ2Q1BIRWRvQm9PK2R5ZEhSTUEwR0NTcUdTSWIzRFFFQkN3VUEKTURJeEN6QUpCZ05WQkFZVEFsVlRNUll3RkFZRFZRUUtFdzFNWlhRbmN5QkZibU55ZVhCME1Rc3dDUVlEVlFRRApFd0pTTXpBZUZ3MHlNVEExTWpBeE5UQTNNalZhRncweU1UQTRNVGd4TlRBM01qVmFNQ0V4SHpBZEJnTlZCQU1UCkZtRndhUzFqZEM1aVlXNWhibVZ1YUdGc1pXNHVibXd3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXcKZ2dFS0FvSUJBUURXWHRjazdlK1AwY2V0cGJKVkZNUmVJRTBYTDNWQVJqZ3RpT1ZiRUVvUE80cWdTMzlQOXAwTwp0RnlVcVNna1hpelRnMmxXbk8yQzlhbkRCdnlBNjZZQ20wbDY4UnJxSnhtZjhYRXhjZkYwV1ZhNFZsZnJnZCtCCnBJME1zWDJ6WmV0a2MxZ0VLVzQ3WFZvUGlaWlRUKzQ1VGJtT1VwczNnWXFWMHQrZjZuUUp6a3Y1Nk1ZYlg2ZVcKTWdFcEs0MVFhTXZ6VkxIb0hZYUVacnhTNmllL2NtRVhhbTc3d205anNneXZiY01lVm0yMVM0VUd1aFhON083NwowQ2pyTXhPOHdxa2lQQTVpSE1JbE5ITmRWMkR6dVdqOE9LY0t4WXNvWFhNUGh4VFhNWWc5VWk5Rm11WlNEK2d4Cm9vaFRjTk0zSFBIQWRuS3JyM3VObUZhTFd2OXozWDNQQWdNQkFBR2pnZ0pRTUlJQ1REQU9CZ05WSFE4QkFmOEUKQkFNQ0JhQXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUZCd01DTUF3R0ExVWRFd0VCL3dRQwpNQUF3SFFZRFZSME9CQllFRkFDMTE5VWRzUTRYWWVpTkdvakxXYnRtTm9iOU1COEdBMVVkSXdRWU1CYUFGQlF1CnN4ZTNXRmJMcmxBSlFPWWZyNTJMRk1MR01GVUdDQ3NHQVFVRkJ3RUJCRWt3UnpBaEJnZ3JCZ0VGQlFjd0FZWVYKYUhSMGNEb3ZMM0l6TG04dWJHVnVZM0l1YjNKbk1DSUdDQ3NHQVFVRkJ6QUNoaFpvZEhSd09pOHZjak11YVM1cwpaVzVqY2k1dmNtY3ZNQ0VHQTFVZEVRUWFNQmlDRm1Gd2FTMWpkQzVpWVc1aGJtVnVhR0ZzWlc0dWJtd3dUQVlEClZSMGdCRVV3UXpBSUJnWm5nUXdCQWdFd053WUxLd1lCQkFHQzN4TUJBUUV3S0RBbUJnZ3JCZ0VGQlFjQ0FSWWEKYUhSMGNEb3ZMMk53Y3k1c1pYUnpaVzVqY25sd2RDNXZjbWN3Z2dFREJnb3JCZ0VFQWRaNUFnUUNCSUgwQklIeApBTzhBZGdCRWxHVXVzTzdPcjhSQUI5aW8vaWpBMnVhQ3Z0akxNYlUvMHpPV3RiYUJxQUFBQVhtS2lCZnhBQUFFCkF3QkhNRVVDSVFDSmxZVTR2TU9KTXFtdHl6VzlIN0xWMk5INHdyV2JHbGVyb0tpN0N2VlRBUUlnYWcyOTdvZGUKQnlhWWExQ2hBT1BCdzJLQmlWMmpIMGYzb1IwV1paSjlkVlVBZFFEMlhKUXYwWGN3SWhSVUdBZ3dsRmFPNDAwVApHVE8vM3d3dklBdk1UdkZrNHdBQUFYbUtpQmZrQUFBRUF3QkdNRVFDSUM5R2lBelRDbmJyWWNjQjBwRnA0NVR4Cm5uRS9HUDBHYytlSmY1Yk5kSnVZQWlCNWx2TlVOZUxuR0Fwa3ZpZWVwZCsxQWdMY29FdGZ4bmlmWHJUUUNpK2MKVERBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQU4rQmxnbk16NHhpU3d6djdsNFRuUVV4bE0rVTNsSlJFRlRFTwowUHdCTElLWVg0UkJPOWt2bnczMzZQcTlwWWlTSkkxR3ZLQkx1VjJBK1E5R210UkNSNjlZNEVyTE1oNS9Jcjc2CnJBRUlVWmZuZjNlV0w0Wjg3KzFOaU9UbmlvS1lNUURJSFR3YmpESnhQNi9IclgzaXNsb3NUUk1pcG04ek1Wa2sKMVBuQ2FiT0VTYzhsS0xFa0ZxTmdiL2t4aUNULzBvQWQ2WDJydmJqTkQ5UjRpZTBjRk0zVkhlK25aQ3BLRXllYwpsM2dySEx5OVlGbnJ1c2Z2WXdSOCtMV3FCZjNLU1NzZ3pzMWxCVFpTVjBDWGh3YnlEMlo1bTc0WlIrNDhCbzk3Ck1yV0pWQWhFQ0xSemkxT2lEN3Njc1hXeGVGczRhVU43ZVR3K0JUTUNWRm5rbXR5NVN3PT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=")!
         let openssl = OpenSSL()
@@ -289,7 +340,7 @@ class CryptoUtilityTests: XCTestCase {
         
         let sans: [String ] = (openssl.getSubjectAlternativeDNSNames(certPEM) as! Array<String>?)!
         XCTAssert(sans.first == "api-ct.bananenhalen.nl")
-
+        
         // Regenerate with openssl req -new -x509 -subj /CN=foo/ \
         //      -addext "subjectAltName=DNS:test1,DNS:test2,email:fo@bar,IP:1.2.3.4"  \
         //      -nodes -keyout/dev/null |\
@@ -304,13 +355,13 @@ class CryptoUtilityTests: XCTestCase {
         
         XCTAssert(true == openssl.validateSubjectAlternativeDNSName("test1", forCertificateData: certWithStuff))
         XCTAssert(true == openssl.validateSubjectAlternativeDNSName("test2", forCertificateData: certWithStuff))
-
+        
         // check that we do not see the non DNS entries. IP address is a bit of an edge case. Perhaps
         // we should allow that to match.
         //
         XCTAssert(false == openssl.validateSubjectAlternativeDNSName("fo@bar", forCertificateData: certWithStuff))
     }
-
+    
     /// Test the hash
     func testSha256() {
         
