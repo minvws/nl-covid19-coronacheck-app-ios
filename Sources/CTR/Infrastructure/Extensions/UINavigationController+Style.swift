@@ -18,19 +18,3 @@ extension UINavigationController {
 		}
 	}
 }
-
-extension UINavigationController {
-
-	/// Add a banner view to the top of the screen
-	/// - Parameter bannerView: the banner view to show
-	func addBannerView(_ bannerView: BannerView) {
-
-		view.addSubview(bannerView)
-
-		NSLayoutConstraint.activate([
-			bannerView.widthAnchor.constraint(equalTo: view.widthAnchor),
-			bannerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-			bannerView.topAnchor.constraint(equalTo: view.topAnchor)
-		])
-	}
-}
