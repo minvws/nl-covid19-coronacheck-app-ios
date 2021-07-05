@@ -179,21 +179,11 @@ class HolderDashboardViewModel: Logging {
 				self?.state.expiredGreenCards += expiredGreenCards
 			}
 		}
-		self.datasource.reload()
 
 		// Update State from UserDefaults:
 		self.state.qrCodeValidityRegion = dashboardRegionToggleValue
 
 		self.setupNotificationListeners()
-
-		// Remove after EU Launch:
-		if let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom), euLaunchDate > Date() {
-			let secondsUntilEULaunchDate = euLaunchDate.timeIntervalSinceNow
-			DispatchQueue.main.asyncAfter(deadline: .now() + secondsUntilEULaunchDate) {
-				// Purpose: to remove the EU Launch footer ""
-				self.datasource.reload()
-			}
-		}
 
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -214,7 +204,7 @@ class HolderDashboardViewModel: Logging {
 	// MARK: Capture User input:
 
 	@objc func addProofTapped() {
-		coordinator?.userWishesToCreateAQR()
+		coordinator?.navigateToAboutMakingAQR()
 	}
 
 	func openUrl(_ url: URL) {
@@ -265,7 +255,7 @@ class HolderDashboardViewModel: Logging {
 					message: L.holderDashboardCreateMessage(),
 					actionTitle: L.holderDashboardCreateAction(),
 					didTapMakeQR: { [weak coordinatorDelegate] in
-						coordinatorDelegate?.userWishesToCreateAQR()
+						coordinatorDelegate?.navigateToAboutMakingAQR()
 					}
 				)
 			]
@@ -332,20 +322,12 @@ class HolderDashboardViewModel: Logging {
 							)
 						}
 
-						var cards = [HolderDashboardViewController.Card.europeanUnionQR(
+						return [HolderDashboardViewController.Card.europeanUnionQR(
 							rows: rows,
 							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 							buttonEnabledEvaluator: evaluateEnabledState,
 							expiryCountdownEvaluator: nil
 						)]
-
-						// 📝 Can be removed after EU launch:
-						if let origin = origins.first(where: { $0.shouldConsiderEULaunchDate }), origin.euLaunchDate > Date() {
-							let message = String.qrEULaunchCardFooterMessage(forEULaunchDate: origin.euLaunchDate)
-							cards += [.cardFooter(message: message)]
-						}
-
-						return cards
 
 					default: return []
 				}
@@ -406,26 +388,7 @@ extension HolderDashboardViewModel {
 			let type: QRCodeOriginType // vaccination | test | recovery
 			let eventDate: Date
 			let expirationTime: Date
-			// let validFromDate: Date
-
-			// ⬇️⬇️⬇️ -- Temporary, this block can be deleted after EU launch -- ~~~
-			var validFromDate: Date {
-				guard shouldConsiderEULaunchDate && euLaunchDate > Date() else { return realValidFromDate }
-				return realValidFromDate < euLaunchDate ? euLaunchDate : realValidFromDate
-			}
-			let shouldConsiderEULaunchDate: Bool
-			let euLaunchDate: Date
-			private let realValidFromDate: Date
-
-			init(type: QRCodeOriginType, eventDate: Date, expirationTime: Date, validFromDate: Date, euLaunchDate: Date, shouldConsiderEULaunchDate: Bool) {
-				self.type = type
-				self.eventDate = eventDate
-				self.expirationTime = expirationTime
-				self.realValidFromDate = validFromDate
-				self.euLaunchDate = euLaunchDate
-				self.shouldConsiderEULaunchDate = shouldConsiderEULaunchDate
-			}
-			// ⬆️⬆️⬆️ --- end EU launch code ----------------------------------- ~~~
+			let validFromDate: Date
 
 			/// There is a particular order to sort these onscreen
 			var customSortIndex: Int {
@@ -601,14 +564,18 @@ extension HolderDashboardViewModel {
 
 	fileprivate class Datasource {
 
-		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)?
+		var didUpdate: (([HolderDashboardViewModel.MyQRCard], [ExpiredQR]) -> Void)? {
+			didSet {
+				guard didUpdate != nil else { return }
+				reload()
+			}
+		}
 
 		private let dataStoreManager: DataStoreManaging
 		private var reloadTimer: Timer?
 
 		init(dataStoreManager: DataStoreManaging) {
 			self.dataStoreManager = dataStoreManager
-			self.reload()
 		}
 
 		// Calls fetch, then updates subscribers.
@@ -648,9 +615,6 @@ extension HolderDashboardViewModel {
 			let walletManager = Services.walletManager
 			let greencards = walletManager.listGreenCards()
 
-			/* Can be removed after EU Launch! */ let euLaunchDate = Services.remoteConfigManager.getConfiguration().euLaunchDate.flatMap(Formatter.getDateFrom) ?? .distantFuture
-			// let euLaunchDate = Formatter.getDateFrom(dateString8601: "2021-06-30T22:00:00Z") ?? .distantFuture
-
 			let items = greencards
 				.compactMap { (greencard: GreenCard) -> (GreenCard, [Origin])? in
 					// Get all origins
@@ -675,9 +639,7 @@ extension HolderDashboardViewModel {
 								type: type,
 								eventDate: eventDate,
 								expirationTime: expirationTime,
-								validFromDate: validFromDate,
-								euLaunchDate: euLaunchDate,
-								shouldConsiderEULaunchDate: greencard.getType() == .eu
+								validFromDate: validFromDate
 							)
 						}
 						.filter {
@@ -732,19 +694,19 @@ extension HolderDashboardViewModel {
 
 	fileprivate static let dateWithoutTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMM yyyy"
+		formatter.dateFormat = "d MMMM yyyy"
 		return formatter
 	}()
 
 	fileprivate static let dateWithDayAndTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "EEEE d MMM HH:mm"
+		formatter.dateFormat = "EEEE d MMMM HH:mm"
 		return formatter
 	}()
 
 	fileprivate static let dayAndMonthFormatter: DateFormatter = {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMM"
+		formatter.dateFormat = "d MMMM"
 		return formatter
 	}()
 
@@ -839,29 +801,29 @@ private func injectSampleData(dataStoreManager: DataStoreManaging) {
 
 		let ago: TimeInterval = -1
 		let fromNow: TimeInterval = 1
-		let seconds: TimeInterval = 1
+//		let seconds: TimeInterval = 1
 		let minutes: TimeInterval = 60
 		let hours: TimeInterval = 60 * minutes
 		let days: TimeInterval = hours * 24
 
-		create( type: .recovery,
-				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
-				validFromDate: Date().addingTimeInterval(fromNow),
-				greenCard: domesticGreenCard,
-				managedContext: context)
+//		create( type: .recovery,
+//				eventDate: Date().addingTimeInterval(14 * days * ago),
+//				expirationTime: Date().addingTimeInterval((10 * seconds * fromNow)),
+//				validFromDate: Date().addingTimeInterval(fromNow),
+//				greenCard: domesticGreenCard,
+//				managedContext: context)
 
 		create( type: .vaccination,
 				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((15 * seconds * fromNow)),
+				expirationTime: Date().addingTimeInterval((365 * 4 * days * fromNow)),
 				validFromDate: Date().addingTimeInterval(fromNow),
 				greenCard: domesticGreenCard,
 				managedContext: context)
 
 		create( type: .test,
-				eventDate: Date().addingTimeInterval(14 * days * ago),
-				expirationTime: Date().addingTimeInterval((20 * seconds * fromNow)),
-				validFromDate: Date().addingTimeInterval(fromNow),
+				eventDate: Date().addingTimeInterval(20 * hours * ago),
+				expirationTime: Date().addingTimeInterval((20 * hours * fromNow)),
+				validFromDate: Date().addingTimeInterval(20 * hours * ago),
 				greenCard: domesticGreenCard,
 				managedContext: context)
 

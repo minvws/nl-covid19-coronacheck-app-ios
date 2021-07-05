@@ -23,7 +23,6 @@ class EventStartViewModelTests: XCTestCase {
 		deactivated: nil,
 		informationURL: nil,
 		configTTL: 3600,
-		euLaunchDate: "2021-06-03T14:00:00+00:00",
 		maxValidityHours: 48,
 		recoveryWaitingPeriodDays: 11,
 		requireUpdateBefore: nil,
@@ -33,7 +32,8 @@ class EventStartViewModelTests: XCTestCase {
 		recoveryEventValidity: 7300,
 		testEventValidity: 40,
 		isGGDEnabled: true,
-		recoveryExpirationDays: 180
+		recoveryExpirationDays: 180,
+		credentialRenewalDays: 5
 	)
 
 	override func setUp() {

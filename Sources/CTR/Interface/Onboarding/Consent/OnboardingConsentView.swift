@@ -214,11 +214,11 @@ final class OnboardingConsentView: BaseView {
 		)
 		var accessibiliyHint = ""
 		if number == 1 {
-			accessibiliyHint = .listAccessibilityStart
+			accessibiliyHint = L.generalListAccessibilityStart()
 		}
-		accessibiliyHint += String(format: .listAccessibility, "\(number)", "\(total)")
+		accessibiliyHint += L.generalListAccessibility("\(number)", "\(total)")
 		if number == total {
-			accessibiliyHint += .listAccessibilityEnd
+			accessibiliyHint += L.generalListAccessibilityEnd()
 		}
 		label.accessibilityHint = accessibiliyHint
 		let stack = HStack(

@@ -47,8 +47,6 @@ class HolderDashboardViewController: BaseViewController {
 	
 	let sceneView = HolderDashboardView()
 
-	var bannerView: BannerView?
-
 	var screenCaptureInProgress = false
 	
 	// MARK: Initializers
@@ -143,9 +141,9 @@ class HolderDashboardViewController: BaseViewController {
 
 						switch card {
 							case .domesticQR:
-								qrCard.region = .netherlands
+								qrCard.region = L.generalNetherlands()
 							case .europeanUnionQR:
-								qrCard.region = .europeanUnion
+								qrCard.region = L.generalEuropeanUnion()
 								qrCard.shouldStyleForEU = true
 							default: break
 						}
@@ -213,7 +211,7 @@ class HolderDashboardViewController: BaseViewController {
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.addProofTapped)
 		)
-		plusbutton.accessibilityLabel = .add
+		plusbutton.accessibilityLabel = L.generalAdd()
 		navigationItem.rightBarButtonItem = plusbutton
 	}
 }

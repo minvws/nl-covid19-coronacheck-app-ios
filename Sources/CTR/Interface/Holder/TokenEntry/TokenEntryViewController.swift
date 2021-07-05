@@ -92,7 +92,7 @@ class TokenEntryViewController: BaseViewController {
 		viewModel.$shouldShowProgress.binding = { [sceneView] in
 			if $0 {
 				MBProgressHUD.showAdded(to: sceneView, animated: true)
-				UIAccessibility.post(notification: .announcement, argument: String.loading)
+				UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
 			} else {
 				MBProgressHUD.hide(for: sceneView, animated: true)
 			}
@@ -107,7 +107,7 @@ class TokenEntryViewController: BaseViewController {
 		
 		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
 			if $0 {
-				self?.showError(.errorTitle, message: .technicalErrorText)
+				self?.showError(L.generalErrorTitle(), message: L.generalErrorTechnicalText())
 			}
 		}
 

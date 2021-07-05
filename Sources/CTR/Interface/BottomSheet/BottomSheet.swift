@@ -61,7 +61,7 @@ private final class CloseButtonRowView: UIView {
 		button.setImage(.cross, for: .normal)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel =  .close
+		button.accessibilityLabel = L.generalClose()
 		button.tintColor = Theme.colors.dark
 
 		super.init(frame: CGRect.zero)

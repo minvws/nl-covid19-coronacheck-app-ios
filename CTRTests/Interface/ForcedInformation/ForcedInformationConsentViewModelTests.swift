@@ -42,8 +42,8 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		XCTAssertEqual(sut.title, consent.title)
 		XCTAssertEqual(sut.highlights, consent.highlight)
 		XCTAssertEqual(sut.content, consent.content)
-		XCTAssertEqual(sut.primaryActionTitle, String.newTermsAgree)
-		XCTAssertEqual(sut.secondaryActionTitle, String.newTermsDisagree)
+		XCTAssertEqual(sut.primaryActionTitle, L.newTermsAgree())
+		XCTAssertEqual(sut.secondaryActionTitle, L.newTermsDisagree())
 		XCTAssertTrue(sut.useSecondaryButton)
 	}
 
@@ -63,7 +63,7 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		XCTAssertEqual(sut.title, consent.title)
 		XCTAssertEqual(sut.highlights, consent.highlight)
 		XCTAssertEqual(sut.content, consent.content)
-		XCTAssertEqual(sut.primaryActionTitle, String.next)
+		XCTAssertEqual(sut.primaryActionTitle, L.generalNext())
 		XCTAssertNil(sut.secondaryActionTitle)
 		XCTAssertFalse(sut.useSecondaryButton)
 	}
@@ -113,8 +113,8 @@ class ForcedInformationConsentViewModelTests: XCTestCase {
 		sut.secondaryButtonTapped()
 
 		// Then
-		XCTAssertEqual(sut.errorTitle, String.newTermsErrorTitle)
-		XCTAssertEqual(sut.errorMessage, String.newTermsErrorMessage)
+		XCTAssertEqual(sut.errorTitle, L.newTermsErrorTitle())
+		XCTAssertEqual(sut.errorMessage, L.newTermsErrorMessage())
 		XCTAssertTrue(sut.showErrorDialog)
 	}
 }

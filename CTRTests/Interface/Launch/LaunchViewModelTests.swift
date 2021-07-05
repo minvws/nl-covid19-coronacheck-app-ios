@@ -40,7 +40,6 @@ class LaunchViewModelTests: XCTestCase {
 		deactivated: nil,
 		informationURL: nil,
 		configTTL: 3600,
-		euLaunchDate: "2021-06-03T14:00:00+00:00",
 		maxValidityHours: 48,
 		recoveryWaitingPeriodDays: 11,
 		requireUpdateBefore: nil,
@@ -50,7 +49,8 @@ class LaunchViewModelTests: XCTestCase {
 		recoveryEventValidity: 7300,
 		testEventValidity: 40,
 		isGGDEnabled: true,
-		recoveryExpirationDays: 180
+		recoveryExpirationDays: 180,
+		credentialRenewalDays: 5
 	)
 
 	// MARK: Tests
@@ -69,8 +69,8 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .holderLaunchTitle
-		expect(self.sut.message) == .holderLaunchText
+		expect(self.sut.title) == L.holderLaunchTitle()
+		expect(self.sut.message) == L.holderLaunchText()
 		expect(self.sut.appIcon) == .holderAppIcon
 		expect(self.proofManagerSpy.invokedMigrateExistingProof) == true
 	}
@@ -89,8 +89,8 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .verifierLaunchTitle
-		expect(self.sut.message) == .verifierLaunchText
+		expect(self.sut.title) == L.verifierLaunchTitle()
+		expect(self.sut.message) == L.verifierLaunchText()
 		expect(self.sut.appIcon) == .verifierAppIcon
 		expect(self.proofManagerSpy.invokedMigrateExistingProof) == false
 	}

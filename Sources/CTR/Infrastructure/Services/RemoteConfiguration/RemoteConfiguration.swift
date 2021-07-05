@@ -28,9 +28,6 @@ protocol RemoteInformation {
 	/// What is the TTL of the config
 	var configTTL: Int? { get }
 
-	/// The launch date of the EU greencard functionality
-	var euLaunchDate: String? { get }
-
 	/// What is the validity of a test
 	var maxValidityHours: Int? { get }
 
@@ -50,7 +47,11 @@ protocol RemoteInformation {
 	var recoveryEventValidity: Int? { get }
 	var testEventValidity: Int? { get }
 
+	// The number of days before a recovery expires
 	var recoveryExpirationDays: Int? { get }
+
+	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
+	var credentialRenewalDays: Int? { get }
 }
 
 extension RemoteInformation {
@@ -86,9 +87,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// What is the TTL of the config
 	let configTTL: Int?
-
-	/// The launch date of the EU greencard functionality
-	let euLaunchDate: String?
 
 	/// What is the validity of a test
 	let maxValidityHours: Int?
@@ -135,6 +133,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
 
+	var credentialRenewalDays: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -144,7 +144,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
-		case euLaunchDate = "euLaunchDate"
 		case maxValidityHours = "maxValidityHours"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
@@ -163,6 +162,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euTestManufacturers = "euTestManufacturers"
 		case providerIdentifiers = "providerIdentifiers"
 		case isGGDEnabled = "ggdEnabled"
+		case credentialRenewalDays = "credentialRenewalDays"
 	}
 
 	init(
@@ -172,7 +172,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		deactivated: Bool?,
 		informationURL: URL?,
 		configTTL: Int?,
-		euLaunchDate: String?,
 		maxValidityHours: Int?,
 		recoveryWaitingPeriodDays: Int?,
 		requireUpdateBefore: TimeInterval?,
@@ -182,15 +181,15 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		recoveryEventValidity: Int?,
 		testEventValidity: Int?,
 		isGGDEnabled: Bool?,
-		recoveryExpirationDays: Int?) {
-		
+		recoveryExpirationDays: Int?,
+		credentialRenewalDays: Int?) {
+
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
 		self.configTTL = configTTL
-		self.euLaunchDate = euLaunchDate
 		self.maxValidityHours = maxValidityHours
 		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
 		self.requireUpdateBefore = requireUpdateBefore
@@ -201,6 +200,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.testEventValidity = testEventValidity
 		self.isGGDEnabled = isGGDEnabled
 		self.recoveryExpirationDays = recoveryExpirationDays
+		self.credentialRenewalDays = credentialRenewalDays
 	}
 
 	/// Default remote configuration
@@ -212,7 +212,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
-			euLaunchDate: nil,
 			maxValidityHours: 40,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
@@ -222,7 +221,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
 			isGGDEnabled: true,
-			recoveryExpirationDays: 180
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 	}
 }

@@ -26,7 +26,6 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil,
 			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
@@ -36,7 +35,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
 			isGGDEnabled: true,
-			recoveryExpirationDays: 180
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -70,7 +70,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, .updateAppContent)
+		XCTAssertEqual(sut.message, L.updateAppContent())
 	}
 
 	/// Test the update button tapped method with an url
@@ -96,7 +96,6 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: nil,
 			informationURL: nil,
 			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
@@ -106,7 +105,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
 			isGGDEnabled: true,
-			recoveryExpirationDays: 180
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -130,7 +130,6 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: true,
 			informationURL: nil,
 			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
@@ -140,7 +139,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
 			isGGDEnabled: true,
-			recoveryExpirationDays: 180
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 
 		// When
@@ -148,7 +148,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, .endOfLifeDescription)
+		XCTAssertEqual(sut.message, L.endOfLifeDescription())
 	}
 
 	/// Test the initializer for end of life
@@ -162,7 +162,6 @@ class AppUpdateViewModelTests: XCTestCase {
 			deactivated: true,
 			informationURL: URL(string: "https://apple.com"),
 			configTTL: 3600,
-			euLaunchDate: "2021-06-03T14:00:00+00:00",
 			maxValidityHours: 48,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
@@ -172,7 +171,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			recoveryEventValidity: 7300,
 			testEventValidity: 40,
 			isGGDEnabled: true,
-			recoveryExpirationDays: 180
+			recoveryExpirationDays: 180,
+			credentialRenewalDays: 5
 		)
 
 		// When
@@ -180,7 +180,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.errorMessage, .endOfLifeErrorMessage)
+		XCTAssertEqual(sut.errorMessage, L.endOfLifeErrorMessage())
 	}
 
 	func test_noInternet() {
@@ -191,9 +191,9 @@ class AppUpdateViewModelTests: XCTestCase {
 		sut = InternetRequiredViewModel(coordinator: appCoordinatorSpy)
 
 		// Then
-		expect(self.sut.title) == .internetRequiredTitle
-		expect(self.sut.message) == .internetRequiredText
-		expect(self.sut.actionTitle) == .internetRequiredButton
+		expect(self.sut.title) == L.internetRequiredTitle()
+		expect(self.sut.message) == L.internetRequiredText()
+		expect(self.sut.actionTitle) == L.internetRequiredButton()
 		expect(self.sut.image) == .noInternet
 	}
 

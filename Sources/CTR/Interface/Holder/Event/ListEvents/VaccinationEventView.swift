@@ -17,6 +17,7 @@ class VaccinationEventView: BaseView {
 		static let titleKerning: CGFloat = -0.41
 		static let messageLineHeight: CGFloat = 18
 		static let messageKerning: CGFloat = -0.24
+		static let messageParagraphSpacing: CGFloat = 6
 
 		// Margins
 		static let margin: CGFloat = 20.0
@@ -161,7 +162,8 @@ class VaccinationEventView: BaseView {
 				font: Theme.fonts.subhead,
 				textColor: Theme.colors.grey1,
 				lineHeight: ViewTraits.messageLineHeight,
-				kern: ViewTraits.messageKerning
+				kern: ViewTraits.messageKerning,
+				paragraphSpacing: ViewTraits.messageParagraphSpacing
 			)
 			setAccessibilityLabel()
 		}

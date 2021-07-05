@@ -9,126 +9,21 @@ import Foundation
 
 extension String {
 
-	static var holderTestResultsPendingTitle: String {
-
-		return Localization.string(for: "holder.testresults.pending.title")
-	}
-
-	static var holderTestResultsPendingText: String {
-
-		return Localization.string(for: "holder.testresults.pending.text")
-	}
-
-	static var holderTestResultsResultsButton: String {
-
-		return Localization.string(for: "holder.testresults.results.button")
-	}
-
-	static var holderTestResultsIdentity: String {
-
-		return Localization.string(for: "holder.testresults.identity")
-	}
-
-	static var holderTestResultsAlertTitle: String {
-
-		return Localization.string(for: "holder.testresults.alert.title")
-	}
-
-	static var holderTestResultsAlertMessage: String {
-
-		return Localization.string(for: "holder.testresults.alert.message")
-	}
-
-	static var holderTestResultsAlertOk: String {
-
-		return Localization.string(for: "holder.testresults.alert.ok")
-	}
-
-	static var holderTestResultsAlertCancel: String {
-
-		return Localization.string(for: "holder.testresults.alert.cancel")
-	}
-
-	static var holderTestResultsDisclaimerAccessibility: String {
-
-		return Localization.string(for: "holder.testresults.disclaimer.accessibility")
-	}
-
-	static var shortJanuary: String {
-
-		return Localization.string(for: "holder.testresults.january")
-	}
-
-	static var shortFebruary: String {
-
-		return Localization.string(for: "holder.testresults.february")
-	}
-
-	static var shortMarch: String {
-
-		return Localization.string(for: "holder.testresults.march")
-	}
-
-	static var shortApril: String {
-
-		return Localization.string(for: "holder.testresults.april")
-	}
-
-	static var shortMay: String {
-
-		return Localization.string(for: "holder.testresults.may")
-	}
-
-	static var shortJune: String {
-
-		return Localization.string(for: "holder.testresults.june")
-	}
-
-	static var shortJuly: String {
-
-		return Localization.string(for: "holder.testresults.july")
-	}
-
-	static var shortAugust: String {
-
-		return Localization.string(for: "holder.testresults.august")
-	}
-
-	static var shortSeptember: String {
-
-		return Localization.string(for: "holder.testresults.september")
-	}
-
-	static var shortOctober: String {
-
-		return Localization.string(for: "holder.testresults.october")
-	}
-
-	static var shortNovember: String {
-
-		return Localization.string(for: "holder.testresults.november")
-	}
-
-	static var shortDecember: String {
-
-		return Localization.string(for: "holder.testresults.december")
-	}
-
 	static var shortMonths: [String] {
 
 		return [
-			.shortJanuary,
-			.shortFebruary,
-			.shortMarch,
-			.shortApril,
-			.shortMay,
-			.shortJune,
-			.shortJuly,
-			.shortAugust,
-			.shortSeptember,
-			.shortOctober,
-			.shortNovember,
-			.shortDecember
+			L.holderTestresultsJanuary(),
+			L.holderTestresultsFebruary(),
+			L.holderTestresultsMarch(),
+			L.holderTestresultsApril(),
+			L.holderTestresultsMay(),
+			L.holderTestresultsJune(),
+			L.holderTestresultsJuly(),
+			L.holderTestresultsAugust(),
+			L.holderTestresultsSeptember(),
+			L.holderTestresultsOctober(),
+			L.holderTestresultsNovember(),
+			L.holderTestresultsDecember()
 		]
 	}
 }

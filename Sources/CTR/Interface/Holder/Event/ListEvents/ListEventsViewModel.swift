@@ -131,7 +131,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	func warnBeforeGoBack() {
 
 		alert = ListEventsViewController.AlertContent(
-			title: .holderVaccinationAlertTitle,
+			title: L.holderVaccinationAlertTitle(),
 			subTitle: {
 				switch eventMode {
 					case .recovery:
@@ -143,11 +143,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				}
 			}(),
 			cancelAction: nil,
-			cancelTitle: .holderVaccinationAlertCancel,
+			cancelTitle: L.holderVaccinationAlertCancel(),
 			okAction: { [weak self] _ in
 				self?.goBack()
 			},
-			okTitle: .holderVaccinationAlertOk
+			okTitle: L.holderVaccinationAlertOk()
 		)
 	}
 
@@ -166,6 +166,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private func getViewState(from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
 		var event30DataSource = [EventDataTuple]()
+
+		// If there is just one pending negative/positive test: Pending State.
+		if remoteEvents.count == 1 &&
+			remoteEvents.first?.wrapper.status == .pending &&
+			(remoteEvents.first?.wrapper.events?.first?.negativeTest != nil || remoteEvents.first?.wrapper.events?.first?.positiveTest != nil) {
+			return pendingEventsState()
+		}
 
 		for eventResponse in remoteEvents {
 			if let identity = eventResponse.wrapper.identity,
@@ -385,8 +392,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: L.holderEventAboutTitle(),
-								body: String(
-									format: .holderEventAboutBodyTest30,
+								body: L.holderEventAboutBodyTest3(
 									dataRow.identity.fullName,
 									formattedBirthDate,
 									testType,
@@ -426,12 +432,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 			rows.append(
 				ListEventsViewController.Row(
-					title: String(format: .holderVaccinationElementTitle, "\(formattedShotMonth) (\(provider))"),
-					subTitle: String(
-						format: .holderVaccinationElementSubTitle,
-						dataRow.identity.fullName,
-						formattedBirthDate
-					),
+					title: L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))"),
+					subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 					action: { [weak self] in
 
 						var vaccinName = ""
@@ -449,14 +451,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						var dosage = ""
 						if let doseNumber = dataRow.event.vaccination?.doseNumber,
 						   let totalDose = dataRow.event.vaccination?.totalDoses {
-							dosage = String(format: .holderVaccinationAboutOf, "\(doseNumber)", "\(totalDose)")
+							dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 						}
 
 						self?.coordinator?.listEventsScreenDidFinish(
 							.moreInformation(
 								title: L.holderEventAboutTitle(),
-								body: String(
-									format: .holderEventAboutBodyVaccination,
+								body: L.holderEventAboutBodyVaccination(
 									dataRow.identity.fullName,
 									formattedBirthDate,
 									vaccinName,
@@ -621,31 +622,35 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				return
 			}
 
-			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials { (result: Result<Void, GreenCardLoader.Error>) in
+			self.greenCardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: { [weak self] remoteResponse in
+				// Check if we have any origin for the event mode
+				// == 0 -> No greenCards from the signer (name mismatch, expired, etc)
+				// > 0 -> Success
+
+				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
+					.filter { $0.type == self?.eventMode.rawValue }
+					.count ?? 0
+				let internationalOrigins: Int = remoteResponse.euGreenCards?
+					.flatMap { $0.origins }
+					.filter { $0.type == self?.eventMode.rawValue }
+					.count ?? 0
+
+				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(String(describing: self?.eventMode.rawValue))")
+				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(String(describing: self?.eventMode.rawValue))")
+				return internationalOrigins + domesticOrigins > 0
+
+			}, completion: { result in
 				self.progressIndicationCounter.decrement()
 
 				switch result {
 					case .success:
-						var originType: OriginType = .vaccination
-						if self.eventMode == .vaccination {
-							originType = .vaccination
-						} else if self.eventMode == .recovery {
-							originType = .recovery
-						} else if self.eventMode == .test {
-							originType = .test
-						}
+						self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: self.eventMode))
 
-						let numberOfOrigins = self.walletManager.listOrigins(type: originType).count
-						self.logVerbose("Origins for \(String(describing: self.eventMode)): \(String(describing: numberOfOrigins))")
-						if numberOfOrigins == 0 {
-							// No origins for this type means something went wrong.
-							self.viewState = self.cannotCreateEventsState()
-							self.shouldPrimaryButtonBeEnabled = true
-						} else {
-							self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: .vaccination))
-						}
+					case .failure(.didNotEvaluate):
+						self.viewState = self.cannotCreateEventsState()
+						self.shouldPrimaryButtonBeEnabled = true
 
-					case .failure(.failedToSave):
+					case .failure(.failedToSave), .failure(.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 
@@ -664,17 +669,17 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					case .failure(.credentials119):
 						self.showTechnicalError("118 credentials")
 				}
-			}
+			})
 		}
 	}
 
 	private func showEventError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
-			subTitle: .holderFetchEventsErrorNoResultsNetworkErrorMessage(localizedEventMode: eventMode.localized),
+			title: L.generalErrorTitle(),
+			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 			cancelAction: nil,
-			cancelTitle: .holderVaccinationErrorClose,
+			cancelTitle: L.holderVaccinationErrorClose(),
 			okAction: { [weak self] _ in
 				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
 					if !success {
@@ -682,7 +687,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					}
 				}
 			},
-			okTitle: .holderVaccinationErrorAgain
+			okTitle: L.holderVaccinationErrorAgain()
 		)
 	}
 
@@ -691,32 +696,32 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private func showServerTooBusyError() {
 
 		alert = ListEventsViewController.AlertContent(
-			title: .serverTooBusyErrorTitle,
-			subTitle: .serverTooBusyErrorText,
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyText(),
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { [weak self] _ in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
 			},
-			okTitle: .serverTooBusyErrorButton
+			okTitle: L.generalNetworkwasbusyButton()
 		)
 	}
 
 	private func showTechnicalError(_ customCode: String?) {
 
-		var subTitle = String.technicalErrorText
+		var subTitle = L.generalErrorTechnicalText()
 		if let code = customCode {
-			subTitle = String(format: .technicalErrorCustom, code)
+			subTitle = L.generalErrorTechnicalCustom(code)
 		}
 		alert = ListEventsViewController.AlertContent(
-			title: .errorTitle,
+			title: L.generalErrorTitle(),
 			subTitle: subTitle,
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { _ in
 				self.coordinator?.listEventsScreenDidFinish(.back(eventMode: self.eventMode))
 			},
-			okTitle: .close
+			okTitle: L.generalClose()
 		)
 	}
 
@@ -766,9 +771,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						case .recovery:
 							return L.holderEventOriginmismatchRecoveryBody()
 						case .test:
-							return L.holderEventOriginmismatchVaccinationBody()
-						case .vaccination:
 							return L.holderEventOriginmismatchTestBody()
+						case .vaccination:
+							return L.holderEventOriginmismatchVaccinationBody()
 					}
 				}(),
 				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
@@ -806,8 +811,8 @@ extension ListEventsViewModel {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
-				title: .holderTestResultsPendingTitle,
-				subTitle: .holderTestResultsPendingText,
+				title: L.holderTestresultsPendingTitle(),
+				subTitle: L.holderTestresultsPendingText(),
 				primaryActionTitle: L.holderTestNolistAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -829,7 +834,7 @@ extension ListEventsViewModel {
 			content: ListEventsViewController.Content(
 				title: L.holderTestresultsResultsTitle(),
 				subTitle: L.holderTestresultsResultsText(),
-				primaryActionTitle: .holderTestResultsResultsButton,
+				primaryActionTitle: L.holderTestresultsResultsButton(),
 				primaryAction: { [weak self] in
 					self?.userWantsToMakeQR(remoteEvents: [remoteEvent]) { [weak self] success in
 						if !success {

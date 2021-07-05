@@ -53,9 +53,16 @@ class QRCardView: BaseView {
 		let button = Button(title: "", style: .primary)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
-		button.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
+	}()
+
+	private lazy var loadingButtonOverlay: ButtonLoadingOverlayView = {
+		let overlay = ButtonLoadingOverlayView()
+		overlay.backgroundColor = Theme.colors.tertiary
+		overlay.translatesAutoresizingMaskIntoConstraints = false
+		overlay.isHidden = true
+		return overlay
 	}()
 
 	private let largeIconImageView: UIImageView = {
@@ -104,6 +111,11 @@ class QRCardView: BaseView {
 		addSubview(largeIconImageView)
 		addSubview(verticalLabelsStackView)
 		addSubview(viewQRButton)
+		addSubview(loadingButtonOverlay)
+
+		// This has a edge-case bug if you set it in the `let viewQRButton: Button = {}` declaration, so setting it here instead.
+		// (was only applicable when Settings->Accessibility->Keyboard->Full Keyboard Access was enabled)
+		viewQRButton.addTarget(self, action: #selector(viewQRButtonTapped), for: .touchUpInside)
 	}
 
 	/// Setup the constraints
@@ -134,7 +146,12 @@ class QRCardView: BaseView {
 			viewQRButton.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.trailingAnchor),
 			viewQRButton.topAnchor.constraint(equalTo: verticalLabelsStackView.bottomAnchor, constant: 38),
 			viewQRButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
-			
+
+			loadingButtonOverlay.leadingAnchor.constraint(equalTo: viewQRButton.leadingAnchor),
+			loadingButtonOverlay.trailingAnchor.constraint(equalTo: viewQRButton.trailingAnchor),
+			loadingButtonOverlay.topAnchor.constraint(equalTo: viewQRButton.topAnchor),
+			loadingButtonOverlay.bottomAnchor.constraint(equalTo: viewQRButton.bottomAnchor),
+
 			// Break constraint when title label increases in size
 			{
 				let constraint = verticalLabelsStackView.topAnchor.constraint(equalTo: largeIconImageView.bottomAnchor, constant: ViewTraits.topVerticalLabelSpacing)
@@ -186,7 +203,17 @@ class QRCardView: BaseView {
 				validityLabel.isHidden = true
 			}
 		}
-
+        
+        // Group accessibility labels together for two reasons:
+        // 1. Fix focus order issues caused by frequently removing and adding subviews
+        // 2. Clearer for users to hear all information at once
+        let groupedAccessibilityLabel = verticalLabelsStackView.arrangedSubviews.compactMap { arrangedView in
+            arrangedView.accessibilityLabel
+        }.joined(separator: " ")
+        verticalLabelsStackView.isAccessibilityElement = true
+        verticalLabelsStackView.shouldGroupAccessibilityChildren = true
+        verticalLabelsStackView.accessibilityLabel = groupedAccessibilityLabel
+        
 		verticalLabelsStackView.setNeedsLayout()
 	}
 
@@ -265,6 +292,12 @@ class QRCardView: BaseView {
 		didSet {
 			viewQRButton.titleLabel?.font = Theme.fonts.bodySemiBold
 			viewQRButton.setTitle(viewQRButtonTitle, for: .normal)
+		}
+	}
+
+	var isLoading: Bool = false {
+		didSet {
+			loadingButtonOverlay.isHidden = !isLoading
 		}
 	}
 

@@ -50,7 +50,7 @@ final class MakeTestAppointmentViewModel: Logging {
 
 		// Notify the coordinator
 		logInfo("Create appointment tapped")
-		if let url = URL(string: .holderUrlAppointment) {
+		if let url = URL(string: L.holderUrlAppointment()) {
 			coordinator?.openUrl(url, inApp: true)
 		}
 	}

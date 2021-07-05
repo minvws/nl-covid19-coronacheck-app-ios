@@ -8,6 +8,7 @@
 import XCTest
 @testable import CTR
 import Nimble
+import Rswift
 
 class VerifierResultViewModelTests: XCTestCase {
 	
@@ -70,7 +71,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .demo
-		expect(self.sut.title) == .verifierResultDemoTitle
+		expect(self.sut.title) == L.verifierResultDemoTitle()
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 	
@@ -87,8 +88,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == .verifierResultDeniedTitle
-		expect(self.sut.message) == .verifierResultDeniedMessage
+		expect(self.sut.title) == L.verifierResultDeniedTitle()
+		expect(self.sut.message) == L.verifierResultDeniedMessage()
 	}
 	
 	func test_checkAttributes_shouldDisplayDeniedDomesticDcc() {
@@ -112,8 +113,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == .verifierResultDeniedRegionTitle
-		expect(self.sut.message) == .verifierResultDeniedRegionMessage
+		expect(self.sut.title) == L.verifierResultDeniedRegionTitle()
+		expect(self.sut.message) == L.verifierResultDeniedRegionMessage()
 	}
 	
 	func test_checkAttributes_whenSpecimenIsSet_shouldDisplayDeniedDomesticDcc() {
@@ -137,8 +138,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == .verifierResultDeniedRegionTitle
-		expect(self.sut.message) == .verifierResultDeniedRegionMessage
+		expect(self.sut.title) == L.verifierResultDeniedRegionTitle()
+		expect(self.sut.message) == L.verifierResultDeniedRegionMessage()
 	}
 	
 	func test_checkAttributes_shouldDisplayVerified() {
@@ -163,7 +164,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		// Then
 		expect(self.sut.allowAccess) == .verified
-		expect(self.sut.title) == .verifierResultAccessTitle
+		expect(self.sut.title) == L.verifierResultAccessTitle()
 		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 

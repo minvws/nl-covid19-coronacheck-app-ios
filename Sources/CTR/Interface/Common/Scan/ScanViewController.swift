@@ -128,7 +128,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			message: "Your device does not support scanning a code from an item. Please use a device with a camera.",
 			preferredStyle: .alert
 		)
-		ac.addAction(UIAlertAction(title: .ok, style: .default))
+		ac.addAction(UIAlertAction(title: L.generalOk(), style: .default))
 		present(ac, animated: true)
 		captureSession = nil
 	}

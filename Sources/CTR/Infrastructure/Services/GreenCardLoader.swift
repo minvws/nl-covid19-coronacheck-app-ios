@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -10,12 +9,17 @@ import Foundation
 
 protocol GreenCardLoading {
 	init(networkManager: NetworkManaging, cryptoManager: CryptoManaging, walletManager: WalletManaging)
-	func signTheEventsIntoGreenCardsAndCredentials(completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void)
+	func signTheEventsIntoGreenCardsAndCredentials(
+		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
+		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
 	enum Error: Swift.Error {
+		case noEvents
+		case didNotEvaluate
+
 		case failedToSave
 		case failedToPrepareIssue
 		
@@ -40,7 +44,9 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		self.walletManager = walletManager
 	}
 
-	func signTheEventsIntoGreenCardsAndCredentials(completion: @escaping (Result<Void, Error>) -> Void) {
+	func signTheEventsIntoGreenCardsAndCredentials(
+		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
+		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void) {
 
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
 
@@ -70,6 +76,12 @@ class GreenCardLoader: GreenCardLoading, Logging {
 							case .failure(let error):
 								completion(.failure(error))
 							case .success(let greenCardResponse):
+
+								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
+									completion(.failure(.didNotEvaluate))
+									return
+								}
+
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self.logError("Failed to save greenCards")
@@ -88,6 +100,11 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
+
+		guard !signedEvents.isEmpty else {
+			onCompletion(.failure(.noEvents))
+			return
+		}
 
 		guard let issueCommitmentMessage = cryptoManager.generateCommitmentMessage(),
 			let utf8 = issueCommitmentMessage.data(using: .utf8),

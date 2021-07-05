@@ -298,6 +298,7 @@ class ListEventsViewModelTests: XCTestCase {
 		)
 
 		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.failure(NetworkError.invalidResponse), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -374,6 +375,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = false
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -412,8 +414,8 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
-		walletSpy.stubbedListOriginsResult = []
-		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCardsNoOrigin), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
@@ -426,9 +428,9 @@ class ListEventsViewModelTests: XCTestCase {
 			// Then
 			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
-			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())
-			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
+			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beFalse())
+			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beFalse())
+			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beFalse())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
 			expect(self.sut.alert).toEventually(beNil())
 		} else {
@@ -451,7 +453,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy.stubbedStoreEventGroupResult = true
 		walletSpy.stubbedStoreEuGreenCardResult = true
 		walletSpy.stubbedStoreDomesticGreenCardResult = true
-		walletSpy.stubbedListOriginsResult = [Origin()]
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
 			networkSpy.stubbedFetchGreencardsCompletionResult = (.success(remoteGreenCards), ())
 		networkSpy.stubbedPrepareIssueCompletionResult = (.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
@@ -586,6 +588,19 @@ class ListEventsViewModelTests: XCTestCase {
 						validFrom: Date()
 					)
 				],
+				credential: "test credential"
+			)
+		]
+	)
+
+	private let remoteGreenCardsNoOrigin = RemoteGreenCards.Response(
+		domesticGreenCard: RemoteGreenCards.DomesticGreenCard(
+			origins: [],
+			createCredentialMessages: "test"
+		),
+		euGreenCards: [
+			RemoteGreenCards.EuGreenCard(
+				origins: [],
 				credential: "test credential"
 			)
 		]
