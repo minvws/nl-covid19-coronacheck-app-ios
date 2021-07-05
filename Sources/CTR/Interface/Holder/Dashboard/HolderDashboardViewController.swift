@@ -47,8 +47,6 @@ class HolderDashboardViewController: BaseViewController {
 	
 	let sceneView = HolderDashboardView()
 
-	var bannerView: BannerView?
-
 	var screenCaptureInProgress = false
 	
 	// MARK: Initializers

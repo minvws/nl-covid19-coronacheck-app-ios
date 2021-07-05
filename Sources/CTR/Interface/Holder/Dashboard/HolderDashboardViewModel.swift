@@ -804,7 +804,7 @@ private func injectSampleData(dataStoreManager: DataStoreManaging) {
 
 		let ago: TimeInterval = -1
 		let fromNow: TimeInterval = 1
-		let seconds: TimeInterval = 1
+//		let seconds: TimeInterval = 1
 		let minutes: TimeInterval = 60
 		let hours: TimeInterval = 60 * minutes
 		let days: TimeInterval = hours * 24
