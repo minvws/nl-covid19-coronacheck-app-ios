@@ -124,7 +124,8 @@
 "general.error.title" = "Sorry, er ging iets mis";
 "general.error.technical.text" = "Dat komt door een technische fout.";
 "general.error.technical.custom" = "Dat komt door een technische fout (%@)";
-"general.error.nointernet.title" = "Geen internetverbinding";
+"general.error.nointernet.title" = "Geen internetverbinding"; // FIX HERE
+"general.error.nointernet.message" = "..."; // FIX HERE
 "general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
