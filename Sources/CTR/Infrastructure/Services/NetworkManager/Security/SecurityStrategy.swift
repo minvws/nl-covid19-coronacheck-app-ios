@@ -142,18 +142,17 @@ class SecurityCheckerNone: SecurityChecker {
 
 class SecurityCheckerWorker: Logging {
     
-    func certificateFromPEM(certificateAsPemData: Data) -> SecCertificate? {
+    internal func certificateFromPEM(certificateAsPemData: Data) -> SecCertificate? {
         
-        let lenght = certificateAsPemData.count - 26
-        let derb64 = certificateAsPemData.subdata(in: 28 ..< lenght)
+        let length = certificateAsPemData.count - 26
+        let derb64 = certificateAsPemData.subdata(in: 28 ..< length)
         
         var str = String(decoding: derb64, as: UTF8.self)
         str = str.replacingOccurrences(of: "\n", with: "")
         
-        if let data = Data(base64Encoded: str) {
-            if let cert = SecCertificateCreateWithData(nil, data as CFData) {
-                return cert
-            }
+        if let data = Data(base64Encoded: str),
+		   let cert = SecCertificateCreateWithData(nil, data as CFData) {
+			return cert
         }
         return nil
     }
@@ -161,17 +160,19 @@ class SecurityCheckerWorker: Logging {
     // This function has an extra option, when the trustedCertificates are
     // empty, only used during testing.
     // if so - then the validation will also rely on anything in the system chain
-    // (including any certs the user was fooled into adding, or added intentionally).
-    //
-    func checkATS(serverTrust: SecTrust,
-                  policies: [SecPolicy],
-                  trustedCertificates: [Data]) -> Bool {
-        var trustList: [SecCertificate] = []
-        
-        // XXX fixme -- use sensible covnersion; etc..
-        for certificateAsPemData in trustedCertificates {
-            if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
-                trustList.append(cert)
+	// (including any certs the user was fooled into adding, or added intentionally).
+	//
+	internal func checkATS(
+		serverTrust: SecTrust,
+		policies: [SecPolicy],
+		trustedCertificates: [Data]) -> Bool {
+
+		var trustList: [SecCertificate] = []
+
+		// XXX fixme -- use sensible conversion; etc..
+		for certificateAsPemData in trustedCertificates {
+			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
+				trustList.append(cert)
             } else {
                 logError("checkATS: Trust cert converson failed: \(certificateAsPemData)")
             }
@@ -184,7 +185,7 @@ class SecurityCheckerWorker: Logging {
                 return false
             }
         } else {
-            // rely on just the achors specified.
+            // rely on just the anchors specified.
             //
             let erm = SecTrustSetAnchorCertificates(serverTrust, trustList as CFArray)
             if errSecSuccess != erm {
@@ -193,39 +194,50 @@ class SecurityCheckerWorker: Logging {
             }
         }
 
-        var result = SecTrustResultType.invalid
-        if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
-            logError("checkATS: SecTrustEvaluateWithError: \(result)")
-            return false
-        }
-        switch result {
-         case .unspecified:
-            // We should be using SecTrustEvaluateWithError -- but cannot as that is > 12.0
-            // so we have a weakness here - we cannot readily distingish between the users chain
-            // and our own lists. So that is a second stage comparison that we need to do.
-            //
-            logError("SecTrustEvaluateWithError: unspecified - trusted by the OS or Us")
-            return true
-         case .proceed:
-            logError("SecTrustEvaluateWithError: proceed - trusted by the user; but not from our list.")
-         case .deny:
-            logError("SecTrustEvaluateWithError: deny")
-         case .invalid:
-            logError("SecTrustEvaluateWithError: invalid")
-         case .recoverableTrustFailure:
-            dump(SecTrustCopyResult(serverTrust))
-            logError("SecTrustEvaluateWithError: recoverableTrustFailure.")
-         case .fatalTrustFailure:
-            logError("SecTrustEvaluateWithError: fatalTrustFailure")
-         case .otherError:
-            logError("SecTrustEvaluateWithError: otherError")
-         default:
-            logError("SecTrustEvaluateWithError: uknown")
-        }
-        logError("SecTrustEvaluateWithError: returning false.")
-        return false
-    } // checkATS()
-    
+		if #available(iOS 12.0, *) {
+			var error: CFError?
+			let result = SecTrustEvaluateWithError(serverTrust, &error)
+			if let error = error {
+				logError("checkATS: SecTrustEvaluateWithError: \(error)")
+			}
+			return result
+		} else {
+			// Fallback on earlier versions
+
+			var result = SecTrustResultType.invalid
+			if errSecSuccess != SecTrustEvaluate(serverTrust, &result) {
+				logError("checkATS: SecTrustEvaluate: \(result)")
+				return false
+			}
+			switch result {
+				case .unspecified:
+					// We should be using SecTrustEvaluateWithError -- but cannot as that is > 12.0
+					// so we have a weakness here - we cannot readily distinguish between the users chain
+					// and our own lists. So that is a second stage comparison that we need to do.
+					//
+					logError("SecTrustEvaluate: unspecified - trusted by the OS or Us")
+					return true
+				case .proceed:
+					logError("SecTrustEvaluate: proceed - trusted by the user; but not from our list.")
+				case .deny:
+					logError("SecTrustEvaluate: deny")
+				case .invalid:
+					logError("SecTrustEvaluate: invalid")
+				case .recoverableTrustFailure:
+					dump(SecTrustCopyResult(serverTrust))
+					logError("SecTrustEvaluate: recoverableTrustFailure.")
+				case .fatalTrustFailure:
+					logError("SecTrustEvaluate: fatalTrustFailure")
+				case .otherError:
+					logError("SecTrustEvaluate: otherError")
+				default:
+					logError("SecTrustEvaluate: unknown")
+			}
+			logError("SecTrustEvaluate: returning false.")
+			return false
+		}
+	} // checkATS()
+
     func checkSSL(serverTrust: SecTrust,
                   policies: [SecPolicy],
                   trustedCertificates: [Data],
@@ -325,7 +337,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
     //
     func checkATS(serverTrust: SecTrust) -> Bool {
         let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
-        
+
         return SecurityCheckerWorker().checkATS(serverTrust: serverTrust,
                                                 policies: policies,
                                                 trustedCertificates: trustedCertificates)
