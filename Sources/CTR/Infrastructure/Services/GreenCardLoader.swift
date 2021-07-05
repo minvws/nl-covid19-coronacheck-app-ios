@@ -9,9 +9,11 @@ import Foundation
 
 protocol GreenCardLoading {
 	init(networkManager: NetworkManaging, cryptoManager: CryptoManaging, walletManager: WalletManaging)
+
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void)
+		completion: @escaping (Result<Void, GreenCardLoader.Error>
+	) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading, Logging {
@@ -28,6 +30,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		case credentials119
 
 		case serverBusy
+		case serverNotReachable
 	}
 
 	private let networkManager: NetworkManaging
@@ -53,10 +56,14 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			switch prepareIssueResult {
 				case .failure(let networkError):
 					self.logError("error: \(networkError)")
-					if networkError == .serverBusy {
-						completion(.failure(.serverBusy))
-					} else {
-						completion(.failure(.preparingIssue117))
+
+					switch networkError {
+						case .serverBusy:
+							completion(.failure(.serverBusy))
+						case .serverNotReachable:
+							completion(.failure(.serverNotReachable))
+						default:
+							completion(.failure(.preparingIssue117))
 					}
 
 				case .success(let prepareIssueEnvelope):
@@ -125,13 +132,16 @@ class GreenCardLoader: GreenCardLoading, Logging {
 				case let .success(greencardResponse):
 					self?.logVerbose("ok: \(greencardResponse)")
 					onCompletion(.success(greencardResponse))
-				case let .failure(error):
-					self?.logError("error: \(error)")
+				case let .failure(networkError):
+					self?.logError("error: \(networkError)")
 
-					if error == .serverBusy {
-						onCompletion(.failure(.serverBusy))
-					} else {
-						onCompletion(.failure(.credentials119))
+					switch networkError {
+						case .serverBusy:
+							onCompletion(.failure(.serverBusy))
+						case .serverNotReachable:
+							onCompletion(.failure(.serverNotReachable))
+						default:
+							onCompletion(.failure(.credentials119))
 					}
 			}
 		}
