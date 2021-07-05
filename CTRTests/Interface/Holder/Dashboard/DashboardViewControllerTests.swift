@@ -235,22 +235,4 @@
 //			// Then
 //			expect(self.cryptoManagerSpy.invokedRemoveCredential) == true
 //		}
-//
-//		func test_showNotificationBanner() {
-//
-//			// Given
-//			loadView()
-//			let notificationContent = NotificationBannerContent(
-//				title: "Banner title",
-//				message: nil,
-//				icon: nil
-//			)
-//
-//			// When
-//			sut.showNotificationBanner(notificationContent)
-//
-//			// Then
-//			expect(self.sut.bannerView)
-//				.toNot(beNil(), description: "Banner view should be shown")
-//		}
 //	}
