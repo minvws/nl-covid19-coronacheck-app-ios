@@ -701,7 +701,13 @@ class CryptoUtilityTests: XCTestCase {
 		}
         
 		if let sans2 = openssl.getSubjectAlternativeDNSNames(certWithStuff) as? [String] {
-			XCTAssert(sans2.count == 2) // check that we skip the IP and email entry.
+			XCTAssert(sans2.count == 2) // check that we skip the IP, otherName and email entry.
+            XCTAssert(sans2.contains("test1"))
+            XCTAssert(sans2.contains("test2"))
+            XCTAssertFalse(sans2.contains("1.2.3.4"))
+
+            // OpenSSL seems to keep the order the same.
+            //
 			XCTAssert(sans2.first == "test1")
 			XCTAssert(sans2.last == "test2")
 		} else {
