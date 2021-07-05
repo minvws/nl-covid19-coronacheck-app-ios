@@ -255,6 +255,8 @@
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.<br />Dit komt doordat het type test niet voldoet in Nederland.";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.<br />Dit komt doordat het type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden.";
+"holder.dashboard.empty.title" = "Hier komt jouw bewijs";
+"holder.dashboard.empty.message" = "Ben je gevaccineerd, hersteld of getest bij een aangesloten testlocatie? Dan kun je een bewijs toevoegen. De app maakt een Nederlands en een internationaal bewijs. Reis je buiten Nederland? Check www.wijsopreis.nl voor vertrek. Daar staat of jouw internationale bewijs geldig is in het land dat je bezoekt.";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";

@@ -7,11 +7,32 @@
 
 import UIKit
 
-class HolderDashboardView: ScrolledStackView {
+class HolderDashboardView: ScrolledStackWithButtonView {
+	
+	private var scrollViewToFooterConstraint: NSLayoutConstraint?
 
 	override func setupViews() {
 		super.setupViews()
 		stackView.distribution = .fill
 		stackView.spacing = 40
+	}
+	
+	func configurePrimaryButton(display: Bool) {
+		if display {
+			bottomScrollViewConstraint?.isActive = false
+			
+			NSLayoutConstraint.activate([
+				{
+					let constraint = scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
+					scrollViewToFooterConstraint = constraint
+					return constraint
+				}()
+			])
+			
+			setupPrimaryButton()
+		} else {
+			bottomScrollViewConstraint?.isActive = true
+			scrollViewToFooterConstraint?.isActive = false
+		}
 	}
 }

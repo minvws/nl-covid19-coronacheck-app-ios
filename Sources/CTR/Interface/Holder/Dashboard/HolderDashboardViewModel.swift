@@ -90,6 +90,10 @@ class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var title: String = L.holderDashboardTitle()
 
 	@Bindable private(set) var cards = [HolderDashboardViewController.Card]()
+	
+	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
+	
+	@Bindable private(set) var hasAddCertificateMode: Bool = false
 
 	// MARK: - Private types
 
@@ -138,6 +142,8 @@ class HolderDashboardViewModel: Logging {
 				},
 				coordinatorDelegate: coordinator
 			)
+			
+			hasAddCertificateMode = state.myQRCards.isEmpty
 		}
 	}
 
@@ -226,14 +232,15 @@ class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
-		cards += [.headerMessage(
-			message: {
-				guard !state.myQRCards.isEmpty else { return L.holderDashboardIntroEmptystate() }
-				return state.qrCodeValidityRegion == .domestic
-					? L.holderDashboardIntroDomestic()
-					: L.holderDashboardIntroInternational()
-			}())
-		]
+		if !state.myQRCards.isEmpty {
+			cards += [.headerMessage(
+						message: {
+							return state.qrCodeValidityRegion == .domestic
+								? L.holderDashboardIntroDomestic()
+								: L.holderDashboardIntroInternational()
+						}())
+			]
+		}
 
 		cards += state.expiredGreenCards.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }
@@ -250,13 +257,9 @@ class HolderDashboardViewModel: Logging {
 
 		if state.myQRCards.isEmpty {
 			cards += [
-				.makeQR(
-					title: L.holderDashboardCreateTitle(),
-					message: L.holderDashboardCreateMessage(),
-					actionTitle: L.holderDashboardCreateAction(),
-					didTapMakeQR: { [weak coordinatorDelegate] in
-						coordinatorDelegate?.userWishesToCreateAQR()
-					}
+				.emptyState(
+					title: L.holderDashboardEmptyTitle(),
+					message: L.holderDashboardEmptyMessage()
 				)
 			]
 		}

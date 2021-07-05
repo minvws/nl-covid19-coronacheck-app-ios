@@ -21,7 +21,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
 
-		case makeQR(title: String, message: String, actionTitle: String, didTapMakeQR: () -> Void)
+		case emptyState(title: String, message: String)
 
 		case changeRegion(buttonTitle: String, currentLocationTitle: String)
 
@@ -81,11 +81,17 @@ class HolderDashboardViewController: BaseViewController {
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 		setupPlusButton()
+		
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.addProofTapped()
+		}
 	}
 
 	private func setupBindings() {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
+		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.configurePrimaryButton(display: $0) }
 
 		// Receive an array of cards,
 		viewModel.$cards.binding = { [sceneView, weak viewModel] cards in
@@ -114,15 +120,15 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
 
-					case .makeQR(let title, let message, let actionTitle, let didTapAction):
-						let makeQRCard = CardView()
-						makeQRCard.title = title
-						makeQRCard.message = message
-						makeQRCard.primaryTitle = actionTitle
-						makeQRCard.backgroundImage = .createTile
-						makeQRCard.color = Theme.colors.create
-						makeQRCard.primaryButtonTappedCommand = didTapAction
-						return makeQRCard
+					case .emptyState(let title, let message):
+						let emptyDashboardView = EmptyDashboardView()
+						emptyDashboardView.image = .emptyDashboard
+						emptyDashboardView.title = title
+						emptyDashboardView.message = message
+						emptyDashboardView.contentTextView.linkTouched { url in
+							viewModel?.openUrl(url)
+						}
+						return emptyDashboardView
 
 					case .changeRegion(let buttonTitle, let currentLocationTitle):
 						let changeRegionCard = ChangeRegionView()

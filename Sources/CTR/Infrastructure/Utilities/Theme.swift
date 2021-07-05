@@ -47,6 +47,10 @@ class Fonts {
 	var headlineBold: UIFont {
 		font(textStyle: .headline, isBold: true) // Size 17 points
 	}
+	
+	var headlineBoldMontserrat: UIFont {
+		font(textStyle: .headline, isBold: true, customFont: "Montserrat-Bold") // Size 17 points
+	}
 
     var body: UIFont {
         font(textStyle: .body) // Size 17 points
@@ -180,8 +184,6 @@ final class Colors {
 
 	var appointment: UIColor { return color(for: "AppointmentColor") }
 
-	var create: UIColor { return color(for: "CreateColor") }
-
 	var shadow: UIColor { return color(for: "ShadowColor") }
 
 	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
@@ -211,6 +213,8 @@ final class Colors {
 	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
 
 	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
+	
+	var emptyDashboardColor: UIColor { return color(for: "EmptyDashboardColor") }
 
     // MARK: - Private
 
