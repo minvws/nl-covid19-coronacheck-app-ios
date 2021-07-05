@@ -65,20 +65,20 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 
 		let pages = [
 			OnboardingPage(
-				title: .holderOnboardingTitleSafely,
-				message: .holderOnboardingMessageSafely,
+				title: L.holderOnboardingTitleSafely(),
+				message: L.holderOnboardingMessageSafely(),
 				image: .onboardingSafely,
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
-				title: .holderOnboardingTitleYourQR,
-				message: .holderOnboardingMessageYourQR,
+				title: L.holderOnboardingTitleYourqr(),
+				message: L.holderOnboardingMessageYourqr(),
 				image: .onboardingYourQR,
 				step: .yourQR
 			),
 			OnboardingPage(
-				title: .holderOnboardingTitleValidity,
-				message: String(format: .holderOnboardingMessageValidity, "\(maxValidity)"),
+				title: L.holderOnboardingTitleValidity(),
+				message: String(format: L.holderOnboardingMessageValidity(), "\(maxValidity)"),
 				image: .onboardingValidity,
 				step: .validity
 			),
@@ -96,32 +96,32 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	/// Get the Consent Title
 	func getConsentTitle() -> String {
 
-		return .holderConsentTitle
+		return L.holderConsentTitle()
 	}
 
 	/// Get the Consent message
 	func getConsentMessage() -> String {
 
-		return .holderConsentMessage
+		return L.holderConsentMessage()
 	}
 	/// Get the Consent underlined message
 	func getConsentLink() -> String {
 
-		return .holderConsentMessageUnderlined
+		return L.holderConsentMessageUnderlined()
 	}
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String {
 
-		return .holderConsentButtonTitle
+		return L.holderConsentButton()
 	}
 
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
 		return [
-			.holderConsentItemOne,
-			.holderConsentItemTwo
+			L.holderConsentItem1(),
+			L.holderConsentItem2()
 		]
 	}
 }
@@ -135,26 +135,26 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 
 		let pages = [
 			OnboardingPage(
-				title: .verifierOnboardingTitleSafely,
-				message: .verifierOnboardingMessageSafely,
+				title: L.verifierOnboardingTitleSafely(),
+				message: L.verifierOnboardingMessageSafely(),
 				image: .onboardingSafely,
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleScanQR,
-				message: String(format: .verifierOnboardingMessageScanQR, "\(maxValidity)"),
+				title: L.verifierOnboardingTitleScanqr(),
+				message: String(format: L.verifierOnboardingMessageScanqr(), "\(maxValidity)"),
 				image: .onboardingScan,
 				step: .yourQR
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleAccess,
-				message: .verifierOnboardingMessageAccess,
+				title: L.verifierOnboardingTitleAccess(),
+				message: L.verifierOnboardingMessageAccess(),
 				image: .onboardingIdentity,
 				step: .access
 			),
 			OnboardingPage(
-				title: .verifierOnboardingTitleWho,
-				message: .verifierOnboardingMessageWho,
+				title: L.verifierOnboardingTitleWho(),
+				message: L.verifierOnboardingMessageWho(),
 				image: .onboardingWho,
 				step: .privacy
 			)
@@ -166,33 +166,33 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	/// Get the Consent Title
 	func getConsentTitle() -> String {
 
-		return .verifierConsentTitle
+		return L.verifierConsentTitle()
 	}
 
 	/// Get the Consent message
 	func getConsentMessage() -> String {
 
-		return .verifierConsentMessage
+		return L.verifierConsentMessage()
 	}
 	/// Get the Consent underlined message
 	func getConsentLink() -> String {
 
-		return .verifierConsentMessageUnderlined
+		return L.verifierConsentMessageUnderlined()
 	}
 
 	/// Get the Consent Button Title
 	func getConsentButtonTitle() -> String {
 
-		return .verifierConsentButtonTitle
+		return L.verifierConsentButton()
 	}
 
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
 		return [
-			.verifierConsentItemOne,
-			.verifierConsentItemTwo,
-			.verifierConsentItemThree
+			L.verifierConsentItem1(),
+			L.verifierConsentItem2(),
+			L.verifierConsentItem3()
 		]
 	}
 }

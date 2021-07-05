@@ -75,12 +75,12 @@ class AppUpdateViewController: BaseViewController {
 	private func showCannotOpenUrl() {
 
 		let alertController = UIAlertController(
-			title: .errorTitle,
+			title: L.generalErrorTitle(),
 			message: errorMessage,
 			preferredStyle: .alert)
 		alertController.addAction(
 			UIAlertAction(
-				title: .ok,
+				title: L.generalOk(),
 				style: .default,
 				handler: nil)
 		)

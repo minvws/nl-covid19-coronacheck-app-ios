@@ -29,7 +29,7 @@ class BaseViewController: UIViewController {
 		styleBackButton()
 	}
 
-	func styleBackButton(buttonText: String = .previous) {
+	func styleBackButton(buttonText: String = L.generalPrevious()) {
 
 		let backbutton = UIBarButtonItem(
 			title: buttonText,
@@ -88,7 +88,7 @@ class BaseViewController: UIViewController {
 	///   - accessibilityLabel: the label for Voice Over
 	func addCloseButton(
 		action: Selector?,
-		accessibilityLabel: String = .close,
+		accessibilityLabel: String = L.generalClose(),
 		backgroundColor: UIColor = Theme.colors.viewControllerBackground,
 		tintColor: UIColor = Theme.colors.dark) {
 
@@ -132,7 +132,7 @@ class BaseViewController: UIViewController {
 	}
 
 	/// Show alert
-	func showError(_ title: String = .errorTitle, message: String) {
+	func showError(_ title: String = L.generalErrorTitle(), message: String) {
 
 		let alertController = UIAlertController(
 			title: title,
@@ -141,7 +141,7 @@ class BaseViewController: UIViewController {
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .ok,
+				title: L.generalOk(),
 				style: .default,
 				handler: nil
 			)

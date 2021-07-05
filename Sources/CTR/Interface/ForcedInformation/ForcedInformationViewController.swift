@@ -55,7 +55,7 @@ final class ForcedInformationViewController: BaseViewController {
 			}
 		}
 		
-		sceneView.primaryButton.setTitle(.next, for: .normal)
+		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 	

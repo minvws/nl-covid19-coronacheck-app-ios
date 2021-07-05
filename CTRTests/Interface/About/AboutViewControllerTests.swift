@@ -55,9 +55,9 @@ class AboutViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.title) == .holderAboutTitle
-		expect(self.sut.sceneView.message) == .holderAboutText
-		expect(self.sut.sceneView.listHeader) == .holderAboutReadMore
+		expect(self.sut.title) == L.holderAboutTitle()
+		expect(self.sut.sceneView.message) == L.holderAboutText()
+		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
 			.to(haveCount(2))
 		expect(self.sut.sceneView.version).toNot(beNil())

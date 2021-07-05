@@ -83,13 +83,13 @@ class VerifierScanViewController: ScanViewController {
 	func showPermissionError() {
 
 		let alertController = UIAlertController(
-			title: .verifierScanPermissionTitle,
-			message: .verifierScanPermissionMessage,
+			title: L.verifierScanPermissionTitle(),
+			message: L.verifierScanPermissionMessage(),
 			preferredStyle: .alert
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .verifierScanPermissionSettings,
+				title: L.verifierScanPermissionSettings(),
 				style: .default,
 				handler: { [weak self] _ in
 					self?.viewModel.gotoSettings()
@@ -98,7 +98,7 @@ class VerifierScanViewController: ScanViewController {
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .cancel,
+				title: L.generalCancel(),
 				style: .cancel,
 				handler: nil
 			)

@@ -43,7 +43,7 @@ class AboutMakingAQRViewController: BaseViewController {
 		viewModel.$body.binding = { [weak self] in self?.sceneView.body = $0 }
 		viewModel.$image.binding = { [weak self] in self?.sceneView.headerImage = $0 }
 
-		sceneView.buttonTitle = .next
+		sceneView.buttonTitle = L.generalNext()
 
 		sceneView.contentTextView.linkTouched { [weak self] url in
 			self?.viewModel.userTouchedURL(url)

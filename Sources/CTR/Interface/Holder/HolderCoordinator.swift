@@ -116,19 +116,19 @@ class HolderCoordinator: SharedCoordinator {
 				switch result {
 					case .failure:
 						alertController = UIAlertController(
-							title: String.holderFaultyVaccination28JuneFailedToReloadAlertTitle,
-							message: String.holderFaultyVaccination28JuneFailedToReloadAlertMessage,
+							title: L.holderFaultyvaccination28JuneFailedtoreloadAlertTitle(),
+							message: L.holderFaultyvaccination28JuneFailedtoreloadAlertMessage(),
 							preferredStyle: .alert
 						)
 
 					case .success:
 						alertController = UIAlertController(
-							title: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertTitle,
-							message: String.holderFaultyVaccination28JuneSuccessfullyReloadedAlertMessage,
+							title: L.holderFaultyvaccination28JuneSuccessfullyreloadedAlertTitle(),
+							message: L.holderFaultyvaccination28JuneSuccessfullyreloadedAlertMessage(),
 							preferredStyle: .alert
 						)
 				}
-				alertController.addAction(.init(title: String.close, style: .default, handler: { _ in
+				alertController.addAction(.init(title: L.generalClose(), style: .default, handler: { _ in
 					self.start()
 				}))
 
@@ -414,9 +414,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let viewController = MakeTestAppointmentViewController(
 			viewModel: MakeTestAppointmentViewModel(
 				coordinator: self,
-				title: .holderNoTestTitle,
-				message: String(format: .holderNoTestBody),
-				buttonTitle: .holderNoTestButtonTitle
+				title: L.holderNotestTitle(),
+				message: String(format: L.holderNotestBody()),
+				buttonTitle: L.holderNotestButtonTitle()
 			)
 		)
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
@@ -472,20 +472,20 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				navigateToShowQR(greenCard)
 			} else {
 				let alertController = UIAlertController(
-					title: .errorTitle,
-					message: String(format: .technicalErrorCustom, "150"),
+					title: L.generalErrorTitle(),
+					message: String(format: L.generalErrorTechnicalCustom("150")),
 					preferredStyle: .alert)
 
-				alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+				alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 				(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 			}
 		} catch let error {
 			let alertController = UIAlertController(
-				title: .errorTitle,
-				message: String(format: .technicalErrorCustom, "CD_\((error as NSError).code))"),
+				title: L.generalErrorTitle(),
+				message: L.generalErrorTechnicalCustom("CD_\((error as NSError).code))"),
 				preferredStyle: .alert)
 
-			alertController.addAction(.init(title: .ok, style: .default, handler: nil))
+			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 		}
 	}
@@ -511,7 +511,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = dashboardNavigationController
 
 			case .faq:
-				guard let faqUrl = URL(string: .holderUrlFAQ) else {
+				guard let faqUrl = URL(string: L.holderUrlFaq()) else {
 					logError("No holder FAQ url")
 					return
 				}
@@ -558,7 +558,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .overview, title: .holderMenuDashboard)
+			MenuItem(identifier: .overview, title: L.holderMenuDashboard())
 		]
 	}
 	/// Get the items for the bottom menu

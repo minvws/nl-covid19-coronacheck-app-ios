@@ -69,8 +69,8 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .holderLaunchTitle
-		expect(self.sut.message) == .holderLaunchText
+		expect(self.sut.title) == L.holderLaunchTitle()
+		expect(self.sut.message) == L.holderLaunchText()
 		expect(self.sut.appIcon) == .holderAppIcon
 		expect(self.proofManagerSpy.invokedMigrateExistingProof) == true
 	}
@@ -89,8 +89,8 @@ class LaunchViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.title) == .verifierLaunchTitle
-		expect(self.sut.message) == .verifierLaunchText
+		expect(self.sut.title) == L.verifierLaunchTitle()
+		expect(self.sut.message) == L.verifierLaunchText()
 		expect(self.sut.appIcon) == .verifierAppIcon
 		expect(self.proofManagerSpy.invokedMigrateExistingProof) == false
 	}

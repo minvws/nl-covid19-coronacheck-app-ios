@@ -57,10 +57,10 @@ class VerifierStartViewModel: Logging {
 		self.proofManager = proofManager
 		self.userSettings = userSettings
 
-		primaryButtonTitle = .verifierStartButtonTitle
-		title = .verifierStartTitle
-		header = .verifierStartHeader
-		message = .verifierStartMessage
+		primaryButtonTitle = L.verifierStartButtonTitle()
+		title = L.verifierStartTitle()
+		header = L.verifierStartHeader()
+		message = L.verifierStartMessage()
 	}
 
 	func primaryButtonTapped() {

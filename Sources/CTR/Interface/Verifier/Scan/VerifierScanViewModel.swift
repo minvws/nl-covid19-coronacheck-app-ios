@@ -41,9 +41,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.theCoordinator = coordinator
 		self.cryptoManager = cryptoManager
 
-		self.title = .verifierScanTitle
-		self.message = .verifierScanMessage
-		self.torchLabels = [.verifierScanTorchEnable, .verifierScanTorchDisable]
+		self.title = L.verifierScanTitle()
+		self.message = L.verifierScanMessage()
+		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
 		super.init(coordinator: coordinator)
 	}

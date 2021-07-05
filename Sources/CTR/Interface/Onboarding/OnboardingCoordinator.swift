@@ -116,9 +116,9 @@ extension OnboardingCoordinator: OnboardingCoordinatorDelegate {
 		let urlString: String
 
 		if AppFlavor.flavor == .holder {
-			urlString = .holderUrlPrivacy
+			urlString = L.holderUrlPrivacy()
 		} else {
-			urlString = .verifierUrlPrivacy
+			urlString = L.verifierUrlPrivacy()
 		}
 
 		guard let privacyUrl = URL(string: urlString) else {

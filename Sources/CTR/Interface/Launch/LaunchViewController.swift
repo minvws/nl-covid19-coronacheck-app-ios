@@ -76,13 +76,13 @@ class LaunchViewController: BaseViewController {
 	private func showJailBreakDialog() {
 
 		let alertController = UIAlertController(
-			title: .jailbrokenTitle,
-			message: .jailbrokenMessage,
+			title: L.jailbrokenTitle(),
+			message: L.jailbrokenMessage(),
 			preferredStyle: .alert
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: .ok,
+				title: L.generalOk(),
 				style: .default,
 				handler: { [weak self] _ in
 					self?.viewModel.userDismissedJailBreakWarning()
