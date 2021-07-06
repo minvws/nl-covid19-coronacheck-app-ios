@@ -88,13 +88,6 @@ final class OnboardingConsentView: BaseView {
 		return view
 	}()
 
-	let consentButton: ConsentButton = {
-
-		let button = ConsentButton()
-		button.translatesAutoresizingMaskIntoConstraints = false
-		return button
-	}()
-
 	/// setup the views
 	override func setupViews() {
 
@@ -110,7 +103,6 @@ final class OnboardingConsentView: BaseView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(itemStackView)
-		stackView.addArrangedSubview(consentButton)
 
 		stackView.embed(
 			in: scrollView,
@@ -194,12 +186,6 @@ final class OnboardingConsentView: BaseView {
 		let attributedUnderlined = messageText.underlineAsLink(underlined: underlinedText)
 		messageLabel.attributedText = attributedUnderlined.setLineHeight(ViewTraits.messageLineHeight)
 		messageLabel.accessibilityTraits = [.staticText, .link]
-	}
-
-	var consent: String? {
-		didSet {
-			consentButton.setTitle(consent, for: .normal)
-		}
 	}
 
 	/// Add a privacy item
