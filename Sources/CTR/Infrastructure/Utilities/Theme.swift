@@ -210,8 +210,6 @@ final class Colors {
 
 	var europa: UIColor { return color(for: "Europa") }
 
-	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
-
 	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
 	
 	var emptyDashboardColor: UIColor { return color(for: "EmptyDashboardColor") }
