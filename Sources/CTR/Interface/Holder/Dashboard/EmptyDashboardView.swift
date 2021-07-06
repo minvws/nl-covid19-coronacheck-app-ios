@@ -76,7 +76,12 @@ final class EmptyDashboardView: BaseView {
 	/// The message
 	var message: String? {
 		didSet {
-			contentTextView.html(message)
+			contentTextView.attributedText = .makeFromHtml(
+				text: message,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark,
+				paragraphSpacing: 0
+			)
 		}
 	}
 }
