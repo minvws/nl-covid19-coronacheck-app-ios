@@ -26,7 +26,7 @@ final class FetchEventsViewModel: Logging {
 
 	@Bindable internal var viewState: FetchEventsViewController.State
 
-	@Bindable private(set) var navigationAlert: FetchEventsViewController.AlertContent?
+	@Bindable private(set) var alert: FetchEventsViewController.AlertContent?
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -93,14 +93,7 @@ final class FetchEventsViewModel: Logging {
 		let networkOffline: Bool = networkErrors.contains { $0 == .serverNotReachable }
 
 		guard !networkOffline else {
-			self.navigationAlert = FetchEventsViewController.AlertContent(
-				title: L.generalErrorNointernetTitle(),
-				subTitle: L.generalErrorNointernetText(),
-				okAction: { _ in
-					self.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				okTitle: L.generalOk()
-			)
+			self.alert = noInternetAlertContent()
 			return
 		}
 
@@ -114,7 +107,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -125,7 +118,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, _, true): // No results and >=1 network had an error (5.5.1)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 					okAction: { _ in
@@ -136,7 +129,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -147,7 +140,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
 					subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
 					okAction: { _ in
@@ -162,6 +155,18 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
+	private func noInternetAlertContent() -> FetchEventsViewController.AlertContent {
+
+		return FetchEventsViewController.AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			okAction: { _ in
+				self.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			okTitle: L.generalOk()
+		)
+	}
+
 	func handleFetchEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
@@ -169,14 +174,7 @@ final class FetchEventsViewModel: Logging {
 		let networkOffline: Bool = networkErrors.contains { $0 == .serverNotReachable }
 		
 		guard !networkOffline else {
-			self.navigationAlert = FetchEventsViewController.AlertContent(
-				title: L.generalErrorNointernetTitle(),
-				subTitle: L.generalErrorNointernetText(),
-				okAction: { _ in
-					self.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				okTitle: L.generalOk()
-			)
+			self.alert = noInternetAlertContent()
 			return
 		}
 
@@ -190,7 +188,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -201,7 +199,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, _, true): // No results and >=1 network had an error (5.5.1)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 					okAction: { _ in
@@ -212,7 +210,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
 
-				self.navigationAlert = FetchEventsViewController.AlertContent(
+				self.alert = FetchEventsViewController.AlertContent(
 					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -223,7 +221,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
-			   self.navigationAlert = FetchEventsViewController.AlertContent(
+			   self.alert = FetchEventsViewController.AlertContent(
 				title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
 				subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
 				   okAction: { _ in
@@ -245,7 +243,7 @@ final class FetchEventsViewModel: Logging {
 
 	func warnBeforeGoBack() {
 
-		navigationAlert = FetchEventsViewController.AlertContent(
+		alert = FetchEventsViewController.AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode == .vaccination
 				? L.holderVaccinationAlertMessage()
