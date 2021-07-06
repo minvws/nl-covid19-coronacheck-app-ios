@@ -4,9 +4,375 @@
  *
  *  SPDX-License-Identifier: EUPL-1.2
  */
+// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
+import Nimble
+
+// Bizarre cert with odd extensions.
+// Regenerate with openssl req -new -x509 -subj /CN=foo/ \
+//      -addext "subjectAltName=otherName:1.2.3.4;UTF8,DNS:test1,DNS:test2,email:fo@bar,IP:1.2.3.4"  \
+//      -nodes -keyout /dev/null |\
+//            openssl x509 | pbcopy
+//
+let certWithStuff = """
+-----BEGIN CERTIFICATE-----
+MIIDMTCCAhmgAwIBAgIUDg8ZD211w0VBq6Odl6vbkTbwH3IwDQYJKoZIhvcNAQEL
+BQAwDjEMMAoGA1UEAwwDZm9vMB4XDTIxMDcwNTEwMDcwNFoXDTIxMDgwNDEwMDcw
+NFowDjEMMAoGA1UEAwwDZm9vMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEA2axpu3nLbM8DCXWm1jieT0QbGmVl+aBkBVT5vRUxe2yn5ogvsEC8w4qsxKxC
+1T8lrMnkfVEPL/lBfLbuUJF/cUpHwTE0EQ2cQjHnpXzXLWCsbtN5T35ZbFyqQSWW
+CRGv3/3EZaA9y9hRyUl19TRPGfdss9HybJ7ssvO/53RJyaXxeHVneqpJc+E5mOnu
+mA2t0ZeKUPK3FnNWVWxsX+gAxgELbQFiJI+Rt88yC+i/fSR8Ic6dldJTeYa0f9ws
+VKPy6d4mHcBBcf03drNbcAGTbScpy9xA7EvE1+daXpmKuOv5Vi1jzznHbunIVepf
+vDh49MmZAsk2NKuXY1Zb7X38lQIDAQABo4GGMIGDMB0GA1UdDgQWBBTk+9elNiM4
+juir0pmNh06999aPiTAfBgNVHSMEGDAWgBTk+9elNiM4juir0pmNh06999aPiTAP
+BgNVHRMBAf8EBTADAQH/MDAGA1UdEQQpMCegCQYDKgMEoAIMAIIFdGVzdDGCBXRl
+c3QygQZmb0BiYXKHBAECAwQwDQYJKoZIhvcNAQELBQADggEBAMIg+nmG76SqfpNA
+C/WBuv7IVVQ1olbedtdMs0652omCEd5nQilBVSgZfc43wDYypT4HHP7us+zgkSdd
+s7r2fS119uyBu2vrgP5PYtj5TGDdowog2xxjjEoyFT8v+bGMSWIz5j3m3mtB9lLJ
+FIqGAYX2ngis7HBuPUHmALUC0THubSsg3CPzONSpHd1FDpuU/XDjiLneDk01BYUw
+CAp6RqELairVEuL3VTCaFWmJYq/myCd7vWx5KnnhTAYiwhBp5QTNDgcmsf96NJ5I
+axmt1cb2JFPOIyJA/fpq7cbbxFGQMxdKa8O7LNCn+NlwOw/nbWFLtksgdRp5rg4A
+tx5sCJ8=
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// Chain that is identical in subjectKeyIdentifier, issuerIdentifier, etc
+// to a real one - but fake from the root down.
+//
+// See the Scripts directory:
+//  gen_fake_bananen.sh         - takes real chain and makes a fake one from it.
+//  gen_fake_cms_signed_json.sh - uses that to sign a bit of json.
+//  gen_code.pl                 - generates below hardcoded data.
+//
+// For the scripts that have generated below.
+//
+// File:       : 1002.real
+// SHA256 (DER): 19:C4:79:A1:D9:E9:BD:B3:D7:38:E8:41:45:70:16:FB:D8:15:C0:6B:71:96:12:F7:00:9A:1A:C7:E1:9B:F3:53
+// Subject     : CN = api-ct.bananenhalen.nl
+// Issuer      : C = US, O = Let's Encrypt, CN = R3
+//
+let realLeaf = """
+-----BEGIN CERTIFICATE-----
+MIIFMTCCBBmgAwIBAgISA+9nCNF6vCPHEdoBoO+dydHRMA0GCSqGSIb3DQEBCwUA
+MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
+EwJSMzAeFw0yMTA1MjAxNTA3MjVaFw0yMTA4MTgxNTA3MjVaMCExHzAdBgNVBAMT
+FmFwaS1jdC5iYW5hbmVuaGFsZW4ubmwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQCslmgl4f/vKGkO6Vx5pcgVSN9yfZE9gBYsgTfko0mSuw1Cavdas/BO
+jYO29cVGy2YOAbvWeUwRUGbiUG8GGU+4tmkTToJuDiO2cMc7vIqOoi30z0lLXtUW
+/j5mqKLuryJ/gN4Uxe2G7+fR1jsL2Eeh/9Kl2u0RHSlxYfuJgCr2HzEhfc54tIbF
+ibkTkUdFxTkEBLrb3YRK12eLb/L7RDfLUsUJMi7dfOxhplS3VEW09A0jJaCcYUCZ
+VjB43YzWd5sraWzkx6kOxmad/EbQ2/3yj6xghuyeyNXlrKpVAEdHvuAVy9nJcgDc
+7ehDwIzzhHF0Te9HdSR2RG2Q8EM1egCDAgMBAAGjggJQMIICTDAOBgNVHQ8BAf8E
+BAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQC
+MAAwHQYDVR0OBBYEFAC119UdsQ4XYeiNGojLWbtmNob9MB8GA1UdIwQYMBaAFBQu
+sxe3WFbLrlAJQOYfr52LFMLGMFUGCCsGAQUFBwEBBEkwRzAhBggrBgEFBQcwAYYV
+aHR0cDovL3IzLm8ubGVuY3Iub3JnMCIGCCsGAQUFBzAChhZodHRwOi8vcjMuaS5s
+ZW5jci5vcmcvMCEGA1UdEQQaMBiCFmFwaS1jdC5iYW5hbmVuaGFsZW4ubmwwTAYD
+VR0gBEUwQzAIBgZngQwBAgEwNwYLKwYBBAGC3xMBAQEwKDAmBggrBgEFBQcCARYa
+aHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcwggEDBgorBgEEAdZ5AgQCBIH0BIHx
+AO8AdgBElGUusO7Or8RAB9io/ijA2uaCvtjLMbU/0zOWtbaBqAAAAXmKiBfxAAAE
+AwBHMEUCIQCJlYU4vMOJMqmtyzW9H7LV2NH4wrWbGleroKi7CvVTAQIgag297ode
+ByaYa1ChAOPBw2KBiV2jH0f3oR0WZZJ9dVUAdQD2XJQv0XcwIhRUGAgwlFaO400T
+GTO/3wwvIAvMTvFk4wAAAXmKiBfkAAAEAwBGMEQCIC9GiAzTCnbrYccB0pFp45Tx
+nnE/GP0Gc+eJf5bNdJuYAiB5lvNUNeLnGApkvieepd+1AgLcoEtfxnifXrTQCi+c
+TDANBgkqhkiG9w0BAQsFAAOCAQEAWEJUugwM5ZcSDY+kE9vl2ILYC1n7EyTsxAGc
+1PJ8oh5a5UltJbJ9nK7un7eXR6KmbNeYEtoRyduQmkWI7pnAPWKiefghzEKCu7rS
+kNaHKy0PVnVY5ikgYukq3gZU/CevBFhGnHgi97T9q3wCUjQ6juIiifeqSoh1DrNw
+NuxmeksYpPQ2uy6+aJ25pDjRO+DYoo8eUwaFGkbU3mBYhAl8VCww2Zy44RqanOim
+wdXahoExpufM51GidNXUL8iMP/jNG95a+DHaAzGuNjfWxRmrs3FlYGEvOe8PanhX
+MkM+M/46ybm3G4z9vcdQpJ4ORbYUgYvWlH1LoKmAO+/zv7xm7w==
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : 1001.real
+// SHA256 (DER): 67:AD:D1:16:6B:02:0A:E6:1B:8F:5F:C9:68:13:C0:4C:2A:A5:89:96:07:96:86:55:72:A3:C7:E7:37:61:3D:FD
+// Subject     : C = US, O = Let's Encrypt, CN = R3
+// Issuer      : C = US, O = Internet Security Research Group, CN = ISRG Root X1
+//
+let realChain02 = """
+-----BEGIN CERTIFICATE-----
+MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQC7AhUozPaglNMPEuyNVZLD+ILxmaZ6QoinXSaqtSu5xUyxr45r+XXIo9cP
+R5QUVTVXjJ6oojkZ9YI8QqlObvU7wy7bjcCwXPNZOOftz2nwWgsbvsCUJCWH+jdx
+sxPnHKzhm+/b5DtFUkWWqcFTzjTIUu61ru2P3mBw4qVUq7ZtDpelQDRrK9O8Zutm
+NHz6a4uPVymZ+DAXXbpyb/uBxa3Shlg9F8fnCbvxK/eG3MHacV3URuPMrSXBiLxg
+Z3Vms/EY96Jc5lP/Ooi2R6X/ExjqmAl3P51T+c8B5fWmcBcUr2Ok/5mzk53cU6cG
+/kiFHaFpriV1uxPMUgP17VGhi9sVAgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCFyk5HPqP3hUSFvNVneLKYY611TR6W
+PTNlclQtgaDqw+34IL9fzLdwALduO/ZelN7kIJ+m74uyA+eitRY8kc607TkC53wl
+ikfmZW4/RvTZ8M6UK+5UzhK8jCdLuMGYL6KvzXGRSgi3yLgjewQtCPkIVz6D2QQz
+CkcheAmCJ8MqyJu5zlzyZMjAvnnAT45tRAxekrsu94sQ4egdRCnbWSDtY7kh+BIm
+lJNXoB1lBMEKIq4QDUOXoRgffuDghje1WrG9ML+Hbisq/yFOGwXD9RiX8F6sw6W4
+avAuvDszue5L3sz85K+EC4Y/wFVDNvZo4TYXao6Z0f+lQKc0t8DQYzk1OXVu8rp2
+yJMC6alLbBfODALZvYH7n7do1AZls4I9d1P4jnkDrQoxB3UqQ9hVl3LEKQ73xF1O
+yK5GhDDX8oVfGKF5u+decIsH4YaTw7mP3GFxJSqv3+0lUFJoi5Lc5da149p90Ids
+hCExroL1+7mryIkXPeFM5TgO9r0rvZaBFOvV2z0gp35Z0+L4WPlbuEjN/lxPFin+
+HlUjr8gRsI3qfJOQFy/9rKIJR0Y/8Omwt/8oTWgy1mdeHmmjk7j1nYsvC9JSQ6Zv
+MldlTTKB3zhThV1+XWYp6rjd5JW1zbVWEkLNxE7GJThEUG3szgBVGP7pSWTUTsqX
+nLRbwHOoq7hHwg==
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : ca.pem
+// SHA256 (DER): E2:E9:55:FE:81:5D:AB:5E:BF:04:B6:D9:21:4E:60:C0:E9:5E:BE:98:09:50:01:38:8A:88:FC:5F:F5:79:B6:63
+// Subject     : O = Digital Signature Trust Co., CN = DST Root CA X3
+// Issuer      : O = Digital Signature Trust Co., CN = DST Root CA X3
+//
+let fakeRoot = """
+-----BEGIN CERTIFICATE-----
+MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQsFADA/
+MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+DkRTVCBSb290IENBIFgzMB4XDTAwMDkzMDIxMTIxOVoXDTIxMDkzMDE0MDExNVow
+PzEkMCIGA1UEChMbRGlnaXRhbCBTaWduYXR1cmUgVHJ1c3QgQ28uMRcwFQYDVQQD
+Ew5EU1QgUm9vdCBDQSBYMzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+ALNmLiEmWJl6IiZHo6SDv+wZtJrh32NnHJuiuxIwKoXYomtB7U9ovsTcczUDiedZ
+wgt4GVfiwMEhEdmDFcYwb4YKKb2IognBuSwMhNXsNS4DpQtKJO4EY0L+CC2o39LX
+2cCXN4yVmff0rVvSPArjPhMBMrpb/zWQJgKFAK/pwCA6+DRLHXeY+UHOa6HX2Ple
+Y6XsyaqvmUfj33aGbFjl3B2/ZM2zfKikgfOdfu+K2Trplyp4LYGHmysuW/6iXURr
+uhqK3Cdjs3ILeEaO7Va+OGXYYBQl3exzUzuiXfoKjhLUb8IydzDXeFlNkrEHvqTO
+Ht8O2ez/Icsv7xPu1GHcyGkCAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNV
+HQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMSnsaR7LHH62+FLkHX/xBVghYkQMA0GCSqG
+SIb3DQEBCwUAA4IBAQBWADIrtetdmk0aMUzzQNnmzpIER74A+ri3udQM+K7Bo+ME
+uzMAStJewKqpCKvBxGb1JLhkefsHxMAvpS5Q+v/rJMnKxzFMFiyyzzIDfNyxzmwj
+2yYYMthgtSRXIn0UodDATGxCyHgiZgOUTtMiAkeegTuCr33ziBYSPt5EvTav+47N
+lRxGS0vqlvXnjqk/JR0BPBFB23rtNFJfjHGNeVyJ4HDeP+/KRDJ0eDxmQ9Od0i6f
+hTTUGfq+tJTwO2eoBhFp0BVwF66Zo9qyCOmKSEbTDawSmJ9E0rE0vVKRy2voeLJ5
+nNvdoe+7fOphyK78AOokdNxitgb2TP0hnHsbPXDj
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : 1001.pem
+// SHA256 (DER): E7:71:65:1C:03:91:B6:D9:87:40:FB:26:7C:74:9E:D0:53:BA:9C:6C:BC:13:26:71:41:26:F3:95:7A:4B:6B:EF
+// Subject     : C = US, O = Let's Encrypt, CN = R3
+// Issuer      : C = US, O = Internet Security Research Group, CN = ISRG Root X1
+//
+let fakeChain02 = """
+-----BEGIN CERTIFICATE-----
+MIIFFjCCAv6gAwIBAgIRAJErCErPDBinU/bWLiWnX1owDQYJKoZIhvcNAQELBQAw
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjAwOTA0MDAwMDAw
+WhcNMjUwOTE1MTYwMDAwWjAyMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg
+RW5jcnlwdDELMAkGA1UEAxMCUjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDUzBtsvxp1wMVHQh/E23gOy8DVLvtzbRYyHuvt/5KFp5WuZtn5K/pF1Mpn
+UgR+bnFmdVHReXeb6unMuelLIO1+h72UgNKcUz4jnM1PAuKIOyOkDcQxCTNFIyss
+qLLIHo4OaYeG7k2iG/B4QaDohvFo3HXxr7Eb4VlBPI6dgSB0PRccx0K8r9iI8gyn
+RPtvSuNuAfbzWN5LwNy8qKbe4erkL9lg7SKi1DNrUpH0jyf1/i+QRPXkmyYXxYmB
+25N4sw6uPhJZfMc8JerSXaBKeY9i3acfsV0DDqCCzo5Isg0CQ6Anycfm5lSVbVu2
+BJT4EPERuQcCkMufVgFd9PMmV3z/AgMBAAGjggEIMIIBBDAOBgNVHQ8BAf8EBAMC
+AYYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMBMBIGA1UdEwEB/wQIMAYB
+Af8CAQAwHQYDVR0OBBYEFBQusxe3WFbLrlAJQOYfr52LFMLGMB8GA1UdIwQYMBaA
+FHm0WeZ7tuXkAXOACIjIGlj26ZtuMDIGCCsGAQUFBwEBBCYwJDAiBggrBgEFBQcw
+AoYWaHR0cDovL3gxLmkubGVuY3Iub3JnLzAnBgNVHR8EIDAeMBygGqAYhhZodHRw
+Oi8veDEuYy5sZW5jci5vcmcvMCIGA1UdIAQbMBkwCAYGZ4EMAQIBMA0GCysGAQQB
+gt8TAQEBMA0GCSqGSIb3DQEBCwUAA4ICAQCVvjpmtAbDfn0axUO/Npdg9ELyqnDK
+UKJIlrLI0+Fbx3yPWD9pi0DayBuIYxmbbM05mQRqLqxUAzscEhin1/TOvzgoawIt
+x/nZ358lQ44gxQpX/lmPvJr7aG03rIXKRJHC6x8IBWvdnNKSg3gwPmpHeEisa/mh
+FHuWPryQFhEelgzct8WccrCRIhZvb5NMVYeiy6YCrJhsXU/VWqQWkBdlNSpA0W4n
+qSIk4f2UtIEwqDHPYohh1KhoOFjqc4d0kUhBqXfxFPpC88Iwe+XGaisbp8nXnN2/
+xn8UCrcuMy6da2QQoN5veN9mQ+ETckOs+f0rtd4YVqpCERVei1O4tngo7un0l1kV
+Nzvte1c7eME5TyELGhoIZ1f2nePDjDGRWEjGKro1CVDP1FXHD1EiBgLCQip1s4aO
+dhgllgeGmYR8F2poa6e5EqpYqMEehvzlW8naI1JJLs5uL3g76cLj58PTb+5+0o4Q
+Snp2ebuqS9ffLTlAQMOef2nEXDtbt/T0RtWxCQzxPpRhpQ6iGyJ6AGJA2tfx1Zhl
+5YHXthMY52vZZPVUcw4rw+SqaYA5rtMXAxxWSH1FLXl6ZhBkApF9YMpIzk8FE+t9
+mr3sAK1ou2h+nJp9Tw2/Zg39wOzscmHzzz7tV9ACx/YpkHnR0715IwBibzRUlTsp
+RVnWO3bYOaxc7g==
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : ca.real
+// SHA256 (DER): 06:87:26:03:31:A7:24:03:D9:09:F1:05:E6:9B:CF:0D:32:E1:BD:24:93:FF:C6:D9:20:6D:11:BC:D6:77:07:39
+// Subject     : O = Digital Signature Trust Co., CN = DST Root CA X3
+// Issuer      : O = Digital Signature Trust Co., CN = DST Root CA X3
+//
+let realRoot = """
+-----BEGIN CERTIFICATE-----
+MIIDSjCCAjKgAwIBAgIQRK+wgNajJ7qJMDmGLvhAazANBgkqhkiG9w0BAQUFADA/
+MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+DkRTVCBSb290IENBIFgzMB4XDTAwMDkzMDIxMTIxOVoXDTIxMDkzMDE0MDExNVow
+PzEkMCIGA1UEChMbRGlnaXRhbCBTaWduYXR1cmUgVHJ1c3QgQ28uMRcwFQYDVQQD
+Ew5EU1QgUm9vdCBDQSBYMzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AN+v6ZdQCINXtMxiZfaQguzH0yxrMMpb7NnDfcdAwRgUi+DoM3ZJKuM/IUmTrE4O
+rz5Iy2Xu/NMhD2XSKtkyj4zl93ewEnu1lcCJo6m67XMuegwGMoOifooUMM0RoOEq
+OLl5CjH9UL2AZd+3UWODyOKIYepLYYHsUmu5ouJLGiifSKOeDNoJjj4XLh7dIN9b
+xiqKqy69cK3FCxolkHRyxXtqqzTWMIn/5WgTe1QLyNau7Fqckh49ZLOMxt+/yUFw
+7BZy1SbsOFU5Q9D8/RhcQPGX69Wam40dutolucbY38EVAjqr2m7xPi71XAicPNaD
+aeQQmxkqtilX4+U9m5/wAl0CAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAOBgNV
+HQ8BAf8EBAMCAQYwHQYDVR0OBBYEFMSnsaR7LHH62+FLkHX/xBVghYkQMA0GCSqG
+SIb3DQEBBQUAA4IBAQCjGiybFwBcqR7uKGY3Or+Dxz9LwwmglSBd49lZRNI+DT69
+ikugdB/OEIKcdBodfpga3csTS7MgROSR6cz8faXbauX+5v3gTt23ADq1cEmv8uXr
+AvHRAosZy5Q6XkjEGB5YGV8eAlrwDPGxrancWYaLbumR9YbK+rlmM6pZW87ipxZz
+R8srzJmwN0jP41ZL9c8PDHIyh8bwRLtTcm1D9SZImlJnt1ir/md2cXjbDaJWFBM5
+JDGFoqgCWjBH4d1QB7wCCZAA62RjYJsWvIjJEubSfZGL+T0yjWW06XyxV3bqxbYo
+Ob8VZRzI9neWagqNdwvYkQsEjgfbKbYK7p2CNTUQ
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : 1002.pem
+// SHA256 (DER): 80:54:EA:12:E6:9A:DE:CE:7D:C4:D3:62:93:5D:58:DF:F2:95:30:EA:5B:E3:CA:47:71:7A:8B:A8:FE:73:66:B5
+// Subject     : CN = api-ct.bananenhalen.nl
+// Issuer      : C = US, O = Let's Encrypt, CN = R3
+//
+let fakeLeaf = """
+-----BEGIN CERTIFICATE-----
+MIIFMTCCBBmgAwIBAgISA+9nCNF6vCPHEdoBoO+dydHRMA0GCSqGSIb3DQEBCwUA
+MDIxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQswCQYDVQQD
+EwJSMzAeFw0yMTA1MjAxNTA3MjVaFw0yMTA4MTgxNTA3MjVaMCExHzAdBgNVBAMT
+FmFwaS1jdC5iYW5hbmVuaGFsZW4ubmwwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQCtOe4gRkSsDd/2P4KsnCxacSBi9J0YS4odJ/yhSqYWjciKXKiIJqMU
+eBcSLz4URuNmdfv588oVaHqxqqhk0Zx/kmS/N7yJWJRgNh/FmxOJPYnko+YJX1ki
+x51dORU47AhnNkIsbxGoDOBCYc/tsjeA7CXqO85iT12g8gVycpItoG9XgcPB/1ml
+Ft32UeWLPUPDg89XSLWak+231hIuT4FzpNnmZ0B1uHK+s59Os0INTV/9pkajyeYT
+R3RElC3qpZb+NaPZ166WZrThaUZ4qMbKXm5pwOb3vtzNrc/MfkVwUBDrDTDI1zYO
+8JdA3LKC6Pc77s51wrnPUClTqUSE6eDNAgMBAAGjggJQMIICTDAOBgNVHQ8BAf8E
+BAMCBaAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQC
+MAAwHQYDVR0OBBYEFAC119UdsQ4XYeiNGojLWbtmNob9MB8GA1UdIwQYMBaAFBQu
+sxe3WFbLrlAJQOYfr52LFMLGMFUGCCsGAQUFBwEBBEkwRzAhBggrBgEFBQcwAYYV
+aHR0cDovL3IzLm8ubGVuY3Iub3JnMCIGCCsGAQUFBzAChhZodHRwOi8vcjMuaS5s
+ZW5jci5vcmcvMCEGA1UdEQQaMBiCFmFwaS1jdC5iYW5hbmVuaGFsZW4ubmwwTAYD
+VR0gBEUwQzAIBgZngQwBAgEwNwYLKwYBBAGC3xMBAQEwKDAmBggrBgEFBQcCARYa
+aHR0cDovL2Nwcy5sZXRzZW5jcnlwdC5vcmcwggEDBgorBgEEAdZ5AgQCBIH0BIHx
+AO8AdgBElGUusO7Or8RAB9io/ijA2uaCvtjLMbU/0zOWtbaBqAAAAXmKiBfxAAAE
+AwBHMEUCIQCJlYU4vMOJMqmtyzW9H7LV2NH4wrWbGleroKi7CvVTAQIgag297ode
+ByaYa1ChAOPBw2KBiV2jH0f3oR0WZZJ9dVUAdQD2XJQv0XcwIhRUGAgwlFaO400T
+GTO/3wwvIAvMTvFk4wAAAXmKiBfkAAAEAwBGMEQCIC9GiAzTCnbrYccB0pFp45Tx
+nnE/GP0Gc+eJf5bNdJuYAiB5lvNUNeLnGApkvieepd+1AgLcoEtfxnifXrTQCi+c
+TDANBgkqhkiG9w0BAQsFAAOCAQEAXPEFXFDaYnnNqVEIrc2ns1ZEavE77GG8ndNL
+OLuZ6wEpJB4z2zyjmtIAuuInmItOB9nfcTi8TvRtef2hdflmI72dFFfYlTAWwr8G
+YMmD5O0wwvqd7RCr/ufx45K9dbdgy1Yqc+dsHDFuewERyS/Sj9krYxzgHgmP4OBA
+SKtiV06V+oJ/10FRAO3D0cHD/bcsWl073mh/ijLUf2wKlJN9HbMZjI/jnKV0Ncdk
+ExE28rcDtk2BNNEPDmXatVWowAP1i0Lm4O6BW496Gu8zx70l7YyIMMLgftX1a5/M
+pGLhdcdcsiALP2Ev9hoyAnrcVRSR6RiuikMql+8K8HJIRJdRcg==
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : cross.pem
+// SHA256 (DER): 8B:05:B6:8C:C6:59:E5:ED:0F:CB:38:F2:C9:42:FB:FD:20:0E:6F:2F:F9:F8:5D:63:C6:99:4E:F5:E0:B0:27:01
+// Subject     : C = US, O = Internet Security Research Group, CN = ISRG Root X2
+// Issuer      : C = US, O = Internet Security Research Group, CN = ISRG Root X1
+//
+let realCrossSigned = """
+-----BEGIN CERTIFICATE-----
+MIIEYDCCAkigAwIBAgIQB55JKIY3b9QISMI/xjHkYzANBgkqhkiG9w0BAQsFADBP
+MQswCQYDVQQGEwJVUzEpMCcGA1UEChMgSW50ZXJuZXQgU2VjdXJpdHkgUmVzZWFy
+Y2ggR3JvdXAxFTATBgNVBAMTDElTUkcgUm9vdCBYMTAeFw0yMDA5MDQwMDAwMDBa
+Fw0yNTA5MTUxNjAwMDBaME8xCzAJBgNVBAYTAlVTMSkwJwYDVQQKEyBJbnRlcm5l
+dCBTZWN1cml0eSBSZXNlYXJjaCBHcm91cDEVMBMGA1UEAxMMSVNSRyBSb290IFgy
+MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAEzZvVn4CDCuwJSvMWSj5cz3es3mcFDR0H
+ttwW+1qLFNvicWDEukWVEYmO6gbf9yoWHKS5xcUy4APgHoIYOIvXRdgKam7mAHf7
+AlF9ItgKbppbd9/w+kHsOdx1ymgHDB/qo4HlMIHiMA4GA1UdDwEB/wQEAwIBBjAP
+BgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBR8Qpau3ktIO/qS+J6Mz22LqXI3lTAf
+BgNVHSMEGDAWgBR5tFnme7bl5AFzgAiIyBpY9umbbjAyBggrBgEFBQcBAQQmMCQw
+IgYIKwYBBQUHMAKGFmh0dHA6Ly94MS5pLmxlbmNyLm9yZy8wJwYDVR0fBCAwHjAc
+oBqgGIYWaHR0cDovL3gxLmMubGVuY3Iub3JnLzAiBgNVHSAEGzAZMAgGBmeBDAEC
+ATANBgsrBgEEAYLfEwEBATANBgkqhkiG9w0BAQsFAAOCAgEAG38lK5B6CHYAdxjh
+wy6KNkxBfr8XS+Mw11sMfpyWmG97sGjAJETM4vL80erb0p8B+RdNDJ1V/aWtbdIv
+P0tywC6uc8clFlfCPhWt4DHRCoSEbGJ4QjEiRhrtekC/lxaBRHfKbHtdIVwH8hGR
+Ib/hL8Lvbv0FIOS093nzLbs3KvDGsaysUfUfs1oeZs5YBxg4f3GpPIO617yCnpp2
+D56wKf3L84kHSBv+q5MuFCENX6+Ot1SrXQ7UW0xx0JLqPaM2m3wf4DtVudhTU8yD
+ZrtK3IEGABiL9LPXSLETQbnEtp7PLHeOQiALgH6fxatI27xvBI1sRikCDXCKHfES
+c7ZGJEKeKhcY46zHmMJyzG0tdm3dLCsmlqXPIQgb5dovy++fc5Ou+DZfR4+XKM6r
+4pgmmIv97igyIintTJUJxCD6B+GGLET2gUfA5GIy7R3YPEiIlsNekbave1mk7uOG
+nMeIWMooKmZVm4WAuR3YQCvJHBM8qevemcIWQPb1pK4qJWxSuscETLQyu/w4XKAM
+YXtX7HdOUM+vBqIPN4zhDtLTLxq9nHE+zOH40aijvQT2GcD5hq/1DhqqlWvvykdx
+S2McTZbbVSMKnQ+BdaDmQPVkRgNuzvpqfQbspDQGdNpT2Lm4xiN9qfgqLaSCpi4t
+EcrmzTFYeYXmchynn9NM0GbQp7s=
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : 1000.pem
+// SHA256 (DER): 89:F9:6A:AC:DB:42:F3:18:19:7E:3F:F0:40:98:2A:DF:DF:7C:FE:C0:28:3D:CA:A8:88:28:D7:CA:CD:AE:E2:5C
+// Subject     : C = US, O = Internet Security Research Group, CN = ISRG Root X1
+// Issuer      : O = Digital Signature Trust Co., CN = DST Root CA X3
+//
+let fakeChain01 = """
+-----BEGIN CERTIFICATE-----
+MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
+MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+DkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
+AQUAA4ICDwAwggIKAoICAQC2z0CEoNDT7u4IBy47zbQIIoiOV8NT4ruUApbbAq1f
+/uleLPFY4m2iCAbURZYVlQX2rCb9bxrHk68YLYR112dvhQel8jnOaqv+vqP0fVX9
+EbJVvV6r5gIFJQ9stN5F7nLDuh2PYqyy/gmXtKWyLpgci4WedUoNTSnNHKxXRmJY
+n98RUxYGVpS9WqtTmEJAi2ezkG5594B34ElhFMDuixPNt0m6KxagGrG20tn9Zn41
+cW6psIdWuW3aprkhPdEzL9bfyDRoQNrgTuZPIybOST5VoSwXeC+Jm/IoyGy7KI5B
+VdX9mBYo+axGWcRPSKDOq4r6jjnr+6lG47oH2rKvbPvb70QcIdmpzhIZqqeNZqBD
+8DaKjCTJqz8Y594Wc126Qw0B3sk93hbz/j/0+zBvvZrORrZCmAjQHoL24ggdYYJZ
+nrLdpHqMogJvsu34FA2RbuSjPS8gVOKp/uF3g5yd8Ko2pN1A1oFAhDCKeJf4jRZM
+P9cGCpNCKITCkIVRVDUddYTWabPuXLBZUmEY8GbYFukqwTx9/NNtBn8al5tZQupx
+P+4Ukxl//aUuxQgdTg4hu1uSmEKK1Q6e/uJGlJmJm6dIxd5x5EMTidYkmQkwFL52
+rQwoKktrQbCr1Wz9ChxQ/nWp8nJ1DSt3PofzfNZMYafYMLgtRSwOHpOT5MhN3P1E
+5QIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
+SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
+c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
++tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
+ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
+b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9E
+U1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
+MA0GCSqGSIb3DQEBCwUAA4IBAQCrpdsaAVcifzsI2erw2vPLx+EZhWheO4l1EKqU
+CmNsJM7tchmjv5/Vc+gEvAvU7iMjFt+B0LGuOw6h5UL2oxNSJUNZaM1F8swRmXRR
+8iR6SBKagjA68/+52X+PRVnFJl10VjgY6wNXfUhmI+oeL+vF9S/HuXzBPK1XATZ8
+7U4wuaq6ayOuAZheU/VA8Th16TJ4jk/XwVLI6t+ghopv3iCunerjeGUbaFUWPiKi
+VpWsePtjFxV2Y9rqULTgU88M32fjKyrlAjz9p5LMF318BqvN9biNEiUAbwWDulAO
+ylQml3CV+5ntVKF7l2UCBeNGQzrFOQDOJQn291zCTEb4yJfW
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// File:       : 1000.real
+// SHA256 (DER): 6D:99:FB:26:5E:B1:C5:B3:74:47:65:FC:BC:64:8F:3C:D8:E1:BF:FA:FD:C4:C2:F9:9B:9D:47:CF:7F:F1:C2:4F
+// Subject     : C = US, O = Internet Security Research Group, CN = ISRG Root X1
+// Issuer      : O = Digital Signature Trust Co., CN = DST Root CA X3
+//
+let realChain01 = """
+-----BEGIN CERTIFICATE-----
+MIIFYDCCBEigAwIBAgIQQAF3ITfU6UK47naqPGQKtzANBgkqhkiG9w0BAQsFADA/
+MSQwIgYDVQQKExtEaWdpdGFsIFNpZ25hdHVyZSBUcnVzdCBDby4xFzAVBgNVBAMT
+DkRTVCBSb290IENBIFgzMB4XDTIxMDEyMDE5MTQwM1oXDTI0MDkzMDE4MTQwM1ow
+TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh
+cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwggIiMA0GCSqGSIb3DQEB
+AQUAA4ICDwAwggIKAoICAQCt6CRz9BQ385ueK1coHIe+3LffOJCMbjzmV6B493XC
+ov71am72AE8o295ohmxEk7axY/0UEmu/H9LqMZshftEzPLpI9d1537O4/xLxIZpL
+wYqGcWlKZmZsj348cL+tKSIG8+TA5oCu4kuPt5l+lAOf00eXfJlII1PoOK5PCm+D
+LtFJV4yAdLbaL9A4jXsDcCEbdfIwPPqPrt3aY6vrFk/CjhFLfs8L6P+1dy70sntK
+4EwSJQxwjQMpoOFTJOwT2e4ZvxCzSow/iaNhUd6shweU9GNx7C7ib1uYgeGJXDR5
+bHbvO5BieebbpJovJsXQEOEO3tkQjhb7t/eo98flAgeYjzYIlefiN5YNNnWe+w5y
+sR2bvAP5SQXYgd0FtCrWQemsAXaVCg/Y39W9Eh81LygXbNKYwagJZHduRze6zqxZ
+Xmidf3LWicUGQSk+WT7dJvUkyRGnWqNMQB9GoZm1pzpRboY7nn1ypxIFeFntPlF4
+FQsDj43QLwWyPntKHEtzBRL8xurgUBN8Q5N0s8p0544fAQjQMNRbcTa0B7rBMDBc
+SLeCO5imfWCKoqMpgsy6vYMEG6KDA0Gh1gXxG8K28Kh8hjtGqEgqiNx2mna/H2ql
+PRmP6zjzZN7IKw0KKP/32+IVQtQi0Cdd4Xn+GOdwiK1O5tmLOsbdJ1Fu/7xk9TND
+TwIDAQABo4IBRjCCAUIwDwYDVR0TAQH/BAUwAwEB/zAOBgNVHQ8BAf8EBAMCAQYw
+SwYIKwYBBQUHAQEEPzA9MDsGCCsGAQUFBzAChi9odHRwOi8vYXBwcy5pZGVudHJ1
+c3QuY29tL3Jvb3RzL2RzdHJvb3RjYXgzLnA3YzAfBgNVHSMEGDAWgBTEp7Gkeyxx
++tvhS5B1/8QVYIWJEDBUBgNVHSAETTBLMAgGBmeBDAECATA/BgsrBgEEAYLfEwEB
+ATAwMC4GCCsGAQUFBwIBFiJodHRwOi8vY3BzLnJvb3QteDEubGV0c2VuY3J5cHQu
+b3JnMDwGA1UdHwQ1MDMwMaAvoC2GK2h0dHA6Ly9jcmwuaWRlbnRydXN0LmNvbS9E
+U1RST09UQ0FYM0NSTC5jcmwwHQYDVR0OBBYEFHm0WeZ7tuXkAXOACIjIGlj26Ztu
+MA0GCSqGSIb3DQEBCwUAA4IBAQAKcwBslm7/DlLQrt2M51oGrS+o44+/yQoDFVDC
+5WxCu2+b9LRPwkSICHXM6webFGJueN7sJ7o5XPWioW5WlHAQU7G75K/QosMrAdSW
+9MUgNTP52GE24HGNtLi1qoJFlcDyqSMo59ahy2cI2qBDLKobkx/J3vWraV0T9VuG
+WCLKTVXkcGdtwlfFRjlBz4pYg1htmf5X6DYO8A4jqv2Il9DjXA6USbW1FzXSLr9O
+he8Y4IWS6wY7bCkjCWDcRQJMEhg76fsO3txE+FiYruq9RUWhiF1myv4Q6W+CyBFC
+Dfvp7OOGAN6dEOM4+qR9sdjoSYKEBpsr6GtPAQw4dy753ec5
+-----END CERTIFICATE-----
+""".data(using: .ascii)!
+
+// Generated with gen_fake_cms_signed_json.sh
+//
+let fakePayload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K")!
+let fakeSignature = Data(base64Encoded: "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")!
 
 class CryptoUtilityTests: XCTestCase {
     
@@ -30,7 +396,7 @@ class CryptoUtilityTests: XCTestCase {
         let hexBytes = signature.map { String(format: "%02hhx", $0) }
         
         // Then
-        XCTAssertEqual("\(hexBytes.joined())", "a1118b1288eb8b20075f7b5d65d6809ad95f571856e3b831a43c39094f509beb")
+		expect("\(hexBytes.joined())") == "a1118b1288eb8b20075f7b5d65d6809ad95f571856e3b831a43c39094f509beb"
     }
     
     let rootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURsVENDQW4yZ0F3SUJBZ0lVZmg1bXBLc25XdXJyVkZsK09mRkVHdHJFWHJBd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1dqRXJNQ2tHQTFVRUF3d2lVM1JoWVhRZ1pHVnlJRTVsWkdWeWJHRnVaR1Z1SUZKdmIzUWdRMEVnTFNCSApNekVlTUJ3R0ExVUVDZ3dWVTNSaFlYUWdaR1Z5SUU1bFpHVnliR0Z1WkdWdU1Rc3dDUVlEVlFRR0V3Sk9UREFlCkZ3MHlNVEEyTWprd09EUTJORGxhRncweU1UQTNNamt3T0RRMk5EbGFNRm94S3pBcEJnTlZCQU1NSWxOMFlXRjAKSUdSbGNpQk9aV1JsY214aGJtUmxiaUJTYjI5MElFTkJJQzBnUnpNeEhqQWNCZ05WQkFvTUZWTjBZV0YwSUdSbApjaUJPWldSbGNteGhibVJsYmpFTE1Ba0dBMVVFQmhNQ1Rrd3dnZ0VpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCCkR3QXdnZ0VLQW9JQkFRQzlRWlJiRVNhb3h1NVJmVVFLSzlyOEtSNnJsUDhYNS9vZUtxSDVsa2UwdDRXVWcvNlAKYmFQcjMxS0Z3QWs1Wm5xd2NMWGI4d0lrcHpLelFWdmVybTVHMDUrRkE5V2RKRENBd3h5Z3hLTDZ4Z2o5ZTlmNwoyUHdZTVJtdU5IalhSaEwxK2ZNZk4wU0dkSVhJWFZHYVl1NWdwd3RaNnQ5aGRzaTdyY1hwbUlpRmg4WlZQU3FYCkZoNUx5UDdJYld1MWJTZU9iWlhZUjRLR0ZRZWthaWxDZUVjMWg1L1VQeFFZUWZzTlhQRW1wTFRGOU9JK0dwZXkKbGdaSVZONm15bm91Lzhhb3lVeVUzQlA3c2Flak93MVpZVCtuTDhUWEFUdlMrL3NCR3Z0bHAzeEY1RWM2TkhyaAp1aWQ0SnBxYzFEMWxOMDE3eDVUQWxGVzE2blZ0L1c5bld4VUxBZ01CQUFHalV6QlJNQjBHQTFVZERnUVdCQlN6CjAxRVhUOHIwbFdNZGIzVlI0MWFhdElwZVdEQWZCZ05WSFNNRUdEQVdnQlN6MDFFWFQ4cjBsV01kYjNWUjQxYWEKdElwZVdEQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQzUxZzFuRVN6TgpkcVpyNmJPMm1PRm5oUERMempaaVRHMSsra0V1cEFlUHhubCsvanEyQ3hhaHZkWXhtYUd0ZEZkMVhEdm9TTFFrCmRKMk1qMVhzM2tnOUdBWk9JK3U5ZExtS0JpYWtTMTJrV1BybGlubzMxRS85c2tNdWRiZnhPRWxLK0tQcWNSR1gKaDIxV28yd0hBMkZrOVV4ckJkcUR0ZWNRMTZ5TG5WdS9CTVU0Q1o2bUNkRzcycHlBRHp6b2dLMHNQeE9qdll3agpwMzVHNDZaYWxhTHh0R0RyYWozU0R1bjFWc0NWTWdsTnNSSzlZWUtuZDNrMkdYSEVSZ1BsbnhqTVk3N3d5amlmCjNzUmYyOWpMYmV2TGl4TURaMnlCM01mWDMwemVjNUdoR2RaQUE1YTJsOElSemdXaXl1bTNWMTNlSXV6UFhXT2wKbE1UYWpoSkF4Q0JnCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K" )!
@@ -43,124 +409,466 @@ class CryptoUtilityTests: XCTestCase {
     
     let signaturePPS = Data(base64Encoded: "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")!
     
-    func testCMSSignature_padding_pkcs() {
-        
+    func testCMSSignature_padding_pkcs_validPayload() {
+
+		// Given
         let openssl = OpenSSL()
-        XCTAssertNotNil(openssl)
-        XCTAssertEqual(true, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".coronatester.n",
-                        requiredCommonNameSuffix: ".nl"))
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: wrongPayload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".coronatester.n",
-                        requiredCommonNameSuffix: ".nl"))
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester.n",
+			requiredCommonNameSuffix: ".nl")
+
+		// Then
+		expect(validation) == true
     }
+
+	func testCMSSignature_padding_pkcs_wrongPayload() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: wrongPayload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester.n",
+			requiredCommonNameSuffix: ".nl")
+
+		// Then
+		expect(validation) == false
+	}
     
-    func testCMSSignature_padding_pss() {
+    func testCMSSignature_padding_pss_validPayload() {
         
-        let openssl = OpenSSL()
-        XCTAssertNotNil(openssl)
-        
-        XCTAssertEqual(true, openssl.validatePKCS7Signature(
-                        signaturePPS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".coronatester.n",
-                        requiredCommonNameSuffix: ".nl"))
-        
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
-                        signaturePPS,
-                        contentData: wrongPayload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".coronatester.n",
-                        requiredCommonNameSuffix: ".nl"))
-        
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePPS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester.n",
+			requiredCommonNameSuffix: ".nl")
+
+		// Then
+		expect(validation) == true
     }
-    
-    func testCMSSignature_test_pinning() {
-        let openssl = OpenSSL()
-        XCTAssertNotNil(openssl)
+
+	func testCMSSignature_padding_pss_wrongPayload() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			wrongPayload,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester.n",
+			requiredCommonNameSuffix: ".nl")
+
+		// Then
+		expect(validation) == false
+	}
+
+	func testCMSSignature_test_pinning_wrongCommonName() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".xx.n",
+			requiredCommonNameSuffix: ".nl")
+
+		// Then
+		expect(validation) == false
+	}
+
+	func testCMSSignature_test_pinning_wrongSuffix() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester.n",
+			requiredCommonNameSuffix: ".xx"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+	func testCMSSignature_test_pinning_emptySuffix() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester.n",
+			requiredCommonNameSuffix: ""
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+	func testCMSSignature_test_pinning_emptyCommonName() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: "",
+			requiredCommonNameSuffix: ".xx"
+		)
+
+		// Then
+		expect(validation) == false
+	}
+
+    func testCMSSignature_test_pinning_all_empty() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
         
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".xx.n",
-                        requiredCommonNameSuffix: ".nl"))
-        
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".coronatester.n",
-                        requiredCommonNameSuffix: ".xx"))
-        
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: ".coronatester.n",
-                        requiredCommonNameSuffix: ""))
-        
-        XCTAssertEqual(false, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: "",
-                        requiredCommonNameSuffix: ".xx"))
-        
-        XCTAssertEqual(true, openssl.validatePKCS7Signature(
-                        signaturePKCS,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
-                        authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: "",
-                        requiredCommonNameSuffix: ""))
-        
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: "",
+			requiredCommonNameSuffix: ""
+		)
+
+		// Then
+		expect(validation) == true
     }
     
     func testCMSSignature_verydeep() {
+        
+        let rootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMrekNDQWVPZ0F3SUJBZ0lVYzBPUEpXenZ2cEg3ZlZHQVVTeWg1R0o3eGhNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0RURUxNQWtHQTFVRUF3d0NRMEV3SGhjTk1qRXdOakk1TVRreE5qVTBXaGNOTWpFd056STVNVGt4TmpVMApXakFOTVFzd0NRWURWUVFEREFKRFFUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCCkFQVktxLzRNbStKRXdOdExCUVpGU0dxaWdEZmwzeXJIRUpuZHY3UTNWYlZzdGNXL1A2OWxOdE9SdkxvS005eDYKWWxNUXIzWVgyWHdXek81cFVFMHdYLzVBV3dVam85a1Q2T0NaRzdXMXNDV2hJZDl1dWs5YkdvbUpEeFExdFl5bApqalgrUEpIV2l3U3ZOY043dWV4NGxOZlFhN01jVnN6d3c0UGpUZ0FEY2pUV3RPSGlNZytaWVQ3Z3E0NzBraUlXCnptQ1NDcDJRWWVIY2tEdjlMNks2OG0zTklGTFR0ckxOYmttZmowSTFwbG1ZT0VxNEpLOWR4RllWZXdYbXRpUVYKREJCRzJ5Ti9EK2dXN1VFbnZXTDljNGJ6VGlXQW9rcVFsem1QQ3EyUTdhR1JsL05keFJKNmhUTEVpUjVna1hwYQp0dWhuNWFaZlliK3VaZFlIRGNVNzBNTUNBd0VBQWFOVE1GRXdIUVlEVlIwT0JCWUVGQkRwMElzTWZtYnVYWm9mCklMRzUvU3hMeUlPYU1COEdBMVVkSXdRWU1CYUFGQkRwMElzTWZtYnVYWm9mSUxHNS9TeEx5SU9hTUE4R0ExVWQKRXdFQi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFNWXRzWU1zUjVtQ2l2Q01zbnBOWjMrbQo5cDJqU1R0OHhqdXlaZSttOEhxUHo4Y3JJZHpIOEhpZ0RwRnoyR2NEaEMvQjBpZ2dwemt1Tm5MRmo1bm9iUk85ClVjMk81aHFpWlgwdlhoalNZblVHcWMzQUw2MjRSeHgwaitBdGtBNlBWVUU4RktkQ2YyTTRlWUYwNUpNb3ZtbTkKY1VsWGU5L3BUVEJUTm4yYmZqQ3Q3enFkTmR4YjVzU3doT1FNZlVBZVNBdG5oLzRKS3ZSZENIRkE2UXVqSGV0agpPTTdoalM4bjN5SG9IakxwUHJuRExTVUtkZHhuQ1hJRG9vS0lwNmJRQnJOL0JXaHhDU3VaNlRDR0dMeVQvVCs0CnNVYjFjVmJOVEx0OGQrRHJkcVRBekRXQmdOQnIrODZUeS9jZEZRM0c3YWN0ZDliSWZ6ekJhcHdpaWhaRGlQbz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo==" )!
+        let authorityKeyIdentifier = Data([    0x04, 0x14, 0x8F, 0xF8, 0xFC, 0x3E, 0xA0, 0x42, 0x3D, 0x45, 0x2D, 0x17, 0x07, 0xA1, 0xC4, 0xEB, 0x54, 0xE5, 0xFD, 0x5B, 0x32, 0x76])
+        let payload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K" )!
+        
+        let signature = Data(base64Encoded: "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" )!
 
-    let rootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMrekNDQWVPZ0F3SUJBZ0lVYzBPUEpXenZ2cEg3ZlZHQVVTeWg1R0o3eGhNd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0RURUxNQWtHQTFVRUF3d0NRMEV3SGhjTk1qRXdOakk1TVRreE5qVTBXaGNOTWpFd056STVNVGt4TmpVMApXakFOTVFzd0NRWURWUVFEREFKRFFUQ0NBU0l3RFFZSktvWklodmNOQVFFQkJRQURnZ0VQQURDQ0FRb0NnZ0VCCkFQVktxLzRNbStKRXdOdExCUVpGU0dxaWdEZmwzeXJIRUpuZHY3UTNWYlZzdGNXL1A2OWxOdE9SdkxvS005eDYKWWxNUXIzWVgyWHdXek81cFVFMHdYLzVBV3dVam85a1Q2T0NaRzdXMXNDV2hJZDl1dWs5YkdvbUpEeFExdFl5bApqalgrUEpIV2l3U3ZOY043dWV4NGxOZlFhN01jVnN6d3c0UGpUZ0FEY2pUV3RPSGlNZytaWVQ3Z3E0NzBraUlXCnptQ1NDcDJRWWVIY2tEdjlMNks2OG0zTklGTFR0ckxOYmttZmowSTFwbG1ZT0VxNEpLOWR4RllWZXdYbXRpUVYKREJCRzJ5Ti9EK2dXN1VFbnZXTDljNGJ6VGlXQW9rcVFsem1QQ3EyUTdhR1JsL05keFJKNmhUTEVpUjVna1hwYQp0dWhuNWFaZlliK3VaZFlIRGNVNzBNTUNBd0VBQWFOVE1GRXdIUVlEVlIwT0JCWUVGQkRwMElzTWZtYnVYWm9mCklMRzUvU3hMeUlPYU1COEdBMVVkSXdRWU1CYUFGQkRwMElzTWZtYnVYWm9mSUxHNS9TeEx5SU9hTUE4R0ExVWQKRXdFQi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFNWXRzWU1zUjVtQ2l2Q01zbnBOWjMrbQo5cDJqU1R0OHhqdXlaZSttOEhxUHo4Y3JJZHpIOEhpZ0RwRnoyR2NEaEMvQjBpZ2dwemt1Tm5MRmo1bm9iUk85ClVjMk81aHFpWlgwdlhoalNZblVHcWMzQUw2MjRSeHgwaitBdGtBNlBWVUU4RktkQ2YyTTRlWUYwNUpNb3ZtbTkKY1VsWGU5L3BUVEJUTm4yYmZqQ3Q3enFkTmR4YjVzU3doT1FNZlVBZVNBdG5oLzRKS3ZSZENIRkE2UXVqSGV0agpPTTdoalM4bjN5SG9IakxwUHJuRExTVUtkZHhuQ1hJRG9vS0lwNmJRQnJOL0JXaHhDU3VaNlRDR0dMeVQvVCs0CnNVYjFjVmJOVEx0OGQrRHJkcVRBekRXQmdOQnIrODZUeS9jZEZRM0c3YWN0ZDliSWZ6ekJhcHdpaWhaRGlQbz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo==" )!
-    let authorityKeyIdentifier = Data([    0x04, 0x14, 0x8F, 0xF8, 0xFC, 0x3E, 0xA0, 0x42, 0x3D, 0x45, 0x2D, 0x17, 0x07, 0xA1, 0xC4, 0xEB, 0x54, 0xE5, 0xFD, 0x5B, 0x32, 0x76])
-    let payload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K" )!
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let validation = openssl.validatePKCS7Signature(
+			signature,
+			contentData: payload,
+			certificateData: rootCertificateData,
+			authorityKeyIdentifier: authorityKeyIdentifier,
+			requiredCommonNameContent: "leaf",
+			requiredCommonNameSuffix: "f"
+		)
+
+		// Then
+		expect(validation) == true
+    }
     
-    let signature = Data(base64Encoded: "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" )!
-    
+    func test_cms_fake_chain() {
+
+        let fakeChain = [ fakeChain02, fakeChain01 ]
+        let realChain = [
+            realCrossSigned, // Let's Encrypt has two roots; an older one by a third party and their own.
+            realChain01,
+            realChain02
+        ]
+        
         let openssl = OpenSSL()
         XCTAssertNotNil(openssl)
+        XCTAssertNotNil(SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: TrustConfiguration.rootISRGX1))
+
+        // the auth identifier just above the leaf that signed.
+        // fake and real are identical
+        //
+		let authorityKeyIdentifier = Data(
+			[0x04, 0x14, 0x14, 0x2E, 0xB3, 0x17, 0xB7, 0x58, 0x56, 0xCB, 0xAE, 0x50, 0x09, 0x40, 0xE6, 0x1F, 0xAF, 0x9D, 0x8B, 0x14, 0xC2, 0xC6]
+		)
+
+        // this is a test against the fully fake root and should succeed.
+        //
         XCTAssertEqual(true, openssl.validatePKCS7Signature(
-                        signature,
-                        contentData: payload,
-                        certificateData: rootCertificateData,
+                        fakeSignature,
+                        contentData: fakePayload,
+                        certificateData: fakeRoot,
                         authorityKeyIdentifier: authorityKeyIdentifier,
-                        requiredCommonNameContent: "leaf",
-                        requiredCommonNameSuffix: "f"))
+                        requiredCommonNameContent: "bananen",
+                        requiredCommonNameSuffix: "nl"))
+        
+        // Now test against our build in (real) root - and fail.
+        //
+        XCTAssertEqual(false, openssl.validatePKCS7Signature(
+                        fakeSignature,
+                        contentData: fakePayload,
+                        certificateData: TrustConfiguration.rootISRGX1,
+                        authorityKeyIdentifier: authorityKeyIdentifier,
+                        requiredCommonNameContent: "bananen",
+                        requiredCommonNameSuffix: "nl"))
+        
+        let fakeLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeLeaf)
+        XCTAssert(fakeLeafCert != nil)
+        
+        var fakeCertArray = [SecCertificate]()
+        for certPem in fakeChain {
+            let cert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: certPem)
+            XCTAssert(cert != nil)
+            fakeCertArray.append(cert!)
+        }
+        
+        let realLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realLeaf)
+        XCTAssert(fakeLeafCert != nil)
+        
+        var realCertArray = [SecCertificate]()
+        for certPem in realChain {
+            let cert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: certPem)
+            XCTAssert(cert != nil)
+            realCertArray.append(cert!)
+        }
+        
+        // Create a 'worst case' kitchen sink chain with as much in it as we can think off.
+        //
+        let realRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: realRoot)
+        let fakeRootCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: fakeRoot)
+        let allChainCerts = realCertArray + fakeCertArray + [ realRootCert, fakeRootCert]
+
+        // This should fail - as the root is not build in. It may however
+        // succeed if the user has somehow the fake root into the system trust
+        // chain -and- set it to 'trusted' (or was fooled/hacked into that).
+        //
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalRealTrust: SecTrust?
+            
+            // the first certificate is the one to check - the rest is to aid validation.
+            //
+            XCTAssert(noErr == SecTrustCreateWithCertificates([ realLeafCert ] + realCertArray as CFArray,
+                                                              policy,
+                                                              &optionalRealTrust))
+            XCTAssertNotNil(optionalRealTrust)
+            let realServerTrust = optionalRealTrust!
+            
+            // This should success - as we rely on the build in well known root.
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+                                                           policies: [policy],
+                                                           trustedCertificates: []))
+            
+            // This should succeed - as we explicitly rely on the root.
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+                                                           policies: [policy],
+                                                           trustedCertificates: [ realRoot ]))
+            
+            // This should fail - as we are giving it the wrong root.
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: [fakeRoot]))
+            
+        }
+        
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalFakeTrust: SecTrust?
+            XCTAssert(noErr == SecTrustCreateWithCertificates([ fakeLeafCert ] + fakeCertArray as CFArray,
+                                                              policy,
+                                                              &optionalFakeTrust))
+            XCTAssertNotNil(optionalFakeTrust)
+            let fakeServerTrust = optionalFakeTrust!
+            
+            // This should succeed - as we have the fake root as part of our trust
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                           policies: [policy],
+                                                           trustedCertificates: [fakeRoot ]))
+            
+        }
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalFakeTrust: SecTrust?
+            XCTAssert(noErr == SecTrustCreateWithCertificates([fakeLeafCert ] + fakeCertArray as CFArray,
+                                                              policy,
+                                                              &optionalFakeTrust))
+            XCTAssertNotNil(optionalFakeTrust)
+            let fakeServerTrust = optionalFakeTrust!
+            
+            // This should fail - as the root is not build in. It may however
+            // succeed if the user has somehow the fake root into the system trust
+            // chain -and- set it to 'trusted' (or was fooled/hacked into that).
+            //
+            // In theory this requires:
+            // 1) creating the DER version of the fake CA.
+            //     openssl x509 -in ca.pem -out fake.crt -outform DER
+            // 2) Loading this into the emulator via Safari
+            // 3) Hitting install in Settings->General->Profiles
+            // 4) Enabling it as trusted in Settings->About->Certificate Trust settings.
+            // but we've not gotten this to work reliably yet (just once).
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: []))
+            
+            // This should fail - as we are giving it the wrong root to trust.
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: [ realRoot ]))
+
+            // This should succeed - as we are giving it the right root to trust.
+            //
+            XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: [ fakeRoot ]))
+        }
+        
+        // Try again - but now with anything we can think of cert wise.
+        //
+        if true {
+            let policy = SecPolicyCreateSSL(true, "api-ct.bananenhalen.nl" as CFString)
+            var optionalFakeTrust: SecTrust?
+            XCTAssert(noErr == SecTrustCreateWithCertificates([ fakeLeafCert ] + allChainCerts as CFArray,
+                                                              policy,
+                                                              &optionalFakeTrust))
+            XCTAssertNotNil(optionalFakeTrust)
+            let fakeServerTrust = optionalFakeTrust!
+            
+            // This should fail - as the root is not build in. It may however
+            // succeed if the user has somehow the fake root into the system trust
+            // chain -and- set it to 'trusted' (or was fooled/hacked into that).
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: []))
+            
+            // This should fail - as we are giving it the wrong cert..
+            //
+            XCTAssertFalse(SecurityCheckerWorker().checkATS(serverTrust: fakeServerTrust,
+                                                            policies: [policy],
+                                                            trustedCertificates: [ realRoot ]))
+        }
+    }
+
+	func test_subjectAlternativeName_deprecated() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let san = openssl.getSubjectAlternativeName(realLeaf) as String?
+
+		// Then
+		expect(san) == "api-ct.bananenhalen.nl"
+	}
+
+	func test_subjectAlternativeNames_realLeaf() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let sans = openssl.getSubjectAlternativeDNSNames(realLeaf) as? [String]
+
+		// Then
+		expect(sans).to(haveCount(1))
+		expect(sans?.first) == "api-ct.bananenhalen.nl"
+	}
+
+    func test_subjectAlternativeNames_fakeLeaf() {
+
+		// Given
+		let openssl = OpenSSL()
+		expect(openssl).toNot(beNil())
+
+		// When
+		let sans = openssl.getSubjectAlternativeDNSNames(certWithStuff) as? [String]
+
+		// Then
+		expect(sans).to(haveCount(2))
+		// check that we skip the IP, otherName and email entry.
+		expect(sans).to(contain("test1"))
+		expect(sans).to(contain("test2"))
+		expect(sans).toNot(contain("1.2.3.4"))
+
+		// OpenSSL seems to keep the order the same.
+		expect(sans?.first) == "test1"
+		expect(sans?.last) == "test2"
+
+		expect(openssl.validateSubjectAlternativeDNSName("test1", forCertificateData: certWithStuff)) == true
+		expect(openssl.validateSubjectAlternativeDNSName("test2", forCertificateData: certWithStuff)) == true
+		// check that we do not see the non DNS entries. IP address is a bit of an edge case. Perhaps
+		// we should allow that to match.
+		expect(openssl.validateSubjectAlternativeDNSName("fo@bar", forCertificateData: certWithStuff)) == false
     }
     
     /// Test the hash
     func testSha256() {
         
         // Given
+        let data = "SomeString".data(using: .ascii)!
+        
+        // When
+        let sha = sut.sha256(data: data)
+        
+        // Then
+		expect(sha) == "SHA256 digest: 80ed7fe2957fa688284716753d339d019d490d4589ac4999ec8827ef3f84be29"
+    }
+
+    func testSha256withUTF8() {
+        
+        // Given a string that may get a BOM prefix.
         let data = "SomeString".data(using: .utf8)!
         
         // When
         let sha = sut.sha256(data: data)
         
         // Then
-        XCTAssertEqual(sha, "SHA256 digest: 80ed7fe2957fa688284716753d339d019d490d4589ac4999ec8827ef3f84be29")
+		expect(sha) == "SHA256 digest: 80ed7fe2957fa688284716753d339d019d490d4589ac4999ec8827ef3f84be29"
     }
 }

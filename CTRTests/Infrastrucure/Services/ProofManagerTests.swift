@@ -109,7 +109,7 @@ class ProofManagerTests: XCTestCase {
 					TestProvider(
 						identifier: "test_fetchTestProviders",
 						name: "test",
-						resultURL: URL(string: "https://coronacheck.nl"),
+						resultURLString: "https://coronacheck.nl",
 						publicKey: "key",
 						certificate: "certificate")
 				]

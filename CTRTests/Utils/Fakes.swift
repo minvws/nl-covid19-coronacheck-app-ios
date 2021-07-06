@@ -28,7 +28,13 @@ extension ForcedInformationConsent {
 extension TestProvider {
 
     static var fake: TestProvider {
-        TestProvider(identifier: "xxx", name: "Fake Test Provider", resultURL: nil, publicKey: "", certificate: "")
+        TestProvider(
+			identifier: "xxx",
+			name: "Fake Test Provider",
+			resultURLString: "",
+			publicKey: "",
+			certificate: ""
+		)
     }
 }
 
