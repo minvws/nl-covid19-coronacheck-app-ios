@@ -516,7 +516,7 @@ extension HolderCoordinator: MenuDelegate {
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
-			case .qrCodeMaken:
+			case .createCertificate:
 				let destination = ChooseQRCodeTypeViewController(
 					viewModel: ChooseQRCodeTypeViewModel(
 						coordinator: self
@@ -548,7 +548,8 @@ extension HolderCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .overview, title: L.holderMenuDashboard())
+			MenuItem(identifier: .overview, title: L.holderMenuDashboard()),
+			MenuItem(identifier: .createCertificate, title: L.holderMenuProof())
 		]
 	}
 	/// Get the items for the bottom menu
@@ -556,7 +557,6 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .qrCodeMaken, title: L.holderMenuProof()),
 			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
