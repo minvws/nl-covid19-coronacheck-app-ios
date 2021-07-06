@@ -53,8 +53,8 @@ void print_certificate(X509* cert) {
     fprintf(stderr,"      issuer: %s\n", issuer);
     fprintf(stderr,"      serial: %s\n", i2s_ASN1_INTEGER(NULL,X509_get_serialNumber(cert)));
 }
-void print_stack(STACK_OF(X509)* sk)
-{
+
+void print_stack(STACK_OF(X509)* sk) {
     unsigned len = sk_X509_num(sk);
     for(unsigned i=0; i<len; i++) {
         X509 *cert = sk_X509_value(sk, i);
@@ -62,12 +62,14 @@ void print_stack(STACK_OF(X509)* sk)
         print_certificate(cert);
     }
 }
+
 void print_octed_as_hex(const ASN1_OCTET_STRING * str) {
     for(int i = 0; i < str->length; i++) {
         fprintf(stderr,"%s%02x",i ? ":" : "", str->data[i]);
     }
     fprintf(stderr,"\n");
 }
+
 void print_pkey_as_hex(EVP_PKEY *pkey) {
 
     char pkr[64*1024] = {0};
@@ -413,8 +415,6 @@ errit:
     
     return result == YES;
 }
-
-
 
 - (BOOL)compareCerts:(NSData *)certificateData with:(NSData *)trustedCertificateData {
     BIO *certificateBlob = NULL;

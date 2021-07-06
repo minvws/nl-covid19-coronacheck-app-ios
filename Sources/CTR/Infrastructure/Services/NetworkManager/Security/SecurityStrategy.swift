@@ -238,22 +238,23 @@ class SecurityCheckerWorker: Logging {
 		}
 	} // checkATS()
 
-    func checkSSL(serverTrust: SecTrust,
-                  policies: [SecPolicy],
-                  trustedCertificates: [Data],
-                  hostname: String,
-                  trustedNames: [String]
-                  ) -> Bool {
-        let openssl = OpenSSL()
-        let hostnameLC = hostname.lowercased()
+	func checkSSL(
+		serverTrust: SecTrust,
+		policies: [SecPolicy],
+		trustedCertificates: [Data],
+		hostname: String,
+		trustedNames: [String]) -> Bool {
 
-        if false == checkATS(serverTrust: serverTrust,
-                             policies: policies,
-                             trustedCertificates: trustedCertificates) {
-            logVerbose("Bail on ATS")
-            return false
-        }
-        
+		guard checkATS(
+				serverTrust: serverTrust,
+				policies: policies,
+				trustedCertificates: trustedCertificates) else {
+			logError("Bail on ATS")
+			return false
+		}
+		
+		let openssl = OpenSSL()
+		let hostnameLC = hostname.lowercased()
         let certificateCount = SecTrustGetCertificateCount(serverTrust)
         
         var foundValidCertificate = false
@@ -264,30 +265,30 @@ class SecurityCheckerWorker: Logging {
             
             if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, index) {
                 let serverCert = Certificate(certificate: serverCertificate)
-                logDebug("Server set at \(index) is \(serverCert)")
+				logVerbose("Server set at \(index) is \(serverCert)")
                 
                 if let name = serverCert.commonName {
                     logVerbose("Hostname CN \(name)")
                     if name.lowercased() == hostnameLC {
                         foundValidFullyQualifiedDomainName = true
-                        logDebug("Host matched CN \(name)")
+						logVerbose("Host matched CN \(name)")
                     }
                     if !foundValidCommonNameEndsWithTrustedName {
                         for trustedName in trustedNames {
                             if name.lowercased().hasSuffix(trustedName.lowercased()) {
                                 foundValidCommonNameEndsWithTrustedName = true
-                                logDebug("Found a valid name \(name)")
+                                logVerbose("Found a valid name \(name)")
                             }
                         }
                     }
                 }
                 if openssl.validateSubjectAlternativeDNSName(hostnameLC, forCertificateData: serverCert.data) {
                     foundValidFullyQualifiedDomainName = true
-                    logDebug("Host matched SAN \(hostname)")
+					logVerbose("Host matched SAN \(hostname)")
                 }
                 for trustedCertificate in trustedCertificates {
                     if openssl.compare(serverCert.data, withTrustedCertificate: trustedCertificate) {
-                        logDebug("Found a match with a trusted Certificate")
+						logVerbose("Found a match with a trusted Certificate")
                         foundValidCertificate = true
                     }
                 }
