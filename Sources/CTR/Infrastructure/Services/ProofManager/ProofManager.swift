@@ -132,16 +132,16 @@ class ProofManager: ProofManaging, Logging {
 		code: String?,
 		provider: TestProvider,
 		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void) {
-		
+
 		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
 			onCompletion(.failure(ProofError.invalidUrl))
 			return
 		}
-		
+
 		networkManager.fetchTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
-			
+
 			switch response {
 				case let .success(wrapper):
 					self.logDebug("We got \(wrapper.0.status) wrapper.")

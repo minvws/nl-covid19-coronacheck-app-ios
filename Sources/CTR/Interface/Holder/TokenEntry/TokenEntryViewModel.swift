@@ -372,7 +372,9 @@ class TokenEntryViewModel {
 					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
 						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
 					} else if let networkError = error as? NetworkError, networkError == .serverNotReachable {
-						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
+						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
+							self?.fetchResult(requestToken, verificationCode: verificationCode)
+						})
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription
@@ -674,7 +676,9 @@ extension TokenEntryViewModel: Logging {
 
 extension Error {
 
-	fileprivate func toAlertContent(coordinator: HolderCoordinatorDelegate?) -> AlertContent {
+	fileprivate func toAlertContent(
+		coordinator: HolderCoordinatorDelegate?,
+		retryAction: ((UIAlertAction) -> Void)? = nil) -> AlertContent {
 
 		switch self as? NetworkError {
 			case .serverBusy?:
@@ -694,9 +698,9 @@ extension Error {
 					title: L.generalErrorNointernetTitle(),
 					subTitle: L.generalErrorNointernetText(),
 					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: { _ in },
-					okTitle: L.generalOk()
+					cancelTitle: L.generalClose(),
+					okAction: retryAction,
+					okTitle: L.internetRequiredButton()
 				)
 			default:
 				return AlertContent(
