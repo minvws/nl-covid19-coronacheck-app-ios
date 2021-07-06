@@ -19,6 +19,7 @@ class HolderDashboardView: ScrolledStackWithButtonView {
 	
 	func configurePrimaryButton(display: Bool) {
 		if display {
+			// Display button and background
 			bottomScrollViewConstraint?.isActive = false
 			
 			NSLayoutConstraint.activate([
@@ -30,7 +31,11 @@ class HolderDashboardView: ScrolledStackWithButtonView {
 			])
 			
 			setupPrimaryButton()
-		} else {
+		} else if primaryButton.superview != nil, bottomScrollViewConstraint?.isActive == false {
+			// Hide button
+			primaryButton.removeFromSuperview()
+			
+			// Hide button background
 			bottomScrollViewConstraint?.isActive = true
 			scrollViewToFooterConstraint?.isActive = false
 		}
