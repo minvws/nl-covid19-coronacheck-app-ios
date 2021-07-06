@@ -80,15 +80,11 @@ class MenuView: ScrolledStackView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Dimensions
-		static let lineheight: CGFloat = 1.0
-
 		// Margins
 		static let margin: CGFloat = 20.0
-		static let topMenuSpacing: CGFloat = 28.0
+		static let topMargin: CGFloat = 32.0
+		static let topMenuSpacing: CGFloat = 32.0
 		static let bottomMenuSpacing: CGFloat = 24.0
-		static let lineMarginTop: CGFloat = 27.0
-		static let lineMarginBottom: CGFloat = 18.0
 	}
 
 	/// The stackview for the content
@@ -115,14 +111,6 @@ class MenuView: ScrolledStackView {
 		return view
 	}()
 
-	let lineView: UIView = {
-
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.secondary.withAlphaComponent(0.2)
-		return view
-	}()
-
 	private let spacer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -140,6 +128,13 @@ class MenuView: ScrolledStackView {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.primary
+		
+		stackViewInset = UIEdgeInsets(
+			top: ViewTraits.topMargin,
+			left: ViewTraits.margin,
+			bottom: ViewTraits.margin,
+			right: ViewTraits.margin
+		)
 	}
 
 	/// Setup the hierarchy
@@ -147,7 +142,6 @@ class MenuView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		stackView.addArrangedSubview(topStackView)
-//		stackView.addArrangedSubview(lineView)
 		stackView.addArrangedSubview(bottomStackView)
 		stackView.addArrangedSubview(spacer)
 		addSubview(bottomLabel)
@@ -159,9 +153,6 @@ class MenuView: ScrolledStackView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-			// Lineview
-			lineView.heightAnchor.constraint(equalToConstant: 1),
-
 			// Spacer
 			spacer.heightAnchor.constraint(equalTo: bottomLabel.heightAnchor),
 
