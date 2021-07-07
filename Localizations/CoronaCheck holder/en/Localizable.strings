@@ -10,7 +10,7 @@
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
-"holder.recovery.nolist.action" = "To My overview";
+"holder.recovery.nolist.action" = "To My certificates";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery details";
 "holder.recovery.start.message" = "<p>Have you had coronavirus? Then you can make a recovery certificate of the positive test result from the GGD. Log in with DigiD to retrieve your test result.</p><p>Your recovery certificate will be valid %@ days after the positive test result.</p>";
@@ -34,7 +34,7 @@
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.networkwasbusy.text" = "Please try again later.";
-"general.networkwasbusy.button" = "To My overview";
+"general.networkwasbusy.button" = "To My certificates";
 "holder.dashboard.changeregion.button.nl" = "Change to NL";
 "general.add" = "Add";
 /* Link naar web accessibility pagina */
@@ -174,7 +174,7 @@
 "holder.launch.version" = "App version %@ (build %@)";
 
 /* MARK: - Holder Menu */
-"holder.menu.dashboard" = "My overview";
+"holder.menu.dashboard" = "My certificates";
 "holder.menu.settings" = "Settings";
 "holder.menu.faq" = "Frequently asked questions";
 "holder.menu.about" = "About this app";
@@ -219,13 +219,9 @@
 "holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><br /><p><b>1. Choose your certificate</b></p><p> You can create a vaccination certificate, a test certificate or a recovery certificate. </p> <br /> <p><b>2. Automatically retrieve data</b></p><p> The app directly retrieves the data of your vaccination, test result or recovery. </p> <br /> <p><b>3. QR codes are ready</b></p><p> The app generates a QR code for the Netherlands and one for other countries. </p>";
 
 /* MARK: - Holder Dashboard */
-"holder.dashboard.title" = "My overview";
+"holder.dashboard.title" = "My certificates";
 "holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "Travelling outside the Netherlands? Then use your international QR code. In <a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">this overview</a>, you'll find if the QR code is valid in the country you’re planning to visit.";
-"holder.dashboard.intro.emptystate" = "You can create a QR-code if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app\">affiliated test location</a>.";
-"holder.dashboard.create.title" = "Make QR code";
-"holder.dashboard.create.message" = "Turn your vaccination, negative test result or recovery into a QR code.";
-"holder.dashboard.create.action" = "Make QR code";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
@@ -241,20 +237,22 @@
 "holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
 "holder.dashboard.changeregion.title.eu" = "I'm travelling internationally";
 "holder.dashboard.changeregion.button.eu" = "Change to international";
-"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch QR code.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international QR code.";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international certificate.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
-"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible you've only had 1 injection. Add your second injection to get a valid Dutch certificate.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible you've only had 1 injection. Add your second vaccination to get a valid Dutch certificate.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of vaccination isn't accepted abroad.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch certificate was made.</p><p>It's possible your type of vaccination isn't accepted abroad.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international QR code was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Your test certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible the validity period in the Netherlands is shorter than the validity period in other countries. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "About your test certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch QR code was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Your test certificate isn't valid internationally. That's why only a Dutch certificate was made.</p><p>It's possible your type of test isn't accepted abroad. Get tested again.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "About your recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "Your recovery certificate is not valid in the Netherlands, because the type of test is not accepted.<br />You’ve only got an international QR-code.";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
-"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Your recovery certificate is not valid internationally. You’ve only got a Dutch QR-code. <br />The reason is that the type of test is not accepted. <br />An international recovery certificate can only be made with a PCR-test";
+"holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate. <br />The reason is that the type of test is not accepted. An international recovery certificate can only be made with a PCR-test.";
+"holder.dashboard.empty.title" = "Find your certificate here later";
+"holder.dashboard.empty.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.<br /></p><p><b>Travelling outside the Netherlands? </b><br />Check <a href=\"www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> before you leave. There you will find which certificate is valid in the country you’re planning to visit.</p>";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
@@ -338,10 +336,10 @@
 "holder.vaccination.element.subtitle" = "Name: %@<br />Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Look <a href=\"https://coronacheck.nl/en/guidepost\">here</a> for more information.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
-"holder.vaccination.nolist.action" = "To My Overview";
+"holder.vaccination.nolist.action" = "To My certificates";
 "holder.event.nolist.title" = "No test result available";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> for more information.</p><p>Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
-"holder.event.nolist.action" = "To My Overview";
+"holder.event.nolist.action" = "To My certificates";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
 "holder.vaccination.alert.cancel" = "No, go back";
@@ -396,14 +394,14 @@
 "holder.notest.action.title" = "Make an appointment";
 "holder.test.nolist.title" = "No test result available";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Look <a href=\"https://www.coronacheck.nl/en/guidepost\">here</a> for more information. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
-"holder.test.nolist.action" = "To My Overview";
+"holder.test.nolist.action" = "To My certificates";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "To My Overview";
+"holder.fetchevents.error.noresults.networkwasbusy.button" = "To My certificates";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
-"holder.fetchevents.error.noresults.networkerror.button" = "To My Overview";
+"holder.fetchevents.error.noresults.networkerror.button" = "To My certificates";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";

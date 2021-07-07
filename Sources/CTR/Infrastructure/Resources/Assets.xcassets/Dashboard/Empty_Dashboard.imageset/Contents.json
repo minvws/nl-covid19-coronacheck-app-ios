@@ -1,15 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "Header_Illustration_Maak QR.svg",
+      "filename" : "empty_dashboard.pdf",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }
