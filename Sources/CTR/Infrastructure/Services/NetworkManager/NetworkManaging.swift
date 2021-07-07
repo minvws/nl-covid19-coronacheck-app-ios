@@ -7,15 +7,8 @@
 
 import Foundation
 
-enum NetworkResponseHandleError: Error {
-	case cannotUnzip
-	case invalidSignature
-	case cannotDeserialize
-	case invalidPublicKeys
-	case unexpectedCondition
-}
-
 enum NetworkError: Error {
+
 	case invalidRequest
 	case requestTimedOut
 	case noInternetConnection
@@ -26,12 +19,37 @@ enum NetworkError: Error {
 	case encodingError
 	case redirection
 	case serverBusy
-}
+	case invalidSignature
+	case cannotDeserialize
 
-extension NetworkResponseHandleError {
-	
-	var asNetworkError: NetworkError {
-		return .invalidResponse
+	func toMappedErrorCode() -> String {
+
+		switch self {
+			case .invalidRequest:
+				return "160: invalidRequest"
+			case .requestTimedOut:
+				return "161 requestTimedOut"
+			case .noInternetConnection:
+				return "162 noInternetConnection"
+			case .invalidResponse:
+				return "163 invalidResponse"
+			case .responseCached:
+				return "164 responseCached"
+			case .serverError:
+				return "165 serverError"
+			case .resourceNotFound:
+				return "166 resourceNotFound"
+			case .encodingError:
+				return "167 encodingError"
+			case .redirection:
+				return "168 redirection"
+			case .serverBusy:
+				return "169 serverBusy"
+			case .invalidSignature:
+				return "170 invalidSignature"
+			case .cannotDeserialize:
+				return "171 cannotDeserialize"
+		}
 	}
 }
 
