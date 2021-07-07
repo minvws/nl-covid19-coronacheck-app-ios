@@ -23,8 +23,6 @@ class HolderDashboardViewController: BaseViewController {
 
 		case emptyState(title: String, message: String)
 
-		case changeRegion(buttonTitle: String, currentLocationTitle: String)
-
 		case domesticQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case europeanUnionQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -89,7 +87,13 @@ class HolderDashboardViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.configurePrimaryButton(display: $0) }
+		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.setupPrimaryButton(display: $0) }
+		viewModel.$regionMode.binding = { [weak self] in self?.sceneView.setupRegionButton(
+			buttonTitle: $0?.buttonTitle,
+			currentLocationTitle: $0?.currentLocationTitle
+		) {
+			self?.viewModel.didTapChangeRegion()
+		}}
 
 		// Receive an array of cards,
 		viewModel.$cards.binding = { [sceneView, weak viewModel] cards in
@@ -127,16 +131,7 @@ class HolderDashboardViewController: BaseViewController {
 							viewModel?.openUrl(url)
 						}
 						return emptyDashboardView
-
-					case .changeRegion(let buttonTitle, let currentLocationTitle):
-						let changeRegionCard = ChangeRegionView()
-						changeRegionCard.changeRegionButtonTitle = buttonTitle
-						changeRegionCard.currentLocationTitle = currentLocationTitle
-						changeRegionCard.changeRegionButtonTappedCommand = {
-							viewModel?.didTapChangeRegion()
-						}
-						return changeRegionCard
-
+						
 					case .domesticQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator),
 						 .europeanUnionQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator):
 
