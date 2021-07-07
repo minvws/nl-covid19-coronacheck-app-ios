@@ -21,7 +21,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
 	}
 

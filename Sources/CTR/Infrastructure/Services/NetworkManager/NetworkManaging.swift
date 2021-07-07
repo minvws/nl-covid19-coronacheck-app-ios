@@ -74,8 +74,7 @@ protocol NetworkManaging {
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
-	///   - validator: the signature validator
-	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
+	init(configuration: NetworkConfiguration)
 
 	/// Get the access tokens
 	/// - Parameters:
