@@ -68,9 +68,9 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
                 style: .plain,
                 target: self,
                 action: #selector(showSidePanel))
+            button.title = L.generalMenuOpen()
+            button.accessibilityIdentifier = "OpenMenuButton"
             navItem.leftBarButtonItem = button
-            navItem.leftBarButtonItem?.accessibilityIdentifier = "OpenMenuButton"
-            navItem.leftBarButtonItem?.accessibilityLabel = L.generalMenuOpen()
         }
     }
 
