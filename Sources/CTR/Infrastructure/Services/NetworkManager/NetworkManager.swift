@@ -441,42 +441,6 @@ class NetworkManager: NetworkManaging, Logging {
 			}
 		}
 	}
-
-	/// Decode a signed response into Data
-	/// - Parameters:
-	///   - request: the network request
-	///   - completion: completion handler
-	private func decodedSignedData(
-		request: Result<URLRequest, NetworkError>,
-		ignore400: Bool = false,
-		completion: @escaping (Result<Data, NetworkError>) -> Void) {
-		data(request: request, ignore400: ignore400) { result in
-
-			/// Decode to SignedResult
-			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
-			switch signedResult {
-				case let .success(signedResponse):
-
-					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
-					   let signatureData = Data(base64Encoded: signedResponse.signature) {
-
-						// Validate signature (on the base64 payload)
-						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
-							if valid {
-								completion(.success(decodedPayloadData))
-							} else {
-								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
-							}
-						}
-					}
-				case let .failure(networkError):
-					DispatchQueue.main.async {
-						completion(.failure(networkError))
-					}
-			}
-		}
-	}
 	
 	// MARK: - Utilities
 	
