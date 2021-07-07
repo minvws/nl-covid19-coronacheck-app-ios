@@ -455,8 +455,16 @@ class NetworkManager: NetworkManaging, Logging {
 		error: Error?,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
-		if error != nil {
-			completion(.failure(.invalidResponse))
+		if let error = error {
+
+			switch URLError.Code(rawValue: (error as NSError).code) {
+				case .notConnectedToInternet, .networkConnectionLost:
+					completion(.failure(.noInternetConnection))
+				case .timedOut:
+					completion(.failure(.requestTimedOut))
+				default:
+					completion(.failure(.invalidResponse))
+			}
 			return
 		}
 		

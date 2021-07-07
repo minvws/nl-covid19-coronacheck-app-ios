@@ -17,7 +17,8 @@ enum NetworkResponseHandleError: Error {
 
 enum NetworkError: Error {
 	case invalidRequest
-	case serverNotReachable
+	case requestTimedOut
+	case noInternetConnection
 	case invalidResponse
 	case responseCached
 	case serverError

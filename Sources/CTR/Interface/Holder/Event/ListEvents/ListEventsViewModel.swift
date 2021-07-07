@@ -644,7 +644,12 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 				switch result {
 					case .success:
-						self.coordinator?.listEventsScreenDidFinish(.continue(value: nil, eventMode: self.eventMode))
+						self.coordinator?.listEventsScreenDidFinish(
+							.continue(
+								value: nil,
+								eventMode: self.eventMode
+							)
+						)
 
 					case .failure(.didNotEvaluate):
 						self.viewState = self.cannotCreateEventsState()
@@ -653,6 +658,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					case .failure(.failedToSave), .failure(.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
+
+					case .failure(.requestTimedOut), .failure(.noInternetConnection):
+						self.showNoInternet(remoteEvents: remoteEvents)
+						self.shouldPrimaryButtonBeEnabled = true
 
 					case .failure(.failedToPrepareIssue):
 						self.showTechnicalError("116 decodePrepareIssueMessage")
@@ -704,6 +713,25 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
 			},
 			okTitle: L.generalNetworkwasbusyButton()
+		)
+	}
+
+	private func showNoInternet(remoteEvents: [RemoteEvent]) {
+
+		// this is a retry-able situation
+		alert = ListEventsViewController.AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					if !success {
+						self?.showEventError(remoteEvents: remoteEvents)
+					}
+				}
+			},
+			okTitle: L.holderVaccinationErrorAgain()
 		)
 	}
 
