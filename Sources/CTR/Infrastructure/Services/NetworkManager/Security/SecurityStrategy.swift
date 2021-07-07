@@ -227,23 +227,24 @@ class SecurityCheckerProvider: SecurityChecker {
     /// Check the SSL Connection
     override func checkSSL() {
         
-        guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-              let serverTrust = challenge.protectionSpace.serverTrust else {
-            logDebug("No policies/security strategy")
-            completionHandler(.performDefaultHandling, nil)
-            return
-        }
-        let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
+		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+			  let serverTrust = challenge.protectionSpace.serverTrust else {
+			logDebug("SecurityCheckerProvider: No policies/security strategy")
+			completionHandler(.performDefaultHandling, nil)
+			return
+		}
+		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
 
-        if SecurityCheckerWorker().checkSSL(serverTrust: serverTrust,
-                                                policies: policies,
-                                                trustedCertificates: trustedCertificates,
-                                                hostname: challenge.protectionSpace.host,
-                                                trustedNames: []) {
-            completionHandler(.useCredential, URLCredential(trust: serverTrust))
-            return
-        }
-        completionHandler(.cancelAuthenticationChallenge, nil)
-        return
-    }
+		if SecurityCheckerWorker().checkSSL(
+			serverTrust: serverTrust,
+			policies: policies,
+			trustedCertificates: trustedCertificates,
+			hostname: challenge.protectionSpace.host,
+			trustedNames: trustedNames) {
+			completionHandler(.useCredential, URLCredential(trust: serverTrust))
+			return
+		}
+		completionHandler(.cancelAuthenticationChallenge, nil)
+		return
+	}
 }

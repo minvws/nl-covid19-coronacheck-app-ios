@@ -42,7 +42,7 @@ class SecurityCheckerWorker: Logging {
 			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
 				trustList.append(cert)
             } else {
-                logError("checkATS: Trust cert converson failed: \(certificateAsPemData)")
+                logError("checkATS: Trust cert conversion failed")
             }
         }
         if trustList.isEmpty {

@@ -353,7 +353,10 @@ class NetworkManager: NetworkManaging, Logging {
 					   let signatureData = Data(base64Encoded: signedResponse.signature) {
 
 						// Validate signature (on the base64 payload)
-						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
+						if let checker = self.sessionDelegate?.checker {
+							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+
+//						self.validator.validate(data: decodedPayloadData, signature: signatureData) { valid in
 							if valid {
 								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
@@ -370,6 +373,7 @@ class NetworkManager: NetworkManaging, Logging {
 							}
 						}
 					}
+					} // if let checker
 				case let .failure(networkError):
 					DispatchQueue.main.async {
 						completion(.failure(networkError))
