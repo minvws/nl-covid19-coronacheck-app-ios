@@ -124,9 +124,6 @@ class VaccinationEventView: BaseView {
 
 		super.setupAccessibility()
 
-		disclaimerButton.isAccessibilityElement = true
-		titleLabel.isAccessibilityElement = false
-		messageLabel.isAccessibilityElement = false
 		accessibilityElements = [disclaimerButton]
 	}
 
