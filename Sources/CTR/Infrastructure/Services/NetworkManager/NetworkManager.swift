@@ -386,7 +386,7 @@ class NetworkManager: NetworkManaging, Logging {
 		request: Result<URLRequest, NetworkError>,
 		ignore400: Bool = false,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {
-		
+
 		decodeSignedJSONData(request: request, ignore400: ignore400) { (result: Result<(Object, Data), NetworkError>) in
 			switch result {
 				case .success((let object, _)):
@@ -500,11 +500,7 @@ class NetworkManager: NetworkManaging, Logging {
 			self.logVerbose("Response Object: \(object)")
 			return .success(object)
 		} catch {
-//			if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-				self.logDebug("Raw: \(String(decoding: data, as: UTF8.self))")
-//				self.logDebug("Raw JSON: \(json)")
-//			}
-			self.logError("Error Deserializing \(Object.self): \(error)")
+			self.logError("Error Deserializing \(Object.self):\nError: \(error)\nRaw data: \(String(decoding: data, as: UTF8.self))")
 			return .failure(.cannotDeserialize)
 		}
 	}
@@ -572,7 +568,6 @@ class NetworkManager: NetworkManaging, Logging {
 	
 	private lazy var jsonDecoder: JSONDecoder = {
 		let decoder = JSONDecoder()
-//		decoder.dateDecodingStrategy = .formatted(dateFormatter)
 		decoder.dateDecodingStrategy = .iso8601
 		decoder.source = .api
 		return decoder

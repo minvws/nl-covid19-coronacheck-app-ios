@@ -120,19 +120,3 @@ protocol NetworkManaging {
 		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
 }
-
-struct SignedResponse: Codable, Equatable {
-	
-	/// The payload
-	let payload: String
-	
-	/// The signature
-	let signature: String
-	
-	// Key mapping
-	enum CodingKeys: String, CodingKey {
-		
-		case payload
-		case signature
-	}
-}
