@@ -30,7 +30,8 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		case credentials119
 
 		case serverBusy
-		case serverNotReachable
+		case requestTimedOut
+		case noInternetConnection
 	}
 
 	private let networkManager: NetworkManaging
@@ -60,8 +61,10 @@ class GreenCardLoader: GreenCardLoading, Logging {
 					switch networkError {
 						case .serverBusy:
 							completion(.failure(.serverBusy))
-						case .serverNotReachable:
-							completion(.failure(.serverNotReachable))
+						case .noInternetConnection:
+							completion(.failure(.noInternetConnection))
+						case .requestTimedOut:
+							completion(.failure(.requestTimedOut))
 						default:
 							completion(.failure(.preparingIssue117))
 					}
@@ -138,8 +141,10 @@ class GreenCardLoader: GreenCardLoading, Logging {
 					switch networkError {
 						case .serverBusy:
 							onCompletion(.failure(.serverBusy))
-						case .serverNotReachable:
-							onCompletion(.failure(.serverNotReachable))
+						case .noInternetConnection:
+							onCompletion(.failure(.noInternetConnection))
+						case .requestTimedOut:
+							onCompletion(.failure(.requestTimedOut))
 						default:
 							onCompletion(.failure(.credentials119))
 					}

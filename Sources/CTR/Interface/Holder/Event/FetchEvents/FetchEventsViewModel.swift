@@ -90,7 +90,7 @@ final class FetchEventsViewModel: Logging {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
-		let networkOffline: Bool = networkErrors.contains { $0 == .serverNotReachable }
+		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
 
 		guard !networkOffline else {
 			self.alert = noInternetAlertContent()
@@ -171,7 +171,7 @@ final class FetchEventsViewModel: Logging {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
-		let networkOffline: Bool = networkErrors.contains { $0 == .serverNotReachable }
+		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
 		
 		guard !networkOffline else {
 			self.alert = noInternetAlertContent()

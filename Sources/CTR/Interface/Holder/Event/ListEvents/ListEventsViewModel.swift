@@ -659,7 +659,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 
-					case .failure(.serverNotReachable):
+					case .failure(.requestTimedOut), .failure(.noInternetConnection):
 						self.showNoInternet(remoteEvents: remoteEvents)
 						self.shouldPrimaryButtonBeEnabled = true
 

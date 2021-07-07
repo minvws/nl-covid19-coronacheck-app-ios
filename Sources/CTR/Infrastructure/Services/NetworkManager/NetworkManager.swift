@@ -491,7 +491,9 @@ class NetworkManager: NetworkManaging, Logging {
 
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet, .networkConnectionLost:
-					completion(.failure(.serverNotReachable))
+					completion(.failure(.noInternetConnection))
+				case .timedOut:
+					completion(.failure(.requestTimedOut))
 				default:
 					completion(.failure(.invalidResponse))
 			}

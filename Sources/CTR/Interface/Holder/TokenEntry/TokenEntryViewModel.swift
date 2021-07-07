@@ -371,7 +371,7 @@ class TokenEntryViewModel {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
 						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
-					} else if let networkError = error as? NetworkError, networkError == .serverNotReachable {
+					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
 						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
 							self?.fetchResult(requestToken, verificationCode: verificationCode)
 						})
@@ -693,7 +693,7 @@ extension Error {
 					okTitle: L.generalNetworkwasbusyButton()
 				)
 
-			case .serverNotReachable?:
+			case .requestTimedOut?, .noInternetConnection:
 				return AlertContent(
 					title: L.generalErrorNointernetTitle(),
 					subTitle: L.generalErrorNointernetText(),
