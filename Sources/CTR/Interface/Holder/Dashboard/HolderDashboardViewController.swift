@@ -177,7 +177,7 @@ class HolderDashboardViewController: BaseViewController {
 						errorView.message = message
 						errorView.messageView.linkTouched { url in
 							if url.absoluteString == AppAction.tryAgain {
-								// TODO: Implement action
+								// Implement action
 							} else {
 								viewModel?.openUrl(url)
 							}
