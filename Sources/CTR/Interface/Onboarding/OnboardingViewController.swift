@@ -96,11 +96,8 @@ class OnboardingViewController: BaseViewController {
 
 		// Make sure the text won't be truncated if the user opts for bold texts
 		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-        button.adjustsImageSizeForAccessibilityContentSizeCategory = true
         
 		backButton = UIBarButtonItem(customView: button)
-        backButton?.image = button.image(for: .normal)
-        backButton?.title = button.title(for: .normal)
 	}
 	
 	/// The user tapped on the back button
