@@ -94,6 +94,9 @@ class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
 	
 	@Bindable private(set) var hasAddCertificateMode: Bool = false
+	
+	@Bindable private(set) var regionMode: (buttonTitle: String, currentLocationTitle: String)? = (buttonTitle: L.holderDashboardChangeregionButtonEu(),
+																								  currentLocationTitle: L.holderDashboardChangeregionTitleNl())
 
 	// MARK: - Private types
 
@@ -144,6 +147,18 @@ class HolderDashboardViewModel: Logging {
 			)
 			
 			hasAddCertificateMode = state.myQRCards.isEmpty
+			
+			// If there are any cards to show, show the region picker:
+			if !state.myQRCards.isEmpty {
+				switch state.qrCodeValidityRegion {
+					case .domestic:
+						regionMode = (buttonTitle: L.holderDashboardChangeregionButtonEu(), currentLocationTitle: L.holderDashboardChangeregionTitleNl())
+					case .europeanUnion:
+						regionMode = (buttonTitle: L.holderDashboardChangeregionButtonNl(), currentLocationTitle: L.holderDashboardChangeregionTitleEu())
+				}
+			} else {
+				regionMode = nil
+			}
 		}
 	}
 
@@ -335,20 +350,6 @@ class HolderDashboardViewModel: Logging {
 					default: return []
 				}
 			}
-
-		// If there are any cards to show, show the region picker:
-		if !state.myQRCards.isEmpty {
-			switch state.qrCodeValidityRegion {
-				case .domestic:
-					cards += [
-						.changeRegion(buttonTitle: L.holderDashboardChangeregionButtonEu(), currentLocationTitle: L.holderDashboardChangeregionTitleNl())
-					]
-				case .europeanUnion:
-					cards += [
-						.changeRegion(buttonTitle: L.holderDashboardChangeregionButtonNl(), currentLocationTitle: L.holderDashboardChangeregionTitleEu())
-					]
-			}
-		}
 
 		return cards
 	}
