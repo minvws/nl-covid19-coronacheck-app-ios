@@ -23,12 +23,10 @@ class ChangeRegionView: BaseView {
 		return label
 	}()
 
-	private let changeRegionButton: UIButton = {
-		let button = UIButton()
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setTitle("Ik ben een banaan", for: .normal)
+	private let changeRegionButton: Button = {
+        let button = Button(title: "Placeholder", style: .tertiary)
 		button.titleLabel?.font = Theme.fonts.bodyBold
-		button.setTitleColor(Theme.colors.iosBlue, for: .normal)
+        button.titleLabel?.textAlignment = .center
 		return button
 	}()
 
