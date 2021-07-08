@@ -21,7 +21,7 @@ class ProofManagerTests: XCTestCase {
 		sut = ProofManager()
 		cryptoSpy = CryptoManagerSpy()
 		sut.cryptoManager = cryptoSpy
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		sut.networkManager = networkSpy
 	}
 

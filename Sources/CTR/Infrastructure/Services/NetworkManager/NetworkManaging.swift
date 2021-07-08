@@ -56,8 +56,7 @@ protocol NetworkManaging {
 	/// Initializer
 	/// - Parameters:
 	///   - configuration: the network configuration
-	///   - validator: the signature validator
-	init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol)
+	init(configuration: NetworkConfiguration)
 
 	/// Get the access tokens
 	/// - Parameters:
@@ -120,20 +119,4 @@ protocol NetworkManaging {
 		provider: EventFlow.EventProvider,
 		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
-}
-
-struct SignedResponse: Codable, Equatable {
-	
-	/// The payload
-	let payload: String
-	
-	/// The signature
-	let signature: String
-	
-	// Key mapping
-	enum CodingKeys: String, CodingKey {
-		
-		case payload
-		case signature
-	}
 }

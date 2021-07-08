@@ -27,7 +27,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		cryptoSpy = CryptoManagerSpy()
 		remoteConfigSpy = RemoteConfigManagingSpy()
 

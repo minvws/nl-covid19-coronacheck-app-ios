@@ -384,21 +384,6 @@ class CryptoUtilityTests: XCTestCase {
         sut = CryptoUtility(signatureValidator: SignatureValidator())
     }
     
-    /// Test the signature 
-    func testSignature() {
-        
-        // Given
-        let data = "SomeData".data(using: .utf8)!
-        let key = "SomeKey".data(using: .utf8)!
-        
-        // When
-        let signature = sut.signature(forData: data, key: key)
-        let hexBytes = signature.map { String(format: "%02hhx", $0) }
-        
-        // Then
-		expect("\(hexBytes.joined())") == "a1118b1288eb8b20075f7b5d65d6809ad95f571856e3b831a43c39094f509beb"
-    }
-    
     let rootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURsVENDQW4yZ0F3SUJBZ0lVZmg1bXBLc25XdXJyVkZsK09mRkVHdHJFWHJBd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1dqRXJNQ2tHQTFVRUF3d2lVM1JoWVhRZ1pHVnlJRTVsWkdWeWJHRnVaR1Z1SUZKdmIzUWdRMEVnTFNCSApNekVlTUJ3R0ExVUVDZ3dWVTNSaFlYUWdaR1Z5SUU1bFpHVnliR0Z1WkdWdU1Rc3dDUVlEVlFRR0V3Sk9UREFlCkZ3MHlNVEEyTWprd09EUTJORGxhRncweU1UQTNNamt3T0RRMk5EbGFNRm94S3pBcEJnTlZCQU1NSWxOMFlXRjAKSUdSbGNpQk9aV1JsY214aGJtUmxiaUJTYjI5MElFTkJJQzBnUnpNeEhqQWNCZ05WQkFvTUZWTjBZV0YwSUdSbApjaUJPWldSbGNteGhibVJsYmpFTE1Ba0dBMVVFQmhNQ1Rrd3dnZ0VpTUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCCkR3QXdnZ0VLQW9JQkFRQzlRWlJiRVNhb3h1NVJmVVFLSzlyOEtSNnJsUDhYNS9vZUtxSDVsa2UwdDRXVWcvNlAKYmFQcjMxS0Z3QWs1Wm5xd2NMWGI4d0lrcHpLelFWdmVybTVHMDUrRkE5V2RKRENBd3h5Z3hLTDZ4Z2o5ZTlmNwoyUHdZTVJtdU5IalhSaEwxK2ZNZk4wU0dkSVhJWFZHYVl1NWdwd3RaNnQ5aGRzaTdyY1hwbUlpRmg4WlZQU3FYCkZoNUx5UDdJYld1MWJTZU9iWlhZUjRLR0ZRZWthaWxDZUVjMWg1L1VQeFFZUWZzTlhQRW1wTFRGOU9JK0dwZXkKbGdaSVZONm15bm91Lzhhb3lVeVUzQlA3c2Flak93MVpZVCtuTDhUWEFUdlMrL3NCR3Z0bHAzeEY1RWM2TkhyaAp1aWQ0SnBxYzFEMWxOMDE3eDVUQWxGVzE2blZ0L1c5bld4VUxBZ01CQUFHalV6QlJNQjBHQTFVZERnUVdCQlN6CjAxRVhUOHIwbFdNZGIzVlI0MWFhdElwZVdEQWZCZ05WSFNNRUdEQVdnQlN6MDFFWFQ4cjBsV01kYjNWUjQxYWEKdElwZVdEQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQzUxZzFuRVN6TgpkcVpyNmJPMm1PRm5oUERMempaaVRHMSsra0V1cEFlUHhubCsvanEyQ3hhaHZkWXhtYUd0ZEZkMVhEdm9TTFFrCmRKMk1qMVhzM2tnOUdBWk9JK3U5ZExtS0JpYWtTMTJrV1BybGlubzMxRS85c2tNdWRiZnhPRWxLK0tQcWNSR1gKaDIxV28yd0hBMkZrOVV4ckJkcUR0ZWNRMTZ5TG5WdS9CTVU0Q1o2bUNkRzcycHlBRHp6b2dLMHNQeE9qdll3agpwMzVHNDZaYWxhTHh0R0RyYWozU0R1bjFWc0NWTWdsTnNSSzlZWUtuZDNrMkdYSEVSZ1BsbnhqTVk3N3d5amlmCjNzUmYyOWpMYmV2TGl4TURaMnlCM01mWDMwemVjNUdoR2RaQUE1YTJsOElSemdXaXl1bTNWMTNlSXV6UFhXT2wKbE1UYWpoSkF4Q0JnCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K" )!
     let authorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0xF2, 0x88, 0x35, 0x9B, 0xD9, 0x4D, 0xF4, 0xF5, 0x92, 0x29, 0x7D, 0x59, 0xFE, 0x15, 0xF2, 0xAB, 0xF4, 0xD2, 0x56, 0xFB ])
     let payload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K" )!
@@ -845,30 +830,5 @@ class CryptoUtilityTests: XCTestCase {
 		// check that we do not see the non DNS entries. IP address is a bit of an edge case. Perhaps
 		// we should allow that to match.
 		expect(openssl.validateSubjectAlternativeDNSName("fo@bar", forCertificateData: certWithStuff)) == false
-    }
-    
-    /// Test the hash
-    func testSha256() {
-        
-        // Given
-        let data = "SomeString".data(using: .ascii)!
-        
-        // When
-        let sha = sut.sha256(data: data)
-        
-        // Then
-		expect(sha) == "SHA256 digest: 80ed7fe2957fa688284716753d339d019d490d4589ac4999ec8827ef3f84be29"
-    }
-
-    func testSha256withUTF8() {
-        
-        // Given a string that may get a BOM prefix.
-        let data = "SomeString".data(using: .utf8)!
-        
-        // When
-        let sha = sut.sha256(data: data)
-        
-        // Then
-		expect(sha) == "SHA256 digest: 80ed7fe2957fa688284716753d339d019d490d4589ac4999ec8827ef3f84be29"
     }
 }
