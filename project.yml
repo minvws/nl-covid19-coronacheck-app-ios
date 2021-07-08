@@ -97,6 +97,7 @@ targetTemplates:
       - package: Lottie
       - package: MBProgressHUD
       - package: Reachability
+        product: Reachability
       - package: RSwiftLibrary
         product: Rswift
       # Frameworks:
