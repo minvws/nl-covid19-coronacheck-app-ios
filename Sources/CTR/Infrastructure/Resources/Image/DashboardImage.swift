@@ -30,4 +30,6 @@ extension UIImage {
 	static var myQR: UIImage? { UIImage(named: "MyQR") }
 	
 	static var emptyDashboard: UIImage? { UIImage(named: "Empty_Dashboard") }
+	
+	static var errorDashboard: UIImage? { UIImage(named: "Error_Dashboard") }
 }
