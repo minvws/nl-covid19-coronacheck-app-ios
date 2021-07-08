@@ -1,8 +1,6 @@
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "verifier.scan.torch.enable" = "Turn the flashlight on.";
 "verifier.scan.torch.disable" = "Turn the flashlight off.";
-"verifier.result.denied.region.title" = "This is an international QR code";
-"verifier.result.denied.region.message" = "This is not a valid certificate in the Netherlands. Ask the visitor to show a Dutch QR code.";
 "verifier.result.identity.label" = "Characteristic %@ is %@";
 "verifier.instructions.access.image" = "Person is holding a phone with a green screen and a black check mark.";
 "verifier.instructions.denied.image" = "Person is holding a phone with a red screen and a black cross.";

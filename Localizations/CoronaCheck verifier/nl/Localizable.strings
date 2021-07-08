@@ -1,8 +1,6 @@
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
-"verifier.result.denied.region.title" = "Dit is een internationale QR-code";
-"verifier.result.denied.region.message" = "Dit is geen geldig bewijs in Nederland. Vraag de bezoeker een Nederlandse QR-code te laten zien.";
 "verifier.result.identity.label" = "Kenmerk %@ is %@";
 "verifier.instructions.access.image" = "Persoon houdt een telefoon vast met een groen scherm en een zwart vinkje.";
 "verifier.instructions.denied.image" = "Persoon houdt een telefoon vast met een rood scherm en een zwart kruis.";
