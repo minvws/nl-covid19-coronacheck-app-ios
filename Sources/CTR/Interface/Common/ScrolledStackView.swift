@@ -32,6 +32,9 @@ class ScrolledStackView: BaseView {
 	private var bottomStackViewConstraint: NSLayoutConstraint?
 	/// Height scroll view constraint
 	private var heightScrollViewConstraint: NSLayoutConstraint?
+	
+	/// Vertical stack view inset
+	private var verticalStackViewInset: CGFloat { stackViewInset.top + stackViewInset.bottom }
 
 	var stackViewInset = UIEdgeInsets(
 		top: ViewTraits.topMargin,
@@ -80,7 +83,7 @@ class ScrolledStackView: BaseView {
 		super.safeAreaInsetsDidChange()
 		
 		// Update height for safe area
-		heightScrollViewConstraint?.constant = -stackViewInset.top - stackViewInset.bottom - safeAreaInsets.top - safeAreaInsets.bottom
+		heightScrollViewConstraint?.constant = -verticalStackViewInset - safeAreaInsets.top - safeAreaInsets.bottom
 	}
 
 	/// Setup the constraints
@@ -109,7 +112,7 @@ class ScrolledStackView: BaseView {
 			contentScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -stackViewInset.bottom),
 			contentScrollView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
 			{
-				let constraint = contentScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+				let constraint = contentScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: -verticalStackViewInset)
 				constraint.priority = .defaultLow
 				heightScrollViewConstraint = constraint
 				return constraint
