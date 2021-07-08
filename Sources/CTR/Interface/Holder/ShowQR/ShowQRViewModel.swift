@@ -65,7 +65,6 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	///   - configuration: the configuration
-	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,

@@ -42,8 +42,7 @@ class VerifierResultViewModelTests: XCTestCase {
 					specimen: "0"
 				),
 				errorMessage: nil
-			),
-			maxValidity: 48
+			)
 		)
 	}
 	

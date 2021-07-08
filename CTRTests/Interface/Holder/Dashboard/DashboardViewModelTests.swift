@@ -35,7 +35,6 @@
 //				cryptoManager: cryptoManagerSpy,
 //				proofManager: proofManagerSpy,
 //				configuration: configSpy,
-//				maxValidity: 48,
 //				qrCodeValidityRegion: .netherlands
 //			)
 //		}
@@ -77,7 +76,6 @@
 //				cryptoManager: cryptoManagerSpy,
 //				proofManager: proofManagerSpy,
 //				configuration: configSpy,
-//				maxValidity: 48,
 //				qrCodeValidityRegion: .netherlands
 //			)
 //

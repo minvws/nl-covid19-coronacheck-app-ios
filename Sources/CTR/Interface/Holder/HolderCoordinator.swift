@@ -75,8 +75,7 @@ class HolderCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 
@@ -85,8 +84,7 @@ class HolderCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
