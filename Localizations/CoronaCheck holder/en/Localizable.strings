@@ -252,7 +252,7 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "About your recovery certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Your recovery certificate is not valid internationally. You’ve only got a Dutch certificate. <br />The reason is that the type of test is not accepted. An international recovery certificate can only be made with a PCR-test.";
 "holder.dashboard.empty.title" = "Find your certificate here later";
-"holder.dashboard.empty.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.<br /></p><p><b>Travelling outside the Netherlands? </b><br />Check <a href=\"www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> before you leave. There you will find which certificate is valid in the country you’re planning to visit.</p>";
+"holder.dashboard.empty.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.<br /></p><p><b>Travelling outside the Netherlands? </b><br />Check <a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> before you leave. There you will find which certificate is valid in the country you’re planning to visit.</p>";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
