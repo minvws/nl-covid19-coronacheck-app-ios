@@ -93,6 +93,12 @@
 "verifier.result.denied.message" = "De bezoeker heeft geen geldig coronabewijs. Lees mogelijke oorzaken.";
 "verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
+
+/* MARK: - Verifier Result Alert */
+"verifier.result.alert.unknown.title" = "Dit is geen bewijs voor CoronaCheck";
+"verifier.result.alert.unknown.message" = "Je hebt een onbekende QR-code gescand. Vraag de bezoeker een bewijs in de CoronaCheck-app te laten zien. Of een QR-code op papier.";
+"verifier.result.alert.dcc.title" = "Scan een Nederlandse QR-code";
+"verifier.result.alert.dcc.message" = "Je hebt een internationale QR-code gescand. Dat is geen geldig bewijs in Nederland. Vraag de bezoeker om een Nederlands bewijs en scan de QR-code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Over de controle";
 /* MARK: - Verifier Denied Instructions */

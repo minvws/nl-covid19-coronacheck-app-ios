@@ -6,8 +6,7 @@
 */
 
 import Foundation
-
-typealias CryptoResult = (attributes: CryptoAttributes?, errorMessage: String?)
+import Clcore
 
 struct NonceEnvelope: Codable {
 	
@@ -19,38 +18,6 @@ struct PrepareIssueEnvelope: Codable {
 
 	let prepareIssueMessage: String
 	let stoken: String
-}
-
-struct CryptoAttributes: Codable {
-	
-	let birthDay: String?
-	let birthMonth: String?
-	let credentialVersion: String?
-	let domesticDcc: String?
-	let firstNameInitial: String?
-	let lastNameInitial: String?
-	let specimen: String?
-	
-	enum CodingKeys: String, CodingKey {
-		
-		case birthDay
-		case birthMonth
-		case credentialVersion
-		case domesticDcc = "isNLDCC"
-		case firstNameInitial
-		case lastNameInitial
-		case specimen = "isSpecimen"
-	}
-	
-	var isDomesticDcc: Bool {
-		
-		return domesticDcc == "1"
-	}
-	
-	var isSpecimen: Bool {
-		
-		return specimen == "1"
-	}
 }
 
 struct IssuerDomesticPublicKey: Codable {
@@ -109,10 +76,6 @@ protocol CryptoManaging: AnyObject {
 	/// - Parameter ism: the issuer commit message (signed testproof)
 	/// - Returns: Credential data if success, error if not
 	func createCredential(_ ism: Data) -> Result<Data, CryptoError>
-	
-	/// Read the crypto credential
-	/// - Returns: the  the crypto attributes
-	func readCredential() -> CryptoAttributes?
 
 	/// Store the credential in the vault
 	/// - Parameter credential: the credential
@@ -131,7 +94,7 @@ protocol CryptoManaging: AnyObject {
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
 	/// - Returns: Attributes if the QR is valid or error string if not
-	func verifyQRMessage(_ message: String) -> CryptoResult
+	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult?
 
 	// MARK: Migration
 

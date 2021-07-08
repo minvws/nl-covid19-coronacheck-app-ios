@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Clcore
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
@@ -23,8 +24,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToScan()
 
 	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ scanResult: CryptoResult)
+	/// - Parameter attributes: the scanned result
+	func navigateToScanResult(_ scanResult: MobilecoreVerificationResult)
 
 	/// Display content
 	/// - Parameters:
@@ -116,8 +117,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 	
 	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ cryptoResults: CryptoResult) {
+	/// - Parameter attributes: the scanned result
+	func navigateToScanResult(_ cryptoResults: MobilecoreVerificationResult) {
 		
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(

@@ -93,6 +93,12 @@
 "verifier.result.denied.message" = "The visitor doesn't have a valid coronavirus pass. See possible causes.";
 "verifier.result.denied.link" = "See possible causes.";
 "verifier.result.next" = "Scan next";
+
+/* MARK: - Verifier Result Alert */
+"verifier.result.alert.unknown.title" = "This is no certificate for CoronaCheck";
+"verifier.result.alert.unknown.message" = "You have scanned an unknown QR code. Ask the visitor to show either a certificate in the CoronaCheck app or a QR code on paper.";
+"verifier.result.alert.dcc.title" = "Scan a Dutch QR code";
+"verifier.result.alert.dcc.message" = "You have scanned an international QR code. This is no valid certificate in the Netherlands. Ask the visitor for a Dutch certificate and scan the QR code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "About the check";
 /* MARK: - Verifier Denied Instructions */

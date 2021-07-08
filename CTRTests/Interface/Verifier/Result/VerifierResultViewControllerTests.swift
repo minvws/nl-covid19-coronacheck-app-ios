@@ -10,6 +10,7 @@ import XCTest
 import SnapshotTesting
 import Nimble
 import Rswift
+import Clcore
 
 class VerifierResultViewControllerTests: XCTestCase {
 
@@ -27,10 +28,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoResults: CryptoResult(
-				attributes: nil,
-				errorMessage: nil
-			),
+			cryptoResults: MobilecoreVerificationResult(),
 			maxValidity: 48
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
@@ -45,18 +43,11 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDemo() throws {
 
 		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "0",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: "1"
-			),
-			errorMessage: nil
-		)
+		let details = MobilecoreVerificationDetails()
+		details.isSpecimen = "1"
+		let result = MobilecoreVerificationResult()
+		result.details = details
+		viewModel.cryptoResults = result
 		loadView()
 
 		// When
@@ -74,10 +65,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 	func testDeniedInvalidQR() throws {
 
 		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: nil,
-			errorMessage: "Invalid QR"
-		)
+		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_FAILED_ERROR)
+		viewModel.cryptoResults = result
 		loadView()
 
 		// When
@@ -91,51 +81,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Snapshot
 		sut.assertImage()
 	}
-	
-	func testDeniedDomesticDcc() throws {
-		
-		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "1",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: nil
-			),
-			errorMessage: "Invalid QR"
-		)
-		loadView()
-
-		// When
-		viewModel.checkAttributes()
-
-		// Then
-		expect(self.sut.sceneView.title) == L.verifierResultDeniedRegionTitle()
-		expect(self.sut.sceneView.message) == L.verifierResultDeniedRegionMessage()
-		expect(self.sut.sceneView.imageView.image) == UIImage.denied
-
-		// Snapshot
-		sut.assertImage()
-	}
 
 	func testVerified() throws {
 
 		// Given
-		viewModel.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "0",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: "0"
-			),
-			errorMessage: nil
-		)
+		let details = MobilecoreVerificationDetails()
+		let result = MobilecoreVerificationResult()
+		result.details = details
+		viewModel.cryptoResults = result
 		loadView()
 
 		// When
