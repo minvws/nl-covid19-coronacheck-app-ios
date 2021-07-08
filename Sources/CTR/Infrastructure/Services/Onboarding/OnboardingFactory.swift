@@ -54,6 +54,9 @@ protocol OnboardingFactoryProtocol {
 
 	/// Get the consent Items
 	func getConsentItems() -> [String]
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool
 }
 
 struct HolderOnboardingFactory: OnboardingFactoryProtocol {
@@ -123,6 +126,11 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			L.holderConsentItem1(),
 			L.holderConsentItem2()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return false
 	}
 }
 
@@ -194,5 +202,10 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			L.verifierConsentItem2(),
 			L.verifierConsentItem3()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return true
 	}
 }
