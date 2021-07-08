@@ -7,8 +7,6 @@
 
 import XCTest
 @testable import CTR
-import Nimble
-import SnapshotTesting
 
 class ConsentViewControllerTests: XCTestCase {
 
@@ -43,6 +41,7 @@ class ConsentViewControllerTests: XCTestCase {
 	func loadView() {
 
 		_ = sut.view
+
 	}
 
 	// MARK: Test
@@ -56,11 +55,10 @@ class ConsentViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		expect(self.sut.sceneView.title) == L.holderConsentTitle()
-		expect(self.sut.sceneView.message) == L.holderConsentMessage()
-		expect(self.sut.sceneView.itemStackView.arrangedSubviews).to(haveCount(2))
-
-		sut.assertImage()
+		XCTAssertEqual(sut.sceneView.title, L.holderConsentTitle(), "Title should match")
+		XCTAssertEqual(sut.sceneView.message, L.holderConsentMessage(), "Message should match")
+		XCTAssertEqual(sut.sceneView.consent, L.holderConsentButton(), "Consent should match")
+		XCTAssertEqual(sut.sceneView.itemStackView.arrangedSubviews.count, 2, "There should be 2 items")
 	}
 
 	/// Test the user tapped on the link
@@ -73,7 +71,37 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.linkTapped()
 
 		// Then
-		expect(self.coordinatorSpy.invokedShowPrivacyPage) == true
+		XCTAssertTrue(coordinatorSpy.invokedShowPrivacyPage, "Method should be called")
+	}
+
+	/// Test the user tapped on the consent button
+	func testConsentGivenTrue() {
+
+		// Given
+		loadView()
+		let button = ConsentButton()
+		button.isSelected = true
+
+		// When
+		sut.consentValueChanged(button)
+
+		// Then
+		XCTAssertTrue(sut.viewModel.isContinueButtonEnabled, "Button should be enabled")
+	}
+
+	/// Test the user tapped on the consent button
+	func testConsentGivenFalse() {
+
+		// Given
+		loadView()
+		let button = ConsentButton()
+		button.isSelected = false
+
+		// When
+		sut.consentValueChanged(button)
+
+		// Then
+		XCTAssertFalse(sut.viewModel.isContinueButtonEnabled, "Button should not be enabled")
 	}
 
 	/// Test the user tapped on the enabled primary button
@@ -87,7 +115,7 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		expect(self.coordinatorSpy.invokedConsentGiven) == true
+		XCTAssertTrue(coordinatorSpy.invokedConsentGiven, "Method should be called")
 	}
 
 	/// Test the user tapped on the enabled primary button
@@ -101,6 +129,6 @@ class ConsentViewControllerTests: XCTestCase {
 		sut.sceneView.primaryButton.sendActions(for: .touchUpInside)
 
 		// Then
-		expect(self.coordinatorSpy.invokedConsentGiven) == false
+		XCTAssertFalse(coordinatorSpy.invokedConsentGiven, "Method should not be called")
 	}
 }
