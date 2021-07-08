@@ -17,11 +17,14 @@ final class OnboardingConsentViewModel {
 
 	// MARK: - Bindable variables
 
+	@Bindable private(set) var isContinueButtonEnabled: Bool
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
 	@Bindable private(set) var underlinedText: String?
+	@Bindable private(set) var consentText: String?
 	@Bindable private(set) var summary: [String]
 	@Bindable private(set) var shouldHideBackButton: Bool
+	@Bindable private(set) var shouldHideConsentButton: Bool
 
 	/// Initializer
 	/// - Parameters:
@@ -35,7 +38,23 @@ final class OnboardingConsentViewModel {
 		self.message = factory.getConsentMessage()
 		self.underlinedText = factory.getConsentLink()
 		self.summary = factory.getConsentItems()
+		self.consentText = factory.getConsentButtonTitle()
 		self.shouldHideBackButton = shouldHideBackButton
+
+		if factory.useConsentButton() {
+			self.isContinueButtonEnabled = false
+			self.shouldHideConsentButton = false
+		} else {
+			self.isContinueButtonEnabled = true
+			self.shouldHideConsentButton = true
+		}
+	}
+
+	/// The user tapped on the consent button
+	/// - Parameter given: True if consent is given
+	func consentGiven(_ given: Bool) {
+
+		isContinueButtonEnabled = given
 	}
 
 	/// The user tapped on the privacy link
