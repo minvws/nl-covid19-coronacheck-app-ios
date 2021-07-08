@@ -19,7 +19,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		sut = RemoteConfigManager()
 		sut.reset()
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		sut.networkManager = networkSpy
 		super.setUp()
 	}

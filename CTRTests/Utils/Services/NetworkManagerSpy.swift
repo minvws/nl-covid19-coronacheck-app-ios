@@ -10,7 +10,7 @@ import XCTest
 
 class NetworkSpy: NetworkManaging {
 
-	required init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol) {}
+	required init(configuration: NetworkConfiguration) {}
 
 	var invokedNetworkConfigurationGetter = false
 	var invokedNetworkConfigurationGetterCount = 0
