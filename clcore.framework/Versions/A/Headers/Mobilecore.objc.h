@@ -16,6 +16,7 @@
 @class MobilecoreCreateCredentialResultValue;
 @class MobilecorePublicKeysConfig;
 @class MobilecoreResult;
+@class MobilecoreVerificationDetails;
 @class MobilecoreVerificationResult;
 
 @interface MobilecoreAnnotatedDomesticPk : NSObject <goSeqRefInterface> {
@@ -91,22 +92,33 @@
 @end
 
 /**
- * VerificationResult very much mimics the domestic verifier attributes, with only string type values,
+ * VerificationDetails very much mimics the domestic verifier attributes, with only string type values,
  to minimize app-side changes. In the future, both should return properly typed values.
  */
-@interface MobilecoreVerificationResult : NSObject <goSeqRefInterface> {
+@interface MobilecoreVerificationDetails : NSObject <goSeqRefInterface> {
 }
 @property(strong, readonly) _Nonnull id _ref;
 
 - (nonnull instancetype)initWithRef:(_Nonnull id)ref;
 - (nonnull instancetype)init;
 @property (nonatomic) NSString* _Nonnull credentialVersion;
-@property (nonatomic) NSString* _Nonnull isSpecimen;
 @property (nonatomic) NSString* _Nonnull firstNameInitial;
 @property (nonatomic) NSString* _Nonnull lastNameInitial;
 @property (nonatomic) NSString* _Nonnull birthDay;
 @property (nonatomic) NSString* _Nonnull birthMonth;
+@property (nonatomic) NSString* _Nonnull isSpecimen;
 @property (nonatomic) NSString* _Nonnull isNLDCC;
+@end
+
+@interface MobilecoreVerificationResult : NSObject <goSeqRefInterface> {
+}
+@property(strong, readonly) _Nonnull id _ref;
+
+- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
+- (nonnull instancetype)init;
+@property (nonatomic) long status;
+@property (nonatomic) MobilecoreVerificationDetails* _Nullable details;
+@property (nonatomic) NSString* _Nonnull error;
 @end
 
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDISEASE_TARGETED_COVID_19;
@@ -116,6 +128,10 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreTEST_RESULT_NOT_DETECTED;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreV1_VALIDITY_HOURS_STR;
+FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_ERROR;
+FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_IS_NL_DCC;
+FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX;
+FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_SUCCESS;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
@@ -155,7 +171,7 @@ FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadDomesticCredential(N
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreReadEuropeanCredential(NSData* _Nullable proofPrefixed);
 
-FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded);
+FOUNDATION_EXPORT MobilecoreVerificationResult* _Nullable MobilecoreVerify(NSData* _Nullable proofQREncoded);
 
 FOUNDATION_EXPORT MobilecoreResult* _Nullable MobilecoreWrappedErrorResult(NSError* _Nullable err, NSString* _Nullable prefix);
 

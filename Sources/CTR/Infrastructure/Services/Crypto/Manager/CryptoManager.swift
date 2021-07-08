@@ -138,10 +138,12 @@ class CryptoManager: CryptoManaging, Logging {
 			return (attributes: nil, errorMessage: "could not verify QR")
 		}
 		
-		guard result.error.isEmpty, let value = result.value else {
-			self.logError("Error Proof: \(result.error)")
-			return (attributes: nil, errorMessage: result.error)
-		}
+//		guard result.error.isEmpty, let value = result.value else {
+//			self.logError("Error Proof: \(result.error)")
+//			return (attributes: nil, errorMessage: result.error)
+//		}
+		
+		result.error
 		
 		do {
 			let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
