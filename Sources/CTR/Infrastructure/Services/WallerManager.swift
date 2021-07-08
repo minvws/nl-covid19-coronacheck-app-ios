@@ -246,8 +246,8 @@ class WalletManager: WalletManaging, Logging {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 
-				if let greenCrards = wallet.greenCards {
-					for case let greenCard as GreenCard in greenCrards.allObjects {
+				if let greenCards = wallet.greenCards {
+					for case let greenCard as GreenCard in greenCards.allObjects {
 
 						context.delete(greenCard)
 					}
