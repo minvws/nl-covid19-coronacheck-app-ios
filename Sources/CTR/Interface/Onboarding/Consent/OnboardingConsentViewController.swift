@@ -46,8 +46,12 @@ final class OnboardingConsentViewController: BaseViewController {
 			self?.setupLink()
 		}
 
+		viewModel.$isContinueButtonEnabled.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+
+		viewModel.$consentText.binding = { [weak self] in self?.sceneView.consent = $0 }
+		self.sceneView.consentButton.valueChanged(self, action: #selector(consentValueChanged))
 
 		viewModel.$summary.binding = { [weak self] in
 
@@ -57,6 +61,7 @@ final class OnboardingConsentViewController: BaseViewController {
 			}
 		}
 		viewModel.$shouldHideBackButton.binding = { [weak self] in self?.navigationItem.hidesBackButton = $0 }
+		viewModel.$shouldHideConsentButton.binding = { [weak self] in self?.sceneView.consentButton.isHidden = $0 }
 	}
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -71,6 +76,12 @@ final class OnboardingConsentViewController: BaseViewController {
 		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
 		sceneView.messageLabel.addGestureRecognizer(tapGesture)
 		sceneView.messageLabel.isUserInteractionEnabled = true
+	}
+
+	/// User tapped on the consent button
+	@objc func consentValueChanged(_ sender: ConsentButton) {
+
+		viewModel.consentGiven(sender.isSelected)
 	}
 
 	/// User tapped on the link

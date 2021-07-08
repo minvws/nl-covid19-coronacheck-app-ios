@@ -49,8 +49,14 @@ protocol OnboardingFactoryProtocol {
 	/// Get the Consent underlined message
 	func getConsentLink() -> String
 
+	/// Get the Consent Button Title
+	func getConsentButtonTitle() -> String
+
 	/// Get the consent Items
 	func getConsentItems() -> [String]
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool
 }
 
 struct HolderOnboardingFactory: OnboardingFactoryProtocol {
@@ -107,6 +113,12 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 		return L.holderConsentMessageUnderlined()
 	}
 
+	/// Get the Consent Button Title
+	func getConsentButtonTitle() -> String {
+
+		return L.holderConsentButton()
+	}
+
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
@@ -114,6 +126,11 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			L.holderConsentItem1(),
 			L.holderConsentItem2()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return false
 	}
 }
 
@@ -171,6 +188,12 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 		return L.verifierConsentMessageUnderlined()
 	}
 
+	/// Get the Consent Button Title
+	func getConsentButtonTitle() -> String {
+
+		return L.verifierConsentButton()
+	}
+
 	/// Get the consent Items
 	func getConsentItems() -> [String] {
 
@@ -179,5 +202,10 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			L.verifierConsentItem2(),
 			L.verifierConsentItem3()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return true
 	}
 }
