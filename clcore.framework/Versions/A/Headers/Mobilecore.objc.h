@@ -107,7 +107,6 @@
 @property (nonatomic) NSString* _Nonnull birthDay;
 @property (nonatomic) NSString* _Nonnull birthMonth;
 @property (nonatomic) NSString* _Nonnull isSpecimen;
-@property (nonatomic) NSString* _Nonnull isNLDCC;
 @end
 
 @interface MobilecoreVerificationResult : NSObject <goSeqRefInterface> {
