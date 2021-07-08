@@ -70,7 +70,7 @@ protocol NetworkManaging {
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void)
+	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void)
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler

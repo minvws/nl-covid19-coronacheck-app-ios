@@ -20,28 +20,6 @@ struct PrepareIssueEnvelope: Codable {
 	let stoken: String
 }
 
-struct IssuerDomesticPublicKey: Codable {
-	
-	let identifier: String
-	let publicKey: String
-	
-	enum CodingKeys: String, CodingKey {
-		
-		case identifier = "id"
-		case publicKey = "public_key"
-	}
-}
-
-struct IssuerPublicKeys: Codable {
-	
-	let clKeys: [IssuerDomesticPublicKey]
-	
-	enum CodingKeys: String, CodingKey {
-		
-		case clKeys = "cl_keys"
-	}
-}
-
 protocol CryptoManaging: AnyObject {
 	
 	init()

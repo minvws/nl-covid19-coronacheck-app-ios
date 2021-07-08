@@ -29,9 +29,8 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys() {
 
 		// Given
-		let publicKeys = IssuerPublicKeys(clKeys: [])
 		let data = Data()
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success((publicKeys, data)), ())
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(data), ())
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
@@ -71,9 +70,8 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys_withInvalidKeysError() {
 
 		// Given
-		let publicKeys = IssuerPublicKeys(clKeys: [])
 		let data = Data()
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success((publicKeys, data)), ())
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(data), ())
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
