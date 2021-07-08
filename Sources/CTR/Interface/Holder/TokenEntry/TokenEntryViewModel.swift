@@ -375,9 +375,6 @@ class TokenEntryViewModel {
 						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
 							self?.fetchResult(requestToken, verificationCode: verificationCode)
 						})
-					} else if let networkError = error as? NetworkError {
-						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
-						self.fieldErrorMessage = L.generalErrorTitle() + "\n" + L.generalErrorTechnicalCustom(networkError.toMappedErrorCode())
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription
@@ -705,18 +702,10 @@ extension Error {
 					okAction: retryAction,
 					okTitle: L.internetRequiredButton()
 				)
-
 			default:
-				let subTitle: String
-				if let error = self as? NetworkError {
-					subTitle = L.generalErrorTechnicalCustom(error.toMappedErrorCode())
-				} else {
-					subTitle = L.generalErrorTechnicalText()
-				}
-
 				return AlertContent(
 					title: L.generalErrorTitle(),
-					subTitle: subTitle,
+					subTitle: L.generalErrorTechnicalText(),
 					cancelAction: nil,
 					cancelTitle: nil,
 					okAction: { _ in },

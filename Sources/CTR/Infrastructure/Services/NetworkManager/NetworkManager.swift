@@ -128,18 +128,18 @@ class NetworkManager: Logging {
 							// Validate signature (on the base64 payload)
 							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
 								if valid {
-									let decodedResult: Result<Object, NetworkError> = self.decodeJson(data: decodedPayloadData)
+									let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 									DispatchQueue.main.async {
 										switch (decodedResult, decodedPayloadData) {
 											case (.success(let object), let decodedPayloadData):
 												completion(.success((object, decodedPayloadData)))
 											case (.failure(let responseError), _):
-												completion(.failure(responseError))
+												completion(.failure(responseError.asNetworkError))
 										}
 									}
 								} else {
 									self.logError("We got an invalid signature!")
-									completion(.failure(NetworkError.invalidSignature))
+									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 								}
 							}
 						}
@@ -195,18 +195,18 @@ class NetworkManager: Logging {
 							// Validate signature (on the base64 payload)
 							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
 								if valid {
-									let decodedResult: Result<Object, NetworkError> = self.decodeJson(data: decodedPayloadData)
+									let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
 									DispatchQueue.main.async {
 										switch decodedResult {
 											case let .success(object):
 												completion(.success((object, signedResponse)))
 											case let .failure(responseError):
-												completion(.failure(responseError))
+												completion(.failure(responseError.asNetworkError))
 										}
 									}
 								} else {
 									self.logError("We got an invalid signature!")
-									completion(.failure(NetworkError.invalidSignature))
+									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 								}
 							}
 						}
@@ -279,7 +279,7 @@ class NetworkManager: Logging {
 	}
 	
 	/// Utility function to decode JSON
-	private func decodeJson<Object: Decodable>(data: Data) -> Result<Object, NetworkError> {
+	private func decodeJson<Object: Decodable>(data: Data) -> Result<Object, NetworkResponseHandleError> {
 		do {
 			let object = try self.jsonDecoder.decode(Object.self, from: data)
 			self.logVerbose("Response Object: \(object)")
@@ -296,6 +296,10 @@ class NetworkManager: Logging {
 		switch result {
 			case let .success(result):
 				return decodeJson(data: result.1)
+					.mapError {
+						$0.asNetworkError
+						
+					}
 			case let .failure(error):
 				return .failure(error)
 		}
