@@ -105,13 +105,7 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.fieldErrorMessage = message
 		}
 		
-		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
-			if $0 {
-				self?.showError(L.generalErrorTitle(), message: L.generalErrorTechnicalText())
-			}
-		}
-
-		viewModel.$serverTooBusyAlert.binding = { [weak self] in
+		viewModel.$networkErrorAlert.binding = { [weak self] in
 			self?.showAlert($0)
 		}
 
