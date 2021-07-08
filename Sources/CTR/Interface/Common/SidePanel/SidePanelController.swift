@@ -234,6 +234,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 		let sidePanelView = UIView()
         sidePanelView.translatesAutoresizingMaskIntoConstraints = false
+		sidePanelView.isHidden = true // Hide for rotation
 		view.addSubview(sidePanelView)
 
         initializeSwappableSidePanelConstraints(sidePanelView: sidePanelView, superView: view)
