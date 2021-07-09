@@ -18,8 +18,8 @@ extension HolderDashboardViewModel {
 
 	// Future: it's turned out that this can be converted to a struct with a `.region` enum instead
 	enum MyQRCard {
-		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], evaluateEnabledState: (Date) -> Bool)
-		case netherlands(greenCardObjectID: NSManagedObjectID, origins: [Origin], evaluateEnabledState: (Date) -> Bool)
+		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool)
+		case netherlands(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool)
 
 		/// Represents an Origin
 		struct Origin {
@@ -180,7 +180,7 @@ extension HolderDashboardViewModel {
 		/// Without distinguishing NL/EU, just give me the origins:
 		var origins: [Origin] {
 			switch self {
-				case .europeanUnion(_, let origins, _), .netherlands(_, let origins, _):
+				case .europeanUnion(_, let origins, _, _), .netherlands(_, let origins, _, _):
 					return origins
 			}
 		}
