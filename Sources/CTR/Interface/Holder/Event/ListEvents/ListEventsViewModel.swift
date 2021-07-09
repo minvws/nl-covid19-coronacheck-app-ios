@@ -756,12 +756,15 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
+
+		if eventMode == .vaccination {
+			// Remove any existing vaccination events
+			walletManager.removeExistingEventGroups(type: eventMode)
+		}
+
 		for response in remoteEvents where response.wrapper.status == .complete {
 
-			if eventMode == .vaccination {
-				// Remove any existing vaccination events
-				walletManager.removeExistingEventGroups(type: eventMode)
-			} else {
+			if eventMode != .vaccination {
 				// Remove any existing events for the provider
 				walletManager.removeExistingEventGroups(
 					type: eventMode,
