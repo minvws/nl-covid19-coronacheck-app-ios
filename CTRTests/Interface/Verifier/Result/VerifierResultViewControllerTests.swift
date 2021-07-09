@@ -28,8 +28,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			verificationResult: MobilecoreVerificationResult(),
-			maxValidity: 48
+			verificationResult: MobilecoreVerificationResult()
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
 	}

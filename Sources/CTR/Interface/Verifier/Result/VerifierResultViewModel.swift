@@ -66,11 +66,9 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// - Parameters:
 	///   - coordinator: the dismissable delegate
 	///   - scanResults: the decrypted attributes
-	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		verificationResult: MobilecoreVerificationResult,
-		maxValidity: Int) {
+		verificationResult: MobilecoreVerificationResult) {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult

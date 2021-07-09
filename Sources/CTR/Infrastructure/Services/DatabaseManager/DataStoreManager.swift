@@ -111,6 +111,10 @@ class DataStoreManager: DataStoreManaging, Logging {
 				self.logError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 				fatalError("DatabaseController - saveContext error \(nserror), \(nserror.userInfo)")
 			}
+
+			if persistentContainer.viewContext != context {
+				persistentContainer.viewContext.refreshAllObjects()
+			}
 		}
 	}
 }

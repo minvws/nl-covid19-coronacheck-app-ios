@@ -19,4 +19,10 @@ extension Date {
 		let endOfDay = Calendar.current.date(byAdding: components, to: startOfDay)
 		return endOfDay
 	}
+
+	/// to be used like `now.isWithinTimeWindow(.originValidFrom, origin.expireTime)`
+	func isWithinTimeWindow(from: Date, to: Date) -> Bool {
+		guard from <= to else { return false } // otherwise it can crash
+		return (from...to).contains(self)
+	}
 }

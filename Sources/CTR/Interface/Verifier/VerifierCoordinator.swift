@@ -49,8 +49,7 @@ class VerifierCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 			
@@ -59,8 +58,7 @@ class VerifierCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
@@ -123,8 +121,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				verificationResult: verificationResult,
-				maxValidity: maxValidity
+				verificationResult: verificationResult
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)

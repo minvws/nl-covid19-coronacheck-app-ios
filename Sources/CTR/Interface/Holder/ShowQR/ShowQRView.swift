@@ -15,7 +15,7 @@ class ShowQRImageView: BaseView {
 		// Margins
 		static let margin: CGFloat = 10.0
 		static let domesticSecurityMargin: CGFloat = 38.0
-		static let internationalSecurityMargin: CGFloat = 46.0
+		static let internationalSecurityMargin: CGFloat = 49.0
 	}
 
 	var securityViewBottomConstraint: NSLayoutConstraint?

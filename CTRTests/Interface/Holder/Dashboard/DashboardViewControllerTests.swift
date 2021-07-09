@@ -41,7 +41,6 @@
 //				cryptoManager: cryptoManagerSpy,
 //				proofManager: proofManagerSpy,
 //				configuration: configSpy,
-//				maxValidity: 48,
 //				dataStoreManager: .netherlands
 //			)
 //			sut = HolderDashboardViewController(viewModel: viewModel!)
