@@ -90,6 +90,13 @@ class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var title: String = L.holderDashboardTitle()
 
 	@Bindable private(set) var cards = [HolderDashboardViewController.Card]()
+	
+	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
+	
+	@Bindable private(set) var hasAddCertificateMode: Bool = false
+	
+	@Bindable private(set) var regionMode: (buttonTitle: String, currentLocationTitle: String)? = (buttonTitle: L.holderDashboardChangeregionButtonEu(),
+																								  currentLocationTitle: L.holderDashboardChangeregionTitleNl())
 
 	// MARK: - Private types
 
@@ -138,6 +145,20 @@ class HolderDashboardViewModel: Logging {
 				},
 				coordinatorDelegate: coordinator
 			)
+			
+			hasAddCertificateMode = state.myQRCards.isEmpty
+			
+			// If there are any cards to show, show the region picker:
+			if !state.myQRCards.isEmpty {
+				switch state.qrCodeValidityRegion {
+					case .domestic:
+						regionMode = (buttonTitle: L.holderDashboardChangeregionButtonEu(), currentLocationTitle: L.holderDashboardChangeregionTitleNl())
+					case .europeanUnion:
+						regionMode = (buttonTitle: L.holderDashboardChangeregionButtonNl(), currentLocationTitle: L.holderDashboardChangeregionTitleEu())
+				}
+			} else {
+				regionMode = nil
+			}
 		}
 	}
 
@@ -204,7 +225,7 @@ class HolderDashboardViewModel: Logging {
 	// MARK: Capture User input:
 
 	@objc func addProofTapped() {
-		coordinator?.navigateToAboutMakingAQR()
+		coordinator?.userWishesToCreateAQR()
 	}
 
 	func openUrl(_ url: URL) {
@@ -226,14 +247,15 @@ class HolderDashboardViewModel: Logging {
 		coordinatorDelegate: (HolderCoordinatorDelegate)) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
-		cards += [.headerMessage(
-			message: {
-				guard !state.myQRCards.isEmpty else { return L.holderDashboardIntroEmptystate() }
-				return state.qrCodeValidityRegion == .domestic
-					? L.holderDashboardIntroDomestic()
-					: L.holderDashboardIntroInternational()
-			}())
-		]
+		if !state.myQRCards.isEmpty {
+			cards += [.headerMessage(
+						message: {
+							return state.qrCodeValidityRegion == .domestic
+								? L.holderDashboardIntroDomestic()
+								: L.holderDashboardIntroInternational()
+						}())
+			]
+		}
 
 		cards += state.expiredGreenCards.compactMap { expiredQR -> HolderDashboardViewController.Card? in
 			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }
@@ -250,13 +272,9 @@ class HolderDashboardViewModel: Logging {
 
 		if state.myQRCards.isEmpty {
 			cards += [
-				.makeQR(
-					title: L.holderDashboardCreateTitle(),
-					message: L.holderDashboardCreateMessage(),
-					actionTitle: L.holderDashboardCreateAction(),
-					didTapMakeQR: { [weak coordinatorDelegate] in
-						coordinatorDelegate?.navigateToAboutMakingAQR()
-					}
+				.emptyState(
+					title: L.holderDashboardEmptyTitle(),
+					message: L.holderDashboardEmptyMessage()
 				)
 			]
 		}
@@ -332,20 +350,6 @@ class HolderDashboardViewModel: Logging {
 					default: return []
 				}
 			}
-
-		// If there are any cards to show, show the region picker:
-		if !state.myQRCards.isEmpty {
-			switch state.qrCodeValidityRegion {
-				case .domestic:
-					cards += [
-						.changeRegion(buttonTitle: L.holderDashboardChangeregionButtonEu(), currentLocationTitle: L.holderDashboardChangeregionTitleNl())
-					]
-				case .europeanUnion:
-					cards += [
-						.changeRegion(buttonTitle: L.holderDashboardChangeregionButtonNl(), currentLocationTitle: L.holderDashboardChangeregionTitleEu())
-					]
-			}
-		}
 
 		return cards
 	}
@@ -801,7 +805,7 @@ private func injectSampleData(dataStoreManager: DataStoreManaging) {
 
 		let ago: TimeInterval = -1
 		let fromNow: TimeInterval = 1
-		let seconds: TimeInterval = 1
+//		let seconds: TimeInterval = 1
 		let minutes: TimeInterval = 60
 		let hours: TimeInterval = 60 * minutes
 		let days: TimeInterval = hours * 24

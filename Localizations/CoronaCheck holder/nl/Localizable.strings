@@ -10,7 +10,7 @@
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.</p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p>";
-"holder.recovery.nolist.action" = "Naar Mijn overzicht";
+"holder.recovery.nolist.action" = "Naar Mijn bewijzen";
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag van de GGD een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
@@ -34,7 +34,7 @@
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.networkwasbusy.text" = "Probeer het later nog eens.";
-"general.networkwasbusy.button" = "Naar Mijn overzicht";
+"general.networkwasbusy.button" = "Naar Mijn bewijzen";
 "holder.dashboard.changeregion.button.nl" = "Aanpassen naar NL";
 "general.add" = "Toevoegen";
 /* Link naar web accessibility pagina */
@@ -174,7 +174,7 @@
 "holder.launch.version" = "App versie %@ (build %@)";
 
 /* MARK: - Holder Menu */
-"holder.menu.dashboard" = "Mijn overzicht";
+"holder.menu.dashboard" = "Mijn bewijzen";
 "holder.menu.settings" = "Instellingen";
 "holder.menu.faq" = "Meestgestelde vragen";
 "holder.menu.about" = "Over deze app";
@@ -219,13 +219,9 @@
 "holder.aboutmakingaqr.body" = "<p>De app maakt in 3 stappen een QR-code. De QR-code is jouw bewijs.</p> <br /> <p><b>1. Kies het soort bewijs</b></p> <p>Je kan een vaccinatiebewijs, een testbewijs of een herstelbewijs maken.</p> <br /> <p><b>2. Automatisch gegevens ophalen</b></p> <p>De app haalt direct de gegevens van je vaccinatie, testuitslag of herstel op.</p> <br /> <p><b>3. QR-codes staan klaar</b></p> <p>De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. </p>";
 
 /* MARK: - Holder Dashboard */
-"holder.dashboard.title" = "Mijn overzicht";
+"holder.dashboard.title" = "Mijn bewijzen";
 "holder.dashboard.intro.domestic" = "Laat de QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";
 "holder.dashboard.intro.international" = "Reis je buiten Nederland? Gebruik dan je internationale QR-code. Check <a href=\"https://www.nederlandwereldwijd.nl/reizen-naar-het-buitenland\">dit overzicht</a> voor vertrek. Daar staat of jouw QR-code geldig is in het land dat je bezoekt.";
-"holder.dashboard.intro.emptystate" = "Je kan een QR-code maken als je bent gevaccineerd, als je corona hebt gehad of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>.";
-"holder.dashboard.create.title" = "QR-code maken";
-"holder.dashboard.create.message" = "Zet jouw vaccinatie, testuitslag of herstel om in een QR-code.";
-"holder.dashboard.create.action" = "Maak QR-code";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
 "holder.dashboard.qr.minute" = "min";
@@ -241,20 +237,25 @@
 "holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
 "holder.dashboard.changeregion.title.eu" = "Ik reis internationaal";
 "holder.dashboard.changeregion.button.eu" = "Aanpassen naar internationaal";
-"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.";
-"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationale QR-code.";
+"holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
+"holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
-"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet geldig in Nederland. Je hebt wel een internationale QR-code.</p><p>Het kan bijvoorbeeld zijn dat je maar één prik hebt gehad. Voeg je tweede prik toe om een bewijs te maken dat ook in Nederland geldig is.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Het kan bijvoorbeeld zijn dat je maar één prik hebt gehad. Voeg je tweede prik toe om een bewijs te maken dat ook in Nederland geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "Over je vaccinatiebewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen doordat jouw type vaccin niet geaccepteerd wordt in het buitenland.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Jouw vaccinatiebewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.</p><p>Dit kan bijvoorbeeld komen doordat jouw type vaccin niet geaccepteerd wordt in het buitenland.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "Over je testbewijs";
-"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationale QR-code.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.</p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.test.message" = "<p>Jouw testbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.</p><p>Dit kan komen doordat de geldigheidsduur in Nederland korter is dan in andere landen. Laat je opnieuw testen voor een bewijs dat ook in Nederland geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.test.title" = "Over je testbewijs";
-"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlandse QR-code.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
+"holder.dashboard.notValidInThisRegionScreen.eu.test.message" = "<p>Jouw testbewijs is niet internationaal geldig. Je hebt wel een Nederlandse bewijs.</p><p>Dit kan bijvoorbeeld komen door je type test niet geaccepteerd wordt in andere landen. Laat je opnieuw testen voor een bewijs dat ook internationaal geldig is.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.title" = "Over je herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.domestic.recovery.message" = "Je herstelbewijs is niet geldig in Nederland. Je hebt wel een internationaal bewijs.<br />Dit komt doordat het type test niet voldoet in Nederland.";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.title" = "Over je herstelbewijs";
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.<br />Dit komt doordat het type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden.";
+"holder.dashboard.empty.title" = "Hier komt jouw bewijs";
+"holder.dashboard.empty.message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. De app maakt een Nederlands en een internationaal bewijs.<br /></p><p><b>Reis je buiten Nederland?</b><br />Check <a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> voor vertrek. Daar staat welk bewijs geldig is in het land dat je bezoekt.</p>";
+"holder.dashboard.error.strip.server.tryagain" = "Je QR-code werkt niet door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
+"holder.dashboard.error.strip.server.helpdesk" = "<p>Je QR-code werkt niet door een fout op de server. <a href=\"%@\">Probeer opnieuw</a></p><br /><p>of bel de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis)</p>";
+"holder.dashboard.error.strip.nointernet" = "Maak verbinding met het internet om te zorgen dat je QR-code weer werkt.";
 
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
@@ -296,7 +297,7 @@
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";
 "holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br />Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
-"holder.testresults.results.button" = "Maak QR-code";
+"holder.testresults.results.button" = "Maak bewijs";
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
@@ -333,15 +334,15 @@
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
 "holder.test.list.title" = "Testuitslag ophalen";
 "holder.vaccination.list.message" = "Je kunt een QR-code maken van je vaccinaties. Dat is jouw bewijs.";
-"holder.vaccination.list.action" = "Maak QR-code";
+"holder.vaccination.list.action" = "Maak bewijs";
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
 "holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
-"holder.vaccination.nolist.action" = "Naar Mijn overzicht";
+"holder.vaccination.nolist.action" = "Naar Mijn bewijzen";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk<a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
-"holder.event.nolist.action" = "Naar Mijn Overzicht";
+"holder.event.nolist.action" = "Naar Mijn bewijzen";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
 "holder.vaccination.alert.cancel" = "Nee, terug";
@@ -396,14 +397,14 @@
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.test.nolist.message" = "<p>Er zijn geen gegevens van je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk hier voor <a href=\"https://coronacheck.nl/wegwijzer\"\>meer informatie</a>.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
-"holder.test.nolist.action" = "Naar Mijn overzicht";
+"holder.test.nolist.action" = "Naar Mijn bewijzen";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar Mijn overzicht";
+"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar Mijn bewijzen";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
-"holder.fetchevents.error.noresults.networkerror.button" = "Naar Mijn overzicht";
+"holder.fetchevents.error.noresults.networkerror.button" = "Naar Mijn bewijzen";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";

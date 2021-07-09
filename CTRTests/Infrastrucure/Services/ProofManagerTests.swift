@@ -21,7 +21,7 @@ class ProofManagerTests: XCTestCase {
 		sut = ProofManager()
 		cryptoSpy = CryptoManagerSpy()
 		sut.cryptoManager = cryptoSpy
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		sut.networkManager = networkSpy
 	}
 
@@ -109,7 +109,7 @@ class ProofManagerTests: XCTestCase {
 					TestProvider(
 						identifier: "test_fetchTestProviders",
 						name: "test",
-						resultURL: URL(string: "https://coronacheck.nl"),
+						resultURLString: "https://coronacheck.nl",
 						publicKey: "key",
 						certificate: "certificate")
 				]

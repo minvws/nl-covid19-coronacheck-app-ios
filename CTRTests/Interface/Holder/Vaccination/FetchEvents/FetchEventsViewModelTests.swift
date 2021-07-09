@@ -21,7 +21,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		sut = FetchEventsViewModel(coordinator: coordinatorSpy, tvsToken: "test", eventMode: .vaccination, networkManager: networkSpy)
 	}
 
@@ -35,7 +35,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_warnBeforeGoBack() {
@@ -47,7 +47,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == false
-		expect(self.sut.navigationAlert).toNot(beNil())
+		expect(self.sut.alert).toNot(beNil())
 	}
 
 	func test_happyFlow_willInvokeCoordinator() {

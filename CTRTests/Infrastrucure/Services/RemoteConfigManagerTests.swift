@@ -19,7 +19,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		sut = RemoteConfigManager()
 		sut.reset()
-		networkSpy = NetworkSpy(configuration: .test, validator: CryptoUtilitySpy())
+		networkSpy = NetworkSpy(configuration: .test)
 		sut.networkManager = networkSpy
 		super.setUp()
 	}
@@ -227,7 +227,6 @@ extension RemoteConfiguration {
 			deactivated: deactivated,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,

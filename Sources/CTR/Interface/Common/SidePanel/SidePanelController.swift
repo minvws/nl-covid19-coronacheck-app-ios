@@ -161,11 +161,13 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
             }
             
             self.sidePanelView.accessibilityViewIsModal = false
+			self.sidePanelView.isHidden = true
 		})
 	}
 
 	@objc func showSidePanel() {
 
+		sidePanelView.isHidden = false
 		overlayMainView.alpha = 0
 		overlayMainView.isHidden = false
 		UIView.animate(withDuration: animationSpeed, animations: {
@@ -232,6 +234,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 
 		let sidePanelView = UIView()
         sidePanelView.translatesAutoresizingMaskIntoConstraints = false
+		sidePanelView.isHidden = true // Hide for rotation
 		view.addSubview(sidePanelView)
 
         initializeSwappableSidePanelConstraints(sidePanelView: sidePanelView, superView: view)

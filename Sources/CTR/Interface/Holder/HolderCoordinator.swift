@@ -12,9 +12,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
-	/// Navigate to About Making a QR
-	func navigateToAboutMakingAQR()
-
 	/// Navigate to the token scanner
 	func navigateToTokenScan()
 
@@ -78,8 +75,7 @@ class HolderCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 
@@ -88,8 +84,7 @@ class HolderCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
@@ -319,15 +314,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to choose provider
-	func navigateToAboutMakingAQR() {
-
-		let destination = AboutMakingAQRViewController(
-			viewModel: AboutMakingAQRViewModel(coordinator: self)
-		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
 	/// Navigate to the token scanner
 	func navigateToTokenScan() {
 
@@ -528,9 +514,11 @@ extension HolderCoordinator: MenuDelegate {
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
-			case .qrCodeMaken:
-				let destination = AboutMakingAQRViewController(
-					viewModel: AboutMakingAQRViewModel(coordinator: self)
+			case .createCertificate:
+				let destination = ChooseQRCodeTypeViewController(
+					viewModel: ChooseQRCodeTypeViewModel(
+						coordinator: self
+					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = navigationController
@@ -558,7 +546,8 @@ extension HolderCoordinator: MenuDelegate {
 	func getTopMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .overview, title: L.holderMenuDashboard())
+			MenuItem(identifier: .overview, title: L.holderMenuDashboard()),
+			MenuItem(identifier: .createCertificate, title: L.holderMenuProof())
 		]
 	}
 	/// Get the items for the bottom menu
@@ -566,7 +555,6 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
-			MenuItem(identifier: .qrCodeMaken, title: L.holderAboutmakingaqrTitle()),
 			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]

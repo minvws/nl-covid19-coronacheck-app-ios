@@ -36,9 +36,8 @@ struct OnboardingPage {
 protocol OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
-	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: Int) -> [OnboardingPage]
+	func create() -> [OnboardingPage]
 
 	/// Get the Consent Title
 	func getConsentTitle() -> String
@@ -54,14 +53,16 @@ protocol OnboardingFactoryProtocol {
 
 	/// Get the consent Items
 	func getConsentItems() -> [String]
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool
 }
 
 struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
-	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: Int) -> [OnboardingPage] {
+	func create() -> [OnboardingPage] {
 
 		let pages = [
 			OnboardingPage(
@@ -78,7 +79,7 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitleValidity(),
-				message: String(format: L.holderOnboardingMessageValidity(), "\(maxValidity)"),
+				message: L.holderOnboardingMessageValidity(),
 				image: .onboardingValidity,
 				step: .validity
 			),
@@ -124,14 +125,18 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			L.holderConsentItem2()
 		]
 	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return false
+	}
 }
 
 struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 
 	/// Generate an array of onboarding steps
-	/// - Parameter maxValidity: the maximum validity of a test in hours
 	/// - Returns: an array of onboarding steps
-	func create(maxValidity: Int) -> [OnboardingPage] {
+	func create() -> [OnboardingPage] {
 
 		let pages = [
 			OnboardingPage(
@@ -142,7 +147,7 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			),
 			OnboardingPage(
 				title: L.verifierOnboardingTitleScanqr(),
-				message: String(format: L.verifierOnboardingMessageScanqr(), "\(maxValidity)"),
+				message: L.verifierOnboardingMessageScanqr(),
 				image: .onboardingScan,
 				step: .yourQR
 			),
@@ -194,5 +199,10 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			L.verifierConsentItem2(),
 			L.verifierConsentItem3()
 		]
+	}
+
+	/// Should we use the consent button
+	func useConsentButton() -> Bool {
+		return true
 	}
 }

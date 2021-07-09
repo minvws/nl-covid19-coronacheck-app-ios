@@ -49,9 +49,6 @@ class OnboardingCoordinator: Coordinator, Logging {
 
 	/// The onboarding factory
 	var onboardingFactory: OnboardingFactoryProtocol
-
-	/// The general configuration
-	var generalConfiguration: ConfigurationGeneralProtocol = Configuration()
 	
 	/// A presenting view controller
 	weak var presentingViewController: UIViewController?
@@ -60,13 +57,12 @@ class OnboardingCoordinator: Coordinator, Logging {
 	init(
 		navigationController: UINavigationController,
 		onboardingDelegate: OnboardingDelegate,
-		factory: OnboardingFactoryProtocol,
-		maxValidity: Int) {
+		factory: OnboardingFactoryProtocol) {
 		
 		self.navigationController = navigationController
 		self.onboardingDelegate = onboardingDelegate
 		onboardingFactory = factory
-		onboardingPages = onboardingFactory.create(maxValidity: maxValidity)
+		onboardingPages = onboardingFactory.create()
 	}
 	
 	/// The onboarding pages

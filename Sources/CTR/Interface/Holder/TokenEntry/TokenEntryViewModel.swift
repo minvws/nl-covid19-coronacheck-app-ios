@@ -72,8 +72,7 @@ class TokenEntryViewModel {
 
 	// MARK: - Bindables, other
 
-	@Bindable private(set) var showTechnicalErrorAlert: Bool = false
-	@Bindable private(set) var serverTooBusyAlert: AlertContent?
+	@Bindable private(set) var networkErrorAlert: AlertContent?
 
 	// MARK: - Private Dependencies:
 
@@ -303,13 +302,7 @@ class TokenEntryViewModel {
 				self?.progressIndicationCounter.decrement()
 
 			}, onError: { [weak self] error in
-
-				if let networkError = error as? NetworkError,
-				   networkError == .serverBusy {
-					self?.showServerTooBusyError()
-				} else {
-					self?.showTechnicalErrorAlert = true
-				}
+				self?.networkErrorAlert = error.toAlertContent(coordinator: self?.coordinator)
 				self?.decideWhetherToAbortRequestTokenProvidedMode()
 				self?.progressIndicationCounter.decrement()
 			}
@@ -318,7 +311,7 @@ class TokenEntryViewModel {
 
 	private func showServerTooBusyError() {
 
-		self.serverTooBusyAlert = AlertContent(
+		self.networkErrorAlert = AlertContent(
 			title: L.generalNetworkwasbusyTitle(),
 			subTitle: L.generalNetworkwasbusyText(),
 			cancelAction: nil,
@@ -377,11 +370,15 @@ class TokenEntryViewModel {
 					if let castedError = error as? ProofError, castedError == .invalidUrl {
 						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
-						self.showServerTooBusyError()
+						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
+					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
+						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
+							self?.fetchResult(requestToken, verificationCode: verificationCode)
+						})
 					} else {
 						// For now, display the network error.
 						self.fieldErrorMessage = error.localizedDescription
-						self.showTechnicalErrorAlert = true
+						self.networkErrorAlert = error.toAlertContent(coordinator: self.coordinator)
 					}
 					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
@@ -674,6 +671,47 @@ extension TokenEntryViewModel: Logging {
 
 	var loggingCategory: String {
 		return "TokenEntryViewModel"
+	}
+}
+
+extension Error {
+
+	fileprivate func toAlertContent(
+		coordinator: HolderCoordinatorDelegate?,
+		retryAction: ((UIAlertAction) -> Void)? = nil) -> AlertContent {
+
+		switch self as? NetworkError {
+			case .serverBusy?:
+				return AlertContent(
+					title: L.generalNetworkwasbusyTitle(),
+					subTitle: L.generalNetworkwasbusyText(),
+					cancelAction: nil,
+					cancelTitle: nil,
+					okAction: { _ in
+						coordinator?.navigateBackToStart()
+					},
+					okTitle: L.generalNetworkwasbusyButton()
+				)
+
+			case .requestTimedOut?, .noInternetConnection:
+				return AlertContent(
+					title: L.generalErrorNointernetTitle(),
+					subTitle: L.generalErrorNointernetText(),
+					cancelAction: nil,
+					cancelTitle: L.generalClose(),
+					okAction: retryAction,
+					okTitle: L.internetRequiredButton()
+				)
+			default:
+				return AlertContent(
+					title: L.generalErrorTitle(),
+					subTitle: L.generalErrorTechnicalText(),
+					cancelAction: nil,
+					cancelTitle: nil,
+					okAction: { _ in },
+					okTitle: L.generalOk()
+				)
+		}
 	}
 }
 
