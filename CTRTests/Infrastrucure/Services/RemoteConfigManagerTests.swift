@@ -227,7 +227,6 @@ extension RemoteConfiguration {
 			deactivated: deactivated,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 48,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,

@@ -18,10 +18,6 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private var remoteConfigManager: RemoteConfigManaging
 	private let greenCardLoader: GreenCardLoading
 
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 40
-	}
-
 	private var eventMode: EventMode
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
