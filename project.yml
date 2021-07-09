@@ -18,9 +18,6 @@ packages:
   Lottie:
     github: airbnb/lottie-ios
     majorVersion: 3.2.1
-  Firebase:
-    github: firebase/firebase-ios-sdk/
-    exactVersion: 7.5.1
   OHHTTPStubs:
     github: AliSoftware/OHHTTPStubs
     majorVersion: 9.1.0
@@ -41,7 +38,6 @@ packages:
 
 configs:
   Development: debug
-  FirebaseTest: debug
   FirebaseAcceptance: debug
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
@@ -65,8 +61,6 @@ settings:
       - "@executable_path/Frameworks"
   configs:
     Development:
-      LOG_LEVEL: debug
-    FirebaseTest:
       LOG_LEVEL: debug
     FirebaseAcceptance:
       LOG_LEVEL: debug
@@ -92,8 +86,6 @@ targetTemplates:
         product: CocoaLumberjackSwift
       - package: MBProgressHUD
       - package: Lottie
-      - package: Firebase
-        product: FirebaseCrashlytics
       - package: RSwiftLibrary
         product: Rswift
       - package: IOSSecuritySuite
@@ -117,11 +109,9 @@ targetTemplates:
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR
-          NETWORK_CONFIGURATION: Development
+          NETWORK_CONFIGURATION: ACC # bananahalen no longer works.
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
-        FirebaseTest:
-          NETWORK_CONFIGURATION: Test
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
         FirebaseProduction:
@@ -204,50 +194,7 @@ targetTemplates:
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
-    postCompileScripts:
-      - name: Copy Firebase Plist (FirebaseTest/FirebaseAcceptance only)
-        basedOnDependencyAnalysis: false
-        script: |
-          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
-          then
-            # Get a reference to the folder which contains the configuration subfolders.
-            CONFIGURATIONS_FOLDER=Sources/CTR/Configuration/Firebase/${APP_FLAVOR}/${CONFIGURATION}
-            # Get a reference to the filename of a 'GoogleService-Info.plist' file.
-            GOOGLESERVICE_INFO_PLIST=GoogleService-Info.plist
-            # Get a reference to the 'GoogleService-Info.plist' for the current configuration.
-            GOOGLESERVICE_INFO_PLIST_LOCATION=${PROJECT_DIR}/${CONFIGURATIONS_FOLDER}/${GOOGLESERVICE_INFO_PLIST}
-
-            # Check if 'GoogleService-Info.plist' file for current configuration exist.
-            if [ ! -f $GOOGLESERVICE_INFO_PLIST_LOCATION ]
-            then
-              echo "No '${GOOGLESERVICE_INFO_PLIST}' file found for the configuration '${CONFIGURATION}' in location '${GOOGLESERVICE_INFO_PLIST_LOCATION}'."
-              exit 1
-            fi
-
-            # Get a reference to the destination location for the GoogleService-Info.plist.
-            GOOGLESERVICE_INFO_PLIST_DESTINATION=${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app
-
-            # Copy 'GoogleService-Info.plist' for current configution to destination.
-            cp "${GOOGLESERVICE_INFO_PLIST_LOCATION}" "${GOOGLESERVICE_INFO_PLIST_DESTINATION}"
-            echo "Successfully copied the '${GOOGLESERVICE_INFO_PLIST}' file for the '${CONFIGURATION}' configuration from '${GOOGLESERVICE_INFO_PLIST_LOCATION}' to '${GOOGLESERVICE_INFO_PLIST_DESTINATION}'."
-          else
-            echo "Skipping adding Google Service Plist as Configuration is '$CONFIGURATION'"
-          fi
-    postBuildScripts:
-      - name: Upload Crashlytics (FirebaseTest/FirebaseAcceptance only)
-        basedOnDependencyAnalysis: true
-        inputFiles:
-          - ${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${TARGET_NAME}
-          - $(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)
-        script: |
-          if [ "$CONFIGURATION" == "FirebaseAcceptance" ] || [ "$CONFIGURATION" == "FirebaseTest" ]
-          then
-            "${BUILD_DIR%Build/*}SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run"
-          else
-            echo "Skipping uploading to Crashlytics as Configuration is '$CONFIGURATION'"
-          fi
-
-
+    
   Standard_UnitTesting:
     platform: iOS
     type: bundle.unit-test
@@ -273,7 +220,6 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "CTR/Configuration/Firebase"
           - "CTR/Interface/Verifier/Launch"
           - "CTR/Infrastructure/Resources/Localization/Verifier/*.lproj"
           - "CTR/Configuration/verifier-Info.plist"
@@ -292,11 +238,6 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Dev
           CODE_SIGN_ENTITLEMENTS: Sources/CTR/Configuration/Holder-Dev.entitlements
-        FirebaseTest:
-          DISPLAY_NAME: "🐞 Test Holder"
-          PRODUCT_NAME: CTR TEST
-          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.test
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Holder Test
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Holder"
           PRODUCT_NAME: CTR ACC
@@ -339,7 +280,6 @@ targets:
     sources:
       - path: Sources
         excludes:
-          - "CTR/Configuration/Firebase"
           - "CTR/Interface/Holder/Launch"
           - "CTR/Infrastructure/Resources/Localization/Holder/*.lproj"
           - "CTR/Configuration/holder-Info.plist"
@@ -355,10 +295,6 @@ targets:
           DISPLAY_NAME: "🤖 Dev Scanner"
           PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.dev
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Dev
-        FirebaseTest:
-          DISPLAY_NAME: "🐞 Test Scanner"
-          PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Test
-          PRODUCT_BUNDLE_IDENTIFIER: nl.rijksoverheid.ctr.verifier.test
         FirebaseAcceptance:
           DISPLAY_NAME: "💡 Acc Scanner"
           PROVISIONING_PROFILE_SPECIFIER: CoronaCheck Verifier Acc
@@ -388,7 +324,7 @@ targets:
 
 schemeTemplates:
 
-  # Template for Development/Test/Acc/Production/AppStore varieties
+  # Template for Development/Acc/Production/AppStore varieties
   ConfigScheme:
     build:
       config: ${configEnvironment} #not sure if needed.
@@ -445,13 +381,6 @@ schemes:
     run:
       language: nl
 
-  Holder Test:
-    templates:
-      - ConfigScheme
-    templateAttributes:
-      appTargetName: Holder
-      configEnvironment: FirebaseTest
-
   Holder Acceptance:
     templates:
       - ConfigScheme
@@ -481,13 +410,6 @@ schemes:
       configEnvironment: Development
     run:
       language: nl
-
-  Verifier Test:
-    templates:
-      - ConfigScheme
-    templateAttributes:
-      appTargetName: Verifier
-      configEnvironment: FirebaseTest
 
   Verifier Acceptance:
     templates:
