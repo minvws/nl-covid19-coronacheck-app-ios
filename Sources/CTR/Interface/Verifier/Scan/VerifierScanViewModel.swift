@@ -55,8 +55,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let cryptoResults = cryptoManager?.verifyQRMessage(message) {
-			switch Int64(cryptoResults.status) {
+		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
+			switch Int64(verificationResult.status) {
 				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
 					alert = VerifierScanViewController.AlertContent(title: L.verifierResultAlertDccTitle(),
 																	subTitle: L.verifierResultAlertDccMessage(),
@@ -66,7 +66,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 																	subTitle: L.verifierResultAlertUnknownMessage(),
 																	okTitle: L.generalOk())
 				default:
-					theCoordinator?.navigateToScanResult(cryptoResults)
+					theCoordinator?.navigateToScanResult(verificationResult)
 			}
 		}
 	}

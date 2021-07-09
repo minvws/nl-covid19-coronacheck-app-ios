@@ -28,7 +28,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		viewModel = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoResults: MobilecoreVerificationResult(),
+			verificationResult: MobilecoreVerificationResult(),
 			maxValidity: 48
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
@@ -47,7 +47,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		details.isSpecimen = "1"
 		let result = MobilecoreVerificationResult()
 		result.details = details
-		viewModel.cryptoResults = result
+		viewModel.verificationResult = result
 		loadView()
 
 		// When
@@ -67,7 +67,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		// Given
 		let result = MobilecoreVerificationResult()
 		result.status = Int(MobilecoreVERIFICATION_FAILED_ERROR)
-		viewModel.cryptoResults = result
+		viewModel.verificationResult = result
 		loadView()
 
 		// When
@@ -88,7 +88,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 		let details = MobilecoreVerificationDetails()
 		let result = MobilecoreVerificationResult()
 		result.details = details
-		viewModel.cryptoResults = result
+		viewModel.verificationResult = result
 		loadView()
 
 		// When

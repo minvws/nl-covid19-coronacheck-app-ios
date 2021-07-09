@@ -32,7 +32,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoResults: MobilecoreVerificationResult(),
+			verificationResult: MobilecoreVerificationResult(),
 			maxValidity: 48
 		)
 	}
@@ -47,7 +47,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		let result = MobilecoreVerificationResult()
 		result.details = details
 		
-		sut.cryptoResults = result
+		sut.verificationResult = result
 		
 		// When
 		sut.checkAttributes()
@@ -61,7 +61,7 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_checkAttributes_whenNoAttributesAreSet_shouldDisplayDeniedInvalidQR() {
 		
 		// Given
-		sut.cryptoResults = MobilecoreVerificationResult()
+		sut.verificationResult = MobilecoreVerificationResult()
 		
 		// When
 		sut.checkAttributes()
@@ -78,7 +78,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		let details = MobilecoreVerificationDetails()
 		let result = MobilecoreVerificationResult()
 		result.details = details
-		sut.cryptoResults = result
+		sut.verificationResult = result
 		
 		// When
 		sut.checkAttributes()

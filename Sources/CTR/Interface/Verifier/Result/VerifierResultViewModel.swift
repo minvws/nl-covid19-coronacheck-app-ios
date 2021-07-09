@@ -28,7 +28,7 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	private var configuration: ConfigurationGeneralProtocol = Configuration()
 
 	/// The scanned result
-	internal var cryptoResults: MobilecoreVerificationResult
+	internal var verificationResult: MobilecoreVerificationResult
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -69,11 +69,11 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	///   - maxValidity: the maximum validity of a test in hours
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		cryptoResults: MobilecoreVerificationResult,
+		verificationResult: MobilecoreVerificationResult,
 		maxValidity: Int) {
 
 		self.coordinator = coordinator
-		self.cryptoResults = cryptoResults
+		self.verificationResult = verificationResult
 
 		primaryButtonTitle = L.verifierResultNext()
 		super.init()
@@ -103,13 +103,13 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 		
-		guard cryptoResults.status == MobilecoreVERIFICATION_SUCCESS else {
+		guard verificationResult.status == MobilecoreVERIFICATION_SUCCESS else {
 			allowAccess = .denied
 			showAccessDeniedInvalidQR()
 			return
 		}
 		
-		guard let details = cryptoResults.details else {
+		guard let details = verificationResult.details else {
 			allowAccess = .denied
 			showAccessDeniedInvalidQR()
 			return

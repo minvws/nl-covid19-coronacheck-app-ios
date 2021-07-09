@@ -25,7 +25,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ scanResult: MobilecoreVerificationResult)
+	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
 
 	/// Display content
 	/// - Parameters:
@@ -118,12 +118,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
-	func navigateToScanResult(_ cryptoResults: MobilecoreVerificationResult) {
+	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
 		
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				cryptoResults: cryptoResults,
+				verificationResult: verificationResult,
 				maxValidity: maxValidity
 			)
 		)
