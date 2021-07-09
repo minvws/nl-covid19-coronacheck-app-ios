@@ -68,7 +68,7 @@ class SecurityFeaturesView: BaseView {
 		super.setupViewConstraints()
 
 		backgroundImageView.embed(in: self)
-		animationView.embed(in: self, insets: UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0))
+		animationView.embed(in: self)
 		primaryButton.embed(in: self)
 	}
 
@@ -89,7 +89,18 @@ class SecurityFeaturesView: BaseView {
 
 		animationView.animation = currentAnimation.animation
 		animationView.loopMode = currentAnimation.loopMode
-		animationView.play()
+
+		if let section = currentAnimation.section {
+			// only play a section of the animation
+			animationView.play(
+				fromFrame: section.start,
+				toFrame: section.end,
+				loopMode: currentAnimation.loopMode,
+				completion: nil
+			)
+		} else {
+			animationView.play()
+		}
 	}
 
 	// MARK: Public Access

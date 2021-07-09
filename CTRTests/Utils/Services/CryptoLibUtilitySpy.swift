@@ -49,4 +49,16 @@ final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 		invokedStoreParameters = (data, file)
 		invokedStoreParametersList.append((data, file))
 	}
+
+	var invokedCheckFile = false
+	var invokedCheckFileCount = 0
+	var invokedCheckFileParameters: (file: CryptoLibUtility.File, Void)?
+	var invokedCheckFileParametersList = [(file: CryptoLibUtility.File, Void)]()
+
+	func checkFile(_ file: CryptoLibUtility.File) {
+		invokedCheckFile = true
+		invokedCheckFileCount += 1
+		invokedCheckFileParameters = (file, ())
+		invokedCheckFileParametersList.append((file, ()))
+	}
 }

@@ -63,4 +63,23 @@ extension GreenCard {
 		}
 		return nil
 	}
+
+	func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
+		guard let list = credentials?.allObjects as? [Credential] else { return false }
+
+		return !list
+			.filter { $0.expirationTime != nil }
+			.filter { $0.expirationTime! > now }
+			.isEmpty
+	}
+
+	/// Get the credentials, strongly typed.
+	func castCredentials() -> [Credential]? {
+		return credentials?.compactMap({ $0 as? Credential })
+	}
+
+	/// Get the origins, strongly typed.
+	func castOrigins() -> [Origin]? {
+		return origins?.compactMap({ $0 as? Origin })
+	}
 }

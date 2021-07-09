@@ -30,8 +30,7 @@ class VerifierResultViewControllerTests: XCTestCase {
 			cryptoResults: CryptoResult(
 				attributes: nil,
 				errorMessage: nil
-			),
-			maxValidity: 48
+			)
 		)
 		sut = VerifierResultViewController(viewModel: viewModel)
 	}

@@ -47,10 +47,6 @@ class SharedCoordinator: Coordinator, Logging {
 	var dashboardNavigationController: UINavigationController?
 	var aboutNavigationController: UINavigationController?
 
-	var maxValidity: Int {
-		remoteConfigManager.getConfiguration().maxValidityHours ?? 40
-	}
-
 	/// Initiatilzer
 	init(navigationController: UINavigationController, window: UIWindow) {
 

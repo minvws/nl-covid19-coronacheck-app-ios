@@ -16,7 +16,7 @@ class ProofManager: ProofManaging, Logging {
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 	var walletManager: WalletManaging = Services.walletManager
-	var cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
+	var cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 
 	internal var testProviders = [TestProvider]()
 	
@@ -113,6 +113,7 @@ class ProofManager: ProofManaging, Logging {
 					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
 					   lastFetchedTimestamp > Date() - ttl {
 						self?.logInfo("Issuer public keys still within TTL")
+						self?.cryptoLibUtility.checkFile(.publicKeys)
 						onCompletion?()
 						
 					} else {
