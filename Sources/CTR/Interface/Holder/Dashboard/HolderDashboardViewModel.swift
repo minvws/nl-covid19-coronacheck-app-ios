@@ -9,76 +9,6 @@
 import UIKit
 import CoreData
 
-/// Currently used for the NL/EU toggle on the dashboard
-/// but could be expanded elsewhere
-enum QRCodeValidityRegion: String, Codable {
-	case domestic
-	case europeanUnion
-
-	init?(rawValue: String) {
-		switch rawValue {
-			case "europeanUnion", "eu": self = .europeanUnion
-			case "domestic": self = .domestic
-			default: return nil
-		}
-	}
-	
-	var localizedNoun: String {
-		switch self {
-			case .domestic: return L.generalNetherlands()
-			case .europeanUnion: return L.generalEuropeanUnion()
-		}
-	}
-
-	var localizedAdjective: String {
-		switch self {
-			case .domestic: return L.generalDutch()
-			case .europeanUnion: return L.generalEuropean()
-		}
-	}
-
-	/// If there's ever more than 2 regions, will need to rethink usages of this:
-	var opposite: QRCodeValidityRegion {
-		switch self {
-			case .domestic: return .europeanUnion
-			case .europeanUnion: return .domestic
-		}
-	}
-}
-
-enum QRCodeOriginType: String, Codable {
-	case test
-	case vaccination
-	case recovery
-
-	// e.g. "Test Certificate", "Vaccination Certificate"
-	var localizedProof: String {
-		switch self {
-			case .recovery: return L.generalRecoverystatement()
-			case .vaccination: return L.generalVaccinationcertificate()
-			case .test: return L.generalTestcertificate()
-		}
-	}
-
-	// e.g. "Test Date", "Vaccination Date" etc.
-	var localizedEvent: String {
-		switch self {
-			case .recovery: return L.generalRecoverydate()
-			case .vaccination: return L.generalVaccinationdate()
-			case .test: return L.generalTestdate()
-		}
-	}
-
-	/// There is a particular order to sort these onscreen
-	var customSortIndex: Int {
-		switch self {
-			case .vaccination: return 0
-			case .recovery: return 1
-			case .test: return 2
-		}
-	}
-}
-
 class HolderDashboardViewModel: Logging {
 
 	// MARK: - Public properties
@@ -689,56 +619,6 @@ extension HolderDashboardViewModel {
 
 			return items
 		}
-	}
-}
-
-// MARK: - Date Formatters
-
-extension HolderDashboardViewModel {
-
-	fileprivate static let dateWithoutTimeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMMM yyyy"
-		return formatter
-	}()
-
-	fileprivate static let dateWithDayAndTimeFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "EEEE d MMMM HH:mm"
-		return formatter
-	}()
-
-	fileprivate static let dayAndMonthFormatter: DateFormatter = {
-		let formatter = DateFormatter()
-		formatter.dateFormat = "d MMMM"
-		return formatter
-	}()
-
-	// e.g. "4 hours, 55 minutes"
-	// 		"59 minutes"
-	// 		"20 seconds"
-	fileprivate static let hmsRelativeFormatter: DateComponentsFormatter = {
-		let hoursFormatter = DateComponentsFormatter()
-		hoursFormatter.unitsStyle = .full
-		hoursFormatter.maximumUnitCount = 2
-		hoursFormatter.allowedUnits = [.hour, .minute, .second]
-		return hoursFormatter
-	}()
-
-	fileprivate static let daysRelativeFormatter: DateComponentsFormatter = {
-		let hoursFormatter = DateComponentsFormatter()
-		hoursFormatter.unitsStyle = .full
-		hoursFormatter.allowedUnits = [.day]
-		return hoursFormatter
-	}()
-}
-
-private extension Date {
-
-	/// to be used like `now.isWithinTimeWindow(.originValidFrom, origin.expireTime)`
-	func isWithinTimeWindow(from: Date, to: Date) -> Bool {
-		guard from <= to else { return false } // otherwise it can crash
-		return (from...to).contains(self)
 	}
 }
 
