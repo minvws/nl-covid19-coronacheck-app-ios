@@ -96,7 +96,7 @@ class OnboardingViewController: BaseViewController {
 
 		// Make sure the text won't be truncated if the user opts for bold texts
 		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-		
+        
 		backButton = UIBarButtonItem(customView: button)
 	}
 	
