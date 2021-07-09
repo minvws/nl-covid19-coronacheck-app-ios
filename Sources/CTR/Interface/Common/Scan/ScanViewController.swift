@@ -208,4 +208,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
         self.torchEnableLabel = enableLabel
         self.torchDisableLabel = disableLabel
 	}
+	
+	/// Resume scanning after being stopped
+	func resumeScanning() {
+		captureSession.startRunning()
+	}
 }

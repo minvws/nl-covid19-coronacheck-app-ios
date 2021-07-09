@@ -9,6 +9,7 @@ import XCTest
 @testable import CTR
 import Nimble
 import Rswift
+import Clcore
 
 class VerifierResultViewModelTests: XCTestCase {
 	
@@ -31,18 +32,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		
 		sut = VerifierResultViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
-			cryptoResults: CryptoResult(
-				attributes: CryptoAttributes(
-					birthDay: nil,
-					birthMonth: nil,
-					credentialVersion: nil,
-					domesticDcc: "0",
-					firstNameInitial: nil,
-					lastNameInitial: nil,
-					specimen: "0"
-				),
-				errorMessage: nil
-			),
+			verificationResult: MobilecoreVerificationResult(),
 			maxValidity: 48
 		)
 	}
@@ -52,19 +42,12 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_checkAttributes_shouldDisplayDemo() {
 		
 		// Given
-		sut.cryptoResults = CryptoResult(
-			attributes:
-				CryptoAttributes(
-					birthDay: nil,
-					birthMonth: nil,
-					credentialVersion: nil,
-					domesticDcc: "0",
-					firstNameInitial: nil,
-					lastNameInitial: nil,
-					specimen: "1"
-				),
-			errorMessage: nil
-		)
+		let details = MobilecoreVerificationDetails()
+		details.isSpecimen = "1"
+		let result = MobilecoreVerificationResult()
+		result.details = details
+		
+		sut.verificationResult = result
 		
 		// When
 		sut.checkAttributes()
@@ -78,10 +61,7 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_checkAttributes_whenNoAttributesAreSet_shouldDisplayDeniedInvalidQR() {
 		
 		// Given
-		sut.cryptoResults = CryptoResult(
-			attributes: nil,
-			errorMessage: nil
-		)
+		sut.verificationResult = MobilecoreVerificationResult()
 		
 		// When
 		sut.checkAttributes()
@@ -92,72 +72,13 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.verifierResultDeniedMessage()
 	}
 	
-	func test_checkAttributes_shouldDisplayDeniedDomesticDcc() {
-		
-		// Given
-		sut.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "1",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: "0"
-			),
-			errorMessage: nil
-		)
-		
-		// When
-		sut.checkAttributes()
-		
-		// Then
-		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == L.verifierResultDeniedRegionTitle()
-		expect(self.sut.message) == L.verifierResultDeniedRegionMessage()
-	}
-	
-	func test_checkAttributes_whenSpecimenIsSet_shouldDisplayDeniedDomesticDcc() {
-		
-		// Given
-		sut.cryptoResults = CryptoResult(
-			attributes: CryptoAttributes(
-				birthDay: nil,
-				birthMonth: nil,
-				credentialVersion: nil,
-				domesticDcc: "1",
-				firstNameInitial: nil,
-				lastNameInitial: nil,
-				specimen: "1"
-			),
-			errorMessage: nil
-		)
-		
-		// When
-		sut.checkAttributes()
-		
-		// Then
-		expect(self.sut.allowAccess) == .denied
-		expect(self.sut.title) == L.verifierResultDeniedRegionTitle()
-		expect(self.sut.message) == L.verifierResultDeniedRegionMessage()
-	}
-	
 	func test_checkAttributes_shouldDisplayVerified() {
 		
 		// Given
-		sut.cryptoResults = CryptoResult(
-			attributes:
-				CryptoAttributes(
-					birthDay: nil,
-					birthMonth: nil,
-					credentialVersion: nil,
-					domesticDcc: "0",
-					firstNameInitial: nil,
-					lastNameInitial: nil,
-					specimen: "0"
-				),
-			errorMessage: nil
-		)
+		let details = MobilecoreVerificationDetails()
+		let result = MobilecoreVerificationResult()
+		result.details = details
+		sut.verificationResult = result
 		
 		// When
 		sut.checkAttributes()
@@ -171,18 +92,10 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_allNil() {
 
 		// Given
-		let attributes = CryptoAttributes(
-			birthDay: nil,
-			birthMonth: nil,
-			credentialVersion: nil,
-			domesticDcc: "0",
-			firstNameInitial: nil,
-			lastNameInitial: nil,
-			specimen: "0"
-		)
+		let details = MobilecoreVerificationDetails()
 
 		// When
-		sut.setHolderIdentity(attributes)
+		sut.setHolderIdentity(details)
 
 		// Then
 		expect(self.sut.firstName) == "-"
@@ -194,18 +107,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_allEmpty() {
 
 		// Given
-		let attributes = CryptoAttributes(
-			birthDay: "",
-			birthMonth: "",
-			credentialVersion: "",
-			domesticDcc: "0",
-			firstNameInitial: "",
-			lastNameInitial: "",
-			specimen: "0"
-		)
+		let details = MobilecoreVerificationDetails()
+		details.birthDay = ""
+		details.birthMonth = ""
+		details.firstNameInitial = ""
+		details.lastNameInitial = ""
 
 		// When
-		sut.setHolderIdentity(attributes)
+		sut.setHolderIdentity(details)
 
 		// Then
 		expect(self.sut.firstName) == "-"
@@ -217,18 +126,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_allNotEmpty() {
 
 		// Given
-		let attributes = CryptoAttributes(
-			birthDay: "5",
-			birthMonth: "5",
-			credentialVersion: nil,
-			domesticDcc: "0",
-			firstNameInitial: "R",
-			lastNameInitial: "P",
-			specimen: "0"
-		)
+		let details = MobilecoreVerificationDetails()
+		details.birthDay = "5"
+		details.birthMonth = "5"
+		details.firstNameInitial = "R"
+		details.lastNameInitial = "P"
 
 		// When
-		sut.setHolderIdentity(attributes)
+		sut.setHolderIdentity(details)
 
 		// Then
 		expect(self.sut.firstName) == "R"
@@ -240,18 +145,14 @@ class VerifierResultViewModelTests: XCTestCase {
 	func test_holderIdentity_dateOfBirthUnknown() {
 
 		// Given
-		let attributes = CryptoAttributes(
-			birthDay: "X",
-			birthMonth: "X",
-			credentialVersion: "",
-			domesticDcc: "0",
-			firstNameInitial: "",
-			lastNameInitial: "",
-			specimen: "0"
-		)
+		let details = MobilecoreVerificationDetails()
+		details.birthDay = "X"
+		details.birthMonth = "X"
+		details.firstNameInitial = ""
+		details.lastNameInitial = ""
 
 		// When
-		sut.setHolderIdentity(attributes)
+		sut.setHolderIdentity(details)
 
 		// Then
 		expect(self.sut.firstName) == "-"

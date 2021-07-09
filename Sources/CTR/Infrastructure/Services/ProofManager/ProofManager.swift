@@ -100,9 +100,9 @@ class ProofManager: ProofManaging, Logging {
 		
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 			
-			// Response is of type (Result<(IssuerPublicKeys, Data), NetworkError>)
+			// Response is of type (Result<Data, NetworkError>)
 			switch resultwrapper {
-				case .success((_, let data)):
+				case .success(let data):
 					
 					self?.keysFetchedTimestamp = Date()
 					self?.cryptoLibUtility.store(data, for: .publicKeys)
