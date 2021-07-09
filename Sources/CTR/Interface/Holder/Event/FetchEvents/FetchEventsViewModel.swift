@@ -360,17 +360,8 @@ final class FetchEventsViewModel: Logging {
 			let successfulEventInformationAvailable = eventInformationAvailableResults.compactMap { $0.successValue }
 			let outputEventProviders = eventProviders.map { eventProvider -> EventFlow.EventProvider in
 				var eventProvider = eventProvider
-				for response in successfulEventInformationAvailable {
-					if Configuration().getEnvironment() == "production" {
-						if eventProvider.identifier == response.providerIdentifier {
-							eventProvider.eventInformationAvailable = response
-						}
-					} else {
-						if eventProvider.identifier == response.providerIdentifier ||
-							(eventProvider.name == "FakeGGD" && response.providerIdentifier == "ZZZ") {
-							eventProvider.eventInformationAvailable = response
-						}
-					}
+				for response in successfulEventInformationAvailable where eventProvider.identifier == response.providerIdentifier {
+					eventProvider.eventInformationAvailable = response
 				}
 				return eventProvider
 			}
