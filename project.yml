@@ -12,27 +12,33 @@ packages:
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.2
-  MBProgressHUD:
-    github: jdg/MBProgressHUD
-    majorVersion: 1.2.0
-  Lottie:
-    github: airbnb/lottie-ios
-    majorVersion: 3.2.1
-  OHHTTPStubs:
-    github: AliSoftware/OHHTTPStubs
-    majorVersion: 9.1.0
-  Nimble:
-    github: Quick/Nimble
-    majorVersion: 9.0.0
-  SnapshotTesting:
-    github: pointfreeco/swift-snapshot-testing
-    majorVersion: 1.8.2
+  Firebase:
+    github: firebase/firebase-ios-sdk/
+    exactVersion: 7.5.1
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
+  Lottie:
+    github: airbnb/lottie-ios
+    majorVersion: 3.2.1
+  MBProgressHUD:
+    github: jdg/MBProgressHUD
+    majorVersion: 1.2.0
+  Nimble:
+    github: Quick/Nimble
+    majorVersion: 9.0.0
+  OHHTTPStubs:
+    github: AliSoftware/OHHTTPStubs
+    majorVersion: 9.1.0
+  Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
+    github: ashleymills/Reachability.swift
+    majorVersion: 5.1.0
   RSwiftLibrary:
     github: mac-cain13/R.swift.Library
     majorVersion: 5.4.0
+  SnapshotTesting:
+    github: pointfreeco/swift-snapshot-testing
+    majorVersion: 1.8.2
 
 # - Configurations:
 
@@ -76,6 +82,7 @@ targetTemplates:
     platform: iOS
     type: application
     dependencies:
+      # SPM:
       - package: AppAuth
         product: AppAuth
       - package: AppAuth
@@ -84,11 +91,16 @@ targetTemplates:
         product: CocoaLumberjack
       - package: CocoaLumberjack
         product: CocoaLumberjackSwift
-      - package: MBProgressHUD
+      - package: Firebase
+        product: FirebaseCrashlytics
+      - package: IOSSecuritySuite
       - package: Lottie
+      - package: MBProgressHUD
+      - package: Reachability
+        product: Reachability
       - package: RSwiftLibrary
         product: Rswift
-      - package: IOSSecuritySuite
+      # Frameworks:
       - framework: clcore.framework
         embed: false
       - framework: openssl.framework
