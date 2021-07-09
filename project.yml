@@ -48,6 +48,11 @@ configs:
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
+fileGroups: 
+  - project.yml
+  - Localizations
+  - .github
+  
 # - Project Level settings:
 
 options:
