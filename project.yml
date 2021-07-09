@@ -117,11 +117,9 @@ targetTemplates:
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR
-          NETWORK_CONFIGURATION: Development
+          NETWORK_CONFIGURATION: ACC # bananahalen no longer works.
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
-        FirebaseTest:
-          NETWORK_CONFIGURATION: Test
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
         FirebaseProduction:
