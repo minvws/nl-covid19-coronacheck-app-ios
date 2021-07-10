@@ -173,7 +173,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			  let serverTrust = challenge.protectionSpace.serverTrust else {
 
 			logDebug("No security strategy")
-			completionHandler(.cancelAuthenticationChallenge, nil)
+			completionHandler(.performDefaultHandling, nil)
 			return
 		}
 		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
