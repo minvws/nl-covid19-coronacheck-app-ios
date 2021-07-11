@@ -56,7 +56,7 @@ struct SecurityCheckerFactory {
 
 		if case let .provider(provider) = strategy {
 
-			trustedNames.append(contentsOf: provider.getHostNames())
+			trustedNames = [] // No trusted name check.
 			if let sslCertificate = provider.getSSLCertificate() {
 				trustedCertificates.append(sslCertificate)
 			}
