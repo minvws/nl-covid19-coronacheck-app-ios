@@ -172,7 +172,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
 			  let serverTrust = challenge.protectionSpace.serverTrust else {
 
-			logDebug("No security strategy")
+			logWarning("SecurityChecker: invalid authenticationMethod")
 			completionHandler(.performDefaultHandling, nil)
 			return
 		}
@@ -187,6 +187,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
 		}
+		logWarning("SecurityChecker: cancelAuthenticationChallenge")
 		completionHandler(.cancelAuthenticationChallenge, nil)
 		return
 	}

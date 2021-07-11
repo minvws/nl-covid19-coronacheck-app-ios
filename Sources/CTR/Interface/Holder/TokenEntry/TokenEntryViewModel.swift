@@ -331,6 +331,7 @@ class TokenEntryViewModel {
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
+		logVerbose("fetching result with \(provider.resultURLString)")
 
 		progressIndicationCounter.increment()
 
