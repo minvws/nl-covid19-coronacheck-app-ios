@@ -11,10 +11,21 @@ import Reachability
 
 class DashboardStrippenRefresher: Logging {
 
-	enum Error: Swift.Error, Equatable {
-		case unknownError
-		case logicalError
+	enum Error: Swift.Error, LocalizedError, Equatable {
+		case unknownErrorA
+		case logicalErrorA
 		case greencardLoaderError(error: GreenCardLoader.Error)
+
+		var errorDescription: String? {
+			switch self {
+				case .greencardLoaderError(let error):
+					return error.localizedDescription
+				case .logicalErrorA:
+					return "Logical error A"
+				case .unknownErrorA:
+					return "Unknown error A"
+			}
+		}
 	}
 
 	struct State: Equatable {
@@ -81,7 +92,7 @@ class DashboardStrippenRefresher: Logging {
 				case let error as DashboardStrippenRefresher.Error:
 					state.loadingState = .failed(error: error)
 				default:
-					state.loadingState = .failed(error: .unknownError)
+					state.loadingState = .failed(error: .unknownErrorA)
 			}
 			self = state
 		}
@@ -116,7 +127,7 @@ class DashboardStrippenRefresher: Logging {
 		self.walletManager = walletManager
 		self.greencardLoader = greencardLoader
 
-		let expiryState = DashboardStrippenRefresher.calculateGreenCardsExpiryState(
+		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh,
 			walletManager: walletManager
 		)
@@ -154,14 +165,14 @@ class DashboardStrippenRefresher: Logging {
 						case .success:
 							self.state.endLoading()
 
-							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsExpiryState(
+							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialsTriggeringRefresh,
 								walletManager: walletManager
 							)
 
 							// The state should have changed - if not, throw error to avoid infinite loop.
 							guard newExpiryState != state.greencardsCredentialExpiryState else {
-								self.state.endLoadingWithError(error: Error.logicalError)
+								self.state.endLoadingWithError(error: Error.logicalErrorA)
 								return
 							}
 
@@ -179,7 +190,7 @@ class DashboardStrippenRefresher: Logging {
 	}
 
 	/// Greencards where the number of valid credentials is <= 5 and the latest credential expiration time is < than the origin expiration time
-	private static func calculateGreenCardsExpiryState(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, now: Date = Date()) -> State.GreencardsCredentialExpiryState {
+	private static func calculateGreenCardsCredentialExpiryState(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, now: Date = Date()) -> State.GreencardsCredentialExpiryState {
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(now: now)
 
 		var expiredGreencards = [GreenCard]()
