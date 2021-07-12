@@ -195,7 +195,7 @@ final class HolderDashboardViewModel: Logging {
 		}
 
 		// Handle combination of Loading State + Expiry State + Error presentation:
-		switch (refresherState.loadingState, refresherState.greencardsExpiryState, refresherState.userHasPreviouslyDismissedALoadingError) {
+		switch (refresherState.loadingState, refresherState.greencardsCredentialExpiryState, refresherState.userHasPreviouslyDismissedALoadingError) {
 			case (_, .noActionNeeded, _):
 				logDebug("StrippenRefresh: No action needed.")
 
