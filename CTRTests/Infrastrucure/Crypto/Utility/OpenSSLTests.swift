@@ -224,6 +224,7 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == true
 	}
 
+	// swiftlint:disable:next function_body_length
 	func test_cms_fake_chain() {
 
 		let fakeChain = [ OpenSSLData.fakeChain02, OpenSSLData.fakeChain01 ]
@@ -275,7 +276,7 @@ class OpenSSLTests: XCTestCase {
 		}
 
 		let realLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: OpenSSLData.realLeaf)
-		XCTAssert(fakeLeafCert != nil)
+		XCTAssert(realLeafCert != nil)
 
 		var realCertArray = [SecCertificate]()
 		for certPem in realChain {
@@ -327,7 +328,7 @@ class OpenSSLTests: XCTestCase {
 			let realRootString = String(decoding: OpenSSLData.realRoot, as: UTF8.self)
 			let lineEndingString = realRootString.replacingOccurrences(of: "\n", with: "\r\n")
 			let realRootLineEnding = lineEndingString.data(using: .ascii)!
-			expect(lineEndingString).to(contain("\r\n")) == true
+			expect(lineEndingString).to(contain("\r\n"))
 			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
 														   policies: [policy],
 														   trustedCertificates: [realRootLineEnding]))
