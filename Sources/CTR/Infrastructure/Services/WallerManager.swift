@@ -540,8 +540,7 @@ class WalletManager: WalletManaging, Logging {
 			else { return }
 
 			for greenCard in allGreenCards {
-				guard let origins = greenCard.origins?.compactMap({ $0 as? Origin })
-				else { break }
+				guard let origins = greenCard.castOrigins() else { break }
 
 				let hasValidRemainingOrigins = origins.contains(where: { origin in
 					guard let expirationTime = origin.expirationTime else { return false }
