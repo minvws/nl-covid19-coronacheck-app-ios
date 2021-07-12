@@ -3,12 +3,16 @@
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a><br />of bel de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis)";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
 "holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
-"holder.dashboard.strippen.expiring.nointernet.alert.message" = " De QR-code heeft af en toe internet nodig. Zonder internetverbinding kan je nog %@ je QR-code gebruiken.  Ook daarna kun je de QR-code weer gebruiken wanneer je internet hebt.";
+"holder.dashboard.strippen.expiring.nointernet.alert.message" = "De QR-code heeft af en toe internet nodig. Zonder internetverbinding kan je nog %@ je QR-code gebruiken. Ook daarna kun je de QR-code weer gebruiken wanneer je internet hebt.";
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Fout op de server";
 "holder.dashboard.strippen.expired.servererror.alert.message" = "Om je QR-code te gebruiken heeft de app verbinding met de server nodig. Helaas is er nu een fout op de server. <a href=\"%@\">Probeer opnieuw</a> of kom later terug. (foutcode: %@)";
+
+
+
 "holder.tokenentry.button.notoken" = "Ik heb geen code";
+
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
 "holder.recovery.tooOld.message" = "Is het langer dan 180 dagen geleden dat je getest bent? Dan is je testuitslag niet meer geldig. Je kunt dan geen herstelbewijs maken.";
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
