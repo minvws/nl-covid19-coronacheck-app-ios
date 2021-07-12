@@ -324,6 +324,13 @@ class OpenSSLTests: XCTestCase {
 															policies: [policy],
 															trustedCertificates: [OpenSSLData.fakeRoot]))
 
+			let realRootString = String(decoding: OpenSSLData.realRoot, as: UTF8.self)
+			let lineEndingString = realRootString.replacingOccurrences(of: "\n", with: "\r\n")
+			let realRootLineEnding = lineEndingString.data(using: .ascii)!
+			expect(lineEndingString).to(contain("\r\n")) == true
+			XCTAssertTrue(SecurityCheckerWorker().checkATS(serverTrust: realServerTrust,
+														   policies: [policy],
+														   trustedCertificates: [realRootLineEnding]))
 		}
 
 		if true {
