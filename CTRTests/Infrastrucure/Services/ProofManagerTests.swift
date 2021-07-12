@@ -29,9 +29,8 @@ class ProofManagerTests: XCTestCase {
 	func test_fetchIssuerPublicKeys() {
 
 		// Given
-		let publicKeys = IssuerPublicKeys(clKeys: [])
 		let data = Data()
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success((publicKeys, data)), ())
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(data), ())
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
@@ -65,18 +64,14 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	/// Test the fetch issuers public keys with invalid keys error
 	func test_fetchIssuerPublicKeys_withInvalidKeysError() {
 
 		// Given
-		let publicKeys = IssuerPublicKeys(clKeys: [])
 		let data = Data()
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.success((publicKeys, data)), ())
-		// Trigger invalid keys
-		cryptoSpy.stubbedSetIssuerDomesticPublicKeysResult = false
+		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(data), ())
 
 		// When
 		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
@@ -97,7 +92,6 @@ class ProofManagerTests: XCTestCase {
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-		expect(self.cryptoSpy.invokedSetIssuerDomesticPublicKeys).toEventually(beFalse())
 	}
 
 	func test_fetchTestProviders() {

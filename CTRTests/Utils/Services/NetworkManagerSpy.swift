@@ -52,9 +52,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedGetPublicKeys = false
 	var invokedGetPublicKeysCount = 0
-	var stubbedGetPublicKeysCompletionResult: (Result<(IssuerPublicKeys, Data), NetworkError>, Void)?
+	var stubbedGetPublicKeysCompletionResult: (Result<Data, NetworkError>, Void)?
 
-	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void) {
 		invokedGetPublicKeys = true
 		invokedGetPublicKeysCount += 1
 		if let result = stubbedGetPublicKeysCompletionResult {
