@@ -59,6 +59,9 @@ protocol WalletManaging {
 	///   - recoveryValidity: the max validity for recovery
 	///   - testValidity: the max validity for test
 	func expireEventGroups(vaccinationValidity: Int?, recoveryValidity: Int?, testValidity: Int?)
+
+	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
+	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard]
 }
 
 class WalletManager: WalletManaging, Logging {
@@ -224,6 +227,7 @@ class WalletManager: WalletManaging, Logging {
 	func removeExistingEventGroups(type: EventMode) {
 
 		let context = dataStoreManager.backgroundContext()
+		
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
@@ -521,6 +525,34 @@ class WalletManager: WalletManaging, Logging {
 				}
 			}
 		}
+		return result
+	}
+
+	/// Return all greencards for current wallet which still have unexpired origins (regardless of credentials):
+	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard] {
+		var result = [GreenCard]()
+
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			guard let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+				  let allGreenCards = wallet.greenCards?.allObjects as? [GreenCard]
+			else { return }
+
+			for greenCard in allGreenCards {
+				guard let origins = greenCard.castOrigins() else { break }
+
+				let hasValidRemainingOrigins = origins.contains(where: { origin in
+					guard let expirationTime = origin.expirationTime else { return false }
+					return expirationTime > now
+				})
+
+				if hasValidRemainingOrigins {
+					result += [greenCard]
+				}
+			}
+		}
+
 		return result
 	}
 }

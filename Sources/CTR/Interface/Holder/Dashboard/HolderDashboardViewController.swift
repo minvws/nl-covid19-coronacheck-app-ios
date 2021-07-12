@@ -23,13 +23,13 @@ class HolderDashboardViewController: BaseViewController {
 
 		case emptyState(title: String, message: String)
 
-		case domesticQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case domesticQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case europeanUnionQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case europeanUnionQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
 		case cardFooter(message: String)
 		
-		case errorMessage(message: String)
+		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
 
 	struct ValidityText {
@@ -104,7 +104,7 @@ class HolderDashboardViewController: BaseViewController {
 
 				switch card {
 
-					case .headerMessage(let message):
+					case let .headerMessage(message):
 
 						let text = TextView(htmlText: message)
 						text.linkTouched { url in
@@ -112,19 +112,19 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						return text
 
-					case .expiredQR(let message, let didTapCloseAction):
+					case let .expiredQR(message, didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()
 						expiredQRCard.title = message
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
 
-					case .originNotValidInThisRegion(let message, let didTapMoreInfo):
+					case let .originNotValidInThisRegion(message, didTapMoreInfo):
 						let messageCard = MessageCardView()
 						messageCard.title = message
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
 
-					case .emptyState(let title, let message):
+					case let .emptyState(title, message):
 						let emptyDashboardView = EmptyDashboardView()
 						emptyDashboardView.image = .emptyDashboard
 						emptyDashboardView.title = title
@@ -134,8 +134,8 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						return emptyDashboardView
 						
-					case .domesticQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator),
-						 .europeanUnionQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator):
+					case let .domesticQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
+						 let .europeanUnionQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
@@ -157,22 +157,23 @@ class HolderDashboardViewController: BaseViewController {
 
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
+						qrCard.isLoading = isLoading
 
 						return qrCard
 
-					case .cardFooter(let message):
+					case let .cardFooter(message):
 
 						let cardFooterView = CardFooterView()
 						cardFooterView.title = message
 						return cardFooterView
 						
-					case .errorMessage(let message):
+					case let .errorMessage(message, didTapTryAgain):
 						
 						let errorView = ErrorDashboardView()
 						errorView.message = message
 						errorView.messageView.linkTouched { url in
 							if url.absoluteString == AppAction.tryAgain {
-								// Implement action
+								didTapTryAgain()
 							} else {
 								viewModel?.openUrl(url)
 							}
@@ -203,6 +204,12 @@ class HolderDashboardViewController: BaseViewController {
 				guard let previousCardView = cardViews[previousIndex] as? QRCardView else { continue }
 
 				sceneView.stackView.setCustomSpacing(22, after: previousCardView)
+			}
+		}
+
+		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
+			DispatchQueue.main.async {
+				self?.showAlert(alertContent)
 			}
 		}
 	}

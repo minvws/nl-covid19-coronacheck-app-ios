@@ -18,7 +18,7 @@ protocol GreenCardLoading {
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
-	enum Error: Swift.Error {
+	enum Error: Swift.Error, Equatable {
 		case noEvents
 		case didNotEvaluate
 
@@ -53,7 +53,6 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void) {
 
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
-
 			switch prepareIssueResult {
 				case .failure(let networkError):
 					self.logError("error: \(networkError)")

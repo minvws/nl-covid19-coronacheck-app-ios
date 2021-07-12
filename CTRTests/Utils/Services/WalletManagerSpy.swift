@@ -155,4 +155,18 @@ class WalletManagerSpy: WalletManaging {
 		invokedExpireEventGroupsParameters = (vaccinationValidity, recoveryValidity, testValidity)
 		invokedExpireEventGroupsParametersList.append((vaccinationValidity, recoveryValidity, testValidity))
 	}
+
+	var invokedGreencardsWithUnexpiredOrigins = false
+	var invokedGreencardsWithUnexpiredOriginsCount = 0
+	var invokedGreencardsWithUnexpiredOriginsParameters: (now: Date, Void)?
+	var invokedGreencardsWithUnexpiredOriginsParametersList = [(now: Date, Void)]()
+	var stubbedGreencardsWithUnexpiredOriginsResult: [GreenCard]! = []
+
+	func greencardsWithUnexpiredOrigins(now: Date) -> [GreenCard] {
+		invokedGreencardsWithUnexpiredOrigins = true
+		invokedGreencardsWithUnexpiredOriginsCount += 1
+		invokedGreencardsWithUnexpiredOriginsParameters = (now, ())
+		invokedGreencardsWithUnexpiredOriginsParametersList.append((now, ()))
+		return stubbedGreencardsWithUnexpiredOriginsResult
+	}
 }
