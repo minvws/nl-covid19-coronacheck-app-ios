@@ -41,6 +41,16 @@ extension HolderDashboardViewModel {
 		return hoursFormatter
 	}()
 
+	// e.g. "4 hours, 55 minutes"
+	// 		"59 minutes"
+	static let hmRelativeFormatter: DateComponentsFormatter = {
+		let hoursFormatter = DateComponentsFormatter()
+		hoursFormatter.unitsStyle = .full
+		hoursFormatter.maximumUnitCount = 2
+		hoursFormatter.allowedUnits = [.hour, .minute]
+		return hoursFormatter
+	}()
+
 	static let daysRelativeFormatter: DateComponentsFormatter = {
 		let hoursFormatter = DateComponentsFormatter()
 		hoursFormatter.unitsStyle = .full

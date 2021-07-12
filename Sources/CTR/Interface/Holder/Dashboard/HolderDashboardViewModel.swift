@@ -213,9 +213,9 @@ final class HolderDashboardViewModel: Logging {
 				// Do nothing
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Do nothing.")
 
-			case (.noInternet, .expiring, false):
+			case (.noInternet, .expiring(let expiryDate), false):
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(strippenRefresher: strippenRefresher)
+				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher)
 
 			// ❤️‍🩹 NETWORK ERROR: Refresher has entered a failed state (i.e. Server Error)
 
@@ -461,10 +461,19 @@ extension AlertContent {
 		)
 	}
 
-	fileprivate static func strippenExpiringWithNoInternet(strippenRefresher: DashboardStrippenRefresher) -> AlertContent {
-		AlertContent(
+	fileprivate static func strippenExpiringWithNoInternet(expiryDate: Date, strippenRefresher: DashboardStrippenRefresher) -> AlertContent {
+
+		let localizedTimeRemainingUntilExpiry: String = {
+			if expiryDate > (Date().addingTimeInterval(60 * 60 * 24)) { // > 1 day in future
+				return HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: expiryDate) ?? "-"
+			} else {
+				return HolderDashboardViewModel.hmRelativeFormatter.string(from: Date(), to: expiryDate) ?? "-"
+			}
+		}()
+
+		return AlertContent(
 			title: L.holderDashboardStrippenExpiringNointernetAlertTitle(),
-			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(),
+			subTitle: L.holderDashboardStrippenExpiringNointernetAlertMessage(localizedTimeRemainingUntilExpiry),
 			cancelAction: { _ in
 				strippenRefresher.userDismissedALoadingError()
 			},

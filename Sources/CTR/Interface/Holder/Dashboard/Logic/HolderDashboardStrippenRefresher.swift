@@ -35,10 +35,10 @@ class DashboardStrippenRefresher: Logging {
 			}
 		}
 
-		enum GreencardsExpiryState: Equatable {
+		enum GreencardsCredentialExpiryState: Equatable {
 			case noActionNeeded
 			case expired
-			case expiring // TODO: (deadline: Date)
+			case expiring(deadline: Date)
 		}
 
 		// MARK: - Vars
@@ -183,7 +183,7 @@ class DashboardStrippenRefresher: Logging {
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(now: now)
 
 		var expiredGreencards = [GreenCard]()
-		var expiringGreencards = [GreenCard]()
+		var expiringGreencards = [(GreenCard, Date)]()
 
 		validGreenCardsForCurrentWallet
 			.forEach { (greencard: GreenCard) in
@@ -218,13 +218,17 @@ class DashboardStrippenRefresher: Logging {
 				if daysUntilLastCredentialExpiry <= 0 {
 					expiredGreencards += [greencard]
 				} else {
-					expiringGreencards += [greencard]
+					expiringGreencards += [(greencard, latestCredentialExpiryDate)]
 				}
 			}
 
 		switch (expiredGreencards.count, expiringGreencards.count) {
 			case (0, 0): return .noActionNeeded
-			case (0, _): return .expiring
+			case (0, _):
+				let earliestExpiryDate = expiringGreencards.map({ $1 }).reduce(.distantFuture) { result, date in
+					return date < result ? date : result
+				}
+				return .expiring(deadline: earliestExpiryDate)
 			case (_, _): return .expired
 		}
 	}
