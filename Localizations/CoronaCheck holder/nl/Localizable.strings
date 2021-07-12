@@ -7,7 +7,7 @@
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Fout op de server";
-"holder.dashboard.strippen.expired.servererror.alert.message" = "Om je QR-code te gebruiken heeft de app verbinding met de server nodig. Helaas is er nu een fout op de server. <a href=\"%@\">Probeer opnieuw</a> of kom later terug. (foutcode: %@)";
+"holder.dashboard.strippen.expired.servererror.alert.message" = "Om je QR-code te gebruiken heeft de app verbinding met de server nodig. Helaas is er nu een fout op de server. Probeer opnieuw of kom later terug. (foutcode: %@)";
 
 
 

@@ -7,7 +7,7 @@
 "holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
-"holder.dashboard.strippen.expired.servererror.alert.message" = "To use the QR code, the app must make a connection to the server. Unfortunately there is currently a server issue. <a href=\"%@\">Retry now</a> or try again later. (error: %@)";
+"holder.dashboard.strippen.expired.servererror.alert.message" = "To use the QR code, the app must make a connection to the server. Unfortunately there is currently a server issue. Retry now or try again later. (error: %@)";
 
 
 
