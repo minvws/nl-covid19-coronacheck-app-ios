@@ -27,6 +27,18 @@ class ButtonLoadingOverlayView: UIView {
 		activityIndicatorView.startAnimating()
 	}
 
+	var buttonAppearsEnabled: Bool = false {
+		didSet {
+			backgroundColor = buttonAppearsEnabled
+				? Theme.colors.primary
+				: Theme.colors.tertiary
+
+			activityIndicatorView.color = buttonAppearsEnabled
+				? Theme.colors.viewControllerBackground
+				: Theme.colors.gray
+		}
+	}
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

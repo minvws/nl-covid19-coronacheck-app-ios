@@ -59,7 +59,7 @@ class QRCardView: BaseView {
 
 	private lazy var loadingButtonOverlay: ButtonLoadingOverlayView = {
 		let overlay = ButtonLoadingOverlayView()
-		overlay.backgroundColor = Theme.colors.tertiary
+		
 		overlay.translatesAutoresizingMaskIntoConstraints = false
 		overlay.isHidden = true
 		return overlay
@@ -224,6 +224,7 @@ class QRCardView: BaseView {
 			if shouldStyleForEU && enabledState {
 				applyEUStyle()
 			}
+			loadingButtonOverlay.buttonAppearsEnabled = enabledState
 		}
 	}
 

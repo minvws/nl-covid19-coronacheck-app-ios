@@ -119,6 +119,7 @@ extension HolderDashboardViewModel {
 							return [MyQRCard.netherlands(
 								greenCardObjectID: greencard.objectID,
 								origins: originEntries,
+								shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(), // doesn't need to be dynamically evaluated
 								evaluateEnabledState: evaluateButtonEnabledState
 							)]
 						case .eu:
@@ -127,6 +128,7 @@ extension HolderDashboardViewModel {
 								MyQRCard.europeanUnion(
 									greenCardObjectID: greencard.objectID,
 									origins: [originEntry],
+									shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(), // doesn't need to be dynamically evaluated
 									evaluateEnabledState: evaluateButtonEnabledState
 								)
 							}
