@@ -1,8 +1,6 @@
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
-"verifier.result.denied.region.title" = "Dit is een internationale QR-code";
-"verifier.result.denied.region.message" = "Dit is geen geldig bewijs in Nederland. Vraag de bezoeker een Nederlandse QR-code te laten zien.";
 "verifier.result.identity.label" = "Kenmerk %@ is %@";
 "verifier.instructions.access.image" = "Persoon houdt een telefoon vast met een groen scherm en een zwart vinkje.";
 "verifier.instructions.denied.image" = "Persoon houdt een telefoon vast met een rood scherm en een zwart kruis.";
@@ -93,6 +91,12 @@
 "verifier.result.denied.message" = "De bezoeker heeft geen geldig coronabewijs. Lees mogelijke oorzaken.";
 "verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
+
+/* MARK: - Verifier Result Alert */
+"verifier.result.alert.unknown.title" = "Dit is geen bewijs voor CoronaCheck";
+"verifier.result.alert.unknown.message" = "Je hebt een onbekende QR-code gescand. Vraag de bezoeker een bewijs in de CoronaCheck-app te laten zien. Of een QR-code op papier.";
+"verifier.result.alert.dcc.title" = "Scan een Nederlandse QR-code";
+"verifier.result.alert.dcc.message" = "Je hebt een internationale QR-code gescand. Dat is geen geldig bewijs in Nederland. Vraag de bezoeker om een Nederlands bewijs en scan de QR-code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Over de controle";
 /* MARK: - Verifier Denied Instructions */

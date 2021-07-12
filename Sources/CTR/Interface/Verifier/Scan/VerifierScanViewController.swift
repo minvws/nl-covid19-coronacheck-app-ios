@@ -8,6 +8,12 @@
 import UIKit
 
 class VerifierScanViewController: ScanViewController {
+	
+	struct AlertContent {
+		let title: String
+		let subTitle: String
+		let okTitle: String
+	}
 
 	private let viewModel: VerifierScanViewModel
 
@@ -38,6 +44,8 @@ class VerifierScanViewController: ScanViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		
+		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
 		viewModel.$startScanning.binding = { [weak self] in
 			if $0, self?.captureSession?.isRunning == false {
@@ -101,6 +109,28 @@ class VerifierScanViewController: ScanViewController {
 				title: L.generalCancel(),
 				style: .cancel,
 				handler: nil
+			)
+		)
+		present(alertController, animated: true, completion: nil)
+	}
+	
+	func showAlert(_ alertContent: AlertContent?) {
+
+		guard let content = alertContent else { return }
+
+		let alertController = UIAlertController(
+			title: content.title,
+			message: content.subTitle,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: content.okTitle,
+				style: .default,
+				handler: { [weak self] _ in
+					// Resume scanning
+					self?.resumeScanning()
+				}
 			)
 		)
 		present(alertController, animated: true, completion: nil)

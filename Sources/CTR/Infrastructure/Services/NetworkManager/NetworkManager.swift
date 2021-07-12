@@ -103,6 +103,48 @@ class NetworkManager: Logging {
 			}
 		}
 	}
+	
+	/// Decode a signed response into Data
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler
+	private func decodeSignedData(
+		request: Result<URLRequest, NetworkError>,
+		session: URLSession,
+		ignore400: Bool = false,
+		completion: @escaping (Result<Data, NetworkError>) -> Void) {
+		// Fetch data
+		data(request: request, session: session, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
+			
+			/// Decode to SignedResult
+			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
+			switch signedResult {
+				case let .success(signedResponse):
+					
+					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+					   let signatureData = Data(base64Encoded: signedResponse.signature) {
+						
+						if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
+							// Validate signature (on the base64 payload)
+							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+								if valid {
+									DispatchQueue.main.async {
+										completion(.success(decodedPayloadData))
+									}
+								} else {
+									self.logError("We got an invalid signature!")
+									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+								}
+							}
+						}
+					}
+				case let .failure(networkError):
+					DispatchQueue.main.async {
+						completion(.failure(networkError))
+					}
+			}
+		}
+	}
 
 	/// Decode a signed response into JSON
 	/// - Parameters:
@@ -404,7 +446,7 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void) {
 
 		let urlRequest = constructRequest(
 			url: networkConfiguration.publicKeysUrl,
@@ -415,7 +457,7 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
+		decodeSignedData(request: urlRequest, session: session, completion: completion)
 	}
 
 	/// Get the remote configuration

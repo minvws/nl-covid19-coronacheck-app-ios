@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Clcore
 
 /// The access options
 enum AccessAction {
@@ -26,8 +27,8 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// The configuration
 	private var configuration: ConfigurationGeneralProtocol = Configuration()
 
-	/// The scanned attributes
-	internal var cryptoResults: (attributes: CryptoAttributes?, errorMessage: String?)
+	/// The scanned result
+	internal var verificationResult: MobilecoreVerificationResult
 
 	/// A timer auto close the scene
 	private var autoCloseTimer: Timer?
@@ -67,10 +68,10 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	///   - scanResults: the decrypted attributes
 	init(
 		coordinator: (VerifierCoordinatorDelegate & Dismissable),
-		cryptoResults: (CryptoAttributes?, String?)) {
+		verificationResult: MobilecoreVerificationResult) {
 
 		self.coordinator = coordinator
-		self.cryptoResults = cryptoResults
+		self.verificationResult = verificationResult
 
 		primaryButtonTitle = L.verifierResultNext()
 		super.init()
@@ -100,33 +101,35 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Check the attributes
 	internal func checkAttributes() {
 		
-		guard let attributes = cryptoResults.attributes else {
+		guard verificationResult.status == MobilecoreVERIFICATION_SUCCESS else {
 			allowAccess = .denied
 			showAccessDeniedInvalidQR()
 			return
 		}
 		
-		if attributes.isDomesticDcc {
-			// Domestic issued DCC is not valid
+		guard let details = verificationResult.details else {
 			allowAccess = .denied
-			showAccessDeniedDomesticDcc()
-		} else if attributes.isSpecimen {
+			showAccessDeniedInvalidQR()
+			return
+		}
+
+		if details.isSpecimen == "1" {
 			allowAccess = .demo
-			setHolderIdentity(attributes)
+			setHolderIdentity(details)
 			showAccessDemo()
 		} else {
 			allowAccess = .verified
-			setHolderIdentity(attributes)
+			setHolderIdentity(details)
 			showAccessAllowed()
 		}
 	}
 
-	func setHolderIdentity(_ attributes: CryptoAttributes) {
+	func setHolderIdentity(_ details: MobilecoreVerificationDetails) {
 
-		firstName = determineAttributeValue(attributes.firstNameInitial)
-		lastName = determineAttributeValue(attributes.lastNameInitial)
-		dayOfBirth = determineAttributeValue(attributes.birthDay)
-		monthOfBirth = determineMonthOfBirth(attributes.birthMonth)
+		firstName = determineAttributeValue(details.firstNameInitial)
+		lastName = determineAttributeValue(details.lastNameInitial)
+		dayOfBirth = determineAttributeValue(details.birthDay)
+		monthOfBirth = determineMonthOfBirth(details.birthMonth)
 	}
 
 	/// Determine the value for display
@@ -194,12 +197,6 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 		title = L.verifierResultDemoTitle()
 		message = nil
-	}
-	
-	private func showAccessDeniedDomesticDcc() {
-		
-		title = L.verifierResultDeniedRegionTitle()
-		message = L.verifierResultDeniedRegionMessage()
 	}
 
 	func dismiss() {
