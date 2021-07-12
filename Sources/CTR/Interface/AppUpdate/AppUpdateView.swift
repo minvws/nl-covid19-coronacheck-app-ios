@@ -17,7 +17,7 @@ class AppUpdateView: ScrolledStackWithButtonView {
 
 		// Margins
 		static let labelSpacing: CGFloat = 24
-		static let imageToLabelSpacing: CGFloat = 42
+		static let imageToLabelSpacing: CGFloat = 43
 	}
 
 	/// The image view
@@ -73,8 +73,6 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		backgroundColor = Theme.colors.viewControllerBackground
 		titleLabel.textAlignment = .center
 		messageLabel.textAlignment = .center
-		
-		stackView.setCustomSpacing(ViewTraits.imageToLabelSpacing, after: imageView)
 	}
 
 	/// Setup the hierarchy
@@ -89,6 +87,8 @@ class AppUpdateView: ScrolledStackWithButtonView {
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
 		stackView.addArrangedSubview(spacer)
+		
+		stackView.setCustomSpacing(ViewTraits.imageToLabelSpacing, after: imageView)
 	}
 
 	/// Setup the constraints
