@@ -1,3 +1,16 @@
+"general.retry" = "Try again";
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>You can't use the QR code because of a server error. <a href=\"%@\">Try again</a></p><br /><p>or call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free)</p>";
+"holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need internet to continue to access your QR code. ";
+"holder.dashboard.strippen.expiring.nointernet.alert.title" = "Please connect to the internet near upon";
+"holder.dashboard.strippen.expiring.nointernet.alert.message" = "The QR code needs internet connection every now and then. Without connection you can use the QR code for three more days. After that, you can use the QR code again as soon as you have internet.";
+"holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
+"holder.dashboard.strippen.expired.nointernet.alert.message" = "You need internet to continue to access your QR code.";
+"holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
+"holder.dashboard.strippen.expired.servererror.alert.message" = "To keep using your QR code, you need internet connection. However there is currently a server issue. Retry now or try again later. (Error: %@)";
+
+
+
 "holder.tokenentry.button.notoken" = "I don't have a code";
 
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
@@ -9,7 +22,7 @@
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
-"holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p>";
+"holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p><p>Have you been tested more than 180 days ago? Then your test result is no longer valid.</p>";
 "holder.recovery.nolist.action" = "To My certificates";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery details";
@@ -254,6 +267,7 @@
 "holder.dashboard.empty.title" = "Find your certificate here later";
 "holder.dashboard.empty.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.<br /></p><p><b>Travelling outside the Netherlands? </b><br />Check <a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> before you leave. There you will find which certificate is valid in the country you’re planning to visit.</p>";
 
+
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
@@ -294,7 +308,7 @@
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Check your test result";
 "holder.testresults.results.text" = "This test result is retrieved from the test location.<br />Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.";
-"holder.testresults.results.button" = "Make QR code";
+"holder.testresults.results.button" = "Make certificate";
 "holder.testresults.pending.title" = "Test result not yet known";
 "holder.testresults.pending.text" = "<p>Please try again later.</p><p></p><p>If you have any questions, contact your test location.</p>";
 "holder.testresults.already.title" = "Test result already retrieved";
@@ -331,7 +345,7 @@
 "holder.vaccination.list.title" = "Your retrieved vaccinations";
 "holder.test.list.title" = "Retrieve test result";
 "holder.vaccination.list.message" = "You can make a QR code of a negative test result or of a vaccination.";
-"holder.vaccination.list.action" = "Make QR code";
+"holder.vaccination.list.action" = "Make certificate";
 "holder.vaccination.element.title" = "Vaccination %@";
 "holder.vaccination.element.subtitle" = "Name: %@<br />Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
@@ -406,10 +420,4 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
-
-"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Vaccination certificate corrected";
-"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Due to a technical error you’ve wrongly received a Dutch vaccination certificate. This was corrected.";
-"holder.faultyvaccination28June.failedtoreload.alert.title" = "Failed to refresh details";
-"holder.faultyvaccination28June.failedtoreload.alert.message" = "Something went wrong while refreshing your details. Please retrieve your details again via the app.";
-
 

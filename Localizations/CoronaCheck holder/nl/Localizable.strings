@@ -1,3 +1,16 @@
+"general.retry" = "Probeer opnieuw";
+"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
+"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a></p><br /><p>of bel de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis)</p>";
+"holder.dashboard.strippen.expired.errorfooter.nointernet" = "Je hebt internet nodig om je QR-code te kunnen gebruiken.";
+"holder.dashboard.strippen.expiring.nointernet.alert.title" = "Kan je binnenkort verbinding maken met het internet?";
+"holder.dashboard.strippen.expiring.nointernet.alert.message" = " De QR-code heeft af en toe internet nodig. Zonder internetverbinding kan je nog 3 dagen je QR-code gebruiken.  Ook daarna kun je de QR-code weer gebruiken wanneer je internet hebt.";
+"holder.dashboard.strippen.expired.nointernet.alert.title" = "Maak verbinding met het internet";
+"holder.dashboard.strippen.expired.nointernet.alert.message" = "Om toegang tot je QR-codes te houden heb je internet nodig. Maak nu verbinding.";
+"holder.dashboard.strippen.expired.servererror.alert.title" = "Fout op de server";
+"holder.dashboard.strippen.expired.servererror.alert.message" = "Om je QR-code te blijven gebruiken heb je internet nodig. Helaas is er nu een fout op onze server. Probeer opnieuw of kom later terug. (foutcode: %@)";
+
+
+
 "holder.tokenentry.button.notoken" = "Ik heb geen code";
 
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
@@ -9,7 +22,7 @@
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
-"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.</p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p>";
+"holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.</p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p><p>Ben je langer dan 180 dagen geleden positief getest? Dan is de testuitslag niet meer geldig.</p>";
 "holder.recovery.nolist.action" = "Naar Mijn bewijzen";
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
@@ -117,7 +130,6 @@
 "general.next" = "Volgende";
 "general.done" = "Klaar";
 "general.ok" = "Ok";
-"general.retry" = "Probeer opnieuw";
 "general.europeanUnion" = "Internationaal";
 "general.netherlands" = "Nederland";
 "general.dutch" = "Nederlandse";
@@ -254,20 +266,6 @@
 "holder.dashboard.notValidInThisRegionScreen.eu.recovery.message" = "Je herstelbewijs is niet internationaal geldig. Je hebt wel een Nederlands bewijs.<br />Dit komt doordat het type test niet voldoet. Alleen van een PCR-test kan een internationaal bewijs gemaakt worden.";
 "holder.dashboard.empty.title" = "Hier komt jouw bewijs";
 "holder.dashboard.empty.message" = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. De app maakt een Nederlands en een internationaal bewijs.<br /></p><p><b>Reis je buiten Nederland?</b><br />Check <a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> voor vertrek. Daar staat welk bewijs geldig is in het land dat je bezoekt.</p>";
-
-
-// TODO: 👇🏻🚧 THESE NEED FIXING BEFORE PR MERGE 👇🏻🚧 //
-"holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "Je QR-code werkt niet door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
-"holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Je QR-code werkt niet door een fout op de server. <a href=\"%@\">Probeer opnieuw</a></p><br /><p>of bel de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis)</p>";
-"holder.dashboard.strippen.expired.errorfooter.nointernet" = "Maak verbinding met het internet om te zorgen dat je QR-code weer werkt.";
-"holder.dashboard.strippen.expiring.nointernet.alert.title" = "Connect to the internet";
-"holder.dashboard.strippen.expiring.nointernet.alert.message" = "You’ve no internet connection, you can still access your QR card but you’ll need to come online in the next 3 days to continue to access it";
-"holder.dashboard.strippen.expired.nointernet.alert.title" = "Connect to the internet";
-"holder.dashboard.strippen.expired.nointernet.alert.message" = "Your QR cards need to check-in with our server before they can be displayed. Please connect to the internet to view them";
-"holder.dashboard.strippen.expired.servererror.alert.title" = "Server Error";
-"holder.dashboard.strippen.expired.servererror.alert.message" = "Your QR cards need to check-in with our server before they can be displayed. However there is currently a server issue. Retry now or else you can try again later. (Error: %@)";
-// TODO: ☝🏻🚧 THESE NEED FIXING BEFORE PR MERGE ☝🏻🚧 //
-
 
 
 /* MARK: - Holder Enlarged */
@@ -422,10 +420,4 @@
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
-
-"holder.faultyvaccination28June.successfullyreloaded.alert.title" = "Vaccinatiebewijs gecorrigeerd";
-"holder.faultyvaccination28June.successfullyreloaded.alert.message" = "Door een technische fout heeft u onterecht een Nederlands vaccinatiebewijs gekregen. Dit is nu gecorrigeerd.";
-"holder.faultyvaccination28June.failedtoreload.alert.title" = "Gegevens verversen niet gelukt";
-"holder.faultyvaccination28June.failedtoreload.alert.message" = "Er ging iets mis bij het verversen van je gegevens. Haal je gegevens opnieuw op via de app.";
-
 
