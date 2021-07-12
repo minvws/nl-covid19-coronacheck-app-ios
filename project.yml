@@ -48,11 +48,11 @@ configs:
   FirebaseProduction: release # should be identical to AppStore build.
   AppStore: release
 
-fileGroups: 
+fileGroups:
   - project.yml
   - Localizations
   - .github
-  
+
 # - Project Level settings:
 
 options:
@@ -211,7 +211,7 @@ targetTemplates:
           else
             echo "warning: SwiftLint not found, run 'make dev' in the project root folder"
           fi
-    
+
   Standard_UnitTesting:
     platform: iOS
     type: bundle.unit-test
