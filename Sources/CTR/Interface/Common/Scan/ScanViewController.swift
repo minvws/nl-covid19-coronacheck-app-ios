@@ -198,8 +198,8 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			target: self,
 			action: action
 		)
+        button.title = enableLabel
 		button.accessibilityIdentifier = "TorchButton"
-		button.accessibilityLabel = enableLabel
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button
 		navigationController?.navigationItem.rightBarButtonItem = button
