@@ -24,15 +24,6 @@ class SecurityFeaturesView: BaseView {
 		return view
 	}()
 
-	/// The image view for the background image
-	private let backgroundImageView: UIImageView = {
-
-		let view = UIImageView()
-		view.image = .securityBackground
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
 	/// the button
 	internal let primaryButton: UIButton = {
 
@@ -57,7 +48,6 @@ class SecurityFeaturesView: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 
-		addSubview(backgroundImageView)
 		addSubview(animationView)
 		addSubview(primaryButton)
 	}
@@ -67,7 +57,6 @@ class SecurityFeaturesView: BaseView {
 
 		super.setupViewConstraints()
 
-		backgroundImageView.embed(in: self)
 		animationView.embed(in: self)
 		primaryButton.embed(in: self)
 	}
@@ -125,6 +114,5 @@ class SecurityFeaturesView: BaseView {
 	func setupForInternational() {
 
 		currentAnimation = .internationalAnimation
-		backgroundImageView.isHidden = true
 	}
 }
