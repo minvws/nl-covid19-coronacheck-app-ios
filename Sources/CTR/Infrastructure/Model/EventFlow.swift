@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
+typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?)
 
 struct EventFlow {
 
@@ -227,6 +227,7 @@ struct EventFlow {
 		let negativeTest: TestEvent?
 		let positiveTest: TestEvent?
 		let recovery: RecoveryEvent?
+		let dccEvent: DccEvent?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -237,6 +238,7 @@ struct EventFlow {
 			case negativeTest = "negativetest"
 			case positiveTest = "positivetest"
 			case recovery
+			case dccEvent
 		}
 
 		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
@@ -251,6 +253,18 @@ struct EventFlow {
 				return recovery?.getDate(with: dateformatter)
 			}
 			return positiveTest?.getDate(with: dateformatter)
+		}
+	}
+
+	struct DccEvent: Codable, Equatable {
+
+		let credential: String
+		let couplingCode: String
+
+		enum CodingKeys: String, CodingKey {
+
+			case credential
+			case couplingCode
 		}
 	}
 
