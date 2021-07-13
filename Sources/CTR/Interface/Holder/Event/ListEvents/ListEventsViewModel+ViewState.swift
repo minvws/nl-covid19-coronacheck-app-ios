@@ -70,6 +70,8 @@ extension ListEventsViewModel {
 				return emptyTestState()
 			case .vaccination:
 				return emptyVaccinationState()
+			case .scannedDcc:
+				return emptyTestState()
 		}
 	}
 
@@ -146,6 +148,8 @@ extension ListEventsViewModel {
 					switch eventMode {
 						case .recovery:
 							return L.holderEventOriginmismatchRecoveryBody()
+						case .scannedDcc:
+							return "todo";
 						case .test:
 							return L.holderEventOriginmismatchTestBody()
 						case .vaccination:
@@ -197,6 +201,9 @@ extension ListEventsViewModel {
 			case .test:
 				title = L.holderTestresultsResultsTitle()
 				subTitle = L.holderTestresultsResultsText()
+			case .scannedDcc:
+				title = "todo"
+				subTitle = "todo"
 		}
 
 		return .listEvents(

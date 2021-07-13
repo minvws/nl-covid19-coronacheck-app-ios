@@ -92,6 +92,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					switch eventMode {
 						case .recovery:
 							return L.holderRecoveryListTitle()
+						case .scannedDcc:
+							return "Todo"
 						case .test:
 							return L.holderTestresultsResultsTitle()
 						case .vaccination:
@@ -129,10 +131,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				switch eventMode {
 					case .recovery:
 						return L.holderRecoveryAlertMessage()
+					case .scannedDcc:
+						return "Todo"
 					case .test:
 						return L.holderTestAlertMessage()
 					case .vaccination:
 						return L.holderVaccinationAlertMessage()
+
 				}
 			}(),
 			cancelAction: nil,

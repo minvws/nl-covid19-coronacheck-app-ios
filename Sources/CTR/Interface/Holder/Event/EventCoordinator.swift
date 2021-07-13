@@ -11,12 +11,14 @@ import SafariServices
 enum EventMode: String {
 
 	case recovery
+	case scannedDcc
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
 			case .recovery: return L.generalRecoverystatement()
+			case .scannedDcc: return "TODO!!!! localized scannedDcc"
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
 		}
@@ -289,6 +291,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination, .recovery:
 						navigateBackToEventStart()
+					case .scannedDcc:
+					break
 				}
 
 			default:
@@ -308,6 +312,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
+					case .scannedDcc:
+						break
 				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, eventMode: eventMode)
@@ -330,6 +336,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
+					case .scannedDcc:
+						logDebug("TODO: listEventsScreenDidFinish for scannedDcc")
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
