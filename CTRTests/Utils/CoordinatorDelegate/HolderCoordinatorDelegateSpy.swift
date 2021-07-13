@@ -11,12 +11,12 @@ import XCTest
 
 class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, OpenUrlProtocol {
 
-	var invokedNavigateToTokenScan = false
-	var invokedNavigateToTokenScanCount = 0
+	var invokedNavigateToScan = false
+	var invokedNavigateToScanCount = 0
 
-	func navigateToTokenScan() {
-		invokedNavigateToTokenScan = true
-		invokedNavigateToTokenScanCount += 1
+	func navigateToScan() {
+		invokedNavigateToScan = true
+		invokedNavigateToScanCount += 1
 	}
 
 	var invokedNavigateBackToStart = false

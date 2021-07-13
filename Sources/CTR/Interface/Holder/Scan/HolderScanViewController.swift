@@ -7,9 +7,9 @@
 
 import UIKit
 
-class TokenScanViewController: ScanViewController {
+class HolderScanViewController: ScanViewController {
 
-	private let viewModel: TokenScanViewModel
+	private let viewModel: HolderScanViewModel
 
 	var errorTitle: String?
 
@@ -17,7 +17,7 @@ class TokenScanViewController: ScanViewController {
 
 	// MARK: Initializers
 
-	init(viewModel: TokenScanViewModel) {
+	init(viewModel: HolderScanViewModel) {
 
 		self.viewModel = viewModel
 

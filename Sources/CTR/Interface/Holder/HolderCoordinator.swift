@@ -12,8 +12,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
-	/// Navigate to the token scanner
-	func navigateToTokenScan()
+	/// Navigate to the scanner
+	func navigateToScan()
 
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
@@ -248,11 +248,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to the token scanner
-	func navigateToTokenScan() {
+	/// Navigate to the scanner
+	func navigateToScan() {
 
-		let destination = TokenScanViewController(
-			viewModel: TokenScanViewModel(
+		let destination = HolderScanViewController(
+			viewModel: HolderScanViewModel(
 				coordinator: self
 			)
 		)

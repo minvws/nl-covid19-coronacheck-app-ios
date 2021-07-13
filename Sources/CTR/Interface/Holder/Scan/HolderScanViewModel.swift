@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TokenScanViewModel: ScanPermissionViewModel {
+class HolderScanViewModel: ScanPermissionViewModel {
 
 	/// Coordination Delegate
 	weak var theCoordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
