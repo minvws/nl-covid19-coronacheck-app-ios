@@ -253,7 +253,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 		let destination = HolderScanViewController(
 			viewModel: HolderScanViewModel(
-				coordinator: self
+				coordinator: self,
+				cryptoManager: cryptoManager
 			)
 		)
 

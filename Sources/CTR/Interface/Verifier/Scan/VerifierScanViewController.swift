@@ -47,11 +47,6 @@ class VerifierScanViewController: ScanViewController {
 		
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
-		viewModel.$startScanning.binding = { [weak self] in
-			if $0, self?.captureSession?.isRunning == false {
-				self?.captureSession.startRunning()
-			}
-		}
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self else { return }
             strongSelf.addTorchButton(

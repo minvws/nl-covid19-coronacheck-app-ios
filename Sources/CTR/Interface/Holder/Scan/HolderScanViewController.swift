@@ -8,12 +8,14 @@
 import UIKit
 
 class HolderScanViewController: ScanViewController {
+	
+	struct AlertContent {
+		let title: String
+		let subTitle: String
+		let okTitle: String
+	}
 
 	private let viewModel: HolderScanViewModel
-
-	var errorTitle: String?
-
-	var errorMessage: String?
 
 	// MARK: Initializers
 
@@ -38,17 +40,15 @@ class HolderScanViewController: ScanViewController {
 	override func viewDidLoad() {
 
 		super.viewDidLoad()
+		
+		configureTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$errorTitle.binding = { [weak self] in self?.errorTitle = $0 }
-		viewModel.$errorMessage.binding = { [weak self] in self?.errorMessage = $0 }
+	
+		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
-		viewModel.$startScanning.binding = { [weak self] in
-			if $0, self?.captureSession?.isRunning == false {
-				self?.captureSession.startRunning()
-			}
-		}
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self else { return }
 			strongSelf.addTorchButton(
@@ -57,14 +57,9 @@ class HolderScanViewController: ScanViewController {
                 disableLabel: $0.last
             )
 		}
-		viewModel.$showError.binding = { [weak self] in
-			guard let strongSelf = self else {
-				return
-			}
+		viewModel.$showPermissionWarning.binding = { [weak self] in
 			if $0 {
-				if let title = strongSelf.errorTitle, let message = strongSelf.errorMessage {
-					strongSelf.showError(title: title, message: message)
-				}
+				self?.showPermissionError()
 			}
 		}
 
@@ -74,24 +69,53 @@ class HolderScanViewController: ScanViewController {
 
 	override func found(code: String) {
 
-		viewModel.parseCode(code)
+		viewModel.parseQRMessage(code)
 	}
 
-	/// Show an error dialog
-	/// - Parameters:
-	///   - title: the title
-	///   - message: the message
-	private func showError(title: String = L.generalErrorTitle(), message: String) {
+	/// Show alert
+	func showPermissionError() {
 
 		let alertController = UIAlertController(
-			title: title,
-			message: message,
-			preferredStyle: .alert)
+			title: L.verifierScanPermissionTitle(),
+			message: L.verifierScanPermissionMessage(),
+			preferredStyle: .alert
+		)
 		alertController.addAction(
 			UIAlertAction(
-				title: L.generalOk(),
+				title: L.verifierScanPermissionSettings(),
 				style: .default,
+				handler: { [weak self] _ in
+					self?.viewModel.gotoSettings()
+				}
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.generalCancel(),
+				style: .cancel,
 				handler: nil
+			)
+		)
+		present(alertController, animated: true, completion: nil)
+	}
+	
+	func showAlert(_ alertContent: AlertContent?) {
+
+		guard let content = alertContent else { return }
+
+		let alertController = UIAlertController(
+			title: content.title,
+			message: content.subTitle,
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: content.okTitle,
+				style: .default,
+				handler: { [weak self] _ in
+					// Resume scanning
+					self?.resumeScanning()
+				}
 			)
 		)
 		present(alertController, animated: true, completion: nil)

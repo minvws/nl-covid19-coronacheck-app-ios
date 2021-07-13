@@ -8,6 +8,9 @@
 import UIKit
 
 class HolderScanViewModel: ScanPermissionViewModel {
+	
+	/// The crypto manager
+	weak var cryptoManager: CryptoManaging?
 
 	/// Coordination Delegate
 	weak var theCoordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
@@ -18,48 +21,39 @@ class HolderScanViewModel: ScanPermissionViewModel {
 	/// The message of the scene
 	@Bindable private(set) var message: String
 
-	/// The error title of the scene
-	@Bindable private(set) var errorTitle: String
-
-	/// The error message of the scene
-	@Bindable private(set) var errorMessage: String
-
-	/// Show the error?
-	@Bindable private(set) var showError: Bool
-
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
-
-	/// Start scanning
-	@Bindable private(set) var startScanning: Bool = false
+	
+	@Bindable private(set) var alert: HolderScanViewController.AlertContent?
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)) {
-
+	///   - cryptoManager: the crypto manager
+	init(
+		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
+		cryptoManager: CryptoManaging) {
+		
 		self.theCoordinator = coordinator
+		self.cryptoManager = cryptoManager
+		
 		self.title = L.holderTokenscanTitle()
 		self.message = L.holderTokenscanMessage()
 		self.torchLabels = [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
-		self.errorTitle = L.holderTokenscanErrorTitle()
-		self.errorMessage = L.holderTokenscanErrorMessage()
-		self.showError = false
+		
 		super.init(coordinator: coordinator)
 	}
 
 	/// Parse the scanned QR-code
 	/// - Parameter code: the scanned code
-	func parseCode(_ code: String) {
-
-		do {
-			let object = try JSONDecoder().decode(RequestToken.self, from: Data(code.utf8))
-			self.logDebug("Response Object: \(object)")
-			theCoordinator?.userDidScanRequestToken(requestToken: object)
-		} catch {
-			self.logError("Token Scan Error: \(error)")
-			self.showError = true
-			self.startScanning = true
+	func parseQRMessage(_ message: String) {
+		
+		if message.hasPrefix("NL") {
+			// Invalid: Domestic QR-code
+		} else if let euCredentialAttributes = cryptoManager?.readEuCredentials(Data(message.utf8)) {
+			logDebug("\(euCredentialAttributes)")
+		} else {
+			// Invalid QR-code
 		}
 	}
 }
