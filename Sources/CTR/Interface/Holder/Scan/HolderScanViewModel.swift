@@ -37,8 +37,8 @@ class HolderScanViewModel: ScanPermissionViewModel {
 		self.theCoordinator = coordinator
 		self.cryptoManager = cryptoManager
 		
-		self.title = L.holderTokenscanTitle()
-		self.message = L.holderTokenscanMessage()
+		self.title = L.holderScannerTitle()
+		self.message = L.holderScannerMessage()
 		self.torchLabels = [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
 		
 		super.init(coordinator: coordinator)
