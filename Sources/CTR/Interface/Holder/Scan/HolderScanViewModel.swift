@@ -50,10 +50,17 @@ class HolderScanViewModel: ScanPermissionViewModel {
 		
 		if message.hasPrefix("NL") {
 			// Invalid: Domestic QR-code
+			alert = .init(title: L.holderScannerAlertDccTitle(),
+						  subTitle: L.holderScannerAlertDccMessage(),
+						  okTitle: L.generalOk())
 		} else if let euCredentialAttributes = cryptoManager?.readEuCredentials(Data(message.utf8)) {
+			// Valid
 			logDebug("\(euCredentialAttributes)")
 		} else {
-			// Invalid QR-code
+			// Invalid: Unknown QR-codeScanner
+			alert = .init(title: L.holderScannerAlertUnknownTitle(),
+						  subTitle: L.holderScannerAlertUnknownMessage(),
+						  okTitle: L.generalOk())
 		}
 	}
 }
