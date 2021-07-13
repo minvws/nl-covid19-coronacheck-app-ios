@@ -17,7 +17,13 @@ class SecurityCheckerWorker: Logging {
         
         var str = String(decoding: derb64, as: UTF8.self)
         str = str.replacingOccurrences(of: "\n", with: "")
-        
+
+		// Fix if certificate has different line endings.
+		if str.hasSuffix("\r-") {
+			logVerbose("certificateAsPemData: \(String(decoding: certificateAsPemData, as: UTF8.self))")
+			str = String(str.replacingOccurrences(of: "\r", with: "").dropLast())
+		}
+
         if let data = Data(base64Encoded: str),
 		   let cert = SecCertificateCreateWithData(nil, data as CFData) {
 			return cert
@@ -41,6 +47,7 @@ class SecurityCheckerWorker: Logging {
 		for certificateAsPemData in trustedCertificates {
 			if let cert = certificateFromPEM(certificateAsPemData: certificateAsPemData) {
 				trustList.append(cert)
+				logVerbose("checkATS: adding cert \(cert.hashValue)")
             } else {
                 logError("checkATS: Trust cert conversion failed")
             }

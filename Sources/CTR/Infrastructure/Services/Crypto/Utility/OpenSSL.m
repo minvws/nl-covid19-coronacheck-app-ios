@@ -106,6 +106,9 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
     if (gens) {
         for (int i=0; (i < sk_GENERAL_NAME_num(gens)); i++) {
             GENERAL_NAME *name = sk_GENERAL_NAME_value(gens, i);
+            // Note - we intentionally ignore GEN_IPADD (IP:..) voor raw
+            // IPv4 and IPv6 addresses at this point. Even though they could
+            // be in valid URLs (such as https://127.0.0.1/.)
             if (name && name->type == GEN_DNS) {
                 char *dns_name = (char *) ASN1_STRING_get0_data(name->d.dNSName);
                 [results addObject:[NSString stringWithCString:dns_name encoding:NSASCIIStringEncoding]];

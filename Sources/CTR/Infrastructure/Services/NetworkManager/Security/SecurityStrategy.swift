@@ -56,7 +56,7 @@ struct SecurityCheckerFactory {
 
 		if case let .provider(provider) = strategy {
 
-			trustedNames.append(contentsOf: provider.getHostNames())
+			trustedNames = [] // No trusted name check.
 			if let sslCertificate = provider.getSSLCertificate() {
 				trustedCertificates.append(sslCertificate)
 			}
@@ -172,8 +172,8 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
 			  let serverTrust = challenge.protectionSpace.serverTrust else {
 
-			logDebug("No security strategy")
-			completionHandler(.cancelAuthenticationChallenge, nil)
+			logWarning("SecurityChecker: invalid authenticationMethod")
+			completionHandler(.performDefaultHandling, nil)
 			return
 		}
 		let policies = [SecPolicyCreateSSL(true, challenge.protectionSpace.host as CFString)]
@@ -187,6 +187,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 			completionHandler(.useCredential, URLCredential(trust: serverTrust))
 			return
 		}
+		logWarning("SecurityChecker: cancelAuthenticationChallenge")
 		completionHandler(.cancelAuthenticationChallenge, nil)
 		return
 	}
