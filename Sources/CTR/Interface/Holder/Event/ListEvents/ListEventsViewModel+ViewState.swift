@@ -7,7 +7,7 @@
 
 import Foundation
 
-// typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
+typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
 
 extension ListEventsViewModel {
 
@@ -121,9 +121,50 @@ extension ListEventsViewModel {
 		)
 	}
 
+	private func recoveryEventsTooOld() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: L.holderRecoveryTooOldTitle(),
+				subTitle: L.holderRecoveryTooOldMessage(),
+				primaryActionTitle: L.holderTestNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	internal func cannotCreateEventsState() -> ListEventsViewController.State {
+
+		return .emptyEvents(
+			content: ListEventsViewController.Content(
+				title: L.holderEventOriginmismatchTitle(),
+				subTitle: {
+					switch eventMode {
+						case .recovery:
+							return L.holderEventOriginmismatchRecoveryBody()
+						case .test:
+							return L.holderEventOriginmismatchTestBody()
+						case .vaccination:
+							return L.holderEventOriginmismatchVaccinationBody()
+					}
+				}(),
+				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
 	// MARK: List State
 
-	internal func listEventsState(
+	private func listEventsState(
 		_ dataSource: [EventDataTuple],
 		remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 

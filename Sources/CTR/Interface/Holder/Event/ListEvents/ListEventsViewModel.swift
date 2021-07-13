@@ -7,8 +7,6 @@
 
 import Foundation
 
-typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event, providerIdentifier: String)
-
 class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
@@ -232,6 +230,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
+	// MARK: Errors
+
 	internal func showEventError(remoteEvents: [RemoteEvent]) {
 
 		alert = ListEventsViewController.AlertContent(
@@ -249,8 +249,6 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			okTitle: L.holderVaccinationErrorAgain()
 		)
 	}
-
-	// MARK: API Calls
 
 	private func showServerTooBusyError() {
 
@@ -340,153 +338,5 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			}
 		}
 		onCompletion(success)
-	}
-
-	private func cannotCreateEventsState() -> ListEventsViewController.State {
-
-		return .emptyEvents(
-			content: ListEventsViewController.Content(
-				title: L.holderEventOriginmismatchTitle(),
-				subTitle: {
-					switch eventMode {
-						case .recovery:
-							return L.holderEventOriginmismatchRecoveryBody()
-						case .test:
-							return L.holderEventOriginmismatchTestBody()
-						case .vaccination:
-							return L.holderEventOriginmismatchVaccinationBody()
-					}
-				}(),
-				primaryActionTitle: eventMode == .vaccination ? L.holderVaccinationNolistAction() : L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-
-	internal func recoveryEventsTooOld() -> ListEventsViewController.State {
-
-		return .emptyEvents(
-			content: ListEventsViewController.Content(
-				title: L.holderRecoveryTooOldTitle(),
-				subTitle: L.holderRecoveryTooOldMessage(),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-}
-
-// MARK: Test 2.0
-
-extension ListEventsViewModel {
-
-	private func pendingEventsState() -> ListEventsViewController.State {
-
-		return .emptyEvents(
-			content: ListEventsViewController.Content(
-				title: L.holderTestresultsPendingTitle(),
-				subTitle: L.holderTestresultsPendingText(),
-				primaryActionTitle: L.holderTestNolistAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
-		)
-	}
-
-	private func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListEventsViewController.State {
-
-		var rows = [ListEventsViewController.Row]()
-		if let row = getTest20Row(remoteEvent) {
-			rows.append(row)
-		}
-
-		return .listEvents(
-			content: ListEventsViewController.Content(
-				title: L.holderTestresultsResultsTitle(),
-				subTitle: L.holderTestresultsResultsText(),
-				primaryActionTitle: L.holderTestresultsResultsButton(),
-				primaryAction: { [weak self] in
-					self?.userWantsToMakeQR(remoteEvents: [remoteEvent]) { [weak self] success in
-						if !success {
-							self?.showEventError(remoteEvents: [remoteEvent])
-						}
-					}
-				},
-				secondaryActionTitle: L.holderVaccinationListWrong(),
-				secondaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(
-						.moreInformation(
-							title: L.holderVaccinationWrongTitle(),
-							body: L.holderTestresultsWrongBody(),
-							hideBodyForScreenCapture: false
-						)
-					)
-				}
-			),
-			rows: rows
-		)
-	}
-
-	private func getTest20Row(_ remoteEvent: RemoteEvent) -> ListEventsViewController.Row? {
-
-		guard let result = remoteEvent.wrapper.result,
-			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
-			return nil
-		}
-
-		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
-		let printSampleLongDate: String = printTestLongDateFormatter.string(from: sampleDate)
-		let holderID = getDisplayIdentity(result.holder)
-
-		return ListEventsViewController.Row(
-			title: L.holderTestresultsNegative(),
-			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
-			action: { [weak self] in
-
-				let body = L.holderEventAboutBodyTest2(
-					holderID,
-					self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType,
-					printSampleLongDate,
-					L.holderShowqrEuAboutTestNegative(),
-					result.unique
-				)
-				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
-				)
-			}
-		)
-	}
-
-	/// Get a display version of the holder identity
-	/// - Parameter holder: the holder identity
-	/// - Returns: the display version
-	private func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
-
-		guard let holder = holder else {
-			return ""
-		}
-
-		let parts = holder.mapIdentity(months: String.shortMonths)
-		var output = ""
-		for part in parts {
-			output.append(part)
-			output.append(" ")
-		}
-		return output.trimmingCharacters(in: .whitespaces)
 	}
 }
