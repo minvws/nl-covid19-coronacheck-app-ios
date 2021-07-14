@@ -16,27 +16,29 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	
 	var childCoordinators: [Coordinator] = []
 	
-	var navigationController: UINavigationController
-	
+	var navigationController: UINavigationController = UINavigationController()
+
 	weak var delegate: PaperCertificateFlowDelegate?
 	
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	init(
-		navigationController: UINavigationController,
-		delegate: PaperCertificateFlowDelegate) {
+	init(delegate: PaperCertificateFlowDelegate) {
 		
-		self.navigationController = navigationController
 		self.delegate = delegate
 	}
 	
 	/// Start the scene
 	func start() {
-		
+		// Not implemented. Starts in holder coordinator
 	}
 	
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
+	}
+	
+	func navigateToTokenEntry() {
+		
+		// Implement
 	}
 }

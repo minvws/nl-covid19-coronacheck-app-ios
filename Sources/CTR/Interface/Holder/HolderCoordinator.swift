@@ -429,6 +429,11 @@ extension HolderCoordinator: MenuDelegate {
 	/// Open a menu item
 	/// - Parameter identifier: the menu identifier
 	func openMenuItem(_ identifier: MenuIdentifier) {
+		
+		// Clean up child coordinator. Faq is not replacing side panel view controller
+		if let coordinator = childCoordinators.last, identifier != .faq {
+			removeChildCoordinator(coordinator)
+		}
 
 		switch identifier {
 			case .overview:
@@ -460,6 +465,14 @@ extension HolderCoordinator: MenuDelegate {
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
+				
+			case .addPaperCertificate:
+				let coordinator = PaperCertificateCoordinator(delegate: self)
+				let destination = StartPaperCertificateViewController(viewModel: .init(coordinator: coordinator))
+				navigationController = UINavigationController(rootViewController: destination)
+				coordinator.navigationController = navigationController
+				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
 
 			default:

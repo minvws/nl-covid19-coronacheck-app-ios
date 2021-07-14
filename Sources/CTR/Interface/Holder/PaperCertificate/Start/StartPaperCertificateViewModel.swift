@@ -21,4 +21,10 @@ final class StartPaperCertificateViewModel: Logging {
 		
 		self.coordinator = coordinator
 	}
+	
+	/// The user tapped the primary button
+	func primaryButtonTapped() {
+		
+		coordinator?.navigateToTokenEntry()
+	}
 }
