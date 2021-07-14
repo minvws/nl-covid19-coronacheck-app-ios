@@ -268,6 +268,11 @@ struct EventFlow {
 		}
 	}
 
+	struct CouplingResponse: Codable {
+
+		let status: String
+	}
+
 	struct RecoveryEvent: Codable, Equatable {
 
 		let sampleDate: String?

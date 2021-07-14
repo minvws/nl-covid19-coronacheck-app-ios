@@ -673,6 +673,32 @@ extension NetworkManager: NetworkManaging {
 			completion: completion
 		)
 	}
+
+	/// Check the coupling status
+	/// - Parameters:
+	///   - dictionary: the dcc and the coupling code as dictionary
+	///   - completion: completion handler
+	func checkCouplingStatus(dictionary: [String: AnyObject], completion: @escaping (Result<EventFlow.CouplingResponse, NetworkError>) -> Void) {
+
+		do {
+			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+			let urlRequest = constructRequest(
+				url: networkConfiguration.couplingUrl,
+				method: .POST,
+				body: jsonData
+			)
+			let session = URLSession(
+				configuration: .ephemeral,
+				delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
+				delegateQueue: nil
+			)
+			decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
+		} catch {
+			logError("Could not serialize dictionary")
+			completion(.failure(.encodingError))
+		}
+
+	}
 }
 
 private extension Result where Success == (URLResponse, Data) {

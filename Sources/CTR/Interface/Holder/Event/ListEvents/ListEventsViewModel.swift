@@ -14,7 +14,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private var walletManager: WalletManaging
 	var remoteConfigManager: RemoteConfigManaging
 	private let greenCardLoader: GreenCardLoading
-	weak var cryptoManager: CryptoManaging?
+	let cryptoManager: CryptoManaging?
+	private let couplingManager: CouplingManaging
 
 	var eventMode: EventMode
 
@@ -76,10 +77,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		greenCardLoader: GreenCardLoading,
+		scannedDcc: String? = nil,
+		couplingCode: String? = nil,
+		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
 		walletManager: WalletManaging = Services.walletManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		cryptoManager: CryptoManaging = Services.cryptoManager
+		cryptoManager: CryptoManaging = Services.cryptoManager,
+		couplingManager: CouplingManaging = Services.couplingManager
 	) {
 
 		self.coordinator = coordinator
@@ -88,6 +92,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		self.remoteConfigManager = remoteConfigManager
 		self.greenCardLoader = greenCardLoader
 		self.cryptoManager = cryptoManager
+		self.couplingManager = couplingManager
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -113,7 +118,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		super.init()
 
-		viewState = getViewState(from: remoteEvents)
+		if eventMode == .scannedDcc {
+			checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
+		} else {
+			viewState = getViewState(from: remoteEvents)
+		}
 	}
 
 	func backButtonTapped() {
@@ -160,6 +169,16 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
+	}
+
+	// MARK: Check Coupling Code
+
+	private func checkCouplingCode(scannedDcc: String?, couplingCode: String?) {
+
+		if let dcc = scannedDcc, let couplingCode = couplingCode {
+			// Validate coupling code
+			couplingManager.validate(dcc, couplingCode: couplingCode)
+		}
 	}
 
 	// MARK: Sign the events

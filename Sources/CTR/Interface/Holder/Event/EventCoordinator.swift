@@ -137,9 +137,9 @@ class EventCoordinator: Coordinator, Logging {
 		navigateToListEvents(events, eventMode: .test)
 	}
 
-	func startWithScannedDccEvents(_ events: [RemoteEvent]) {
+	func startWithScannedDcc(_ scannedDcc: String, couplingCode: String) {
 
-		navigateToListEvents(events, eventMode: .scannedDcc)
+		navigateToListScannedPaperDcc(scannedDcc: scannedDcc, couplingCode: couplingCode)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -197,8 +197,21 @@ class EventCoordinator: Coordinator, Logging {
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				remoteEvents: remoteEvents,
-				greenCardLoader: Services.greenCardLoader
+				remoteEvents: remoteEvents
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
+
+	private func navigateToListScannedPaperDcc(scannedDcc: String, couplingCode: String) {
+
+		let viewController = ListEventsViewController(
+			viewModel: ListEventsViewModel(
+				coordinator: self,
+				eventMode: .scannedDcc,
+				remoteEvents: [],
+				scannedDcc: scannedDcc,
+				couplingCode: couplingCode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)

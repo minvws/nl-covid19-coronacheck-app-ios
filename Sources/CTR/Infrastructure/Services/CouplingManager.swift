@@ -7,7 +7,9 @@
 
 import Foundation
 
-protocol DccConverting {
+protocol CouplingManaging {
+
+	init(cryptoManager: CryptoManaging, networkManager: NetworkManaging )
 
 	///  Convert a dcc to an event wrapper
 	/// - Parameters:
@@ -15,15 +17,19 @@ protocol DccConverting {
 	///   - couplingCode: the coupling code for the dcc
 	/// - Returns: the event wrapper
 	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper?
+
+	func validate(_ dcc: String, couplingCode: String)
 }
 
-class DccConverter: DccConverting {
+class CouplingManager: CouplingManaging, Logging {
 
-	weak var cryptoManager: CryptoManaging?
+	let cryptoManager: CryptoManaging
+	let networkManager: NetworkManaging
 
-	init(cryptoManager: CryptoManaging = Services.cryptoManager) {
+	required init(cryptoManager: CryptoManaging, networkManager: NetworkManaging) {
 
 		self.cryptoManager = cryptoManager
+		self.networkManager = networkManager
 	}
 
 	///  Convert a dcc to an event wrapper
@@ -34,7 +40,7 @@ class DccConverter: DccConverting {
 	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper? {
 
 		if let credential = dcc.data(using: .utf8),
-		   let euCredentialAttributes = cryptoManager?.readEuCredentials(credential) {
+		   let euCredentialAttributes = cryptoManager.readEuCredentials(credential) {
 
 			let identity = createIdentity(euCredentialAttributes)
 
@@ -75,9 +81,27 @@ class DccConverter: DccConverting {
 			birthDateString: attributes.digitalCovidCertificate.dateOfBirth
 		)
 	}
+
+	func validate(_ dcc: String, couplingCode: String) {
+
+		let dictionary: [String: AnyObject] = [
+			"credential": dcc as AnyObject,
+			"couplingCode": couplingCode as AnyObject
+		]
+
+		networkManager.checkCouplingStatus(dictionary: dictionary) { [weak self] result in
+			// result is Result<EventFlow.CouplingResponse, NetworkError>
+			switch result {
+				case let .success(response):
+					self?.logDebug("CouplingManager validate: \(response)")
+				case let .failure(error):
+					self?.logError("CouplingManager validate: \(error)")
+			}
+		}
+	}
 }
 
-extension DccConverter {
+extension CouplingManager {
 
 	static let testDCC = "HC1:NCF%RN%TS3DH0RGPJB/IB-OM7533SR7694RI3XH8/FWP5IJBVGAMAU5PNPF6R:5SVBWVBDKBYLDZ4D74DWZJ$7K+ CREDRCK*9C%PD8DJI7JSTNB95326HW4*IOQAOGU7$35+Y5MT4K0P*5PP:7X$RL353X7IKRE:7SA7G6M/NRO9SQKMHEE5IAXMFU*GSHGRKMXGG6DB-B93:GQBGZHHBIH5C9HFEC+GYHILIIX2MELNJIKCCHWIJNKMQ-ILKLXGGN+IRB84C9Q2LCIJ/HHKGL/BHOUB7IT8DJUIJ6DBSJLI7BI8AZ3CVOJ3BI9IL NILMLSVB*8BEPLA8KC42UIIUHSBKB+GIAZI3DJ/JAJZIR9KICT.XI/VB6TSYIJGDBGIA181:0TLOJJPACGKC2KRTI-8BEPL3DJ/LKQVBE2C*NIKYJIGK:H3J1DKVTQEDK8C+2TDSCNTCNJS6F3W.C$USE$2:*TIT3C7D8MS7LCTO3MMSSHT0$U58PLY3 ZRA5PUF7MDN QKI7B$WKL 6Q:S14GW4Q:LRERC6FPK1J*IUIH7S3J UQ2VQQ3ONV2CVR/TFFSQJ8KP.BENIQETGK6112U50-BW/IVK5"
 
