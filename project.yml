@@ -40,6 +40,12 @@ packages:
     github: pointfreeco/swift-snapshot-testing
     majorVersion: 1.8.2
 
+
+# - Attributes: 
+
+attributes:
+  LastUpgradeCheck: "1250"
+
 # - Configurations:
 
 configs:
