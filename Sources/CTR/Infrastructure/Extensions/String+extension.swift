@@ -122,6 +122,16 @@ extension String {
 
 extension String {
 
+	func strippingWhitespace() -> String {
+
+		return trimmingCharacters(in: .whitespacesAndNewlines)
+			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
+	}
+}
+
+
+extension String {
+
 	/// Add line breaks at each column.
 	/// Assumes the string is currently a single line.
 	func breakingAtColumn(column: Int) -> String {
