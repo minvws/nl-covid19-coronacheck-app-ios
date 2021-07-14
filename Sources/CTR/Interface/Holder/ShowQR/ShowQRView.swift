@@ -14,12 +14,11 @@ class ShowQRImageView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 10.0
-		static let domesticSecurityMargin: CGFloat = 38.0
+		static let domesticSecurityMargin: CGFloat = UIDevice.current.isSmallScreen ? 58.0 : 70.0
 		static let internationalSecurityMargin: CGFloat = 49.0
 	}
 
 	var securityViewBottomConstraint: NSLayoutConstraint?
-	var securityViewHeightConstraint: NSLayoutConstraint?
 
 	/// The spinner
 	let spinner: UIActivityIndicatorView = {
@@ -95,11 +94,10 @@ class ShowQRImageView: BaseView {
 			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
 
 			// Security
+			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			securityView.trailingAnchor.constraint(equalTo: trailingAnchor)
 		])
-
-		securityViewHeightConstraint = securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor)
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
 			equalTo: bottomAnchor,
@@ -161,6 +159,5 @@ class ShowQRImageView: BaseView {
 
 		securityView.setupForInternational()
 		securityViewBottomConstraint?.constant = ViewTraits.internationalSecurityMargin
-		securityViewHeightConstraint?.isActive = true
 	}
 }
