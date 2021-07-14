@@ -64,8 +64,7 @@ extension SecurityAnimation {
 
 	static let domesticAnimation = SecurityAnimation(
 		name: "domesticAnimation",
-		fileName: "fietser_LR_335x256",
-		section: (start: 58, end: 151)
+		fileName: "skatefiets-2"
 	)
 
 	static let internationalAnimation = SecurityAnimation(
