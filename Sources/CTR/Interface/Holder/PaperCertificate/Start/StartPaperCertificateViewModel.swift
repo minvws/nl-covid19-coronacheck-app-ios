@@ -11,6 +11,7 @@ final class StartPaperCertificateViewModel: Logging {
 	
 	@Bindable private(set) var title: String = L.holderPapercertificateStartTitle()
 	@Bindable private(set) var message: String = L.holderPapercertificateStartMessage()
+	@Bindable private(set) var highlightedMessage: String = L.holderPapercertificateStartHighlightedmessage()
 	@Bindable private(set) var primaryButtonTitle = L.generalNext()
 	
 	weak var coordinator: PaperCertificateCoordinator?

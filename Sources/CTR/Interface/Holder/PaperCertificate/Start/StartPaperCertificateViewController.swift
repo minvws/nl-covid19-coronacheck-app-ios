@@ -43,6 +43,8 @@ final class StartPaperCertificateViewController: BaseViewController {
 
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		
+		viewModel.$highlightedMessage.binding = { [weak self] in self?.sceneView.highlightedMessage = $0 }
+		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.primaryButtonTapped() }

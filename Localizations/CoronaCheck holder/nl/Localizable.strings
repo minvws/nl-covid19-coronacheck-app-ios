@@ -424,4 +424,5 @@
 
 /* MARK: - Start Paper Certificate  */
 "holder.papercertificate.start.title" = "Papieren bewijs toevoegen";
-"holder.papercertificate.start.message" = "Heb je een door de Nederlandse overheid uitgegeven papieren coronabewijs <b>laten printen door jouw zorgverlener</b>? Dan kun je deze hier toevoegen.";
+"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij de zorgverlener</b> waar je bent gevaccineerd of getest? Dan kun je deze hier ook in de app toevoegen. ";
+"holder.papercertificate.start.highlightedmessage" = "<p><b>Zelf je bewijs uitgeprint?</b><br /> Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
