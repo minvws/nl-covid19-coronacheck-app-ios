@@ -14,6 +14,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private var walletManager: WalletManaging
 	internal var remoteConfigManager: RemoteConfigManaging
 	private let greenCardLoader: GreenCardLoading
+	weak internal var cryptoManager: CryptoManaging?
 
 	internal var eventMode: EventMode
 
@@ -77,7 +78,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		remoteEvents: [RemoteEvent],
 		greenCardLoader: GreenCardLoading,
 		walletManager: WalletManaging = Services.walletManager,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		cryptoManager: CryptoManaging = Services.cryptoManager
 	) {
 
 		self.coordinator = coordinator
@@ -85,6 +87,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		self.walletManager = walletManager
 		self.remoteConfigManager = remoteConfigManager
 		self.greenCardLoader = greenCardLoader
+		self.cryptoManager = cryptoManager
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -93,7 +96,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 						case .recovery:
 							return L.holderRecoveryListTitle()
 						case .scannedDcc:
-							return "Todo"
+							return L.holderDccListTitle()
 						case .test:
 							return L.holderTestresultsResultsTitle()
 						case .vaccination:

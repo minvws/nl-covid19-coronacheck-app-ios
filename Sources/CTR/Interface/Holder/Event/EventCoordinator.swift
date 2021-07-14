@@ -132,9 +132,14 @@ class EventCoordinator: Coordinator, Logging {
 		startWith(.recovery)
 	}
 
-	func startWithListTestEvents(_ testEvents: [RemoteEvent]) {
+	func startWithListTestEvents(_ events: [RemoteEvent]) {
 
-		navigateToListEvents(testEvents, eventMode: .test)
+		navigateToListEvents(events, eventMode: .test)
+	}
+
+	func startWithScannedDccEvents(_ events: [RemoteEvent]) {
+
+		navigateToListEvents(events, eventMode: .scannedDcc)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
