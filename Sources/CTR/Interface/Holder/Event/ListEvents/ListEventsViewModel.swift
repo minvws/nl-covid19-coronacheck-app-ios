@@ -12,11 +12,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private var walletManager: WalletManaging
-	internal var remoteConfigManager: RemoteConfigManaging
+	var remoteConfigManager: RemoteConfigManaging
 	private let greenCardLoader: GreenCardLoading
-	weak internal var cryptoManager: CryptoManaging?
+	weak var cryptoManager: CryptoManaging?
 
-	internal var eventMode: EventMode
+	var eventMode: EventMode
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -25,34 +25,34 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}()
 
-	internal lazy var dateFormatter: ISO8601DateFormatter = {
+	lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
 	
-	internal lazy var printDateFormatter: DateFormatter = {
+	lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd MMMM yyyy"
 		return dateFormatter
 	}()
-	internal lazy var printTestDateFormatter: DateFormatter = {
+	lazy var printTestDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EE d MMMM HH:mm"
 		return dateFormatter
 	}()
-	internal lazy var printTestLongDateFormatter: DateFormatter = {
+	lazy var printTestLongDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
-	internal lazy var printMonthFormatter: DateFormatter = {
+	lazy var printMonthFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")

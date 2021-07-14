@@ -11,7 +11,7 @@ typealias EventDataTuple = (identity: EventFlow.Identity, event: EventFlow.Event
 
 extension ListEventsViewModel {
 
-	internal func getViewState(from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
+	func getViewState(from remoteEvents: [RemoteEvent]) -> ListEventsViewController.State {
 
 		var event30DataSource = [EventDataTuple]()
 
@@ -298,6 +298,10 @@ extension ListEventsViewModel {
 				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credential) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 						rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
+					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+						rows.append(getRowFromDCCRecoveryEvent(dataRow: dataRow, recovery: recovery))
+					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
+						rows.append(getRowFromDCCTestEvent(dataRow: dataRow, test: test))
 					}
 				}
 			}
@@ -503,7 +507,9 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getRowFromDCCVaccinationEvent(dataRow: EventDataTuple, vaccination: EuCredentialAttributes.Vaccination) -> ListEventsViewController.Row {
+	private func getRowFromDCCVaccinationEvent(
+		dataRow: EventDataTuple,
+		vaccination: EuCredentialAttributes.Vaccination) -> ListEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -539,7 +545,7 @@ extension ListEventsViewModel {
 
 		return ListEventsViewController.Row(
 			title: L.generalVaccinationcertificate().capitalizingFirstLetter(),
-			subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
@@ -552,6 +558,101 @@ extension ListEventsViewModel {
 		)
 	}
 
+	private func getRowFromDCCRecoveryEvent(
+		dataRow: EventDataTuple,
+		recovery: EuCredentialAttributes.RecoveryEntry) -> ListEventsViewController.Row {
+
+		let formattedBirthDate: String = dataRow.identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+
+		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
+			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
+		let formattedValidFromDate: String = Formatter.getDateFrom(dateString8601: recovery.validFrom)
+			.map(printDateFormatter.string) ?? recovery.validFrom
+		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
+			.map(printDateFormatter.string) ?? recovery.expiresAt
+
+		let body: String = L.holderDccRecoveryMessage(
+			dataRow.identity.fullName,
+			formattedBirthDate,
+			formattedFirstPostiveDate,
+			recovery.country,
+			recovery.issuer,
+			formattedValidFromDate,
+			formattedValidUntilDate,
+			recovery.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
+		)
+
+		return ListEventsViewController.Row(
+			title: L.generalRecoverystatement().capitalizingFirstLetter(),
+			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			action: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(
+					.moreInformation(
+						title: L.holderEventAboutTitle(),
+						body: body,
+						hideBodyForScreenCapture: true
+					)
+				)
+			}
+		)
+	}
+
+	private func getRowFromDCCTestEvent(
+		dataRow: EventDataTuple,
+		test: EuCredentialAttributes.TestEntry) -> ListEventsViewController.Row {
+
+		let formattedBirthDate: String = dataRow.identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
+			.map(printTestLongDateFormatter.string) ?? test.sampleDate
+
+		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
+			test.typeOfTest) ?? test.typeOfTest
+
+		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
+			test.marketingAuthorizationHolder) ?? (test.marketingAuthorizationHolder ?? "")
+
+		var testResult = test.testResult
+		if test.testResult == "260415000" {
+			testResult = L.holderShowqrEuAboutTestNegative()
+		}
+		if test.testResult == "260373001" {
+			testResult = L.holderShowqrEuAboutTestPostive()
+		}
+
+		let body: String = L.holderDccTestMessage(
+			dataRow.identity.fullName,
+			formattedBirthDate,
+			testType,
+			test.name ?? "",
+			formattedTestDate,
+			testResult,
+			test.testCenter,
+			manufacturer,
+			test.country,
+			test.issuer,
+			test.certificateIdentifier
+				.breakingAtColumn(column: 20) // hotfix for webview
+		)
+
+		return ListEventsViewController.Row(
+			title: L.generalTestcertificate().capitalizingFirstLetter(),
+			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			action: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(
+					.moreInformation(
+						title: L.holderEventAboutTitle(),
+						body: body,
+						hideBodyForScreenCapture: true
+					)
+				)
+			}
+		)
+	}
 }
 
 // MARK: Test 2.0
@@ -618,7 +719,7 @@ extension ListEventsViewModel {
 		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
 		let printSampleLongDate: String = printTestLongDateFormatter.string(from: sampleDate)
 		let holderID = getDisplayIdentity(result.holder)
-
+		
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
 			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
