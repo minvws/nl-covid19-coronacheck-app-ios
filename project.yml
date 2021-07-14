@@ -103,6 +103,8 @@ targetTemplates:
         product: AppAuth
       - package: AppAuth
         product: AppAuthCore
+      - package: AppAuth
+        product: AppAuthEnterpriseUserAgent
       - package: CocoaLumberjack
         product: CocoaLumberjack
       - package: CocoaLumberjack
