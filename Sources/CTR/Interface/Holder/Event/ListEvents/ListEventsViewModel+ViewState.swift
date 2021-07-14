@@ -207,19 +207,38 @@ extension ListEventsViewModel {
 
 		let title: String
 		let subTitle: String
+		let secondaryActionBody: String
 		switch eventMode {
 			case .vaccination:
 				title = L.holderVaccinationListTitle()
 				subTitle = L.holderVaccinationListMessage()
+				secondaryActionBody = L.holderVaccinationWrongBody()
 			case .recovery:
 				title = L.holderRecoveryListTitle()
 				subTitle = L.holderRecoveryListMessage()
+				secondaryActionBody = L.holderRecoveryWrongBody()
 			case .test:
 				title = L.holderTestresultsResultsTitle()
 				subTitle = L.holderTestresultsResultsText()
+				secondaryActionBody = L.holderTestresultsWrongBody()
 			case .scannedDcc:
 				title = L.holderDccListTitle()
 				subTitle = L.holderDccListMessage()
+
+				if let credential = dataSource.first?.event.dccEvent?.credential.data(using: .utf8),
+				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credential) {
+					if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
+						secondaryActionBody = L.holderVaccinationWrongBody()
+					} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
+						secondaryActionBody = L.holderRecoveryWrongBody()
+					} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
+						secondaryActionBody = L.holderTestresultsWrongBody()
+					} else {
+						secondaryActionBody = ""
+					}
+				} else {
+					secondaryActionBody = ""
+				}
 		}
 
 		return .listEvents(
@@ -239,7 +258,7 @@ extension ListEventsViewModel {
 					self?.coordinator?.listEventsScreenDidFinish(
 						.moreInformation(
 							title: L.holderVaccinationWrongTitle(),
-							body: self?.eventMode == .vaccination ? L.holderVaccinationWrongBody() : L.holderTestresultsWrongBody(),
+							body: secondaryActionBody,
 							hideBodyForScreenCapture: false
 						)
 					)
