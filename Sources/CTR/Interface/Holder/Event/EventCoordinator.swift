@@ -103,7 +103,7 @@ class EventCoordinator: Coordinator, Logging {
 
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
-	/// Initiailzer
+	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	///   - delegate: the vaccination flow delegate
