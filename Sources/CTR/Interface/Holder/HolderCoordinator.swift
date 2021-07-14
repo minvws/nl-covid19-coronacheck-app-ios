@@ -212,6 +212,12 @@ class HolderCoordinator: SharedCoordinator {
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
+	
+	private func removeChildCoordinator() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -431,8 +437,8 @@ extension HolderCoordinator: MenuDelegate {
 	func openMenuItem(_ identifier: MenuIdentifier) {
 		
 		// Clean up child coordinator. Faq is not replacing side panel view controller
-		if let coordinator = childCoordinators.last, identifier != .faq {
-			removeChildCoordinator(coordinator)
+		if identifier != .faq {
+			removeChildCoordinator()
 		}
 
 		switch identifier {
@@ -520,9 +526,7 @@ extension HolderCoordinator: EventFlowDelegate {
 
 		/// The user completed the event flow. Go back to the dashboard.
 
-		if let vaccinationCoordinator = childCoordinators.last {
-			removeChildCoordinator(vaccinationCoordinator)
-		}
+		removeChildCoordinator()
 
 		navigateToDashboard()
 	}
@@ -531,9 +535,7 @@ extension HolderCoordinator: EventFlowDelegate {
 
 		/// The user cancelled the flow. Go back one page
 
-		if let vaccinationCoordinator = childCoordinators.last {
-			removeChildCoordinator(vaccinationCoordinator)
-		}
+		removeChildCoordinator()
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
 	}
@@ -542,6 +544,8 @@ extension HolderCoordinator: EventFlowDelegate {
 extension HolderCoordinator: PaperCertificateFlowDelegate {
 	
 	func addCertificateFlowDidFinish() {
+		
+		removeChildCoordinator()
 		
 		navigateToDashboard()
 	}
