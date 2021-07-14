@@ -23,8 +23,9 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	init(navigationController: UINavigationController,
-		 delegate: PaperCertificateFlowDelegate) {
+	init(
+		navigationController: UINavigationController,
+		delegate: PaperCertificateFlowDelegate) {
 		
 		self.navigationController = navigationController
 		self.delegate = delegate
