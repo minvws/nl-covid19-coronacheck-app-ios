@@ -7,8 +7,13 @@ name: CTR
 
 packages:
   AppAuth:
-    github: openid/AppAuth-iOS.git
-    majorVersion: 1.4.0
+    ## When this PR is merged, switch back to official repo. 
+    ## For now, use the pinned (and reviewed) commit below 👇🏻
+    ## https://github.com/openid/AppAuth-iOS/pull/604/commits/f8487f6e147f41629f6c0a979fd1bc23d47d5bd0
+    # github: openid/AppAuth-iOS.git
+    # majorVersion: 1.4.0
+    github: davbeck/AppAuth-iOS
+    revision: f8487f6e147f41629f6c0a979fd1bc23d47d5bd0
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.2
@@ -39,6 +44,12 @@ packages:
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
     majorVersion: 1.8.2
+
+
+# - Attributes: 
+
+attributes:
+  LastUpgradeCheck: "1250"
 
 # - Configurations:
 
@@ -92,6 +103,8 @@ targetTemplates:
         product: AppAuth
       - package: AppAuth
         product: AppAuthCore
+      - package: AppAuth
+        product: AppAuthEnterpriseUserAgent
       - package: CocoaLumberjack
         product: CocoaLumberjack
       - package: CocoaLumberjack
