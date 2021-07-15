@@ -63,7 +63,7 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 	
 	// MARK: Public Access
 
-	/// The  title
+	/// The title
 	var title: String? {
 		didSet {
 			titleLabel.attributedText = title?.setLineHeight(
@@ -82,6 +82,7 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 		}
 	}
 	
+	/// The highlighted message shown in rounded label
 	var highlightedMessage: String? {
 		didSet {
 			highlightedMessageLabel.message = highlightedMessage
