@@ -77,13 +77,11 @@ class PaperCertificateCheckViewModel: Logging {
 
 	private func handleSuccess(response: DccCoupling.CouplingResponse, scannedDcc: String, couplingCode: String) {
 
-		logDebug("handleSuccess: \(response)")
-
 		switch response.status {
 			case .accepted:
 				if let wrapper = couplingManager.convert(scannedDcc, couplingCode: couplingCode) {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
-					logInfo("Todo: Pass \(remoteEvent) to list Events")
+					coordinator?.userWantToToGoEvents(remoteEvent)
 				}
 			case .blocked:
 				viewState = .feedback(
@@ -120,7 +118,7 @@ class PaperCertificateCheckViewModel: Logging {
 					)
 				)
 			default:
-				break
+				logWarning("PaperCertificateCheckViewModel - Unhandled response: \(response.status)")
 		}
 	}
 

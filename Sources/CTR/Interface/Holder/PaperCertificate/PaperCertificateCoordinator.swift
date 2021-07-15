@@ -22,6 +22,8 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userWantsToGoBackToDashboard()
 
 	func userWantsToGoBackToTokenEntry()
+
+	func userWantToToGoEvents(_ event: RemoteEvent)
 }
 
 final class PaperCertificateCoordinator: Coordinator, Logging {
@@ -123,6 +125,16 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 			)
 		}
 	}
+
+	func userWantToToGoEvents(_ event: RemoteEvent) {
+
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		eventCoordinator.startWithScannedEvent(event)
+	}
 }
 
 // MARK: - Dismissable
@@ -168,5 +180,33 @@ extension PaperCertificateCoordinator: OpenUrlProtocol {
 		} else {
 			UIApplication.shared.open(url)
 		}
+	}
+}
+
+extension PaperCertificateCoordinator: EventFlowDelegate {
+
+	func eventFlowDidComplete() {
+
+		removeChildCoordinator()
+		delegate?.addCertificateFlowDidFinish()
+	}
+
+	func eventFlowDidCancel() {
+
+		removeChildCoordinator()
+		if let viewController = navigationController.viewControllers
+			.first(where: { $0 is PaperCertificateStartViewController }) {
+
+			navigationController.popToViewController(
+				viewController,
+				animated: true
+			)
+		}
+	}
+
+	private func removeChildCoordinator() {
+
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
 	}
 }

@@ -462,3 +462,5 @@
 "holder.checkdcc.rejected.title" = "Geen geldige combinatie";
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
+
+"holder.dcc.alert.message" = "Je kunt later opnieuw proberen je papieren bewijs in te scannen";

@@ -137,6 +137,11 @@ class EventCoordinator: Coordinator, Logging {
 		navigateToListEvents(events, eventMode: .test)
 	}
 
+	func startWithScannedEvent(_ event: RemoteEvent) {
+
+		navigateToListEvents([event], eventMode: .scannedDcc)
+	}
+
 	func startWithTVS(eventMode: EventMode) {
 		
 		navigateToLogin(eventMode: eventMode)
@@ -336,7 +341,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
 					case .scannedDcc:
-						logDebug("TODO: listEventsScreenDidFinish for scannedDcc")
+						delegate?.eventFlowDidCancel()
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)

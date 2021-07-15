@@ -138,7 +138,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					case .recovery:
 						return L.holderRecoveryAlertMessage()
 					case .scannedDcc:
-						return "Todo"
+						return L.holderDccAlertMessage()
 					case .test:
 						return L.holderTestAlertMessage()
 					case .vaccination:
