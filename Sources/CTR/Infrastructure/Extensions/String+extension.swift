@@ -129,7 +129,6 @@ extension String {
 	}
 }
 
-
 extension String {
 
 	/// Add line breaks at each column.
