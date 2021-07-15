@@ -211,7 +211,14 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string
+          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string`
+
+          # forbid TestFlight release if there are missing translations:
+          if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
+            echo "error: Testflight deploys cannot contain missing translations:"
+            echo $OUTPUT
+            exit 1
+          fi
         inputFiles:
           - $TEMP_DIR/rswift-lastrun
         outputFiles:
