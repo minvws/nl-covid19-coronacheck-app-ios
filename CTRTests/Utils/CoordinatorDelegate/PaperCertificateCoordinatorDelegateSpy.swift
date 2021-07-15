@@ -35,19 +35,19 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
-	var invokedNavigateToTokenEntry = false
-	var invokedNavigateToTokenEntryCount = 0
+	var invokedUserWishesToEnterToken = false
+	var invokedUserWishesToEnterTokenCount = 0
 
-	func navigateToTokenEntry() {
-		invokedNavigateToTokenEntry = true
-		invokedNavigateToTokenEntryCount += 1
+	func userWishesToEnterToken() {
+		invokedUserWishesToEnterToken = true
+		invokedUserWishesToEnterTokenCount += 1
 	}
 
-	var invokedNavigateToScan = false
-	var invokedNavigateToScanCount = 0
+	var invokedUserWishesToScanCertificate = false
+	var invokedUserWishesToScanCertificateCount = 0
 
-	func navigateToScan() {
-		invokedNavigateToScan = true
-		invokedNavigateToScanCount += 1
+	func userWishesToScanCertificate() {
+		invokedUserWishesToScanCertificate = true
+		invokedUserWishesToScanCertificateCount += 1
 	}
 }
