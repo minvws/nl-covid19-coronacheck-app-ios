@@ -51,6 +51,15 @@ final class DCCTokenEntryViewModel {
 
 	// MARK: Handling user input
 
+	/// Is this user input permitted to be entered?
+	func validateInput(input: String?) -> Bool {
+		guard let input = input else { return true }
+		let correctAlphabet = input.unicodeScalars.allSatisfy({ Config.permittedCharacterSet.contains($0) })
+		let correctLength = input.count <= Config.requiredTokenLength
+
+		return correctLength && correctAlphabet
+	}
+
 	func userDidUpdateTokenField(rawTokenInput: String?) {
 		fieldErrorMessage = nil
 		userTokenInput = rawTokenInput
@@ -107,4 +116,5 @@ final class DCCTokenEntryViewModel {
 			hideBodyForScreenCapture: false
 		)
 	}
+
 }

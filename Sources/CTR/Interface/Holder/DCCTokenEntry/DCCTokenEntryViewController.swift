@@ -224,13 +224,19 @@ extension DCCTokenEntryViewController: UITextFieldDelegate {
 		_ textField: UITextField,
 		shouldChangeCharactersIn range: NSRange,
 		replacementString string: String) -> Bool {
-		
-		if let text = textField.text,
-		   let textRange = Range(range, in: text) {
-			let updatedText = text.replacingCharacters(in: textRange, with: string)
-			viewModel.userDidUpdateTokenField(rawTokenInput: updatedText)
+
+		guard let text = textField.text,
+			  let textRange = Range(range, in: text)
+		else { return false }
+
+		let updatedText = text.replacingCharacters(in: textRange, with: string)
+
+		guard viewModel.validateInput(input: updatedText) else {
+			return false
 		}
-		
+
+		viewModel.userDidUpdateTokenField(rawTokenInput: updatedText)
+
 		return true
 	}
 }

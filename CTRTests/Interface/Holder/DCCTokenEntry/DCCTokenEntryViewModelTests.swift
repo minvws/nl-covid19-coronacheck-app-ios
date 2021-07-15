@@ -46,7 +46,7 @@ class DCCTokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 	}
 
-	func test_inputtingValidValue_doesNothing(){
+	func test_inputtingValidValue_doesNothing() {
 		// Arrange
 
 		// Act
@@ -56,7 +56,7 @@ class DCCTokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 	}
 
-	func test_inputtingLongValue_doesNothing(){
+	func test_inputtingLongValue_doesNothing() {
 		// Arrange
 
 		// Act
@@ -109,6 +109,18 @@ class DCCTokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage).to(beNil())
+	}
+
+	func test_validationOfToken() {
+		expect(self.sut.validateInput(input: nil)) == true
+		expect(self.sut.validateInput(input: "ABCDEF")) == true
+
+		expect(self.sut.validateInput(input: "abcdef")) == false
+		expect(self.sut.validateInput(input: "a c c")) == false
+		expect(self.sut.validateInput(input: " ")) == false
+		expect(self.sut.validateInput(input: "1234")) == false
+		expect(self.sut.validateInput(input: "1234567")) == false
+		expect(self.sut.validateInput(input: "@#(*&#")) == false
 	}
 
 	// TODO: complete
