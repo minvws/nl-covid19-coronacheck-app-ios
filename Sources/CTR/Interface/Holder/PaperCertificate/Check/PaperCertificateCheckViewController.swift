@@ -48,9 +48,6 @@ class PaperCertificateCheckViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		navigationItem.hidesBackButton = true
-		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
-
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
 			if $0 {
@@ -73,11 +70,6 @@ class PaperCertificateCheckViewController: BaseViewController {
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
 			self?.sceneView.primaryButton.isEnabled = $0
 		}
-	}
-
-	@objc func backButtonTapped() {
-
-		viewModel.backButtonTapped()
 	}
 
 	private func setForLoadingState(_ content: Content) {

@@ -52,11 +52,6 @@ class PaperCertificateCheckViewModel: Logging {
 		checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
 	}
 
-	func backButtonTapped() {
-
-//		coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
-	}
-
 	// MARK: Check Coupling Code
 
 	private func checkCouplingCode(scannedDcc: String?, couplingCode: String?) {
