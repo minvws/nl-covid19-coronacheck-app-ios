@@ -77,8 +77,6 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		scannedDcc: String? = nil,
-		couplingCode: String? = nil,
 		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
 		walletManager: WalletManaging = Services.walletManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
@@ -118,11 +116,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		super.init()
 
-		if eventMode == .scannedDcc {
-			checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode)
-		} else {
-			viewState = getViewState(from: remoteEvents)
-		}
+		viewState = getViewState(from: remoteEvents)
 	}
 
 	func backButtonTapped() {
@@ -169,16 +163,6 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
-	}
-
-	// MARK: Check Coupling Code
-
-	private func checkCouplingCode(scannedDcc: String?, couplingCode: String?) {
-
-		if let dcc = scannedDcc, let couplingCode = couplingCode {
-			// Validate coupling code
-			couplingManager.validate(dcc, couplingCode: couplingCode)
-		}
 	}
 
 	// MARK: Sign the events

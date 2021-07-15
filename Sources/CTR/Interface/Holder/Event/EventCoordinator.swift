@@ -205,11 +205,9 @@ class EventCoordinator: Coordinator, Logging {
 
 	private func navigateToListScannedPaperDcc(scannedDcc: String, couplingCode: String) {
 
-		let viewController = ListEventsViewController(
-			viewModel: ListEventsViewModel(
+		let viewController = CheckPaperCertificateViewController(
+			viewModel: CheckPaperCertificateViewModel(
 				coordinator: self,
-				eventMode: .scannedDcc,
-				remoteEvents: [],
 				scannedDcc: scannedDcc,
 				couplingCode: couplingCode
 			)

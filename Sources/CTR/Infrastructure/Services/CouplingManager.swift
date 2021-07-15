@@ -18,7 +18,15 @@ protocol CouplingManaging {
 	/// - Returns: the event wrapper
 	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper?
 
-	func validate(_ dcc: String, couplingCode: String)
+	/// Check the dcc and the coupling code
+	/// - Parameters:
+	///   - dcc: the scanned dcc
+	///   - couplingCode: the coupling code
+	///   - completion: completion handler
+	func checkCouplingStatus(
+		dcc: String,
+		couplingCode: String,
+		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
 }
 
 class CouplingManager: CouplingManaging, Logging {
@@ -82,22 +90,22 @@ class CouplingManager: CouplingManaging, Logging {
 		)
 	}
 
-	func validate(_ dcc: String, couplingCode: String) {
+	/// Check the dcc and the coupling code
+	/// - Parameters:
+	///   - dcc: the scanned dcc
+	///   - couplingCode: the coupling code
+	///   - onCompletion: completion handler
+	func checkCouplingStatus(
+		dcc: String,
+		couplingCode: String,
+		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
 
 		let dictionary: [String: AnyObject] = [
 			"credential": dcc as AnyObject,
 			"couplingCode": couplingCode as AnyObject
 		]
 
-		networkManager.checkCouplingStatus(dictionary: dictionary) { [weak self] result in
-			// result is Result<EventFlow.CouplingResponse, NetworkError>
-			switch result {
-				case let .success(response):
-					self?.logDebug("CouplingManager validate: \(response)")
-				case let .failure(error):
-					self?.logError("CouplingManager validate: \(error)")
-			}
-		}
+		networkManager.checkCouplingStatus(dictionary: dictionary, completion: onCompletion)
 	}
 }
 
