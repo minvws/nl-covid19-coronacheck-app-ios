@@ -8,20 +8,14 @@
 import UIKit
 import MBProgressHUD
 
-class TokenEntryViewController: BaseViewController {
+class PaperCertificateTokenEntryViewController: BaseViewController {
 	
-	/// Used for identifying textFields via the UITextField.tag value
-	private enum TextFieldTag: Int {
-		case tokenEntry = 0
-		case verificationEntry = 1
-	}
-	
-	private let viewModel: TokenEntryViewModel
+	private let viewModel: PaperCertificateTokenEntryViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
 	
-	let sceneView = TokenEntryView()
+	let sceneView = PaperCertificateTokenEntryView()
 	
-	init(viewModel: TokenEntryViewModel) {
+	init(viewModel: PaperCertificateTokenEntryViewModel) {
 		
 		self.viewModel = viewModel
 
@@ -47,10 +41,7 @@ class TokenEntryViewController: BaseViewController {
 		
 		setupGestureRecognizer(view: sceneView)
 		sceneView.tokenEntryView.inputField.delegate = self
-		sceneView.tokenEntryView.inputField.tag = TextFieldTag.tokenEntry.rawValue
-		sceneView.verificationEntryView.inputField.delegate = self
-		sceneView.verificationEntryView.inputField.tag = TextFieldTag.verificationEntry.rawValue
-		
+
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
@@ -61,118 +52,35 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.title = title
 		}
 		
-		viewModel.$message.binding = { [weak self] message in
-			self?.sceneView.message = message
+		viewModel.$header.binding = { [weak self] header in
+			self?.sceneView.header = header
 		}
 		
-		viewModel.$tokenEntryHeaderTitle.binding = { [weak self] in
+		viewModel.$tokenEntryFieldTitle.binding = { [weak self] in
 			self?.sceneView.tokenEntryView.header = $0
 		}
 		
-		viewModel.$tokenEntryPlaceholder.binding = { [weak self] in
+		viewModel.$tokenEntryFieldPlaceholder.binding = { [weak self] in
 			self?.sceneView.tokenEntryFieldPlaceholder = $0
 		}
 		
-		viewModel.$verificationEntryHeaderTitle.binding = { [weak self] in
-			self?.sceneView.verificationEntryView.header = $0
-		}
-		
-		viewModel.$verificationInfo.binding = { [weak self] in
-			self?.sceneView.text = $0
-		}
-		
-		viewModel.$primaryTitle.binding = { [weak self] in
+		viewModel.$nextButtonTitle.binding = { [weak self] in
 			self?.sceneView.primaryTitle = $0
 		}
-		
-		viewModel.$verificationPlaceholder.binding = { [weak self] in
-			self?.sceneView.verificationEntryFieldPlaceholder = $0
-		}
-		
-		viewModel.$shouldShowProgress.binding = { [sceneView] in
-			if $0 {
-				MBProgressHUD.showAdded(to: sceneView, animated: true)
-				UIAccessibility.post(notification: .announcement, argument: L.generalLoading())
-			} else {
-				MBProgressHUD.hide(for: sceneView, animated: true)
-			}
-		}
-		
-		viewModel.$fieldErrorMessage.binding = { [weak self] message in
-			if let message = message {
-				UIAccessibility.post(notification: .announcement, argument: message)
-			}
-			self?.sceneView.fieldErrorMessage = message
-		}
-		
-		viewModel.$networkErrorAlert.binding = { [weak self] in
-			self?.showAlert($0)
-		}
 
-		viewModel.$shouldShowTokenEntryField.binding = { [weak self] in
-			self?.sceneView.tokenEntryView.isHidden = !$0
-		}
-
-		viewModel.$shouldShowNextButton.binding = { [weak self] in
-			self?.sceneView.primaryButton.isHidden = !$0
-		}
-
-		viewModel.$shouldShowVerificationEntryField.binding = { [weak self] shouldShowVerificationEntryField in
-			guard let strongSelf = self else { return }
-			
-			let wasHidden = strongSelf.sceneView.verificationEntryView.isHidden
-			
-			strongSelf.sceneView.verificationEntryView.isHidden = !shouldShowVerificationEntryField
-			
-			if strongSelf.sceneView.errorView.isHidden {
-				strongSelf.sceneView.textLabel.isHidden = !shouldShowVerificationEntryField
+		viewModel.$fieldErrorMessage.binding = { [weak self] header in
+			if let header = header {
+				UIAccessibility.post(notification: .announcement, argument: header)
 			}
-			
-			if shouldShowVerificationEntryField {
-				// Don't want the following code executing during viewDidLoad because it causes
-				// a glitch, so let's do it with a slight delay:
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-					if !strongSelf.sceneView.verificationEntryView.isHidden {
-						strongSelf.sceneView.verificationEntryView.inputField.becomeFirstResponder()
-					}
-				}
-			}
-			
-			if wasHidden && shouldShowVerificationEntryField {
-				// Only post once
-				UIAccessibility.post(notification: .screenChanged, argument: strongSelf.sceneView.verificationEntryView)
-			}
+			self?.sceneView.fieldErrorMessage = header
 		}
-		
-		viewModel.$shouldEnableNextButton.binding = { [weak self] in self?.sceneView.primaryButton.isEnabled = $0 }
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in
-			guard let strongSelf = self else { return }
-			
-			strongSelf.viewModel.nextButtonTapped(
-				strongSelf.sceneView.tokenEntryView.inputField.text,
-				verificationInput: strongSelf.sceneView.verificationEntryView.inputField.text
-			)
+			self?.viewModel.nextButtonTapped()
 		}
 		
-		viewModel.$resendVerificationButtonTitle.binding = { [weak self] in
-			self?.sceneView.resendVerificationCodeButtonTitle = $0
-		}
-
 		viewModel.$userNeedsATokenButtonTitle.binding = { [weak self] in
 			self?.sceneView.userNeedsATokenButtonTitle = $0
-		}
-
-		viewModel.$shouldShowUserNeedsATokenButton.binding = { [weak self] in
-			self?.sceneView.userNeedsATokenButton.isHidden = !$0
-		}
-		
-		viewModel.$shouldShowResendVerificationButton.binding = { [weak self] in
-			self?.sceneView.resendVerificationCodeButton.isHidden = !$0
-		}
-		
-		sceneView.resendVerificationCodeButtonTappedCommand = { [weak self] in
-			self?.displayResendVerificationConfirmationAlert()
 		}
 
 		sceneView.userNeedsATokenButtonTappedCommand = { [weak self] in
@@ -219,16 +127,13 @@ class TokenEntryViewController: BaseViewController {
 	}
 	
 	@objc func handleSingleTap(sender: UITapGestureRecognizer) {
-		
-		if view != nil {
-			view.endEditing(true)
-		}
+		view?.endEditing(true)
 	}
 	
 	// MARK: Keyboard
-
+	
 	@objc func keyBoardWillShow(notification: Notification) {
-
+		
 		let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
 		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
 		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
@@ -255,9 +160,9 @@ class TokenEntryViewController: BaseViewController {
 		// Start the animation
 		animator.startAnimation()
 	}
-
+	
 	@objc func keyBoardWillHide(notification: Notification) {
-
+		
 		tapGestureRecognizer?.isEnabled = false
 
 		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
@@ -277,35 +182,11 @@ class TokenEntryViewController: BaseViewController {
 		// Start the animation
 		animator.startAnimation()
 	}
-	
-	// MARK: Alerts
-	
-	func displayResendVerificationConfirmationAlert() {
-		
-		let alertController = UIAlertController(
-			title: viewModel.confirmResendVerificationAlertTitle,
-			message: viewModel.confirmResendVerificationAlertMessage,
-			preferredStyle: .actionSheet
-		)
-		alertController.addAction(UIAlertAction(
-			title: viewModel.confirmResendVerificationAlertOkayButton,
-			style: .default) { [weak self] _ in
-			guard let self = self else { return }
-			self.sceneView.verificationEntryView.inputField.text = nil
-			self.viewModel.resendVerificationCodeButtonTapped()
-		})
-		alertController.addAction(UIAlertAction(
-			title: viewModel.confirmResendVerificationAlertCancelButton,
-			style: .cancel
-		))
-
-		self.present(alertController, animated: true)
-	}
 }
 
 // MARK: - UITextFieldDelegate
 
-extension TokenEntryViewController: UITextFieldDelegate {
+extension PaperCertificateTokenEntryViewController: UITextFieldDelegate {
 
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 
@@ -343,23 +224,19 @@ extension TokenEntryViewController: UITextFieldDelegate {
 		_ textField: UITextField,
 		shouldChangeCharactersIn range: NSRange,
 		replacementString string: String) -> Bool {
-		
-		if let text = textField.text,
-		   let textRange = Range(range, in: text) {
-			let updatedText = text.replacingCharacters(in: textRange, with: string)
-			
-			switch textField.tag {
-				case TextFieldTag.tokenEntry.rawValue:
-					viewModel.userDidUpdateTokenField(rawTokenInput: updatedText, currentValueOfVerificationInput: sceneView.verificationEntryView.inputField.text)
-					
-				case TextFieldTag.verificationEntry.rawValue:
-					viewModel.userDidUpdateVerificationField(rawVerificationInput: updatedText, currentValueOfTokenInput: sceneView.tokenEntryView.inputField.text)
-					
-				default:
-					break
-			}
+
+		guard let text = textField.text,
+			  let textRange = Range(range, in: text)
+		else { return false }
+
+		let updatedText = text.replacingCharacters(in: textRange, with: string)
+
+		guard viewModel.validateInput(input: updatedText) else {
+			return false
 		}
-		
+
+		viewModel.userDidUpdateTokenField(rawTokenInput: updatedText)
+
 		return true
 	}
 }

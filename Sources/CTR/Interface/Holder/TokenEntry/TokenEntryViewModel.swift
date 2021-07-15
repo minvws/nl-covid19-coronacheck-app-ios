@@ -487,10 +487,7 @@ class TokenEntryViewModel {
 	/// Sanitize userInput of token & validation
 	private func sanitize(_ input: String) -> String {
 
-		return input
-			.trimmingCharacters(in: .whitespacesAndNewlines)
-			.replacingOccurrences(of: "\\s+", with: "", options: .regularExpression)
-			.uppercased()
+		return input.strippingWhitespace().uppercased()
 	}
 }
 
