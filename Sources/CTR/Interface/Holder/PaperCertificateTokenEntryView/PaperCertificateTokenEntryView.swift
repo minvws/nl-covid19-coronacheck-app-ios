@@ -69,7 +69,6 @@ class PaperCertificateTokenEntryView: ScrolledStackWithButtonView {
 		
 		let button = Button(title: "", style: .tertiary)
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.isHidden = true
 		button.contentHorizontalAlignment = .leading
 		return button
 	}()
