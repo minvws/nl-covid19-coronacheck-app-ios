@@ -7,13 +7,13 @@
 
 import UIKit
 
-final class StartPaperCertificateViewController: BaseViewController {
+final class PaperCertificateStartViewController: BaseViewController {
 	
-	private let viewModel: StartPaperCertificateViewModel
+	private let viewModel: PaperCertificateStartViewModel
 	
-	let sceneView = StartPaperCertificateView()
+	let sceneView = PaperCertificateStartView()
 	
-	init(viewModel: StartPaperCertificateViewModel) {
+	init(viewModel: PaperCertificateStartViewModel) {
 		
 		self.viewModel = viewModel
 		

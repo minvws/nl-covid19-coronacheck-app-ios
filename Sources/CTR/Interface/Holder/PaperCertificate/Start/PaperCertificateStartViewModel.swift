@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StartPaperCertificateViewModel: Logging {
+final class PaperCertificateStartViewModel: Logging {
 	
 	@Bindable private(set) var title: String = L.holderPapercertificateStartTitle()
 	@Bindable private(set) var message: String = L.holderPapercertificateStartMessage()

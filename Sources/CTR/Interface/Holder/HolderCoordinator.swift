@@ -475,7 +475,7 @@ extension HolderCoordinator: MenuDelegate {
 				
 			case .addPaperCertificate:
 				let coordinator = PaperCertificateCoordinator(delegate: self)
-				let destination = StartPaperCertificateViewController(viewModel: .init(coordinator: coordinator))
+				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController
 				startChildCoordinator(coordinator)

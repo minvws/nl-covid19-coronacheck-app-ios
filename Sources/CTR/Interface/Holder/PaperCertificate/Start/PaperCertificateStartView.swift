@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class StartPaperCertificateView: ScrolledStackWithButtonView {
+final class PaperCertificateStartView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private enum ViewTraits {
