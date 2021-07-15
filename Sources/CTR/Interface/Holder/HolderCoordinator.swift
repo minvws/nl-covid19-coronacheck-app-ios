@@ -197,6 +197,27 @@ class HolderCoordinator: SharedCoordinator {
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.present(viewController, animated: true, completion: nil)
 	}
+	
+	private func navigateToDashboard() {
+		
+		let dashboardViewController = HolderDashboardViewController(
+			viewModel: HolderDashboardViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager,
+				proofManager: proofManager,
+				configuration: generalConfiguration,
+				dataStoreManager: Services.dataStoreManager
+			)
+		)
+		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		sidePanel?.selectedViewController = dashboardNavigationController
+	}
+	
+	private func removeChildCoordinator() {
+		
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -213,17 +234,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			)
 		)
 		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager
-			)
-		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationController
+		navigateToDashboard()
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
@@ -424,6 +435,11 @@ extension HolderCoordinator: MenuDelegate {
 	/// Open a menu item
 	/// - Parameter identifier: the menu identifier
 	func openMenuItem(_ identifier: MenuIdentifier) {
+		
+		// Clean up child coordinator. Faq is not replacing side panel view controller
+		if identifier != .faq {
+			removeChildCoordinator()
+		}
 
 		switch identifier {
 			case .overview:
@@ -448,13 +464,21 @@ extension HolderCoordinator: MenuDelegate {
 				aboutNavigationController = UINavigationController(rootViewController: destination)
 				sidePanel?.selectedViewController = aboutNavigationController
 
-			case .createCertificate:
+			case .addCertificate:
 				let destination = ChooseQRCodeTypeViewController(
 					viewModel: ChooseQRCodeTypeViewModel(
 						coordinator: self
 					)
 				)
 				navigationController = UINavigationController(rootViewController: destination)
+				sidePanel?.selectedViewController = navigationController
+				
+			case .addPaperCertificate:
+				let coordinator = PaperCertificateCoordinator(delegate: self)
+				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
+				navigationController = UINavigationController(rootViewController: destination)
+				coordinator.navigationController = navigationController
+				startChildCoordinator(coordinator)
 				sidePanel?.selectedViewController = navigationController
 
 			default:
@@ -481,7 +505,7 @@ extension HolderCoordinator: MenuDelegate {
 
 		return [
 			MenuItem(identifier: .overview, title: L.holderMenuDashboard()),
-			MenuItem(identifier: .createCertificate, title: L.holderMenuProof())
+			MenuItem(identifier: .addCertificate, title: L.holderMenuProof())
 		]
 	}
 	/// Get the items for the bottom menu
@@ -489,6 +513,7 @@ extension HolderCoordinator: MenuDelegate {
 	func getBottomMenuItems() -> [MenuItem] {
 
 		return [
+			MenuItem(identifier: .addPaperCertificate, title: L.holderMenuPapercertificate()),
 			MenuItem(identifier: .faq, title: L.holderMenuFaq()),
 			MenuItem(identifier: .about, title: L.holderMenuAbout())
 		]
@@ -499,33 +524,29 @@ extension HolderCoordinator: EventFlowDelegate {
 
 	func eventFlowDidComplete() {
 
-		/// The user canceled the vaccination flow. Go back to the dashboard.
+		/// The user completed the event flow. Go back to the dashboard.
 
-		if let vaccinationCoordinator = childCoordinators.last {
-			removeChildCoordinator(vaccinationCoordinator)
-		}
+		removeChildCoordinator()
 
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager
-			)
-		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationController
+		navigateToDashboard()
 	}
 
 	func eventFlowDidCancel() {
 
 		/// The user cancelled the flow. Go back one page
 
-		if let vaccinationCoordinator = childCoordinators.last {
-			removeChildCoordinator(vaccinationCoordinator)
-		}
+		removeChildCoordinator()
 
 		(sidePanel?.selectedViewController as? UINavigationController)?.popViewController(animated: true)
+	}
+}
+
+extension HolderCoordinator: PaperCertificateFlowDelegate {
+	
+	func addCertificateFlowDidFinish() {
+		
+		removeChildCoordinator()
+		
+		navigateToDashboard()
 	}
 }

@@ -23,8 +23,6 @@ extension UIImage {
 
 	static var euQRIcon: UIImage? { UIImage(named: "EU_QRIcon") }
 
-	static var securityBackground: UIImage? { UIImage(named: "Houses") }
-
 	static var smallCross: UIImage? { UIImage(named: "SmallCross") }
 
 	static var myQR: UIImage? { UIImage(named: "MyQR") }
