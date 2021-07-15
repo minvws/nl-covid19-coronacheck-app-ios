@@ -11,7 +11,7 @@
 
 
 
-"holder.tokenentry.button.notoken" = "Ik heb geen code";
+
 
 "holder.recovery.tooOld.title" = "Positieve testuitslag niet meer geldig";
 "holder.recovery.tooOld.message" = "Is het langer dan 180 dagen geleden dat je getest bent? Dan is je testuitslag niet meer geldig. Je kunt dan geen herstelbewijs maken.";
@@ -98,6 +98,7 @@
 "holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 
 /* MARK: - Holder Token entry - Regular Flow */
+"holder.tokenentry.button.notoken" = "Ik heb geen code";
 "holder.tokenentry.regularflow.title" = "Testuitslag ophalen";
 "holder.tokenentry.regularflow.text" = "Vul jouw ophaalcode in. Deze heb je van je testlocatie gekregen.";
 "holder.tokenentry.regularflow.token.title" = "Ophaalcode";
@@ -121,6 +122,21 @@
 "holder.tokenentry.universallinkflow.error.invalid.code" = "Geen geldige combinatie";
 "holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
+
+/* MARK: - Holder DCC Token entry */
+"holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";
+"holder.dcctokenentry.title" = "Jouw lettercombinatie";
+"holder.dcctokenentry.header" = "Vul de lettercombinatie in. Deze heb je van je zorgverlener gekregen, samen met het papieren bewijs.";
+"holder.dcctokenentry.tokenField.title" = "Lettercombinatie";
+"holder.dcctokenentry.tokenField.placeholder" = "Bijv. FLBRXQ";
+"holder.dcctokenentry.tokenField.placeholder.screenreader" = "Vul hier je lettercombinatie in";
+"holder.dcctokenentry.error.codenotfound" = "Deze lettercombinatie bestaat niet";
+"holder.dcctokenentry.error.codewrongformat" = "Vul de 6-letterige lettercombinatie in";
+"holder.dcctokenentry.retry.title" = "Ik heb geen code gekregen";
+"holder.dcctokenentry.next" = "Volgende";
+"holder.dcctokenentryinfo.title" = "Geen lettercombinatie?";
+"holder.dcctokenentryinfo.body" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt <a href=\"http://coronatest.nl\">laten printen door jouw zorgverlener in Nederland</a>.</p><p><b>Zelf jouw bewijs geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
+
 /* MARK: - General */
 "general.cancel" = "Annuleer";
 /* MARK: - General */

@@ -92,7 +92,7 @@ class PaperCertificateCheckViewModel: Logging {
 						subTitle: L.holderCheckdccBlockedMessage(),
 						primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
 						primaryAction: { [weak self] in
-							self?.coordinator?.checkScreenDidFinish(PaperCertificateScreenResult.stop)
+							self?.coordinator?.userWantsToGoBackToDashboard()
 						}
 					)
 				)
@@ -103,7 +103,7 @@ class PaperCertificateCheckViewModel: Logging {
 						subTitle: L.holderCheckdccExpiredMessage(),
 						primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
 						primaryAction: { [weak self] in
-							self?.coordinator?.checkScreenDidFinish(PaperCertificateScreenResult.stop)
+							self?.coordinator?.userWantsToGoBackToDashboard()
 						}
 					)
 				)

@@ -137,11 +137,6 @@ class EventCoordinator: Coordinator, Logging {
 		navigateToListEvents(events, eventMode: .test)
 	}
 
-	func startWithScannedDcc(_ scannedDcc: String, couplingCode: String) {
-
-		navigateToListScannedPaperDcc(scannedDcc: scannedDcc, couplingCode: couplingCode)
-	}
-
 	func startWithTVS(eventMode: EventMode) {
 		
 		navigateToLogin(eventMode: eventMode)
@@ -198,18 +193,6 @@ class EventCoordinator: Coordinator, Logging {
 				coordinator: self,
 				eventMode: eventMode,
 				remoteEvents: remoteEvents
-			)
-		)
-		navigationController.pushViewController(viewController, animated: false)
-	}
-
-	private func navigateToListScannedPaperDcc(scannedDcc: String, couplingCode: String) {
-
-		let viewController = CheckPaperCertificateViewController(
-			viewModel: CheckPaperCertificateViewModel(
-				coordinator: self,
-				scannedDcc: scannedDcc,
-				couplingCode: couplingCode
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)

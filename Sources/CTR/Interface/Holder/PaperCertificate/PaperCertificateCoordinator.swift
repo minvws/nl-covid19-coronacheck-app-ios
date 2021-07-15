@@ -6,32 +6,32 @@
 */
 
 import UIKit
+import SafariServices
 
 protocol PaperCertificateFlowDelegate: AnyObject {
 	
 	func addCertificateFlowDidFinish()
 }
 
-enum PaperCertificateScreenResult: Equatable {
-
-	/// Stop with paper certificate flow,
-	case stop
-
-}
-
 protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
-	func checkScreenDidFinish(_ result: PaperCertificateScreenResult)
+	func userDidSubmitPaperCertificateToken(token: String)
+
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+
+	func userWantsToGoBackToDashboard()
 }
 
-final class PaperCertificateCoordinator: Coordinator, Logging, PaperCertificateCoordinatorDelegate {
-	
+final class PaperCertificateCoordinator: Coordinator, Logging {
+
 	var childCoordinators: [Coordinator] = []
 	
 	var navigationController: UINavigationController = UINavigationController()
 
 	weak var delegate: PaperCertificateFlowDelegate?
-	
+
+	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
+
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
@@ -50,14 +50,17 @@ final class PaperCertificateCoordinator: Coordinator, Logging, PaperCertificateC
 	}
 	
 	func navigateToTokenEntry() {
+		//		navigateToCheck(scannedDcc: CouplingManager.vaccinationDCC, couplingCode: "EBCDEF")
 		
-		// Implement
-
-		navigateToCheck(scannedDcc: CouplingManager.vaccinationDCC, couplingCode: "EBCDEF")
+		let destination = PaperCertificateTokenEntryViewController(
+			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
+		)
+		
+		navigationController.pushViewController(destination, animated: true)
 	}
-
+	
 	func navigateToCheck(scannedDcc: String, couplingCode: String) {
-
+		
 		let viewController = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: self,
@@ -67,15 +70,87 @@ final class PaperCertificateCoordinator: Coordinator, Logging, PaperCertificateC
 		)
 		navigationController.pushViewController(viewController, animated: false)
 	}
+}
 
-	// MARK: - PaperCertificateCoordinatorDelegate
+extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
-	func checkScreenDidFinish(_ result: PaperCertificateScreenResult) {
+	func userDidSubmitPaperCertificateToken(token: String) {
+		// implement
+	}
 
-		switch result {
-			case .stop:
-				delegate?.addCertificateFlowDidFinish()
+	/// Show an information page
+	/// - Parameters:
+	///   - title: the title of the page
+	///   - body: the body of the page
+	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+
+		let viewController = InformationViewController(
+			viewModel: InformationViewModel(
+				coordinator: self,
+				title: title,
+				message: body,
+				linkTapHander: { [weak self] url in
+
+					self?.openUrl(url, inApp: true)
+				},
+				hideBodyForScreenCapture: hideBodyForScreenCapture
+			)
+		)
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		navigationController.viewControllers.last?.present(viewController, animated: true, completion: nil)
+	}
+
+	func userWantsToGoBackToDashboard() {
+		delegate?.addCertificateFlowDidFinish()
+	}
+}
+
+// MARK: - Dismissable
+
+extension PaperCertificateCoordinator: Dismissable {
+
+	func dismiss() {
+
+		if navigationController.presentedViewController != nil {
+			navigationController.presentedViewController?.dismiss(animated: true, completion: nil)
+		} else {
+			navigationController.popViewController(animated: false)
+		}
+	}
+}
+
+// MARK: - OpenUrlProtocol
+
+extension PaperCertificateCoordinator: OpenUrlProtocol {
+
+	/// Open a url
+	/// - Parameters:
+	///   - url: The url to open
+	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
+	func openUrl(_ url: URL, inApp: Bool) {
+
+		var shouldOpenInApp = inApp
+		if url.scheme == "tel" {
+			// Do not open phone numbers in app, doesn't work & will crash.
+			shouldOpenInApp = false
 		}
 
+		if shouldOpenInApp {
+			let safariController = SFSafariViewController(url: url)
+
+			if let presentedViewController = navigationController.presentedViewController {
+				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
+					self.navigationController.present(safariController, animated: true)
+				})
+			} else {
+				navigationController.present(safariController, animated: true)
+			}
+		} else {
+			UIApplication.shared.open(url)
+		}
 	}
 }
