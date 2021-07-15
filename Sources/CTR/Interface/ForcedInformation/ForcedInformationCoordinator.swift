@@ -51,7 +51,7 @@ class ForcedInformationCoordinator: Coordinator, Logging {
 	/// The forced information delegate
 	weak var delegate: ForcedInformationDelegate?
 
-	/// Initiailzer
+	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
 	///   - forcedInformationManager: the forced information manager
