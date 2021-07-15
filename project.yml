@@ -17,9 +17,6 @@ packages:
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.2
-  Firebase:
-    github: firebase/firebase-ios-sdk/
-    exactVersion: 7.5.1
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
     majorVersion: 1.8.0
