@@ -114,8 +114,8 @@ class PaperCertificateCheckViewModel: Logging {
 						title: L.holderCheckdccRejectedTitle(),
 						subTitle: L.holderCheckdccRejectedMessage(),
 						primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
-						primaryAction: {
-							self.logInfo("Todo: go back to token entry")
+						primaryAction: {[weak self] in
+							self?.coordinator?.userWantsToGoBackToTokenEntry()
 						}
 					)
 				)

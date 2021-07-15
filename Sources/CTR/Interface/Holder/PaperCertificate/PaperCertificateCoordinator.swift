@@ -20,6 +20,8 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
 
 	func userWantsToGoBackToDashboard()
+
+	func userWantsToGoBackToTokenEntry()
 }
 
 final class PaperCertificateCoordinator: Coordinator, Logging {
@@ -50,17 +52,16 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	}
 	
 	func navigateToTokenEntry() {
-		//		navigateToCheck(scannedDcc: CouplingManager.vaccinationDCC, couplingCode: "EBCDEF")
-		
+
 		let destination = PaperCertificateTokenEntryViewController(
 			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
 		)
-		
+
 		navigationController.pushViewController(destination, animated: true)
 	}
-	
+
 	func navigateToCheck(scannedDcc: String, couplingCode: String) {
-		
+
 		let viewController = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
 				coordinator: self,
@@ -76,6 +77,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userDidSubmitPaperCertificateToken(token: String) {
 		// implement
+
+				navigateToCheck(scannedDcc: CouplingManager.vaccinationDCC, couplingCode: token)
 	}
 
 	/// Show an information page
@@ -105,7 +108,20 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	}
 
 	func userWantsToGoBackToDashboard() {
+
 		delegate?.addCertificateFlowDidFinish()
+	}
+
+	func userWantsToGoBackToTokenEntry() {
+
+		if let tokenEntryViewController = navigationController.viewControllers
+			.first(where: { $0 is PaperCertificateTokenEntryViewController }) {
+
+			navigationController.popToViewController(
+				tokenEntryViewController,
+				animated: true
+			)
+		}
 	}
 }
 
