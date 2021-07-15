@@ -17,6 +17,10 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userDidSubmitPaperCertificateToken(token: String)
 
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+	
+	func userWishesToEnterToken()
+	
+	func userWishesToScanCertificate()
 }
 
 final class PaperCertificateCoordinator: Coordinator, Logging {
@@ -25,16 +29,22 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	
 	var navigationController: UINavigationController = UINavigationController()
 
-	weak var delegate: PaperCertificateFlowDelegate?
+	private weak var delegate: PaperCertificateFlowDelegate?
 
 	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
+	
+	/// The crypto manager
+	private weak var cryptoManager: CryptoManaging?
 
 	/// Initializer
 	/// - Parameters:
 	///   - navigationController: the navigation controller
-	init(delegate: PaperCertificateFlowDelegate) {
+	init(
+		delegate: PaperCertificateFlowDelegate,
+		cryptoManager: CryptoManaging) {
 		
 		self.delegate = delegate
+		self.cryptoManager = cryptoManager
 	}
 	
 	/// Start the scene
@@ -45,22 +55,19 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	func consume(universalLink: UniversalLink) -> Bool {
 		return false
 	}
-	
-	func navigateToTokenEntry() {
-
-		let destination = PaperCertificateTokenEntryViewController(
-			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
-		)
-
-		navigationController.pushViewController(destination, animated: true)
-
-	}
 }
 
 extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userDidSubmitPaperCertificateToken(token: String) {
-		// implement
+		
+		let destination = PaperCertificateAboutScanViewController(
+			viewModel: PaperCertificateAboutScanViewModel(
+				coordinator: self
+			)
+		)
+		
+		navigationController.pushViewController(destination, animated: true)
 	}
 
 	/// Show an information page
@@ -87,6 +94,28 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		viewController.modalTransitionStyle = .coverVertical
 
 		navigationController.viewControllers.last?.present(viewController, animated: true, completion: nil)
+	}
+	
+	func userWishesToEnterToken() {
+
+		let destination = PaperCertificateTokenEntryViewController(
+			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
+		)
+
+		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	/// Navigate to the scanner
+	func userWishesToScanCertificate() {
+
+		let destination = PaperCertificateScanViewController(
+			viewModel: PaperCertificateScanViewModel(
+				coordinator: self,
+				cryptoManager: cryptoManager
+			)
+		)
+
+		navigationController.pushViewController(destination, animated: true)
 	}
 }
 
@@ -133,18 +162,5 @@ extension PaperCertificateCoordinator: OpenUrlProtocol {
 		} else {
 			UIApplication.shared.open(url)
 		}
-	}
-	
-	/// Navigate to the scanner
-	func navigateToScan() {
-
-//		let destination = PaperCertificateScanViewController(
-//			viewModel: PaperCertificateScanViewModel(
-//				coordinator: self,
-//				cryptoManager: cryptoManager
-//			)
-//		)
-//
-//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 }

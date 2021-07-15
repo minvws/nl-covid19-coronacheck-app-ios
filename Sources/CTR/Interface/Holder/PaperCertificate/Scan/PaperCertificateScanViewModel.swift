@@ -13,7 +13,7 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	weak var cryptoManager: CryptoManaging?
 
 	/// Coordination Delegate
-	weak var theCoordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
+	weak var theCoordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol)?
 
 	/// The title of the scene
 	@Bindable private(set) var title: String
@@ -31,8 +31,8 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
-		cryptoManager: CryptoManaging) {
+		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol),
+		cryptoManager: CryptoManaging?) {
 		
 		self.theCoordinator = coordinator
 		self.cryptoManager = cryptoManager

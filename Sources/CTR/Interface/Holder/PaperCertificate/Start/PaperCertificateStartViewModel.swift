@@ -14,11 +14,11 @@ final class PaperCertificateStartViewModel: Logging {
 	@Bindable private(set) var highlightedMessage: String = L.holderPapercertificateStartHighlightedmessage()
 	@Bindable private(set) var primaryButtonTitle = L.generalNext()
 	
-	weak var coordinator: PaperCertificateCoordinator?
+	private weak var coordinator: PaperCertificateCoordinatorDelegate?
 	
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	init(coordinator: PaperCertificateCoordinator) {
+	init(coordinator: PaperCertificateCoordinatorDelegate) {
 		
 		self.coordinator = coordinator
 	}
@@ -26,6 +26,6 @@ final class PaperCertificateStartViewModel: Logging {
 	/// The user tapped the primary button
 	func primaryButtonTapped() {
 		
-		coordinator?.navigateToTokenEntry()
+		coordinator?.userWishesToEnterToken()
 	}
 }

@@ -5,4 +5,76 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import Foundation
+import UIKit
+
+final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
+	
+	/// The display constants
+	private enum ViewTraits {
+		
+		enum Title {
+			static let lineHeight: CGFloat = 26
+			static let kerning: CGFloat = -0.26
+		}
+		
+		enum Spacing {
+			static let title: CGFloat = 24
+		}
+	}
+	
+	/// The title label
+	private let titleLabel: Label = {
+
+		return Label(title1: nil, montserrat: true).multiline().header()
+	}()
+	
+	/// The message label
+	private let messageLabel: Label = {
+
+		return Label(body: nil).multiline()
+	}()
+	
+	override func setupViews() {
+		super.setupViews()
+		
+		backgroundColor = Theme.colors.viewControllerBackground
+		
+		stackView.distribution = .fill
+	}
+	
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(messageLabel)
+		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
+	}
+	
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+		
+		setupPrimaryButton()
+	}
+	
+	// MARK: Public Access
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.attributedText = title?.setLineHeight(
+				ViewTraits.Title.lineHeight,
+				kerning: ViewTraits.Title.kerning
+			)
+		}
+	}
+	
+	/// The message
+	var message: String? {
+		didSet {
+			messageLabel.attributedText = .makeFromHtml(text: message,
+														font: Theme.fonts.body,
+														textColor: Theme.colors.dark,
+														paragraphSpacing: 0)
+		}
+	}
+}

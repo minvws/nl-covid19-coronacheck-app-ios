@@ -6,3 +6,25 @@
 */
 
 import Foundation
+
+final class PaperCertificateAboutScanViewModel: Logging {
+	
+	@Bindable private(set) var title: String = L.holderPapercertificateAboutscanTitle()
+	@Bindable private(set) var message: String = L.holderPapercertificateAboutscanMessage()
+	@Bindable private(set) var primaryButtonTitle = L.holderScannerTitle()
+	
+	private weak var coordinator: PaperCertificateCoordinatorDelegate?
+	
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	init(coordinator: PaperCertificateCoordinatorDelegate) {
+		
+		self.coordinator = coordinator
+	}
+	
+	/// The user tapped the primary button
+	func primaryButtonTapped() {
+		
+		coordinator?.userWishesToScanCertificate()
+	}
+}
