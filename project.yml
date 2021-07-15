@@ -106,8 +106,6 @@ targetTemplates:
         product: CocoaLumberjack
       - package: CocoaLumberjack
         product: CocoaLumberjackSwift
-      - package: Firebase
-        product: FirebaseCrashlytics
       - package: IOSSecuritySuite
       - package: Lottie
       - package: MBProgressHUD
