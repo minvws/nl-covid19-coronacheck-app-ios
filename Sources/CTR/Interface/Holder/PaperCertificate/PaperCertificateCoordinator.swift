@@ -41,4 +41,17 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 		
 		// Implement
 	}
+	
+	/// Navigate to the scanner
+	func navigateToScan() {
+
+//		let destination = PaperCertificateScanViewController(
+//			viewModel: PaperCertificateScanViewModel(
+//				coordinator: self,
+//				cryptoManager: cryptoManager
+//			)
+//		)
+//
+//		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+	}
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HolderScanViewModel: ScanPermissionViewModel {
+class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	
 	/// The crypto manager
 	weak var cryptoManager: CryptoManaging?
@@ -24,7 +24,7 @@ class HolderScanViewModel: ScanPermissionViewModel {
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
 	
-	@Bindable private(set) var alert: HolderScanViewController.AlertContent?
+	@Bindable private(set) var alert: PaperCertificateScanViewController.AlertContent?
 
 	/// Initializer
 	/// - Parameters:

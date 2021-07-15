@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HolderScanViewController: ScanViewController {
+class PaperCertificateScanViewController: ScanViewController {
 	
 	struct AlertContent {
 		let title: String
@@ -15,11 +15,11 @@ class HolderScanViewController: ScanViewController {
 		let okTitle: String
 	}
 
-	private let viewModel: HolderScanViewModel
+	private let viewModel: PaperCertificateScanViewModel
 
 	// MARK: Initializers
 
-	init(viewModel: HolderScanViewModel) {
+	init(viewModel: PaperCertificateScanViewModel) {
 
 		self.viewModel = viewModel
 

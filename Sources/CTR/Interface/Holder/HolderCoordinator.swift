@@ -262,8 +262,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	/// Navigate to the scanner
 	func navigateToScan() {
 
-		let destination = HolderScanViewController(
-			viewModel: HolderScanViewModel(
+		let destination = PaperCertificateScanViewController(
+			viewModel: PaperCertificateScanViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager
 			)
