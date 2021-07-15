@@ -8,14 +8,14 @@
 import UIKit
 import MBProgressHUD
 
-class DCCTokenEntryViewController: BaseViewController {
+class PaperCertificateTokenEntryViewController: BaseViewController {
 	
-	private let viewModel: DCCTokenEntryViewModel
+	private let viewModel: PaperCertificateTokenEntryViewModel
 	private var tapGestureRecognizer: UITapGestureRecognizer?
 	
-	let sceneView = DCCTokenEntryView()
+	let sceneView = PaperCertificateTokenEntryView()
 	
-	init(viewModel: DCCTokenEntryViewModel) {
+	init(viewModel: PaperCertificateTokenEntryViewModel) {
 		
 		self.viewModel = viewModel
 
@@ -186,7 +186,7 @@ class DCCTokenEntryViewController: BaseViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension DCCTokenEntryViewController: UITextFieldDelegate {
+extension PaperCertificateTokenEntryViewController: UITextFieldDelegate {
 
 	func textFieldDidBeginEditing(_ textField: UITextField) {
 

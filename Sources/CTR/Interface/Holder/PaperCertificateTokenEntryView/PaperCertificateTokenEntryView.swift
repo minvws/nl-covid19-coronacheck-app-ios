@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DCCTokenEntryView: ScrolledStackWithButtonView {
+class PaperCertificateTokenEntryView: ScrolledStackWithButtonView {
 	
 	/// The display constants
 	private struct ViewTraits {

@@ -12,16 +12,16 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-class DCCTokenEntryViewModelTests: XCTestCase {
+class PaperCertificateTokenEntryViewModelTests: XCTestCase {
 
-	var sut: DCCTokenEntryViewModel!
-	var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	var sut: PaperCertificateTokenEntryViewModel!
+	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!
 
 	override func setUp() {
 		super.setUp()
 		
-		coordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		sut = DCCTokenEntryViewModel(coordinator: coordinatorDelegateSpy)
+		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
+		sut = PaperCertificateTokenEntryViewModel(coordinator: coordinatorDelegateSpy)
 	}
 
 	func test_initialState() {
@@ -33,7 +33,7 @@ class DCCTokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.userNeedsATokenButtonTitle) == L.holderDcctokenentryButtonNotoken()
 
-		DCCTokenEntryViewController(viewModel: sut).assertImage()
+		PaperCertificateTokenEntryViewController(viewModel: sut).assertImage()
 	}
 
 	func test_inputtingShortValue_doesntShowError() {
@@ -123,19 +123,18 @@ class DCCTokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.validateInput(input: "@#(*&#")) == false
 	}
 
-	// TODO: complete
 	func test_tappingSubmit_withValidValue_doesSomething() {
 		// Arrange
 
 		// Act
-		sut.userDidUpdateTokenField(rawTokenInput: "abcdef")
+		sut.userDidUpdateTokenField(rawTokenInput: "ABCDEF")
 		sut.nextButtonTapped()
 
 		// Assert
-
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
 	}
 
-	// TODO: complete
 	func test_tappingSubmit_withValidLowercaseValue_submitsUppercasedValue() {
 		// Arrange
 
@@ -144,6 +143,7 @@ class DCCTokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped()
 
 		// Assert
-
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateToken) == true
+		expect(self.coordinatorDelegateSpy.invokedUserDidSubmitPaperCertificateTokenParameters?.token) == "ABCDEF"
 	}
 }

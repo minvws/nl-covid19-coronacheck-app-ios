@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DCCTokenEntryViewModel {
+final class PaperCertificateTokenEntryViewModel {
 
 	enum Config {
 		static let requiredTokenLength = 6
@@ -32,7 +32,7 @@ final class DCCTokenEntryViewModel {
 
 	// MARK: - Private Dependencies:
 
-	private weak var coordinator: HolderCoordinatorDelegate?
+	private weak var coordinator: PaperCertificateCoordinatorDelegate?
 
 	// MARK: - Private vars
 
@@ -44,7 +44,7 @@ final class DCCTokenEntryViewModel {
 	///   - coordinator: the coordinator delegate
 	///   - proofManager: the proof manager
 	///   - requestToken: an optional existing request token
-	init(coordinator: HolderCoordinatorDelegate) {
+	init(coordinator: PaperCertificateCoordinatorDelegate) {
 
 		self.coordinator = coordinator
 	}
@@ -105,7 +105,7 @@ final class DCCTokenEntryViewModel {
 			return
 		}
 
-		// TODO: pass the `sanitizedInput` back to the coordinator
+		coordinator?.userDidSubmitPaperCertificateToken(token: sanitizedInput)
 	}
 
 	func userHasNoTokenButtonTapped() {
