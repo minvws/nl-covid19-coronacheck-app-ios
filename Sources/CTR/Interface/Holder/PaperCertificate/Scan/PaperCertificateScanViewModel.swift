@@ -49,15 +49,18 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	func parseQRMessage(_ message: String) {
 		
 		if message.hasPrefix("NL") {
-			// Invalid: Domestic QR-code
+			logInfo("Invalid: Domestic QR-code")
+			
 			alert = .init(title: L.holderScannerAlertDccTitle(),
 						  subTitle: L.holderScannerAlertDccMessage(),
 						  okTitle: L.generalOk())
-		} else if let euCredentialAttributes = cryptoManager?.readEuCredentials(Data(message.utf8)) {
-			// Valid
-			logDebug("\(euCredentialAttributes)")
+		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
+			logInfo("Valid DCC")
+			
+			theCoordinator?.userWishesToCreateACertificate(message: message)
 		} else {
-			// Invalid: Unknown QR-codeScanner
+			logInfo("Invalid: Unknown QR-code")
+			
 			alert = .init(title: L.holderScannerAlertUnknownTitle(),
 						  subTitle: L.holderScannerAlertUnknownMessage(),
 						  okTitle: L.generalOk())

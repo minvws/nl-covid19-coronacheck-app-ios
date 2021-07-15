@@ -21,6 +21,8 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userWishesToEnterToken()
 	
 	func userWishesToScanCertificate()
+	
+	func userWishesToCreateACertificate(message: String)
 }
 
 final class PaperCertificateCoordinator: Coordinator, Logging {
@@ -116,6 +118,11 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		)
 
 		navigationController.pushViewController(destination, animated: true)
+	}
+	
+	func userWishesToCreateACertificate(message: String) {
+		
+		// Implement
 	}
 }
 

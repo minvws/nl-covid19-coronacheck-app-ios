@@ -49,4 +49,16 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserWishesToScanCertificate = true
 		invokedUserWishesToScanCertificateCount += 1
 	}
+
+	var invokedUserWishesToCreateACertificate = false
+	var invokedUserWishesToCreateACertificateCount = 0
+	var invokedUserWishesToCreateACertificateParameters: (message: String, Void)?
+	var invokedUserWishesToCreateACertificateParametersList = [(message: String, Void)]()
+
+	func userWishesToCreateACertificate(message: String) {
+		invokedUserWishesToCreateACertificate = true
+		invokedUserWishesToCreateACertificateCount += 1
+		invokedUserWishesToCreateACertificateParameters = (message, ())
+		invokedUserWishesToCreateACertificateParametersList.append((message, ()))
+	}
 }
