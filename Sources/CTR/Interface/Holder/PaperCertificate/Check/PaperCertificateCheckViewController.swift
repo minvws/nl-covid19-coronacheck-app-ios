@@ -70,6 +70,10 @@ class PaperCertificateCheckViewController: BaseViewController {
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
 			self?.sceneView.primaryButton.isEnabled = $0
 		}
+
+		viewModel.$alert.binding = { [weak self] in
+			self?.showAlert($0)
+		}
 	}
 
 	private func setForLoadingState(_ content: Content) {

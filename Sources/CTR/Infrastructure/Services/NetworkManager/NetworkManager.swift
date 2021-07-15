@@ -697,7 +697,6 @@ extension NetworkManager: NetworkManaging {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
 		}
-
 	}
 }
 

@@ -26,6 +26,8 @@ class PaperCertificateCheckViewModel: Logging {
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
+	@Bindable private(set) var alert: AlertContent?
+
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
@@ -69,7 +71,7 @@ class PaperCertificateCheckViewModel: Logging {
 					case let .success(response):
 						self?.handleSuccess(response: response, scannedDcc: dcc, couplingCode: couplingCode)
 					case let .failure(error):
-						self?.logError("CouplingManager validate: \(error)")
+						self?.handleError(error: error, scannedDcc: dcc, couplingCode: couplingCode)
 				}
 			}
 		}
@@ -119,78 +121,62 @@ class PaperCertificateCheckViewModel: Logging {
 				)
 			default:
 				logWarning("PaperCertificateCheckViewModel - Unhandled response: \(response.status)")
+				showTechnicalError("110, unhandled status \(response.status)")
 		}
 	}
 
-//
-//	// MARK: Errors
-//
-//	internal func showEventError(remoteEvents: [RemoteEvent]) {
-//
-//		alert = ListEventsViewController.AlertContent(
-//			title: L.generalErrorTitle(),
-//			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-//			cancelAction: nil,
-//			cancelTitle: L.holderVaccinationErrorClose(),
-//			okAction: { [weak self] _ in
-//				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-//					if !success {
-//						self?.showEventError(remoteEvents: remoteEvents)
-//					}
-//				}
-//			},
-//			okTitle: L.holderVaccinationErrorAgain()
-//		)
-//	}
-//
-//	private func showServerTooBusyError() {
-//
-//		alert = ListEventsViewController.AlertContent(
-//			title: L.generalNetworkwasbusyTitle(),
-//			subTitle: L.generalNetworkwasbusyText(),
-//			cancelAction: nil,
-//			cancelTitle: nil,
-//			okAction: { [weak self] _ in
-//				self?.coordinator?.listEventsScreenDidFinish(.stop)
-//			},
-//			okTitle: L.generalNetworkwasbusyButton()
-//		)
-//	}
-//
-//	private func showNoInternet(remoteEvents: [RemoteEvent]) {
-//
-//		// this is a retry-able situation
-//		alert = ListEventsViewController.AlertContent(
-//			title: L.generalErrorNointernetTitle(),
-//			subTitle: L.generalErrorNointernetText(),
-//			cancelAction: nil,
-//			cancelTitle: L.generalClose(),
-//			okAction: { [weak self] _ in
-//				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-//					if !success {
-//						self?.showEventError(remoteEvents: remoteEvents)
-//					}
-//				}
-//			},
-//			okTitle: L.holderVaccinationErrorAgain()
-//		)
-//	}
-//
-//	private func showTechnicalError(_ customCode: String?) {
-//
-//		var subTitle = L.generalErrorTechnicalText()
-//		if let code = customCode {
-//			subTitle = L.generalErrorTechnicalCustom(code)
-//		}
-//		alert = ListEventsViewController.AlertContent(
-//			title: L.generalErrorTitle(),
-//			subTitle: subTitle,
-//			cancelAction: nil,
-//			cancelTitle: nil,
-//			okAction: { _ in
-//				self.coordinator?.listEventsScreenDidFinish(.back(eventMode: self.eventMode))
-//			},
-//			okTitle: L.generalClose()
-//		)
-//	}
+	func handleError(error: NetworkError, scannedDcc: String, couplingCode: String) {
+		logError("CouplingManager validate: \(error)")
+		switch error {
+			case .serverBusy:
+				showServerTooBusyError(scannedDcc: scannedDcc, couplingCode: couplingCode)
+			case .noInternetConnection:
+				showNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
+			default:
+				showTechnicalError("110, check coupling code")
+		}
+	}
+
+	// MARK: Errors
+
+	private func showServerTooBusyError(scannedDcc: String, couplingCode: String) {
+
+		alert = AlertContent(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyText(),
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
+			okTitle: L.generalNetworkwasbusyButton()
+		)
+	}
+
+	private func showNoInternet(scannedDcc: String, couplingCode: String) {
+
+		// this is a retry-able situation
+		alert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
+			okTitle: L.holderVaccinationErrorAgain()
+		)
+	}
+
+	private func showTechnicalError(_ customCode: String?) {
+
+		var subTitle = L.generalErrorTechnicalText()
+		if let code = customCode {
+			subTitle = L.generalErrorTechnicalCustom(code)
+		}
+		alert = AlertContent(
+			title: L.generalErrorTitle(),
+			subTitle: subTitle,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
+			okTitle: L.generalClose()
+		)
+	}
 }
