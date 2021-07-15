@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -33,5 +32,33 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedPresentInformationPageCount += 1
 		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
 		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
+	}
+
+	var invokedUserWantsToGoBackToDashboard = false
+	var invokedUserWantsToGoBackToDashboardCount = 0
+
+	func userWantsToGoBackToDashboard() {
+		invokedUserWantsToGoBackToDashboard = true
+		invokedUserWantsToGoBackToDashboardCount += 1
+	}
+
+	var invokedUserWantsToGoBackToTokenEntry = false
+	var invokedUserWantsToGoBackToTokenEntryCount = 0
+
+	func userWantsToGoBackToTokenEntry() {
+		invokedUserWantsToGoBackToTokenEntry = true
+		invokedUserWantsToGoBackToTokenEntryCount += 1
+	}
+
+	var invokedUserWantToToGoEvents = false
+	var invokedUserWantToToGoEventsCount = 0
+	var invokedUserWantToToGoEventsParameters: (event: RemoteEvent, Void)?
+	var invokedUserWantToToGoEventsParametersList = [(event: RemoteEvent, Void)]()
+
+	func userWantToToGoEvents(_ event: RemoteEvent) {
+		invokedUserWantToToGoEvents = true
+		invokedUserWantToToGoEventsCount += 1
+		invokedUserWantToToGoEventsParameters = (event, ())
+		invokedUserWantToToGoEventsParametersList.append((event, ()))
 	}
 }

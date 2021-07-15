@@ -34,8 +34,8 @@ class PaperCertificateCheckViewModel: Logging {
 
 	init(
 		coordinator: PaperCertificateCoordinatorDelegate,
-		scannedDcc: String? = nil,
-		couplingCode: String? = nil,
+		scannedDcc: String,
+		couplingCode: String,
 		couplingManager: CouplingManaging = Services.couplingManager
 	) {
 
@@ -56,23 +56,21 @@ class PaperCertificateCheckViewModel: Logging {
 
 	// MARK: Check Coupling Code
 
-	private func checkCouplingCode(scannedDcc: String?, couplingCode: String?) {
+	private func checkCouplingCode(scannedDcc: String, couplingCode: String) {
 
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		if let dcc = scannedDcc, let couplingCode = couplingCode {
-			// Validate coupling code
-			couplingManager.checkCouplingStatus(dcc: dcc, couplingCode: couplingCode) { [weak self] result in
-				// result = Result<DccCoupling.CouplingResponse, NetworkError>
-				self?.progressIndicationCounter.decrement()
-				self?.shouldPrimaryButtonBeEnabled = true
-				switch result {
-					case let .success(response):
-						self?.handleSuccess(response: response, scannedDcc: dcc, couplingCode: couplingCode)
-					case let .failure(error):
-						self?.handleError(error: error, scannedDcc: dcc, couplingCode: couplingCode)
-				}
+		// Validate coupling code
+		couplingManager.checkCouplingStatus(dcc: scannedDcc, couplingCode: couplingCode) { [weak self] result in
+			// result = Result<DccCoupling.CouplingResponse, NetworkError>
+			self?.progressIndicationCounter.decrement()
+			self?.shouldPrimaryButtonBeEnabled = true
+			switch result {
+				case let .success(response):
+					self?.handleSuccess(response: response, scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case let .failure(error):
+					self?.handleError(error: error, scannedDcc: scannedDcc, couplingCode: couplingCode)
 			}
 		}
 	}
@@ -84,6 +82,8 @@ class PaperCertificateCheckViewModel: Logging {
 				if let wrapper = couplingManager.convert(scannedDcc, couplingCode: couplingCode) {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 					coordinator?.userWantToToGoEvents(remoteEvent)
+				} else {
+					showTechnicalError("110, invalid DCC")
 				}
 			case .blocked:
 				viewState = .feedback(

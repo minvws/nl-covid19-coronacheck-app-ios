@@ -173,4 +173,20 @@ class NetworkSpy: NetworkManaging {
 			completion(result.0)
 		}
 	}
+
+	var invokedCheckCouplingStatus = false
+	var invokedCheckCouplingStatusCount = 0
+	var invokedCheckCouplingStatusParameters: (dictionary: [String: AnyObject], Void)?
+	var invokedCheckCouplingStatusParametersList = [(dictionary: [String: AnyObject], Void)]()
+	var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, NetworkError>, Void)?
+
+	func checkCouplingStatus(dictionary: [String: AnyObject], completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
+		invokedCheckCouplingStatus = true
+		invokedCheckCouplingStatusCount += 1
+		invokedCheckCouplingStatusParameters = (dictionary, ())
+		invokedCheckCouplingStatusParametersList.append((dictionary, ()))
+		if let result = stubbedCheckCouplingStatusCompletionResult {
+			completion(result.0)
+		}
+	}
 }
