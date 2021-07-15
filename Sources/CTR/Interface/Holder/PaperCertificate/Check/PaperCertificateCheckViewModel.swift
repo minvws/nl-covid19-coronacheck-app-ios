@@ -7,9 +7,9 @@
 
 import Foundation
 
-class CheckPaperCertificateViewModel: Logging {
+class PaperCertificateCheckViewModel: Logging {
 
-	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: PaperCertificateCoordinatorDelegate?
 
 	private let couplingManager: CouplingManaging
 
@@ -22,7 +22,7 @@ class CheckPaperCertificateViewModel: Logging {
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable internal var viewState: CheckPaperCertificateViewController.State
+	@Bindable internal var viewState: PaperCertificateCheckViewController.State
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
@@ -31,7 +31,7 @@ class CheckPaperCertificateViewModel: Logging {
 	private let eventFetchingGroup = DispatchGroup()
 
 	init(
-		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
+		coordinator: PaperCertificateCoordinatorDelegate,
 		scannedDcc: String? = nil,
 		couplingCode: String? = nil,
 		couplingManager: CouplingManaging = Services.couplingManager
@@ -41,7 +41,7 @@ class CheckPaperCertificateViewModel: Logging {
 		self.couplingManager = couplingManager
 
 		viewState = .loading(
-			content: CheckPaperCertificateViewController.Content(
+			content: PaperCertificateCheckViewController.Content(
 				title: L.holderDccListTitle(),
 				subTitle: nil,
 				primaryActionTitle: nil,
@@ -55,11 +55,6 @@ class CheckPaperCertificateViewModel: Logging {
 	func backButtonTapped() {
 
 //		coordinator?.listEventsScreenDidFinish(.back(eventMode: eventMode))
-	}
-
-	func openUrl(_ url: URL) {
-
-		coordinator?.openUrl(url, inApp: true)
 	}
 
 	// MARK: Check Coupling Code
@@ -97,30 +92,30 @@ class CheckPaperCertificateViewModel: Logging {
 				}
 			case .blocked:
 				viewState = .feedback(
-					content: CheckPaperCertificateViewController.Content(
+					content: PaperCertificateCheckViewController.Content(
 						title: L.holderCheckdccBlockedTitle(),
 						subTitle: L.holderCheckdccBlockedMessage(),
 						primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
-						primaryAction: {
-							self.logInfo("Todo: go back")
+						primaryAction: { [weak self] in
+							self?.coordinator?.checkScreenDidFinish(PaperCertificateScreenResult.stop)
 						}
 					)
 				)
 			case .expired:
 				viewState = .feedback(
-					content: CheckPaperCertificateViewController.Content(
+					content: PaperCertificateCheckViewController.Content(
 						title: L.holderCheckdccExpiredTitle(),
 						subTitle: L.holderCheckdccExpiredMessage(),
 						primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
-						primaryAction: {
-							self.logInfo("Todo: go back")
+						primaryAction: { [weak self] in
+							self?.coordinator?.checkScreenDidFinish(PaperCertificateScreenResult.stop)
 						}
 					)
 				)
 
 			case .rejected:
 				viewState = .feedback(
-					content: CheckPaperCertificateViewController.Content(
+					content: PaperCertificateCheckViewController.Content(
 						title: L.holderCheckdccRejectedTitle(),
 						subTitle: L.holderCheckdccRejectedMessage(),
 						primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
@@ -204,45 +199,5 @@ class CheckPaperCertificateViewModel: Logging {
 //			},
 //			okTitle: L.generalClose()
 //		)
-//	}
-//
-//	// MARK: Store events
-//
-//	private func storeEvent(
-//		remoteEvents: [RemoteEvent],
-//		onCompletion: @escaping (Bool) -> Void) {
-//
-//		var success = true
-//
-//		if eventMode == .vaccination {
-//			// Remove any existing vaccination events
-//			walletManager.removeExistingEventGroups(type: eventMode)
-//		}
-//
-//		for response in remoteEvents where response.wrapper.status == .complete {
-//
-//			if eventMode != .vaccination {
-//				// Remove any existing events for the provider
-//				walletManager.removeExistingEventGroups(
-//					type: eventMode,
-//					providerIdentifier: response.wrapper.providerIdentifier
-//				)
-//			}
-//
-//			// Store the new events
-//			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
-//			   let signedResponse = response.signedResponse {
-//				success = success && walletManager.storeEventGroup(
-//					eventMode,
-//					providerIdentifier: response.wrapper.providerIdentifier,
-//					signedResponse: signedResponse,
-//					issuedAt: maxIssuedAt
-//				)
-//				if !success {
-//					break
-//				}
-//			}
-//		}
-//		onCompletion(success)
 //	}
 }

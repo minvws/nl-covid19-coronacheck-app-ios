@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CheckPaperCertificateViewController: BaseViewController {
+class PaperCertificateCheckViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
@@ -21,12 +21,12 @@ class CheckPaperCertificateViewController: BaseViewController {
 		let primaryAction: (() -> Void)?
 	}
 
-	private let viewModel: CheckPaperCertificateViewModel
+	private let viewModel: PaperCertificateCheckViewModel
 	private let sceneView = FetchEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: CheckPaperCertificateViewModel) {
+	init(viewModel: PaperCertificateCheckViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -72,11 +72,6 @@ class CheckPaperCertificateViewController: BaseViewController {
 
 		viewModel.$shouldPrimaryButtonBeEnabled.binding = { [weak self] in
 			self?.sceneView.primaryButton.isEnabled = $0
-		}
-
-		sceneView.contentTextView.linkTouched { [weak self] url in
-
-			self?.viewModel.openUrl(url)
 		}
 	}
 

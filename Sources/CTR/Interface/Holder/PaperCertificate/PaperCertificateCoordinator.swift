@@ -12,7 +12,19 @@ protocol PaperCertificateFlowDelegate: AnyObject {
 	func addCertificateFlowDidFinish()
 }
 
-final class PaperCertificateCoordinator: Coordinator, Logging {
+enum PaperCertificateScreenResult: Equatable {
+
+	/// Stop with paper certificate flow,
+	case stop
+
+}
+
+protocol PaperCertificateCoordinatorDelegate: AnyObject {
+
+	func checkScreenDidFinish(_ result: PaperCertificateScreenResult)
+}
+
+final class PaperCertificateCoordinator: Coordinator, Logging, PaperCertificateCoordinatorDelegate {
 	
 	var childCoordinators: [Coordinator] = []
 	
@@ -40,5 +52,30 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	func navigateToTokenEntry() {
 		
 		// Implement
+
+		navigateToCheck(scannedDcc: CouplingManager.vaccinationDCC, couplingCode: "EBCDEF")
+	}
+
+	func navigateToCheck(scannedDcc: String, couplingCode: String) {
+
+		let viewController = PaperCertificateCheckViewController(
+			viewModel: PaperCertificateCheckViewModel(
+				coordinator: self,
+				scannedDcc: scannedDcc,
+				couplingCode: couplingCode
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
+
+	// MARK: - PaperCertificateCoordinatorDelegate
+
+	func checkScreenDidFinish(_ result: PaperCertificateScreenResult) {
+
+		switch result {
+			case .stop:
+				delegate?.addCertificateFlowDidFinish()
+		}
+
 	}
 }
