@@ -58,6 +58,10 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
+		// Disable the bottom constraint of the scroll view, add our own
+		bottomScrollViewConstraint?.isActive = false
+		scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor).isActive = true
+		
 		setupPrimaryButton()
 	}
 	
