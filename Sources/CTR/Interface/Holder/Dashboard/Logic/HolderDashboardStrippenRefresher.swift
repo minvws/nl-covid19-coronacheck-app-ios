@@ -118,11 +118,11 @@ class DashboardStrippenRefresher: Logging {
 
 	private let walletManager: WalletManaging
 	private let greencardLoader: GreenCardLoading
-	private let reachability: Reachability?
+	private let reachability: ReachabilityProtocol?
 
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
 
-	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading) {
+	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading, reachability: ReachabilityProtocol?) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
 		self.walletManager = walletManager
 		self.greencardLoader = greencardLoader
@@ -135,7 +135,7 @@ class DashboardStrippenRefresher: Logging {
 		state = State(greencardsCredentialExpiryState: expiryState)
 
 		// Start updates for network access availablity:
-		self.reachability = try? Reachability()
+		self.reachability = reachability
 		reachability?.whenReachable = { [weak self] _ in
 			guard let self = self,
 				  self.state.loadingState == .noInternet
@@ -143,7 +143,6 @@ class DashboardStrippenRefresher: Logging {
 
 			self.load()
 		}
-		reachability?.whenUnreachable = { _ in }
 		try? reachability?.startNotifier()
 	}
 
