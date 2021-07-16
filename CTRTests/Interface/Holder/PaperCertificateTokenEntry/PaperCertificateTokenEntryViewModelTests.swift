@@ -26,7 +26,7 @@ class PaperCertificateTokenEntryViewModelTests: XCTestCase {
 	func test_initialState() {
 		expect(self.sut.title) == L.holderDcctokenentryTitle()
 		expect(self.sut.header) == L.holderDcctokenentryHeader()
-		expect(self.sut.tokenEntryFieldTitle) == L.holderDcctokenentryTitle()
+		expect(self.sut.tokenEntryFieldTitle) == L.holderDcctokenentryTokenFieldTitle()
 		expect(self.sut.tokenEntryFieldPlaceholder) == L.holderDcctokenentryTokenFieldPlaceholder()
 		expect(self.sut.nextButtonTitle) == L.holderDcctokenentryNext()
 		expect(self.sut.fieldErrorMessage).to(beNil())
