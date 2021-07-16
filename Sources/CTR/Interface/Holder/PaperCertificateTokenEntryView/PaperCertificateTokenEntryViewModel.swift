@@ -18,7 +18,7 @@ final class PaperCertificateTokenEntryViewModel {
 
 	@Bindable private(set) var title = L.holderDcctokenentryTitle()
 	@Bindable private(set) var header = L.holderDcctokenentryHeader()
-	@Bindable private(set) var tokenEntryFieldTitle = L.holderDcctokenentryTitle()
+	@Bindable private(set) var tokenEntryFieldTitle = L.holderDcctokenentryTokenFieldTitle()
 	@Bindable private(set) var tokenEntryFieldPlaceholder = { () -> String in
 		if UIAccessibility.isVoiceOverRunning {
 			return L.holderDcctokenentryTokenFieldPlaceholderScreenreader()
