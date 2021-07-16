@@ -50,14 +50,10 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingEventGroups = false
 	var invokedRemoveExistingEventGroupsCount = 0
-	var invokedRemoveExistingEventGroupsParameters: (type: EventMode, Void)?
-	var invokedRemoveExistingEventGroupsParametersList = [(type: EventMode, Void)]()
 
-	func removeExistingEventGroups(type: EventMode) {
+	func removeExistingEventGroups() {
 		invokedRemoveExistingEventGroups = true
 		invokedRemoveExistingEventGroupsCount += 1
-		invokedRemoveExistingEventGroupsParameters = (type, ())
-		invokedRemoveExistingEventGroupsParametersList.append((type, ()))
 	}
 
 	var invokedRemoveExistingGreenCards = false
@@ -108,6 +104,16 @@ class WalletManagerSpy: WalletManaging {
 		invokedImportExistingTestCredentialParameters = (data, sampleDate)
 		invokedImportExistingTestCredentialParametersList.append((data, sampleDate))
 		return stubbedImportExistingTestCredentialResult
+	}
+
+	var invokedListEventGroups = false
+	var invokedListEventGroupsCount = 0
+	var stubbedListEventGroupsResult: [EventGroup]! = []
+
+	func listEventGroups() -> [EventGroup] {
+		invokedListEventGroups = true
+		invokedListEventGroupsCount += 1
+		return stubbedListEventGroupsResult
 	}
 
 	var invokedListGreenCards = false

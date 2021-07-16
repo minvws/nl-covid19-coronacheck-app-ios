@@ -158,10 +158,22 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	internal func userWantsToMakeQR(remoteEvents: [RemoteEvent], completion: @escaping (Bool) -> Void) {
 
+		if checkIdentityMatch(remoteEvents: remoteEvents) {
+			storeAndSign(remoteEvents: remoteEvents, replaceExistingEventGroups: false, completion: completion)
+		} else {
+			showIdentityMismatch {
+				// Replace the stored eventgroups
+				self.storeAndSign(remoteEvents: remoteEvents, replaceExistingEventGroups: true, completion: completion)
+			}
+		}
+	}
+
+	private func storeAndSign(remoteEvents: [RemoteEvent], replaceExistingEventGroups: Bool, completion: @escaping (Bool) -> Void) {
+
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeEvent(remoteEvents: remoteEvents) { saved in
+		storeEvent(remoteEvents: remoteEvents, replaceExistingEventGroups: replaceExistingEventGroups) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
@@ -230,7 +242,92 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
+	/// Check if the identities match
+	/// - Parameter remoteEvents: the remote events
+	/// - Returns: True if the identities match
+	func checkIdentityMatch(remoteEvents: [RemoteEvent]) -> Bool {
+
+		var match = true
+		var existingIdentities = [Any]()
+		var remoteIdentities = [Any]()
+
+		for storedEvent in walletManager.listEventGroups() {
+			if let jsonData = storedEvent.jsonData,
+			   let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+			   let decodedPayloadData = Data(base64Encoded: object.payload),
+			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+
+				if let identity = wrapper.identity {
+					existingIdentities.append(identity)
+				} else if let holder = wrapper.result?.holder {
+					existingIdentities.append(holder)
+				}
+			}
+		}
+		remoteIdentities = remoteEvents.compactMap {
+			if let identity = $0.wrapper.identity {
+				return identity
+			} else if let holder = $0.wrapper.result?.holder {
+				return holder
+			}
+			return nil
+		}
+
+		for existingIdentity in existingIdentities {
+
+			var existingFirstNameInitial: String?
+			var existingLastNameInitial: String?
+			var existingDay: String?
+			var existingMonth: String?
+
+			if let existing = existingIdentity as? EventFlow.Identity {
+				(existingFirstNameInitial, existingLastNameInitial, existingDay, existingMonth) = existing.identityMatchTuple()
+			} else if let existing = existingIdentity as? TestHolderIdentity {
+				(existingFirstNameInitial, existingLastNameInitial, existingDay, existingMonth) = existing.identityMatchTuple()
+			}
+			logVerbose("existingIdentity: \(existingFirstNameInitial ?? "-"), \(existingLastNameInitial ?? "-"), \(existingDay ?? "-"), \(existingMonth ?? "-")")
+
+			for remoteIdentity in remoteIdentities {
+
+				var remoteFirstNameInitial: String?
+				var remoteLastNameInitial: String?
+				var remoteDay: String?
+				var remoteMonth: String?
+
+				if let remote = remoteIdentity as? EventFlow.Identity {
+					(remoteFirstNameInitial, remoteLastNameInitial, remoteDay, remoteMonth) = remote.identityMatchTuple()
+				} else if let remote = remoteIdentity as? TestHolderIdentity {
+					(remoteFirstNameInitial, remoteLastNameInitial, remoteDay, remoteMonth) = remote.identityMatchTuple()
+				}
+				logVerbose("remoteIdentity: \(remoteFirstNameInitial ?? "-"), \(remoteLastNameInitial ?? "-"), \(remoteDay ?? "-"), \(remoteMonth ?? "-")")
+
+				match = match && (
+					remoteDay == existingDay && remoteMonth == existingMonth &&
+					(remoteFirstNameInitial == existingFirstNameInitial || remoteLastNameInitial == existingLastNameInitial)
+				)
+			}
+		}
+		logDebug("Does the identity of the new events match with the existing ones? \(match)")
+		return match
+	}
+
 	// MARK: Errors
+
+	internal func showIdentityMismatch(onReplace: @escaping () -> Void) {
+
+		alert = ListEventsViewController.AlertContent(
+			title: L.holderEventIdentityAlertTitle(),
+			subTitle: L.holderEventIdentityAlertMessage(),
+			cancelAction: { [weak self] _ in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			cancelTitle: L.holderEventIdentityAlertCancel(),
+			okAction: { _ in
+				onReplace()
+			},
+			okTitle: L.holderEventIdentityAlertOk()
+		)
+	}
 
 	internal func showEventError(remoteEvents: [RemoteEvent]) {
 
@@ -305,24 +402,22 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func storeEvent(
 		remoteEvents: [RemoteEvent],
+		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
 
-		if eventMode == .vaccination {
-			// Remove any existing vaccination events
-			walletManager.removeExistingEventGroups(type: eventMode)
+		if replaceExistingEventGroups {
+			walletManager.removeExistingEventGroups()
 		}
 
 		for response in remoteEvents where response.wrapper.status == .complete {
 
-			if eventMode != .vaccination {
-				// Remove any existing events for the provider
-				walletManager.removeExistingEventGroups(
-					type: eventMode,
-					providerIdentifier: response.wrapper.providerIdentifier
-				)
-			}
+			// Remove any existing events for the provider
+			walletManager.removeExistingEventGroups(
+				type: eventMode,
+				providerIdentifier: response.wrapper.providerIdentifier
+			)
 
 			// Store the new events
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt() {

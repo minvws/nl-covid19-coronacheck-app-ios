@@ -453,3 +453,8 @@
 "holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
 "holder.scanner.alert.dcc.title" = "Scan de internationale QR-code";
 "holder.scanner.alert.dcc.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
+
+"holder.event.identity.alert.title" = "Wil je je bewijs vervangen?";
+"holder.event.identity.alert.message" = "Je hebt eerder een bewijs gemaakt. De gegevens daarvan zijn anders dan de gegevens die net zijn opgehaald. Daarom kan je het bewijs alleen vervangen.";
+"holder.event.identity.alert.ok" = "Ja, vervang";
+"holder.event.identity.alert.cancel" = "Nee, stop";
