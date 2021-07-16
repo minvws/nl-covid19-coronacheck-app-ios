@@ -190,3 +190,10 @@ class NetworkSpy: NetworkManaging {
 		}
 	}
 }
+
+extension NetworkSpy {
+
+	convenience init() {
+		self.init(configuration: .test)
+	}
+}

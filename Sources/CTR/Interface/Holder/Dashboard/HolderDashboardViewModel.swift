@@ -134,7 +134,8 @@ final class HolderDashboardViewModel: Logging {
 		self.strippenRefresher = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Services.remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
 			walletManager: Services.walletManager,
-			greencardLoader: Services.greenCardLoader
+			greencardLoader: Services.greenCardLoader,
+			reachability: try? Reachability()
 		)
 
 		self.state = State(

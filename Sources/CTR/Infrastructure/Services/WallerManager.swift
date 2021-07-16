@@ -27,10 +27,8 @@ protocol WalletManaging {
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String)
 
-	/// Remove any existing event groups for the type
-	/// - Parameters:
-	///   - type: the type of event group
-	func removeExistingEventGroups(type: EventMode)
+	/// Remove any existing event groups
+	func removeExistingEventGroups()
 
 	func removeExistingGreenCards()
 
@@ -46,6 +44,10 @@ protocol WalletManaging {
 	///   - sampleDate: the sample date of the credential
 	/// - Returns: True if import was successful
 	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool
+
+	/// List all the event groups
+	/// - Returns: all the event groups
+	func listEventGroups() -> [EventGroup]
 
 	func listGreenCards() -> [GreenCard]
 
@@ -221,19 +223,17 @@ class WalletManager: WalletManaging, Logging {
 		}
 	}
 
-	/// Remove any existing event groups for the type
-	/// - Parameters:
-	///   - type: the type of event group
-	func removeExistingEventGroups(type: EventMode) {
+	/// Remove any existing event groups
+	func removeExistingEventGroups() {
 
 		let context = dataStoreManager.backgroundContext()
-		
+
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 
 				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
+					for case let eventGroup as EventGroup in eventGroups.allObjects {
 						self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 						context.delete(eventGroup)
 					}
@@ -449,6 +449,22 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
 			   let greenCards = wallet.greenCards?.allObjects as? [GreenCard] {
 				result = greenCards
+			}
+		}
+		return result
+	}
+
+	/// List all the event groups
+	/// - Returns: all the event groups
+	func listEventGroups() -> [EventGroup] {
+
+		var result = [EventGroup]()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
+				result = eventGroups
 			}
 		}
 		return result

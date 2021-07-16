@@ -51,4 +51,9 @@ extension TestHolderIdentity {
 
 		return output
 	}
+
+	func identityMatchTuple() -> (firstNameInitial: String?, lastNameInitial: String?, day: String?, month: String?) {
+		
+		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: birthDay, month: birthMonth)
+	}
 }

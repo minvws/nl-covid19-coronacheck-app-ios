@@ -86,8 +86,8 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		NSLayoutConstraint.activate([
 
 			// Line
-			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			lineView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			lineView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+			lineView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
 			lineView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
 			lineView.heightAnchor.constraint(equalToConstant: 1),
 
