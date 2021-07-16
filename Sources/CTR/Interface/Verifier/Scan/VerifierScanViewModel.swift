@@ -27,9 +27,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
-
-	/// Start scanning
-	@Bindable private(set) var startScanning: Bool = false
 	
 	@Bindable private(set) var alert: VerifierScanViewController.AlertContent?
 

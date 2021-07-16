@@ -316,12 +316,6 @@
 "holder.provider.ggd.subtitle" = "Je wordt doorgestuurd naar DigiD";
 "holder.provider.commercial.title" = "Andere testlocatie";
 
-/* MARK: - Holder Token Scan */
-"holder.tokenscan.title" = "Scan QR-code";
-"holder.tokenscan.message" = "Richt je telefoon op de QR-code die je van de testlocatie hebt gekregen.";
-"holder.tokenscan.error.title" = "Ongeldige QR-code";
-"holder.tokenscan.error.message" = "Deze QR-code is niet geldig. Scan de QR-code die je van je testlocatie hebt gekregen.";
-
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";
 "holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br />Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
@@ -440,5 +434,22 @@
 
 /* MARK: - Start Paper Certificate  */
 "holder.papercertificate.start.title" = "Papieren bewijs toevoegen";
-"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij de zorgverlener</b> waar je bent gevaccineerd of getest? Dan kun je deze hier ook in de app toevoegen. ";
+"holder.papercertificate.start.message" = "Heb je een papieren coronabewijs <b>aangevraagd bij de zorgverlener</b> waar je bent gevaccineerd of getest? Dan kun je deze hier ook in de app toevoegen.";
 "holder.papercertificate.start.highlightedmessage" = "<p><b>Zelf je bewijs uitgeprint?</b><br /> Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
+
+/* MARK: - Start Paper Certificate  */
+"holder.papercertificate.aboutscan.title" = "Scan alleen de internationale QR-code";
+"holder.papercertificate.aboutscan.message" = "<p>In de internationale QR-code staan genoeg gegevens om zowel een Nederlands als een internationaal bewijs te maken.<br />Scan daarom met de camera van je telefoon <b>alleen je internationale QR-code.</b></p><br /><p><b>Dit krijg je:</b><ul><li>Een Nederlands bewijs</li><li>Een internationaal bewijs</li></ul></p>";
+
+/* MARK: - Holder Scanner */
+"holder.scanner.title" = "Scan QR-code";
+"holder.scanner.message" = "Richt je telefoon op de QR-code op je internationale bewijs";
+"holder.scanner.permission.title" = "Geen toegang tot camera";
+"holder.scanner.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
+"holder.scanner.permission.settings" = "Naar instellingen";
+
+/* MARK: - Holder Scanner Alert */
+"holder.scanner.alert.unknown.title" = "Ongeldige QR-code";
+"holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
+"holder.scanner.alert.dcc.title" = "Scan de internationale QR-code";
+"holder.scanner.alert.dcc.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
