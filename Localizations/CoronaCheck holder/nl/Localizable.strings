@@ -316,12 +316,6 @@
 "holder.provider.ggd.subtitle" = "Je wordt doorgestuurd naar DigiD";
 "holder.provider.commercial.title" = "Andere testlocatie";
 
-/* MARK: - Holder Token Scan */
-"holder.tokenscan.title" = "Scan QR-code";
-"holder.tokenscan.message" = "Richt je telefoon op de QR-code die je van de testlocatie hebt gekregen.";
-"holder.tokenscan.error.title" = "Ongeldige QR-code";
-"holder.tokenscan.error.message" = "Deze QR-code is niet geldig. Scan de QR-code die je van je testlocatie hebt gekregen.";
-
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";
 "holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie.<br />Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
