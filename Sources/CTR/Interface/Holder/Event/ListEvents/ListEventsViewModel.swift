@@ -252,18 +252,15 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		var remoteIdentities = [Any]()
 
 		for storedEvent in walletManager.listEventGroups() {
+			if let jsonData = storedEvent.jsonData,
+			   let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+			   let decodedPayloadData = Data(base64Encoded: object.payload),
+			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
 
-			if let jsonData = storedEvent.jsonData {
-				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData) {
-					if let decodedPayloadData = Data(base64Encoded: object.payload) {
-						if let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
-							if let identity = wrapper.identity {
-								existingIdentities.append(identity)
-							} else if let holder = wrapper.result?.holder {
-								existingIdentities.append(holder)
-							}
-						}
-					}
+				if let identity = wrapper.identity {
+					existingIdentities.append(identity)
+				} else if let holder = wrapper.result?.holder {
+					existingIdentities.append(holder)
 				}
 			}
 		}
