@@ -211,32 +211,35 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 							)
 						)
 
-					case .failure(.didNotEvaluate):
+					case .failure(GreenCardLoader.Error.didNotEvaluate):
 						self.viewState = self.cannotCreateEventsState()
 						self.shouldPrimaryButtonBeEnabled = true
 
-					case .failure(.failedToSave), .failure(.noEvents):
+					case .failure(GreenCardLoader.Error.failedToSave), .failure(GreenCardLoader.Error.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 
-					case .failure(.requestTimedOut), .failure(.noInternetConnection):
+					case .failure(NetworkError.requestTimedOut), .failure(NetworkError.noInternetConnection):
 						self.showNoInternet(remoteEvents: remoteEvents)
 						self.shouldPrimaryButtonBeEnabled = true
 
-					case .failure(.failedToPrepareIssue):
+					case .failure(GreenCardLoader.Error.failedToPrepareIssue):
 						self.showTechnicalError("116 decodePrepareIssueMessage")
 
-					case .failure(.serverBusy):
+					case .failure(NetworkError.serverBusy):
 						self.showServerTooBusyError()
 
-					case .failure(.preparingIssue117):
+					case .failure(GreenCardLoader.Error.preparingIssue117):
 						self.showTechnicalError("117 prepareIssue")
 
-					case .failure(.stoken118):
+					case .failure(GreenCardLoader.Error.stoken118):
 						self.showTechnicalError("118 stoken")
 
-					case .failure(.credentials119):
+					case .failure(GreenCardLoader.Error.credentials119):
 						self.showTechnicalError("118 credentials")
+
+					case .failure(let error):
+						self.showTechnicalError("119 error: \(error)")
 				}
 			})
 		}

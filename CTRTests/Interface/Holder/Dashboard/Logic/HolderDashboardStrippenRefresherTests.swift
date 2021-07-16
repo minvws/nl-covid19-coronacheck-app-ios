@@ -149,10 +149,10 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
 		expect(self.sut.state.loadingState) == .failed(error: .greencardLoaderError(error: .serverBusy))
 		expect(self.sut.state.hasLoadingEverFailed) == true
-		expect(self.sut.state.serverErrorOccurenceCount) == 1
+		expect(self.sut.state.errorOccurenceCount) == 1
 
 		sut.load()
-		expect(self.sut.state.serverErrorOccurenceCount) == 2
+		expect(self.sut.state.errorOccurenceCount) == 2
 
 		// Fix network
 		greencardLoader.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.success(()), ())
@@ -163,7 +163,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
 		expect(self.sut.state.loadingState) == .idle
 		expect(self.sut.state.hasLoadingEverFailed) == true
-		expect(self.sut.state.serverErrorOccurenceCount) == 2
+		expect(self.sut.state.errorOccurenceCount) == 2
 	}
 
 	func test_noInternet() {
@@ -186,7 +186,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
 		expect(self.sut.state.loadingState) == .noInternet
 		expect(self.sut.state.hasLoadingEverFailed) == true
-		expect(self.sut.state.serverErrorOccurenceCount) == 0
+		expect(self.sut.state.errorOccurenceCount) == 0
 
 		// simulate reachability restoration
 
@@ -198,7 +198,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
 		expect(self.sut.state.loadingState) == .idle
 		expect(self.sut.state.hasLoadingEverFailed) == true
-		expect(self.sut.state.serverErrorOccurenceCount) == 0
+		expect(self.sut.state.errorOccurenceCount) == 0
 	}
 }
 
