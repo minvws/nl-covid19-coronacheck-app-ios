@@ -50,14 +50,10 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedRemoveExistingEventGroups = false
 	var invokedRemoveExistingEventGroupsCount = 0
-	var invokedRemoveExistingEventGroupsParameters: (type: EventMode, Void)?
-	var invokedRemoveExistingEventGroupsParametersList = [(type: EventMode, Void)]()
 
-	func removeExistingEventGroups(type: EventMode) {
+	func removeExistingEventGroups() {
 		invokedRemoveExistingEventGroups = true
 		invokedRemoveExistingEventGroupsCount += 1
-		invokedRemoveExistingEventGroupsParameters = (type, ())
-		invokedRemoveExistingEventGroupsParametersList.append((type, ()))
 	}
 
 	var invokedRemoveExistingGreenCards = false

@@ -27,10 +27,8 @@ protocol WalletManaging {
 	///   - providerIdentifier: the identifier of the the provider
 	func removeExistingEventGroups(type: EventMode, providerIdentifier: String)
 
-	/// Remove any existing event groups for the type
-	/// - Parameters:
-	///   - type: the type of event group
-	func removeExistingEventGroups(type: EventMode)
+	/// Remove any existing event groups
+	func removeExistingEventGroups()
 
 	func removeExistingGreenCards()
 
@@ -221,19 +219,17 @@ class WalletManager: WalletManaging, Logging {
 		}
 	}
 
-	/// Remove any existing event groups for the type
-	/// - Parameters:
-	///   - type: the type of event group
-	func removeExistingEventGroups(type: EventMode) {
+	/// Remove any existing event groups
+	func removeExistingEventGroups() {
 
 		let context = dataStoreManager.backgroundContext()
-		
+
 		context.performAndWait {
 
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 
 				if let eventGroups = wallet.eventGroups {
-					for case let eventGroup as EventGroup in eventGroups.allObjects where eventGroup.type == type.rawValue {
+					for case let eventGroup as EventGroup in eventGroups.allObjects {
 						self.logDebug("Removing eventGroup \(String(describing: eventGroup.providerIdentifier)) \(String(describing: eventGroup.type))")
 						context.delete(eventGroup)
 					}

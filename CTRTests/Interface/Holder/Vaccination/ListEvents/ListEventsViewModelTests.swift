@@ -180,8 +180,8 @@ class ListEventsViewModelTests: XCTestCase {
 			content.primaryAction?()
 
 			// Then
-			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
-			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedFetchGreencards) == false
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
 			expect(self.sut.alert).toNot(beNil())
@@ -275,7 +275,8 @@ class ListEventsViewModelTests: XCTestCase {
 			content.primaryAction?()
 
 			// Then
-			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
@@ -310,7 +311,8 @@ class ListEventsViewModelTests: XCTestCase {
 			content.primaryAction?()
 
 			// Then
-			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
 			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
@@ -387,7 +389,8 @@ class ListEventsViewModelTests: XCTestCase {
 			content.primaryAction?()
 
 			// Then
-			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
 			expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 			expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
@@ -426,7 +429,8 @@ class ListEventsViewModelTests: XCTestCase {
 			content.primaryAction?()
 
 			// Then
-			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
 			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beFalse())
 			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beFalse())
@@ -465,7 +469,8 @@ class ListEventsViewModelTests: XCTestCase {
 			content.primaryAction?()
 
 			// Then
-			expect(self.walletSpy.invokedRemoveExistingEventGroups) == true
+			expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+			expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 			expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
 			expect(self.walletSpy.invokedStoreDomesticGreenCard).toEventually(beTrue())
 			expect(self.walletSpy.invokedStoreEuGreenCard).toEventually(beTrue())

@@ -158,10 +158,22 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	internal func userWantsToMakeQR(remoteEvents: [RemoteEvent], completion: @escaping (Bool) -> Void) {
 
+		if checkIdentityMatch(remoteEvents: remoteEvents) {
+			storeAndSign(remoteEvents: remoteEvents, replaceExistingEventGroups: false, completion: completion)
+		} else {
+			showIdentityMismatch {
+				// Replace the stored eventgroups
+				self.storeAndSign(remoteEvents: remoteEvents, replaceExistingEventGroups: true, completion: completion)
+			}
+		}
+	}
+
+	private func storeAndSign(remoteEvents: [RemoteEvent], replaceExistingEventGroups: Bool, completion: @escaping (Bool) -> Void) {
+
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeEvent(remoteEvents: remoteEvents) { saved in
+		storeEvent(remoteEvents: remoteEvents, replaceExistingEventGroups: replaceExistingEventGroups) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
@@ -230,7 +242,31 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}
 
+	/// Check if the identities match
+	/// - Parameter remoteEvents: the remote events
+	/// - Returns: True if the identities match
+	func checkIdentityMatch(remoteEvents: [RemoteEvent]) -> Bool {
+
+		return true
+	}
+
 	// MARK: Errors
+
+	internal func showIdentityMismatch(onReplace: @escaping () -> Void) {
+
+		alert = ListEventsViewController.AlertContent(
+			title: L.holderEventIdentityAlertTitle(),
+			subTitle: L.holderEventIdentityAlertMessage(),
+			cancelAction: { [weak self] _ in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			cancelTitle: L.holderEventIdentityAlertCancel(),
+			okAction: { _ in
+				onReplace()
+			},
+			okTitle: L.holderEventIdentityAlertOk()
+		)
+	}
 
 	internal func showEventError(remoteEvents: [RemoteEvent]) {
 
@@ -305,24 +341,22 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func storeEvent(
 		remoteEvents: [RemoteEvent],
+		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
 		var success = true
 
-		if eventMode == .vaccination {
-			// Remove any existing vaccination events
-			walletManager.removeExistingEventGroups(type: eventMode)
+		if replaceExistingEventGroups {
+			walletManager.removeExistingEventGroups()
 		}
 
 		for response in remoteEvents where response.wrapper.status == .complete {
 
-			if eventMode != .vaccination {
-				// Remove any existing events for the provider
-				walletManager.removeExistingEventGroups(
-					type: eventMode,
-					providerIdentifier: response.wrapper.providerIdentifier
-				)
-			}
+			// Remove any existing events for the provider
+			walletManager.removeExistingEventGroups(
+				type: eventMode,
+				providerIdentifier: response.wrapper.providerIdentifier
+			)
 
 			// Store the new events
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt() {
