@@ -170,3 +170,9 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedGreencardsWithUnexpiredOriginsResult
 	}
 }
+
+extension WalletManagerSpy {
+	convenience init() {
+		self.init(dataStoreManager: DataStoreManager(.inMemory))
+	}
+}
