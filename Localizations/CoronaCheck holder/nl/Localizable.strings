@@ -444,6 +444,9 @@
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR-code";
 "holder.scanner.message" = "Richt je telefoon op de QR-code op je internationale bewijs";
+"holder.scanner.permission.title" = "Geen toegang tot camera";
+"holder.scanner.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
+"holder.scanner.permission.settings" = "Naar instellingen";
 
 /* MARK: - Holder Scanner Alert */
 "holder.scanner.alert.unknown.title" = "Ongeldige QR-code";
