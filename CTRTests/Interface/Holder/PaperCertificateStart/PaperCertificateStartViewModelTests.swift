@@ -31,4 +31,12 @@ final class PaperCertificateStartViewModelTests: XCTestCase {
 		
 		PaperCertificateStartViewController(viewModel: sut).assertImage()
 	}
+	
+	func test_primaryButtonTapped_shouldInvokeCoordinator() {
+		// When
+		sut.primaryButtonTapped()
+		
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToEnterToken) == true
+	}
 }
