@@ -19,7 +19,7 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 		
 		enum Spacing {
 			static let title: CGFloat = 24
-			static let messageLabel: CGFloat = 44
+			static let messageLabel: CGFloat = 32
 		}
 	}
 	
