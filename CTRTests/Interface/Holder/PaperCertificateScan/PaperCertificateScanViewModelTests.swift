@@ -7,6 +7,7 @@
 
 import XCTest
 import Nimble
+import SnapshotTesting
 @testable import CTR
 
 final class PaperCertificateScanViewModelTests: XCTestCase {
@@ -24,6 +25,14 @@ final class PaperCertificateScanViewModelTests: XCTestCase {
 			coordinator: coordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy
 		)
+	}
+	
+	func test_initialState() {
+		expect(self.sut.title) == L.holderScannerTitle()
+		expect(self.sut.message) == L.holderScannerMessage()
+		expect(self.sut.torchLabels) == [L.holderTokenscanTorchEnable(), L.holderTokenscanTorchDisable()]
+		
+		PaperCertificateScanViewController(viewModel: sut).assertImage()
 	}
 	
 	func test_parseQRMessage_whenDomesticQRIsUppercased_shouldInvokeAlert() {
