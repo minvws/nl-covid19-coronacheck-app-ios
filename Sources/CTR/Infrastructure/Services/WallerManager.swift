@@ -45,6 +45,10 @@ protocol WalletManaging {
 	/// - Returns: True if import was successful
 	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool
 
+	/// List all the event groups
+	/// - Returns: all the event groups
+	func listEventGroups() -> [EventGroup]
+
 	func listGreenCards() -> [GreenCard]
 
 	func listOrigins(type: OriginType) -> [Origin]
@@ -445,6 +449,22 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
 			   let greenCards = wallet.greenCards?.allObjects as? [GreenCard] {
 				result = greenCards
+			}
+		}
+		return result
+	}
+
+	/// List all the event groups
+	/// - Returns: all the event groups
+	func listEventGroups() -> [EventGroup] {
+
+		var result = [EventGroup]()
+		let context = dataStoreManager.managedObjectContext()
+		context.performAndWait {
+
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
+			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
+				result = eventGroups
 			}
 		}
 		return result

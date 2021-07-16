@@ -160,6 +160,35 @@ class WalletManagerTests: XCTestCase {
 
 		// Then
 		expect(wallet?.eventGroups).to(haveCount(0))
+	}
+
+	func test_listEventGroups() {
+
+		// Given
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "CoronaCheck",
+			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			issuedAt: Date()
+		)
+		sut.storeEventGroup(
+			.test,
+			providerIdentifier: "Other Provider",
+			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			issuedAt: Date()
+		)
+		sut.storeEventGroup(
+			.vaccination,
+			providerIdentifier: "GGD",
+			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			issuedAt: Date()
+		)
+
+		// When
+		let list = sut.listEventGroups()
+
+		// Then
+		expect(list).to(haveCount(3))
 
 	}
 

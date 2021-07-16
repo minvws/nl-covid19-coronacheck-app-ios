@@ -247,7 +247,71 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	/// - Returns: True if the identities match
 	func checkIdentityMatch(remoteEvents: [RemoteEvent]) -> Bool {
 
-		return true
+		var match = true
+		var existingIdentities = [Any]()
+		var remoteIdentities = [Any]()
+
+		for storedEvent in walletManager.listEventGroups() {
+
+			if let jsonData = storedEvent.jsonData {
+				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData) {
+					if let decodedPayloadData = Data(base64Encoded: object.payload) {
+						if let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+							if let identity = wrapper.identity {
+								existingIdentities.append(identity)
+							} else if let holder = wrapper.result?.holder {
+								existingIdentities.append(holder)
+							}
+						}
+					}
+				}
+			}
+		}
+		remoteIdentities = remoteEvents.compactMap {
+			if let identity = $0.wrapper.identity {
+				return identity
+			} else if let holder = $0.wrapper.result?.holder {
+				return holder
+			}
+			return nil
+		}
+
+		for existingIdentity in existingIdentities {
+
+			var existingFirstNameInitial: String?
+			var existingLastNameInitial: String?
+			var existingDay: String?
+			var existingMonth: String?
+
+			if let existing = existingIdentity as? EventFlow.Identity {
+				(existingFirstNameInitial, existingLastNameInitial, existingDay, existingMonth) = existing.identityMatchTuple()
+			} else if let existing = existingIdentity as? TestHolderIdentity {
+				(existingFirstNameInitial, existingLastNameInitial, existingDay, existingMonth) = existing.identityMatchTuple()
+			}
+			logVerbose("existingIdentity: \(existingFirstNameInitial ?? "-"), \(existingLastNameInitial ?? "-"), \(existingDay ?? "-"), \(existingMonth ?? "-")")
+
+			for remoteIdentity in remoteIdentities {
+
+				var remoteFirstNameInitial: String?
+				var remoteLastNameInitial: String?
+				var remoteDay: String?
+				var remoteMonth: String?
+
+				if let remote = remoteIdentity as? EventFlow.Identity {
+					(remoteFirstNameInitial, remoteLastNameInitial, remoteDay, remoteMonth) = remote.identityMatchTuple()
+				} else if let remote = remoteIdentity as? TestHolderIdentity {
+					(remoteFirstNameInitial, remoteLastNameInitial, remoteDay, remoteMonth) = remote.identityMatchTuple()
+				}
+				logVerbose("remoteIdentity: \(remoteFirstNameInitial ?? "-"), \(remoteLastNameInitial ?? "-"), \(remoteDay ?? "-"), \(remoteMonth ?? "-")")
+
+				match = match && (
+					remoteDay == existingDay && remoteMonth == existingMonth &&
+					(remoteFirstNameInitial == existingFirstNameInitial || remoteLastNameInitial == existingLastNameInitial)
+				)
+			}
+		}
+		logDebug("Does the identity of the new events match with the existing ones? \(match)")
+		return match
 	}
 
 	// MARK: Errors

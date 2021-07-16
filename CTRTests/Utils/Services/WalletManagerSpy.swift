@@ -106,6 +106,16 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedImportExistingTestCredentialResult
 	}
 
+	var invokedListEventGroups = false
+	var invokedListEventGroupsCount = 0
+	var stubbedListEventGroupsResult: [EventGroup]! = []
+
+	func listEventGroups() -> [EventGroup] {
+		invokedListEventGroups = true
+		invokedListEventGroupsCount += 1
+		return stubbedListEventGroupsResult
+	}
+
 	var invokedListGreenCards = false
 	var invokedListGreenCardsCount = 0
 	var stubbedListGreenCardsResult: [GreenCard]! = []
