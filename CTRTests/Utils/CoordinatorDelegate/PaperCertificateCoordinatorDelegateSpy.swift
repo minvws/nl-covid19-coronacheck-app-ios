@@ -8,7 +8,7 @@
 import Foundation
 @testable import CTR
 
-class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegate {
+class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegate, OpenUrlProtocol {
 
 	var invokedUserDidSubmitPaperCertificateToken = false
 	var invokedUserDidSubmitPaperCertificateTokenCount = 0
@@ -60,5 +60,45 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserWantToToGoEventsCount += 1
 		invokedUserWantToToGoEventsParameters = (event, ())
 		invokedUserWantToToGoEventsParametersList.append((event, ()))
+	}
+
+	var invokedUserWishesToEnterToken = false
+	var invokedUserWishesToEnterTokenCount = 0
+
+	func userWishesToEnterToken() {
+		invokedUserWishesToEnterToken = true
+		invokedUserWishesToEnterTokenCount += 1
+	}
+
+	var invokedUserWishesToScanCertificate = false
+	var invokedUserWishesToScanCertificateCount = 0
+
+	func userWishesToScanCertificate() {
+		invokedUserWishesToScanCertificate = true
+		invokedUserWishesToScanCertificateCount += 1
+	}
+
+	var invokedUserWishesToCreateACertificate = false
+	var invokedUserWishesToCreateACertificateCount = 0
+	var invokedUserWishesToCreateACertificateParameters: (message: String, Void)?
+	var invokedUserWishesToCreateACertificateParametersList = [(message: String, Void)]()
+
+	func userWishesToCreateACertificate(message: String) {
+		invokedUserWishesToCreateACertificate = true
+		invokedUserWishesToCreateACertificateCount += 1
+		invokedUserWishesToCreateACertificateParameters = (message, ())
+		invokedUserWishesToCreateACertificateParametersList.append((message, ()))
+	}
+
+	var invokedOpenUrl = false
+	var invokedOpenUrlCount = 0
+	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
+	var invokedOpenUrlParametersList = [(url: URL, inApp: Bool)]()
+
+	func openUrl(_ url: URL, inApp: Bool) {
+		invokedOpenUrl = true
+		invokedOpenUrlCount += 1
+		invokedOpenUrlParameters = (url, inApp)
+		invokedOpenUrlParametersList.append((url, inApp))
 	}
 }

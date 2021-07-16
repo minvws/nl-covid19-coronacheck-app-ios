@@ -12,9 +12,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	// MARK: Navigation
 
-	/// Navigate to the token scanner
-	func navigateToTokenScan()
-
 	/// Navigate to the start fo the holder flow
 	func navigateBackToStart()
 
@@ -259,18 +256,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
 
-	/// Navigate to the token scanner
-	func navigateToTokenScan() {
-
-		let destination = TokenScanViewController(
-			viewModel: TokenScanViewModel(
-				coordinator: self
-			)
-		)
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
-	}
-
 	private func navigateToChooseTestLocation() {
 
 		let destination = ChooseTestLocationViewController(
@@ -474,7 +459,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .addPaperCertificate:
-				let coordinator = PaperCertificateCoordinator(delegate: self)
+				let coordinator = PaperCertificateCoordinator(delegate: self, cryptoManager: cryptoManager)
 				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController

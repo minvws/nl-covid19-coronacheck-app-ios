@@ -5,14 +5,13 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
-import UIKit
+import Foundation
 
-final class PaperCertificateStartViewModel: Logging {
+final class PaperCertificateAboutScanViewModel: Logging {
 	
-	@Bindable private(set) var title: String = L.holderPapercertificateStartTitle()
-	@Bindable private(set) var message: String = L.holderPapercertificateStartMessage()
-	@Bindable private(set) var highlightedMessage: String = L.holderPapercertificateStartHighlightedmessage()
-	@Bindable private(set) var primaryButtonTitle = L.generalNext()
+	@Bindable private(set) var title: String = L.holderPapercertificateAboutscanTitle()
+	@Bindable private(set) var message: String = L.holderPapercertificateAboutscanMessage()
+	@Bindable private(set) var primaryButtonTitle = L.holderScannerTitle()
 	
 	private weak var coordinator: PaperCertificateCoordinatorDelegate?
 	
@@ -26,6 +25,6 @@ final class PaperCertificateStartViewModel: Logging {
 	/// The user tapped the primary button
 	func primaryButtonTapped() {
 		
-		coordinator?.userWishesToEnterToken()
+		coordinator?.userWishesToScanCertificate()
 	}
 }

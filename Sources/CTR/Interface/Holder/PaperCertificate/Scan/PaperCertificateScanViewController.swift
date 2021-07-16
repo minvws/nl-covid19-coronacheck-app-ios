@@ -7,7 +7,7 @@
 
 import UIKit
 
-class VerifierScanViewController: ScanViewController {
+class PaperCertificateScanViewController: ScanViewController {
 	
 	struct AlertContent {
 		let title: String
@@ -15,9 +15,11 @@ class VerifierScanViewController: ScanViewController {
 		let okTitle: String
 	}
 
-	private let viewModel: VerifierScanViewModel
+	private let viewModel: PaperCertificateScanViewModel
 
-	init(viewModel: VerifierScanViewModel) {
+	// MARK: Initializers
+
+	init(viewModel: PaperCertificateScanViewModel) {
 
 		self.viewModel = viewModel
 
@@ -42,31 +44,25 @@ class VerifierScanViewController: ScanViewController {
 		configureTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 		
+		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+	
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self else { return }
-            strongSelf.addTorchButton(
+			strongSelf.addTorchButton(
                 action: #selector(strongSelf.toggleTorch),
                 enableLabel: $0.first,
                 disableLabel: $0.last
             )
 		}
-
 		viewModel.$showPermissionWarning.binding = { [weak self] in
 			if $0 {
 				self?.showPermissionError()
 			}
 		}
-		
-		addCloseButton(
-			action: #selector(closeButtonTapped),
-			backgroundColor: .clear,
-			tintColor: .white
-		)
+
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
@@ -76,23 +72,17 @@ class VerifierScanViewController: ScanViewController {
 		viewModel.parseQRMessage(code)
 	}
 
-	/// User tapped on the button
-	@objc func closeButtonTapped() {
-
-		viewModel.dismiss()
-	}
-
 	/// Show alert
 	func showPermissionError() {
 
 		let alertController = UIAlertController(
-			title: L.verifierScanPermissionTitle(),
-			message: L.verifierScanPermissionMessage(),
+			title: L.holderScannerPermissionTitle(),
+			message: L.holderScannerAlertDccMessage(),
 			preferredStyle: .alert
 		)
 		alertController.addAction(
 			UIAlertAction(
-				title: L.verifierScanPermissionSettings(),
+				title: L.holderScannerPermissionSettings(),
 				style: .default,
 				handler: { [weak self] _ in
 					self?.viewModel.gotoSettings()
