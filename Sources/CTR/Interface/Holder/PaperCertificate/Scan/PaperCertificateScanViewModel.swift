@@ -48,7 +48,7 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 		
-		if message.hasPrefix("NL") {
+		if message.lowercased().hasPrefix("nl") {
 			logInfo("Invalid: Domestic QR-code")
 			
 			alert = .init(title: L.holderScannerAlertDccTitle(),
