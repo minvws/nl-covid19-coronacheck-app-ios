@@ -35,9 +35,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 			var existingTuple: IdentityTuple?
 
 			if let existing = existingIdentity as? EventFlow.Identity {
-				existingTuple = existing.identityMatchTuple()
+				existingTuple = existing.asIdentityTuple()
 			} else if let existing = existingIdentity as? TestHolderIdentity {
-				existingTuple = existing.identityMatchTuple()
+				existingTuple = existing.asIdentityTuple()
 			}
 			logDebug("existingIdentity: \(String(describing: existingTuple))")
 
@@ -46,9 +46,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				var remoteTuple: IdentityTuple?
 
 				if let remote = remoteIdentity as? EventFlow.Identity {
-					remoteTuple = remote.identityMatchTuple()
+					remoteTuple = remote.asIdentityTuple()
 				} else if let remote = remoteIdentity as? TestHolderIdentity {
-					remoteTuple = remote.identityMatchTuple()
+					remoteTuple = remote.asIdentityTuple()
 				}
 				logDebug("existingIdentity: \(String(describing: remoteTuple))")
 
@@ -99,7 +99,7 @@ typealias IdentityTuple = (firstNameInitial: String?, lastNameInitial: String?, 
 
 extension EventFlow.Identity {
 
-	func identityMatchTuple() -> IdentityTuple {
+	func asIdentityTuple() -> IdentityTuple {
 
 		var firstNameInitial: String?
 		var lastNameInitial: String?
@@ -131,7 +131,7 @@ extension EventFlow.Identity {
 
 extension TestHolderIdentity {
 
-	func identityMatchTuple() -> IdentityTuple {
+	func asIdentityTuple() -> IdentityTuple {
 
 		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: birthDay, month: birthMonth)
 	}
