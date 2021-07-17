@@ -50,16 +50,16 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserWantsToGoBackToTokenEntryCount += 1
 	}
 
-	var invokedUserWantToToGoEvents = false
-	var invokedUserWantToToGoEventsCount = 0
-	var invokedUserWantToToGoEventsParameters: (event: RemoteEvent, Void)?
-	var invokedUserWantToToGoEventsParametersList = [(event: RemoteEvent, Void)]()
+	var invokedUserWishesToSeeScannedEvent = false
+	var invokedUserWishesToSeeScannedEventCount = 0
+	var invokedUserWishesToSeeScannedEventParameters: (event: RemoteEvent, Void)?
+	var invokedUserWishesToSeeScannedEventParametersList = [(event: RemoteEvent, Void)]()
 
-	func userWantToToGoEvents(_ event: RemoteEvent) {
-		invokedUserWantToToGoEvents = true
-		invokedUserWantToToGoEventsCount += 1
-		invokedUserWantToToGoEventsParameters = (event, ())
-		invokedUserWantToToGoEventsParametersList.append((event, ()))
+	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
+		invokedUserWishesToSeeScannedEvent = true
+		invokedUserWishesToSeeScannedEventCount += 1
+		invokedUserWishesToSeeScannedEventParameters = (event, ())
+		invokedUserWishesToSeeScannedEventParametersList.append((event, ()))
 	}
 
 	var invokedUserWishesToEnterToken = false

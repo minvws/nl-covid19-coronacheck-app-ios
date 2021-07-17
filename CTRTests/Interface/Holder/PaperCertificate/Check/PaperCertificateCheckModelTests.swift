@@ -41,7 +41,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
 	}
 
@@ -66,7 +66,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == true
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == true
 		expect(self.sut.alert).to(beNil())
 	}
 
@@ -85,7 +85,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).to(beNil())
 
 		if case let .feedback(content: content) = sut.viewState {
@@ -111,7 +111,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).to(beNil())
 
 		if case let .feedback(content: content) = sut.viewState {
@@ -137,7 +137,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).to(beNil())
 
 		if case let .feedback(content: content) = sut.viewState {
@@ -163,7 +163,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
 		expect(self.sut.alert?.title) == L.generalNetworkwasbusyTitle()
 	}
@@ -183,7 +183,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
 		expect(self.sut.alert?.title) == L.generalErrorNointernetTitle()
 	}
@@ -203,7 +203,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWantToToGoEvents) == false
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
 		expect(self.sut.alert?.title) == L.generalErrorTitle()
 	}

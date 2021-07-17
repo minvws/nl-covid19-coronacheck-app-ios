@@ -193,6 +193,7 @@ class ProofManager: ProofManaging, Logging {
 
 		if let testEvent = getTestWrapper(),
 		   let signedProof = getSignedWrapper(),
+		   let jsonData = try? JSONEncoder().encode(signedProof),
 		   let sampleDateString = testEvent.result?.sampleDate,
 		   let sampleDate = Formatter.getDateFrom(dateString8601: sampleDateString),
 		   testEvent.status == .complete {
@@ -201,7 +202,7 @@ class ProofManager: ProofManaging, Logging {
 			_ = walletManager.storeEventGroup(
 				.test,
 				providerIdentifier: testEvent.providerIdentifier,
-				signedResponse: signedProof,
+				jsonData: jsonData,
 				issuedAt: sampleDate
 			)
 			// Remove old data

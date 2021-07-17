@@ -69,7 +69,7 @@ class WalletManagerTests: XCTestCase {
 		let result = sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 
@@ -85,7 +85,7 @@ class WalletManagerTests: XCTestCase {
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "CoronaCheck",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 
@@ -103,7 +103,7 @@ class WalletManagerTests: XCTestCase {
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "Other Provider",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 
@@ -121,7 +121,7 @@ class WalletManagerTests: XCTestCase {
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "CoronaCheck",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 
@@ -139,19 +139,19 @@ class WalletManagerTests: XCTestCase {
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "CoronaCheck",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "Other Provider",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GGD",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 
@@ -168,19 +168,19 @@ class WalletManagerTests: XCTestCase {
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "CoronaCheck",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 		sut.storeEventGroup(
 			.test,
 			providerIdentifier: "Other Provider",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 		sut.storeEventGroup(
 			.vaccination,
 			providerIdentifier: "GGD",
-			signedResponse: SignedResponse(payload: "test", signature: "signature"),
+			jsonData: Data(),
 			issuedAt: Date()
 		)
 
