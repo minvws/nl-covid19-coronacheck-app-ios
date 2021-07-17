@@ -23,7 +23,7 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 
 	func userWantsToGoBackToTokenEntry()
 
-	func userWantToToGoEvents(_ event: RemoteEvent)
+	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
 	func userWishesToEnterToken()
 	
@@ -39,6 +39,10 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	var navigationController: UINavigationController = UINavigationController()
 
 	private weak var delegate: PaperCertificateFlowDelegate?
+
+	private var token: String?
+
+	private var scannedQR: String?
 
 	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 	
@@ -70,14 +74,15 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userDidSubmitPaperCertificateToken(token: String) {
 
-	//	navigateToCheck(scannedDcc: CouplingManager.vaccinationDCC, couplingCode: token)
+		// Store Token
+		self.token = token
 
+		// Navigate to About Scan
 		let destination = PaperCertificateAboutScanViewController(
 			viewModel: PaperCertificateAboutScanViewModel(
 				coordinator: self
 			)
 		)
-
 		navigationController.pushViewController(destination, animated: true)
 	}
 
@@ -109,11 +114,14 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWantsToGoBackToDashboard() {
 
+		scannedQR = nil
+		token = nil
 		delegate?.addCertificateFlowDidFinish()
 	}
 
 	func userWantsToGoBackToTokenEntry() {
 
+		scannedQR = nil
 		if let tokenEntryViewController = navigationController.viewControllers
 			.first(where: { $0 is PaperCertificateTokenEntryViewController }) {
 
@@ -124,7 +132,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		}
 	}
 
-	func userWantToToGoEvents(_ event: RemoteEvent) {
+	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
 
 		let eventCoordinator = EventCoordinator(
 			navigationController: navigationController,
@@ -152,20 +160,25 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				cryptoManager: cryptoManager
 			)
 		)
-
 		navigationController.pushViewController(destination, animated: true)
 	}
 	
 	func userWishesToCreateACertificate(message: String) {
-		
-//		let viewController = PaperCertificateCheckViewController(
-//			viewModel: PaperCertificateCheckViewModel(
-//				coordinator: self,
-//				scannedDcc: scannedDcc,
-//				couplingCode: couplingCode
-//			)
-//		)
-//		navigationController.pushViewController(viewController, animated: false)
+
+		// Store
+		self.scannedQR = message
+
+		// Navigate to Check Certificate
+		if let scannedDcc = scannedQR, let couplingCode = token {
+			let viewController = PaperCertificateCheckViewController(
+				viewModel: PaperCertificateCheckViewModel(
+					coordinator: self,
+					scannedDcc: scannedDcc,
+					couplingCode: couplingCode
+				)
+			)
+			navigationController.pushViewController(viewController, animated: false)
+		}
 	}
 }
 
@@ -220,12 +233,16 @@ extension PaperCertificateCoordinator: EventFlowDelegate {
 	func eventFlowDidComplete() {
 
 		removeChildCoordinator()
+		scannedQR = nil
+		token = nil
 		delegate?.addCertificateFlowDidFinish()
 	}
 
 	func eventFlowDidCancel() {
 
 		removeChildCoordinator()
+		scannedQR = nil
+		token = nil
 		if let viewController = navigationController.viewControllers
 			.first(where: { $0 is PaperCertificateStartViewController }) {
 

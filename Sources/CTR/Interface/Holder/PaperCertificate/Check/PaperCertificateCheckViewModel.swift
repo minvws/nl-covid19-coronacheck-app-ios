@@ -81,7 +81,7 @@ class PaperCertificateCheckViewModel: Logging {
 			case .accepted:
 				if let wrapper = couplingManager.convert(scannedDcc, couplingCode: couplingCode) {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
-					coordinator?.userWantToToGoEvents(remoteEvent)
+					coordinator?.userWishesToSeeScannedEvent(remoteEvent)
 				} else {
 					showTechnicalError("110, invalid DCC")
 				}

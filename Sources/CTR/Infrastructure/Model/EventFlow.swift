@@ -355,35 +355,3 @@ struct EventFlow {
 		}
 	}
 }
-
-extension EventFlow.Identity {
-
-	func identityMatchTuple() -> (firstNameInitial: String?, lastNameInitial: String?, day: String?, month: String?) {
-
-		var firstNameInitial: String?
-		var lastNameInitial: String?
-		var day: String?
-		var month: String?
-		
-		if let firstName = firstName {
-			let firstChar = firstName.prefix(1)
-			firstNameInitial = String(firstChar).uppercased()
-		}
-		
-		if let lastName = lastName {
-			let firstChar = lastName.prefix(1)
-			lastNameInitial = String(firstChar).uppercased()
-		}
-
-		if let birthDate = birthDateString.flatMap(Formatter.getDateFrom) {
-			let components = Calendar.current.dateComponents([.month, .day], from: birthDate)
-			if let dayInt = components.day {
-				day = "\(dayInt)"
-			}
-			if let monthInt = components.month {
-				month = "\(monthInt)"
-			}
-		}
-		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: day, month: month)
-	}
-}
