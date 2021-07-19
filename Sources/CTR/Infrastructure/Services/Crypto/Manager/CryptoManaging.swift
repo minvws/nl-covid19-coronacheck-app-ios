@@ -76,8 +76,6 @@ protocol CryptoManaging: AnyObject {
 
 	// MARK: Migration
 
-	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date)
-
 	func readDomesticCredentials(_ data: Data) -> DomesticCredentialAttributes?
 
 	func readEuCredentials(_ data: Data) -> EuCredentialAttributes?
