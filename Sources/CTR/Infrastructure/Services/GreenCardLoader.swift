@@ -47,9 +47,6 @@ class GreenCardLoader: GreenCardLoading, Logging {
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<Void, Swift.Error>) -> Void) {
-
-		completion(.failure(Error.failedToSave))
-		return ()
 		
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
 			switch prepareIssueResult {

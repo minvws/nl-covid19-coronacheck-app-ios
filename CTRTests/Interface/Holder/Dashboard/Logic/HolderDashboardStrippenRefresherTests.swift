@@ -133,7 +133,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// Arrange `expiring` starting state
 		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoader.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(.serverBusy), ())
+		greencardLoader.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.serverBusy), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
@@ -147,7 +147,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		sut.load()
 
 		expect(self.sut.state.greencardsCredentialExpiryState) == .expiring(deadline: now.addingTimeInterval(3 * days * fromNow))
-		expect(self.sut.state.loadingState) == .failed(error: .greencardLoaderError(error: .serverBusy))
+		expect(self.sut.state.loadingState) == .failed(error: .networkError(error: .serverBusy))
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 1
 
@@ -170,7 +170,7 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 
 		// Arrange `expiring` starting state
 		walletManagerSpy.loadDomesticCredentialsExpiringIn3DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
-		greencardLoader.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(.noInternetConnection), ())
+		greencardLoader.stubbedSignTheEventsIntoGreenCardsAndCredentialsCompletionResult = (.failure(NetworkError.noInternetConnection), ())
 
 		sut = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
