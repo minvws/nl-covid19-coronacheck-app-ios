@@ -38,13 +38,6 @@ protocol WalletManaging {
 
 	init( dataStoreManager: DataStoreManaging)
 
-	/// Import any existing version 1 credentials into the database
-	/// - Parameters:
-	///   - data: the credential data
-	///   - sampleDate: the sample date of the credential
-	/// - Returns: True if import was successful
-	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool
-
 	/// List all the event groups
 	/// - Returns: all the event groups
 	func listEventGroups() -> [EventGroup]
@@ -460,55 +453,6 @@ class WalletManager: WalletManaging, Logging {
 			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
 			   let eventGroups = wallet.eventGroups?.allObjects as? [EventGroup] {
 				result = eventGroups
-			}
-		}
-		return result
-	}
-
-	/// Import any existing version 1 credentials into the database
-	/// - Parameters:
-	///   - data: the credential data
-	///   - sampleDate: the sample date of the credential
-	/// - Returns: True if import was successful
-	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool {
-
-		guard let expireDate = Calendar.current.date(byAdding: .hour, value: 40, to: sampleDate) else {
-
-			return false
-		}
-
-		var result = true
-		let context = dataStoreManager.backgroundContext()
-		context.performAndWait {
-
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
-
-				guard let greenCards = wallet.greenCards, greenCards.allObjects.isEmpty else {
-					// Existing greencard.
-					result = false
-					return
-				}
-
-				if let greenCard = GreenCardModel.create(type: .domestic, wallet: wallet, managedContext: context) {
-					result = result && OriginModel.create(
-						type: .test,
-						eventDate: sampleDate,
-						expirationTime: expireDate,
-						validFromDate: sampleDate, // I guess this is correct?
-						greenCard: greenCard,
-						managedContext: context) != nil
-					// Legacy credential should have version 1
-					result = result && CredentialModel.create(
-						data: data,
-						validFrom: sampleDate,
-						expirationTime: expireDate,
-						version: 1,
-						greenCard: greenCard,
-						managedContext: context) != nil
-					dataStoreManager.save(context)
-				}
-			} else {
-				result = false
 			}
 		}
 		return result

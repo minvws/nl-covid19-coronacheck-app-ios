@@ -92,20 +92,6 @@ class WalletManagerSpy: WalletManaging {
 		return stubbedStoreEuGreenCardResult
 	}
 
-	var invokedImportExistingTestCredential = false
-	var invokedImportExistingTestCredentialCount = 0
-	var invokedImportExistingTestCredentialParameters: (data: Data, sampleDate: Date)?
-	var invokedImportExistingTestCredentialParametersList = [(data: Data, sampleDate: Date)]()
-	var stubbedImportExistingTestCredentialResult: Bool! = false
-
-	func importExistingTestCredential(_ data: Data, sampleDate: Date) -> Bool {
-		invokedImportExistingTestCredential = true
-		invokedImportExistingTestCredentialCount += 1
-		invokedImportExistingTestCredentialParameters = (data, sampleDate)
-		invokedImportExistingTestCredentialParametersList.append((data, sampleDate))
-		return stubbedImportExistingTestCredentialResult
-	}
-
 	var invokedListEventGroups = false
 	var invokedListEventGroupsCount = 0
 	var stubbedListEventGroupsResult: [EventGroup]! = []

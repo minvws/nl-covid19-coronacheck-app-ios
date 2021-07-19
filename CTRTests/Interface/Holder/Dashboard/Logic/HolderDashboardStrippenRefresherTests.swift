@@ -50,7 +50,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
 			walletManager: walletManagerSpy,
 			greencardLoader: greencardLoader,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			now: { now }
 		)
 
 		// Act
@@ -70,7 +71,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
 			walletManager: walletManagerSpy,
 			greencardLoader: greencardLoader,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			now: { now }
 		)
 
 		// Act
@@ -90,7 +92,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
 			walletManager: walletManagerSpy,
 			greencardLoader: greencardLoader,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			now: { now }
 		)
 
 		// Act
@@ -113,7 +116,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
 			walletManager: walletManagerSpy,
 			greencardLoader: greencardLoader,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			now: { now }
 		)
 
 		walletManagerSpy.loadDomesticCredentialsExpiringIn10DaysWithMoreToFetch(dataStoreManager: dataStoreManager)
@@ -134,7 +138,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
 			walletManager: walletManagerSpy,
 			greencardLoader: greencardLoader,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			now: { now }
 		)
 
 		// Act & Assert
@@ -170,7 +175,8 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
 			walletManager: walletManagerSpy,
 			greencardLoader: greencardLoader,
-			reachability: reachabilitySpy
+			reachability: reachabilitySpy,
+			now: { now }
 		)
 
 		// Act & Assert
