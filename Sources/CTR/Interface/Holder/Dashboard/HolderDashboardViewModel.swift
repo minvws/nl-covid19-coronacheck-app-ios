@@ -135,7 +135,8 @@ final class HolderDashboardViewModel: Logging {
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Services.remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
 			walletManager: Services.walletManager,
 			greencardLoader: Services.greenCardLoader,
-			reachability: try? Reachability()
+			reachability: try? Reachability(),
+			now: { Date() }
 		)
 
 		self.state = State(
