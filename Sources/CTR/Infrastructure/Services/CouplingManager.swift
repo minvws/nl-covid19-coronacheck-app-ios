@@ -60,7 +60,7 @@ class CouplingManager: CouplingManaging, Logging {
 					events: [
 						EventFlow.Event(
 							type: "scannedDcc",
-							unique: "1234",
+							unique: dcc,
 							isSpecimen: false,
 							vaccination: nil,
 							negativeTest: nil,

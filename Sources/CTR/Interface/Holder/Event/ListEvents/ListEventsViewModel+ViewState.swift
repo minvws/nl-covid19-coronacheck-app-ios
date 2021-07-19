@@ -111,9 +111,9 @@ extension ListEventsViewModel {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
-				title: "todo",
-				subTitle: "todo",
-				primaryActionTitle: "todo",
+				title: L.holderCheckdccExpiredTitle(),
+				subTitle: L.holderCheckdccExpiredMessage(),
+				primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.listEventsScreenDidFinish(.stop)
 				},
@@ -165,7 +165,7 @@ extension ListEventsViewModel {
 						case .recovery:
 							return L.holderEventOriginmismatchRecoveryBody()
 						case .scannedDcc:
-							return "todo"
+							return L.holderEventOriginmismatchDccBody()
 						case .test:
 							return L.holderEventOriginmismatchTestBody()
 						case .vaccination:
