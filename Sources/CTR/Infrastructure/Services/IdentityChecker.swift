@@ -19,6 +19,13 @@ protocol IdentityCheckerProtocol {
 
 class IdentityChecker: IdentityCheckerProtocol, Logging {
 
+	let cryptoManager: CryptoManaging
+
+	required init(cryptoManager: CryptoManaging = Services.cryptoManager) {
+
+		self.cryptoManager = cryptoManager
+	}
+
 	/// Check if the identities in event groups and remote events match
 	/// - Parameters:
 	///   - eventGroups: the event groups
@@ -67,15 +74,20 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 		var identities = [Any]()
 
 		for storedEvent in eventGroups {
-			if let jsonData = storedEvent.jsonData,
-			   let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
-			   let decodedPayloadData = Data(base64Encoded: object.payload),
-			   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
+			if let jsonData = storedEvent.jsonData {
+				if let object = try? JSONDecoder().decode(SignedResponse.self, from: jsonData),
+				   let decodedPayloadData = Data(base64Encoded: object.payload),
+				   let wrapper = try? JSONDecoder().decode(EventFlow.EventResultWrapper.self, from: decodedPayloadData) {
 
-				if let identity = wrapper.identity {
-					identities.append(identity)
-				} else if let holder = wrapper.result?.holder {
-					identities.append(holder)
+					if let identity = wrapper.identity {
+						identities.append(identity)
+					} else if let holder = wrapper.result?.holder {
+						identities.append(holder)
+					}
+				} else if let object = try? JSONDecoder().decode(EventFlow.DccEvent.self, from: jsonData) {
+					if let identity = object.identity(cryptoManager: cryptoManager) {
+						identities.append(identity)
+					}
 				}
 			}
 		}

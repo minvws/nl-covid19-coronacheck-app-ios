@@ -364,11 +364,19 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				type: eventMode,
 				providerIdentifier: response.wrapper.providerIdentifier
 			)
+			// Data
+			var data: Data?
+			if let signedResponse = response.signedResponse,
+			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+				data = jsonData
+			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
+			   let jsonData = try? JSONEncoder().encode(dccEvent) {
+				data = jsonData
+			}
 
 			// Store the new events
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
-			   let signedResponse = response.signedResponse,
-			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
 					eventMode,
 					providerIdentifier: response.wrapper.providerIdentifier,
@@ -378,6 +386,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				if !success {
 					break
 				}
+			} else {
+				logWarning("Could not store event group")
 			}
 		}
 		onCompletion(success)

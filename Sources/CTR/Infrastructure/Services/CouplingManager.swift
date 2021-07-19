@@ -47,10 +47,8 @@ class CouplingManager: CouplingManaging, Logging {
 	/// - Returns: the event wrapper
 	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper? {
 
-		if let credential = dcc.data(using: .utf8),
-		   let euCredentialAttributes = cryptoManager.readEuCredentials(credential) {
-
-			let identity = createIdentity(euCredentialAttributes)
+		let dccEvent = EventFlow.DccEvent(credential: dcc, couplingCode: couplingCode)
+		if let identity = dccEvent.identity(cryptoManager: cryptoManager) {
 
 			let wrapper =
 				EventFlow.EventResultWrapper(
@@ -68,26 +66,13 @@ class CouplingManager: CouplingManaging, Logging {
 							negativeTest: nil,
 							positiveTest: nil,
 							recovery: nil,
-							dccEvent: EventFlow.DccEvent(
-								credential: dcc,
-								couplingCode: couplingCode
-							)
+							dccEvent: dccEvent
 						)
 					]
 				)
 			return wrapper
 		}
 		return nil
-	}
-
-	private func createIdentity(_ attributes: EuCredentialAttributes) -> EventFlow.Identity {
-
-		return EventFlow.Identity(
-			infix: nil,
-			firstName: attributes.digitalCovidCertificate.name.givenName,
-			lastName: attributes.digitalCovidCertificate.name.familyName,
-			birthDateString: attributes.digitalCovidCertificate.dateOfBirth
-		)
 	}
 
 	/// Check the dcc and the coupling code
