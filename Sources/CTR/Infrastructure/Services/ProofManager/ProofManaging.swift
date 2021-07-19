@@ -42,19 +42,6 @@ protocol ProofManaging: AnyObject {
 	/// - Parameter token: the test token
 	/// - Returns: the test provider
 	func getTestProvider(_ token: RequestToken) -> TestProvider?
-
-	/// Get a test result
-	/// - Returns: a test result
-	func getTestWrapper() -> TestResultWrapper?
-
-	/// Get the signed test result
-	/// - Returns: a test result
-	func getSignedWrapper() -> SignedResponse?
-
-	/// Remove the test wrapper
-	func removeTestWrapper()
-
-	func migrateExistingProof()
 }
 
 enum ProofError: Error {

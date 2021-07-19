@@ -53,8 +53,6 @@ class ProofManager: ProofManaging, Logging {
 	/// Initializer
 	required init() {
 		// Required by protocol
-		
-//		removeTestWrapper()
 	}
 	
 	/// Get the providers
@@ -154,27 +152,6 @@ class ProofManager: ProofManaging, Logging {
 		}
 	}
 	
-	/// Get a test result
-	/// - Returns: a test result
-	func getTestWrapper() -> TestResultWrapper? {
-		
-		return proofData.testWrapper
-	}
-	
-	/// Get the signed test result
-	/// - Returns: a test result
-	func getSignedWrapper() -> SignedResponse? {
-		
-		return proofData.signedWrapper
-	}
-	
-	/// Remove the test wrapper
-	func removeTestWrapper() {
-		
-		proofData.testWrapper = nil
-		proofData.signedWrapper = nil
-	}
-	
 	// MARK: - Helper methods
 	
 	private func generateString<T>(object: T) -> String where T: Codable {
@@ -185,30 +162,5 @@ class ProofManager: ProofManaging, Logging {
 			return convertedToString
 		}
 		return ""
-	}
-
-	// MARK: - Migrating to Database
-
-	func migrateExistingProof() {
-
-		if let testEvent = getTestWrapper(),
-		   let signedProof = getSignedWrapper(),
-		   let sampleDateString = testEvent.result?.sampleDate,
-		   let sampleDate = Formatter.getDateFrom(dateString8601: sampleDateString),
-		   testEvent.status == .complete {
-
-			// Convert to eventGroup
-			_ = walletManager.storeEventGroup(
-				.test,
-				providerIdentifier: testEvent.providerIdentifier,
-				signedResponse: signedProof,
-				issuedAt: sampleDate
-			)
-			// Remove old data
-			removeTestWrapper()
-			
-			// Convert Credential
-			cryptoManager.migrateExistingCredential(walletManager, sampleDate: sampleDate)
-		}
 	}
 }
