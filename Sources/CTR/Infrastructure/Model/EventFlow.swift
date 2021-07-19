@@ -392,4 +392,18 @@ extension EventFlow.DccEvent {
 		}
 		return nil
 	}
+
+	func getEventType(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventMode? {
+
+		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
+			if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
+				return .vaccination
+			} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
+				return .recovery
+			} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
+				return .test
+			}
+		}
+		return nil
+	}
 }

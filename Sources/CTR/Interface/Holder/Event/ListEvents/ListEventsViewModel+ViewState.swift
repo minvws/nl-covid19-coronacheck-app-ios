@@ -224,9 +224,8 @@ extension ListEventsViewModel {
 			case .scannedDcc:
 				title = L.holderDccListTitle()
 				subTitle = L.holderDccListMessage()
-
-				if let credential = dataSource.first?.event.dccEvent?.credential.data(using: .utf8),
-				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credential) {
+				if let cryptoManager = cryptoManager,
+				   let euCredentialAttributes = dataSource.first?.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
 					if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
 						secondaryActionBody = L.holderVaccinationWrongBody()
 					} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
@@ -313,8 +312,8 @@ extension ListEventsViewModel {
 			} else if dataRow.event.negativeTest != nil {
 				rows.append(getRowFromNegativeTestEvent(dataRow: dataRow))
 			} else if dataRow.event.dccEvent != nil {
-				if let credential = dataRow.event.dccEvent?.credential.data(using: .utf8),
-				   let euCredentialAttributes = cryptoManager?.readEuCredentials(credential) {
+				if let cryptoManager = cryptoManager,
+				   let euCredentialAttributes = dataRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 						rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {

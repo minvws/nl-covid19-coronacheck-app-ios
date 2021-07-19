@@ -359,26 +359,31 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		for response in remoteEvents where response.wrapper.status == .complete {
 
-			// Remove any existing events for the provider
-			walletManager.removeExistingEventGroups(
-				type: eventMode,
-				providerIdentifier: response.wrapper.providerIdentifier
-			)
-			// Data
 			var data: Data?
+			var eventModeForStorage: EventMode = eventMode
+
 			if let signedResponse = response.signedResponse,
 			   let jsonData = try? JSONEncoder().encode(signedResponse) {
 				data = jsonData
 			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
-			   let jsonData = try? JSONEncoder().encode(dccEvent) {
+					  let jsonData = try? JSONEncoder().encode(dccEvent),
+					  let cryptoManager = cryptoManager,
+					  let dccEventType = dccEvent.getEventType(cryptoManager: cryptoManager) {
 				data = jsonData
+				eventModeForStorage = dccEventType
 			}
+
+			// Remove any existing events for the provider
+			walletManager.removeExistingEventGroups(
+				type: eventModeForStorage,
+				providerIdentifier: response.wrapper.providerIdentifier
+			)
 
 			// Store the new events
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
 			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
-					eventMode,
+					eventModeForStorage,
 					providerIdentifier: response.wrapper.providerIdentifier,
 					jsonData: jsonData,
 					issuedAt: maxIssuedAt
