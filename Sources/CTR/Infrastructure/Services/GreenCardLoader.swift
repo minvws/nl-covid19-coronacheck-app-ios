@@ -12,13 +12,13 @@ protocol GreenCardLoading {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, GreenCardLoader.Error>
+		completion: @escaping (Result<Void, Swift.Error>
 	) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
-	enum Error: Swift.Error, Equatable {
+	enum Error: String, Swift.Error, Equatable {
 		case noEvents
 		case didNotEvaluate
 
@@ -28,10 +28,6 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		case preparingIssue117
 		case stoken118
 		case credentials119
-
-		case serverBusy
-		case requestTimedOut
-		case noInternetConnection
 	}
 
 	private let networkManager: NetworkManaging
@@ -50,8 +46,8 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, GreenCardLoader.Error>) -> Void) {
-
+		completion: @escaping (Result<Void, Swift.Error>) -> Void) {
+		
 		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
 			switch prepareIssueResult {
 				case .failure(let networkError):
@@ -59,19 +55,19 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 					switch networkError {
 						case .serverBusy:
-							completion(.failure(.serverBusy))
+							completion(.failure(NetworkError.serverBusy))
 						case .noInternetConnection:
-							completion(.failure(.noInternetConnection))
+							completion(.failure(NetworkError.noInternetConnection))
 						case .requestTimedOut:
-							completion(.failure(.requestTimedOut))
+							completion(.failure(NetworkError.requestTimedOut))
 						default:
-							completion(.failure(.preparingIssue117))
+							completion(.failure(Error.preparingIssue117))
 					}
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
 						self.logError("Can't save the nonce / prepareIssueMessage")
-						completion(.failure(.failedToPrepareIssue))
+						completion(.failure(Error.failedToPrepareIssue))
 						return
 					}
 
@@ -87,14 +83,14 @@ class GreenCardLoader: GreenCardLoading, Logging {
 							case .success(let greenCardResponse):
 
 								if let evaluator = responseEvaluator, !evaluator(greenCardResponse) {
-									completion(.failure(.didNotEvaluate))
+									completion(.failure(Error.didNotEvaluate))
 									return
 								}
 
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self.logError("Failed to save greenCards")
-										completion(.failure(.failedToSave))
+										completion(.failure(Error.failedToSave))
 										return
 									}
 									
@@ -106,12 +102,12 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		}
 	}
 
-	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Error>) -> Void) {
+	private func fetchGreenCards(_ onCompletion: @escaping (Result<RemoteGreenCards.Response, Swift.Error>) -> Void) {
 
 		let signedEvents = walletManager.fetchSignedEvents()
 
 		guard !signedEvents.isEmpty else {
-			onCompletion(.failure(.noEvents))
+			onCompletion(.failure(Error.noEvents))
 			return
 		}
 
@@ -119,7 +115,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
 		else {
-			onCompletion(.failure(.stoken118))
+			onCompletion(.failure(Error.stoken118))
 			return
 		}
 
@@ -139,13 +135,13 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 					switch networkError {
 						case .serverBusy:
-							onCompletion(.failure(.serverBusy))
+							onCompletion(.failure(NetworkError.serverBusy))
 						case .noInternetConnection:
-							onCompletion(.failure(.noInternetConnection))
+							onCompletion(.failure(NetworkError.noInternetConnection))
 						case .requestTimedOut:
-							onCompletion(.failure(.requestTimedOut))
+							onCompletion(.failure(NetworkError.requestTimedOut))
 						default:
-							onCompletion(.failure(.credentials119))
+							onCompletion(.failure(Error.credentials119))
 					}
 			}
 		}
