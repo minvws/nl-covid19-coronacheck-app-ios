@@ -283,6 +283,9 @@ struct EventFlow {
 		let doseNumber: Int?
 		let totalDoses: Int?
 		let country: String?
+		let completedByMedicalStatement: Bool?
+		let completedByPersonalStatement: Bool?
+		let completionReason: CompletionReason?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -294,6 +297,14 @@ struct EventFlow {
 			case doseNumber
 			case totalDoses
 			case country
+			case completedByMedicalStatement
+			case completedByPersonalStatement
+			case completionReason
+		}
+		
+		enum CompletionReason: String, Codable, Equatable {
+			case recovery = "recovery"
+			case priorEvent = "priorevent"
 		}
 
 		/// Get the date for this event
