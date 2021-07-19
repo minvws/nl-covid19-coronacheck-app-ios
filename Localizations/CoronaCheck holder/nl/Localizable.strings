@@ -466,7 +466,7 @@
 "holder.dcc.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
 "holder.dcc.vaccination.message" = "<p>De volgende gegevens zijn opgheaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.dcc.recovery.message" = "<p>De volgende gegevens zijn opgheaald:</p> <p>Naam: <b>%@</b> <br />Geboortedatum: <b>%@</b></p> <p>Ziekte waarvan hersteld: <b>COVID-19</b> <br />Testdatum: <b>%@</b> <br />Getest in: <b>%@</b> <br />Afgever certificaat: <b>%@</b> <br />Geldig vanaf: <b>%@</b> <br />Geldig tot: <b>%@</b> </p><p>Uniek certificaatnummer: <b>%@</b></p>";
-"holder.dcc.test.message" = " <p>De volgende gegevens zijn opgheaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Producent: <b>%@</b><br />Getest in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
+"holder.dcc.test.message" = "<p>De volgende gegevens zijn opgheaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Producent: <b>%@</b><br />Getest in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.recovery.wrong.body" = "Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.";
 
 "holder.checkdcc.blocked.title" = "Je hebt te vaak gescand";
@@ -475,7 +475,6 @@
 "holder.checkdcc.expired.actionTitle" = "Probeer opnieuw";
 "holder.checkdcc.expired.title" = "Dit papieren bewijs is verlopen";
 "holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Laat dan opnieuw een papieren bewijs printen door de zorgverlener waar je bent gevaccineerd of getest.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
-"holder.checkdcc.expired.actionTitle" = "Naar Mijn bewijzen";
 "holder.checkdcc.rejected.title" = "Geen geldige combinatie";
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
