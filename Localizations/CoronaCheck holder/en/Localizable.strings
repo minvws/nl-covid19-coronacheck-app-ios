@@ -383,7 +383,7 @@
 
 "holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br />Test name: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Test location: <b>%@</b><br />Test manufacturer: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br />Vaccine: <b>%@</b><br />Vaccine type: <b>%@</b><br />Manufacturer: <b>%@</b><br />Doses: <b>%@</b><br />Vaccination date: <b>%@</b><br />Vaccinated in: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br />Vaccine: <b>%@</b><br />Vaccine type: <b>%@</b><br />Manufacturer: <b>%@</b><br />Doses: <b>%@</b><br />Is this the last doses of your vaccination? <b>%@</b><br />Vaccination date: <b>%@</b><br />Vaccinated in: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
