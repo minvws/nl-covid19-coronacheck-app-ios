@@ -40,9 +40,9 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 
 	private weak var delegate: PaperCertificateFlowDelegate?
 
-	private var token: String?
+	var token: String?
 
-	private var scannedQR: String?
+	var scannedQR: String?
 
 	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 	
