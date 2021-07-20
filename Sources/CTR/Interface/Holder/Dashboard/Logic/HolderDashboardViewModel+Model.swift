@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-// MARK: - MyQRCard
+// MARK: - Model
 
 extension HolderDashboardViewModel {
 

@@ -10,6 +10,7 @@ import CoreData
 import Reachability
 
 final class HolderDashboardViewModel: Logging {
+	typealias Datasource = HolderDashboardDatasource
 
 	// MARK: - Public properties
 
