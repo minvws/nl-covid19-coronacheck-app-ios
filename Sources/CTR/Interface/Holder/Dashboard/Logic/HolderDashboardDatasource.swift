@@ -19,10 +19,14 @@ class HolderDashboardDatasource {
 	}
 
 	private let dataStoreManager: DataStoreManaging
+	private let walletManager: WalletManaging
 	private var reloadTimer: Timer?
+	private let now: () -> Date
 
-	init(dataStoreManager: DataStoreManaging) {
+	init(dataStoreManager: DataStoreManaging, walletManager: WalletManaging, now: @escaping () -> Date) {
 		self.dataStoreManager = dataStoreManager
+		self.walletManager = walletManager
+		self.now = now
 	}
 
 	// Calls fetch, then updates subscribers.
@@ -40,6 +44,15 @@ class HolderDashboardDatasource {
 		// Callback
 		didUpdate(cards, expiredGreenCards)
 
+		// Schedule a Timer to reload the next time an origin will expire:
+		reloadTimer = calculateNextReload(cards: cards).map { (nextFetchInterval: TimeInterval) in
+			Timer.scheduledTimer(withTimeInterval: nextFetchInterval, repeats: false, block: { [weak self] _ in
+				self?.reload()
+			})
+		}
+	}
+
+	private func calculateNextReload(cards: [HolderDashboardViewModel.MyQRCard]) -> TimeInterval? {
 		// Calculate when the next reload is needed:
 		let nextFetchInterval: TimeInterval = cards
 			.flatMap { $0.origins }
@@ -47,16 +60,12 @@ class HolderDashboardDatasource {
 				origin.expirationTime < result ? origin.expirationTime : result
 			}.timeIntervalSinceNow
 
-		guard nextFetchInterval > 0 else { return }
-
-		// Schedule a Timer to reload the next time an origin will expire:
-		reloadTimer = Timer.scheduledTimer(withTimeInterval: nextFetchInterval, repeats: false, block: { [weak self] _ in
-			self?.reload()
-		})
+		guard nextFetchInterval > 0 else { return nil }
+		return nextFetchInterval
 	}
 
 	private func removeExpiredGreenCards() -> [ExpiredQR] {
-		return Services.walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
+		return walletManager.removeExpiredGreenCards().compactMap { (greencardType: String, originType: String) -> ExpiredQR? in
 			guard let region = QRCodeValidityRegion(rawValue: greencardType) else { return nil }
 			guard let originType = QRCodeOriginType(rawValue: originType) else { return nil }
 			return ExpiredQR(region: region, type: originType)
@@ -66,7 +75,7 @@ class HolderDashboardDatasource {
 	/// Fetch the Greencards+Origins from Database
 	/// and convert to UI-appropriate model types.
 	private func fetchMyQRCards() -> [HolderDashboardViewModel.MyQRCard] {
-		let walletManager = Services.walletManager
+		let walletManager = walletManager
 		let greencards = walletManager.listGreenCards()
 
 		let items = greencards
@@ -99,7 +108,7 @@ class HolderDashboardDatasource {
 					.filter {
 						// Pro-actively remove invalid Origins here, in case the database is laggy:
 						// Future: this could be moved to the DB layer like how greencard.getActiveCredentials does it.
-						Date() < $0.expirationTime
+						self.now() < $0.expirationTime
 					}
 					.sorted { $0.customSortIndex < $1.customSortIndex }
 
@@ -107,7 +116,7 @@ class HolderDashboardDatasource {
 					guard !greencard.isDeleted else { return false }
 
 					let activeCredential: Credential? = greencard.getActiveCredential(forDate: date)
-					let enabled = !(activeCredential == nil || originEntries.isEmpty) && originEntries.contains(where: { $0.isCurrentlyValid })
+					let enabled = !(activeCredential == nil || originEntries.isEmpty) && originEntries.contains(where: { $0.isCurrentlyValid(now: date) })
 					return enabled
 				}
 
@@ -116,7 +125,7 @@ class HolderDashboardDatasource {
 						return [MyQRCard.netherlands(
 							greenCardObjectID: greencard.objectID,
 							origins: originEntries,
-							shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(), // doesn't need to be dynamically evaluated
+							shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 							evaluateEnabledState: evaluateButtonEnabledState
 						)]
 					case .eu:
@@ -125,7 +134,7 @@ class HolderDashboardDatasource {
 							MyQRCard.europeanUnion(
 								greenCardObjectID: greencard.objectID,
 								origins: [originEntry],
-								shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(), // doesn't need to be dynamically evaluated
+								shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
 								evaluateEnabledState: evaluateButtonEnabledState
 							)
 						}
