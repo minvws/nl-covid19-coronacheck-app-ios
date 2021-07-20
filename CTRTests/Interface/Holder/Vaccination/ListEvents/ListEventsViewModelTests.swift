@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable type_body_length
+// swiftlint:disable file_length
 
 @testable import CTR
 import XCTest
@@ -482,6 +483,286 @@ class ListEventsViewModelTests: XCTestCase {
 			fail("wrong state")
 		}
 	}
+	
+	func test_vaccinationrow_completionStatus_unknown() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: nil, completionReason: nil)
+		let completionStatus = L.holderVaccinationStatusUnknown()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_unknown_withCompletionReason() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: nil, completionReason: .recovery)
+		let completionStatus = L.holderVaccinationStatusUnknown()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_incomplete_withMedicalStatement() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: false, completedByPersonalStatement: nil, completionReason: nil)
+		let completionStatus = L.holderVaccinationStatusIncomplete()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_incomplete_withPersonalStatement() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: false, completionReason: nil)
+		let completionStatus = L.holderVaccinationStatusIncomplete()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_complete_fromRecovery() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: true, completedByPersonalStatement: nil, completionReason: .recovery)
+		let completionStatus = L.holderVaccinationStatusCompleteRecovery()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_complete_fromPriorEvent() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: true, completedByPersonalStatement: nil, completionReason: .priorEvent)
+		let completionStatus = L.holderVaccinationStatusCompletePriorevent()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_complete_withMedicalStatement() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: true, completedByPersonalStatement: nil, completionReason: nil)
+		let completionStatus = L.holderVaccinationStatusComplete()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
+	
+	func test_vaccinationrow_completionStatus_complete_withPersonalStatement() {
+
+		// Given
+		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: true, completionReason: nil)
+		let completionStatus = L.holderVaccinationStatusComplete()
+		
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteEvent],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie?<b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
+
+		if case let .listEvents(content: _, rows: rows) = sut.viewState {
+
+			// When
+			rows.first?.action?()
+			// Then
+			expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
+
+			if case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 {
+				expect(title) == L.holderEventAboutTitle()
+				expect(body) == expectedBody
+				expect(hide) == true
+			} else {
+				fail("wrong information")
+			}
+		} else {
+			fail("wrong state")
+		}
+	}
 
 	// MARK: Default values
 
@@ -565,7 +846,10 @@ class ListEventsViewModelTests: XCTestCase {
 		brand: nil,
 		doseNumber: 1,
 		totalDoses: 2,
-		country: "NLD"
+		country: "NLD",
+		completedByMedicalStatement: nil,
+		completedByPersonalStatement: nil,
+		completionReason: nil
 	)
 
 	private let signedResponse = SignedResponse(
@@ -612,4 +896,43 @@ class ListEventsViewModelTests: XCTestCase {
 			)
 		]
 	)
+	
+	// MARK: Helper
+	
+	func remoteVaccinationEvent(completedByMedicalStatement: Bool?, completedByPersonalStatement: Bool?, completionReason: EventFlow.VaccinationEvent.CompletionReason?) -> RemoteEvent {
+		let vaccinationEvent = EventFlow.VaccinationEvent(
+			dateString: "2021-05-16",
+			hpkCode: nil,
+			type: nil,
+			manufacturer: nil,
+			brand: nil,
+			doseNumber: 1,
+			totalDoses: 2,
+			country: "NLD",
+			completedByMedicalStatement: completedByMedicalStatement,
+			completedByPersonalStatement: completedByPersonalStatement,
+			completionReason: completionReason
+		)
+		return RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: "CC",
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				result: nil,
+				events: [
+					EventFlow.Event(
+						type: "vaccination",
+						unique: "1234",
+						isSpecimen: false,
+						vaccination: vaccinationEvent,
+						negativeTest: nil,
+						positiveTest: nil,
+						recovery: nil
+					)
+				]
+			),
+			signedResponse: signedResponse
+		)
+	}
 }

@@ -15,7 +15,7 @@ enum NetworkResponseHandleError: Error {
 	case unexpectedCondition
 }
 
-enum NetworkError: Error {
+enum NetworkError: String, Error {
 	case invalidRequest
 	case requestTimedOut
 	case noInternetConnection

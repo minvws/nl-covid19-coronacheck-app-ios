@@ -413,6 +413,7 @@ extension ListEventsViewModel {
 			vaccineType,
 			vaccineManufacturer,
 			dosage,
+			dataRow.event.vaccination?.completionStatus ?? "",
 			formattedShotDate,
 			dataRow.event.vaccination?.country ?? "",
 			dataRow.event.unique ?? ""
@@ -777,5 +778,34 @@ extension ListEventsViewModel {
 			output.append(" ")
 		}
 		return output.trimmingCharacters(in: .whitespaces)
+	}
+}
+
+private extension EventFlow.VaccinationEvent {
+	
+	/// Get a display version of the vaccination completion status
+	var completionStatus: String {
+		
+		let status = completedByMedicalStatement ?? completedByPersonalStatement
+		
+		// No data: Unknown status
+		guard status != nil else {
+			return L.holderVaccinationStatusUnknown()
+		}
+		
+		// Neither statements are completed: Vaccination incomplete
+		guard status == true else {
+			return L.holderVaccinationStatusIncomplete()
+		}
+		
+		// Vaccination completed: Optional clarification for completion
+		switch completionReason {
+			case .recovery:
+				return L.holderVaccinationStatusCompleteRecovery()
+			case .priorEvent:
+				return L.holderVaccinationStatusCompletePriorevent()
+			default:
+				return L.holderVaccinationStatusComplete()
+		}
 	}
 }

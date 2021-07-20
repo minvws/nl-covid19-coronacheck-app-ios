@@ -162,7 +162,10 @@ class FetchEventsViewModelTests: XCTestCase {
 		brand: nil,
 		doseNumber: 1,
 		totalDoses: 2,
-		country: "NLD"
+		country: "NLD",
+		completedByMedicalStatement: nil,
+		completedByPersonalStatement: nil,
+		completionReason: nil
 	)
 
 	let signedResponse = SignedResponse(

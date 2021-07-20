@@ -385,6 +385,11 @@
 "holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je gevaccineerd bent en geef de foutcode (%@) door.";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
+"holder.vaccination.status.unknown" = "niet bekend";
+"holder.vaccination.status.complete" = "ja";
+"holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
+"holder.vaccination.status.complete.priorevent" = "ja (ergens anders gevaccineerd)";
+"holder.vaccination.status.incomplete" = "nee";
 
 "holder.ggdlogin.failure.general.title" = "Het ophalen is afgebroken";
 "holder.ggdlogin.failure.general.message" = "Mogelijk is het te druk, probeer het later opnieuw.";
@@ -394,7 +399,7 @@
 
 "holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Testproducent: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 
-"holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
+"holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Is dit de laatste doses van je vaccinatie?<b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Kijk <a href=\"https://coronacheck.nl/wegwijzer\">hier</a> voor meer informatie.</p>";
 

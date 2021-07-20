@@ -14,11 +14,14 @@ class DashboardStrippenRefresher: Logging {
 		case unknownErrorA
 		case logicalErrorA
 		case greencardLoaderError(error: GreenCardLoader.Error)
+		case networkError(error: NetworkError)
 
 		var errorDescription: String? {
 			switch self {
 				case .greencardLoaderError(let error):
-					return error.localizedDescription
+					return error.rawValue
+				case .networkError(let error):
+					return error.rawValue
 				case .logicalErrorA:
 					return "Logical error A"
 				case .unknownErrorA:
@@ -59,7 +62,7 @@ class DashboardStrippenRefresher: Logging {
 		// thereafter, it should be displayed non-modally in the UI instead.
 		var userHasPreviouslyDismissedALoadingError: Bool = false
 		var hasLoadingEverFailed: Bool = false // for whatever reason (server or connection)
-		var serverErrorOccurenceCount = 0
+		var errorOccurenceCount = 0 // Excludes simple "no internet" events
 
 		// Whether the refresher is (non-silently) loading.
 		// (if you want to check for silent loading, check the state directly).
@@ -82,14 +85,20 @@ class DashboardStrippenRefresher: Logging {
 			state.hasLoadingEverFailed = true
 
 			switch error {
-				// FUTURE: noInternetConnection etc should be removed from GreenCardLoader and just use NetworkError instead.
-				case GreenCardLoader.Error.noInternetConnection, GreenCardLoader.Error.requestTimedOut: // Future: handle timeout separately.
+				case NetworkError.noInternetConnection:
 					state.loadingState = .noInternet
+
+				case let error as NetworkError:
+					state.errorOccurenceCount += 1
+					state.loadingState = .failed(error: .networkError(error: error))
+
 				case let error as GreenCardLoader.Error:
-					state.serverErrorOccurenceCount += 1
+					state.errorOccurenceCount += 1
 					state.loadingState = .failed(error: .greencardLoaderError(error: error))
+
 				case let error as DashboardStrippenRefresher.Error:
 					state.loadingState = .failed(error: error)
+
 				default:
 					state.loadingState = .failed(error: .unknownErrorA)
 			}
@@ -151,13 +160,13 @@ class DashboardStrippenRefresher: Logging {
 	func load() {
 
 		guard !state.loadingState.isLoading else {
-			logDebug("@id Skipping call to `load()` as a load is already in progress.")
+			logDebug("StrippenRefresh: Skipping call to `load()` as a load is already in progress.")
 			return
 		}
 
 		switch state.greencardsCredentialExpiryState {
 			case .noActionNeeded:
-				self.logDebug("@id No greencards within threshold of needing refreshing, skipping refresh.")
+				self.logDebug("StrippenRefresh: No greencards within threshold of needing refreshing. Skipping refresh.")
 
 			case .expired, .expiring:
 				state.beginLoading()
