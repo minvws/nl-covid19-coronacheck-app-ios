@@ -22,7 +22,7 @@ class PaperCertificateCheckViewController: BaseViewController {
 	}
 
 	private let viewModel: PaperCertificateCheckViewModel
-	private let sceneView = FetchEventsView()
+	let sceneView = FetchEventsView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model

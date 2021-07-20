@@ -129,7 +129,7 @@ class PaperCertificateCheckViewModel: Logging {
 		logError("CouplingManager validate: \(error)")
 		switch error {
 			case .serverBusy:
-				showServerTooBusyError(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				showServerTooBusyError()
 			case .noInternetConnection:
 				showNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
 			default:
@@ -139,7 +139,7 @@ class PaperCertificateCheckViewModel: Logging {
 
 	// MARK: Errors
 
-	private func showServerTooBusyError(scannedDcc: String, couplingCode: String) {
+	private func showServerTooBusyError() {
 
 		alert = AlertContent(
 			title: L.generalNetworkwasbusyTitle(),
