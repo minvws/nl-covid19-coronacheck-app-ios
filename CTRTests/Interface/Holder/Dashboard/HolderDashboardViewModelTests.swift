@@ -35,7 +35,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			configuration: configSpy,
 			dataStoreManager: dataStoreManager,
-			now: { Date() } 
+			now: { Date() }
 		)
 	}
 
