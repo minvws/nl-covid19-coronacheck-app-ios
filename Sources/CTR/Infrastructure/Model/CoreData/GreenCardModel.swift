@@ -57,7 +57,7 @@ extension GreenCard {
 				.filter { $0.expirationTime != nil }
 				.filter { $0.validFrom != nil }
 				.filter { $0.expirationTime! > now }
-				.filter { $0.validFrom! < now }
+				.filter { $0.validFrom! <= now }
 				.sorted { $0.validFrom! < $1.validFrom! }
 				.last
 		}
@@ -67,10 +67,11 @@ extension GreenCard {
 	func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
 		guard let list = credentials?.allObjects as? [Credential] else { return false }
 
-		return !list
+		let activeCredentialsNowOrInFuture = list
 			.filter { $0.expirationTime != nil }
 			.filter { $0.expirationTime! > now }
-			.isEmpty
+
+		return !activeCredentialsNowOrInFuture.isEmpty
 	}
 
 	/// Get the credentials, strongly typed.
