@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import Reachability
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
@@ -203,7 +204,18 @@ class HolderCoordinator: SharedCoordinator {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager,
+				datasource: HolderDashboardDatasource(
+					dataStoreManager: Services.dataStoreManager,
+					walletManager: Services.walletManager,
+					now: { Date() }
+				),
+				strippenRefresher: DashboardStrippenRefresher(
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
+					walletManager: Services.walletManager,
+					greencardLoader: Services.greenCardLoader,
+					reachability: try? Reachability(),
+					now: { Date() }
+				),
 				now: { Date() }
 			)
 		)

@@ -106,10 +106,8 @@ final class HolderDashboardViewModel: Logging {
 		}
 	}
 
-	private let datasource: Datasource
-
-	private let strippenRefresher: DashboardStrippenRefresher
-
+	private let datasource: HolderDashboardDatasourceProtocol
+	private let strippenRefresher: DashboardStrippenRefreshing
 	private let now: () -> Date
 
 	// MARK: -
@@ -126,7 +124,8 @@ final class HolderDashboardViewModel: Logging {
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
-		dataStoreManager: DataStoreManaging,
+		datasource: HolderDashboardDatasourceProtocol,
+		strippenRefresher: DashboardStrippenRefreshing,
 		now: @escaping () -> Date
 	) {
 
@@ -134,16 +133,9 @@ final class HolderDashboardViewModel: Logging {
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
 		self.configuration = configuration
-		self.datasource = Datasource(dataStoreManager: dataStoreManager, walletManager: Services.walletManager, now: { Date() })
+		self.datasource = datasource
+		self.strippenRefresher = strippenRefresher
 		self.now = now
-		
-		self.strippenRefresher = DashboardStrippenRefresher(
-			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Services.remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
-			walletManager: Services.walletManager,
-			greencardLoader: Services.greenCardLoader,
-			reachability: try? Reachability(),
-			now: { Date() }
-		)
 
 		self.state = State(
 			myQRCards: [],
@@ -271,7 +263,7 @@ final class HolderDashboardViewModel: Logging {
 		state: HolderDashboardViewModel.State,
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
 		coordinatorDelegate: (HolderCoordinatorDelegate),
-		strippenRefresher: DashboardStrippenRefresher,
+		strippenRefresher: DashboardStrippenRefreshing,
 		now: Date) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
@@ -455,7 +447,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 
 extension AlertContent {
 
-	fileprivate static func strippenExpiredWithNoInternet(strippenRefresher: DashboardStrippenRefresher) -> AlertContent {
+	fileprivate static func strippenExpiredWithNoInternet(strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
 		AlertContent(
 			title: L.holderDashboardStrippenExpiredNointernetAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiredNointernetAlertMessage(),
@@ -470,7 +462,7 @@ extension AlertContent {
 		)
 	}
 
-	fileprivate static func strippenExpiringWithNoInternet(expiryDate: Date, strippenRefresher: DashboardStrippenRefresher) -> AlertContent {
+	fileprivate static func strippenExpiringWithNoInternet(expiryDate: Date, strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
 
 		let localizedTimeRemainingUntilExpiry: String = {
 			if expiryDate > (Date().addingTimeInterval(60 * 60 * 24)) { // > 1 day in future
@@ -494,7 +486,7 @@ extension AlertContent {
 		)
 	}
 
-	fileprivate static func strippenExpiringServerError(strippenRefresher: DashboardStrippenRefresher, error: DashboardStrippenRefresher.Error) -> AlertContent {
+	fileprivate static func strippenExpiringServerError(strippenRefresher: DashboardStrippenRefreshing, error: DashboardStrippenRefresher.Error) -> AlertContent {
 		AlertContent(
 			title: L.holderDashboardStrippenExpiredServererrorAlertTitle(),
 			subTitle: L.holderDashboardStrippenExpiredServererrorAlertMessage(error.localizedDescription),
