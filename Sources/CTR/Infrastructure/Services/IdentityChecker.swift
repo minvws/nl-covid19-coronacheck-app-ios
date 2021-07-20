@@ -141,7 +141,7 @@ extension EventFlow.Identity {
 		return String(firstChar).uppercased()
 	}
 
-	private func getBirthDay() -> String {
+	private func getBirthDay() -> String? {
 
 		guard let birthDate = birthDateString.flatMap(Formatter.getDateFrom) else {
 			return nil
@@ -152,7 +152,7 @@ extension EventFlow.Identity {
 		}
 	}
 
-	private func getBirthMonth() -> String {
+	private func getBirthMonth() -> String? {
 
 		guard let birthDate = birthDateString.flatMap(Formatter.getDateFrom) else {
 			return nil
