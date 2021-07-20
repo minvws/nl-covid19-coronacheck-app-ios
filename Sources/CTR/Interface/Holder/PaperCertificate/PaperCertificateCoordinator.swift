@@ -26,9 +26,9 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
 
 	func userWishesToEnterToken()
-	
+
 	func userWishesToScanCertificate()
-	
+
 	func userWishesToCreateACertificate(message: String)
 }
 
@@ -141,7 +141,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		addChildCoordinator(eventCoordinator)
 		eventCoordinator.startWithScannedEvent(event)
 	}
-	
+
 	func userWishesToEnterToken() {
 
 		let destination = PaperCertificateTokenEntryViewController(
@@ -150,11 +150,11 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		navigationController.pushViewController(destination, animated: true)
 	}
-	
+
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 
-//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
+		//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
 		let destination = PaperCertificateScanViewController(
 			viewModel: PaperCertificateScanViewModel(
@@ -164,7 +164,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 		)
 		navigationController.pushViewController(destination, animated: true)
 	}
-	
+
 	func userWishesToCreateACertificate(message: String) {
 
 		// Store

@@ -28,8 +28,6 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		cryptoSpy = CryptoManagerSpy()
 		couplingManagerSpy = CouplingManagerSpy(cryptoManager: cryptoSpy, networkManager: networkSpy)
 		window = UIWindow()
-
-//		isRecording = true
 	}
 
 	override func tearDown() {
