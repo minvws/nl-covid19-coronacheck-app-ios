@@ -357,11 +357,12 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			)
 
 			// Store the new events
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt() {
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
+			   let signedResponse = response.signedResponse {
 				success = success && walletManager.storeEventGroup(
 					eventMode,
 					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: response.signedResponse,
+					signedResponse: signedResponse,
 					issuedAt: maxIssuedAt
 				)
 				if !success {

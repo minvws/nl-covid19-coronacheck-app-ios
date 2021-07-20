@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
+typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?)
 
 struct EventFlow {
 
@@ -134,12 +134,12 @@ struct EventFlow {
 				.compactMap {
 					if $0.vaccination != nil {
 						return $0.vaccination?.dateString
-					}
-					if $0.negativeTest != nil {
+					} else if $0.negativeTest != nil {
 						return $0.negativeTest?.sampleDateString
-					}
-					if $0.recovery != nil {
+					} else if $0.recovery != nil {
 						return $0.recovery?.sampleDate
+					} else if $0.dccEvent != nil {
+						return $0.dccEvent?.dateString()
 					}
 					return $0.positiveTest?.sampleDateString
 				}
