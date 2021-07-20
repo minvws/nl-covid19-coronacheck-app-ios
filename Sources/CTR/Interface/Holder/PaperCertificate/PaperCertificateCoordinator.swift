@@ -14,14 +14,21 @@ protocol PaperCertificateFlowDelegate: AnyObject {
 }
 
 protocol PaperCertificateCoordinatorDelegate: AnyObject {
+
 	func userDidSubmitPaperCertificateToken(token: String)
 
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
-	
+
+	func userWantsToGoBackToDashboard()
+
+	func userWantsToGoBackToTokenEntry()
+
+	func userWishesToSeeScannedEvent(_ event: RemoteEvent)
+
 	func userWishesToEnterToken()
-	
+
 	func userWishesToScanCertificate()
-	
+
 	func userWishesToCreateACertificate(message: String)
 }
 
@@ -32,6 +39,10 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 	var navigationController: UINavigationController = UINavigationController()
 
 	private weak var delegate: PaperCertificateFlowDelegate?
+
+	var token: String?
+
+	var scannedQR: String?
 
 	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 	
@@ -62,13 +73,16 @@ final class PaperCertificateCoordinator: Coordinator, Logging {
 extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userDidSubmitPaperCertificateToken(token: String) {
-		
+
+		// Store Token
+		self.token = token
+
+		// Navigate to About Scan
 		let destination = PaperCertificateAboutScanViewController(
 			viewModel: PaperCertificateAboutScanViewModel(
 				coordinator: self
 			)
 		)
-		
 		navigationController.pushViewController(destination, animated: true)
 	}
 
@@ -97,7 +111,32 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		navigationController.viewControllers.last?.present(viewController, animated: true, completion: nil)
 	}
-	
+
+	func userWantsToGoBackToDashboard() {
+
+		scannedQR = nil
+		token = nil
+		delegate?.addCertificateFlowDidFinish()
+	}
+
+	func userWantsToGoBackToTokenEntry() {
+
+		scannedQR = nil
+		if let tokenEntryViewController = navigationController.viewControllers
+			.first(where: { $0 is PaperCertificateTokenEntryViewController }) {
+
+			navigationController.popToViewController(
+				tokenEntryViewController,
+				animated: true
+			)
+		}
+	}
+
+	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
+
+		// to implement
+	}
+
 	func userWishesToEnterToken() {
 
 		let destination = PaperCertificateTokenEntryViewController(
@@ -106,9 +145,11 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		navigationController.pushViewController(destination, animated: true)
 	}
-	
+
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
+
+		//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
 		let destination = PaperCertificateScanViewController(
 			viewModel: PaperCertificateScanViewModel(
@@ -116,13 +157,25 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				cryptoManager: cryptoManager
 			)
 		)
-
 		navigationController.pushViewController(destination, animated: true)
 	}
-	
+
 	func userWishesToCreateACertificate(message: String) {
-		
-		// Implement
+
+		// Store
+		self.scannedQR = message
+
+		// Navigate to Check Certificate
+		if let scannedDcc = scannedQR, let couplingCode = token {
+			let viewController = PaperCertificateCheckViewController(
+				viewModel: PaperCertificateCheckViewModel(
+					coordinator: self,
+					scannedDcc: scannedDcc,
+					couplingCode: couplingCode
+				)
+			)
+			navigationController.pushViewController(viewController, animated: false)
+		}
 	}
 }
 
@@ -169,5 +222,37 @@ extension PaperCertificateCoordinator: OpenUrlProtocol {
 		} else {
 			UIApplication.shared.open(url)
 		}
+	}
+}
+
+extension PaperCertificateCoordinator: EventFlowDelegate {
+
+	func eventFlowDidComplete() {
+
+		removeChildCoordinator()
+		scannedQR = nil
+		token = nil
+		delegate?.addCertificateFlowDidFinish()
+	}
+
+	func eventFlowDidCancel() {
+
+		removeChildCoordinator()
+		scannedQR = nil
+		token = nil
+		if let viewController = navigationController.viewControllers
+			.first(where: { $0 is PaperCertificateStartViewController }) {
+
+			navigationController.popToViewController(
+				viewController,
+				animated: true
+			)
+		}
+	}
+
+	private func removeChildCoordinator() {
+
+		guard let coordinator = childCoordinators.last else { return }
+		removeChildCoordinator(coordinator)
 	}
 }
