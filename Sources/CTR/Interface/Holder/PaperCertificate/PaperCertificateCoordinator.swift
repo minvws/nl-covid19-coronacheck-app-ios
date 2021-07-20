@@ -154,6 +154,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 
+//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
+
 		let destination = PaperCertificateScanViewController(
 			viewModel: PaperCertificateScanViewModel(
 				coordinator: self,
