@@ -146,10 +146,11 @@ extension EventFlow.Identity {
 		guard let birthDate = birthDateString.flatMap(Formatter.getDateFrom) else {
 			return nil
 		}
-		let components = Calendar.current.dateComponents([day], from: birthDate)
+		let components = Calendar.current.dateComponents([.day], from: birthDate)
 		if let dayInt = components.day {
 			return "\(dayInt)"
 		}
+		return nil
 	}
 
 	private func getBirthMonth() -> String? {
@@ -161,6 +162,7 @@ extension EventFlow.Identity {
 		if let monthInt = components.month {
 			return "\(monthInt)"
 		}
+		return nil
 	}
 }
 
