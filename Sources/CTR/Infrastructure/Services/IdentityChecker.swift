@@ -113,31 +113,56 @@ extension EventFlow.Identity {
 
 	func asIdentityTuple() -> IdentityTuple {
 
-		var firstNameInitial: String?
-		var lastNameInitial: String?
-		var day: String?
-		var month: String?
+		return (
+			firstNameInitial: getFirstNameInitIal(),
+			lastNameInitial: getLastNameInitial(),
+			day: getBirthDay(),
+			month:  getBirthMonth()
+		)
+	}
 
-		if let firstName = firstName {
-			let firstChar = firstName.prefix(1)
-			firstNameInitial = String(firstChar).uppercased()
-		}
+	private func getFirstNameInitIal() -> String? {
 
-		if let lastName = lastName {
-			let firstChar = lastName.prefix(1)
-			lastNameInitial = String(firstChar).uppercased()
+		guard let firstName = firstName else {
+			return nil
 		}
+		// todo: Normalize
+		let firstChar = firstName.prefix(1)
+		return String(firstChar).uppercased()
+	}
 
-		if let birthDate = birthDateString.flatMap(Formatter.getDateFrom) {
-			let components = Calendar.current.dateComponents([.month, .day], from: birthDate)
-			if let dayInt = components.day {
-				day = "\(dayInt)"
-			}
-			if let monthInt = components.month {
-				month = "\(monthInt)"
-			}
+	private func getLastNameInitial() -> String? {
+
+		guard let lastName = lastName else {
+			return nil
 		}
-		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: day, month: month)
+		// todo: Normalize
+		let firstChar = lastName.prefix(1)
+		return String(firstChar).uppercased()
+	}
+
+	private func getBirthDay() -> String? {
+
+		guard let birthDate = birthDateString.flatMap(Formatter.getDateFrom) else {
+			return nil
+		}
+		let components = Calendar.current.dateComponents([.day], from: birthDate)
+		if let dayInt = components.day {
+			return "\(dayInt)"
+		}
+		return nil
+	}
+
+	private func getBirthMonth() -> String? {
+
+		guard let birthDate = birthDateString.flatMap(Formatter.getDateFrom) else {
+			return nil
+		}
+		let components = Calendar.current.dateComponents([.month], from: birthDate)
+		if let monthInt = components.month {
+			return "\(monthInt)"
+		}
+		return nil
 	}
 }
 

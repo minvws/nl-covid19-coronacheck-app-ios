@@ -173,7 +173,6 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	internal func userWantsToMakeQR(remoteEvents: [RemoteEvent], completion: @escaping (Bool) -> Void) {
 
 		if identityChecker.compare(eventGroups: walletManager.listEventGroups(), with: remoteEvents) {
-
 			storeAndSign(remoteEvents: remoteEvents, replaceExistingEventGroups: false, completion: completion)
 		} else {
 			showIdentityMismatch {

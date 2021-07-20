@@ -203,7 +203,8 @@ class HolderCoordinator: SharedCoordinator {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager
+				dataStoreManager: Services.dataStoreManager,
+				now: { Date() }
 			)
 		)
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
