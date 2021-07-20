@@ -19,7 +19,8 @@ final class HolderDashboardViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = L.holderDashboardTitle()
 
-	@Bindable private(set) var cards = [HolderDashboardViewController.Card]()
+	@Bindable private(set) var domesticCards = [HolderDashboardViewController.Card]()
+	@Bindable private(set) var internationalCards = [HolderDashboardViewController.Card]()
 	
 	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
 	
@@ -79,7 +80,7 @@ final class HolderDashboardViewModel: Logging {
 		didSet {
 			guard let coordinator = coordinator else { return }
 
-			self.cards = HolderDashboardViewModel.assembleCards(
+			(domesticCards, internationalCards) = HolderDashboardViewModel.assembleCards(
 				state: state,
 				didTapCloseExpiredQR: { expiredQR in
 					self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
@@ -265,42 +266,69 @@ final class HolderDashboardViewModel: Logging {
 		state: HolderDashboardViewModel.State,
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
 		coordinatorDelegate: (HolderCoordinatorDelegate),
-		strippenRefresher: DashboardStrippenRefresher) -> [HolderDashboardViewController.Card] {
-		var cards = [HolderDashboardViewController.Card]()
+		strippenRefresher: DashboardStrippenRefresher
+	) -> (domestic: [HolderDashboardViewController.Card], international: [HolderDashboardViewController.Card]) {
 
-		if !state.myQRCards.isEmpty {
-			cards += [ .headerMessage( message: {
-				state.qrCodeValidityRegion == .domestic
-					? L.holderDashboardIntroDomestic()
-					: L.holderDashboardIntroInternational()
-			}())]
-		}
-
-		cards += state.expiredGreenCards.compactMap { expiredQR -> HolderDashboardViewController.Card? in
-			guard expiredQR.region == state.qrCodeValidityRegion else { return nil }
-
-			let message = String.holderDashboardQRExpired(
-				localizedRegion: expiredQR.region.localizedAdjective,
-				localizedOriginType: expiredQR.type.localizedProof
-			)
-
-			return .expiredQR(message: message, didTapClose: {
-				didTapCloseExpiredQR(expiredQR)
-			})
-		}
+		var domesticCards = [HolderDashboardViewController.Card]()
+		var internationalCards = [HolderDashboardViewController.Card]()
 
 		if state.myQRCards.isEmpty {
-			cards += [
+			domesticCards += [
 				.emptyState(
 					title: L.holderDashboardEmptyTitle(),
 					message: L.holderDashboardEmptyMessage()
 				)
 			]
+			internationalCards += [
+				.emptyState(
+					title: L.holderDashboardEmptyTitle(),
+					message: L.holderDashboardEmptyMessage()
+				)
+			]
+		} else {
+			domesticCards += [ .headerMessage(message: L.holderDashboardIntroDomestic())]
+			internationalCards += [ .headerMessage(message: L.holderDashboardIntroInternational())]
+		}
+
+		domesticCards += state.expiredGreenCards
+			.filter { $0.region == .domestic }
+			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
+				let message = String.holderDashboardQRExpired(
+					localizedRegion: expiredQR.region.localizedAdjective,
+					localizedOriginType: expiredQR.type.localizedProof
+				)
+
+				return .expiredQR(message: message, didTapClose: {
+					didTapCloseExpiredQR(expiredQR)
+				})
+		}
+
+		internationalCards += state.expiredGreenCards
+			.filter { $0.region == .europeanUnion }
+			.compactMap { expiredQR -> HolderDashboardViewController.Card? in
+				let message = String.holderDashboardQRExpired(
+					localizedRegion: expiredQR.region.localizedAdjective,
+					localizedOriginType: expiredQR.type.localizedProof
+				)
+
+				return .expiredQR(message: message, didTapClose: {
+					didTapCloseExpiredQR(expiredQR)
+				})
 		}
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state)
+		domesticCards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, thisRegion: .domestic)
+			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
+			.map { originType, message in
+				return .originNotValidInThisRegion(message: message) {
+					coordinatorDelegate.userWishesMoreInfoAboutUnavailableQR(
+						originType: originType,
+						currentRegion: state.qrCodeValidityRegion,
+						availableRegion: state.qrCodeValidityRegion.opposite)
+				}
+			}
+		internationalCards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, thisRegion: .europeanUnion)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
 				return .originNotValidInThisRegion(message: message) {
@@ -311,80 +339,84 @@ final class HolderDashboardViewModel: Logging {
 				}
 			}
 
-		cards += state.myQRCards
+		domesticCards += state.myQRCards
 
 			// Map a `MyQRCard` to a `VC.Card`:
 			.flatMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> [HolderDashboardViewController.Card] in
+				guard case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = qrcardDataItem
+				else { return [] }
 
-				switch (state.qrCodeValidityRegion, qrcardDataItem) {
-					case let (.domestic, .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState)):
-						let rows = origins.map { origin in
-							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localizedProof.capitalizingFirstLetter(),
-								validityTextEvaluator: { now in
-									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
-								}
-							)
+				let rows = origins.map { origin in
+					HolderDashboardViewController.Card.QRCardRow(
+						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
+						validityTextEvaluator: { now in
+							qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
 						}
-
-						var cards = [HolderDashboardViewController.Card.domesticQR(
-							rows: rows,
-							isLoading: state.isRefreshingStrippen,
-							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
-							buttonEnabledEvaluator: evaluateEnabledState,
-							expiryCountdownEvaluator: { now in
-								let mostDistantFutureExpiryDate = origins.reduce(Date()) { result, nextOrigin in
-									nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
-								}
-
-								// if all origins will be expired in next six hours:
-								let sixHours: TimeInterval = 6 * 60 * 60
-								guard mostDistantFutureExpiryDate > Date() && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
-								else { return nil }
-
-								// e.g. "5 uur 59 min"
-								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
-								else { return nil }
-
-								return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
-							}
-						)]
-
-						if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-							cards += [.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
-						}
-
-						return cards
-
-					case let (.europeanUnion, .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState)):
-						let rows = origins.map { origin in
-							HolderDashboardViewController.Card.QRCardRow(
-								typeText: origin.type.localizedEvent.capitalizingFirstLetter(),
-								validityTextEvaluator: { now in
-									qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
-								}
-							)
-						}
-
-						var cards = [HolderDashboardViewController.Card.europeanUnionQR(
-							rows: rows,
-							isLoading: state.isRefreshingStrippen,
-							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
-							buttonEnabledEvaluator: evaluateEnabledState,
-							expiryCountdownEvaluator: nil
-						)]
-
-						if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
-							cards += [.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
-						}
-
-						return cards
-
-					default: return []
+					)
 				}
+
+				var cards = [HolderDashboardViewController.Card.domesticQR(
+					rows: rows,
+					isLoading: state.isRefreshingStrippen,
+					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
+					buttonEnabledEvaluator: evaluateEnabledState,
+					expiryCountdownEvaluator: { now in
+						let mostDistantFutureExpiryDate = origins.reduce(Date()) { result, nextOrigin in
+							nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
+						}
+
+						// if all origins will be expired in next six hours:
+						let sixHours: TimeInterval = 6 * 60 * 60
+						guard mostDistantFutureExpiryDate > Date() && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
+						else { return nil }
+
+						// e.g. "5 uur 59 min"
+						guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
+						else { return nil }
+
+						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
+					}
+				)]
+
+				if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
+					cards += [.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
+				}
+
+				return cards
 			}
 
-		return cards
+		internationalCards += state.myQRCards
+			// Map a `MyQRCard` to a `VC.Card`:
+			.flatMap { (qrcardDataItem: HolderDashboardViewModel.MyQRCard) -> [HolderDashboardViewController.Card] in
+				guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = qrcardDataItem
+				else { return [] }
+
+				let rows = origins.map { origin in
+					HolderDashboardViewController.Card.QRCardRow(
+						typeText: origin.type.localizedEvent.capitalizingFirstLetter(),
+						validityTextEvaluator: { now in
+							qrcardDataItem.localizedDateExplanation(forOrigin: origin, forNow: now)
+						}
+					)
+				}
+
+				var cards = [HolderDashboardViewController.Card.europeanUnionQR(
+					rows: rows,
+					isLoading: state.isRefreshingStrippen,
+					didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
+					buttonEnabledEvaluator: evaluateEnabledState,
+					expiryCountdownEvaluator: nil
+				)]
+
+				if let error = state.errorForQRCardsMissingCredentials, shouldShowErrorBeneathCard {
+					cards += [.errorMessage(message: error, didTapTryAgain: strippenRefresher.load)]
+				}
+
+				return cards
+
+			}
+
+		return (domestic: domesticCards, international: internationalCards)
 	}
 }
 
@@ -409,11 +441,11 @@ extension HolderDashboardViewModel {
 
 // MARK: - Free Functions
 
-private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State) -> [(originType: QRCodeOriginType, message: String)] {
+private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State, thisRegion: QRCodeValidityRegion) -> [(originType: QRCodeOriginType, message: String)] {
 
 	// Calculate origins which exist in the other region but are not in this region:
 	let originTypesForCurrentRegion = Set(state.myQRCards
-											.filter { $0.isOfRegion(region: state.qrCodeValidityRegion) }
+											.filter { $0.isOfRegion(region: thisRegion) }
 											.flatMap { $0.origins }
 											.filter {
 												$0.isNotYetExpired
@@ -422,7 +454,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 	)
 
 	let originTypesForOtherRegion = Set(state.myQRCards
-											.filter { !$0.isOfRegion(region: state.qrCodeValidityRegion) }
+											.filter { !$0.isOfRegion(region: thisRegion) }
 											.flatMap { $0.origins }
 											.filter {
 												$0.isNotYetExpired
