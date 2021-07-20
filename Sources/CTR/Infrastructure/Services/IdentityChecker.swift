@@ -46,7 +46,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 			} else if let existing = existingIdentity as? TestHolderIdentity {
 				existingTuple = existing.asIdentityTuple()
 			}
-			logDebug("existingIdentity: \(String(describing: existingTuple))")
+			logVerbose("existingIdentity: \(String(describing: existingTuple))")
 
 			for remoteIdentity in remoteIdentities {
 
@@ -57,7 +57,7 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				} else if let remote = remoteIdentity as? TestHolderIdentity {
 					remoteTuple = remote.asIdentityTuple()
 				}
-				logDebug("remoteIdentity: \(String(describing: remoteTuple))")
+				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
 
 				match = match && (remoteTuple?.day == existingTuple?.day && remoteTuple?.month == existingTuple?.month &&
 									(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||

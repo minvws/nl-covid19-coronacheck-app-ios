@@ -928,7 +928,8 @@ class ListEventsViewModelTests: XCTestCase {
 						vaccination: vaccinationEvent,
 						negativeTest: nil,
 						positiveTest: nil,
-						recovery: nil
+						recovery: nil,
+						dccEvent: nil
 					)
 				]
 			),
