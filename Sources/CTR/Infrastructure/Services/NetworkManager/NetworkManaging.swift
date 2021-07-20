@@ -124,5 +124,7 @@ protocol NetworkManaging {
 	/// - Parameters:
 	///   - dictionary: the dcc and the coupling code as dictionary
 	///   - completion: completion handler
-	func checkCouplingStatus(dictionary: [String: AnyObject], completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
+	func checkCouplingStatus(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
 }

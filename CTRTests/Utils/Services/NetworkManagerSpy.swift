@@ -180,7 +180,9 @@ class NetworkSpy: NetworkManaging {
 	var invokedCheckCouplingStatusParametersList = [(dictionary: [String: AnyObject], Void)]()
 	var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, NetworkError>, Void)?
 
-	func checkCouplingStatus(dictionary: [String: AnyObject], completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
+	func checkCouplingStatus(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
 		invokedCheckCouplingStatus = true
 		invokedCheckCouplingStatusCount += 1
 		invokedCheckCouplingStatusParameters = (dictionary, ())
