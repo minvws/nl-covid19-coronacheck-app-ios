@@ -59,10 +59,12 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				}
 				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
 
-				match = match && (remoteTuple?.day == existingTuple?.day && remoteTuple?.month == existingTuple?.month &&
-									(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
-										remoteTuple?.lastNameInitial == remoteTuple?.lastNameInitial)
-				)
+				match = match && (remoteTuple?.day == existingTuple?.day && remoteTuple?.month == existingTuple?.month)
+				// Disable the name checking for now.
+//					&&
+//									(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
+//										remoteTuple?.lastNameInitial == remoteTuple?.lastNameInitial)
+//				)
 			}
 		}
 		logDebug("Does the identity of the new events match with the existing ones? \(match)")
@@ -126,8 +128,8 @@ extension EventFlow.Identity {
 		guard let firstName = firstName else {
 			return nil
 		}
-		// todo: Normalize
-		let firstChar = firstName.prefix(1)
+		let normalized = Normalizer.normalize(firstName)
+		let firstChar = normalized.prefix(1)
 		return String(firstChar).uppercased()
 	}
 
@@ -136,8 +138,8 @@ extension EventFlow.Identity {
 		guard let lastName = lastName else {
 			return nil
 		}
-		// todo: Normalize
-		let firstChar = lastName.prefix(1)
+		let normalized = Normalizer.normalize(lastName)
+		let firstChar = normalized.prefix(1)
 		return String(firstChar).uppercased()
 	}
 
@@ -163,6 +165,23 @@ extension EventFlow.Identity {
 			return "\(monthInt)"
 		}
 		return nil
+	}
+}
+
+class Normalizer {
+
+	static let permittedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz ")
+
+	/// Normalize any input, transform to latin, remove all diacritics
+	/// - Parameter input: the unnormalized input
+	/// - Returns: normalized output
+	class func normalize(_ input: String) -> String {
+
+		if let latinInput = input.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
+			let permittedInput = String(latinInput.unicodeScalars.filter { permittedCharacterSet.contains($0) })
+			return permittedInput
+		}
+		return input
 	}
 }
 

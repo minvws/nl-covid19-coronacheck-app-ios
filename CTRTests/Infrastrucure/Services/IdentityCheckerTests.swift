@@ -188,6 +188,33 @@ class IdentityCheckerTests: XCTestCase {
 		}
 		return eventGroup
 	}
+
+	func test_normalization() {
+
+		// Given
+		let values: [String: String] = [
+			"Rool": "R",
+			"#$pietje": "P",
+			"παράδειγμα δοκιμής": "P",
+			"Ægir": "A",
+			"'Doorn": "D",
+			"Özturk": "O",
+			"ТЕСТ МИЛИЦА": "T",
+			"王": "W",
+			"Şımarık": "S",
+			"Ådne": "A",
+			"محمود عبدالرحيم": "M",
+			"أحمد‎": "A"
+		]
+		for (value, expected) in values {
+			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
+
+			// When
+			let tuple = identity.asIdentityTuple()
+
+			expect(tuple.firstNameInitial) == expected
+		}
+	}
 }
 
 extension EventFlow.EventResultWrapper {
