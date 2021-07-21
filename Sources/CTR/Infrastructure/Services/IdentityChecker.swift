@@ -164,14 +164,15 @@ extension EventFlow.Identity {
 		}
 		return nil
 	}
-
 }
 
 class Normalizer {
 
 	static let permittedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz ")
-	
-	// todo: Normalize
+
+	/// Normalize any input, transform to latin, remove all diacritics
+	/// - Parameter input: the unnormalized input
+	/// - Returns: normalized output
 	class func normalize(_ input: String) -> String {
 
 		if let latinInput = input.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
