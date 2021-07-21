@@ -16,6 +16,7 @@
 "holder.dcc.vaccination.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.dcc.recovery.message" = "<p>De volgende gegevens zijn opgehaald:</p> <p>Naam / Name: <b>%@</b> <br />Geboortedatum / Date of birth*: <b>%@</b></p> <p>Ziekte waarvan hersteld / Disease recovered from: <b>COVID-19</b> <br />Testdatum / Test date*: <b>%@</b> <br />Getest in / Member state of test <b>%@</b> <br />Afgever certificaat / Certificate issuer <b>%@</b> <br />Geldig vanaf / Valid from*: <b>%@</b> <br />Geldig tot / Valid to*: <b>%@</b> </p><p>Uniek certificaatnummer / Unique certificate identifier: <b>%@</b></p>";
 "holder.dcc.test.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam / Name: <b>%@</b><br />Geboortedatum / Date of birth*: <b>%@</b></p><p>Ziekteverwekker / Disease targeted: <b>COVID-19</b><br />Type test / Type of test: <b>%@</b><br />Testnaam / Test name: <b>%@</b><br />Testdatum / Test date*: <b>%@</b><br />Testuitslag / Test result: <b>%@</b><br />Testlocatie / Testing centre: <b>%@</b><br />Producent / Test manufacturer: <b>%@</b><br />Getest in / Member state of test: <b>%@</b><br />Afgever certificaat / Certificate issuer: <b>%@</b></p><p>Uniek certificaatnummer / Unique certificate identifier <b>%@</b></p>";
+"holder.dcc.list.issuer" = "Ministerie VWS";
 "holder.recovery.wrong.body" = "Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.";
 "general.retry" = "Probeer opnieuw";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
@@ -391,6 +392,9 @@
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
 "holder.vaccination.about.off" = "%@ van %@";
+"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
+"holder.vaccination.about.country" = "Nederland / The Netherlands";
+"holder.vaccination.about.issuer" = "Ministerie VWS / Ministry of Health, Welfare and Sport";
 
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";

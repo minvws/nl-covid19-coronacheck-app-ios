@@ -172,7 +172,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+			let isNL = "nl" == Locale.current.languageCode
+			dosage = isNL ? L.holderVaccinationAboutOffDcc("\(doseNumber)", "\(totalDose)", "\(doseNumber)", "\(totalDose)") : L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
@@ -182,11 +183,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 
-		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
-			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
+		
+		let issuer = getDisplayIssuer(vaccination.issuer)
+		let country = getDisplayCountry(vaccination.country)
 
 		let body: String = L.holderShowqrEuAboutVaccinationMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
@@ -196,8 +199,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			vaccineManufacturer,
 			dosage ?? " ",
 			formattedVaccinationDate,
-			vaccination.country,
-			"issuer",
+			country,
+			issuer,
 			vaccination.certificateIdentifier
 				.breakingAtColumn(column: 20) // hotfix for webview
 		)
@@ -212,8 +215,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		euCredentialAttributes: EuCredentialAttributes,
 		test: EuCredentialAttributes.TestEntry) {
 
-		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
-			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
 			.map(printDateTimeFormatter.string) ?? test.sampleDate
@@ -231,6 +233,9 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		if test.testResult == "260373001" {
 			testResult = L.holderShowqrEuAboutTestPostive()
 		}
+		
+		let issuer = getDisplayIssuer(test.issuer)
+		let country = getDisplayCountry(test.country)
 
 		let body: String = L.holderShowqrEuAboutTestMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
@@ -241,8 +246,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			testResult,
 			test.testCenter,
 			manufacturer,
-			test.country,
-			"issueer",
+			country,
+			issuer,
 			test.certificateIdentifier
 				.breakingAtColumn(column: 20) // hotfix for webview
 		)
@@ -257,8 +262,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		euCredentialAttributes: EuCredentialAttributes,
 		recovery: EuCredentialAttributes.RecoveryEntry) {
 
-		let formattedBirthDate: String = Formatter.getDateFrom(dateString8601: euCredentialAttributes.digitalCovidCertificate.dateOfBirth)
-			.map(printDateFormatter.string) ?? euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
 		let formattedFirstPostiveDate: String = Formatter.getDateFrom(dateString8601: recovery.firstPositiveTestDate)
 			.map(printDateFormatter.string) ?? recovery.firstPositiveTestDate
@@ -333,5 +337,29 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	func stopValidityTimer() {
 		validityTimer?.invalidate()
 		validityTimer = nil
+	}
+	
+	private func getDisplayIssuer(_ issuer: String) -> String {
+		guard issuer == "Ministry of Health Welfare and Sport" else {
+			return issuer
+		}
+		return L.holderVaccinationAboutIssuer()
+	}
+	
+	private func getDisplayCountry(_ country: String) -> String {
+		guard country == "NL" else {
+			return country
+		}
+		return L.holderVaccinationAboutCountry()
+	}
+}
+
+private extension EuCredentialAttributes {
+	
+	func dateOfBirth(_ dateFormatter: DateFormatter) -> String {
+		return Formatter
+			.getDateFrom(dateString8601: digitalCovidCertificate.dateOfBirth)
+			.map(dateFormatter.string)
+			?? digitalCovidCertificate.dateOfBirth
 	}
 }

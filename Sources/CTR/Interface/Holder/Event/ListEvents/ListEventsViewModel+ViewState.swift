@@ -548,6 +548,9 @@ extension ListEventsViewModel {
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
 		let formattedVaccinationDate: String = Formatter.getDateFrom(dateString8601: vaccination.dateOfVaccination)
 			.map(printDateFormatter.string) ?? vaccination.dateOfVaccination
+		
+		let issuer = getDisplayIssuer(vaccination.issuer)
+		let country = getDisplayCountry(vaccination.country)
 
 		let body: String = L.holderDccVaccinationMessage(
 			dataRow.identity.fullName,
@@ -557,8 +560,8 @@ extension ListEventsViewModel {
 			vaccineManufacturer,
 			dosage ?? " ",
 			formattedVaccinationDate,
-			vaccination.country,
-			vaccination.issuer,
+			country,
+			issuer,
 			vaccination.certificateIdentifier
 				.breakingAtColumn(column: 20) // hotfix for webview
 		)
@@ -592,13 +595,16 @@ extension ListEventsViewModel {
 			.map(printDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
 			.map(printDateFormatter.string) ?? recovery.expiresAt
+		
+		let issuer = getDisplayIssuer(recovery.issuer)
+		let country = getDisplayCountry(recovery.country)
 
 		let body: String = L.holderDccRecoveryMessage(
 			dataRow.identity.fullName,
 			formattedBirthDate,
 			formattedFirstPostiveDate,
-			recovery.country,
-			recovery.issuer,
+			country,
+			issuer,
 			formattedValidFromDate,
 			formattedValidUntilDate,
 			recovery.certificateIdentifier
@@ -643,6 +649,9 @@ extension ListEventsViewModel {
 		if test.testResult == "260373001" {
 			testResult = L.holderShowqrEuAboutTestPostive()
 		}
+		
+		let issuer = getDisplayIssuer(test.issuer)
+		let country = getDisplayCountry(test.country)
 
 		let body: String = L.holderDccTestMessage(
 			dataRow.identity.fullName,
@@ -653,8 +662,8 @@ extension ListEventsViewModel {
 			testResult,
 			test.testCenter,
 			manufacturer,
-			test.country,
-			test.issuer,
+			country,
+			issuer,
 			test.certificateIdentifier
 				.breakingAtColumn(column: 20) // hotfix for webview
 		)
@@ -677,9 +686,9 @@ extension ListEventsViewModel {
 
 // MARK: Test 2.0
 
-extension ListEventsViewModel {
+private extension ListEventsViewModel {
 
-	private func pendingEventsState() -> ListEventsViewController.State {
+	func pendingEventsState() -> ListEventsViewController.State {
 
 		return .emptyEvents(
 			content: ListEventsViewController.Content(
@@ -695,7 +704,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListEventsViewController.State {
+	func listTest20EventsState(_ remoteEvent: RemoteEvent) -> ListEventsViewController.State {
 
 		var rows = [ListEventsViewController.Row]()
 		if let row = getTest20Row(remoteEvent) {
@@ -729,7 +738,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getTest20Row(_ remoteEvent: RemoteEvent) -> ListEventsViewController.Row? {
+	func getTest20Row(_ remoteEvent: RemoteEvent) -> ListEventsViewController.Row? {
 
 		guard let result = remoteEvent.wrapper.result,
 			  let sampleDate = Formatter.getDateFrom(dateString8601: result.sampleDate) else {
@@ -766,7 +775,7 @@ extension ListEventsViewModel {
 	/// Get a display version of the holder identity
 	/// - Parameter holder: the holder identity
 	/// - Returns: the display version
-	private func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
+	func getDisplayIdentity(_ holder: TestHolderIdentity?) -> String {
 
 		guard let holder = holder else {
 			return ""
@@ -779,6 +788,20 @@ extension ListEventsViewModel {
 			output.append(" ")
 		}
 		return output.trimmingCharacters(in: .whitespaces)
+	}
+	
+	func getDisplayIssuer(_ issuer: String) -> String {
+		guard issuer == "Ministry of Health Welfare and Sport" else {
+			return issuer
+		}
+		return L.holderDccListIssuer()
+	}
+	
+	func getDisplayCountry(_ country: String) -> String {
+		guard country == "NL" else {
+			return country
+		}
+		return L.generalNetherlands()
 	}
 }
 
