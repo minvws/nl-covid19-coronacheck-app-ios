@@ -13,8 +13,6 @@ final class RoundedLabel: BaseView {
 	private enum ViewTraits {
 		
 		static let margin: CGFloat = 24
-		static let bottomMargin: CGFloat = 17
-		
 		static let cornerRadius: CGFloat = 15
 	}
 	
@@ -46,7 +44,7 @@ final class RoundedLabel: BaseView {
 			messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin),
 			messageLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: ViewTraits.margin),
 			messageLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -ViewTraits.margin),
-			messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.bottomMargin)
+			messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)
 		])
 	}
 	
