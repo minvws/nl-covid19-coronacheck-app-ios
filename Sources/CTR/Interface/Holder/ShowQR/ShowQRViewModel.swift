@@ -48,7 +48,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "d MMMM yyyy"
+		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
 
@@ -197,6 +197,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			dosage ?? " ",
 			formattedVaccinationDate,
 			vaccination.country,
+			"issuer",
 			vaccination.certificateIdentifier
 				.breakingAtColumn(column: 20) // hotfix for webview
 		)
@@ -241,6 +242,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			test.testCenter,
 			manufacturer,
 			test.country,
+			"issueer",
 			test.certificateIdentifier
 				.breakingAtColumn(column: 20) // hotfix for webview
 		)
