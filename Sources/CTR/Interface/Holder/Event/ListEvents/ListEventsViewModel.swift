@@ -187,7 +187,19 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeEvent(remoteEvents: remoteEvents, replaceExistingEventGroups: replaceExistingEventGroups) { saved in
+		var eventModeForStorage = eventMode
+
+		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
+			let cryptoManager = cryptoManager,
+			let dccEventType = dccEvent.getEventType(cryptoManager: cryptoManager) {
+			eventModeForStorage = dccEventType
+			logVerbose("Setting eventModeForStorage to \(eventModeForStorage.rawValue)")
+		}
+
+		storeEvent(
+			remoteEvents: remoteEvents,
+			eventModeForStorage: eventModeForStorage,
+			replaceExistingEventGroups: replaceExistingEventGroups) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
@@ -202,15 +214,15 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				// > 0 -> Success
 
 				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
-					.filter { $0.type == self?.eventMode.rawValue }
+					.filter { $0.type == eventModeForStorage.rawValue }
 					.count ?? 0
 				let internationalOrigins: Int = remoteResponse.euGreenCards?
 					.flatMap { $0.origins }
-					.filter { $0.type == self?.eventMode.rawValue }
+					.filter { $0.type == eventModeForStorage.rawValue }
 					.count ?? 0
 
-				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(String(describing: self?.eventMode.rawValue))")
-				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(String(describing: self?.eventMode.rawValue))")
+				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(eventModeForStorage.rawValue)")
+				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(eventModeForStorage.rawValue)")
 				return internationalOrigins + domesticOrigins > 0
 
 			}, completion: { result in
@@ -350,6 +362,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func storeEvent(
 		remoteEvents: [RemoteEvent],
+		eventModeForStorage: EventMode,
 		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
@@ -362,17 +375,14 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		for response in remoteEvents where response.wrapper.status == .complete {
 
 			var data: Data?
-			var eventModeForStorage: EventMode = eventMode
 
 			if let signedResponse = response.signedResponse,
 			   let jsonData = try? JSONEncoder().encode(signedResponse) {
 				data = jsonData
 			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
-					  let jsonData = try? JSONEncoder().encode(dccEvent),
-					  let cryptoManager = cryptoManager,
-					  let dccEventType = dccEvent.getEventType(cryptoManager: cryptoManager) {
+					  let jsonData = try? JSONEncoder().encode(dccEvent)
+					   {
 				data = jsonData
-				eventModeForStorage = dccEventType
 			}
 
 			// Remove any existing events for the provider
