@@ -36,6 +36,7 @@
 "general.error.cryptolib.retry" = "Try again";
 
 "general.recoverystatement" = "recovery certificate";
+"general.recoverycertificate" = "recovery certificate";
 "general.recoverydate" = "recovery date";
 "general.testcertificate" = "test certificate";
 "general.vaccinationcertificate" = "vaccination certificate";
