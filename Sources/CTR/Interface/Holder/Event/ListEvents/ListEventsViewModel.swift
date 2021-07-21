@@ -101,7 +101,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					switch eventMode {
 						case .recovery:
 							return L.holderRecoveryListTitle()
-						case .scannedDcc:
+						case .paperflow:
 							return L.holderDccListTitle()
 						case .test:
 							return L.holderTestresultsResultsTitle()
@@ -140,7 +140,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				switch eventMode {
 					case .recovery:
 						return L.holderRecoveryAlertMessage()
-					case .scannedDcc:
+					case .paperflow:
 						return L.holderDccAlertMessage()
 					case .test:
 						return L.holderTestAlertMessage()

@@ -37,7 +37,7 @@ class EventStartViewModel: Logging {
 				self.title = L.holderRecoveryStartTitle()
 				let validAfterDays = remoteConfigManager.getConfiguration().recoveryWaitingPeriodDays ?? 11
 				self.message = L.holderRecoveryStartMessage("\(validAfterDays)")
-			case .test, .scannedDcc:
+			case .test, .paperflow:
 				// Should be changed when we want test 3.0 to use this page. Skipped in the current flow.
 				self.title = ""
 				self.message = ""

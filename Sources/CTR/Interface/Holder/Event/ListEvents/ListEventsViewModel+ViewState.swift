@@ -71,7 +71,7 @@ extension ListEventsViewModel {
 				return emptyTestState()
 			case .vaccination:
 				return emptyVaccinationState()
-			case .scannedDcc:
+			case .paperflow:
 				return emptyDccState()
 		}
 	}
@@ -165,7 +165,7 @@ extension ListEventsViewModel {
 					switch eventMode {
 						case .recovery:
 							return L.holderEventOriginmismatchRecoveryBody()
-						case .scannedDcc:
+						case .paperflow:
 							return L.holderEventOriginmismatchDccBody()
 						case .test:
 							return L.holderEventOriginmismatchTestBody()
@@ -222,7 +222,7 @@ extension ListEventsViewModel {
 				title = L.holderTestresultsResultsTitle()
 				subTitle = L.holderTestresultsResultsText()
 				secondaryActionBody = L.holderTestresultsWrongBody()
-			case .scannedDcc:
+			case .paperflow:
 				title = L.holderDccListTitle()
 				subTitle = L.holderDccListMessage()
 				if let cryptoManager = cryptoManager,

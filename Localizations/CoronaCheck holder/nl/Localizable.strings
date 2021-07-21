@@ -41,6 +41,7 @@
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.testdate" = "Testdatum";
 "general.vaccinationdate" = "Vaccinatiedatum";
+"general.paperflow" = "papieren bewijs";
 
 "holder.tokenscan.torch.enable" = "Zet de zaklamp aan.";
 "holder.tokenscan.torch.disable" = "Zet de zaklamp uit.";

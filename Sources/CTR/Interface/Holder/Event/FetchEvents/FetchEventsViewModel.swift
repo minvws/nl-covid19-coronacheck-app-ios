@@ -52,7 +52,7 @@ final class FetchEventsViewModel: Logging {
 							return L.holderTestListTitle()
 						case .vaccination:
 							return L.holderVaccinationListTitle()
-						case .scannedDcc:
+						case .paperflow:
 							return "" // Scanned Dcc not a part of this flow.
 					}
 				}(),
@@ -462,7 +462,7 @@ private extension EventMode {
 	var queryFilterValue: String {
 		switch self {
 			case .recovery: return "positivetest,recovery"
-			case .scannedDcc: return ""
+			case .paperflow: return ""
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
 		}

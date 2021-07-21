@@ -36,7 +36,7 @@ class LoginTVSViewModel: Logging {
 				title = L.holderTestListTitle()
 			case .vaccination:
 				title = L.holderVaccinationListTitle()
-			case .scannedDcc:
+			case .paperflow:
 				title = ""
 		}
 	}

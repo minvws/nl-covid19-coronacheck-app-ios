@@ -11,14 +11,14 @@ import SafariServices
 enum EventMode: String {
 
 	case recovery
-	case scannedDcc
+	case paperflow
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
 			case .recovery: return L.generalRecoverystatement()
-			case .scannedDcc: return "TODO!!!! localized scannedDcc"
+			case .paperflow: return L.generalPaperflow()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
 		}
@@ -139,7 +139,7 @@ class EventCoordinator: Coordinator, Logging {
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
-		navigateToListEvents([event], eventMode: .scannedDcc)
+		navigateToListEvents([event], eventMode: .paperflow)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -295,7 +295,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination, .recovery:
 						navigateBackToEventStart()
-					case .scannedDcc:
+					case .paperflow:
 					break
 				}
 
@@ -316,7 +316,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
-					case .scannedDcc:
+					case .paperflow:
 						break
 				}
 			case let .showEvents(remoteEvents, eventMode):
@@ -340,7 +340,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
-					case .scannedDcc:
+					case .paperflow:
 						delegate?.eventFlowDidCancel()
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
