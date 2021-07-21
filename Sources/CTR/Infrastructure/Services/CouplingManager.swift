@@ -59,7 +59,7 @@ class CouplingManager: CouplingManaging, Logging {
 					result: nil,
 					events: [
 						EventFlow.Event(
-							type: "scannedDcc",
+							type: "paperFlow",
 							unique: dcc,
 							isSpecimen: false,
 							vaccination: nil,

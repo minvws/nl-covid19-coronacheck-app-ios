@@ -14,15 +14,15 @@ class WalletManagerSpy: WalletManaging {
 
 	var invokedStoreEventGroup = false
 	var invokedStoreEventGroupCount = 0
-	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)?
-	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date)]()
+	var invokedStoreEventGroupParameters: (type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)?
+	var invokedStoreEventGroupParametersList = [(type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date)]()
 	var stubbedStoreEventGroupResult: Bool! = false
 
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool {
+	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool {
 		invokedStoreEventGroup = true
 		invokedStoreEventGroupCount += 1
-		invokedStoreEventGroupParameters = (type, providerIdentifier, signedResponse, issuedAt)
-		invokedStoreEventGroupParametersList.append((type, providerIdentifier, signedResponse, issuedAt))
+		invokedStoreEventGroupParameters = (type, providerIdentifier, jsonData, issuedAt)
+		invokedStoreEventGroupParametersList.append((type, providerIdentifier, jsonData, issuedAt))
 		return stubbedStoreEventGroupResult
 	}
 

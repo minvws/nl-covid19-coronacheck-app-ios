@@ -33,7 +33,7 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 }
 
 final class PaperCertificateCoordinator: Coordinator, Logging {
-	
+
 	var childCoordinators: [Coordinator] = []
 	
 	var navigationController: UINavigationController = UINavigationController()
@@ -134,7 +134,12 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
 
-		// to implement
+		let eventCoordinator = EventCoordinator(
+			navigationController: navigationController,
+			delegate: self
+		)
+		addChildCoordinator(eventCoordinator)
+		eventCoordinator.startWithScannedEvent(event)
 	}
 
 	func userWishesToEnterToken() {

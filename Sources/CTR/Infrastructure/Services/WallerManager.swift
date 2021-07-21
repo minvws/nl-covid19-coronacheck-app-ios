@@ -14,10 +14,10 @@ protocol WalletManaging {
 	/// - Parameters:
 	///   - type: the event type (vaccination, recovery, test)
 	///   - providerIdentifier: the identifier of the provider
-	///   - signedResponse: the json of the signed response to store
+	///   - jsonData: the json  data of the original signed event or dcc
 	///   - issuedAt: when was this event administered?
 	/// - Returns: True if stored
-	func storeEventGroup(_ type: EventMode, providerIdentifier: String, signedResponse: SignedResponse, issuedAt: Date) -> Bool
+	func storeEventGroup(_ type: EventMode, providerIdentifier: String, jsonData: Data, issuedAt: Date) -> Bool
 
 	func fetchSignedEvents() -> [String]
 
@@ -94,7 +94,7 @@ class WalletManager: WalletManaging, Logging {
 	@discardableResult func storeEventGroup(
 		_ type: EventMode,
 		providerIdentifier: String,
-		signedResponse: SignedResponse,
+		jsonData: Data,
 		issuedAt: Date) -> Bool {
 
 		var success = true
@@ -102,8 +102,7 @@ class WalletManager: WalletManaging, Logging {
 		let context = dataStoreManager.backgroundContext()
 		context.performAndWait {
 
-			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context),
-			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+			if let wallet = WalletModel.findBy(label: WalletManager.walletName, managedContext: context) {
 				EventGroupModel.create(
 					type: type,
 					providerIdentifier: providerIdentifier,
@@ -181,10 +180,6 @@ class WalletManager: WalletManaging, Logging {
 						   let convertedToString = String(data: data, encoding: .utf8) {
 							result.append(convertedToString.replacingOccurrences(of: "\\/", with: "/"))
 						}
-
-						// This should be rewritten to return an array of SignedResponse instead of String
-						// That fails at converting it to json and data in the network manager
-						// let object = try? JSONDecoder().decode(SignedResponse.self, from: data) {
 					}
 				}
 			}

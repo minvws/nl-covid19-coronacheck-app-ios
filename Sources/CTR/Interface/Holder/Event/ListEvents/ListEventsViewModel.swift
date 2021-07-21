@@ -12,11 +12,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
 	private var walletManager: WalletManaging
-	internal var remoteConfigManager: RemoteConfigManaging
+	var remoteConfigManager: RemoteConfigManaging
 	private let greenCardLoader: GreenCardLoading
+	let cryptoManager: CryptoManaging?
+	private let couplingManager: CouplingManaging
 	private let identityChecker: IdentityCheckerProtocol
 
-	internal var eventMode: EventMode
+	var eventMode: EventMode
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -25,34 +27,34 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		}
 	}()
 
-	internal lazy var dateFormatter: ISO8601DateFormatter = {
+	lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
 		return dateFormatter
 	}()
 	
-	internal lazy var printDateFormatter: DateFormatter = {
+	lazy var printDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "dd MMMM yyyy"
 		return dateFormatter
 	}()
-	internal lazy var printTestDateFormatter: DateFormatter = {
+	lazy var printTestDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EE d MMMM HH:mm"
 		return dateFormatter
 	}()
-	internal lazy var printTestLongDateFormatter: DateFormatter = {
+	lazy var printTestLongDateFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
-	internal lazy var printMonthFormatter: DateFormatter = {
+	lazy var printMonthFormatter: DateFormatter = {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
@@ -76,9 +78,11 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		greenCardLoader: GreenCardLoading,
+		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
 		walletManager: WalletManaging = Services.walletManager,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		cryptoManager: CryptoManaging = Services.cryptoManager,
+		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker()
 	) {
 
@@ -87,6 +91,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		self.walletManager = walletManager
 		self.remoteConfigManager = remoteConfigManager
 		self.greenCardLoader = greenCardLoader
+		self.cryptoManager = cryptoManager
+		self.couplingManager = couplingManager
 		self.identityChecker = identityChecker
 
 		viewState = .loading(
@@ -95,6 +101,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 					switch eventMode {
 						case .recovery:
 							return L.holderRecoveryListTitle()
+						case .paperflow:
+							return L.holderDccListTitle()
 						case .test:
 							return L.holderTestresultsResultsTitle()
 						case .vaccination:
@@ -132,10 +140,13 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				switch eventMode {
 					case .recovery:
 						return L.holderRecoveryAlertMessage()
+					case .paperflow:
+						return L.holderDccAlertMessage()
 					case .test:
 						return L.holderTestAlertMessage()
 					case .vaccination:
 						return L.holderVaccinationAlertMessage()
+
 				}
 			}(),
 			cancelAction: nil,
@@ -176,7 +187,19 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		shouldPrimaryButtonBeEnabled = false
 		progressIndicationCounter.increment()
 
-		storeEvent(remoteEvents: remoteEvents, replaceExistingEventGroups: replaceExistingEventGroups) { saved in
+		var eventModeForStorage = eventMode
+
+		if let dccEvent = remoteEvents.first?.wrapper.events?.first?.dccEvent,
+			let cryptoManager = cryptoManager,
+			let dccEventType = dccEvent.getEventType(cryptoManager: cryptoManager) {
+			eventModeForStorage = dccEventType
+			logVerbose("Setting eventModeForStorage to \(eventModeForStorage.rawValue)")
+		}
+
+		storeEvent(
+			remoteEvents: remoteEvents,
+			eventModeForStorage: eventModeForStorage,
+			replaceExistingEventGroups: replaceExistingEventGroups) { saved in
 
 			guard saved else {
 				self.progressIndicationCounter.decrement()
@@ -191,15 +214,15 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 				// > 0 -> Success
 
 				let domesticOrigins: Int = remoteResponse.domesticGreenCard?.origins
-					.filter { $0.type == self?.eventMode.rawValue }
+					.filter { $0.type == eventModeForStorage.rawValue }
 					.count ?? 0
 				let internationalOrigins: Int = remoteResponse.euGreenCards?
 					.flatMap { $0.origins }
-					.filter { $0.type == self?.eventMode.rawValue }
+					.filter { $0.type == eventModeForStorage.rawValue }
 					.count ?? 0
 
-				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(String(describing: self?.eventMode.rawValue))")
-				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(String(describing: self?.eventMode.rawValue))")
+				self?.logVerbose("We got \(domesticOrigins) domestic Origins of type \(eventModeForStorage.rawValue)")
+				self?.logVerbose("We got \(internationalOrigins) international Origins of type \(eventModeForStorage.rawValue)")
 				return internationalOrigins + domesticOrigins > 0
 
 			}, completion: { result in
@@ -339,6 +362,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	private func storeEvent(
 		remoteEvents: [RemoteEvent],
+		eventModeForStorage: EventMode,
 		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
@@ -350,24 +374,36 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 		for response in remoteEvents where response.wrapper.status == .complete {
 
+			var data: Data?
+
+			if let signedResponse = response.signedResponse,
+			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+				data = jsonData
+			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
+					  let jsonData = try? JSONEncoder().encode(dccEvent) {
+				data = jsonData
+			}
+
 			// Remove any existing events for the provider
 			walletManager.removeExistingEventGroups(
-				type: eventMode,
+				type: eventModeForStorage,
 				providerIdentifier: response.wrapper.providerIdentifier
 			)
 
 			// Store the new events
 			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
-			   let signedResponse = response.signedResponse {
+			   let jsonData = data {
 				success = success && walletManager.storeEventGroup(
-					eventMode,
+					eventModeForStorage,
 					providerIdentifier: response.wrapper.providerIdentifier,
-					signedResponse: signedResponse,
+					jsonData: jsonData,
 					issuedAt: maxIssuedAt
 				)
 				if !success {
 					break
 				}
+			} else {
+				logWarning("Could not store event group")
 			}
 		}
 		onCompletion(success)

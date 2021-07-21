@@ -156,23 +156,23 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 
 	func test_userWishesToSeeScannedEvent() {
 
-//		// Given
-//		let remoteEvent = RemoteEvent(
-//			wrapper: EventFlow.EventResultWrapper(
-//				providerIdentifier: "CC",
-//				protocolVersion: "3.0",
-//				identity: nil,
-//				status: .complete,
-//				result: nil
-//			),
-//			signedResponse: nil
-//		)
-//
-//		// When
-//		sut.userWishesToSeeScannedEvent(remoteEvent)
-//
-//		// Then
-//		expect(self.navigationSpy.pushViewControllerCallCount) == 1
+		// Given
+		let remoteEvent = RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: "CC",
+				protocolVersion: "3.0",
+				identity: nil,
+				status: .complete,
+				result: nil
+			),
+			signedResponse: nil
+		)
+
+		// When
+		sut.userWishesToSeeScannedEvent(remoteEvent)
+
+		// Then
+		expect(self.navigationSpy.pushViewControllerCallCount) == 1
 	}
 
 	func test_eventFlowDidCancel() {
