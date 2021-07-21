@@ -97,20 +97,29 @@ class OpenIdManager: OpenIdManaging, Logging {
 					}
 				}
 			}
-			if Configuration().getEnvironment() == "production" {
-				let browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+//			if Configuration().getEnvironment() == "production" {
+
+				var browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+
+				let sharedApplication = UIApplication.shared
+				if let edgeUrl = URL(string: "microsoft-edge-https//"),
+				   sharedApplication.canOpenURL(edgeUrl),
+				   let edgeBrowser = OIDExternalUserAgentIOSCustomBrowser.customBrowserEdge() {
+					browser = edgeBrowser
+				}
+
 				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
 					byPresenting: request,
 					externalUserAgent: browser,
 					callback: callBack
 				)
-			} else {
-				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
-					byPresenting: request,
-					presenting: presenter,
-					callback: callBack
-				)
-			}
+//			} else {
+//				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
+//					byPresenting: request,
+//					presenting: presenter,
+//					callback: callBack
+//				)
+//			}
 		}
 	}
 
