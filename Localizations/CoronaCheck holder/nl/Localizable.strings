@@ -36,6 +36,7 @@
 "general.error.cryptolib.retry" = "Probeer opnieuw";
 
 "general.recoverystatement" = "herstelverklaring";
+"general.recoverycertificate" = "herstelbewijs";
 "general.recoverydate" = "hersteldatum";
 "general.testcertificate" = "testbewijs";
 "general.vaccinationcertificate" = "vaccinatiebewijs";
