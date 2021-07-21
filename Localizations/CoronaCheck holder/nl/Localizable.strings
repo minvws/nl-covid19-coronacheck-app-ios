@@ -474,7 +474,7 @@
 "holder.dcc.vaccination.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.dcc.recovery.message" = "<p>De volgende gegevens zijn opgehaald:</p> <p>Naam: <b>%@</b> <br />Geboortedatum: <b>%@</b></p> <p>Ziekte waarvan hersteld: <b>COVID-19</b> <br />Testdatum: <b>%@</b> <br />Getest in: <b>%@</b> <br />Afgever certificaat: <b>%@</b> <br />Geldig vanaf: <b>%@</b> <br />Geldig tot: <b>%@</b> </p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.dcc.test.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Producent: <b>%@</b><br />Getest in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
-"holder.recovery.wrong.body" = "Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.";
+"holder.recovery.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.</p>";
 
 "holder.checkdcc.blocked.title" = "Je hebt te vaak gescand";
 "holder.checkdcc.blocked.message" = "Voor de veiligheid kan je deze QR-code tijdelijk niet meer scannen. Probeer het later nog eens.";
