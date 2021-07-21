@@ -59,10 +59,12 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				}
 				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
 
-				match = match && (remoteTuple?.day == existingTuple?.day && remoteTuple?.month == existingTuple?.month &&
-									(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
-										remoteTuple?.lastNameInitial == remoteTuple?.lastNameInitial)
-				)
+				match = match && (remoteTuple?.day == existingTuple?.day && remoteTuple?.month == existingTuple?.month)
+				// Disable the name checking for now.
+//					&&
+//									(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
+//										remoteTuple?.lastNameInitial == remoteTuple?.lastNameInitial)
+//				)
 			}
 		}
 		logDebug("Does the identity of the new events match with the existing ones? \(match)")
