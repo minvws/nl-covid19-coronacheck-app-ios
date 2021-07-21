@@ -1,14 +1,15 @@
+"general.recoverycertificate" = "recovery certificate";
 "general.paperflow" = "paper certificate";
 "holder.checkdcc.blocked.title" = "Too many attempts";
 "holder.checkdcc.blocked.message" = "For safety reasons, you temporarily can't add this QR code in the app. You can try again in 24 hours.";
-"holder.checkdcc.blocked.actionTitle" = "To My certificates";
+"holder.checkdcc.blocked.actionTitle" = "To My Certificates";
 "holder.checkdcc.expired.actionTitle" = "Try again";
 "holder.checkdcc.expired.title" = "This paper certificate has expired";
 "holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. Please request a new paper coronavirus from the healthcare provider who vaccinated or tested you.</li><li>Your vaccination or recovery has expired.</li></ul>";
 "holder.checkdcc.rejected.title" = "No valid combination";
 "holder.checkdcc.rejected.message" = "This letter combination and QR code don't belong together.";
 "holder.checkdcc.rejected.actionTitle" = "Try again";
-"holder.dcc.alert.message" = "You can try to scan your paper certificate again later";
+"holder.dcc.alert.message" = "You can try to add a paper certificate again later.";
 "holder.event.originmismatch.dcc.body" = "At this moment, we can't make a certificate from your scanned QR code. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl//en/guidepost\">the Guidepost.</a>";
 "holder.dcc.list.title" = "Retrieved details";
 "holder.dcc.list.message" = "You can create a QR code with the retrieved details. This is your certificate.";
@@ -42,7 +43,7 @@
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p><p>Have you been tested more than 180 days ago? Then your test result is no longer valid.</p>";
-"holder.recovery.nolist.action" = "To my certificates";
+"holder.recovery.nolist.action" = "To My Certificates";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery details";
 "holder.recovery.start.message" = "<p>Have you had coronavirus? Then you can make a recovery certificate of the positive test result from the GGD. Log in with DigiD to retrieve your test result.</p><p>Your recovery certificate will be valid %@ days after the positive test result.</p>";
@@ -66,7 +67,7 @@
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.networkwasbusy.text" = "Please try again later.";
-"general.networkwasbusy.button" = "To My certificates";
+"general.networkwasbusy.button" = "To My Certificates";
 "holder.dashboard.changeregion.button.nl" = "Change to NL";
 "general.add" = "Add";
 /* Link naar web accessibility pagina */
@@ -381,17 +382,16 @@
 "holder.vaccination.element.subtitle" = "Name: %@<br />Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
-"holder.vaccination.nolist.action" = "To My certificates";
+"holder.vaccination.nolist.action" = "To My Certificates";
 "holder.event.nolist.title" = "No test result available";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl/en/guidepost\">the Guidepost</a>.</p><p>Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
-"holder.event.nolist.action" = "To My certificates";
+"holder.event.nolist.action" = "To My Certificates";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
 "holder.vaccination.alert.cancel" = "No, go back";
 "holder.vaccination.alert.ok" = "Yes, stop";
 "holder.vaccination.about.text" = "About your vaccination";
 "holder.vaccination.about.off" = "%@ of %@";
-
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.wrong.title" = "Something is wrong";
 "holder.vaccination.wrong.body" = "<p>Is your name or date of birth wrong? Or are your vaccination details incorrect? Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a> </p>";
@@ -444,14 +444,14 @@
 "holder.notest.action.title" = "Make an appointment";
 "holder.test.nolist.title" = "No test result available";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl/en/guidepost\">the Guidepost</a>. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
-"holder.test.nolist.action" = "To My certificates";
+"holder.test.nolist.action" = "To My Certificates";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "To My certificates";
+"holder.fetchevents.error.noresults.networkwasbusy.button" = "To My Certificates";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
-"holder.fetchevents.error.noresults.networkerror.button" = "To My certificates";
+"holder.fetchevents.error.noresults.networkerror.button" = "To My Certificates";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
@@ -463,7 +463,7 @@
 "holder.papercertificate.start.highlightedmessage" = "<p><b>Did you print your certificate yourself?</b><br /> Please add your certificate to the app via the menu. Go to “Add certificate” and log in using your DigiD.</p>";
 
 /* MARK: - Start Paper Certificate */
-"holder.papercertificate.aboutscan.title" = "Only scan the international QR code";
+"holder.papercertificate.aboutscan.title" = "Now scan the international QR code";
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR code";
 "holder.scanner.message" = "Point your phone at the QR code on the international certificate";
@@ -473,7 +473,7 @@
 
 /* MARK: - Holder Scanner Alert */
 "holder.scanner.alert.unknown.title" = "Invalid QR code";
-"holder.scanner.alert.unknown.message" = "This QR code is not valid. Scan the QR code on the international certificate.";
+"holder.scanner.alert.unknown.message" = "Scan the QR code on the international certificate. You don't have to scan the Dutch QR code.";
 "holder.scanner.alert.dcc.title" = "Scan the international QR code";
 "holder.scanner.alert.dcc.message" = "Scan the QR code on your international certificate. You don't have to scan the Dutch QR code.";
 

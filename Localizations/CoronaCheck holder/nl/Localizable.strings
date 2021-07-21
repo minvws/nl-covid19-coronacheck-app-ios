@@ -1,14 +1,20 @@
+"general.recoverycertificate" = "herstelbewijs";
 "general.paperflow" = "papieren bewijs";
+"holder.dcc.list.issuer" = "Ministerie VWS";
+"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
+"holder.vaccination.about.country" = "Nederland / The Netherlands";
+"holder.vaccination.about.issuer" = "Ministerie VWS";
+
 "holder.checkdcc.blocked.title" = "Je hebt te vaak gescand";
 "holder.checkdcc.blocked.message" = "Voor de veiligheid kan je deze QR-code tijdelijk niet meer scannen. Probeer het later nog eens.";
-"holder.checkdcc.blocked.actionTitle" = "Naar Mijn bewijzen";
+"holder.checkdcc.blocked.actionTitle" = "Naar Mijn Bewijzen";
 "holder.checkdcc.expired.actionTitle" = "Probeer opnieuw";
 "holder.checkdcc.expired.title" = "Dit papieren bewijs is verlopen";
 "holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Laat dan opnieuw een papieren bewijs printen door de zorgverlener waar je bent gevaccineerd of getest.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
 "holder.checkdcc.rejected.title" = "Geen geldige combinatie";
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
-"holder.dcc.alert.message" = "Je kunt later opnieuw proberen je papieren bewijs in te scannen";
+"holder.dcc.alert.message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
 "holder.event.originmismatch.dcc.body" = "Op dit moment kunnen we van jouw gescande QR-code geen bewijs maken. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer.</a>";
 "holder.dcc.list.title" = "Opgehaalde gegevens";
 "holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
@@ -16,7 +22,6 @@
 "holder.dcc.vaccination.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.dcc.recovery.message" = "<p>De volgende gegevens zijn opgehaald:</p> <p>Naam / Name: <b>%@</b> <br />Geboortedatum / Date of birth*: <b>%@</b></p> <p>Ziekte waarvan hersteld / Disease recovered from: <b>COVID-19</b> <br />Testdatum / Test date*: <b>%@</b> <br />Getest in / Member state of test <b>%@</b> <br />Afgever certificaat / Certificate issuer <b>%@</b> <br />Geldig vanaf / Valid from*: <b>%@</b> <br />Geldig tot / Valid to*: <b>%@</b> </p><p>Uniek certificaatnummer / Unique certificate identifier: <b>%@</b></p>";
 "holder.dcc.test.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam / Name: <b>%@</b><br />Geboortedatum / Date of birth*: <b>%@</b></p><p>Ziekteverwekker / Disease targeted: <b>COVID-19</b><br />Type test / Type of test: <b>%@</b><br />Testnaam / Test name: <b>%@</b><br />Testdatum / Test date*: <b>%@</b><br />Testuitslag / Test result: <b>%@</b><br />Testlocatie / Testing centre: <b>%@</b><br />Producent / Test manufacturer: <b>%@</b><br />Getest in / Member state of test: <b>%@</b><br />Afgever certificaat / Certificate issuer: <b>%@</b></p><p>Uniek certificaatnummer / Unique certificate identifier <b>%@</b></p>";
-"holder.dcc.list.issuer" = "Ministerie VWS";
 "holder.recovery.wrong.body" = "Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.";
 "general.retry" = "Probeer opnieuw";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
@@ -43,7 +48,7 @@
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.</p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p><p>Ben je langer dan 180 dagen geleden positief getest? Dan is de testuitslag niet meer geldig.</p>";
-"holder.recovery.nolist.action" = "Naar Mijn bewijzen";
+"holder.recovery.nolist.action" = "Naar Mijn Bewijzen";
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag van de GGD een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
@@ -67,7 +72,7 @@
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.networkwasbusy.text" = "Probeer het later nog eens.";
-"general.networkwasbusy.button" = "Naar Mijn bewijzen";
+"general.networkwasbusy.button" = "Naar Mijn Bewijzen";
 "holder.dashboard.changeregion.button.nl" = "Aanpassen naar NL";
 "general.add" = "Toevoegen";
 /* Link naar web accessibility pagina */
@@ -382,20 +387,16 @@
 "holder.vaccination.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
 "holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
-"holder.vaccination.nolist.action" = "Naar Mijn bewijzen";
+"holder.vaccination.nolist.action" = "Naar Mijn Bewijzen";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a>.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
-"holder.event.nolist.action" = "Naar Mijn bewijzen";
+"holder.event.nolist.action" = "Naar Mijn Bewijzen";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
 "holder.vaccination.alert.cancel" = "Nee, terug";
 "holder.vaccination.alert.ok" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
 "holder.vaccination.about.off" = "%@ van %@";
-"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
-"holder.vaccination.about.country" = "Nederland / The Netherlands";
-"holder.vaccination.about.issuer" = "Ministerie VWS / Ministry of Health, Welfare and Sport";
-
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
 "holder.vaccination.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Of staat er onjuiste informatie over je vaccinatie? Op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
@@ -448,14 +449,14 @@
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\"\>de Wegwijzer</a>.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
-"holder.test.nolist.action" = "Naar Mijn bewijzen";
+"holder.test.nolist.action" = "Naar Mijn Bewijzen";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar Mijn bewijzen";
+"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar Mijn Bewijzen";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
-"holder.fetchevents.error.noresults.networkerror.button" = "Naar Mijn bewijzen";
+"holder.fetchevents.error.noresults.networkerror.button" = "Naar Mijn Bewijzen";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
@@ -467,7 +468,7 @@
 "holder.papercertificate.start.highlightedmessage" = "<p><b>Zelf je bewijs uitgeprint?</b><br /> Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
 
 /* MARK: - Start Paper Certificate */
-"holder.papercertificate.aboutscan.title" = "Scan alleen de internationale QR-code";
+"holder.papercertificate.aboutscan.title" = "Scan nu de internationale QR-code";
 "holder.papercertificate.aboutscan.message" = "<p>In de internationale QR-code staan genoeg gegevens om zowel een Nederlands als een internationaal bewijs te maken.<br />Scan daarom met de camera van je telefoon <b>alleen je internationale QR-code.</b></p><br /><p><b>Dit krijg je:</b><ul><li>Een Nederlands bewijs</li><li>Een internationaal bewijs</li></ul></p>";
 
 /* MARK: - Holder Scanner */
@@ -479,7 +480,7 @@
 
 /* MARK: - Holder Scanner Alert */
 "holder.scanner.alert.unknown.title" = "Ongeldige QR-code";
-"holder.scanner.alert.unknown.message" = "Deze QR-code is niet geldig. Scan de QR-code op je internationale bewijs.";
+"holder.scanner.alert.unknown.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
 "holder.scanner.alert.dcc.title" = "Scan de internationale QR-code";
 "holder.scanner.alert.dcc.message" = "Scan de QR-code op je internationale bewijs. Je hoeft de Nederlandse QR-code niet te scannen.";
 
