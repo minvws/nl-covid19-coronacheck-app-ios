@@ -213,6 +213,8 @@ targetTemplates:
             echo "error: Testflight deploys cannot contain missing translations:"
             echo $OUTPUT
             exit 1
+          else 
+            echo $OUTPUT
           fi
         inputFiles:
           - $TEMP_DIR/rswift-lastrun
