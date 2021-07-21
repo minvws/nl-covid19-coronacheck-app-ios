@@ -317,6 +317,7 @@ struct EventFlow {
 		}
 		
 		enum CompletionReason: String, Codable, Equatable {
+			case none = ""
 			case recovery = "recovery"
 			case priorEvent = "priorevent"
 		}
