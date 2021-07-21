@@ -160,11 +160,9 @@ extension HolderDashboardViewModel {
 				case (.netherlands, _):
 					return HolderDashboardViewModel.dateWithoutTimeFormatter
 
-				case (.europeanUnion, .vaccination):
+				case (.europeanUnion, .vaccination),
+					 (.europeanUnion, .recovery):
 					return HolderDashboardViewModel.dateWithoutTimeFormatter
-
-				case (.europeanUnion, .recovery):
-					return HolderDashboardViewModel.dayAndMonthFormatter
 
 				case (.europeanUnion, .test):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
