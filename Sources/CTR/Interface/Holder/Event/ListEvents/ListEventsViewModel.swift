@@ -380,8 +380,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			   let jsonData = try? JSONEncoder().encode(signedResponse) {
 				data = jsonData
 			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
-					  let jsonData = try? JSONEncoder().encode(dccEvent)
-					   {
+					  let jsonData = try? JSONEncoder().encode(dccEvent) {
 				data = jsonData
 			}
 
