@@ -14,7 +14,7 @@ class ShowQRImageView: BaseView {
 
 		// Margins
 		static let margin: CGFloat = 10.0
-		static let domesticSecurityMargin: CGFloat = UIDevice.current.isSmallScreen ? 58.0 : 70.0
+		static let domesticSecurityMargin: CGFloat = 56.0
 		static let internationalSecurityMargin: CGFloat = 49.0
 	}
 
