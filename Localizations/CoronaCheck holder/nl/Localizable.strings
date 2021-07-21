@@ -3,7 +3,7 @@
 "holder.dcc.list.issuer" = "Ministerie VWS";
 "holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
 "holder.vaccination.about.country" = "Nederland / The Netherlands";
-"holder.vaccination.about.issuer" = "Ministerie VWS";
+"holder.vaccination.about.issuer" = "Ministerie VWS / Ministry VWS";
 
 "holder.checkdcc.blocked.title" = "Je hebt te vaak gescand";
 "holder.checkdcc.blocked.message" = "Voor de veiligheid kan je deze QR-code tijdelijk niet meer scannen. Probeer het later nog eens.";
@@ -61,7 +61,6 @@
 "general.error.cryptolib.retry" = "Probeer opnieuw";
 
 "general.recoverystatement" = "herstelverklaring";
-"general.recoverycertificate" = "herstelbewijs";
 "general.recoverydate" = "hersteldatum";
 "general.testcertificate" = "testbewijs";
 "general.vaccinationcertificate" = "vaccinatiebewijs";

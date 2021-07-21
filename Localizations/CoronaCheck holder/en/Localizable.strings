@@ -1,5 +1,10 @@
 "general.recoverycertificate" = "recovery certificate";
 "general.paperflow" = "paper certificate";
+"holder.dcc.list.issuer" = "Ministry VWS";
+"holder.vaccination.about.off.dcc" = "Doses %@ of %@";
+"holder.vaccination.about.country" = "The Netherlands";
+"holder.vaccination.about.issuer" = "Ministry VWS";
+
 "holder.checkdcc.blocked.title" = "Too many attempts";
 "holder.checkdcc.blocked.message" = "For safety reasons, you temporarily can't add this QR code in the app. You can try again in 24 hours.";
 "holder.checkdcc.blocked.actionTitle" = "To My Certificates";
@@ -56,7 +61,6 @@
 "general.error.cryptolib.retry" = "Try again";
 
 "general.recoverystatement" = "recovery certificate";
-"general.recoverycertificate" = "recovery certificate";
 "general.recoverydate" = "recovery date";
 "general.testcertificate" = "test certificate";
 "general.vaccinationcertificate" = "vaccination certificate";
@@ -465,6 +469,8 @@
 
 /* MARK: - Start Paper Certificate */
 "holder.papercertificate.aboutscan.title" = "Now scan the international QR code";
+"holder.papercertificate.aboutscan.message" = "<p>The international QR code contains enough information to create both a Dutch certificate and an international certificate.<br />Therefore please <b>only scan the international QR code</b> using your smartphone camera.</p><br /><p><b>You will receive the following:</b><ul><li>A Dutch certificate</li><li>An international certificate</li></ul></p>";
+
 /* MARK: - Holder Scanner */
 "holder.scanner.title" = "Scan QR code";
 "holder.scanner.message" = "Point your phone at the QR code on the international certificate";
