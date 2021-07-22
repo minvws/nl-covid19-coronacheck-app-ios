@@ -15,10 +15,10 @@ class UniversalLinkTests: XCTestCase {
 
         // Arrange
         let activity = NSUserActivity(activityType: NSUserActivityTypeBrowsingWeb)
-        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-YYYYYYYYYYYY-Z2")
+        activity.webpageURL = URL(string: "http://coronatest.nl/app/redeem#XXX-STXT2VF3389TJ2-Z2")
 
         let expected = UniversalLink.redeemHolderToken(requestToken: RequestToken(
-            token: "YYYYYYYYYYYY",
+            token: "STXT2VF3389TJ2",
             protocolVersion: "3.0",
             providerIdentifier: "XXX"
         ))
