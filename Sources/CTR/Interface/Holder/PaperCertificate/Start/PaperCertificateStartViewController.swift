@@ -49,5 +49,7 @@ final class PaperCertificateStartViewController: BaseViewController {
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.primaryButtonTapped() }
+
+		styleBackButton(buttonText: "")
 	}
 }

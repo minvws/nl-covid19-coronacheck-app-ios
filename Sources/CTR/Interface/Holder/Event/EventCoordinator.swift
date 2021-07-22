@@ -11,12 +11,14 @@ import SafariServices
 enum EventMode: String {
 
 	case recovery
+	case paperflow
 	case test
 	case vaccination
 
 	var localized: String {
 		switch self {
 			case .recovery: return L.generalRecoverystatement()
+			case .paperflow: return L.generalPaperflow()
 			case .test: return L.generalTestresult()
 			case .vaccination: return L.generalVaccination()
 		}
@@ -130,9 +132,14 @@ class EventCoordinator: Coordinator, Logging {
 		startWith(.recovery)
 	}
 
-	func startWithListTestEvents(_ testEvents: [RemoteEvent]) {
+	func startWithListTestEvents(_ events: [RemoteEvent]) {
 
-		navigateToListEvents(testEvents, eventMode: .test)
+		navigateToListEvents(events, eventMode: .test)
+	}
+
+	func startWithScannedEvent(_ event: RemoteEvent) {
+
+		navigateToListEvents([event], eventMode: .paperflow)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -190,8 +197,7 @@ class EventCoordinator: Coordinator, Logging {
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				remoteEvents: remoteEvents,
-				greenCardLoader: Services.greenCardLoader
+				remoteEvents: remoteEvents
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -289,6 +295,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .vaccination, .recovery:
 						navigateBackToEventStart()
+					case .paperflow:
+					break
 				}
 
 			default:
@@ -308,6 +316,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
+					case .paperflow:
+						break
 				}
 			case let .showEvents(remoteEvents, eventMode):
 				navigateToListEvents(remoteEvents, eventMode: eventMode)
@@ -330,6 +340,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 						navigateBackToTestStart()
 					case .recovery, .vaccination:
 						navigateBackToEventStart()
+					case .paperflow:
+						delegate?.eventFlowDidCancel()
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)

@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-// MARK: - MyQRCard
+// MARK: - Model
 
 extension HolderDashboardViewModel {
 
@@ -33,21 +33,21 @@ extension HolderDashboardViewModel {
 				type.customSortIndex
 			}
 
-			var isNotYetExpired: Bool {
-				expirationTime > Date()
+			func isNotYetExpired(now: Date) -> Bool {
+				expirationTime > now
 			}
 
-			var isCurrentlyValid: Bool {
-				isValid(duringDate: Date())
+			func isCurrentlyValid(now: Date) -> Bool {
+				isValid(duringDate: now)
 			}
 
 			func isValid(duringDate date: Date) -> Bool {
 				date.isWithinTimeWindow(from: validFromDate, to: expirationTime)
 			}
 
-			var expiryIsBeyondThreeYearsFromNow: Bool {
+			func expiryIsBeyondThreeYearsFromNow(now: Date) -> Bool {
 				let threeYearsFromNow: TimeInterval = 60 * 60 * 24 * 365 * 3
-				return expirationTime > Date(timeIntervalSinceNow: threeYearsFromNow)
+				return expirationTime > now.addingTimeInterval(threeYearsFromNow)
 			}
 		}
 
@@ -59,7 +59,7 @@ extension HolderDashboardViewModel {
 			}
 		}
 
-		func localizedDateExplanation(forOrigin origin: Origin, forNow now: Date = Date()) -> HolderDashboardViewController.ValidityText {
+		func localizedDateExplanation(forOrigin origin: Origin, forNow now: Date) -> HolderDashboardViewController.ValidityText {
 
 			if origin.expirationTime < now { // expired
 				return .init(text: "", kind: .past)
@@ -76,14 +76,14 @@ extension HolderDashboardViewModel {
 						HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: $0)
 					} ?? "-"
 
-					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
 					return .init(
 						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
 						kind: .future
 					)
 				} else {
 					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
-					let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
 					return .init(
 						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
 						kind: .future
@@ -93,12 +93,12 @@ extension HolderDashboardViewModel {
 				switch self {
 					// Netherlands uses expireTime
 					case .netherlands:
-						if origin.expiryIsBeyondThreeYearsFromNow {
-							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+						if origin.expiryIsBeyondThreeYearsFromNow(now: now) {
+							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
 							return .init(text: prefix, kind: .future)
 						} else {
 							let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
-							let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
 								return .init(
 									text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
 									kind: .current
@@ -108,7 +108,7 @@ extension HolderDashboardViewModel {
 					// EU cards use Valid From (eventTime) because we don't know the expiry date
 					case .europeanUnion:
 						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.validFromDate)
-						let prefix = localizedDateExplanationPrefix(forOrigin: origin)
+						let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
 						return .init(
 							text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
 							kind: .current
@@ -126,12 +126,12 @@ extension HolderDashboardViewModel {
 		// MARK: - private
 
 		/// Each origin has its own prefix
-		private func localizedDateExplanationPrefix(forOrigin origin: Origin) -> String {
+		private func localizedDateExplanationPrefix(forOrigin origin: Origin, forNow now: Date) -> String {
 
 			switch self {
 				case .netherlands:
-					if origin.isCurrentlyValid {
-						if origin.expiryIsBeyondThreeYearsFromNow {
+					if origin.isCurrentlyValid(now: now) {
+						if origin.expiryIsBeyondThreeYearsFromNow(now: now) {
 							return ""
 						} else {
 							return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
@@ -142,7 +142,7 @@ extension HolderDashboardViewModel {
 					}
 
 				case .europeanUnion:
-					if !origin.isCurrentlyValid && origin.isNotYetExpired {
+					if !origin.isCurrentlyValid(now: now) && origin.isNotYetExpired(now: now) {
 						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
 					} else {
 						return ""
@@ -160,11 +160,9 @@ extension HolderDashboardViewModel {
 				case (.netherlands, _):
 					return HolderDashboardViewModel.dateWithoutTimeFormatter
 
-				case (.europeanUnion, .vaccination):
+				case (.europeanUnion, .vaccination),
+					 (.europeanUnion, .recovery):
 					return HolderDashboardViewModel.dateWithoutTimeFormatter
-
-				case (.europeanUnion, .recovery):
-					return HolderDashboardViewModel.dayAndMonthFormatter
 
 				case (.europeanUnion, .test):
 					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
@@ -172,8 +170,8 @@ extension HolderDashboardViewModel {
 		}
 
 		/// If at least one origin('s date range) is valid:
-		var isCurrentlyValid: Bool {
-			origins.contains(where: { $0.isCurrentlyValid })
+		func isCurrentlyValid(now: Date) -> Bool {
+			origins.contains(where: { $0.isCurrentlyValid(now: now) })
 		}
 
 		/// Without distinguishing NL/EU, just give me the origins:

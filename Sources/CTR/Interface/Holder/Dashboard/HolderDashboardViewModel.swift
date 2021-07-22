@@ -10,6 +10,7 @@ import CoreData
 import Reachability
 
 final class HolderDashboardViewModel: Logging {
+	typealias Datasource = HolderDashboardDatasource
 
 	// MARK: - Public properties
 
@@ -85,7 +86,8 @@ final class HolderDashboardViewModel: Logging {
 					self.state.expiredGreenCards.removeAll(where: { $0.id == expiredQR.id })
 				},
 				coordinatorDelegate: coordinator,
-				strippenRefresher: strippenRefresher
+				strippenRefresher: strippenRefresher,
+				now: self.now()
 			)
 			
 			hasAddCertificateMode = state.myQRCards.isEmpty
@@ -108,6 +110,8 @@ final class HolderDashboardViewModel: Logging {
 
 	private let strippenRefresher: DashboardStrippenRefresher
 
+	private let now: () -> Date
+
 	// MARK: -
 
 	/// Initializer
@@ -122,20 +126,23 @@ final class HolderDashboardViewModel: Logging {
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
 		configuration: ConfigurationGeneralProtocol,
-		dataStoreManager: DataStoreManaging
+		dataStoreManager: DataStoreManaging,
+		now: @escaping () -> Date
 	) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
 		self.configuration = configuration
-		self.datasource = Datasource(dataStoreManager: dataStoreManager)
-
+		self.datasource = Datasource(dataStoreManager: dataStoreManager, walletManager: Services.walletManager, now: { Date() })
+		self.now = now
+		
 		self.strippenRefresher = DashboardStrippenRefresher(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Services.remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
 			walletManager: Services.walletManager,
 			greencardLoader: Services.greenCardLoader,
-			reachability: try? Reachability()
+			reachability: try? Reachability(),
+			now: { Date() }
 		)
 
 		self.state = State(
@@ -223,7 +230,7 @@ final class HolderDashboardViewModel: Logging {
 			case (.failed, .expired, true):
 				logDebug("StrippenRefresh: Need refreshing now, but server error. Showing in UI.")
 
-				state.errorForQRCardsMissingCredentials = refresherState.serverErrorOccurenceCount > 1
+				state.errorForQRCardsMissingCredentials = refresherState.errorOccurenceCount > 1
 					? L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
 					: L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 
@@ -264,7 +271,8 @@ final class HolderDashboardViewModel: Logging {
 		state: HolderDashboardViewModel.State,
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
 		coordinatorDelegate: (HolderCoordinatorDelegate),
-		strippenRefresher: DashboardStrippenRefresher) -> [HolderDashboardViewController.Card] {
+		strippenRefresher: DashboardStrippenRefresher,
+		now: Date) -> [HolderDashboardViewController.Card] {
 		var cards = [HolderDashboardViewController.Card]()
 
 		if !state.myQRCards.isEmpty {
@@ -299,7 +307,7 @@ final class HolderDashboardViewModel: Logging {
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state)
+		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, now: now)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
 				return .originNotValidInThisRegion(message: message) {
@@ -408,14 +416,14 @@ extension HolderDashboardViewModel {
 
 // MARK: - Free Functions
 
-private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State) -> [(originType: QRCodeOriginType, message: String)] {
+private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashboardViewModel.State, now: Date) -> [(originType: QRCodeOriginType, message: String)] {
 
 	// Calculate origins which exist in the other region but are not in this region:
 	let originTypesForCurrentRegion = Set(state.myQRCards
 											.filter { $0.isOfRegion(region: state.qrCodeValidityRegion) }
 											.flatMap { $0.origins }
 											.filter {
-												$0.isNotYetExpired
+												$0.isNotYetExpired(now: now)
 											}
 											.compactMap { $0.type }
 	)
@@ -424,7 +432,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 											.filter { !$0.isOfRegion(region: state.qrCodeValidityRegion) }
 											.flatMap { $0.origins }
 											.filter {
-												$0.isNotYetExpired
+												$0.isNotYetExpired(now: now)
 											}
 											.compactMap { $0.type }
 	)

@@ -14,11 +14,14 @@ class DashboardStrippenRefresher: Logging {
 		case unknownErrorA
 		case logicalErrorA
 		case greencardLoaderError(error: GreenCardLoader.Error)
+		case networkError(error: NetworkError)
 
 		var errorDescription: String? {
 			switch self {
 				case .greencardLoaderError(let error):
-					return error.localizedDescription
+					return error.rawValue
+				case .networkError(let error):
+					return error.rawValue
 				case .logicalErrorA:
 					return "Logical error A"
 				case .unknownErrorA:
@@ -59,7 +62,7 @@ class DashboardStrippenRefresher: Logging {
 		// thereafter, it should be displayed non-modally in the UI instead.
 		var userHasPreviouslyDismissedALoadingError: Bool = false
 		var hasLoadingEverFailed: Bool = false // for whatever reason (server or connection)
-		var serverErrorOccurenceCount = 0
+		var errorOccurenceCount = 0 // Excludes simple "no internet" events
 
 		// Whether the refresher is (non-silently) loading.
 		// (if you want to check for silent loading, check the state directly).
@@ -82,14 +85,20 @@ class DashboardStrippenRefresher: Logging {
 			state.hasLoadingEverFailed = true
 
 			switch error {
-				// FUTURE: noInternetConnection etc should be removed from GreenCardLoader and just use NetworkError instead.
-				case GreenCardLoader.Error.noInternetConnection, GreenCardLoader.Error.requestTimedOut: // Future: handle timeout separately.
+				case NetworkError.noInternetConnection:
 					state.loadingState = .noInternet
+
+				case let error as NetworkError:
+					state.errorOccurenceCount += 1
+					state.loadingState = .failed(error: .networkError(error: error))
+
 				case let error as GreenCardLoader.Error:
-					state.serverErrorOccurenceCount += 1
+					state.errorOccurenceCount += 1
 					state.loadingState = .failed(error: .greencardLoaderError(error: error))
+
 				case let error as DashboardStrippenRefresher.Error:
 					state.loadingState = .failed(error: error)
+
 				default:
 					state.loadingState = .failed(error: .unknownErrorA)
 			}
@@ -119,16 +128,19 @@ class DashboardStrippenRefresher: Logging {
 	private let greencardLoader: GreenCardLoading
 	private let reachability: ReachabilityProtocol?
 
+	private let now: () -> Date
 	private let minimumThresholdOfValidCredentialsTriggeringRefresh: Int // (values <= this number trigger refresh.)
 
-	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading, reachability: ReachabilityProtocol?) {
+	init(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, greencardLoader: GreenCardLoading, reachability: ReachabilityProtocol?, now: @escaping () -> Date) {
 		self.minimumThresholdOfValidCredentialsTriggeringRefresh = minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh
 		self.walletManager = walletManager
 		self.greencardLoader = greencardLoader
+		self.now = now
 
 		let expiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
 			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh,
-			walletManager: walletManager
+			walletManager: walletManager,
+			now: now()
 		)
 
 		state = State(greencardsCredentialExpiryState: expiryState)
@@ -148,28 +160,31 @@ class DashboardStrippenRefresher: Logging {
 	func load() {
 
 		guard !state.loadingState.isLoading else {
-			logDebug("@id Skipping call to `load()` as a load is already in progress.")
+			logDebug("StrippenRefresh: Skipping call to `load()` as a load is already in progress.")
 			return
 		}
 
 		switch state.greencardsCredentialExpiryState {
 			case .noActionNeeded:
-				self.logDebug("@id No greencards within threshold of needing refreshing, skipping refresh.")
+				self.logDebug("StrippenRefresh: No greencards within threshold of needing refreshing. Skipping refresh.")
 
 			case .expired, .expiring:
 				state.beginLoading()
-				greencardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { [self] in
+				greencardLoader.signTheEventsIntoGreenCardsAndCredentials(responseEvaluator: nil) { [weak self] in
+					guard let self = self else { return }
+
 					switch $0 {
 						case .success:
 							self.state.endLoading()
 
 							let newExpiryState = DashboardStrippenRefresher.calculateGreenCardsCredentialExpiryState(
-								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: minimumThresholdOfValidCredentialsTriggeringRefresh,
-								walletManager: walletManager
+								minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: self.minimumThresholdOfValidCredentialsTriggeringRefresh,
+								walletManager: self.walletManager,
+								now: self.now()
 							)
 
 							// The state should have changed - if not, throw error to avoid infinite loop.
-							guard newExpiryState != state.greencardsCredentialExpiryState else {
+							guard newExpiryState != self.state.greencardsCredentialExpiryState else {
 								self.state.endLoadingWithError(error: Error.logicalErrorA)
 								return
 							}
@@ -188,7 +203,7 @@ class DashboardStrippenRefresher: Logging {
 	}
 
 	/// Greencards where the number of valid credentials is <= 5 and the latest credential expiration time is < than the origin expiration time
-	private static func calculateGreenCardsCredentialExpiryState(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, now: Date = Date()) -> State.GreencardsCredentialExpiryState {
+	private static func calculateGreenCardsCredentialExpiryState(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, now: Date) -> State.GreencardsCredentialExpiryState {
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(now: now)
 
 		var expiredGreencards = [GreenCard]()

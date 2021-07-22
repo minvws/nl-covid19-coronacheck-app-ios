@@ -129,18 +129,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedVerifyQRMessageResult
 	}
 
-	var invokedMigrateExistingCredential = false
-	var invokedMigrateExistingCredentialCount = 0
-	var invokedMigrateExistingCredentialParameters: (walletManager: WalletManaging, sampleDate: Date)?
-	var invokedMigrateExistingCredentialParametersList = [(walletManager: WalletManaging, sampleDate: Date)]()
-
-	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date) {
-		invokedMigrateExistingCredential = true
-		invokedMigrateExistingCredentialCount += 1
-		invokedMigrateExistingCredentialParameters = (walletManager, sampleDate)
-		invokedMigrateExistingCredentialParametersList.append((walletManager, sampleDate))
-	}
-
 	var invokedReadDomesticCredentials = false
 	var invokedReadDomesticCredentialsCount = 0
 	var invokedReadDomesticCredentialsParameters: (data: Data, Void)?

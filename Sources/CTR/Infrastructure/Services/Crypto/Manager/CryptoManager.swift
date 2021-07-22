@@ -171,7 +171,7 @@ class CryptoManager: CryptoManaging, Logging {
 		if let response = MobilecoreReadEuropeanCredential(data) {
 			if let value = response.value {
 				do {
-					logDebug("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
+					logVerbose("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
 					return object
 				} catch {
@@ -211,17 +211,5 @@ class CryptoManager: CryptoManaging, Logging {
 	func removeCredential() {
 		
 		cryptoData.credential = nil
-	}
-
-	/// Migrate existing credential to the wallet
-	/// - Parameter walletManager: the wallet manager
-	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date) {
-		
-		// Sample time is not returned, use current date for now
-		if let existingCredential = cryptoData.credential,
-			walletManager.importExistingTestCredential(existingCredential, sampleDate: sampleDate) {
-
-				removeCredential()
-		}
 	}
 }

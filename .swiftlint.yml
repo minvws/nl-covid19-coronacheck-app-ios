@@ -55,3 +55,7 @@ switch_case_alignment:
 trailing_whitespace:
   ignores_empty_lines: true
   ignores_comments: true
+
+custom_rules:
+  no_empty_comment_above_the_copyright:
+    regex: "//\\n/\\*"

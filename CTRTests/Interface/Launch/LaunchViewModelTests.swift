@@ -71,7 +71,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.holderLaunchTitle()
 		expect(self.sut.message) == L.holderLaunchText()
 		expect(self.sut.appIcon) == .holderAppIcon
-		expect(self.proofManagerSpy.invokedMigrateExistingProof) == true
 	}
 
 	func test_initializeVerifier() {
@@ -91,7 +90,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.verifierLaunchTitle()
 		expect(self.sut.message) == L.verifierLaunchText()
 		expect(self.sut.appIcon) == .verifierAppIcon
-		expect(self.proofManagerSpy.invokedMigrateExistingProof) == false
 	}
 
 	func test_noActionRequired() {

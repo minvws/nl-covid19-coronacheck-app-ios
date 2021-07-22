@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse)
+typealias RemoteEvent = (wrapper: EventFlow.EventResultWrapper, signedResponse: SignedResponse?)
 
 struct EventFlow {
 
@@ -134,12 +134,12 @@ struct EventFlow {
 				.compactMap {
 					if $0.vaccination != nil {
 						return $0.vaccination?.dateString
-					}
-					if $0.negativeTest != nil {
+					} else if $0.negativeTest != nil {
 						return $0.negativeTest?.sampleDateString
-					}
-					if $0.recovery != nil {
+					} else if $0.recovery != nil {
 						return $0.recovery?.sampleDate
+					} else if $0.dccEvent != nil {
+						return $0.dccEvent?.dateString()
 					}
 					return $0.positiveTest?.sampleDateString
 				}
@@ -227,6 +227,7 @@ struct EventFlow {
 		let negativeTest: TestEvent?
 		let positiveTest: TestEvent?
 		let recovery: RecoveryEvent?
+		let dccEvent: DccEvent?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -237,6 +238,7 @@ struct EventFlow {
 			case negativeTest = "negativetest"
 			case positiveTest = "positivetest"
 			case recovery
+			case dccEvent
 		}
 
 		func getSortDate(with dateformatter: ISO8601DateFormatter) -> Date? {
@@ -251,6 +253,18 @@ struct EventFlow {
 				return recovery?.getDate(with: dateformatter)
 			}
 			return positiveTest?.getDate(with: dateformatter)
+		}
+	}
+
+	struct DccEvent: Codable, Equatable {
+
+		let credential: String
+		let couplingCode: String
+
+		enum CodingKeys: String, CodingKey {
+
+			case credential
+			case couplingCode
 		}
 	}
 
@@ -283,6 +297,9 @@ struct EventFlow {
 		let doseNumber: Int?
 		let totalDoses: Int?
 		let country: String?
+		let completedByMedicalStatement: Bool?
+		let completedByPersonalStatement: Bool?
+		let completionReason: CompletionReason?
 
 		enum CodingKeys: String, CodingKey {
 
@@ -294,6 +311,15 @@ struct EventFlow {
 			case doseNumber
 			case totalDoses
 			case country
+			case completedByMedicalStatement
+			case completedByPersonalStatement
+			case completionReason
+		}
+		
+		enum CompletionReason: String, Codable, Equatable {
+			case none = ""
+			case recovery = "recovery"
+			case priorEvent = "priorevent"
 		}
 
 		/// Get the date for this event
@@ -342,34 +368,54 @@ struct EventFlow {
 	}
 }
 
-extension EventFlow.Identity {
+extension EventFlow.DccEvent {
 
-	func identityMatchTuple() -> (firstNameInitial: String?, lastNameInitial: String?, day: String?, month: String?) {
+	func dateString(cryptoManager: CryptoManaging = Services.cryptoManager) -> String? {
 
-		var firstNameInitial: String?
-		var lastNameInitial: String?
-		var day: String?
-		var month: String?
-		
-		if let firstName = firstName {
-			let firstChar = firstName.prefix(1)
-			firstNameInitial = String(firstChar).uppercased()
-		}
-		
-		if let lastName = lastName {
-			let firstChar = lastName.prefix(1)
-			lastNameInitial = String(firstChar).uppercased()
-		}
-
-		if let birthDate = birthDateString.flatMap(Formatter.getDateFrom) {
-			let components = Calendar.current.dateComponents([.month, .day], from: birthDate)
-			if let dayInt = components.day {
-				day = "\(dayInt)"
-			}
-			if let monthInt = components.month {
-				month = "\(monthInt)"
+		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
+			if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
+				return vaccination.dateOfVaccination
+			} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+				return recovery.firstPositiveTestDate
+			} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
+				return test.sampleDate
 			}
 		}
-		return (firstNameInitial: firstNameInitial, lastNameInitial: lastNameInitial, day: day, month: month)
+		return nil
+	}
+
+	func identity(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventFlow.Identity? {
+
+		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
+			return EventFlow.Identity(
+				infix: nil,
+				firstName: euCredentialAttributes.digitalCovidCertificate.name.givenName,
+				lastName: euCredentialAttributes.digitalCovidCertificate.name.familyName,
+				birthDateString: euCredentialAttributes.digitalCovidCertificate.dateOfBirth
+			)
+		}
+		return nil
+	}
+
+	func getAttributes(cryptoManager: CryptoManaging = Services.cryptoManager) -> EuCredentialAttributes? {
+
+		if let credentialData = credential.data(using: .utf8) {
+			return cryptoManager.readEuCredentials(credentialData)
+		}
+		return nil
+	}
+
+	func getEventType(cryptoManager: CryptoManaging = Services.cryptoManager) -> EventMode? {
+
+		if let euCredentialAttributes = getAttributes(cryptoManager: cryptoManager) {
+			if euCredentialAttributes.digitalCovidCertificate.vaccinations?.first != nil {
+				return .vaccination
+			} else if euCredentialAttributes.digitalCovidCertificate.recoveries?.first != nil {
+				return .recovery
+			} else if euCredentialAttributes.digitalCovidCertificate.tests?.first != nil {
+				return .test
+			}
+		}
+		return nil
 	}
 }

@@ -34,6 +34,34 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
 	}
 
+	var invokedUserWantsToGoBackToDashboard = false
+	var invokedUserWantsToGoBackToDashboardCount = 0
+
+	func userWantsToGoBackToDashboard() {
+		invokedUserWantsToGoBackToDashboard = true
+		invokedUserWantsToGoBackToDashboardCount += 1
+	}
+
+	var invokedUserWantsToGoBackToTokenEntry = false
+	var invokedUserWantsToGoBackToTokenEntryCount = 0
+
+	func userWantsToGoBackToTokenEntry() {
+		invokedUserWantsToGoBackToTokenEntry = true
+		invokedUserWantsToGoBackToTokenEntryCount += 1
+	}
+
+	var invokedUserWishesToSeeScannedEvent = false
+	var invokedUserWishesToSeeScannedEventCount = 0
+	var invokedUserWishesToSeeScannedEventParameters: (event: RemoteEvent, Void)?
+	var invokedUserWishesToSeeScannedEventParametersList = [(event: RemoteEvent, Void)]()
+
+	func userWishesToSeeScannedEvent(_ event: RemoteEvent) {
+		invokedUserWishesToSeeScannedEvent = true
+		invokedUserWishesToSeeScannedEventCount += 1
+		invokedUserWishesToSeeScannedEventParameters = (event, ())
+		invokedUserWishesToSeeScannedEventParametersList.append((event, ()))
+	}
+
 	var invokedUserWishesToEnterToken = false
 	var invokedUserWishesToEnterTokenCount = 0
 
