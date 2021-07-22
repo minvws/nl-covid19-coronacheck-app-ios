@@ -27,8 +27,6 @@ class HolderDashboardViewController: BaseViewController {
 
 		case europeanUnionQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case cardFooter(message: String)
-		
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
 
@@ -161,12 +159,6 @@ class HolderDashboardViewController: BaseViewController {
 
 						return qrCard
 
-					case let .cardFooter(message):
-
-						let cardFooterView = CardFooterView()
-						cardFooterView.title = message
-						return cardFooterView
-						
 					case let .errorMessage(message, didTapTryAgain):
 						
 						let errorView = ErrorDashboardView()
