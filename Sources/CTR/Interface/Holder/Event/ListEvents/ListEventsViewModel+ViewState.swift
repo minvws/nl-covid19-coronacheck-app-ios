@@ -810,15 +810,15 @@ private extension EventFlow.VaccinationEvent {
 	/// Get a display version of the vaccination completion status
 	var completionStatus: String {
 		
-		let status = completedByMedicalStatement ?? completedByPersonalStatement
+		let hasStatement = completedByMedicalStatement ?? completedByPersonalStatement
 		
 		// No data: Unknown status
-		guard status != nil else {
+		guard hasStatement != nil else {
 			return L.holderVaccinationStatusUnknown()
 		}
 		
 		// Neither statements are completed: Vaccination incomplete
-		guard status == true else {
+		guard completedByMedicalStatement == true || completedByPersonalStatement == true else {
 			return L.holderVaccinationStatusIncomplete()
 		}
 		
