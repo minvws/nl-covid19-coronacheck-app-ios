@@ -119,4 +119,12 @@ protocol NetworkManaging {
 		provider: EventFlow.EventProvider,
 		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+
+	/// Check the coupling status
+	/// - Parameters:
+	///   - dictionary: the dcc and the coupling code as dictionary
+	///   - completion: completion handler
+	func checkCouplingStatus(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
 }

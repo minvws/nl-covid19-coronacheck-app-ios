@@ -99,7 +99,7 @@ class PaperCertificateTokenEntryView: ScrolledStackWithButtonView {
 		stackView.setCustomSpacing(8, after: tokenEntryView)
 
 		stackView.addArrangedSubview(errorView)
-		stackView.setCustomSpacing(0, after: errorView)
+		stackView.setCustomSpacing(16, after: errorView)
 
 		stackView.addArrangedSubview(userNeedsATokenButton)
 		stackView.setCustomSpacing(0, after: userNeedsATokenButton)

@@ -21,6 +21,7 @@ final class Services {
 	private static var remoteConfigManagingType: RemoteConfigManaging.Type = RemoteConfigManager.self
 	private static var walletManagingType: WalletManaging.Type = WalletManager.self
 	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
+	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
 
 	/// Override the CryptoManaging type that will be instantiated
 	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
@@ -69,9 +70,15 @@ final class Services {
 	}
 
 	/// Override the GreenCardLoading type that will be instantiated
-	/// - parameter greenCardLoader: The type conforming to ProofManaging to be used as the global proof manager
+	/// - parameter greenCardLoader: The type conforming to GreenCardLoading to be used as the global greencard loader
 	static func use(_ greenCardLoader: GreenCardLoading.Type) {
 		greenCardLoadingType = greenCardLoader
+	}
+
+	/// Override the couplingManaging type  that will be instantiated
+	/// - parameter couplingManager: The type conforming to CouplingManaging to be used as the global coupling manager
+	static func use(_ couplingManager: CouplingManaging.Type) {
+		couplingManagingType = couplingManager
 	}
 
 	// MARK: Static access
@@ -105,7 +112,11 @@ final class Services {
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
 
-	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(networkManager: networkManager, cryptoManager: cryptoManager, walletManager: walletManager)
+	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
+		networkManager: networkManager,
+		cryptoManager: cryptoManager,
+		walletManager: walletManager
+	)
 
     static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
 
@@ -116,4 +127,9 @@ final class Services {
 	static private(set) var proofManager: ProofManaging = proofManagerType.init()
 
 	static private(set) var walletManager: WalletManaging = walletManagingType.init(dataStoreManager: dataStoreManager)
+
+	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
+		cryptoManager: cryptoManager,
+		networkManager: networkManager
+	)
 }

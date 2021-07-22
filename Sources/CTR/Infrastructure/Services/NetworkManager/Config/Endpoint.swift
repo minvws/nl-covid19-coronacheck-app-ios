@@ -29,6 +29,8 @@ struct Endpoint {
 	static let prepareIssue = Path(components: "holder", "prepare_issue")
 
 	static let getCredentials = Path(components: "holder", "credentials")
+
+	static let coupling = Path(components: "holder", "coupling")
 	
 	/// Endpoint for the public keys
 	static let publicKeys = Path(components: AppFlavor.flavor == .holder ? "holder" : "verifier", "public_keys")

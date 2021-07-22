@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class TokenValidatorTests: XCTestCase {
 
@@ -21,7 +22,7 @@ class TokenValidatorTests: XCTestCase {
 	// MARK: - Tests
 
 	/// Test the validator with valid tokens
-	func testValidatorWithValidTokens() {
+	func test_validator_withValidTokens() {
 
 		// Given
 		let validTokens: [String] = [
@@ -40,12 +41,12 @@ class TokenValidatorTests: XCTestCase {
 			let result = sut.validate(token)
 
 			// Then
-			XCTAssertTrue(result, "\(token) should be a valid token")
+			expect(result) == true
 		}
 	}
 
 	/// Test the validator with invalid tokens
-	func testValidatorWithInvalidTokens() {
+	func test_validator_withInvalidTokens() {
 
 		// Given
 		let invalidTokens: [String] = [
@@ -57,9 +58,11 @@ class TokenValidatorTests: XCTestCase {
 			"",
 			"T-E-S-T",
 			"T--T",
-//			"ZZZ-AAAAA-A2",
+			"ZZZ-AAAAA-A2",
 			"ZZZ-32X4RUBC2TYBX6-UU2",
-			"ZZZ-32X4RUBC2TYBX6-U3"
+			"ZZZ-32X4RUBC2TYBX6-U3",
+			"ZZZ-AA-B2",
+			"ZZZ-BB-A2"
 		]
 
 		for token in invalidTokens {
@@ -68,7 +71,67 @@ class TokenValidatorTests: XCTestCase {
 			let result = sut.validate(token)
 
 			// Then
-			XCTAssertFalse(result, "\(token) should be an invalid token")
+			expect(result) == false
+		}
+	}
+
+	func test_luhnNChecksum_withValidTokens() {
+
+		// Given
+		let validTokens: [String] = [
+			"2SX4XLGGXUB6V94",
+			"YL8BSX9T6J39C7Q",
+			"2FR36XSUGJY3UZG",
+			"32X4RUBC2TYBX6U",
+			"SGF25J4TBTX",
+			"4RRT5FRQ6LX",
+			"QGJ6Y2SBSY6"
+		]
+
+		for token in validTokens {
+
+			// When
+			let result = sut.luhnModN(token)
+
+			// Then
+			expect(result) == true
+		}
+	}
+
+	func test_luhnNChecksum_withInvalidTokens() {
+
+		// Given
+		let validTokens: [String] = [
+			"2SX4XLGGXUB6V84",
+			"YL8BSX9T6J39C7L",
+			"SGF25J4TBTY"
+		]
+
+		for token in validTokens {
+
+			// When
+			let result = sut.luhnModN(token)
+
+			// Then
+			expect(result) == false
+		}
+	}
+
+	func test_luhnNChecksum_withInvalidChars() {
+
+		// Given
+		let validTokens: [String] = [
+			"2SPW782",
+			"SGF25J4TBTA"
+		]
+
+		for token in validTokens {
+
+			// When
+			let result = sut.luhnModN(token)
+
+			// Then
+			expect(result) == false
 		}
 	}
 }

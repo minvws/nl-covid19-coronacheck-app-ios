@@ -86,6 +86,8 @@ class PaperCertificateTokenEntryViewController: BaseViewController {
 		sceneView.userNeedsATokenButtonTappedCommand = { [weak self] in
 			self?.viewModel.userHasNoTokenButtonTapped()
 		}
+
+		styleBackButton(buttonText: "")
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

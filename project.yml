@@ -78,15 +78,6 @@ settings:
     LD_RUNPATH_SEARCH_PATHS:
       - "$(inherited)"
       - "@executable_path/Frameworks"
-  configs:
-    Development:
-      LOG_LEVEL: debug
-    FirebaseAcceptance:
-      LOG_LEVEL: debug
-    FirebaseProduction:
-      LOG_LEVEL: error
-    AppStore:
-      LOG_LEVEL: error
 
 # - Target Templates (i.e. shared default settings for targets):
 
@@ -137,17 +128,22 @@ targetTemplates:
           NETWORK_CONFIGURATION: ACC # bananahalen no longer works.
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
+          LOG_LEVEL: debug
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
+          LOG_LEVEL: error
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
+          LOG_LEVEL: error
         AppStore:
           NETWORK_CONFIGURATION: Production
+          LOG_LEVEL: error
     info:
       properties:
         # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
         NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
         APP_FLAVOR: ${APP_FLAVOR}
+        LOG_LEVEL: ${LOG_LEVEL}
         CFBundleDevelopmentRegion: nl_NL
         CFBundleExecutable: $(EXECUTABLE_NAME)
         CFBundleName: ${DISPLAY_NAME}
@@ -213,6 +209,8 @@ targetTemplates:
             echo "error: Testflight deploys cannot contain missing translations:"
             echo $OUTPUT
             exit 1
+          else 
+            echo $OUTPUT
           fi
         inputFiles:
           - $TEMP_DIR/rswift-lastrun
