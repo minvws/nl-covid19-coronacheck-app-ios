@@ -1,4 +1,3 @@
-"general.recoverycertificate" = "herstelbewijs";
 "general.paperflow" = "papieren bewijs";
 "holder.dcc.list.issuer" = "Ministerie VWS";
 "holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
@@ -60,7 +59,7 @@
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";
 
-"general.recoverystatement" = "herstelverklaring";
+"general.recoverystatement" = "herstelbewijs";
 "general.recoverydate" = "hersteldatum";
 "general.testcertificate" = "testbewijs";
 "general.vaccinationcertificate" = "vaccinatiebewijs";

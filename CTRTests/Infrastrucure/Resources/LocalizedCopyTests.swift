@@ -43,7 +43,7 @@ final class LocalizedCopyTests: XCTestCase {
 			== [ .nl: "hersteldatum", .en: "recovery date" ]
 
 		expect(self.copyValues(key: "general.recoverystatement"))
-			== [ .nl: "herstelverklaring", .en: "recovery certificate" ]
+			== [ .nl: "herstelbewijs", .en: "recovery certificate" ]
 		/* -- (end of lowercased checks) ☝🏻 -- */
 
 		expect(self.copyValues(key: "general.testdate"))
