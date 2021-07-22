@@ -116,4 +116,22 @@ class TokenValidatorTests: XCTestCase {
 			expect(result) == false
 		}
 	}
+
+	func test_luhnNChecksum_withInvalidChars() {
+
+		// Given
+		let validTokens: [String] = [
+			"2SPW782",
+			"SGF25J4TBTA"
+		]
+
+		for token in validTokens {
+
+			// When
+			let result = sut.luhnModN(token)
+
+			// Then
+			expect(result) == false
+		}
+	}
 }

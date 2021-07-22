@@ -19,14 +19,14 @@ protocol TokenValidatorProtocol {
 class TokenValidator: TokenValidatorProtocol {
 
 	private let tokenChars: [String.Element]
-	private let charSet: CharacterSet
+	private let allowedCharacterSet: CharacterSet
 
 	/// Initialize
 	/// - Parameter alphabet: the alphabet to use
 	init(alphabet: String = "BCFGJLQRSTUVXYZ23456789") {
 
 		tokenChars = Array(alphabet)
-		self.charSet = CharacterSet(charactersIn: alphabet)
+		allowedCharacterSet = CharacterSet(charactersIn: alphabet)
 	}
 
 	/// Validate the token
@@ -47,7 +47,7 @@ class TokenValidator: TokenValidatorProtocol {
 			return false
 		}
 
-		guard codeSplit[1].unicodeScalars.allSatisfy({ charSet.contains($0) }) else {
+		guard codeSplit[1].unicodeScalars.allSatisfy({ allowedCharacterSet.contains($0) }) else {
 
 			return false
 		}
@@ -57,7 +57,7 @@ class TokenValidator: TokenValidatorProtocol {
 			return false
 		}
 
-		guard let checksum = codeSplit[2].first, checksum.unicodeScalars.allSatisfy({ charSet.contains($0) }) else {
+		guard let checksum = codeSplit[2].first, checksum.unicodeScalars.allSatisfy({ allowedCharacterSet.contains($0) }) else {
 
 			return false
 		}
