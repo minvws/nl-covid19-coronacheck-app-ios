@@ -3,11 +3,11 @@
 "holder.dcc.list.issuer" = "Ministerie VWS";
 "holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
 "holder.vaccination.about.country" = "Nederland / The Netherlands";
-"holder.vaccination.about.issuer" = "Ministerie VWS / Ministry VWS";
+"holder.vaccination.about.issuer" = "Ministerie VWS / Ministry of Health, Welfare and Sport";
 
 "holder.checkdcc.blocked.title" = "Je hebt te vaak gescand";
 "holder.checkdcc.blocked.message" = "Voor de veiligheid kan je deze QR-code tijdelijk niet meer scannen. Probeer het later nog eens.";
-"holder.checkdcc.blocked.actionTitle" = "Naar Mijn Bewijzen";
+"holder.checkdcc.blocked.actionTitle" = "Naar mijn bewijzen";
 "holder.checkdcc.expired.actionTitle" = "Probeer opnieuw";
 "holder.checkdcc.expired.title" = "Dit papieren bewijs is verlopen";
 "holder.checkdcc.expired.message" = "<p>Dit papieren bewijs is niet meer geldig. Dit kan verschillende oorzaken hebben:</p><ul><li>Je vaccinatie of herstel is nog geldig, maar het papieren bewijs niet. Laat dan opnieuw een papieren bewijs printen door de zorgverlener waar je bent gevaccineerd of getest.</li><li>Je vaccinatie of herstel is verlopen.</li></ul>";
@@ -48,7 +48,7 @@
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
 "holder.recovery.nolist.message" = "<p>Er is geen positieve testuitslag beschikbaar.</p><p>Ben je net getest? Het kan een paar uur duren voordat je positieve uitslag verwerkt wordt. Probeer het later nog eens.</p><p>Ben je langer dan 180 dagen geleden positief getest? Dan is de testuitslag niet meer geldig.</p>";
-"holder.recovery.nolist.action" = "Naar Mijn Bewijzen";
+"holder.recovery.nolist.action" = "Naar mijn bewijzen";
 "holder.recovery.list.title" = "Jouw opgehaalde positieve testuitslag";
 "holder.recovery.start.title" = "Gegevens van je herstel ophalen";
 "holder.recovery.start.message" = "<p>Heb je corona gehad? Dan kun je van de positieve testuitslag van de GGD een herstelbewijs maken. Log in met DigiD om een testuitslag op te halen.</p><p>Je herstelbewijs wordt %@ dagen na de positieve testuitslag geldig. Je moet dan ook vrij zijn van klachten.</p>";
@@ -72,7 +72,7 @@
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.networkwasbusy.text" = "Probeer het later nog eens.";
-"general.networkwasbusy.button" = "Naar Mijn Bewijzen";
+"general.networkwasbusy.button" = "Naar mijn bewijzen";
 "holder.dashboard.changeregion.button.nl" = "Aanpassen naar NL";
 "general.add" = "Toevoegen";
 /* Link naar web accessibility pagina */
@@ -387,10 +387,10 @@
 "holder.vaccination.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
 "holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
-"holder.vaccination.nolist.action" = "Naar Mijn Bewijzen";
+"holder.vaccination.nolist.action" = "Naar mijn bewijzen";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a>.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
-"holder.event.nolist.action" = "Naar Mijn Bewijzen";
+"holder.event.nolist.action" = "Naar mijn bewijzen";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
 "holder.vaccination.alert.cancel" = "Nee, terug";
@@ -449,14 +449,14 @@
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\"\>de Wegwijzer</a>.</p><p>Heb je al een negatieve testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
-"holder.test.nolist.action" = "Naar Mijn Bewijzen";
+"holder.test.nolist.action" = "Naar mijn bewijzen";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar Mijn Bewijzen";
+"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar mijn bewijzen";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
-"holder.fetchevents.error.noresults.networkerror.button" = "Naar Mijn Bewijzen";
+"holder.fetchevents.error.noresults.networkerror.button" = "Naar mijn bewijzen";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";

@@ -1,13 +1,13 @@
 "general.recoverycertificate" = "recovery certificate";
 "general.paperflow" = "paper certificate";
-"holder.dcc.list.issuer" = "Ministry VWS";
+"holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
 "holder.vaccination.about.off.dcc" = "Doses %@ of %@";
 "holder.vaccination.about.country" = "The Netherlands";
-"holder.vaccination.about.issuer" = "Ministry VWS";
+"holder.vaccination.about.issuer" = "Ministry of Health, Welfare and Sport";
 
 "holder.checkdcc.blocked.title" = "Too many attempts";
 "holder.checkdcc.blocked.message" = "For safety reasons, you temporarily can't add this QR code in the app. You can try again in 24 hours.";
-"holder.checkdcc.blocked.actionTitle" = "To My Certificates";
+"holder.checkdcc.blocked.actionTitle" = "To my certificates";
 "holder.checkdcc.expired.actionTitle" = "Try again";
 "holder.checkdcc.expired.title" = "This paper certificate has expired";
 "holder.checkdcc.expired.message" = "<p>This paper certificate is no longer valid. This may have various causes:</p><ul><li>Your vaccination or recovery certificate is still valid, but the paper certificate isn’t. Please request a new paper coronavirus from the healthcare provider who vaccinated or tested you.</li><li>Your vaccination or recovery has expired.</li></ul>";
@@ -48,7 +48,7 @@
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
 "holder.recovery.nolist.message" = "<p>There is no positive test result available.</p><p>Got tested recently? It can take a few hours until your details are available. Try again later.</p><p>Have you been tested more than 180 days ago? Then your test result is no longer valid.</p>";
-"holder.recovery.nolist.action" = "To My Certificates";
+"holder.recovery.nolist.action" = "To my certificates";
 "holder.recovery.list.title" = "Your positive test result";
 "holder.recovery.start.title" = "Retrieve recovery details";
 "holder.recovery.start.message" = "<p>Have you had coronavirus? Then you can make a recovery certificate of the positive test result from the GGD. Log in with DigiD to retrieve your test result.</p><p>Your recovery certificate will be valid %@ days after the positive test result.</p>";
@@ -72,7 +72,7 @@
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.networkwasbusy.text" = "Please try again later.";
-"general.networkwasbusy.button" = "To My Certificates";
+"general.networkwasbusy.button" = "To my certificates";
 "holder.dashboard.changeregion.button.nl" = "Change to NL";
 "general.add" = "Add";
 /* Link naar web accessibility pagina */
@@ -387,10 +387,10 @@
 "holder.vaccination.element.subtitle" = "Name: %@<br />Date of birth: %@";
 "holder.vaccination.nolist.title" = "Vaccinations not available";
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
-"holder.vaccination.nolist.action" = "To My Certificates";
+"holder.vaccination.nolist.action" = "To my certificates";
 "holder.event.nolist.title" = "No test result available";
 "holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl/en/guidepost\">the Guidepost</a>.</p><p>Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
-"holder.event.nolist.action" = "To My Certificates";
+"holder.event.nolist.action" = "To my certificates";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
 "holder.vaccination.alert.cancel" = "No, go back";
@@ -449,14 +449,14 @@
 "holder.notest.action.title" = "Make an appointment";
 "holder.test.nolist.title" = "No test result available";
 "holder.test.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl/en/guidepost\">the Guidepost</a>. Already got a negative test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
-"holder.test.nolist.action" = "To My Certificates";
+"holder.test.nolist.action" = "To my certificates";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, it is really busy";
 "holder.fetchevents.error.noresults.networkwasbusy.message" = "There are currently many visitors on the affiliated partner's website or there is an outage. We can't retrieve your details now. Please try again later.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "To My Certificates";
+"holder.fetchevents.error.noresults.networkwasbusy.button" = "To my certificates";
 "holder.fetchevents.error.noresults.networkerror.title" = "Sorry, something went wrong";
 "holder.fetchevents.error.noresults.networkerror.message" = "Couldn't retrieve the %@. Please try again.";
-"holder.fetchevents.error.noresults.networkerror.button" = "To My Certificates";
+"holder.fetchevents.error.noresults.networkerror.button" = "To my certificates";
 "holder.fetchevents.warning.someresults.networkwasbusy.title" = "Details possibly incomplete";
 "holder.fetchevents.warning.someresults.networkwasbusy.message" = "Due to a technical issue at one of our involved parties, details might be missing. Please try again later.";
 "holder.fetchevents.warning.someresults.networkerror.title" = "Details possibly incomplete";
