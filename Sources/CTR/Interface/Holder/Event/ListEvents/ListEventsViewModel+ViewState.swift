@@ -612,7 +612,7 @@ extension ListEventsViewModel {
 		)
 
 		return ListEventsViewController.Row(
-			title: L.generalRecoverycertificate().capitalizingFirstLetter(),
+			title: L.generalRecoverystatement().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
