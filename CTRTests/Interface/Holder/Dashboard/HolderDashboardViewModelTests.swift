@@ -29,6 +29,22 @@ class HolderDashboardViewModelTests: XCTestCase {
 	@CTR.UserDefaults(key: "dashboardRegionToggleValue", defaultValue: QRCodeValidityRegion.domestic)
 	private var validityRegion: QRCodeValidityRegion // swiftlint:disable:this let_var_whitespace
 
+	private static var initialTimeZone: TimeZone?
+
+	override class func setUp() {
+		super.setUp()
+		initialTimeZone = NSTimeZone.default
+		NSTimeZone.default = TimeZone(abbreviation: "CEST")!
+	}
+
+	override class func tearDown() {
+		super.tearDown()
+
+		if let timeZone = initialTimeZone {
+			NSTimeZone.default = timeZone
+		}
+	}
+
 	override func setUp() {
 		super.setUp()
 
@@ -44,6 +60,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		validityRegion = .domestic
 	}
+
 
 	func vendSut() -> HolderDashboardViewModel {
 		HolderDashboardViewModel(
