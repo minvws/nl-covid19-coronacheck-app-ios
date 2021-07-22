@@ -77,7 +77,7 @@ class TokenValidator: TokenValidatorProtocol {
 	/// Check the luhn mod N checksum
 	/// - Parameter token: the token to check
 	/// - Returns: True if this is a valid token
-	private func luhnModN(_ token: String) -> Bool {
+	func luhnModN(_ token: String) -> Bool {
 
 		// for more detail,
 		// see https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm
