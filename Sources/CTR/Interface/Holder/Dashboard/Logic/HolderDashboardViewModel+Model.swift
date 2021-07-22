@@ -73,7 +73,7 @@ extension HolderDashboardViewModel {
 					let validFromDateEndOfDay: Date? = origin.validFromDate.oneSecondBeforeMidnight
 
 					let dateString = validFromDateEndOfDay.flatMap {
-						HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: $0)
+						HolderDashboardViewModel.daysRelativeFormatter.string(from: now, to: $0)
 					} ?? "-"
 
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
@@ -82,7 +82,7 @@ extension HolderDashboardViewModel {
 						kind: .future
 					)
 				} else {
-					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
+					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: origin.validFromDate) ?? "-"
 					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
 					return .init(
 						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
@@ -99,10 +99,10 @@ extension HolderDashboardViewModel {
 						} else {
 							let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
 							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-								return .init(
-									text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-									kind: .current
-								)
+							return .init(
+								text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+								kind: .current
+							)
 						}
 
 					// EU cards use Valid From (eventTime) because we don't know the expiry date

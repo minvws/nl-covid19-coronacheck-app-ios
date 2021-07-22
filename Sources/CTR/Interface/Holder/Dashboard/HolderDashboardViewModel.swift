@@ -215,7 +215,7 @@ final class HolderDashboardViewModel: Logging {
 
 			case (.noInternet, .expiring(let expiryDate), false):
 				logDebug("StrippenRefresh: Need refreshing soon, but no internet. Presenting alert.")
-				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher)
+				currentlyPresentedAlert = AlertContent.strippenExpiringWithNoInternet(expiryDate: expiryDate, strippenRefresher: strippenRefresher, now: now())
 
 			// ❤️‍🩹 NETWORK ERROR: Refresher has entered a failed state (i.e. Server Error)
 
@@ -299,7 +299,7 @@ final class HolderDashboardViewModel: Logging {
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
 		// e.g. "Je vaccinatie is niet geldig in Europa. Je hebt alleen een Nederlandse QR-code."
-		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, now: now)
+ 		cards += localizedOriginsValidOnlyInOtherRegionsMessages(state: state, now: now)
 			.sorted(by: { $0.originType.customSortIndex < $1.originType.customSortIndex })
 			.map { originType, message in
 				return .originNotValidInThisRegion(message: message) {
@@ -332,17 +332,17 @@ final class HolderDashboardViewModel: Logging {
 							didTapViewQR: { coordinatorDelegate.userWishesToViewQR(greenCardObjectID: greenCardObjectID) },
 							buttonEnabledEvaluator: evaluateEnabledState,
 							expiryCountdownEvaluator: { now in
-								let mostDistantFutureExpiryDate = origins.reduce(Date()) { result, nextOrigin in
+								let mostDistantFutureExpiryDate = origins.reduce(now) { result, nextOrigin in
 									nextOrigin.expirationTime > result ? nextOrigin.expirationTime : result
 								}
 
 								// if all origins will be expired in next six hours:
 								let sixHours: TimeInterval = 6 * 60 * 60
-								guard mostDistantFutureExpiryDate > Date() && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
+								guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
 								else { return nil }
 
 								// e.g. "5 uur 59 min"
-								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
+								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: mostDistantFutureExpiryDate)
 								else { return nil }
 
 								return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -462,13 +462,13 @@ extension AlertContent {
 		)
 	}
 
-	fileprivate static func strippenExpiringWithNoInternet(expiryDate: Date, strippenRefresher: DashboardStrippenRefreshing) -> AlertContent {
+	fileprivate static func strippenExpiringWithNoInternet(expiryDate: Date, strippenRefresher: DashboardStrippenRefreshing, now: Date) -> AlertContent {
 
 		let localizedTimeRemainingUntilExpiry: String = {
-			if expiryDate > (Date().addingTimeInterval(60 * 60 * 24)) { // > 1 day in future
-				return HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: expiryDate) ?? "-"
+			if expiryDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day in future
+				return HolderDashboardViewModel.daysRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
 			} else {
-				return HolderDashboardViewModel.hmRelativeFormatter.string(from: Date(), to: expiryDate) ?? "-"
+				return HolderDashboardViewModel.hmRelativeFormatter.string(from: now, to: expiryDate) ?? "-"
 			}
 		}()
 
