@@ -8,7 +8,14 @@
 import Foundation
 import Reachability
 
-class DashboardStrippenRefresher: Logging {
+protocol DashboardStrippenRefreshing: AnyObject {
+	func load()
+	func userDismissedALoadingError()
+
+	var didUpdate: ((DashboardStrippenRefresher.State?, DashboardStrippenRefresher.State) -> Void)? { get set }
+}
+
+class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 	enum Error: Swift.Error, LocalizedError, Equatable {
 		case unknownErrorA
