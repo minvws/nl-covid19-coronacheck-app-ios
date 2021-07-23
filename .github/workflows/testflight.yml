@@ -25,6 +25,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Log Build Number
+        run: |
+          ./Scripts/log-build-number.sh
                     
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1

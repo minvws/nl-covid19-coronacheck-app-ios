@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Clcore
 
 class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 
@@ -52,10 +53,10 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToScanResult = false
 	var invokedNavigateToScanResultCount = 0
-	var invokedNavigateToScanResultParameters: (scanResult: CryptoResult, Void)?
-	var invokedNavigateToScanResultParametersList = [(scanResult: CryptoResult, Void)]()
+	var invokedNavigateToScanResultParameters: (scanResult: MobilecoreVerificationResult, Void)?
+	var invokedNavigateToScanResultParametersList = [(scanResult: MobilecoreVerificationResult, Void)]()
 
-	func navigateToScanResult(_ scanResult: CryptoResult) {
+	func navigateToScanResult(_ scanResult: MobilecoreVerificationResult) {
 		invokedNavigateToScanResult = true
 		invokedNavigateToScanResultCount += 1
 		invokedNavigateToScanResultParameters = (scanResult, ())

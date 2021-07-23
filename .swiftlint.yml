@@ -1,5 +1,5 @@
 disabled_rules:
- # - trailing_whitespace
+  - computed_accessors_order # Swift Mock Generator doesn't do this.
   - line_length
   - unused_closure_parameter
   - large_tuple
@@ -55,3 +55,7 @@ switch_case_alignment:
 trailing_whitespace:
   ignores_empty_lines: true
   ignores_comments: true
+
+custom_rules:
+  no_empty_comment_above_the_copyright:
+    regex: "//\\n/\\*"

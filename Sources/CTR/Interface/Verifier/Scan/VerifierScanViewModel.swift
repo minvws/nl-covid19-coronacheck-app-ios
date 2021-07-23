@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import Clcore
 
 class VerifierScanViewModel: ScanPermissionViewModel {
 
@@ -26,9 +27,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
-
-	/// Start scanning
-	@Bindable private(set) var startScanning: Bool = false
+	
+	@Bindable private(set) var alert: VerifierScanViewController.AlertContent?
 
 	/// Initializer
 	/// - Parameters:
@@ -52,8 +52,19 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	/// - Parameter code: the scanned code
 	func parseQRMessage(_ message: String) {
 
-		if let cryptoResults = cryptoManager?.verifyQRMessage(message) {
-			theCoordinator?.navigateToScanResult(cryptoResults)
+		if let verificationResult = cryptoManager?.verifyQRMessage(message) {
+			switch Int64(verificationResult.status) {
+				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
+					alert = VerifierScanViewController.AlertContent(title: L.verifierResultAlertDccTitle(),
+																	subTitle: L.verifierResultAlertDccMessage(),
+																	okTitle: L.generalOk())
+				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
+					alert = VerifierScanViewController.AlertContent(title: L.verifierResultAlertUnknownTitle(),
+																	subTitle: L.verifierResultAlertUnknownMessage(),
+																	okTitle: L.generalOk())
+				default:
+					theCoordinator?.navigateToScanResult(verificationResult)
+			}
 		}
 	}
 

@@ -23,8 +23,7 @@ class OnboardingCoordinatorTests: XCTestCase {
 		sut = OnboardingCoordinator(
 			navigationController: navigationSpy,
 			onboardingDelegate: onboardingDelegateSpy,
-			factory: HolderOnboardingFactory(),
-			maxValidity: 40
+			factory: HolderOnboardingFactory()
 		)
 	}
 

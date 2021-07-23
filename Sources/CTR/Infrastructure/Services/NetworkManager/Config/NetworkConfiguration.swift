@@ -102,6 +102,12 @@ struct NetworkConfiguration {
 		return self.combine(path: Endpoint.getCredentials, fromCdn: false)
 	}
 
+	/// The coupling url
+	var couplingUrl: URL? {
+
+		return self.combine(path: Endpoint.coupling, fromCdn: false)
+	}
+
 	/// The public keys url
 	var publicKeysUrl: URL? {
 

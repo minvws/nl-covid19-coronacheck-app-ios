@@ -21,19 +21,17 @@ class HolderDashboardViewController: BaseViewController {
 
 		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
 
-		case makeQR(title: String, message: String, actionTitle: String, didTapMakeQR: () -> Void)
+		case emptyState(title: String, message: String)
 
-		case changeRegion(buttonTitle: String, currentLocationTitle: String)
+		case domesticQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case domesticQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
+		case europeanUnionQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case europeanUnionQR(rows: [QRCardRow], didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
-
-		case cardFooter(message: String)
+		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
 
-	struct ValidityText {
-		enum Kind {
+	struct ValidityText: Equatable {
+		enum Kind: Equatable {
 			case past
 			case future
 			case current
@@ -44,48 +42,58 @@ class HolderDashboardViewController: BaseViewController {
 	}
 
 	private let viewModel: HolderDashboardViewModel
-	
+
 	let sceneView = HolderDashboardView()
 
-	var bannerView: BannerView?
-
 	var screenCaptureInProgress = false
-	
+
 	// MARK: Initializers
-	
+
 	init(viewModel: HolderDashboardViewModel) {
-		
+
 		self.viewModel = viewModel
-		
+
 		super.init(nibName: nil, bundle: nil)
 	}
-	
+
 	required init?(coder: NSCoder) {
-		
+
 		fatalError("init(coder:) has not been implemented")
 	}
-	
+
 	// MARK: View lifecycle
-	
+
 	override func loadView() {
-		
+
 		view = sceneView
 	}
-	
+
 	override func viewDidLoad() {
-		
+
 		super.viewDidLoad()
-		
+
 		setupBindings()
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 		setupPlusButton()
+
+		sceneView.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.addProofTapped()
+		}
 	}
 
 	private func setupBindings() {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
+		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.setupPrimaryButton(display: $0) }
+		viewModel.$regionMode.binding = { [weak self] in self?.sceneView.setupRegionButton(
+			buttonTitle: $0?.buttonTitle,
+			currentLocationTitle: $0?.currentLocationTitle
+		) {
+			self?.viewModel.didTapChangeRegion()
+		}}
 
 		// Receive an array of cards,
 		viewModel.$cards.binding = { [sceneView, weak viewModel] cards in
@@ -94,7 +102,7 @@ class HolderDashboardViewController: BaseViewController {
 
 				switch card {
 
-					case .headerMessage(let message):
+					case let .headerMessage(message):
 
 						let text = TextView(htmlText: message)
 						text.linkTouched { url in
@@ -102,39 +110,30 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						return text
 
-					case .expiredQR(let message, let didTapCloseAction):
+					case let .expiredQR(message, didTapCloseAction):
 						let expiredQRCard = ExpiredQRView()
 						expiredQRCard.title = message
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
 
-					case .originNotValidInThisRegion(let message, let didTapMoreInfo):
+					case let .originNotValidInThisRegion(message, didTapMoreInfo):
 						let messageCard = MessageCardView()
 						messageCard.title = message
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
 
-					case .makeQR(let title, let message, let actionTitle, let didTapAction):
-						let makeQRCard = CardView()
-						makeQRCard.title = title
-						makeQRCard.message = message
-						makeQRCard.primaryTitle = actionTitle
-						makeQRCard.backgroundImage = .createTile
-						makeQRCard.color = Theme.colors.create
-						makeQRCard.primaryButtonTappedCommand = didTapAction
-						return makeQRCard
-
-					case .changeRegion(let buttonTitle, let currentLocationTitle):
-						let changeRegionCard = ChangeRegionView()
-						changeRegionCard.changeRegionButtonTitle = buttonTitle
-						changeRegionCard.currentLocationTitle = currentLocationTitle
-						changeRegionCard.changeRegionButtonTappedCommand = {
-							viewModel?.didTapChangeRegion()
+					case let .emptyState(title, message):
+						let emptyDashboardView = EmptyDashboardView()
+						emptyDashboardView.image = .emptyDashboard
+						emptyDashboardView.title = title
+						emptyDashboardView.message = message
+						emptyDashboardView.contentTextView.linkTouched { url in
+							viewModel?.openUrl(url)
 						}
-						return changeRegionCard
+						return emptyDashboardView
 
-					case .domesticQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator),
-						 .europeanUnionQR(let rows, let didTapViewQR, let buttonEnabledEvaluator, let expiryCountdownEvaluator):
+					case let .domesticQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
+						 let .europeanUnionQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 
 						let qrCard = QRCardView()
 						qrCard.viewQRButtonCommand = didTapViewQR
@@ -156,14 +155,22 @@ class HolderDashboardViewController: BaseViewController {
 
 						qrCard.expiryEvaluator = expiryCountdownEvaluator
 						qrCard.buttonEnabledEvaluator = buttonEnabledEvaluator
+						qrCard.isLoading = isLoading
 
 						return qrCard
 
-					case .cardFooter(let message):
+					case let .errorMessage(message, didTapTryAgain):
 
-						let cardFooterView = CardFooterView()
-						cardFooterView.title = message
-						return cardFooterView
+						let errorView = ErrorDashboardView()
+						errorView.message = message
+						errorView.messageView.linkTouched { url in
+							if url.absoluteString == AppAction.tryAgain {
+								didTapTryAgain()
+							} else {
+								viewModel?.openUrl(url)
+							}
+						}
+						return errorView
 				}
 			}
 
@@ -176,12 +183,11 @@ class HolderDashboardViewController: BaseViewController {
 				sceneView.stackView.addArrangedSubview($0)
 			}
 
-			// Hack to fix the spacing between EU Launch message and a EU Card.
-			// 📝 Can be removed once EU Launch date is passed:
+			// Custom spacing for error message
 			for (index, view) in cardViews.enumerated() {
-				guard view is CardFooterView else { continue }
+				guard view is ErrorDashboardView else { continue }
 
-				// Try to get previous view, which would be an EU card:
+				// Try to get previous view, which would be an QR card:
 				let previousIndex = index - 1
 
 				guard previousIndex >= 0 else { continue }
@@ -189,7 +195,13 @@ class HolderDashboardViewController: BaseViewController {
 				// Check that previous view is a QRCardView:
 				guard let previousCardView = cardViews[previousIndex] as? QRCardView else { continue }
 
-				sceneView.stackView.setCustomSpacing(16, after: previousCardView)
+				sceneView.stackView.setCustomSpacing(22, after: previousCardView)
+			}
+		}
+
+		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
+			DispatchQueue.main.async {
+				self?.showAlert(alertContent)
 			}
 		}
 	}
@@ -197,7 +209,7 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		
+
 		// Scroll to top
 		sceneView.scrollView.setContentOffset(.zero, animated: false)
 
@@ -213,7 +225,7 @@ class HolderDashboardViewController: BaseViewController {
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.addProofTapped)
 		)
-		plusbutton.accessibilityLabel = L.generalAdd()
+		plusbutton.title = L.generalAdd()
 		navigationItem.rightBarButtonItem = plusbutton
 	}
 }

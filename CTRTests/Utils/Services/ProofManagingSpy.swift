@@ -81,40 +81,4 @@ class ProofManagingSpy: ProofManaging {
 		invokedGetTestProviderParametersList.append((token, ()))
 		return stubbedGetTestProviderResult
 	}
-
-	var invokedGetTestWrapper = false
-	var invokedGetTestWrapperCount = 0
-	var stubbedGetTestWrapperResult: TestResultWrapper!
-
-	func getTestWrapper() -> TestResultWrapper? {
-		invokedGetTestWrapper = true
-		invokedGetTestWrapperCount += 1
-		return stubbedGetTestWrapperResult
-	}
-
-	var invokedGetSignedWrapper = false
-	var invokedGetSignedWrapperCount = 0
-	var stubbedGetSignedWrapperResult: SignedResponse!
-
-	func getSignedWrapper() -> SignedResponse? {
-		invokedGetSignedWrapper = true
-		invokedGetSignedWrapperCount += 1
-		return stubbedGetSignedWrapperResult
-	}
-
-	var invokedRemoveTestWrapper = false
-	var invokedRemoveTestWrapperCount = 0
-
-	func removeTestWrapper() {
-		invokedRemoveTestWrapper = true
-		invokedRemoveTestWrapperCount += 1
-	}
-
-	var invokedMigrateExistingProof = false
-	var invokedMigrateExistingProofCount = 0
-
-	func migrateExistingProof() {
-		invokedMigrateExistingProof = true
-		invokedMigrateExistingProofCount += 1
-	}
 }

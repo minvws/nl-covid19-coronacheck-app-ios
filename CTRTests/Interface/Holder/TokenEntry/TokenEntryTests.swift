@@ -41,7 +41,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
-		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
 		expect(self.sut.message) == L.holderTokenentryRegularflowText()
 		expect(self.sut.confirmResendVerificationAlertTitle) == L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
@@ -65,7 +65,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowUserNeedsATokenButton) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryRegularflowRetryTitle()
-		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.confirmResendVerificationAlertTitle) == L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
@@ -276,7 +276,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == false
-		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
 
@@ -296,7 +296,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedGetTestProvider) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -324,7 +325,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedGetTestProvider) == true
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -541,7 +543,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -581,7 +584,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.networkErrorAlert).to(beNil())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -643,7 +646,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedGetTestProvider) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
@@ -909,7 +913,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
@@ -1042,7 +1047,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.proofManagerSpy.invokedGetTestProvider) == false
@@ -1329,7 +1335,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-		expect(self.sut.showTechnicalErrorAlert) == true
+		expect(self.sut.networkErrorAlert).toNot(beNil())
+		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -1359,7 +1366,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.message).to(beNil())
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
-		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
 		expect(self.holderCoordinatorSpy.invokedUserWishesToMakeQRFromNegativeTest) == true
@@ -1434,7 +1441,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
 		expect(self.sut.resendVerificationButtonTitle) == L.holderTokenentryUniversallinkflowRetryTitle()
-		expect(self.sut.showTechnicalErrorAlert) == false
+		expect(self.sut.networkErrorAlert).to(beNil())
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.fieldErrorMessage).to(beNil())
 

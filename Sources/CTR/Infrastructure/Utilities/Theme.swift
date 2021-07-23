@@ -12,50 +12,67 @@ class Fonts {
     // https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
     // Table with point in sizes can be found on the link.
 
+	/// Size 34 points
     var largeTitle: UIFont {
-        font(textStyle: .largeTitle, isBold: true) // Size 34 points
+        font(textStyle: .largeTitle, isBold: true)
     }
 
+	/// Size 28 points
     var title1: UIFont {
-        font(textStyle: .title1, isBold: true) // Size 28 points
+        font(textStyle: .title1, isBold: true)
     }
 
+	/// Size 28 points
 	var title1Montserrat: UIFont {
-		font(textStyle: .title1, isBold: true, customFont: "Montserrat-Bold") // Size 28 points
+		font(textStyle: .title1, isBold: true, customFont: "Montserrat-Bold")
 	}
 
+	/// Size 22 points
     var title2: UIFont {
-        font(textStyle: .title2, isBold: true) // Size 22 points
+        font(textStyle: .title2, isBold: true)
     }
 
+	/// Size 20 points
     var title3: UIFont {
-        font(textStyle: .title3, isBold: true) // Size 20 points
+        font(textStyle: .title3, isBold: true)
     }
 
+	/// Size 20 points
 	var title3Montserrat: UIFont {
-		font(textStyle: .title3, isBold: true, customFont: "Montserrat-Bold") // Size 20 points
+		font(textStyle: .title3, isBold: true, customFont: "Montserrat-Bold")
 	}
 
+	/// Size 20 points
 	var title3Medium: UIFont {
-		font(textStyle: .title3, isMedium: true) // Size 20 points
+		font(textStyle: .title3, isMedium: true)
 	}
 
+	/// Size 17 points
     var headline: UIFont {
-        font(textStyle: .headline) // Size 17 points
+        font(textStyle: .headline)
     }
 
+	/// Size 17 points
 	var headlineBold: UIFont {
-		font(textStyle: .headline, isBold: true) // Size 17 points
+		font(textStyle: .headline, isBold: true)
+	}
+	
+	/// Size 17 points
+	var headlineBoldMontserrat: UIFont {
+		font(textStyle: .headline, isBold: true, customFont: "Montserrat-Bold")
 	}
 
+	/// Size 17 points
     var body: UIFont {
-        font(textStyle: .body) // Size 17 points
+        font(textStyle: .body)
     }
 
+	/// Size 17 points
 	var bodyMontserrat: UIFont {
-		font(textStyle: .body, customFont: "Montserrat-Bold") // Size 17 points
+		font(textStyle: .body, customFont: "Montserrat-Bold")
 	}
 
+	/// Size 17 points
 	var bodyMontserratFixed: UIFont {
 
 		if let font = UIFont(name: "Montserrat-Bold", size: 17) {
@@ -64,60 +81,74 @@ class Fonts {
 		return .systemFont(ofSize: 17)
 	}
 
+	/// Size 17 points
     var bodyBold: UIFont {
-        font(textStyle: .body, isBold: true) // Size 17 points
+        font(textStyle: .body, isBold: true)
     }
 
+	/// Size 17 points
 	var bodyBoldFixed: UIFont {
 		return .boldSystemFont(ofSize: 17)
 	}
 
+	/// Size 17 points
 	var bodySemiBold: UIFont {
-		font(textStyle: .body, isSemiBold: true) // Size 17 points
+		font(textStyle: .body, isSemiBold: true)
 	}
 
+	/// Size 17 points
 	var bodyMedium: UIFont {
-		font(textStyle: .body, isMedium: true) // Size 17 points
+		font(textStyle: .body, isMedium: true)
 	}
 
+	/// Size 16 points
     var callout: UIFont {
-        font(textStyle: .callout) // Size 16 points
+        font(textStyle: .callout)
     }
-
+	
+	/// Size 16 points
 	var calloutSemiBold: UIFont {
-		font(textStyle: .callout, isSemiBold: true) // Size 16 points
+		font(textStyle: .callout, isSemiBold: true)
 	}
 
+	/// Size 15 points
     var subhead: UIFont {
-        font(textStyle: .subheadline) // Size 15 points
+        font(textStyle: .subheadline)
     }
 
+	/// Size 15 points
 	var subheadMontserrat: UIFont {
-		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold") // Size 15 points
+		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
 	}
 
+	/// Size 15 points
     var subheadBold: UIFont {
-        font(textStyle: .subheadline, isBold: true) // Size 15 points
+        font(textStyle: .subheadline, isBold: true)
     }
 
+	/// Size 15 points
 	var subheadMedium: UIFont {
-		font(textStyle: .subheadline, isMedium: true) // Size 15 points
+		font(textStyle: .subheadline, isMedium: true)
 	}
 
+	/// Size 13 points
     var footnote: UIFont {
-        font(textStyle: .footnote) // Size 13 points
+        font(textStyle: .footnote)
     }
 
+	/// Size 13 points
 	var footnoteMontserrat: UIFont {
-		font(textStyle: .footnote, customFont: "Montserrat-SemiBold") // Size 13 points
+		font(textStyle: .footnote, customFont: "Montserrat-SemiBold")
 	}
 
+	/// size 12 points
     var caption1: UIFont {
-        font(textStyle: .caption1, isBold: true) // size 12 points
+        font(textStyle: .caption1, isBold: true)
     }
 
+	/// size 12 points
 	var caption1SemiBold: UIFont {
-		font(textStyle: .caption1, isSemiBold: true) // size 12 points
+		font(textStyle: .caption1, isSemiBold: true)
 	}
 
     // MARK: - Private
@@ -180,8 +211,6 @@ final class Colors {
 
 	var appointment: UIColor { return color(for: "AppointmentColor") }
 
-	var create: UIColor { return color(for: "CreateColor") }
-
 	var shadow: UIColor { return color(for: "ShadowColor") }
 
 	var lightBackground: UIColor { return color(for: "LightBackgroundColor") }
@@ -208,9 +237,9 @@ final class Colors {
 
 	var europa: UIColor { return color(for: "Europa") }
 
-	var bannerBackgroundColor: UIColor { return color(for: "BannerBackgroundColor") }
-
 	var highlightBackgroundColor: UIColor { return color(for: "HighlightBackgroundColor") }
+	
+	var emptyDashboardColor: UIColor { return color(for: "EmptyDashboardColor") }
 
     // MARK: - Private
 

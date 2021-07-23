@@ -19,6 +19,9 @@ protocol NamedAnimationProtocol {
 
 	/// The Lottie Animation
 	var animation: Animation? { get set }
+
+	/// The playable part to the animation. If nil, the whole animation is played.
+	var section: (start: AnimationProgressTime, end: AnimationProgressTime)? { get set }
 }
 
 struct SecurityAnimation: NamedAnimationProtocol, Equatable {
@@ -32,14 +35,18 @@ struct SecurityAnimation: NamedAnimationProtocol, Equatable {
 	/// The Lottie Animation
 	var animation: Animation?
 
+	/// The playable part to the animation. If nil, the whole animation is played.
+	var section: (start: AnimationFrameTime, end: AnimationFrameTime)?
+
 	/// Initializer
 	/// - Parameters:
 	///   - name: the name of the animation
 	///   - fileName: the name of the file
-	init(name: String, fileName: String) {
+	init(name: String, fileName: String, section: (start: AnimationFrameTime, end: AnimationFrameTime)? = nil) {
 
 		self.name = name
 		self.animation = Animation.named(fileName)
+		self.section = section
 	}
 
 	/// Equality
@@ -55,9 +62,13 @@ struct SecurityAnimation: NamedAnimationProtocol, Equatable {
 
 extension SecurityAnimation {
 
-	/// A security animation
-	static let domesticAnimation = SecurityAnimation(name: "domesticAnimation", fileName: "fietser_LR_335x256")
+	static let domesticAnimation = SecurityAnimation(
+		name: "domesticAnimation",
+		fileName: "skatefiets-2"
+	)
 
-	///
-	static let internationalAnimation = SecurityAnimation(name: "internationalAnimation", fileName: "lf20_fnpdb2ex")
+	static let internationalAnimation = SecurityAnimation(
+		name: "internationalAnimation",
+		fileName: "lf20_fnpdb2ex"
+	)
 }

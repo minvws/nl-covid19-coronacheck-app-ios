@@ -17,7 +17,7 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 	let name: String
 
 	/// The url of the provider to fetch the result
-	let resultURL: URL?
+	let resultURLString: String
 
 	/// The public key of the provider
 	let publicKey: String
@@ -30,9 +30,14 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 
 		case identifier = "provider_identifier"
 		case name
-		case resultURL = "result_url"
+		case resultURLString = "result_url"
 		case publicKey = "public_key"
 		case certificate = "ssl_cert"
+	}
+
+	var resultURL: URL? {
+
+		return URL(string: resultURLString)
 	}
 
 	func getHostNames() -> [String] {

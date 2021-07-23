@@ -105,13 +105,7 @@ class TokenEntryViewController: BaseViewController {
 			self?.sceneView.fieldErrorMessage = message
 		}
 		
-		viewModel.$showTechnicalErrorAlert.binding = { [weak self] in
-			if $0 {
-				self?.showError(L.generalErrorTitle(), message: L.generalErrorTechnicalText())
-			}
-		}
-
-		viewModel.$serverTooBusyAlert.binding = { [weak self] in
+		viewModel.$networkErrorAlert.binding = { [weak self] in
 			self?.showAlert($0)
 		}
 
@@ -232,22 +226,56 @@ class TokenEntryViewController: BaseViewController {
 	}
 	
 	// MARK: Keyboard
-	
+
 	@objc func keyBoardWillShow(notification: Notification) {
-		
-		tapGestureRecognizer?.isEnabled = true
 
-		sceneView.scrollView.contentInset.bottom = notification.getHeight()
+		let keyboardHeight = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0
+		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
+		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
 
-		let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
-		sceneView.bottomButtonConstraint?.constant = -notification.getHeight() + buttonOffset
+		// Create a property animator to manage the animation
+		let animator = UIViewPropertyAnimator(
+			duration: animationDuration,
+			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
+		) {
+			self.sceneView.scrollView.contentInset.bottom = keyboardHeight
+
+			let buttonOffset: CGFloat = UIDevice.current.hasNotch ? 20 : -10
+			self.sceneView.bottomButtonConstraint?.constant = -keyboardHeight + buttonOffset
+
+			// Required to trigger NSLayoutConstraint changes
+			// to animate
+			self.view?.layoutIfNeeded()
+		}
+
+		animator.addCompletion { _ in
+			self.tapGestureRecognizer?.isEnabled = true
+		}
+
+		// Start the animation
+		animator.startAnimation()
 	}
-	
+
 	@objc func keyBoardWillHide(notification: Notification) {
-		
+
 		tapGestureRecognizer?.isEnabled = false
-		sceneView.scrollView.contentInset.bottom = 0.0
-		sceneView.bottomButtonConstraint?.constant = -20
+
+		let animationDuration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0
+		let animationCurve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int ?? 0
+
+		// Create a property animator to manage the animation
+		let animator = UIViewPropertyAnimator(
+			duration: animationDuration,
+			curve: UIView.AnimationCurve(rawValue: animationCurve) ?? .linear
+		) {
+			self.sceneView.scrollView.contentInset.bottom = 0.0
+			self.sceneView.bottomButtonConstraint?.constant = -20
+
+			self.view?.layoutIfNeeded()
+		}
+
+		// Start the animation
+		animator.startAnimation()
 	}
 	
 	// MARK: Alerts
@@ -333,17 +361,5 @@ extension TokenEntryViewController: UITextFieldDelegate {
 		}
 		
 		return true
-	}
-}
-
-extension Notification {
-	
-	func getHeight() -> CGFloat {
-		
-		var height: CGFloat = 0.0
-		if let keyboardFrame = self.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-			height += keyboardFrame.height
-		}
-		return height
 	}
 }

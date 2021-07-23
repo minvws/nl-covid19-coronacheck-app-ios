@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Clcore
 
 protocol VerifierCoordinatorDelegate: AnyObject {
 	
@@ -23,8 +24,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	func navigateToScan()
 
 	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ scanResult: CryptoResult)
+	/// - Parameter attributes: the scanned result
+	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
 
 	/// Display content
 	/// - Parameters:
@@ -48,8 +49,7 @@ class VerifierCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			startChildCoordinator(coordinator)
 			
@@ -58,8 +58,7 @@ class VerifierCoordinator: SharedCoordinator {
 			let coordinator = OnboardingCoordinator(
 				navigationController: navigationController,
 				onboardingDelegate: self,
-				factory: onboardingFactory,
-				maxValidity: maxValidity
+				factory: onboardingFactory
 			)
 			addChildCoordinator(coordinator)
 			coordinator.navigateToConsent(shouldHideBackButton: true)
@@ -116,14 +115,13 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	}
 	
 	/// Navigate to the scan result
-	/// - Parameter attributes: the scanned attributes
-	func navigateToScanResult(_ cryptoResults: CryptoResult) {
+	/// - Parameter attributes: the scanned result
+	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
 		
 		let viewController = VerifierResultViewController(
 			viewModel: VerifierResultViewModel(
 				coordinator: self,
-				cryptoResults: cryptoResults,
-				maxValidity: maxValidity
+				verificationResult: verificationResult
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)

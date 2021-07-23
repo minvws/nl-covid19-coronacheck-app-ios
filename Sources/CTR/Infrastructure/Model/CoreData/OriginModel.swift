@@ -42,3 +42,13 @@ class OriginModel {
 		return nil
 	}
 }
+
+extension Array {
+
+	/// Find the Origin element with the latest expiry date (note: this could still be in the past).
+	func latestOriginExpiryTime() -> Date? where Element == Origin {
+		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
+			.last?
+			.expirationTime
+	}
+}

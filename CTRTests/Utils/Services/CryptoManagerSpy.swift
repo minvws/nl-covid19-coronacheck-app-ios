@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Clcore
 
 class CryptoManagerSpy: CryptoManaging {
 
@@ -56,20 +57,6 @@ class CryptoManagerSpy: CryptoManaging {
 		return stubbedGenerateCommitmentMessageResult
 	}
 
-	var invokedSetIssuerDomesticPublicKeys = false
-	var invokedSetIssuerDomesticPublicKeysCount = 0
-	var invokedSetIssuerDomesticPublicKeysParameters: (keys: IssuerPublicKeys, Void)?
-	var invokedSetIssuerDomesticPublicKeysParametersList = [(keys: IssuerPublicKeys, Void)]()
-	var stubbedSetIssuerDomesticPublicKeysResult: Bool! = false
-
-	func setIssuerDomesticPublicKeys(_ keys: IssuerPublicKeys) -> Bool {
-		invokedSetIssuerDomesticPublicKeys = true
-		invokedSetIssuerDomesticPublicKeysCount += 1
-		invokedSetIssuerDomesticPublicKeysParameters = (keys, ())
-		invokedSetIssuerDomesticPublicKeysParametersList.append((keys, ()))
-		return stubbedSetIssuerDomesticPublicKeysResult
-	}
-
 	var invokedHasPublicKeys = false
 	var invokedHasPublicKeysCount = 0
 	var stubbedHasPublicKeysResult: Bool! = false
@@ -92,16 +79,6 @@ class CryptoManagerSpy: CryptoManaging {
 		invokedCreateCredentialParameters = (ism, ())
 		invokedCreateCredentialParametersList.append((ism, ()))
 		return stubbedCreateCredentialResult
-	}
-
-	var invokedReadCredential = false
-	var invokedReadCredentialCount = 0
-	var stubbedReadCredentialResult: CryptoAttributes!
-
-	func readCredential() -> CryptoAttributes? {
-		invokedReadCredential = true
-		invokedReadCredentialCount += 1
-		return stubbedReadCredentialResult
 	}
 
 	var invokedStoreCredential = false
@@ -142,26 +119,14 @@ class CryptoManagerSpy: CryptoManaging {
 	var invokedVerifyQRMessageCount = 0
 	var invokedVerifyQRMessageParameters: (message: String, Void)?
 	var invokedVerifyQRMessageParametersList = [(message: String, Void)]()
-	var stubbedVerifyQRMessageResult: CryptoResult!
+	var stubbedVerifyQRMessageResult: MobilecoreVerificationResult!
 
-	func verifyQRMessage(_ message: String) -> CryptoResult {
+	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult? {
 		invokedVerifyQRMessage = true
 		invokedVerifyQRMessageCount += 1
 		invokedVerifyQRMessageParameters = (message, ())
 		invokedVerifyQRMessageParametersList.append((message, ()))
 		return stubbedVerifyQRMessageResult
-	}
-
-	var invokedMigrateExistingCredential = false
-	var invokedMigrateExistingCredentialCount = 0
-	var invokedMigrateExistingCredentialParameters: (walletManager: WalletManaging, sampleDate: Date)?
-	var invokedMigrateExistingCredentialParametersList = [(walletManager: WalletManaging, sampleDate: Date)]()
-
-	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date) {
-		invokedMigrateExistingCredential = true
-		invokedMigrateExistingCredentialCount += 1
-		invokedMigrateExistingCredentialParameters = (walletManager, sampleDate)
-		invokedMigrateExistingCredentialParametersList.append((walletManager, sampleDate))
 	}
 
 	var invokedReadDomesticCredentials = false

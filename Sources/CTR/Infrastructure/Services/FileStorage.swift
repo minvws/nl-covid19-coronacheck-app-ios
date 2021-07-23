@@ -50,4 +50,18 @@ final class FileStorage: Logging {
 			logError("Failed to read directory \(error)")
 		}
 	}
+
+	/// Check if a file exists
+	/// - Parameter fileName: the name of the file
+	/// - Returns: True if it does.
+	func fileExists(_ fileName: String) -> Bool {
+
+		guard let url = documentsURL else {
+			logError("Failed to load documents directory")
+			return false
+		}
+
+		let fileUrl = url.appendingPathComponent(fileName, isDirectory: false)
+		return fileManager.fileExists(atPath: fileUrl.path)
+	}
 }

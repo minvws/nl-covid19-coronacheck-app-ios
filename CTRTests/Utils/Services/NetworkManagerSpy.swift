@@ -10,7 +10,7 @@ import XCTest
 
 class NetworkSpy: NetworkManaging {
 
-	required init(configuration: NetworkConfiguration, validator: CryptoUtilityProtocol) {}
+	required init(configuration: NetworkConfiguration) {}
 
 	var invokedNetworkConfigurationGetter = false
 	var invokedNetworkConfigurationGetterCount = 0
@@ -52,9 +52,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedGetPublicKeys = false
 	var invokedGetPublicKeysCount = 0
-	var stubbedGetPublicKeysCompletionResult: (Result<(IssuerPublicKeys, Data), NetworkError>, Void)?
+	var stubbedGetPublicKeysCompletionResult: (Result<Data, NetworkError>, Void)?
 
-	func getPublicKeys(completion: @escaping (Result<(IssuerPublicKeys, Data), NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void) {
 		invokedGetPublicKeys = true
 		invokedGetPublicKeysCount += 1
 		if let result = stubbedGetPublicKeysCompletionResult {
@@ -172,5 +172,30 @@ class NetworkSpy: NetworkManaging {
 		if let result = stubbedFetchEventsCompletionResult {
 			completion(result.0)
 		}
+	}
+
+	var invokedCheckCouplingStatus = false
+	var invokedCheckCouplingStatusCount = 0
+	var invokedCheckCouplingStatusParameters: (dictionary: [String: AnyObject], Void)?
+	var invokedCheckCouplingStatusParametersList = [(dictionary: [String: AnyObject], Void)]()
+	var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, NetworkError>, Void)?
+
+	func checkCouplingStatus(
+		dictionary: [String: AnyObject],
+		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
+		invokedCheckCouplingStatus = true
+		invokedCheckCouplingStatusCount += 1
+		invokedCheckCouplingStatusParameters = (dictionary, ())
+		invokedCheckCouplingStatusParametersList.append((dictionary, ()))
+		if let result = stubbedCheckCouplingStatusCompletionResult {
+			completion(result.0)
+		}
+	}
+}
+
+extension NetworkSpy {
+
+	convenience init() {
+		self.init(configuration: .test)
 	}
 }

@@ -71,7 +71,6 @@ public extension NSAttributedString {
 		boldTextColor: UIColor? = nil,
 		textAlignment: NSTextAlignment = .left,
 		lineHeight: CGFloat = 22,
-		underlineColor: UIColor? = nil,
 		kern: CGFloat = -0.41,
 		paragraphSpacing: CGFloat = 8) -> NSAttributedString {
 
@@ -97,20 +96,17 @@ public extension NSAttributedString {
 		}
 
 		listParagraphStyle.alignment = textAlignment
-		listParagraphStyle.paragraphSpacing = 8
+		listParagraphStyle.paragraphSpacing = 0
 		listParagraphStyle.tabStops = tabStops
 		listParagraphStyle.headIndent = tabInterval
 		listParagraphStyle.firstLineHeadIndent = 0
+		listParagraphStyle.minimumLineHeight = lineHeight
 
-		var attributes: [Key: Any] = [
+		let attributes: [Key: Any] = [
 			.foregroundColor: textColor,
 			.paragraphStyle: paragraphStyle,
 			.kern: kern
 		]
-		if let underlineColor = underlineColor {
-			attributes[.underlineColor] = underlineColor
-			attributes[.underlineStyle] = NSUnderlineStyle.single.rawValue
-		}
 		let data: Data = text.data(using: .unicode) ?? Data(text.utf8)
 
 		if let attributedTitle = try? NSMutableAttributedString(

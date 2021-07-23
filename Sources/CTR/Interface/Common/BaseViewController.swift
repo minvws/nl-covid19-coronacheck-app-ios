@@ -37,6 +37,7 @@ class BaseViewController: UIViewController {
 			target: nil,
 			action: nil
 		)
+        backbutton.accessibilityLabel = L.generalPrevious()
 
 		navigationController?.navigationBar.backIndicatorImage = .backArrow
 		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
@@ -98,8 +99,8 @@ class BaseViewController: UIViewController {
 			target: self,
 			action: action
 		)
+        button.title = accessibilityLabel
 		button.accessibilityIdentifier = "CloseButton"
-		button.accessibilityLabel = accessibilityLabel
 		button.accessibilityTraits = .button
 		button.tintColor = tintColor
 		navigationItem.hidesBackButton = true
@@ -122,8 +123,8 @@ class BaseViewController: UIViewController {
 			target: self,
 			action: action
 		)
+        button.title = accessibilityLabel
 		button.accessibilityIdentifier = "BackButton"
-		button.accessibilityLabel = accessibilityLabel
 		button.accessibilityTraits = .button
 		navigationItem.hidesBackButton = true
 		navigationItem.leftBarButtonItem = button

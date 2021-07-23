@@ -28,9 +28,6 @@ protocol RemoteInformation {
 	/// What is the TTL of the config
 	var configTTL: Int? { get }
 
-	/// What is the validity of a test
-	var maxValidityHours: Int? { get }
-
 	/// What is the waiting period before a recovery is valid?
 	var recoveryWaitingPeriodDays: Int? { get }
 
@@ -88,9 +85,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	/// What is the TTL of the config
 	let configTTL: Int?
 
-	/// What is the validity of a test
-	let maxValidityHours: Int?
-
 	/// What is the waiting period before a recovery is valid?
 	let recoveryWaitingPeriodDays: Int?
 
@@ -144,7 +138,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
 		case configTTL = "configTTL"
-		case maxValidityHours = "maxValidityHours"
 		case recoveryWaitingPeriodDays = "recoveryWaitingPeriodDays"
 		case requireUpdateBefore = "requireUpdateBefore"
 		case temporarilyDisabled = "temporarilyDisabled"
@@ -172,7 +165,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		deactivated: Bool?,
 		informationURL: URL?,
 		configTTL: Int?,
-		maxValidityHours: Int?,
 		recoveryWaitingPeriodDays: Int?,
 		requireUpdateBefore: TimeInterval?,
 		temporarilyDisabled: Bool?,
@@ -190,7 +182,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
 		self.configTTL = configTTL
-		self.maxValidityHours = maxValidityHours
 		self.recoveryWaitingPeriodDays = recoveryWaitingPeriodDays
 		self.requireUpdateBefore = requireUpdateBefore
 		self.temporarilyDisabled = temporarilyDisabled
@@ -212,7 +203,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			deactivated: false,
 			informationURL: nil,
 			configTTL: 3600,
-			maxValidityHours: 40,
 			recoveryWaitingPeriodDays: 11,
 			requireUpdateBefore: nil,
 			temporarilyDisabled: false,

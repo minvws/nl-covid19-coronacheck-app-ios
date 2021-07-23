@@ -43,3 +43,5 @@ report.xml
 /Sources/CTR/Infrastructure/Resources/R.generated.swift
 /Sources/CTR/Infrastructure/Resources/Localization/nl.lproj/Localizable.strings
 /Sources/CTR/Infrastructure/Resources/Localization/en.lproj/Localizable.strings
+/Brewfile_CI.lock.json
+/Brewfile.lock.json

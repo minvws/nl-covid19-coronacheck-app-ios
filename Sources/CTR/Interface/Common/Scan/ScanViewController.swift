@@ -198,8 +198,8 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			target: self,
 			action: action
 		)
+        button.title = enableLabel
 		button.accessibilityIdentifier = "TorchButton"
-		button.accessibilityLabel = enableLabel
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button
 		navigationController?.navigationItem.rightBarButtonItem = button
@@ -207,5 +207,10 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
         self.torchButton = button
         self.torchEnableLabel = enableLabel
         self.torchDisableLabel = disableLabel
+	}
+	
+	/// Resume scanning after being stopped
+	func resumeScanning() {
+		captureSession.startRunning()
 	}
 }

@@ -57,8 +57,13 @@ class Label: UILabel {
         self.init(headline, font: Theme.fonts.headline, textColor: textColor)
     }
 
-	convenience init(headlineBold: String?, textColor: UIColor = .darkText) {
-		self.init(headlineBold, font: Theme.fonts.headlineBold, textColor: textColor)
+	convenience init(headlineBold: String?, textColor: UIColor = .darkText, montserrat: Bool = false) {
+		if montserrat {
+			self.init(headlineBold, font: Theme.fonts.headlineBoldMontserrat, textColor: textColor)
+			adjustsFontForContentSizeCategory = true
+		} else {
+			self.init(headlineBold, font: Theme.fonts.headlineBold, textColor: textColor)
+		}
 	}
     
     convenience init(body: String?, textColor: UIColor = .darkText) {
