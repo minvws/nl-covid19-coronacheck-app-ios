@@ -61,7 +61,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		validityRegion = .domestic
 	}
 
-
 	func vendSut() -> HolderDashboardViewModel {
 		HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
