@@ -14,20 +14,16 @@ import CoreData
 class HolderDashboardViewModelTests: XCTestCase {
 
 	/// Subject under test
-	var sut: HolderDashboardViewModel!
-
-	var configSpy: ConfigurationGeneralSpy!
-	var cryptoManagerSpy: CryptoManagerSpy!
-	var dataStoreManager: DataStoreManager!
-	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	var proofManagerSpy: ProofManagingSpy!
-	var datasourceSpy: HolderDashboardDatasourceSpy!
-	var strippenRefresherSpy: DashboardStrippenRefresherSpy!
-
-	var sampleGreencardObjectID: NSManagedObjectID!
-
-	@CTR.UserDefaults(key: "dashboardRegionToggleValue", defaultValue: QRCodeValidityRegion.domestic)
-	private var validityRegion: QRCodeValidityRegion // swiftlint:disable:this let_var_whitespace
+	private var sut: HolderDashboardViewModel!
+	private var configSpy: ConfigurationGeneralSpy!
+	private var cryptoManagerSpy: CryptoManagerSpy!
+	private var dataStoreManager: DataStoreManager!
+	private var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	private var proofManagerSpy: ProofManagingSpy!
+	private var datasourceSpy: HolderDashboardDatasourceSpy!
+	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
+	private var userSettingsSpy: UserSettingsSpy!
+	private var sampleGreencardObjectID: NSManagedObjectID!
 
 	private static var initialTimeZone: TimeZone?
 
@@ -55,10 +51,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
+		userSettingsSpy = UserSettingsSpy()
 
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sampleGreencardObjectID = NSManagedObjectID()
-
-		validityRegion = .domestic
 	}
 
 	func vendSut() -> HolderDashboardViewModel {
@@ -69,6 +65,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			configuration: configSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
+			userSettings: userSettingsSpy,
 			now: { now }
 		)
 	}
@@ -147,7 +144,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_didTapChangeRegion_callsCoordinator() {
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 		holderCoordinatorDelegateSpy.stubbedUserWishesToChangeRegionCompletionResult = (.domestic, ())
 
@@ -161,7 +158,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegionParameters?.currentRegion) == .europeanUnion
 
 		// The value should have now been changed to Domestic: 
-		expect(self.validityRegion) == .domestic
+		expect(self.userSettingsSpy.invokedDashboardRegionToggleValue) == .domestic
 	}
 
 	func test_openURL_callsCoordinator() {
@@ -676,7 +673,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let qrCards = [
@@ -724,7 +721,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let qrCards = [
@@ -773,7 +770,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalRecovery() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let qrCards = [
@@ -867,7 +864,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let vaccineGreenCardID = NSManagedObjectID()
@@ -954,7 +951,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_datasourceupdate_tripleCurrentlyValidDomesticButViewingInternationalTab() {
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let qrCards = [
@@ -997,7 +994,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccinationButViewingDomesticTab() {
 
 		// Arrange
-		validityRegion = .domestic
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut()
 
 		let vaccineGreenCardID = NSManagedObjectID()
@@ -1056,7 +1053,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccinationButViewingDomesticTab_tappingMoreInfo() {
 
 		// Arrange
-		validityRegion = .domestic
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut()
 
 		let vaccineGreenCardID = NSManagedObjectID()
@@ -1183,7 +1180,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleNotYetValidInternationalVaccination() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let qrCards = [
@@ -1231,7 +1228,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleNotYetValidInternationalRecovery() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let qrCards = [
@@ -1276,7 +1273,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_domesticExpired() {
 
 		// Arrange
-		validityRegion = .domestic
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut()
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
@@ -1305,7 +1302,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_domesticExpired_tapForMoreInfo() {
 
 		// Arrange
-		validityRegion = .domestic
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sut = vendSut()
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
@@ -1329,7 +1326,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_internationalExpired() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
@@ -1358,7 +1355,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_domesticExpiredButOnInternationalTab() {
 
 		// Arrange
-		validityRegion = .europeanUnion
+		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
 		sut = vendSut()
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
