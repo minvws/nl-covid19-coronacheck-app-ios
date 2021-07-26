@@ -43,6 +43,7 @@ final class DashboardViewController: BaseViewController {
 		title = "Mijn bewijzen"
 		
 		view.addSubview(topTabBar)
+		topTabBar.delegate = self
 		view.addSubview(scrollView)
 		scrollView.delegate = self
 		scrollView.addSubview(domesticScrollView)
@@ -91,5 +92,13 @@ extension DashboardViewController: UIScrollViewDelegate {
 		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
 		let tab: TopTabBar.Tab = nextPage ? .international : .domestic
 		topTabBar.select(tab: tab, animated: true)
+	}
+}
+
+extension DashboardViewController: TopTabBarDelegate {
+	
+	func topTabBarDidSelectTab(_ tab: TopTabBar.Tab) {
+		let scrollOffset = CGPoint(x: scrollView.frame.width * CGFloat(tab.rawValue), y: 0)
+		scrollView.setContentOffset(scrollOffset, animated: true)
 	}
 }

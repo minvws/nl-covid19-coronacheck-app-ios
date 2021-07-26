@@ -7,12 +7,19 @@
 
 import UIKit
 
+protocol TopTabBarDelegate: AnyObject {
+	
+	func topTabBarDidSelectTab(_ tab: TopTabBar.Tab)
+}
+
 final class TopTabBar: BaseView {
 	
-	enum Tab {
+	enum Tab: Int {
 		case domestic
 		case international
 	}
+	
+	weak var delegate: TopTabBarDelegate?
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -65,11 +72,21 @@ final class TopTabBar: BaseView {
 	
 	private var selectionLineLeftConstraint: NSLayoutConstraint?
 	private var selectionLineRightConstraint: NSLayoutConstraint?
+	private var isAnimating = false
 	
 	override func setupViews() {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		domesticButton.title = L.generalNetherlands()
+		domesticButton.tapHandler = { [weak self] in
+			self?.tapTabButton(.domestic)
+		}
+		internationalButton.title = L.generalEuropeanUnion()
+		internationalButton.tapHandler = { [weak self] in
+			self?.tapTabButton(.international)
+		}
 	}
 	
 	override func setupViewHierarchy() {
@@ -77,10 +94,7 @@ final class TopTabBar: BaseView {
 		
 		addSubview(stackView)
 		stackView.addArrangedSubview(domesticButton)
-		domesticButton.title = L.generalNetherlands()
 		stackView.addArrangedSubview(internationalButton)
-		internationalButton.title = L.generalEuropeanUnion()
-		
 		stackView.addSubview(separatorView)
 		stackView.addSubview(selectionLineView)
 	}
@@ -106,6 +120,13 @@ final class TopTabBar: BaseView {
 		select(tab: .domestic, animated: false)
 	}
 	
+	private func tapTabButton(_ tab: Tab) {
+		guard !isAnimating else { return }
+		
+		delegate?.topTabBarDidSelectTab(tab)
+		select(tab: tab, animated: true)
+	}
+	
 	func select(tab: Tab, animated: Bool) {
 		
 		selectionLineLeftConstraint?.isActive = false
@@ -125,10 +146,11 @@ final class TopTabBar: BaseView {
 		
 		guard animated else { return }
 		
+		isAnimating = true
 		UIView.animate(withDuration: ViewTraits.Duration.lineAnimation) {
 			self.layoutIfNeeded()
-		} completion: { _ in
-			
+		} completion: { [weak self] _ in
+			self?.isAnimating = false
 		}
 	}
 }
@@ -170,19 +192,21 @@ private class TabBarButton: UIControl {
 	}
 	
 	/// Setup all the views
-	func setupViews() {
+	private func setupViews() {
 
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		addTarget(self, action: #selector(touchUp), for: .touchUpInside)
 	}
 
 	/// Setup the view hierarchy
-	func setupViewHierarchy() {
+	private func setupViewHierarchy() {
 
 		addSubview(titleLabel)
 	}
 
 	/// Setup all the constraints
-	func setupViewConstraints() {
+	private func setupViewConstraints() {
 
 		NSLayoutConstraint.activate([
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
@@ -193,6 +217,13 @@ private class TabBarButton: UIControl {
 			titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor)
 		])
 	}
+	
+	@objc
+	private func touchUp() {
+		tapHandler?()
+	}
+	
+	var tapHandler: (() -> Void)?
 	
 	/// The title
 	var title: String? {
