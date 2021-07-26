@@ -216,6 +216,7 @@ class HolderCoordinator: SharedCoordinator {
 					reachability: try? Reachability(),
 					now: { Date() }
 				),
+				userSettings: UserSettings(),
 				now: { Date() }
 			)
 		)
