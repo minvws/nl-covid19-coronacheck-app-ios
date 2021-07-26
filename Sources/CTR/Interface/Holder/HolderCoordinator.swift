@@ -197,16 +197,19 @@ class HolderCoordinator: SharedCoordinator {
 	
 	private func navigateToDashboard() {
 		
-		let dashboardViewController = HolderDashboardViewController(
-			viewModel: HolderDashboardViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager,
-				now: { Date() }
-			)
-		)
+//		let dashboardViewController = HolderDashboardViewController(
+//			viewModel: HolderDashboardViewModel(
+//				coordinator: self,
+//				cryptoManager: cryptoManager,
+//				proofManager: proofManager,
+//				configuration: generalConfiguration,
+//				dataStoreManager: Services.dataStoreManager,
+//				now: { Date() }
+//			)
+//		)
+//		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
+		
+		let dashboardViewController = DashboardViewController()
 		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
 		sidePanel?.selectedViewController = dashboardNavigationController
 	}
