@@ -29,9 +29,6 @@ packages:
   Nimble:
     github: Quick/Nimble
     majorVersion: 9.0.0
-  OHHTTPStubs:
-    github: AliSoftware/OHHTTPStubs
-    majorVersion: 9.1.0
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -229,10 +226,6 @@ targetTemplates:
     platform: iOS
     type: bundle.unit-test
     dependencies:
-      - package: OHHTTPStubs
-        product: OHHTTPStubs
-      - package: OHHTTPStubs
-        product: OHHTTPStubsSwift
       - package: Nimble
       - package: SnapshotTesting
       - target: Holder
