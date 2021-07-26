@@ -7,23 +7,24 @@
   
 import UIKit
 
-class ShowQRViewModel: PreventableScreenCapture, Logging {
+class ShowQRViewModel: Logging {
 
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
 
 	var loggingCategory: String = "ShowQRViewModel"
 
+	var screenshotWasTakenHandler: (() -> Void)?
+
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
 	weak private var configuration: ConfigurationGeneralProtocol?
 
-	var previousBrightness: CGFloat?
-
 	weak var validityTimer: Timer?
-
+	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
+	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 
 	@Bindable private(set) var title: String?
     
@@ -36,6 +37,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	@Bindable private(set) var showValidQR: Bool
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
+
+	@Bindable private(set) var hideForCapture: Bool = false
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -70,13 +73,15 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
 		configuration: ConfigurationGeneralProtocol,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager) {
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
 		self.configuration = configuration
 		self.remoteConfigManager = remoteConfigManager
+		self.screenCaptureDetector = screenCaptureDetector
 
 		// Start by showing nothing
 		self.showValidQR = false
@@ -94,7 +99,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			showInternationalAnimation = true
 		}
 
-		super.init()
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
+		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
+			self?.screenshotWasTakenHandler?()
+		}
 	}
 
 	/// Check the QR Validity

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ListEventsViewModel: PreventableScreenCapture, Logging {
+class ListEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -70,6 +70,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
+	@Bindable private(set) var hideForCapture: Bool = false
+
+	private let screenCaptureDetector = ScreenCaptureDetector()
+
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
@@ -117,7 +121,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			)
 		)
 
-		super.init()
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
 
 		viewState = getViewState(from: remoteEvents)
 	}
