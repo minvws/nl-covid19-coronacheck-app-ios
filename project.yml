@@ -28,7 +28,7 @@ packages:
     majorVersion: 1.2.0
   Nimble:
     github: Quick/Nimble
-    majorVersion: 9.0.0
+    majorVersion: 9.2.0
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
