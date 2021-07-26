@@ -59,12 +59,11 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				}
 				logVerbose("remoteIdentity: \(String(describing: remoteTuple))")
 
-				match = match && (remoteTuple?.day == existingTuple?.day && remoteTuple?.month == existingTuple?.month)
-				// Disable the name checking for now.
-//					&&
-//									(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
-//										remoteTuple?.lastNameInitial == remoteTuple?.lastNameInitial)
-//				)
+				match = match &&
+					remoteTuple?.day == existingTuple?.day &&
+					remoteTuple?.month == existingTuple?.month &&
+					remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial &&
+					remoteTuple?.lastNameInitial == existingTuple?.lastNameInitial
 			}
 		}
 		logDebug("Does the identity of the new events match with the existing ones? \(match)")
@@ -125,22 +124,12 @@ extension EventFlow.Identity {
 
 	private func getFirstNameInitIal() -> String? {
 
-		guard let firstName = firstName else {
-			return nil
-		}
-		let normalized = Normalizer.normalize(firstName)
-		let firstChar = normalized.prefix(1)
-		return String(firstChar).uppercased()
+		return Normalizer.toAzInitial(firstName)?.uppercased()
 	}
 
 	private func getLastNameInitial() -> String? {
 
-		guard let lastName = lastName else {
-			return nil
-		}
-		let normalized = Normalizer.normalize(lastName)
-		let firstChar = normalized.prefix(1)
-		return String(firstChar).uppercased()
+		return Normalizer.toAzInitial(lastName)?.uppercased()
 	}
 
 	private func getBirthDay() -> String? {
@@ -171,6 +160,7 @@ extension EventFlow.Identity {
 class Normalizer {
 
 	static let permittedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz ")
+	static let initialsCharacterSet = CharacterSet(charactersIn: "ABCDEFGHILKLMNOPQRSTUVWXYZ")
 
 	/// Normalize any input, transform to latin, remove all diacritics
 	/// - Parameter input: the unnormalized input
@@ -182,6 +172,25 @@ class Normalizer {
 			return permittedInput
 		}
 		return input
+	}
+
+	/// Return the initial of the input, only if is in A-Z
+	/// - Parameter input: the string to check
+	/// - Returns: optional the initial
+	class func toAzInitial(_ input: String?) -> String? {
+
+		guard let input = input else {
+			return nil
+		}
+
+		let firstChar = input.prefix(1)
+		let capitalizedInitial = String(firstChar)
+
+		guard capitalizedInitial.uppercased().unicodeScalars.allSatisfy({ initialsCharacterSet.contains($0) }) else {
+
+			return nil
+		}
+		return capitalizedInitial
 	}
 }
 
