@@ -77,9 +77,9 @@ final class TopTabBar: BaseView {
 		
 		addSubview(stackView)
 		stackView.addArrangedSubview(domesticButton)
-		domesticButton.title = "Nederland"
+		domesticButton.title = L.generalNetherlands()
 		stackView.addArrangedSubview(internationalButton)
-		internationalButton.title = "Internationaal"
+		internationalButton.title = L.generalEuropeanUnion()
 		
 		stackView.addSubview(separatorView)
 		stackView.addSubview(selectionLineView)
@@ -110,8 +110,11 @@ final class TopTabBar: BaseView {
 		
 		selectionLineLeftConstraint?.isActive = false
 		selectionLineRightConstraint?.isActive = false
+		domesticButton.isSelected = false
+		internationalButton.isSelected = false
 		
 		let button = tab == .domestic ? domesticButton : internationalButton
+		button.isSelected = true
 		
 		selectionLineLeftConstraint = selectionLineView.leftAnchor.constraint(equalTo: button.leftAnchor)
 		selectionLineLeftConstraint?.isActive = true
@@ -142,8 +145,9 @@ private class TabBarButton: UIControl {
 	}
 	
 	private let titleLabel: Label = {
-		let label = Label(subhead: nil)
+		let label = Label(subheadMedium: nil)
 		label.textAlignment = .center
+		label.textColor = Theme.colors.secondaryText
 		return label
 	}()
 	
@@ -153,6 +157,12 @@ private class TabBarButton: UIControl {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+	}
+	
+	override var isSelected: Bool {
+		didSet {
+			titleLabel.textColor = isSelected ? Theme.colors.dark : Theme.colors.secondaryText
+		}
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
