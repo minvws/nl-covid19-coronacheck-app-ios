@@ -173,7 +173,7 @@ class IdentityCheckerTests: XCTestCase {
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
 
 		// Then
-		expect(matched) == false
+		expect(matched) == true
 	}
 
 	func test_eventGroupV3Alternative_removeEventv3Diacritic() throws {
@@ -186,7 +186,7 @@ class IdentityCheckerTests: XCTestCase {
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
 
 		// Then
-		expect(matched) == false
+		expect(matched) == true
 	}
 
 	func test_eventGroupV3Diacritic_removeEventv3Diacritic_identicalDiacritic() throws {
@@ -202,7 +202,7 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
-	func test_eventGroupV3Diacritic_removeEventv3AlternativeDiacritic_alternative() throws {
+	func test_eventGroupV3Diacritic_removeEventv3AlternativeDiacritic() throws {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacriticAlternative))
@@ -245,8 +245,11 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let values: [String: String] = [
+			"'Doorn": "D",
 			"Rool": "R",
-			"rool": "R"
+			"rool": "R",
+			" rool": "R",
+			"-rool": "R"
 		]
 		for (value, expected) in values {
 			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
@@ -265,7 +268,6 @@ class IdentityCheckerTests: XCTestCase {
 			"#$pietje",
 			"παράδειγμα δοκιμής",
 			"Ægir",
-			"'Doorn",
 			"Özturk",
 			"ТЕСТ МИЛИЦА",
 			"王",

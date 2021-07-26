@@ -62,8 +62,9 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				match = match &&
 					remoteTuple?.day == existingTuple?.day &&
 					remoteTuple?.month == existingTuple?.month &&
-					remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial &&
-					remoteTuple?.lastNameInitial == existingTuple?.lastNameInitial
+					(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
+					remoteTuple?.lastNameInitial == existingTuple?.lastNameInitial)
+
 			}
 		}
 		logDebug("Does the identity of the new events match with the existing ones? \(match)")
@@ -161,6 +162,7 @@ class Normalizer {
 
 	static let permittedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz ")
 	static let initialsCharacterSet = CharacterSet(charactersIn: "ABCDEFGHILKLMNOPQRSTUVWXYZ")
+	static let excludeCharacterSet = CharacterSet(charactersIn: "-' ")
 
 	/// Normalize any input, transform to latin, remove all diacritics
 	/// - Parameter input: the unnormalized input
@@ -183,10 +185,10 @@ class Normalizer {
 			return nil
 		}
 
-		let firstChar = input.prefix(1)
-		let capitalizedInitial = String(firstChar)
-
-		guard capitalizedInitial.uppercased().unicodeScalars.allSatisfy({ initialsCharacterSet.contains($0) }) else {
+		let validInput = String(input.unicodeScalars.filter { !excludeCharacterSet.contains($0) })
+		let firstChar = validInput.prefix(1)
+		let capitalizedInitial = String(firstChar).uppercased()
+		guard capitalizedInitial.unicodeScalars.allSatisfy({ initialsCharacterSet.contains($0) }) else {
 
 			return nil
 		}
