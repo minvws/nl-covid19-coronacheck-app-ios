@@ -150,12 +150,14 @@ targetTemplates:
         ITSAppUsesNonExemptEncryption: false
         LSApplicationQueriesSchemes:
           - 'tel'
+          - 'activator'
           - 'cydia'
+          - 'filza'
           - 'sileo'
           - 'undecimus'
           - 'zbra'
         LSRequiresIPhoneOS: true
-        NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen. "
+        NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen."
         UIAppFonts:
           - 'Montserrat-Bold.ttf'
           - 'Montserrat-SemiBold.ttf'
