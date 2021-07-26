@@ -18,6 +18,7 @@ class ShowQRViewModelTests: XCTestCase {
 	var cryptoManagerSpy: CryptoManagerSpy!
 	var configSpy: ConfigurationGeneralSpy!
 	var dataStoreManager: DataStoreManaging!
+	var screenCaptureDetector: ScreenCaptureDetectorSpy!
 
 	override func setUp() {
 
@@ -26,6 +27,7 @@ class ShowQRViewModelTests: XCTestCase {
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
 		configSpy = ConfigurationGeneralSpy()
+		screenCaptureDetector = ScreenCaptureDetectorSpy()
 	}
 
 	// MARK: - Tests
@@ -47,7 +49,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// Then
@@ -74,7 +77,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// Then
@@ -98,7 +102,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -122,7 +127,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -146,7 +152,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
 
@@ -175,7 +182,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -204,18 +212,49 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
+
+		var screenshotWasTaken = false
+		sut.screenshotWasTakenHandler = {
+			screenshotWasTaken = true
+		}
 
 		// When
-		NotificationCenter.default.post(
-			name: UIApplication.userDidTakeScreenshotNotification,
-			object: nil,
-			userInfo: nil
-		)
+		screenCaptureDetector.invokedScreenshotWasTakenCallback?()
 
 		// Then
-		expect(self.sut.screenshotWasTaken) == true
+		expect(screenshotWasTaken) == true
+	}
+
+	func testHideForCapture() throws {
+		// Given
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .domestic,
+				withValidCredential: false
+			)
+		)
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCard: greenCard,
+			cryptoManager: cryptoManagerSpy,
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
+		)
+		expect(self.sut.hideForCapture) == false
+
+		// When
+		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(true)
+
+		// Then
+		expect(self.sut.hideForCapture) == true
+
+		// And disable again:
+		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(false)
+		expect(self.sut.hideForCapture) == false
 	}
 
 	func test_moreInformation_noValidCredential() throws {
@@ -231,7 +270,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 
 		// When
@@ -254,7 +294,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
 			birthDay: "30",
@@ -290,7 +331,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = nil
 
@@ -314,7 +356,8 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			configuration: configSpy,
+			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(
 			credentialVersion: 1,

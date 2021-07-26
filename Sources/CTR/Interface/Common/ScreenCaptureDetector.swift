@@ -7,7 +7,12 @@
 
 import UIKit
 
-final class ScreenCaptureDetector {
+protocol ScreenCaptureDetectorProtocol: AnyObject {
+	var screenshotWasTakenCallback: (() -> Void)? { get set }
+	var screenCaptureDidChangeCallback: ((Bool) -> Void)? { get set }
+}
+
+final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 

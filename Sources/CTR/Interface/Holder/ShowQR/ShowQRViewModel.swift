@@ -21,10 +21,10 @@ class ShowQRViewModel: Logging {
 	weak private var remoteConfigManager: RemoteConfigManaging?
 	weak private var configuration: ConfigurationGeneralProtocol?
 
-	weak private var validityTimer: Timer?
+	weak var validityTimer: Timer?
 	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
-	private let screenCaptureDetector = ScreenCaptureDetector()
+	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 
 	@Bindable private(set) var title: String?
     
@@ -73,13 +73,15 @@ class ShowQRViewModel: Logging {
 		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
 		configuration: ConfigurationGeneralProtocol,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager) {
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
 		self.configuration = configuration
 		self.remoteConfigManager = remoteConfigManager
+		self.screenCaptureDetector = screenCaptureDetector
 
 		// Start by showing nothing
 		self.showValidQR = false
