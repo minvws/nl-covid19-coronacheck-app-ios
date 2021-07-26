@@ -41,8 +41,7 @@ enum LaunchState: Equatable {
 					lhsVersion.appStoreURL == rhsVersion.appStoreURL &&
 					lhsVersion.informationURL == rhsVersion.informationURL &&
 					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
-					lhsVersion.configTTL == rhsVersion.configTTL &&
-					lhsVersion.maxValidityHours == rhsVersion.maxValidityHours
+					lhsVersion.configTTL == rhsVersion.configTTL
 			case (.cryptoLibNotInitialized, cryptoLibNotInitialized):
 				return true
 			default:

@@ -1,4 +1,3 @@
-//
 /*
 * Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
 *  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
@@ -44,7 +43,7 @@ final class LocalizedCopyTests: XCTestCase {
 			== [ .nl: "hersteldatum", .en: "recovery date" ]
 
 		expect(self.copyValues(key: "general.recoverystatement"))
-			== [ .nl: "herstelverklaring", .en: "recovery certificate" ]
+			== [ .nl: "herstelbewijs", .en: "recovery certificate" ]
 		/* -- (end of lowercased checks) ☝🏻 -- */
 
 		expect(self.copyValues(key: "general.testdate"))

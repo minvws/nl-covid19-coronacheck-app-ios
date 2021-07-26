@@ -26,7 +26,8 @@ protocol MenuDelegate: AnyObject {
 enum MenuIdentifier {
 
 	case overview
-	case qrCodeMaken
+	case addCertificate
+	case addPaperCertificate
 	case scan
 	case support
 	case settings

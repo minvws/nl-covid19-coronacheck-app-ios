@@ -125,54 +125,25 @@ class CryptoManager: CryptoManaging, Logging {
 	
 	/// Verify the QR message
 	/// - Parameter message: the scanned QR code
-	/// - Returns: Attributes if the QR is valid or error string if not
-	func verifyQRMessage(_ message: String) -> CryptoResult {
+	/// - Returns: Verification result if the QR is valid or nil if not
+	func verifyQRMessage(_ message: String) -> MobilecoreVerificationResult? {
 		
 		guard hasPublicKeys() else {
-			return (attributes: nil, errorMessage: "no public keys")
+			logError("No public keys")
+			return nil
 		}
 		
 		let proofQREncoded = message.data(using: .utf8)
 		
 		guard let result = MobilecoreVerify(proofQREncoded) else {
-			return (attributes: nil, errorMessage: "could not verify QR")
+			logError("Could not verify QR")
+			return nil
 		}
 		
-		guard result.error.isEmpty, let value = result.value else {
-			self.logError("Error Proof: \(result.error)")
-			return (attributes: nil, errorMessage: result.error)
-		}
-		
-		do {
-			let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
-			return (attributes: object, errorMessage: nil)
-		} catch {
-			self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
-			return (attributes: nil, errorMessage: error.localizedDescription)
-		}
+		return result
 	}
 	
 	// MARK: - Credential
-	
-	/// Read the crypto credential
-	/// - Returns: the crypto attributes
-	func readCredential() -> CryptoAttributes? {
-		
-		if let cryptoDataValue = cryptoData.credential,
-		   let response = MobilecoreReadDomesticCredential(cryptoDataValue) {
-			if let value = response.value {
-				do {
-					let object = try JSONDecoder().decode(CryptoAttributes.self, from: value)
-					return object
-				} catch {
-					self.logError("Error Deserializing \(CryptoAttributes.self): \(error)")
-				}
-			} else {
-				logError("Can't read credential: \(String(describing: response.error))")
-			}
-		}
-		return nil
-	}
 
 	/// Read the crypto credential
 	/// - Returns: the crypto attributes
@@ -200,7 +171,7 @@ class CryptoManager: CryptoManaging, Logging {
 		if let response = MobilecoreReadEuropeanCredential(data) {
 			if let value = response.value {
 				do {
-					logDebug("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
+					logVerbose("EuCredentialAttributes Raw: \(String(decoding: value, as: UTF8.self))")
 					let object = try JSONDecoder().decode(EuCredentialAttributes.self, from: value)
 					return object
 				} catch {
@@ -240,17 +211,5 @@ class CryptoManager: CryptoManaging, Logging {
 	func removeCredential() {
 		
 		cryptoData.credential = nil
-	}
-
-	/// Migrate existing credential to the wallet
-	/// - Parameter walletManager: the wallet manager
-	func migrateExistingCredential(_ walletManager: WalletManaging, sampleDate: Date) {
-		
-		// Sample time is not returned, use current date for now
-		if let existingCredential = cryptoData.credential,
-			walletManager.importExistingTestCredential(existingCredential, sampleDate: sampleDate) {
-
-				removeCredential()
-		}
 	}
 }

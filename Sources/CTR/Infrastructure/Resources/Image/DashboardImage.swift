@@ -13,8 +13,6 @@ extension UIImage {
 
 	static var appointmentTile: UIImage? { UIImage(named: "AppointmentTile") }
 
-	static var create: UIImage? { UIImage(named: "CreateQR") }
-
 	static var createTile: UIImage? { UIImage(named: "CreateTile") }
 
 	static var radio: UIImage? { UIImage(named: "Radio") }
@@ -25,9 +23,11 @@ extension UIImage {
 
 	static var euQRIcon: UIImage? { UIImage(named: "EU_QRIcon") }
 
-	static var securityBackground: UIImage? { UIImage(named: "Houses") }
-
 	static var smallCross: UIImage? { UIImage(named: "SmallCross") }
 
 	static var myQR: UIImage? { UIImage(named: "MyQR") }
+	
+	static var emptyDashboard: UIImage? { UIImage(named: "Empty_Dashboard") }
+	
+	static var errorDashboard: UIImage? { UIImage(named: "Error_Dashboard") }
 }

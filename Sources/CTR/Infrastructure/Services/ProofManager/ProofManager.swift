@@ -16,7 +16,7 @@ class ProofManager: ProofManaging, Logging {
 	var networkManager: NetworkManaging = Services.networkManager
 	var cryptoManager: CryptoManaging = Services.cryptoManager
 	var walletManager: WalletManaging = Services.walletManager
-	var cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
+	var cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 
 	internal var testProviders = [TestProvider]()
 	
@@ -53,8 +53,6 @@ class ProofManager: ProofManaging, Logging {
 	/// Initializer
 	required init() {
 		// Required by protocol
-		
-//		removeTestWrapper()
 	}
 	
 	/// Get the providers
@@ -100,9 +98,9 @@ class ProofManager: ProofManaging, Logging {
 		
 		networkManager.getPublicKeys { [weak self] resultwrapper in
 			
-			// Response is of type (Result<(IssuerPublicKeys, Data), NetworkError>)
+			// Response is of type (Result<Data, NetworkError>)
 			switch resultwrapper {
-				case .success((_, let data)):
+				case .success(let data):
 					
 					self?.keysFetchedTimestamp = Date()
 					self?.cryptoLibUtility.store(data, for: .publicKeys)
@@ -113,6 +111,7 @@ class ProofManager: ProofManaging, Logging {
 					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
 					   lastFetchedTimestamp > Date() - ttl {
 						self?.logInfo("Issuer public keys still within TTL")
+						self?.cryptoLibUtility.checkFile(.publicKeys)
 						onCompletion?()
 						
 					} else {
@@ -132,16 +131,16 @@ class ProofManager: ProofManaging, Logging {
 		code: String?,
 		provider: TestProvider,
 		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void) {
-		
+
 		if provider.resultURL == nil {
 			self.logError("No url provided for \(provider)")
 			onCompletion(.failure(ProofError.invalidUrl))
 			return
 		}
-		
+
 		networkManager.fetchTestResult(provider: provider, token: token, code: code) { response in
 			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
-			
+
 			switch response {
 				case let .success(wrapper):
 					self.logDebug("We got \(wrapper.0.status) wrapper.")
@@ -151,27 +150,6 @@ class ProofManager: ProofManaging, Logging {
 					onCompletion(.failure(error))
 			}
 		}
-	}
-	
-	/// Get a test result
-	/// - Returns: a test result
-	func getTestWrapper() -> TestResultWrapper? {
-		
-		return proofData.testWrapper
-	}
-	
-	/// Get the signed test result
-	/// - Returns: a test result
-	func getSignedWrapper() -> SignedResponse? {
-		
-		return proofData.signedWrapper
-	}
-	
-	/// Remove the test wrapper
-	func removeTestWrapper() {
-		
-		proofData.testWrapper = nil
-		proofData.signedWrapper = nil
 	}
 	
 	// MARK: - Helper methods
@@ -184,30 +162,5 @@ class ProofManager: ProofManaging, Logging {
 			return convertedToString
 		}
 		return ""
-	}
-
-	// MARK: - Migrating to Database
-
-	func migrateExistingProof() {
-
-		if let testEvent = getTestWrapper(),
-		   let signedProof = getSignedWrapper(),
-		   let sampleDateString = testEvent.result?.sampleDate,
-		   let sampleDate = Formatter.getDateFrom(dateString8601: sampleDateString),
-		   testEvent.status == .complete {
-
-			// Convert to eventGroup
-			_ = walletManager.storeEventGroup(
-				.test,
-				providerIdentifier: testEvent.providerIdentifier,
-				signedResponse: signedProof,
-				issuedAt: sampleDate
-			)
-			// Remove old data
-			removeTestWrapper()
-			
-			// Convert Credential
-			cryptoManager.migrateExistingCredential(walletManager, sampleDate: sampleDate)
-		}
 	}
 }

@@ -1,0 +1,31 @@
+/*
+* Copyright (c) 2021 De Staat der Nederlanden, Ministerie van Volksgezondheid, Welzijn en Sport.
+*  Licensed under the EUROPEAN UNION PUBLIC LICENCE v. 1.2
+*
+*  SPDX-License-Identifier: EUPL-1.2
+*/
+
+import UIKit
+
+final class PaperCertificateStartViewModel: Logging {
+	
+	@Bindable private(set) var title: String = L.holderPapercertificateStartTitle()
+	@Bindable private(set) var message: String = L.holderPapercertificateStartMessage()
+	@Bindable private(set) var highlightedMessage: String = L.holderPapercertificateStartHighlightedmessage()
+	@Bindable private(set) var primaryButtonTitle = L.generalNext()
+	
+	private weak var coordinator: PaperCertificateCoordinatorDelegate?
+	
+	/// - Parameters:
+	///   - coordinator: the coordinator delegate
+	init(coordinator: PaperCertificateCoordinatorDelegate) {
+		
+		self.coordinator = coordinator
+	}
+	
+	/// The user tapped the primary button
+	func primaryButtonTapped() {
+		
+		coordinator?.userWishesToEnterToken()
+	}
+}

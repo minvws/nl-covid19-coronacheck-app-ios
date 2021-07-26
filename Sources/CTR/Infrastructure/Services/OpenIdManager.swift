@@ -7,6 +7,7 @@
 
 import Foundation
 import AppAuth
+import AppAuthEnterpriseUserAgent
 
 protocol OpenIdManaging: AnyObject {
 
