@@ -22,7 +22,7 @@ packages:
     majorVersion: 1.9.1
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.2.1
+    majorVersion: 3.2.3
   MBProgressHUD:
     github: jdg/MBProgressHUD
     majorVersion: 1.2.0
