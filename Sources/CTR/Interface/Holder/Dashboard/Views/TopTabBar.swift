@@ -9,6 +9,11 @@ import UIKit
 
 final class TopTabBar: BaseView {
 	
+	enum Tab {
+		case domestic
+		case international
+	}
+	
 	/// The display constants
 	private enum ViewTraits {
 		
@@ -17,6 +22,10 @@ final class TopTabBar: BaseView {
 		}
 		enum Size {
 			static let separatorHeight: CGFloat = 2
+			static let lineHeight: CGFloat = 2
+		}
+		enum Duration {
+			static let lineAnimation: TimeInterval = 0.25
 		}
 	}
 	
@@ -47,6 +56,16 @@ final class TopTabBar: BaseView {
 		return stackView
 	}()
 	
+	private let selectionLineView: UIView = {
+		let view = UIView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.dark
+		return view
+	}()
+	
+	private var selectionLineLeftConstraint: NSLayoutConstraint?
+	private var selectionLineRightConstraint: NSLayoutConstraint?
+	
 	override func setupViews() {
 		super.setupViews()
 		
@@ -58,9 +77,12 @@ final class TopTabBar: BaseView {
 		
 		addSubview(stackView)
 		stackView.addArrangedSubview(domesticButton)
+		domesticButton.title = "Nederland"
 		stackView.addArrangedSubview(internationalButton)
+		internationalButton.title = "Internationaal"
 		
 		stackView.addSubview(separatorView)
+		stackView.addSubview(selectionLineView)
 	}
 	
 	override func setupViewConstraints() {
@@ -75,8 +97,36 @@ final class TopTabBar: BaseView {
 			separatorView.leftAnchor.constraint(equalTo: stackView.leftAnchor),
 			separatorView.rightAnchor.constraint(equalTo: stackView.rightAnchor),
 			separatorView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
-			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.separatorHeight)
+			separatorView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.separatorHeight),
+			
+			selectionLineView.bottomAnchor.constraint(equalTo: separatorView.topAnchor),
+			selectionLineView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.lineHeight)
 		])
+		
+		select(tab: .domestic, animated: false)
+	}
+	
+	func select(tab: Tab, animated: Bool) {
+		
+		selectionLineLeftConstraint?.isActive = false
+		selectionLineRightConstraint?.isActive = false
+		
+		let button = tab == .domestic ? domesticButton : internationalButton
+		
+		selectionLineLeftConstraint = selectionLineView.leftAnchor.constraint(equalTo: button.leftAnchor)
+		selectionLineLeftConstraint?.isActive = true
+		selectionLineRightConstraint = selectionLineView.rightAnchor.constraint(equalTo: button.rightAnchor)
+		selectionLineRightConstraint?.isActive = true
+		
+		setNeedsLayout()
+		
+		guard animated else { return }
+		
+		UIView.animate(withDuration: ViewTraits.Duration.lineAnimation) {
+			self.layoutIfNeeded()
+		} completion: { _ in
+			
+		}
 	}
 }
 
