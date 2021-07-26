@@ -37,7 +37,7 @@ packages:
     majorVersion: 5.4.0
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
-    majorVersion: 1.8.2
+    majorVersion: 1.9.0
 
 
 # - Attributes: 
