@@ -21,7 +21,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
 
-		case emptyState(title: String, message: String)
+		case emptyState(image: UIImage?, title: String, message: String)
 
 		case domesticQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
@@ -139,9 +139,9 @@ class HolderDashboardViewController: BaseViewController {
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
 						
-					case let .emptyState(title, message):
+					case let .emptyState(image, title, message):
 						let emptyDashboardView = EmptyDashboardView()
-						emptyDashboardView.image = .emptyDashboard
+						emptyDashboardView.image = image
 						emptyDashboardView.title = title
 						emptyDashboardView.message = message
 						emptyDashboardView.contentTextView.linkTouched { url in

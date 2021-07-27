@@ -332,10 +332,24 @@ final class HolderDashboardViewModel: Logging {
 		}
 
 		if allQRCards.isEmpty && regionFilteredExpiredCards.isEmpty {
-			viewControllerCards += [.emptyState(
-				title: L.holderDashboardEmptyTitle(),
-				message: L.holderDashboardEmptyMessage()
-			)]
+			viewControllerCards += [
+				{
+					switch validityRegion {
+						case .domestic:
+							return HolderDashboardViewController.Card.emptyState(
+								image: I.empty_Dashboard_Domestic(),
+								title: L.holderDashboardEmptyDomesticTitle(),
+								message: L.holderDashboardEmptyDomesticMessage()
+							)
+						case .europeanUnion:
+							return HolderDashboardViewController.Card.emptyState(
+								image: I.empty_Dashboard_International(),
+								title: L.holderDashboardEmptyInternationalTitle(),
+								message: L.holderDashboardEmptyInternationalMessage()
+							)
+					}
+				}()
+			]
 		}
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
