@@ -54,25 +54,20 @@ final class HolderDashboardViewModel: Logging {
 
 	// MARK: - Private properties
 
-	/// Coordination Delegate
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
-
-	/// The crypto manager
 	private weak var cryptoManager: CryptoManaging?
-
-	/// The proof manager
 	private weak var proofManager: ProofManaging?
-
-	/// The configuration
 	private var configuration: ConfigurationGeneralProtocol
-
-	/// the notification center
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private var userSettings: UserSettingsProtocol
 
-	@UserDefaults(key: "dashboardRegionToggleValue", defaultValue: QRCodeValidityRegion.domestic)
-	private var dashboardRegionToggleValue: QRCodeValidityRegion { // swiftlint:disable:this let_var_whitespace
-		didSet {
-			state.qrCodeValidityRegion = dashboardRegionToggleValue
+	private var dashboardRegionToggleValue: QRCodeValidityRegion {
+		get {
+			userSettings.dashboardRegionToggleValue
+		}
+		set {
+			state.qrCodeValidityRegion = newValue
+			userSettings.dashboardRegionToggleValue = newValue
 		}
 	}
 
@@ -108,6 +103,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let datasource: HolderDashboardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
+
 	private let now: () -> Date
 
 	// MARK: -
@@ -126,6 +122,7 @@ final class HolderDashboardViewModel: Logging {
 		configuration: ConfigurationGeneralProtocol,
 		datasource: HolderDashboardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
+		userSettings: UserSettingsProtocol,
 		now: @escaping () -> Date
 	) {
 
@@ -135,6 +132,7 @@ final class HolderDashboardViewModel: Logging {
 		self.configuration = configuration
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
+		self.userSettings = userSettings
 		self.now = now
 
 		self.state = State(
@@ -159,7 +157,7 @@ final class HolderDashboardViewModel: Logging {
 		strippenRefresher.load()
 
 		// Update State from UserDefaults:
-		self.state.qrCodeValidityRegion = dashboardRegionToggleValue
+		self.state.qrCodeValidityRegion = userSettings.dashboardRegionToggleValue
 
 		self.setupNotificationListeners()
 		
@@ -344,7 +342,7 @@ final class HolderDashboardViewModel: Logging {
 								// e.g. "5 uur 59 min"
 								guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: mostDistantFutureExpiryDate)
 								else { return nil }
-
+		
 								return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
 							}
 						)]

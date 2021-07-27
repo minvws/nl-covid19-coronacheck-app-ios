@@ -7,12 +7,10 @@
 
 import Foundation
 
-class InformationViewModel: PreventableScreenCapture {
+class InformationViewModel {
 
 	/// Dismissable Delegate
 	weak var coordinator: Dismissable?
-
-	var hideBodyForScreenCapture = false
 
 	// MARK: - Bindable
 
@@ -22,8 +20,12 @@ class InformationViewModel: PreventableScreenCapture {
 	/// The message of the information page
 	@Bindable private(set) var message: String
 
+	@Bindable private(set) var hideForCapture: Bool = false
+
 	// MARK: - Private
+	private let hideBodyForScreenCapture: Bool
 	private let linkTapHander: ((URL) -> Void)?
+	private let screenCaptureDetector = ScreenCaptureDetector()
 
 	// MARK: - Initializer
 
@@ -44,7 +46,12 @@ class InformationViewModel: PreventableScreenCapture {
 		self.message = message
 		self.linkTapHander = linkTapHander
 		self.hideBodyForScreenCapture = hideBodyForScreenCapture
-		super.init()
+
+		if hideBodyForScreenCapture {
+			screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+				self?.hideForCapture = isBeingCaptured
+			}
+		}
 	}
 
 	// MARK: - Methods
@@ -58,13 +65,5 @@ class InformationViewModel: PreventableScreenCapture {
 
 	func userDidTapURL(url: URL) {
 		linkTapHander?(url)
-	}
-
-	override func preventScreenCapture() {
-
-		// only prevent when required
-		if hideBodyForScreenCapture {
-			super.preventScreenCapture()
-		}
 	}
 }
