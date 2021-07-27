@@ -7,19 +7,19 @@
 
 import UIKit
 
-protocol TopTabBarDelegate: AnyObject {
+protocol DashboardTabBarDelegate: AnyObject {
 	
-	func topTabBarDidSelectTab(_ tab: TopTabBar.Tab)
+	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTabBar.Tab)
 }
 
-final class TopTabBar: BaseView {
+final class DashboardTabBar: BaseView {
 	
 	enum Tab: Int {
 		case domestic
 		case international
 	}
 	
-	weak var delegate: TopTabBarDelegate?
+	weak var delegate: DashboardTabBarDelegate?
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -123,7 +123,7 @@ final class TopTabBar: BaseView {
 	private func tapTabButton(_ tab: Tab) {
 		guard !isAnimating else { return }
 		
-		delegate?.topTabBarDidSelectTab(tab)
+		delegate?.dashboardTabBar(self, didSelect: tab)
 		selectedTab = tab
 	}
 	

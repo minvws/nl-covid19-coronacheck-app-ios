@@ -7,68 +7,110 @@
 
 import UIKit
 
-class HolderDashboardView: ScrolledStackWithButtonView {
+final class HolderDashboardView: BaseView {
 	
-	private var scrollViewToFooterConstraint: NSLayoutConstraint?
-	
-	private let changeRegionView: ChangeRegionView = {
-		let view = ChangeRegionView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
+	private let tabBar: DashboardTabBar = {
+		let tabBar = DashboardTabBar()
+		tabBar.translatesAutoresizingMaskIntoConstraints = false
+		return tabBar
 	}()
-
+	
+	private let scrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.isPagingEnabled = true
+		scrollView.showsHorizontalScrollIndicator = false
+		return scrollView
+	}()
+	
+	private let domesticScrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.backgroundColor = Theme.colors.viewControllerBackground
+		return scrollView
+	}()
+	
+	private let internationalScrollView: UIScrollView = {
+		let scrollView = UIScrollView()
+		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.backgroundColor = Theme.colors.viewControllerBackground
+		return scrollView
+	}()
+	
 	override func setupViews() {
 		super.setupViews()
-		stackView.distribution = .fill
-		stackView.spacing = 40
+		
+		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
-	func setupPrimaryButton(display: Bool) {
-		if display {
-			// Display button and background
-			bottomScrollViewConstraint?.isActive = false
-			
-			NSLayoutConstraint.activate([
-				{
-					let constraint = scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
-					scrollViewToFooterConstraint = constraint
-					return constraint
-				}()
-			])
-			
-			setupPrimaryButton()
-		} else if primaryButton.superview != nil, bottomScrollViewConstraint?.isActive == false {
-			// Hide button
-			primaryButton.removeFromSuperview()
-			
-			// Hide button background
-			bottomScrollViewConstraint?.isActive = true
-			scrollViewToFooterConstraint?.isActive = false
-		}
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		addSubview(tabBar)
+		tabBar.delegate = self
+		addSubview(scrollView)
+		scrollView.delegate = self
+		scrollView.addSubview(domesticScrollView)
+		scrollView.addSubview(internationalScrollView)
 	}
 	
-	func setupRegionButton(buttonTitle: String?, currentLocationTitle: String?, actionHandler: (() -> Void)?) {
-		if let buttonTitle = buttonTitle,
-		   let currentLocationTitle = currentLocationTitle,
-		   let actionHandler = actionHandler {
+	override func setupViewConstraints() {
+		super.setupViewConstraints()
+		
+		NSLayoutConstraint.activate([
+			tabBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+			tabBar.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			tabBar.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			
-			hasFooterView = true
+			scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
+			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
-			changeRegionView.changeRegionButtonTitle = buttonTitle
-			changeRegionView.currentLocationTitle = currentLocationTitle
-			changeRegionView.changeRegionButtonTappedCommand = actionHandler
-			contentScrollView.addSubview(changeRegionView)
+			domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			domesticScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			domesticScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
+			{
+				let constraint = domesticScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+				constraint.priority = .defaultLow
+				return constraint
+			}(),
 			
-			NSLayoutConstraint.activate([
-				changeRegionView.topAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor, constant: 32),
-				changeRegionView.leftAnchor.constraint(equalTo: contentScrollView.leftAnchor),
-				changeRegionView.rightAnchor.constraint(equalTo: contentScrollView.rightAnchor),
-				changeRegionView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor),
-				changeRegionView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor)
-			])
-		} else {
-			changeRegionView.removeFromSuperview()
-			hasFooterView = false
-		}
+			internationalScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			internationalScrollView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+			internationalScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			internationalScrollView.leftAnchor.constraint(equalTo: domesticScrollView.rightAnchor),
+			internationalScrollView.widthAnchor.constraint(equalTo: safeAreaLayoutGuide.widthAnchor),
+			{
+				let constraint = internationalScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+				constraint.priority = .defaultLow
+				return constraint
+			}()
+		])
+	}
+	
+	func updateForRotation() {
+		let selectedTab = tabBar.selectedTab.rawValue
+		scrollView.contentOffset = CGPoint(x: scrollView.bounds.width * CGFloat(selectedTab), y: 0)
+	}
+}
+
+extension HolderDashboardView: UIScrollViewDelegate {
+	
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		guard scrollView.isDragging else { return }
+		let scrollViewWidth = scrollView.frame.width
+		let pageScroll = 1.5 * scrollViewWidth
+		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
+		tabBar.selectedTab = nextPage ? .international : .domestic
+	}
+}
+
+extension HolderDashboardView: DashboardTabBarDelegate {
+	
+	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTabBar.Tab) {
+		let scrollOffset = CGPoint(x: scrollView.frame.width * CGFloat(tab.rawValue), y: 0)
+		scrollView.setContentOffset(scrollOffset, animated: true)
 	}
 }

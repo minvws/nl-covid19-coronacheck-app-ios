@@ -78,24 +78,33 @@ class HolderDashboardViewController: BaseViewController {
 		styleBackButton(buttonText: "")
 		setupPlusButton()
 
-		sceneView.primaryButtonTappedCommand = { [weak self] in
-			self?.viewModel.addProofTapped()
+//		sceneView.primaryButtonTappedCommand = { [weak self] in
+//			self?.viewModel.addProofTapped()
+//		}
+	}
+	
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransition(to: size, with: coordinator)
+		
+		coordinator.animate { _ in
+			self.sceneView.updateForRotation()
 		}
 	}
 
 	private func setupBindings() {
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
-		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.setupPrimaryButton(display: $0) }
-		viewModel.$regionMode.binding = { [weak self] in self?.sceneView.setupRegionButton(
-			buttonTitle: $0?.buttonTitle,
-			currentLocationTitle: $0?.currentLocationTitle
-		) {
-			self?.viewModel.didTapChangeRegion()
-		}}
+//		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
+//		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.setupPrimaryButton(display: $0) }
+//		viewModel.$regionMode.binding = { [weak self] in self?.sceneView.setupRegionButton(
+//			buttonTitle: $0?.buttonTitle,
+//			currentLocationTitle: $0?.currentLocationTitle
+//		) {
+//			self?.viewModel.didTapChangeRegion()
+//		}}
 
 		// Receive an array of cards,
+		/*
 		viewModel.$cards.binding = { [sceneView, weak viewModel] cards in
 			let cardViews = cards
 				.compactMap { card -> UIView? in
@@ -198,6 +207,7 @@ class HolderDashboardViewController: BaseViewController {
 				sceneView.stackView.setCustomSpacing(22, after: previousCardView)
 			}
 		}
+		*/
 
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
@@ -211,7 +221,7 @@ class HolderDashboardViewController: BaseViewController {
 		super.viewWillAppear(animated)
 
 		// Scroll to top
-		sceneView.scrollView.setContentOffset(.zero, animated: false)
+//		sceneView.scrollView.setContentOffset(.zero, animated: false)
 
 		viewModel.viewWillAppear()
 	}
