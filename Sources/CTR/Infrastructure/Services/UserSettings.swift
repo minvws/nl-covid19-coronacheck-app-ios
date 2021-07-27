@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol UserSettingsProtocol {
+protocol UserSettingsProtocol: AnyObject {
 
 	var scanInstructionShown: Bool { get set }
 

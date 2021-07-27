@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-protocol WalletManaging {
+protocol WalletManaging: AnyObject {
 
 	/// Store an event group
 	/// - Parameters:

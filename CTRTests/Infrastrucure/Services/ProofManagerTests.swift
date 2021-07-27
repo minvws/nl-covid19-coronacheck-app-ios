@@ -12,15 +12,12 @@ import Nimble
 class ProofManagerTests: XCTestCase {
 
 	private var sut: ProofManager!
-	private var cryptoSpy: CryptoManagerSpy!
 	private var networkSpy: NetworkSpy!
 
 	override func setUp() {
 
 		super.setUp()
 		sut = ProofManager()
-		cryptoSpy = CryptoManagerSpy()
-		sut.cryptoManager = cryptoSpy
 		networkSpy = NetworkSpy(configuration: .test)
 		sut.networkManager = networkSpy
 	}

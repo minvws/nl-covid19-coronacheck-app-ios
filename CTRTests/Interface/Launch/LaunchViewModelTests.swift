@@ -19,6 +19,7 @@ class LaunchViewModelTests: XCTestCase {
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var cryptoLibUtilitySpy: CryptoLibUtilitySpy!
+	private var walletSpy: WalletManagerSpy!
 
 	override func setUp() {
 		super.setUp()
@@ -31,6 +32,7 @@ class LaunchViewModelTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		cryptoLibUtilitySpy = CryptoLibUtilitySpy()
 		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
+		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 	}
 
 	let remoteConfig = RemoteConfiguration(
@@ -64,7 +66,8 @@ class LaunchViewModelTests: XCTestCase {
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
 			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy
+			proofManager: proofManagerSpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -83,7 +86,8 @@ class LaunchViewModelTests: XCTestCase {
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier,
 			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy
+			proofManager: proofManagerSpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -109,7 +113,8 @@ class LaunchViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -139,7 +144,8 @@ class LaunchViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -173,7 +179,8 @@ class LaunchViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -207,7 +214,8 @@ class LaunchViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -239,7 +247,8 @@ class LaunchViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -269,7 +278,8 @@ class LaunchViewModelTests: XCTestCase {
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -295,7 +305,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -321,7 +332,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -347,7 +359,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
 		)
 
 		// Then
@@ -371,7 +384,8 @@ class LaunchViewModelTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
 		)
 
 		// When

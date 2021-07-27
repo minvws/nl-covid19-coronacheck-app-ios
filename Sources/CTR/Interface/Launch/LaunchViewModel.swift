@@ -11,12 +11,12 @@ class LaunchViewModel {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 
-	private var versionSupplier: AppVersionSupplierProtocol
+	private var versionSupplier: AppVersionSupplierProtocol?
 	private var remoteConfigManager: RemoteConfigManaging
-	private var walletManager: WalletManaging?
+	private weak var walletManager: WalletManaging?
 	private var proofManager: ProofManaging
-	private var jailBreakDetector: JailBreakProtocol
-	private var userSettings: UserSettingsProtocol
+	private weak var jailBreakDetector: JailBreakProtocol?
+	private weak var userSettings: UserSettingsProtocol?
 	private let cryptoLibUtility: CryptoLibUtilityProtocol
 
 	private var isUpdatingConfiguration = false
@@ -44,12 +44,12 @@ class LaunchViewModel {
 	///   - cryptoLibUtility: the crypto library utility
 	init(
 		coordinator: AppCoordinatorDelegate,
-		versionSupplier: AppVersionSupplierProtocol,
+		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
 		proofManager: ProofManaging = Services.proofManager,
-		jailBreakDetector: JailBreakProtocol = JailBreakDetector(),
-		userSettings: UserSettingsProtocol = UserSettings(),
+		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
+		userSettings: UserSettingsProtocol? = UserSettings(),
 		cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility,
 		walletManager: WalletManaging?) {
 
@@ -68,8 +68,8 @@ class LaunchViewModel {
 		appIcon = flavor == .holder ? .holderAppIcon : .verifierAppIcon
 
 		version = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
+			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
 		if shouldShowJailBreakAlert() {
 			// Interrupt, do not continu the flow
@@ -95,6 +95,10 @@ class LaunchViewModel {
 			return false
 		}
 
+		guard let jailBreakDetector = jailBreakDetector, let userSettings = userSettings else {
+			return false
+		}
+
 		return !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken()
 	}
 
@@ -103,7 +107,7 @@ class LaunchViewModel {
 		// Interruption is over
 		interruptForJailBreakDialog = false
 		// Warning has been shown, do not show twice
-		userSettings.jailbreakWarningShown = true
+		userSettings?.jailbreakWarningShown = true
 		// Continu with flow
 		updateDependencies()
 	}

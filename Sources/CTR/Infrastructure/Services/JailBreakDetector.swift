@@ -8,7 +8,7 @@
 import Foundation
 import IOSSecuritySuite
 
-protocol JailBreakProtocol {
+protocol JailBreakProtocol: AnyObject {
 
 	/// Is this device jail broken?
 	func isJailBroken() -> Bool
