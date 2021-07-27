@@ -26,10 +26,6 @@ class AppCoordinator: Coordinator, Logging {
 	var childCoordinators: [Coordinator] = []
 
 	var navigationController: UINavigationController
-
-	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	private var proofManager: ProofManaging = Services.proofManager
 	
 	private var privacySnapshotWindow: UIWindow?
 
@@ -75,8 +71,7 @@ class AppCoordinator: Coordinator, Logging {
                 coordinator: self,
                 versionSupplier: AppVersionSupplier(),
                 flavor: AppFlavor.flavor,
-                remoteConfigManager: remoteConfigManager,
-                proofManager: proofManager
+				walletManager: AppFlavor.flavor == .holder ? Services.walletManager : nil
             )
         )
         // Set the root

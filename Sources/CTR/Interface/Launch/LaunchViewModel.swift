@@ -13,7 +13,7 @@ class LaunchViewModel {
 
 	private var versionSupplier: AppVersionSupplierProtocol
 	private var remoteConfigManager: RemoteConfigManaging
-	private var walletManager: WalletManaging
+	private var walletManager: WalletManaging?
 	private var proofManager: ProofManaging
 	private var jailBreakDetector: JailBreakProtocol
 	private var userSettings: UserSettingsProtocol
@@ -46,12 +46,12 @@ class LaunchViewModel {
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol,
 		flavor: AppFlavor,
-		remoteConfigManager: RemoteConfigManaging,
-		proofManager: ProofManaging,
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		proofManager: ProofManaging = Services.proofManager,
 		jailBreakDetector: JailBreakProtocol = JailBreakDetector(),
 		userSettings: UserSettingsProtocol = UserSettings(),
 		cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility,
-		walletManager: WalletManaging = Services.walletManager) {
+		walletManager: WalletManaging?) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
@@ -133,8 +133,13 @@ class LaunchViewModel {
 
 	private func checkWallet() {
 
+		guard flavor == .holder else {
+			// Only enable for the holder
+			return
+		}
+
 		let configuration = remoteConfigManager.getConfiguration()
-		walletManager.expireEventGroups(
+		walletManager?.expireEventGroups(
 			vaccinationValidity: configuration.vaccinationEventValidity,
 			recoveryValidity: configuration.recoveryEventValidity,
 			testValidity: configuration.testEventValidity
