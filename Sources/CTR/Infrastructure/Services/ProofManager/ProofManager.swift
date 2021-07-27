@@ -14,8 +14,6 @@ class ProofManager: ProofManaging, Logging {
 
 	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	var networkManager: NetworkManaging = Services.networkManager
-	var cryptoManager: CryptoManaging = Services.cryptoManager
-	var walletManager: WalletManaging = Services.walletManager
 	var cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 
 	internal var testProviders = [TestProvider]()
