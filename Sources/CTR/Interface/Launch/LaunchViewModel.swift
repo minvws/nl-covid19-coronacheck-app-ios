@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LaunchViewModel {
+class LaunchViewModel: Logging {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 
@@ -31,6 +31,9 @@ class LaunchViewModel {
 	@Bindable private(set) var version: String
 	@Bindable private(set) var appIcon: UIImage?
 	@Bindable private(set) var interruptForJailBreakDialog: Bool = false
+
+	@UserDefaults(key: "lastFetchedTimestamp", defaultValue: nil)
+	var lastFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 
 	/// Initializer
 	/// - Parameters:
@@ -157,11 +160,84 @@ class LaunchViewModel {
 		}
 
 		isUpdatingConfiguration = true
-		remoteConfigManager?.update { state in
+		remoteConfigManager?.update { resultWrapper in
 
 			self.isUpdatingConfiguration = false
-			completion(state)
+
+			switch resultWrapper {
+				case .success((let remoteConfiguration, let data)):
+
+					// Update the last fetch time
+					self.lastFetchedTimestamp = Date()
+					// Store as JSON file
+					self.cryptoLibUtility.store(data, for: .remoteConfiguration)
+					// Decide what to do
+					self.compare(remoteConfiguration, completion: completion)
+
+				case let .failure(networkError):
+
+					self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
+
+					// Fallback to the last known remote configuration
+					guard let storedConfiguration = self.remoteConfigManager?.getConfiguration() else {
+						completion(.internetRequired)
+						return
+					}
+
+					self.logDebug("Using stored Configuration \(storedConfiguration)")
+					//
+					if let lastFetchedTimestamp = self.lastFetchedTimestamp,
+					   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
+						// We still got a remote configuration within the config TTL.
+						self.logInfo("Remote Configuration still within TTL")
+						self.compare(storedConfiguration, completion: completion)
+					} else {
+						self.compare(storedConfiguration) { state in
+							switch state {
+								case .actionRequired:
+									// Deactiviated or update trumps no internet
+									completion(state)
+								default:
+									completion(.internetRequired)
+							}
+						}
+					}
+			}
 		}
+	}
+
+	/// Compare the remote configuration against the app version
+	/// - Parameters:
+	///   - remoteConfiguration: the remote configuration
+	///   - completion: completion handler
+	private func compare(
+		_ remoteConfiguration: RemoteInformation,
+		completion: @escaping (LaunchState) -> Void) {
+
+		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)
+		let currentVersion = fullVersionString(versionSupplier?.getCurrentVersion() ?? "1.0.0")
+
+		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+			// Update the app
+			completion(.actionRequired(remoteConfiguration))
+		} else if remoteConfiguration.isDeactivated {
+			// Kill the app
+			completion(.actionRequired(remoteConfiguration))
+		} else {
+			// Nothing to do
+			completion(.noActionNeeded)
+		}
+	}
+
+	/// Get a three digit string of the version
+	/// - Parameter version: the version
+	/// - Returns: three digit string of the version
+	private func fullVersionString(_ version: String) -> String {
+
+		var components = version.split(separator: ".")
+		let missingComponents = max(0, 3 - components.count)
+		components.append(contentsOf: Array(repeating: "0", count: missingComponents))
+		return components.joined(separator: ".")
 	}
 
 	private func checkWallet() {

@@ -40,7 +40,7 @@ class EventStartViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy()
+		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 		remoteConfigManagingSpy.stubbedGetConfigurationResult = remoteConfig
 		sut = EventStartViewModel(
 			coordinator: coordinatorSpy,
