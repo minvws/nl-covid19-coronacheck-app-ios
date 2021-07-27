@@ -81,14 +81,11 @@ class ShowQRViewController: BaseViewController {
 			self?.sceneView.hideQRImage = $0
 		}
 
-		viewModel.$screenshotWasTaken.binding = { [weak self] in
-
-			if $0 {
-				self?.showError(
-					L.holderEnlargedScreenshotTitle(),
-					message: L.holderEnlargedScreenshotMessage()
-				)
-			}
+		viewModel.screenshotWasTakenHandler = { [weak self] in
+			self?.showError(
+				L.holderEnlargedScreenshotTitle(),
+				message: L.holderEnlargedScreenshotMessage()
+			)
 		}
 
 		viewModel.$showInternationalAnimation.binding = { [weak self] in
@@ -120,9 +117,6 @@ class ShowQRViewController: BaseViewController {
 
 		// Check the Validity of the QR
 		viewModel.checkQRValidity()
-
-		// Check if we are being recorded
-		viewModel.preventScreenCapture()
 
 		// Check the brightness
 		if !sceneView.largeQRimageView.isHidden {

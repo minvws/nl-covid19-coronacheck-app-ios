@@ -27,13 +27,11 @@ class HolderDashboardViewController: BaseViewController {
 
 		case europeanUnionQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
 
-		case cardFooter(message: String)
-		
 		case errorMessage(message: String, didTapTryAgain: () -> Void)
 	}
 
-	struct ValidityText {
-		enum Kind {
+	struct ValidityText: Equatable {
+		enum Kind: Equatable {
 			case past
 			case future
 			case current
@@ -44,42 +42,42 @@ class HolderDashboardViewController: BaseViewController {
 	}
 
 	private let viewModel: HolderDashboardViewModel
-	
+
 	let sceneView = HolderDashboardView()
 
 	var screenCaptureInProgress = false
-	
+
 	// MARK: Initializers
-	
+
 	init(viewModel: HolderDashboardViewModel) {
-		
+
 		self.viewModel = viewModel
-		
+
 		super.init(nibName: nil, bundle: nil)
 	}
-	
+
 	required init?(coder: NSCoder) {
-		
+
 		fatalError("init(coder:) has not been implemented")
 	}
-	
+
 	// MARK: View lifecycle
-	
+
 	override func loadView() {
-		
+
 		view = sceneView
 	}
-	
+
 	override func viewDidLoad() {
-		
+
 		super.viewDidLoad()
-		
+
 		setupBindings()
 
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 		setupPlusButton()
-		
+
 		sceneView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.addProofTapped()
 		}
@@ -133,7 +131,7 @@ class HolderDashboardViewController: BaseViewController {
 							viewModel?.openUrl(url)
 						}
 						return emptyDashboardView
-						
+
 					case let .domesticQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator),
 						 let .europeanUnionQR(rows, isLoading, didTapViewQR, buttonEnabledEvaluator, expiryCountdownEvaluator):
 
@@ -161,14 +159,8 @@ class HolderDashboardViewController: BaseViewController {
 
 						return qrCard
 
-					case let .cardFooter(message):
-
-						let cardFooterView = CardFooterView()
-						cardFooterView.title = message
-						return cardFooterView
-						
 					case let .errorMessage(message, didTapTryAgain):
-						
+
 						let errorView = ErrorDashboardView()
 						errorView.message = message
 						errorView.messageView.linkTouched { url in
@@ -217,7 +209,7 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		
+
 		// Scroll to top
 		sceneView.scrollView.setContentOffset(.zero, animated: false)
 

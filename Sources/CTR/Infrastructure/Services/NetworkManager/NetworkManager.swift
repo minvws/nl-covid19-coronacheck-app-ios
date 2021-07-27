@@ -311,7 +311,8 @@ class NetworkManager: Logging {
 		}
 
 		if let error = self.inspect(response: response) {
-			if error == .resourceNotFound && !ignore400 {
+			// serverBusy == 429, resourceNotFound = 4xx
+			if !ignore400 || !(error == .resourceNotFound || error == .serverBusy) {
 				completion(.failure(error))
 				return
 			}
@@ -622,7 +623,6 @@ extension NetworkManager: NetworkManaging {
 		decodedAndReturnSignedJSONData(
 			request: urlRequest,
 			session: session,
-			ignore400: true,
 			completion: completion
 		)
 	}
@@ -669,7 +669,6 @@ extension NetworkManager: NetworkManaging {
 		decodedAndReturnSignedJSONData(
 			request: urlRequest,
 			session: session,
-			ignore400: true,
 			completion: completion
 		)
 	}

@@ -12,6 +12,8 @@ protocol UserSettingsProtocol {
 	var scanInstructionShown: Bool { get set }
 
 	var jailbreakWarningShown: Bool { get set }
+
+	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -21,4 +23,7 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
 	var jailbreakWarningShown: Bool // swiftlint:disable:this let_var_whitespace
+
+	@Bindable @UserDefaults(key: "dashboardRegionToggleValue")
+	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic // swiftlint:disable:this let_var_whitespace
 }
