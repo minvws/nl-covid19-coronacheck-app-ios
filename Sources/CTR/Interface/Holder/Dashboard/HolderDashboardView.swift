@@ -23,15 +23,15 @@ final class HolderDashboardView: BaseView {
 		return scrollView
 	}()
 	
-	private let domesticScrollView: UIScrollView = {
-		let scrollView = UIScrollView()
+	let domesticScrollView: ScrolledStackView = {
+		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		scrollView.backgroundColor = Theme.colors.viewControllerBackground
 		return scrollView
 	}()
 	
-	private let internationalScrollView: UIScrollView = {
-		let scrollView = UIScrollView()
+	let internationalScrollView: ScrolledStackView = {
+		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
 		scrollView.backgroundColor = Theme.colors.viewControllerBackground
 		return scrollView
