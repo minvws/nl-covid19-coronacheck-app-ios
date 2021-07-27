@@ -12,7 +12,7 @@ class LaunchViewModel {
 	private weak var coordinator: AppCoordinatorDelegate?
 
 	private var versionSupplier: AppVersionSupplierProtocol?
-	private var remoteConfigManager: RemoteConfigManaging
+	private var remoteConfigManager: RemoteConfigManaging?
 	private weak var walletManager: WalletManaging?
 	private var proofManager: ProofManaging
 	private weak var jailBreakDetector: JailBreakProtocol?
@@ -22,9 +22,9 @@ class LaunchViewModel {
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
 
-	private var configStatus: LaunchState?
-	private var issuerPublicKeysStatus: LaunchState?
 	private var flavor: AppFlavor
+
+	private let dependencyGroup = DispatchGroup()
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -46,7 +46,7 @@ class LaunchViewModel {
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager,
 		proofManager: ProofManaging = Services.proofManager,
 		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
 		userSettings: UserSettingsProtocol? = UserSettings(),
@@ -84,8 +84,44 @@ class LaunchViewModel {
 	/// Update the dependencies
 	private func updateDependencies() {
 
-		updateConfiguration()
-		updateKeys()
+		// Configuration
+		var configStatus: LaunchState?
+		dependencyGroup.enter()
+		updateConfiguration { result in
+
+			configStatus = result
+			self.dependencyGroup.leave()
+		}
+
+		// Issuer Public Keys
+		var issuerPublicKeysStatus: LaunchState?
+		dependencyGroup.enter()
+		updateKeys { result in
+
+			issuerPublicKeysStatus = result
+			self.dependencyGroup.leave()
+		}
+
+		dependencyGroup.notify(queue: DispatchQueue.main) {
+
+			if self.flavor == .holder {
+				self.checkWallet()
+			}
+
+			if case let .actionRequired(info) = configStatus {
+				// show action
+				self.coordinator?.handleLaunchState(.actionRequired(info))
+			} else if configStatus == .internetRequired || issuerPublicKeysStatus == .internetRequired {
+				// Show no internet
+				self.coordinator?.handleLaunchState(.internetRequired)
+			} else if !self.cryptoLibUtility.isInitialized {
+				// Show crypto lib not initialized error
+				self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
+			} else {
+				// Start application
+				self.coordinator?.handleLaunchState(.noActionNeeded)
+			}
+		}
 	}
 
 	private func shouldShowJailBreakAlert() -> Bool {
@@ -113,7 +149,7 @@ class LaunchViewModel {
 	}
 
 	/// Update the configuration
-	private func updateConfiguration() {
+	private func updateConfiguration(_ completion: @escaping (LaunchState) -> Void) {
 
 		// Execute once.
 		guard !isUpdatingConfiguration else {
@@ -121,28 +157,19 @@ class LaunchViewModel {
 		}
 
 		isUpdatingConfiguration = true
-
-		remoteConfigManager.update { [weak self] updateState in
-			guard let self = self else { return }
-			self.configStatus = updateState
-
-			if self.flavor == .holder {
-				self.checkWallet()
-			}
+		remoteConfigManager?.update { state in
 
 			self.isUpdatingConfiguration = false
-			self.handleState()
+			completion(state)
 		}
 	}
 
 	private func checkWallet() {
 
-		guard flavor == .holder else {
-			// Only enable for the holder
+		guard let configuration = remoteConfigManager?.getConfiguration() else {
 			return
 		}
 
-		let configuration = remoteConfigManager.getConfiguration()
 		walletManager?.expireEventGroups(
 			vaccinationValidity: configuration.vaccinationEventValidity,
 			recoveryValidity: configuration.recoveryEventValidity,
@@ -150,8 +177,7 @@ class LaunchViewModel {
 		)
 	}
 
-	/// Update the Issuer Public keys
-	private func updateKeys() {
+	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
 
 		// Execute once.
 		guard !isUpdatingIssuerPublicKeys else {
@@ -159,42 +185,15 @@ class LaunchViewModel {
 		}
 
 		isUpdatingIssuerPublicKeys = true
-
-		// Fetch the issuer Public keys
 		proofManager.fetchIssuerPublicKeys { [weak self] in
 
 			self?.isUpdatingIssuerPublicKeys = false
-			self?.issuerPublicKeysStatus = .noActionNeeded
-			self?.handleState()
+			completion(.noActionNeeded)
 
 		} onError: { [weak self] error in
 
 			self?.isUpdatingIssuerPublicKeys = false
-			self?.issuerPublicKeysStatus = .internetRequired
-			self?.handleState()
-		}
-	}
-
-	/// Handle the state of the updates
-	private func handleState() {
-
-		guard let configStatus = configStatus,
-			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
-			return
-		}
-		
-		if case .actionRequired = configStatus {
-			// show action
-			coordinator?.handleLaunchState(configStatus)
-		} else if configStatus == .internetRequired || issuerPublicKeysStatus == .internetRequired {
-			// Show no internet
-			coordinator?.handleLaunchState(.internetRequired)
-		} else if !cryptoLibUtility.isInitialized {
-			// Show crypto lib not initialized error
-			coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-		} else {
-			// Start application
-			coordinator?.handleLaunchState(.noActionNeeded)
+			completion(.internetRequired)
 		}
 	}
 }

@@ -120,7 +120,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == true
@@ -151,7 +151,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
@@ -186,7 +186,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
@@ -221,7 +221,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
@@ -254,7 +254,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.actionRequired(remoteConfig)
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
@@ -285,7 +285,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.remoteConfigSpy.invokedUpdate) == true
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.cryptoLibNotInitialized
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == true
