@@ -77,6 +77,8 @@ class HolderDashboardViewController: BaseViewController {
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 		setupPlusButton()
+		
+		sceneView.delegate = self
 
 //		sceneView.primaryButtonTappedCommand = { [weak self] in
 //			self?.viewModel.addProofTapped()
@@ -87,7 +89,7 @@ class HolderDashboardViewController: BaseViewController {
 		super.viewWillTransition(to: size, with: coordinator)
 		
 		coordinator.animate { _ in
-			self.sceneView.updateForRotation()
+			self.sceneView.updateScrollPosition()
 		}
 	}
 
@@ -111,6 +113,9 @@ class HolderDashboardViewController: BaseViewController {
 				self?.showAlert(alertContent)
 			}
 		}
+		
+		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
+		sceneView.select(tab: selectedTab)
 	}
 	
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
@@ -237,5 +242,13 @@ class HolderDashboardViewController: BaseViewController {
 		)
 		plusbutton.title = L.generalAdd()
 		navigationItem.rightBarButtonItem = plusbutton
+	}
+}
+
+extension HolderDashboardViewController: HolderDashboardViewDelegate {
+	
+	func holderDashboardView(_ view: HolderDashboardView, didDisplay tab: DashboardTab) {
+		let changedRegion: QRCodeValidityRegion = tab == .domestic ? .domestic : .europeanUnion
+		viewModel.dashboardRegionToggleValue = changedRegion
 	}
 }
