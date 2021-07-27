@@ -269,20 +269,7 @@ final class HolderDashboardViewModel: Logging {
 		var domesticCards = [HolderDashboardViewController.Card]()
 		var internationalCards = [HolderDashboardViewController.Card]()
 
-		if state.myQRCards.isEmpty {
-			domesticCards += [
-				.emptyState(
-					title: L.holderDashboardEmptyTitle(),
-					message: L.holderDashboardEmptyMessage()
-				)
-			]
-			internationalCards += [
-				.emptyState(
-					title: L.holderDashboardEmptyTitle(),
-					message: L.holderDashboardEmptyMessage()
-				)
-			]
-		} else {
+		if !state.myQRCards.isEmpty {
 			domesticCards += [ .headerMessage(message: L.holderDashboardIntroDomestic())]
 			internationalCards += [ .headerMessage(message: L.holderDashboardIntroInternational())]
 		}
@@ -311,6 +298,21 @@ final class HolderDashboardViewModel: Logging {
 				return .expiredQR(message: message, didTapClose: {
 					didTapCloseExpiredQR(expiredQR)
 				})
+		}
+
+		if state.myQRCards.isEmpty {
+			domesticCards += [
+				.emptyState(
+					title: L.holderDashboardEmptyTitle(),
+					message: L.holderDashboardEmptyMessage()
+				)
+			]
+			internationalCards += [
+				.emptyState(
+					title: L.holderDashboardEmptyTitle(),
+					message: L.holderDashboardEmptyMessage()
+				)
+			]
 		}
 
 		// for each origin which is in the other region but not in this one, add a new MessageCard to explain.
@@ -364,11 +366,11 @@ final class HolderDashboardViewModel: Logging {
 
 						// if all origins will be expired in next six hours:
 						let sixHours: TimeInterval = 6 * 60 * 60
-						guard mostDistantFutureExpiryDate > Date() && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
+						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
 						else { return nil }
 
 						// e.g. "5 uur 59 min"
-						guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: mostDistantFutureExpiryDate)
+						guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: mostDistantFutureExpiryDate)
 						else { return nil }
 
 						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
