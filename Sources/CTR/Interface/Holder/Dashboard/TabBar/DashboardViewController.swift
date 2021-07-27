@@ -40,7 +40,7 @@ final class DashboardViewController: BaseViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		title = "Mijn bewijzen"
+		title = L.holderDashboardTitle()
 		
 		view.addSubview(topTabBar)
 		topTabBar.delegate = self
@@ -81,6 +81,15 @@ final class DashboardViewController: BaseViewController {
 			}()
 		])
 	}
+	
+	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+		super.viewWillTransition(to: size, with: coordinator)
+		
+		coordinator.animate { _ in
+			let selectedTab = self.topTabBar.selectedTab.rawValue
+			self.scrollView.contentOffset = CGPoint(x: self.scrollView.bounds.width * CGFloat(selectedTab), y: 0)
+		}
+	}
 }
 
 extension DashboardViewController: UIScrollViewDelegate {
@@ -90,8 +99,7 @@ extension DashboardViewController: UIScrollViewDelegate {
 		let scrollViewWidth = scrollView.frame.width
 		let pageScroll = 1.5 * scrollViewWidth
 		let nextPage = scrollView.contentOffset.x + scrollViewWidth > pageScroll
-		let tab: TopTabBar.Tab = nextPage ? .international : .domestic
-		topTabBar.select(tab: tab, animated: true)
+		topTabBar.selectedTab = nextPage ? .international : .domestic
 	}
 }
 

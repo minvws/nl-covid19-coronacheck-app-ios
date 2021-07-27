@@ -124,10 +124,10 @@ final class TopTabBar: BaseView {
 		guard !isAnimating else { return }
 		
 		delegate?.topTabBarDidSelectTab(tab)
-		select(tab: tab, animated: true)
+		selectedTab = tab
 	}
 	
-	func select(tab: Tab, animated: Bool) {
+	private func select(tab: Tab, animated: Bool) {
 		
 		selectionLineLeftConstraint?.isActive = false
 		selectionLineRightConstraint?.isActive = false
@@ -151,6 +151,12 @@ final class TopTabBar: BaseView {
 			self.layoutIfNeeded()
 		} completion: { [weak self] _ in
 			self?.isAnimating = false
+		}
+	}
+	
+	var selectedTab: Tab = .domestic {
+		didSet {
+			select(tab: selectedTab, animated: true)
 		}
 	}
 }
@@ -210,7 +216,6 @@ private class TabBarButton: UIControl {
 
 		NSLayoutConstraint.activate([
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-			titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.top),
 			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margin.bottom),
 			titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor),
