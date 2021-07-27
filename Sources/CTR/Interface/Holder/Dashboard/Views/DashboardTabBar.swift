@@ -9,15 +9,10 @@ import UIKit
 
 protocol DashboardTabBarDelegate: AnyObject {
 	
-	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTabBar.Tab)
+	func dashboardTabBar(_ tabBar: DashboardTabBar, didSelect tab: DashboardTab)
 }
 
 final class DashboardTabBar: BaseView {
-	
-	enum Tab: Int {
-		case domestic
-		case international
-	}
 	
 	weak var delegate: DashboardTabBarDelegate?
 	
@@ -120,14 +115,15 @@ final class DashboardTabBar: BaseView {
 		select(tab: .domestic, animated: false)
 	}
 	
-	private func tapTabButton(_ tab: Tab) {
+	private func tapTabButton(_ tab: DashboardTab) {
 		guard !isAnimating else { return }
 		
 		delegate?.dashboardTabBar(self, didSelect: tab)
-		selectedTab = tab
+		select(tab: tab, animated: true)
 	}
 	
-	private func select(tab: Tab, animated: Bool) {
+	func select(tab: DashboardTab, animated: Bool) {
+		selectedTab = tab
 		
 		selectionLineLeftConstraint?.isActive = false
 		selectionLineRightConstraint?.isActive = false
@@ -154,11 +150,7 @@ final class DashboardTabBar: BaseView {
 		}
 	}
 	
-	var selectedTab: Tab = .domestic {
-		didSet {
-			select(tab: selectedTab, animated: true)
-		}
-	}
+	private(set) var selectedTab: DashboardTab = .domestic
 }
 
 private class TabBarButton: UIControl {

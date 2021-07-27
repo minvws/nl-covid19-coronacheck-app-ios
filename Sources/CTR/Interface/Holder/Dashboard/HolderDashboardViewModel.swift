@@ -62,13 +62,15 @@ final class HolderDashboardViewModel: Logging {
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
-	private var dashboardRegionToggleValue: QRCodeValidityRegion {
+	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		get {
 			userSettings.dashboardRegionToggleValue
 		}
 		set {
 			state.qrCodeValidityRegion = newValue
-			userSettings.dashboardRegionToggleValue = newValue
+			DispatchQueue.global().async {
+				self.userSettings.dashboardRegionToggleValue = newValue
+			}
 		}
 	}
 
