@@ -78,13 +78,13 @@ class UserSettingsSpy: UserSettingsProtocol {
 
 	var invokedConfigFetchedTimestampSetter = false
 	var invokedConfigFetchedTimestampSetterCount = 0
-	var invokedConfigFetchedTimestamp: Date?
-	var invokedConfigFetchedTimestampList = [Date?]()
+	var invokedConfigFetchedTimestamp: TimeInterval?
+	var invokedConfigFetchedTimestampList = [TimeInterval?]()
 	var invokedConfigFetchedTimestampGetter = false
 	var invokedConfigFetchedTimestampGetterCount = 0
-	var stubbedConfigFetchedTimestamp: Date!
+	var stubbedConfigFetchedTimestamp: TimeInterval!
 
-	var configFetchedTimestamp: Date? {
+	var configFetchedTimestamp: TimeInterval? {
 		set {
 			invokedConfigFetchedTimestampSetter = true
 			invokedConfigFetchedTimestampSetterCount += 1
@@ -100,13 +100,13 @@ class UserSettingsSpy: UserSettingsProtocol {
 
 	var invokedIssuerKeysFetchedTimestampSetter = false
 	var invokedIssuerKeysFetchedTimestampSetterCount = 0
-	var invokedIssuerKeysFetchedTimestamp: Date?
-	var invokedIssuerKeysFetchedTimestampList = [Date?]()
+	var invokedIssuerKeysFetchedTimestamp: TimeInterval?
+	var invokedIssuerKeysFetchedTimestampList = [TimeInterval?]()
 	var invokedIssuerKeysFetchedTimestampGetter = false
 	var invokedIssuerKeysFetchedTimestampGetterCount = 0
-	var stubbedIssuerKeysFetchedTimestamp: Date!
+	var stubbedIssuerKeysFetchedTimestamp: TimeInterval!
 
-	var issuerKeysFetchedTimestamp: Date? {
+	var issuerKeysFetchedTimestamp: TimeInterval? {
 		set {
 			invokedIssuerKeysFetchedTimestampSetter = true
 			invokedIssuerKeysFetchedTimestampSetterCount += 1

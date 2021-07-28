@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -163,39 +164,6 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
 
-	/// Test internet required for the remote config
-	func test_internetRequired_forRemoteConfig_butWithinTTL() {
-
-		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
-		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
-		cryptoLibUtilitySpy.stubbedIsInitialized = true
-		userSettingsSpy.stubbedConfigFetchedTimestamp = Date().addingTimeInterval(30 * minutes * ago)
-
-		// When
-		sut = LaunchViewModel(
-			coordinator: appCoordinatorSpy,
-			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy,
-			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
-		)
-
-		// Then
-		expect(self.remoteConfigSpy.invokedUpdate) == true
-		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
-		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.noActionNeeded
-		expect(self.sut.interruptForJailBreakDialog) == false
-		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == true
-	}
-
 	/// Test internet required for the issuer public keys
 	func test_internetRequired_forIssuerPublicKeys() {
 
@@ -232,7 +200,7 @@ class LaunchViewModelTests: XCTestCase {
 	}
 
 	/// Test internet required for the issuer public keys and the remote config
-	func test_nternetRequired_forBothActions() {
+	func test_internetRequired_forBothActions() {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
@@ -259,6 +227,41 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
 		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
+		expect(self.sut.interruptForJailBreakDialog) == false
+		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
+	}
+
+	/// Test internet required for the remote config
+	func test_internetRequired_forBothActions_butWithinTTL() {
+
+		// Given
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		cryptoLibUtilitySpy.stubbedIsInitialized = true
+		userSettingsSpy.stubbedConfigFetchedTimestamp = Date().timeIntervalSince1970 - 600
+		userSettingsSpy.stubbedIssuerKeysFetchedTimestamp = Date().timeIntervalSince1970 - 600
+
+		// When
+		sut = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			userSettings: userSettingsSpy,
+			cryptoLibUtility: cryptoLibUtilitySpy,
+			walletManager: walletSpy
+		)
+
+		// Then
+		expect(self.remoteConfigSpy.invokedUpdate) == true
+		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
+		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
+		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateCount).toEventually(equal(2))
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParametersList).toEventually(haveCount(2))
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
