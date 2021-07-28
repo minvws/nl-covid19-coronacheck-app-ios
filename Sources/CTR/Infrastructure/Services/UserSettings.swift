@@ -14,6 +14,10 @@ protocol UserSettingsProtocol: AnyObject {
 	var jailbreakWarningShown: Bool { get set }
 
 	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
+
+	var configFetchedTimestamp: Date? { get set }
+
+	var issuerKeysFetchedTimestamp: Date? { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -26,4 +30,10 @@ class UserSettings: UserSettingsProtocol {
 
 	@Bindable @UserDefaults(key: "dashboardRegionToggleValue")
 	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
+	var configFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
+	var issuerKeysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 }

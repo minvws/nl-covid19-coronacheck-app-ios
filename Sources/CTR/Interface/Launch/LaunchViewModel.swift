@@ -32,9 +32,6 @@ class LaunchViewModel: Logging {
 	@Bindable private(set) var appIcon: UIImage?
 	@Bindable private(set) var interruptForJailBreakDialog: Bool = false
 
-	@UserDefaults(key: "lastFetchedTimestamp", defaultValue: nil)
-	var lastFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
-
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -168,7 +165,7 @@ class LaunchViewModel: Logging {
 				case .success((let remoteConfiguration, let data)):
 
 					// Update the last fetch time
-					self.lastFetchedTimestamp = Date()
+					self.userSettings?.configFetchedTimestamp = Date()
 					// Store as JSON file
 					self.cryptoLibUtility.store(data, for: .remoteConfiguration)
 					// Decide what to do
@@ -186,7 +183,7 @@ class LaunchViewModel: Logging {
 
 					self.logDebug("Using stored Configuration \(storedConfiguration)")
 					//
-					if let lastFetchedTimestamp = self.lastFetchedTimestamp,
+					if let lastFetchedTimestamp = self.userSettings?.configFetchedTimestamp,
 					   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
 						// We still got a remote configuration within the config TTL.
 						self.logInfo("Remote Configuration still within TTL")
