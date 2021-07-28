@@ -116,8 +116,6 @@ final class DashboardTabBar: BaseView {
 			selectionLineView.bottomAnchor.constraint(equalTo: separatorView.topAnchor),
 			selectionLineView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.lineHeight)
 		])
-		
-		select(tab: .domestic, animated: false)
 	}
 	
 	private func tapTabButton(_ tab: DashboardTab) {

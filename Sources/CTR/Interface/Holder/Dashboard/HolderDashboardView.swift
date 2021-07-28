@@ -149,15 +149,12 @@ final class HolderDashboardView: BaseView {
 		scrollView.contentOffset = CGPoint(x: scrollView.bounds.width * CGFloat(selectedTab), y: 0)
 	}
 	
-	/// Selects a tab view
+	/// Selects a tab view shown on start
 	/// - Parameter tab: The dashboard tab
-	func select(tab: DashboardTab) {
+	func startOn(tab: DashboardTab) {
 		tabBar.select(tab: tab, animated: false)
 		
-		// Run on next runloop to update scroll position
-		DispatchQueue.main.asyncAfter(deadline: .now()) {
-			self.updateScrollPosition()
-		}
+		updateScrollPosition()
 	}
 }
 
