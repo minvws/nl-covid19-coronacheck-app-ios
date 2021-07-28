@@ -12,19 +12,20 @@ class LaunchViewModel: Logging {
 	private weak var coordinator: AppCoordinatorDelegate?
 
 	private var versionSupplier: AppVersionSupplierProtocol?
-	private var remoteConfigManager: RemoteConfigManaging?
+	private weak var remoteConfigManager: RemoteConfigManaging?
 	private weak var walletManager: WalletManaging?
-	private var proofManager: ProofManaging
+	private weak var proofManager: ProofManaging?
 	private weak var jailBreakDetector: JailBreakProtocol?
-	private weak var userSettings: UserSettingsProtocol?
-	private let cryptoLibUtility: CryptoLibUtilityProtocol
+	private var userSettings: UserSettingsProtocol?
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol?
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
 
 	private var flavor: AppFlavor
-
-	private let dependencyGroup = DispatchGroup()
+	var configStatus: LaunchState?
+	var issuerPublicKeysStatus: LaunchState?
+	var bothStatesWithinTTL = false
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -47,10 +48,10 @@ class LaunchViewModel: Logging {
 		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
 		remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager,
-		proofManager: ProofManaging = Services.proofManager,
+		proofManager: ProofManaging? = Services.proofManager,
 		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
 		userSettings: UserSettingsProtocol? = UserSettings(),
-		cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility,
+		cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility,
 		walletManager: WalletManaging?) {
 
 		self.coordinator = coordinator
@@ -85,42 +86,54 @@ class LaunchViewModel: Logging {
 	private func updateDependencies() {
 
 		// Configuration
-		var configStatus: LaunchState?
-		dependencyGroup.enter()
 		updateConfiguration { result in
-
-			configStatus = result
-			self.dependencyGroup.leave()
+			self.configStatus = result
+			self.handleState()
 		}
 
 		// Issuer Public Keys
-		var issuerPublicKeysStatus: LaunchState?
-		dependencyGroup.enter()
 		updateKeys { result in
 
-			issuerPublicKeysStatus = result
-			self.dependencyGroup.leave()
+			self.issuerPublicKeysStatus = result
+			self.handleState()
+		}
+	}
+
+	/// Handle the state of the updates
+	private func handleState() {
+
+		guard let configStatus = configStatus,
+			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
+			return
 		}
 
-		dependencyGroup.notify(queue: DispatchQueue.main) {
+		logInfo("switch \(configStatus), \(issuerPublicKeysStatus) - bothStatesWithinTTL: \(bothStatesWithinTTL)")
+		switch (configStatus, issuerPublicKeysStatus) {
+			case (LaunchState.withinTTL, LaunchState.withinTTL):
+				bothStatesWithinTTL = true
+				coordinator?.handleLaunchState(.withinTTL)
 
-			if self.flavor == .holder {
-				self.checkWallet()
-			}
+			case (LaunchState.actionRequired, _):
+				coordinator?.handleLaunchState(configStatus)
 
-			if case let .actionRequired(info) = configStatus {
-				// show action
-				self.coordinator?.handleLaunchState(.actionRequired(info))
-			} else if configStatus == .internetRequired || issuerPublicKeysStatus == .internetRequired {
-				// Show no internet
-				self.coordinator?.handleLaunchState(.internetRequired)
-			} else if !self.cryptoLibUtility.isInitialized {
-				// Show crypto lib not initialized error
-				self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-			} else {
-				// Start application
-				self.coordinator?.handleLaunchState(.noActionNeeded)
-			}
+			case (LaunchState.internetRequired, _), (_, LaunchState.internetRequired):
+				if !bothStatesWithinTTL {
+					coordinator?.handleLaunchState(.internetRequired)
+				}
+
+			case (LaunchState.noActionNeeded, LaunchState.noActionNeeded):
+				if let lib = self.cryptoLibUtility, !lib.isInitialized {
+					// Show crypto lib not initialized error
+					coordinator?.handleLaunchState(.cryptoLibNotInitialized)
+				} else {
+					// Start application
+					if !bothStatesWithinTTL {
+						coordinator?.handleLaunchState(.noActionNeeded)
+					}
+				}
+
+			default:
+				logInfo("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 		}
 	}
 
@@ -157,6 +170,15 @@ class LaunchViewModel: Logging {
 		}
 
 		isUpdatingConfiguration = true
+
+		if let lastFetchedTimestamp = self.userSettings?.configFetchedTimestamp,
+		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0) {
+			self.logInfo("Remote Configuration still within TTL")
+			// Mark remote config loaded
+			cryptoLibUtility?.checkFile(.remoteConfiguration)
+			completion(.withinTTL)
+		}
+
 		remoteConfigManager?.update { resultWrapper in
 
 			self.isUpdatingConfiguration = false
@@ -165,9 +187,9 @@ class LaunchViewModel: Logging {
 				case .success((let remoteConfiguration, let data)):
 
 					// Update the last fetch time
-					self.userSettings?.configFetchedTimestamp = Date()
+					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
 					// Store as JSON file
-					self.cryptoLibUtility.store(data, for: .remoteConfiguration)
+					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
 					// Decide what to do
 					self.compare(remoteConfiguration, completion: completion)
 
@@ -182,21 +204,14 @@ class LaunchViewModel: Logging {
 					}
 
 					self.logDebug("Using stored Configuration \(storedConfiguration)")
-					//
-					if let lastFetchedTimestamp = self.userSettings?.configFetchedTimestamp,
-					   lastFetchedTimestamp > Date() - TimeInterval(storedConfiguration.configTTL ?? 0) {
-						// We still got a remote configuration within the config TTL.
-						self.logInfo("Remote Configuration still within TTL")
-						self.compare(storedConfiguration, completion: completion)
-					} else {
-						self.compare(storedConfiguration) { state in
-							switch state {
-								case .actionRequired:
-									// Deactiviated or update trumps no internet
-									completion(state)
-								default:
-									completion(.internetRequired)
-							}
+
+					self.compare(storedConfiguration) { state in
+						switch state {
+							case .actionRequired:
+								// Deactivated or update trumps no internet
+								completion(state)
+							default:
+								completion(.internetRequired)
 						}
 					}
 			}
@@ -259,34 +274,32 @@ class LaunchViewModel: Logging {
 
 		isUpdatingIssuerPublicKeys = true
 
-		let ttl = TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0)
-		proofManager.fetchIssuerPublicKeys {[weak self] resultwrapper in
+		if let lastFetchedTimestamp = self.userSettings?.issuerKeysFetchedTimestamp,
+		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0) {
+			self.logInfo("Issuer public keys still within TTL")
+			// Mark remote config loaded
+			cryptoLibUtility?.checkFile(.publicKeys)
+			completion(.withinTTL)
+		}
+		proofManager?.fetchIssuerPublicKeys {[weak self] resultWrapper in
 
 			self?.isUpdatingIssuerPublicKeys = false
 
 			// Response is of type (Result<Data, NetworkError>)
-			switch resultwrapper {
+			switch resultWrapper {
 				case .success(let data):
 
 					// Update the last fetch time
-					self?.userSettings?.issuerKeysFetchedTimestamp = Date()
+					self?.userSettings?.issuerKeysFetchedTimestamp = Date().timeIntervalSince1970
 					// Store JSON file
-					self?.cryptoLibUtility.store(data, for: .publicKeys)
+					self?.cryptoLibUtility?.store(data, for: .publicKeys)
 
 					completion(.noActionNeeded)
 
 				case let .failure(error):
 
 					self?.logError("Error getting the issuers public keys: \(error)")
-					if let lastFetchedTimestamp = self?.userSettings?.issuerKeysFetchedTimestamp,
-					   lastFetchedTimestamp > Date() - ttl {
-						self?.logInfo("Issuer public keys still within TTL")
-						self?.cryptoLibUtility.checkFile(.publicKeys)
-						completion(.noActionNeeded)
-					} else {
-						completion(.internetRequired)
-
-					}
+					completion(.internetRequired)
 			}
 		}
 	}

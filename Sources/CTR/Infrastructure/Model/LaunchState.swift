@@ -22,6 +22,9 @@ enum LaunchState: Equatable {
 	/// The crypto library needs to be initialized
 	case cryptoLibNotInitialized
 
+	/// the previous fetch is still valid
+	case withinTTL
+
 	// MARK: Equatable
 
 	/// Equatable
@@ -43,6 +46,8 @@ enum LaunchState: Equatable {
 					lhsVersion.appDeactivated == rhsVersion.appDeactivated &&
 					lhsVersion.configTTL == rhsVersion.configTTL
 			case (.cryptoLibNotInitialized, cryptoLibNotInitialized):
+				return true
+			case (withinTTL, withinTTL):
 				return true
 			default:
 				return false

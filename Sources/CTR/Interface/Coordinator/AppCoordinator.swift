@@ -198,20 +198,20 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
 
-        switch state {
-            case .noActionNeeded:
-                startApplication()
-
-            case .internetRequired:
-                showInternetRequired()
-
-            case let .actionRequired(versionInformation):
-                showActionRequired(with: versionInformation)
+		switch state {
+			case .noActionNeeded, .withinTTL:
+				startApplication()
 				
-            case .cryptoLibNotInitialized:
+			case .internetRequired:
+				showInternetRequired()
+
+			case let .actionRequired(versionInformation):
+				showActionRequired(with: versionInformation)
+				
+			case .cryptoLibNotInitialized:
 				showCryptoLibNotInitializedError()
-        }
-    }
+		}
+	}
 
     /// Retry loading the requirements
     func retry() {

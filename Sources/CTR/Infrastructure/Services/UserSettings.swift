@@ -15,9 +15,9 @@ protocol UserSettingsProtocol: AnyObject {
 
 	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
 
-	var configFetchedTimestamp: Date? { get set }
+	var configFetchedTimestamp: TimeInterval? { get set }
 
-	var issuerKeysFetchedTimestamp: Date? { get set }
+	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -32,8 +32,8 @@ class UserSettings: UserSettingsProtocol {
 	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
-	var configFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+	var configFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 
 	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
-	var issuerKeysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
+	var issuerKeysFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 }
