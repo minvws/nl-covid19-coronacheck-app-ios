@@ -258,15 +258,36 @@ class LaunchViewModel: Logging {
 		}
 
 		isUpdatingIssuerPublicKeys = true
-		proofManager.fetchIssuerPublicKeys { [weak self] in
+
+		let ttl = TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0)
+		proofManager.fetchIssuerPublicKeys {[weak self] resultwrapper in
 
 			self?.isUpdatingIssuerPublicKeys = false
-			completion(.noActionNeeded)
 
-		} onError: { [weak self] error in
+			// Response is of type (Result<Data, NetworkError>)
+			switch resultwrapper {
+				case .success(let data):
 
-			self?.isUpdatingIssuerPublicKeys = false
-			completion(.internetRequired)
+					// Update the last fetch time
+					self?.userSettings?.issuerKeysFetchedTimestamp = Date()
+					// Store JSON file
+					self?.cryptoLibUtility.store(data, for: .publicKeys)
+
+					completion(.noActionNeeded)
+
+				case let .failure(error):
+
+					self?.logError("Error getting the issuers public keys: \(error)")
+					if let lastFetchedTimestamp = self?.userSettings?.issuerKeysFetchedTimestamp,
+					   lastFetchedTimestamp > Date() - ttl {
+						self?.logInfo("Issuer public keys still within TTL")
+						self?.cryptoLibUtility.checkFile(.publicKeys)
+						completion(.noActionNeeded)
+					} else {
+						completion(.internetRequired)
+
+					}
+			}
 		}
 	}
 }

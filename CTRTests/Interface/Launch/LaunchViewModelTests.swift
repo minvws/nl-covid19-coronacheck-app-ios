@@ -104,7 +104,7 @@ class LaunchViewModelTests: XCTestCase {
 			minVersionMessage: "test_noActionRequired"
 		), Data())), ())
 
-		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
@@ -136,7 +136,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
-		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
@@ -168,7 +168,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
-		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
 		userSettingsSpy.stubbedConfigFetchedTimestamp = Date().addingTimeInterval(30 * minutes * ago)
@@ -204,11 +204,7 @@ class LaunchViewModelTests: XCTestCase {
 			minVersion: "1.0.0",
 			minVersionMessage: "test_noActionRequired"
 		), Data())), ())
-		let error = NSError(
-			domain: NSURLErrorDomain,
-			code: URLError.notConnectedToInternet.rawValue
-		)
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
@@ -240,11 +236,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		// Given
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
-		let error = NSError(
-			domain: NSURLErrorDomain,
-			code: URLError.notConnectedToInternet.rawValue
-		)
-		proofManagerSpy.stubbedFetchIssuerPublicKeysOnErrorResult = (error, ())
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
@@ -278,7 +270,7 @@ class LaunchViewModelTests: XCTestCase {
 		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration(minVersion: "2.0", minVersionMessage: "remoteConfigSpy")
 		let remoteConfig = remoteConfigSpy.getConfiguration()
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data())), ())
-		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
 
@@ -313,7 +305,7 @@ class LaunchViewModelTests: XCTestCase {
 			minVersionMessage: "test_cryptoLibNotInitialized"
 		), Data())), ())
 
-		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = false
 
@@ -350,7 +342,7 @@ class LaunchViewModelTests: XCTestCase {
 
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data())), ())
 
-		proofManagerSpy.shouldInvokeFetchIssuerPublicKeysOnCompletion = true
+		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = false
 

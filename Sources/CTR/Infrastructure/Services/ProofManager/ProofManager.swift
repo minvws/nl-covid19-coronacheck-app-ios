@@ -12,9 +12,7 @@ class ProofManager: ProofManaging, Logging {
 	
 	var loggingCategory: String = "ProofManager"
 
-	var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	var networkManager: NetworkManaging = Services.networkManager
-	var cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 
 	internal var testProviders = [TestProvider]()
 	
@@ -44,9 +42,6 @@ class ProofManager: ProofManaging, Logging {
 	/// The proof data stored in the keychain
 	@Keychain(name: "proofData", service: Constants.keychainService, clearOnReinstall: true)
 	internal var proofData: ProofData = .empty
-
-	@UserDefaults(key: "keysFetchedTimestamp", defaultValue: nil)
-	var keysFetchedTimestamp: Date? // swiftlint:disable:this let_var_whitespace
 	
 	/// Initializer
 	required init() {
@@ -88,34 +83,10 @@ class ProofManager: ProofManaging, Logging {
 	/// - Parameters:
 	///   - onCompletion: completion handler
 	///   - onError: error handler
-	func fetchIssuerPublicKeys(
-		onCompletion: (() -> Void)?,
-		onError: ((Error) -> Void)?) {
-		
-		let ttl = TimeInterval(remoteConfigManager.getConfiguration().configTTL ?? 0)
-		
-		networkManager.getPublicKeys { [weak self] resultwrapper in
-			
-			// Response is of type (Result<Data, NetworkError>)
-			switch resultwrapper {
-				case .success(let data):
-					
-					self?.keysFetchedTimestamp = Date()
-					self?.cryptoLibUtility.store(data, for: .publicKeys)
-					onCompletion?()
-				case let .failure(error):
-					
-					self?.logError("Error getting the issuers public keys: \(error)")
-					if let lastFetchedTimestamp = self?.keysFetchedTimestamp,
-					   lastFetchedTimestamp > Date() - ttl {
-						self?.logInfo("Issuer public keys still within TTL")
-						self?.cryptoLibUtility.checkFile(.publicKeys)
-						onCompletion?()
-						
-					} else {
-						onError?(error)
-					}
-			}
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, NetworkError>) -> Void)?) {
+
+		networkManager.getPublicKeys { result in
+			onCompletion?(result)
 		}
 	}
 	
@@ -148,17 +119,5 @@ class ProofManager: ProofManaging, Logging {
 					onCompletion(.failure(error))
 			}
 		}
-	}
-	
-	// MARK: - Helper methods
-	
-	private func generateString<T>(object: T) -> String where T: Codable {
-		
-		if let data = try? JSONEncoder().encode(object),
-		   let convertedToString = String(data: data, encoding: .utf8) {
-			logVerbose("ProofManager: Convert to \(convertedToString)")
-			return convertedToString
-		}
-		return ""
 	}
 }

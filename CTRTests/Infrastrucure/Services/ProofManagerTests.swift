@@ -30,7 +30,7 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(data), ())
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		sut.fetchIssuerPublicKeys(onCompletion: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
@@ -43,7 +43,7 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = nil
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		sut.fetchIssuerPublicKeys(onCompletion: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
@@ -54,10 +54,9 @@ class ProofManagerTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
-		sut.keysFetchedTimestamp = nil
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		sut.fetchIssuerPublicKeys(onCompletion: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
@@ -71,21 +70,7 @@ class ProofManagerTests: XCTestCase {
 		networkSpy.stubbedGetPublicKeysCompletionResult = (.success(data), ())
 
 		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
-	}
-
-	/// Test the fetch issuers public keys with an network error
-	func test_fetchIssuerPublicKeys_withError_withinTTL() {
-
-		// Given
-		networkSpy.stubbedGetPublicKeysCompletionResult = (.failure(NetworkError.invalidRequest), ())
-		sut.keysFetchedTimestamp = Date()
-
-		// When
-		sut.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		sut.fetchIssuerPublicKeys(onCompletion: nil)
 
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
