@@ -104,13 +104,15 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards).toEventually(haveCount(1))
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 
-		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { title, message in
-			expect(title) == L.holderDashboardEmptyTitle()
-			expect(message) == L.holderDashboardEmptyMessage()
+		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message in
+			expect(image) == I.empty_Dashboard_Domestic()
+			expect(title) == L.holderDashboardEmptyDomesticTitle()
+			expect(message) == L.holderDashboardEmptyDomesticMessage()
 		}))
-		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { title, message in
-			expect(title) == L.holderDashboardEmptyTitle()
-			expect(message) == L.holderDashboardEmptyMessage()
+		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message in
+			expect(image) == I.empty_Dashboard_International()
+			expect(title) == L.holderDashboardEmptyInternationalTitle()
+			expect(message) == L.holderDashboardEmptyInternationalMessage()
 		}))
 	}
 
@@ -1309,8 +1311,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		// TODO: Also check International?
 		expect(self.sut.domesticCards).toEventually(haveCount(4))
-		expect(self.sut.domesticCards[0]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
@@ -1318,7 +1320,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.domesticCards[3]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
+			expect(message) == L.holderDashboardQrExpired()
+		}))
 	}
 
 	func test_datasourceupdate_domesticExpired_tapForMoreInfo() {
@@ -1337,12 +1341,20 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		// TODO: Also check International?
 		expect(self.sut.domesticCards).toEventually(haveCount(2))
-		expect(self.sut.domesticCards[0]).toEventually(beExpiredQRCard(test: { message, didTapClose in
+
+		// At this point cache the domestic cards value, because `didTapClose()` mutates it:
+		let domesticCards = sut.domesticCards
+
+		expect(domesticCards[0]).toEventually(beHeaderMessageCard() { message in
+
+		})
+		expect(domesticCards[1]).toEventually(beExpiredQRCard(test: { message, didTapClose in
 			expect(message) == L.holderDashboardQrExpired()
 			didTapClose()
 
-			// Check that the Expired QR row was removed:
+			// Check the non-cached value now to check that the Expired QR row was removed:
 			expect(self.sut.domesticCards).to(haveCount(1))
+			expect(self.sut.domesticCards[0]).to(beEmptyStateCard())
 		}))
 	}
 
@@ -1363,16 +1375,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beExpiredQRCard(test: { message, _ in
-			expect(message) == L.holderDashboardQrExpired()
-		}))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard() { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		})
 		expect(self.sut.internationalCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
 		expect(self.sut.internationalCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.internationalCards[3]).toEventually(beEmptyStateCard())
+		expect(self.sut.internationalCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
+			expect(message) == L.holderDashboardQrExpired()
+		}))
 	}
 
 	func test_datasourceupdate_domesticExpiredButOnInternationalTab() {
@@ -1397,11 +1411,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
-private func beEmptyStateCard(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beEmptyStateCard(test: @escaping (UIImage?, String, String) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .emptyState with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .emptyState(title1, message1) = actual {
-			test(title1, message1)
+		   case let .emptyState(image, title1, message1) = actual {
+			test(image, title1, message1)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
