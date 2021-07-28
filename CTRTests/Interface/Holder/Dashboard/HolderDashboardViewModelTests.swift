@@ -889,7 +889,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
@@ -936,7 +935,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
@@ -985,7 +983,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
@@ -1398,7 +1395,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
@@ -1446,7 +1442,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(2))
 		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
@@ -1523,9 +1518,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// At this point cache the domestic cards value, because `didTapClose()` mutates it:
 		let domesticCards = sut.domesticCards
 
-		expect(domesticCards[0]).toEventually(beHeaderMessageCard() { message in
-
-		})
+		expect(domesticCards[0]).toEventually(beHeaderMessageCard())
 		expect(domesticCards[1]).toEventually(beExpiredQRCard(test: { message, didTapClose in
 			expect(message) == L.holderDashboardQrExpired()
 			didTapClose()
@@ -1551,9 +1544,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(4))
-		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard() { message in
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		})
 		expect(self.sut.internationalCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
@@ -1582,7 +1574,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		// TODO: Also check Domestic?
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
 	}
