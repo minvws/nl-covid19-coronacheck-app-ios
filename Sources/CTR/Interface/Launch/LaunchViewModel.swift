@@ -107,21 +107,24 @@ class LaunchViewModel: Logging {
 			return
 		}
 
-		logInfo("switch \(configStatus), \(issuerPublicKeysStatus) - bothStatesWithinTTL: \(bothStatesWithinTTL)")
+		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - bothStatesWithinTTL: \(bothStatesWithinTTL)")
 		switch (configStatus, issuerPublicKeysStatus) {
-			case (LaunchState.withinTTL, LaunchState.withinTTL):
+			case (.withinTTL, .withinTTL):
 				bothStatesWithinTTL = true
-				coordinator?.handleLaunchState(.withinTTL)
+				// Small delay, let the viewController load.
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+					self.coordinator?.handleLaunchState(.withinTTL)
+				}
 
-			case (LaunchState.actionRequired, _):
+			case (.actionRequired, _):
 				coordinator?.handleLaunchState(configStatus)
 
-			case (LaunchState.internetRequired, _), (_, LaunchState.internetRequired):
+			case (LaunchState.internetRequired, _), (_, .internetRequired):
 				if !bothStatesWithinTTL {
 					coordinator?.handleLaunchState(.internetRequired)
 				}
 
-			case (LaunchState.noActionNeeded, LaunchState.noActionNeeded):
+			case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
 				if let lib = self.cryptoLibUtility, !lib.isInitialized {
 					// Show crypto lib not initialized error
 					coordinator?.handleLaunchState(.cryptoLibNotInitialized)
@@ -133,7 +136,7 @@ class LaunchViewModel: Logging {
 				}
 
 			default:
-				logInfo("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+				logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 		}
 	}
 
