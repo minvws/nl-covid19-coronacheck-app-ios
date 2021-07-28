@@ -159,7 +159,7 @@ private class TabBarButton: UIControl {
 	private enum ViewTraits {
 		
 		enum Margin {
-			static let top: CGFloat = 24
+			static let top: CGFloat = UIDevice.current.isSmallScreen ? 13 : 24
 			static let bottom: CGFloat = 18
 		}
 	}

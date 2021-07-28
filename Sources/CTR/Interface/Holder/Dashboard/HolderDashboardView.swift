@@ -16,6 +16,14 @@ final class HolderDashboardView: BaseView {
 	
 	weak var delegate: HolderDashboardViewDelegate?
 	
+	/// The display constants
+	private enum ViewTraits {
+		
+		enum Spacing {
+			static let stackView: CGFloat = 24
+		}
+	}
+	
 	private let tabBar: DashboardTabBar = {
 		let tabBar = DashboardTabBar()
 		tabBar.translatesAutoresizingMaskIntoConstraints = false
@@ -33,6 +41,7 @@ final class HolderDashboardView: BaseView {
 	let domesticScrollView: ScrolledStackView = {
 		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.stackView.spacing = ViewTraits.Spacing.stackView
 		scrollView.backgroundColor = Theme.colors.viewControllerBackground
 		return scrollView
 	}()
@@ -40,6 +49,7 @@ final class HolderDashboardView: BaseView {
 	let internationalScrollView: ScrolledStackView = {
 		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
+		scrollView.stackView.spacing = ViewTraits.Spacing.stackView
 		scrollView.backgroundColor = Theme.colors.viewControllerBackground
 		return scrollView
 	}()
