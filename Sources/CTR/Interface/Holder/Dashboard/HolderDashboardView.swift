@@ -38,6 +38,7 @@ final class HolderDashboardView: BaseView {
 		return scrollView
 	}()
 	
+	/// The scrolled stackview to display domestic cards
 	let domesticScrollView: ScrolledStackView = {
 		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +47,7 @@ final class HolderDashboardView: BaseView {
 		return scrollView
 	}()
 	
+	/// The scrolled stackview to display international cards
 	let internationalScrollView: ScrolledStackView = {
 		let scrollView = ScrolledStackView()
 		scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +56,7 @@ final class HolderDashboardView: BaseView {
 		return scrollView
 	}()
 	
+	/// Footer view with primary button
 	let footerButtonView: DashboardFooterButtonView = {
 		let footerView = DashboardFooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false
@@ -62,6 +65,7 @@ final class HolderDashboardView: BaseView {
 	
 	private var bottomScrollViewConstraint: NSLayoutConstraint?
 	
+	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
 		
@@ -72,6 +76,7 @@ final class HolderDashboardView: BaseView {
 		footerButtonView.isHidden = true
 	}
 	
+	/// Setup the view hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
@@ -82,6 +87,7 @@ final class HolderDashboardView: BaseView {
 		scrollView.addSubview(internationalScrollView)
 	}
 	
+	/// Setup all the constraints
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
@@ -126,21 +132,25 @@ final class HolderDashboardView: BaseView {
 		])
 	}
 	
+	/// Display primary button view
 	var shouldDisplayButtonView = false {
 		didSet {
 			footerButtonView.isHidden = !shouldDisplayButtonView
 			bottomScrollViewConstraint?.isActive = false
-			let constraint: NSLayoutYAxisAnchor = shouldDisplayButtonView ? footerButtonView.topAnchor : self.bottomAnchor
-			bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: constraint)
+			let anchor: NSLayoutYAxisAnchor = shouldDisplayButtonView ? footerButtonView.topAnchor : self.bottomAnchor
+			bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: anchor)
 			bottomScrollViewConstraint?.isActive = true
 		}
 	}
 	
+	/// Updates selected tab position
 	func updateScrollPosition() {
 		let selectedTab = tabBar.selectedTab.rawValue
 		scrollView.contentOffset = CGPoint(x: scrollView.bounds.width * CGFloat(selectedTab), y: 0)
 	}
 	
+	/// Selects a tab view
+	/// - Parameter tab: The dashboard tab
 	func select(tab: DashboardTab) {
 		tabBar.select(tab: tab, animated: false)
 		

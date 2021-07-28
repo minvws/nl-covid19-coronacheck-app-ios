@@ -67,8 +67,11 @@ final class DashboardTabBar: BaseView {
 	
 	private var selectionLineLeftConstraint: NSLayoutConstraint?
 	private var selectionLineRightConstraint: NSLayoutConstraint?
+	
+	/// Only allows tab interation when animation is ended
 	private var isAnimating = false
 	
+	/// Setup all the views
 	override func setupViews() {
 		super.setupViews()
 		
@@ -84,6 +87,7 @@ final class DashboardTabBar: BaseView {
 		}
 	}
 	
+	/// Setup the view hierarchy
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
@@ -94,6 +98,7 @@ final class DashboardTabBar: BaseView {
 		stackView.addSubview(selectionLineView)
 	}
 	
+	/// Setup all the constraints
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
@@ -122,6 +127,10 @@ final class DashboardTabBar: BaseView {
 		select(tab: tab, animated: true)
 	}
 	
+	/// Select a tab
+	/// - Parameters:
+	///   - tab: The dashboard tab
+	///   - animated: Boolean to display tab animated
 	func select(tab: DashboardTab, animated: Bool) {
 		selectedTab = tab
 		
@@ -150,6 +159,7 @@ final class DashboardTabBar: BaseView {
 		}
 	}
 	
+	/// Get selected tab
 	private(set) var selectedTab: DashboardTab = .domestic
 }
 
@@ -220,6 +230,7 @@ private class TabBarButton: UIControl {
 		tapHandler?()
 	}
 	
+	/// The tap handler
 	var tapHandler: (() -> Void)?
 	
 	/// The title
