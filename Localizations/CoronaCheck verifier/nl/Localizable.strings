@@ -8,7 +8,7 @@
 "verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
 
 /* Koptekst in de over de app pagina */
-"verifier.about.readmore" = "Lees meer";
+"verifier.about.readmore" = "Lees meer:";
 
 /* Menu item voor Toegankelijkheid */
 "verifier.menu.accessibility" = "Toegankelijkheid";
