@@ -120,7 +120,7 @@ class HolderDashboardViewController: BaseViewController {
 	
 	private func setup(cards: [HolderDashboardViewController.Card], with stackView: UIStackView) {
 		let cardViews = cards
-			.compactMap { card -> UIView? in
+			.compactMap { [weak self] card -> UIView? in
 				
 				switch card {
 					
@@ -128,7 +128,7 @@ class HolderDashboardViewController: BaseViewController {
 						
 						let text = TextView(htmlText: message)
 						text.linkTouched { url in
-							self.viewModel.openUrl(url)
+							self?.viewModel.openUrl(url)
 						}
 						return text
 						
@@ -150,7 +150,7 @@ class HolderDashboardViewController: BaseViewController {
 						emptyDashboardView.title = title
 						emptyDashboardView.message = message
 						emptyDashboardView.contentTextView.linkTouched { url in
-							self.viewModel.openUrl(url)
+							self?.viewModel.openUrl(url)
 						}
 						return emptyDashboardView
 						
@@ -189,7 +189,7 @@ class HolderDashboardViewController: BaseViewController {
 							if url.absoluteString == AppAction.tryAgain {
 								didTapTryAgain()
 							} else {
-								self.viewModel.openUrl(url)
+								self?.viewModel.openUrl(url)
 							}
 						}
 						return errorView
