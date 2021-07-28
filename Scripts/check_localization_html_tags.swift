@@ -110,6 +110,8 @@ func checkLine(line: String) throws {
 // The script takes a list of paths as an argument:
 let paths = CommandLine.arguments.dropFirst()
 
+var didError = false
+
 // For each path, open the file and iterate over each line:
 paths.forEach { path in
 	
@@ -121,14 +123,17 @@ paths.forEach { path in
 		do {
 			try checkLine(line: line)
 		} catch let error as String {
-			print("error: ", error)
-			exit(1)
-			
+			print("error: ", error)	
+			didError = true		
 		} catch let error as ParseError {
 			print("error: \(error.message) at position '\(error.position)' on line \(error.line)")
-			exit(1)
+			didError = true
 		} catch {
 			fatalError("unhandled error")
 		}
 	}
+}
+
+if didError {
+	exit(1)
 }
