@@ -31,8 +31,8 @@ final class DashboardFooterButtonView: BaseView {
 		return view
 	}()
 
-	/// the update button
-	private let primaryButton: Button = {
+	/// The primary button
+	let primaryButton: Button = {
 		let button = Button()
 		button.rounded = true
 		button.titleLabel?.textAlignment = .center

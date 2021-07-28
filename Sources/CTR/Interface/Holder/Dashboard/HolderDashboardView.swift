@@ -54,6 +54,14 @@ final class HolderDashboardView: BaseView {
 		return scrollView
 	}()
 	
+	let footerButtonView: DashboardFooterButtonView = {
+		let footerView = DashboardFooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		return footerView
+	}()
+	
+	private var bottomScrollViewConstraint: NSLayoutConstraint?
+	
 	override func setupViews() {
 		super.setupViews()
 		
@@ -61,6 +69,7 @@ final class HolderDashboardView: BaseView {
 		
 		tabBar.delegate = self
 		scrollView.delegate = self
+		footerButtonView.isHidden = true
 	}
 	
 	override func setupViewHierarchy() {
@@ -68,6 +77,7 @@ final class HolderDashboardView: BaseView {
 		
 		addSubview(tabBar)
 		addSubview(scrollView)
+		addSubview(footerButtonView)
 		scrollView.addSubview(domesticScrollView)
 		scrollView.addSubview(internationalScrollView)
 	}
@@ -83,7 +93,15 @@ final class HolderDashboardView: BaseView {
 			scrollView.topAnchor.constraint(equalTo: tabBar.bottomAnchor),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			{
+				let constraint = scrollView.bottomAnchor.constraint(equalTo: bottomAnchor)
+				bottomScrollViewConstraint = constraint
+				return constraint
+			}(),
+			
+			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			
 			domesticScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor),
 			domesticScrollView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
@@ -106,6 +124,16 @@ final class HolderDashboardView: BaseView {
 				return constraint
 			}()
 		])
+	}
+	
+	var shouldDisplayButtonView = false {
+		didSet {
+			footerButtonView.isHidden = !shouldDisplayButtonView
+			bottomScrollViewConstraint?.isActive = false
+			let constraint: NSLayoutYAxisAnchor = shouldDisplayButtonView ? footerButtonView.topAnchor : self.bottomAnchor
+			bottomScrollViewConstraint = scrollView.bottomAnchor.constraint(equalTo: constraint)
+			bottomScrollViewConstraint?.isActive = true
+		}
 	}
 	
 	func updateScrollPosition() {

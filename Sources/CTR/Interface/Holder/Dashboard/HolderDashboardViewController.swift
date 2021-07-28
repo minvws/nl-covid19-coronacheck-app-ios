@@ -80,9 +80,9 @@ class HolderDashboardViewController: BaseViewController {
 		
 		sceneView.delegate = self
 
-//		sceneView.primaryButtonTappedCommand = { [weak self] in
-//			self?.viewModel.addProofTapped()
-//		}
+		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
+			self?.viewModel.addProofTapped()
+		}
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -105,8 +105,8 @@ class HolderDashboardViewController: BaseViewController {
 			self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
 		}
 		
-//		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryButton.title = $0 }
-//		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.setupPrimaryButton(display: $0) }
+		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
+		viewModel.$hasAddCertificateMode.binding = { [weak self] in self?.sceneView.shouldDisplayButtonView = $0 }
 
 		viewModel.$currentlyPresentedAlert.binding = { [weak self] alertContent in
 			DispatchQueue.main.async {
@@ -224,9 +224,6 @@ class HolderDashboardViewController: BaseViewController {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-
-		// Scroll to top
-//		sceneView.scrollView.setContentOffset(.zero, animated: false)
 
 		viewModel.viewWillAppear()
 	}
