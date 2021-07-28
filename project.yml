@@ -201,7 +201,7 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string`
+          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
           # forbid TestFlight release if there are missing translations:
           if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
