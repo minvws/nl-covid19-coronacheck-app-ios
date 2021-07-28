@@ -123,8 +123,8 @@ paths.forEach { path in
 		do {
 			try checkLine(line: line)
 		} catch let error as String {
-			print("error: ", error)	
-			didError = true		
+			print("error: ", error)
+			didError = true
 		} catch let error as ParseError {
 			print("error: \(error.message) at position '\(error.position)' on line \(error.line)")
 			didError = true
