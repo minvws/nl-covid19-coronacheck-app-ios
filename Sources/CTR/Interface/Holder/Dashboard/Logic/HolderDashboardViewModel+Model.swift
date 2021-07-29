@@ -64,38 +64,19 @@ extension HolderDashboardViewModel {
 			if origin.expirationTime < now { // expired
 				return .init(text: "", kind: .past)
 			} else if origin.validFromDate > now {
-				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
-
-					// we want "full" days in future, so calculate by midnight of the validFromDate day, minus 1 second.
-					// (note, when there is <1 day remaining, it switches to counting down in
-					// hours/minutes using `HolderDashboardViewModel.hmsRelativeFormatter`
-					// elsewhere, so this doesn't apply there anyway.
-					let validFromDateEndOfDay: Date? = origin.validFromDate.oneSecondBeforeMidnight
-
-					let dateString = validFromDateEndOfDay.flatMap {
-						HolderDashboardViewModel.daysRelativeFormatter.string(from: now, to: $0)
-					} ?? "-"
-
-					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-					return .init(
-						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-						kind: .future
-					)
-				} else {
-					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: origin.validFromDate) ?? "-"
-					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-					return .init(
-						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-						kind: .future
-					)
-				}
+				let dateString = HolderDashboardViewModel.dateWithTimeFormatter.string(from: origin.validFromDate)
+				let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
+				return .init(
+					text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
+					kind: .future(showingAutomaticallyBecomesValidFooter: true)
+				)
 			} else {
 				switch self {
 					// Netherlands uses expireTime
 					case .netherlands:
 						if origin.expiryIsBeyondThreeYearsFromNow(now: now) {
 							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-							return .init(text: prefix, kind: .future)
+							return .init(text: prefix, kind: .future(showingAutomaticallyBecomesValidFooter: false))
 						} else {
 							let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
 							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
@@ -138,7 +119,8 @@ extension HolderDashboardViewModel {
 						}
 
 					} else {
-						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
+						// L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
+						return L.holderDashboardQrValidityDatePrefixValidFrom()
 					}
 
 				case .europeanUnion:
