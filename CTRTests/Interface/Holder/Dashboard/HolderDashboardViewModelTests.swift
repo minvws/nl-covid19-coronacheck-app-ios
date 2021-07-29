@@ -19,7 +19,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var cryptoManagerSpy: CryptoManagerSpy!
 	private var dataStoreManager: DataStoreManager!
 	private var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
-	private var proofManagerSpy: ProofManagingSpy!
 	private var datasourceSpy: HolderDashboardDatasourceSpy!
 	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	private var userSettingsSpy: UserSettingsSpy!
@@ -48,7 +47,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
-		proofManagerSpy = ProofManagingSpy()
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
@@ -61,7 +59,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
 			configuration: configSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,

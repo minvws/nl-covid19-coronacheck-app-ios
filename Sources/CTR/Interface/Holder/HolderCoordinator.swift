@@ -202,7 +202,6 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
 				configuration: generalConfiguration,
 				datasource: HolderDashboardDatasource(
 					dataStoreManager: Services.dataStoreManager,

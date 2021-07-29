@@ -260,8 +260,8 @@ class LaunchViewModelTests: XCTestCase {
 		expect(self.userSettingsSpy.invokedConfigFetchedTimestampSetter) == false
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
 		expect(self.appCoordinatorSpy.invokedHandleLaunchState).toEventually(beTrue())
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateCount).toEventually(equal(2))
-		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParametersList).toEventually(haveCount(2))
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateCount).toEventually(equal(1))
+		expect(self.appCoordinatorSpy.invokedHandleLaunchStateParameters?.state) == LaunchState.internetRequired
 		expect(self.sut.interruptForJailBreakDialog) == false
 		expect(self.cryptoLibUtilitySpy.invokedIsInitializedGetter) == false
 	}
