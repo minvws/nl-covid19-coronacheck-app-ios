@@ -28,15 +28,15 @@ class QRCardViewTests: XCTestCase {
 			// Isn't displayed
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Past", kind: .past) }
+				validityString: { _ in .init(text: "Past", kind: .past) }
 			),
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Current", kind: .current) }
+				validityString: { _ in .init(text: "Current", kind: .current) }
 			),
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Future", kind: .future) }
+				validityString: { _ in .init(text: "Future", kind: .future(showingAutomaticallyBecomesValidFooter: false)) }
 			)
 		]
 
@@ -60,7 +60,7 @@ class QRCardViewTests: XCTestCase {
 		sut.originRows = [
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Current", kind: .current) }
+				validityString: { _ in .init(text: "Current", kind: .current) }
 			)
 		]
 
@@ -84,7 +84,7 @@ class QRCardViewTests: XCTestCase {
 		sut.originRows = [
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Current", kind: .current) }
+				validityString: { _ in .init(text: "Current", kind: .current) }
 			)
 		]
 

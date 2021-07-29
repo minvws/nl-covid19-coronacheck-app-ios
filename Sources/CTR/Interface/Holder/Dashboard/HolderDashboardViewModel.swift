@@ -357,7 +357,7 @@ extension HolderDashboardViewModel.MyQRCard {
 				let rows = origins.map { origin in
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
-						validityTextEvaluator: { now in
+						validityText: { now in
 							localizedDateExplanation(forOrigin: origin, forNow: now)
 						}
 					)
@@ -396,7 +396,7 @@ extension HolderDashboardViewModel.MyQRCard {
 				let rows = origins.map { origin in
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: origin.type.localizedEvent.capitalizingFirstLetter(),
-						validityTextEvaluator: { now in
+						validityText: { now in
 							localizedDateExplanation(forOrigin: origin, forNow: now)
 						}
 					)

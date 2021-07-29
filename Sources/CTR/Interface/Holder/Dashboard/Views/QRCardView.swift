@@ -12,7 +12,7 @@ class QRCardView: BaseView {
 	// MARK: - Public types
 	struct OriginRow {
 		let type: String
-		let validityStringEvaluator: (Date) -> HolderDashboardViewController.ValidityText
+		let validityString: (Date) -> HolderDashboardViewController.ValidityText
 	}
 
 	// MARK: - Private types
@@ -172,7 +172,7 @@ class QRCardView: BaseView {
 		}
 
 		originRows?.forEach { row in
-			let validityText = row.validityStringEvaluator(Date())
+			let validityText = row.validityString(Date())
 			guard validityText.kind != .past else { return }
 
 			let qrTypeLabel = Label(body: row.type + (validityText.text.isEmpty ? "" : ":"))
