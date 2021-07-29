@@ -62,13 +62,22 @@ class IdentityChecker: IdentityCheckerProtocol, Logging {
 				match = match &&
 					remoteTuple?.day == existingTuple?.day &&
 					remoteTuple?.month == existingTuple?.month &&
-					(remoteTuple?.firstNameInitial == existingTuple?.firstNameInitial ||
-					remoteTuple?.lastNameInitial == existingTuple?.lastNameInitial)
-
+					(isInitialEqual(remoteTuple?.firstNameInitial, existingTuple?.firstNameInitial) ||
+						isInitialEqual(remoteTuple?.lastNameInitial, existingTuple?.lastNameInitial))
 			}
 		}
 		logDebug("Does the identity of the new events match with the existing ones? \(match)")
 		return match
+	}
+
+	private func isInitialEqual(_ lhs: String?, _ rhs: String?) -> Bool {
+
+		switch (lhs, rhs) {
+			case (nil, _), (_, nil):
+				return true
+			default:
+				return lhs == rhs
+		}
 	}
 
 	private func convertEventGroupsToIdentities(_ eventGroups: [EventGroup]) -> [Any] {
