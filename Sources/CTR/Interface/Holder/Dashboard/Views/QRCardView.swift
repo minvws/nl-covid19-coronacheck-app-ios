@@ -182,10 +182,6 @@ class QRCardView: BaseView {
 			let validUntilLabel = Label(body: validityText.text)
 			validUntilLabel.numberOfLines = 0
 
-			if case .future = validityText.kind {
-				validUntilLabel.textColor = Theme.colors.iosBlue
-			}
-
 			verticalLabelsStackView.addArrangedSubview(validUntilLabel)
 
 			verticalLabelsStackView.setCustomSpacing(22, after: validUntilLabel)
