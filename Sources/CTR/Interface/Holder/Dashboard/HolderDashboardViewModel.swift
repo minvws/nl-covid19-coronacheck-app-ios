@@ -503,7 +503,7 @@ private func localizedOriginsValidOnlyInOtherRegionsMessages(state: HolderDashbo
 
 	// Map it to user messages:
 	let userMessages = originTypesOnlyInOtherRegion.map { (originType: QRCodeOriginType) -> (originType: QRCodeOriginType, message: String) in
-		switch state.qrCodeValidityRegion {
+		switch thisRegion {
 			case .domestic:
 				return (originType, L.holderDashboardOriginNotValidInNetherlandsButIsInEU(originType.localizedProof))
 			case .europeanUnion:
