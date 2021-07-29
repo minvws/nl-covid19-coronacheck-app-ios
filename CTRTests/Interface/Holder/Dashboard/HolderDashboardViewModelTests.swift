@@ -72,7 +72,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		)
 	}
 
-	// MARK: - Tests
+	// MARK: -
 
 	func test_initialState() {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
@@ -159,6 +159,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
 	}
+
+	// MARK: - Strippen Loading
 
 	func test_strippen_stopsLoading_shouldTriggerDatasourceReload() {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
