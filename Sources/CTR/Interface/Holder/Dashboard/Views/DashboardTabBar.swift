@@ -118,6 +118,14 @@ final class DashboardTabBar: BaseView {
 		])
 	}
 	
+	/// Setup all the accessibility traits
+	override func setupAccessibility() {
+		super.setupAccessibility()
+		
+		accessibilityTraits = .tabBar
+		isAccessibilityElement = false // Should have it disabled for this trait
+	}
+	
 	private func tapTabButton(_ tab: DashboardTab) {
 		guard !isAnimating else { return }
 		
@@ -188,6 +196,7 @@ private class TabBarButton: UIControl {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+		setupAccessibility()
 	}
 	
 	override var isHighlighted: Bool {
@@ -199,6 +208,11 @@ private class TabBarButton: UIControl {
 	override var isSelected: Bool {
 		didSet {
 			titleLabel.textColor = isSelected ? Theme.colors.dark : Theme.colors.secondaryText
+			if isSelected {
+				accessibilityTraits.insert(.selected)
+			} else {
+				accessibilityTraits.remove(.selected)
+			}
 		}
 	}
 	
@@ -232,6 +246,12 @@ private class TabBarButton: UIControl {
 		])
 	}
 	
+	/// Setup all the accessibility traits
+	private func setupAccessibility() {
+
+		isAccessibilityElement = true
+	}
+	
 	@objc
 	private func touchUp() {
 		tapHandler?()
@@ -244,6 +264,7 @@ private class TabBarButton: UIControl {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
+			accessibilityLabel = title
 		}
 	}
 }

@@ -85,6 +85,9 @@ class HolderDashboardViewController: BaseViewController {
 		sceneView.footerButtonView.primaryButtonTappedCommand = { [weak self] in
 			self?.viewModel.addProofTapped()
 		}
+		
+		// Forces VoiceOver focus on menu button instead of tab bar on start up
+		UIAccessibility.post(notification: .screenChanged, argument: navigationItem.leftBarButtonItem)
 	}
 	
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
