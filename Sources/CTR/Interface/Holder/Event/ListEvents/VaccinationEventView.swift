@@ -39,9 +39,9 @@ class VaccinationEventView: BaseView {
 	}()
 
 	/// The message text
-	private let messageTextView: TextView = {
+	private let messageLabel: Label = {
 
-		return TextView()
+        return Label(subhead: nil).multiline()
 	}()
 
 	private let disclaimerButton: UIButton = {
@@ -72,7 +72,7 @@ class VaccinationEventView: BaseView {
 
 		addSubview(disclaimerImageView)
 		addSubview(titleLabel)
-		addSubview(messageTextView)
+		addSubview(messageLabel)
 	}
 
 	/// Setup the constraints
@@ -100,18 +100,18 @@ class VaccinationEventView: BaseView {
 				equalTo: disclaimerImageView.leadingAnchor
 			),
 			titleLabel.bottomAnchor.constraint(
-				equalTo: messageTextView.topAnchor,
+				equalTo: messageLabel.topAnchor,
 				constant: -8
 			),
 
 			// Message
-			messageTextView.leadingAnchor.constraint(
+			messageLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor
 			),
-			messageTextView.trailingAnchor.constraint(
+			messageLabel.trailingAnchor.constraint(
 				equalTo: trailingAnchor
 			),
-			messageTextView.bottomAnchor.constraint(
+			messageLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -24
 			)
@@ -134,7 +134,7 @@ class VaccinationEventView: BaseView {
 
 	func setAccessibilityLabel() {
 
-        disclaimerButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageTextView.text ?? "")"
+        disclaimerButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
@@ -153,7 +153,7 @@ class VaccinationEventView: BaseView {
 	/// The message
 	var subTitle: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(
+			messageLabel.attributedText = .makeFromHtml(
 				text: subTitle,
 				font: Theme.fonts.subhead,
 				textColor: Theme.colors.grey1,
