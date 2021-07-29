@@ -1141,11 +1141,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
-
-		// This would never really happen, because the datasource would have really returned both
-		// domestic and international entries. But just check that our assumptions are correct:
-		expect(self.sut.domesticCards).toEventually(haveCount(1))
-		expect(self.sut.domesticCards[1]).toEventually(beHeaderMessageCard())
 	}
 
 	// MARK: - Triple, Currently Valid, Domestic but viewing International Tab
