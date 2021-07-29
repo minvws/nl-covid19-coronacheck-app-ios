@@ -42,6 +42,7 @@ class TextElement: UITextView, UITextViewDelegate {
     
     /// Sets up the TextElement with the default settings
     private func setup() {
+        isAccessibilityElement = true
         delegate = self
         
         font = Theme.fonts.body

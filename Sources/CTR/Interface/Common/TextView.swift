@@ -39,8 +39,10 @@ class TextView: UIStackView {
                 if part != parts.last {
                     var lineHeight = part.lineHeight
                     
-                    if part.isHeader || part.isListItem {
+                    if part.isHeader {
                         element.accessibilityTraits = .header
+                        lineHeight /= 4
+                    } else if part.isListItem {
                         lineHeight /= 4
                     }
                     
