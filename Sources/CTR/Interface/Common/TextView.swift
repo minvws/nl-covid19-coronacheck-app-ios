@@ -15,8 +15,6 @@ class TextView: UIStackView {
     
     var text: String? {
         didSet {
-            print("Did set text")
-            
             removeAllArrangedSubviews()
             
             let element = TextElement(text: text)
@@ -26,8 +24,6 @@ class TextView: UIStackView {
     
     var attributedText: NSAttributedString? {
         didSet {
-            print("Did set attributedText")
-            
             removeAllArrangedSubviews()
             
             guard let attributedText = attributedText else { return }
@@ -53,14 +49,12 @@ class TextView: UIStackView {
     }
     
     var textElements: [TextElement] {
-        get {
-            return arrangedSubviews.compactMap { view in
-                return view as? TextElement
-            }
+        return arrangedSubviews.compactMap { view in
+            return view as? TextElement
         }
     }
     
-    var linkTextAttributes: [NSAttributedString.Key : Any]? {
+    var linkTextAttributes: [NSAttributedString.Key: Any]? {
         didSet {
             textElements.forEach { $0.linkTextAttributes = linkTextAttributes }
         }
@@ -127,7 +121,7 @@ class TextView: UIStackView {
     /// Removes all arranged subviews
     @discardableResult
     func removeAllArrangedSubviews() -> [UIView] {
-        let removedSubviews = arrangedSubviews.reduce([]) { (removedSubviews, subview) -> [UIView] in
+        let removedSubviews = arrangedSubviews.reduce([]) { removedSubviews, subview -> [UIView] in
             self.removeArrangedSubview(subview)
             NSLayoutConstraint.deactivate(subview.constraints)
             subview.removeFromSuperview()
@@ -144,7 +138,7 @@ extension NSAttributedString {
         
         var index = 0
         for component in self.string.components(separatedBy: separator) {
-            let range = NSMakeRange(index, component.utf16.count)
+            let range = NSRange(location: index, length: component.utf16.count)
             
             let substring = self.attributedSubstring(from: range)
             substrings.append(substring)
@@ -157,7 +151,7 @@ extension NSAttributedString {
     
     func attributes(find: (_ key: Key, _ value: Any, _ range: NSRange) -> (Bool)) -> Bool {
         var result = false
-        enumerateAttributes(in: NSRange(location: 0, length: self.length)) { (attributes, range, stop) in
+        enumerateAttributes(in: NSRange(location: 0, length: self.length)) { attributes, range, stop in
             for (key, value) in attributes {
                 if find(key, value, range) {
                     result = true
@@ -169,79 +163,71 @@ extension NSAttributedString {
     }
     
     var isHeader: Bool {
-        get {
-            return attributes { key, value, range in
-                // Check if header level is h1 or higher
+        return attributes { key, value, range in
+            // Check if header level is h1 or higher
+            if key == NSAttributedString.Key.paragraphStyle,
+               let paragraphStyle = value as? NSParagraphStyle,
+               paragraphStyle.headerLevel >= 1 {
+                return true
+            }
+            
+            // Check if full range uses a bold font
+            if key == NSAttributedString.Key.font,
+               let font = value as? UIFont,
+               font.fontDescriptor.symbolicTraits.contains(.traitBold),
+               range.lowerBound == 0,
+               range.upperBound >= self.length - 1 {
+                return true
+            }
+        
+            return false
+        }
+    }
+    
+    // swiftlint:disable empty_count
+    var isListItem: Bool {
+        // Check if strings starts with tabbed bullet character
+        if string.starts(with: "\t●") || string.starts(with: "\t•") {
+            return true
+        } else {
+            // Check if textLists attribute contains one or more elements
+            return attributes { key, value, _ in
+                
                 if key == NSAttributedString.Key.paragraphStyle,
                    let paragraphStyle = value as? NSParagraphStyle,
-                   paragraphStyle.headerLevel >= 1 {
+                   paragraphStyle.textLists.count > 0 {
                     return true
                 }
-                
-                // Check if full range uses a bold font
-                if key == NSAttributedString.Key.font,
-                   let font = value as? UIFont,
-                   font.fontDescriptor.symbolicTraits.contains(.traitBold),
-                   range.lowerBound == 0,
-                   range.upperBound >= self.length - 1 {
-                    return true
-                }
-            
                 return false
             }
         }
     }
-    
-    // swiftlint:disable all [empty_count]
-    var isListItem: Bool {
-        get {
-            // Check if strings starts with tabbed bullet character
-            if string.starts(with: "\t●") || string.starts(with: "\t•") {
-                return true
-            } else {
-                // Check if textLists attribute contains one or more elements
-                return attributes { key, value, _ in
-                    
-                    if key == NSAttributedString.Key.paragraphStyle,
-                       let paragraphStyle = value as? NSParagraphStyle,
-                       paragraphStyle.textLists.count > 0 {
-                        return true
-                    }
-                    return false
-                }
-            }
-        }
-    }
-    
+
     var lineHeight: CGFloat {
-        get {
-            var height: CGFloat = 0
-            
-            enumerateAttributes(in: NSRange(location: 0, length: self.length)) { (attributes, range, stop) in
-                for (key, value) in attributes {
-                    if key == NSAttributedString.Key.paragraphStyle,
-                       let paragraphStyle = value as? NSParagraphStyle,
-                       paragraphStyle.minimumLineHeight > height {
-                        height = paragraphStyle.minimumLineHeight
-                    }
+        var height: CGFloat = 0
+        
+        enumerateAttributes(in: NSRange(location: 0, length: self.length)) { attributes, range, stop in
+            for (key, value) in attributes {
+                if key == NSAttributedString.Key.paragraphStyle,
+                   let paragraphStyle = value as? NSParagraphStyle,
+                   paragraphStyle.minimumLineHeight > height {
+                    height = paragraphStyle.minimumLineHeight
                 }
             }
-            
-            return height
         }
+        
+        return height
     }
 }
 
 extension NSParagraphStyle {
     
     var headerLevel: Int {
-        get {
-            let key = "headerLevel"
-            if responds(to: NSSelectorFromString(key)) {
-                return value(forKey: key) as? Int ?? 0
-            }
-            return 0
+        let key = "headerLevel"
+        if responds(to: NSSelectorFromString(key)) {
+            return value(forKey: key) as? Int ?? 0
         }
+        return 0
     }
     
     var textLists: NSArray {
