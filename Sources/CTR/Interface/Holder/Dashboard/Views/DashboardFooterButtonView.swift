@@ -44,7 +44,6 @@ final class DashboardFooterButtonView: BaseView {
 		super.setupViews()
 		
 		backgroundColor = .clear
-		clipsToBounds = false
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -61,7 +60,6 @@ final class DashboardFooterButtonView: BaseView {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			
 			gradientView.bottomAnchor.constraint(equalTo: topAnchor),
 			gradientView.leftAnchor.constraint(equalTo: leftAnchor),
 			gradientView.rightAnchor.constraint(equalTo: rightAnchor),

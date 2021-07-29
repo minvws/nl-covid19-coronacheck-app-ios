@@ -170,6 +170,9 @@ private class TabBarButton: UIControl {
 			static let top: CGFloat = UIDevice.current.isSmallScreen ? 13 : 24
 			static let bottom: CGFloat = 18
 		}
+		enum Colors {
+			static let highlighted = UIColor(white: 0.98, alpha: 1)
+		}
 	}
 	
 	private let titleLabel: Label = {
@@ -185,6 +188,12 @@ private class TabBarButton: UIControl {
 		setupViews()
 		setupViewHierarchy()
 		setupViewConstraints()
+	}
+	
+	override var isHighlighted: Bool {
+		didSet {
+			backgroundColor = isHighlighted ? ViewTraits.Colors.highlighted : Theme.colors.viewControllerBackground
+		}
 	}
 	
 	override var isSelected: Bool {
