@@ -16,6 +16,11 @@ class TextView: UIStackView {
     var text: String? {
         didSet {
             print("Did set text")
+            
+            removeAllArrangedSubviews()
+            
+            let element = TextElement(text: text)
+            addArrangedSubview(element)
         }
     }
     
@@ -23,38 +28,41 @@ class TextView: UIStackView {
         didSet {
             print("Did set attributedText")
             
+            removeAllArrangedSubviews()
+            
             guard let attributedText = attributedText else { return }
             
             let parts = attributedText.split("\n")
+            
             for part in parts {
-                print("\n\nPart: \(part)\n\n")
-                
                 let element = TextElement(attributedText: part)
-                
-                if part.isHeader {
-                    element.accessibilityTraits = .header
-                }
-                
                 addArrangedSubview(element)
+                
+                if part != parts.last {
+                    var lineHeight = part.lineHeight
+                    
+                    if part.isHeader || part.isListItem {
+                        element.accessibilityTraits = .header
+                        lineHeight /= 4
+                    }
+                    
+                    setCustomSpacing(lineHeight, after: element)
+                }
+            }
+        }
+    }
+    
+    var textElements: [TextElement] {
+        get {
+            return arrangedSubviews.compactMap { view in
+                return view as? TextElement
             }
         }
     }
     
     var linkTextAttributes: [NSAttributedString.Key : Any]? {
         didSet {
-            print("Did set linkTextAttributes")
-        }
-    }
-    
-    private var linkHandlers = [(URL) -> Void]() {
-        didSet {
-            print("Did set linkHandlers")
-        }
-    }
-    
-    private var textChangedHandlers = [(String?) -> Void]() {
-        didSet {
-            print("Did set textChangedHandlers")
+            textElements.forEach { $0.linkTextAttributes = linkTextAttributes }
         }
     }
     
@@ -103,7 +111,7 @@ class TextView: UIStackView {
     /// - parameter handler: The closure to be called when the user selects a link
     @discardableResult
     func linkTouched(handler: @escaping (URL) -> Void) -> Self {
-        linkHandlers.append(handler)
+        textElements.forEach({ $0.linkTouched(handler: handler) })
         return self
     }
     
@@ -112,8 +120,20 @@ class TextView: UIStackView {
     /// - parameter handler: The closure to be called when the text is updated
     @discardableResult
     func textChanged(handler: @escaping (String?) -> Void) -> Self {
-        textChangedHandlers.append(handler)
+        textElements.forEach({ $0.textChanged(handler: handler) })
         return self
+    }
+    
+    /// Removes all arranged subviews
+    @discardableResult
+    func removeAllArrangedSubviews() -> [UIView] {
+        let removedSubviews = arrangedSubviews.reduce([]) { (removedSubviews, subview) -> [UIView] in
+            self.removeArrangedSubview(subview)
+            NSLayoutConstraint.deactivate(subview.constraints)
+            subview.removeFromSuperview()
+            return removedSubviews + [subview]
+        }
+        return removedSubviews
     }
 }
 
@@ -175,15 +195,39 @@ extension NSAttributedString {
     // swiftlint:disable all [empty_count]
     var isListItem: Bool {
         get {
-            return attributes { key, value, _ in
-                // Check if textLists attribute is not empty
-                if key == NSAttributedString.Key.paragraphStyle,
-                   let paragraphStyle = value as? NSParagraphStyle,
-                   paragraphStyle.textLists.count > 0 {
-                    return true
+            // Check if strings starts with tabbed bullet character
+            if string.starts(with: "\t●") || string.starts(with: "\t•") {
+                return true
+            } else {
+                // Check if textLists attribute contains one or more elements
+                return attributes { key, value, _ in
+                    
+                    if key == NSAttributedString.Key.paragraphStyle,
+                       let paragraphStyle = value as? NSParagraphStyle,
+                       paragraphStyle.textLists.count > 0 {
+                        return true
+                    }
+                    return false
                 }
-                return false
             }
+        }
+    }
+    
+    var lineHeight: CGFloat {
+        get {
+            var height: CGFloat = 0
+            
+            enumerateAttributes(in: NSRange(location: 0, length: self.length)) { (attributes, range, stop) in
+                for (key, value) in attributes {
+                    if key == NSAttributedString.Key.paragraphStyle,
+                       let paragraphStyle = value as? NSParagraphStyle,
+                       paragraphStyle.minimumLineHeight > height {
+                        height = paragraphStyle.minimumLineHeight
+                    }
+                }
+            }
+            
+            return height
         }
     }
 }
