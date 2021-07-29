@@ -420,27 +420,19 @@ errit:
 }
 
 - (BOOL)compareCerts:(NSData *)certificateData with:(NSData *)trustedCertificateData {
-    BIO *certificateBlob = NULL;
-    X509 *certificate = NULL;
-    BIO *trustedCertificateBlob = NULL;
-    X509 *trustedCertificate = NULL;
+
     BOOL isMatch = NO;
 
-    if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
-        EXITOUT("Cannot allocate certificateBlob");
-    
-    if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse certificateData");
-    
-    if (NULL  == (trustedCertificateBlob = BIO_new_mem_buf(trustedCertificateData.bytes, (int)trustedCertificateData.length)))
-        EXITOUT("Cannot allocate trustedCertificateBlob");
-    
-    if (NULL == (trustedCertificate = PEM_read_bio_X509(trustedCertificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse trustedCertificate");
+	X509 *certificate = [self getX509:certificateData];
+	if (certificate == NULL) {
+		return NO;
+	}
 
-    // basically a memcmp() of the hash (not sure if this is a sha1/md5
-    // or something more modern).
-    //
+	X509 *trustedCertificate = [self getX509:trustedCertificateData];
+	if (trustedCertificate == NULL) {
+		return NO;
+	}
+
     isMatch = (0 == X509_cmp(trustedCertificate, certificate)) ? YES : NO;
 
     // compare public keys too - as we'r not sure of above hash.
@@ -450,101 +442,101 @@ errit:
     
     isMatch = isMatch && ((1 == EVP_PKEY_cmp(ptc, tc)) ? YES : NO);
 
-errit:
-    BIO_free(certificateBlob);
-    BIO_free(trustedCertificateBlob);
     X509_free(certificate);
     X509_free(trustedCertificate);
-    
+
     return isMatch;
 }
 
 - (BOOL)compareSubjectKeyIdentifier:(NSData *)certificateData with:(NSData *)trustedCertificateData {
-    
-    const ASN1_OCTET_STRING *trustedCertificateSubjectKeyIdentifier = NULL;
-    const ASN1_OCTET_STRING *certificateSubjectKeyIdentifier = NULL;
-    BIO *certificateBlob = NULL;
-    X509 *certificate = NULL;
-    BIO *trustedCertificateBlob = NULL;
-    X509 *trustedCertificate = NULL;
-    BOOL isMatch = NO;
-    
-    if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
-        EXITOUT("Cannot allocate certificateBlob");
-    
-    if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse certificateData");
-    
-    if (NULL  == (trustedCertificateBlob = BIO_new_mem_buf(trustedCertificateData.bytes, (int)trustedCertificateData.length)))
-        EXITOUT("Cannot allocate trustedCertificateBlob");
-    
-    if (NULL == (trustedCertificate = PEM_read_bio_X509(trustedCertificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse trustedCertificate");
-    
-    if (NULL == (trustedCertificateSubjectKeyIdentifier = X509_get0_subject_key_id(trustedCertificate)))
-        EXITOUT("Cannot extract trustedCertificateSubjectKeyIdentifier");
-    
-    if (NULL == (certificateSubjectKeyIdentifier = X509_get0_subject_key_id(certificate)))
-        EXITOUT("Cannot extract certificateSubjectKeyIdentifier");
-    
-    isMatch = ASN1_OCTET_STRING_cmp(trustedCertificateSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
 
-errit:
-    BIO_free(certificateBlob);
-    BIO_free(trustedCertificateBlob);
-    X509_free(certificate);
-    X509_free(trustedCertificate);
-    
+	// Certificate
+	X509 *certificate = [self getX509:certificateData];
+	if (certificate == NULL) {
+		return NO;
+	}
+
+	const ASN1_OCTET_STRING *certificateSubjectKeyIdentifier = X509_get0_subject_key_id(certificate);
+	if (certificateSubjectKeyIdentifier == NULL) {
+		X509_free(certificate); certificate = NULL;
+		return NO;
+	}
+
+	// Trusted Certificate
+	X509 *trustedCertificate = [self getX509:trustedCertificateData];
+	if (trustedCertificate == NULL) {
+		return NO;
+	}
+
+	const ASN1_OCTET_STRING *trustedCertificateSubjectKeyIdentifier = X509_get0_subject_key_id(trustedCertificate);
+	if (trustedCertificateSubjectKeyIdentifier == NULL) {
+		X509_free(trustedCertificate); trustedCertificate = NULL;
+		return NO;
+	}
+
+	BOOL isMatch = ASN1_OCTET_STRING_cmp(trustedCertificateSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
+
+	X509_free(certificate); certificate = NULL;
+	X509_free(trustedCertificate); trustedCertificate = NULL;
     return isMatch;
 }
 
 - (BOOL)compareSerialNumber:(NSData *)certificateData with:(NSData *)trustedCertificateData {
-    
-    BIO *certificateBlob = NULL;
-    X509 *certificate = NULL;
-    BIO *trustedCertificateBlob = NULL;
-    X509 *trustedCertificate = NULL;
-    ASN1_INTEGER *certificateSerial = NULL;
-    ASN1_INTEGER *trustedCertificateSerial = NULL;
-    BOOL isMatch = NO;
-    
-    if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
-        EXITOUT("Cannot allocate certificateBlob");
-    
-    if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse certificate");
-    
-    if (NULL  == (trustedCertificateBlob = BIO_new_mem_buf(trustedCertificateData.bytes, (int)trustedCertificateData.length)))
-        EXITOUT("Cannot allocate trustedCertificateBlob");
-    
-    if (NULL == (trustedCertificate = PEM_read_bio_X509(trustedCertificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse trustedCertificate");
-    
-    if (NULL == (certificateSerial = X509_get_serialNumber(certificate)))
-        EXITOUT("Cannot parse certificateSerial");
-    
-    if (NULL == (trustedCertificateSerial = X509_get_serialNumber(trustedCertificate)))
-        EXITOUT("Cannot parse trustedCertificateSerial");
-    
-    isMatch = ASN1_INTEGER_cmp(certificateSerial, trustedCertificateSerial) == 0;
-    
+
+	// Certificate
+	X509 *certificate = [self getX509:certificateData];
+	if (certificate == NULL) {
+		return NO;
+	}
+
+	ASN1_INTEGER *certificateSerial = X509_get_serialNumber(certificate);
+	if (certificateSerial == NULL) {
+		X509_free(certificate); certificate = NULL;
+		return NO;
+	}
+
+	// Trusted Certificate
+	X509 *trustedCertificate = [self getX509:trustedCertificateData];
+	if (trustedCertificate == NULL) {
+		return NO;
+	}
+
+	ASN1_INTEGER *trustedCertificateSerial = X509_get_serialNumber(trustedCertificate);
+	if (trustedCertificateSerial == NULL) {
+		X509_free(trustedCertificate); trustedCertificate = NULL;
+		return NO;
+	}
+
+	BOOL isMatch = ASN1_INTEGER_cmp(certificateSerial, trustedCertificateSerial) == 0;
+
 #ifdef __DEBUG
-    char *cs = BN_bn2hex(ASN1_INTEGER_to_BN(certificateSerial, NULL));
-    char *ts = BN_bn2hex(ASN1_INTEGER_to_BN(trustedCertificateSerial, NULL));
-    print_certificate(certificate);
-    print_certificate(trustedCertificate);
-    NSLog(@"compareSerialNumber %s == %s", cs, ts);
+	char *cs = BN_bn2hex(ASN1_INTEGER_to_BN(certificateSerial, NULL));
+	char *ts = BN_bn2hex(ASN1_INTEGER_to_BN(trustedCertificateSerial, NULL));
+	print_certificate(certificate);
+	print_certificate(trustedCertificate);
+	NSLog(@"compareSerialNumber %s == %s", cs, ts);
 #endif
-errit:
-    BIO_free(certificateBlob);
-    BIO_free(trustedCertificateBlob);
-    X509_free(certificate);
-    X509_free(trustedCertificate);
-    
-    return isMatch;
+
+	X509_free(certificate); certificate = NULL;
+	X509_free(trustedCertificate); trustedCertificate = NULL;
+	return isMatch;
+}
+
+-(nullable X509*)getX509:(NSData *)certificateData {
+
+	// Certificate
+	BIO *certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length);
+	if (certificateBlob == NULL) {
+		return NULL;
+	}
+
+	X509 *certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL);
+	BIO_free(certificateBlob); certificateBlob = NULL;
+	return certificate;
 }
 
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData {
+
     if (![self compareSubjectKeyIdentifier:certificateData with:trustedCertificateData]) {
         DEBUGOUT("compareSubjectKeyIdentifier failed");
         return false;
