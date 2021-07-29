@@ -43,6 +43,7 @@ class NormalizationTests: XCTestCase {
 
 		// Given
 		let values: [String: String?] = [
+			"": nil,
 			"Rool": "R",
 			" Rool": "R",
 			"-de Vries": "D",

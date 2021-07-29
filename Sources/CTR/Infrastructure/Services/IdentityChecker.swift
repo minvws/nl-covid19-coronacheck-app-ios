@@ -162,18 +162,18 @@ class Normalizer {
 
 	static let permittedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz ")
 	static let initialsCharacterSet = CharacterSet(charactersIn: "ABCDEFGHILKLMNOPQRSTUVWXYZ")
-	static let excludeCharacterSet = CharacterSet(charactersIn: "-' ")
+	static let filterCharacterSet = CharacterSet(charactersIn: "-' ")
 
 	/// Normalize any input, transform to latin, remove all diacritics
 	/// - Parameter input: the unnormalized input
 	/// - Returns: normalized output
-	class func normalize(_ input: String) -> String {
+	class func normalize(_ input: String) -> String? {
 
 		if let latinInput = input.applyingTransform(StringTransform("Any-Latin; Latin-ASCII; Lower;"), reverse: false) {
 			let permittedInput = String(latinInput.unicodeScalars.filter { permittedCharacterSet.contains($0) })
 			return permittedInput
 		}
-		return input
+		return nil
 	}
 
 	/// Return the initial of the input, only if is in A-Z
@@ -181,11 +181,11 @@ class Normalizer {
 	/// - Returns: optional the initial
 	class func toAzInitial(_ input: String?) -> String? {
 
-		guard let input = input else {
+		guard let input = input, !input.isEmpty else {
 			return nil
 		}
 
-		let validInput = String(input.unicodeScalars.filter { !excludeCharacterSet.contains($0) })
+		let validInput = String(input.unicodeScalars.filter { !filterCharacterSet.contains($0) })
 		let firstChar = validInput.prefix(1)
 		let capitalizedInitial = String(firstChar).uppercased()
 		guard capitalizedInitial.unicodeScalars.allSatisfy({ initialsCharacterSet.contains($0) }) else {
