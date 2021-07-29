@@ -7,12 +7,13 @@
 
 import UIKit
 
-/// Styled subclass of UIStackView that can handle (simple) html.
+/// Styled subclass of UIStackView that displays one or more TextElement's, which can handle (simple) html
 /// Auto expands to fit its content.
 /// By default the content is not editable or selectable.
 /// Can listen to selected links and updated text.
 class TextView: UIStackView {
     
+    /// Helper variable to display the given text by using a TextElement
     var text: String? {
         didSet {
             removeAllArrangedSubviews()
@@ -22,6 +23,7 @@ class TextView: UIStackView {
         }
     }
     
+    /// Helper variable to display a TextElement for each paragraph in the attributed string
     var attributedText: NSAttributedString? {
         didSet {
             removeAllArrangedSubviews()
@@ -48,18 +50,21 @@ class TextView: UIStackView {
         }
     }
     
+    /// Helper variable to retrieve all subviews
     var textElements: [TextElement] {
         return arrangedSubviews.compactMap { view in
             return view as? TextElement
         }
     }
     
+    /// Helper variable to pass linkTextAttributes to each subview
     var linkTextAttributes: [NSAttributedString.Key: Any]? {
         didSet {
             textElements.forEach { $0.linkTextAttributes = linkTextAttributes }
         }
     }
     
+    /// Initializes the TextView by parsing the given string to HTML
     init(
 		htmlText: String,
 		font: UIFont = Theme.fonts.body,
@@ -71,6 +76,7 @@ class TextView: UIStackView {
         html(htmlText, font: font, textColor: textColor, boldTextColor: boldTextColor)
     }
     
+    //// Initializes the TextView with a string
     init(text: String? = nil) {
         super.init(frame: .zero)
         setup()
@@ -78,6 +84,7 @@ class TextView: UIStackView {
         self.text = text
     }
     
+    /// Initializes the TextView with an attributed string
     init(attributedText: NSAttributedString) {
         super.init(frame: .zero)
         setup()
@@ -89,6 +96,7 @@ class TextView: UIStackView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Set vertical alignment
     private func setup() {
         axis = .vertical
     }
@@ -133,6 +141,7 @@ class TextView: UIStackView {
 
 extension NSAttributedString {
     
+    /// Helper method to split an attributed string by using the given separator
     func split(_ separator: String) -> [NSAttributedString] {
         var substrings = [NSAttributedString]()
         
@@ -149,6 +158,7 @@ extension NSAttributedString {
         return substrings
     }
     
+    /// Helper method to find certain attributes of an attributed string
     func attributes(find: (_ key: Key, _ value: Any, _ range: NSRange) -> (Bool)) -> Bool {
         var result = false
         enumerateAttributes(in: NSRange(location: 0, length: self.length)) { attributes, range, stop in
@@ -162,6 +172,7 @@ extension NSAttributedString {
         return result
     }
     
+    /// Determines whether the attributed string is a header
     var isHeader: Bool {
         return attributes { key, value, range in
             // Check if header level is h1 or higher
@@ -185,27 +196,30 @@ extension NSAttributedString {
     }
     
     // swiftlint:disable empty_count
+    /// Determines whether the attributed string is a list item
     var isListItem: Bool {
         // Check if strings starts with tabbed bullet character
         if string.starts(with: "\t●") || string.starts(with: "\t•") {
             return true
-        } else {
-            // Check if textLists attribute contains one or more elements
-            return attributes { key, value, _ in
-                
-                if key == NSAttributedString.Key.paragraphStyle,
-                   let paragraphStyle = value as? NSParagraphStyle,
-                   paragraphStyle.textLists.count > 0 {
-                    return true
-                }
-                return false
+        }
+        
+        // Check if textLists attribute contains one or more elements
+        return attributes { key, value, _ in
+            
+            if key == NSAttributedString.Key.paragraphStyle,
+               let paragraphStyle = value as? NSParagraphStyle,
+               paragraphStyle.textLists.count > 0 {
+                return true
             }
+            return false
         }
     }
 
+    /// Determines the line height used for the attributed string
     var lineHeight: CGFloat {
         var height: CGFloat = 0
         
+        // Retrieve the maximum value set for minimumLineHeight in NSParagraphStyle
         enumerateAttributes(in: NSRange(location: 0, length: self.length)) { attributes, range, stop in
             for (key, value) in attributes {
                 if key == NSAttributedString.Key.paragraphStyle,

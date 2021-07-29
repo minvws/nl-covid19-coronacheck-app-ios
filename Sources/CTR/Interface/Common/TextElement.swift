@@ -16,6 +16,7 @@ class TextElement: UITextView, UITextViewDelegate {
     private var linkHandlers = [(URL) -> Void]()
     private var textChangedHandlers = [(String?) -> Void]()
     
+    ///  Initializes the TextView with the given attributed string
     init(
         attributedText: NSAttributedString,
         font: UIFont = Theme.fonts.body,
@@ -27,6 +28,7 @@ class TextElement: UITextView, UITextViewDelegate {
         self.attributedText = attributedText
     }
     
+    ///  Initializes the TextView with the given string
     init(text: String? = nil) {
         super.init(frame: .zero, textContainer: nil)
         setup()
@@ -38,6 +40,7 @@ class TextElement: UITextView, UITextViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// Sets up the TextElement with the default settings
     private func setup() {
         delegate = self
         
@@ -55,6 +58,7 @@ class TextElement: UITextView, UITextViewDelegate {
         ]
     }
     
+    /// Calculates the intrisic content size
     override var intrinsicContentSize: CGSize {
         let superSize = super.intrinsicContentSize
         
@@ -86,6 +90,7 @@ class TextElement: UITextView, UITextViewDelegate {
         return self
     }
     
+    /// Delegate method to determine whether a URL can be interacted with
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         switch interaction {
             case .invokeDefaultAction:
@@ -97,10 +102,12 @@ class TextElement: UITextView, UITextViewDelegate {
         return false
     }
     
+    /// Delegate method which is called when the user has ended editing
     func textViewDidEndEditing(_ textView: UITextView) {
         textChangedHandlers.forEach { $0(textView.text) }
     }
     
+    /// Delegate method which is called when the user has changed selection
     func textViewDidChangeSelection(_ textView: UITextView) {
         // Allows links to be tapped but disables text selection
         textView.selectedTextRange = nil
