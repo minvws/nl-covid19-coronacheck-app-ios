@@ -7,3 +7,5 @@
 
 // swiftlint:disable type_name
 typealias L = R.string.localizable
+typealias I = R.image
+typealias C = R.color
