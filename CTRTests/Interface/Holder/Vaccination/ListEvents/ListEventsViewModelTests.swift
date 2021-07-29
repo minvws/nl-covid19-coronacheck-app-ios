@@ -491,7 +491,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -527,7 +527,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -563,7 +563,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -599,7 +599,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -635,7 +635,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -670,7 +670,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -706,7 +706,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -742,7 +742,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -778,7 +778,7 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><p></p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><p></p>Vaccin: <b></b><p></p>Type vaccin: <b></b><p></p>Producent: <b></b><p></p>Doses: <b>1 van 2</b><p></p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><p></p>Vaccinatiedatum: <b>16 mei 2021</b><p></p>Gevaccineerd in: <b>NLD</b><p></p>Uniek certificaatnummer: <b>1234</b></p>"
+		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b></p><p>Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b></p><p>Vaccin: <b></b></p><p>Type vaccin: <b></b></p><p>Producent: <b></b></p><p>Doses: <b>1 van 2</b></p><p>Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b></p><p>Vaccinatiedatum: <b>16 mei 2021</b></p><p>Gevaccineerd in: <b>NLD</b></p><p>Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
