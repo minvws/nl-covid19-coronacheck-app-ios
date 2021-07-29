@@ -17,9 +17,9 @@ final class RoundedLabel: BaseView {
 	}
 	
 	/// The message label
-	private let messageTextView: TextView = {
+	private let messageLabel: Label = {
 
-		return TextView()
+        return Label(body: nil).multiline()
 	}()
 	
 	override func setupViews() {
@@ -34,24 +34,24 @@ final class RoundedLabel: BaseView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		addSubview(messageTextView)
+		addSubview(messageLabel)
 	}
 	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
 		NSLayoutConstraint.activate([
-			messageTextView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin),
-			messageTextView.leftAnchor.constraint(equalTo: leftAnchor, constant: ViewTraits.margin),
-			messageTextView.rightAnchor.constraint(equalTo: rightAnchor, constant: -ViewTraits.margin),
-			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)
+			messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.margin),
+			messageLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: ViewTraits.margin),
+			messageLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -ViewTraits.margin),
+			messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.margin)
 		])
 	}
 	
 	/// The message
 	var message: String? {
 		didSet {
-			messageTextView.attributedText = .makeFromHtml(text: message,
+			messageLabel.attributedText = .makeFromHtml(text: message,
 														font: Theme.fonts.body,
 														textColor: Theme.colors.dark)
 		}
