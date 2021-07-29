@@ -345,9 +345,9 @@
 "holder.testresults.results.text" = "<p>Deze testuitslag is opgehaald bij de testlocatie.</p><p>Kloppen de gegevens hieronder? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.</p>";
 "holder.testresults.results.button" = "Maak bewijs";
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
-"holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p></p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
+"holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
 "holder.testresults.already.title" = "Testuitslag is al opgehaald";
-"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en omgezet in een QR-code.</p><p></p> <p>Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
+"holder.testresults.already.text" = "<p>Je testuitslag is al opgehaald en omgezet in een QR-code.</p><p>Klopt dit niet? Neem dan contact op met de testlocatie.</p>";
 "holder.testresults.negative" = "Negatieve testuitslag";
 "holder.testresults.identity" = "Identificatiegegevens: %@";
 "holder.testresults.alert.title" = "Weet je zeker dat je wilt stoppen?";

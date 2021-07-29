@@ -90,7 +90,7 @@
 "holder.menu.accessibility" = "Accessibility";
 
 "holder.tokenentry.modal.notoken.title" = "I don't have a code";
-"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p></p>";
+"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p>";
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 
@@ -270,7 +270,7 @@
 /* MARK: - About Making a QR */
 "holder.aboutmakingaqr.title" = "Make QR code";
 "holder.aboutmakingaqr.header" = "Make a QR code";
-"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate. </p><b>1. Choose your certificate</b><p>You can create a vaccination certificate, a test certificate or a recovery certificate.</p><b>2. Automatically retrieve data</b><p>The app directly retrieves the data of your vaccination, test result or recovery.</p><b>3. QR codes are ready</b><p>The app generates a QR code for the Netherlands and one for other countries.</p>";
+"holder.aboutmakingaqr.body" = "<p>The app makes a QR code in three steps. This QR code is your personal certificate.</p><b>1. Choose your certificate</b><p>You can create a vaccination certificate, a test certificate or a recovery certificate.</p><b>2. Automatically retrieve data</b><p>The app directly retrieves the data of your vaccination, test result or recovery.</p><b>3. QR codes are ready</b><p>The app generates a QR code for the Netherlands and one for other countries.</p>";
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
@@ -314,7 +314,7 @@
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
 "holder.showqr.domestic.title" = "My QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p>The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you.</p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <b>%@</b></p><p>Date of birth*: <b>%@</b></p><p>Disease targeted: <b>COVID-19</b></p><p>Vaccine: <b>%@</b></p><p>Vaccine medicinal product: <b>%@</b></p><p>Vaccine manufacturer: <b>%@</b></p><p>Number in series of doses: <b>%@</b></p><p>Date of vaccination*: <b>%@</b></p><p>Member state of vaccination: <b>%@</b></p><p>Certificate issuer: <b>%@</b></p><p>Unique certificate identifier: <b>%@</b></p><p>*Date displayed as dd-mm-yyyy.</p>";
@@ -397,7 +397,7 @@
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.wrong.title" = "Something is wrong";
-"holder.vaccination.wrong.body" = "<p>Is your name or date of birth wrong? Or are your vaccination details incorrect? Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a> </p>";
+"holder.vaccination.wrong.body" = "<p>Is your name or date of birth wrong? Or are your vaccination details incorrect? Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a></p>";
 
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
