@@ -206,12 +206,7 @@ final class OnboardingConsentView: BaseView {
 	/// - Parameter text: the privacy text
 	func addPrivacyItem(_ text: String, number: Int, total: Int) {
 
-		let label = Label(body: nil, textColor: Theme.colors.dark).multiline()
-		label.attributedText = .makeFromHtml(
-			text: text,
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
+        let textView = TextView(htmlText: text, font: Theme.fonts.body, textColor: Theme.colors.dark, boldTextColor: Theme.colors.dark)
 		var accessibiliyHint = ""
 		if number == 1 {
 			accessibiliyHint = L.generalListAccessibilityStart()
@@ -220,13 +215,12 @@ final class OnboardingConsentView: BaseView {
 		if number == total {
 			accessibiliyHint += L.generalListAccessibilityEnd()
 		}
-		label.accessibilityHint = accessibiliyHint
+		textView.accessibilityHint = accessibiliyHint
 		let stack = HStack(
 			spacing: 16,
 			ImageView(imageName: "PrivacyItem").asIcon(),
-			label
-		)
-		.alignment(.center)
+			textView
+		).alignment(.center)
 		itemStackView.addArrangedSubview(stack)
 	}
 }

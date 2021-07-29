@@ -38,10 +38,10 @@ class VaccinationEventView: BaseView {
 		return Label(bodyMedium: nil).multiline()
 	}()
 
-	/// The message label
-	private let messageLabel: Label = {
+	/// The message text
+	private let messageTextView: TextView = {
 
-		return Label(subhead: nil).multiline()
+		return TextView()
 	}()
 
 	private let disclaimerButton: UIButton = {
@@ -56,7 +56,6 @@ class VaccinationEventView: BaseView {
 
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
-		messageLabel.textColor = Theme.colors.grey1
 		disclaimerButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
@@ -73,7 +72,7 @@ class VaccinationEventView: BaseView {
 
 		addSubview(disclaimerImageView)
 		addSubview(titleLabel)
-		addSubview(messageLabel)
+		addSubview(messageTextView)
 	}
 
 	/// Setup the constraints
@@ -101,18 +100,18 @@ class VaccinationEventView: BaseView {
 				equalTo: disclaimerImageView.leadingAnchor
 			),
 			titleLabel.bottomAnchor.constraint(
-				equalTo: messageLabel.topAnchor,
+				equalTo: messageTextView.topAnchor,
 				constant: -8
 			),
 
 			// Message
-			messageLabel.leadingAnchor.constraint(
+			messageTextView.leadingAnchor.constraint(
 				equalTo: leadingAnchor
 			),
-			messageLabel.trailingAnchor.constraint(
+			messageTextView.trailingAnchor.constraint(
 				equalTo: trailingAnchor
 			),
-			messageLabel.bottomAnchor.constraint(
+			messageTextView.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -24
 			)
@@ -135,7 +134,7 @@ class VaccinationEventView: BaseView {
 
 	func setAccessibilityLabel() {
 
-        disclaimerButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "")"
+        disclaimerButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageTextView.text ?? "")"
 	}
 
 	// MARK: Public Access
@@ -154,7 +153,7 @@ class VaccinationEventView: BaseView {
 	/// The message
 	var subTitle: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
+			messageTextView.attributedText = .makeFromHtml(
 				text: subTitle,
 				font: Theme.fonts.subhead,
 				textColor: Theme.colors.grey1,

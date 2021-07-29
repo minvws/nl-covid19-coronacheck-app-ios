@@ -62,9 +62,9 @@ class ForcedInformationConsentView: BaseView {
 		return view
 	}()
 
-	private let highlightLabel: Label = {
+	private let highlightTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 
 	let contentTextView: TextView = {
@@ -115,7 +115,7 @@ class ForcedInformationConsentView: BaseView {
 
 		super.setupViewHierarchy()
 
-		highlightLabel.embed(
+		highlightTextView.embed(
 			in: highlightView,
 			insets: UIEdgeInsets.all(ViewTraits.margin)
 		)
@@ -219,7 +219,7 @@ class ForcedInformationConsentView: BaseView {
 	/// The highlight
 	var highlight: String? {
 		didSet {
-			highlightLabel.attributedText = .makeFromHtml(
+			highlightTextView.attributedText = .makeFromHtml(
 				text: highlight,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark

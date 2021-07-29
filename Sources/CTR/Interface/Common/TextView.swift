@@ -26,15 +26,15 @@ class TextView: UIStackView {
             guard let attributedText = attributedText else { return }
             
             let parts = attributedText.split("\n")
-            print("Parts: \(parts)")
-            
             for part in parts {
+                print("\n\nPart: \(part)\n\n")
+                
                 let element = TextElement(attributedText: part)
                 
                 if part.isHeader {
                     element.accessibilityTraits = .header
                 }
-                    
+                
                 addArrangedSubview(element)
             }
         }

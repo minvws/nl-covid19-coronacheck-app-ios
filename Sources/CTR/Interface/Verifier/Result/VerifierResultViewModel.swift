@@ -223,38 +223,33 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 
 	private func showVerifiedInfo() {
 
-		let label = Label(body: nil).multiline()
-		label.attributedText = .makeFromHtml(
-			text: L.verifierResultCheckText(),
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
+        let textView = TextView(htmlText: L.verifierResultCheckText(), font: Theme.fonts.body, textColor: Theme.colors.dark, boldTextColor: Theme.colors.dark)
 
 		coordinator?.displayContent(
 			title: L.verifierResultCheckTitle(),
-			content: [(label, 16)]
+			content: [(textView, 16)]
 		)
 	}
 
 	private func showDeniedInfo() {
 
-		let label = Label(body: nil).multiline()
-		label.attributedText = .makeFromHtml(
-			text: L.verifierDeniedMessageOne(),
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
+		let textView1 = TextView(
+            htmlText: L.verifierDeniedMessageOne(),
+            font: Theme.fonts.body,
+            textColor: Theme.colors.dark,
+            boldTextColor: Theme.colors.dark
+        )
 
-		let label2 = Label(body: nil).multiline()
-		label2.attributedText = .makeFromHtml(
-			text: L.verifierDeniedMessageTwo(),
-			font: Theme.fonts.body,
-			textColor: Theme.colors.dark
-		)
+        let textView2 = TextView(
+            htmlText: L.verifierDeniedMessageTwo(),
+            font: Theme.fonts.body,
+            textColor: Theme.colors.dark,
+            boldTextColor: Theme.colors.dark
+        )
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),
-			content: [(label, 16), (label2, 0)]
+			content: [(textView1, 16), (textView2, 0)]
 		)
 	}
 
