@@ -26,11 +26,6 @@ final class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var primaryButtonTitle = L.holderMenuProof()
 	
 	@Bindable private(set) var hasAddCertificateMode: Bool = false
-	
-	@Bindable private(set) var regionMode: (buttonTitle: String, currentLocationTitle: String)? = (
-		buttonTitle: L.holderDashboardChangeregionButtonEu(),
-		currentLocationTitle: L.holderDashboardChangeregionTitleNl()
-	)
 
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
 
@@ -43,7 +38,6 @@ final class HolderDashboardViewModel: Logging {
 		var myQRCards: [MyQRCard]
 		var expiredGreenCards: [ExpiredQR]
 		var showCreateCard: Bool
-		var qrCodeValidityRegion: QRCodeValidityRegion
 		var isRefreshingStrippen: Bool
 
 		// Related to strippen refreshing.
@@ -67,7 +61,6 @@ final class HolderDashboardViewModel: Logging {
 			userSettings.dashboardRegionToggleValue
 		}
 		set {
-			state.qrCodeValidityRegion = newValue
 			DispatchQueue.global().async {
 				self.userSettings.dashboardRegionToggleValue = newValue
 			}
@@ -89,18 +82,6 @@ final class HolderDashboardViewModel: Logging {
 			)
 			
 			hasAddCertificateMode = state.myQRCards.isEmpty
-			
-			// If there are any cards to show, show the region picker:
-			if !state.myQRCards.isEmpty {
-				switch state.qrCodeValidityRegion {
-					case .domestic:
-						regionMode = (buttonTitle: L.holderDashboardChangeregionButtonEu(), currentLocationTitle: L.holderDashboardChangeregionTitleNl())
-					case .europeanUnion:
-						regionMode = (buttonTitle: L.holderDashboardChangeregionButtonNl(), currentLocationTitle: L.holderDashboardChangeregionTitleEu())
-				}
-			} else {
-				regionMode = nil
-			}
 		}
 	}
 
@@ -142,7 +123,6 @@ final class HolderDashboardViewModel: Logging {
 			myQRCards: [],
 			expiredGreenCards: [],
 			showCreateCard: true,
-			qrCodeValidityRegion: .domestic,
 			isRefreshingStrippen: false
 		)
 
@@ -158,9 +138,6 @@ final class HolderDashboardViewModel: Logging {
 			self?.strippenRefresherDidUpdate(oldRefresherState: oldValue, refresherState: newValue)
 		}
 		strippenRefresher.load()
-
-		// Update State from UserDefaults:
-		self.state.qrCodeValidityRegion = userSettings.dashboardRegionToggleValue
 
 		self.setupNotificationListeners()
 		
@@ -250,12 +227,6 @@ final class HolderDashboardViewModel: Logging {
 	func openUrl(_ url: URL) {
 
 		coordinator?.openUrl(url, inApp: true)
-	}
-
-	func didTapChangeRegion() {
-		coordinator?.userWishesToChangeRegion(currentRegion: state.qrCodeValidityRegion) { [weak self] newRegion in
-			self?.dashboardRegionToggleValue = newRegion
-		}
 	}
 
 	// MARK: - Static Methods

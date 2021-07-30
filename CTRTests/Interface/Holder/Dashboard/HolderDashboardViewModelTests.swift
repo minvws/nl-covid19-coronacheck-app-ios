@@ -78,9 +78,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
-		// expect(self.sut.hasAddCertificateMode) == true
-		expect(self.sut.regionMode?.buttonTitle) == L.holderDashboardChangeregionButtonEu()
-		expect(self.sut.regionMode?.currentLocationTitle) == L.holderDashboardChangeregionTitleNl()
+		expect(self.sut.hasAddCertificateMode) == false
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 		expect(self.sut.domesticCards).to(beEmpty())
 		expect(self.sut.internationalCards).to(beEmpty())
@@ -96,8 +94,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
-		expect(self.sut.regionMode?.buttonTitle) == L.holderDashboardChangeregionButtonEu()
-		expect(self.sut.regionMode?.currentLocationTitle) == L.holderDashboardChangeregionTitleNl()
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 
 		expect(self.sut.hasAddCertificateMode).toEventually(beTrue())
@@ -150,24 +146,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == true
-	}
-
-	func test_didTapChangeRegion_callsCoordinator() {
-		// Arrange
-		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
-		holderCoordinatorDelegateSpy.stubbedUserWishesToChangeRegionCompletionResult = (.domestic, ())
-
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegion) == false
-
-		// Act
-		sut.didTapChangeRegion()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegion) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegionParameters?.currentRegion) == .europeanUnion
-
-		// The value should have now been changed to Domestic: 
-		expect(self.userSettingsSpy.invokedDashboardRegionToggleValue) == .domestic
 	}
 
 	func test_openURL_callsCoordinator() {
