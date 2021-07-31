@@ -119,5 +119,5 @@ class QRCardViewTests: XCTestCase {
 
 		// Assert
 		sut.assertImage()
-	} 
+	}
 }
