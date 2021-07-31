@@ -33,7 +33,7 @@ class HolderDashboardViewController: BaseViewController {
 	struct ValidityText: Equatable {
 		enum Kind: Equatable {
 			case past
-			case future
+			case future(showingAutomaticallyBecomesValidFooter: Bool)
 			case current
 		}
 

@@ -119,4 +119,27 @@ class QRCardViewTests: XCTestCase {
 		// Assert
 		sut.assertImage()
 	}
+
+	func testBecomesAutomaticallyValidRowFooter() {
+		// Arrange
+		let sut = QRCardView()
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.region = "Region"
+
+		sut.originRows = [
+			QRCardView.OriginRow(
+				type: "Type of Proof",
+				validityString: { _ in .init(text: "Future", kind: .future(showingAutomaticallyBecomesValidFooter: true)) }
+			)
+		]
+
+		sut.expiryEvaluator = { _ in "Expiry Date text" }
+		sut.buttonEnabledEvaluator = { _ in true }
+		sut.isLoading = false
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
 }

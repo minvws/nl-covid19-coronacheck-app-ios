@@ -184,19 +184,29 @@ class QRCardView: BaseView {
 
 			verticalLabelsStackView.addArrangedSubview(validUntilLabel)
 
-			verticalLabelsStackView.setCustomSpacing(22, after: validUntilLabel)
+			if case .future(let showingAutomaticallyBecomesValidFooter) = validityText.kind,
+			   showingAutomaticallyBecomesValidFooter {
+				let becomesValidLabel = Label(bodyBold: L.holderDashboardQrValidityDateAutomaticallyBecomesValidOn())
+				becomesValidLabel.numberOfLines = 0
+
+				verticalLabelsStackView.addArrangedSubview(becomesValidLabel)
+
+				verticalLabelsStackView.setCustomSpacing(22, after: becomesValidLabel)
+			} else {
+				verticalLabelsStackView.setCustomSpacing(22, after: validUntilLabel)
+			}
 		}
 
 		if let expiryEvaluator = expiryEvaluator {
-			let validityLabel = Label(bodyBold: expiryEvaluator(Date()))
-			validityLabel.numberOfLines = 0
-			verticalLabelsStackView.addArrangedSubview(validityLabel)
+			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
+			expiryLabel.numberOfLines = 0
+			verticalLabelsStackView.addArrangedSubview(expiryLabel)
 
 			if let text = expiryEvaluator(Date()) {
-				validityLabel.isHidden = false
-				validityLabel.text = text
+				expiryLabel.isHidden = false
+				expiryLabel.text = text
 			} else {
-				validityLabel.isHidden = true
+				expiryLabel.isHidden = true
 			}
 		}
         
