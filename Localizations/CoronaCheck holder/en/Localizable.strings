@@ -1,6 +1,6 @@
 "general.paperflow" = "paper certificate";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
-"holder.vaccination.about.off.dcc" = "Doses %@ of %@";
+"holder.vaccination.about.off.dcc" = "Dose %@ of %@";
 "holder.vaccination.about.country" = "The Netherlands";
 "holder.vaccination.about.issuer" = "Ministry of Health, Welfare and Sport";
 
@@ -41,7 +41,7 @@
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
 "holder.menu.proof" = "Add certificate";
-"holder.showqr.eu.about.recovery.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b> <br /><br />Date of birth*: <br /> <b>%@</b></p> <p>Disease recovered from: <b>COVID-19</b> <br /><br /> Test date*: <br /> <b>%@</b> <br /><br /> Member state of test: <br /> <b>%@</b> <br /><br /> Certificate issuer: <br /> <b>%@</b> <br /><br /> Valid from*: <br /> <b>%@</b> <br /><br /> Valid to*: <br /> <b>%@</b> <br /></p> <p><br /> Unique certificate identifier: <br /> <b>%@</b></p> <p>*Date displayed as dd-mm-yyyy.</p>";
+"holder.showqr.eu.about.recovery.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b> <br /><br />Date of birth*: <br /> <b>%@</b></p> <p>Disease recovered from: <b>COVID-19</b> <br /><br /> Test date*: <br /> <b>%@</b> <br /><br /> Member state of test: <br /> <b>%@</b> <br /><br /> Certificate issuer: <br /> <b>%@</b> <br /><br /> Valid from*: <br /> <b>%@</b> <br /><br /> Valid to*: <br /> <b>%@</b> <br /></p> <p><br /> Unique certificate identifier: <br /> <b>%@</b></p> <p>Date noted in day-month-year</p>";
 "holder.event.about.body.recovery" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Date of birth: <b>%@</b><br />Test date: <b>%@</b><br />Valid from: <b>%@</b><br />Valid until: <b>%@</b><br />Unique certificate number: <b>%@</b></p>";
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
@@ -72,7 +72,6 @@
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.button" = "To my certificates";
-"holder.dashboard.changeregion.button.nl" = "Change to NL";
 "general.add" = "Add";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
@@ -190,12 +189,6 @@
 "general.list.accessibility" = "%@ of %@.";
 "general.vaccination" = "vaccination";
 "general.testresult" = "test result";
-/* MARK: - Toggle Region */
-"toggleRegion.label.topText.eu" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
-"toggleRegion.label.topText.nl" = "Always use your Dutch QR code within the Netherlands. Travelling outside the Netherlands? Then use your international QR code.";
-"toggleRegion.label.bottomText.eu" = "The international QR code contains more details: your name, date of birth, and the type of vaccine.";
-"toggleRegion.label.bottomText.nl" = "The Dutch QR code only contains your initials, your birth month, and your day of birth.";
-
 /* MARK: - Update App */
 "updateApp.error.message" = "Can't open App Store";
 "updateApp.title" = "Time for an update";
@@ -289,9 +282,6 @@
 "holder.dashboard.qr.title" = "My QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
-"holder.dashboard.changeregion.title.nl" = "I'm in the Netherlands";
-"holder.dashboard.changeregion.title.eu" = "I'm travelling internationally";
-"holder.dashboard.changeregion.button.eu" = "Change to international";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international certificate.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
@@ -318,8 +308,8 @@
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
-"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That’s why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b><br /><br />Date of birth*: <br /><b>%@</b></p><p><br />Disease targeted: <br /> <b>COVID-19</b><br /><br />Vaccine: <br /> <b>%@</b><br /><br />Vaccine medicinal product: <br /> <b>%@</b><br /><br />Vaccine manufacturer: <br /> <b>%@</b><br /><br />Number in series of doses: <br /> <b>%@</b><br /><br />Date of vaccination*: <br /> <b>%@</b><br /><br />Member state of vaccination: <br /> <b>%@</b><br /> <br />Certificate issuer: <br /> <b>%@</b><br /><br />Unique certificate identifier: <br /> <b>%@</b></p><p>*Date displayed as dd-mm-yyyy.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b><br /><br />Date of birth*: <br /> <b>%@</b></p><p><br />Disease targeted: <br /> <b>COVID-19</b><br /><br />Type of test: <br /> <b>%@</b><br /><br />Test name: <br /> <b>%@</b><br /><br />Test date*: <br /> <b>%@</b><br /><br />Test result: <br /> <b>%@</b><br /><br />Testing centre: <br /> <b>%@</b><br /><br />Test manufacturer: <br /> <b>%@</b><br /><br />Member state of test: <br /> <b>%@</b><br /><br />Certificate issuer: <br /> <b>%@</b><br /><br />Unique certificate identifier: <br /> <b>%@</b></p><p>*Date displayed as dd-mm-yyyy.</p>";
+"holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That’s why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b><br /><br />Date of birth*: <br /><b>%@</b></p><p><br />Disease targeted: <br /> <b>COVID-19</b><br /><br />Vaccine: <br /> <b>%@</b><br /><br />Vaccine medicinal product: <br /> <b>%@</b><br /><br />Vaccine manufacturer: <br /> <b>%@</b><br /><br />Number in series of doses: <br /> <b>%@</b><br /><br />Date of vaccination*: <br /> <b>%@</b><br /><br />Member state of vaccination: <br /> <b>%@</b><br /> <br />Certificate issuer: <br /> <b>%@</b><br /><br />Unique certificate identifier: <br /> <b>%@</b></p><p>*Date noted in day-month-year</p>";
+"holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b><br /><br />Date of birth*: <br /> <b>%@</b></p><p><br />Disease targeted: <br /> <b>COVID-19</b><br /><br />Type of test: <br /> <b>%@</b><br /><br />Test name: <br /> <b>%@</b><br /><br />Test date*: <br /> <b>%@</b><br /><br />Test result: <br /> <b>%@</b><br /><br />Testing centre: <br /> <b>%@</b><br /><br />Test manufacturer: <br /> <b>%@</b><br /><br />Member state of test: <br /> <b>%@</b><br /><br />Certificate issuer: <br /> <b>%@</b><br /><br />Unique certificate identifier: <br /> <b>%@</b></p><p>*Date noted in day-month-year</p>";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
 

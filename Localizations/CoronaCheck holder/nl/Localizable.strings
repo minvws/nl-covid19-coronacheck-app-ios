@@ -1,8 +1,8 @@
 "general.paperflow" = "papieren bewijs";
-"holder.dcc.list.issuer" = "Ministerie VWS";
-"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Doses %@ of %@";
+"holder.dcc.list.issuer" = "Ministerie van VWS";
+"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Dose %@ of %@";
 "holder.vaccination.about.country" = "Nederland / The Netherlands";
-"holder.vaccination.about.issuer" = "Ministerie VWS / Ministry of Health, Welfare and Sport";
+"holder.vaccination.about.issuer" = "Ministerie van VWS / Ministry of Health, Welfare and Sport";
 
 "holder.checkdcc.blocked.title" = "Je hebt te vaak gescand";
 "holder.checkdcc.blocked.message" = "Voor de veiligheid kan je deze QR-code tijdelijk niet meer scannen. Probeer het later nog eens.";
@@ -41,7 +41,7 @@
 "holder.recovery.tooOld.message" = "Is het langer dan 180 dagen geleden dat je getest bent? Dan is je testuitslag niet meer geldig. Je kunt dan geen herstelbewijs maken.";
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
 "holder.menu.proof" = "Bewijs toevoegen";
-"holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p> <p>Naam / Name:<br /> <b>%@</b> <br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p> <p>Ziekte waarvan hersteld / Disease recovered from:<br /> <b>COVID-19</b> <br /><br />Testdatum / Test date*:<br /> <b>%@</b> <br /><br />Getest in / Member state of test:<br /> <b>%@</b> <br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b> <br /><br />Geldig vanaf / Valid from*:<br /> <b>%@</b> <br /><br />Geldig tot / Valid to*:<br /> <b>%@</b> <br /></p> <p><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p> <p>*Datum weergegeven in dd-mm-jjjj / Date displayed as dd-mm-yyyy.</p>";
+"holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p> <p>Naam / Name:<br /> <b>%@</b> <br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p> <p>Ziekte waarvan hersteld / Disease recovered from:<br /> <b>COVID-19</b> <br /><br />Testdatum / Test date*:<br /> <b>%@</b> <br /><br />Getest in / Member state of test:<br /> <b>%@</b> <br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b> <br /><br />Geldig vanaf / Valid from*:<br /> <b>%@</b> <br /><br />Geldig tot / Valid to*:<br /> <b>%@</b> <br /></p> <p><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p> <p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
 "holder.event.about.body.recovery" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br />Geldig vanaf: <b>%@</b><br />Geldig tot: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
@@ -72,7 +72,6 @@
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.networkwasbusy.text" = "Probeer het later nog eens.";
 "general.networkwasbusy.button" = "Naar mijn bewijzen";
-"holder.dashboard.changeregion.button.nl" = "Aanpassen naar NL";
 "general.add" = "Toevoegen";
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
@@ -190,12 +189,6 @@
 "general.list.accessibility" = "%@ van %@.";
 "general.vaccination" = "vaccinatie";
 "general.testresult" = "testuitslag";
-/* MARK: - Toggle Region */
-"toggleRegion.label.topText.eu" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
-"toggleRegion.label.topText.nl" = "Gebruik binnen Nederland altijd je Nederlandse QR-code. Reis je buiten Nederland? Gebruik dan je internationale bewijs.";
-"toggleRegion.label.bottomText.eu" = "In de internationale QR-code staan meer gegevens: je naam, geboortedatum en het type vaccin.";
-"toggleRegion.label.bottomText.nl" = "In de Nederlandse QR-code staan alleen je initialen, je geboortedag en je geboortemaand.";
-
 /* MARK: - Update App */
 "updateApp.error.message" = "De App Store kan niet geopend worden.";
 "updateApp.title" = "Tijd voor een update";
@@ -285,13 +278,10 @@
 "holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Verloopt over";
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig t/m";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
-"holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf ";
+"holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
-"holder.dashboard.changeregion.title.nl" = "Ik ben in Nederland";
-"holder.dashboard.changeregion.title.eu" = "Ik reis internationaal";
-"holder.dashboard.changeregion.button.eu" = "Aanpassen naar internationaal";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
@@ -318,8 +308,8 @@
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Om privacyredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
-"holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /> <b>%@</b><br /><br />Geboortedatum / Date of birth*: <br /><b>%@</b></p><p><br />Ziekteverwekker / Disease targeted:<br /> <b>COVID-19</b><br /><br />Vaccin / Vaccine:<br /> <b>%@</b><br /><br />Type vaccin / Vaccine medicinal product:<br /> <b>%@</b><br /><br />Producent / Vaccine manufacturer:<br /> <b>%@</b><br /><br />Dosis / Number in series of doses:<br /> <b>%@</b><br /><br />Vaccinatiedatum / Date of vaccination*:<br /> <b>%@</b><br /><br />Gevaccineerd in / Member state of vaccination:<br /> <b>%@</b><br /> <br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b><br /><br />Uniek certificaatnummer /  Unique certificate identifier:<br /> <b>%@</b></p><p>*Datum weergegeven in dd-mm-jjjj / Date displayed as dd-mm-yyyy.</p>";
-"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /> <b>%@</b><br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p><p><br />Ziekteverwekker / Disease targeted:<br /> <b>COVID-19</b><br /><br />Type test / Type of test:<br /> <b>%@</b><br /><br />Testnaam / Test name:<br /> <b>%@</b><br /><br />Testdatum / Test date*:<br /> <b>%@</b><br /><br />Testuitslag / Test result:<br /> <b>%@</b><br /><br />Testlocatie / Testing centre:<br /> <b>%@</b><br /><br />Producent / Test manufacturer:<br /> <b>%@</b><br /><br />Getest in / Member state of test:<br /> <b>%@</b><br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b><br /><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p><p>*Datum weergegeven in dd-mm-jjjj / Date displayed as dd-mm-yyyy.</p>";
+"holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /> <b>%@</b><br /><br />Geboortedatum / Date of birth*: <br /><b>%@</b></p><p><br />Ziekteverwekker / Disease targeted:<br /> <b>COVID-19</b><br /><br />Vaccin / Vaccine:<br /> <b>%@</b><br /><br />Type vaccin / Vaccine medicinal product:<br /> <b>%@</b><br /><br />Producent / Vaccine manufacturer:<br /> <b>%@</b><br /><br />Dosis / Number in series of doses:<br /> <b>%@</b><br /><br />Vaccinatiedatum / Date of vaccination*:<br /> <b>%@</b><br /><br />Gevaccineerd in / Member state of vaccination:<br /> <b>%@</b><br /> <br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b><br /><br />Uniek certificaatnummer /  Unique certificate identifier:<br /> <b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
+"holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /> <b>%@</b><br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p><p><br />Ziekteverwekker / Disease targeted:<br /> <b>COVID-19</b><br /><br />Type test / Type of test:<br /> <b>%@</b><br /><br />Testnaam / Test name:<br /> <b>%@</b><br /><br />Testdatum / Test date*:<br /> <b>%@</b><br /><br />Testuitslag / Test result:<br /> <b>%@</b><br /><br />Testlocatie / Testing centre:<br /> <b>%@</b><br /><br />Producent / Test manufacturer:<br /> <b>%@</b><br /><br />Getest in / Member state of test:<br /> <b>%@</b><br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b><br /><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
 "holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
 
