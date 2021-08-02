@@ -24,18 +24,10 @@ class VaccinationEventView: BaseView {
 		static let messageTopMargin: CGFloat = 4.0
 	}
 
-	/// The disclaimer image
-	private let disclaimerImageView: UIImageView = {
-		let view = UIImageView(image: .questionMark)
-		view.tintColor = Theme.colors.dark
-		view.translatesAutoresizingMaskIntoConstraints = false
-		return view
-	}()
-
 	/// The title label
 	private let titleLabel: Label = {
 
-		return Label(bodyMedium: nil).multiline()
+		return Label(bodyBold: nil).multiline()
 	}()
 
 	/// The message label
@@ -44,7 +36,13 @@ class VaccinationEventView: BaseView {
 		return Label(subhead: nil).multiline()
 	}()
 
-	private let disclaimerButton: UIButton = {
+	/// The link label
+	private let linkLabel: Label = {
+
+		return Label(bodyBold: nil).multiline()
+	}()
+
+	private let detailsButton: UIButton = {
 
 		let button = UIButton()
 		button.backgroundColor = .clear
@@ -57,7 +55,8 @@ class VaccinationEventView: BaseView {
 		super.setupViews()
 		view?.backgroundColor = Theme.colors.viewControllerBackground
 		messageLabel.textColor = Theme.colors.grey1
-		disclaimerButton.addTarget(
+		linkLabel.textColor = Theme.colors.iosBlue
+		detailsButton.addTarget(
 			self,
 			action: #selector(disclaimerButtonTapped),
 			for: .touchUpInside
@@ -69,11 +68,11 @@ class VaccinationEventView: BaseView {
 
 		super.setupViewHierarchy()
 
-		disclaimerButton.embed(in: self)
+		detailsButton.embed(in: self)
 
-		addSubview(disclaimerImageView)
 		addSubview(titleLabel)
 		addSubview(messageLabel)
+		addSubview(linkLabel)
 	}
 
 	/// Setup the constraints
@@ -82,12 +81,6 @@ class VaccinationEventView: BaseView {
 		super.setupViewConstraints()
 
 		NSLayoutConstraint.activate([
-
-			// Disclaimer View
-			disclaimerImageView.trailingAnchor.constraint( equalTo: trailingAnchor),
-			disclaimerImageView.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor),
-			disclaimerImageView.widthAnchor.constraint(equalToConstant: 21),
-			disclaimerImageView.heightAnchor.constraint(equalToConstant: 21),
 
 			// Title
 			titleLabel.topAnchor.constraint(
@@ -98,7 +91,7 @@ class VaccinationEventView: BaseView {
 				equalTo: leadingAnchor
 			),
 			titleLabel.trailingAnchor.constraint(
-				equalTo: disclaimerImageView.leadingAnchor
+				equalTo: trailingAnchor
 			),
 			titleLabel.bottomAnchor.constraint(
 				equalTo: messageLabel.topAnchor,
@@ -113,6 +106,18 @@ class VaccinationEventView: BaseView {
 				equalTo: trailingAnchor
 			),
 			messageLabel.bottomAnchor.constraint(
+				equalTo: linkLabel.topAnchor,
+				constant: -8
+			),
+
+			// Link
+			linkLabel.leadingAnchor.constraint(
+				equalTo: leadingAnchor
+			),
+			linkLabel.trailingAnchor.constraint(
+				equalTo: trailingAnchor
+			),
+			linkLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -24
 			)
@@ -124,7 +129,7 @@ class VaccinationEventView: BaseView {
 
 		super.setupAccessibility()
 
-		accessibilityElements = [disclaimerButton]
+		accessibilityElements = [detailsButton]
 	}
 
 	/// User tapped on the primary button
@@ -135,7 +140,7 @@ class VaccinationEventView: BaseView {
 
 	func setAccessibilityLabel() {
 
-        disclaimerButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "")"
+        detailsButton.accessibilityLabel = "\(titleLabel.text ?? "") \(messageLabel.text ?? "")"
 	}
 
 	// MARK: Public Access
@@ -163,6 +168,16 @@ class VaccinationEventView: BaseView {
 				paragraphSpacing: ViewTraits.messageParagraphSpacing
 			)
 			setAccessibilityLabel()
+		}
+	}
+
+	var link: String? {
+		didSet {
+			linkLabel.attributedText = link?.setLineHeight(
+				ViewTraits.titleLineHeight,
+				kerning: ViewTraits.titleKerning,
+				textColor: Theme.colors.iosBlue
+			)
 		}
 	}
 
