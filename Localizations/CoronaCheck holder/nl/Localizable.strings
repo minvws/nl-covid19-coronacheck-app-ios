@@ -414,6 +414,18 @@
 "holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Testproducent: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 
 "holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Is dit de laatste doses van je vaccinatie? <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
+"holder.event.about.vaccination.name" = "Naam:";
+"holder.event.about.vaccination.dateofbirth" = "Geboortedatum:";
+"holder.event.about.vaccination.pathogen" = "Ziekteverwekker:";
+"holder.event.about.vaccination.pathogenvalue" = "COVID-19";
+"holder.event.about.vaccination.brand" = "Vaccin:";
+"holder.event.about.vaccination.type" = "Type vaccin:";
+"holder.event.about.vaccination.manufacturer" = "Producent:";
+"holder.event.about.vaccination.dosage" = "Doses:";
+"holder.event.about.vaccination.completionreason" = "Is dit de laatste doses van je vaccinatie?";
+"holder.event.about.vaccination.date" = "Vaccinatiedatum:";
+"holder.event.about.vaccination.country" = "Gevaccineerd in:";
+"holder.event.about.vaccination.identifier" = "Uniek certificaatnummer:";
 
 "holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
 

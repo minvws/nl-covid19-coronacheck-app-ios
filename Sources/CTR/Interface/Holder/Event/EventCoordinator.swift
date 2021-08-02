@@ -44,6 +44,9 @@ enum EventScreenResult: Equatable {
 
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
+	
+	// Update equatable
+	case showEventDetails(title: String, details: [EventDetails])
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
 		switch (lhs, rhs) {
@@ -224,6 +227,24 @@ class EventCoordinator: Coordinator, Logging {
 
 		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
 	}
+	
+	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
+		
+		let viewController = EventDetailsViewController(
+			viewModel: EventDetailsViewModel(
+				coordinator: self,
+				title: title,
+				details: details,
+				hideBodyForScreenCapture: true
+			)
+		)
+
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+	}
 
 	private func navigateBackToEventStart() {
 
@@ -345,6 +366,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 				}
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
+			case let .showEventDetails(title, details):
+				navigateToEventDetails(title, details: details)
 			default:
 				break
 		}
