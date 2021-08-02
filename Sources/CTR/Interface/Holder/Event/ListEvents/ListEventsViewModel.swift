@@ -128,9 +128,6 @@ class ListEventsViewModel: Logging {
 			self?.hideForCapture = isBeingCaptured
 		}
 
-		for event in remoteEvents {
-			logDebug("Starting List with \(event.wrapper)")
-		}
 		viewState = getViewState(from: remoteEvents)
 	}
 

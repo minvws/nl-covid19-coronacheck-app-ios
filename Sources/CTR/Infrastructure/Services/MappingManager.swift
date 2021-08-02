@@ -11,7 +11,7 @@ protocol MappingManaging {
 
 	init(remoteConfigManager: RemoteConfigManaging)
 
-	func setProviderIdentifierMapping(_ providers: [EventFlow.EventProvider])
+	func setEventProviders(_ providers: [EventFlow.EventProvider])
 
 	func getProviderIdentifierMapping(_ code: String? ) -> String?
 
@@ -28,7 +28,7 @@ class MappingManager: MappingManaging, Logging {
 		self.remoteConfigManager = remoteConfigManager
 	}
 
-	func setProviderIdentifierMapping(_ providers: [EventFlow.EventProvider]) {
+	func setEventProviders(_ providers: [EventFlow.EventProvider]) {
 
 		providerIdentifiers.removeAll()
 

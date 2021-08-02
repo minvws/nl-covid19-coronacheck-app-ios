@@ -81,7 +81,7 @@ final class FetchEventsViewModel: Logging {
 
 			case .success(let eventProviders):
 
-				self.mappingManager.setProviderIdentifierMapping(eventProviders)
+				self.mappingManager.setEventProviders(eventProviders)
 
 				// Do the Unomi call
 				self.fetchHasEventInformation(
