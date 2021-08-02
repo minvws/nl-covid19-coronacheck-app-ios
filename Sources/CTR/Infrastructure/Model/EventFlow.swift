@@ -419,3 +419,13 @@ extension EventFlow.DccEvent {
 		return nil
 	}
 }
+
+extension EventFlow.VaccinationEvent {
+
+	func doesMatchEvent(_ otherEvent: EventFlow.VaccinationEvent) -> Bool {
+
+		return dateString == otherEvent.dateString &&
+			((hpkCode != nil && hpkCode == otherEvent.hpkCode) ||
+				(manufacturer != nil && manufacturer == otherEvent.manufacturer))
+	}
+}

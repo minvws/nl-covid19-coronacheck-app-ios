@@ -429,7 +429,6 @@ final class FetchEventsViewModel: Logging {
 
 				eventFetchingGroup.enter()
 				fetchVaccinationEvent(from: provider, filter: filter) { result in
-					self.logDebug("result: \(result)")
 					if Configuration().getEnvironment() == "production" {
 						eventResponseResults += [result.map({ ($0, $1) })]
 					} else {

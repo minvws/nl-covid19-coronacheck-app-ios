@@ -296,35 +296,89 @@ extension ListEventsViewModel {
 		let sortedDataSource = dataSource.sorted { lhs, rhs in
 			if let lhsDate = lhs.event.getSortDate(with: dateFormatter),
 			   let rhsDate = rhs.event.getSortDate(with: dateFormatter) {
+
+				if lhsDate == rhsDate {
+					return lhs.providerIdentifier < rhs.providerIdentifier
+				}
 				return lhsDate < rhsDate
 			}
 			return false
 		}
 
 		var rows = [ListEventsViewController.Row]()
-		for dataRow in sortedDataSource {
+		var counter = 0
 
-			if dataRow.event.recovery != nil {
-				rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
-			} else if dataRow.event.positiveTest != nil {
-				rows.append(getRowFromPositiveTestEvent(dataRow: dataRow))
-			} else if dataRow.event.vaccination != nil {
-				rows.append(getRowFromVaccinationEvent(dataRow: dataRow))
-			} else if dataRow.event.negativeTest != nil {
-				rows.append(getRowFromNegativeTestEvent(dataRow: dataRow))
-			} else if dataRow.event.dccEvent != nil {
-				if let cryptoManager = cryptoManager,
-				   let euCredentialAttributes = dataRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
-					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-						rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
-					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-						rows.append(getRowFromDCCRecoveryEvent(dataRow: dataRow, recovery: recovery))
-					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-						rows.append(getRowFromDCCTestEvent(dataRow: dataRow, test: test))
+		while counter <= sortedDataSource.count - 1 {
+			let dataRow = sortedDataSource[counter]
+			logDebug("using \(dataRow)")
+
+			if counter < sortedDataSource.count - 1, let currentVaccinationEvent = dataRow.event.vaccination,
+			   let nextVaccinationEvent = sortedDataSource[counter + 1].event.vaccination {
+
+				if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
+
+					if dataRow.providerIdentifier == dataSource[counter + 1].providerIdentifier {
+						logDebug("Matching vaccinations, same provider")
+						// Do not add to the rows.
+					} else {
+						logDebug("Matching vaccinations, different provider")
+						rows.append(getRowFromVaccinationEvent(dataRow: dataRow, otherProvider: dataSource[counter + 1].providerIdentifier))
+					}
+					// Skip the next row
+//					counter += 1
+				} else {
+					logDebug("not Matching vaccinations")
+					rows.append(getRowFromVaccinationEvent(dataRow: dataRow))
+				}
+			} else {
+				if dataRow.event.recovery != nil {
+					rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
+				} else if dataRow.event.positiveTest != nil {
+					rows.append(getRowFromPositiveTestEvent(dataRow: dataRow))
+				} else if dataRow.event.vaccination != nil {
+					rows.append(getRowFromVaccinationEvent(dataRow: dataRow))
+					logDebug("else vaccination")
+				} else if dataRow.event.negativeTest != nil {
+					rows.append(getRowFromNegativeTestEvent(dataRow: dataRow))
+				} else if dataRow.event.dccEvent != nil {
+					if let cryptoManager = cryptoManager,
+					   let euCredentialAttributes = dataRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
+						if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
+							rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
+						} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+							rows.append(getRowFromDCCRecoveryEvent(dataRow: dataRow, recovery: recovery))
+						} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
+							rows.append(getRowFromDCCTestEvent(dataRow: dataRow, test: test))
+						}
 					}
 				}
 			}
+			counter += 1
 		}
+
+//		for dataRow in sortedDataSource {
+//
+//			if dataRow.event.recovery != nil {
+//				rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
+//			} else if dataRow.event.positiveTest != nil {
+//				rows.append(getRowFromPositiveTestEvent(dataRow: dataRow))
+//			} else if dataRow.event.vaccination != nil {
+//				rows.append(getRowFromVaccinationEvent(dataRow: dataRow))
+//			} else if dataRow.event.negativeTest != nil {
+//				rows.append(getRowFromNegativeTestEvent(dataRow: dataRow))
+//			} else if dataRow.event.dccEvent != nil {
+//				if let cryptoManager = cryptoManager,
+//				   let euCredentialAttributes = dataRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
+//					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
+//						rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
+//					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
+//						rows.append(getRowFromDCCRecoveryEvent(dataRow: dataRow, recovery: recovery))
+//					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
+//						rows.append(getRowFromDCCTestEvent(dataRow: dataRow, test: test))
+//					}
+//				}
+//			}
+//		}
 		return rows
 	}
 
@@ -376,7 +430,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getRowFromVaccinationEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, otherProvider: String? = nil) -> ListEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -420,9 +474,17 @@ extension ListEventsViewModel {
 			dataRow.event.unique ?? ""
 		)
 
+		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
+		var title = L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))")
+		if let otherProvider = otherProvider {
+			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(otherProvider) ?? otherProvider
+			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
+			title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
+		}
+
 		return ListEventsViewController.Row(
-			title: L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))"),
-			subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			title: title,
+			subTitle: subTitle,
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.moreInformation(
