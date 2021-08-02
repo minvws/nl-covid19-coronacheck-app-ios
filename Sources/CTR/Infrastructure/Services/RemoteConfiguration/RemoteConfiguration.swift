@@ -60,12 +60,14 @@ extension RemoteInformation {
 	}
 }
 
-struct RemoteConfiguration: RemoteInformation, Codable {
+struct Mapping: Codable {
 
-	struct Mapping: Codable {
-		let code: String
-		let name: String
-	}
+	let code: String
+	
+	let name: String
+}
+
+struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// The minimum required version
 	let minimumVersion: String
@@ -122,8 +124,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var euTestManufacturers: [Mapping]? = []
 
-	var providerIdentifiers: [Mapping]? = []
-	
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
 
@@ -153,7 +153,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euVaccinationTypes = "euVaccinations"
 		case euTestTypes = "euTestTypes"
 		case euTestManufacturers = "euTestManufacturers"
-		case providerIdentifiers = "providerIdentifiers"
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
 	}
@@ -254,10 +253,5 @@ extension RemoteConfiguration {
 	func getTestManufacturerMapping(_ code: String? ) -> String? {
 
 		return euTestManufacturers?.first(where: { $0.code == code })?.name
-	}
-
-	func getProviderIdentifierMapping(_ code: String? ) -> String? {
-
-		return providerIdentifiers?.first(where: { $0.code == code })?.name
 	}
 }

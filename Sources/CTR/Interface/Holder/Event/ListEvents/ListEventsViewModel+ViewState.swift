@@ -387,7 +387,7 @@ extension ListEventsViewModel {
 		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
 			.map(printMonthFormatter.string) ?? ""
-		let provider: String = remoteConfigManager.getConfiguration().getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var vaccinName = ""
 		if let hpkCode = dataRow.event.vaccination?.hpkCode {

@@ -16,6 +16,7 @@ class ListEventsViewModel: Logging {
 	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging?
 	private let couplingManager: CouplingManaging
+	let mappingManager: MappingManaging
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
@@ -87,7 +88,8 @@ class ListEventsViewModel: Logging {
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		couplingManager: CouplingManaging = Services.couplingManager,
-		identityChecker: IdentityCheckerProtocol = IdentityChecker()
+		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
+		mappingManager: MappingManaging = Services.mappingManager
 	) {
 
 		self.coordinator = coordinator
@@ -98,6 +100,7 @@ class ListEventsViewModel: Logging {
 		self.cryptoManager = cryptoManager
 		self.couplingManager = couplingManager
 		self.identityChecker = identityChecker
+		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -125,6 +128,9 @@ class ListEventsViewModel: Logging {
 			self?.hideForCapture = isBeingCaptured
 		}
 
+		for event in remoteEvents {
+			logDebug("Starting List with \(event.wrapper)")
+		}
 		viewState = getViewState(from: remoteEvents)
 	}
 
