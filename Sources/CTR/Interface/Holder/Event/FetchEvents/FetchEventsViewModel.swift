@@ -14,6 +14,7 @@ final class FetchEventsViewModel: Logging {
 	private var tvsToken: String
 	private var eventMode: EventMode
 	private var networkManager: NetworkManaging
+	private let mappingManager: MappingManaging
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -36,11 +37,13 @@ final class FetchEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		tvsToken: String,
 		eventMode: EventMode,
-		networkManager: NetworkManaging = Services.networkManager) {
+		networkManager: NetworkManaging = Services.networkManager,
+		mappingManager: MappingManaging = Services.mappingManager) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 		self.networkManager = networkManager
+		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: FetchEventsViewController.Content(
@@ -77,6 +80,9 @@ final class FetchEventsViewModel: Logging {
 				)
 
 			case .success(let eventProviders):
+
+				self.mappingManager.setEventProviders(eventProviders)
+
 				// Do the Unomi call
 				self.fetchHasEventInformation(
 					forEventProviders: eventProviders,
@@ -423,7 +429,18 @@ final class FetchEventsViewModel: Logging {
 
 				eventFetchingGroup.enter()
 				fetchVaccinationEvent(from: provider, filter: filter) { result in
-					eventResponseResults += [result.map({ ($0, $1) })]
+					self.logDebug("result: \(result)")
+					if Configuration().getEnvironment() == "production" {
+						eventResponseResults += [result.map({ ($0, $1) })]
+					} else {
+						eventResponseResults += [result.map({ wrapper, signed in
+							var mappedWrapper = wrapper
+							/// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
+							mappedWrapper.providerIdentifier = provider.identifier
+							return (mappedWrapper, signed)
+						})]
+
+					}
 					self.eventFetchingGroup.leave()
 				}
 			}
