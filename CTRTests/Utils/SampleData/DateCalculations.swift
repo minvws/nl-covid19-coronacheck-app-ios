@@ -22,3 +22,5 @@ let hours: TimeInterval = 60 * minutes
 let hour = hours
 let days: TimeInterval = hours * 24
 let day: TimeInterval = days
+let years: TimeInterval = days * 365
+let year: TimeInterval = years

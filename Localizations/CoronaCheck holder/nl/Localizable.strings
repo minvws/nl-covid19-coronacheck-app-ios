@@ -101,7 +101,7 @@
 "general.vaccinationcertificate" = "vaccinatiebewijs";
 "general.testdate" = "Testdatum";
 "general.vaccinationdate" = "Vaccinatiedatum";
-
+"general.uptoandincluding" = "t/m";
 "holder.tokenscan.torch.enable" = "Zet de zaklamp aan.";
 "holder.tokenscan.torch.disable" = "Zet de zaklamp uit.";
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
@@ -314,10 +314,12 @@
 "holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Verloopt over";
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig t/m";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
+"holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "Wordt automatisch geldig";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
 "holder.dashboard.qr.title" = "Mijn QR-code";
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
+"holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccinatiebewijs: dosis %@ van %@";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
