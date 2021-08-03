@@ -160,7 +160,22 @@ enum EventDetailsDCCVaccination: EventDetailable {
 		}
 	}
 	
-	var displayTitle: String { "" }
+	var displayTitle: String {
+		switch self {
+			case .subtitle: return L.holderDccVaccinationSubtitle()
+			case .name: return L.holderDccVaccinationName()
+			case .dateOfBirth: return L.holderDccVaccinationDateofbirth()
+			case .pathogen: return L.holderDccVaccinationPathogen()
+			case .vaccineBrand: return L.holderDccVaccinationBrand()
+			case .vaccineType: return L.holderDccVaccinationType()
+			case .vaccineManufacturer: return L.holderDccVaccinationManufacturer()
+			case .dosage: return L.holderDccVaccinationDosage()
+			case .date: return L.holderDccVaccinationDate()
+			case .country: return L.holderDccVaccinationCountry()
+			case .issuer: return L.holderDccVaccinationIssuer()
+			case .certificateIdentifier: return L.holderDccVaccinationIdentifier()
+		}
+	}
 	
 	var hasLineBreak: Bool {
 		switch self {

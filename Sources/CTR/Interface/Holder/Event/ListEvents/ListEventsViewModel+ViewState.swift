@@ -546,31 +546,29 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(vaccination.issuer)
 		let country = getDisplayCountry(vaccination.country)
-
-		let body: String = L.holderDccVaccinationMessage(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			vaccineBrand,
-			vaccineType,
-			vaccineManufacturer,
-			dosage ?? " ",
-			formattedVaccinationDate,
-			country,
-			issuer,
-			vaccination.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsDCCVaccination.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCVaccination.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsDCCVaccination.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCVaccination.pathogen, value: L.holderDccVaccinationPathogenvalue()),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineBrand, value: vaccineBrand),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineType, value: vaccineType),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			EventDetails(field: EventDetailsDCCVaccination.dosage, value: dosage),
+			EventDetails(field: EventDetailsDCCVaccination.date, value: formattedVaccinationDate),
+			EventDetails(field: EventDetailsDCCVaccination.country, value: country),
+			EventDetails(field: EventDetailsDCCVaccination.issuer, value: issuer),
+			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.certificateIdentifier)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.generalVaccinationcertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
