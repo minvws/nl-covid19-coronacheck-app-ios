@@ -90,15 +90,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let now: () -> Date
 
-	// MARK: -
-
-	/// Initializer
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
-	///   - proofManager: the proof manager
-	///   - configuration: the configuration
-	///   - dataStoreManager: the data store manager
+	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		cryptoManager: CryptoManaging,
@@ -141,12 +133,12 @@ final class HolderDashboardViewModel: Logging {
 
 		self.setupNotificationListeners()
 		
-		//		#if DEBUG
-		//		DispatchQueue.main.asyncAfter(deadline: .now()) {
-		//			injectSampleData(dataStoreManager: dataStoreManager)
-		//			self.datasource.reload()
-		//		}
-		//		#endif
+//		#if DEBUG
+//		DispatchQueue.main.asyncAfter(deadline: .now()) {
+//			self.injectSampleData(dataStoreManager: Services.dataStoreManager)
+//			self.datasource.reload()
+//		}
+//		#endif
 	}
 
 	deinit {

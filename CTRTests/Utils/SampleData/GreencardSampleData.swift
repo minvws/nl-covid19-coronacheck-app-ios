@@ -284,6 +284,15 @@ extension HolderDashboardViewModel.MyQRCard.Origin {
 		)
 	}
 
+	static func valid30DaysAgo_vaccination_expires60SecondsFromNow() -> HolderDashboardViewModel.MyQRCard.Origin {
+		.init(
+			type: QRCodeOriginType.vaccination,
+			eventDate: now.addingTimeInterval(30 * day * ago),
+			expirationTime: now.addingTimeInterval(60 * seconds * fromNow),
+			validFromDate: now.addingTimeInterval(30 * day * ago)
+		)
+	}
+
 	static func validOneHourAgo_test_expires23HoursFromNow() -> HolderDashboardViewModel.MyQRCard.Origin {
 		.init(
 			type: QRCodeOriginType.test,
@@ -293,12 +302,39 @@ extension HolderDashboardViewModel.MyQRCard.Origin {
 		)
 	}
 
+	static func validOneDayAgo_test_expires5MinutesFromNow() -> HolderDashboardViewModel.MyQRCard.Origin {
+		.init(
+			type: QRCodeOriginType.test,
+			eventDate: now.addingTimeInterval(1 * day * ago),
+			expirationTime: now.addingTimeInterval(5 * minutes * fromNow),
+			validFromDate: now.addingTimeInterval(1 * day * ago)
+		)
+	}
+
 	static func validOneHourAgo_recovery_expires300DaysFromNow() -> HolderDashboardViewModel.MyQRCard.Origin {
 		.init(
 			type: QRCodeOriginType.recovery,
 			eventDate: now.addingTimeInterval(1 * hour * ago),
 			expirationTime: now.addingTimeInterval(300 * days * fromNow),
 			validFromDate: now.addingTimeInterval(1 * hour * ago)
+		)
+	}
+
+	static func validOneMonthAgo_recovery_expires2HoursFromNow() -> HolderDashboardViewModel.MyQRCard.Origin {
+		.init(
+			type: QRCodeOriginType.recovery,
+			eventDate: now.addingTimeInterval(30 * days * ago),
+			expirationTime: now.addingTimeInterval(120 * minutes * fromNow),
+			validFromDate: now.addingTimeInterval(30 * days * ago)
+		)
+	}
+
+	static func eventNineDaysAgo_validFiveDaysFromNow_vaccination_expiresFourYearsLater() -> HolderDashboardViewModel.MyQRCard.Origin {
+		.init(
+			type: QRCodeOriginType.vaccination,
+			eventDate: now.addingTimeInterval(9 * days * ago),
+			expirationTime: now.addingTimeInterval(4 * years * fromNow),
+			validFromDate: now.addingTimeInterval(5 * days * fromNow)
 		)
 	}
 
