@@ -18,6 +18,7 @@
 "holder.dcc.list.title" = "Opgehaalde gegevens";
 "holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
 "holder.dcc.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
+
 "holder.dcc.vaccination.subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder.dcc.vaccination.name" = "Naam:";
 "holder.dcc.vaccination.dateofbirth" = "Geboortedatum:";
@@ -31,7 +32,19 @@
 "holder.dcc.vaccination.country" = "Gevaccineerd in:";
 "holder.dcc.vaccination.issuer" = "Afgever certificaat:";
 "holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
-"holder.dcc.recovery.message" = "<p>De volgende gegevens zijn opgehaald:</p> <p>Naam: <b>%@</b> <br />Geboortedatum: <b>%@</b></p> <p>Ziekte waarvan hersteld: <b>COVID-19</b> <br />Testdatum: <b>%@</b> <br />Getest in: <b>%@</b> <br />Afgever certificaat: <b>%@</b> <br />Geldig vanaf: <b>%@</b> <br />Geldig tot: <b>%@</b> </p><p>Uniek certificaatnummer: <b>%@</b></p>";
+
+"holder.dcc.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.recovery.name" = "Naam:";
+"holder.dcc.recovery.dateofbirth" = "Geboortedatum:";
+"holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
+"holder.dcc.recovery.pathogenvalue" = "COVID-19";
+"holder.dcc.recovery.date" = "Testdatum:";
+"holder.dcc.recovery.country" = "Getest in:";
+"holder.dcc.recovery.issuer" = "Afgever certificaat:";
+"holder.dcc.recovery.validfrom" = "Geldig vanaf:";
+"holder.dcc.recovery.validuntil" = "Geldig tot:";
+"holder.dcc.recovery.identifier" = "Uniek testnummer:";
+
 "holder.dcc.test.subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder.dcc.test.name" = "Naam:";
 "holder.dcc.test.dateofbirth" = "Geboortedatum:";
@@ -461,7 +474,7 @@
 
 "holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
 "holder.event.about.recovery.name" = "Jouw gegevens:";
-"holder.event.about.recovery.dateofbirth" = "Geboortedatum gegevens:";
+"holder.event.about.recovery.dateofbirth" = "Geboortedatum:";
 "holder.event.about.recovery.date" = "Testdatum:";
 "holder.event.about.recovery.validfrom" = "Geldig vanaf:";
 "holder.event.about.recovery.validuntil" = "Geldig tot:";

@@ -246,7 +246,20 @@ enum EventDetailsDCCRecovery: EventDetailable {
 		return true
 	}
 	
-	var displayTitle: String { "" }
+	var displayTitle: String {
+		switch self {
+			case .subtitle: return L.holderDccRecoverySubtitle()
+			case .name: return L.holderDccRecoveryName()
+			case .dateOfBirth: return L.holderDccRecoveryDateofbirth()
+			case .pathogen: return L.holderDccRecoveryPathogen()
+			case .date: return L.holderDccRecoveryDate()
+			case .country: return L.holderDccRecoveryCountry()
+			case .issuer: return L.holderDccRecoveryIssuer()
+			case .validFrom: return L.holderDccRecoveryValidfrom()
+			case .validUntil: return L.holderDccRecoveryValiduntil()
+			case .certificateIdentifier: return L.holderDccRecoveryIdentifier()
+		}
+	}
 	
 	var hasLineBreak: Bool {
 		switch self {

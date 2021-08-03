@@ -18,7 +18,6 @@
 "holder.dcc.list.title" = "Retrieved details";
 "holder.dcc.list.message" = "You can create a QR code with the retrieved details. This is your certificate.";
 "holder.dcc.element.subtitle" = "Name: %@<br />Date of birth: %@";
-"holder.dcc.recovery.message" = "<p>The following details were retrieved:</p> <p>Name: <b>%@</b> <br />Date of birth: <b>%@</b></p> <p>Disease recovered from: <b>COVID-19</b> <br />Test date: <b>%@</b> <br />Member state of test <b>%@</b> <br />Certificate issuer: <b>%@</b> <br />Valid from: <b>%@</b> <br />Valid to: <b>%@</b> </p><p>Unique certificate identifier: <b>%@</b></p>";
 "holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";

@@ -591,29 +591,26 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(recovery.issuer)
 		let country = getDisplayCountry(recovery.country)
-
-		let body: String = L.holderDccRecoveryMessage(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			formattedFirstPostiveDate,
-			country,
-			issuer,
-			formattedValidFromDate,
-			formattedValidUntilDate,
-			recovery.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsDCCRecovery.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCRecovery.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsDCCRecovery.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCRecovery.date, value: formattedFirstPostiveDate),
+			EventDetails(field: EventDetailsDCCRecovery.country, value: country),
+			EventDetails(field: EventDetailsDCCRecovery.issuer, value: issuer),
+			EventDetails(field: EventDetailsDCCRecovery.validFrom, value: formattedValidFromDate),
+			EventDetails(field: EventDetailsDCCRecovery.validUntil, value: formattedValidUntilDate),
+			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.certificateIdentifier)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.generalRecoverystatement().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
