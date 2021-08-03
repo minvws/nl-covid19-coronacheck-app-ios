@@ -359,19 +359,18 @@ extension ListEventsViewModel {
 
 					if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
 						if currentRow.providerIdentifier != nextRow.providerIdentifier {
-							logDebug("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
+							logVerbose("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
 							rows.append(getRowFromVaccinationEvent(dataRow: currentRow, combineWith: nextRow))
 							counter += 1
 						}
 					} else {
-						logDebug("not Matching vaccinations")
+						logVerbose("not Matching vaccinations")
 						rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
 					}
 				} else {
 					// Next row is not an vaccination
-					logDebug("nextRow is not a vaccination")
+					logVerbose("nextRow is not a vaccination")
 					rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
-
 				}
 			} else if currentRow.event.negativeTest != nil {
 				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
@@ -484,12 +483,13 @@ extension ListEventsViewModel {
 			dataRow.event.unique ?? ""
 		)
 
+		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
 		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
-		var title = L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))")
 		if let nextRow = combineWith {
 			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
 			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
-			title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
+		} else {
+			subTitle += L.holderVaccinationElementSingle(provider)
 		}
 
 		return ListEventsViewController.Row(
