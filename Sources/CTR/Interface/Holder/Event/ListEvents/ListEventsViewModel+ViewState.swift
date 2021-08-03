@@ -387,17 +387,29 @@ extension ListEventsViewModel {
 			.map(printMonthFormatter.string) ?? ""
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
-		var vaccinName = ""
+		var vaccinName: String?
+		var vaccineType: String?
+		var vaccineManufacturer: String?
 		if let hpkCode = dataRow.event.vaccination?.hpkCode {
-			vaccinName = remoteConfigManager.getConfiguration().getHpkMapping(hpkCode) ?? ""
-		} else if let brand = dataRow.event.vaccination?.brand {
-			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand) ?? ""
+			let hpkData = remoteConfigManager.getConfiguration().getHpkData(hpkCode)
+			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(hpkData?.mp)
+			vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(hpkData?.vp)
+			vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(hpkData?.ma)
 		}
-
-		let vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(
-			dataRow.event.vaccination?.type) ?? dataRow.event.vaccination?.type ?? ""
-		let vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(
-			dataRow.event.vaccination?.manufacturer) ?? dataRow.event.vaccination?.manufacturer ?? ""
+		
+		if vaccinName?.isEmpty == true, let brand = dataRow.event.vaccination?.brand {
+			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand)
+		}
+		if vaccineType?.isEmpty == true {
+			vaccineType = remoteConfigManager.getConfiguration()
+				.getTypeMapping(dataRow.event.vaccination?.type)
+				?? dataRow.event.vaccination?.type
+		}
+		if vaccineManufacturer?.isEmpty == true {
+			vaccineManufacturer = remoteConfigManager.getConfiguration()
+				.getVaccinationManufacturerMapping(dataRow.event.vaccination?.manufacturer)
+				?? dataRow.event.vaccination?.manufacturer
+		}
 
 		var dosage = ""
 		if let doseNumber = dataRow.event.vaccination?.doseNumber,

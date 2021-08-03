@@ -31,15 +31,11 @@ final class EventDetailsView: BaseView {
 		return view
 	}()
 	
-	override func setupViews() {
-		super.setupViews()
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
 		
 		addSubview(stackView)
 		stackView.addArrangedSubview(titleLabel)
-	}
-	
-	override func setupViewHierarchy() {
-		super.setupViewHierarchy()
 	}
 	
 	override func setupViewConstraints() {

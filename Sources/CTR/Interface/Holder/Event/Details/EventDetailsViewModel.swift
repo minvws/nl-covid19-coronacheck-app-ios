@@ -35,7 +35,7 @@ final class EventDetailsViewModel {
 		self.title = title
 		self.hideBodyForScreenCapture = hideBodyForScreenCapture
 		self.details = details.compactMap {
-			guard $0.field.isRequired || $0.value != nil else { return nil }
+			guard $0.field.isRequired || $0.value?.isEmpty == false else { return nil }
 			
 			var field = $0.field.displayTitle
 			if let value = $0.value {
