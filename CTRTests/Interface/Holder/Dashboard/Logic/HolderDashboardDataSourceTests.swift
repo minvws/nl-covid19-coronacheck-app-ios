@@ -15,12 +15,14 @@ class HolderDashboardDatasourceTests: XCTestCase {
 	/// Subject under test
 	var sut: HolderDashboardDatasource!
 
+	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManager!
 	var walletManagingSpy: WalletManagerSpy!
 
 	override func setUp() {
 		super.setUp()
-		
+
+		cryptoManagerSpy = CryptoManagerSpy()
 		dataStoreManager = DataStoreManager(.inMemory)
 		walletManagingSpy = WalletManagerSpy()
 	}

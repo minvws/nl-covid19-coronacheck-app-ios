@@ -65,13 +65,25 @@ extension GreenCard {
 	}
 
 	func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
-		guard let list = credentials?.allObjects as? [Credential] else { return false }
+
+		return !activeCredentialsNowOrInFuture(forDate: now).isEmpty
+	}
+
+	func activeCredentialsNowOrInFuture(forDate now: Date = Date()) -> [Credential] {
+		guard let list = credentials?.allObjects as? [Credential] else { return [] }
 
 		let activeCredentialsNowOrInFuture = list
 			.filter { $0.expirationTime != nil }
 			.filter { $0.expirationTime! > now }
 
-		return !activeCredentialsNowOrInFuture.isEmpty
+		return activeCredentialsNowOrInFuture
+	}
+
+	func currentOrNextActiveCredential(forDate now: Date = Date()) -> Credential? {
+		let activeCrendentials = activeCredentialsNowOrInFuture(forDate: now)
+		return activeCrendentials.sorted(by: {
+			($0.validFrom ?? .distantFuture) < ($1.validFrom ?? .distantFuture)
+		}).first
 	}
 
 	/// Get the credentials, strongly typed.
@@ -84,3 +96,4 @@ extension GreenCard {
 		return origins?.compactMap({ $0 as? Origin })
 	}
 }
+

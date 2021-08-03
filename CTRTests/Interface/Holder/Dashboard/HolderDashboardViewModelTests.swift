@@ -24,6 +24,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
+	private var remoteConfigSpy: RemoteConfigManagingSpy!
 
 	private static var initialTimeZone: TimeZone?
 
@@ -52,6 +53,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
 
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
@@ -1352,6 +1355,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	// MARK: - Single, Not Yet Valid, International
 
+	// This shouldn't happen because DCC Vaccines are immediately valid
+	// But the test can at least track the behaviour in case it does.
 	func test_datasourceupdate_singleNotYetValidInternationalVaccination() {
 
 		// Arrange
@@ -1630,5 +1635,62 @@ private func beOriginNotValidInThisRegionCard(test: @escaping (String, () -> Voi
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
+	}
+}
+
+extension EuCredentialAttributes.DigitalCovidCertificate {
+
+	static func sampleWithVaccine(doseNumber: Int?, totalDose: Int?) -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0",
+			vaccinations: [
+				EuCredentialAttributes.Vaccination(
+					certificateIdentifier: "test",
+					country: "NLS",
+					diseaseAgentTargeted: "test",
+					doseNumber: doseNumber,
+					dateOfVaccination: "2021-06-01",
+					issuer: "Test",
+					marketingAuthorizationHolder: "Test",
+					medicalProduct: "Test",
+					totalDose: totalDose,
+					vaccineOrProphylaxis: "test"
+				)
+			]
+		)
+	}
+
+	static func sampleWithTest() -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0",
+			tests: [
+				EuCredentialAttributes.TestEntry(
+					certificateIdentifier: "URN:UCI:01:NL:WMZBJR3MJRHSPGBCNROM42#M",
+					country: "NL",
+					diseaseAgentTargeted: "840539006",
+					issuer: "Ministry of Health Welfare and Sport",
+					marketingAuthorizationHolder: "",
+					name: "",
+					sampleDate: "2021-07-31T09:50:00+00:00",
+					testResult: "260415000",
+					testCenter: "Facility approved by the State of The Netherlands",
+					typeOfTest: "LP6464-4"
+				)
+			]
+		)
 	}
 }
