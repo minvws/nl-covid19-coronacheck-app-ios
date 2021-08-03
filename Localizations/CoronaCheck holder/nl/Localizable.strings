@@ -1,6 +1,5 @@
 "general.paperflow" = "papieren bewijs";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
-"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Dose %@ of %@";
 "holder.vaccination.about.country" = "Nederland / The Netherlands";
 "holder.vaccination.about.issuer" = "Ministerie van VWS / Ministry of Health, Welfare and Sport";
 

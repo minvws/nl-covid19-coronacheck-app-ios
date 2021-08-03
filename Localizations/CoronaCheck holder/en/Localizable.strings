@@ -1,6 +1,5 @@
 "general.paperflow" = "paper certificate";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
-"holder.vaccination.about.off.dcc" = "Dose %@ of %@";
 "holder.vaccination.about.country" = "The Netherlands";
 "holder.vaccination.about.issuer" = "Ministry of Health, Welfare and Sport";
 
