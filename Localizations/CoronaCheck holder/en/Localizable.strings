@@ -42,7 +42,6 @@
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
 "holder.menu.proof" = "Add certificate";
 "holder.showqr.eu.about.recovery.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b> <br /><br />Date of birth*: <br /> <b>%@</b></p> <p>Disease recovered from: <b>COVID-19</b> <br /><br /> Test date*: <br /> <b>%@</b> <br /><br /> Member state of test: <br /> <b>%@</b> <br /><br /> Certificate issuer: <br /> <b>%@</b> <br /><br /> Valid from*: <br /> <b>%@</b> <br /><br /> Valid to*: <br /> <b>%@</b> <br /></p> <p><br /> Unique certificate identifier: <br /> <b>%@</b></p> <p>Date noted in day-month-year</p>";
-"holder.event.about.body.recovery" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Date of birth: <b>%@</b><br />Test date: <b>%@</b><br />Valid from: <b>%@</b><br />Valid until: <b>%@</b><br />Unique certificate number: <b>%@</b></p>";
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";

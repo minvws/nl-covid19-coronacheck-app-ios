@@ -42,7 +42,6 @@
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
 "holder.menu.proof" = "Bewijs toevoegen";
 "holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p> <p>Naam / Name:<br /> <b>%@</b> <br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p> <p>Ziekte waarvan hersteld / Disease recovered from:<br /> <b>COVID-19</b> <br /><br />Testdatum / Test date*:<br /> <b>%@</b> <br /><br />Getest in / Member state of test:<br /> <b>%@</b> <br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b> <br /><br />Geldig vanaf / Valid from*:<br /> <b>%@</b> <br /><br />Geldig tot / Valid to*:<br /> <b>%@</b> <br /></p> <p><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p> <p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
-"holder.event.about.body.recovery" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br />Geldig vanaf: <b>%@</b><br />Geldig tot: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
@@ -434,6 +433,14 @@
 "holder.event.about.vaccination.date" = "Vaccinatiedatum:";
 "holder.event.about.vaccination.country" = "Gevaccineerd in:";
 "holder.event.about.vaccination.identifier" = "Uniek vaccinatienummer:";
+
+"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
+"holder.event.about.recovery.name" = "Jouw gegevens:";
+"holder.event.about.recovery.dateofbirth" = "Geboortedatum gegevens:";
+"holder.event.about.recovery.date" = "Testdatum:";
+"holder.event.about.recovery.validfrom" = "Geldig vanaf:";
+"holder.event.about.recovery.validuntil" = "Geldig tot:";
+"holder.event.about.recovery.identifier" = "Uniek testnummer:";
 
 "holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
 

@@ -112,14 +112,24 @@ enum EventDetailsRecovery: EventDetailable {
 	case dateOfBirth
 	case date
 	case validFrom
-	case expiresAt
+	case validUntil
 	case certificateIdentifier
 	
 	var isRequired: Bool {
 		return true
 	}
 	
-	var displayTitle: String { "" }
+	var displayTitle: String {
+		switch self {
+			case .subtitle: return L.holderEventAboutRecoverySubtitle()
+			case .name: return L.holderEventAboutRecoveryName()
+			case .dateOfBirth: return L.holderEventAboutRecoveryDateofbirth()
+			case .date: return L.holderEventAboutRecoveryDate()
+			case .validFrom: return L.holderEventAboutRecoveryValidfrom()
+			case .validUntil: return L.holderEventAboutRecoveryValiduntil()
+			case .certificateIdentifier: return L.holderEventAboutRecoveryIdentifier()
+		}
+	}
 	
 	var hasLineBreak: Bool {
 		switch self {
@@ -197,7 +207,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	case country
 	case issuer
 	case validFrom
-	case expiresAt
+	case validUntil
 	case certificateIdentifier
 	
 	var isRequired: Bool {

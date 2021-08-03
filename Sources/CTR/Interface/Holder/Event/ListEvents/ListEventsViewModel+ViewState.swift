@@ -449,15 +449,16 @@ extension ListEventsViewModel {
 		let formattedShortValidUntilDate: String = dataRow.event.recovery?.validUntil
 			.flatMap(Formatter.getDateFrom)
 			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
-
-		let body = L.holderEventAboutBodyRecovery(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			formattedShortTestDate,
-			formattedShortValidFromDate,
-			formattedShortValidUntilDate,
-			dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsRecovery.subtitle, value: nil),
+			EventDetails(field: EventDetailsRecovery.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsRecovery.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsRecovery.date, value: formattedShortTestDate),
+			EventDetails(field: EventDetailsRecovery.validFrom, value: formattedShortValidFromDate),
+			EventDetails(field: EventDetailsRecovery.validUntil, value: formattedShortValidUntilDate),
+			EventDetails(field: EventDetailsRecovery.certificateIdentifier, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -468,11 +469,8 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					EventScreenResult.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
