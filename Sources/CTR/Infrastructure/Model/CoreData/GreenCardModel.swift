@@ -96,4 +96,3 @@ extension GreenCard {
 		return origins?.compactMap({ $0 as? Origin })
 	}
 }
-
