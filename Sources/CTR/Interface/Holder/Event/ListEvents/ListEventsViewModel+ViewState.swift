@@ -344,18 +344,19 @@ extension ListEventsViewModel {
 			dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
 		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
 			dataRow.event.negativeTest?.manufacturer) ?? (dataRow.event.negativeTest?.manufacturer ?? "")
-
-		let body = L.holderEventAboutBodyTest3(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			testType,
-			dataRow.event.negativeTest?.name ?? "",
-			formattedTestLongDate,
-			L.holderShowqrEuAboutTestNegative(),
-			dataRow.event.negativeTest?.facility ?? "",
-			manufacturer,
-			dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsTest.subtitle, value: nil),
+			EventDetails(field: EventDetailsTest.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsTest.testType, value: testType),
+			EventDetails(field: EventDetailsTest.testName, value: dataRow.event.negativeTest?.name),
+			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
+			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
+			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.negativeTest?.facility),
+			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsTest.certificateIdentifier, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
@@ -366,11 +367,8 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -496,16 +494,19 @@ extension ListEventsViewModel {
 			dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
 		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
 			dataRow.event.positiveTest?.manufacturer) ?? (dataRow.event.positiveTest?.manufacturer ?? "")
-
-		let body = L.holderEventAboutBodyTest3(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			testType, dataRow.event.positiveTest?.name ?? "",
-			formattedTestLongDate,
-			L.holderShowqrEuAboutTestPostive(),
-			dataRow.event.positiveTest?.facility ?? "",
-			manufacturer, dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsTest.subtitle, value: nil),
+			EventDetails(field: EventDetailsTest.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsTest.testType, value: testType),
+			EventDetails(field: EventDetailsTest.testName, value: dataRow.event.positiveTest?.name),
+			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
+			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
+			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.positiveTest?.facility),
+			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsTest.certificateIdentifier, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -516,11 +517,8 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -752,20 +750,18 @@ private extension ListEventsViewModel {
 			title: L.holderTestresultsNegative(),
 			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
 			action: { [weak self] in
-
-				let body = L.holderEventAboutBodyTest2(
-					holderID,
-					self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType,
-					printSampleLongDate,
-					L.holderShowqrEuAboutTestNegative(),
-					result.unique
-				)
+				
+				let details: [EventDetails] = [
+					EventDetails(field: EventDetailsTest.name, value: holderID),
+					EventDetails(field: EventDetailsTest.testType, value: self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType),
+					EventDetails(field: EventDetailsTest.date, value: printSampleLongDate),
+					EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
+					EventDetails(field: EventDetailsTest.certificateIdentifier, value: result.unique)
+				]
+				
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)

@@ -68,12 +68,14 @@ enum EventDetailsVaccination: EventDetailable {
 }
 
 enum EventDetailsTest: EventDetailable {
+	case subtitle
 	case name
 	case dateOfBirth
 	case testType
 	case testName
+	case date
 	case result
-	case location
+	case facility
 	case manufacturer
 	case certificateIdentifier
 	
@@ -81,17 +83,31 @@ enum EventDetailsTest: EventDetailable {
 		return true
 	}
 	
-	var displayTitle: String { "" }
+	var displayTitle: String {
+		switch self {
+			case .subtitle: return L.holderEventAboutTestSubtitle()
+			case .name: return L.holderEventAboutTestName()
+			case .dateOfBirth: return L.holderEventAboutTestDateofbirth()
+			case .testType: return L.holderEventAboutTestType()
+			case .testName: return L.holderEventAboutTestTestname()
+			case .date: return L.holderEventAboutTestDate()
+			case .result: return L.holderEventAboutTestResult()
+			case .facility: return L.holderEventAboutTestFacility()
+			case .manufacturer: return L.holderEventAboutTestManufacturer()
+			case .certificateIdentifier: return L.holderEventAboutTestIdentifier()
+		}
+	}
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .dateOfBirth: return true
+			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
 	}
 }
 
 enum EventDetailsRecovery: EventDetailable {
+	case subtitle
 	case name
 	case dateOfBirth
 	case date
@@ -107,13 +123,14 @@ enum EventDetailsRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .dateOfBirth: return true
+			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
 	}
 }
 
 enum EventDetailsDCCVaccination: EventDetailable {
+	case subtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -127,20 +144,24 @@ enum EventDetailsDCCVaccination: EventDetailable {
 	case certificateIdentifier
 	
 	var isRequired: Bool {
-		return true
+		switch self {
+			case .dosage: return false
+			default: return true
+		}
 	}
 	
 	var displayTitle: String { "" }
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .dateOfBirth: return true
+			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
 	}
 }
 
 enum EventDetailsDCCTest: EventDetailable {
+	case subtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -161,13 +182,14 @@ enum EventDetailsDCCTest: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .dateOfBirth: return true
+			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
 	}
 }
 
 enum EventDetailsDCCRecovery: EventDetailable {
+	case subtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -186,7 +208,7 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	
 	var hasLineBreak: Bool {
 		switch self {
-			case .dateOfBirth: return true
+			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
 	}
