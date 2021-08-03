@@ -64,7 +64,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
-			configuration: configSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,

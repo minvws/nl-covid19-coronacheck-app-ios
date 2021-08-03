@@ -52,7 +52,6 @@ final class HolderDashboardViewModel: Logging {
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var cryptoManager: CryptoManaging?
 	private weak var proofManager: ProofManaging?
-	private var configuration: ConfigurationGeneralProtocol
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
@@ -94,16 +93,17 @@ final class HolderDashboardViewModel: Logging {
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the coordinator delegate
+	///   - coordinator:  the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	///   - proofManager: the proof manager
-	///   - configuration: the configuration
-	///   - dataStoreManager: the data store manager
+	///   - datasource: the dashboard data source
+	///   - strippenRefresher: the strippen refresher
+	///   - userSettings: the user settings
+	///   - now: date closure
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol,
 		datasource: HolderDashboardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
@@ -113,7 +113,6 @@ final class HolderDashboardViewModel: Logging {
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
-		self.configuration = configuration
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings

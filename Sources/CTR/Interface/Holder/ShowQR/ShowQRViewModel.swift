@@ -19,7 +19,6 @@ class ShowQRViewModel: Logging {
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
-	weak private var configuration: ConfigurationGeneralProtocol?
 
 	weak var validityTimer: Timer?
 	private var previousBrightness: CGFloat?
@@ -66,20 +65,20 @@ class ShowQRViewModel: Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
-	///   - configuration: the configuration
+	///   - greenCard: a greencard to display
+	///   - cryptoManager: the crypto manager to check the green card
+	///   - remoteConfigManager: the remote configuration for mapping values
+	///   - screenCaptureDetector: the screen capture detector
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
-		configuration: ConfigurationGeneralProtocol,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
-		self.configuration = configuration
 		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
 
@@ -331,12 +330,12 @@ class ShowQRViewModel: Logging {
 	/// Start the validity timer, check every 90 seconds.
 	private func startValidityTimer() {
 
-		guard validityTimer == nil, let configuration = configuration else {
+		guard validityTimer == nil else {
 			return
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRRefreshPeriod()),
+			timeInterval: TimeInterval(remoteConfigManager?.getConfiguration().domesticQRRefreshSeconds ?? 60),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
