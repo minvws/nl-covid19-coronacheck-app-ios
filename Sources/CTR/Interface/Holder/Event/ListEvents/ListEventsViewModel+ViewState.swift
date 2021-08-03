@@ -406,30 +406,29 @@ extension ListEventsViewModel {
 		   let totalDose = dataRow.event.vaccination?.totalDoses {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
-
-		let body = L.holderEventAboutBodyVaccination(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			vaccinName,
-			vaccineType,
-			vaccineManufacturer,
-			dosage,
-			dataRow.event.vaccination?.completionStatus ?? "",
-			formattedShotDate,
-			dataRow.event.vaccination?.country ?? "",
-			dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsVaccination.subtitle, value: nil),
+			EventDetails(field: EventDetailsVaccination.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
+			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
+			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
+			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
+			EventDetails(field: EventDetailsVaccination.completionReason, value: dataRow.event.vaccination?.completionStatus),
+			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
+			EventDetails(field: EventDetailsVaccination.country, value: dataRow.event.vaccination?.country),
+			EventDetails(field: EventDetailsVaccination.certificateIdentifier, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))"),
 			subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)

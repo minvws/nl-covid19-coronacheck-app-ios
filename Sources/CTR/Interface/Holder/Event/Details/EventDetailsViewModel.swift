@@ -34,19 +34,20 @@ final class EventDetailsViewModel {
 		self.coordinator = coordinator
 		self.title = title
 		self.hideBodyForScreenCapture = hideBodyForScreenCapture
-		self.details = details.map { ("\($0.field.displayTitle): <b>\($0.value)</b>", $0.field.isRequired) }
+		self.details = details.compactMap {
+			guard $0.field.isRequired || $0.value != nil else { return nil }
+			
+			var field = $0.field.displayTitle
+			if let value = $0.value {
+				field += " <b>\(value)</b>"
+			}
+			return (field, $0.field.hasLineBreak)
+		}
 		
 		if hideBodyForScreenCapture {
 			screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 				self?.hideForCapture = isBeingCaptured
 			}
 		}
-	}
-}
-
-private extension EventDetailsViewModel {
-	
-	func mapDetails(_ details: [EventDetails]) -> [(String, Bool)] {
-		return details.map { ("\($0.field.displayTitle): <b>\($0.value)</b>", $0.field.isRequired) }
 	}
 }

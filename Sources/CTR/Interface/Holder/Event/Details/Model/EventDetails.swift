@@ -9,7 +9,7 @@ import Foundation
 
 struct EventDetails {
 	let field: EventDetailable
-	let value: String
+	let value: String?
 }
 
 protocol EventDetailable {
@@ -17,9 +17,12 @@ protocol EventDetailable {
 	var isRequired: Bool { get }
 	
 	var displayTitle: String { get }
+	
+	var hasLineBreak: Bool { get }
 }
 
 enum EventDetailsVaccination: EventDetailable {
+	case subtitle
 	case name
 	case dateOfBirth
 	case pathogen
@@ -35,12 +38,13 @@ enum EventDetailsVaccination: EventDetailable {
 	var isRequired: Bool {
 		switch self {
 			case .dosage, .completionReason: return false
-			default: return false
+			default: return true
 		}
 	}
 	
 	var displayTitle: String {
 		switch self {
+			case .subtitle: return L.holderEventAboutVaccinationSubtitle()
 			case .name: return L.holderEventAboutVaccinationName()
 			case .dateOfBirth: return L.holderEventAboutVaccinationDateofbirth()
 			case .pathogen: return L.holderEventAboutVaccinationPathogen()
@@ -52,6 +56,13 @@ enum EventDetailsVaccination: EventDetailable {
 			case .date: return L.holderEventAboutVaccinationDate()
 			case .country: return L.holderEventAboutVaccinationCountry()
 			case .certificateIdentifier: return L.holderEventAboutVaccinationIdentifier()
+		}
+	}
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .subtitle, .dateOfBirth: return true
+			default: return false
 		}
 	}
 }
@@ -71,6 +82,13 @@ enum EventDetailsTest: EventDetailable {
 	}
 	
 	var displayTitle: String { "" }
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .dateOfBirth: return true
+			default: return false
+		}
+	}
 }
 
 enum EventDetailsRecovery: EventDetailable {
@@ -86,6 +104,13 @@ enum EventDetailsRecovery: EventDetailable {
 	}
 	
 	var displayTitle: String { "" }
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .dateOfBirth: return true
+			default: return false
+		}
+	}
 }
 
 enum EventDetailsDCCVaccination: EventDetailable {
@@ -106,6 +131,13 @@ enum EventDetailsDCCVaccination: EventDetailable {
 	}
 	
 	var displayTitle: String { "" }
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .dateOfBirth: return true
+			default: return false
+		}
+	}
 }
 
 enum EventDetailsDCCTest: EventDetailable {
@@ -126,6 +158,13 @@ enum EventDetailsDCCTest: EventDetailable {
 	}
 	
 	var displayTitle: String { "" }
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .dateOfBirth: return true
+			default: return false
+		}
+	}
 }
 
 enum EventDetailsDCCRecovery: EventDetailable {
@@ -144,4 +183,11 @@ enum EventDetailsDCCRecovery: EventDetailable {
 	}
 	
 	var displayTitle: String { "" }
+	
+	var hasLineBreak: Bool {
+		switch self {
+			case .dateOfBirth: return true
+			default: return false
+		}
+	}
 }

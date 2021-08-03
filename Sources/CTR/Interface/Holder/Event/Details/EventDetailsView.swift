@@ -72,6 +72,7 @@ final class EventDetailsView: BaseView {
 	var title: String? {
 		didSet {
 			titleLabel.text = title
+			stackView.setCustomSpacing(ViewTraits.spacing, after: titleLabel)
 		}
 	}
 	
@@ -90,11 +91,6 @@ final class EventDetailsView: BaseView {
 private extension EventDetailsView {
 	
 	func loadDetails(_ details: [(detail: String, hasExtraLineBreak: Bool)]) {
-		stackView.arrangedSubviews.forEach {
-			stackView.removeArrangedSubview($0)
-			$0.removeFromSuperview()
-		}
-		
 		details.forEach {
 			let label = Label(body: nil)
 			label.attributedText = .makeFromHtml(text: $0.detail,
