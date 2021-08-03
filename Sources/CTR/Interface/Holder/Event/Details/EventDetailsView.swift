@@ -72,7 +72,7 @@ final class EventDetailsView: BaseView {
 		}
 	}
 	
-	var details: [(detail: String, hasExtraLineBreak: Bool)]? {
+	var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
@@ -86,12 +86,11 @@ final class EventDetailsView: BaseView {
 
 private extension EventDetailsView {
 	
-	func loadDetails(_ details: [(detail: String, hasExtraLineBreak: Bool)]) {
+	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]) {
 		details.forEach {
 			let label = Label(body: nil)
-			label.attributedText = .makeFromHtml(text: $0.detail,
-												 font: Theme.fonts.body,
-												 textColor: Theme.colors.dark)
+			label.attributedText = $0.detail
+			label.textColor = Theme.colors.dark
 			label.numberOfLines = 0
 			stackView.addArrangedSubview(label)
 			

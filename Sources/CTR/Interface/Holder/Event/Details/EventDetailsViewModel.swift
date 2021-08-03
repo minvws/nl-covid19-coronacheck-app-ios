@@ -17,7 +17,7 @@ final class EventDetailsViewModel {
 	/// The title of the information page
 	@Bindable private(set) var title: String
 	
-	@Bindable private(set) var details: [(detail: String, hasExtraLineBreak: Bool)]
+	@Bindable private(set) var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]
 	
 	@Bindable private(set) var hideForCapture: Bool = false
 	
@@ -37,9 +37,9 @@ final class EventDetailsViewModel {
 		self.details = details.compactMap {
 			guard $0.field.isRequired || $0.value?.isEmpty == false else { return nil }
 			
-			var field = $0.field.displayTitle
-			if let value = $0.value {
-				field += " <b>\(value)</b>"
+			let field = NSMutableAttributedString(string: $0.field.displayTitle, attributes: [.font: Theme.fonts.body])
+			if let value = $0.value, !value.isEmpty {
+				field.append(NSAttributedString(string: " \(value)", attributes: [.font: Theme.fonts.bodyBold]))
 			}
 			return (field, $0.field.hasLineBreak)
 		}
