@@ -394,11 +394,9 @@
 "holder.vaccination.error.message.code" = "Can't read the vaccination. Contact the location where you were vaccinated and give them the error code (%@).";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
-"holder.vaccination.status.unknown" = "unknown";
 "holder.vaccination.status.complete" = "yes";
 "holder.vaccination.status.complete.recovery" = "yes (I’ve had coronavirus earlier)";
 "holder.vaccination.status.complete.priorevent" = "Yes (I have been vaccinated elsewhere)";
-"holder.vaccination.status.incomplete" = "no";
 
 "holder.ggdlogin.failure.general.title" = "Retrieval is cancelled";
 "holder.ggdlogin.failure.general.message" = "It might be too busy. Please try again later.";

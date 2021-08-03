@@ -437,11 +437,9 @@
 "holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je gevaccineerd bent en geef de foutcode (%@) door.";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
-"holder.vaccination.status.unknown" = "niet bekend";
 "holder.vaccination.status.complete" = "ja";
 "holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
 "holder.vaccination.status.complete.priorevent" = "ja (ergens anders gevaccineerd)";
-"holder.vaccination.status.incomplete" = "nee";
 
 "holder.ggdlogin.failure.general.title" = "Het ophalen is afgebroken";
 "holder.ggdlogin.failure.general.message" = "Mogelijk is het te druk, probeer het later opnieuw.";
