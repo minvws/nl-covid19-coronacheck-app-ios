@@ -393,9 +393,19 @@ extension HolderDashboardViewModel.MyQRCard {
 						let sixHours: TimeInterval = 6 * 60 * 60
 						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
 						else { return nil }
+ 
+						let fiveMinutes: TimeInterval = 5 * 60
+						let formatter: DateComponentsFormatter = {
+							if mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: fiveMinutes) {
+								// e.g. "4 minuten en 15 seconden"
+								return HolderDashboardViewModel.hmsRelativeFormatter
+							} else {
+								// e.g. "5 uur 59 min"
+								return HolderDashboardViewModel.hmRelativeFormatter
+							}
+						}()
 
-						// e.g. "5 uur 59 min"
-						guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: mostDistantFutureExpiryDate)
+						guard let relativeDateString = formatter.string(from: now, to: mostDistantFutureExpiryDate)
 						else { return nil }
 
 						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
