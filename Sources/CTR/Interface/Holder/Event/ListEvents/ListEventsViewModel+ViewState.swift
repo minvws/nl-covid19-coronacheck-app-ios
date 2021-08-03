@@ -417,6 +417,8 @@ extension ListEventsViewModel {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
 		
+		let country = getDisplayCountry(dataRow.event.vaccination?.country ?? "")
+		
 		let details: [EventDetails] = [
 			EventDetails(field: EventDetailsVaccination.subtitle, value: nil),
 			EventDetails(field: EventDetailsVaccination.name, value: dataRow.identity.fullName),
@@ -428,7 +430,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
 			EventDetails(field: EventDetailsVaccination.completionReason, value: dataRow.event.vaccination?.completionStatus),
 			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
-			EventDetails(field: EventDetailsVaccination.country, value: dataRow.event.vaccination?.country),
+			EventDetails(field: EventDetailsVaccination.country, value: country),
 			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
@@ -796,7 +798,7 @@ private extension ListEventsViewModel {
 	}
 	
 	func getDisplayCountry(_ country: String) -> String {
-		guard country == "NL" else {
+		guard ["NL", "NLD"].contains(country) else {
 			return country
 		}
 		return L.generalNetherlands()
