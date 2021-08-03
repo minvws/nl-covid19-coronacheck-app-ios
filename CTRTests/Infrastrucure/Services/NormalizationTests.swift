@@ -38,4 +38,39 @@ class NormalizationTests: XCTestCase {
 			expect(normalized) == expected
 		}
 	}
+
+	func test_azInitial() {
+
+		// Given
+		let values: [String: String?] = [
+			"": nil,
+			"Rool": "R",
+			" Rool": "R",
+			"-de Vries": "D",
+			"#$pietje": nil,
+			"παράδειγμα δοκιμής": nil,
+			"Ægir": nil,
+			"'Doorn": "D",
+			"Özturk": nil,
+			"ТЕСТ МИЛИЦА": nil,
+			"Şımarık": nil,
+			"王": nil,
+			"Ådne": nil,
+			"محمود عبدالرحيم": nil,
+			"أحمد‎": nil
+		]
+
+		for (value, expected) in values {
+
+			// When
+			let normalized = Normalizer.toAzInitial(value)
+
+			// Then
+			if expected == nil {
+				expect(normalized).to(beNil())
+			} else {
+			expect(normalized) == expected
+			}
+		}
+	}
 }

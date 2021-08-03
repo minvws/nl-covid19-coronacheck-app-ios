@@ -51,12 +51,14 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
 
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
-	func vendSut() -> HolderDashboardViewModel {
-		HolderDashboardViewModel(
+	func vendSut(dashboardRegionToggleValue: QRCodeValidityRegion) -> HolderDashboardViewModel {
+
+		userSettingsSpy.stubbedDashboardRegionToggleValue = dashboardRegionToggleValue
+
+		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			configuration: configSpy,
@@ -70,19 +72,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 	// MARK: - Tests
 
 	func test_initialState() {
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
-		// expect(self.sut.hasAddCertificateMode) == true
-		expect(self.sut.regionMode?.buttonTitle) == L.holderDashboardChangeregionButtonEu()
-		expect(self.sut.regionMode?.currentLocationTitle) == L.holderDashboardChangeregionTitleNl()
+		expect(self.sut.hasAddCertificateMode) == false
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
-		expect(self.sut.cards).to(beEmpty())
+		expect(self.sut.domesticCards).to(beEmpty())
+		expect(self.sut.internationalCards).to(beEmpty())
 	}
 
 	func test_initialStateAfterFirstEmptyLoad() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		// Act
 		datasourceSpy.invokedDidUpdate?([], [])
@@ -90,22 +91,27 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.sut.title) == L.holderDashboardTitle()
 		expect(self.sut.primaryButtonTitle) == L.holderMenuProof()
-		expect(self.sut.regionMode?.buttonTitle) == L.holderDashboardChangeregionButtonEu()
-		expect(self.sut.regionMode?.currentLocationTitle) == L.holderDashboardChangeregionTitleNl()
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 
 		expect(self.sut.hasAddCertificateMode).toEventually(beTrue())
-		expect(self.sut.cards).toEventually(haveCount(1))
+		expect(self.sut.domesticCards).toEventually(haveCount(1))
+		expect(self.sut.internationalCards).toEventually(haveCount(1))
 
-		expect(self.sut.cards.first).to(beEmptyStateCard(test: { title, message in
-			expect(title) == L.holderDashboardEmptyTitle()
-			expect(message) == L.holderDashboardEmptyMessage()
+		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message in
+			expect(image) == I.empty_Dashboard_Domestic()
+			expect(title) == L.holderDashboardEmptyDomesticTitle()
+			expect(message) == L.holderDashboardEmptyDomesticMessage()
+		}))
+		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message in
+			expect(image) == I.empty_Dashboard_International()
+			expect(title) == L.holderDashboardEmptyInternationalTitle()
+			expect(message) == L.holderDashboardEmptyInternationalMessage()
 		}))
 	}
 
 	func test_viewWillAppear_triggersDatasourceReload() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.datasourceSpy.invokedReload) == false
 
 		// Act
@@ -117,7 +123,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_didBecomeActiveNotification_triggersDatasourceReload() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.datasourceSpy.invokedReload) == false
 
 		// Act
@@ -129,7 +135,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_addProofTapped_callsCoordinator() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == false
 
 		// Act
@@ -139,28 +145,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToCreateAQR) == true
 	}
 
-	func test_didTapChangeRegion_callsCoordinator() {
-		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
-		holderCoordinatorDelegateSpy.stubbedUserWishesToChangeRegionCompletionResult = (.domestic, ())
-
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegion) == false
-
-		// Act
-		sut.didTapChangeRegion()
-
-		// Assert
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegion) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToChangeRegionParameters?.currentRegion) == .europeanUnion
-
-		// The value should have now been changed to Domestic: 
-		expect(self.userSettingsSpy.invokedDashboardRegionToggleValue) == .domestic
-	}
-
 	func test_openURL_callsCoordinator() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == false
 
 		// Act
@@ -171,7 +158,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 
 	func test_strippen_stopsLoading_shouldTriggerDatasourceReload() {
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		expect(self.datasourceSpy.invokedReload) == false
 
@@ -194,9 +181,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.datasourceSpy.invokedReload) == true
 	}
 
-	func test_strippen_startLoading_shouldClearError() {
+	func test_strippen_domestic_startLoading_shouldClearError() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -217,8 +204,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		)
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
-		expect(self.sut.cards).toEventually(haveCount(3))
-		expect(self.sut.cards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
 			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
 
@@ -235,13 +222,110 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Assert
 		// Error Message should now be gone:
-		expect(self.sut.cards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+	}
+
+	func test_strippen_international_startLoading_shouldClearError() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		let strippenState = DashboardStrippenRefresher.State(
+			loadingState: .noInternet,
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: true,
+			hasLoadingEverFailed: false,
+			errorOccurenceCount: 1
+		)
+		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
+
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
+		expect(self.sut.internationalCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		}))
+
+		// Act
+		// Apply loading state:
+		let newStrippenState = DashboardStrippenRefresher.State(
+			loadingState: .loading(silently: false),
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: true,
+			hasLoadingEverFailed: false,
+			errorOccurenceCount: 1
+		)
+		strippenRefresherSpy.invokedDidUpdate?(strippenState, newStrippenState)
+
+		// Assert
+		// Error Message should now be gone:
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+	}
+	func test_strippen_domesticandinternational_startLoading_shouldClearError() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		let strippenState = DashboardStrippenRefresher.State(
+			loadingState: .noInternet,
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: true,
+			hasLoadingEverFailed: false,
+			errorOccurenceCount: 1
+		)
+		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		}))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
+		expect(self.sut.internationalCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
+		}))
+
+		// Act
+		// Apply loading state:
+		let newStrippenState = DashboardStrippenRefresher.State(
+			loadingState: .loading(silently: false),
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: true,
+			hasLoadingEverFailed: false,
+			errorOccurenceCount: 1
+		)
+		strippenRefresherSpy.invokedDidUpdate?(strippenState, newStrippenState)
+
+		// Assert
+		// Error Message should now be gone:
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
 	}
 
 	// MARK: - Strippen Alerts
 
 	func test_strippen_expired_noInternetError_shouldPresentError() {
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -267,7 +351,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_strippenkaart_noInternet_expired_previouslyDismissed_shouldDisplayError() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -291,20 +375,20 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(3))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 
-		expect(self.sut.cards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
 			expect(message) == L.holderDashboardStrippenExpiredErrorfooterNointernet()
 		}))
 	}
 
 	func test_strippen_noInternet_expiring_shouldPresentErrorAlert() {
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let newStrippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -330,7 +414,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_strippenkaart_noInternet_expiring_hasPreviouslyDismissed_shouldDoNothing() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .noInternet,
@@ -342,15 +426,15 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(1))
-		expect(self.sut.cards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(1))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateCard())
 
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
 
 	func test_strippenkaart_serverError_expiring_shouldDoNothing() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 
 		let strippenState = DashboardStrippenRefresher.State(
@@ -363,14 +447,16 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(1))
-		expect(self.sut.cards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(1))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.internationalCards).toEventually(haveCount(1))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
 
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
 
 	func test_strippen_expired_serverError_firstTime_shouldPresentAlert() {
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let newStrippenState = DashboardStrippenRefresher.State(
@@ -396,7 +482,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_strippen_expired_serverError_secondTime_shouldDisplayError() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -420,21 +506,74 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(3))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 
-		expect(self.sut.cards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
 			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
 		}))
 	}
 
-	func test_strippen_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
+	func test_strippen_domesticandinternational_expired_serverError_secondTime_shouldDisplayError() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			),
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		let strippenState = DashboardStrippenRefresher.State(
+			loadingState: .failed(error: error),
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: true,
+			hasLoadingEverFailed: true,
+			errorOccurenceCount: 1
+		)
+		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
+
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard())
+
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+		}))
+		expect(self.sut.internationalCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerTryagain(AppAction.tryAgain)
+		}))
+	}
+
+	func test_strippen_domestic_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -458,21 +597,59 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(3))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
 
-		expect(self.sut.cards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
+		}))
+	}
+
+	func test_strippen_international_expired_serverError_thirdTime_shouldDisplayHelpdeskError() {
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+		let error = DashboardStrippenRefresher.Error.networkError(error: NetworkError.invalidRequest)
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
+				shouldShowErrorBeneathCard: true,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		let strippenState = DashboardStrippenRefresher.State(
+			loadingState: .failed(error: error),
+			greencardsCredentialExpiryState: .expired,
+			userHasPreviouslyDismissedALoadingError: true,
+			hasLoadingEverFailed: true,
+			errorOccurenceCount: 2
+		)
+		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
+
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(3))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard())
+
+		expect(self.sut.internationalCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
 			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk(AppAction.tryAgain)
 		}))
 	}
 
 	func test_strippenkaart_noActionNeeded_shouldDoNothing() {
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let strippenState = DashboardStrippenRefresher.State(
 			loadingState: .idle,
@@ -484,8 +661,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(1))
-		expect(self.sut.cards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(1))
+		expect(self.sut.domesticCards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.internationalCards).toEventually(haveCount(1))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
 
 		expect(self.sut.currentlyPresentedAlert).to(beNil())
 	}
@@ -495,7 +674,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_mutliplefailures_shouldShowHelpDeskErrorBeneathCard() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -519,10 +698,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		strippenRefresherSpy.invokedDidUpdate?(nil, strippenState)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(3))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard())
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard())
-		expect(self.sut.cards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
+		expect(self.sut.domesticCards).toEventually(haveCount(3))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard())
+		expect(self.sut.domesticCards[2]).toEventually(beErrorMessageCard(test: { message, didTapTryAgain in
 			expect(message) == L.holderDashboardStrippenExpiredErrorfooterServerHelpdesk("ctr.action:try_again")
 		}))
 	}
@@ -532,7 +711,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -546,12 +725,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -578,7 +757,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidDomesticTest() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -593,11 +772,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -625,7 +804,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidDomesticRecovery() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -640,11 +819,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalRecoverystatement().capitalized
 
@@ -670,8 +849,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
@@ -686,12 +864,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -718,9 +896,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
-
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -734,12 +910,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -767,8 +943,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleCurrentlyValidInternationalRecovery() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
@@ -783,11 +958,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
-		expect(self.sut.cards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalRecoverydate().capitalized
 
@@ -813,7 +988,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_tripleCurrentlyValidDomestic() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -831,12 +1006,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -861,8 +1036,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let vaccineGreenCardID = NSManagedObjectID()
 		let testGreenCardID = NSManagedObjectID()
@@ -899,12 +1073,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(4))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -917,7 +1091,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 
-		expect(self.sut.cards[2]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[2]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -930,7 +1104,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 
-		expect(self.sut.cards[3]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[3]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -948,8 +1122,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	func test_datasourceupdate_tripleCurrentlyValidDomesticButViewingInternationalTab() {
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -968,20 +1141,20 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(4))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
+		expect(self.sut.internationalCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
 			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.generalVaccinationcertificate())
 		}))
 
-		expect(self.sut.cards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
+		expect(self.sut.internationalCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
 			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.generalRecoverystatement())
 		}))
-		
-		expect(self.sut.cards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
+
+		expect(self.sut.internationalCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
 			expect(message) == L.holderDashboardOriginNotValidInEUButIsInTheNetherlands(L.generalTestcertificate())
 		}))
 	}
@@ -992,7 +1165,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Arrange
 		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let vaccineGreenCardID = NSManagedObjectID()
 		let testGreenCardID = NSManagedObjectID()
@@ -1029,20 +1202,20 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(4))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(4))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
+		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
 			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.generalVaccinationcertificate())
 		}))
 
-		expect(self.sut.cards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
+		expect(self.sut.domesticCards[2]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
 			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.generalRecoverystatement())
 		}))
 
-		expect(self.sut.cards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
+		expect(self.sut.domesticCards[3]).toEventually(beOriginNotValidInThisRegionCard(test: { message, _ in
 			expect(message) == L.holderDashboardOriginNotValidInNetherlandsButIsInEU(L.generalTestcertificate())
 		}))
 	}
@@ -1051,7 +1224,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Arrange
 		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let vaccineGreenCardID = NSManagedObjectID()
 
@@ -1070,10 +1243,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard())
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard())
 
-		expect(self.sut.cards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { _, didTapMoreInfo in
+		expect(self.sut.domesticCards[1]).toEventually(beOriginNotValidInThisRegionCard(test: { _, didTapMoreInfo in
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == false
 			didTapMoreInfo()
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesMoreInfoAboutUnavailableQR) == true
@@ -1087,7 +1260,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleNotYetValidDomesticVaccination() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
 				greenCardObjectID: sampleGreencardObjectID,
@@ -1101,12 +1274,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1133,7 +1306,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleNotYetValidDomesticRecovery() {
 
 		// Arrange
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.netherlands(
@@ -1148,11 +1321,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroDomestic()
 		}))
-		expect(self.sut.cards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalRecoverystatement().capitalized
 
@@ -1177,8 +1350,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleNotYetValidInternationalVaccination() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
@@ -1193,12 +1365,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
 
-		expect(self.sut.cards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			// check isLoading
 			expect(isLoading) == false
 
@@ -1225,8 +1397,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	func test_datasourceupdate_singleNotYetValidInternationalRecovery() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let qrCards = [
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
@@ -1241,11 +1412,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beHeaderMessageCard(test: { message in
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
 			expect(message) == L.holderDashboardIntroInternational()
 		}))
-		expect(self.sut.cards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalRecoverydate().capitalized
 
@@ -1271,7 +1442,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 		// Arrange
 		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery),
@@ -1283,24 +1454,26 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(4))
-		expect(self.sut.cards[0]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.domesticCards).toEventually(haveCount(4))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
+		expect(self.sut.domesticCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.cards[1]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.domesticCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.cards[2]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.domesticCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.cards[3]).toEventually(beEmptyStateCard())
 	}
 
 	func test_datasourceupdate_domesticExpired_tapForMoreInfo() {
 
 		// Arrange
 		userSettingsSpy.stubbedDashboardRegionToggleValue = .domestic
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery)
@@ -1310,21 +1483,26 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(2))
-		expect(self.sut.cards[0]).toEventually(beExpiredQRCard(test: { message, didTapClose in
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+
+		// At this point cache the domestic cards value, because `didTapClose()` mutates it:
+		let domesticCards = sut.domesticCards
+
+		expect(domesticCards[0]).toEventually(beHeaderMessageCard())
+		expect(domesticCards[1]).toEventually(beExpiredQRCard(test: { message, didTapClose in
 			expect(message) == L.holderDashboardQrExpired()
 			didTapClose()
 
-			// Check that the Expired QR row was removed:
-			expect(self.sut.cards).to(haveCount(1))
+			// Check the non-cached value now to check that the Expired QR row was removed:
+			expect(self.sut.domesticCards).to(haveCount(1))
+			expect(self.sut.domesticCards[0]).to(beEmptyStateCard())
 		}))
 	}
 
 	func test_datasourceupdate_internationalExpired() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .europeanUnion, type: .recovery),
@@ -1336,24 +1514,25 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(4))
-		expect(self.sut.cards[0]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.internationalCards).toEventually(haveCount(4))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		})
+		expect(self.sut.internationalCards[1]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.cards[1]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.internationalCards[2]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.cards[2]).toEventually(beExpiredQRCard(test: { message, _ in
+		expect(self.sut.internationalCards[3]).toEventually(beExpiredQRCard(test: { message, _ in
 			expect(message) == L.holderDashboardQrExpired()
 		}))
-		expect(self.sut.cards[3]).toEventually(beEmptyStateCard())
 	}
 
 	func test_datasourceupdate_domesticExpiredButOnInternationalTab() {
 
 		// Arrange
-		userSettingsSpy.stubbedDashboardRegionToggleValue = .europeanUnion
-		sut = vendSut()
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
 
 		let expiredCards: [HolderDashboardViewModel.ExpiredQR] = [
 			.init(region: .domestic, type: .recovery),
@@ -1365,17 +1544,17 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy.invokedDidUpdate?([], expiredCards)
 
 		// Assert
-		expect(self.sut.cards).toEventually(haveCount(1))
-		expect(self.sut.cards[0]).toEventually(beEmptyStateCard())
+		expect(self.sut.internationalCards).toEventually(haveCount(1))
+		expect(self.sut.internationalCards[0]).toEventually(beEmptyStateCard())
 	}
 }
 
 // See: https://medium.com/@Tovkal/testing-enums-with-associated-values-using-nimble-839b0e53128
-private func beEmptyStateCard(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
+private func beEmptyStateCard(test: @escaping (UIImage?, String, String) -> Void = { _, _, _ in }) -> Predicate<HolderDashboardViewController.Card> {
 	return Predicate.define("be .emptyState with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .emptyState(title1, message1) = actual {
-			test(title1, message1)
+		   case let .emptyState(image, title1, message1) = actual {
+			test(image, title1, message1)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)

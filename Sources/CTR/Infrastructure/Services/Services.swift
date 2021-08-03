@@ -22,6 +22,7 @@ final class Services {
 	private static var walletManagingType: WalletManaging.Type = WalletManager.self
 	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
+	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
 
 	/// Override the CryptoManaging type that will be instantiated
 	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
@@ -81,6 +82,12 @@ final class Services {
 		couplingManagingType = couplingManager
 	}
 
+	/// Override the mappingManaging type  that will be instantiated
+	/// - parameter mappingManager: The type conforming to MappingManaging to be used as the global mapping manager
+	static func use(_ mappingManager: MappingManaging.Type) {
+		mappingManagingType = mappingManager
+	}
+
 	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
@@ -135,5 +142,9 @@ final class Services {
 	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
 		cryptoManager: cryptoManager,
 		networkManager: networkManager
+	)
+
+	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
+		remoteConfigManager: remoteConfigManager
 	)
 }
