@@ -355,7 +355,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
 			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.negativeTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.certificateIdentifier, value: dataRow.event.unique)
+			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
 		return ListEventsViewController.Row(
@@ -417,7 +417,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsVaccination.completionReason, value: dataRow.event.vaccination?.completionStatus),
 			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
 			EventDetails(field: EventDetailsVaccination.country, value: dataRow.event.vaccination?.country),
-			EventDetails(field: EventDetailsVaccination.certificateIdentifier, value: dataRow.event.unique)
+			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
 		return ListEventsViewController.Row(
@@ -457,7 +457,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsRecovery.date, value: formattedShortTestDate),
 			EventDetails(field: EventDetailsRecovery.validFrom, value: formattedShortValidFromDate),
 			EventDetails(field: EventDetailsRecovery.validUntil, value: formattedShortValidUntilDate),
-			EventDetails(field: EventDetailsRecovery.certificateIdentifier, value: dataRow.event.unique)
+			EventDetails(field: EventDetailsRecovery.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
 		return ListEventsViewController.Row(
@@ -503,7 +503,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
 			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.positiveTest?.facility),
 			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
-			EventDetails(field: EventDetailsTest.certificateIdentifier, value: dataRow.event.unique)
+			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
 		return ListEventsViewController.Row(
@@ -645,32 +645,30 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(test.issuer)
 		let country = getDisplayCountry(test.country)
-
-		let body: String = L.holderDccTestMessage(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			testType,
-			test.name ?? "",
-			formattedTestDate,
-			testResult,
-			test.testCenter,
-			manufacturer,
-			country,
-			issuer,
-			test.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCTest.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsDCCTest.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCTest.pathogen, value: L.holderDccTestPathogenvalue()),
+			EventDetails(field: EventDetailsDCCTest.testType, value: testType),
+			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
+			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
+			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
+			EventDetails(field: EventDetailsDCCTest.facility, value: test.testCenter),
+			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsDCCTest.country, value: country),
+			EventDetails(field: EventDetailsDCCTest.issuer, value: issuer),
+			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.generalTestcertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -752,7 +750,7 @@ private extension ListEventsViewModel {
 					EventDetails(field: EventDetailsTest.testType, value: self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType),
 					EventDetails(field: EventDetailsTest.date, value: printSampleLongDate),
 					EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
-					EventDetails(field: EventDetailsTest.certificateIdentifier, value: result.unique)
+					EventDetails(field: EventDetailsTest.uniqueIdentifer, value: result.unique)
 				]
 				
 				self?.coordinator?.listEventsScreenDidFinish(
