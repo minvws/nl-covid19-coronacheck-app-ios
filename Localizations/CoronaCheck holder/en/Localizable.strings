@@ -477,3 +477,5 @@
 "holder.event.identity.alert.message" = "You’ve created a certificate before. The information on it differs from the information that has just been retrieved. Therefore you can only replace the certificate.";
 "holder.event.identity.alert.ok" = "Yes, replace";
 "holder.event.identity.alert.cancel" = "No, stop";
+
+"holder.event.details" = "Details";
