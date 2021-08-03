@@ -181,8 +181,7 @@ class ShowQRViewModel: Logging {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			let isNL = "nl" == Locale.current.languageCode
-			dosage = isNL ? L.holderVaccinationAboutOffDcc("\(doseNumber)", "\(totalDose)", "\(doseNumber)", "\(totalDose)") : L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+			dosage = "\(doseNumber) / \(totalDose)"
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(

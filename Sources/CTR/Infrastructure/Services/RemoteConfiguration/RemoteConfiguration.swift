@@ -200,7 +200,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
-		return RemoteConfiguration(
+ 		return RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: nil,
 			storeUrl: nil,

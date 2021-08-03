@@ -24,6 +24,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var strippenRefresherSpy: DashboardStrippenRefresherSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
+	private var remoteConfigSpy: RemoteConfigManagingSpy!
 
 	private static var initialTimeZone: TimeZone?
 
@@ -52,6 +53,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
 
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
@@ -71,7 +74,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		)
 	}
 
-	// MARK: - Tests
+	// MARK: -
 
 	func test_initialState() {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
@@ -158,6 +161,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 		// Assert
 		expect(self.holderCoordinatorDelegateSpy.invokedOpenUrl) == true
 	}
+
+	// MARK: - Strippen Loading
 
 	func test_strippen_stopsLoading_shouldTriggerDatasourceReload() {
 		sut = vendSut(dashboardRegionToggleValue: .domestic)
@@ -1349,6 +1354,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	// MARK: - Single, Not Yet Valid, International
 
+	// This shouldn't happen because DCC Vaccines are immediately valid
+	// But the test can at least track the behaviour in case it does.
 	func test_datasourceupdate_singleNotYetValidInternationalVaccination() {
 
 		// Arrange
