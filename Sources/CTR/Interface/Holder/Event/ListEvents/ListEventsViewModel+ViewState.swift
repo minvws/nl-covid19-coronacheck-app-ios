@@ -411,7 +411,7 @@ extension ListEventsViewModel {
 				?? dataRow.event.vaccination?.manufacturer
 		}
 
-		var dosage = ""
+		var dosage: String?
 		if let doseNumber = dataRow.event.vaccination?.doseNumber,
 		   let totalDose = dataRow.event.vaccination?.totalDoses {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
@@ -808,18 +808,11 @@ private extension ListEventsViewModel {
 private extension EventFlow.VaccinationEvent {
 	
 	/// Get a display version of the vaccination completion status
-	var completionStatus: String {
-		
-		let hasStatement = completedByMedicalStatement ?? completedByPersonalStatement
-		
-		// No data: Unknown status
-		guard hasStatement != nil else {
-			return L.holderVaccinationStatusUnknown()
-		}
+	var completionStatus: String? {
 		
 		// Neither statements are completed: Vaccination incomplete
 		guard completedByMedicalStatement == true || completedByPersonalStatement == true else {
-			return L.holderVaccinationStatusIncomplete()
+			return nil
 		}
 		
 		// Vaccination completed: Optional clarification for completion
