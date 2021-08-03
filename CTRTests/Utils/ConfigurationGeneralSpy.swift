@@ -13,12 +13,4 @@ class ConfigurationGeneralSpy: ConfigurationGeneralProtocol {
 	func getAutoCloseTime() -> TimeInterval {
 		return 10
 	}
-
-	func getTestResultWarningTTL() -> Int {
-		return 10
-	}
-
-	func getQRRefreshPeriod() -> TimeInterval {
-		return 10
-	}
 }

@@ -52,7 +52,6 @@ final class HolderDashboardViewModel: Logging {
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var cryptoManager: CryptoManaging?
 	private weak var proofManager: ProofManaging?
-	private var configuration: ConfigurationGeneralProtocol
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
@@ -95,7 +94,6 @@ final class HolderDashboardViewModel: Logging {
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol,
 		datasource: HolderDashboardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
@@ -105,7 +103,6 @@ final class HolderDashboardViewModel: Logging {
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
-		self.configuration = configuration
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
