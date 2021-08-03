@@ -168,7 +168,7 @@ class ShowQRViewModel: Logging {
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, test: test)
+					showMoreInformationTest(euCredentialAttributes: euCredentialAttributes, test: test)
 				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
 					showMoreInformationRecovery(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 				}
@@ -220,7 +220,7 @@ class ShowQRViewModel: Logging {
 		)
 	}
 
-	private func showMoreInformationVaccination(
+	private func showMoreInformationTest(
 		euCredentialAttributes: EuCredentialAttributes,
 		test: EuCredentialAttributes.TestEntry) {
 
