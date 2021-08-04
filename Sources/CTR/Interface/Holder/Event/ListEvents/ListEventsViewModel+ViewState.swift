@@ -442,12 +442,44 @@ extension ListEventsViewModel {
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
 			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
-		let formattedShotDate: String = dataRow.event.vaccination?.dateString
-			.flatMap(Formatter.getDateFrom)
-			.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
 			.map(printMonthFormatter.string) ?? ""
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
+
+		var details = getEventDetail(dataRow: dataRow)
+
+		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
+		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
+		if let nextRow = combineWith {
+			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
+			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
+			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
+			details += getEventDetail(dataRow: nextRow)
+		} else {
+			subTitle += L.holderVaccinationElementSingle(provider)
+		}
+
+		return ListEventsViewController.Row(
+			title: title,
+			subTitle: subTitle,
+			action: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
+				)
+			}
+		)
+	}
+
+	private func getEventDetail(dataRow: EventDataTuple) -> [EventDetails] {
+
+		let formattedBirthDate: String = dataRow.identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+		let formattedShotDate: String = dataRow.event.vaccination?.dateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
 		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
 		var vaccinName: String?
@@ -459,7 +491,7 @@ extension ListEventsViewModel {
 			vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(hpkData?.vp)
 			vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(hpkData?.ma)
 		}
-		
+
 		if vaccinName?.isEmpty == true, let brand = dataRow.event.vaccination?.brand {
 			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand)
 		}
@@ -479,11 +511,11 @@ extension ListEventsViewModel {
 		   let totalDose = dataRow.event.vaccination?.totalDoses {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
-		
+
 		let country = getDisplayCountry(dataRow.event.vaccination?.country ?? "")
-		
+
 		let details: [EventDetails] = [
-			EventDetails(field: EventDetailsVaccination.subtitle, value: nil),
+			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
 			EventDetails(field: EventDetailsVaccination.name, value: dataRow.identity.fullName),
 			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
 			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
@@ -497,25 +529,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
-		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
-		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
-		if let nextRow = combineWith {
-			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
-			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
-		} else {
-			subTitle += L.holderVaccinationElementSingle(provider)
-		}
-
-		return ListEventsViewController.Row(
-			title: title,
-			subTitle: subTitle,
-			action: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(
-					.showEventDetails(title: L.holderEventAboutTitle(),
-									  details: details)
-				)
-			}
-		)
+		return details
 	}
 
 	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {

@@ -460,7 +460,7 @@
 "holder.event.about.test.manufacturer" = "Testproducent:";
 "holder.event.about.test.identifier" = "Uniek testnummer:";
 
-"holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald:";
+"holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald bij %@:";
 "holder.event.about.vaccination.name" = "Naam:";
 "holder.event.about.vaccination.dateofbirth" = "Geboortedatum:";
 "holder.event.about.vaccination.pathogen" = "Ziekteverwekker:";
