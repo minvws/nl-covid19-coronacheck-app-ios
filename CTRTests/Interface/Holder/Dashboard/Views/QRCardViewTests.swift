@@ -28,15 +28,15 @@ class QRCardViewTests: XCTestCase {
 			// Isn't displayed
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Past", kind: .past) }
+				validityString: { _ in .init(texts: ["Past"], kind: .past) }
 			),
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Current", kind: .current) }
+				validityString: { _ in .init(texts: ["Current"], kind: .current) }
 			),
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Future", kind: .future) }
+				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false)) }
 			)
 		]
 
@@ -60,7 +60,7 @@ class QRCardViewTests: XCTestCase {
 		sut.originRows = [
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Current", kind: .current) }
+				validityString: { _ in .init(texts: ["Current"], kind: .current) }
 			)
 		]
 
@@ -84,7 +84,7 @@ class QRCardViewTests: XCTestCase {
 		sut.originRows = [
 			QRCardView.OriginRow(
 				type: "Type of Proof",
-				validityStringEvaluator: { _ in .init(text: "Current", kind: .current) }
+				validityString: { _ in .init(texts: ["Current"], kind: .current) }
 			)
 		]
 
@@ -117,6 +117,77 @@ class QRCardViewTests: XCTestCase {
 		sut.isLoading = true
 
 		// Assert
+		sut.assertImage()
+	}
+
+	func testBecomesAutomaticallyValidRowFooter() {
+		// Arrange
+		let sut = QRCardView()
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.region = "Region"
+
+		sut.originRows = [
+			QRCardView.OriginRow(
+				type: "Type of Proof",
+				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)) }
+			)
+		]
+
+		sut.expiryEvaluator = { _ in "Expiry Date text" }
+		sut.buttonEnabledEvaluator = { _ in false }
+		sut.isLoading = false
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testHidesAutomaticallyValidRowFooterIfButtonIsEnabled() {
+		// Arrange
+		let sut = QRCardView()
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.region = "Region"
+
+		sut.originRows = [
+			QRCardView.OriginRow(
+				type: "Type of Proof",
+				validityString: { _ in .init(texts: ["Future"], kind: .future(desiresToShowAutomaticallyBecomesValidFooter: true)) }
+			)
+		]
+
+		sut.expiryEvaluator = { _ in "Expiry Date text" }
+		sut.buttonEnabledEvaluator = { _ in true }
+		sut.isLoading = false
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
+		sut.assertImage()
+	}
+
+	func testSubtextField() {
+		// Arrange
+		let sut = QRCardView()
+		sut.title = "Title"
+		sut.viewQRButtonTitle = "viewQRButtonTitle"
+		sut.region = "Region"
+		sut.shouldStyleForEU = true
+		sut.originRows = [
+			QRCardView.OriginRow(
+				type: nil,
+				validityString: { _ in .init(
+					texts: ["Vaccinatiebewijs: dosis 2 van 2", "Vaccinatiedatum: 15 juli 2021"],
+					kind: .future(desiresToShowAutomaticallyBecomesValidFooter: false))
+				}
+			)
+		]
+
+		sut.buttonEnabledEvaluator = { _ in true }
+		sut.isLoading = false
+
+		// Assert
+		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 350)
 		sut.assertImage()
 	}
 }

@@ -193,7 +193,7 @@ class HolderCoordinator: SharedCoordinator {
 				cryptoManager: cryptoManager,
 				proofManager: proofManager,
 				datasource: HolderDashboardDatasource(
-					dataStoreManager: Services.dataStoreManager,
+					cryptoManaging: Services.cryptoManager,
 					walletManager: Services.walletManager,
 					now: { Date() }
 				),
@@ -205,6 +205,7 @@ class HolderCoordinator: SharedCoordinator {
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
+				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)

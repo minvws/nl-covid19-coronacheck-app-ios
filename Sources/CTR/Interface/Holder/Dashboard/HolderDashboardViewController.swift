@@ -11,8 +11,8 @@ class HolderDashboardViewController: BaseViewController {
 
 	enum Card {
 		struct QRCardRow {
-			let typeText: String
-			let validityTextEvaluator: (Date) -> ValidityText
+			let typeText: String?
+			let validityText: (Date) -> ValidityText
 		}
 
 		case headerMessage(message: String)
@@ -33,11 +33,14 @@ class HolderDashboardViewController: BaseViewController {
 	struct ValidityText: Equatable {
 		enum Kind: Equatable {
 			case past
-			case future
+
+			// An future-valid origin row can indicate that it would like the "automatically becomes valid"
+			// footer to be shown. But if the card as-a-whole is already valid, then this will be ignored.
+			case future(desiresToShowAutomaticallyBecomesValidFooter: Bool)
 			case current
 		}
 
-		let text: String
+		let texts: [String]
 		let kind: Kind
 	}
 
@@ -174,7 +177,7 @@ class HolderDashboardViewController: BaseViewController {
 						}
 						
 						qrCard.originRows = rows.map { (qrCardRow: Card.QRCardRow) in
-							QRCardView.OriginRow(type: qrCardRow.typeText, validityStringEvaluator: qrCardRow.validityTextEvaluator)
+							QRCardView.OriginRow(type: qrCardRow.typeText, validityString: qrCardRow.validityText)
 						}
 						
 						qrCard.expiryEvaluator = expiryCountdownEvaluator

@@ -25,7 +25,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 	private var userSettingsSpy: UserSettingsSpy!
 	private var sampleGreencardObjectID: NSManagedObjectID!
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
-
+	
 	private static var initialTimeZone: TimeZone?
 
 	override class func setUp() {
@@ -55,7 +55,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		remoteConfigSpy = RemoteConfigManagingSpy()
 		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
-
+		
 		sampleGreencardObjectID = NSManagedObjectID()
 	}
 
@@ -70,6 +70,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,
+			remoteConfigManager: remoteConfigSpy,
 			now: { now }
 		)
 	}
@@ -241,7 +242,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
@@ -290,7 +292,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 		datasourceSpy.invokedDidUpdate?(qrCards, [])
@@ -540,7 +543,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -625,7 +629,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneMonthAgo_vaccination_expired2DaysAgo()],
 				shouldShowErrorBeneathCard: true,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -745,11 +750,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalVaccinationcertificate().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now).text) == "geldig t/m 18 juli 2021"
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).text) == "geldig t/m 18 juli 2021"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts.first) == "geldig vanaf 14 juli 2021"
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts.first) == "geldig vanaf 14 juli 2021"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -758,6 +763,52 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
 
 			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 72 uur"
+		}))
+	}
+
+	func test_datasourceupdate_singleCurrentlyValidDomesticVaccination_expiringSoon() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(1))
+			expect(rows.first?.typeText) == L.generalVaccinationcertificate().capitalized
+
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts.first) == "geldig vanaf 15 juni 2021"
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .past
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts).to(haveCount(0))
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 1 minuut"
 		}))
 	}
 
@@ -790,12 +841,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalTestcertificate().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now).text) == "geldig t/m vrijdag 16 juli 16:02"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts.first) == "geldig t/m vrijdag 16 juli 16:02"
 
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).text) == "geldig t/m vrijdag 16 juli 16:02"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig t/m vrijdag 16 juli 16:02"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -834,12 +885,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalRecoverystatement().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now).text) == "geldig t/m 11 mei 2022"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts.first) == "geldig t/m 11 mei 2022"
 
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).text) == "geldig t/m 11 mei 2022"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig t/m 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -853,7 +904,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 	// MARK: - Single, Currently Valid, International
 
-	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination() {
+	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_1_of_2() {
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
@@ -863,7 +914,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { (date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+					return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+				}
 			)
 		]
 
@@ -882,13 +936,171 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// check rows
 			expect(rows).to(haveCount(1))
-			expect(rows.first?.typeText) == L.generalVaccinationdate().capitalized
+			expect(rows.first?.typeText).to(beNil()) // this value is blanked in this QR card
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now).text) == "14 juli 2021"
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).text) == "14 juli 2021"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts).to(haveCount(2))
+			expect(rows.first?.validityText(now).texts[0]) == "Vaccinatiebewijs: dosis 1 van 2"
+			expect(rows.first?.validityText(now).texts[1]) == "Vaccinatiedatum: 14 juli 2021"
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts).to(haveCount(2))
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts[0]) == "Vaccinatiebewijs: dosis 1 van 2"
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts[1]) == "Vaccinatiedatum: 14 juli 2021"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+
+	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_ExpiringSoon() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.valid30DaysAgo_vaccination_expires60SecondsFromNow()],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { (date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+					return .sampleWithVaccine(doseNumber: 1, totalDose: 2)
+				}
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(1))
+			expect(rows.first?.typeText).to(beNil()) // this value is blanked in this QR card
+
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts).to(haveCount(2))
+			expect(rows.first?.validityText(now).texts[0]) == "Vaccinatiebewijs: dosis 1 van 2"
+			expect(rows.first?.validityText(now).texts[1]) == "Vaccinatiedatum: 15 juni 2021"
+
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * minutes * fromNow)).kind) == .past
+			expect(rows.first?.validityText(now.addingTimeInterval(2 * minutes * fromNow)).texts).to(haveCount(0))
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+
+	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_0_of_2() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { (date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+					return .sampleWithVaccine(doseNumber: 0, totalDose: 2)
+				}
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(1))
+			expect(rows.first?.typeText).to(beNil()) // this value is blanked in this QR card
+
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts).to(haveCount(2))
+			expect(rows.first?.validityText(now).texts[0]) == "Vaccinatiebewijs: dosis 0 van 2"
+			expect(rows.first?.validityText(now).texts[1]) == "Vaccinatiedatum: 14 juli 2021"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+
+	func test_datasourceupdate_singleCurrentlyValidInternationalVaccination_nil_of_2() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
+
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.europeanUnion(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [.validOneDayAgo_vaccination_expires3DaysFromNow()],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { (date: Date) -> EuCredentialAttributes.DigitalCovidCertificate? in
+					return .sampleWithVaccine(doseNumber: nil, totalDose: 2)
+				}
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.internationalCards).toEventually(haveCount(2))
+		expect(self.sut.internationalCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroInternational()
+		}))
+
+		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(1))
+
+			expect(rows.first?.typeText).to(beNil())
+
+			// Here we've got an invalid `EuCredentialAttributes.DigitalCovidCertificate` (nil of 2)
+			// So we fallback to default `localizedDateExplanation` for an EU origin:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts).to(haveCount(1))
+			expect(rows.first?.validityText(now).texts[0]) == "14 juli 2021"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -901,6 +1113,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 	}
 
 	func test_datasourceupdate_singleCurrentlyValidInternationalTest() {
+		remoteConfigSpy.stubbedGetConfigurationResult = .default
+		remoteConfigSpy.stubbedGetConfigurationResult.euTestTypes = [
+			.init(code: "LP6464-4", name: "PCR (NAAT)")
+		]
 
 		// Arrange
 		sut = vendSut(dashboardRegionToggleValue: .europeanUnion)
@@ -909,7 +1125,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneHourAgo_test_expires23HoursFromNow()],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in .sampleWithTest() }
 			)
 		]
 
@@ -928,14 +1145,18 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// check rows
 			expect(rows).to(haveCount(1))
-			expect(rows.first?.typeText) == L.generalTestdate().capitalized
+			expect(rows.first?.typeText).to(beNil())
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now).text) == "donderdag 15 juli 16:02"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts).to(haveCount(2))
+			expect(rows.first?.validityText(now).texts[0]) == "Testbewijs: PCR (NAAT)"
+			expect(rows.first?.validityText(now).texts[1]) == "Testdatum: donderdag 15 juli 16:02"
 
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).text) == "donderdag 15 juli 16:02"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts).to(haveCount(2))
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts[0]) == "Testbewijs: PCR (NAAT)"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts[1]) == "Testdatum: donderdag 15 juli 16:02"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -957,7 +1178,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validOneHourAgo_recovery_expires300DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -971,14 +1193,72 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			expect(rows).to(haveCount(1))
-			expect(rows.first?.typeText) == L.generalRecoverydate().capitalized
+			expect(rows.first?.typeText) == L.generalRecoverystatement().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now).text) == "15 juli 2021"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .current
+			expect(rows.first?.validityText(now).texts.first) == "geldig t/m 11 mei 2022"
 
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(22 * hours * fromNow)).text) == "15 juli 2021"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig t/m 11 mei 2022"
+
+			// check didTapViewQR
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
+			didTapViewQR()
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
+			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+
+	// MARK: - Multiple, One Valid, One not yet Valid, Domestic
+
+	func test_datasourceupdate_oneNotYetValid_oneCurrentlyValid_domestic() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [
+					.validOneDayAgo_vaccination_expires3DaysFromNow(),
+					.validIn48Hours_recovery_expires300DaysFromNow()
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(2))
+			expect(rows[0].typeText) == L.generalVaccinationcertificate().capitalized
+
+			// Exercise the validityText with different sample dates:
+			expect(rows[0].validityText(now).kind) == .current
+			expect(rows[0].validityText(now).texts.first) == "geldig vanaf 14 juli 2021"
+			expect(rows[0].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
+			expect(rows[0].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts.first) == "geldig vanaf 14 juli 2021"
+
+			expect(rows[1].typeText) == L.generalRecoverystatement().capitalized
+
+			expect(rows[1].validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows[1].validityText(now).texts.first) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
+			expect(rows[1].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
+			expect(rows[1].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts.first) == "geldig t/m 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -1038,6 +1318,98 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 	}
 
+	func test_datasourceupdate_tripleCurrentlyValidDomestic_oneExpiringSoon() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [
+					.valid30DaysAgo_vaccination_expires60SecondsFromNow(),
+					.validOneHourAgo_test_expires23HoursFromNow(),
+					.validOneHourAgo_recovery_expires300DaysFromNow()
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(3))
+
+			let rowA = rows[0]
+			expect(rowA.typeText) == L.generalVaccinationcertificate().capitalized
+
+			let rowB = rows[1]
+			expect(rowB.typeText) == L.generalTestcertificate().capitalized
+
+			let rowC = rows[2]
+			expect(rowC.typeText) == L.generalRecoverystatement().capitalized
+
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
+		}))
+	}
+
+	func test_datasourceupdate_tripleCurrentlyValidDomestic_allExpiringSoon() {
+
+		// Arrange
+		sut = vendSut(dashboardRegionToggleValue: .domestic)
+		let qrCards = [
+			HolderDashboardViewModel.MyQRCard.netherlands(
+				greenCardObjectID: sampleGreencardObjectID,
+				origins: [
+					.valid30DaysAgo_vaccination_expires60SecondsFromNow(),
+					.validOneDayAgo_test_expires5MinutesFromNow(),
+					.validOneMonthAgo_recovery_expires2HoursFromNow()
+				],
+				shouldShowErrorBeneathCard: false,
+				evaluateEnabledState: { _ in true }
+			)
+		]
+
+		// Act
+		datasourceSpy.invokedDidUpdate?(qrCards, [])
+
+		// Assert
+		expect(self.sut.domesticCards).toEventually(haveCount(2))
+		expect(self.sut.domesticCards[0]).toEventually(beHeaderMessageCard(test: { message in
+			expect(message) == L.holderDashboardIntroDomestic()
+		}))
+
+		expect(self.sut.domesticCards[1]).toEventually(beDomesticQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
+			// check isLoading
+			expect(isLoading) == false
+
+			// check rows
+			expect(rows).to(haveCount(3))
+
+			let rowA = rows[0]
+			expect(rowA.typeText) == L.generalVaccinationcertificate().capitalized
+
+			let rowB = rows[1]
+			expect(rowB.typeText) == L.generalTestcertificate().capitalized
+
+			let rowC = rows[2]
+			expect(rowC.typeText) == L.generalRecoverystatement().capitalized
+
+			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 2 uur"
+		}))
+	}
+
 	// MARK: - Triple, Currently Valid, International
 
 	func test_datasourceupdate_tripleCurrentlyValidInternationalVaccination() {
@@ -1056,7 +1428,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneDayAgo_vaccination_expires3DaysFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			),
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
 				greenCardObjectID: recoveryGreenCardID,
@@ -1064,7 +1437,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneHourAgo_recovery_expires300DaysFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			),
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
 				greenCardObjectID: testGreenCardID,
@@ -1072,7 +1446,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneHourAgo_test_expires23HoursFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -1093,7 +1468,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 
 			let rowA = rows[0]
-			expect(rowA.typeText) == L.generalVaccinationdate().capitalized
+			expect(rowA.typeText).to(beNil())
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
@@ -1106,7 +1481,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 
 			let rowA = rows[0]
-			expect(rowA.typeText) == L.generalRecoverydate().capitalized
+			expect(rowA.typeText) == L.generalRecoverystatement().capitalized
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
@@ -1119,7 +1494,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 
 			let rowA = rows[0]
-			expect(rowA.typeText) == L.generalTestdate().capitalized
+			expect(rowA.typeText).to(beNil())
 
 			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
@@ -1185,7 +1560,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneDayAgo_vaccination_expires3DaysFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			),
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
 				greenCardObjectID: recoveryGreenCardID,
@@ -1193,7 +1569,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneHourAgo_recovery_expires300DaysFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			),
 			HolderDashboardViewModel.MyQRCard.europeanUnion(
 				greenCardObjectID: testGreenCardID,
@@ -1201,7 +1578,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneHourAgo_test_expires23HoursFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -1242,7 +1620,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 					.validOneDayAgo_vaccination_expires3DaysFromNow()
 				],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -1294,11 +1673,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalVaccinationcertificate().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now).text) == "wordt automatisch geldig over 2 dagen"
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).text) == "wordt automatisch geldig over 12 uur"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now).texts.first) == "geldig vanaf 17 juli 17:02"
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).texts.first) == "geldig vanaf 17 juli 17:02"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -1336,11 +1715,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows).to(haveCount(1))
 			expect(rows.first?.typeText) == L.generalRecoverystatement().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now).text) == "wordt automatisch geldig over 2 dagen"
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).text) == "wordt automatisch geldig over 12 uur"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now).texts.first) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).texts.first) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -1366,7 +1745,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validIn48Hours_vaccination_expires30DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -1385,13 +1765,11 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// check rows
 			expect(rows).to(haveCount(1))
-			expect(rows.first?.typeText) == L.generalVaccinationdate().capitalized
+			expect(rows.first?.typeText).to(beNil())
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now).text) == "wordt automatisch geldig over 2 dagen"
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).text) == "wordt automatisch geldig over 12 uur"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now).texts[0]) == "wordt automatisch geldig over 17 juli 17:02"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -1413,7 +1791,8 @@ class HolderDashboardViewModelTests: XCTestCase {
 				greenCardObjectID: sampleGreencardObjectID,
 				origins: [.validIn48Hours_recovery_expires300DaysFromNow()],
 				shouldShowErrorBeneathCard: false,
-				evaluateEnabledState: { _ in true }
+				evaluateEnabledState: { _ in true },
+				evaluateDCC: { _ in nil }
 			)
 		]
 
@@ -1427,13 +1806,13 @@ class HolderDashboardViewModelTests: XCTestCase {
 		}))
 		expect(self.sut.internationalCards[1]).toEventually(beEuropeanUnionQRCard(test: { rows, isLoading, didTapViewQR, expiryCountdownEvaluator in
 			expect(rows).to(haveCount(1))
-			expect(rows.first?.typeText) == L.generalRecoverydate().capitalized
+			expect(rows.first?.typeText) == L.generalRecoverystatement().capitalized
 
-			// Exercise the validityTextEvaluator with different sample dates:
-			expect(rows.first?.validityTextEvaluator(now).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now).text) == "wordt automatisch geldig over 2 dagen"
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future
-			expect(rows.first?.validityTextEvaluator(now.addingTimeInterval(36 * hours * fromNow)).text) == "wordt automatisch geldig over 12 uur"
+			// Exercise the validityText with different sample dates:
+			expect(rows.first?.validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now).texts.first) == "geldig t/m 17 juli 17:02 t/m 11 mei 2022"
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).texts.first) == "geldig t/m 17 juli 17:02 t/m 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
