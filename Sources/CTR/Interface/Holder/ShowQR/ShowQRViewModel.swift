@@ -244,6 +244,7 @@ class ShowQRViewModel: Logging {
 		
 		let issuer = getDisplayIssuer(test.issuer)
 		let country = getDisplayCountry(test.country)
+		let facility = getDisplayFacility(test.testCenter)
 
 		let body: String = L.holderShowqrEuAboutTestMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
@@ -252,7 +253,7 @@ class ShowQRViewModel: Logging {
 			test.name ?? "",
 			formattedTestDate,
 			testResult,
-			test.testCenter,
+			facility,
 			manufacturer,
 			country,
 			issuer,
@@ -359,6 +360,13 @@ class ShowQRViewModel: Logging {
 			return country
 		}
 		return L.holderVaccinationAboutCountry()
+	}
+	
+	private func getDisplayFacility(_ facility: String) -> String {
+		guard facility == "Facility approved by the State of The Netherlands" else {
+			return facility
+		}
+		return L.holderDccListFacility()
 	}
 }
 
