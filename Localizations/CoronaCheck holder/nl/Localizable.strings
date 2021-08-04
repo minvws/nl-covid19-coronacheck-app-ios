@@ -1,5 +1,6 @@
 "general.paperflow" = "papieren bewijs";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
+"holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Dose %@ of %@";
 "holder.vaccination.about.country" = "Nederland / The Netherlands";
 "holder.vaccination.about.issuer" = "Ministerie van VWS / Ministry of Health, Welfare and Sport";
 
@@ -17,6 +18,7 @@
 "holder.dcc.list.title" = "Opgehaalde gegevens";
 "holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
 "holder.dcc.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
+"holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 
 "holder.dcc.vaccination.subtitle" = "De volgende gegevens zijn opgehaald:";
 "holder.dcc.vaccination.name" = "Naam:";
@@ -179,7 +181,7 @@
 "holder.tokenentry.universallinkflow.verification.info" = "Je krijgt een code via sms of e-mail";
 "holder.tokenentry.universallinkflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "Geen geldige combinatie";
+"holder.tokenentry.universallinkflow.error.invalid.code" = "Deze ophaalcode is verlopen";
 "holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
 
@@ -542,6 +544,8 @@
 "holder.event.identity.alert.ok" = "Ja, vervang";
 "holder.event.identity.alert.cancel" = "Nee, stop";
 
+"holder.vaccination.element.single" = "<br />Gegevens opgehaald bij: %@";
+"holder.vaccination.element.combined" = "<br />Gegevens opgehaald bij: %@ en %@";
 "holder.event.details" = "Details";
 "holder.vaccination.element.combined" = "<br />Gegevens opgehaald bij: %@ en %@";
 "holder.vaccination.element.single" = "<br />Gegevens opgehaald bij: %@";
