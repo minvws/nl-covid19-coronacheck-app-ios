@@ -66,13 +66,13 @@ struct HPKData: Codable {
 	
 	let name: String
 	
-	/// Search in euVaccinationsMapping
+	/// euVaccinationTypes lookup
 	let vp: String
 	
-	/// Search in euBrands
+	/// euBrands lookup
 	let mp: String
 	
-	/// Search in euManufacturers
+	/// euManufacturers lookup
 	let ma: String
 }
 
