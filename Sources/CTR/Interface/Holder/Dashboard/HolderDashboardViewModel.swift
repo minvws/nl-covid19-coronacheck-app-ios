@@ -365,9 +365,6 @@ extension HolderDashboardViewModel.MyQRCard {
 
 		switch self {
 			case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState):
-				print("Netherlands: ")
-				dump(origins)
-
 				let rows = origins.map { origin in
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
@@ -417,9 +414,6 @@ extension HolderDashboardViewModel.MyQRCard {
 				return cards
 
 			case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _):
-				print("EU: ")
-				dump(origins)
-
 				let rows = origins.map { origin in
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: {
