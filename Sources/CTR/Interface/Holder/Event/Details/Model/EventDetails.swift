@@ -14,10 +14,13 @@ struct EventDetails {
 
 protocol EventDetailable {
 	
+	/// Required or optional field
 	var isRequired: Bool { get }
 	
+	/// The display title of the field
 	var displayTitle: String { get }
 	
+	/// Show additional line break after field
 	var hasLineBreak: Bool { get }
 }
 

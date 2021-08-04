@@ -9,17 +9,19 @@ import UIKit
 
 final class EventDetailsView: BaseView {
 	
+	/// The display constants
 	private enum ViewTraits {
 		
-		// Margins
 		static let margin: CGFloat = 20.0
 		static let spacing: CGFloat = 24
 	}
 	
+	/// The title label
 	private let titleLabel: Label = {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
+	/// The stack view to add all labels to
 	private let stackView: UIStackView = {
 
 		let view = UIStackView()
@@ -72,6 +74,7 @@ final class EventDetailsView: BaseView {
 		}
 	}
 	
+	/// Tuple with attributed string detail value and if extra linebreak is needed
 	var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]? {
 		didSet {
 			guard let details = details else { return }
