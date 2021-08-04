@@ -1,5 +1,6 @@
 "general.paperflow" = "paper certificate";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
+"holder.vaccination.about.off.dcc" = "Dose %@ of %@";
 "holder.vaccination.about.country" = "The Netherlands";
 "holder.vaccination.about.issuer" = "Ministry of Health, Welfare and Sport";
 
@@ -17,6 +18,7 @@
 "holder.dcc.list.title" = "Retrieved details";
 "holder.dcc.list.message" = "You can create a QR code with the retrieved details. This is your certificate.";
 "holder.dcc.element.subtitle" = "Name: %@<br />Date of birth: %@";
+
 "holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
@@ -51,7 +53,7 @@
 "holder.showqr.domestic.qr.title" = "Your Dutch QR code is shown here";
 "holder.showqr.eu.qr.title" = "Your international QR code is displayed here";
 "general.error.cryptolib.title" = "Sorry, something went wrong";
-"general.error.cryptolib.message" = "Contact our helpdesk and give them error code (%@) or try again later.";
+"general.error.cryptolib.message" = "Contact our help desk and give them error code (%@) or try again later.";
 "general.error.cryptolib.retry" = "Try again";
 
 "general.recoverystatement" = "recovery certificate";
@@ -60,7 +62,6 @@
 "general.vaccinationcertificate" = "vaccination certificate";
 "general.testdate" = "test date";
 "general.vaccinationdate" = "vaccination date";
-
 "holder.tokenscan.torch.enable" = "Turn the flashlight on.";
 "holder.tokenscan.torch.disable" = "Turn the flashlight off.";
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
@@ -138,7 +139,7 @@
 "holder.tokenentry.universallinkflow.verification.info" = "You get a code via text or email";
 "holder.tokenentry.universallinkflow.verification.title" = "Verification code";
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
-"holder.tokenentry.universallinkflow.error.invalid.code" = "Invalid combination";
+"holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
 "holder.tokenentry.universallinkflow.retry.title" = "I haven't received a code";
 "holder.tokenentry.universallinkflow.next" = "Retrieve test result";
 
@@ -465,3 +466,7 @@
 "holder.event.identity.alert.message" = "You’ve created a certificate before. The information on it differs from the information that has just been retrieved. Therefore you can only replace the certificate.";
 "holder.event.identity.alert.ok" = "Yes, replace";
 "holder.event.identity.alert.cancel" = "No, stop";
+
+"holder.vaccination.element.single" = "<br />Details retrieved at: %@";
+"holder.vaccination.element.combined" = "<br />Details retrieved at: %@ en %@";
+"holder.event.details" = "Details";
