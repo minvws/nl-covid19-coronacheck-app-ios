@@ -98,6 +98,28 @@ class UserSettingsSpy: UserSettingsProtocol {
 		}
 	}
 
+	var invokedLastScreenshotTimeSetter = false
+	var invokedLastScreenshotTimeSetterCount = 0
+	var invokedLastScreenshotTime: Date?
+	var invokedLastScreenshotTimeList = [Date?]()
+	var invokedLastScreenshotTimeGetter = false
+	var invokedLastScreenshotTimeGetterCount = 0
+	var stubbedLastScreenshotTime: Date!
+
+	var lastScreenshotTime: Date? {
+		set {
+			invokedLastScreenshotTimeSetter = true
+			invokedLastScreenshotTimeSetterCount += 1
+			invokedLastScreenshotTime = newValue
+			invokedLastScreenshotTimeList.append(newValue)
+		}
+		get {
+			invokedLastScreenshotTimeGetter = true
+			invokedLastScreenshotTimeGetterCount += 1
+			return stubbedLastScreenshotTime
+		}
+	}
+
 	var invokedIssuerKeysFetchedTimestampSetter = false
 	var invokedIssuerKeysFetchedTimestampSetterCount = 0
 	var invokedIssuerKeysFetchedTimestamp: TimeInterval?

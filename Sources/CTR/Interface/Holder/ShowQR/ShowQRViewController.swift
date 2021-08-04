@@ -63,30 +63,37 @@ class ShowQRViewController: BaseViewController {
 			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
 		}
 
-		viewModel.$qrImage.binding = { [weak self] in self?.sceneView.qrImage = $0 }
-
-		viewModel.$showValidQR.binding = { [weak self] in
-
-			let hideForCapture = self?.sceneView.hideQRImage ?? false
-
-			if $0 && !hideForCapture {
-				self?.sceneView.largeQRimageView.isHidden = false
-			} else {
-				self?.sceneView.largeQRimageView.isHidden = true
-			}
+		viewModel.$visibilityState.binding = { [weak self] in
+			self?.sceneView.visibilityState = $0
 		}
+//		viewModel.$qrImage.binding = { [weak self] in self?.sceneView.visibilityState = .visible(qrImage: $0) }
 
-		viewModel.$hideForCapture.binding = { [weak self] in
+//		viewModel.$showValidQR.binding = { [weak self] image in
+//
+//			self?.sceneView.visibilityState = .visible(qrImage: image)
+////			let hideForCapture = self?.sceneView.hideQRImage ?? false
+////
+////			if $0 && !hideForCapture {
+////				self?.sceneView.largeQRimageView.isHidden = false
+////			} else {
+////				self?.sceneView.largeQRimageView.isHidden = true
+////			}
+//		}
 
-			self?.sceneView.hideQRImage = $0
-		}
+//		viewModel.$hideForCapture.binding = { [weak self] in
+//
+//			self?.sceneView.hideQRImage = $0
+//		}
 
-		viewModel.screenshotWasTakenHandler = { [weak self] in
-			self?.showError(
-				L.holderEnlargedScreenshotTitle(),
-				message: L.holderEnlargedScreenshotMessage()
-			)
-		}
+//		viewModel.screenshotWasTakenHandler = { [weak self] in
+//			self?.showError(
+//				L.holderEnlargedScreenshotTitle(),
+//				message: L.holderEnlargedScreenshotMessage()
+//			)
+//			self?.sceneView.displayScreenshotWarning(
+//				forSeconds: ShowQRViewModel.screenshotWarningMessageDuration
+//			)
+//		}
 
 		viewModel.$showInternationalAnimation.binding = { [weak self] in
 			if $0 {
@@ -119,9 +126,9 @@ class ShowQRViewController: BaseViewController {
 		viewModel.checkQRValidity()
 
 		// Check the brightness
-		if !sceneView.largeQRimageView.isHidden {
-			viewModel.setBrightness()
-		}
+//		if !sceneView.largeQRimageView.isHidden {
+//			viewModel.setBrightness()
+//		}
 
 		sceneView.resume()
 	}

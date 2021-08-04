@@ -10,6 +10,16 @@ import Foundation
 
 class ScreenCaptureDetectorSpy: ScreenCaptureDetectorProtocol {
 
+	var invokedScreenIsBeingCapturedGetter = false
+	var invokedScreenIsBeingCapturedGetterCount = 0
+	var stubbedScreenIsBeingCaptured: Bool! = false
+
+	var screenIsBeingCaptured: Bool {
+		invokedScreenIsBeingCapturedGetter = true
+		invokedScreenIsBeingCapturedGetterCount += 1
+		return stubbedScreenIsBeingCaptured
+	}
+
 	var invokedScreenshotWasTakenCallbackSetter = false
 	var invokedScreenshotWasTakenCallbackSetterCount = 0
 	var invokedScreenshotWasTakenCallback: (() -> Void)?

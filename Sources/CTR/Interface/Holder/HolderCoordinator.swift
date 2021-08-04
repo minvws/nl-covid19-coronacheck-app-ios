@@ -251,6 +251,9 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				coordinator: self,
 				greenCard: greenCard,
 				cryptoManager: cryptoManager
+				configuration: generalConfiguration,
+				userSettings: UserSettings(),
+				now: Date.init
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
