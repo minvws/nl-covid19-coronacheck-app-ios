@@ -20,6 +20,7 @@ class ShowQRViewModelTests: XCTestCase {
 	var dataStoreManager: DataStoreManaging!
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
 	var userSettingsSpy: UserSettingsSpy!
+	var remoteConfigManagingSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
 
@@ -29,6 +30,7 @@ class ShowQRViewModelTests: XCTestCase {
 		cryptoManagerSpy = CryptoManagerSpy()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 		userSettingsSpy = UserSettingsSpy()
+		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 	}
 
 	// MARK: - Tests
@@ -144,7 +146,8 @@ class ShowQRViewModelTests: XCTestCase {
 	}
 
 	func test_validity_withDomesticGreenCard_withValidCredential() throws {
-
+		remoteConfigManagingSpy.stubbedGetConfigurationResult = .default
+		
 		// Given
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(
@@ -242,7 +245,7 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
+			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy,
 			now: { now }
@@ -272,7 +275,7 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
+			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy,
 			now: { now }

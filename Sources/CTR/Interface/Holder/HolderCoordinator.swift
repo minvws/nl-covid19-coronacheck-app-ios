@@ -250,8 +250,8 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCard: greenCard,
-				cryptoManager: cryptoManager
-				configuration: generalConfiguration,
+				cryptoManager: cryptoManager,
+				remoteConfigManager: Services.remoteConfigManager,
 				userSettings: UserSettings(),
 				now: Date.init
 			)

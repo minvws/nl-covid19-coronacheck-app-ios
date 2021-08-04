@@ -40,7 +40,6 @@ class ShowQRViewTests: XCTestCase {
 	func testVisible() {
 		let sut = ShowQRImageView()
 
-
 		sut.visibilityState = .visible(
 			qrImage: UIImage.withColor(.blue, size: CGSize(width: 200, height: 200))
 		)

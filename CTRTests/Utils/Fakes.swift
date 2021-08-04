@@ -160,7 +160,6 @@ extension EuCredentialAttributes.DigitalCovidCertificate {
 	}
 }
 
-
 extension UIImage {
 
 	static func withColor(_ color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {
@@ -173,4 +172,3 @@ extension UIImage {
 		return image
 	}
 }
-
