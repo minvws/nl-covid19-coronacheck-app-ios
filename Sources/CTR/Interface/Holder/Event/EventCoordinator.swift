@@ -45,7 +45,7 @@ enum EventScreenResult: Equatable {
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
 	
-	// Update equatable
+	/// Show event details
 	case showEventDetails(title: String, details: [EventDetails])
 
 	static func == (lhs: EventScreenResult, rhs: EventScreenResult) -> Bool {
@@ -72,6 +72,8 @@ enum EventScreenResult: Equatable {
 					}
 				}
 				return true
+			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
+				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
 
 			default:
 				return false
