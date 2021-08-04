@@ -191,9 +191,9 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				configuration: generalConfiguration,
+				proofManager: proofManager,
 				datasource: HolderDashboardDatasource(
-					dataStoreManager: Services.dataStoreManager,
+					cryptoManaging: Services.cryptoManager,
 					walletManager: Services.walletManager,
 					now: { Date() }
 				),
@@ -205,6 +205,7 @@ class HolderCoordinator: SharedCoordinator {
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
+				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)
@@ -250,8 +251,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCard: greenCard,
-				cryptoManager: cryptoManager,
-				configuration: generalConfiguration
+				cryptoManager: cryptoManager
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
