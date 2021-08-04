@@ -454,6 +454,7 @@ extension ListEventsViewModel {
 		if let nextRow = combineWith {
 			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
 			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
+			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
 			details += getEventDetail(dataRow: nextRow)
 		} else {
 			subTitle += L.holderVaccinationElementSingle(provider)

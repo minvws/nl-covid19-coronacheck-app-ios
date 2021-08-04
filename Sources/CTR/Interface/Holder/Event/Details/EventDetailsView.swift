@@ -73,7 +73,7 @@ final class EventDetailsView: BaseView {
 	}
 	
 	/// Tuple with attributed string detail value and if extra linebreak is needed
-	var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]? {
+	var details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
@@ -94,14 +94,34 @@ private extension EventDetailsView {
 		label.numberOfLines = 0
 		return label
 	}
+
+	func createLineView() -> UIView {
+
+		let view = UIView()
+		view.backgroundColor = Theme.colors.line
+		return view
+	}
 	
-	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]) {
+	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool, isSeparator: Bool)]) {
 		details.forEach {
-			let label = createLabel(for: $0.detail)
-			stackView.addArrangedSubview(label)
-			
-			if $0.hasExtraLineBreak {
-				stackView.setCustomSpacing(ViewTraits.spacing, after: label)
+			if $0.isSeparator {
+				let spaceView = UIView()
+				let lineView = createLineView()
+				stackView.addArrangedSubview(spaceView)
+				stackView.setCustomSpacing(ViewTraits.spacing, after: spaceView)
+				stackView.addArrangedSubview(lineView)
+				NSLayoutConstraint.activate([
+					// Set height to 1, else it will default to 0.
+					lineView.heightAnchor.constraint(equalToConstant: 1.0)
+				])
+				stackView.setCustomSpacing(ViewTraits.spacing, after: lineView)
+			} else {
+				let label = createLabel(for: $0.detail)
+				stackView.addArrangedSubview(label)
+
+				if $0.hasExtraLineBreak {
+					stackView.setCustomSpacing(ViewTraits.spacing, after: label)
+				}
 			}
 		}
 	}
