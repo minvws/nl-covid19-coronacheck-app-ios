@@ -52,8 +52,8 @@ final class HolderDashboardViewModel: Logging {
 	private weak var coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol)?
 	private weak var cryptoManager: CryptoManaging?
 	private weak var proofManager: ProofManaging?
-	private var configuration: ConfigurationGeneralProtocol
-	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
+	private let remoteConfigManager: RemoteConfigManaging
+	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
 	var dashboardRegionToggleValue: QRCodeValidityRegion {
@@ -78,6 +78,7 @@ final class HolderDashboardViewModel: Logging {
 				},
 				coordinatorDelegate: coordinator,
 				strippenRefresher: strippenRefresher,
+				remoteConfigManager: remoteConfigManager,
 				now: self.now()
 			)
 			
@@ -90,33 +91,25 @@ final class HolderDashboardViewModel: Logging {
 
 	private let now: () -> Date
 
-	// MARK: -
-
-	/// Initializer
-	/// - Parameters:
-	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
-	///   - proofManager: the proof manager
-	///   - configuration: the configuration
-	///   - dataStoreManager: the data store manager
+	// MARK: - Initializer
 	init(
 		coordinator: (HolderCoordinatorDelegate & OpenUrlProtocol),
 		cryptoManager: CryptoManaging,
 		proofManager: ProofManaging,
-		configuration: ConfigurationGeneralProtocol,
 		datasource: HolderDashboardDatasourceProtocol,
 		strippenRefresher: DashboardStrippenRefreshing,
 		userSettings: UserSettingsProtocol,
+		remoteConfigManager: RemoteConfigManaging,
 		now: @escaping () -> Date
 	) {
 
 		self.coordinator = coordinator
 		self.cryptoManager = cryptoManager
 		self.proofManager = proofManager
-		self.configuration = configuration
 		self.datasource = datasource
 		self.strippenRefresher = strippenRefresher
 		self.userSettings = userSettings
+		self.remoteConfigManager = remoteConfigManager
 		self.now = now
 
 		self.state = State(
@@ -141,12 +134,12 @@ final class HolderDashboardViewModel: Logging {
 
 		self.setupNotificationListeners()
 		
-		//		#if DEBUG
-		//		DispatchQueue.main.asyncAfter(deadline: .now()) {
-		//			injectSampleData(dataStoreManager: dataStoreManager)
-		//			self.datasource.reload()
-		//		}
-		//		#endif
+//		#if DEBUG
+//		DispatchQueue.main.asyncAfter(deadline: .now()) {
+//			self.injectSampleData(dataStoreManager: Services.dataStoreManager)
+//			self.datasource.reload()
+//		}
+//		#endif
 	}
 
 	deinit {
@@ -236,6 +229,7 @@ final class HolderDashboardViewModel: Logging {
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
 		coordinatorDelegate: (HolderCoordinatorDelegate),
 		strippenRefresher: DashboardStrippenRefreshing,
+		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> (domestic: [HolderDashboardViewController.Card], international: [HolderDashboardViewController.Card]) {
 
@@ -245,6 +239,7 @@ final class HolderDashboardViewModel: Logging {
 			didTapCloseExpiredQR: didTapCloseExpiredQR,
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
+			remoteConfigManager: remoteConfigManager,
 			now: now)
 
 		let internationalCards = assembleCards(
@@ -253,6 +248,7 @@ final class HolderDashboardViewModel: Logging {
 			didTapCloseExpiredQR: didTapCloseExpiredQR,
 			coordinatorDelegate: coordinatorDelegate,
 			strippenRefresher: strippenRefresher,
+			remoteConfigManager: remoteConfigManager,
 			now: now)
 
 		return (domestic: domesticCards, international: internationalCards)
@@ -264,6 +260,7 @@ final class HolderDashboardViewModel: Logging {
 		didTapCloseExpiredQR: @escaping (ExpiredQR) -> Void,
 		coordinatorDelegate: HolderCoordinatorDelegate,
 		strippenRefresher: DashboardStrippenRefreshing,
+		remoteConfigManager: RemoteConfigManaging,
 		now: Date
 	) -> [HolderDashboardViewController.Card] {
 
@@ -345,6 +342,7 @@ final class HolderDashboardViewModel: Logging {
 					state: state,
 					coordinatorDelegate: coordinatorDelegate,
 					strippenRefresher: strippenRefresher,
+					remoteConfigManager: remoteConfigManager,
 					now: now
 				)
 			}
@@ -357,16 +355,24 @@ final class HolderDashboardViewModel: Logging {
 
 extension HolderDashboardViewModel.MyQRCard {
 
-	fileprivate func toViewControllerCards(state: HolderDashboardViewModel.State, coordinatorDelegate: HolderCoordinatorDelegate, strippenRefresher: DashboardStrippenRefreshing, now: Date) -> [HolderDashboardViewController.Card] {
+	fileprivate func toViewControllerCards(
+		state: HolderDashboardViewModel.State,
+		coordinatorDelegate: HolderCoordinatorDelegate,
+		strippenRefresher: DashboardStrippenRefreshing,
+		remoteConfigManager: RemoteConfigManaging,
+		now: Date
+	) -> [HolderDashboardViewController.Card] {
 
 		switch self {
 			case let .netherlands(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState):
+				print("Netherlands: ")
+				dump(origins)
 
 				let rows = origins.map { origin in
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
-						validityTextEvaluator: { now in
-							localizedDateExplanation(forOrigin: origin, forNow: now)
+						validityText: { now in
+							localizedDateExplanation(forOrigin: origin, forNow: now, remoteConfig: remoteConfigManager)
 						}
 					)
 				}
@@ -385,9 +391,19 @@ extension HolderDashboardViewModel.MyQRCard {
 						let sixHours: TimeInterval = 6 * 60 * 60
 						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
 						else { return nil }
+ 
+						let fiveMinutes: TimeInterval = 5 * 60
+						let formatter: DateComponentsFormatter = {
+							if mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: fiveMinutes) {
+								// e.g. "4 minuten en 15 seconden"
+								return HolderDashboardViewModel.hmsRelativeFormatter
+							} else {
+								// e.g. "5 uur 59 min"
+								return HolderDashboardViewModel.hmRelativeFormatter
+							}
+						}()
 
-						// e.g. "5 uur 59 min"
-						guard let relativeDateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: now, to: mostDistantFutureExpiryDate)
+						guard let relativeDateString = formatter.string(from: now, to: mostDistantFutureExpiryDate)
 						else { return nil }
 
 						return (L.holderDashboardQrExpiryDatePrefixExpiresIn() + " " + relativeDateString).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -400,12 +416,20 @@ extension HolderDashboardViewModel.MyQRCard {
 
 				return cards
 
-			case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState):
+			case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _):
+				print("EU: ")
+				dump(origins)
+
 				let rows = origins.map { origin in
 					HolderDashboardViewController.Card.QRCardRow(
-						typeText: origin.type.localizedEvent.capitalizingFirstLetter(),
-						validityTextEvaluator: { now in
-							localizedDateExplanation(forOrigin: origin, forNow: now)
+						typeText: {
+							switch origin.type {
+								case .vaccination, .test: return nil
+								default: return origin.type.localizedProof.capitalizingFirstLetter()
+							}
+						}(),
+						validityText: { now in
+							localizedDateExplanation(forOrigin: origin, forNow: now, remoteConfig: remoteConfigManager)
 						}
 					)
 				}

@@ -101,3 +101,60 @@ extension RequestToken {
         )
     }
 }
+
+extension EuCredentialAttributes.DigitalCovidCertificate {
+
+	static func sampleWithVaccine(doseNumber: Int?, totalDose: Int?) -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0",
+			vaccinations: [
+				EuCredentialAttributes.Vaccination(
+					certificateIdentifier: "test",
+					country: "NLS",
+					diseaseAgentTargeted: "test",
+					doseNumber: doseNumber,
+					dateOfVaccination: "2021-06-01",
+					issuer: "Test",
+					marketingAuthorizationHolder: "Test",
+					medicalProduct: "Test",
+					totalDose: totalDose,
+					vaccineOrProphylaxis: "test"
+				)
+			]
+		)
+	}
+
+	static func sampleWithTest() -> EuCredentialAttributes.DigitalCovidCertificate {
+		EuCredentialAttributes.DigitalCovidCertificate(
+			dateOfBirth: "2021-06-01",
+			name: EuCredentialAttributes.Name(
+				familyName: "Corona",
+				standardisedFamilyName: "CORONA",
+				givenName: "Check",
+				standardisedGivenName: "CHECK"
+			),
+			schemaVersion: "1.0.0",
+			tests: [
+				EuCredentialAttributes.TestEntry(
+					certificateIdentifier: "URN:UCI:01:NL:WMZBJR3MJRHSPGBCNROM42#M",
+					country: "NL",
+					diseaseAgentTargeted: "840539006",
+					issuer: "Ministry of Health Welfare and Sport",
+					marketingAuthorizationHolder: "",
+					name: "",
+					sampleDate: "2021-07-31T09:50:00+00:00",
+					testResult: "260415000",
+					testCenter: "Facility approved by the State of The Netherlands",
+					typeOfTest: "LP6464-4"
+				)
+			]
+		)
+	}
+}

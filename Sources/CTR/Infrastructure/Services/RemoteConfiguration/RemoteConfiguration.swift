@@ -110,6 +110,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var recoveryExpirationDays: Int?
 
+	var domesticQRRefreshSeconds: Int?
+
 	var hpkCodes: [Mapping]? = []
 
 	var nlTestTypes: [Mapping]? = []
@@ -155,6 +157,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euTestManufacturers = "euTestManufacturers"
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
+		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
 	}
 
 	init(
@@ -173,7 +176,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		testEventValidity: Int?,
 		isGGDEnabled: Bool?,
 		recoveryExpirationDays: Int?,
-		credentialRenewalDays: Int?) {
+		credentialRenewalDays: Int?,
+		domesticQRRefreshSeconds: Int?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -191,11 +195,12 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.isGGDEnabled = isGGDEnabled
 		self.recoveryExpirationDays = recoveryExpirationDays
 		self.credentialRenewalDays = credentialRenewalDays
+		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
 	}
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
-		return RemoteConfiguration(
+ 		return RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: nil,
 			storeUrl: nil,
@@ -211,7 +216,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			testEventValidity: 40,
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
+			credentialRenewalDays: 5,
+			domesticQRRefreshSeconds: 60
 		)
 	}
 }
