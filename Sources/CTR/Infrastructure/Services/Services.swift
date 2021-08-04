@@ -125,7 +125,9 @@ final class Services {
 		walletManager: walletManager
 	)
 
-    static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
+    static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
+		networkManager: networkManager
+	)
 
 	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
 
@@ -133,7 +135,9 @@ final class Services {
 
 	static private(set) var proofManager: ProofManaging = proofManagerType.init()
 
-	static private(set) var walletManager: WalletManaging = walletManagingType.init(dataStoreManager: dataStoreManager)
+	static private(set) var walletManager: WalletManaging = walletManagingType.init(
+		dataStoreManager: dataStoreManager
+	)
 
 	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
 		cryptoManager: cryptoManager,

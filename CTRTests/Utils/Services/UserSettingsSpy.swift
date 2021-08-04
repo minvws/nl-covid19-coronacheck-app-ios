@@ -75,4 +75,48 @@ class UserSettingsSpy: UserSettingsProtocol {
 			return stubbedDashboardRegionToggleValue
 		}
 	}
+
+	var invokedConfigFetchedTimestampSetter = false
+	var invokedConfigFetchedTimestampSetterCount = 0
+	var invokedConfigFetchedTimestamp: TimeInterval?
+	var invokedConfigFetchedTimestampList = [TimeInterval?]()
+	var invokedConfigFetchedTimestampGetter = false
+	var invokedConfigFetchedTimestampGetterCount = 0
+	var stubbedConfigFetchedTimestamp: TimeInterval!
+
+	var configFetchedTimestamp: TimeInterval? {
+		set {
+			invokedConfigFetchedTimestampSetter = true
+			invokedConfigFetchedTimestampSetterCount += 1
+			invokedConfigFetchedTimestamp = newValue
+			invokedConfigFetchedTimestampList.append(newValue)
+		}
+		get {
+			invokedConfigFetchedTimestampGetter = true
+			invokedConfigFetchedTimestampGetterCount += 1
+			return stubbedConfigFetchedTimestamp
+		}
+	}
+
+	var invokedIssuerKeysFetchedTimestampSetter = false
+	var invokedIssuerKeysFetchedTimestampSetterCount = 0
+	var invokedIssuerKeysFetchedTimestamp: TimeInterval?
+	var invokedIssuerKeysFetchedTimestampList = [TimeInterval?]()
+	var invokedIssuerKeysFetchedTimestampGetter = false
+	var invokedIssuerKeysFetchedTimestampGetterCount = 0
+	var stubbedIssuerKeysFetchedTimestamp: TimeInterval!
+
+	var issuerKeysFetchedTimestamp: TimeInterval? {
+		set {
+			invokedIssuerKeysFetchedTimestampSetter = true
+			invokedIssuerKeysFetchedTimestampSetterCount += 1
+			invokedIssuerKeysFetchedTimestamp = newValue
+			invokedIssuerKeysFetchedTimestampList.append(newValue)
+		}
+		get {
+			invokedIssuerKeysFetchedTimestampGetter = true
+			invokedIssuerKeysFetchedTimestampGetterCount += 1
+			return stubbedIssuerKeysFetchedTimestamp
+		}
+	}
 }

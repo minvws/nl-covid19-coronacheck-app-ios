@@ -30,7 +30,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .test)
 		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: networkSpy)
 
 		/// Not using a GreenCardLoader Spy here because all its dependencies are already spies here.
 		greenCardLoader = GreenCardLoader(networkManager: networkSpy, cryptoManager: cryptoSpy, walletManager: walletSpy)
