@@ -25,7 +25,7 @@ protocol EventDetailable {
 }
 
 enum EventDetailsVaccination: EventDetailable {
-	case subtitle
+	case subtitle(provider: String)
 	case name
 	case dateOfBirth
 	case pathogen
@@ -47,7 +47,7 @@ enum EventDetailsVaccination: EventDetailable {
 	
 	var displayTitle: String {
 		switch self {
-			case .subtitle: return L.holderEventAboutVaccinationSubtitle()
+			case let .subtitle(provider): return L.holderEventAboutVaccinationSubtitle(provider)
 			case .name: return L.holderEventAboutVaccinationName()
 			case .dateOfBirth: return L.holderEventAboutVaccinationDateofbirth()
 			case .pathogen: return L.holderEventAboutVaccinationPathogen()
