@@ -728,6 +728,7 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(test.issuer)
 		let country = getDisplayCountry(test.country)
+		let facility = getDisplayFacility(test.testCenter)
 		
 		let details: [EventDetails] = [
 			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
@@ -738,7 +739,7 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
 			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
 			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
-			EventDetails(field: EventDetailsDCCTest.facility, value: test.testCenter),
+			EventDetails(field: EventDetailsDCCTest.facility, value: facility),
 			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
 			EventDetails(field: EventDetailsDCCTest.country, value: country),
 			EventDetails(field: EventDetailsDCCTest.issuer, value: issuer),
@@ -874,6 +875,13 @@ private extension ListEventsViewModel {
 			return country
 		}
 		return L.generalNetherlands()
+	}
+	
+	func getDisplayFacility(_ facility: String) -> String {
+		guard facility == "Facility approved by the State of The Netherlands" else {
+			return facility
+		}
+		return L.holderDccListFacility()
 	}
 }
 
