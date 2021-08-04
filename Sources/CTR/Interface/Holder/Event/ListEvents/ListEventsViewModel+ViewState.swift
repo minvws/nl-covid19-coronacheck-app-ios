@@ -291,39 +291,102 @@ extension ListEventsViewModel {
 		return (filteredDataSource: filteredSource, hasTooOldEvents: filteredSource.count != dataSource.count)
 	}
 
+	/// Filter all duplicate vaccination events (same provider, same hpkCode, same manufacturer, same date)
+	/// - Parameter dataSource: the remote events
+	/// - Returns: filtered events
+	private func filterDuplicateVaccinationEvents(_ dataSource: [EventDataTuple]) -> [EventDataTuple] {
+
+		var filteredDataSource = [EventDataTuple]()
+		var counter = 0
+
+		while counter <= dataSource.count - 1 {
+			let currentRow = dataSource[counter]
+			if counter < dataSource.count - 1,
+			   let currentVaccinationEvent = currentRow.event.vaccination,
+			   let nextVaccinationEvent = dataSource[counter + 1].event.vaccination {
+				// Two vaccination rows, let's check for duplicates.
+				let nextRow = dataSource[counter + 1]
+				if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
+					if currentRow.providerIdentifier != nextRow.providerIdentifier {
+						// Next row matches, but is not the same provider
+						filteredDataSource.append(currentRow)
+					}
+				} else {
+					// Next row does not match
+					filteredDataSource.append(currentRow)
+				}
+			} else {
+				// Next row or this row is not a vaccination
+				filteredDataSource.append(currentRow)
+			}
+			counter += 1
+		}
+		return filteredDataSource
+	}
+
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
-		let sortedDataSource = dataSource.sorted { lhs, rhs in
+		var sortedDataSource = dataSource.sorted { lhs, rhs in
 			if let lhsDate = lhs.event.getSortDate(with: dateFormatter),
 			   let rhsDate = rhs.event.getSortDate(with: dateFormatter) {
+
+				if lhsDate == rhsDate {
+					return lhs.providerIdentifier < rhs.providerIdentifier
+				}
 				return lhsDate < rhsDate
 			}
 			return false
 		}
 
-		var rows = [ListEventsViewController.Row]()
-		for dataRow in sortedDataSource {
+		sortedDataSource = filterDuplicateVaccinationEvents(sortedDataSource)
 
-			if dataRow.event.recovery != nil {
-				rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
-			} else if dataRow.event.positiveTest != nil {
-				rows.append(getRowFromPositiveTestEvent(dataRow: dataRow))
-			} else if dataRow.event.vaccination != nil {
-				rows.append(getRowFromVaccinationEvent(dataRow: dataRow))
-			} else if dataRow.event.negativeTest != nil {
-				rows.append(getRowFromNegativeTestEvent(dataRow: dataRow))
-			} else if dataRow.event.dccEvent != nil {
+		var rows = [ListEventsViewController.Row]()
+		var counter = 0
+
+		while counter <= sortedDataSource.count - 1 {
+			let currentRow = sortedDataSource[counter]
+
+			if currentRow.event.recovery != nil {
+				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
+			} else if currentRow.event.positiveTest != nil {
+				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
+			} else if currentRow.event.vaccination != nil {
+
+				if counter < sortedDataSource.count - 1,
+				   let currentVaccinationEvent = currentRow.event.vaccination,
+				   let nextVaccinationEvent = sortedDataSource[counter + 1].event.vaccination {
+					let nextRow = sortedDataSource[counter + 1]
+
+					if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
+						if currentRow.providerIdentifier != nextRow.providerIdentifier {
+							logVerbose("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
+							rows.append(getRowFromVaccinationEvent(dataRow: currentRow, combineWith: nextRow))
+							counter += 1
+						}
+					} else {
+						logVerbose("not Matching vaccinations")
+						rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
+					}
+				} else {
+					// Next row is not an vaccination
+					logVerbose("nextRow is not a vaccination")
+					rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
+				}
+			} else if currentRow.event.negativeTest != nil {
+				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
+			} else if currentRow.event.dccEvent != nil {
 				if let cryptoManager = cryptoManager,
-				   let euCredentialAttributes = dataRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
+				   let euCredentialAttributes = currentRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-						rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
+						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-						rows.append(getRowFromDCCRecoveryEvent(dataRow: dataRow, recovery: recovery))
+						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery))
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-						rows.append(getRowFromDCCTestEvent(dataRow: dataRow, test: test))
+						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test))
 					}
 				}
 			}
+			counter += 1
 		}
 		return rows
 	}
@@ -374,7 +437,7 @@ extension ListEventsViewModel {
 		)
 	}
 
-	private func getRowFromVaccinationEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, combineWith: EventDataTuple? = nil) -> ListEventsViewController.Row {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -434,9 +497,18 @@ extension ListEventsViewModel {
 			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: dataRow.event.unique)
 		]
 
+		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
+		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
+		if let nextRow = combineWith {
+			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
+			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
+		} else {
+			subTitle += L.holderVaccinationElementSingle(provider)
+		}
+
 		return ListEventsViewController.Row(
-			title: L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))"),
-			subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
+			title: title,
+			subTitle: subTitle,
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
 					.showEventDetails(title: L.holderEventAboutTitle(),

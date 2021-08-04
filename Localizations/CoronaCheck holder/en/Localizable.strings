@@ -467,6 +467,6 @@
 "holder.event.identity.alert.ok" = "Yes, replace";
 "holder.event.identity.alert.cancel" = "No, stop";
 
+"holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<br />Details retrieved at: %@";
 "holder.vaccination.element.combined" = "<br />Details retrieved at: %@ en %@";
-"holder.event.details" = "Details";
