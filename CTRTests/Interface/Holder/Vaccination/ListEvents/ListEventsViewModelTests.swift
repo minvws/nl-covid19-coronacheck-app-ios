@@ -161,6 +161,234 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: L.holderVaccinationWrongTitle(), body: L.holderVaccinationWrongBody(), hideBodyForScreenCapture: false)
 	}
 
+	func test_oneEvent_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01")],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_twoDifferentEvents_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01"), remoteVaccinationEvent(vaccinationDate: "2021-08-03")],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_twoIdenticalEvents_noHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01"), remoteVaccinationEvent(vaccinationDate: "2021-08-01")],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_twoIdenticalEvents_withHPKCode_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_fourIdenticalEvents_withHPKCode_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_twoSimilarEvents_noHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-01"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-01")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_twoSimilarEvents_withHPKCode_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_fourSimilarEvents_withHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				// Shot 1 in july
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				// Shot 2 in august
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_fourSimilarEvents_withDuplicates_withHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				// Shot 1 in july, duplicate at GGD
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				// Shot 2 in august, duplicate at RIVM
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
 	func test_makeQR_saveEventGroupError_eventModeVaccination() {
 
 		// Given
@@ -934,8 +1162,50 @@ class ListEventsViewModelTests: XCTestCase {
 	)
 	
 	// MARK: Helper
+
+	func remoteVaccinationEvent(providerIdentifier: String = "CC", vaccinationDate: String, hpkCode: String? = nil) -> RemoteEvent {
+
+		let vaccinationEvent = EventFlow.VaccinationEvent(
+			dateString: vaccinationDate,
+			hpkCode: hpkCode,
+			type: nil,
+			manufacturer: nil,
+			brand: nil,
+			doseNumber: 1,
+			totalDoses: 2,
+			country: "NLD",
+			completedByMedicalStatement: nil,
+			completedByPersonalStatement: nil,
+			completionReason: nil
+		)
+		return RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: providerIdentifier,
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				result: nil,
+				events: [
+					EventFlow.Event(
+						type: "vaccination",
+						unique: "1234",
+						isSpecimen: false,
+						vaccination: vaccinationEvent,
+						negativeTest: nil,
+						positiveTest: nil,
+						recovery: nil,
+						dccEvent: nil
+					)
+				]
+			),
+			signedResponse: signedResponse
+		)
+	}
 	
-	func remoteVaccinationEvent(completedByMedicalStatement: Bool?, completedByPersonalStatement: Bool?, completionReason: EventFlow.VaccinationEvent.CompletionReason?) -> RemoteEvent {
+	func remoteVaccinationEvent(
+		completedByMedicalStatement: Bool?,
+		completedByPersonalStatement: Bool?,
+		completionReason: EventFlow.VaccinationEvent.CompletionReason?) -> RemoteEvent {
 		let vaccinationEvent = EventFlow.VaccinationEvent(
 			dateString: "2021-05-16",
 			hpkCode: nil,
