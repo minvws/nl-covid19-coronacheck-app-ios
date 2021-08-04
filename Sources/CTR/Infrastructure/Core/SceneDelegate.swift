@@ -48,7 +48,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 
-//		print("ScanDelete openURLContexts: \(URLContexts.first?.url)")
 		if let url = URLContexts.first?.url,
 		   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
 		   let authorizationFlow = appDelegate.currentAuthorizationFlow,

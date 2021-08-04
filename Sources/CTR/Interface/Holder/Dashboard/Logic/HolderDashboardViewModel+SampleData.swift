@@ -60,7 +60,7 @@ extension HolderDashboardViewModel {
 					managedContext: context)
 
 			dataStoreManager.save(context)
-			print("did insert!")
+			logDebug("did insert!")
 		}
 	}
 

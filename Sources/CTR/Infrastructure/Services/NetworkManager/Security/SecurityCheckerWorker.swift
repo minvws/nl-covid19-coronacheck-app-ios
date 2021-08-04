@@ -99,7 +99,7 @@ class SecurityCheckerWorker: Logging {
 				case .invalid:
 					logError("SecTrustEvaluate: invalid")
 				case .recoverableTrustFailure:
-					dump(SecTrustCopyResult(serverTrust))
+					logDebug(SecTrustCopyResult(serverTrust).debugDescription)
 					logError("SecTrustEvaluate: recoverableTrustFailure.")
 				case .fatalTrustFailure:
 					logError("SecTrustEvaluate: fatalTrustFailure")
