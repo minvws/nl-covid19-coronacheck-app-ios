@@ -60,6 +60,22 @@ extension RemoteInformation {
 	}
 }
 
+struct HPKData: Codable {
+	
+	let code: String
+	
+	let name: String
+	
+	/// euVaccinationTypes lookup
+	let vp: String
+	
+	/// euBrands lookup
+	let mp: String
+	
+	/// euManufacturers lookup
+	let ma: String
+}
+
 struct Mapping: Codable {
 
 	let code: String
@@ -111,8 +127,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	var recoveryExpirationDays: Int?
 
 	var domesticQRRefreshSeconds: Int?
-
-	var hpkCodes: [Mapping]? = []
+	
+	var hpkCodes: [HPKData]? = []
 
 	var nlTestTypes: [Mapping]? = []
 
@@ -226,9 +242,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 extension RemoteConfiguration {
 
-	func getHpkMapping(_ code: String? ) -> String? {
+	func getHpkData(_ code: String? ) -> HPKData? {
 
-		return hpkCodes?.first(where: { $0.code == code })?.name
+		return hpkCodes?.first(where: { $0.code == code })
 	}
 
 	func getNlTestType(_ code: String? ) -> String? {

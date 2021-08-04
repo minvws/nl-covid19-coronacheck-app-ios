@@ -17,9 +17,47 @@
 "holder.dcc.list.title" = "Opgehaalde gegevens";
 "holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
 "holder.dcc.element.subtitle" = "Naam: %@<br />Geboortedatum: %@";
-"holder.dcc.vaccination.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
-"holder.dcc.recovery.message" = "<p>De volgende gegevens zijn opgehaald:</p> <p>Naam: <b>%@</b> <br />Geboortedatum: <b>%@</b></p> <p>Ziekte waarvan hersteld: <b>COVID-19</b> <br />Testdatum: <b>%@</b> <br />Getest in: <b>%@</b> <br />Afgever certificaat: <b>%@</b> <br />Geldig vanaf: <b>%@</b> <br />Geldig tot: <b>%@</b> </p><p>Uniek certificaatnummer: <b>%@</b></p>";
-"holder.dcc.test.message" = "<p>De volgende gegevens zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Producent: <b>%@</b><br />Getest in: <b>%@</b><br />Afgever certificaat: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
+
+"holder.dcc.vaccination.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.vaccination.name" = "Naam:";
+"holder.dcc.vaccination.dateofbirth" = "Geboortedatum:";
+"holder.dcc.vaccination.pathogen" = "Ziekteverwekker:";
+"holder.dcc.vaccination.pathogenvalue" = "COVID-19";
+"holder.dcc.vaccination.brand" = "Vaccin:";
+"holder.dcc.vaccination.type" = "Type vaccin:";
+"holder.dcc.vaccination.manufacturer" = "Producent:";
+"holder.dcc.vaccination.dosage" = "Doses:";
+"holder.dcc.vaccination.date" = "Vaccinatiedatum:";
+"holder.dcc.vaccination.country" = "Gevaccineerd in:";
+"holder.dcc.vaccination.issuer" = "Afgever certificaat:";
+"holder.dcc.vaccination.identifier" = "Uniek vaccinatienummer:";
+
+"holder.dcc.recovery.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.recovery.name" = "Naam:";
+"holder.dcc.recovery.dateofbirth" = "Geboortedatum:";
+"holder.dcc.recovery.pathogen" = "Ziekte waarvan hersteld:";
+"holder.dcc.recovery.pathogenvalue" = "COVID-19";
+"holder.dcc.recovery.date" = "Testdatum:";
+"holder.dcc.recovery.country" = "Getest in:";
+"holder.dcc.recovery.issuer" = "Afgever certificaat:";
+"holder.dcc.recovery.validfrom" = "Geldig vanaf:";
+"holder.dcc.recovery.validuntil" = "Geldig tot:";
+"holder.dcc.recovery.identifier" = "Uniek testnummer:";
+
+"holder.dcc.test.subtitle" = "De volgende gegevens zijn opgehaald:";
+"holder.dcc.test.name" = "Naam:";
+"holder.dcc.test.dateofbirth" = "Geboortedatum:";
+"holder.dcc.test.pathogen" = "Ziekteverwekker:";
+"holder.dcc.test.pathogenvalue" = "COVID-19";
+"holder.dcc.test.type" = "Type test:";
+"holder.dcc.test.testname" = "Testnaam:";
+"holder.dcc.test.date" = "Testdatum:";
+"holder.dcc.test.result" = "Testuitslag:";
+"holder.dcc.test.facility" = "Testlocatie:";
+"holder.dcc.test.manufacturer" = "Testproducent:";
+"holder.dcc.test.country" = "Getest in:";
+"holder.dcc.test.issuer" = "Afgever certificaat:";
+"holder.dcc.test.identifier" = "Uniek testnummer:";
 "holder.recovery.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.</p>";
 "general.retry" = "Probeer opnieuw";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a>";
@@ -41,7 +79,6 @@
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
 "holder.menu.proof" = "Bewijs toevoegen";
 "holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p> <p>Naam / Name:<br /> <b>%@</b> <br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p> <p>Ziekte waarvan hersteld / Disease recovered from:<br /> <b>COVID-19</b> <br /><br />Testdatum / Test date*:<br /> <b>%@</b> <br /><br />Getest in / Member state of test:<br /> <b>%@</b> <br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b> <br /><br />Geldig vanaf / Valid from*:<br /> <b>%@</b> <br /><br />Geldig tot / Valid to*:<br /> <b>%@</b> <br /></p> <p><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p> <p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
-"holder.event.about.body.recovery" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b><br />Geldig vanaf: <b>%@</b><br />Geldig tot: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
@@ -400,21 +437,47 @@
 "holder.vaccination.error.message.code" = "De vaccinatie kan niet worden gelezen. Neem contact op met de locatie waar je gevaccineerd bent en geef de foutcode (%@) door.";
 "holder.vaccination.error.title.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
 "holder.vaccination.error.message.toobusy" = "Er zijn nu veel bezoekers op de server van de GGD. Probeer het later nog eens.";
-"holder.vaccination.status.unknown" = "niet bekend";
 "holder.vaccination.status.complete" = "ja";
 "holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
 "holder.vaccination.status.complete.priorevent" = "ja (ergens anders gevaccineerd)";
-"holder.vaccination.status.incomplete" = "nee";
 
 "holder.ggdlogin.failure.general.title" = "Het ophalen is afgebroken";
 "holder.ggdlogin.failure.general.message" = "Mogelijk is het te druk, probeer het later opnieuw.";
 
 "holder.event.about.title" = "Wat is er opgehaald?";
-"holder.event.about.body.test2" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Type test: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
 
-"holder.event.about.body.test3" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Type test: <b>%@</b><br />Testnaam: <b>%@</b><br />Testdatum: <b>%@</b><br />Testuitslag: <b>%@</b><br />Testlocatie: <b>%@</b><br />Testproducent: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
+"holder.event.about.test.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
+"holder.event.about.test.name" = "Jouw gegevens:";
+"holder.event.about.test.dateofbirth" = "Geboortedatum:";
+"holder.event.about.test.type" = "Type test:";
+"holder.event.about.test.testname" = "Testnaam:";
+"holder.event.about.test.date" = "Testdatum:";
+"holder.event.about.test.result" = "Testuitslag:";
+"holder.event.about.test.facility" = "Testlocatie:";
+"holder.event.about.test.manufacturer" = "Testproducent:";
+"holder.event.about.test.identifier" = "Uniek testnummer:";
 
-"holder.event.about.body.vaccination" = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>%@</b><br />Geboortedatum: <b>%@</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b>%@</b><br />Type vaccin: <b>%@</b><br />Producent: <b>%@</b><br />Doses: <b>%@</b><br />Is dit de laatste doses van je vaccinatie? <b>%@</b><br />Vaccinatiedatum: <b>%@</b><br />Gevaccineerd in: <b>%@</b><br />Uniek certificaatnummer: <b>%@</b></p>";
+"holder.event.about.vaccination.subtitle" = "Deze gegevens van je vaccinatie zijn opgehaald:";
+"holder.event.about.vaccination.name" = "Naam:";
+"holder.event.about.vaccination.dateofbirth" = "Geboortedatum:";
+"holder.event.about.vaccination.pathogen" = "Ziekteverwekker:";
+"holder.event.about.vaccination.pathogenvalue" = "COVID-19";
+"holder.event.about.vaccination.brand" = "Vaccin:";
+"holder.event.about.vaccination.type" = "Type vaccin:";
+"holder.event.about.vaccination.manufacturer" = "Producent:";
+"holder.event.about.vaccination.dosage" = "Doses:";
+"holder.event.about.vaccination.completionreason" = "Is dit de laatste doses van je vaccinatie?";
+"holder.event.about.vaccination.date" = "Vaccinatiedatum:";
+"holder.event.about.vaccination.country" = "Gevaccineerd in:";
+"holder.event.about.vaccination.identifier" = "Uniek vaccinatienummer:";
+
+"holder.event.about.recovery.subtitle" = "De volgende gegevens zijn opgehaald bij de testlocatie:";
+"holder.event.about.recovery.name" = "Jouw gegevens:";
+"holder.event.about.recovery.dateofbirth" = "Geboortedatum:";
+"holder.event.about.recovery.date" = "Testdatum:";
+"holder.event.about.recovery.validfrom" = "Geldig vanaf:";
+"holder.event.about.recovery.validuntil" = "Geldig tot:";
+"holder.event.about.recovery.identifier" = "Uniek testnummer:";
 
 "holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
 
