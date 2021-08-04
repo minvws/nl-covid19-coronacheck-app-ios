@@ -25,13 +25,13 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 		}
 	}
 
-	private let dataStoreManager: DataStoreManaging
+	private let cryptoManaging: CryptoManaging
 	private let walletManager: WalletManaging
 	private var reloadTimer: Timer?
 	private let now: () -> Date
 
-	init(dataStoreManager: DataStoreManaging, walletManager: WalletManaging, now: @escaping () -> Date) {
-		self.dataStoreManager = dataStoreManager
+	init(cryptoManaging: CryptoManaging, walletManager: WalletManaging, now: @escaping () -> Date) {
+		self.cryptoManaging = cryptoManaging
 		self.walletManager = walletManager
 		self.now = now
 	}
@@ -46,7 +46,7 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 		reloadTimer = nil
 
 		let expiredGreenCards: [ExpiredQR] = removeExpiredGreenCards()
-		let cards: [HolderDashboardViewModel.MyQRCard] = fetchMyQRCards()
+		let cards: [HolderDashboardViewModel.MyQRCard] = fetchMyQRCards(cryptoManaging: cryptoManaging)
 
 		// Callback
 		didUpdate(cards, expiredGreenCards)
@@ -81,7 +81,7 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 
 	/// Fetch the Greencards+Origins from Database
 	/// and convert to UI-appropriate model types.
-	private func fetchMyQRCards() -> [HolderDashboardViewModel.MyQRCard] {
+	private func fetchMyQRCards(cryptoManaging: CryptoManaging) -> [HolderDashboardViewModel.MyQRCard] {
 		let walletManager = walletManager
 		let greencards = walletManager.listGreenCards()
 
@@ -127,6 +127,20 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 					return enabled
 				}
 
+				func evaluateDigitalCovidCertificate(now: Date) -> EuCredentialAttributes.DigitalCovidCertificate? {
+					guard !greencard.isDeleted else { return nil }
+
+					guard greencard.type == GreenCardType.eu.rawValue,
+						  let credential = greencard.currentOrNextActiveCredential(forDate: now),
+						  let data = credential.data,
+						  let euCredentialAttributes = cryptoManaging.readEuCredentials(data)
+					else {
+						return nil
+					}
+
+					return euCredentialAttributes.digitalCovidCertificate
+				}
+
 				switch greencard.getType() {
 					case .domestic:
 						return [MyQRCard.netherlands(
@@ -142,7 +156,8 @@ class HolderDashboardDatasource: HolderDashboardDatasourceProtocol {
 								greenCardObjectID: greencard.objectID,
 								origins: [originEntry],
 								shouldShowErrorBeneathCard: !greencard.hasActiveCredentialNowOrInFuture(forDate: now()), // doesn't need to be dynamically evaluated
-								evaluateEnabledState: evaluateButtonEnabledState
+								evaluateEnabledState: evaluateButtonEnabledState,
+								evaluateDCC: evaluateDigitalCovidCertificate
 							)
 						}
 					default:

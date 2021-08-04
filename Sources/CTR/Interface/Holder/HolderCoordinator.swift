@@ -41,8 +41,6 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
-
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
 	
 	func openUrl(_ url: URL, inApp: Bool)
@@ -186,15 +184,6 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
-
-	func presentChangeRegionBottomSheet(currentRegion: QRCodeValidityRegion, callback: @escaping (QRCodeValidityRegion) -> Void) {
-		let viewController = ToggleRegionViewController(viewModel: ToggleRegionViewModel(currentRegion: currentRegion, didChangeCallback: callback))
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.present(viewController, animated: true, completion: nil)
-	}
 	
 	private func navigateToDashboard() {
 		
@@ -202,10 +191,8 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
 				datasource: HolderDashboardDatasource(
-					dataStoreManager: Services.dataStoreManager,
+					cryptoManaging: Services.cryptoManager,
 					walletManager: Services.walletManager,
 					now: { Date() }
 				),
@@ -217,6 +204,7 @@ class HolderCoordinator: SharedCoordinator {
 					now: { Date() }
 				),
 				userSettings: UserSettings(),
+				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)
@@ -262,8 +250,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCard: greenCard,
-				cryptoManager: cryptoManager,
-				configuration: generalConfiguration
+				cryptoManager: cryptoManager
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
@@ -383,10 +370,6 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 
 	func userDidScanRequestToken(requestToken: RequestToken) {
 		navigateToTokenEntry(requestToken)
-	}
-
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
-		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
 	}
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {

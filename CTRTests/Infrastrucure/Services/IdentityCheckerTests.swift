@@ -163,6 +163,58 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
+	func test_eventGroupV3Diacritic_removeEventv3Alternative() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Alternative_removeEventv3Diacritic() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Diacritic_removeEventv3Diacritic_identicalDiacritic() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Diacritic_removeEventv3AlternativeDiacritic() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacriticAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
 	// MARK: - Helper
 
 	private func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
@@ -193,18 +245,11 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let values: [String: String] = [
-			"Rool": "R",
-			"#$pietje": "P",
-			"παράδειγμα δοκιμής": "P",
-			"Ægir": "A",
 			"'Doorn": "D",
-			"Özturk": "O",
-			"ТЕСТ МИЛИЦА": "T",
-			"王": "W",
-			"Şımarık": "S",
-			"Ådne": "A",
-			"محمود عبدالرحيم": "M",
-			"أحمد‎": "A"
+			"Rool": "R",
+			"rool": "R",
+			" rool": "R",
+			"-rool": "R"
 		]
 		for (value, expected) in values {
 			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
@@ -213,6 +258,31 @@ class IdentityCheckerTests: XCTestCase {
 			let tuple = identity.asIdentityTuple()
 
 			expect(tuple.firstNameInitial) == expected
+		}
+	}
+
+	func test_normalization_valuesShouldReturnNil() {
+
+		// Given
+		let values: [String] = [
+			"#$pietje",
+			"παράδειγμα δοκιμής",
+			"Ægir",
+			"Özturk",
+			"ТЕСТ МИЛИЦА",
+			"王",
+			"Şımarık",
+			"Ådne",
+			"محمود عبدالرحيم",
+			"أحمد‎"
+		]
+		for value in values {
+			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
+
+			// When
+			let tuple = identity.asIdentityTuple()
+
+			expect(tuple.firstNameInitial).to(beNil())
 		}
 	}
 }
@@ -234,6 +304,26 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Rool", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+
+	static var fakeWithV3IdentityFirstNameWithDiacritic: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Ådne", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+
+	static var fakeWithV3IdentityFirstNameWithDiacriticAlternative: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Ægir", lastName: "Paap", birthDateString: "1970-05-27"),
 			status: .complete,
 			result: nil
 		)

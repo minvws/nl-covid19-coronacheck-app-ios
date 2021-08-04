@@ -37,6 +37,26 @@ internal extension UIViewController {
 	}
 }
 
+internal extension UIView {
+	func assertImage(
+		file: StaticString = #file,
+		testName: String = #function,
+		line: UInt = #line,
+		precision: Float = 1
+	) {
+		UIScreen.main.assertSimulatorIsAllowedForSnapshotTesting()
+		UIViewController.assertSimulatorDoesNotHaveAlteredAccessibilitySizes()
+
+		SnapshotTesting.assertSnapshot(
+			matching: self,
+			as: .image(precision: precision),
+			file: file,
+			testName: testName,
+			line: line
+		)
+	}
+}
+
 private extension UIScreen {
 	/// All tests must be run on an iPhone 12-sized Simulator due to differing pixel density issues,
 	/// see issue: https://github.com/pointfreeco/swift-snapshot-testing/issues/174

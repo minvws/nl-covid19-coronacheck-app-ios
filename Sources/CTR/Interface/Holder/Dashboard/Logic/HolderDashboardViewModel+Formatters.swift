@@ -17,6 +17,12 @@ extension HolderDashboardViewModel {
 		return formatter
 	}()
 
+	static let dateWithTimeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "d MMMM HH:mm"
+		return formatter
+	}()
+
 	static let dateWithDayAndTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "EEEE d MMMM HH:mm"
@@ -26,6 +32,12 @@ extension HolderDashboardViewModel {
 	static let dayAndMonthFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM"
+		return formatter
+	}()
+
+	static let dayAndMonthWithTimeFormatter: DateFormatter = {
+		let formatter = DateFormatter()
+		formatter.dateFormat = "d MMMM HH:mm"
 		return formatter
 	}()
 

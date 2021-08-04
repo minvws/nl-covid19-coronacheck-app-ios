@@ -48,7 +48,7 @@ enum HTTPContentType: String {
 }
 
 /// - Tag: NetworkManaging
-protocol NetworkManaging {
+protocol NetworkManaging: AnyObject {
 	
 	/// The network configuration
 	var networkConfiguration: NetworkConfiguration { get }

@@ -16,7 +16,6 @@ class ShowQRViewModelTests: XCTestCase {
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
-	var configSpy: ConfigurationGeneralSpy!
 	var dataStoreManager: DataStoreManaging!
 	var screenCaptureDetector: ScreenCaptureDetectorSpy!
 
@@ -26,7 +25,6 @@ class ShowQRViewModelTests: XCTestCase {
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		configSpy = ConfigurationGeneralSpy()
 		screenCaptureDetector = ScreenCaptureDetectorSpy()
 	}
 
@@ -49,7 +47,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -77,7 +74,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -102,7 +98,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -127,7 +122,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -152,7 +146,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
@@ -182,7 +175,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -212,7 +204,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -241,7 +232,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		expect(self.sut.hideForCapture) == false
@@ -270,7 +260,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 
@@ -294,7 +283,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = DomesticCredentialAttributes(
@@ -331,7 +319,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedReadDomesticCredentialsResult = nil
@@ -356,7 +343,6 @@ class ShowQRViewModelTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy,
 			screenCaptureDetector: screenCaptureDetector
 		)
 		cryptoManagerSpy.stubbedReadEuCredentialsResult = EuCredentialAttributes(

@@ -11,8 +11,8 @@ class QRCardView: BaseView {
 
 	// MARK: - Public types
 	struct OriginRow {
-		let type: String
-		let validityStringEvaluator: (Date) -> HolderDashboardViewController.ValidityText
+		let type: String?
+		let validityString: (Date) -> HolderDashboardViewController.ValidityText
 	}
 
 	// MARK: - Private types
@@ -163,6 +163,8 @@ class QRCardView: BaseView {
 
 	// MARK: - Private funcs
 
+	var originDesiresToShowAutomaticallyBecomesValidFooter = false
+
 	private func reapplyLabels() {
 
 		// Remove previous labels
@@ -172,35 +174,55 @@ class QRCardView: BaseView {
 		}
 
 		originRows?.forEach { row in
-			let validityText = row.validityStringEvaluator(Date())
+			let validityText = row.validityString(Date())
 			guard validityText.kind != .past else { return }
 
-			let qrTypeLabel = Label(body: row.type + (validityText.text.isEmpty ? "" : ":"))
-			qrTypeLabel.numberOfLines = 0
-			verticalLabelsStackView.addArrangedSubview(qrTypeLabel)
-
-			let validUntilLabel = Label(body: validityText.text)
-			validUntilLabel.numberOfLines = 0
-
-			if case .future = validityText.kind {
-				validUntilLabel.textColor = Theme.colors.iosBlue
+			if let type = row.type {
+				let qrTypeLabel = Label(body: type + (validityText.texts.isEmpty ? "" : ":"))
+				qrTypeLabel.numberOfLines = 0
+				verticalLabelsStackView.addArrangedSubview(qrTypeLabel)
 			}
 
-			verticalLabelsStackView.addArrangedSubview(validUntilLabel)
+			validityText.texts.forEach { text in
+				let label = Label(body: text)
+				label.numberOfLines = 0
+				verticalLabelsStackView.addArrangedSubview(label)
+			}
 
-			verticalLabelsStackView.setCustomSpacing(22, after: validUntilLabel)
+			if case .future(let desiresToShowAutomaticallyBecomesValidFooter) = validityText.kind,
+			   desiresToShowAutomaticallyBecomesValidFooter {
+				self.originDesiresToShowAutomaticallyBecomesValidFooter = self.originDesiresToShowAutomaticallyBecomesValidFooter
+					|| desiresToShowAutomaticallyBecomesValidFooter
+			}
+			
+			if let buttonEnabledEvaluator = buttonEnabledEvaluator {
+				let enabledState = buttonEnabledEvaluator(Date())
+				if !enabledState && originDesiresToShowAutomaticallyBecomesValidFooter {
+					let becomesValidLabel = Label(bodyBold: L.holderDashboardQrValidityDateAutomaticallyBecomesValidOn())
+					becomesValidLabel.numberOfLines = 0
+
+					verticalLabelsStackView.addArrangedSubview(becomesValidLabel)
+					verticalLabelsStackView.setCustomSpacing(22, after: becomesValidLabel)
+				}
+			}
+
+			// Add some padding after the last label
+			if let lastLabel = verticalLabelsStackView.arrangedSubviews.last as? Label {
+				verticalLabelsStackView.setCustomSpacing(22, after: lastLabel)
+			}
+
 		}
 
 		if let expiryEvaluator = expiryEvaluator {
-			let validityLabel = Label(bodyBold: expiryEvaluator(Date()))
-			validityLabel.numberOfLines = 0
-			verticalLabelsStackView.addArrangedSubview(validityLabel)
+			let expiryLabel = Label(bodyBold: expiryEvaluator(Date()))
+			expiryLabel.numberOfLines = 0
+			verticalLabelsStackView.addArrangedSubview(expiryLabel)
 
 			if let text = expiryEvaluator(Date()) {
-				validityLabel.isHidden = false
-				validityLabel.text = text
+				expiryLabel.isHidden = false
+				expiryLabel.text = text
 			} else {
-				validityLabel.isHidden = true
+				expiryLabel.isHidden = true
 			}
 		}
         

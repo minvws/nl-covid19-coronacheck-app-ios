@@ -114,7 +114,7 @@ struct EventFlow {
 	/// A wrapper around an event result.
 	struct EventResultWrapper: Codable, Equatable {
 
-		let providerIdentifier: String
+		var providerIdentifier: String
 		let protocolVersion: String
 		let identity: Identity? // 3.0
 		let status: EventState
