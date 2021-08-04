@@ -51,7 +51,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 		datasourceSpy = HolderDashboardDatasourceSpy()
 		strippenRefresherSpy = DashboardStrippenRefresherSpy()
 		userSettingsSpy = UserSettingsSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration.default
 		
 		sampleGreencardObjectID = NSManagedObjectID()
@@ -64,7 +64,6 @@ class HolderDashboardViewModelTests: XCTestCase {
 		return HolderDashboardViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
-			proofManager: proofManagerSpy,
 			datasource: datasourceSpy,
 			strippenRefresher: strippenRefresherSpy,
 			userSettings: userSettingsSpy,

@@ -70,7 +70,8 @@ class LaunchViewControllerTests: XCTestCase {
 		testEventValidity: 40,
 		isGGDEnabled: true,
 		recoveryExpirationDays: 180,
-		credentialRenewalDays: 5
+		credentialRenewalDays: 5,
+		domesticQRRefreshSeconds: 60
 	)
 
 	override func tearDown() {

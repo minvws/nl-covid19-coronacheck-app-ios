@@ -191,7 +191,6 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
 				datasource: HolderDashboardDatasource(
 					cryptoManaging: Services.cryptoManager,
 					walletManager: Services.walletManager,
