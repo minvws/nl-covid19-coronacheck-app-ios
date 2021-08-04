@@ -288,6 +288,7 @@
 "holder.consent.item.1" = "Jouw gegevens worden <b>nergens centraal opgeslagen</b>";
 "holder.consent.item.2" = "Er worden <b>geen locatiegegevens</b> gebruikt of bewaard";
 "holder.consent.button" = "Ik heb de privacyverklaring gelezen en begrijp hoe de app met mijn gegevens omgaat.";
+"holder.consent.action" = "Aan de slag";
 
 /* MARK: - Choose QR Code Type */
 "holder.chooseqrcodetype.title" = "Welk bewijs wil je toevoegen?";

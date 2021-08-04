@@ -22,6 +22,7 @@ final class OnboardingConsentViewModel {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var underlinedText: String?
 	@Bindable private(set) var consentText: String?
+	@Bindable private(set) var actionTitle: String?
 	@Bindable private(set) var summary: [String]
 	@Bindable private(set) var shouldHideBackButton: Bool
 	@Bindable private(set) var shouldHideConsentButton: Bool
@@ -40,6 +41,7 @@ final class OnboardingConsentViewModel {
 		self.summary = factory.getConsentItems()
 		self.consentText = factory.getConsentButtonTitle()
 		self.shouldHideBackButton = shouldHideBackButton
+		self.actionTitle = factory.getActionButtonTitle()
 
 		if factory.useConsentButton() {
 			self.isContinueButtonEnabled = false
