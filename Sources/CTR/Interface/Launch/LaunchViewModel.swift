@@ -25,7 +25,7 @@ class LaunchViewModel: Logging {
 	private var flavor: AppFlavor
 	var configStatus: LaunchState?
 	var issuerPublicKeysStatus: LaunchState?
-	var didInformCoordinator = false
+	var didFinishLaunchState = false
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -107,10 +107,10 @@ class LaunchViewModel: Logging {
 			return
 		}
 
-		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - bothStatesWithinTTL: \(didInformCoordinator)")
+		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
 		switch (configStatus, issuerPublicKeysStatus) {
 			case (.withinTTL, .withinTTL):
-				didInformCoordinator = true
+				didFinishLaunchState = true
 				// Small delay, let the viewController load.
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 					self.coordinator?.handleLaunchState(.withinTTL)
@@ -120,8 +120,8 @@ class LaunchViewModel: Logging {
 				coordinator?.handleLaunchState(configStatus)
 
 			case (LaunchState.internetRequired, _), (_, .internetRequired):
-				if !didInformCoordinator {
-					didInformCoordinator = true
+				if !didFinishLaunchState {
+					didFinishLaunchState = true
 					coordinator?.handleLaunchState(.internetRequired)
 				}
 
@@ -131,8 +131,8 @@ class LaunchViewModel: Logging {
 					coordinator?.handleLaunchState(.cryptoLibNotInitialized)
 				} else {
 					// Start application
-					if !didInformCoordinator {
-						didInformCoordinator = true
+					if !didFinishLaunchState {
+						didFinishLaunchState = true
 						coordinator?.handleLaunchState(.noActionNeeded)
 					}
 				}
