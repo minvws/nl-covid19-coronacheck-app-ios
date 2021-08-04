@@ -17,9 +17,6 @@
 "holder.dcc.list.title" = "Retrieved details";
 "holder.dcc.list.message" = "You can create a QR code with the retrieved details. This is your certificate.";
 "holder.dcc.element.subtitle" = "Name: %@<br />Date of birth: %@";
-"holder.dcc.vaccination.message" = "<p>The following details were retrieved:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Disease targeted: <b>COVID-19</b><br />Vaccine: <b>%@</b><br />Vaccine medicinal product: <b>%@</b><br />Vaccine manufacturer: <b>%@</b><br />Number in series of doses: <b>%@</b><br />Date of vaccination: <b>%@</b><br />Member state of vaccination: <b>%@</b><br />Certificate issuer: <b>%@</b></p><p>Unique certificate identifier: <b>%@</b></p>";
-"holder.dcc.recovery.message" = "<p>The following details were retrieved:</p> <p>Name: <b>%@</b> <br />Date of birth: <b>%@</b></p> <p>Disease recovered from: <b>COVID-19</b> <br />Test date: <b>%@</b> <br />Member state of test <b>%@</b> <br />Certificate issuer: <b>%@</b> <br />Valid from: <b>%@</b> <br />Valid to: <b>%@</b> </p><p>Unique certificate identifier: <b>%@</b></p>";
-"holder.dcc.test.message" = "<p>The following details were retrieved:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Disease targeted: <b>COVID-19</b><br />Type of test: <b>%@</b><br />Test name: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Testing centre: <b>%@</b><br />Test manufacturer: <b>%@</b><br />Member state of test: <b>%@</b><br />Certificate issuer: <b>%@</b></p><p>Unique certificate identifier: <b>%@</b></p>";
 "holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
@@ -41,7 +38,6 @@
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
 "holder.menu.proof" = "Add certificate";
 "holder.showqr.eu.about.recovery.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b> <br /><br />Date of birth*: <br /> <b>%@</b></p> <p>Disease recovered from: <b>COVID-19</b> <br /><br /> Test date*: <br /> <b>%@</b> <br /><br /> Member state of test: <br /> <b>%@</b> <br /><br /> Certificate issuer: <br /> <b>%@</b> <br /><br /> Valid from*: <br /> <b>%@</b> <br /><br /> Valid to*: <br /> <b>%@</b> <br /></p> <p><br /> Unique certificate identifier: <br /> <b>%@</b></p> <p>Date noted in day-month-year</p>";
-"holder.event.about.body.recovery" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Date of birth: <b>%@</b><br />Test date: <b>%@</b><br />Valid from: <b>%@</b><br />Valid until: <b>%@</b><br />Unique certificate number: <b>%@</b></p>";
 "holder.testresults.positive" = "Positive test result";
 "holder.recovery.alert.message" = "You can retrieve your positive test result again later";
 "holder.recovery.nolist.title" = "No positive test result available";
@@ -398,21 +394,14 @@
 "holder.vaccination.error.message.code" = "Can't read the vaccination. Contact the location where you were vaccinated and give them the error code (%@).";
 "holder.vaccination.error.title.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
 "holder.vaccination.error.message.toobusy" = "There are currently many visitors on the GGD's server. Please try again later.";
-"holder.vaccination.status.unknown" = "unknown";
 "holder.vaccination.status.complete" = "yes";
 "holder.vaccination.status.complete.recovery" = "yes (I’ve had coronavirus earlier)";
 "holder.vaccination.status.complete.priorevent" = "Yes (I have been vaccinated elsewhere)";
-"holder.vaccination.status.incomplete" = "no";
 
 "holder.ggdlogin.failure.general.title" = "Retrieval is cancelled";
 "holder.ggdlogin.failure.general.message" = "It might be too busy. Please try again later.";
 
 "holder.event.about.title" = "What was retrieved?";
-"holder.event.about.body.test2" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b></p><p>Test type: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
-
-"holder.event.about.body.test3" = "<p>The following details were retrieved at the test location:</p><p>Your details: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Test type: <b>%@</b><br />Test name: <b>%@</b><br />Test date: <b>%@</b><br />Test result: <b>%@</b><br />Test location: <b>%@</b><br />Test manufacturer: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
-
-"holder.event.about.body.vaccination" = "<p>The following details of your vaccination were retrieved:</p><p>Name: <b>%@</b><br />Date of birth: <b>%@</b></p><p>Pathogen: <b>COVID-19</b><br />Vaccine: <b>%@</b><br />Vaccine type: <b>%@</b><br />Vaccine manufacturer: <b>%@</b><br />Doses: <b>%@</b><br />Is this the last doses of your vaccination? <b>%@</b><br />Vaccination date: <b>%@</b><br />Member state of vaccination: <b>%@</b><br />Unique certificate identifier: <b>%@</b></p>";
 
 "holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
 
