@@ -27,8 +27,6 @@ final class EventDetailsView: BaseView {
 		let view = UIStackView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.axis = .vertical
-		view.alignment = .fill
-		view.distribution = .fill
 		view.spacing = 0
 		return view
 	}()
@@ -89,12 +87,17 @@ final class EventDetailsView: BaseView {
 
 private extension EventDetailsView {
 	
+	func createLabel(for detail: NSAttributedString) -> Label {
+		let label = Label(body: nil)
+		label.attributedText = detail
+		label.textColor = Theme.colors.dark
+		label.numberOfLines = 0
+		return label
+	}
+	
 	func loadDetails(_ details: [(detail: NSAttributedString, hasExtraLineBreak: Bool)]) {
 		details.forEach {
-			let label = Label(body: nil)
-			label.attributedText = $0.detail
-			label.textColor = Theme.colors.dark
-			label.numberOfLines = 0
+			let label = createLabel(for: $0.detail)
 			stackView.addArrangedSubview(label)
 			
 			if $0.hasExtraLineBreak {

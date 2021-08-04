@@ -12,17 +12,6 @@ struct EventDetails {
 	let value: String?
 }
 
-extension EventDetails: Equatable {
-	
-	static func == (lhs: EventDetails, rhs: EventDetails) -> Bool {
-		return
-			lhs.field.displayTitle == rhs.field.displayTitle &&
-			lhs.field.isRequired == rhs.field.isRequired &&
-			lhs.field.hasLineBreak == rhs.field.hasLineBreak &&
-			lhs.value == rhs.value
-	}
-}
-
 protocol EventDetailable {
 	
 	/// Required or optional field
@@ -280,5 +269,16 @@ enum EventDetailsDCCRecovery: EventDetailable {
 			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
+	}
+}
+
+extension EventDetails: Equatable {
+	
+	static func == (lhs: EventDetails, rhs: EventDetails) -> Bool {
+		return
+			lhs.field.displayTitle == rhs.field.displayTitle &&
+			lhs.field.isRequired == rhs.field.isRequired &&
+			lhs.field.hasLineBreak == rhs.field.hasLineBreak &&
+			lhs.value == rhs.value
 	}
 }
