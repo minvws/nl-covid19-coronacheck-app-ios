@@ -63,7 +63,7 @@ enum EventDetailsVaccination: EventDetailable {
 			case .date: return L.holderEventAboutVaccinationDate()
 			case .country: return L.holderEventAboutVaccinationCountry()
 			case .uniqueIdentifer: return L.holderEventAboutVaccinationIdentifier()
-			case .separator: return "separator"
+			case .separator: return ""
 		}
 	}
 	
