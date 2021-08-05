@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ListEventsViewModel: PreventableScreenCapture, Logging {
+class ListEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
@@ -16,6 +16,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 	private let greenCardLoader: GreenCardLoading
 	let cryptoManager: CryptoManaging?
 	private let couplingManager: CouplingManaging
+	let mappingManager: MappingManaging
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
@@ -70,6 +71,10 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
+	@Bindable private(set) var hideForCapture: Bool = false
+
+	private let screenCaptureDetector = ScreenCaptureDetector()
+
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
 	private let eventFetchingGroup = DispatchGroup()
@@ -83,7 +88,8 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		couplingManager: CouplingManaging = Services.couplingManager,
-		identityChecker: IdentityCheckerProtocol = IdentityChecker()
+		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
+		mappingManager: MappingManaging = Services.mappingManager
 	) {
 
 		self.coordinator = coordinator
@@ -94,6 +100,7 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 		self.cryptoManager = cryptoManager
 		self.couplingManager = couplingManager
 		self.identityChecker = identityChecker
+		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: ListEventsViewController.Content(
@@ -117,7 +124,9 @@ class ListEventsViewModel: PreventableScreenCapture, Logging {
 			)
 		)
 
-		super.init()
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
 
 		viewState = getViewState(from: remoteEvents)
 	}

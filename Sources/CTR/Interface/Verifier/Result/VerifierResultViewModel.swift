@@ -16,7 +16,7 @@ enum AccessAction {
 	case demo
 }
 
-class VerifierResultViewModel: PreventableScreenCapture, Logging {
+class VerifierResultViewModel: Logging {
 
 	/// The logging category
 	var loggingCategory: String = "VerifierResultViewModel"
@@ -62,6 +62,10 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
 
+	@Bindable private(set) var hideForCapture: Bool = false
+
+	private let screenCaptureDetector = ScreenCaptureDetector()
+
 	/// Initialzier
 	/// - Parameters:
 	///   - coordinator: the dismissable delegate
@@ -74,16 +78,17 @@ class VerifierResultViewModel: PreventableScreenCapture, Logging {
 		self.verificationResult = verificationResult
 
 		primaryButtonTitle = L.verifierResultNext()
-		super.init()
 
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
+
+		addObservers()
 		checkAttributes()
 		startAutoCloseTimer()
 	}
 
-	override func addObservers() {
-
-		// super will handle the PreventableScreenCapture observers
-		super.addObservers()
+	func addObservers() {
 
 		NotificationCenter.default.addObserver(
 			self,

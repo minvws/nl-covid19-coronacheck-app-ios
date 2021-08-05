@@ -19,16 +19,16 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var stubbedScanInstructionShown: Bool! = false
 
 	var scanInstructionShown: Bool {
-		get {
-			invokedScanInstructionShownGetter = true
-			invokedScanInstructionShownGetterCount += 1
-			return stubbedScanInstructionShown
-		}
 		set {
 			invokedScanInstructionShownSetter = true
 			invokedScanInstructionShownSetterCount += 1
 			invokedScanInstructionShown = newValue
 			invokedScanInstructionShownList.append(newValue)
+		}
+		get {
+			invokedScanInstructionShownGetter = true
+			invokedScanInstructionShownGetterCount += 1
+			return stubbedScanInstructionShown
 		}
 	}
 
@@ -41,16 +41,82 @@ class UserSettingsSpy: UserSettingsProtocol {
 	var stubbedJailbreakWarningShown: Bool! = false
 
 	var jailbreakWarningShown: Bool {
-		get {
-			invokedJailbreakWarningShownGetter = true
-			invokedJailbreakWarningShownGetterCount += 1
-			return stubbedJailbreakWarningShown
-		}
 		set {
 			invokedJailbreakWarningShownSetter = true
 			invokedJailbreakWarningShownSetterCount += 1
 			invokedJailbreakWarningShown = newValue
 			invokedJailbreakWarningShownList.append(newValue)
+		}
+		get {
+			invokedJailbreakWarningShownGetter = true
+			invokedJailbreakWarningShownGetterCount += 1
+			return stubbedJailbreakWarningShown
+		}
+	}
+
+	var invokedDashboardRegionToggleValueSetter = false
+	var invokedDashboardRegionToggleValueSetterCount = 0
+	var invokedDashboardRegionToggleValue: QRCodeValidityRegion?
+	var invokedDashboardRegionToggleValueList = [QRCodeValidityRegion]()
+	var invokedDashboardRegionToggleValueGetter = false
+	var invokedDashboardRegionToggleValueGetterCount = 0
+	var stubbedDashboardRegionToggleValue: QRCodeValidityRegion!
+
+	var dashboardRegionToggleValue: QRCodeValidityRegion {
+		set {
+			invokedDashboardRegionToggleValueSetter = true
+			invokedDashboardRegionToggleValueSetterCount += 1
+			invokedDashboardRegionToggleValue = newValue
+			invokedDashboardRegionToggleValueList.append(newValue)
+		}
+		get {
+			invokedDashboardRegionToggleValueGetter = true
+			invokedDashboardRegionToggleValueGetterCount += 1
+			return stubbedDashboardRegionToggleValue
+		}
+	}
+
+	var invokedConfigFetchedTimestampSetter = false
+	var invokedConfigFetchedTimestampSetterCount = 0
+	var invokedConfigFetchedTimestamp: TimeInterval?
+	var invokedConfigFetchedTimestampList = [TimeInterval?]()
+	var invokedConfigFetchedTimestampGetter = false
+	var invokedConfigFetchedTimestampGetterCount = 0
+	var stubbedConfigFetchedTimestamp: TimeInterval!
+
+	var configFetchedTimestamp: TimeInterval? {
+		set {
+			invokedConfigFetchedTimestampSetter = true
+			invokedConfigFetchedTimestampSetterCount += 1
+			invokedConfigFetchedTimestamp = newValue
+			invokedConfigFetchedTimestampList.append(newValue)
+		}
+		get {
+			invokedConfigFetchedTimestampGetter = true
+			invokedConfigFetchedTimestampGetterCount += 1
+			return stubbedConfigFetchedTimestamp
+		}
+	}
+
+	var invokedIssuerKeysFetchedTimestampSetter = false
+	var invokedIssuerKeysFetchedTimestampSetterCount = 0
+	var invokedIssuerKeysFetchedTimestamp: TimeInterval?
+	var invokedIssuerKeysFetchedTimestampList = [TimeInterval?]()
+	var invokedIssuerKeysFetchedTimestampGetter = false
+	var invokedIssuerKeysFetchedTimestampGetterCount = 0
+	var stubbedIssuerKeysFetchedTimestamp: TimeInterval!
+
+	var issuerKeysFetchedTimestamp: TimeInterval? {
+		set {
+			invokedIssuerKeysFetchedTimestampSetter = true
+			invokedIssuerKeysFetchedTimestampSetterCount += 1
+			invokedIssuerKeysFetchedTimestamp = newValue
+			invokedIssuerKeysFetchedTimestampList.append(newValue)
+		}
+		get {
+			invokedIssuerKeysFetchedTimestampGetter = true
+			invokedIssuerKeysFetchedTimestampGetterCount += 1
+			return stubbedIssuerKeysFetchedTimestamp
 		}
 	}
 }

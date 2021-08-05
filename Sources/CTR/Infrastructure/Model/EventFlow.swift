@@ -114,7 +114,7 @@ struct EventFlow {
 	/// A wrapper around an event result.
 	struct EventResultWrapper: Codable, Equatable {
 
-		let providerIdentifier: String
+		var providerIdentifier: String
 		let protocolVersion: String
 		let identity: Identity? // 3.0
 		let status: EventState
@@ -417,5 +417,15 @@ extension EventFlow.DccEvent {
 			}
 		}
 		return nil
+	}
+}
+
+extension EventFlow.VaccinationEvent {
+
+	func doesMatchEvent(_ otherEvent: EventFlow.VaccinationEvent) -> Bool {
+
+		return dateString == otherEvent.dateString &&
+			((hpkCode != nil && hpkCode == otherEvent.hpkCode) ||
+				(manufacturer != nil && manufacturer == otherEvent.manufacturer))
 	}
 }

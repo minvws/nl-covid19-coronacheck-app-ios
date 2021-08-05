@@ -60,12 +60,30 @@ extension RemoteInformation {
 	}
 }
 
-struct RemoteConfiguration: RemoteInformation, Codable {
+struct HPKData: Codable {
+	
+	let code: String
+	
+	let name: String
+	
+	/// euVaccinationTypes lookup
+	let vp: String
+	
+	/// euBrands lookup
+	let mp: String
+	
+	/// euManufacturers lookup
+	let ma: String
+}
 
-	struct Mapping: Codable {
-		let code: String
-		let name: String
-	}
+struct Mapping: Codable {
+
+	let code: String
+	
+	let name: String
+}
+
+struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// The minimum required version
 	let minimumVersion: String
@@ -108,7 +126,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var recoveryExpirationDays: Int?
 
-	var hpkCodes: [Mapping]? = []
+	var domesticQRRefreshSeconds: Int?
+	
+	var hpkCodes: [HPKData]? = []
 
 	var nlTestTypes: [Mapping]? = []
 
@@ -122,8 +142,6 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var euTestManufacturers: [Mapping]? = []
 
-	var providerIdentifiers: [Mapping]? = []
-	
 	/// Restricts access to GGD test provider login
 	var isGGDEnabled: Bool?
 
@@ -153,9 +171,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case euVaccinationTypes = "euVaccinations"
 		case euTestTypes = "euTestTypes"
 		case euTestManufacturers = "euTestManufacturers"
-		case providerIdentifiers = "providerIdentifiers"
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
+		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
 	}
 
 	init(
@@ -174,7 +192,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		testEventValidity: Int?,
 		isGGDEnabled: Bool?,
 		recoveryExpirationDays: Int?,
-		credentialRenewalDays: Int?) {
+		credentialRenewalDays: Int?,
+		domesticQRRefreshSeconds: Int?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -192,11 +211,12 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.isGGDEnabled = isGGDEnabled
 		self.recoveryExpirationDays = recoveryExpirationDays
 		self.credentialRenewalDays = credentialRenewalDays
+		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
 	}
 
 	/// Default remote configuration
 	static var `default`: RemoteConfiguration {
-		return RemoteConfiguration(
+ 		return RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: nil,
 			storeUrl: nil,
@@ -212,7 +232,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			testEventValidity: 40,
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5
+			credentialRenewalDays: 5,
+			domesticQRRefreshSeconds: 60
 		)
 	}
 }
@@ -221,9 +242,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 extension RemoteConfiguration {
 
-	func getHpkMapping(_ code: String? ) -> String? {
+	func getHpkData(_ code: String? ) -> HPKData? {
 
-		return hpkCodes?.first(where: { $0.code == code })?.name
+		return hpkCodes?.first(where: { $0.code == code })
 	}
 
 	func getNlTestType(_ code: String? ) -> String? {
@@ -254,10 +275,5 @@ extension RemoteConfiguration {
 	func getTestManufacturerMapping(_ code: String? ) -> String? {
 
 		return euTestManufacturers?.first(where: { $0.code == code })?.name
-	}
-
-	func getProviderIdentifierMapping(_ code: String? ) -> String? {
-
-		return providerIdentifiers?.first(where: { $0.code == code })?.name
 	}
 }

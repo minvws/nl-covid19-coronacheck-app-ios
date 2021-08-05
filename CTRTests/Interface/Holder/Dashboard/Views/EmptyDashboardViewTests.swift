@@ -23,11 +23,26 @@ final class EmptyDashboardViewTests: XCTestCase {
 		])
 	}
 
-	func test_() {
+	func test_domestic() {
 		// Arrange
-		sut.title = "Hier komt jouw bewijs"
-		sut.image = .emptyDashboard
-		sut.message = "<p>Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een <a href=\"https://coronacheck.nl/nl/testafspraak-in-app\">aangesloten testlocatie</a>. De app maakt een Nederlands en een internationaal bewijs.</p><b>Reis je buiten Nederland?</b><p>Check <a href=\"www.nederlandwereldwijd.nl/reizen/reisadviezen\">wijsopreis.nl</a> voor vertrek. Daar staat welk bewijs geldig is in het land dat je bezoekt.</p>"
+		sut.title = "Hier komt jouw Nederlandse bewijs"
+		sut.image = I.empty_Dashboard_Domestic()
+		sut.message = "Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een aangesloten testlocatie. De app maakt een Nederlands en een internationaal bewijs."
+
+		// Act
+		// Assert
+		assertSnapshot(matching: sut, as: .image(precision: 0.9))
+	}
+	
+	func test_international() {
+		// Arrange
+		sut.title = "Hier komt jouw internationale bewijs"
+		sut.image = I.empty_Dashboard_International()
+		sut.message = """
+		Ben je in het buitenland of ga je de grens over? Gebruik dan altijd jouw internationale bewijs. Controleer voor vertrek welk bewijs je nodig hebt.
+		
+		Welk bewijs is geldig op mijn bestemming?
+		"""
 
 		// Act
 		// Assert

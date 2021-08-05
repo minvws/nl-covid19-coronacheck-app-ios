@@ -21,6 +21,7 @@ class LaunchViewControllerTests: XCTestCase {
 	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	private var walletSpy: WalletManagerSpy!
 
 	var window = UIWindow()
 
@@ -31,10 +32,12 @@ class LaunchViewControllerTests: XCTestCase {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
 		versionSupplierSpy = AppVersionSupplierSpy(version: "1.0.0")
-		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		userSettingsSpy = UserSettingsSpy()
+		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
@@ -43,12 +46,33 @@ class LaunchViewControllerTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
 		)
 
 		sut = LaunchViewController(viewModel: viewModel)
 		window = UIWindow()
 	}
+
+	let remoteConfig = RemoteConfiguration(
+		minVersion: "1.0",
+		minVersionMessage: "test message",
+		storeUrl: URL(string: "https://apple.com"),
+		deactivated: nil,
+		informationURL: nil,
+		configTTL: 3600,
+		recoveryWaitingPeriodDays: 11,
+		requireUpdateBefore: nil,
+		temporarilyDisabled: false,
+		domesticValidityHours: 40,
+		vaccinationEventValidity: 14600,
+		recoveryEventValidity: 7300,
+		testEventValidity: 40,
+		isGGDEnabled: true,
+		recoveryExpirationDays: 180,
+		credentialRenewalDays: 5,
+		domesticQRRefreshSeconds: 60
+	)
 
 	override func tearDown() {
 
@@ -93,7 +117,8 @@ class LaunchViewControllerTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			userSettings: userSettingsSpy
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 

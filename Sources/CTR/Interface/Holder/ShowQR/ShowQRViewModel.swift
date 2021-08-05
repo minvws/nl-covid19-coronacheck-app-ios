@@ -7,23 +7,23 @@
   
 import UIKit
 
-class ShowQRViewModel: PreventableScreenCapture, Logging {
+class ShowQRViewModel: Logging {
 
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
 
 	var loggingCategory: String = "ShowQRViewModel"
 
+	var screenshotWasTakenHandler: (() -> Void)?
+
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
-	weak private var configuration: ConfigurationGeneralProtocol?
-
-	var previousBrightness: CGFloat?
 
 	weak var validityTimer: Timer?
-
+	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
+	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
 
 	@Bindable private(set) var title: String?
     
@@ -36,6 +36,8 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	@Bindable private(set) var showValidQR: Bool
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
+
+	@Bindable private(set) var hideForCapture: Bool = false
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -63,20 +65,22 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - cryptoManager: the crypto manager
-	///   - configuration: the configuration
+	///   - greenCard: a greencard to display
+	///   - cryptoManager: the crypto manager to check the green card
+	///   - remoteConfigManager: the remote configuration for mapping values
+	///   - screenCaptureDetector: the screen capture detector
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
-		configuration: ConfigurationGeneralProtocol,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager) {
+		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
-		self.configuration = configuration
 		self.remoteConfigManager = remoteConfigManager
+		self.screenCaptureDetector = screenCaptureDetector
 
 		// Start by showing nothing
 		self.showValidQR = false
@@ -94,7 +98,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			showInternationalAnimation = true
 		}
 
-		super.init()
+		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
+			self?.hideForCapture = isBeingCaptured
+		}
+		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
+			self?.screenshotWasTakenHandler?()
+		}
 	}
 
 	/// Check the QR Validity
@@ -158,7 +167,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 				if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
 					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, vaccination: vaccination)
 				} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-					showMoreInformationVaccination(euCredentialAttributes: euCredentialAttributes, test: test)
+					showMoreInformationTest(euCredentialAttributes: euCredentialAttributes, test: test)
 				} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
 					showMoreInformationRecovery(euCredentialAttributes: euCredentialAttributes, recovery: recovery)
 				}
@@ -172,8 +181,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 
 		var dosage: String?
 		if let doseNumber = vaccination.doseNumber, let totalDose = vaccination.totalDose, doseNumber > 0, totalDose > 0 {
-			let isNL = "nl" == Locale.current.languageCode
-			dosage = isNL ? L.holderVaccinationAboutOffDcc("\(doseNumber)", "\(totalDose)", "\(doseNumber)", "\(totalDose)") : L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
+			dosage = "\(doseNumber) / \(totalDose)"
 		}
 
 		let vaccineType = remoteConfigManager?.getConfiguration().getTypeMapping(
@@ -211,7 +219,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		)
 	}
 
-	private func showMoreInformationVaccination(
+	private func showMoreInformationTest(
 		euCredentialAttributes: EuCredentialAttributes,
 		test: EuCredentialAttributes.TestEntry) {
 
@@ -236,6 +244,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 		
 		let issuer = getDisplayIssuer(test.issuer)
 		let country = getDisplayCountry(test.country)
+		let facility = getDisplayFacility(test.testCenter)
 
 		let body: String = L.holderShowqrEuAboutTestMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
@@ -244,7 +253,7 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			test.name ?? "",
 			formattedTestDate,
 			testResult,
-			test.testCenter,
+			facility,
 			manufacturer,
 			country,
 			issuer,
@@ -321,12 +330,12 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 	/// Start the validity timer, check every 90 seconds.
 	private func startValidityTimer() {
 
-		guard validityTimer == nil, let configuration = configuration else {
+		guard validityTimer == nil else {
 			return
 		}
 
 		validityTimer = Timer.scheduledTimer(
-			timeInterval: TimeInterval(configuration.getQRRefreshPeriod()),
+			timeInterval: TimeInterval(remoteConfigManager?.getConfiguration().domesticQRRefreshSeconds ?? 60),
 			target: self,
 			selector: (#selector(checkQRValidity)),
 			userInfo: nil,
@@ -351,6 +360,13 @@ class ShowQRViewModel: PreventableScreenCapture, Logging {
 			return country
 		}
 		return L.holderVaccinationAboutCountry()
+	}
+	
+	private func getDisplayFacility(_ facility: String) -> String {
+		guard facility == "Facility approved by the State of The Netherlands" else {
+			return facility
+		}
+		return L.holderDccListFacility()
 	}
 }
 

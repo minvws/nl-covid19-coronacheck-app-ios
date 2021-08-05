@@ -32,7 +32,8 @@ class EventStartViewModelTests: XCTestCase {
 		testEventValidity: 40,
 		isGGDEnabled: true,
 		recoveryExpirationDays: 180,
-		credentialRenewalDays: 5
+		credentialRenewalDays: 5,
+		domesticQRRefreshSeconds: 60
 	)
 
 	override func setUp() {
@@ -40,7 +41,7 @@ class EventStartViewModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorSpy = EventCoordinatorDelegateSpy()
-		remoteConfigManagingSpy = RemoteConfigManagingSpy()
+		remoteConfigManagingSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
 		remoteConfigManagingSpy.stubbedGetConfigurationResult = remoteConfig
 		sut = EventStartViewModel(
 			coordinator: coordinatorSpy,

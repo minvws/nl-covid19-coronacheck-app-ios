@@ -13,7 +13,7 @@ final class EmptyDashboardView: BaseView {
 	private enum ViewTraits {
 		
 		enum Spacing {
-			static let cardToMessage: CGFloat = 24
+			static let cardToMessage: CGFloat = 32
 		}
 	}
 	
@@ -43,8 +43,8 @@ final class EmptyDashboardView: BaseView {
 		super.setupViewHierarchy()
 		
 		addSubview(stackView)
-		stackView.addArrangedSubview(cardView)
 		stackView.addArrangedSubview(contentTextView)
+		stackView.addArrangedSubview(cardView)
 	}
 	
 	/// Setup the constraints

@@ -7,22 +7,31 @@
 
 import UIKit
 
-class PreventableScreenCapture {
+protocol ScreenCaptureDetectorProtocol: AnyObject {
+	var screenshotWasTakenCallback: (() -> Void)? { get set }
+	var screenCaptureDidChangeCallback: ((Bool) -> Void)? { get set }
+}
+
+final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
-	@Bindable var hideForCapture: Bool = false
-	@Bindable var screenshotWasTaken: Bool = false
+	private(set) var screenIsBeingCaptured: Bool
+
+	var screenshotWasTakenCallback: (() -> Void)?
+	var screenCaptureDidChangeCallback: ((Bool) -> Void)? {
+		didSet {
+			updateScreenCaptureDidChangeCallback()
+		}
+	}
 
 	/// Initializer
 	init() {
-
+		screenIsBeingCaptured = UIScreen.main.isCaptured
 		addObservers()
-		preventScreenCapture()
 	}
 
 	deinit {
-
 		notificationCenter.removeObserver(self)
 	}
 
@@ -33,21 +42,21 @@ class PreventableScreenCapture {
 
 		notificationCenter.addObserver(
 			self,
-			selector: #selector(preventScreenCapture),
+			selector: #selector(updateScreenCaptureDidChangeCallback),
 			name: UIScreen.capturedDidChangeNotification,
 			object: nil
 		)
 
 		notificationCenter.addObserver(
 			self,
-			selector: #selector(preventScreenCapture),
+			selector: #selector(updateScreenCaptureDidChangeCallback),
 			name: UIApplication.willEnterForegroundNotification,
 			object: nil
 		)
 		
 		notificationCenter.addObserver(
 			self,
-			selector: #selector(preventScreenCapture),
+			selector: #selector(updateScreenCaptureDidChangeCallback),
 			name: UIApplication.didBecomeActiveNotification,
 			object: nil
 		)
@@ -61,18 +70,13 @@ class PreventableScreenCapture {
 	}
 
 	/// Prevent screen capture
-	@objc internal func preventScreenCapture() {
-		
-		if UIScreen.main.isCaptured {
-			hideForCapture = true
-		} else {
-			hideForCapture = false
-		}
+	@objc internal func updateScreenCaptureDidChangeCallback() {
+		screenIsBeingCaptured = UIScreen.main.isCaptured
+		screenCaptureDidChangeCallback?(UIScreen.main.isCaptured)
 	}
 
 	/// handle a screen shot taken
 	@objc internal func handleScreenShot() {
-
-		screenshotWasTaken = true
+		screenshotWasTakenCallback?()
 	}
 }

@@ -17,8 +17,8 @@ class ShowQRViewControllerTests: XCTestCase {
 
 	var holderCoordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
 	var cryptoManagerSpy: CryptoManagerSpy!
-	var configSpy: ConfigurationGeneralSpy!
 	var dataStoreManager: DataStoreManaging!
+	var screenCaptureDetector: ScreenCaptureDetectorSpy!
 	var viewModel: ShowQRViewModel!
 
 	var window = UIWindow()
@@ -31,8 +31,8 @@ class ShowQRViewControllerTests: XCTestCase {
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		configSpy = ConfigurationGeneralSpy()
 		cryptoManagerSpy.stubbedGenerateQRmessageResult = Data()
+		screenCaptureDetector = ScreenCaptureDetectorSpy()
 
 		let greenCard = try XCTUnwrap(
 			GreenCardModel.createTestGreenCard(
@@ -46,7 +46,7 @@ class ShowQRViewControllerTests: XCTestCase {
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
 			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			screenCaptureDetector: screenCaptureDetector
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		window = UIWindow()
@@ -91,8 +91,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
-			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 
@@ -118,8 +117,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
-			cryptoManager: cryptoManagerSpy,
-			configuration: configSpy
+			cryptoManager: cryptoManagerSpy
 		)
 		sut = ShowQRViewController(viewModel: viewModel)
 		loadView()
@@ -139,7 +137,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		sut?.checkValidity()
 
 		// When
-		viewModel?.hideForCapture = true
+		screenCaptureDetector.invokedScreenCaptureDidChangeCallback?(true)
 
 		// Then
 		expect(self.sut.sceneView.largeQRimageView.isHidden) == true
@@ -168,7 +166,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		viewModel.handleScreenShot()
+		screenCaptureDetector.invokedScreenshotWasTakenCallback?()
 
 		// Then
 		alertVerifier.verify(
