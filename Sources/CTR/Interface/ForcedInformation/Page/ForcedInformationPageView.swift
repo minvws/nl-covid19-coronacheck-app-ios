@@ -17,6 +17,8 @@ final class ForcedInformationPageView: ScrolledStackView {
 		static let imageHeightPercentage: CGFloat = 0.38
 		static let taglineLineHeight: CGFloat = 22
 		static let taglineKerning: CGFloat = -0.41
+		static let topMargin: CGFloat = 16
+		static let margin: CGFloat = 20
 		
 		// Margins
 		static let taglineSpacing: CGFloat = 8
@@ -29,6 +31,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
+		view.backgroundColor = C.forcedInformationImage()
 		return view
 	}()
 	
@@ -62,6 +65,18 @@ final class ForcedInformationPageView: ScrolledStackView {
 		
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		// No margins on the horizontal sides to display image full width
+		stackViewInset = UIEdgeInsets(top: ViewTraits.topMargin,
+									  left: 0,
+									  bottom: ViewTraits.margin,
+									  right: 0)
+		// Apply side margins for labels
+		bottomStackView.layoutMargins = UIEdgeInsets(top: 0,
+													 left: ViewTraits.margin,
+													 bottom: 0,
+													 right: ViewTraits.margin)
+		bottomStackView.isLayoutMarginsRelativeArrangement = true
 	}
 	
 	/// Setup the hierarchy
@@ -77,18 +92,6 @@ final class ForcedInformationPageView: ScrolledStackView {
 
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
-	}
-	
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-
-			imageView.heightAnchor.constraint(
-				lessThanOrEqualTo: heightAnchor,
-				multiplier: ViewTraits.imageHeightPercentage
-			)
-		])
 	}
 	
 	var image: UIImage? {
