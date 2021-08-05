@@ -121,20 +121,23 @@ class NetworkManager: Logging {
 			switch signedResult {
 				case let .success(signedResponse):
 					
-					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
-					   let signatureData = Data(base64Encoded: signedResponse.signature) {
-						
-						if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
-							// Validate signature (on the base64 payload)
-							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-								if valid {
-									DispatchQueue.main.async {
-										completion(.success(decodedPayloadData))
-									}
-								} else {
-									self.logError("We got an invalid signature!")
-									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
+						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
+						completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						return
+					}
+
+					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
+						// Validate signature (on the base64 payload)
+						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+							if valid {
+								DispatchQueue.main.async {
+									completion(.success(decodedPayloadData))
 								}
+							} else {
+								self.logError("We got an invalid signature!")
+								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 							}
 						}
 					}
@@ -163,29 +166,33 @@ class NetworkManager: Logging {
 			switch signedResult {
 				case let .success(signedResponse):
 
-					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
-					   let signatureData = Data(base64Encoded: signedResponse.signature) {
+					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
+						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
+						completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						return
+					}
 
-						if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
-							// Validate signature (on the base64 payload)
-							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-								if valid {
-									let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
-									DispatchQueue.main.async {
-										switch (decodedResult, decodedPayloadData) {
-											case (.success(let object), let decodedPayloadData):
-												completion(.success((object, decodedPayloadData)))
-											case (.failure(let responseError), _):
-												completion(.failure(responseError.asNetworkError))
-										}
+					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
+						// Validate signature (on the base64 payload)
+						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+							if valid {
+								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+								DispatchQueue.main.async {
+									switch (decodedResult, decodedPayloadData) {
+										case (.success(let object), let decodedPayloadData):
+											completion(.success((object, decodedPayloadData)))
+										case (.failure(let responseError), _):
+											completion(.failure(responseError.asNetworkError))
 									}
-								} else {
-									self.logError("We got an invalid signature!")
-									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 								}
+							} else {
+								self.logError("We got an invalid signature!")
+								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 							}
 						}
-					} // if let checker
+					}
+
 				case let .failure(networkError):
 					DispatchQueue.main.async {
 						completion(.failure(networkError))
@@ -230,26 +237,29 @@ class NetworkManager: Logging {
 			switch signedResult {
 				case let .success(signedResponse):
 
-					if let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
-					   let signatureData = Data(base64Encoded: signedResponse.signature) {
+					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
+						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
+						completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						return
+					}
 
-						if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
-							// Validate signature (on the base64 payload)
-							checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-								if valid {
-									let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
-									DispatchQueue.main.async {
-										switch decodedResult {
-											case let .success(object):
-												completion(.success((object, signedResponse)))
-											case let .failure(responseError):
-												completion(.failure(responseError.asNetworkError))
-										}
+					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
+						// Validate signature (on the base64 payload)
+						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+							if valid {
+								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+								DispatchQueue.main.async {
+									switch decodedResult {
+										case let .success(object):
+											completion(.success((object, signedResponse)))
+										case let .failure(responseError):
+											completion(.failure(responseError.asNetworkError))
 									}
-								} else {
-									self.logError("We got an invalid signature!")
-									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 								}
+							} else {
+								self.logError("We got an invalid signature!")
+								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
 							}
 						}
 					}
@@ -294,9 +304,9 @@ class NetworkManager: Logging {
 			//			logDebug("Response headers: \n\(headers)")
 			
 			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
-				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
-					logVerbose("Response body: \n\(body)")
-				}
+//				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
+					logDebug("Response body: \n\(body)")
+//				}
 			}
 		} else if let error = error {
 			logDebug("Error with response: \(error)")
