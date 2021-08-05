@@ -22,10 +22,13 @@ protocol EventDetailable {
 	
 	/// Show additional line break after field
 	var hasLineBreak: Bool { get }
+
+	/// Show a separator line
+	var isSeparator: Bool { get }
 }
 
 enum EventDetailsVaccination: EventDetailable {
-	case subtitle
+	case subtitle(provider: String)
 	case name
 	case dateOfBirth
 	case pathogen
@@ -37,17 +40,18 @@ enum EventDetailsVaccination: EventDetailable {
 	case date
 	case country
 	case uniqueIdentifer
+	case separator
 	
 	var isRequired: Bool {
 		switch self {
-			case .dosage, .completionReason: return false
+			case .dosage, .completionReason, .separator: return false
 			default: return true
 		}
 	}
 	
 	var displayTitle: String {
 		switch self {
-			case .subtitle: return L.holderEventAboutVaccinationSubtitle()
+			case let .subtitle(provider): return L.holderEventAboutVaccinationSubtitle(provider)
 			case .name: return L.holderEventAboutVaccinationName()
 			case .dateOfBirth: return L.holderEventAboutVaccinationDateofbirth()
 			case .pathogen: return L.holderEventAboutVaccinationPathogen()
@@ -59,12 +63,21 @@ enum EventDetailsVaccination: EventDetailable {
 			case .date: return L.holderEventAboutVaccinationDate()
 			case .country: return L.holderEventAboutVaccinationCountry()
 			case .uniqueIdentifer: return L.holderEventAboutVaccinationIdentifier()
+			case .separator: return ""
 		}
 	}
 	
 	var hasLineBreak: Bool {
 		switch self {
 			case .subtitle, .dateOfBirth: return true
+			default: return false
+		}
+	}
+
+	var isSeparator: Bool {
+
+		switch self {
+			case .separator: return true
 			default: return false
 		}
 	}
@@ -107,6 +120,10 @@ enum EventDetailsTest: EventDetailable {
 			default: return false
 		}
 	}
+
+	var isSeparator: Bool {
+		return false
+	}
 }
 
 enum EventDetailsRecovery: EventDetailable {
@@ -139,6 +156,10 @@ enum EventDetailsRecovery: EventDetailable {
 			case .subtitle, .dateOfBirth: return true
 			default: return false
 		}
+	}
+
+	var isSeparator: Bool {
+		return false
 	}
 }
 
@@ -186,6 +207,10 @@ enum EventDetailsDCCVaccination: EventDetailable {
 			default: return false
 		}
 	}
+
+	var isSeparator: Bool {
+		return false
+	}
 }
 
 enum EventDetailsDCCTest: EventDetailable {
@@ -231,6 +256,10 @@ enum EventDetailsDCCTest: EventDetailable {
 			default: return false
 		}
 	}
+
+	var isSeparator: Bool {
+		return false
+	}
 }
 
 enum EventDetailsDCCRecovery: EventDetailable {
@@ -270,6 +299,10 @@ enum EventDetailsDCCRecovery: EventDetailable {
 			default: return false
 		}
 	}
+
+	var isSeparator: Bool {
+		return false
+	}
 }
 
 extension EventDetails: Equatable {
@@ -279,6 +312,7 @@ extension EventDetails: Equatable {
 			lhs.field.displayTitle == rhs.field.displayTitle &&
 			lhs.field.isRequired == rhs.field.isRequired &&
 			lhs.field.hasLineBreak == rhs.field.hasLineBreak &&
+			lhs.field.isSeparator == rhs.field.isSeparator &&
 			lhs.value == rhs.value
 	}
 }
