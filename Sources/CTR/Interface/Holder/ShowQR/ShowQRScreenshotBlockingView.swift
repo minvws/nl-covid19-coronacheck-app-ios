@@ -27,9 +27,12 @@ class ShowQRScreenshotBlockingView: BaseView {
 		let label = Label(nil, font: Theme.fonts.headlineBoldMontserrat, textColor: Theme.colors.dark)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.textAlignment = .center
-		label.numberOfLines = 0
+		label.numberOfLines = 2
+		label.adjustsFontSizeToFitWidth = true
 		label.text = L.holderShowqrScreenshotwarningTitle()
 		label.setContentHuggingPriority(.required, for: .vertical)
+		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
+
 		return label
 	}()
 
@@ -37,9 +40,12 @@ class ShowQRScreenshotBlockingView: BaseView {
 		let label = Label(nil, font: Theme.fonts.body, textColor: Theme.colors.dark)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.textAlignment = .center
-		label.numberOfLines = 0
+		label.numberOfLines = 2
+		label.adjustsFontSizeToFitWidth = true
 		label.text = L.holderShowqrScreenshotwarningSubtitle()
 		label.setContentHuggingPriority(.required, for: .vertical)
+		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
+
 		return label
 	}()
 
@@ -47,9 +53,12 @@ class ShowQRScreenshotBlockingView: BaseView {
 		let label = Label(nil, font: Theme.fonts.subhead, textColor: Theme.colors.grey2)
 		label.translatesAutoresizingMaskIntoConstraints = false
 		label.textAlignment = .center
-		label.numberOfLines = 0
+		label.numberOfLines = 1
+		label.adjustsFontSizeToFitWidth = true
 		label.text = L.holderShowqrScreenshotwarningMessage("-")
 		label.setContentHuggingPriority(.required, for: .vertical)
+		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
+
 		return label
 	}()
 
@@ -57,6 +66,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 		let imageView = UIImageView(image: I.redScreenSmall())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.contentMode = .center
+		imageView.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .vertical)
 		return imageView
 	}()
 
@@ -76,6 +86,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 	override func setupViews() {
 
 		super.setupViews()
+		clipsToBounds = true
 		layer.cornerRadius = ViewTraits.cornerRadius.rawValue
 		layer.borderWidth = 1
 		layer.borderColor = Theme.colors.grey3.cgColor
@@ -100,11 +111,11 @@ class ShowQRScreenshotBlockingView: BaseView {
 		NSLayoutConstraint.activate([
 
 			headerImageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			headerImageView.topAnchor.constraint(equalTo: topAnchor),
+			headerImageView.topAnchor.constraint(equalTo: topAnchor, constant: 20),
 			headerImageView.bottomAnchor.constraint(equalTo: titleLabel.topAnchor),
 			headerImageView.widthAnchor.constraint(equalToConstant: ViewTraits.headerImageWidth.rawValue),
 
-			titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
+			titleLabel.centerYAnchor.constraint(lessThanOrEqualTo: centerYAnchor),
 			titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: ViewTraits.labelHorizontalPadding.rawValue),
 			titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.labelHorizontalPadding.rawValue),
 
