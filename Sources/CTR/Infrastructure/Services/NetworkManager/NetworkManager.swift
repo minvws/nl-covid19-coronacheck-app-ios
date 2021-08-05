@@ -304,9 +304,9 @@ class NetworkManager: Logging {
 			//			logDebug("Response headers: \n\(headers)")
 			
 			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
-//				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
-					logDebug("Response body: \n\(body)")
-//				}
+				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
+					logVerbose("Response body: \n\(body)")
+				}
 			}
 		} else if let error = error {
 			logDebug("Error with response: \(error)")
