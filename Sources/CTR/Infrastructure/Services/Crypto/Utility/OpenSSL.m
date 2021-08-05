@@ -122,16 +122,6 @@ errit:
     return results;
 }
 
-- (nullable NSString *)getSubjectAlternativeName:(NSData *)certificateData {
-    NSArray * sans = [self getSubjectAlternativeDNSNames:certificateData];
-
-    if ([sans count] == 1)
-        return [sans firstObject];
-    
-    NSLog(@"ERROR - getSubjectAlternativeName with multiple options - returning none.");
-    return NULL;
-}
-
 - (BOOL)validateSubjectAlternativeDNSName:(NSString *)host forCertificateData:(NSData *)certificateData {
     if (host == NULL)
         return false;

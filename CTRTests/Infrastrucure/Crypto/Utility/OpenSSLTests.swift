@@ -417,18 +417,6 @@ class OpenSSLTests: XCTestCase {
 
 	// MARK: - Subject Alternative Name
 
-	func test_subjectAlternativeName_deprecated() {
-
-		// Given
-		expect(self.sut).toNot(beNil())
-
-		// When
-		let san = sut.getSubjectAlternativeName(OpenSSLData.realLeaf) as String?
-
-		// Then
-		expect(san) == "api-ct.bananenhalen.nl"
-	}
-
 	func test_subjectAlternativeNames_realLeaf() {
 
 		// Given
