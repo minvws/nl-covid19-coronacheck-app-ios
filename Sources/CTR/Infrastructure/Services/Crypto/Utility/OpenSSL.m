@@ -93,15 +93,12 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
 - (NSArray *)getSubjectAlternativeDNSNames:(NSData *)certificateData {
     NSMutableArray * results = [[NSMutableArray alloc] initWithCapacity:4];
     STACK_OF(GENERAL_NAME) *gens = NULL;
-    BIO *certificateBlob = NULL;
-    X509 *certificate = NULL;
-    
-    if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
-        EXITOUT("Cannot allocate certificateBlob");
-    
-    if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse certificateData");
-    
+
+	X509 *certificate = [self getX509:certificateData];
+	if (certificate == NULL) {
+		return results;
+	}
+
     gens = X509_get_ext_d2i(certificate, NID_subject_alt_name, NULL, NULL);
     if (gens) {
         for (int i=0; (i < sk_GENERAL_NAME_num(gens)); i++) {
@@ -117,7 +114,6 @@ void print_pkey_as_hex(EVP_PKEY *pkey) {
     }
 errit:
     sk_GENERAL_NAME_pop_free(gens, GENERAL_NAME_free);
-    BIO_free(certificateBlob);
     X509_free(certificate);
     return results;
 }
@@ -135,15 +131,8 @@ errit:
 }
 
 - (BOOL)validateSerialNumber:(uint64_t)serialNumber forCertificateData:(NSData *)certificateData {
-    BIO *certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length);
-    
-    if (certificateBlob == NULL) {
-        return NO;
-    }
-    
-    X509 *certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL);
-    BIO_free(certificateBlob); certificateBlob = NULL;
-    
+
+	X509 *certificate = [self getX509:certificateData];
     if (certificate == NULL) {
         return NO;
     }
@@ -151,17 +140,20 @@ errit:
     ASN1_INTEGER *expectedSerial = ASN1_INTEGER_new();
     
     if (expectedSerial == NULL) {
+		X509_free(certificate); certificate = NULL;
         return NO;
     }
     
     if (ASN1_INTEGER_set_uint64(expectedSerial, serialNumber) != 1) {
         ASN1_INTEGER_free(expectedSerial); expectedSerial = NULL;
+		X509_free(certificate); certificate = NULL;
         
         return NO;
     }
     
     ASN1_INTEGER *certificateSerial = X509_get_serialNumber(certificate);
     if (certificateSerial == NULL) {
+		X509_free(certificate); certificate = NULL;
         return NO;
     }
     
@@ -176,17 +168,14 @@ errit:
                   forCertificateData:(NSData *)certificateData {
     const ASN1_OCTET_STRING *certificateSubjectKeyIdentifier = NULL;
     ASN1_OCTET_STRING *expectedSubjectKeyIdentifier = NULL;
-    BIO *certificateBlob = NULL;
-    X509 *certificate = NULL;
     BOOL isMatch = NO;
-    
-    if (NULL  == (certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length)))
-        EXITOUT("Cannot allocate certificateBlob");
-    
-    if (NULL == (certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL)))
-        EXITOUT("Cannot parse certificateData")
-        
-        const unsigned char *bytes = subjectKeyIdentifier.bytes;
+
+	X509 *certificate = [self getX509:certificateData];
+	if (certificate == NULL) {
+		return NO;
+	}
+
+	const unsigned char *bytes = subjectKeyIdentifier.bytes;
     if (NULL == (expectedSubjectKeyIdentifier = d2i_ASN1_OCTET_STRING(NULL, &bytes, (int)subjectKeyIdentifier.length)))
         EXITOUT("Cannot extract expectedSubjectKeyIdentifier");
     
@@ -196,7 +185,6 @@ errit:
     isMatch = ASN1_OCTET_STRING_cmp(expectedSubjectKeyIdentifier, certificateSubjectKeyIdentifier) == 0;
 
 errit:
-    BIO_free(certificateBlob);
     X509_free(certificate);
     ASN1_OCTET_STRING_free(expectedSubjectKeyIdentifier);
     
@@ -441,7 +429,7 @@ errit:
 - (BOOL)compareSubjectKeyIdentifier:(NSData *)certificateData with:(NSData *)trustedCertificateData {
 
 	// Certificate
-	X509 *certificate = [self getX509:certificateData];
+	X509 *certificate = [self getX509: certificateData];
 	if (certificate == NULL) {
 		return NO;
 	}
@@ -453,7 +441,7 @@ errit:
 	}
 
 	// Trusted Certificate
-	X509 *trustedCertificate = [self getX509:trustedCertificateData];
+	X509 *trustedCertificate = [self getX509: trustedCertificateData];
 	if (trustedCertificate == NULL) {
 		return NO;
 	}
@@ -475,7 +463,7 @@ errit:
 - (BOOL)compareSerialNumber:(NSData *)certificateData with:(NSData *)trustedCertificateData {
 
 	// Certificate
-	X509 *certificate = [self getX509:certificateData];
+	X509 *certificate = [self getX509: certificateData];
 	if (certificate == NULL) {
 		return NO;
 	}
@@ -487,8 +475,9 @@ errit:
 	}
 
 	// Trusted Certificate
-	X509 *trustedCertificate = [self getX509:trustedCertificateData];
+	X509 *trustedCertificate = [self getX509: trustedCertificateData];
 	if (trustedCertificate == NULL) {
+		X509_free(certificate); certificate = NULL;
 		return NO;
 	}
 
@@ -514,11 +503,14 @@ errit:
 	return isMatch;
 }
 
--(nullable X509*)getX509:(NSData *)certificateData {
+/// Extract the X509 from a certificate, returns null if failed.
+/// @param certificateData the data of the certificate
+- (nullable X509*) getX509: (NSData *) certificateData {
 
 	// Certificate
 	BIO *certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length);
 	if (certificateBlob == NULL) {
+		NSLog(@"Can not create bio blob");
 		return NULL;
 	}
 
