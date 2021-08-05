@@ -9,6 +9,12 @@ import UIKit
 
 class ShowQRImageView: BaseView {
 
+	enum VisibilityState: Equatable {
+		case loading
+		case visible(qrImage: UIImage)
+		case hiddenForScreenCapture
+		case screenshotBlocking(timeRemainingText: String)
+	}
 	/// The display constants
 	private struct ViewTraits {
 
@@ -18,10 +24,10 @@ class ShowQRImageView: BaseView {
 		static let internationalSecurityMargin: CGFloat = 49.0
 	}
 
-	var securityViewBottomConstraint: NSLayoutConstraint?
+	private var securityViewBottomConstraint: NSLayoutConstraint?
 
 	/// The spinner
-	let spinner: UIActivityIndicatorView = {
+	private let spinner: UIActivityIndicatorView = {
 
 		let view = UIActivityIndicatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +42,7 @@ class ShowQRImageView: BaseView {
 	}()
 
 	/// The image view for the QR image
-	internal let largeQRimageView: UIImageView = {
+	let largeQRimageView: UIImageView = {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -48,6 +54,13 @@ class ShowQRImageView: BaseView {
 
 		let view = SecurityFeaturesView()
 		view.contentMode = .bottom
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
+
+		let view = ShowQRScreenshotBlockingView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -66,6 +79,7 @@ class ShowQRImageView: BaseView {
 		addSubview(securityView)
 		addSubview(spinner)
 		addSubview(largeQRimageView)
+		addSubview(screenshotBlockingView)
 	}
 
 	/// Setup the constraints
@@ -89,6 +103,11 @@ class ShowQRImageView: BaseView {
 				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.margin
 			),
+
+			screenshotBlockingView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
+			screenshotBlockingView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+			screenshotBlockingView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
+			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
 
 			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
 			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
@@ -121,11 +140,36 @@ class ShowQRImageView: BaseView {
 
 	// MARK: Public Access
 
-	/// The qr  image
-	var qrImage: UIImage? {
+	var visibilityState: VisibilityState = .loading {
 		didSet {
-			largeQRimageView.image = qrImage
-			qrImage == nil ? spinner.startAnimating() : spinner.stopAnimating()
+
+			switch visibilityState {
+				case .hiddenForScreenCapture:
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = true
+					screenshotBlockingView.isHidden = true
+					spinner.isHidden = true
+
+				case .loading:
+					spinner.startAnimating()
+					largeQRimageView.isHidden = true
+					screenshotBlockingView.isHidden = true
+					spinner.isHidden = false
+
+				case .screenshotBlocking(let timeRemainingText):
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = true
+					screenshotBlockingView.countdown = timeRemainingText
+					screenshotBlockingView.isHidden = false
+					spinner.isHidden = true
+
+				case .visible(let qrImage):
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = false
+					largeQRimageView.image = qrImage
+					screenshotBlockingView.isHidden = true
+					spinner.isHidden = true
+			}
 		}
 	}
 
@@ -133,13 +177,6 @@ class ShowQRImageView: BaseView {
 	var accessibilityDescription: String? {
 		didSet {
             largeQRimageView.accessibilityLabel = accessibilityDescription
-		}
-	}
-
-	/// Hide the QR Image
-	var hideQRImage: Bool = false {
-		didSet {
-			largeQRimageView.isHidden = hideQRImage
 		}
 	}
 

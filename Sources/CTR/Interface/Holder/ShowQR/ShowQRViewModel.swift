@@ -11,19 +11,38 @@ class ShowQRViewModel: Logging {
 
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
+	static let screenshotWarningMessageDuration: Int = 3 * 60
 
 	var loggingCategory: String = "ShowQRViewModel"
-
-	var screenshotWasTakenHandler: (() -> Void)?
 
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
 
 	weak var validityTimer: Timer?
+	weak private var screenshotWarningTimer: Timer?
+
 	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
+
+	private var currentQRImage: UIImage? {
+		didSet {
+			updateQRVisibility()
+		}
+	}
+
+	private var screenIsBeingCaptured: Bool {
+		didSet {
+			updateQRVisibility()
+		}
+	}
+
+	private var screenIsBlockedForScreenshotWithTimeRemaining: Int? {
+		didSet {
+			updateQRVisibility()
+		}
+	}
 
 	@Bindable private(set) var title: String?
     
@@ -31,13 +50,9 @@ class ShowQRViewModel: Logging {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var qrImage: UIImage?
-
-	@Bindable private(set) var showValidQR: Bool
+	@Bindable private(set) var visibilityState: ShowQRImageView.VisibilityState = .loading
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
-
-	@Bindable private(set) var hideForCapture: Bool = false
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -62,6 +77,8 @@ class ShowQRViewModel: Logging {
 		return dateFormatter
 	}()
 
+	private let userSettings: UserSettingsProtocol
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -74,17 +91,17 @@ class ShowQRViewModel: Logging {
 		greenCard: GreenCard,
 		cryptoManager: CryptoManaging,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()) {
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
+		userSettings: UserSettingsProtocol,
+		now: @escaping () -> Date = Date.init
+	) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
 		self.cryptoManager = cryptoManager
 		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
-
-		// Start by showing nothing
-		self.showValidQR = false
-		self.qrImage = nil
+		self.userSettings = userSettings
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = L.holderShowqrDomesticTitle()
@@ -98,12 +115,66 @@ class ShowQRViewModel: Logging {
 			showInternationalAnimation = true
 		}
 
+		screenIsBeingCaptured = screenCaptureDetector.screenIsBeingCaptured
+
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
-			self?.hideForCapture = isBeingCaptured
+			self?.screenIsBeingCaptured = isBeingCaptured
 		}
+
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
-			self?.screenshotWasTakenHandler?()
+			userSettings.lastScreenshotTime = now()
+			self?.screenshotWasTaken()
 		}
+
+		if let lastScreenshotTime = userSettings.lastScreenshotTime {
+			let expiryDate = lastScreenshotTime.addingTimeInterval(TimeInterval(ShowQRViewModel.screenshotWarningMessageDuration))
+			if expiryDate > now() {
+				let timeRemaining = Int(expiryDate.timeIntervalSince(now()))
+				screenshotWasTaken(timeRemaining: timeRemaining)
+			} else {
+				userSettings.lastScreenshotTime = nil
+			}
+		}
+
+		updateQRVisibility()
+	}
+
+	func updateQRVisibility() {
+		if let screenshotBlockTimeRemaining = screenIsBlockedForScreenshotWithTimeRemaining {
+			let mins = screenshotBlockTimeRemaining / 60 % 60
+			let secs = screenshotBlockTimeRemaining % 60
+			let zeroPaddedSeconds = String(format: "%02d", secs)
+
+			let message = L.holderShowqrScreenshotwarningMessage("\(mins):\(zeroPaddedSeconds)")
+			self.visibilityState = .screenshotBlocking(timeRemainingText: message)
+		} else if screenIsBeingCaptured {
+			self.visibilityState = .hiddenForScreenCapture
+		} else if let currentQRImage = self.currentQRImage {
+			self.visibilityState = .visible(qrImage: currentQRImage)
+		} else {
+			self.visibilityState = .loading
+		}
+	}
+
+	private func screenshotWasTaken(timeRemaining: Int = ShowQRViewModel.screenshotWarningMessageDuration) {
+		// Let's 🧹 the busted old timer
+		screenshotWarningTimer?.invalidate()
+		screenshotWarningTimer = nil
+
+		screenIsBlockedForScreenshotWithTimeRemaining = timeRemaining
+		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+			guard let self = self,
+				  let remainingSeconds = self.screenIsBlockedForScreenshotWithTimeRemaining
+			else { return }
+
+			if remainingSeconds <= 0 {
+				timer.invalidate()
+				self.screenIsBlockedForScreenshotWithTimeRemaining = nil
+			} else {
+				self.screenIsBlockedForScreenshotWithTimeRemaining = remainingSeconds - 1
+			}
+		}
+		screenshotWarningTimer?.fire() // don't wait 1s
 	}
 
 	/// Check the QR Validity
@@ -132,9 +203,10 @@ class ShowQRViewModel: Logging {
 		} else {
 			DispatchQueue.global(qos: .userInitiated).async {
 				// International
-				let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel)
-				DispatchQueue.main.async {
-					self.setQRValid(image: image)
+				if let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel) {
+					DispatchQueue.main.async {
+						self.setQRValid(image: image)
+					}
 				}
 			}
 		}
@@ -298,19 +370,17 @@ class ShowQRViewModel: Logging {
 		)
 	}
 
-	private func setQRValid(image: UIImage?) {
+	private func setQRValid(image: UIImage) {
 
 		logDebug("Credential is valid")
-		qrImage = image
-		showValidQR = true
+		currentQRImage = image
 		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
 
 		logWarning("Credential is not valid")
-		qrImage = nil
-		showValidQR = false
+		currentQRImage = nil
 		stopValidityTimer()
 		coordinator?.navigateBackToStart()
 	}
