@@ -65,6 +65,7 @@ class ShowQRViewController: BaseViewController {
 
 		viewModel.$visibilityState.binding = { [weak self] in
 			self?.sceneView.visibilityState = $0
+			self?.viewModel.setBrightness()
 		}
 
 		viewModel.$showInternationalAnimation.binding = { [weak self] in
@@ -96,11 +97,6 @@ class ShowQRViewController: BaseViewController {
 
 		// Check the Validity of the QR
 		viewModel.checkQRValidity()
-
-		// Check the brightness
-//		if !sceneView.largeQRimageView.isHidden {
-//			viewModel.setBrightness()
-//		}
 
 		sceneView.resume()
 	}
