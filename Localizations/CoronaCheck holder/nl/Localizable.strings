@@ -279,9 +279,9 @@
 "holder.onboarding.message.privacy" = "De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code.";
 
 /* MARK: - Update Page Forced Information */
-"holder.updatepage.title" = "Bewijs van herstel";
+"holder.updatepage.title.tab" = "Een Nederlands en internationaal tabblad";
 "holder.updatepage.tagline" = "Nieuw in de app";
-"holder.updatepage.content" = "Vanaf nu kun je via deze app ook een herstelbewijs maken. Dat is een bewijs van een positieve testuitslag. Daarmee laat je zien dat je corona hebt gehad. Zo krijg je toegang tot bepaalde plekken en activiteiten. Ook kun je er internationaal mee reizen.";
+"holder.updatepage.content.tab" = "Je kunt nu makkelijker wisselen tussen je Nederlandse en internationale bewijs. Bovenin het scherm vind je een tabblad ‘Nederland’ en een tabblad ‘Internationaal’. Ga je de grens over? Gebruik dan de bewijzen onder ‘Internationaal’.";
 
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
