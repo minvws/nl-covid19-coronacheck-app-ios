@@ -470,6 +470,7 @@ errit:
 
 	const ASN1_OCTET_STRING *trustedCertificateSubjectKeyIdentifier = X509_get0_subject_key_id(trustedCertificate);
 	if (trustedCertificateSubjectKeyIdentifier == NULL) {
+		X509_free(certificate); certificate = NULL;
 		X509_free(trustedCertificate); trustedCertificate = NULL;
 		return NO;
 	}
@@ -503,6 +504,7 @@ errit:
 
 	ASN1_INTEGER *trustedCertificateSerial = X509_get_serialNumber(trustedCertificate);
 	if (trustedCertificateSerial == NULL) {
+		X509_free(certificate); certificate = NULL;
 		X509_free(trustedCertificate); trustedCertificate = NULL;
 		return NO;
 	}
