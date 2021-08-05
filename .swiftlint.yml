@@ -64,10 +64,8 @@ custom_rules:
     name: "print usage"
     regex: "((\\bprint)|(Swift\\.print))\\s*\\("
     message: "Prefer logDebug over print"
-    severity: error
   disable_dump:
     included: "Sources/.*\\.swift"
     name: "dump usage"
     regex: "((\\bdump)|(Swift\\.dump))\\s*\\("
     message: "Prefer logDebug over dump"
-    severity: error
