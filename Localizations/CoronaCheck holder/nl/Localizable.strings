@@ -353,6 +353,9 @@
 "holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /> <b>%@</b><br /><br />Geboortedatum / Date of birth*:<br /> <b>%@</b></p><p><br />Ziekteverwekker / Disease targeted:<br /> <b>COVID-19</b><br /><br />Type test / Type of test:<br /> <b>%@</b><br /><br />Testnaam / Test name:<br /> <b>%@</b><br /><br />Testdatum / Test date*:<br /> <b>%@</b><br /><br />Testuitslag / Test result:<br /> <b>%@</b><br /><br />Testlocatie / Testing centre:<br /> <b>%@</b><br /><br />Producent / Test manufacturer:<br /> <b>%@</b><br /><br />Getest in / Member state of test:<br /> <b>%@</b><br /><br />Afgever certificaat / Certificate issuer:<br /> <b>%@</b><br /><br />Uniek certificaatnummer / Unique certificate identifier:<br /> <b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
 "holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
+"holder.showqr.screenshotwarning.title" = "Een schermafbeelding is geen geldig bewijs";
+"holder.showqr.screenshotwarning.subtitle" = "Gebruik de QR-code in de app";
+"holder.showqr.screenshotwarning.message" = "Je QR-code komt terug in %@";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
