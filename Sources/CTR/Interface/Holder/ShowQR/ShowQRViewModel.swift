@@ -121,7 +121,7 @@ class ShowQRViewModel: Logging {
 			showInternationalAnimation = false
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = L.holderShowqrEuTitle()
-            qrAccessibility = L.holderShowqrEuTitle()
+            qrAccessibility = L.holderShowqrEuQrTitle()
 			infoButtonAccessibility = L.holderShowqrEuAboutTitle()
 			showInternationalAnimation = true
 		}
