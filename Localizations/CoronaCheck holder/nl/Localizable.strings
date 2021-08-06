@@ -551,5 +551,3 @@
 "holder.vaccination.element.single" = "<br />Gegevens opgehaald bij: %@";
 "holder.vaccination.element.combined" = "<br />Gegevens opgehaald bij: %@ en %@";
 "holder.event.details" = "Details";
-"holder.vaccination.element.combined" = "<br />Gegevens opgehaald bij: %@ en %@";
-"holder.vaccination.element.single" = "<br />Gegevens opgehaald bij: %@";
