@@ -250,7 +250,10 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCard: greenCard,
-				cryptoManager: cryptoManager
+				cryptoManager: cryptoManager,
+				remoteConfigManager: Services.remoteConfigManager,
+				userSettings: UserSettings(),
+				now: Date.init
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
