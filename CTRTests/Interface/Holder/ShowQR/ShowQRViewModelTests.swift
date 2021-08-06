@@ -252,6 +252,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
@@ -308,6 +309,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -489,7 +491,8 @@ class ShowQRViewModelTests: XCTestCase {
 			greenCard: greenCard,
 			thirdPartyTicketAppName: "RollerDiscoParties",
 			cryptoManager: cryptoManagerSpy,
-			screenCaptureDetector: screenCaptureDetector
+			screenCaptureDetector: screenCaptureDetector,
+			userSettings: userSettingsSpy
 		)
 
 		// Act
