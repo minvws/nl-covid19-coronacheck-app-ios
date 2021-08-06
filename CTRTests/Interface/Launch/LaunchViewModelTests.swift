@@ -53,7 +53,8 @@ class LaunchViewModelTests: XCTestCase {
 		isGGDEnabled: true,
 		recoveryExpirationDays: 180,
 		credentialRenewalDays: 5,
-		domesticQRRefreshSeconds: 60
+		domesticQRRefreshSeconds: 60,
+		universalLinkPermittedDomains: nil
 	)
 
 	// MARK: Tests
