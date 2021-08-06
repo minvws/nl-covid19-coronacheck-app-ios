@@ -54,6 +54,8 @@ class ShowQRViewModel: Logging {
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
 
+	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
+
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
 		dateFormatter.formatOptions = [.withFullDate]
@@ -89,6 +91,7 @@ class ShowQRViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
+		thirdPartyTicketAppName: String?,
 		cryptoManager: CryptoManaging,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
 		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
@@ -98,6 +101,7 @@ class ShowQRViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
+		self.thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 		self.cryptoManager = cryptoManager
 		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
@@ -210,6 +214,10 @@ class ShowQRViewModel: Logging {
 				}
 			}
 		}
+	}
+
+	func didTapThirdPartyAppButton() {
+		coordinator?.userWishesToLaunchThirdPartyTicketApp()
 	}
 
 	func showMoreInformation() {

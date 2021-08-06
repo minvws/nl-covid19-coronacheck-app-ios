@@ -73,6 +73,15 @@ class ShowQRViewController: BaseViewController {
 				self?.sceneView.setupForInternational()
 			}
 		}
+
+		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in
+			self?.sceneView.returnToThirdPartyAppButtonTitle = $0
+		}
+
+		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in
+			viewModel.didTapThirdPartyAppButton()
+		}
+
 	}
 
 	private func setupListeners() {

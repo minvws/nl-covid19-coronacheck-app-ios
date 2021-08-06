@@ -331,6 +331,7 @@
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccinatiebewijs: dosis %@ van %@";
+"holder.dashboard.qr.backToThirdPartyApp" = "Naar de %@";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
