@@ -180,7 +180,9 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 	}
     
     func torchChanged(enabled: Bool) {
-        torchButton?.accessibilityLabel = enabled ? torchDisableLabel : torchEnableLabel
+        let label = enabled ? torchDisableLabel : torchEnableLabel
+        torchButton?.accessibilityLabel = label
+        torchButton?.title = label
     }
 
 	/// Add a torch button to the navigation bar.
@@ -199,6 +201,7 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
 			action: action
 		)
         button.title = enableLabel
+        button.accessibilityLabel = enableLabel
 		button.accessibilityIdentifier = "TorchButton"
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button

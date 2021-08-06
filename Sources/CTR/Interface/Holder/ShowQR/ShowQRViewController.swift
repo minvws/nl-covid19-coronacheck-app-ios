@@ -138,6 +138,7 @@ class ShowQRViewController: BaseViewController {
 			action: action
 		)
         button.title = accessibilityLabel
+        button.accessibilityLabel = accessibilityLabel
 		button.accessibilityIdentifier = "InformationButton"
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button
