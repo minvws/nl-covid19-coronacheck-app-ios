@@ -1,7 +1,7 @@
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "Een Nederlands en internationaal tabblad";
-"holder.updatepage.content.tab" = "Je kunt nu makkelijker wisselen tussen je Nederlandse en internationale bewijs. Bovenin het scherm vind je een tabblad ‘Nederland’ en een tabblad ‘Internationaal’. Ga je de grens over? Gebruik dan de bewijzen onder ‘Internationaal’.";
 
+"holder.updatepage.content.tab" = "Je kunt nu makkelijker wisselen tussen je Nederlandse en internationale bewijs. Bovenin het scherm vind je een tabblad ‘Nederland’ en een tabblad ‘Internationaal’. Ga je de grens over? Gebruik dan de bewijzen onder ‘Internationaal’.";
 "general.paperflow" = "papieren bewijs";
 "holder.dcc.list.issuer" = "Ministerie van VWS";
 "holder.vaccination.about.off.dcc" = "Dosis %@ van %@ / Dose %@ of %@";
@@ -285,12 +285,7 @@
 "holder.onboarding.title.privacy" = "QR-codes voor Nederland en internationaal";
 "holder.onboarding.message.privacy" = "De app maakt twee QR-codes: een QR-code voor Nederland en een internationale. Beide QR-codes vind je in de app. Reis je buiten Nederland? Gebruik dan je internationale QR-code.";
 
-
-/* MARK: - Update Page Forced Information */
-"holder.updatepage.title.tab" = "Een Nederlands en internationaal tabblad";
 "holder.updatepage.tagline" = "Nieuw in de app";
-"holder.updatepage.content.tab" = "Je kunt nu makkelijker wisselen tussen je Nederlandse en internationale bewijs. Bovenin het scherm vind je een tabblad ‘Nederland’ en een tabblad ‘Internationaal’. Ga je de grens over? Gebruik dan de bewijzen onder ‘Internationaal’.";
-
 /* MARK: - Holder Consent */
 "holder.consent.title" = "Zo gebruikt de app jouw gegevens";
 "holder.consent.message" = "In de privacyverklaring staat hoe CoronaCheck omgaat met jouw gegevens. Dit zijn de belangrijkste punten:";
@@ -331,6 +326,8 @@
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccinatiebewijs: dosis %@ van %@";
+"holder.dashboard.qr.backToThirdPartyApp" = "Naar de %@";
+
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";
