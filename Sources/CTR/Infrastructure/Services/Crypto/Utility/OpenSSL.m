@@ -408,6 +408,7 @@ errit:
 
 	X509 *trustedCertificate = [self getX509:trustedCertificateData];
 	if (trustedCertificate == NULL) {
+		X509_free(certificate); certificate = NULL;
 		return NO;
 	}
 
@@ -443,6 +444,7 @@ errit:
 	// Trusted Certificate
 	X509 *trustedCertificate = [self getX509: trustedCertificateData];
 	if (trustedCertificate == NULL) {
+		X509_free(certificate); certificate = NULL;
 		return NO;
 	}
 
@@ -507,15 +509,14 @@ errit:
 /// @param certificateData the data of the certificate
 - (nullable X509*) getX509: (NSData *) certificateData {
 
-	// Certificate
-	BIO *certificateBlob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length);
-	if (certificateBlob == NULL) {
+	BIO *blob = BIO_new_mem_buf(certificateData.bytes, (int)certificateData.length);
+	if (blob == NULL) {
 		NSLog(@"Can not create bio blob");
 		return NULL;
 	}
 
-	X509 *certificate = PEM_read_bio_X509(certificateBlob, NULL, 0, NULL);
-	BIO_free(certificateBlob); certificateBlob = NULL;
+	X509 *certificate = PEM_read_bio_X509(blob, NULL, 0, NULL);
+	BIO_free(blob); blob = NULL;
 	return certificate;
 }
 
