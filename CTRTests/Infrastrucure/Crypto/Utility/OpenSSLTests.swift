@@ -12,18 +12,13 @@ import Nimble
 class OpenSSLTests: XCTestCase {
 
 	var sut = OpenSSL()
+	let testBundle = Bundle(for: OpenSSLTests.self)
 
 	override func setUp() {
 
 		super.setUp()
 		sut = OpenSSL()
 	}
-
-	// Use gen-fake-pki-overheid.sh to generate this certificate
-	let rootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURoekNDQW0rZ0F3SUJBZ0lKQUs2d3FVcEswaVhTTUEwR0NTcUdTSWIzRFFFQkN3VUFNRm94S3pBcEJnTlYKQkFNTUlsTjBZV0YwSUdSbGNpQk9aV1JsY214aGJtUmxiaUJTYjI5MElFTkJJQzBnUnpNeEhqQWNCZ05WQkFvTQpGVk4wWVdGMElHUmxjaUJPWldSbGNteGhibVJsYmpFTE1Ba0dBMVVFQmhNQ1Rrd3dIaGNOTWpFd09EQTFNVEV5Ck5qQTVXaGNOTWpJd09EQTFNVEV5TmpBNVdqQmFNU3N3S1FZRFZRUUREQ0pUZEdGaGRDQmtaWElnVG1Wa1pYSnMKWVc1a1pXNGdVbTl2ZENCRFFTQXRJRWN6TVI0d0hBWURWUVFLREJWVGRHRmhkQ0JrWlhJZ1RtVmtaWEpzWVc1awpaVzR4Q3pBSkJnTlZCQVlUQWs1TU1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnJHQWJlM0JMeGVBWnAzZ09WcmZGU2d2S0pJSE1PWHhaME1yZnJKaXdCQTRDZEtWb1prd282dUtxRFp0S0JEdWMKc0ZCL3dHSnFZMThzSXBpUktNeWwxbFNidU9BeVp4Vit1TEFOVERucitlcDhuclU4bjlPdGNLWFZzalVsQUM4SwpBaXNUdnRDT1VsV1l6MElUUFNSeWV4bkpwblNrdWpOK1N0ZEZSS2FRaVRkc2xsUm1RR1VjOE5TazVuaGJRT1dNCmJJZ3k5QmlISmYrZ0JrU2NCNlJXQjI1UFgxdFNyS1RnTTloQkdjZE85dUJXRVdoemh5c1FFalBGVHpRaGhMdUQKNXRTWE1lRHRtKzVEeEw4STJsVWw5UTFXSmpmc09HN25ZbWloSGZkNmpyZ1dXWmQwczk2eFlVOERKUWthTlo5bwpvYk5yNmNJNXZ4ZFlldWNTc1FNd1hRSURBUUFCbzFBd1RqQWRCZ05WSFE0RUZnUVVoaHV1WVVXV2tmRGRWQmtJCndMSUlWNHFGODk4d0h3WURWUjBqQkJnd0ZvQVVoaHV1WVVXV2tmRGRWQmtJd0xJSVY0cUY4OTh3REFZRFZSMFQKQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBS3owemllZFZNalhqL05uRWxucmFUUzB2U2llZQpCOU9hYlp6UUxuUXJtaFNibXZuK1h0UWZQbGtPdjZmNitiL2syRkRoNVpEYzJnbVFrUW4vNXdrWU00MUZ2MENaCkVQU25DWHJMam01NU12eDdYZ1h2OVJoUFVlRm5qcnNzN3FZNjFiZkh5VXJEdnR5Z2hFRCtkdVJxUHViMTcydk4KOE9oYTVUbXF2UkxDN01LN20wRkVZR2MrSWdDdDdYUzRrN3BYcW9zUzNycGMyeG1tdWlmekVTckxoRkZhdHVmSQpFYU14Rzg3MEdYekhuWFlnTFJPTWZWeUg3ZFEwT09tT0NCZUhGVDB4OGFNSEhGNkJqZjJGcHVETFlWblNzeDd3Ck1pcm5taG5jZXpRL0hFTFA4eTRrRkI0aE55MHNHRUdZS0ZuOTFkbzlQZFp2cUhERDgxcmZBQTlpVGc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t" )!
-
-	// Use long-chain.sh to generate this certificate
-	let deepRootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM3VENDQWRXZ0F3SUJBZ0lKQUsxU2NYMWthcHhaTUEwR0NTcUdTSWIzRFFFQkN3VUFNQTB4Q3pBSkJnTlYKQkFNTUFrTkJNQjRYRFRJeE1EZ3dOVEV5TkRNeE1Wb1hEVEl4TURrd05ERXlORE14TVZvd0RURUxNQWtHQTFVRQpBd3dDUTBFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURQK0hkZGhSNmk4dXdQCllWeXJQV3grbFROUm1STlAxTFVKOUtLVWhCQ2drWW96TGI2cXpKVzFWcFFDSEdPR2ZlZTR2cndwUmdxQkt6UDIKYWh4d3ROYjJidFltc2Q4a2sxYUxaOXUrd3JoSmhzU3hlTkpqbU93Y0s4NFduMlM1Z050UU1ZRFMxOEJyMUFlNgpaY3hIZkFIVzgxbjJrbkRTWm5rcXM4N3JBZlNKNGYrOHBMM0ZDZ1BIb29LdzdycWFibmdDQ29nSzIxUWJkc0t0CnRLNjBVenNkZGUwZTdEWXdwQnMxN3ZkKzBZMnpINVNtMlpHN1g2RGNPTzRnK3NaMmZ5YzVrdzBaUkdQQlRBLzAKRUhQbWxUZVFLdVlaRk5yUU5nOTU2UzMrVFhrdExRdDlnR2VmZTQ0WGhHY09tazRnR25SSzFNSUdkKyt0RVFoaAp0eUt6TmRnVkFnTUJBQUdqVURCT01CMEdBMVVkRGdRV0JCVFYzcHBlNi9sa00rbTE2VmpKYzZ1bjl4bEhHREFmCkJnTlZIU01FR0RBV2dCVFYzcHBlNi9sa00rbTE2VmpKYzZ1bjl4bEhHREFNQmdOVkhSTUVCVEFEQVFIL01BMEcKQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNoYkx5WXI4RXNna3MyVGR0ZWhMSWM5eDNYZiswbDZJNEhWZ1dLNW94Qwp5UG90NWx3YXNEaElIWkhqa2xNOHVudmdhWkVBQUJCMnk5MHYxSXZ5bDNRR3oydTlnVDRWVnBjSllZL3FoLzZjCnZrU2NidjN5RmEraVJDZ0lQOGdubS9yUnhzR0hCVk5JNzBySzk1ZDFuZnE3blVKMG5ydVZlT2dKZWRIS08vR0IKMThuS1ROOGtibUdKRnlvanBvWVhpR053c3BoUzFGMURTUkd6LzlPWHFrQWNJb0kvb1g0VzFnQ1ZLbHBjaXVBVAo5eGhYYS9VelM5eVFwSEtzTG1Kckk2eUhrVEthc3dMNlBMYTlhT21JMnUyTVNUZUM2Syt5RmdzalBRb3R1RTNuCnFFMTdjdUMzQ09Lcys3Znd5OW9xK1FVaS9OUEpac2RMOTN6azgrb25EQkIyCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=" )!
 
 	let authorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0x88, 0x58, 0x4D, 0x77, 0xE3, 0x87, 0x8B, 0xCF, 0x30, 0x63, 0xDF, 0x9A, 0x9C, 0x40, 0xD5, 0xD7, 0xD6, 0x57, 0xED, 0x93 ])
 
@@ -44,16 +39,19 @@ class OpenSSLTests: XCTestCase {
 
 	// MARK: - Signature
 
-	func testCMSSignature_padding_pkcs_validPayload() {
+	func testCMSSignature_padding_pkcs_validPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ".nl")
@@ -62,16 +60,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == true
 	}
 
-	func testCMSSignature_padding_pkcs_wrongPayload() {
+	func testCMSSignature_padding_pkcs_wrongPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: wrongPayload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ".nl")
@@ -80,16 +81,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func testCMSSignature_padding_pss_validPayload() {
+	func testCMSSignature_padding_pss_validPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePPS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ".nl")
@@ -98,16 +102,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == true
 	}
 
-	func testCMSSignature_padding_pss_wrongPayload() {
+	func testCMSSignature_padding_pss_wrongPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			wrongPayload,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ".nl")
@@ -116,16 +123,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_wrongCommonName() {
+	func testCMSSignature_test_pinning_wrongCommonName() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".xx.n",
 			requiredCommonNameSuffix: ".nl")
@@ -134,16 +144,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_wrongSuffix() {
+	func testCMSSignature_test_pinning_wrongSuffix() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ".xx"
@@ -153,16 +166,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_emptySuffix() {
+	func testCMSSignature_test_pinning_emptySuffix() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ""
@@ -172,16 +188,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_emptyCommonName() {
+	func testCMSSignature_test_pinning_emptyCommonName() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: "",
 			requiredCommonNameSuffix: ".xx"
@@ -191,16 +210,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_all_empty() {
+	func testCMSSignature_test_pinning_all_empty() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
 			requiredCommonNameContent: "",
 			requiredCommonNameSuffix: ""
@@ -210,16 +232,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == true
 	}
 
-	func testCMSSignature_verydeep() {
+	func testCMSSignature_verydeep() throws {
+
+		// Use long-chain.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certDeepChain", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			deepSignature,
 			contentData: payload,
-			certificateData: deepRootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: deepAuthorityKeyIdentifier,
 			requiredCommonNameContent: "leaf",
 			requiredCommonNameSuffix: ".nl"
@@ -229,16 +254,19 @@ class OpenSSLTests: XCTestCase {
 		expect(validation) == true
 	}
 
-	func testCMSSignature_invalidAuthorityKeyIdentifier() {
+	func testCMSSignature_invalidAuthorityKeyIdentifier() throws {
+
+		// Use long-chain.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certDeepChain", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: deepAuthorityKeyIdentifier,
 			requiredCommonNameContent: ".coronatester.n",
 			requiredCommonNameSuffix: ".nl")
