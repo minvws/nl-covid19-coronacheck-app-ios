@@ -166,7 +166,8 @@ errit:
 
 - (BOOL)validateSubjectKeyIdentifier:(NSData *)subjectKeyIdentifier
                   forCertificateData:(NSData *)certificateData {
-    const ASN1_OCTET_STRING *certificateSubjectKeyIdentifier = NULL;
+
+	const ASN1_OCTET_STRING *certificateSubjectKeyIdentifier = NULL;
     ASN1_OCTET_STRING *expectedSubjectKeyIdentifier = NULL;
     BOOL isMatch = NO;
 
@@ -193,7 +194,8 @@ errit:
 
 - (BOOL)validateAuthorityKeyIdentifierData:(NSData *)expectedAuthorityKeyIdentifierData
                         signingCertificate:(X509 *)signingCert {
-    ASN1_OCTET_STRING *expectedAuthorityKeyIdentifier = NULL;
+
+	ASN1_OCTET_STRING *expectedAuthorityKeyIdentifier = NULL;
     BOOL isMatch = NO;
     
     if (expectedAuthorityKeyIdentifierData == NULL)
