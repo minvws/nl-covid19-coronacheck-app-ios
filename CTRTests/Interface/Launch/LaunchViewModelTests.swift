@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -101,10 +100,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_noActionRequired() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_noActionRequired"
-		), Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data())), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -169,10 +165,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequired_forIssuerPublicKeys() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_noActionRequired"
-		), Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data())), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -271,8 +264,10 @@ class LaunchViewModelTests: XCTestCase {
 	func test_actionRequired() {
 
 		// Given
-		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration(minVersion: "2.0", minVersionMessage: "remoteConfigSpy")
-		let remoteConfig = remoteConfigSpy.getConfiguration()
+		var remoteConfig = RemoteConfiguration.default
+		remoteConfig.minimumVersion = "2.0"
+
+		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data())), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -304,10 +299,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_cryptoLibNotInitialized() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_cryptoLibNotInitialized"
-		), Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data())), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -338,11 +330,9 @@ class LaunchViewModelTests: XCTestCase {
 	func test_killswitchEnabled() {
 
 		// Given
-		let remoteConfig = RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_killswitch",
-			deactivated: true
-		)
+		var remoteConfig = RemoteConfiguration.default
+//		remoteConfig.minimumVersion = "1.0.0"
+		remoteConfig.appDeactivated = true
 
 		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data())), ())
 
