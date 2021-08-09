@@ -53,11 +53,7 @@ class RemoteConfigManagerTests: XCTestCase {
 
 		// Given
 		waitUntil(timeout: .seconds(10)) { done in
-			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration(
-				minVersion: "1.0.0",
-				minVersionMessage: "test_remoteConfigManagerUpdate_versionsEqual"
-			), Data())), ())
-			
+			self.networkSpy.stubbedGetRemoteConfigurationCompletionResult = (.success((RemoteConfiguration.default, Data())), ())
 			// When
 			self.sut.update { state in
 
@@ -67,31 +63,5 @@ class RemoteConfigManagerTests: XCTestCase {
 				done()
 			}
 		}
-	}
-}
-
-extension RemoteConfiguration {
-
-	init(minVersion: String, minVersionMessage: String?, deactivated: Bool? = nil) {
-
-		self.init(
-			minVersion: minVersion,
-			minVersionMessage: minVersionMessage,
-			storeUrl: nil,
-			deactivated: deactivated,
-			informationURL: nil,
-			configTTL: 3600,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
-		)
 	}
 }
