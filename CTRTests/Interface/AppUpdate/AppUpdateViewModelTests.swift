@@ -19,26 +19,9 @@ class AppUpdateViewModelTests: XCTestCase {
 	override func setUp() {
 
 		appCoordinatorSpy = AppCoordinatorSpy()
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: "test message",
-			storeUrl: URL(string: "https://apple.com"),
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60,
-			universalLinkPermittedDomains: nil
-		)
+		var appVersionInfo = RemoteConfiguration.default
+		appVersionInfo.appStoreURL = URL(string: "https://apple.com")
+
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
 	}
@@ -54,7 +37,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Then
 		XCTAssertFalse(sut.showCannotOpenAlert, "We should not show an alert")
-		XCTAssertEqual(sut.message, "test message")
+		XCTAssertEqual(sut.message, "Je hebt de laatste versie van de app nodig om verder te gaan.")
 	}
 
 	/// Test the initializer without a message in the app information.
@@ -76,6 +59,7 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Given
 
+
 		// When
 		sut.actionButtonTapped()
 
@@ -87,26 +71,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testUpdateButtonTappedWithoutUrl() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: "test",
-			storeUrl: nil,
-			deactivated: nil,
-			informationURL: nil,
-			configTTL: 3600,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60,
-			universalLinkPermittedDomains: nil
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 
@@ -122,26 +87,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testInitializerEndOfLifeNoInformationUrl() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: nil,
-			storeUrl: nil,
-			deactivated: true,
-			informationURL: nil,
-			configTTL: 3600,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60,
-			universalLinkPermittedDomains: nil
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		// When
 		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -155,26 +101,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testInitializerEndOfLifeWithInformationUrl() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: nil,
-			storeUrl: nil,
-			deactivated: true,
-			informationURL: URL(string: "https://apple.com"),
-			configTTL: 3600,
-			recoveryWaitingPeriodDays: 11,
-			requireUpdateBefore: nil,
-			temporarilyDisabled: false,
-			domesticValidityHours: 40,
-			vaccinationEventValidity: 14600,
-			recoveryEventValidity: 7300,
-			testEventValidity: 40,
-			isGGDEnabled: true,
-			recoveryExpirationDays: 180,
-			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60,
-			universalLinkPermittedDomains: nil
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		// When
 		sut = EndOfLifeViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
