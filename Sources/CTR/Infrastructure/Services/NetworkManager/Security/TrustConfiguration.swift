@@ -15,9 +15,25 @@ struct SigningCertificate {
 	/// The certificate
 	let certificate: String
 
+	/// The required common name
+	let commonName: String?
+
+	/// The required suffix
+	let suffix: String?
+
+	/// The required authority Key
+	let authorityKeyIdentifier: Data?
+
+	/// The required subject key
+	let subjectKeyIdentifier: Data?
+
+	/// The serial number
+	let rootSerial: UInt64?
+
 	/// Get the certificate data
 	/// - Returns: the certificate data
 	func getCertificateData() -> Data {
+
 		return Data(certificate.utf8)
 	}
 }
@@ -26,17 +42,32 @@ struct TrustConfiguration {
 
 	static let sdNRootCAG3Certificate = SigningCertificate(
 		name: "Staat der Nederlanden Root CA - G3",
-		certificate: TrustConfiguration.sdNRootCAG3String
+		certificate: TrustConfiguration.sdNRootCAG3String,
+		commonName: "coronatester.nl",
+		suffix: ".nl",
+		authorityKeyIdentifier: nil,
+		subjectKeyIdentifier: nil,
+		rootSerial: nil
 	)
 
 	static let sdNEVRootCACertificate = SigningCertificate(
 		name: "Staat der Nederlanden EV Root CA",
-		certificate: TrustConfiguration.sdNEVRootCAString
+		certificate: TrustConfiguration.sdNEVRootCAString,
+		commonName: "coronatester.nl",
+		suffix: ".nl",
+		authorityKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x08, 0x4A, 0xAA, 0xBB, 0x99, 0x24, 0x6F, 0xBE, 0x5B, 0x07, 0xF1, 0xA5, 0x8A, 0x99, 0x5B, 0x2D, 0x47, 0xEF, 0xB9, 0x3C]),
+		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0xfe, 0xab, 0x00, 0x90, 0x98, 0x9e, 0x24, 0xfc, 0xa9, 0xcc, 0x1a, 0x8a, 0xfb, 0x27, 0xb8, 0xbf, 0x30, 0x6e, 0xa8, 0x3b]),
+		rootSerial: 10000013
 	)
 
 	static let sdNPrivateRootCertificate = SigningCertificate(
 		name: "Staat der Nederlanden Private Root CA - G1",
-		certificate: TrustConfiguration.sdNPrivateRootString
+		certificate: TrustConfiguration.sdNPrivateRootString,
+		commonName: "coronatester.nl",
+		suffix: ".nl",
+		authorityKeyIdentifier: nil,
+		subjectKeyIdentifier: nil,
+		rootSerial: nil
 	)
 
 	static let commonNameContent = ".coronacheck.nl"

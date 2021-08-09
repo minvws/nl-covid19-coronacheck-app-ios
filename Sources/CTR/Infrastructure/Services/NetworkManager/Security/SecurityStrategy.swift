@@ -202,10 +202,28 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		//		logDebug("Security Strategy: there are \(trustedSigners.count) trusted signers for \(Unmanaged.passUnretained(self).toOpaque())")
 
 		for signer in trustedSigners {
+
+			let certificateData = signer.getCertificateData()
+
+			if let subjectKeyIdentifier = signer.subjectKeyIdentifier,
+			   !openssl.validateSubjectKeyIdentifier(subjectKeyIdentifier, forCertificateData: certificateData) {
+				logError("validateSubjectKeyIdentifier(subjectKeyIdentifier) failed")
+				return false
+			}
+
+			if let serial = signer.rootSerial,
+			   !openssl.validateSerialNumber( serial, forCertificateData: certificateData) {
+				logError("validateSerialNumber(serial) is invalid")
+				return false
+			}
+
 			if openssl.validatePKCS7Signature(
 				signature,
-				contentData: content,
-				certificateData: signer.getCertificateData()) {
+				contentData: certificateData,
+				certificateData: signer.getCertificateData(),
+				authorityKeyIdentifier: nil, // signer.authorityKeyIdentifier,
+				requiredCommonNameContent: "", //  signer.commonName ?? "",
+				requiredCommonNameSuffix: "") { // } signer.suffix ?? "") {
 				return true
 			}
 		}

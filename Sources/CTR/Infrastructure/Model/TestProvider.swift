@@ -55,7 +55,15 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 	func getSigningCertificate() -> SigningCertificate? {
 
 		publicKey.base64Decoded().map {
-			SigningCertificate(name: "TestProvider", certificate: $0)
+			SigningCertificate(
+				name: "TestProvider",
+				certificate: $0,
+				commonName: nil,
+				suffix: nil,
+				authorityKeyIdentifier: nil,
+				subjectKeyIdentifier: nil,
+				rootSerial: nil
+			)
 		}
 	}
 }
