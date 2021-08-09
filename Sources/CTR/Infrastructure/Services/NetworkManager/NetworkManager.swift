@@ -94,9 +94,9 @@ class NetworkManager: Logging {
 		}
 	}
 	
-	private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<Object, NetworkError>) -> Void) {
+	private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
 		data(request: request, session: session, ignore400: ignore400) { result in
-			let decodedResult: Result<Object, NetworkError> = self.jsonResponseHandler(result: result)
+			let decodedResult: Result<(URLResponse, Object), NetworkError> = self.jsonResponseHandler(result: result)
 			
 			DispatchQueue.main.async {
 				completion(decodedResult)
@@ -112,14 +112,14 @@ class NetworkManager: Logging {
 		request: Result<URLRequest, NetworkError>,
 		session: URLSession,
 		ignore400: Bool = false,
-		completion: @escaping (Result<Data, NetworkError>) -> Void) {
+		completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
 		// Fetch data
 		data(request: request, session: session, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
 			
 			/// Decode to SignedResult
-			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
+			let signedResult: Result<(URLResponse, SignedResponse), NetworkError> = self.jsonResponseHandler(result: result)
 			switch signedResult {
-				case let .success(signedResponse):
+				case let .success((urlResponse, signedResponse)):
 					
 					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
@@ -133,7 +133,7 @@ class NetworkManager: Logging {
 						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
 							if valid {
 								DispatchQueue.main.async {
-									completion(.success(decodedPayloadData))
+									completion(.success((urlResponse, decodedPayloadData)))
 								}
 							} else {
 								self.logError("We got an invalid signature!")
@@ -157,19 +157,21 @@ class NetworkManager: Logging {
 		request: Result<URLRequest, NetworkError>,
 		session: URLSession,
 		ignore400: Bool = false,
-		completion: @escaping (Result<(Object, Data), NetworkError>) -> Void) {
+		completion: @escaping (Result<(Object, Data, URLResponse), NetworkError>) -> Void) {
 		// Fetch data
 		data(request: request, session: session, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
 
 			/// Decode to SignedResult
-			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
+			let signedResult: Result<(URLResponse, SignedResponse), NetworkError> = self.jsonResponseHandler(result: result)
 			switch signedResult {
-				case let .success(signedResponse):
+				case let .success((urlResponse, signedResponse)):
 
 					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
 						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-						completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						DispatchQueue.main.async {
+							completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						}
 						return
 					}
 
@@ -181,14 +183,16 @@ class NetworkManager: Logging {
 								DispatchQueue.main.async {
 									switch (decodedResult, decodedPayloadData) {
 										case (.success(let object), let decodedPayloadData):
-											completion(.success((object, decodedPayloadData)))
+											completion(.success((object, decodedPayloadData, urlResponse)))
 										case (.failure(let responseError), _):
 											completion(.failure(responseError.asNetworkError))
 									}
 								}
 							} else {
 								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+								DispatchQueue.main.async {
+									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+								}
 							}
 						}
 					}
@@ -211,9 +215,9 @@ class NetworkManager: Logging {
 		ignore400: Bool = false,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {
 
-		decodeSignedJSONData(request: request, session: session, ignore400: ignore400) { (result: Result<(Object, Data), NetworkError>) in
+		decodeSignedJSONData(request: request, session: session, ignore400: ignore400) { (result: Result<(Object, Data, URLResponse), NetworkError>) in
 			switch result {
-				case .success((let object, _)):
+				case .success((let object, _, _)):
 					completion(.success(object))
 				case .failure(let error):
 					completion(.failure(error))
@@ -229,13 +233,13 @@ class NetworkManager: Logging {
 		request: Result<URLRequest, NetworkError>,
 		session: URLSession,
 		ignore400: Bool = false,
-		completion: @escaping (Result<(Object, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(Object, SignedResponse, URLResponse), NetworkError>) -> Void) {
 		data(request: request, session: session, ignore400: ignore400) { [self] result in
 
 			/// Decode to SignedResult
-			let signedResult: Result<SignedResponse, NetworkError> = self.jsonResponseHandler(result: result)
+			let signedResult: Result<(URLResponse, SignedResponse), NetworkError> = self.jsonResponseHandler(result: result)
 			switch signedResult {
-				case let .success(signedResponse):
+				case let .success((urlResponse, signedResponse)):
 
 					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
@@ -252,7 +256,7 @@ class NetworkManager: Logging {
 								DispatchQueue.main.async {
 									switch decodedResult {
 										case let .success(object):
-											completion(.success((object, signedResponse)))
+											completion(.success((object, signedResponse, urlResponse)))
 										case let .failure(responseError):
 											completion(.failure(responseError.asNetworkError))
 									}
@@ -345,13 +349,15 @@ class NetworkManager: Logging {
 	
 	/// Response handler which decodes JSON
 	private func jsonResponseHandler<Object: Decodable>(
-		result: Result<(URLResponse, Data), NetworkError>) -> Result<Object, NetworkError> {
+		result: Result<(URLResponse, Data), NetworkError>) -> Result<(URLResponse, Object), NetworkError> {
 		switch result {
 			case let .success(result):
 				return decodeJson(data: result.1)
 					.mapError {
 						$0.asNetworkError
-						
+					}
+					.map {
+						(result.0, $0)
 					}
 			case let .failure(error):
 				return .failure(error)
@@ -468,12 +474,14 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedData(request: urlRequest, session: session, completion: completion)
+		decodeSignedData(request: urlRequest, session: session, completion: { result in
+			completion(result.map { _, data in data })
+		})
 	}
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
 		let urlRequest = constructRequest(
 			url: networkConfiguration.remoteConfigurationUrl,
 			method: .GET
@@ -483,7 +491,9 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
+		decodeSignedJSONData(request: urlRequest, session: session, completion: { result in
+			completion(result.map { decodable, data, urlResponse in (decodable, data, urlResponse) })
+		})
 	}
 
 	func fetchGreencards(
@@ -587,7 +597,9 @@ extension NetworkManager: NetworkManaging {
 			request: urlRequest,
 			session: session,
 			ignore400: true,
-			completion: completion
+			completion: { result in
+				completion(result.map { object, signedResponse, urlResponse in (object, signedResponse) })
+			}
 		)
 	}
 
@@ -633,7 +645,9 @@ extension NetworkManager: NetworkManaging {
 		decodedAndReturnSignedJSONData(
 			request: urlRequest,
 			session: session,
-			completion: completion
+			completion: { result in
+				completion(result.map { object, signedResponse, urlResponse in (object, signedResponse) })
+			}
 		)
 	}
 
@@ -679,7 +693,9 @@ extension NetworkManager: NetworkManaging {
 		decodedAndReturnSignedJSONData(
 			request: urlRequest,
 			session: session,
-			completion: completion
+			completion: { result in
+				completion(result.map { object, signedResponse, urlResponse in (object, signedResponse) })
+			}
 		)
 	}
 

@@ -74,7 +74,7 @@ protocol NetworkManaging: AnyObject {
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void)
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void)
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler

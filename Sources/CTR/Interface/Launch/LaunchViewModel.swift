@@ -189,7 +189,7 @@ class LaunchViewModel: Logging {
 			self.isUpdatingConfiguration = false
 
 			switch resultWrapper {
-				case .success((let remoteConfiguration, let data)):
+				case let .success((remoteConfiguration, data, urlResponse)):
 
 					// Update the last fetch time
 					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
@@ -197,6 +197,11 @@ class LaunchViewModel: Logging {
 					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
 					// Decide what to do
 					self.compare(remoteConfiguration, completion: completion)
+
+					if let httpResponse = urlResponse as? HTTPURLResponse {
+						let serverDate = httpResponse.allHeaderFields["Date"]
+						// handle server date here? 
+					}
 
 				case let .failure(networkError):
 
