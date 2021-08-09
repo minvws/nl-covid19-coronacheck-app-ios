@@ -219,11 +219,14 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 
 			if openssl.validatePKCS7Signature(
 				signature,
-				contentData: certificateData,
-				certificateData: signer.getCertificateData(),
-				authorityKeyIdentifier: nil, // signer.authorityKeyIdentifier,
-				requiredCommonNameContent: "", //  signer.commonName ?? "",
-				requiredCommonNameSuffix: "") { // } signer.suffix ?? "") {
+				contentData: content,
+				certificateData: certificateData,
+//				authorityKeyIdentifier: nil,
+//				requiredCommonNameContent: "",
+//				requiredCommonNameSuffix: "") {
+				authorityKeyIdentifier: signer.authorityKeyIdentifier,
+				requiredCommonNameContent: signer.commonName ?? "",
+				requiredCommonNameSuffix: signer.suffix ?? "") {
 				return true
 			}
 		}
