@@ -46,8 +46,8 @@ struct TrustConfiguration {
 		commonName: "coronatester.nl",
 		suffix: ".nl",
 		authorityKeyIdentifier: nil,
-		subjectKeyIdentifier: nil,
-		rootSerial: nil
+		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x54, 0xAD, 0xFA, 0xC7, 0x92, 0x57, 0xAE, 0xCA, 0x35, 0x9C, 0x2E, 0x12, 0xFB, 0xE4, 0xBA, 0x5D, 0x20, 0xDC, 0x94, 0x57]),
+		rootSerial: 10003001
 	)
 
 	static let sdNEVRootCACertificate = SigningCertificate(
@@ -66,8 +66,8 @@ struct TrustConfiguration {
 		commonName: "coronatester.nl",
 		suffix: ".nl",
 		authorityKeyIdentifier: nil,
-		subjectKeyIdentifier: nil,
-		rootSerial: nil
+		subjectKeyIdentifier: Data([0x04, 0x14, /* keyID starts here: */ 0x2A, 0xFD, 0xB9, 0x2B, 0x1E, 0xFA, 0xC3, 0x84, 0x87, 0x06, 0xDB, 0x81, 0xFF, 0x86, 0x97, 0x75, 0x0D, 0xEB, 0x01, 0x8B]),
+		rootSerial: 10004001
 	)
 
 	static let commonNameContent = ".coronacheck.nl"

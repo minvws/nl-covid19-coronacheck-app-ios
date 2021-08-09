@@ -76,7 +76,7 @@ struct SecurityCheckerFactory {
 	}
 }
 
-protocol SecurityCheckerProtocol: SignatureValidating {
+protocol SecurityCheckerProtocol {
 
 	/// Check the SSL Connection
 	func checkSSL()
