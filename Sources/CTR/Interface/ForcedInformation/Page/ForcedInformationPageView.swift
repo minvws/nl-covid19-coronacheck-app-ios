@@ -17,7 +17,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 		static let imageHeightPercentage: CGFloat = 0.38
 		static let taglineLineHeight: CGFloat = 22
 		static let taglineKerning: CGFloat = -0.41
-		static let topMargin: CGFloat = 16
+		static let topMargin: CGFloat = 0
 		static let margin: CGFloat = 20
 		
 		// Margins
