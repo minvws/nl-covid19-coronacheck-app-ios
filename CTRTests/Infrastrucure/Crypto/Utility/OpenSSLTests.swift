@@ -57,8 +57,8 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == true
@@ -78,8 +78,8 @@ class OpenSSLTests: XCTestCase {
 			contentData: wrongPayload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == false
@@ -99,8 +99,8 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == true
@@ -120,8 +120,8 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == false
@@ -141,36 +141,14 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".xx.n",
-			requiredCommonNameSuffix: ".nl")
-
-		// Then
-		expect(validation) == false
-	}
-
-	func testCMSSignature_test_pinning_wrongSuffix() throws {
-
-		// Use gen-fake-pki-overheid.sh to generate this certificate
-
-		// Given
-		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
-		let certificateData = try Data(contentsOf: certificateUrl)
-
-		// When
-		let validation = sut.validatePKCS7Signature(
-			signaturePKCS,
-			contentData: payload,
-			certificateData: certificateData,
-			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".xx"
+			requiredCommonNameContent: ".coronacheck.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_emptySuffix() throws {
+	func testCMSSignature_test_pinning_commonNameAsPartOfDomain() throws {
 
 		// Use gen-fake-pki-overheid.sh to generate this certificate
 
@@ -184,8 +162,7 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ""
+			requiredCommonNameContent: ".coronatester.nl.xx.nl"
 		)
 
 		// Then
@@ -206,15 +183,14 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: "",
-			requiredCommonNameSuffix: ".xx"
+			requiredCommonNameContent: ""
 		)
 
 		// Then
-		expect(validation) == false
+		expect(validation) == true
 	}
 
-	func testCMSSignature_test_pinning_all_empty() throws {
+	func testCMSSignature_test_pinning_emptyAuthorityKeyIdentifier() throws {
 
 		// Use gen-fake-pki-overheid.sh to generate this certificate
 
@@ -227,9 +203,29 @@ class OpenSSLTests: XCTestCase {
 			signaturePKCS,
 			contentData: payload,
 			certificateData: certificateData,
-			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: "",
-			requiredCommonNameSuffix: ""
+			authorityKeyIdentifier: nil,
+			requiredCommonNameContent: "coronatester.nl"
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func testCMSSignature_test_pinning_emptyAuthorityKeyIdentifier_emptyCommonName() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
+
+		// Given
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
+
+		// When
+		let validation = sut.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: certificateData,
+			authorityKeyIdentifier: nil,
+			requiredCommonNameContent: ""
 		)
 
 		// Then
@@ -250,8 +246,7 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: deepAuthorityKeyIdentifier,
-			requiredCommonNameContent: "leaf",
-			requiredCommonNameSuffix: ".nl"
+			requiredCommonNameContent: "leaf.nl"
 		)
 
 		// Then
@@ -272,8 +267,8 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: deepAuthorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == false
@@ -293,8 +288,8 @@ class OpenSSLTests: XCTestCase {
 			contentData: payload,
 			certificateData: certificateData,
 			authorityKeyIdentifier: noCommonNameAuthorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester..nl"
+		)
 
 		// Then
 		expect(validation) == false

@@ -36,6 +36,7 @@ struct SecurityCheckerFactory {
 
 		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
+				checkForAuthorityKeyIdentifierAndNameAndSuffix: false,
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
@@ -43,6 +44,7 @@ struct SecurityCheckerFactory {
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
 		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
+		var checkForAuthorityKeyIdentifierAndNameAndSuffix = true
 
 		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
 			trustedNames.append(TrustConfiguration.testNameContent)
@@ -64,12 +66,14 @@ struct SecurityCheckerFactory {
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
 			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
 			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
+			checkForAuthorityKeyIdentifierAndNameAndSuffix = false
 		}
 
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
 			trustedNames: trustedNames,
 			trustedSigners: trustedSigners,
+			checkForAuthorityKeyIdentifierAndNameAndSuffix: checkForAuthorityKeyIdentifierAndNameAndSuffix,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
@@ -138,11 +142,13 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	var trustedNames: [String]
 	var trustedSigners: [SigningCertificate]
 	var openssl = OpenSSL()
+	var checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool
 
 	init(
 		trustedCertificates: [Data] = [],
 		trustedNames: [String] = [],
 		trustedSigners: [SigningCertificate] = [],
+		checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool,
 		challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
@@ -150,6 +156,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		self.trustedSigners = trustedSigners
 		self.trustedNames = trustedNames
 		self.challenge = challenge
+		self.checkForAuthorityKeyIdentifierAndNameAndSuffix = checkForAuthorityKeyIdentifierAndNameAndSuffix
 		self.completionHandler = completionHandler
 	}
 
@@ -221,12 +228,8 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 				signature,
 				contentData: content,
 				certificateData: certificateData,
-//				authorityKeyIdentifier: nil,
-//				requiredCommonNameContent: "",
-//				requiredCommonNameSuffix: "") {
-				authorityKeyIdentifier: signer.authorityKeyIdentifier,
-				requiredCommonNameContent: signer.commonName ?? "",
-				requiredCommonNameSuffix: signer.suffix ?? "") {
+				authorityKeyIdentifier: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? nil : signer.authorityKeyIdentifier,
+				requiredCommonNameContent: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? "" : signer.commonName ?? "") {
 				return true
 			}
 		}

@@ -19,12 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
                    contentData:(NSData *)contentData
                certificateData:(NSData *)certificateData
         authorityKeyIdentifier:(nullable NSData *)expectedAuthorityKeyIdentifierData
-     requiredCommonNameContent:(NSString *)requiredCommonNameContent
-      requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffix;
-
-- (BOOL)validatePKCS7Signature:(NSData *)signatureData
-				   contentData:(NSData *)contentData
-			   certificateData:(NSData *)certificateData;
+	 requiredCommonNameContent:(NSString *)requiredCommonNameContent;
 
 /// Compare two certificates, return TRUE if they match
 /// @param certificateData the certificate to examine

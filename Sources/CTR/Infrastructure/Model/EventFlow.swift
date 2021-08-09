@@ -89,7 +89,6 @@ struct EventFlow {
 					name: "EventProvider",
 					certificate: $0,
 					commonName: nil,
-					suffix: nil,
 					authorityKeyIdentifier: nil,
 					subjectKeyIdentifier: nil,
 					rootSerial: nil

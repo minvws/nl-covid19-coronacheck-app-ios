@@ -59,7 +59,6 @@ struct TestProvider: Codable, CertificateProvider, Equatable {
 				name: "TestProvider",
 				certificate: $0,
 				commonName: nil,
-				suffix: nil,
 				authorityKeyIdentifier: nil,
 				subjectKeyIdentifier: nil,
 				rootSerial: nil

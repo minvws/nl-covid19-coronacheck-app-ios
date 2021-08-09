@@ -224,8 +224,7 @@ errit:
 }
 
 - (BOOL)validateCommonNameForCertificate:(X509 *)certificate
-                         requiredContent:(NSString *)requiredContent
-                          requiredSuffix:(NSString *)requiredSuffix {
+                         requiredContent:(NSString *)requiredContent {
     
     // Get subject from certificate
     X509_NAME *certificateSubjectName = X509_get_subject_name(certificate);
@@ -238,33 +237,20 @@ errit:
     }
     NSString *cnString = [NSString stringWithUTF8String:certificateCommonName];
     
-    // Compare Common Name to required content and required suffix
-    BOOL containsRequiredContent = [cnString rangeOfString:requiredContent options:NSCaseInsensitiveSearch].location != NSNotFound;
-    BOOL hasCorrectSuffix = [cnString hasSuffix:requiredSuffix];
+    // Compare Common Name to required content
+    BOOL hasCorrectEnding = [cnString hasSuffix:requiredContent];
     
     certificateSubjectName = NULL;
     
-    return hasCorrectSuffix && containsRequiredContent;
-}
-
-- (BOOL)validatePKCS7Signature:(NSData *)signatureData
-                   contentData:(NSData *)contentData
-               certificateData:(NSData *)certificateData {
-    
-    return [self validatePKCS7Signature:signatureData
-                            contentData:contentData
-                        certificateData:certificateData
-                 authorityKeyIdentifier:nil
-              requiredCommonNameContent:@""
-               requiredCommonNameSuffix:@""];
+    return hasCorrectEnding;
 }
 
 - (BOOL)validatePKCS7Signature:(NSData *)signatureData
                    contentData:(NSData *)contentData
                certificateData:(NSData *)certificateData
         authorityKeyIdentifier:(nullable NSData *)expectedAuthorityKeyIdentifierDataOrNil
-     requiredCommonNameContent:(NSString *)requiredCommonNameContentOrNil
-      requiredCommonNameSuffix:(NSString *)requiredCommonNameSuffixOrNil {
+     requiredCommonNameContent:(NSString *)requiredCommonNameContentOrNil {
+
     bool result = NO;
     BIO *signatureBlob = NULL, *contentBlob = NULL, *certificateBlob = NULL,*cmsBlob = NULL;
     X509_VERIFY_PARAM *verifyParameters = NULL;
@@ -372,15 +358,12 @@ errit:
                                    signingCertificate:signingCert])
             EXITOUT("invalid isAuthorityKeyIdentifierValid");
     
-    if ((requiredCommonNameSuffixOrNil.length) && (requiredCommonNameContentOrNil.length )) {
+    if (requiredCommonNameContentOrNil.length) {
         if (![self validateCommonNameForCertificate:signingCert
-                                    requiredContent:requiredCommonNameContentOrNil
-                                     requiredSuffix:requiredCommonNameSuffixOrNil])
+                                    requiredContent:requiredCommonNameContentOrNil])
             EXITOUT("invalid isCommonNameValid");
-    } else
-        if ((requiredCommonNameSuffixOrNil.length) || (requiredCommonNameContentOrNil.length))
-            EXITOUT("incomplete common fields to compare against");
-    
+    }
+
 #ifdef __DEBUG
     fprintf(stderr,"=== signature is valid - and meets the rules ===\n");
 #endif
