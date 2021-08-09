@@ -67,7 +67,7 @@ class ShowQRViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "d MMMM yyyy"
+		dateFormatter.dateFormat = "dd-MM-yyyy"
 		return dateFormatter
 	}()
 
@@ -372,13 +372,16 @@ class ShowQRViewModel: Logging {
 			.map(printDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
 			.map(printDateFormatter.string) ?? recovery.expiresAt
+		
+		let country = getDisplayCountry(recovery.country)
+		let issuer = getDisplayIssuer(recovery.issuer)
 
 		let body: String = L.holderShowqrEuAboutRecoveryMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			formattedFirstPostiveDate,
-			recovery.country,
-			recovery.issuer,
+			country,
+			issuer,
 			formattedValidFromDate,
 			formattedValidUntilDate,
 			recovery.certificateIdentifier
@@ -448,7 +451,7 @@ class ShowQRViewModel: Logging {
 	}
 	
 	private func getDisplayCountry(_ country: String) -> String {
-		guard country == "NL" else {
+		guard ["NL", "NLD"].contains(country) else {
 			return country
 		}
 		return L.holderVaccinationAboutCountry()

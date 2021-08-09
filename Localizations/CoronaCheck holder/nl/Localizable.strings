@@ -353,7 +353,7 @@
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
-"holder.showqr.domestic.title" = "Mijn QR-code";
+"holder.showqr.domestic.title" = "Nederlandse QR-code";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Om privacyredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";
 "holder.showqr.eu.title" = "Internationale QR-code";
@@ -379,7 +379,7 @@
 /* MARK: - Holder Choose Provider */
 "holder.provider.title" = "QR-code maken";
 "holder.provider.header" = "Waar ben je getest?";
-"holder.provider.message" = "Je kunt een QR-code maken van jouw testuitslag, als blijkt dat je geen corona hebt. Geef aan waar je getest bent.";
+"holder.provider.message" = "Blijkt uit de test dat je geen corona hebt? Dan kun je van de testuitslag een QR-code maken. Geef aan waar je getest bent.";
 "holder.provider.ggd.title" = "GGD";
 "holder.provider.ggd.subtitle" = "Je wordt doorgestuurd naar DigiD";
 "holder.provider.commercial.title" = "Andere testlocatie";
@@ -503,7 +503,7 @@
 "holder.event.element.subtitle.test3" = "Testdatum: %@<br />Naam: %@<br />Geboortedatum: %@";
 
 "holder.location.title" = "Waar ben je getest?";
-"holder.location.message" = "Geef aan of je bij de GGD of bij een andere testlocatie getest bent.";
+"holder.location.message" = "Blijkt uit de test dat je geen corona hebt? Dan kun je van de testuitslag een QR-code maken. Geef aan waar je getest bent.";
 "holder.location.ggd.title" = "GGD";
 "holder.location.ggd.subtitle" = "Log in met je DigiD";
 "holder.location.other.title" = "Andere testlocatie";
