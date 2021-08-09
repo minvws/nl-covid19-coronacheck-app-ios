@@ -67,7 +67,7 @@ class ShowQRViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "dd-MM-yyyy"
+		dateFormatter.dateFormat = "d MMMM yyyy"
 		return dateFormatter
 	}()
 

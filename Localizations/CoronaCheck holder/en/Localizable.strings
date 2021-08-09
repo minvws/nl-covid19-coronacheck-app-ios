@@ -1,7 +1,7 @@
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "A Dutch and an international tab";
-"holder.updatepage.content.tab" = "From now on you can easily switch between your Dutch and international certificate. At the top of the screen, you’ll find a tab named ‘the Netherlands’ and a tab named ‘International’. Are you travelling abroad? Use the certificates found under ‘International’.";
 
+"holder.updatepage.content.tab" = "From now on you can easily switch between your Dutch and international certificate. At the top of the screen, you’ll find a tab named ‘the Netherlands’ and a tab named ‘International’. Are you travelling abroad? Use the certificates found under ‘International’.";
 "general.paperflow" = "paper certificate";
 "holder.dcc.list.issuer" = "Ministry of Health, Welfare and Sport";
 "holder.vaccination.about.off.dcc" = "Dose %@ of %@";
@@ -22,6 +22,7 @@
 "holder.dcc.list.title" = "Retrieved details";
 "holder.dcc.list.message" = "You can create a QR code with the retrieved details. This is your certificate.";
 "holder.dcc.element.subtitle" = "Name: %@<br />Date of birth: %@";
+"holder.dcc.list.facility" = "Facility approved by the State of The Netherlands";
 
 /* MARK: - Paper Certificate Vaccination Event */
 "holder.dcc.vaccination.subtitle" = "The following details were retrieved:";
@@ -66,7 +67,6 @@
 "holder.dcc.test.country" = "Member state of test:";
 "holder.dcc.test.issuer" = "Certificate issuer:";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
-
 "holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
@@ -78,6 +78,10 @@
 "holder.dashboard.strippen.expired.nointernet.alert.message" = "You need an internet connection to regain access to your QR code.";
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
 "holder.dashboard.strippen.expired.servererror.alert.message" = "To use the QR code, the app must make a connection to the server. Unfortunately there is currently a server issue (error: %@). Retry now or try again later.";
+
+
+
+
 
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
@@ -106,6 +110,7 @@
 "general.vaccinationcertificate" = "vaccination certificate";
 "general.testdate" = "test date";
 "general.vaccinationdate" = "vaccination date";
+"general.uptoandincluding" = "until";
 "holder.tokenscan.torch.enable" = "Turn the flashlight on.";
 "holder.tokenscan.torch.disable" = "Turn the flashlight off.";
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
@@ -280,12 +285,7 @@
 "holder.onboarding.title.privacy" = "QR codes for the Netherlands and international";
 "holder.onboarding.message.privacy" = "This app generates a QR code for the Netherlands and one for other countries. You can find both QR codes in the app. Travelling outside of the Netherlands? Then use your international QR code.";
 
-
-/* MARK: - Update Page Forced Information */
-"holder.updatepage.title.tab" = "A Dutch and an international tab";
 "holder.updatepage.tagline" = "New in the app";
-"holder.updatepage.content.tab" = "From now on you can easily switch between your Dutch and international certificate. At the top of the screen, you’ll find a tab named ‘the Netherlands’ and a tab named ‘International’. Are you travelling abroad? Use the certificates found under ‘International’.";
-
 /* MARK: - Holder Consent */
 "holder.consent.title" = "This is how the app uses your data";
 "holder.consent.message" = "The privacy statement details how CoronaCheck handles your data. These are the most important points:";
@@ -320,14 +320,17 @@
 "holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Expires in";
 "holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "valid until";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
+"holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "automatically becomes valid";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
 "holder.dashboard.qr.title" = "My QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
+"holder.dashboard.qr.backToThirdPartyApp" = "To the %@";
+
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Your %@ isn't valid internationally. You've only got a Dutch certificate.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Your %@ isn't valid in the Netherlands. You've only got an international certificate.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "About your vaccination certificate";
-"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible you've only had one injection. Add your second vaccination to get a valid Dutch certificate.<a href=\"https://coronacheck.nl/nl/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">Read all about the possible causes.</a></p>";
+"holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.message" = "<p>Your vaccination certificate isn't valid in the Netherlands. That's why only an international certificate was made.</p><p>It's possible you've only had one injection. Add your second vaccination to get a valid Dutch certificate.<a href=\"https://coronacheck.nl/en/faq/2-4-ik-heb-wel-een-internationale-qr-code-maar-geen-nederlandse/\">Read all about the possible causes.</a></p>";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.title" = "About your vaccination certificate";
 "holder.dashboard.notValidInThisRegionScreen.eu.vaccination.message" = "<p>Your vaccination certificate isn't valid internationally. That's why only a Dutch certificate was made.</p><p>It's possible your type of vaccination isn't accepted abroad.</p>";
 "holder.dashboard.notValidInThisRegionScreen.domestic.test.title" = "About your test certificate";
@@ -354,6 +357,10 @@
 "holder.showqr.eu.about.test.message" = "<p>Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:</p><p>Name: <br /> <b>%@</b><br /><br />Date of birth*: <br /> <b>%@</b></p><p><br />Disease targeted: <br /> <b>COVID-19</b><br /><br />Type of test: <br /> <b>%@</b><br /><br />Test name: <br /> <b>%@</b><br /><br />Test date*: <br /> <b>%@</b><br /><br />Test result: <br /> <b>%@</b><br /><br />Testing centre: <br /> <b>%@</b><br /><br />Test manufacturer: <br /> <b>%@</b><br /><br />Member state of test: <br /> <b>%@</b><br /><br />Certificate issuer: <br /> <b>%@</b><br /><br />Unique certificate identifier: <br /> <b>%@</b></p><p>*Date noted in day-month-year</p>";
 "holder.showqr.eu.about.test.negative" = "negative (no coronavirus)";
 "holder.showqr.eu.about.test.postive" = "positive (coronavirus)";
+"holder.showqr.screenshotwarning.title" = "A screenshot is not a valid certificate";
+"holder.showqr.screenshotwarning.subtitle" = "Use the QR code in the app";
+"holder.showqr.screenshotwarning.message" = "Your QR code returns in %@";
+
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Your QR code has been made";
 
