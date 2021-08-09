@@ -175,14 +175,15 @@ class AppCoordinator: Coordinator, Logging {
 
     func consume(universalLink: UniversalLink) -> Bool {
 
-        switch universalLink {
-            case .redeemHolderToken:
-                /// If we reach here it means that there was no holderCoordinator initialized at the time
-                /// the universal link was received. So hold onto it here, for when it is ready.
-                unhandledUniversalLink = universalLink
-                return true
-        }
-    }
+		switch universalLink {
+			case .redeemHolderToken,
+				 .thirdPartyTicketApp:
+				/// If we reach here it means that there was no holderCoordinator initialized at the time
+				/// the universal link was received. So hold onto it here, for when it is ready.
+				unhandledUniversalLink = universalLink
+				return true
+		}
+	}
 }
 
 // MARK: - AppCoordinatorDelegate

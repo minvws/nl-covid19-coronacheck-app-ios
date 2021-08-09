@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import UIKit
 import XCTest
@@ -51,6 +52,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -78,6 +80,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -108,6 +111,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -133,6 +137,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -159,6 +164,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -188,6 +194,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -217,6 +224,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -244,6 +252,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
@@ -274,6 +283,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			remoteConfigManager: remoteConfigManagingSpy,
 			screenCaptureDetector: screenCaptureDetector,
@@ -299,6 +309,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -331,6 +342,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -355,6 +367,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -392,6 +405,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -417,6 +431,7 @@ class ShowQRViewModelTests: XCTestCase {
 		sut = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -458,6 +473,34 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
 		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrEuAboutTitle()
+	}
+
+	func test_canShowThirdPartyAppButton() throws {
+
+		// Arrange
+		let greenCard = try XCTUnwrap(
+			GreenCardModel.createTestGreenCard(
+				dataStoreManager: dataStoreManager,
+				type: .eu,
+				withValidCredential: true
+			)
+		)
+
+		sut = ShowQRViewModel(
+			coordinator: holderCoordinatorDelegateSpy,
+			greenCard: greenCard,
+			thirdPartyTicketAppName: "RollerDiscoParties",
+			cryptoManager: cryptoManagerSpy,
+			screenCaptureDetector: screenCaptureDetector,
+			userSettings: userSettingsSpy
+		)
+
+		// Act
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == false
+		sut.didTapThirdPartyAppButton()
+
+		// Assert
+		expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToLaunchThirdPartyTicketApp) == true
 	}
 }
 

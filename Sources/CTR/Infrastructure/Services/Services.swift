@@ -23,6 +23,7 @@ final class Services {
 	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
 	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
+	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
 
 	/// Override the CryptoManaging type that will be instantiated
 	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
@@ -88,6 +89,11 @@ final class Services {
 		mappingManagingType = mappingManager
 	}
 
+	static func use(_ clockDeviationManager: ClockDeviationManaging.Type) {
+
+		clockDeviationType = clockDeviationManager
+	}
+
 	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
@@ -147,4 +153,6 @@ final class Services {
 	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
 		remoteConfigManager: remoteConfigManager
 	)
+
+	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
 }
