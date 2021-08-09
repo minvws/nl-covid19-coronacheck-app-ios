@@ -49,6 +49,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			screenCaptureDetector: screenCaptureDetector,
 			userSettings: userSettingsSpy
@@ -95,6 +96,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			remoteConfigManager: remoteConfigMangingSpy,
 			userSettings: userSettingsSpy
@@ -122,6 +124,7 @@ class ShowQRViewControllerTests: XCTestCase {
 		viewModel = ShowQRViewModel(
 			coordinator: holderCoordinatorDelegateSpy,
 			greenCard: greenCard,
+			thirdPartyTicketAppName: nil,
 			cryptoManager: cryptoManagerSpy,
 			remoteConfigManager: remoteConfigMangingSpy,
 			userSettings: userSettingsSpy

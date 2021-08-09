@@ -83,6 +83,13 @@ struct Mapping: Codable {
 	let name: String
 }
 
+struct UniversalLinkPermittedDomain: Codable {
+
+	let url: String
+
+	let name: String
+}
+
 struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// The minimum required version
@@ -147,6 +154,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var credentialRenewalDays: Int?
 
+	var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -174,6 +183,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
 		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
+		case universalLinkPermittedDomains = "universalLinkDomains"
 	}
 
 	init(
@@ -193,7 +203,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		isGGDEnabled: Bool?,
 		recoveryExpirationDays: Int?,
 		credentialRenewalDays: Int?,
-		domesticQRRefreshSeconds: Int?) {
+		domesticQRRefreshSeconds: Int?,
+		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -212,6 +223,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.recoveryExpirationDays = recoveryExpirationDays
 		self.credentialRenewalDays = credentialRenewalDays
 		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
+		self.universalLinkPermittedDomains = universalLinkPermittedDomains
 	}
 
 	/// Default remote configuration
@@ -233,7 +245,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil
 		)
 	}
 }

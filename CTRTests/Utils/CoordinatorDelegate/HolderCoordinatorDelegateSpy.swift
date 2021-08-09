@@ -147,6 +147,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToViewQRParametersList.append((greenCardObjectID, ()))
 	}
 
+	var invokedUserWishesToLaunchThirdPartyTicketApp = false
+	var invokedUserWishesToLaunchThirdPartyTicketAppCount = 0
+
+	func userWishesToLaunchThirdPartyTicketApp() {
+		invokedUserWishesToLaunchThirdPartyTicketApp = true
+		invokedUserWishesToLaunchThirdPartyTicketAppCount += 1
+	}
+
 	var invokedDismiss = false
 	var invokedDismissCount = 0
 

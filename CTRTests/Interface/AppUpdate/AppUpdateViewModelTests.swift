@@ -36,7 +36,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil
 		)
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
 		super.setUp()
@@ -103,7 +104,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil
 		)
 
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)
@@ -137,7 +139,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil
 		)
 
 		// When
@@ -169,7 +172,8 @@ class AppUpdateViewModelTests: XCTestCase {
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil
 		)
 
 		// When

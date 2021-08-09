@@ -33,7 +33,8 @@ class EventStartViewModelTests: XCTestCase {
 		isGGDEnabled: true,
 		recoveryExpirationDays: 180,
 		credentialRenewalDays: 5,
-		domesticQRRefreshSeconds: 60
+		domesticQRRefreshSeconds: 60,
+		universalLinkPermittedDomains: nil
 	)
 
 	override func setUp() {
