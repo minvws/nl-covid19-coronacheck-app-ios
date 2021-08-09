@@ -35,7 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, Logging {
 			appCoordinator = AppCoordinator(navigationController: UINavigationController())
 			appCoordinator?.start()
 		}
-
 		return true
 	}
 

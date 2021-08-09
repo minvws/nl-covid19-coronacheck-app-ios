@@ -59,7 +59,6 @@ class AppUpdateViewModelTests: XCTestCase {
 
 		// Given
 
-
 		// When
 		sut.actionButtonTapped()
 

@@ -21,7 +21,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
@@ -42,6 +42,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userDidScanRequestToken(requestToken: RequestToken)
 
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+
+	func userWishesMoreInfoAboutClockDeviation()
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
@@ -303,7 +305,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -312,7 +314,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				message: body,
 				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url, inApp: openURLsInApp)
 				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
@@ -401,6 +403,12 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
+	}
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.holderClockDeviationDetectedTitle()
+		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {

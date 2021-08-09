@@ -49,6 +49,8 @@ protocol RemoteInformation {
 
 	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
 	var credentialRenewalDays: Int? { get }
+
+	var clockDeviationThresholdSeconds: Int? { get }
 }
 
 extension RemoteInformation {
@@ -156,6 +158,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
 
+	var clockDeviationThresholdSeconds: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -184,6 +188,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case credentialRenewalDays = "credentialRenewalDays"
 		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
 		case universalLinkPermittedDomains = "universalLinkDomains"
+		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 	}
 
 	init(
@@ -204,7 +209,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		recoveryExpirationDays: Int?,
 		credentialRenewalDays: Int?,
 		domesticQRRefreshSeconds: Int?,
-		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?) {
+		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?,
+		clockDeviationThresholdSeconds: Int?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -224,6 +230,7 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.credentialRenewalDays = credentialRenewalDays
 		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
 		self.universalLinkPermittedDomains = universalLinkPermittedDomains
+		self.clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
 	}
 
 	/// Default remote configuration
@@ -246,7 +253,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
 			domesticQRRefreshSeconds: 60,
-			universalLinkPermittedDomains: nil
+			universalLinkPermittedDomains: nil,
+			clockDeviationThresholdSeconds: 30
 		)
 	}
 }

@@ -198,9 +198,12 @@ class LaunchViewModel: Logging {
 					// Decide what to do
 					self.compare(remoteConfiguration, completion: completion)
 
-					if let httpResponse = urlResponse as? HTTPURLResponse {
-						let serverDate = httpResponse.allHeaderFields["Date"]
-						// handle server date here? 
+					/// Fish for the server Date in the network response, and use that to maintain
+					/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
+					/// beyond a permitted time interval.
+					if let httpResponse = urlResponse as? HTTPURLResponse,
+					   let serverDateString = httpResponse.allHeaderFields["Date"] as? String {
+						Services.clockDeviationManager.update(serverHeaderDate: serverDateString)
 					}
 
 				case let .failure(networkError):
