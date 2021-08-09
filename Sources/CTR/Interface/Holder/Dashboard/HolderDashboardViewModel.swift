@@ -45,6 +45,8 @@ final class HolderDashboardViewModel: Logging {
 		// we show an error message on each QR card that lacks credentials.
 		// This does not discriminate between domestic/EU.
 		var errorForQRCardsMissingCredentials: String?
+
+		var deviceHasClockDeviation: Bool = false
 	}
 
 	// MARK: - Private properties
@@ -87,7 +89,7 @@ final class HolderDashboardViewModel: Logging {
 
 	private let datasource: HolderDashboardDatasourceProtocol
 	private let strippenRefresher: DashboardStrippenRefreshing
-
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 	private let now: () -> Date
 
 	// MARK: - Initializer
@@ -130,7 +132,12 @@ final class HolderDashboardViewModel: Logging {
 		strippenRefresher.load()
 
 		self.setupNotificationListeners()
-		
+
+		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.state.deviceHasClockDeviation = hasClockDeviation
+			self?.datasource.reload() // this could cause some QR code states to change, so reload.
+		}
+
 //		#if DEBUG
 //		DispatchQueue.main.asyncAfter(deadline: .now()) {
 //			self.injectSampleData(dataStoreManager: Services.dataStoreManager)
@@ -141,6 +148,7 @@ final class HolderDashboardViewModel: Logging {
 
 	deinit {
 		NotificationCenter.default.removeObserver(self)
+		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
 	}
 
 	func viewWillAppear() {
@@ -283,6 +291,14 @@ final class HolderDashboardViewModel: Logging {
 						case .europeanUnion: return L.holderDashboardIntroInternational()
 					}
 				}())
+			]
+		}
+
+		if state.deviceHasClockDeviation && validityRegion == .domestic && !regionFilteredMyQRCards.isEmpty {
+			viewControllerCards += [
+				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
+					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
+				})
 			]
 		}
 

@@ -16,26 +16,7 @@ class EventStartViewModelTests: XCTestCase {
 
 	private var coordinatorSpy: EventCoordinatorDelegateSpy!
 	private var remoteConfigManagingSpy: RemoteConfigManagingSpy!
-	private let remoteConfig = RemoteConfiguration(
-		minVersion: "1.0",
-		minVersionMessage: "test message",
-		storeUrl: URL(string: "https://apple.com"),
-		deactivated: nil,
-		informationURL: nil,
-		configTTL: 3600,
-		recoveryWaitingPeriodDays: 11,
-		requireUpdateBefore: nil,
-		temporarilyDisabled: false,
-		domesticValidityHours: 40,
-		vaccinationEventValidity: 14600,
-		recoveryEventValidity: 7300,
-		testEventValidity: 40,
-		isGGDEnabled: true,
-		recoveryExpirationDays: 180,
-		credentialRenewalDays: 5,
-		domesticQRRefreshSeconds: 60,
-		universalLinkPermittedDomains: nil
-	)
+	private let remoteConfig = RemoteConfiguration.default
 
 	override func setUp() {
 

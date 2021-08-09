@@ -81,6 +81,8 @@ class ShowQRViewModel: Logging {
 
 	private let userSettings: UserSettingsProtocol
 
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -140,7 +142,15 @@ class ShowQRViewModel: Logging {
 			}
 		}
 
+		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.validityTimer?.fire()
+		}
+
 		updateQRVisibility()
+	}
+
+	deinit {
+		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
 	}
 
 	func updateQRVisibility() {
@@ -236,7 +246,8 @@ class ShowQRViewModel: Logging {
 				coordinator?.presentInformationPage(
 					title: L.holderShowqrDomesticAboutTitle(),
 					body: L.holderShowqrDomesticAboutMessage(identity),
-					hideBodyForScreenCapture: true
+					hideBodyForScreenCapture: true,
+					openURLsInApp: true
 				)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
@@ -295,7 +306,8 @@ class ShowQRViewModel: Logging {
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
 			body: body,
-			hideBodyForScreenCapture: true
+			hideBodyForScreenCapture: true,
+			openURLsInApp: true
 		)
 	}
 
@@ -343,7 +355,8 @@ class ShowQRViewModel: Logging {
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
 			body: body,
-			hideBodyForScreenCapture: true
+			hideBodyForScreenCapture: true,
+			openURLsInApp: true
 		)
 	}
 
@@ -374,7 +387,8 @@ class ShowQRViewModel: Logging {
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
 			body: body,
-			hideBodyForScreenCapture: true
+			hideBodyForScreenCapture: true,
+			openURLsInApp: true
 		)
 	}
 

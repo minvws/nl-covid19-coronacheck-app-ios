@@ -328,6 +328,10 @@
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccinatiebewijs: dosis %@ van %@";
 "holder.dashboard.qr.backToThirdPartyApp" = "Naar de %@";
 
+"holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
+"holder.clockDeviationDetected.message" = "<p>Mogelijk klopt de tijd van jouw telefoon niet. Het kan bijvoorbeeld zijn dat je telefoon een paar minuten voor loopt. Om de CoronaCheck-app goed te kunnen gebruiken is het belangrijk dat de tijd juist staat ingesteld.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
+
+"holder.dashboard.clockDeviationDetected.message" = "Controleer de tijd van je telefoon. Mogelijk staat deze niet goed ingesteld.";
 "holder.dashboard.originNotValidInEUButIsInTheNetherlands" = "Je %@ is niet internationaal geldig. Je hebt wel een Nederlands bewijs.";
 "holder.dashboard.originNotValidInNetherlandsButIsInEU" = "Je %@ is niet geldig in Nederland. Je hebt wel een internationaal bewijs.";
 "holder.dashboard.notValidInThisRegionScreen.domestic.vaccination.title" = "Over je vaccinatiebewijs";

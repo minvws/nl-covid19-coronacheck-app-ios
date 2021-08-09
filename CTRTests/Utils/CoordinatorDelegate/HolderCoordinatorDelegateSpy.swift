@@ -21,14 +21,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)]()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
-		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture, openURLsInApp)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
 	}
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false
@@ -121,6 +121,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutUnavailableQRCount += 1
 		invokedUserWishesMoreInfoAboutUnavailableQRParameters = (originType, currentRegion, availableRegion)
 		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
+	}
+
+	var invokedUserWishesMoreInfoAboutClockDeviation = false
+	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		invokedUserWishesMoreInfoAboutClockDeviation = true
+		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
 	}
 
 	var invokedOpenUrl = false
