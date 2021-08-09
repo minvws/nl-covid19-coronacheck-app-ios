@@ -47,8 +47,7 @@ class OpenSSLChainTests: XCTestCase {
 						contentData: OpenSSLData.fakePayload,
 						certificateData: OpenSSLData.fakeRoot,
 						authorityKeyIdentifier: authorityKeyIdentifier,
-						requiredCommonNameContent: "bananen",
-						requiredCommonNameSuffix: "nl"))
+						requiredCommonNameContent: "bananenhalen.nl"))
 
 		// Now test against our build in (real) root - and fail.
 		//
@@ -57,8 +56,7 @@ class OpenSSLChainTests: XCTestCase {
 						contentData: OpenSSLData.fakePayload,
 						certificateData: TrustConfiguration.rootISRGX1,
 						authorityKeyIdentifier: authorityKeyIdentifier,
-						requiredCommonNameContent: "bananen",
-						requiredCommonNameSuffix: "nl"))
+						requiredCommonNameContent: "bananenhalen.nl"))
 
 		let fakeLeafCert = SecurityCheckerWorker().certificateFromPEM(certificateAsPemData: OpenSSLData.fakeLeaf)
 		XCTAssert(fakeLeafCert != nil)
