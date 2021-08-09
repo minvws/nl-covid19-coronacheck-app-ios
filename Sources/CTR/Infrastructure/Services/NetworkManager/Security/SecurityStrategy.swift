@@ -36,6 +36,7 @@ struct SecurityCheckerFactory {
 
 		if case SecurityStrategy.none = strategy {
 			return SecurityCheckerNone(
+				checkForAuthorityKeyIdentifierAndNameAndSuffix: false,
 				challenge: challenge,
 				completionHandler: completionHandler
 			)
@@ -43,6 +44,7 @@ struct SecurityCheckerFactory {
 		var trustedNames = [TrustConfiguration.commonNameContent]
 		var trustedCertificates = [TrustConfiguration.sdNEVRootCA]
 		var trustedSigners = [TrustConfiguration.sdNEVRootCACertificate]
+		var checkForAuthorityKeyIdentifierAndNameAndSuffix = true
 
 		if networkConfiguration.name == "Development" || networkConfiguration.name == "Test" {
 			trustedNames.append(TrustConfiguration.testNameContent)
@@ -64,19 +66,21 @@ struct SecurityCheckerFactory {
 			trustedCertificates.append(TrustConfiguration.sdNPrivateRoot)
 			trustedSigners.append(TrustConfiguration.sdNRootCAG3Certificate)
 			trustedSigners.append(TrustConfiguration.sdNPrivateRootCertificate)
+			checkForAuthorityKeyIdentifierAndNameAndSuffix = false
 		}
 
 		return SecurityChecker(
 			trustedCertificates: trustedCertificates,
 			trustedNames: trustedNames,
 			trustedSigners: trustedSigners,
+			checkForAuthorityKeyIdentifierAndNameAndSuffix: checkForAuthorityKeyIdentifierAndNameAndSuffix,
 			challenge: challenge,
 			completionHandler: completionHandler
 		)
 	}
 }
 
-protocol SecurityCheckerProtocol: SignatureValidating {
+protocol SecurityCheckerProtocol {
 
 	/// Check the SSL Connection
 	func checkSSL()
@@ -138,11 +142,13 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 	var trustedNames: [String]
 	var trustedSigners: [SigningCertificate]
 	var openssl = OpenSSL()
+	var checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool
 
 	init(
 		trustedCertificates: [Data] = [],
 		trustedNames: [String] = [],
 		trustedSigners: [SigningCertificate] = [],
+		checkForAuthorityKeyIdentifierAndNameAndSuffix: Bool,
 		challenge: URLAuthenticationChallenge,
 		completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
 
@@ -150,6 +156,7 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		self.trustedSigners = trustedSigners
 		self.trustedNames = trustedNames
 		self.challenge = challenge
+		self.checkForAuthorityKeyIdentifierAndNameAndSuffix = checkForAuthorityKeyIdentifierAndNameAndSuffix
 		self.completionHandler = completionHandler
 	}
 
@@ -202,10 +209,27 @@ class SecurityChecker: SecurityCheckerProtocol, Logging {
 		//		logDebug("Security Strategy: there are \(trustedSigners.count) trusted signers for \(Unmanaged.passUnretained(self).toOpaque())")
 
 		for signer in trustedSigners {
+
+			let certificateData = signer.getCertificateData()
+
+			if let subjectKeyIdentifier = signer.subjectKeyIdentifier,
+			   !openssl.validateSubjectKeyIdentifier(subjectKeyIdentifier, forCertificateData: certificateData) {
+				logError("validateSubjectKeyIdentifier(subjectKeyIdentifier) failed")
+				return false
+			}
+
+			if let serial = signer.rootSerial,
+			   !openssl.validateSerialNumber( serial, forCertificateData: certificateData) {
+				logError("validateSerialNumber(serial) is invalid")
+				return false
+			}
+
 			if openssl.validatePKCS7Signature(
 				signature,
 				contentData: content,
-				certificateData: signer.getCertificateData()) {
+				certificateData: certificateData,
+				authorityKeyIdentifier: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? nil : signer.authorityKeyIdentifier,
+				requiredCommonNameContent: !checkForAuthorityKeyIdentifierAndNameAndSuffix ? "" : signer.commonName ?? "") {
 				return true
 			}
 		}

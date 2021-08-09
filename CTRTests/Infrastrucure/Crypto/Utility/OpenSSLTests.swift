@@ -12,6 +12,7 @@ import Nimble
 class OpenSSLTests: XCTestCase {
 
 	var sut = OpenSSL()
+	let testBundle = Bundle(for: OpenSSLTests.self)
 
 	override func setUp() {
 
@@ -19,15 +20,11 @@ class OpenSSLTests: XCTestCase {
 		sut = OpenSSL()
 	}
 
-	// Use gen-fake-pki-overheid.sh to generate this certifiate
-	let rootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURoekNDQW0rZ0F3SUJBZ0lKQUs2d3FVcEswaVhTTUEwR0NTcUdTSWIzRFFFQkN3VUFNRm94S3pBcEJnTlYKQkFNTUlsTjBZV0YwSUdSbGNpQk9aV1JsY214aGJtUmxiaUJTYjI5MElFTkJJQzBnUnpNeEhqQWNCZ05WQkFvTQpGVk4wWVdGMElHUmxjaUJPWldSbGNteGhibVJsYmpFTE1Ba0dBMVVFQmhNQ1Rrd3dIaGNOTWpFd09EQTFNVEV5Ck5qQTVXaGNOTWpJd09EQTFNVEV5TmpBNVdqQmFNU3N3S1FZRFZRUUREQ0pUZEdGaGRDQmtaWElnVG1Wa1pYSnMKWVc1a1pXNGdVbTl2ZENCRFFTQXRJRWN6TVI0d0hBWURWUVFLREJWVGRHRmhkQ0JrWlhJZ1RtVmtaWEpzWVc1awpaVzR4Q3pBSkJnTlZCQVlUQWs1TU1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NBUUVBCnJHQWJlM0JMeGVBWnAzZ09WcmZGU2d2S0pJSE1PWHhaME1yZnJKaXdCQTRDZEtWb1prd282dUtxRFp0S0JEdWMKc0ZCL3dHSnFZMThzSXBpUktNeWwxbFNidU9BeVp4Vit1TEFOVERucitlcDhuclU4bjlPdGNLWFZzalVsQUM4SwpBaXNUdnRDT1VsV1l6MElUUFNSeWV4bkpwblNrdWpOK1N0ZEZSS2FRaVRkc2xsUm1RR1VjOE5TazVuaGJRT1dNCmJJZ3k5QmlISmYrZ0JrU2NCNlJXQjI1UFgxdFNyS1RnTTloQkdjZE85dUJXRVdoemh5c1FFalBGVHpRaGhMdUQKNXRTWE1lRHRtKzVEeEw4STJsVWw5UTFXSmpmc09HN25ZbWloSGZkNmpyZ1dXWmQwczk2eFlVOERKUWthTlo5bwpvYk5yNmNJNXZ4ZFlldWNTc1FNd1hRSURBUUFCbzFBd1RqQWRCZ05WSFE0RUZnUVVoaHV1WVVXV2tmRGRWQmtJCndMSUlWNHFGODk4d0h3WURWUjBqQkJnd0ZvQVVoaHV1WVVXV2tmRGRWQmtJd0xJSVY0cUY4OTh3REFZRFZSMFQKQkFVd0F3RUIvekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBS3owemllZFZNalhqL05uRWxucmFUUzB2U2llZQpCOU9hYlp6UUxuUXJtaFNibXZuK1h0UWZQbGtPdjZmNitiL2syRkRoNVpEYzJnbVFrUW4vNXdrWU00MUZ2MENaCkVQU25DWHJMam01NU12eDdYZ1h2OVJoUFVlRm5qcnNzN3FZNjFiZkh5VXJEdnR5Z2hFRCtkdVJxUHViMTcydk4KOE9oYTVUbXF2UkxDN01LN20wRkVZR2MrSWdDdDdYUzRrN3BYcW9zUzNycGMyeG1tdWlmekVTckxoRkZhdHVmSQpFYU14Rzg3MEdYekhuWFlnTFJPTWZWeUg3ZFEwT09tT0NCZUhGVDB4OGFNSEhGNkJqZjJGcHVETFlWblNzeDd3Ck1pcm5taG5jZXpRL0hFTFA4eTRrRkI0aE55MHNHRUdZS0ZuOTFkbzlQZFp2cUhERDgxcmZBQTlpVGc9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0t" )!
-
-	// Use long-chain.sh to generate this certifcate
-	let deepRootCertificateData = Data(base64Encoded: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM3VENDQWRXZ0F3SUJBZ0lKQUsxU2NYMWthcHhaTUEwR0NTcUdTSWIzRFFFQkN3VUFNQTB4Q3pBSkJnTlYKQkFNTUFrTkJNQjRYRFRJeE1EZ3dOVEV5TkRNeE1Wb1hEVEl4TURrd05ERXlORE14TVZvd0RURUxNQWtHQTFVRQpBd3dDUTBFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURQK0hkZGhSNmk4dXdQCllWeXJQV3grbFROUm1STlAxTFVKOUtLVWhCQ2drWW96TGI2cXpKVzFWcFFDSEdPR2ZlZTR2cndwUmdxQkt6UDIKYWh4d3ROYjJidFltc2Q4a2sxYUxaOXUrd3JoSmhzU3hlTkpqbU93Y0s4NFduMlM1Z050UU1ZRFMxOEJyMUFlNgpaY3hIZkFIVzgxbjJrbkRTWm5rcXM4N3JBZlNKNGYrOHBMM0ZDZ1BIb29LdzdycWFibmdDQ29nSzIxUWJkc0t0CnRLNjBVenNkZGUwZTdEWXdwQnMxN3ZkKzBZMnpINVNtMlpHN1g2RGNPTzRnK3NaMmZ5YzVrdzBaUkdQQlRBLzAKRUhQbWxUZVFLdVlaRk5yUU5nOTU2UzMrVFhrdExRdDlnR2VmZTQ0WGhHY09tazRnR25SSzFNSUdkKyt0RVFoaAp0eUt6TmRnVkFnTUJBQUdqVURCT01CMEdBMVVkRGdRV0JCVFYzcHBlNi9sa00rbTE2VmpKYzZ1bjl4bEhHREFmCkJnTlZIU01FR0RBV2dCVFYzcHBlNi9sa00rbTE2VmpKYzZ1bjl4bEhHREFNQmdOVkhSTUVCVEFEQVFIL01BMEcKQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUNoYkx5WXI4RXNna3MyVGR0ZWhMSWM5eDNYZiswbDZJNEhWZ1dLNW94Qwp5UG90NWx3YXNEaElIWkhqa2xNOHVudmdhWkVBQUJCMnk5MHYxSXZ5bDNRR3oydTlnVDRWVnBjSllZL3FoLzZjCnZrU2NidjN5RmEraVJDZ0lQOGdubS9yUnhzR0hCVk5JNzBySzk1ZDFuZnE3blVKMG5ydVZlT2dKZWRIS08vR0IKMThuS1ROOGtibUdKRnlvanBvWVhpR053c3BoUzFGMURTUkd6LzlPWHFrQWNJb0kvb1g0VzFnQ1ZLbHBjaXVBVAo5eGhYYS9VelM5eVFwSEtzTG1Kckk2eUhrVEthc3dMNlBMYTlhT21JMnUyTVNUZUM2Syt5RmdzalBRb3R1RTNuCnFFMTdjdUMzQ09Lcys3Znd5OW9xK1FVaS9OUEpac2RMOTN6azgrb25EQkIyCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=" )!
-
 	let authorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0x88, 0x58, 0x4D, 0x77, 0xE3, 0x87, 0x8B, 0xCF, 0x30, 0x63, 0xDF, 0x9A, 0x9C, 0x40, 0xD5, 0xD7, 0xD6, 0x57, 0xED, 0x93 ])
 
 	let deepAuthorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0xd7, 0xce, 0xef, 0x1e, 0x49, 0x77, 0x92, 0x96, 0x14, 0xec, 0xac, 0xc3, 0xa6, 0x24, 0x32, 0x1d, 0xb7, 0x8c, 0x1b, 0xfd ])
+
+	let noCommonNameAuthorityKeyIdentifier = Data([0x04, 0x14, /* keyID starts here: */ 0x43, 0x84, 0x4c, 0xb7, 0x6c, 0xb1, 0x22, 0x7e, 0x28, 0xb0, 0x2c, 0x27, 0xbf, 0xab, 0x20, 0xd6, 0x6f, 0x53, 0xba, 0x80 ])
 
 	let payload = Data(base64Encoded: "WwogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMDYtMTdUMTA6MDA6MDAuMDAwKzAyMDAiLAogICJ1aXRzbGFnZGF0dW0iOiIyMDIwLTA2LTE3VDEwOjEwOjAwLjAwMCswMjAwIiwKICAicmVzdWx0YWF0IjoiTkVHQVRJRUYiLAogICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAiYWZzcHJhYWtJZCI6Mjc4NzE3Njh9LAogeyJhZm5hbWVkYXR1bSI6IjIwMjAtMTEtMDhUMTA6MTU6MDAuMDAwKzAxMDAiLAogICAidWl0c2xhZ2RhdHVtIjoiMjAyMC0xMS0wOVQwNzo1MDozOS4wMDArMDEwMCIsCiAgICJyZXN1bHRhYXQiOiJQT1NJVElFRiIsCiAgICJhZnNwcmFha1N0YXR1cyI6IkFGR0VST05EIiwKICAgImFmc3ByYWFrSWQiOjI1ODcxOTcyMTl9Cl0K" )!
 
@@ -39,264 +36,262 @@ class OpenSSLTests: XCTestCase {
 	// Use sign.sh to generate this signature (rsa_padding_mode: pss)
 	let signaturePPS = Data(base64Encoded: "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")!
 
+	let signatureNoCommonName = Data(base64Encoded: "MIIJmQYJKoZIhvcNAQcCoIIJijCCCYYCAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBoIIG2TCCA0AwggIooAMCAQICAgPyMA0GCSqGSIb3DQEBCwUAMAAwHhcNMjEwODA2MTIzNDM2WhcNMjEwOTA1MTIzNDM2WjBnMQswCQYDVQQGEwJOTDEeMBwGA1UECgwVU3RhYXQgZGVyIE5lZGVybGFuZGVuMTgwNgYDVQQDDC9TdGFhdCBkZXIgTmVkZXJsYW5kZW4gT3JnYW5pc2F0aWUgLSBTZXJ2aWNlcyBHMzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM0yZRNQrplxTCl8xP7c7klRor9VjKlFuOTpKVnzjYK1r2vhxiLS3MFUyigClpTvhE71lrSuT51w5NdhHwgx+nzqCCnPsKacPyIFPdbgDsuDhSOI61TabwjWP21NZJimf0sdaFW+3KpAOY300m9MwpwwTQJzg/okU4LRp8UDNbYkbqAgXH/TCrmSMnJPFAIlVeI8eTOWV5KOh3wSljCnx734J7pK3Pf6DzPhNNb6mPkCVrnbwUli8WdNZS1l5do6iNe9kpgH7X6Tvrf4hBUl+w9ED5P/O6Yqirinsf/v9bRri9tGlL7cRUIw2wkVeMpxpkubuhBHdXTiYyFXxvyp+VECAwEAAaNdMFswCwYDVR0PBAQDAgEGMB0GA1UdDgQWBBRDhEy3bLEifiiwLCe/qyDWb1O6gDAfBgNVHSMEGDAWgBQfa8EPH1d4UdtFvSBY87R34Pz1zTAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQA9+aZHyMiL7pMn3PnvlwbnpbRgKY4fXXjZ70bm1/TSzL5va0yZ00r70SzWO8ZjyLHckU55Uu1XiQNuwgpW6t8VxzhLKPh9Dxbusopx6vBBtQJBJs0hx44MYvcg4vGUSE9vSpZKGtzkijgx4ZSu/XqmLHWsGg/hFoRWMV6CZI7CpnwQlwRei+DvOnvZeACLUPYZZPVTqFSnWsh1GsKqrzHoz30GzeAHrFjiLS/i/t/qzJydSaZjvTqFSUzcmYhQiXCYELtgutpe+ZzZSNgeoWbSJOsxuBD3Pn7QrzaRxStpCvpCIutYHPd4Sbhm1kGPfz4vgTDPLMYiPemRYySUH/3OMIIDkTCCAnmgAwIBAgILAN6tvu/erb7vwN4wDQYJKoZIhvcNAQELBQAwZzELMAkGA1UEBhMCTkwxHjAcBgNVBAoMFVN0YWF0IGRlciBOZWRlcmxhbmRlbjE4MDYGA1UEAwwvU3RhYXQgZGVyIE5lZGVybGFuZGVuIE9yZ2FuaXNhdGllIC0gU2VydmljZXMgRzMwHhcNMjEwODA2MTIzNDM2WhcNMjEwOTA1MTIzNDM2WjAAMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA09dpRRFqAEr9pgXncnGXT7dkG1fSHLkkcZzPLq5cLKGd7DaoSb/TVTn6lWJKdPV+4dUfCexWKu4usBnbq11wg+Laau2++xX0jVIhm6BQ2NUS7Va4HBogDM6b365fPo6Xk7wrgvA73DX518LrG7rsgBWaP3he8z24W9oJR/89MChJpAD4sOja78C+fJX4+zrmaactNvVkfeKfxBP98dvW4+131i6cwcqdcYDntz+tQ+XofrDFUgClzkaw2kKyt+SpAXjZmbKkXI2Y02EHNJIZVQl/knBHaItzx+JI3EsnSPm0f/kVsK+XeT+vdMqgGbol63C86xTwMUuhBgkxdykJVQIDAQABo4GkMIGhMEcGCWCGSAGG+EIBDQQ6FjhGb3IgdGVzdGluZyBvbmx5IGFuZCBubyB0aGlzIGlzIG5vdCB0aGUgcmVhbCB0aGluZy4gRHVoLjALBgNVHQ8EBAMCBeAwHQYDVR0OBBYEFLjbvlSXwKhaSCSg44vH8/cZE9ZqMB8GA1UdIwQYMBaAFEOETLdssSJ+KLAsJ7+rINZvU7qAMAkGA1UdEwQCMAAwDQYJKoZIhvcNAQELBQADggEBAD/re6fHIfIDzH3TmgRyrp1uzVvSB8EskSel8+DJMmaFIvnQmiLPB3SSRIBsbE28Pj2Yqb7JAkNVbEisQpMtd1b8C1r3hifUOO+uqboqhzsiHlaeHwkUBj6KZIi3NNhO5+C1tJn/6XSzNQcPXsGx2gd759ky/MIiySFESW2blQHlX8oEDRi0NrM+SRZoTwiIl7Obhzvb81XzU0FI64dqUffka+s6vdipt3m+QmGf13BSLsOGhi9RnzEo2atN0Ynl63ESCpALTJr+X/XDUx8I8xIn5OiLc+upbJSBGSQPIyT62sv3y8ZxLtGghUCDBqgRDdjSc+8WAYHncWrB4qcKYaIxggKGMIICggIBATB2MGcxCzAJBgNVBAYTAk5MMR4wHAYDVQQKDBVTdGFhdCBkZXIgTmVkZXJsYW5kZW4xODA2BgNVBAMML1N0YWF0IGRlciBOZWRlcmxhbmRlbiBPcmdhbmlzYXRpZSAtIFNlcnZpY2VzIEczAgsA3q2+796tvu/A3jALBglghkgBZQMEAgGggeQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjEwODA2MTIzNDQyWjAvBgkqhkiG9w0BCQQxIgQgjeoieCXQAb6FG1meoeoz5gIp3ri3LMHlRLGrg6yaUU0weQYJKoZIhvcNAQkPMWwwajALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwDQYJKoZIhvcNAQEBBQAEggEAeHdsCJXHkaRh4LkVAUMAieWUU/DsQRlRJnQuhTRVqaGCY1+n8/5ImjS8HtBOL+GM08dxfACOtGPo777WEYQjtEHoUPaX7/PnCsIRSX+xKFOsz8sRH1xglyARfuEYBGk55kohPEh/oqyarNbQUYebaCUAw6r5OiMnC8M5Gi4HK2oKGPzyFhzdBt7MLj0PT9dTjVOFxh3qUH/Wm+sIW2BMOk/OUV9JrH0yJqpT80zL5aGNJ8/AKMk2e3upOrefJrDrT2v82Ro3O1iSgBfdEdk4Q7LVd20rN6ihy19ebJQ8j48nLWd6dZlqLWI8R9hVEHipYKg+evzqq5DYkt2OFyomBg==")!
+
 	// use long-chain.sh to generate this signature
 	let deepSignature = Data(base64Encoded: "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")!
 
 	// MARK: - Signature
 
-	func testCMSSignature_padding_pkcs_validPayload() {
+	func testCMSSignature_padding_pkcs_validPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func testCMSSignature_padding_pkcs_wrongPayload() {
+	func testCMSSignature_padding_pkcs_wrongPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: wrongPayload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func testCMSSignature_padding_pss_validPayload() {
+	func testCMSSignature_padding_pss_validPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePPS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func testCMSSignature_padding_pss_wrongPayload() {
+	func testCMSSignature_padding_pss_wrongPayload() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			wrongPayload,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
-
-		// Then
-		expect(validation) == false
-	}
-
-	func testCMSSignature_test_pinning_wrongCommonName() {
-
-		// Given
-		expect(self.sut).toNot(beNil())
-
-		// When
-		let validation = sut.validatePKCS7Signature(
-			signaturePKCS,
-			contentData: payload,
-			certificateData: rootCertificateData,
-			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".xx.n",
-			requiredCommonNameSuffix: ".nl")
-
-		// Then
-		expect(validation) == false
-	}
-
-	func testCMSSignature_test_pinning_wrongSuffix() {
-
-		// Given
-		expect(self.sut).toNot(beNil())
-
-		// When
-		let validation = sut.validatePKCS7Signature(
-			signaturePKCS,
-			contentData: payload,
-			certificateData: rootCertificateData,
-			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".xx"
+			requiredCommonNameContent: ".coronatester.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_emptySuffix() {
+	func testCMSSignature_test_pinning_wrongCommonName() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ""
+			requiredCommonNameContent: ".coronacheck.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_emptyCommonName() {
+	func testCMSSignature_test_pinning_commonNameAsPartOfDomain() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: "",
-			requiredCommonNameSuffix: ".xx"
+			requiredCommonNameContent: ".coronatester.nl.xx.nl"
 		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	func testCMSSignature_test_pinning_all_empty() {
+	func testCMSSignature_test_pinning_emptyCommonName() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: authorityKeyIdentifier,
-			requiredCommonNameContent: "",
-			requiredCommonNameSuffix: ""
+			requiredCommonNameContent: ""
 		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func testCMSSignature_verydeep() {
+	func testCMSSignature_test_pinning_emptyAuthorityKeyIdentifier() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
+
+		// When
+		let validation = sut.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: certificateData,
+			authorityKeyIdentifier: nil,
+			requiredCommonNameContent: "coronatester.nl"
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func testCMSSignature_test_pinning_emptyAuthorityKeyIdentifier_emptyCommonName() throws {
+
+		// Use gen-fake-pki-overheid.sh to generate this certificate
+
+		// Given
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certFakePKIOverheid", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
+
+		// When
+		let validation = sut.validatePKCS7Signature(
+			signaturePKCS,
+			contentData: payload,
+			certificateData: certificateData,
+			authorityKeyIdentifier: nil,
+			requiredCommonNameContent: ""
+		)
+
+		// Then
+		expect(validation) == true
+	}
+
+	func testCMSSignature_verydeep() throws {
+
+		// Use long-chain.sh to generate this certificate
+
+		// Given
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certDeepChain", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			deepSignature,
 			contentData: payload,
-			certificateData: deepRootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: deepAuthorityKeyIdentifier,
-			requiredCommonNameContent: "leaf",
-			requiredCommonNameSuffix: ".nl"
+			requiredCommonNameContent: "leaf.nl"
 		)
 
 		// Then
 		expect(validation) == true
 	}
 
-	func testCMSSignature_invalidAuthorityKeyIdentifier() {
+	func testCMSSignature_invalidAuthorityKeyIdentifier() throws {
+
+		// Use long-chain.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certDeepChain", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
 		let validation = sut.validatePKCS7Signature(
 			signaturePKCS,
 			contentData: payload,
-			certificateData: rootCertificateData,
+			certificateData: certificateData,
 			authorityKeyIdentifier: deepAuthorityKeyIdentifier,
-			requiredCommonNameContent: ".coronatester.n",
-			requiredCommonNameSuffix: ".nl")
+			requiredCommonNameContent: ".coronatester.nl"
+		)
 
 		// Then
 		expect(validation) == false
 	}
 
-	// MARK: - Subject Alternative Name
+	func testCMSSignature_noCommonName() throws {
 
-	func test_subjectAlternativeName_deprecated() {
-
-		// Given
-		expect(self.sut).toNot(beNil())
-
-		// When
-		let san = sut.getSubjectAlternativeName(OpenSSLData.realLeaf) as String?
-
-		// Then
-		expect(san) == "api-ct.bananenhalen.nl"
-	}
-
-	func test_subjectAlternativeNames_realLeaf() {
+		// Use long-chain.sh to generate this certificate
 
 		// Given
-		expect(self.sut).toNot(beNil())
+		let certificateUrl = try XCTUnwrap(testBundle.url(forResource: "certWithoutCN", withExtension: ".pem"))
+		let certificateData = try Data(contentsOf: certificateUrl)
 
 		// When
-		let sans = sut.getSubjectAlternativeDNSNames(OpenSSLData.realLeaf) as? [String]
+		let validation = sut.validatePKCS7Signature(
+			signatureNoCommonName,
+			contentData: payload,
+			certificateData: certificateData,
+			authorityKeyIdentifier: noCommonNameAuthorityKeyIdentifier,
+			requiredCommonNameContent: ".coronatester..nl"
+		)
 
 		// Then
-		expect(sans).to(haveCount(1))
-		expect(sans?.first) == "api-ct.bananenhalen.nl"
-	}
-
-	func test_subjectAlternativeNames_fakeLeaf() {
-
-		// Given
-		expect(self.sut).toNot(beNil())
-
-		// When
-		let sans = sut.getSubjectAlternativeDNSNames(OpenSSLData.certWithStuff) as? [String]
-
-		// Then
-		expect(sans).to(haveCount(2))
-		// check that we skip the IP, otherName and email entry.
-		expect(sans).to(contain("test1"))
-		expect(sans).to(contain("test2"))
-		expect(sans).toNot(contain("1.2.3.4"))
-
-		// OpenSSL seems to keep the order the same.
-		expect(sans?.first) == "test1"
-		expect(sans?.last) == "test2"
-
-		expect(self.sut.validateSubjectAlternativeDNSName("test1", forCertificateData: OpenSSLData.certWithStuff)) == true
-		expect(self.sut.validateSubjectAlternativeDNSName("test2", forCertificateData: OpenSSLData.certWithStuff)) == true
-		// check that we do not see the non DNS entries. IP address is a bit of an edge case. Perhaps
-		// we should allow that to match.
-		expect(self.sut.validateSubjectAlternativeDNSName("fo@bar", forCertificateData: OpenSSLData.certWithStuff)) == false
+		expect(validation) == false
 	}
 }
