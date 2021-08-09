@@ -485,22 +485,22 @@ extension ListEventsViewModel {
 		var vaccinName: String?
 		var vaccineType: String?
 		var vaccineManufacturer: String?
-		if let hpkCode = dataRow.event.vaccination?.hpkCode {
+		if let hpkCode = dataRow.event.vaccination?.hpkCode, !hpkCode.isEmpty {
 			let hpkData = remoteConfigManager.getConfiguration().getHpkData(hpkCode)
 			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(hpkData?.mp)
 			vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(hpkData?.vp)
 			vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(hpkData?.ma)
 		}
 
-		if vaccinName?.isEmpty == true, let brand = dataRow.event.vaccination?.brand {
+		if vaccinName == nil, let brand = dataRow.event.vaccination?.brand {
 			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand)
 		}
-		if vaccineType?.isEmpty == true {
+		if vaccineType == nil {
 			vaccineType = remoteConfigManager.getConfiguration()
 				.getTypeMapping(dataRow.event.vaccination?.type)
 				?? dataRow.event.vaccination?.type
 		}
-		if vaccineManufacturer?.isEmpty == true {
+		if vaccineManufacturer == nil {
 			vaccineManufacturer = remoteConfigManager.getConfiguration()
 				.getVaccinationManufacturerMapping(dataRow.event.vaccination?.manufacturer)
 				?? dataRow.event.vaccination?.manufacturer
