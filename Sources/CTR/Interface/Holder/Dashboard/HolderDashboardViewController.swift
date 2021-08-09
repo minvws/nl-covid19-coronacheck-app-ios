@@ -108,11 +108,15 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		
 		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
-			self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
+			DispatchQueue.main.async {
+				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
+			}
 		}
 		
 		viewModel.$internationalCards.binding = { [sceneView, weak self] cards in
-			self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
+			DispatchQueue.main.async {
+				self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
+			}
 		}
 		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
