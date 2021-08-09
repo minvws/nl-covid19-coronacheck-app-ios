@@ -60,10 +60,7 @@ class AppUpdateViewModelTests: XCTestCase {
 	func testInitializerWithoutMessage() {
 
 		// Given
-		let appVersionInfo = RemoteConfiguration(
-			minVersion: "1.0",
-			minVersionMessage: nil
-		)
+		let appVersionInfo = RemoteConfiguration.default
 
 		// When
 		sut = AppUpdateViewModel(coordinator: appCoordinatorSpy, versionInformation: appVersionInfo)

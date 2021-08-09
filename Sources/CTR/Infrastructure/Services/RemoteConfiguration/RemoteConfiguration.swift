@@ -86,34 +86,34 @@ struct Mapping: Codable {
 struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// The minimum required version
-	let minimumVersion: String
+	var minimumVersion: String
 
 	/// The message for the minimum required version
-	let minimumVersionMessage: String?
+	var minimumVersionMessage: String?
 
 	/// The url to the appStore
-	let appStoreURL: URL?
+	var appStoreURL: URL?
 
 	/// The url to the site
-	let informationURL: URL?
+	var informationURL: URL?
 
 	/// Is the app deactivated?
-	let appDeactivated: Bool?
+	var appDeactivated: Bool?
 
 	/// What is the TTL of the config
-	let configTTL: Int?
+	var configTTL: Int?
 
 	/// What is the waiting period before a recovery is valid?
-	let recoveryWaitingPeriodDays: Int?
+	var recoveryWaitingPeriodDays: Int?
 
 	/// When should we update
-	let requireUpdateBefore: TimeInterval?
+	var requireUpdateBefore: TimeInterval?
 
 	/// Is the app temporarily disabled?
-	let temporarilyDisabled: Bool?
+	var temporarilyDisabled: Bool?
 
 	/// What is the validity of a domestic  test / vaccination
-	let domesticValidityHours: Int?
+	var domesticValidityHours: Int?
 
 	/// Max validity of a vaccination
 	var vaccinationEventValidity: Int?
