@@ -28,7 +28,7 @@ class Button: UIButton {
         }
     }
 
-    var title = "" {
+	var title: String? = "" {
         didSet {
             self.setTitle(title, for: .normal)
         }
