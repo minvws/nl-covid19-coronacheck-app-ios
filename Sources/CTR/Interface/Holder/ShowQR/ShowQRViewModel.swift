@@ -9,9 +9,13 @@ import UIKit
 
 class ShowQRViewModel: Logging {
 
+	// MARK: - Static
+	
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
-	static let screenshotWarningMessageDuration: Int = 3 * 60
+	static let screenshotWarningMessageDuration: TimeInterval = 3 * 60
+
+	// MARK: - vars
 
 	var loggingCategory: String = "ShowQRViewModel"
 
@@ -38,7 +42,7 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	private var screenIsBlockedForScreenshotWithTimeRemaining: Int? {
+	private var screenIsBlockedForScreenshotWithSecondsRemaining: Int? {
 		didSet {
 			updateQRVisibility()
 		}
@@ -80,7 +84,7 @@ class ShowQRViewModel: Logging {
 	}()
 
 	private let userSettings: UserSettingsProtocol
-
+	private let now: () -> Date
 	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
 
 	/// Initializer
@@ -108,6 +112,7 @@ class ShowQRViewModel: Logging {
 		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
 		self.userSettings = userSettings
+		self.now = now
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = L.holderShowqrDomesticTitle()
@@ -128,16 +133,15 @@ class ShowQRViewModel: Logging {
 		}
 
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
-			guard self?.screenIsBlockedForScreenshotWithTimeRemaining == nil else { return }
+			guard self?.screenIsBlockedForScreenshotWithSecondsRemaining == nil else { return }
 			userSettings.lastScreenshotTime = now()
-			self?.screenshotWasTaken()
+			self?.screenshotWasTaken(blockQRUntil: now().addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration))
 		}
 
 		if let lastScreenshotTime = userSettings.lastScreenshotTime {
-			let expiryDate = lastScreenshotTime.addingTimeInterval(TimeInterval(ShowQRViewModel.screenshotWarningMessageDuration))
+			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration)
 			if expiryDate > now() {
-				let timeRemaining = Int(expiryDate.timeIntervalSince(now()))
-				screenshotWasTaken(timeRemaining: timeRemaining)
+				screenshotWasTaken(blockQRUntil: expiryDate)
 			} else {
 				userSettings.lastScreenshotTime = nil
 			}
@@ -155,7 +159,7 @@ class ShowQRViewModel: Logging {
 	}
 
 	func updateQRVisibility() {
-		if let screenshotBlockTimeRemaining = screenIsBlockedForScreenshotWithTimeRemaining {
+		if let screenshotBlockTimeRemaining = screenIsBlockedForScreenshotWithSecondsRemaining {
 			let mins = screenshotBlockTimeRemaining / 60 % 60
 			let secs = screenshotBlockTimeRemaining % 60
 			let zeroPaddedSeconds = String(format: "%02d", secs)
@@ -171,22 +175,21 @@ class ShowQRViewModel: Logging {
 		}
 	}
 
-	private func screenshotWasTaken(timeRemaining: Int = ShowQRViewModel.screenshotWarningMessageDuration) {
-		// Let's 🧹 the busted old timer
+	private func screenshotWasTaken(blockQRUntil: Date) {
+		// Cleanup the busted old timer
 		screenshotWarningTimer?.invalidate()
 		screenshotWarningTimer = nil
 
-		screenIsBlockedForScreenshotWithTimeRemaining = timeRemaining
 		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
-			guard let self = self,
-				  let remainingSeconds = self.screenIsBlockedForScreenshotWithTimeRemaining
-			else { return }
+			guard let self = self else { return }
 
-			if remainingSeconds <= 0 {
+			let timeRemaining = blockQRUntil.timeIntervalSince(self.now())
+
+			if timeRemaining < 0 {
 				timer.invalidate()
-				self.screenIsBlockedForScreenshotWithTimeRemaining = nil
+				self.screenIsBlockedForScreenshotWithSecondsRemaining = nil
 			} else {
-				self.screenIsBlockedForScreenshotWithTimeRemaining = remainingSeconds - 1
+				self.screenIsBlockedForScreenshotWithSecondsRemaining = Int(timeRemaining)
 			}
 		}
 		screenshotWarningTimer?.fire() // don't wait 1s
