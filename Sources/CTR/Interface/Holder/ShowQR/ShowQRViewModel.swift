@@ -185,7 +185,7 @@ class ShowQRViewModel: Logging {
 
 			let timeRemaining = blockQRUntil.timeIntervalSince(self.now())
 
-			if timeRemaining < 0 {
+			if timeRemaining <= 0 {
 				timer.invalidate()
 				self.screenIsBlockedForScreenshotWithSecondsRemaining = nil
 			} else {
