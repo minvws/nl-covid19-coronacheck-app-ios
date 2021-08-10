@@ -168,17 +168,15 @@ class ShowQRViewModel: Logging {
 
 			// Attempt to make a nicer voiceover string:
 			let voiceoverTimeRemaining: String
-			if #available(iOS 13.0, *) {
-				let relative = RelativeDateTimeFormatter()
-				relative.unitsStyle = .spellOut
-				relative.formattingContext = .middleOfSentence
 
-				// e.g. "in ten seconds"
-				let relativeString = relative.localizedString(fromTimeInterval: TimeInterval(screenshotBlockTimeRemaining))
-				voiceoverTimeRemaining = L.holderShowqrScreenshotwarningMessage(relativeString)
-			} else {
-				voiceoverTimeRemaining = message
-			}
+			let durationFormatter = DateComponentsFormatter()
+			durationFormatter.unitsStyle = . full
+			durationFormatter.maximumUnitCount = 2
+			durationFormatter.allowedUnits = [.minute, .second]
+
+			// e.g. "in ten seconds"
+			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))
+			voiceoverTimeRemaining = relativeString.map { L.holderShowqrScreenshotwarningMessage($0) } ?? message
 
 			self.visibilityState = .screenshotBlocking(timeRemainingText: message, voiceoverTimeRemainingText: voiceoverTimeRemaining)
 

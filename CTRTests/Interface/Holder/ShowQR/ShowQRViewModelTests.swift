@@ -293,7 +293,7 @@ class ShowQRViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.visibilityState).toEventually(beScreenshotBlocking(test: { message, voiceoverMessage in
 			expect(message) == "Je QR-code komt terug in 2:50"
-			expect(voiceoverMessage) == "Je QR-code komt terug in over twee minuten"
+			expect(voiceoverMessage) == "Je QR-code komt terug in 2 minuten en 50 seconden"
 		}))
 	}
 
