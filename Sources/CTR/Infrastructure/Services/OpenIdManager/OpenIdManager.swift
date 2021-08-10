@@ -91,18 +91,10 @@ class OpenIdManager: OpenIdManaging, Logging {
 					}
 				}
 			}
-			var browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
-			
-			let sharedApplication = UIApplication.shared
-			if let edgeUrl = URL(string: "microsoft-edge-https//"),
-			   sharedApplication.canOpenURL(edgeUrl),
-			   let edgeBrowser = OIDExternalUserAgentIOSCustomBrowser.customBrowserEdge() {
-				browser = edgeBrowser
-			}
-			
+
 			appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
 				byPresenting: request,
-				externalUserAgent: browser,
+				externalUserAgent: OIDExternalUserAgentIOSCustomBrowser.defaultBrowser() ?? OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari(),
 				callback: callBack
 			)
 		}

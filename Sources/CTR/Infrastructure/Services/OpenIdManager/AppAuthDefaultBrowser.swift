@@ -10,14 +10,13 @@ import AppAuthEnterpriseUserAgent
 
 extension OIDExternalUserAgentIOSCustomBrowser {
 
-	class func customBrowserEdge() -> OIDExternalUserAgentIOSCustomBrowser? {
+	/// Get the system default browser (i.e. the one that opens a http/https link
+	/// - Returns: optional browser
+	class func defaultBrowser() -> OIDExternalUserAgentIOSCustomBrowser? {
 
 		return OIDExternalUserAgentIOSCustomBrowser(
-			urlTransformation: urlTransformationSchemeSubstitutionHTTPS(
-				"microsoft-edge-https",
-				http: "microsoft-edge-http"
-			),
-			canOpenURLScheme: "microsoft-edge-https",
+			urlTransformation: urlTransformationSchemeSubstitutionHTTPS("https", http: "http"),
+			canOpenURLScheme: "https",
 			appStore: nil
 		)
 	}
