@@ -19,12 +19,14 @@ protocol TokenValidatorProtocol {
 class TokenValidator: TokenValidatorProtocol {
 
 	private let tokenChars: [String.Element]
+	private let allowedCharacterSet: CharacterSet
 
 	/// Initialize
 	/// - Parameter alphabet: the alphabet to use
 	init(alphabet: String = "BCFGJLQRSTUVXYZ23456789") {
 
 		tokenChars = Array(alphabet)
+		allowedCharacterSet = CharacterSet(charactersIn: alphabet)
 	}
 
 	/// Validate the token
@@ -44,10 +46,22 @@ class TokenValidator: TokenValidatorProtocol {
 
 			return false
 		}
+
+		guard codeSplit[1].unicodeScalars.allSatisfy({ allowedCharacterSet.contains($0) }) else {
+
+			return false
+		}
+
 		guard codeSplit[2].count == 2 else {
 
 			return false
 		}
+
+		guard let checksum = codeSplit[2].first, checksum.unicodeScalars.allSatisfy({ allowedCharacterSet.contains($0) }) else {
+
+			return false
+		}
+		
 		guard codeSplit[2].last == "2" else {
 
 			return false
@@ -63,7 +77,7 @@ class TokenValidator: TokenValidatorProtocol {
 	/// Check the luhn mod N checksum
 	/// - Parameter token: the token to check
 	/// - Returns: True if this is a valid token
-	private func luhnModN(_ token: String) -> Bool {
+	func luhnModN(_ token: String) -> Bool {
 
 		// for more detail,
 		// see https://en.wikipedia.org/wiki/Luhn_mod_N_algorithm

@@ -9,35 +9,6 @@ import Foundation
 
 class OpenSSLData {
 
-	// Bizarre cert with odd extensions.
-	// Regenerate with openssl req -new -x509 -subj /CN=foo/ \
-	//      -addext "subjectAltName=otherName:1.2.3.4;UTF8,DNS:test1,DNS:test2,email:fo@bar,IP:1.2.3.4"  \
-	//      -nodes -keyout /dev/null |\
-	//            openssl x509 | pbcopy
-	//
-	static let certWithStuff = """
------BEGIN CERTIFICATE-----
-MIIDMTCCAhmgAwIBAgIUDg8ZD211w0VBq6Odl6vbkTbwH3IwDQYJKoZIhvcNAQEL
-BQAwDjEMMAoGA1UEAwwDZm9vMB4XDTIxMDcwNTEwMDcwNFoXDTIxMDgwNDEwMDcw
-NFowDjEMMAoGA1UEAwwDZm9vMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEA2axpu3nLbM8DCXWm1jieT0QbGmVl+aBkBVT5vRUxe2yn5ogvsEC8w4qsxKxC
-1T8lrMnkfVEPL/lBfLbuUJF/cUpHwTE0EQ2cQjHnpXzXLWCsbtN5T35ZbFyqQSWW
-CRGv3/3EZaA9y9hRyUl19TRPGfdss9HybJ7ssvO/53RJyaXxeHVneqpJc+E5mOnu
-mA2t0ZeKUPK3FnNWVWxsX+gAxgELbQFiJI+Rt88yC+i/fSR8Ic6dldJTeYa0f9ws
-VKPy6d4mHcBBcf03drNbcAGTbScpy9xA7EvE1+daXpmKuOv5Vi1jzznHbunIVepf
-vDh49MmZAsk2NKuXY1Zb7X38lQIDAQABo4GGMIGDMB0GA1UdDgQWBBTk+9elNiM4
-juir0pmNh06999aPiTAfBgNVHSMEGDAWgBTk+9elNiM4juir0pmNh06999aPiTAP
-BgNVHRMBAf8EBTADAQH/MDAGA1UdEQQpMCegCQYDKgMEoAIMAIIFdGVzdDGCBXRl
-c3QygQZmb0BiYXKHBAECAwQwDQYJKoZIhvcNAQELBQADggEBAMIg+nmG76SqfpNA
-C/WBuv7IVVQ1olbedtdMs0652omCEd5nQilBVSgZfc43wDYypT4HHP7us+zgkSdd
-s7r2fS119uyBu2vrgP5PYtj5TGDdowog2xxjjEoyFT8v+bGMSWIz5j3m3mtB9lLJ
-FIqGAYX2ngis7HBuPUHmALUC0THubSsg3CPzONSpHd1FDpuU/XDjiLneDk01BYUw
-CAp6RqELairVEuL3VTCaFWmJYq/myCd7vWx5KnnhTAYiwhBp5QTNDgcmsf96NJ5I
-axmt1cb2JFPOIyJA/fpq7cbbxFGQMxdKa8O7LNCn+NlwOw/nbWFLtksgdRp5rg4A
-tx5sCJ8=
------END CERTIFICATE-----
-""".data(using: .ascii)!
-
 	// Chain that is identical in subjectKeyIdentifier, issuerIdentifier, etc
 	// to a real one - but fake from the root down.
 	//

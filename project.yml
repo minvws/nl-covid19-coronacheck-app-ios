@@ -19,19 +19,16 @@ packages:
     majorVersion: 3.7.2
   IOSSecuritySuite:
     github: securing/IOSSecuritySuite
-    majorVersion: 1.8.0
+    majorVersion: 1.9.1
   Lottie:
     github: airbnb/lottie-ios
-    majorVersion: 3.2.1
+    majorVersion: 3.2.3
   MBProgressHUD:
     github: jdg/MBProgressHUD
     majorVersion: 1.2.0
   Nimble:
     github: Quick/Nimble
-    majorVersion: 9.0.0
-  OHHTTPStubs:
-    github: AliSoftware/OHHTTPStubs
-    majorVersion: 9.1.0
+    majorVersion: 9.2.0
   Reachability: # Once we support >= iOS12.0 we can remove this & use iOS NWPathMonitor instead.
     github: ashleymills/Reachability.swift
     majorVersion: 5.1.0
@@ -40,7 +37,7 @@ packages:
     majorVersion: 5.4.0
   SnapshotTesting:
     github: pointfreeco/swift-snapshot-testing
-    majorVersion: 1.8.2
+    majorVersion: 1.9.0
 
 
 # - Attributes: 
@@ -78,15 +75,6 @@ settings:
     LD_RUNPATH_SEARCH_PATHS:
       - "$(inherited)"
       - "@executable_path/Frameworks"
-  configs:
-    Development:
-      LOG_LEVEL: debug
-    FirebaseAcceptance:
-      LOG_LEVEL: debug
-    FirebaseProduction:
-      LOG_LEVEL: error
-    AppStore:
-      LOG_LEVEL: error
 
 # - Target Templates (i.e. shared default settings for targets):
 
@@ -120,8 +108,8 @@ targetTemplates:
         embed: false
     settings:
       base:
-        MARKETING_VERSION: 2.2.0
-        CURRENT_PROJECT_VERSION: 38
+        MARKETING_VERSION: 2.2.1
+        CURRENT_PROJECT_VERSION: 39
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
@@ -137,17 +125,22 @@ targetTemplates:
           NETWORK_CONFIGURATION: ACC # bananahalen no longer works.
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
+          LOG_LEVEL: debug
         FirebaseAcceptance:
           NETWORK_CONFIGURATION: ACC
+          LOG_LEVEL: error
         FirebaseProduction:
           NETWORK_CONFIGURATION: Production
+          LOG_LEVEL: error
         AppStore:
           NETWORK_CONFIGURATION: Production
+          LOG_LEVEL: error
     info:
       properties:
         # Dynamic properties (APP_FLAVOR etc) here are set at build time, so can still vary based on a Configuration.
         NETWORK_CONFIGURATION: $(NETWORK_CONFIGURATION)
         APP_FLAVOR: ${APP_FLAVOR}
+        LOG_LEVEL: ${LOG_LEVEL}
         CFBundleDevelopmentRegion: nl_NL
         CFBundleExecutable: $(EXECUTABLE_NAME)
         CFBundleName: ${DISPLAY_NAME}
@@ -157,13 +150,15 @@ targetTemplates:
         ITSAppUsesNonExemptEncryption: false
         LSApplicationQueriesSchemes:
           - 'tel'
+          - 'activator'
           - 'cydia'
+          - 'filza'
           - 'sileo'
           - 'undecimus'
           - 'zbra'
           - 'https'
         LSRequiresIPhoneOS: true
-        NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen. "
+        NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen."
         UIAppFonts:
           - 'Montserrat-Bold.ttf'
           - 'Montserrat-SemiBold.ttf'
@@ -207,13 +202,15 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string`
+          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
           # forbid TestFlight release if there are missing translations:
           if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then
             echo "error: Testflight deploys cannot contain missing translations:"
             echo $OUTPUT
             exit 1
+          else 
+            echo $OUTPUT
           fi
         inputFiles:
           - $TEMP_DIR/rswift-lastrun
@@ -232,10 +229,6 @@ targetTemplates:
     platform: iOS
     type: bundle.unit-test
     dependencies:
-      - package: OHHTTPStubs
-        product: OHHTTPStubs
-      - package: OHHTTPStubs
-        product: OHHTTPStubsSwift
       - package: Nimble
       - package: SnapshotTesting
       - target: Holder

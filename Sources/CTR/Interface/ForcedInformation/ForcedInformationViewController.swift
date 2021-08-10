@@ -50,7 +50,7 @@ final class ForcedInformationViewController: BaseViewController {
 			}
 			
 			self.pageViewController.pages = $0.compactMap { page in
-				guard let forcedInformationPageViewController = self.viewModel.getForcedInformatioStep(page) as? ForcedInformationPageViewController else { return nil }
+				guard let forcedInformationPageViewController = self.viewModel.getForcedInformationStep(page) as? ForcedInformationPageViewController else { return nil }
 				return forcedInformationPageViewController
 			}
 		}

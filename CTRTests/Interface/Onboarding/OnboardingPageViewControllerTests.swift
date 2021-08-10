@@ -18,7 +18,7 @@ class OnboardingPageViewControllerTests: XCTestCase {
 	let page = OnboardingPage(
 		title: "Onboarding Title",
 		message: "Onboarding Message",
-		image: .onboardingSafely,
+		image: I.onboarding.safely(),
 		step: .safelyOnTheRoad
 	)
 

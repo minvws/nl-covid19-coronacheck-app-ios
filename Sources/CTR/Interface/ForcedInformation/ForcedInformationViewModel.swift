@@ -23,7 +23,7 @@ final class ForcedInformationViewModel {
 		self.pages = pages
 	}
 	
-	func getForcedInformatioStep(_ info: ForcedInformationPage) -> UIViewController {
+	func getForcedInformationStep(_ info: ForcedInformationPage) -> UIViewController {
 		
 		let viewController = ForcedInformationPageViewController(
 			viewModel: ForcedInformationPageViewModel(

@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import Reachability
 
 protocol HolderCoordinatorDelegate: AnyObject {
 
@@ -20,7 +21,7 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool)
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
@@ -40,13 +41,15 @@ protocol HolderCoordinatorDelegate: AnyObject {
 
 	func userDidScanRequestToken(requestToken: RequestToken)
 
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void)
-
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion)
+
+	func userWishesMoreInfoAboutClockDeviation()
 	
 	func openUrl(_ url: URL, inApp: Bool)
 
-	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) // probably some other params also.
+	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID)
+
+	func userWishesToLaunchThirdPartyTicketApp()
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -57,6 +60,15 @@ class HolderCoordinator: SharedCoordinator {
 	var openIdManager: OpenIdManaging = Services.openIdManager
 	var userSettings: UserSettingsProtocol = UserSettings()
 	var onboardingFactory: OnboardingFactoryProtocol = HolderOnboardingFactory()
+
+	///	A (whitelisted) third-party can open the app & - if they provide a return URL, we will
+	///	display a "return to Ticket App" button on the ShowQR screen
+	/// Docs: https://shrtm.nu/oc45
+	private var thirdpartyTicketApp: (name: String, returnURL: URL)?
+
+	/// If set, this should be handled at the first opportunity:
+	private var unhandledUniversalLink: UniversalLink?
+
 	private var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
 
 	/// Restricts access to GGD test provider login
@@ -110,32 +122,41 @@ class HolderCoordinator: SharedCoordinator {
 
     // MARK: - Universal Links
 
-    /// If set, this should be handled at the first opportunity:
-    private var unhandledUniversalLink: UniversalLink?
-
     /// Try to consume the Activity
     /// returns: bool indicating whether it was possible.
     @discardableResult
     override func consume(universalLink: UniversalLink) -> Bool {
-        switch universalLink {
-            case .redeemHolderToken(let requestToken):
+		switch universalLink {
+			case .redeemHolderToken(let requestToken):
 
-                // Need to handle two situations:
-                // - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
-                //   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
-                //      that after the user has completed these screens.
-                // - the user is somewhere in the Holder app, and the nav stack can just be replaced.
+				// Need to handle two situations:
+				// - the user is currently viewing onboarding/consent/force-information (and these should not be skipped)
+				//   ⮑ in this situation, it is nice to keep hold of the UniversalLink and go straight to handling
+				//      that after the user has completed these screens.
+				// - the user is somewhere in the Holder app, and the nav stack can just be replaced.
 
-                if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
-                    self.unhandledUniversalLink = universalLink
-                } else {
-                    // Do it on the next runloop, to standardise all the entry points to this function:
-                    DispatchQueue.main.async { [self] in
-                        navigateToTokenEntry(requestToken)
-                    }
-                }
-            return true
-        }
+				if onboardingManager.needsOnboarding || onboardingManager.needsConsent || forcedInformationManager.needsUpdating {
+					self.unhandledUniversalLink = universalLink
+				} else {
+					// Do it on the next runloop, to standardise all the entry points to this function:
+					DispatchQueue.main.async { [self] in
+						navigateToTokenEntry(requestToken)
+					}
+				}
+				return true
+
+			case .thirdPartyTicketApp(let returnURL):
+				guard let returnURL = returnURL,
+					  let matchingMetadata = remoteConfigManager.getConfiguration().universalLinkPermittedDomains?.first(where: { permittedDomain in
+						  permittedDomain.url == returnURL.host
+					  })
+				else {
+					return true
+				}
+
+				thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
+				return true
+		}
     }
 
 	private func startEventFlowForVaccination() {
@@ -185,15 +206,6 @@ class HolderCoordinator: SharedCoordinator {
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
 	}
-
-	func presentChangeRegionBottomSheet(currentRegion: QRCodeValidityRegion, callback: @escaping (QRCodeValidityRegion) -> Void) {
-		let viewController = ToggleRegionViewController(viewModel: ToggleRegionViewModel(currentRegion: currentRegion, didChangeCallback: callback))
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.present(viewController, animated: true, completion: nil)
-	}
 	
 	private func navigateToDashboard() {
 		
@@ -201,9 +213,20 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: HolderDashboardViewModel(
 				coordinator: self,
 				cryptoManager: cryptoManager,
-				proofManager: proofManager,
-				configuration: generalConfiguration,
-				dataStoreManager: Services.dataStoreManager,
+				datasource: HolderDashboardDatasource(
+					cryptoManaging: Services.cryptoManager,
+					walletManager: Services.walletManager,
+					now: { Date() }
+				),
+				strippenRefresher: DashboardStrippenRefresher(
+					minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: remoteConfigManager.getConfiguration().credentialRenewalDays ?? 5,
+					walletManager: Services.walletManager,
+					greencardLoader: Services.greenCardLoader,
+					reachability: try? Reachability(),
+					now: { Date() }
+				),
+				userSettings: UserSettings(),
+				remoteConfigManager: Services.remoteConfigManager,
 				now: { Date() }
 			)
 		)
@@ -249,8 +272,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			viewModel: ShowQRViewModel(
 				coordinator: self,
 				greenCard: greenCard,
+				thirdPartyTicketAppName: thirdpartyTicketApp?.name,
 				cryptoManager: cryptoManager,
-				configuration: generalConfiguration
+				remoteConfigManager: Services.remoteConfigManager,
+				userSettings: UserSettings(),
+				now: Date.init
 			)
 		)
 		destination.modalPresentationStyle = .fullScreen
@@ -279,7 +305,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	///   - title: the title of the page
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool = true) {
 
 		let viewController = InformationViewController(
 			viewModel: InformationViewModel(
@@ -288,7 +314,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				message: body,
 				linkTapHander: { [weak self] url in
 
-					self?.openUrl(url, inApp: true)
+					self?.openUrl(url, inApp: openURLsInApp)
 				},
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
@@ -372,15 +398,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 		navigateToTokenEntry(requestToken)
 	}
 
-	func userWishesToChangeRegion(currentRegion: QRCodeValidityRegion, completion: @escaping (QRCodeValidityRegion) -> Void) {
-		presentChangeRegionBottomSheet(currentRegion: currentRegion, callback: completion)
-	}
-
 	func userWishesMoreInfoAboutUnavailableQR(originType: QRCodeOriginType, currentRegion: QRCodeValidityRegion, availableRegion: QRCodeValidityRegion) {
 
 		let title: String = .holderDashboardNotValidInThisRegionScreenTitle(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		let message: String = .holderDashboardNotValidInThisRegionScreenMessage(originType: originType, currentRegion: currentRegion, availableRegion: availableRegion)
 		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false)
+	}
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		let title: String = L.holderClockDeviationDetectedTitle()
+		let message: String = L.holderClockDeviationDetectedMessage(UIApplication.openSettingsURLString)
+		presentInformationPage(title: title, body: message, hideBodyForScreenCapture: false, openURLsInApp: false)
 	}
 
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID) {
@@ -405,6 +433,11 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
 			(sidePanel?.selectedViewController as? UINavigationController)?.present(alertController, animated: true, completion: nil)
 		}
+	}
+
+	func userWishesToLaunchThirdPartyTicketApp() {
+		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
+		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
 	}
 }
 

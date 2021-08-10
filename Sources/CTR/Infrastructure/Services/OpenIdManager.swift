@@ -15,11 +15,9 @@ protocol OpenIdManaging: AnyObject {
 
 	/// Request an access token
 	/// - Parameters:
-	///   - presenter: the presenting view controller
 	///   - onCompletion: completion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
-		presenter: UIViewController,
 		onCompletion: @escaping (String?) -> Void,
 		onError: @escaping (Error?) -> Void)
 }
@@ -44,11 +42,9 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 	/// Request an access token
 	/// - Parameters:
-	///   - presenter: the presenting view controller
 	///   - onCompletion: completion handler with optional access token
 	///   - onError: error handler
 	func requestAccessToken(
-		presenter: UIViewController,
 		onCompletion: @escaping (String?) -> Void,
 		onError: @escaping (Error?) -> Void) {
 
@@ -57,7 +53,6 @@ class OpenIdManager: OpenIdManaging, Logging {
 				case let .success(serviceConfiguration):
 					self?.requestAuthorization(
 						serviceConfiguration,
-						presenter: presenter,
 						onCompletion: onCompletion,
 						onError: onError
 					)
@@ -70,7 +65,6 @@ class OpenIdManager: OpenIdManaging, Logging {
 
 	private func requestAuthorization(
 		_ serviceConfiguration: OIDServiceConfiguration,
-		presenter: UIViewController,
 		onCompletion: @escaping (String?) -> Void,
 		onError: @escaping (Error?) -> Void) {
 
@@ -97,29 +91,20 @@ class OpenIdManager: OpenIdManaging, Logging {
 					}
 				}
 			}
-//			if Configuration().getEnvironment() == "production" {
-
-				var browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
-
-				let sharedApplication = UIApplication.shared
-				if let edgeUrl = URL(string: "microsoft-edge-https//"),
-				   sharedApplication.canOpenURL(edgeUrl),
-				   let edgeBrowser = OIDExternalUserAgentIOSCustomBrowser.customBrowserEdge() {
-					browser = edgeBrowser
-				}
-
-				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
-					byPresenting: request,
-					externalUserAgent: browser,
-					callback: callBack
-				)
-//			} else {
-//				appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
-//					byPresenting: request,
-//					presenting: presenter,
-//					callback: callBack
-//				)
-//			}
+			var browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+			
+			let sharedApplication = UIApplication.shared
+			if let edgeUrl = URL(string: "microsoft-edge-https//"),
+			   sharedApplication.canOpenURL(edgeUrl),
+			   let edgeBrowser = OIDExternalUserAgentIOSCustomBrowser.customBrowserEdge() {
+				browser = edgeBrowser
+			}
+			
+			appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
+				byPresenting: request,
+				externalUserAgent: browser,
+				callback: callBack
+			)
 		}
 	}
 

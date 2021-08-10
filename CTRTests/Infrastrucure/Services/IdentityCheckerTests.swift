@@ -39,7 +39,7 @@ class IdentityCheckerTests: XCTestCase {
 	func test_noEventGroup_remoteEventV2() {
 
 		// Given
-		let remoteEvent = RemoteEvent(wrapper: .fakeWithV2Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEvent = RemoteEvent(wrapper: .fakeWithV2Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [], with: [remoteEvent])
@@ -51,7 +51,7 @@ class IdentityCheckerTests: XCTestCase {
 	func test_noEventGroup_remoteEventV3() {
 
 		// Given
-		let remoteEvent = RemoteEvent(wrapper: .fakeWithV3Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEvent = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [], with: [remoteEvent])
@@ -63,8 +63,8 @@ class IdentityCheckerTests: XCTestCase {
 	func test_noEventGroup_remoteEventV2_andV3() {
 
 		// Given
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, SignedResponse(payload: "", signature: ""))
-		let remoteEventV2 = RemoteEvent(wrapper: .fakeWithV2Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
+		let remoteEventV2 = RemoteEvent(wrapper: .fakeWithV2Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [], with: [remoteEventV2, remoteEventV3])
@@ -89,7 +89,7 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
@@ -102,7 +102,7 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2Identity))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
@@ -115,7 +115,7 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
-		let remoteEventV2 = RemoteEvent(wrapper: .fakeWithV2Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEventV2 = RemoteEvent(wrapper: .fakeWithV2Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV2])
@@ -128,7 +128,7 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3Identity))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative, SignedResponse(payload: "", signature: ""))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
@@ -141,7 +141,7 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, SignedResponse(payload: "", signature: ""))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3Identity, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
@@ -154,7 +154,59 @@ class IdentityCheckerTests: XCTestCase {
 
 		// Given
 		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
-		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative, SignedResponse(payload: "", signature: ""))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Diacritic_removeEventv3Alternative() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Alternative_removeEventv3Diacritic() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Diacritic_removeEventv3Diacritic_identicalDiacritic() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV3Diacritic_removeEventv3AlternativeDiacritic() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityFirstNameWithDiacriticAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityFirstNameWithDiacritic, signedResponse: nil)
 
 		// When
 		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
@@ -171,7 +223,7 @@ class IdentityCheckerTests: XCTestCase {
 		if let payloadData = try? JSONEncoder().encode(wrapper) {
 		   let base64String = payloadData.base64EncodedString()
 			let signedResponse = SignedResponse(payload: base64String, signature: "does not matter for this test")
-			let context = dataStoreManager.backgroundContext()
+			let context = dataStoreManager.managedObjectContext()
 			context.performAndWait {
 				if let wallet = WalletModel.createTestWallet(managedContext: context),
 				   let jsonData = try? JSONEncoder().encode(signedResponse) {
@@ -187,6 +239,51 @@ class IdentityCheckerTests: XCTestCase {
 			}
 		}
 		return eventGroup
+	}
+
+	func test_normalization() {
+
+		// Given
+		let values: [String: String] = [
+			"'Doorn": "D",
+			"Rool": "R",
+			"rool": "R",
+			" rool": "R",
+			"-rool": "R"
+		]
+		for (value, expected) in values {
+			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
+
+			// When
+			let tuple = identity.asIdentityTuple()
+
+			expect(tuple.firstNameInitial) == expected
+		}
+	}
+
+	func test_normalization_valuesShouldReturnNil() {
+
+		// Given
+		let values: [String] = [
+			"#$pietje",
+			"παράδειγμα δοκιμής",
+			"Ægir",
+			"Özturk",
+			"ТЕСТ МИЛИЦА",
+			"王",
+			"Şımarık",
+			"Ådne",
+			"محمود عبدالرحيم",
+			"أحمد‎"
+		]
+		for value in values {
+			let identity = EventFlow.Identity(infix: nil, firstName: value, lastName: nil, birthDateString: nil)
+
+			// When
+			let tuple = identity.asIdentityTuple()
+
+			expect(tuple.firstNameInitial).to(beNil())
+		}
 	}
 }
 
@@ -207,6 +304,26 @@ extension EventFlow.EventResultWrapper {
 			providerIdentifier: "CoronaCheck",
 			protocolVersion: "3,0",
 			identity: EventFlow.Identity(infix: nil, firstName: "Rool", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+
+	static var fakeWithV3IdentityFirstNameWithDiacritic: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Ådne", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+
+	static var fakeWithV3IdentityFirstNameWithDiacriticAlternative: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Ægir", lastName: "Paap", birthDateString: "1970-05-27"),
 			status: .complete,
 			result: nil
 		)

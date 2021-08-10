@@ -57,13 +57,13 @@ class ForcedInformationManager: ForcedInformationManaging {
 	/// The source of all the forced information. This needs to be updated if new consent or pages are required.
 	private var information: ForcedInformation = ForcedInformation(
 		pages: [ForcedInformationPage(
-			image: .onboardingSafely,
+			image: isNL ? I.onboarding.tabbarNL() : I.onboarding.tabbarEN(),
 			tagline: L.holderUpdatepageTagline(),
-			title: L.holderUpdatepageTitle(),
-			content: L.holderUpdatepageContent()
+			title: L.holderUpdatepageTitleTab(),
+			content: L.holderUpdatepageContentTab()
 		)],
 		consent: nil,
-		version: 3
+		version: 4
 	)
 
 	// MARK: - ForcedInformationManaging
@@ -100,5 +100,9 @@ class ForcedInformationManager: ForcedInformationManaging {
 	func reset() {
 
 		$data.clearData()
+	}
+	
+	private static var isNL: Bool {
+		return "nl" == Locale.current.languageCode
 	}
 }

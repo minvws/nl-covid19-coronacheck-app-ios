@@ -247,7 +247,8 @@ class TokenEntryViewModel {
 		coordinator?.presentInformationPage(
 			title: L.holderTokenentryModalNotokenTitle(),
 			body: L.holderTokenentryModalNotokenDetails(),
-			hideBodyForScreenCapture: false
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
 		)
 	}
 

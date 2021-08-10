@@ -26,10 +26,6 @@ class AppCoordinator: Coordinator, Logging {
 	var childCoordinators: [Coordinator] = []
 
 	var navigationController: UINavigationController
-
-	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	private var proofManager: ProofManaging = Services.proofManager
 	
 	private var privacySnapshotWindow: UIWindow?
 
@@ -75,8 +71,7 @@ class AppCoordinator: Coordinator, Logging {
                 coordinator: self,
                 versionSupplier: AppVersionSupplier(),
                 flavor: AppFlavor.flavor,
-                remoteConfigManager: remoteConfigManager,
-                proofManager: proofManager
+				walletManager: AppFlavor.flavor == .holder ? Services.walletManager : nil
             )
         )
         // Set the root
@@ -180,14 +175,15 @@ class AppCoordinator: Coordinator, Logging {
 
     func consume(universalLink: UniversalLink) -> Bool {
 
-        switch universalLink {
-            case .redeemHolderToken:
-                /// If we reach here it means that there was no holderCoordinator initialized at the time
-                /// the universal link was received. So hold onto it here, for when it is ready.
-                unhandledUniversalLink = universalLink
-                return true
-        }
-    }
+		switch universalLink {
+			case .redeemHolderToken,
+				 .thirdPartyTicketApp:
+				/// If we reach here it means that there was no holderCoordinator initialized at the time
+				/// the universal link was received. So hold onto it here, for when it is ready.
+				unhandledUniversalLink = universalLink
+				return true
+		}
+	}
 }
 
 // MARK: - AppCoordinatorDelegate
@@ -203,20 +199,20 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
 
-        switch state {
-            case .noActionNeeded:
-                startApplication()
-
-            case .internetRequired:
-                showInternetRequired()
-
-            case let .actionRequired(versionInformation):
-                showActionRequired(with: versionInformation)
+		switch state {
+			case .noActionNeeded, .withinTTL:
+				startApplication()
 				
-            case .cryptoLibNotInitialized:
+			case .internetRequired:
+				showInternetRequired()
+
+			case let .actionRequired(versionInformation):
+				showActionRequired(with: versionInformation)
+				
+			case .cryptoLibNotInitialized:
 				showCryptoLibNotInitializedError()
-        }
-    }
+		}
+	}
 
     /// Retry loading the requirements
     func retry() {

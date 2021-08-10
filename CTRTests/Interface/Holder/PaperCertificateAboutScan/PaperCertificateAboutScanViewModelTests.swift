@@ -10,7 +10,7 @@ import Nimble
 import SnapshotTesting
 @testable import CTR
 
-final class PaperCertificateAbountScanViewModelTests: XCTestCase {
+final class PaperCertificateAboutScanViewModelTests: XCTestCase {
 	
 	var sut: PaperCertificateAboutScanViewModel!
 	var coordinatorDelegateSpy: PaperCertificateCoordinatorDelegateSpy!

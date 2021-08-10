@@ -15,19 +15,21 @@ class HolderDashboardDatasourceTests: XCTestCase {
 	/// Subject under test
 	var sut: HolderDashboardDatasource!
 
+	var cryptoManagerSpy: CryptoManagerSpy!
 	var dataStoreManager: DataStoreManager!
 	var walletManagingSpy: WalletManagerSpy!
 
 	override func setUp() {
 		super.setUp()
-		
+
+		cryptoManagerSpy = CryptoManagerSpy()
 		dataStoreManager = DataStoreManager(.inMemory)
 		walletManagingSpy = WalletManagerSpy()
 	}
 
 	func test_settingDidUpdateCallbackTriggersReloadWithCallback() {
 		// Arrange
-		sut = HolderDashboardDatasource(dataStoreManager: dataStoreManager, walletManager: walletManagingSpy, now: { now })
+		sut = HolderDashboardDatasource(cryptoManaging: cryptoManagerSpy, walletManager: walletManagingSpy, now: { now })
 
 		// Act
 		var wasUpdated: Bool = false
@@ -46,7 +48,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 			(greencardType: "domestic", originType: "vaccination")
 		]
 
-		sut = HolderDashboardDatasource(dataStoreManager: dataStoreManager, walletManager: walletManagingSpy, now: { now })
+		sut = HolderDashboardDatasource(cryptoManaging: cryptoManagerSpy, walletManager: walletManagingSpy, now: { now })
 
 		// Act
 		var cards = [HolderDashboardViewModel.MyQRCard]()
@@ -69,7 +71,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		walletManagingSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardDatasource(dataStoreManager: dataStoreManager, walletManager: walletManagingSpy, now: { now })
+		sut = HolderDashboardDatasource(cryptoManaging: cryptoManagerSpy, walletManager: walletManagingSpy, now: { now })
 
 		var cards = [HolderDashboardViewModel.MyQRCard]()
 		var expiredQRs = [HolderDashboardDatasource.ExpiredQR]()
@@ -101,7 +103,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		walletManagingSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardDatasource(dataStoreManager: dataStoreManager, walletManager: walletManagingSpy, now: { now })
+		sut = HolderDashboardDatasource(cryptoManaging: cryptoManagerSpy, walletManager: walletManagingSpy, now: { now })
 
 		var cards = [HolderDashboardViewModel.MyQRCard]()
 		var expiredQRs = [HolderDashboardDatasource.ExpiredQR]()
@@ -133,7 +135,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		walletManagingSpy.stubbedListGreenCardsResult = [greencard]
 
 		// Act
-		sut = HolderDashboardDatasource(dataStoreManager: dataStoreManager, walletManager: walletManagingSpy, now: { now })
+		sut = HolderDashboardDatasource(cryptoManaging: cryptoManagerSpy, walletManager: walletManagingSpy, now: { now })
 
 		var cards = [HolderDashboardViewModel.MyQRCard]()
 		var expiredQRs = [HolderDashboardDatasource.ExpiredQR]()
@@ -178,7 +180,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		walletManagingSpy.stubbedListGreenCardsResult = greencards
 
 		// Act
-		sut = HolderDashboardDatasource(dataStoreManager: dataStoreManager, walletManager: walletManagingSpy, now: { now })
+		sut = HolderDashboardDatasource(cryptoManaging: cryptoManagerSpy, walletManager: walletManagingSpy, now: { now })
 
 		var cards = [HolderDashboardViewModel.MyQRCard]()
 		var expiredQRs = [HolderDashboardDatasource.ExpiredQR]()
@@ -191,7 +193,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(expiredQRs).to(beEmpty())
 		expect(cards.count) == 2 // two origins, but grouped in one card.
 
-		guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = cards[0] else { fail(); return }
+		guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _) = cards[0] else { fail(); return }
 		expect(greenCardObjectID) == greencards[1].objectID
 
 		expect(origins.count) == 1
@@ -205,7 +207,7 @@ class HolderDashboardDatasourceTests: XCTestCase {
 		expect(evaluateEnabledState(now)) == true
 
 		// unwrap next index to same variables
-		guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState) = cards[1] else { fail(); return }
+		guard case let .europeanUnion(greenCardObjectID, origins, shouldShowErrorBeneathCard, evaluateEnabledState, _) = cards[1] else { fail(); return }
 		expect(greenCardObjectID) == greencards[0].objectID
 
 		expect(origins.count) == 1

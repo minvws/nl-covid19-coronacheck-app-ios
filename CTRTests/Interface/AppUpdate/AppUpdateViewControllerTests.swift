@@ -27,10 +27,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		appCoordinatorSpy = AppCoordinatorSpy()
 		let viewModel = AppUpdateViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: "AppUpdateViewControllerTests"
-			)
+			versionInformation: RemoteConfiguration.default
 		)
 
 		sut = AppUpdateViewController(viewModel: viewModel)
@@ -77,10 +74,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = AppUpdateViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: nil
-			)
+			versionInformation: RemoteConfiguration.default
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
 
@@ -101,11 +95,7 @@ class AppUpdateViewControllerTests: XCTestCase {
 		// Given
 		let viewModel = EndOfLifeViewModel(
 			coordinator: appCoordinatorSpy,
-			versionInformation: RemoteConfiguration(
-				minVersion: "1.0",
-				minVersionMessage: nil,
-				deactivated: true
-			)
+			versionInformation: RemoteConfiguration.default
 		)
 		sut = AppUpdateViewController(viewModel: viewModel)
 

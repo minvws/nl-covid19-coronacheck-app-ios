@@ -85,7 +85,14 @@ struct EventFlow {
 		func getSigningCertificate() -> SigningCertificate? {
 
 			cmsCertificate.base64Decoded().map {
-				SigningCertificate(name: "EventProvider", certificate: $0)
+				SigningCertificate(
+					name: "EventProvider",
+					certificate: $0,
+					commonName: nil,
+					authorityKeyIdentifier: nil,
+					subjectKeyIdentifier: nil,
+					rootSerial: nil
+				)
 			}
 		}
 	}
@@ -114,7 +121,7 @@ struct EventFlow {
 	/// A wrapper around an event result.
 	struct EventResultWrapper: Codable, Equatable {
 
-		let providerIdentifier: String
+		var providerIdentifier: String
 		let protocolVersion: String
 		let identity: Identity? // 3.0
 		let status: EventState
@@ -317,6 +324,7 @@ struct EventFlow {
 		}
 		
 		enum CompletionReason: String, Codable, Equatable {
+			case none = ""
 			case recovery = "recovery"
 			case priorEvent = "priorevent"
 		}
@@ -416,5 +424,15 @@ extension EventFlow.DccEvent {
 			}
 		}
 		return nil
+	}
+}
+
+extension EventFlow.VaccinationEvent {
+
+	func doesMatchEvent(_ otherEvent: EventFlow.VaccinationEvent) -> Bool {
+
+		return dateString == otherEvent.dateString &&
+			((hpkCode != nil && hpkCode == otherEvent.hpkCode) ||
+				(manufacturer != nil && manufacturer == otherEvent.manufacturer))
 	}
 }
