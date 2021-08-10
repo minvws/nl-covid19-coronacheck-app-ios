@@ -128,6 +128,7 @@ class ShowQRViewModel: Logging {
 		}
 
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
+			guard self?.screenIsBlockedForScreenshotWithTimeRemaining == nil else { return }
 			userSettings.lastScreenshotTime = now()
 			self?.screenshotWasTaken()
 		}
