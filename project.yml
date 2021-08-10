@@ -157,10 +157,10 @@ targetTemplates:
           - 'undecimus'
           - 'zbra'
           - 'https'
-          - 'googlechrome'
+          - 'googlechromes'
           - 'opera-https'
           - 'firefox'
-          - 'microsoft-edge-hhtps'
+          - 'microsoft-edge-https'
         LSRequiresIPhoneOS: true
         NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen."
         UIAppFonts:
