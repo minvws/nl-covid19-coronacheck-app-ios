@@ -325,7 +325,7 @@
 "holder.dashboard.qr.title" = "My QR code";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
-"holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccination certificate: dose %@ van %@";
+"holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccination certificate: dose %@ of %@";
 "holder.dashboard.qr.backToThirdPartyApp" = "To the %@";
 
 "holder.clockDeviationDetected.title" = "Please check your phone’s time settings";
