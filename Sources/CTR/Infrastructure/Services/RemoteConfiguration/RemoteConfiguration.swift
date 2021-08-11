@@ -7,61 +7,6 @@
 
 import Foundation
 
-/// Protocol for app version information
-protocol RemoteInformation {
-
-	/// The minimum required version
-	var minimumVersion: String { get }
-
-	/// The message for the minimum required version
-	var minimumVersionMessage: String? { get }
-
-	/// The url to the appStore
-	var appStoreURL: URL? { get }
-
-	/// The url to the site
-	var informationURL: URL? { get }
-
-	/// Is the app deactivated?
-	var appDeactivated: Bool? { get }
-
-	/// What is the TTL of the config
-	var configTTL: Int? { get }
-
-	/// What is the waiting period before a recovery is valid?
-	var recoveryWaitingPeriodDays: Int? { get }
-
-	/// When should we update
-	var requireUpdateBefore: TimeInterval? { get }
-
-	/// Is the app temporarily disabled?
-	var temporarilyDisabled: Bool? { get }
-
-	/// What is the validity of a domestic test / vaccination
-	var domesticValidityHours: Int? { get }
-
-	var vaccinationEventValidity: Int? { get }
-	var recoveryEventValidity: Int? { get }
-	var testEventValidity: Int? { get }
-
-	// The number of days before a recovery expires
-	var recoveryExpirationDays: Int? { get }
-
-	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
-	var credentialRenewalDays: Int? { get }
-
-	var clockDeviationThresholdSeconds: Int? { get }
-}
-
-extension RemoteInformation {
-
-	/// Is the app deactivated?
-	var isDeactivated: Bool {
-
-		return appDeactivated ?? false
-	}
-}
-
 struct HPKData: Codable {
 	
 	let code: String
@@ -92,7 +37,7 @@ struct UniversalLinkPermittedDomain: Codable {
 	let name: String
 }
 
-struct RemoteConfiguration: RemoteInformation, Codable {
+struct RemoteConfiguration: Codable {
 
 	/// The minimum required version
 	var minimumVersion: String
@@ -256,6 +201,12 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			universalLinkPermittedDomains: nil,
 			clockDeviationThresholdSeconds: 30
 		)
+	}
+
+	/// Is the app deactivated?
+	var isDeactivated: Bool {
+
+		return appDeactivated ?? false
 	}
 }
 

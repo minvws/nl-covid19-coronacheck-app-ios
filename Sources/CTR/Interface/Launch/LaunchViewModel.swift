@@ -236,7 +236,7 @@ class LaunchViewModel: Logging {
 	///   - remoteConfiguration: the remote configuration
 	///   - completion: completion handler
 	private func compare(
-		_ remoteConfiguration: RemoteInformation,
+		_ remoteConfiguration: RemoteConfiguration,
 		completion: @escaping (LaunchState) -> Void) {
 
 		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)
