@@ -131,7 +131,7 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$dashboardRegionToggleValue.binding = { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
 			let selectedTab: DashboardTab = region == .domestic ? .domestic : .international
-			sceneView.startOn(tab: selectedTab)
+			sceneView.selectTab(tab: selectedTab)
 		}
 	}
 	
@@ -254,7 +254,7 @@ class HolderDashboardViewController: BaseViewController {
 
 		// Select start tab after layouting is done to be able to update scroll position
 		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.startOn(tab: selectedTab)
+		sceneView.selectTab(tab: selectedTab)
 	}
 
 	// MARK: Helper methods
