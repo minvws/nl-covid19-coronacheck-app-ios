@@ -45,6 +45,12 @@ struct RemoteConfiguration: Codable {
 	/// The message for the minimum required version
 	var minimumVersionMessage: String?
 
+	/// The recommended version
+	var recommendedVersion: String?
+
+	/// The recommended version nag interval
+	var recommendedNagIntervalHours: Int?
+
 	/// The url to the appStore
 	var appStoreURL: URL?
 
@@ -110,6 +116,8 @@ struct RemoteConfiguration: Codable {
 
 		case minimumVersion = "iosMinimumVersion"
 		case minimumVersionMessage = "iosMinimumVersionMessage"
+		case recommendedVersion = "iosRecommendedVersion"
+		case recommendedNagIntervalHours = "upgradeRecommendationInterval"
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
@@ -139,6 +147,8 @@ struct RemoteConfiguration: Codable {
 	init(
 		minVersion: String,
 		minVersionMessage: String?,
+		recommendedVersion: String?,
+		recommendedNagIntervalHours: Int?,
 		storeUrl: URL?,
 		deactivated: Bool?,
 		informationURL: URL?,
@@ -159,6 +169,8 @@ struct RemoteConfiguration: Codable {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
+		self.recommendedVersion = recommendedVersion
+		self.recommendedNagIntervalHours = recommendedNagIntervalHours
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
@@ -183,6 +195,8 @@ struct RemoteConfiguration: Codable {
  		return RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: nil,
+			recommendedVersion: "1.0.0",
+			recommendedNagIntervalHours: 24,
 			storeUrl: nil,
 			deactivated: false,
 			informationURL: nil,
