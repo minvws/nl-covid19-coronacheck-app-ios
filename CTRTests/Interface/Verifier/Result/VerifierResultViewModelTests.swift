@@ -44,6 +44,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		let details = MobilecoreVerificationDetails()
 		details.isSpecimen = "1"
 		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
 		
 		sut.verificationResult = result
@@ -76,6 +77,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Given
 		let details = MobilecoreVerificationDetails()
 		let result = MobilecoreVerificationResult()
+		result.status = Int(MobilecoreVERIFICATION_SUCCESS)
 		result.details = details
 		sut.verificationResult = result
 		
