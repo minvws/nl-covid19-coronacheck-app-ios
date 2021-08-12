@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ResultView: ScrolledStackWithButtonView {
+class VerifierResultView: ScrolledStackWithButtonView {
 
 	/// The display constants
 	private struct ViewTraits {

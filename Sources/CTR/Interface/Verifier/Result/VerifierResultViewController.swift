@@ -11,7 +11,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 	private let viewModel: VerifierResultViewModel
 
-	let sceneView = ResultView()
+	let sceneView = VerifierResultView()
 
 	init(viewModel: VerifierResultViewModel) {
 
