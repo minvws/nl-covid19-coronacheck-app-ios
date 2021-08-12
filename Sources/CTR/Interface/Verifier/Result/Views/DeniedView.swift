@@ -11,8 +11,14 @@ final class DeniedView: ScrolledStackWithButtonView {
 	
 	private enum ViewTraits {
 		
+		enum Margin {
+			static let top: CGFloat = 4
+		}
+		enum Spacing {
+			static let imageToLabel: CGFloat = UIDevice.current.isSmallScreen ? 24 : 40
+		}
 		enum Size {
-			static let image = CGSize(width: 200, height: 200)
+			static let imageWidth: CGFloat = 200
 		}
 	}
 	
@@ -21,12 +27,16 @@ final class DeniedView: ScrolledStackWithButtonView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
+		view.image = .denied
 		return view
 	}()
 	
 	private let titleLabel: Label = {
 
-		return Label(title1: nil, montserrat: true).multiline().header()
+		let label = Label(title1: nil, montserrat: true).multiline().header()
+		label.textAlignment = .center
+		label.textColor = Theme.colors.dark
+		return label
 	}()
 	
 	private let secondaryButton: Button = {
@@ -39,9 +49,12 @@ final class DeniedView: ScrolledStackWithButtonView {
 	
 	override func setupViews() {
 		super.setupViews()
+	
+		stackView.spacing = ViewTraits.Spacing.imageToLabel
+		stackViewInset.top = ViewTraits.Margin.top
 		
-		backgroundColor = Theme.colors.denied
-		imageView.image = .denied
+		actionColor = Theme.colors.denied
+		footerActionColor = Theme.colors.denied
 		
 		primaryButton.style = .secondary
 	}
@@ -49,7 +62,8 @@ final class DeniedView: ScrolledStackWithButtonView {
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
-		
+		stackView.addArrangedSubview(imageView)
+		stackView.addArrangedSubview(titleLabel)
 	}
 	
 	override func setupViewConstraints() {
@@ -68,7 +82,18 @@ final class DeniedView: ScrolledStackWithButtonView {
 		
 		NSLayoutConstraint.activate([
 			
-			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
+			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
+			
+			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
 		])
+	}
+	
+	// MARK: Public Access
+
+	/// The title
+	var title: String? {
+		didSet {
+			titleLabel.text = title
+		}
 	}
 }

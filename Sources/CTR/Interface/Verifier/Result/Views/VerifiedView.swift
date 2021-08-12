@@ -19,7 +19,7 @@ final class VerifiedView: BaseView {
 			static let imageToLabel: CGFloat = 32
 		}
 		enum Size {
-			static let image = CGSize(width: 200, height: 200)
+			static let imageWidth: CGFloat = 200
 		}
 		enum Position {
 			static let contentMultiplier: CGFloat = 0.75
@@ -31,6 +31,7 @@ final class VerifiedView: BaseView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
+		view.image = .access
 		return view
 	}()
 	
@@ -38,6 +39,7 @@ final class VerifiedView: BaseView {
 
 		let label = Label(title1: nil, montserrat: true).multiline().header()
 		label.textAlignment = .center
+		label.textColor = Theme.colors.dark
 		return label
 	}()
 	
@@ -54,7 +56,6 @@ final class VerifiedView: BaseView {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.access
-		imageView.image = .access
 	}
 	
 	override func setupViewHierarchy() {
@@ -82,8 +83,7 @@ final class VerifiedView: BaseView {
 			stackView.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor),
 			stackView.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor),
 			
-			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.image.width),
-			imageView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.image.height)
+			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
 		])
 	}
 	
