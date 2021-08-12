@@ -107,7 +107,7 @@ class LaunchViewModel: Logging {
 			return
 		}
 
-		logDebug("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
+		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
 
 		// Small delay, let the viewController load.
 		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

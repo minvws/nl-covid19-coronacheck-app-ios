@@ -33,6 +33,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
 
+	var userSettings: UserSettingsProtocol = UserSettings()
+
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, navigationController: UINavigationController) {
@@ -97,6 +99,10 @@ class AppCoordinator: Coordinator, Logging {
     /// Start the app as a holder
     private func startAsHolder() {
 
+		guard childCoordinators.isEmpty else {
+			return
+		}
+
         let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
 
@@ -107,6 +113,10 @@ class AppCoordinator: Coordinator, Logging {
 
     /// Start the app as a verifier
     private func startAsVerifier() {
+
+		guard childCoordinators.isEmpty else {
+			return
+		}
 
         let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
@@ -153,7 +163,9 @@ class AppCoordinator: Coordinator, Logging {
 			UIAlertAction(
 				title: L.recommendedUpdateAppActionCancel(),
 				style: .cancel,
-				handler: nil
+				handler: { [weak self] _ in
+					self?.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+				}
 			)
 		)
 		alertController.addAction(
@@ -161,7 +173,7 @@ class AppCoordinator: Coordinator, Logging {
 				title: L.recommendedUpdateAppActionOk(),
 				style: .default,
 				handler: { [weak self] _ in
-					self?.logDebug("Should implement update")
+					self?.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
 					self?.openUrl(updateURL)
 					
 				}
@@ -234,6 +246,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
 				let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
 
 				if remoteConfiguration.isDeactivated {
+					// Deactivated
 					navigateToAppUpdate(
 						with: EndOfLifeViewModel(
 							coordinator: self,
@@ -241,6 +254,7 @@ extension AppCoordinator: AppCoordinatorDelegate {
 						)
 					)
 				} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+					// Required Update
 					navigateToAppUpdate(
 						with: AppUpdateViewModel(
 							coordinator: self,
@@ -248,17 +262,27 @@ extension AppCoordinator: AppCoordinatorDelegate {
 						)
 					)
 				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+					// Recommended update
 
-					// Todo: 24 hour nag check.
 					guard let updateURL = remoteConfiguration.appStoreURL else {
 						startApplication()
 						return
 					}
-					showRecommendedUpdate(updateURL: updateURL)
+
+					let now = Date().timeIntervalSince1970
+					let interval: Int = remoteConfiguration.recommendedNagIntervalHours ?? 24
+					let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
+
+					if lastSeen == now || lastSeen + (Double(interval) * 3600) < now {
+						showRecommendedUpdate(updateURL: updateURL)
+					} else {
+						startApplication()
+					}
 				} else {
 					startApplication()
 				}
 			case .cryptoLibNotInitialized:
+				// Crypto library not loaded
 				showCryptoLibNotInitializedError()
 		}
 	}
