@@ -244,12 +244,6 @@
 "updateApp.content" = "Download de laatste versie van de app om verder te gaan.";
 "updateApp.button" = "Installeer update";
 
-/* MARK: - Recommended Update App */
-"recommended.updateApp.title" = "Wil je de app updaten?";
-"recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
-"recommended.updateApp.action.ok" = "Installeer update";
-"recommended.updateApp.action.cancel" = "Nee, doe ik later";
-
 /* MARK: - EndOfLife */
 "endOfLife.error.message" = "De website kan niet geopend worden.";
 "endOfLife.title" = "App buiten werking";
