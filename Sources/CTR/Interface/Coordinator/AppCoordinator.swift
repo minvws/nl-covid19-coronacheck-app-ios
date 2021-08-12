@@ -31,6 +31,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	private var shouldUsePrivacySnapShot = true
 
+	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
+
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, navigationController: UINavigationController) {
@@ -69,7 +71,7 @@ class AppCoordinator: Coordinator, Logging {
         let destination = LaunchViewController(
             viewModel: LaunchViewModel(
                 coordinator: self,
-                versionSupplier: AppVersionSupplier(),
+                versionSupplier: versionSupplier,
                 flavor: AppFlavor.flavor,
 				walletManager: AppFlavor.flavor == .holder ? Services.walletManager : nil
             )
@@ -103,22 +105,12 @@ class AppCoordinator: Coordinator, Logging {
         }
     }
 
-    /// Start the app as a verifiier
+    /// Start the app as a verifier
     private func startAsVerifier() {
 
         let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
     }
-
-	/// Show the Action Required View
-	/// - Parameter versionInformation: the version information
-	private func showActionRequired(with versionInformation: RemoteConfiguration) {
-		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
-		if versionInformation.isDeactivated {
-			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)
-		}
-		navigateToAppUpdate(with: viewModel)
-	}
 	
 	/// Show the Internet Required View
 	private func showInternetRequired() {
@@ -143,6 +135,35 @@ class AppCoordinator: Coordinator, Logging {
 				style: .cancel,
 				handler: { [weak self] _ in
 					self?.retry()
+				}
+			)
+		)
+		window.rootViewController?.present(alertController, animated: true)
+	}
+
+	/// Show an alert for the recommended update
+	private func showRecommendedUpdate(updateURL: URL) {
+
+		let alertController = UIAlertController(
+			title: L.recommendedUpdateAppTitle(),
+			message: L.recommendedUpdateAppSubtitle(),
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.recommendedUpdateAppActionCancel(),
+				style: .cancel,
+				handler: nil
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.recommendedUpdateAppActionOk(),
+				style: .default,
+				handler: { [weak self] _ in
+					self?.logDebug("Should implement update")
+					self?.openUrl(updateURL)
+					
 				}
 			)
 		)
@@ -206,9 +227,37 @@ extension AppCoordinator: AppCoordinatorDelegate {
 			case .internetRequired:
 				showInternetRequired()
 
-			case let .actionRequired(versionInformation):
-				showActionRequired(with: versionInformation)
-				
+			case let .actionRequired(remoteConfiguration):
+
+				let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
+				let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+				let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
+
+				if remoteConfiguration.isDeactivated {
+					navigateToAppUpdate(
+						with: EndOfLifeViewModel(
+							coordinator: self,
+							versionInformation: remoteConfiguration
+						)
+					)
+				} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+					navigateToAppUpdate(
+						with: AppUpdateViewModel(
+							coordinator: self,
+							versionInformation: remoteConfiguration
+						)
+					)
+				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+
+					// Todo: 24 hour nag check.
+					guard let updateURL = remoteConfiguration.appStoreURL else {
+						startApplication()
+						return
+					}
+					showRecommendedUpdate(updateURL: updateURL)
+				} else {
+					startApplication()
+				}
 			case .cryptoLibNotInitialized:
 				showCryptoLibNotInitializedError()
 		}
@@ -261,7 +310,7 @@ extension AppCoordinator {
 
 		let shapshotViewController = SnapshotViewController(
 			viewModel: SnapshotViewModel(
-				versionSupplier: AppVersionSupplier(),
+				versionSupplier: versionSupplier,
 				flavor: AppFlavor.flavor
 			)
 		)
