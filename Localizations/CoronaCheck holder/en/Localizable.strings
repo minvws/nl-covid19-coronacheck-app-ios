@@ -276,7 +276,7 @@
 "holder.onboarding.title.safely" = "Only access with a certificate";
 "holder.onboarding.message.safely" = "Your and other people’s health matters. That is why some countries and places ask for a coronavirus pass. You’re only allowed to enter carrying this pass.";
 "holder.onboarding.title.yourqr" = "Certificate of test or vaccination";
-"holder.onboarding.message.yourqr" = "The app can generate a coronavirus pass if:<ul><li>You have been vaccinated</li><li>A test result confirms you don’t have corona.</li><li>A test result confirms you've had coronavirus and are recovered.</li></ul>";
+"holder.onboarding.message.yourqr" = "<p>The app can generate a coronavirus pass if:</p><ul><li>You have been vaccinated</li><li>A test result confirms you don’t have corona.</li><li>A test result confirms you've had coronavirus and are recovered.</li></ul>";
 "holder.onboarding.title.validity" = "QR code = your proof";
 "holder.onboarding.message.validity" = "This app generates a QR code with your vaccination, test result or recovery. That is your certificate. This QR code will be checked at the entrance of places or activities or at the border.";
 "holder.onboarding.title.privacy" = "QR codes for the Netherlands and international";
