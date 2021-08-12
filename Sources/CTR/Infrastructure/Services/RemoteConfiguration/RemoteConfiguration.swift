@@ -7,61 +7,6 @@
 
 import Foundation
 
-/// Protocol for app version information
-protocol RemoteInformation {
-
-	/// The minimum required version
-	var minimumVersion: String { get }
-
-	/// The message for the minimum required version
-	var minimumVersionMessage: String? { get }
-
-	/// The url to the appStore
-	var appStoreURL: URL? { get }
-
-	/// The url to the site
-	var informationURL: URL? { get }
-
-	/// Is the app deactivated?
-	var appDeactivated: Bool? { get }
-
-	/// What is the TTL of the config
-	var configTTL: Int? { get }
-
-	/// What is the waiting period before a recovery is valid?
-	var recoveryWaitingPeriodDays: Int? { get }
-
-	/// When should we update
-	var requireUpdateBefore: TimeInterval? { get }
-
-	/// Is the app temporarily disabled?
-	var temporarilyDisabled: Bool? { get }
-
-	/// What is the validity of a domestic test / vaccination
-	var domesticValidityHours: Int? { get }
-
-	var vaccinationEventValidity: Int? { get }
-	var recoveryEventValidity: Int? { get }
-	var testEventValidity: Int? { get }
-
-	// The number of days before a recovery expires
-	var recoveryExpirationDays: Int? { get }
-
-	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
-	var credentialRenewalDays: Int? { get }
-
-	var clockDeviationThresholdSeconds: Int? { get }
-}
-
-extension RemoteInformation {
-
-	/// Is the app deactivated?
-	var isDeactivated: Bool {
-
-		return appDeactivated ?? false
-	}
-}
-
 struct HPKData: Codable {
 	
 	let code: String
@@ -92,13 +37,19 @@ struct UniversalLinkPermittedDomain: Codable {
 	let name: String
 }
 
-struct RemoteConfiguration: RemoteInformation, Codable {
+struct RemoteConfiguration: Codable {
 
 	/// The minimum required version
 	var minimumVersion: String
 
 	/// The message for the minimum required version
 	var minimumVersionMessage: String?
+
+	/// The recommended version
+	var recommendedVersion: String?
+
+	/// The recommended version nag interval
+	var recommendedNagIntervalHours: Int?
 
 	/// The url to the appStore
 	var appStoreURL: URL?
@@ -165,6 +116,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 		case minimumVersion = "iosMinimumVersion"
 		case minimumVersionMessage = "iosMinimumVersionMessage"
+		case recommendedVersion = "iosRecommendedVersion"
+		case recommendedNagIntervalHours = "upgradeRecommendationInterval"
 		case appStoreURL = "iosAppStoreURL"
 		case appDeactivated = "appDeactivated"
 		case informationURL = "informationURL"
@@ -194,6 +147,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 	init(
 		minVersion: String,
 		minVersionMessage: String?,
+		recommendedVersion: String?,
+		recommendedNagIntervalHours: Int?,
 		storeUrl: URL?,
 		deactivated: Bool?,
 		informationURL: URL?,
@@ -214,6 +169,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
+		self.recommendedVersion = recommendedVersion
+		self.recommendedNagIntervalHours = recommendedNagIntervalHours
 		self.appStoreURL = storeUrl
 		self.appDeactivated = deactivated
 		self.informationURL = informationURL
@@ -238,6 +195,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
  		return RemoteConfiguration(
 			minVersion: "1.0.0",
 			minVersionMessage: nil,
+			recommendedVersion: "1.0.0",
+			recommendedNagIntervalHours: 24,
 			storeUrl: nil,
 			deactivated: false,
 			informationURL: nil,
@@ -256,6 +215,12 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			universalLinkPermittedDomains: nil,
 			clockDeviationThresholdSeconds: 30
 		)
+	}
+
+	/// Is the app deactivated?
+	var isDeactivated: Bool {
+
+		return appDeactivated ?? false
 	}
 }
 

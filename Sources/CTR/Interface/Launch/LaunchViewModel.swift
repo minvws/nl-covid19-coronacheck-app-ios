@@ -108,37 +108,38 @@ class LaunchViewModel: Logging {
 		}
 
 		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
-		switch (configStatus, issuerPublicKeysStatus) {
-			case (.withinTTL, .withinTTL):
-				didFinishLaunchState = true
-				// Small delay, let the viewController load.
-				DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+
+		// Small delay, let the viewController load.
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			switch (configStatus, issuerPublicKeysStatus) {
+				case (.withinTTL, .withinTTL):
+					self.didFinishLaunchState = true
 					self.coordinator?.handleLaunchState(.withinTTL)
-				}
 
-			case (.actionRequired, _):
-				coordinator?.handleLaunchState(configStatus)
+				case (.actionRequired, _):
+					self.coordinator?.handleLaunchState(configStatus)
 
-			case (LaunchState.internetRequired, _), (_, .internetRequired):
-				if !didFinishLaunchState {
-					didFinishLaunchState = true
-					coordinator?.handleLaunchState(.internetRequired)
-				}
-
-			case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
-				if let lib = self.cryptoLibUtility, !lib.isInitialized {
-					// Show crypto lib not initialized error
-					coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-				} else {
-					// Start application
-					if !didFinishLaunchState {
-						didFinishLaunchState = true
-						coordinator?.handleLaunchState(.noActionNeeded)
+				case (LaunchState.internetRequired, _), (_, .internetRequired):
+					if !self.didFinishLaunchState {
+						self.didFinishLaunchState = true
+						self.coordinator?.handleLaunchState(.internetRequired)
 					}
-				}
 
-			default:
-				logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+				case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
+					if let lib = self.cryptoLibUtility, !lib.isInitialized {
+						// Show crypto lib not initialized error
+						self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
+					} else {
+						// Start application
+						if !self.didFinishLaunchState {
+							self.didFinishLaunchState = true
+							self.coordinator?.handleLaunchState(.noActionNeeded)
+						}
+					}
+
+				default:
+					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+			}
 		}
 	}
 
@@ -187,7 +188,6 @@ class LaunchViewModel: Logging {
 		remoteConfigManager?.update { resultWrapper in
 
 			self.isUpdatingConfiguration = false
-
 			switch resultWrapper {
 				case let .success((remoteConfiguration, data, urlResponse)):
 
@@ -195,8 +195,8 @@ class LaunchViewModel: Logging {
 					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
 					// Store as JSON file
 					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
-					// Decide what to do
-					self.compare(remoteConfiguration, completion: completion)
+					// Check the wallet
+					self.checkWallet()
 
 					/// Fish for the server Date in the network response, and use that to maintain
 					/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
@@ -205,6 +205,8 @@ class LaunchViewModel: Logging {
 					   let serverDateString = httpResponse.allHeaderFields["Date"] as? String {
 						Services.clockDeviationManager.update(serverHeaderDate: serverDateString)
 					}
+
+					self.compare(remoteConfiguration, completion: completion)
 
 				case let .failure(networkError):
 
@@ -217,6 +219,9 @@ class LaunchViewModel: Logging {
 					}
 
 					self.logDebug("Using stored Configuration \(storedConfiguration)")
+
+					// Check the wallet
+					self.checkWallet()
 
 					self.compare(storedConfiguration) { state in
 						switch state {
@@ -236,33 +241,22 @@ class LaunchViewModel: Logging {
 	///   - remoteConfiguration: the remote configuration
 	///   - completion: completion handler
 	private func compare(
-		_ remoteConfiguration: RemoteInformation,
+		_ remoteConfiguration: RemoteConfiguration,
 		completion: @escaping (LaunchState) -> Void) {
 
-		let requiredVersion = fullVersionString(remoteConfiguration.minimumVersion)
-		let currentVersion = fullVersionString(versionSupplier?.getCurrentVersion() ?? "1.0.0")
+		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
+		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
 
-		if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
-			// Update the app
-			completion(.actionRequired(remoteConfiguration))
-		} else if remoteConfiguration.isDeactivated {
-			// Kill the app
+		if remoteConfiguration.isDeactivated ||
+			requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending ||
+			recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+			// Update or kill the app
 			completion(.actionRequired(remoteConfiguration))
 		} else {
 			// Nothing to do
 			completion(.noActionNeeded)
 		}
-	}
-
-	/// Get a three digit string of the version
-	/// - Parameter version: the version
-	/// - Returns: three digit string of the version
-	private func fullVersionString(_ version: String) -> String {
-
-		var components = version.split(separator: ".")
-		let missingComponents = max(0, 3 - components.count)
-		components.append(contentsOf: Array(repeating: "0", count: missingComponents))
-		return components.joined(separator: ".")
 	}
 
 	private func checkWallet() {
