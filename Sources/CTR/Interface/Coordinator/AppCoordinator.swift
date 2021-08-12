@@ -35,6 +35,8 @@ class AppCoordinator: Coordinator, Logging {
 
 	var userSettings: UserSettingsProtocol = UserSettings()
 
+	var flavor = AppFlavor.flavor
+
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
 	init(scene: UIWindowScene, navigationController: UINavigationController) {
@@ -74,8 +76,8 @@ class AppCoordinator: Coordinator, Logging {
             viewModel: LaunchViewModel(
                 coordinator: self,
                 versionSupplier: versionSupplier,
-                flavor: AppFlavor.flavor,
-				walletManager: AppFlavor.flavor == .holder ? Services.walletManager : nil
+                flavor: flavor,
+				walletManager: flavor == .holder ? Services.walletManager : nil
             )
         )
         // Set the root
@@ -88,7 +90,7 @@ class AppCoordinator: Coordinator, Logging {
     /// Start the real application
     private func startApplication() {
 
-        switch AppFlavor.flavor {
+        switch flavor {
             case .holder:
                 startAsHolder()
             default:
@@ -335,7 +337,7 @@ extension AppCoordinator {
 		let shapshotViewController = SnapshotViewController(
 			viewModel: SnapshotViewModel(
 				versionSupplier: versionSupplier,
-				flavor: AppFlavor.flavor
+				flavor: flavor
 			)
 		)
 		privacySnapshotWindow?.rootViewController = shapshotViewController

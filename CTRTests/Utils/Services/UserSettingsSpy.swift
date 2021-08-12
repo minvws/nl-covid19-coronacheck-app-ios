@@ -141,4 +141,26 @@ class UserSettingsSpy: UserSettingsProtocol {
 			return stubbedIssuerKeysFetchedTimestamp
 		}
 	}
+
+	var invokedLastRecommendUpdateDismissalTimestampSetter = false
+	var invokedLastRecommendUpdateDismissalTimestampSetterCount = 0
+	var invokedLastRecommendUpdateDismissalTimestamp: TimeInterval?
+	var invokedLastRecommendUpdateDismissalTimestampList = [TimeInterval?]()
+	var invokedLastRecommendUpdateDismissalTimestampGetter = false
+	var invokedLastRecommendUpdateDismissalTimestampGetterCount = 0
+	var stubbedLastRecommendUpdateDismissalTimestamp: TimeInterval!
+
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval? {
+		set {
+			invokedLastRecommendUpdateDismissalTimestampSetter = true
+			invokedLastRecommendUpdateDismissalTimestampSetterCount += 1
+			invokedLastRecommendUpdateDismissalTimestamp = newValue
+			invokedLastRecommendUpdateDismissalTimestampList.append(newValue)
+		}
+		get {
+			invokedLastRecommendUpdateDismissalTimestampGetter = true
+			invokedLastRecommendUpdateDismissalTimestampGetterCount += 1
+			return stubbedLastRecommendUpdateDismissalTimestamp
+		}
+	}
 }
