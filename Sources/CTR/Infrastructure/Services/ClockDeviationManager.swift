@@ -26,7 +26,8 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		guard let serverResponseDateTime = serverResponseDateTime,
 			let localResponseDatetime = localResponseDateTime,
 			let localResponseSystemUptime = localResponseSystemUptime,
-			let clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
+			let clockDeviationThresholdSeconds = clockDeviationThresholdSeconds,
+			let systemUptime = currentSystemUptime()
 		else { return nil }
 
 		let result = ClockDeviationManager.hasSignificantDeviation(
@@ -34,7 +35,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 			localResponseDateTime: localResponseDatetime,
 			localResponseSystemUptime: localResponseSystemUptime,
 			currentDate: now(),
-			currentSystemUptime: currentSystemUptime(),
+			currentSystemUptime: systemUptime,
 			clockDeviationThresholdSeconds: clockDeviationThresholdSeconds
 		)
 
@@ -49,7 +50,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		remoteConfigManager.getConfiguration().clockDeviationThresholdSeconds.map { Double($0) }
 	}
 	private let remoteConfigManager: RemoteConfigManaging
-	private let currentSystemUptime: () -> __darwin_time_t
+	private let currentSystemUptime: () -> __darwin_time_t?
 	private let now: () -> Date
 	private var deviationChangeObservers = [ObserverToken: (Bool) -> Void]()
 	private lazy var serverHeaderDateFormatter: DateFormatter = {
@@ -69,7 +70,7 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 
 	required init(
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		currentSystemUptime: @escaping () -> __darwin_time_t = { ClockDeviationManager.currentSystemUptime() },
+		currentSystemUptime: @escaping () -> __darwin_time_t? = { ClockDeviationManager.currentSystemUptime() },
 		now: @escaping () -> Date = { Date() }
 	) {
 		self.remoteConfigManager = remoteConfigManager
@@ -93,12 +94,14 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	/// Update using the Server Response Header string
 	/// e.g. "Sat, 07 Aug 2021 12:12:57 GMT"
 	func update(serverHeaderDate: String) {
-		guard let serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate) else { return }
+		guard let serverDate = serverHeaderDateFormatter.date(from: serverHeaderDate),
+			  let systemUptime = currentSystemUptime()
+		else { return }
 
 		update(
 			serverResponseDateTime: serverDate,
 			localResponseDateTime: now(),
-			localResponseSystemUptime: currentSystemUptime()
+			localResponseSystemUptime: systemUptime
 		)
 	}
 
@@ -155,15 +158,16 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 		return hasDeviation
 	}
 
-	private static func currentSystemUptime() -> __darwin_time_t {
+	private static func currentSystemUptime() -> __darwin_time_t? {
 
 		var uptime = timespec()
 
-		// CLOCK_MONOTONIC represents the absolute elapsed wall-clock time since some arbitrary,
+		// `CLOCK_MONOTONIC` represents the absolute elapsed wall-clock time since some arbitrary,
 		// fixed point in the past. It isn't affected by changes in the system time-of-day clock.
-		guard 0 == clock_gettime(CLOCK_MONOTONIC, &uptime) else {
-			// TODO: remove
-			fatalError("Could not execute clock_gettime, errno: \(errno)")
+
+		// Check response is 0 else there was an error:
+		guard clock_gettime(CLOCK_MONOTONIC, &uptime) == 0 else {
+			return nil
 		}
 
 		return uptime.tv_sec
