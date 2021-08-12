@@ -115,7 +115,8 @@ final class HolderDashboardViewModel: Logging {
 			myQRCards: [],
 			expiredGreenCards: [],
 			showCreateCard: true,
-			isRefreshingStrippen: false
+			isRefreshingStrippen: false,
+			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
 		)
 
 		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCards: [ExpiredQR]) in
