@@ -84,8 +84,6 @@
 "holder.recovery.tooOld.message" = "Is het langer dan 180 dagen geleden dat je getest bent? Dan is je testuitslag niet meer geldig. Je kunt dan geen herstelbewijs maken.";
 "holder.recovery.list.message" = "Met de opgehaalde gegevens kun je een herstelbewijs maken.";
 "holder.menu.proof" = "Bewijs toevoegen";
-"holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /><b>%@</b></p><p>Geboortedatum / Date of birth*:<br /><b>%@</b></p><p>Ziekte waarvan hersteld / Disease recovered from:<br /><b>COVID-19</b></p><p>Testdatum / Test date*:<br /><b>%@</b></p><p>Getest in / Member state of test:<br /><b>%@</b></p><p>Afgever certificaat / Certificate issuer:<br /><b>%@</b></p><p>Geldig vanaf / Valid from*:<br /><b>%@</b></p><p>Geldig tot / Valid to*:<br /><b>%@</b></p><p>Uniek certificaatnummer / Unique certificate identifier:<br /><b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
-"holder.event.about.body.recovery" = "<p>De volgende gegevens zijn opgehaald bij de testlocatie:</p><p>Jouw gegevens: <b>%@</b></p><p>Geboortedatum: <b>%@</b></p><p>Testdatum: <b>%@</b></p><p>Geldig vanaf: <b>%@</b></p><p>Geldig tot: <b>%@</b></p><p>Uniek certificaatnummer: <b>%@</b></p>";
 "holder.testresults.positive" = "Positieve testuitslag";
 "holder.recovery.alert.message" = "Je kunt later opnieuw proberen je positieve testuitslag op te halen";
 "holder.recovery.nolist.title" = "Geen positieve testuitslag beschikbaar";
@@ -98,6 +96,7 @@
 "holder.chooseqrcodetype.option.recovery.subtitle" = "Uit de test blijkt dat ik corona heb gehad";
 "holder.showqr.domestic.qr.title" = "Je Nederlandse QR-code wordt hier getoond";
 "holder.showqr.eu.qr.title" = "Je internationale QR-code wordt hier getoond";
+"holder.showqr.eu.about.recovery.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /><b>%@</b></p><p>Geboortedatum / Date of birth*:<br /><b>%@</b></p><p>Ziekte waarvan hersteld / Disease recovered from:<br /><b>COVID-19</b></p><p>Testdatum / Test date*:<br /><b>%@</b></p><p>Getest in / Member state of test:<br /><b>%@</b></p><p>Afgever certificaat / Certificate issuer:<br /><b>%@</b></p><p>Geldig vanaf / Valid from*:<br /><b>%@</b></p><p>Geldig tot / Valid to*:<br /><b>%@</b></p><p>Uniek certificaatnummer / Unique certificate identifier:<br /><b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
 "general.error.cryptolib.retry" = "Probeer opnieuw";
