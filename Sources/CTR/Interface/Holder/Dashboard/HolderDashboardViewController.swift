@@ -21,6 +21,8 @@ class HolderDashboardViewController: BaseViewController {
 
 		case originNotValidInThisRegion(message: String, didTapMoreInfo: () -> Void)
 
+		case deviceHasClockDeviation(message: String, didTapMoreInfo: () -> Void)
+
 		case emptyState(image: UIImage?, title: String, message: String)
 
 		case domesticQR(rows: [QRCardRow], isLoading: Bool, didTapViewQR: () -> Void, buttonEnabledEvaluator: (Date) -> Bool, expiryCountdownEvaluator: ((Date) -> String?)?)
@@ -106,11 +108,15 @@ class HolderDashboardViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		
 		viewModel.$domesticCards.binding = { [sceneView, weak self] cards in
-			self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
+			DispatchQueue.main.async {
+				self?.setup(cards: cards, with: sceneView.domesticScrollView.stackView)
+			}
 		}
 		
 		viewModel.$internationalCards.binding = { [sceneView, weak self] cards in
-			self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
+			DispatchQueue.main.async {
+				self?.setup(cards: cards, with: sceneView.internationalScrollView.stackView)
+			}
 		}
 		
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.footerButtonView.primaryButton.title = $0 }
@@ -143,12 +149,14 @@ class HolderDashboardViewController: BaseViewController {
 						expiredQRCard.closeButtonTappedCommand = didTapCloseAction
 						return expiredQRCard
 						
-					case let .originNotValidInThisRegion(message, didTapMoreInfo):
+					case let .originNotValidInThisRegion(message, didTapMoreInfo),
+						 let .deviceHasClockDeviation(message, didTapMoreInfo):
+
 						let messageCard = MessageCardView()
 						messageCard.title = message
 						messageCard.infoButtonTappedCommand = didTapMoreInfo
 						return messageCard
-						
+
 					case let .emptyState(image, title, message):
 						let emptyDashboardView = EmptyDashboardView()
 						emptyDashboardView.image = image
@@ -253,6 +261,7 @@ class HolderDashboardViewController: BaseViewController {
 			action: #selector(HolderDashboardViewModel.addProofTapped)
 		)
 		plusbutton.title = L.generalAdd()
+        plusbutton.accessibilityLabel = plusbutton.title
 		navigationItem.rightBarButtonItem = plusbutton
 	}
 }

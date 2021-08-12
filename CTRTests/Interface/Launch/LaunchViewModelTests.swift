@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable type_body_length
 
 import XCTest
 @testable import CTR
@@ -36,25 +35,7 @@ class LaunchViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 	}
 
-	let remoteConfig = RemoteConfiguration(
-		minVersion: "1.0",
-		minVersionMessage: "test message",
-		storeUrl: URL(string: "https://apple.com"),
-		deactivated: nil,
-		informationURL: nil,
-		configTTL: 3600,
-		recoveryWaitingPeriodDays: 11,
-		requireUpdateBefore: nil,
-		temporarilyDisabled: false,
-		domesticValidityHours: 40,
-		vaccinationEventValidity: 14600,
-		recoveryEventValidity: 7300,
-		testEventValidity: 40,
-		isGGDEnabled: true,
-		recoveryExpirationDays: 180,
-		credentialRenewalDays: 5,
-		domesticQRRefreshSeconds: 60
-	)
+	let remoteConfig = RemoteConfiguration.default
 
 	// MARK: Tests
 
@@ -101,10 +82,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_noActionRequired() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_noActionRequired"
-		), Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -169,10 +147,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequired_forIssuerPublicKeys() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_noActionRequired"
-		), Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -271,9 +246,11 @@ class LaunchViewModelTests: XCTestCase {
 	func test_actionRequired() {
 
 		// Given
-		remoteConfigSpy.stubbedGetConfigurationResult = RemoteConfiguration(minVersion: "2.0", minVersionMessage: "remoteConfigSpy")
-		let remoteConfig = remoteConfigSpy.getConfiguration()
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data())), ())
+		var remoteConfig = RemoteConfiguration.default
+		remoteConfig.minimumVersion = "2.0"
+
+		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data(), URLResponse())), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		cryptoLibUtilitySpy.stubbedIsInitialized = true
@@ -304,10 +281,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_cryptoLibNotInitialized() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_cryptoLibNotInitialized"
-		), Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((RemoteConfiguration.default, Data(), URLResponse())), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
@@ -338,13 +312,11 @@ class LaunchViewModelTests: XCTestCase {
 	func test_killswitchEnabled() {
 
 		// Given
-		let remoteConfig = RemoteConfiguration(
-			minVersion: "1.0.0",
-			minVersionMessage: "test_killswitch",
-			deactivated: true
-		)
+		var remoteConfig = RemoteConfiguration.default
+//		remoteConfig.minimumVersion = "1.0.0"
+		remoteConfig.appDeactivated = true
 
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data())), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.success((remoteConfig, Data(), URLResponse())), ())
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false

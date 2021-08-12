@@ -189,7 +189,7 @@ class LaunchViewModel: Logging {
 			self.isUpdatingConfiguration = false
 
 			switch resultWrapper {
-				case .success((let remoteConfiguration, let data)):
+				case let .success((remoteConfiguration, data, urlResponse)):
 
 					// Update the last fetch time
 					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
@@ -197,6 +197,14 @@ class LaunchViewModel: Logging {
 					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
 					// Decide what to do
 					self.compare(remoteConfiguration, completion: completion)
+
+					/// Fish for the server Date in the network response, and use that to maintain
+					/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
+					/// beyond a permitted time interval.
+					if let httpResponse = urlResponse as? HTTPURLResponse,
+					   let serverDateString = httpResponse.allHeaderFields["Date"] as? String {
+						Services.clockDeviationManager.update(serverHeaderDate: serverDateString)
+					}
 
 				case let .failure(networkError):
 

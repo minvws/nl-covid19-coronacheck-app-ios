@@ -28,10 +28,10 @@ class ChooseQRCodeTypeViewModel: Logging {
 
 		buttonModels = [
 			ChooseQRCodeTypeViewController.ButtonModel(
-				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
-				subtitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
+				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
+				subtitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
 
-				self?.coordinator?.userWishesToChooseLocation()
+				self?.coordinator?.userWishesToCreateAVaccinationQR()
 			},
 			ChooseQRCodeTypeViewController.ButtonModel(
 				title: L.holderChooseqrcodetypeOptionRecoveryTitle(),
@@ -40,10 +40,10 @@ class ChooseQRCodeTypeViewModel: Logging {
 				self?.coordinator?.userWishesToCreateARecoveryQR()
 			},
 			ChooseQRCodeTypeViewController.ButtonModel(
-				title: L.holderChooseqrcodetypeOptionVaccineTitle(),
-				subtitle: L.holderChooseqrcodetypeOptionVaccineSubtitle()) { [weak self] in
+				title: L.holderChooseqrcodetypeOptionNegativetestTitle(),
+				subtitle: L.holderChooseqrcodetypeOptionNegativetestSubtitle()) { [weak self] in
 
-				self?.coordinator?.userWishesToCreateAVaccinationQR()
+				self?.coordinator?.userWishesToChooseLocation()
 			}
 		]
 	}

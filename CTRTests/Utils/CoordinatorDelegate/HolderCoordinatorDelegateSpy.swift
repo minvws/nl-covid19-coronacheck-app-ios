@@ -21,14 +21,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 
 	var invokedPresentInformationPage = false
 	var invokedPresentInformationPageCount = 0
-	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool)?
-	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool)]()
+	var invokedPresentInformationPageParameters: (title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)?
+	var invokedPresentInformationPageParametersList = [(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)]()
 
-	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool) {
+	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool) {
 		invokedPresentInformationPage = true
 		invokedPresentInformationPageCount += 1
-		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture)
-		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture))
+		invokedPresentInformationPageParameters = (title, body, hideBodyForScreenCapture, openURLsInApp)
+		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
 	}
 
 	var invokedUserWishesToMakeQRFromNegativeTest = false
@@ -123,6 +123,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesMoreInfoAboutUnavailableQRParametersList.append((originType, currentRegion, availableRegion))
 	}
 
+	var invokedUserWishesMoreInfoAboutClockDeviation = false
+	var invokedUserWishesMoreInfoAboutClockDeviationCount = 0
+
+	func userWishesMoreInfoAboutClockDeviation() {
+		invokedUserWishesMoreInfoAboutClockDeviation = true
+		invokedUserWishesMoreInfoAboutClockDeviationCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?
@@ -145,6 +153,14 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToViewQRCount += 1
 		invokedUserWishesToViewQRParameters = (greenCardObjectID, ())
 		invokedUserWishesToViewQRParametersList.append((greenCardObjectID, ()))
+	}
+
+	var invokedUserWishesToLaunchThirdPartyTicketApp = false
+	var invokedUserWishesToLaunchThirdPartyTicketAppCount = 0
+
+	func userWishesToLaunchThirdPartyTicketApp() {
+		invokedUserWishesToLaunchThirdPartyTicketApp = true
+		invokedUserWishesToLaunchThirdPartyTicketAppCount += 1
 	}
 
 	var invokedDismiss = false

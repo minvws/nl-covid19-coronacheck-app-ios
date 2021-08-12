@@ -91,10 +91,10 @@ class OpenIdManager: OpenIdManaging, Logging {
 					}
 				}
 			}
-			let browser = OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari()
+
 			appDelegate.currentAuthorizationFlow = OIDAuthState.authState(
 				byPresenting: request,
-				externalUserAgent: browser,
+				externalUserAgent: OIDExternalUserAgentIOSCustomBrowser.defaultBrowser() ?? OIDExternalUserAgentIOSCustomBrowser.customBrowserSafari(),
 				callback: callBack
 			)
 		}

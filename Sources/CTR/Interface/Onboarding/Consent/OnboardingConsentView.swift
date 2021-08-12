@@ -218,9 +218,10 @@ final class OnboardingConsentView: BaseView {
 		textView.accessibilityHint = accessibiliyHint
 		let stack = HStack(
 			spacing: 16,
-			ImageView(imageName: "PrivacyItem").asIcon(),
+			ImageView(imageName: I.onboarding.privacyItem.name).asIcon(),
 			textView
-		).alignment(.center)
+		)
+		.alignment(.center)
 		itemStackView.addArrangedSubview(stack)
 	}
 }

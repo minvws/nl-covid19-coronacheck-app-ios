@@ -9,21 +9,44 @@ import UIKit
 
 class ShowQRViewModel: Logging {
 
+	// MARK: - Static
+	
 	static let domesticCorrectionLevel = "M"
 	static let internationalCorrectionLevel = "Q"
+	static let screenshotWarningMessageDuration: TimeInterval = 3 * 60
+
+	// MARK: - vars
 
 	var loggingCategory: String = "ShowQRViewModel"
-
-	var screenshotWasTakenHandler: (() -> Void)?
 
 	weak private var coordinator: HolderCoordinatorDelegate?
 	weak private var cryptoManager: CryptoManaging?
 	weak private var remoteConfigManager: RemoteConfigManaging?
 
 	weak var validityTimer: Timer?
+	weak private var screenshotWarningTimer: Timer?
+
 	private var previousBrightness: CGFloat?
 	private var greenCard: GreenCard
 	private let screenCaptureDetector: ScreenCaptureDetectorProtocol
+
+	private var currentQRImage: UIImage? {
+		didSet {
+			updateQRVisibility()
+		}
+	}
+
+	private var screenIsBeingCaptured: Bool {
+		didSet {
+			updateQRVisibility()
+		}
+	}
+
+	private var screenIsBlockedForScreenshotWithSecondsRemaining: Int? {
+		didSet {
+			updateQRVisibility()
+		}
+	}
 
 	@Bindable private(set) var title: String?
     
@@ -31,13 +54,11 @@ class ShowQRViewModel: Logging {
 
 	@Bindable private(set) var infoButtonAccessibility: String?
 
-	@Bindable private(set) var qrImage: UIImage?
-
-	@Bindable private(set) var showValidQR: Bool
+	@Bindable private(set) var visibilityState: ShowQRImageView.VisibilityState = .loading
 
 	@Bindable private(set) var showInternationalAnimation: Bool = false
 
-	@Bindable private(set) var hideForCapture: Bool = false
+	@Bindable private(set) var thirdPartyTicketAppButtonTitle: String?
 
 	private lazy var dateFormatter: ISO8601DateFormatter = {
 		let dateFormatter = ISO8601DateFormatter()
@@ -62,6 +83,10 @@ class ShowQRViewModel: Logging {
 		return dateFormatter
 	}()
 
+	private let userSettings: UserSettingsProtocol
+	private let now: () -> Date
+	private var clockDeviationObserverToken: ClockDeviationManager.ObserverToken?
+
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
@@ -72,19 +97,22 @@ class ShowQRViewModel: Logging {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		greenCard: GreenCard,
+		thirdPartyTicketAppName: String?,
 		cryptoManager: CryptoManaging,
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector()) {
+		screenCaptureDetector: ScreenCaptureDetectorProtocol = ScreenCaptureDetector(),
+		userSettings: UserSettingsProtocol,
+		now: @escaping () -> Date = Date.init
+	) {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
+		self.thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 		self.cryptoManager = cryptoManager
 		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
-
-		// Start by showing nothing
-		self.showValidQR = false
-		self.qrImage = nil
+		self.userSettings = userSettings
+		self.now = now
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			title = L.holderShowqrDomesticTitle()
@@ -98,12 +126,73 @@ class ShowQRViewModel: Logging {
 			showInternationalAnimation = true
 		}
 
+		screenIsBeingCaptured = screenCaptureDetector.screenIsBeingCaptured
+
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
-			self?.hideForCapture = isBeingCaptured
+			self?.screenIsBeingCaptured = isBeingCaptured
 		}
+
 		screenCaptureDetector.screenshotWasTakenCallback = { [weak self] in
-			self?.screenshotWasTakenHandler?()
+			guard self?.screenIsBlockedForScreenshotWithSecondsRemaining == nil else { return }
+			userSettings.lastScreenshotTime = now()
+			self?.screenshotWasTaken(blockQRUntil: now().addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration))
 		}
+
+		if let lastScreenshotTime = userSettings.lastScreenshotTime {
+			let expiryDate = lastScreenshotTime.addingTimeInterval(ShowQRViewModel.screenshotWarningMessageDuration)
+			if expiryDate > now() {
+				screenshotWasTaken(blockQRUntil: expiryDate)
+			} else {
+				userSettings.lastScreenshotTime = nil
+			}
+		}
+
+		clockDeviationObserverToken = Services.clockDeviationManager.appendDeviationChangeObserver { [weak self] hasClockDeviation in
+			self?.validityTimer?.fire()
+		}
+
+		updateQRVisibility()
+	}
+
+	deinit {
+		clockDeviationObserverToken.map(Services.clockDeviationManager.removeDeviationChangeObserver)
+	}
+
+	func updateQRVisibility() {
+		if let screenshotBlockTimeRemaining = screenIsBlockedForScreenshotWithSecondsRemaining {
+			let mins = screenshotBlockTimeRemaining / 60 % 60
+			let secs = screenshotBlockTimeRemaining % 60
+			let zeroPaddedSeconds = String(format: "%02d", secs)
+
+			let message = L.holderShowqrScreenshotwarningMessage("\(mins):\(zeroPaddedSeconds)")
+			self.visibilityState = .screenshotBlocking(timeRemainingText: message)
+		} else if screenIsBeingCaptured {
+			self.visibilityState = .hiddenForScreenCapture
+		} else if let currentQRImage = self.currentQRImage {
+			self.visibilityState = .visible(qrImage: currentQRImage)
+		} else {
+			self.visibilityState = .loading
+		}
+	}
+
+	private func screenshotWasTaken(blockQRUntil: Date) {
+		// Cleanup the busted old timer
+		screenshotWarningTimer?.invalidate()
+		screenshotWarningTimer = nil
+
+		screenshotWarningTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+			guard let self = self else { return }
+
+			let timeRemaining = blockQRUntil.timeIntervalSince(self.now())
+
+			if timeRemaining <= 0 {
+				timer.invalidate()
+				self.screenIsBlockedForScreenshotWithSecondsRemaining = nil
+			} else {
+				self.screenIsBlockedForScreenshotWithSecondsRemaining = Int(timeRemaining)
+			}
+		}
+		screenshotWarningTimer?.fire() // don't wait 1s
 	}
 
 	/// Check the QR Validity
@@ -132,12 +221,17 @@ class ShowQRViewModel: Logging {
 		} else {
 			DispatchQueue.global(qos: .userInitiated).async {
 				// International
-				let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel)
-				DispatchQueue.main.async {
-					self.setQRValid(image: image)
+				if let image = data.generateQRCode(correctionLevel: ShowQRViewModel.internationalCorrectionLevel) {
+					DispatchQueue.main.async {
+						self.setQRValid(image: image)
+					}
 				}
 			}
 		}
+	}
+
+	func didTapThirdPartyAppButton() {
+		coordinator?.userWishesToLaunchThirdPartyTicketApp()
 	}
 
 	func showMoreInformation() {
@@ -156,7 +250,8 @@ class ShowQRViewModel: Logging {
 				coordinator?.presentInformationPage(
 					title: L.holderShowqrDomesticAboutTitle(),
 					body: L.holderShowqrDomesticAboutMessage(identity),
-					hideBodyForScreenCapture: true
+					hideBodyForScreenCapture: true,
+					openURLsInApp: true
 				)
 			}
 		} else if greenCard.type == GreenCardType.eu.rawValue {
@@ -215,7 +310,8 @@ class ShowQRViewModel: Logging {
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
 			body: body,
-			hideBodyForScreenCapture: true
+			hideBodyForScreenCapture: true,
+			openURLsInApp: true
 		)
 	}
 
@@ -263,7 +359,8 @@ class ShowQRViewModel: Logging {
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
 			body: body,
-			hideBodyForScreenCapture: true
+			hideBodyForScreenCapture: true,
+			openURLsInApp: true
 		)
 	}
 
@@ -279,13 +376,16 @@ class ShowQRViewModel: Logging {
 			.map(printDateFormatter.string) ?? recovery.validFrom
 		let formattedValidUntilDate: String = Formatter.getDateFrom(dateString8601: recovery.expiresAt)
 			.map(printDateFormatter.string) ?? recovery.expiresAt
+		
+		let country = getDisplayCountry(recovery.country)
+		let issuer = getDisplayIssuer(recovery.issuer)
 
 		let body: String = L.holderShowqrEuAboutRecoveryMessage(
 			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
 			formattedBirthDate,
 			formattedFirstPostiveDate,
-			recovery.country,
-			recovery.issuer,
+			country,
+			issuer,
 			formattedValidFromDate,
 			formattedValidUntilDate,
 			recovery.certificateIdentifier
@@ -294,23 +394,22 @@ class ShowQRViewModel: Logging {
 		coordinator?.presentInformationPage(
 			title: L.holderShowqrEuAboutTitle(),
 			body: body,
-			hideBodyForScreenCapture: true
+			hideBodyForScreenCapture: true,
+			openURLsInApp: true
 		)
 	}
 
-	private func setQRValid(image: UIImage?) {
+	private func setQRValid(image: UIImage) {
 
 		logDebug("Credential is valid")
-		qrImage = image
-		showValidQR = true
+		currentQRImage = image
 		startValidityTimer()
 	}
 
 	private func setQRNotValid() {
 
 		logWarning("Credential is not valid")
-		qrImage = nil
-		showValidQR = false
+		currentQRImage = nil
 		stopValidityTimer()
 		coordinator?.navigateBackToStart()
 	}
@@ -356,7 +455,7 @@ class ShowQRViewModel: Logging {
 	}
 	
 	private func getDisplayCountry(_ country: String) -> String {
-		guard country == "NL" else {
+		guard ["NL", "NLD"].contains(country) else {
 			return country
 		}
 		return L.holderVaccinationAboutCountry()

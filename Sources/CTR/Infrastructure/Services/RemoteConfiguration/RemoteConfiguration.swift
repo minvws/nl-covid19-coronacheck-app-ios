@@ -49,6 +49,8 @@ protocol RemoteInformation {
 
 	// What is the lower threshold for remaining Credentials on a Greencard before we fetch more? (StrippenKaart)
 	var credentialRenewalDays: Int? { get }
+
+	var clockDeviationThresholdSeconds: Int? { get }
 }
 
 extension RemoteInformation {
@@ -83,37 +85,44 @@ struct Mapping: Codable {
 	let name: String
 }
 
+struct UniversalLinkPermittedDomain: Codable {
+
+	let url: String
+
+	let name: String
+}
+
 struct RemoteConfiguration: RemoteInformation, Codable {
 
 	/// The minimum required version
-	let minimumVersion: String
+	var minimumVersion: String
 
 	/// The message for the minimum required version
-	let minimumVersionMessage: String?
+	var minimumVersionMessage: String?
 
 	/// The url to the appStore
-	let appStoreURL: URL?
+	var appStoreURL: URL?
 
 	/// The url to the site
-	let informationURL: URL?
+	var informationURL: URL?
 
 	/// Is the app deactivated?
-	let appDeactivated: Bool?
+	var appDeactivated: Bool?
 
 	/// What is the TTL of the config
-	let configTTL: Int?
+	var configTTL: Int?
 
 	/// What is the waiting period before a recovery is valid?
-	let recoveryWaitingPeriodDays: Int?
+	var recoveryWaitingPeriodDays: Int?
 
 	/// When should we update
-	let requireUpdateBefore: TimeInterval?
+	var requireUpdateBefore: TimeInterval?
 
 	/// Is the app temporarily disabled?
-	let temporarilyDisabled: Bool?
+	var temporarilyDisabled: Bool?
 
 	/// What is the validity of a domestic  test / vaccination
-	let domesticValidityHours: Int?
+	var domesticValidityHours: Int?
 
 	/// Max validity of a vaccination
 	var vaccinationEventValidity: Int?
@@ -147,6 +156,10 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 
 	var credentialRenewalDays: Int?
 
+	var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
+
+	var clockDeviationThresholdSeconds: Int?
+
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
 
@@ -174,6 +187,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		case isGGDEnabled = "ggdEnabled"
 		case credentialRenewalDays = "credentialRenewalDays"
 		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
+		case universalLinkPermittedDomains = "universalLinkDomains"
+		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
 	}
 
 	init(
@@ -193,7 +208,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		isGGDEnabled: Bool?,
 		recoveryExpirationDays: Int?,
 		credentialRenewalDays: Int?,
-		domesticQRRefreshSeconds: Int?) {
+		domesticQRRefreshSeconds: Int?,
+		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?,
+		clockDeviationThresholdSeconds: Int?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -212,6 +229,8 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 		self.recoveryExpirationDays = recoveryExpirationDays
 		self.credentialRenewalDays = credentialRenewalDays
 		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
+		self.universalLinkPermittedDomains = universalLinkPermittedDomains
+		self.clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
 	}
 
 	/// Default remote configuration
@@ -233,7 +252,9 @@ struct RemoteConfiguration: RemoteInformation, Codable {
 			isGGDEnabled: true,
 			recoveryExpirationDays: 180,
 			credentialRenewalDays: 5,
-			domesticQRRefreshSeconds: 60
+			domesticQRRefreshSeconds: 60,
+			universalLinkPermittedDomains: nil,
+			clockDeviationThresholdSeconds: 30
 		)
 	}
 }

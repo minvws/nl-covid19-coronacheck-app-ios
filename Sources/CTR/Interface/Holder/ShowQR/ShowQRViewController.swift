@@ -63,29 +63,9 @@ class ShowQRViewController: BaseViewController {
 			self?.addInfoButton(action: #selector(self?.informationButtonTapped), accessibilityLabel: $0 ?? "")
 		}
 
-		viewModel.$qrImage.binding = { [weak self] in self?.sceneView.qrImage = $0 }
-
-		viewModel.$showValidQR.binding = { [weak self] in
-
-			let hideForCapture = self?.sceneView.hideQRImage ?? false
-
-			if $0 && !hideForCapture {
-				self?.sceneView.largeQRimageView.isHidden = false
-			} else {
-				self?.sceneView.largeQRimageView.isHidden = true
-			}
-		}
-
-		viewModel.$hideForCapture.binding = { [weak self] in
-
-			self?.sceneView.hideQRImage = $0
-		}
-
-		viewModel.screenshotWasTakenHandler = { [weak self] in
-			self?.showError(
-				L.holderEnlargedScreenshotTitle(),
-				message: L.holderEnlargedScreenshotMessage()
-			)
+		viewModel.$visibilityState.binding = { [weak self] in
+			self?.sceneView.visibilityState = $0
+			self?.viewModel.setBrightness()
 		}
 
 		viewModel.$showInternationalAnimation.binding = { [weak self] in
@@ -93,6 +73,15 @@ class ShowQRViewController: BaseViewController {
 				self?.sceneView.setupForInternational()
 			}
 		}
+
+		viewModel.$thirdPartyTicketAppButtonTitle.binding = { [weak self] in
+			self?.sceneView.returnToThirdPartyAppButtonTitle = $0
+		}
+
+		sceneView.didTapThirdPartyAppButtonCommand = { [viewModel] in
+			viewModel.didTapThirdPartyAppButton()
+		}
+
 	}
 
 	private func setupListeners() {
@@ -117,11 +106,6 @@ class ShowQRViewController: BaseViewController {
 
 		// Check the Validity of the QR
 		viewModel.checkQRValidity()
-
-		// Check the brightness
-		if !sceneView.largeQRimageView.isHidden {
-			viewModel.setBrightness()
-		}
 
 		sceneView.resume()
 	}
@@ -163,6 +147,7 @@ class ShowQRViewController: BaseViewController {
 			action: action
 		)
         button.title = accessibilityLabel
+        button.accessibilityLabel = accessibilityLabel
 		button.accessibilityIdentifier = "InformationButton"
 		button.accessibilityTraits = .button
 		navigationItem.rightBarButtonItem = button

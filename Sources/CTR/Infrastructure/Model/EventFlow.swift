@@ -85,7 +85,14 @@ struct EventFlow {
 		func getSigningCertificate() -> SigningCertificate? {
 
 			cmsCertificate.base64Decoded().map {
-				SigningCertificate(name: "EventProvider", certificate: $0)
+				SigningCertificate(
+					name: "EventProvider",
+					certificate: $0,
+					commonName: nil,
+					authorityKeyIdentifier: nil,
+					subjectKeyIdentifier: nil,
+					rootSerial: nil
+				)
 			}
 		}
 	}

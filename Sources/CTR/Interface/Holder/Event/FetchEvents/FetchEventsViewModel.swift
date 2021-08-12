@@ -395,7 +395,7 @@ final class FetchEventsViewModel: Logging {
 		filter: String?,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
-		self.logInfo("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
+		self.logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in

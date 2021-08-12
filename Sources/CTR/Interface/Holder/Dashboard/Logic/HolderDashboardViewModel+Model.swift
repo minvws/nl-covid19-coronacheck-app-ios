@@ -201,7 +201,10 @@ extension HolderDashboardViewModel {
 				case .europeanUnion:
 					switch origin.type {
 						case .recovery:
-							return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+							if origin.isCurrentlyValid(now: now) {
+								return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
+							}
+							return L.holderDashboardQrValidityDatePrefixValidFrom()
 						default:
 							if !origin.isCurrentlyValid(now: now) && origin.isNotYetExpired(now: now) {
 								return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()

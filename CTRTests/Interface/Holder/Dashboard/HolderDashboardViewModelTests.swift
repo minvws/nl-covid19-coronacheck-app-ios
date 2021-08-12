@@ -1807,9 +1807,9 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// Exercise the validityText with different sample dates:
 			expect(rows.first?.validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(rows.first?.validityText(now).texts.first) == "geldig t/m 17 juli 17:02 t/m 11 mei 2022"
+			expect(rows.first?.validityText(now).texts.first) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
 			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
-			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).texts.first) == "geldig t/m 17 juli 17:02 t/m 11 mei 2022"
+			expect(rows.first?.validityText(now.addingTimeInterval(36 * hours * fromNow)).texts.first) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false

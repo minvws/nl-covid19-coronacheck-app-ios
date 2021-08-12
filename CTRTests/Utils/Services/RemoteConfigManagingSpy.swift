@@ -14,9 +14,9 @@ class RemoteConfigManagingSpy: RemoteConfigManaging {
 
 	var invokedUpdate = false
 	var invokedUpdateCount = 0
-	var stubbedUpdateCompletionResult: (Result<(RemoteConfiguration, Data), NetworkError>, Void)?
+	var stubbedUpdateCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>, Void)?
 
-	func update(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void) {
+	func update(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
 		invokedUpdate = true
 		invokedUpdateCount += 1
 		if let result = stubbedUpdateCompletionResult {

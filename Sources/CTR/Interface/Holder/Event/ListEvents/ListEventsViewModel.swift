@@ -38,7 +38,7 @@ class ListEventsViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "dd MMMM yyyy"
+		dateFormatter.dateFormat = "d MMMM yyyy"
 		return dateFormatter
 	}()
 	lazy var printTestDateFormatter: DateFormatter = {
