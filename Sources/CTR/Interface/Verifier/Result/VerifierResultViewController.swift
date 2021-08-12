@@ -37,48 +37,38 @@ class VerifierResultViewController: BaseViewController, Logging {
 		
 		configureTranslucentNavigationBar()
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+//		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+//		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+//		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
-		sceneView.primaryButtonTappedCommand = { [weak self] in
+//		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-			self?.viewModel.scanAgain()
-		}
+//			self?.viewModel.scanAgain()
+//		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
 
-			if $0 == .verified {
-				self?.sceneView.imageView.image = .access
-				self?.sceneView.actionColor = Theme.colors.access
-				self?.sceneView.footerActionColor = Theme.colors.secondary
-				self?.sceneView.setupForVerified()
-				self?.sceneView.revealIdentityView { [weak self] in
-					self?.title = self?.viewModel.title
-				}
-
-			} else if $0 == .demo {
-				self?.sceneView.imageView.image = .access
-				self?.sceneView.actionColor = Theme.colors.grey4
-				self?.sceneView.footerActionColor = Theme.colors.secondary
-				self?.sceneView.setupForVerified()
-				self?.sceneView.revealIdentityView { [weak self] in
-					self?.title = self?.viewModel.title
-				}
-			} else {
-				self?.sceneView.imageView.image = .denied
-				self?.sceneView.actionColor = Theme.colors.denied
-				self?.sceneView.footerActionColor = Theme.colors.denied
-				self?.sceneView.setupForDenied()
+			switch $0 {
+				case .verified:
+					self?.sceneView.setup(for: .verified)
+					self?.sceneView.revealIdentityView { [weak self] in
+						self?.title = self?.viewModel.title
+					}
+				case .demo:
+					self?.sceneView.setup(for: .demo)
+					self?.sceneView.revealIdentityView { [weak self] in
+						self?.title = self?.viewModel.title
+					}
+				case .denied:
+					self?.sceneView.setup(for: .denied)
 			}
 		}
 
-		viewModel.$linkedMessage.binding = { [weak self] in
-			if $0 != nil {
-				self?.sceneView.underline($0)
-				self?.setupLink()
-			}
-		}
+//		viewModel.$linkedMessage.binding = { [weak self] in
+//			if $0 != nil {
+//				self?.setupLink()
+//			}
+//		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
@@ -120,9 +110,9 @@ class VerifierResultViewController: BaseViewController, Logging {
 	/// Setup a gesture recognizer for underlined text
 	private func setupLink() {
 
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-		sceneView.messageLabel.isUserInteractionEnabled = true
+//		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
+//		sceneView.messageLabel.addGestureRecognizer(tapGesture)
+//		sceneView.messageLabel.isUserInteractionEnabled = true
 	}
 
 	// MARK: User interaction

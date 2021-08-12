@@ -194,14 +194,12 @@ class VerifierResultViewModel: Logging {
 	private func showAccessDeniedInvalidQR() {
 
 		title = L.verifierResultDeniedTitle()
-		message = L.verifierResultDeniedMessage()
 		linkedMessage = L.verifierResultDeniedLink()
 	}
 
 	private func showAccessDemo() {
 
 		title = L.verifierResultDemoTitle()
-		message = nil
 	}
 
 	func dismiss() {
