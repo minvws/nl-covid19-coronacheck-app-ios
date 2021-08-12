@@ -294,7 +294,7 @@ final class HolderDashboardViewModel: Logging {
 			]
 		}
 
-		if state.deviceHasClockDeviation && validityRegion == .domestic && !regionFilteredMyQRCards.isEmpty {
+		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
 			viewControllerCards += [
 				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
 					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
