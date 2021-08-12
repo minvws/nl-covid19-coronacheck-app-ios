@@ -13,7 +13,7 @@ protocol ClockDeviationManaging: AnyObject {
 	init()
 
 	func update(serverHeaderDate: String)
-	func update(serverResponseDateTime: Date, localResponseDatetime: Date, localResponseSystemUptime: TimeInterval)
+	func update(serverResponseDateTime: Date, localResponseDateTime: Date, localResponseSystemUptime: __darwin_time_t)
 
 	func appendDeviationChangeObserver(_ observer: @escaping (Bool) -> Void) -> ClockDeviationManager.ObserverToken
 	func removeDeviationChangeObserver(token: ClockDeviationManager.ObserverToken)
@@ -24,31 +24,32 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 
 	var hasSignificantDeviation: Bool? {
 		guard let serverResponseDateTime = serverResponseDateTime,
-			let localResponseDatetime = localResponseDatetime,
+			let localResponseDatetime = localResponseDateTime,
 			let localResponseSystemUptime = localResponseSystemUptime,
 			let clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
 		else { return nil }
 
 		let result = ClockDeviationManager.hasSignificantDeviation(
 			serverResponseDateTime: serverResponseDateTime,
-			localResponseDatetime: localResponseDatetime,
-			clockDeviationThresholdSeconds: clockDeviationThresholdSeconds,
-			localSystemUptime: localResponseSystemUptime,
-			systemUptime: currentSystemUptime(),
-			now: now()
+			localResponseDateTime: localResponseDatetime,
+			localResponseSystemUptime: localResponseSystemUptime,
+			currentDate: now(),
+			currentSystemUptime: currentSystemUptime(),
+			clockDeviationThresholdSeconds: clockDeviationThresholdSeconds
 		)
+
 		return result
 	}
 
 	private var serverResponseDateTime: Date?
-	private var localResponseDatetime: Date?
-	private var localResponseSystemUptime: TimeInterval?
+	private var localResponseDateTime: Date?
+	private var localResponseSystemUptime: __darwin_time_t?
 
 	private var clockDeviationThresholdSeconds: Double? {
 		remoteConfigManager.getConfiguration().clockDeviationThresholdSeconds.map { Double($0) }
 	}
 	private let remoteConfigManager: RemoteConfigManaging
-	private let currentSystemUptime: () -> TimeInterval
+	private let currentSystemUptime: () -> __darwin_time_t
 	private let now: () -> Date
 	private var deviationChangeObservers = [ObserverToken: (Bool) -> Void]()
 	private lazy var serverHeaderDateFormatter: DateFormatter = {
@@ -61,14 +62,14 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	required convenience init() {
 		self.init(
 			remoteConfigManager: Services.remoteConfigManager,
-			currentSystemUptime: { ProcessInfo.processInfo.systemUptime },
+			currentSystemUptime: { ClockDeviationManager.currentSystemUptime() },
 			now: { Date() }
 		)
 	}
 
 	required init(
 		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		currentSystemUptime: @escaping () -> TimeInterval = { ProcessInfo.processInfo.systemUptime },
+		currentSystemUptime: @escaping () -> __darwin_time_t = { ClockDeviationManager.currentSystemUptime() },
 		now: @escaping () -> Date = { Date() }
 	) {
 		self.remoteConfigManager = remoteConfigManager
@@ -96,14 +97,14 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 
 		update(
 			serverResponseDateTime: serverDate,
-			localResponseDatetime: now(),
+			localResponseDateTime: now(),
 			localResponseSystemUptime: currentSystemUptime()
 		)
 	}
 
-	func update(serverResponseDateTime: Date, localResponseDatetime: Date, localResponseSystemUptime: TimeInterval) {
+	func update(serverResponseDateTime: Date, localResponseDateTime: Date, localResponseSystemUptime: __darwin_time_t) {
 		self.serverResponseDateTime = serverResponseDateTime
-		self.localResponseDatetime = localResponseDatetime
+		self.localResponseDateTime = localResponseDateTime
 		self.localResponseSystemUptime = localResponseSystemUptime
 		notifyObservers()
 	}
@@ -138,19 +139,33 @@ class ClockDeviationManager: ClockDeviationManaging, Logging {
 	/// 	- now: the current local time
 	private static func hasSignificantDeviation(
 		serverResponseDateTime: Date,
-		localResponseDatetime: Date,
-		clockDeviationThresholdSeconds: Double,
-		localSystemUptime: TimeInterval,
-		systemUptime: TimeInterval,
-		now: Date = Date()
+		localResponseDateTime: Date,
+		localResponseSystemUptime: __darwin_time_t,
+		currentDate: Date = Date(),
+		currentSystemUptime: __darwin_time_t,
+		clockDeviationThresholdSeconds: Double
 	) -> Bool {
 
-		let responseSystemStartDatetime = localResponseDatetime.timeIntervalSince1970 - localSystemUptime
-		let currentSystemStartDateTime = now.timeIntervalSince1970 - systemUptime
+		let responseSystemStartDatetime = localResponseDateTime.timeIntervalSince1970 - TimeInterval(localResponseSystemUptime)
+		let currentSystemStartDateTime = currentDate.timeIntervalSince1970 - TimeInterval(currentSystemUptime)
 		let systemUptimeDelta = currentSystemStartDateTime - responseSystemStartDatetime
-		let responseTimeDelta = localResponseDatetime.timeIntervalSince1970 - serverResponseDateTime.timeIntervalSince1970
+		let responseTimeDelta = localResponseDateTime.timeIntervalSince1970 - serverResponseDateTime.timeIntervalSince1970
 
 		let hasDeviation = abs(responseTimeDelta + systemUptimeDelta) >= clockDeviationThresholdSeconds
 		return hasDeviation
+	}
+
+	private static func currentSystemUptime() -> __darwin_time_t {
+
+		var uptime = timespec()
+
+		// CLOCK_MONOTONIC represents the absolute elapsed wall-clock time since some arbitrary,
+		// fixed point in the past. It isn't affected by changes in the system time-of-day clock.
+		guard 0 == clock_gettime(CLOCK_MONOTONIC, &uptime) else {
+			// TODO: remove
+			fatalError("Could not execute clock_gettime, errno: \(errno)")
+		}
+
+		return uptime.tv_sec
 	}
 }
