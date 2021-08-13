@@ -14,6 +14,14 @@ class VerifierResultView: BaseView {
 		case verified
 		case denied
 		case demo
+		
+		var colors: UIColor {
+			switch self {
+				case .verified: return Theme.colors.access
+				case .demo: return Theme.colors.grey4
+				case .denied: return Theme.colors.denied
+			}
+		}
 	}
 
 	/// The display constants
@@ -42,32 +50,21 @@ class VerifierResultView: BaseView {
 		backgroundColor = Theme.colors.viewControllerBackground
 		checkIdentityView.alpha = 0
 	}
-
-	func revealIdentityView(completion: @escaping () -> Void) {
-		
-		setup(view: checkIdentityView)
-
-		UIView.animate(withDuration: 0.25, delay: 0.8, options: .curveLinear) {
-			self.checkIdentityView.alpha = 1
-			completion()
-		} completion: { _ in
-//			self.accessibilityElements = [self.checkIdentityView, self.primaryButton]
-//			UIAccessibility.post(notification: .screenChanged, argument: self.checkIdentityView)
-		}
-	}
 	
 	func setup(for result: Result) {
 		switch result {
 			case .verified:
 				let view = VerifiedView()
-				view.backgroundColor = Theme.colors.access
+				view.backgroundColor = result.colors
 				view.title = L.verifierResultAccessTitle()
 				setup(view: view)
+				revealIdentityView(for: result)
 			case .demo:
 				let view = VerifiedView()
-				view.backgroundColor = Theme.colors.grey4
+				view.backgroundColor = result.colors
 				view.title = L.verifierResultDemoTitle()
 				setup(view: view)
+				revealIdentityView(for: result)
 			case .denied:
 				let view = DeniedView()
 				view.title = L.verifierResultDeniedTitle()
@@ -102,5 +99,18 @@ private extension VerifierResultView {
 			view.rightAnchor.constraint(equalTo: rightAnchor),
 			view.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
+	}
+	
+	func revealIdentityView(for result: Result) {
+		
+		checkIdentityView.backgroundColor = result.colors
+		setup(view: checkIdentityView)
+
+		UIView.animate(withDuration: 0.25, delay: 0.8, options: .curveLinear) {
+			self.checkIdentityView.alpha = 1
+		} completion: { _ in
+//			self.accessibilityElements = [self.checkIdentityView, self.primaryButton]
+//			UIAccessibility.post(notification: .screenChanged, argument: self.checkIdentityView)
+		}
 	}
 }

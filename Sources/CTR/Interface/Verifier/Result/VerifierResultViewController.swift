@@ -51,14 +51,8 @@ class VerifierResultViewController: BaseViewController, Logging {
 			switch $0 {
 				case .verified:
 					self?.sceneView.setup(for: .verified)
-					self?.sceneView.revealIdentityView { [weak self] in
-						self?.title = self?.viewModel.title
-					}
 				case .demo:
 					self?.sceneView.setup(for: .demo)
-					self?.sceneView.revealIdentityView { [weak self] in
-						self?.title = self?.viewModel.title
-					}
 				case .denied:
 					self?.sceneView.setup(for: .denied)
 			}
