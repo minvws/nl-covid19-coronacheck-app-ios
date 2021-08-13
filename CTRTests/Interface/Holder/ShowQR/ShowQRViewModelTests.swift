@@ -24,7 +24,6 @@ class ShowQRViewModelTests: XCTestCase {
 	var remoteConfigManagingSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
-
 		super.setUp()
 		dataStoreManager = DataStoreManager(.inMemory)
 		holderCoordinatorDelegateSpy = HolderCoordinatorDelegateSpy()
@@ -292,8 +291,9 @@ class ShowQRViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.visibilityState).toEventually(beScreenshotBlocking(test: { message in
+		expect(self.sut.visibilityState).toEventually(beScreenshotBlocking(test: { message, voiceoverMessage in
 			expect(message) == "Je QR-code komt terug in 2:50"
+			expect(voiceoverMessage) == "Je QR-code komt terug in over twee minuten"
 		}))
 	}
 
@@ -545,11 +545,11 @@ private func beVisible(test: @escaping (UIImage) -> Void = { _ in }) -> Predicat
 		return PredicateResult(status: .fail, message: message)
 	}
 }
-private func beScreenshotBlocking(test: @escaping (String) -> Void = { _ in }) -> Predicate<ShowQRImageView.VisibilityState> {
+private func beScreenshotBlocking(test: @escaping (String, String) -> Void = { _, _ in }) -> Predicate<ShowQRImageView.VisibilityState> {
 	return Predicate.define("be .expiredQR with matching values") { expression, message in
 		if let actual = try expression.evaluate(),
-		   case let .screenshotBlocking(timeRemainingText) = actual {
-			test(timeRemainingText)
+		   case let .screenshotBlocking(timeRemainingText, voiceoverTimeRemainingText) = actual {
+			test(timeRemainingText, voiceoverTimeRemainingText)
 			return PredicateResult(status: .matches, message: message)
 		}
 		return PredicateResult(status: .fail, message: message)
