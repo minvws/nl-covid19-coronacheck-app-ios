@@ -12,7 +12,6 @@
 
 
 @class MobilecoreAnnotatedDomesticPk;
-@class MobilecoreAnnotatedEuropeanPk;
 @class MobilecoreCreateCredentialResultValue;
 @class MobilecorePublicKeysConfig;
 @class MobilecoreResult;
@@ -32,19 +31,6 @@
  * DEPRECATED: Remove this field together with LegacyDomesticPks
  */
 @property (nonatomic) NSString* _Nonnull kid;
-@end
-
-@interface MobilecoreAnnotatedEuropeanPk : NSObject <goSeqRefInterface> {
-}
-@property(strong, readonly) _Nonnull id _ref;
-
-- (nonnull instancetype)initWithRef:(_Nonnull id)ref;
-- (nonnull instancetype)init;
-@property (nonatomic) NSData* _Nullable subjectPk;
-// skipped field AnnotatedEuropeanPk.KeyUsage with unsupported type: []string
-
-// skipped field AnnotatedEuropeanPk.LoadedPk with unsupported type: interface{}
-
 @end
 
 @interface MobilecoreCreateCredentialResultValue : NSObject <goSeqRefInterface> {
@@ -67,7 +53,7 @@
 - (nullable instancetype)init:(NSString* _Nullable)pksPath expectEuropeanKeys:(BOOL)expectEuropeanKeys;
 // skipped field PublicKeysConfig.DomesticPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-mobile-core.DomesticPksLookup
 
-// skipped field PublicKeysConfig.EuropeanPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-mobile-core.EuropeanPksLookup
+// skipped field PublicKeysConfig.EuropeanPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-hcert/verifier.EuropeanPksLookup
 
 // skipped field PublicKeysConfig.LegacyDomesticPks with unsupported type: []*github.com/minvws/nl-covid19-coronacheck-mobile-core.AnnotatedDomesticPk
 
@@ -127,6 +113,7 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreNL_COUNTRY_CODE;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreTEST_RESULT_NOT_DETECTED;
+FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVACCINE_MEDICINAL_PRODUCT_JANSSEN;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_ERROR;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_IS_NL_DCC;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX;
@@ -136,6 +123,8 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVERIFIER_PUBLIC_KEYS_FILENA
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreYYYYMMDD_FORMAT;
 
 @interface Mobilecore : NSObject
+// skipped variable DATE_OF_BIRTH_REGEX with unsupported type: *regexp.Regexp
+
 /**
  * DEPRECATED: See deprecation of LoadDomesticIssuerPks
  */

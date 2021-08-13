@@ -142,7 +142,7 @@ final class HolderDashboardView: BaseView {
 			bottomScrollViewConstraint?.isActive = true
 		}
 	}
-	
+
 	/// Updates selected tab position
 	func updateScrollPosition() {
 		let selectedTab = tabBar.selectedTab.rawValue
@@ -151,7 +151,7 @@ final class HolderDashboardView: BaseView {
 	
 	/// Selects a tab view shown on start
 	/// - Parameter tab: The dashboard tab
-	func startOn(tab: DashboardTab) {
+	func selectTab(tab: DashboardTab) {
 		tabBar.select(tab: tab, animated: false)
 		
 		updateScrollPosition()

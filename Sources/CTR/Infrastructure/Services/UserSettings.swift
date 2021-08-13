@@ -20,6 +20,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var lastScreenshotTime: Date? { get set }
 
 	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
+
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -41,4 +43,7 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "lastScreenshotTime", defaultValue: nil)
 	var lastScreenshotTime: Date? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 }

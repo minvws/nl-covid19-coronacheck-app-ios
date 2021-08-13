@@ -57,13 +57,10 @@ final class HolderDashboardViewModel: Logging {
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
-	var dashboardRegionToggleValue: QRCodeValidityRegion {
-		get {
-			userSettings.dashboardRegionToggleValue
-		}
-		set {
+	@Bindable var dashboardRegionToggleValue: QRCodeValidityRegion {
+		didSet {
 			DispatchQueue.global().async {
-				self.userSettings.dashboardRegionToggleValue = newValue
+				self.userSettings.dashboardRegionToggleValue = self.dashboardRegionToggleValue
 			}
 		}
 	}
@@ -117,6 +114,8 @@ final class HolderDashboardViewModel: Logging {
 			showCreateCard: true,
 			isRefreshingStrippen: false
 		)
+
+		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
 
 		self.datasource.didUpdate = { [weak self] (qrCardDataItems: [MyQRCard], expiredGreenCards: [ExpiredQR]) in
 			DispatchQueue.main.async {

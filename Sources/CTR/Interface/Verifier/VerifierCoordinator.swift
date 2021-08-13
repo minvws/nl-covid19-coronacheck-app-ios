@@ -43,30 +43,11 @@ class VerifierCoordinator: SharedCoordinator {
 
 	// Designated starter method
 	override func start() {
-		
-		if onboardingManager.needsOnboarding {
-			/// Start with the onboarding
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			startChildCoordinator(coordinator)
-			
-		} else if onboardingManager.needsConsent {
-			// Show the consent page
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent(shouldHideBackButton: true)
 
-		} else {
-			
+		handleOnboarding(factory: onboardingFactory) {
 			navigateToVerifierWelcome()
 		}
+
 	}
 }
 

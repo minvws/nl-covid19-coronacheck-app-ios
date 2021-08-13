@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import CTR
+import Nimble
 
 class VerifierCoordinatorTests: XCTestCase {
 
@@ -53,6 +54,6 @@ class VerifierCoordinatorTests: XCTestCase {
 		sut.finishForcedInformation()
 
 		// Then
-		XCTAssertTrue(sut.childCoordinators.isEmpty)
+		expect(self.sut.childCoordinators).to(beEmpty())
 	}
 }
