@@ -150,4 +150,10 @@ class ShowQRScreenshotBlockingView: BaseView {
 			countdownLabel.text = countdown
 		}
 	}
+
+	var countdownVoiceover: String? {
+		didSet {
+			countdownLabel.accessibilityValue = countdownVoiceover
+		}
+	}
 }

@@ -165,7 +165,23 @@ class ShowQRViewModel: Logging {
 			let zeroPaddedSeconds = String(format: "%02d", secs)
 
 			let message = L.holderShowqrScreenshotwarningMessage("\(mins):\(zeroPaddedSeconds)")
-			self.visibilityState = .screenshotBlocking(timeRemainingText: message)
+
+			// Attempt to make a nicer voiceover string:
+			let voiceoverTimeRemaining: String
+			if #available(iOS 13.0, *) {
+				let relative = RelativeDateTimeFormatter()
+				relative.unitsStyle = .spellOut
+				relative.formattingContext = .middleOfSentence
+
+				// e.g. "in ten seconds"
+				let relativeString = relative.localizedString(fromTimeInterval: TimeInterval(screenshotBlockTimeRemaining))
+				voiceoverTimeRemaining = L.holderShowqrScreenshotwarningMessage(relativeString)
+			} else {
+				voiceoverTimeRemaining = message
+			}
+
+			self.visibilityState = .screenshotBlocking(timeRemainingText: message, voiceoverTimeRemainingText: voiceoverTimeRemaining)
+
 		} else if screenIsBeingCaptured {
 			self.visibilityState = .hiddenForScreenCapture
 		} else if let currentQRImage = self.currentQRImage {
