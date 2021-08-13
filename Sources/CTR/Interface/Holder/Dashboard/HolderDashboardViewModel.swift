@@ -112,7 +112,8 @@ final class HolderDashboardViewModel: Logging {
 			myQRCards: [],
 			expiredGreenCards: [],
 			showCreateCard: true,
-			isRefreshingStrippen: false
+			isRefreshingStrippen: false,
+			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
 		)
 
 		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
@@ -293,7 +294,7 @@ final class HolderDashboardViewModel: Logging {
 			]
 		}
 
-		if state.deviceHasClockDeviation && validityRegion == .domestic && !regionFilteredMyQRCards.isEmpty {
+		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
 			viewControllerCards += [
 				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
 					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
