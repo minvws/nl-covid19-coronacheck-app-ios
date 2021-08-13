@@ -14,6 +14,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 
 	var sut: ChooseQRCodeTypeViewController!
 	var coordinatorDelegateSpy: HolderCoordinatorDelegateSpy!
+	var window = UIWindow()
 
 	override func setUp() {
 		super.setUp()
@@ -21,9 +22,52 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 		sut = ChooseQRCodeTypeViewController(viewModel: ChooseQRCodeTypeViewModel(
 			coordinator: coordinatorDelegateSpy
 		))
+		window = UIWindow()
+	}
+
+	func loadView() {
+
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	func test_snapshot() {
 		assertSnapshot(matching: sut, as: .image)
+	}
+
+	func test_vaccination_tapped() {
+
+		// Given
+		loadView()
+
+		// When
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubTitleButton)?.primaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateAVaccinationQR) == true
+	}
+
+	func test_recovery_tapped() {
+
+		// Given
+		loadView()
+
+		// When
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews[1] as? DisclosureSubTitleButton)?.primaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateARecoveryQR) == true
+	}
+
+	func test_test_tapped() {
+
+		// Given
+		loadView()
+
+		// When
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews.last as? DisclosureSubTitleButton)?.primaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseLocation) == true
 	}
 }

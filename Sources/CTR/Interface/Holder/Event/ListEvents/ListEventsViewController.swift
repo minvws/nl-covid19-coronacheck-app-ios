@@ -230,6 +230,7 @@ extension VaccinationEventView {
 		view.isUserInteractionEnabled = true
 		view.title = title
 		view.subTitle = subTitle
+		view.link = L.holderEventDetails()
 		view.disclaimerButtonTappedCommand = command
 		return view
 	}

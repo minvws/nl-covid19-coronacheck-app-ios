@@ -30,7 +30,7 @@ class ListEventsViewModelTests: XCTestCase {
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 		networkSpy = NetworkSpy(configuration: .test)
 		cryptoSpy = CryptoManagerSpy()
-		remoteConfigSpy = RemoteConfigManagingSpy()
+		remoteConfigSpy = RemoteConfigManagingSpy(networkManager: networkSpy)
 
 		/// Not using a GreenCardLoader Spy here because all its dependencies are already spies here.
 		greenCardLoader = GreenCardLoader(networkManager: networkSpy, cryptoManager: cryptoSpy, walletManager: walletSpy)
@@ -127,13 +127,11 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .moreInformation(title, _, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, _) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
 			return
-			
 		}
 		expect(title) == L.holderEventAboutTitle()
-		expect(hide) == true
 	}
 
 	func test_somethingIsWrong_tapped() {
@@ -159,6 +157,234 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0) == .moreInformation(title: L.holderVaccinationWrongTitle(), body: L.holderVaccinationWrongBody(), hideBodyForScreenCapture: false)
+	}
+
+	func test_oneEvent_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01")],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_twoDifferentEvents_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01"), remoteVaccinationEvent(vaccinationDate: "2021-08-03")],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_twoIdenticalEvents_noHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [remoteVaccinationEvent(vaccinationDate: "2021-08-01"), remoteVaccinationEvent(vaccinationDate: "2021-08-01")],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_twoIdenticalEvents_withHPKCode_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_fourIdenticalEvents_withHPKCode_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "CC", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_twoSimilarEvents_noHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-01"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-01")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_twoSimilarEvents_withHPKCode_oneRow() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(1))
+	}
+
+	func test_fourSimilarEvents_withHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				// Shot 1 in july
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				// Shot 2 in august
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
+	}
+
+	func test_fourSimilarEvents_withDuplicates_withHPKCode_twoRows() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [
+				// Shot 1 in july, duplicate at GGD
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-07-02", hpkCode: "2924528"),
+				// Shot 2 in august, duplicate at RIVM
+				remoteVaccinationEvent(providerIdentifier: "GGD", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528"),
+				remoteVaccinationEvent(providerIdentifier: "RVV", vaccinationDate: "2021-08-02", hpkCode: "2924528")
+			],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		// When
+		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// Then
+		expect(rows).to(haveCount(2))
 	}
 
 	func test_makeQR_saveEventGroupError_eventModeVaccination() {
@@ -481,7 +707,6 @@ class ListEventsViewModelTests: XCTestCase {
 
 		// Given
 		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: nil, completionReason: nil)
-		let completionStatus = L.holderVaccinationStatusUnknown()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -491,7 +716,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -502,22 +726,24 @@ class ListEventsViewModelTests: XCTestCase {
 		rows.first?.action?()
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
-
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value).to(beNil())
 	}
 	
 	func test_vaccinationrow_completionStatus_unknown_withCompletionReason() {
 
 		// Given
 		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: nil, completionReason: .recovery)
-		let completionStatus = L.holderVaccinationStatusUnknown()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -527,7 +753,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -539,21 +764,23 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value).to(beNil())
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withMedicalStatement() {
 
 		// Given
 		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: false, completedByPersonalStatement: nil, completionReason: nil)
-		let completionStatus = L.holderVaccinationStatusIncomplete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -563,7 +790,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -575,21 +801,23 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value).to(beNil())
 	}
 	
 	func test_vaccinationrow_completionStatus_incomplete_withPersonalStatement() {
 
 		// Given
 		let remoteEvent = remoteVaccinationEvent(completedByMedicalStatement: nil, completedByPersonalStatement: false, completionReason: nil)
-		let completionStatus = L.holderVaccinationStatusIncomplete()
 		
 		sut = ListEventsViewModel(
 			coordinator: coordinatorSpy,
@@ -599,7 +827,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -611,14 +838,17 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value).to(beNil())
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_noReason() {
@@ -635,7 +865,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 		
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -647,13 +876,17 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		
-		guard case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
 			return
 		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
+			return
+		}
+		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value) == completionStatus
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_fromRecovery() {
@@ -670,7 +903,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -682,14 +914,17 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value) == completionStatus
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_fromPriorEvent() {
@@ -706,7 +941,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -718,14 +952,17 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value) == completionStatus
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_withMedicalStatement() {
@@ -742,7 +979,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -754,14 +990,17 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value) == completionStatus
 	}
 	
 	func test_vaccinationrow_completionStatus_complete_withPersonalStatement() {
@@ -778,7 +1017,6 @@ class ListEventsViewModelTests: XCTestCase {
 			walletManager: walletSpy,
 			remoteConfigManager: remoteConfigSpy
 		)
-		let expectedBody = "<p>Deze gegevens van je vaccinatie zijn opgehaald:</p><p>Naam: <b>Check, Corona</b><br />Geboortedatum: <b>16 mei 2021</b></p><p>Ziekteverwekker: <b>COVID-19</b><br />Vaccin: <b></b><br />Type vaccin: <b></b><br />Producent: <b></b><br />Doses: <b>1 van 2</b><br />Is dit de laatste doses van je vaccinatie? <b>\(completionStatus)</b><br />Vaccinatiedatum: <b>16 mei 2021</b><br />Gevaccineerd in: <b>NLD</b><br />Uniek certificaatnummer: <b>1234</b></p>"
 
 		guard case let .listEvents(content: _, rows: rows) = sut.viewState else {
 			fail("wrong state")
@@ -790,14 +1028,17 @@ class ListEventsViewModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 
-		guard  case let .moreInformation(title, body, hide) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
-			fail("wrong information")
+		guard case let .showEventDetails(title, details) = self.coordinatorSpy.invokedListEventsScreenDidFinishParameters?.0 else {
+			fail("wrong delegate callback")
+			return
+		}
+		guard let completionReason = details.first(where: { $0.field.displayTitle == L.holderEventAboutVaccinationCompletionreason() }) else {
+			fail("no event details")
 			return
 		}
 		
 		expect(title) == L.holderEventAboutTitle()
-		expect(body) == expectedBody
-		expect(hide) == true
+		expect(completionReason.value) == completionStatus
 	}
 
 	// MARK: Default values
@@ -934,8 +1175,50 @@ class ListEventsViewModelTests: XCTestCase {
 	)
 	
 	// MARK: Helper
+
+	func remoteVaccinationEvent(providerIdentifier: String = "CC", vaccinationDate: String, hpkCode: String? = nil) -> RemoteEvent {
+
+		let vaccinationEvent = EventFlow.VaccinationEvent(
+			dateString: vaccinationDate,
+			hpkCode: hpkCode,
+			type: nil,
+			manufacturer: nil,
+			brand: nil,
+			doseNumber: 1,
+			totalDoses: 2,
+			country: "NLD",
+			completedByMedicalStatement: nil,
+			completedByPersonalStatement: nil,
+			completionReason: nil
+		)
+		return RemoteEvent(
+			wrapper: EventFlow.EventResultWrapper(
+				providerIdentifier: providerIdentifier,
+				protocolVersion: "3.0",
+				identity: identity,
+				status: .complete,
+				result: nil,
+				events: [
+					EventFlow.Event(
+						type: "vaccination",
+						unique: "1234",
+						isSpecimen: false,
+						vaccination: vaccinationEvent,
+						negativeTest: nil,
+						positiveTest: nil,
+						recovery: nil,
+						dccEvent: nil
+					)
+				]
+			),
+			signedResponse: signedResponse
+		)
+	}
 	
-	func remoteVaccinationEvent(completedByMedicalStatement: Bool?, completedByPersonalStatement: Bool?, completionReason: EventFlow.VaccinationEvent.CompletionReason?) -> RemoteEvent {
+	func remoteVaccinationEvent(
+		completedByMedicalStatement: Bool?,
+		completedByPersonalStatement: Bool?,
+		completionReason: EventFlow.VaccinationEvent.CompletionReason?) -> RemoteEvent {
 		let vaccinationEvent = EventFlow.VaccinationEvent(
 			dateString: "2021-05-16",
 			hpkCode: nil,

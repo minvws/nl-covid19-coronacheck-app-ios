@@ -32,19 +32,13 @@ class ProofManagingSpy: ProofManaging {
 
 	var invokedFetchIssuerPublicKeys = false
 	var invokedFetchIssuerPublicKeysCount = 0
-	var shouldInvokeFetchIssuerPublicKeysOnCompletion = false
-	var stubbedFetchIssuerPublicKeysOnErrorResult: (Error, Void)?
+	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, NetworkError>, Void)?
 
-	func fetchIssuerPublicKeys(
-		onCompletion: (() -> Void)?,
-		onError: ((Error) -> Void)?) {
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, NetworkError>) -> Void)?) {
 		invokedFetchIssuerPublicKeys = true
 		invokedFetchIssuerPublicKeysCount += 1
-		if shouldInvokeFetchIssuerPublicKeysOnCompletion {
-			onCompletion?()
-		}
-		if let result = stubbedFetchIssuerPublicKeysOnErrorResult {
-			onError?(result.0)
+		if let result = stubbedFetchIssuerPublicKeysOnCompletionResult {
+			onCompletion?(result.0)
 		}
 	}
 

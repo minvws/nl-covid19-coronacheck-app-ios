@@ -22,10 +22,7 @@ protocol ProofManaging: AnyObject {
 	/// Fetch the issuer public keys
 	/// - Parameters:
 	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchIssuerPublicKeys(
-		onCompletion: (() -> Void)?,
-		onError: ((Error) -> Void)?)
+	func fetchIssuerPublicKeys(onCompletion: ((Result<Data, NetworkError>) -> Void)?)
 
 	/// Get the test result for a token
 	/// - Parameters:

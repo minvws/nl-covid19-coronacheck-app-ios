@@ -56,6 +56,9 @@ protocol OnboardingFactoryProtocol {
 
 	/// Should we use the consent button
 	func useConsentButton() -> Bool
+
+	/// Get the action Button Title
+	func getActionButtonTitle() -> String
 }
 
 struct HolderOnboardingFactory: OnboardingFactoryProtocol {
@@ -68,25 +71,25 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: L.holderOnboardingTitleSafely(),
 				message: L.holderOnboardingMessageSafely(),
-				image: .onboardingSafely,
+				image: I.onboarding.safely(),
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitleYourqr(),
 				message: L.holderOnboardingMessageYourqr(),
-				image: .onboardingYourQR,
+				image: I.onboarding.yourQR(),
 				step: .yourQR
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitleValidity(),
 				message: L.holderOnboardingMessageValidity(),
-				image: .onboardingValidity,
+				image: I.onboarding.validity(),
 				step: .validity
 			),
 			OnboardingPage(
 				title: L.holderOnboardingTitlePrivacy(),
 				message: L.holderOnboardingMessagePrivacy(),
-				image: .onboardingInternational,
+				image: I.onboarding.international(),
 				step: .who
 			)
 		]
@@ -130,6 +133,10 @@ struct HolderOnboardingFactory: OnboardingFactoryProtocol {
 	func useConsentButton() -> Bool {
 		return false
 	}
+
+	func getActionButtonTitle() -> String {
+		return L.holderConsentAction()
+	}
 }
 
 struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
@@ -142,25 +149,25 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 			OnboardingPage(
 				title: L.verifierOnboardingTitleSafely(),
 				message: L.verifierOnboardingMessageSafely(),
-				image: .onboardingSafely,
+				image: I.onboarding.safely(),
 				step: .safelyOnTheRoad
 			),
 			OnboardingPage(
 				title: L.verifierOnboardingTitleScanqr(),
 				message: L.verifierOnboardingMessageScanqr(),
-				image: .onboardingScan,
+				image: I.onboarding.scan(),
 				step: .yourQR
 			),
 			OnboardingPage(
 				title: L.verifierOnboardingTitleAccess(),
 				message: L.verifierOnboardingMessageAccess(),
-				image: .onboardingIdentity,
+				image: I.onboarding.identity(),
 				step: .access
 			),
 			OnboardingPage(
 				title: L.verifierOnboardingTitleWho(),
 				message: L.verifierOnboardingMessageWho(),
-				image: .onboardingWho,
+				image: I.onboarding.who(),
 				step: .privacy
 			)
 		]
@@ -204,5 +211,9 @@ struct VerifierOnboardingFactory: OnboardingFactoryProtocol {
 	/// Should we use the consent button
 	func useConsentButton() -> Bool {
 		return true
+	}
+
+	func getActionButtonTitle() -> String {
+		return L.generalNext()
 	}
 }

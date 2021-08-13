@@ -109,7 +109,7 @@ targetTemplates:
     settings:
       base:
         MARKETING_VERSION: 2.2.1
-        CURRENT_PROJECT_VERSION: 39
+        CURRENT_PROJECT_VERSION: 40
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         SWIFT_OBJC_BRIDGING_HEADER: Sources/CTR/Infrastructure/Services/Crypto/Utility/CTR-Bridging-Header.h
         TARGETED_DEVICE_FAMILY: 1
@@ -156,6 +156,11 @@ targetTemplates:
           - 'sileo'
           - 'undecimus'
           - 'zbra'
+          - 'https'
+          - 'googlechromes'
+          - 'opera-https'
+          - 'firefox'
+          - 'microsoft-edge-https'
         LSRequiresIPhoneOS: true
         NSCameraUsageDescription: "De app will toegang tot de camera om de QR-code te scannen."
         UIAppFonts:
@@ -201,7 +206,7 @@ targetTemplates:
       - name: Run R.Swift
         basedOnDependencyAnalysis: true
         script: |
-          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string`
+          OUTPUT=`rswift generate "$SRCROOT/Sources/CTR/Infrastructure/Resources/R.generated.swift" --generators string,image,color`
 
           # forbid TestFlight release if there are missing translations:
           if [[ "$OUTPUT" == *"warning"* ]] && [[ "$TESTFLIGHT_DEPLOY" == "true" ]]; then

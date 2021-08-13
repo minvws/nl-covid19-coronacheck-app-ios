@@ -22,6 +22,8 @@ final class Services {
 	private static var walletManagingType: WalletManaging.Type = WalletManager.self
 	private static var greenCardLoadingType: GreenCardLoading.Type = GreenCardLoader.self
 	private static var couplingManagingType: CouplingManaging.Type = CouplingManager.self
+	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
+	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
 
 	/// Override the CryptoManaging type that will be instantiated
 	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
@@ -81,6 +83,17 @@ final class Services {
 		couplingManagingType = couplingManager
 	}
 
+	/// Override the mappingManaging type  that will be instantiated
+	/// - parameter mappingManager: The type conforming to MappingManaging to be used as the global mapping manager
+	static func use(_ mappingManager: MappingManaging.Type) {
+		mappingManagingType = mappingManager
+	}
+
+	static func use(_ clockDeviationManager: ClockDeviationManaging.Type) {
+
+		clockDeviationType = clockDeviationManager
+	}
+
 	// MARK: Static access
     
     static private(set) var networkManager: NetworkManaging = {
@@ -118,7 +131,9 @@ final class Services {
 		walletManager: walletManager
 	)
 
-    static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init()
+    static private(set) var remoteConfigManager: RemoteConfigManaging = remoteConfigManagingType.init(
+		networkManager: networkManager
+	)
 
 	static private(set) var onboardingManager: OnboardingManaging = onboardingManagingType.init()
 
@@ -126,10 +141,18 @@ final class Services {
 
 	static private(set) var proofManager: ProofManaging = proofManagerType.init()
 
-	static private(set) var walletManager: WalletManaging = walletManagingType.init(dataStoreManager: dataStoreManager)
+	static private(set) var walletManager: WalletManaging = walletManagingType.init(
+		dataStoreManager: dataStoreManager
+	)
 
 	static private(set) var couplingManager: CouplingManaging = couplingManagingType.init(
 		cryptoManager: cryptoManager,
 		networkManager: networkManager
 	)
+
+	static private(set) var mappingManager: MappingManaging = mappingManagingType.init(
+		remoteConfigManager: remoteConfigManager
+	)
+
+	static private(set) var clockDeviationManager: ClockDeviationManaging = clockDeviationType.init()
 }

@@ -7,24 +7,25 @@
 
 import UIKit
 
-class LaunchViewModel {
+class LaunchViewModel: Logging {
 
 	private weak var coordinator: AppCoordinatorDelegate?
 
-	private var versionSupplier: AppVersionSupplierProtocol
-	private var remoteConfigManager: RemoteConfigManaging
-	private var walletManager: WalletManaging
-	private var proofManager: ProofManaging
-	private var jailBreakDetector: JailBreakProtocol
-	private var userSettings: UserSettingsProtocol
-	private let cryptoLibUtility: CryptoLibUtilityProtocol
+	private var versionSupplier: AppVersionSupplierProtocol?
+	private weak var remoteConfigManager: RemoteConfigManaging?
+	private weak var walletManager: WalletManaging?
+	private weak var proofManager: ProofManaging?
+	private weak var jailBreakDetector: JailBreakProtocol?
+	private var userSettings: UserSettingsProtocol?
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol?
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
 
-	private var configStatus: LaunchState?
-	private var issuerPublicKeysStatus: LaunchState?
 	private var flavor: AppFlavor
+	var configStatus: LaunchState?
+	var issuerPublicKeysStatus: LaunchState?
+	var didFinishLaunchState = false
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
@@ -44,14 +45,14 @@ class LaunchViewModel {
 	///   - cryptoLibUtility: the crypto library utility
 	init(
 		coordinator: AppCoordinatorDelegate,
-		versionSupplier: AppVersionSupplierProtocol,
+		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
-		remoteConfigManager: RemoteConfigManaging,
-		proofManager: ProofManaging,
-		jailBreakDetector: JailBreakProtocol = JailBreakDetector(),
-		userSettings: UserSettingsProtocol = UserSettings(),
-		cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility,
-		walletManager: WalletManaging = Services.walletManager) {
+		remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager,
+		proofManager: ProofManaging? = Services.proofManager,
+		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
+		userSettings: UserSettingsProtocol? = UserSettings(),
+		cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility,
+		walletManager: WalletManaging?) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
@@ -68,8 +69,8 @@ class LaunchViewModel {
 		appIcon = flavor == .holder ? .holderAppIcon : .verifierAppIcon
 
 		version = flavor == .holder
-			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
-			: L.verifierLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())
+			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
+			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
 		if shouldShowJailBreakAlert() {
 			// Interrupt, do not continu the flow
@@ -84,14 +85,72 @@ class LaunchViewModel {
 	/// Update the dependencies
 	private func updateDependencies() {
 
-		updateConfiguration()
-		updateKeys()
+		// Configuration
+		updateConfiguration { result in
+			self.configStatus = result
+			self.handleState()
+		}
+
+		// Issuer Public Keys
+		updateKeys { result in
+
+			self.issuerPublicKeysStatus = result
+			self.handleState()
+		}
+	}
+
+	/// Handle the state of the updates
+	private func handleState() {
+
+		guard let configStatus = configStatus,
+			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
+			return
+		}
+
+		logVerbose("switch \(configStatus), \(issuerPublicKeysStatus) - didFinishLaunchState: \(didFinishLaunchState)")
+
+		// Small delay, let the viewController load.
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+			switch (configStatus, issuerPublicKeysStatus) {
+				case (.withinTTL, .withinTTL):
+					self.didFinishLaunchState = true
+					self.coordinator?.handleLaunchState(.withinTTL)
+
+				case (.actionRequired, _):
+					self.coordinator?.handleLaunchState(configStatus)
+
+				case (LaunchState.internetRequired, _), (_, .internetRequired):
+					if !self.didFinishLaunchState {
+						self.didFinishLaunchState = true
+						self.coordinator?.handleLaunchState(.internetRequired)
+					}
+
+				case (.noActionNeeded, .noActionNeeded), (.noActionNeeded, .withinTTL), (.withinTTL, .noActionNeeded):
+					if let lib = self.cryptoLibUtility, !lib.isInitialized {
+						// Show crypto lib not initialized error
+						self.coordinator?.handleLaunchState(.cryptoLibNotInitialized)
+					} else {
+						// Start application
+						if !self.didFinishLaunchState {
+							self.didFinishLaunchState = true
+							self.coordinator?.handleLaunchState(.noActionNeeded)
+						}
+					}
+
+				default:
+					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
+			}
+		}
 	}
 
 	private func shouldShowJailBreakAlert() -> Bool {
 
 		guard flavor == .holder else {
 			// Only enable for the holder
+			return false
+		}
+
+		guard let jailBreakDetector = jailBreakDetector, let userSettings = userSettings else {
 			return false
 		}
 
@@ -103,13 +162,13 @@ class LaunchViewModel {
 		// Interruption is over
 		interruptForJailBreakDialog = false
 		// Warning has been shown, do not show twice
-		userSettings.jailbreakWarningShown = true
+		userSettings?.jailbreakWarningShown = true
 		// Continu with flow
 		updateDependencies()
 	}
 
 	/// Update the configuration
-	private func updateConfiguration() {
+	private func updateConfiguration(_ completion: @escaping (LaunchState) -> Void) {
 
 		// Execute once.
 		guard !isUpdatingConfiguration else {
@@ -118,31 +177,102 @@ class LaunchViewModel {
 
 		isUpdatingConfiguration = true
 
-		remoteConfigManager.update { [weak self] updateState in
-			guard let self = self else { return }
-			self.configStatus = updateState
+		if let lastFetchedTimestamp = self.userSettings?.configFetchedTimestamp,
+		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0) {
+			self.logInfo("Remote Configuration still within TTL")
+			// Mark remote config loaded
+			cryptoLibUtility?.checkFile(.remoteConfiguration)
+			completion(.withinTTL)
+		}
 
-			if self.flavor == .holder {
-				self.checkWallet()
-			}
+		remoteConfigManager?.update { resultWrapper in
 
 			self.isUpdatingConfiguration = false
-			self.handleState()
+			switch resultWrapper {
+				case let .success((remoteConfiguration, data, urlResponse)):
+
+					// Update the last fetch time
+					self.userSettings?.configFetchedTimestamp = Date().timeIntervalSince1970
+					// Store as JSON file
+					self.cryptoLibUtility?.store(data, for: .remoteConfiguration)
+					// Check the wallet
+					self.checkWallet()
+
+					/// Fish for the server Date in the network response, and use that to maintain
+					/// a clockDeviationManager to check if the delta between the serverTime and the localTime is
+					/// beyond a permitted time interval.
+					if let httpResponse = urlResponse as? HTTPURLResponse,
+					   let serverDateString = httpResponse.allHeaderFields["Date"] as? String {
+						Services.clockDeviationManager.update(serverHeaderDate: serverDateString)
+					}
+
+					self.compare(remoteConfiguration, completion: completion)
+
+				case let .failure(networkError):
+
+					self.logError("Error retreiving remote configuration: \(networkError.localizedDescription)")
+
+					// Fallback to the last known remote configuration
+					guard let storedConfiguration = self.remoteConfigManager?.getConfiguration() else {
+						completion(.internetRequired)
+						return
+					}
+
+					self.logDebug("Using stored Configuration \(storedConfiguration)")
+
+					// Check the wallet
+					self.checkWallet()
+
+					self.compare(storedConfiguration) { state in
+						switch state {
+							case .actionRequired:
+								// Deactivated or update trumps no internet
+								completion(state)
+							default:
+								completion(.internetRequired)
+						}
+					}
+			}
+		}
+	}
+
+	/// Compare the remote configuration against the app version
+	/// - Parameters:
+	///   - remoteConfiguration: the remote configuration
+	///   - completion: completion handler
+	private func compare(
+		_ remoteConfiguration: RemoteConfiguration,
+		completion: @escaping (LaunchState) -> Void) {
+
+		let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
+		let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+		let currentVersion = versionSupplier?.getCurrentVersion().fullVersionString() ?? "1.0.0"
+
+		if remoteConfiguration.isDeactivated ||
+			requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending ||
+			recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+			// Update or kill the app
+			completion(.actionRequired(remoteConfiguration))
+		} else {
+			// Nothing to do
+			completion(.noActionNeeded)
 		}
 	}
 
 	private func checkWallet() {
 
-		let configuration = remoteConfigManager.getConfiguration()
-		walletManager.expireEventGroups(
+		guard let configuration = remoteConfigManager?.getConfiguration() else {
+			return
+		}
+
+		walletManager?.expireEventGroups(
 			vaccinationValidity: configuration.vaccinationEventValidity,
 			recoveryValidity: configuration.recoveryEventValidity,
 			testValidity: configuration.testEventValidity
 		)
 	}
 
-	/// Update the Issuer Public keys
-	private func updateKeys() {
+	private func updateKeys(_ completion: @escaping (LaunchState) -> Void) {
 
 		// Execute once.
 		guard !isUpdatingIssuerPublicKeys else {
@@ -151,41 +281,33 @@ class LaunchViewModel {
 
 		isUpdatingIssuerPublicKeys = true
 
-		// Fetch the issuer Public keys
-		proofManager.fetchIssuerPublicKeys { [weak self] in
+		if let lastFetchedTimestamp = self.userSettings?.issuerKeysFetchedTimestamp,
+		   lastFetchedTimestamp > Date().timeIntervalSince1970 - TimeInterval(remoteConfigManager?.getConfiguration().configTTL ?? 0) {
+			self.logInfo("Issuer public keys still within TTL")
+			// Mark remote config loaded
+			cryptoLibUtility?.checkFile(.publicKeys)
+			completion(.withinTTL)
+		}
+		proofManager?.fetchIssuerPublicKeys {[weak self] resultWrapper in
 
 			self?.isUpdatingIssuerPublicKeys = false
-			self?.issuerPublicKeysStatus = .noActionNeeded
-			self?.handleState()
 
-		} onError: { [weak self] error in
+			// Response is of type (Result<Data, NetworkError>)
+			switch resultWrapper {
+				case .success(let data):
 
-			self?.isUpdatingIssuerPublicKeys = false
-			self?.issuerPublicKeysStatus = .internetRequired
-			self?.handleState()
-		}
-	}
+					// Update the last fetch time
+					self?.userSettings?.issuerKeysFetchedTimestamp = Date().timeIntervalSince1970
+					// Store JSON file
+					self?.cryptoLibUtility?.store(data, for: .publicKeys)
 
-	/// Handle the state of the updates
-	private func handleState() {
+					completion(.noActionNeeded)
 
-		guard let configStatus = configStatus,
-			  let issuerPublicKeysStatus = issuerPublicKeysStatus else {
-			return
-		}
-		
-		if case .actionRequired = configStatus {
-			// show action
-			coordinator?.handleLaunchState(configStatus)
-		} else if configStatus == .internetRequired || issuerPublicKeysStatus == .internetRequired {
-			// Show no internet
-			coordinator?.handleLaunchState(.internetRequired)
-		} else if !cryptoLibUtility.isInitialized {
-			// Show crypto lib not initialized error
-			coordinator?.handleLaunchState(.cryptoLibNotInitialized)
-		} else {
-			// Start application
-			coordinator?.handleLaunchState(.noActionNeeded)
+				case let .failure(error):
+
+					self?.logError("Error getting the issuers public keys: \(error)")
+					completion(.internetRequired)
+			}
 		}
 	}
 }

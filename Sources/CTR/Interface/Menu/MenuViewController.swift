@@ -92,6 +92,7 @@ class MenuViewController: BaseViewController {
 				action: action
 			)
             button.title = accessibilityLabel
+            button.accessibilityLabel = accessibilityLabel
 			button.accessibilityIdentifier = "CloseButton"
 			button.accessibilityTraits = .button
 			button.tintColor = Theme.colors.secondary

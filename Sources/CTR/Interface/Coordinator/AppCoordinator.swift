@@ -26,14 +26,16 @@ class AppCoordinator: Coordinator, Logging {
 	var childCoordinators: [Coordinator] = []
 
 	var navigationController: UINavigationController
-
-	private var remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-
-	private var proofManager: ProofManaging = Services.proofManager
 	
 	private var privacySnapshotWindow: UIWindow?
 
 	private var shouldUsePrivacySnapShot = true
+
+	var versionSupplier: AppVersionSupplierProtocol = AppVersionSupplier()
+
+	var userSettings: UserSettingsProtocol = UserSettings()
+
+	var flavor = AppFlavor.flavor
 
 	/// For use with iOS 13 and higher
 	@available(iOS 13.0, *)
@@ -73,10 +75,9 @@ class AppCoordinator: Coordinator, Logging {
         let destination = LaunchViewController(
             viewModel: LaunchViewModel(
                 coordinator: self,
-                versionSupplier: AppVersionSupplier(),
-                flavor: AppFlavor.flavor,
-                remoteConfigManager: remoteConfigManager,
-                proofManager: proofManager
+                versionSupplier: versionSupplier,
+                flavor: flavor,
+				walletManager: flavor == .holder ? Services.walletManager : nil
             )
         )
         // Set the root
@@ -89,7 +90,7 @@ class AppCoordinator: Coordinator, Logging {
     /// Start the real application
     private func startApplication() {
 
-        switch AppFlavor.flavor {
+        switch flavor {
             case .holder:
                 startAsHolder()
             default:
@@ -100,6 +101,10 @@ class AppCoordinator: Coordinator, Logging {
     /// Start the app as a holder
     private func startAsHolder() {
 
+		guard childCoordinators.isEmpty else {
+			return
+		}
+
         let coordinator = HolderCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
 
@@ -108,22 +113,16 @@ class AppCoordinator: Coordinator, Logging {
         }
     }
 
-    /// Start the app as a verifiier
+    /// Start the app as a verifier
     private func startAsVerifier() {
+
+		guard childCoordinators.isEmpty else {
+			return
+		}
 
         let coordinator = VerifierCoordinator(navigationController: navigationController, window: window)
         startChildCoordinator(coordinator)
     }
-
-	/// Show the Action Required View
-	/// - Parameter versionInformation: the version information
-	private func showActionRequired(with versionInformation: RemoteInformation) {
-		var viewModel = AppUpdateViewModel(coordinator: self, versionInformation: versionInformation)
-		if versionInformation.isDeactivated {
-			viewModel = EndOfLifeViewModel(coordinator: self, versionInformation: versionInformation)
-		}
-		navigateToAppUpdate(with: viewModel)
-	}
 	
 	/// Show the Internet Required View
 	private func showInternetRequired() {
@@ -148,6 +147,37 @@ class AppCoordinator: Coordinator, Logging {
 				style: .cancel,
 				handler: { [weak self] _ in
 					self?.retry()
+				}
+			)
+		)
+		window.rootViewController?.present(alertController, animated: true)
+	}
+
+	/// Show an alert for the recommended update
+	private func showRecommendedUpdate(updateURL: URL) {
+
+		let alertController = UIAlertController(
+			title: L.recommendedUpdateAppTitle(),
+			message: L.recommendedUpdateAppSubtitle(),
+			preferredStyle: .alert
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.recommendedUpdateAppActionCancel(),
+				style: .cancel,
+				handler: { [weak self] _ in
+					self?.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+				}
+			)
+		)
+		alertController.addAction(
+			UIAlertAction(
+				title: L.recommendedUpdateAppActionOk(),
+				style: .default,
+				handler: { [weak self] _ in
+					self?.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+					self?.openUrl(updateURL)
+					
 				}
 			)
 		)
@@ -180,14 +210,15 @@ class AppCoordinator: Coordinator, Logging {
 
     func consume(universalLink: UniversalLink) -> Bool {
 
-        switch universalLink {
-            case .redeemHolderToken:
-                /// If we reach here it means that there was no holderCoordinator initialized at the time
-                /// the universal link was received. So hold onto it here, for when it is ready.
-                unhandledUniversalLink = universalLink
-                return true
-        }
-    }
+		switch universalLink {
+			case .redeemHolderToken,
+				 .thirdPartyTicketApp:
+				/// If we reach here it means that there was no holderCoordinator initialized at the time
+				/// the universal link was received. So hold onto it here, for when it is ready.
+				unhandledUniversalLink = universalLink
+				return true
+		}
+	}
 }
 
 // MARK: - AppCoordinatorDelegate
@@ -203,20 +234,60 @@ extension AppCoordinator: AppCoordinatorDelegate {
     /// - Parameter state: the launch state
     func handleLaunchState(_ state: LaunchState) {
 
-        switch state {
-            case .noActionNeeded:
-                startApplication()
-
-            case .internetRequired:
-                showInternetRequired()
-
-            case let .actionRequired(versionInformation):
-                showActionRequired(with: versionInformation)
+		switch state {
+			case .noActionNeeded, .withinTTL:
+				startApplication()
 				
-            case .cryptoLibNotInitialized:
+			case .internetRequired:
+				showInternetRequired()
+
+			case let .actionRequired(remoteConfiguration):
+
+				let requiredVersion = remoteConfiguration.minimumVersion.fullVersionString()
+				let recommendedVersion = remoteConfiguration.recommendedVersion?.fullVersionString() ?? "1.0.0"
+				let currentVersion = versionSupplier.getCurrentVersion().fullVersionString()
+
+				if remoteConfiguration.isDeactivated {
+					// Deactivated
+					navigateToAppUpdate(
+						with: EndOfLifeViewModel(
+							coordinator: self,
+							versionInformation: remoteConfiguration
+						)
+					)
+				} else if requiredVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+					// Required Update
+					navigateToAppUpdate(
+						with: AppUpdateViewModel(
+							coordinator: self,
+							versionInformation: remoteConfiguration
+						)
+					)
+				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+					// Recommended update
+
+					guard let updateURL = remoteConfiguration.appStoreURL else {
+						startApplication()
+						return
+					}
+
+					let now = Date().timeIntervalSince1970
+					let interval: Int = remoteConfiguration.recommendedNagIntervalHours ?? 24
+					let lastSeen: TimeInterval = userSettings.lastRecommendUpdateDismissalTimestamp ?? now
+
+					if lastSeen == now || lastSeen + (Double(interval) * 3600) < now {
+						showRecommendedUpdate(updateURL: updateURL)
+					} else {
+						startApplication()
+					}
+				} else {
+					startApplication()
+				}
+			case .cryptoLibNotInitialized:
+				// Crypto library not loaded
 				showCryptoLibNotInitializedError()
-        }
-    }
+		}
+	}
 
     /// Retry loading the requirements
     func retry() {
@@ -265,8 +336,8 @@ extension AppCoordinator {
 
 		let shapshotViewController = SnapshotViewController(
 			viewModel: SnapshotViewModel(
-				versionSupplier: AppVersionSupplier(),
-				flavor: AppFlavor.flavor
+				versionSupplier: versionSupplier,
+				flavor: flavor
 			)
 		)
 		privacySnapshotWindow?.rootViewController = shapshotViewController

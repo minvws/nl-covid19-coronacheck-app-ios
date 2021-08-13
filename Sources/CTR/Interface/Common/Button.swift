@@ -28,7 +28,7 @@ class Button: UIButton {
         }
     }
 
-    var title = "" {
+	var title: String? = "" {
         didSet {
             self.setTitle(title, for: .normal)
         }
@@ -117,7 +117,7 @@ class Button: UIButton {
 				backgroundColor = .clear
 				setTitleColor(Theme.colors.iosBlue, for: .normal)
 				setTitleColor(Theme.colors.grey2, for: .disabled)
-				self.titleLabel?.font = Theme.fonts.bodyMedium
+				self.titleLabel?.font = Theme.fonts.bodySemiBold
 				
 		}
 		tintColor = Theme.colors.viewControllerBackground

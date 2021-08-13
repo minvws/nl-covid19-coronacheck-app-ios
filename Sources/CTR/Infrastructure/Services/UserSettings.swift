@@ -7,13 +7,21 @@
 
 import Foundation
 
-protocol UserSettingsProtocol {
+protocol UserSettingsProtocol: AnyObject {
 
 	var scanInstructionShown: Bool { get set }
 
 	var jailbreakWarningShown: Bool { get set }
 
 	var dashboardRegionToggleValue: QRCodeValidityRegion { get set }
+
+	var configFetchedTimestamp: TimeInterval? { get set }
+
+	var lastScreenshotTime: Date? { get set }
+
+	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
+
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -24,6 +32,18 @@ class UserSettings: UserSettingsProtocol {
 	@UserDefaults(key: "jailbreakWarningShown", defaultValue: false)
 	var jailbreakWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 
-	@Bindable @UserDefaults(key: "dashboardRegionToggleValue")
+	@UserDefaults(key: "dashboardRegionToggleValue")
 	var dashboardRegionToggleValue: QRCodeValidityRegion = .domestic // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "configFetchedTimestamp", defaultValue: nil)
+	var configFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "issuerKeysFetchedTimestamp", defaultValue: nil)
+	var issuerKeysFetchedTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "lastScreenshotTime", defaultValue: nil)
+	var lastScreenshotTime: Date? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
+	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
 }

@@ -223,7 +223,7 @@ final class OnboardingConsentView: BaseView {
 		label.accessibilityHint = accessibiliyHint
 		let stack = HStack(
 			spacing: 16,
-			ImageView(imageName: "PrivacyItem").asIcon(),
+			ImageView(imageName: I.onboarding.privacyItem.name).asIcon(),
 			label
 		)
 		.alignment(.center)

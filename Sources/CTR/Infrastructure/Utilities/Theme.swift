@@ -198,6 +198,8 @@ final class Colors {
 	var primary: UIColor { return color(for: "PrimaryColor") }
 
 	var secondary: UIColor { return color(for: "SecondaryColor") }
+	
+	var secondaryText: UIColor { return color(for: "SecondaryText") }
 
 	var iosBlue: UIColor { return color(for: "IosBlue") }
 

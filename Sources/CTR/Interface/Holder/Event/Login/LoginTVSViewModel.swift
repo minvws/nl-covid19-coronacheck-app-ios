@@ -47,23 +47,10 @@ class LoginTVSViewModel: Logging {
 	}
 
 	/// Login at the GGD
-	/// - Parameter presentingViewController: the presenting view controller
-	func login(_ presentingViewController: UIViewController?) {
+	func login() {
 
 		shouldShowProgress = true
-
-		guard let viewController = presentingViewController else {
-			logError("Can't present login for GGD")
-			shouldShowProgress = false
-			alert = LoginTVSViewController.AlertContent(
-				title: L.generalErrorTitle(),
-				subTitle: L.generalErrorTechnicalText(),
-				okTitle: L.generalOk()
-			)
-			return
-		}
-
-		openIdManager?.requestAccessToken(presenter: viewController) { accessToken in
+		openIdManager?.requestAccessToken() { accessToken in
 
 			self.shouldShowProgress = false
 

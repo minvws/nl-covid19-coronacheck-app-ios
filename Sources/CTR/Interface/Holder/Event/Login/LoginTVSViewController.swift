@@ -61,7 +61,7 @@ class LoginTVSViewController: BaseViewController {
 		}
 
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
-		viewModel.login(self)
+		viewModel.login()
 	}
 
 	func showAlert(_ alertContent: AlertContent?) {
