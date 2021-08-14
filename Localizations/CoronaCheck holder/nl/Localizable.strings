@@ -369,6 +369,7 @@
 "holder.showqr.screenshotwarning.title" = "Een schermafbeelding is geen geldig bewijs";
 "holder.showqr.screenshotwarning.subtitle" = "Gebruik de QR-code in de app";
 "holder.showqr.screenshotwarning.message" = "Je QR-code komt terug in %@";
+"holder.showqr.screenshotwarning.countdownAccessibilityLabel" = "Overgebleven tijd:";
 
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";

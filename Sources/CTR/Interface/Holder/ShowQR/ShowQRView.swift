@@ -185,8 +185,7 @@ class ShowQRImageView: BaseView {
 					spinner.stopAnimating()
 					returnToThirdPartyAppButton.isHidden = true
 					largeQRimageView.isHidden = true
-					screenshotBlockingView.countdown = timeRemainingText
-					screenshotBlockingView.countdownVoiceover = voiceoverTimeRemainingText
+					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
 					spinner.isHidden = true
 

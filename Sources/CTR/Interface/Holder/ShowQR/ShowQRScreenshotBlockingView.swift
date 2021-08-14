@@ -58,7 +58,8 @@ class ShowQRScreenshotBlockingView: BaseView {
 		label.text = L.holderShowqrScreenshotwarningMessage("-")
 		label.setContentHuggingPriority(.required, for: .vertical)
 		label.setContentCompressionResistancePriority(UILayoutPriority.required, for: .vertical)
-
+		label.accessibilityTraits = .updatesFrequently
+		label.accessibilityLabel = L.holderShowqrScreenshotwarningCountdownAccessibilityLabel()
 		return label
 	}()
 
@@ -145,15 +146,8 @@ class ShowQRScreenshotBlockingView: BaseView {
 		}
 	}
 
-	var countdown: String? {
-		didSet {
-			countdownLabel.text = countdown
-		}
-	}
-
-	var countdownVoiceover: String? {
-		didSet {
-			countdownLabel.accessibilityValue = countdownVoiceover
-		}
+	func setCountdown(text: String?, voiceoverText: String?) {
+		countdownLabel.accessibilityValue = voiceoverText
+		countdownLabel.text = text
 	}
 }
