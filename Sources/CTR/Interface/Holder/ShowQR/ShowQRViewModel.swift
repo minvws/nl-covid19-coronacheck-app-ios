@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-  
+
 import UIKit
 
 class ShowQRViewModel: Logging {
@@ -190,7 +190,7 @@ class ShowQRViewModel: Logging {
 	}
 
 	private func screenshotWasTaken(blockQRUntil: Date) {
-		// Cleanup the busted old timer
+		// Cleanup the old timer
 		screenshotWarningTimer?.invalidate()
 		screenshotWarningTimer = nil
 
@@ -250,9 +250,7 @@ class ShowQRViewModel: Logging {
 
 	func showMoreInformation() {
 
-		guard let credential = greenCard.getActiveCredential(), let data = credential.data else {
-			return
-		}
+		guard let credential = greenCard.getActiveCredential(), let data = credential.data else { return }
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {

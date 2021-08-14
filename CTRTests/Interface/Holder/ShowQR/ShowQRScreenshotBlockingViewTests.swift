@@ -20,7 +20,7 @@ class ShowQRScreenshotBlockingViewTests: XCTestCase {
 		let sut = ShowQRScreenshotBlockingView()
 		sut.title = "ShowQRScreenshotBlockingView title"
 		sut.subtitle = "ShowQRScreenshotBlockingView subtitle"
-		sut.setCountdown(text: "ShowQRScreenshotBlockingView countdown", voiceoverText: "") 
+		sut.setCountdown(text: "ShowQRScreenshotBlockingView countdown", voiceoverText: "")
 
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
 		sut.assertImage()
