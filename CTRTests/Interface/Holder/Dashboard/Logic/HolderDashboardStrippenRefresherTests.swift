@@ -191,4 +191,52 @@ class HolderDashboardStrippenRefresherTests: XCTestCase {
 		expect(self.sut.state.hasLoadingEverFailed) == true
 		expect(self.sut.state.errorOccurenceCount) == 0
 	}
+
+	// MARK: Zero Credentials
+	// Test the jansen introduction where the greencard had zero credentials due to a 28 day waiting period.
+
+	func test_greencard_withZeroInitialCredentials_shouldNotBeReloadedWhenOutsideTheThreshold() {
+
+		// Arrange with zero initial credentials
+		walletManagerSpy.loadDomesticEmptyCredentialsWithDistantFutureValidity(dataStoreManager: dataStoreManager)
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			walletManager: walletManagerSpy,
+			greencardLoader: greencardLoader,
+			reachability: reachabilitySpy,
+			now: { now }
+		)
+
+		// Act & Assert
+		sut.load()
+
+		expect(self.sut.state.greencardsCredentialExpiryState) == .noActionNeeded
+		expect(self.sut.state.loadingState) == .idle
+		expect(self.sut.state.hasLoadingEverFailed) == false
+		expect(self.sut.state.errorOccurenceCount) == 0
+	}
+
+	// Test the jansen introduction where the greencard had zero credentials due to a 28 day waiting period.
+	func test_greencard_withZeroInitialCredentials_shouldBeReloadedWhenInsideTheThreshold() {
+
+		// Arrange with zero initial credentials
+		walletManagerSpy.loadDomesticEmptyCredentialsWithImminentFutureValidity(dataStoreManager: dataStoreManager)
+
+		sut = DashboardStrippenRefresher(
+			minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: 5,
+			walletManager: walletManagerSpy,
+			greencardLoader: greencardLoader,
+			reachability: reachabilitySpy,
+			now: { now }
+		)
+
+		// Act & Assert
+		sut.load()
+
+		expect(self.sut.state.greencardsCredentialExpiryState) == .expired
+		expect(self.sut.state.loadingState) == .loading(silently: false)
+		expect(self.sut.state.hasLoadingEverFailed) == false
+		expect(self.sut.state.errorOccurenceCount) == 0
+	}
 }
