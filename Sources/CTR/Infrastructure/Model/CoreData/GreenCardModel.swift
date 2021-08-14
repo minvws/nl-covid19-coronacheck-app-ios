@@ -69,7 +69,7 @@ extension GreenCard {
 
 		return castOrigins()?
 			.filter { origin in
-				(origin.validFromDate ?? .distantFuture)  < thresholdEndDate
+				(origin.validFromDate ?? .distantFuture) < thresholdEndDate
 			}
 			.filter { origin in
 				(origin.expirationTime ?? .distantPast) > now
