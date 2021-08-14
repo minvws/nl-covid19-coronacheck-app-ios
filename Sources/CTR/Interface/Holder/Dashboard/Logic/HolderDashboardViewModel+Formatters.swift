@@ -11,61 +11,68 @@ import Foundation
 
 extension HolderDashboardViewModel {
 
+	/// e.g. `10 August 2021`
 	static let dateWithoutTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM yyyy"
 		return formatter
 	}()
 
+	/// e.g. `10 August 15:17`
 	static let dateWithTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM HH:mm"
 		return formatter
 	}()
 
+	/// e.g. `Tuesday 10 August 15:18`
 	static let dateWithDayAndTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "EEEE d MMMM HH:mm"
 		return formatter
 	}()
 
+	/// e.g. `10 August`
 	static let dayAndMonthFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM"
 		return formatter
 	}()
 
+	/// e.g. `10 August 15:18`
 	static let dayAndMonthWithTimeFormatter: DateFormatter = {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "d MMMM HH:mm"
 		return formatter
 	}()
 
-	// e.g. "4 hours, 55 minutes"
-	// 		"59 minutes"
-	// 		"20 seconds"
+	/// e.g. `"4 hours, 55 minutes"`
+	/// 	 `"59 minutes"`
+	/// 	 `"20 seconds"`
 	static let hmsRelativeFormatter: DateComponentsFormatter = {
-		let hoursFormatter = DateComponentsFormatter()
-		hoursFormatter.unitsStyle = .full
-		hoursFormatter.maximumUnitCount = 2
-		hoursFormatter.allowedUnits = [.hour, .minute, .second]
-		return hoursFormatter
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.maximumUnitCount = 2
+		formatter.allowedUnits = [.hour, .minute, .second]
+		return formatter
 	}()
 
-	// e.g. "4 hours, 55 minutes"
-	// 		"59 minutes"
+	/// e.g. `"4 hours, 55 minutes"`
+	/// 	 `"59 minutes"`
 	static let hmRelativeFormatter: DateComponentsFormatter = {
-		let hoursFormatter = DateComponentsFormatter()
-		hoursFormatter.unitsStyle = .full
-		hoursFormatter.maximumUnitCount = 2
-		hoursFormatter.allowedUnits = [.hour, .minute]
-		return hoursFormatter
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.maximumUnitCount = 2
+		formatter.allowedUnits = [.hour, .minute]
+		return formatter
 	}()
 
+	/// e.g. `"3 days"`
+	/// 	 `"0 days"`
 	static let daysRelativeFormatter: DateComponentsFormatter = {
-		let hoursFormatter = DateComponentsFormatter()
-		hoursFormatter.unitsStyle = .full
-		hoursFormatter.allowedUnits = [.day]
-		return hoursFormatter
+		let formatter = DateComponentsFormatter()
+		formatter.unitsStyle = .full
+		formatter.allowedUnits = [.day]
+		return formatter
 	}()
 }
