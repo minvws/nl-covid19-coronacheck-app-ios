@@ -16,11 +16,20 @@ class VerifierCheckIdentityView: BaseView {
 			static let edge: CGFloat = 20.0
 			static let identityTop: CGFloat = UIDevice.current.isSmallScreen ? 16.0 : 48.0
 			static let identitySide: CGFloat = UIDevice.current.isSmallScreen ? 20.0 : 48.0
-			static let headerTop: CGFloat = 11.0 + UIApplication.shared.statusBarFrame.height
+			static let headerTop: CGFloat = 32.0
 			static let headerBottom: CGFloat = 24.0
 			static let headerSide: CGFloat = 80.0
 		}
 	}
+	
+	/// The scrollview
+	private let scrollView: UIScrollView = {
+
+		let view = UIScrollView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.backgroundColor = Theme.colors.viewControllerBackground
+		return view
+	}()
 	
 	private let contentView: UIView = {
 		
@@ -35,6 +44,7 @@ class VerifierCheckIdentityView: BaseView {
 
 		let label = Label(bodySemiBold: nil).multiline()
 		label.textColor = Theme.colors.dark
+		label.textAlignment = .center
 		return label
 	}()
 
@@ -50,7 +60,8 @@ class VerifierCheckIdentityView: BaseView {
 		super.setupViewHierarchy()
 
 		addSubview(headerLabel)
-		addSubview(contentView)
+		addSubview(scrollView)
+		scrollView.addSubview(contentView)
 		contentView.addSubview(identity)
 	}
 
@@ -62,8 +73,8 @@ class VerifierCheckIdentityView: BaseView {
 			
 			// Title
 			headerLabel.topAnchor.constraint(
-				equalTo: topAnchor,
-				constant: ViewTraits.Margin.headerTop
+				equalTo: safeAreaLayoutGuide.topAnchor,
+				constant: -ViewTraits.Margin.headerTop
 			),
 			headerLabel.leadingAnchor.constraint(
 				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
@@ -75,10 +86,16 @@ class VerifierCheckIdentityView: BaseView {
 			),
 			headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			
-			contentView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ViewTraits.Margin.headerBottom),
-			contentView.leftAnchor.constraint(equalTo: leftAnchor),
-			contentView.rightAnchor.constraint(equalTo: rightAnchor),
-			contentView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			scrollView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ViewTraits.Margin.headerBottom),
+			scrollView.leftAnchor.constraint(equalTo: leftAnchor),
+			scrollView.rightAnchor.constraint(equalTo: rightAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			
+			contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+			contentView.leftAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.leftAnchor),
+			contentView.rightAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.rightAnchor),
+			contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+			contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
 			// Identity
 			identity.topAnchor.constraint(
@@ -94,7 +111,7 @@ class VerifierCheckIdentityView: BaseView {
 				constant: -ViewTraits.Margin.identitySide
 			),
 			identity.bottomAnchor.constraint(
-				lessThanOrEqualTo: contentView.bottomAnchor,
+				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			)
 		])
