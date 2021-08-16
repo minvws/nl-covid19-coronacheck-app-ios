@@ -353,7 +353,7 @@
 "holder.dashboard.empty.domestic.title" = "Find your Dutch certificate here later";
 "holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";
-"holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p><br /><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Which certificate is valid where I’m heading?</a></p>";
+"holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Which certificate is valid where I’m heading?</a></p>";
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
