@@ -204,7 +204,7 @@ class HolderDashboardViewController: BaseViewController {
 						
 						let errorView = ErrorDashboardView()
 						errorView.message = message
-						errorView.messageView.linkTouched { url in
+						errorView.messageTextView.linkTouched { url in
 							if url.absoluteString == AppAction.tryAgain {
 								didTapTryAgain()
 							} else {
