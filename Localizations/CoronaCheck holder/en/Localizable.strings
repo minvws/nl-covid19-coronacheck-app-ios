@@ -1,3 +1,7 @@
+"recommended.updateApp.title" = "Want to update the app?";
+"recommended.updateApp.subtitle" = "There's a new version of the app available.";
+"recommended.updateApp.action.ok" = "Install update";
+"recommended.updateApp.action.cancel" = "No, will do it later";
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "A Dutch and an international tab";
 

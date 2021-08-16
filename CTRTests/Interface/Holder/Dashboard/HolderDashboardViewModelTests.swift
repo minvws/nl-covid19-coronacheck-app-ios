@@ -759,7 +759,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
 
-			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 72 uur"
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
 		}))
 	}
 
@@ -851,7 +851,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == true
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQRParameters?.greenCardObjectID) === self.sampleGreencardObjectID
 
-			expect(expiryCountdownEvaluator?(now)) == "Verloopt over 23 uur"
+			expect(expiryCountdownEvaluator?(now)).to(beNil())
 			expect(expiryCountdownEvaluator?(now.addingTimeInterval(22.5 * hours))) == "Verloopt over 30 minuten"
 		}))
 	}

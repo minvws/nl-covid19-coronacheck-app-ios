@@ -1,3 +1,7 @@
+"recommended.updateApp.title" = "Wil je de app updaten?";
+"recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
+"recommended.updateApp.action.ok" = "Installeer update";
+"recommended.updateApp.action.cancel" = "Nee, doe ik later";
 /* MARK: - Update Page Forced Information */
 "holder.updatepage.title.tab" = "Een Nederlands en internationaal tabblad";
 
@@ -350,6 +354,7 @@
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "Een schermafbeelding is geen geldig toegangsbewijs";
 "holder.enlarged.screenshot.message" = "Een schermafbeelding zorgt voor problemen bij het scannen. Alleen de QR-code in de app is een geldig toegangsbewijs.";
+
 "holder.showqr.domestic.title" = "Nederlandse QR-code";
 "holder.showqr.domestic.about.title" = "Over mijn Nederlandse QR-code";
 "holder.showqr.domestic.about.message" = "<p>In jouw Nederlandse QR-code staan minimale gegevens. In de QR-code staat niet of je een testbewijs of vaccinatie hebt. Maar wel of de QR-code geldig is.</p><p>Ook staan er enkele gegevens van jou in de QR-code. Dit is ter controle, om zeker te zijn dat de QR-code bij jou hoort. De gegevens bestaan uit de eerste letter van je voornaam, de eerste letter van je achternaam, je geboortedag en geboortemaand. Om privacyredenen kunnen er gegevens wegvallen.</p><p>Jouw gegevens: <b>%@</b></p><p>Gebruik in Nederland altijd de Nederlandse QR-code. De internationale QR-code is niet geldig in Nederland.</p>";

@@ -46,13 +46,13 @@ class HolderDashboardViewController: BaseViewController {
 		let kind: Kind
 	}
 
-	private let viewModel: HolderDashboardViewModel
+	let viewModel: HolderDashboardViewModel
 
 	let sceneView = HolderDashboardView()
 
 	var screenCaptureInProgress = false
 	
-	private var isStartedOnRegionTab = false
+	private var didSetInitialStartingTabOnSceneView = false
 
 	// MARK: Initializers
 
@@ -126,6 +126,12 @@ class HolderDashboardViewController: BaseViewController {
 			DispatchQueue.main.async {
 				self?.showAlert(alertContent)
 			}
+		}
+
+		viewModel.$dashboardRegionToggleValue.binding = { [weak self, sceneView] region in
+			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
+			let selectedTab: DashboardTab = region == .domestic ? .domestic : .international
+			sceneView.selectTab(tab: selectedTab)
 		}
 	}
 	
@@ -242,13 +248,13 @@ class HolderDashboardViewController: BaseViewController {
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
-		
-		guard !isStartedOnRegionTab else { return }
-		isStartedOnRegionTab = true
-		
+
+		guard !didSetInitialStartingTabOnSceneView else { return }
+		didSetInitialStartingTabOnSceneView = true
+
 		// Select start tab after layouting is done to be able to update scroll position
 		let selectedTab: DashboardTab = viewModel.dashboardRegionToggleValue == .domestic ? .domestic : .international
-		sceneView.startOn(tab: selectedTab)
+		sceneView.selectTab(tab: selectedTab)
 	}
 
 	// MARK: Helper methods
