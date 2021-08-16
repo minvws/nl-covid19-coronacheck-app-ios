@@ -13,6 +13,10 @@ import UIKit
 /// Can listen to selected links and updated text.
 class TextView: UIStackView {
     
+    var paragraphMarginMultiplier: CGFloat = 1.0
+    var headerMarginMultiplier: CGFloat = 0.25
+    var listItemMarginMultiplier: CGFloat = 0.25
+    
     /// Helper variable to display the given text by using a TextElement
     var text: String? {
         didSet {
@@ -30,24 +34,31 @@ class TextView: UIStackView {
             
             guard let attributedText = attributedText else { return }
             
+            // Split attributed text on new line
             let parts = attributedText.split("\n")
             
             for part in parts {
-                let element = TextElement(attributedText: part)
-                addArrangedSubview(element)
-                
-                if part != parts.last {
-                    var lineHeight = part.lineHeight
+                // 1. Determine spacing of previous element
+                if let previousElement = arrangedSubviews.last {
+                    var spacing = part.lineHeight
                     
                     if part.isHeader {
-                        element.accessibilityTraits = .header
-                        lineHeight /= 4
+                        spacing *= headerMarginMultiplier
                     } else if part.isListItem {
-                        lineHeight /= 4
+                        spacing *= listItemMarginMultiplier
+                    } else {
+                        spacing *= paragraphMarginMultiplier
                     }
                     
-                    setCustomSpacing(lineHeight, after: element)
+                    setCustomSpacing(spacing, after: previousElement)
                 }
+                
+                // 2. Add current TextElement
+                let element = TextElement(attributedText: part)
+                if part.isHeader {
+                    element.accessibilityTraits = .header
+                }
+                addArrangedSubview(element)
             }
         }
     }
