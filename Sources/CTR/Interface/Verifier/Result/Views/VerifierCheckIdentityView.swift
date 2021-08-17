@@ -49,10 +49,18 @@ class VerifierCheckIdentityView: BaseView {
 	}()
 
 	private let identity: VerifierIdentityView = {
+		
 		let view = VerifierIdentityView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.backgroundColor = Theme.colors.viewControllerBackground
 		return view
+	}()
+	
+	private let footerButtonView: VerifierFooterButtonView = {
+		
+		let footerView = VerifierFooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		return footerView
 	}()
 
 	/// Setup the hierarchy
@@ -61,6 +69,7 @@ class VerifierCheckIdentityView: BaseView {
 
 		addSubview(headerLabel)
 		addSubview(scrollView)
+		addSubview(footerButtonView)
 		scrollView.addSubview(contentView)
 		contentView.addSubview(identity)
 	}
@@ -87,13 +96,13 @@ class VerifierCheckIdentityView: BaseView {
 			headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			
 			scrollView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ViewTraits.Margin.headerBottom),
-			scrollView.leftAnchor.constraint(equalTo: leftAnchor),
-			scrollView.rightAnchor.constraint(equalTo: rightAnchor),
-			scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 			
 			contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			contentView.leftAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.leftAnchor),
-			contentView.rightAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.rightAnchor),
+			contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+			contentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
 			contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
 			contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
@@ -113,7 +122,11 @@ class VerifierCheckIdentityView: BaseView {
 			identity.bottomAnchor.constraint(
 				equalTo: contentView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
-			)
+			),
+			
+			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 
