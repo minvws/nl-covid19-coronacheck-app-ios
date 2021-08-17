@@ -37,7 +37,7 @@ final class ErrorDashboardView: BaseView {
 		return imageView
 	}()
 	
-	let messageView: TextView = {
+	let messageTextView: TextView = {
 		let view = TextView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.linkTextAttributes = [.foregroundColor: ViewTraits.Color.tint]
@@ -48,7 +48,7 @@ final class ErrorDashboardView: BaseView {
 		super.setupViewHierarchy()
 		
 		addSubview(iconImageView)
-		addSubview(messageView)
+		addSubview(messageTextView)
 	}
 	
 	override func setupViewConstraints() {
@@ -63,16 +63,16 @@ final class ErrorDashboardView: BaseView {
 			iconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
 			iconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.icon),
 			
-			messageView.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Spacing.iconToMessage),
-			messageView.topAnchor.constraint(equalTo: topAnchor),
-			messageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-			messageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+			messageTextView.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: ViewTraits.Spacing.iconToMessage),
+			messageTextView.topAnchor.constraint(equalTo: topAnchor),
+			messageTextView.trailingAnchor.constraint(equalTo: trailingAnchor),
+			messageTextView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 	
 	var message: String? {
 		didSet {
-			messageView.attributedText = .makeFromHtml(
+			messageTextView.attributedText = .makeFromHtml(
 				text: message,
 				font: Theme.fonts.subhead,
 				textColor: ViewTraits.Color.tint,
