@@ -11,7 +11,7 @@ class VerifierStartViewController: BaseViewController {
 
 	private let viewModel: VerifierStartViewModel
 
-	let sceneView = HeaderTitleMessageButtonView()
+	let sceneView = VerifierStartView()
 
 	init(viewModel: VerifierStartViewModel) {
 

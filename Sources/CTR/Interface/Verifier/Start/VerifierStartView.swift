@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
+class VerifierStartView: ScrolledStackWithHeaderView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -44,6 +44,12 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 
 		let button = Button(title: "Button 1", style: .primary)
 		button.rounded = true
+		return button
+	}()
+
+	private let showInstructionsButton: Button = {
+
+		let button = Button(title: "Button 2", style: .tertiary)
 		return button
 	}()
 
@@ -215,6 +221,13 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 	var primaryTitle: String = "" {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+
+	/// The title of the showInstructions Button
+	var showInstructionsButtonTitle: String = "" {
+		didSet {
+			showInstructionsButton.setTitle(showInstructionsButtonTitle, for: .normal)
 		}
 	}
 
