@@ -13,9 +13,10 @@ final class DeniedView: ScrolledStackWithButtonView {
 		
 		enum Margin {
 			static let top: CGFloat = 4
+			static let secondaryButtonBottom: CGFloat = 20
 		}
 		enum Spacing {
-			static let imageToLabel: CGFloat = UIDevice.current.isSmallScreen ? 24 : 40
+			static let views: CGFloat = UIDevice.current.isSmallScreen ? 24 : 40
 		}
 		enum Size {
 			static let imageWidth: CGFloat = 200
@@ -50,13 +51,16 @@ final class DeniedView: ScrolledStackWithButtonView {
 	override func setupViews() {
 		super.setupViews()
 	
-		stackView.spacing = ViewTraits.Spacing.imageToLabel
+		stackView.spacing = ViewTraits.Spacing.views
+		stackView.distribution = .fill
 		stackViewInset.top = ViewTraits.Margin.top
 		
 		actionColor = Theme.colors.denied
 		footerActionColor = Theme.colors.denied
-		
+
 		primaryButton.style = .secondary
+		
+		hasFooterView = true
 	}
 	
 	override func setupViewHierarchy() {
@@ -64,6 +68,7 @@ final class DeniedView: ScrolledStackWithButtonView {
 		
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(titleLabel)
+		insertSubview(secondaryButton, belowSubview: footerGradientView)
 	}
 	
 	override func setupViewConstraints() {
@@ -84,7 +89,17 @@ final class DeniedView: ScrolledStackWithButtonView {
 			
 			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
 			
-			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
+			{
+				let constraint = imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
+				constraint.priority = .defaultLow
+				return constraint
+			}(),
+			
+			secondaryButton.topAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor, constant: ViewTraits.Spacing.views),
+			secondaryButton.leftAnchor.constraint(equalTo: contentScrollView.leftAnchor),
+			secondaryButton.rightAnchor.constraint(equalTo: contentScrollView.rightAnchor),
+			secondaryButton.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
+			secondaryButton.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom)
 		])
 	}
 	

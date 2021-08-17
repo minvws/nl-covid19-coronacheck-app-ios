@@ -20,6 +20,21 @@ class ScrolledStackView: BaseView {
 
 	/// Scroll view bottom constraint
 	var bottomScrollViewConstraint: NSLayoutConstraint?
+	
+	/// Enable when a footer view is added to set up the constraints
+	var hasFooterView: Bool = false {
+		didSet {
+			setupConstraintsState()
+		}
+	}
+	
+	/// Stack view bottom constraint
+	private var bottomStackViewConstraint: NSLayoutConstraint?
+	/// Height scroll view constraint
+	private var heightScrollViewConstraint: NSLayoutConstraint?
+	
+	/// Vertical stack view inset
+	private var verticalStackViewInset: CGFloat { stackViewInset.top + stackViewInset.bottom }
 
 	var stackViewInset = UIEdgeInsets(
 		top: ViewTraits.topMargin,
@@ -89,14 +104,34 @@ class ScrolledStackView: BaseView {
 			contentScrollView.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: stackViewInset.top),
 			contentScrollView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -stackViewInset.bottom),
 			contentScrollView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: -stackViewInset.left - stackViewInset.right),
+			{
+				let constraint = contentScrollView.heightAnchor.constraint(equalTo: scrollView.heightAnchor, constant: -verticalStackViewInset)
+				constraint.priority = .defaultLow
+				heightScrollViewConstraint = constraint
+				return constraint
+			}(),
 			
 			// StackView
 			stackView.leadingAnchor.constraint(equalTo: contentScrollView.leadingAnchor),
 			stackView.trailingAnchor.constraint(equalTo: contentScrollView.trailingAnchor),
 			stackView.topAnchor.constraint(equalTo: contentScrollView.topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor),
-			stackView.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
+			{
+				let constraint = stackView.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor)
+				bottomStackViewConstraint = constraint
+				return constraint
+			}(),
+
+			stackView.widthAnchor.constraint(
+				equalTo: contentScrollView.widthAnchor
+			),
 			stackView.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor)
 		])
+		
+		setupConstraintsState()
+	}
+	
+	private func setupConstraintsState() {
+		heightScrollViewConstraint?.isActive = hasFooterView
+		bottomStackViewConstraint?.isActive = !hasFooterView
 	}
 }
