@@ -30,10 +30,10 @@ class VaccinationEventView: BaseView {
 		return Label(bodyBold: nil).multiline()
 	}()
 
-	/// The message label
+	/// The message text
 	private let messageLabel: Label = {
 
-		return Label(subhead: nil).multiline()
+        return Label(subhead: nil).multiline()
 	}()
 
 	/// The link label

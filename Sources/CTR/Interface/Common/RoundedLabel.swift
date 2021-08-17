@@ -19,7 +19,7 @@ final class RoundedLabel: BaseView {
 	/// The message label
 	private let messageLabel: Label = {
 
-		return Label(body: nil).multiline()
+        return Label(body: nil).multiline()
 	}()
 	
 	override func setupViews() {

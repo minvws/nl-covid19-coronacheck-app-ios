@@ -55,9 +55,9 @@ final class ForcedInformationPageView: ScrolledStackView {
 		return Label(bodySemiBold: nil)
 	}()
 	
-	private let contentLabel: Label = {
+	private let contentTextView: TextView = {
 		
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 	
 	/// setup the views
@@ -88,7 +88,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 		bottomStackView.setCustomSpacing(ViewTraits.taglineSpacing, after: taglineLabel)
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.setCustomSpacing(ViewTraits.titleSpacing, after: titleLabel)
-		bottomStackView.addArrangedSubview(contentLabel)
+		bottomStackView.addArrangedSubview(contentTextView)
 
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
@@ -121,7 +121,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 	
 	var content: String? {
 		didSet {
-			contentLabel.attributedText = .makeFromHtml(
+			contentTextView.attributedText = .makeFromHtml(
 				text: content,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark
