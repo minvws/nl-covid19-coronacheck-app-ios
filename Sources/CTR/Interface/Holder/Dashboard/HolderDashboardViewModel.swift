@@ -399,12 +399,12 @@ extension HolderDashboardViewModel.MyQRCard {
 
 						// if all origins will be expired in next six hours:
 						let sixHours: TimeInterval = 6 * 60 * 60
-						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
+						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(sixHours)
 						else { return nil }
  
 						let fiveMinutes: TimeInterval = 5 * 60
 						let formatter: DateComponentsFormatter = {
-							if mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: fiveMinutes) {
+							if mostDistantFutureExpiryDate < now.addingTimeInterval(fiveMinutes) {
 								// e.g. "4 minuten en 15 seconden"
 								return HolderDashboardViewModel.hmsRelativeFormatter
 							} else {
