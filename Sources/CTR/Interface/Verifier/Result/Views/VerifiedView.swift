@@ -83,7 +83,11 @@ final class VerifiedView: BaseView {
 			stackView.topAnchor.constraint(greaterThanOrEqualTo: safeAreaLayoutGuide.topAnchor),
 			stackView.bottomAnchor.constraint(lessThanOrEqualTo: safeAreaLayoutGuide.bottomAnchor),
 			
-			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
+			{
+				let constraint = imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
+				constraint.priority = .defaultLow
+				return constraint
+			}()
 		])
 	}
 	
