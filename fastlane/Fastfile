@@ -247,11 +247,14 @@ platform :ios do
       }
     )
 
+    # It's useful to see the originating git branch in Firebase release notes:
+    gitbranch = ENV['GITBRANCH'].delete_prefix("refs/heads/")
+
     # Deploy to Firebase:
     firebase_app_distribution(
       app: firebase_app_id,
       groups: firebase_groups_csv,
-      release_notes: "Branch: '#{ENV['GITBRANCH']}'"
+      release_notes: "Branch: #{gitbranch}"
     )
     
     inform_slack(
