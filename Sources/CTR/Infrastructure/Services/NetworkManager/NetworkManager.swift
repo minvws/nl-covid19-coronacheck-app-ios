@@ -93,16 +93,8 @@ class NetworkManager: Logging {
 				completion: completion)
 		}
 	}
-	
-	private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
-		data(request: request, session: session, ignore400: ignore400) { result in
-			let decodedResult: Result<(URLResponse, Object), NetworkError> = self.jsonResponseHandler(result: result)
-			
-			DispatchQueue.main.async {
-				completion(decodedResult)
-			}
-		}
-	}
+
+	// MARK: - Decode Signed Data
 	
 	/// Decode a signed response into Data
 	/// - Parameters:
@@ -723,18 +715,6 @@ extension NetworkManager: NetworkManaging {
 		} catch {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
-		}
-	}
-}
-
-private extension Result where Success == (URLResponse, Data) {
-	
-	func data() -> Data? {
-		switch self {
-			case .success((_, let data)):
-				return data
-			default:
-				return nil
 		}
 	}
 }
