@@ -603,7 +603,7 @@ extension NetworkManager: NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -634,13 +634,7 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
 			delegateQueue: nil
 		)
-		decodedAndReturnSignedJSONData(
-			request: urlRequest,
-			session: session,
-			completion: { result in
-				completion(result.map { object, signedResponse, urlResponse in (object, signedResponse) })
-			}
-		)
+		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
 	}
 
 	/// Get  events from an event provider
