@@ -57,7 +57,7 @@ class AppUpdateViewModel {
 			showCannotOpenAlert = true
 			return
 		}
-		coordinator?.openUrl(url)
+		coordinator?.openUrl(url, completionHandler: nil)
 	}
 }
 

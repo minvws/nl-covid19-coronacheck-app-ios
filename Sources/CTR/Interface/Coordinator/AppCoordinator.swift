@@ -9,8 +9,7 @@ import UIKit
 
 protocol AppCoordinatorDelegate: AnyObject {
 
-	func openUrl(_ url: URL)
-	func openUrl(_ url: URL, completionHandler: @escaping (() -> Void))
+	func openUrl(_ url: URL, completionHandler: (() -> Void)?)
 
     func handleLaunchState(_ state: LaunchState)
 
@@ -227,14 +226,9 @@ class AppCoordinator: Coordinator, Logging {
 
 extension AppCoordinator: AppCoordinatorDelegate {
 
-	func openUrl(_ url: URL) {
+	func openUrl(_ url: URL, completionHandler: (() -> Void)? = nil) {
 
-		openUrl(url, completionHandler: {})
-	}
-
-	func openUrl(_ url: URL, completionHandler: @escaping () -> Void) {
-
-		UIApplication.shared.open(url, completionHandler: { _ in completionHandler() })
+		UIApplication.shared.open(url, completionHandler: { _ in completionHandler?() })
 	}
 
     /// Handle the launch state
