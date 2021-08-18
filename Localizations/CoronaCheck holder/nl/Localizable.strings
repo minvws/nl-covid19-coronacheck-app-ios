@@ -1,3 +1,7 @@
+"holder.event.error.title" = "Sorry, er gaat iets mis";
+"holder.event.error.message" = "We zijn hard bezig om dit probleem op te lossen (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
+"holder.event.malfunctions.title" = "Bekijk de actuele storingen";
+"holder.event.malfunctions.url" = "https://status.coronacheck.nl/";
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
 "recommended.updateApp.action.ok" = "Installeer update";
@@ -135,7 +139,7 @@
 "holder.menu.accessibility" = "Toegankelijkheid";
 
 "holder.tokenentry.modal.notoken.title" = "Ik heb geen code";
-"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p><p>Het kan zijn dat je je opnieuw moet laten testen.</p>";
+"holder.tokenentry.modal.notoken.details" = "<p>Je krijgt van de testlocatie een ophaalcode met cijfers en letters.</p><p>Heb je geen code gekregen? Of ben je ‘m kwijtgeraakt? Neem dan contact op met de testlocatie.</p>";
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Begin van lijst.";
 
@@ -205,7 +209,7 @@
 "holder.dcctokenentry.retry.title" = "Ik heb geen code gekregen";
 "holder.dcctokenentry.next" = "Volgende";
 "holder.dcctokenentryinfo.title" = "Geen lettercombinatie?";
-"holder.dcctokenentryinfo.body" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt <a href=\"http://coronatest.nl\">aangevraagd bij de zorgverlener</a> waar je bent gevaccineerd of getest.</p><b>Zelf jouw bewijs geprint?</b><p>Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
+"holder.dcctokenentryinfo.body" = "<p>Dan is het niet mogelijk om jouw bewijs op deze manier aan de app toe te voegen.</p><p>Je hebt alleen een lettercombinatie gekregen als je jouw papieren coronabewijs hebt <a href=\"https://coronacheck.nl/nl/coronabewijs-aanvragen-bij-zorgverlener.html\">aangevraagd bij de zorgverlener</a> waar je bent gevaccineerd of getest.</p><p><b>Zelf jouw bewijs geprint?</b><br />Voeg je bewijs dan toe in de app via het menu. Ga naar ‘Bewijs toevoegen’ en log in met DigiD.</p>";
 
 /* MARK: - General */
 "general.cancel" = "Annuleer";
@@ -367,8 +371,8 @@
 "holder.showqr.screenshotwarning.title" = "Een schermafbeelding is geen geldig bewijs";
 "holder.showqr.screenshotwarning.subtitle" = "Gebruik de QR-code in de app";
 "holder.showqr.screenshotwarning.message" = "Je QR-code komt terug in %@";
-"holder.showqr.screenshotwarning.countdownAccessibilityLabel" = "Overgebleven tijd:";
 
+"holder.showqr.screenshotwarning.countdownAccessibilityLabel" = "Overgebleven tijd:";
 /* MARK: - Holder Banner */
 "holder.banner.newqr.title" = "Jouw QR-code is gemaakt";
 

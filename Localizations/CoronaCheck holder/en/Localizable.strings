@@ -1,3 +1,7 @@
+"holder.event.error.title" = "Sorry, something went wrong";
+"holder.event.error.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
+"holder.event.malfunctions.title" = "Check the latest outages";
+"holder.event.malfunctions.url" = "https://status.coronacheck.nl/en/";
 "recommended.updateApp.title" = "Want to update the app?";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";
 "recommended.updateApp.action.ok" = "Install update";
@@ -72,6 +76,8 @@
 "holder.dcc.test.issuer" = "Certificate issuer:";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 
+"holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
+"general.retry" = "Try again";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a><br />or call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free)";
 "holder.dashboard.strippen.expired.errorfooter.nointernet" = "You need an internet connection to regain access to your QR code.";
@@ -82,7 +88,6 @@
 "holder.dashboard.strippen.expired.servererror.alert.title" = "Server error";
 "holder.dashboard.strippen.expired.servererror.alert.message" = "To use the QR code, the app must make a connection to the server. Unfortunately there is currently a server issue (error: %@). Retry now or try again later.";
 
-"holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
 "holder.recovery.tooOld.title" = "Positive test result is not valid";
 "holder.recovery.tooOld.message" = "Have you been tested more than 180 days ago? Then your test result is no longer valid. In this case, you cannot create a recovery certificate.";
 "holder.recovery.list.message" = "You can create a recovery certificate from the retrieved details.";
@@ -118,8 +123,6 @@
 "general.networkwasbusy.text" = "Please try again later.";
 "general.networkwasbusy.button" = "To my certificates";
 "general.add" = "Add";
-"general.retry" = "Try again";
-
 /* Link naar web accessibility pagina */
 "holder.url.accessibility" = "https://coronacheck.nl/en/accessibility-in-app";
 
@@ -206,7 +209,7 @@
 "holder.dcctokenentry.retry.title" = "I haven't received a code";
 "holder.dcctokenentry.next" = "Next";
 "holder.dcctokenentryinfo.title" = "No letter combination?";
-"holder.dcctokenentryinfo.body" = "<p>Then you won’t be able to add your certificate to the app this way.</p><p>You’ve only received a letter combination if you requested your paper coronavirus pass<a href=\"http://coronatest.nl\"> at the healthcare provider</a> you were vaccinated or tested.</p><b>Did you print your certificate yourself?</b><p>Please add your certificate to the app via the menu. Go to “add certificate” and login using your DigiD.</p>";
+"holder.dcctokenentryinfo.body" = "<p>Then you won’t be able to add your certificate to the app this way.</p><p>You’ve only received a letter combination if you <a href=\"https://coronacheck.nl/en/coronabewijs-aanvragen-bij-zorgverlener.html\"> requested your paper coronavirus pass at the healthcare provider</a> who vaccinated or tested you.</p><p><b>Did you print your certificate yourself?</b><br />Please add your certificate to the app via the menu. Go to “add certificate” and login using your DigiD.</p>";
 
 /* MARK: - General */
 "general.cancel" = "Cancel";
@@ -312,7 +315,7 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
 "holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
-"holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
+"holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><br /><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";
@@ -351,9 +354,11 @@
 "holder.dashboard.empty.domestic.message" = "<p>You can add a certificate if you're vaccinated, if you've had corona or by taking a test at an <a href=\"https://coronacheck.nl/en/testafspraak-in-app.html\">affiliated test location</a>. The app generates a certificate for the Netherlands and one for other countries.</p>";
 "holder.dashboard.empty.international.title" = "Find your international certificate here later";
 "holder.dashboard.empty.international.message" = "<p>Are you abroad, or planning to cross the border? Then always use your international certificate. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Which certificate is valid where I’m heading?</a></p>";
+
 /* MARK: - Holder Enlarged */
 "holder.enlarged.screenshot.title" = "A screenshot is not a valid entrance ticket.";
 "holder.enlarged.screenshot.message" = "A screenshot causes issues when scanning. You can only use the QR code in the app as a valid entrance ticket.";
+
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
 "holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
@@ -433,7 +438,7 @@
 "holder.vaccination.nolist.message" = "<p>There is no available vaccination data. This can have various causes. Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost</a>.</p><p>Got vaccinated recently? It can take a few hours until your details are available. </p>";
 "holder.vaccination.nolist.action" = "To my certificates";
 "holder.event.nolist.title" = "No test result available";
-"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl/en/guidepost\">the Guidepost</a>.</p><p>Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
+"holder.event.nolist.message" = "<p>There is no available data of your test result. This can have various causes. Find more information on <a href=\"https://www.coronacheck.nl/en/guidepost\">the Guidepost</a>. Already got a test result from the GGD? It can take a few hours until your details are available. Try again later.</p>";
 "holder.event.nolist.action" = "To my certificates";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to log in with DigiD later to retrieve your vaccination.";
@@ -443,7 +448,7 @@
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.list.wrong" = "Is something wrong?";
 "holder.vaccination.wrong.title" = "Something is wrong";
-"holder.vaccination.wrong.body" = "<p>Is your name or date of birth wrong? Or are your vaccination details incorrect? Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a> </p>";
+"holder.vaccination.wrong.body" = "<p>Is your name or date of birth incorrect? Or are your vaccination details incorrect? Find more information on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a> </p>";
 
 "holder.vaccination.start.nodigid" = "I don't have DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/en/apply-or-activate-digid";
@@ -499,7 +504,7 @@
 "holder.event.about.recovery.validuntil" = "Valid until:";
 "holder.event.about.recovery.identifier" = "Unique certificate number:";
 
-"holder.testresults.wrong.body" = "<p>Are these details different from the details on your proof of identity? Contact your test location. They can have your details edited.</p>";
+"holder.testresults.wrong.body" = "<p>Are your name and/or date of birth incorrect? Find more information on <a href=\"https://coronacheck.nl/guidepost\">the Guidepost</a>.</p>";
 
 "holder.event.element.subtitle.test2" = "<p>Test date: %@</p><p>Your details: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Test date: %@</p><p>Name: %@</p><p>Date of birth: %@</p>";
@@ -516,7 +521,7 @@
 "holder.notest.button.title" = "Make an appointment";
 
 "holder.event.originmismatch.title" = "We can't make a certificate";
-"holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. This can have various causes. <a href=\"https://coronacheck.nl/en/guidepost\">Read more here.</a>";
+"holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. Read more on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a>";
 "holder.event.originmismatch.recovery.body" = "At this moment, we can't make a certificate from your positive test result. This can have various causes. Read more on  <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a>";
 "holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your negative test result. This can have various causes. Read more on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a>";
 "holder.notest.action.title" = "Make an appointment";
@@ -562,6 +567,6 @@
 "holder.event.identity.alert.ok" = "Yes, replace";
 "holder.event.identity.alert.cancel" = "No, stop";
 
+"holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
-"holder.event.details" = "Details";
