@@ -139,7 +139,7 @@
 "holder.menu.accessibility" = "Accessibility";
 
 "holder.tokenentry.modal.notoken.title" = "I don't have a code";
-"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p><p></p>";
+"holder.tokenentry.modal.notoken.details" = "<p>The test location gives you a retrieval code with numbers and letters.</p><p>Didn't get a code? Or did you lose it? Contact the test location.</p>";
 /* Voice over voor begin van een lijst */
 "general.list.accessibility.start" = "Start of list";
 
@@ -396,9 +396,9 @@
 "holder.testresults.results.text" = "<p>This test result is retrieved from the test location.</p><p>Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.</p>";
 "holder.testresults.results.button" = "Make certificate";
 "holder.testresults.pending.title" = "Test result not yet known";
-"holder.testresults.pending.text" = "<p>Please try again later.</p><p></p><p>If you have any questions, contact your test location.</p>";
+"holder.testresults.pending.text" = "<p>Please try again later.</p><p>If you have any questions, contact your test location.</p>";
 "holder.testresults.already.title" = "Test result already retrieved";
-"holder.testresults.already.text" = "<p>Your test result has already been retrieved and made into a QR code.</p><p></p><p>Is this not correct? Contact the test location.</p>";
+"holder.testresults.already.text" = "<p>Your test result has already been retrieved and made into a QR code.</p><p>Is this not correct? Contact the test location.</p>";
 "holder.testresults.negative" = "Negative test result";
 "holder.testresults.identity" = "Identification details: %@";
 "holder.testresults.alert.title" = "Are you sure you want to stop?";
@@ -521,6 +521,7 @@
 "holder.notest.button.title" = "Make an appointment";
 
 "holder.event.originmismatch.title" = "We can't make a certificate";
+"holder.event.originmismatch.vaccination.body" = "At this moment, we can't make a certificate from your vaccination. Read more on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a>";
 "holder.event.originmismatch.recovery.body" = "At this moment, we can't make a certificate from your positive test result. This can have various causes. Read more on  <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a>";
 "holder.event.originmismatch.test.body" = "At this moment, we can't make a certificate from your negative test result. This can have various causes. Read more on <a href=\"https://coronacheck.nl/en/guidepost\">the Guidepost.</a>";
 "holder.notest.action.title" = "Make an appointment";
