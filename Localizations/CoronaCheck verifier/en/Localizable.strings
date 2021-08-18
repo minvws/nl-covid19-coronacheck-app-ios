@@ -1,3 +1,4 @@
+"verifier.start.button.showinstructions" = "What should I pay attention to?";
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "verifier.scan.torch.enable" = "Turn the flashlight on.";
 "verifier.scan.torch.disable" = "Turn the flashlight off.";
@@ -27,7 +28,7 @@
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
-"new.terms.highlights" = "<b>Here's what changed</b><br /><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
+"new.terms.highlights" = "<b>Here's what changed</b><ul><li>Description of acceptable use policy</li><li>App usage explanation</li><li>Camera usage permission</li></ul>";
 "new.terms.description" = "Read the full acceptable use policy <a href=\"https://coronacheck.nl/en/gebruikersvoorwaarden-in-app\">here</a>.";
 /* MARK: - Verifier Launch */
 "verifier.launch.title" = "CoronaCheck Scanner";
@@ -71,12 +72,10 @@
 "verifier.instructions.distance.title" = "1. Keep a distance";
 "verifier.instructions.distance.text" = "Press the 'Start scanning' button and ask the visitor to show their QR code. They may do so using the CoronaCheck app or the paper version. The QR code acts as a coronavirus pass and can be read at a safe distance.";
 "verifier.instructions.scan.title" = "2. Scan the QR code";
-"verifier.instructions.scan.text" = "Point your phone camera at the visitor's certificate. Scan the QR code.";
+"verifier.instructions.scan.text" = "<p>Point your phone camera at the visitor's certificate. Scan the QR code.</p>";
 "verifier.instructions.access.title" = "3. Green screen";
-"verifier.instructions.access.text" = "Green screen? The visitor has a valid certificate. Now check whether the data on the green screen matches the data on the proof of identity. In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.<br /><br />All good? Then the visitor may enter. They might also need an entrance ticket.";
+"verifier.instructions.access.text" = "<p>Green screen? The visitor has a valid certificate. Now check whether the data on the green screen matches the data on the proof of identity. In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p>All good? Then the visitor may enter. They might also need an entrance ticket.</p>";
 "verifier.instructions.denied.title" = "4. Red screen";
-"verifier.instructions.denied.text" = "Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a vaccination, recovery or a negative test result. Here's what you can do: <br /><br /><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Is the visitor a Dutch resident? Then check that they are showing the Dutch QR code. Scanning an international QR code in the CoronaCheck app will result in a red screen. </li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a coronavirus pass? Direct the visitor to our help desk. Phone number: <a href=\"tel:08001421\">0800-1421</a>.</li></ul> <br />A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter.<br /><a href=\"https://coronacheck.nl/en/scanner\">Read more about visitor access</a>";
-
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR code";
 "verifier.scan.message" = "Point your device at the QR code on the visitor's screen. Or point it at the paper version of their valid certificate.";
@@ -102,7 +101,7 @@
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Invalid QR code";
 "verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b><ul><li>The QR code of the visitor does not conform to the Dutch entry requirements</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul></p>";
-"verifier.denied.message.two" = "<p><b>What to do now?</b><br />The visitor can get vaccinated or can take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
+"verifier.denied.message.two" = "<b>What to do now?</b><p>The visitor can get vaccinated or can take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";

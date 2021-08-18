@@ -1,3 +1,4 @@
+"verifier.start.button.showinstructions" = "Waar moet ik op letten?";
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
