@@ -399,16 +399,12 @@ final class FetchEventsViewModel: Logging {
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
+			// Result<EventFlow.EventInformationAvailable, NetworkError>
 
-			// Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>
-			switch result {
-				case let .success(result):
-					self?.logDebug("EventInformationAvailable: \(result.0)")
-					completion(.success(result.0))
-				case let .failure(error):
-					completion(.failure(error))
+			if case let .success(info) = result {
+				self?.logDebug("EventInformationAvailable: \(info)")
 			}
-
+			completion(result)
 			self?.progressIndicationCounter.decrement()
 		}
 	}
