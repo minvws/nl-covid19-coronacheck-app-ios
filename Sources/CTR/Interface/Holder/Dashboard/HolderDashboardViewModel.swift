@@ -28,6 +28,8 @@ final class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var hasAddCertificateMode: Bool = false
 
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
+	
+	@Bindable var selectTab: DashboardTab = .domestic
 
 	// MARK: - Private types
 
@@ -57,7 +59,7 @@ final class HolderDashboardViewModel: Logging {
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
-	@Bindable var dashboardRegionToggleValue: QRCodeValidityRegion {
+	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		didSet {
 			DispatchQueue.global().async {
 				self.userSettings.dashboardRegionToggleValue = self.dashboardRegionToggleValue
