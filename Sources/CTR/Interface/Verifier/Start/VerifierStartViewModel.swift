@@ -37,6 +37,9 @@ class VerifierStartViewModel: Logging {
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
+	/// The title of the showInstructions button
+	@Bindable private(set) var showInstructionsTitle: String
+
 	/// The title of the button
 	@Bindable private(set) var showError: Bool = false
 
@@ -61,6 +64,7 @@ class VerifierStartViewModel: Logging {
 		title = L.verifierStartTitle()
 		header = L.verifierStartHeader()
 		message = L.verifierStartMessage()
+		showInstructionsTitle = L.verifierStartButtonShowinstructions()
 	}
 
 	func primaryButtonTapped() {
@@ -78,6 +82,10 @@ class VerifierStartViewModel: Logging {
 			userSettings.scanInstructionShown = true
 			coordinator?.didFinish(.userTappedProceedToScanInstructions)
 		}
+	}
+
+	func showInstructionsButtonTapped() {
+		coordinator?.userWishesToNavigateToScanInstruction()
 	}
 
 	func linkTapped() {

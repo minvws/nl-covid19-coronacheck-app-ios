@@ -50,6 +50,8 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	private let showInstructionsButton: Button = {
 
 		let button = Button(title: "Button 2", style: .tertiary)
+		button.titleLabel?.font = Theme.fonts.bodyMedium
+		button.contentHorizontalAlignment = .leading
 		return button
 	}()
 
@@ -79,6 +81,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 		super.setupViews()
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		showInstructionsButton.touchUpInside(self, action: #selector(showInstructionsButtonTapped))
 	}
 
 	/// Setup the hierarchy
@@ -87,6 +90,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
+		contentView.addSubview(showInstructionsButton)
 		contentView.addSubview(spacer)
 		addSubview(footerGradientView)
 		footerBackground.addSubview(primaryButton)
@@ -128,9 +132,25 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 				constant: -ViewTraits.margin
 			),
 
+			showInstructionsButton.centerXAnchor.constraint(
+				equalTo: contentView.centerXAnchor
+			),
+			showInstructionsButton.topAnchor.constraint(
+				equalTo: contentTextView.bottomAnchor,
+				constant: ViewTraits.margin
+			),
+			showInstructionsButton.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			showInstructionsButton.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+
 			// Spacer
 			spacer.topAnchor.constraint(
-				equalTo: contentTextView.bottomAnchor,
+				equalTo: showInstructionsButton.bottomAnchor,
 				constant: ViewTraits.margin
 			),
 			spacer.leadingAnchor.constraint(
@@ -175,6 +195,12 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	@objc func primaryButtonTapped() {
 
 		primaryButtonTappedCommand?()
+	}
+
+	/// User tapped on the showInstructions button
+	@objc func showInstructionsButtonTapped() {
+
+		showInstructionsButtonTappedCommand?()
 	}
 
 	private func setFooterGradient() {
@@ -225,14 +251,17 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	}
 
 	/// The title of the showInstructions Button
-	var showInstructionsButtonTitle: String = "" {
+	var showInstructionsTitle: String = "" {
 		didSet {
-			showInstructionsButton.setTitle(showInstructionsButtonTitle, for: .normal)
+			showInstructionsButton.setTitle(showInstructionsTitle, for: .normal)
 		}
 	}
 
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// The user tapped on the showInstructions button
+	var showInstructionsButtonTappedCommand: (() -> Void)?
 
 	/// The header image
 	var headerImage: UIImage? {
