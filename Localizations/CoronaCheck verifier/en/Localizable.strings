@@ -1,3 +1,4 @@
+"verifier.start.button.showinstructions" = "What should I pay attention to?";
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "verifier.scan.torch.enable" = "Turn the flashlight on.";
 "verifier.scan.torch.disable" = "Turn the flashlight off.";
@@ -23,7 +24,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><b>Note: details may be incomplete</b><p>In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect</b>, the visitor is not allowed access.</p>";
+"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br />In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect</b>, the visitor is not allowed access.</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
@@ -75,7 +76,7 @@
 "verifier.instructions.access.title" = "3. Green screen";
 "verifier.instructions.access.text" = "<p>Green screen? The visitor has a valid certificate. Now check whether the data on the green screen matches the data on the proof of identity. In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p>All good? Then the visitor may enter. They might also need an entrance ticket.</p>";
 "verifier.instructions.denied.title" = "4. Red screen";
-"verifier.instructions.denied.text" = "<p>Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a vaccination, recovery or a negative test result. Here's what you can do:</p><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Is the visitor a Dutch resident? Then check that they are showing the Dutch QR code. Scanning an international QR code in the CoronaCheck app will result in a red screen. </li><li>Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a coronavirus pass? Direct the visitor to our help desk. Phone number: <a href=\"tel:08001421\">0800-1421</a>.</li></ul><p>A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter.</p><p><a href=\"https://coronacheck.nl/en/scanner\">Read more about visitor access</a></p>";
+"verifier.instructions.denied.text" = "<p>Red screen? This does not mean the visitor has coronavirus. It just means the QR code is invalid. So there is no proof of a vaccination, recovery or a negative test result. Here's what you can do:</p><ul><li>Check whether the visitor shows the QR code using the CoronaCheck app. A screenshot or copy of the QR code always results in a red screen.</li><li>Does the visitor live in the Netherlands? Then check that they are showing the Dutch QR code. Scanning an international QR code in the CoronaCheck app will result in a red screen.</li><li> Ask the visitor to completely close the app and open it again. Then scan the QR code again.</li><li>Do you keep getting a red screen even though the visitor has a valid coronavirus pass? Direct the visitor to our help desk. Phone number: <a href=\"tel:08001421\">0800-1421</a>.</li></ul><p>Er is altijd een groen scherm nodig voor toegang. A green screen is always needed for entry. Does the visitor not have a (valid) QR code? Then you cannot let them enter.</p><p><a href=\"https://coronacheck.nl/en/scanner\">Read more about visitor access.</a></p>";
 
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR code";
@@ -101,7 +102,7 @@
 "verifier.result.check.title" = "About the check";
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Invalid QR code";
-"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><b>Possible causes</b><ul><li>The QR code of the visitor does not conform to the Dutch entry requirements</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul>";
+"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b></p><ul><li>The QR code of the visitor does not conform to the Dutch entry requirements</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul>";
 "verifier.denied.message.two" = "<b>What to do now?</b><p>The visitor can get vaccinated or can take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
 
 /* MARK: - Verifier About */

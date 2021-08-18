@@ -7,14 +7,6 @@
 
 import Foundation
 
-enum NetworkResponseHandleError: Error {
-	case cannotUnzip
-	case invalidSignature
-	case cannotDeserialize
-	case invalidPublicKeys
-	case unexpectedCondition
-}
-
 enum NetworkError: String, Error {
 	case invalidRequest
 	case requestTimedOut
@@ -26,13 +18,8 @@ enum NetworkError: String, Error {
 	case encodingError
 	case redirection
 	case serverBusy
-}
-
-extension NetworkResponseHandleError {
-	
-	var asNetworkError: NetworkError {
-		return .invalidResponse
-	}
+	case invalidSignature
+	case cannotDeserialize
 }
 
 enum HTTPHeaderKey: String {
