@@ -72,12 +72,7 @@ final class OnboardingConsentView: BaseView {
 	}()
 
 	/// the update button
-	let primaryButton: Button = {
-
-		let button = Button(title: "Button 1", style: .roundedBlue)
-		button.rounded = true
-		return button
-	}()
+	let primaryButton = Button()
 
 	let lineView: UIView = {
 

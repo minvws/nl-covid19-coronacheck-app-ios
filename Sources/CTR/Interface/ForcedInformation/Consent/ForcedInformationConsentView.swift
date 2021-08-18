@@ -72,12 +72,7 @@ class ForcedInformationConsentView: BaseView {
 		return TextView()
 	}()
 
-	let primaryButton: Button = {
-
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
-		return button
-	}()
+	let primaryButton = Button()
 
 	/// the secondary button
 	let secondaryButton: Button = {

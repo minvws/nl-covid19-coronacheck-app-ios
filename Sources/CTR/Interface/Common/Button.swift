@@ -19,17 +19,60 @@ class Button: UIButton {
 		case roundedClear
 		// Text only, blue text
         case textLabelBlue
+		
+		func backgroundColor(isEnabled: Bool = true) -> UIColor {
+			switch self {
+				case .roundedBlue:
+					return isEnabled ? Theme.colors.primary : Theme.colors.tertiary
+				case .roundedWhite:
+					return isEnabled ? Theme.colors.secondary : Theme.colors.grey2
+				case .roundedClear, .textLabelBlue:
+					return .clear
+			}
+		}
+		
+		func textColor(isEnabled: Bool = true) -> UIColor {
+			switch self {
+				case .roundedBlue:
+					return isEnabled ? Theme.colors.viewControllerBackground : Theme.colors.gray
+				case .roundedWhite:
+					return Theme.colors.dark
+				case .roundedClear:
+					return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+				case .textLabelBlue:
+					return isEnabled ? Theme.colors.iosBlue : Theme.colors.grey2
+			}
+		}
+		
+		var contentEdgeInsets: UIEdgeInsets {
+			switch self {
+				case .textLabelBlue: return .zero
+				default: return .topBottom(13.5) + .leftRight(20)
+			}
+		}
+		
+		func borderColor(isEnabled: Bool = true) -> UIColor {
+			return isEnabled ? Theme.colors.dark : Theme.colors.grey2
+		}
+		
+		var borderWidth: CGFloat {
+			switch self {
+				case .roundedClear: return 1
+				default: return 0
+			}
+		}
+		
+		var isRounded: Bool {
+			switch self {
+				case .textLabelBlue: return false
+				default: return true
+			}
+		}
     }
 
     var style = ButtonType.roundedBlue {
         didSet {
             updateButtonType()
-        }
-    }
-
-    var rounded = false {
-        didSet {
-            updateRoundedCorners()
         }
     }
 
@@ -41,7 +84,7 @@ class Button: UIButton {
 
     override var isEnabled: Bool {
         didSet {
-			updatePrimaryStyleColors()
+			updateButtonType()
         }
     }
 
@@ -91,7 +134,7 @@ class Button: UIButton {
     override func layoutSubviews() {
 
         super.layoutSubviews()
-        updateRoundedCorners()
+		layer.cornerRadius = style.isRounded ? min(bounds.width, bounds.height) / 2 : 0
 		titleLabel?.preferredMaxLayoutWidth = titleLabel?.frame.size.width ?? 0
     }
 
@@ -109,48 +152,15 @@ class Button: UIButton {
 
 	private func updateButtonType() {
 		
-		switch style {
-			case .roundedBlue:
-				updatePrimaryStyleColors()
-				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-			case .roundedWhite:
-				backgroundColor = Theme.colors.secondary
-				setTitleColor(Theme.colors.dark, for: .normal)
-				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-			case .textLabelBlue:
-				backgroundColor = .clear
-				setTitleColor(Theme.colors.iosBlue, for: .normal)
-				setTitleColor(Theme.colors.grey2, for: .disabled)
-			case .roundedClear:
-				backgroundColor = .clear
-				setTitleColor(Theme.colors.dark, for: .normal)
-				layer.borderWidth = 1
-				layer.borderColor = Theme.colors.dark.cgColor
-				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-				
-		}
-		tintColor = Theme.colors.viewControllerBackground
-	}
-	
-	private func updatePrimaryStyleColors() {
+		backgroundColor = style.backgroundColor(isEnabled: isEnabled)
+		setTitleColor(style.textColor(isEnabled: true), for: .normal)
+		setTitleColor(style.textColor(isEnabled: false), for: .disabled)
+		contentEdgeInsets = style.contentEdgeInsets
+		layer.borderWidth = style.borderWidth
+		layer.borderColor = style.borderColor(isEnabled: isEnabled).cgColor
 		
-		guard style == .roundedBlue else { return }
-		
-		if isEnabled {
-			backgroundColor = Theme.colors.primary
-			setTitleColor(Theme.colors.viewControllerBackground, for: .normal)
-		} else {
-			backgroundColor = Theme.colors.tertiary
-			setTitleColor(Theme.colors.gray, for: .normal)
-		}
+		setNeedsLayout()
 	}
-
-    private func updateRoundedCorners() {
-
-        if rounded {
-            layer.cornerRadius = min(bounds.width, bounds.height) / 2
-        }
-    }
 
     @objc private func touchDownAnimation() {
 

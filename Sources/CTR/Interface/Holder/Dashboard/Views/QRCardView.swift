@@ -52,7 +52,6 @@ class QRCardView: BaseView {
 
 		let button = Button(title: "", style: .roundedBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.rounded = true
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)
 		return button
 	}()

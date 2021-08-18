@@ -46,7 +46,6 @@ final class DeniedView: ScrolledStackWithButtonView {
 	private let secondaryButton: Button = {
 
 		let button = Button()
-		button.rounded = true
 		button.style = .roundedClear
 		button.title = L.verifierResultDeniedReadmore()
 		button.titleLabel?.textAlignment = .center
