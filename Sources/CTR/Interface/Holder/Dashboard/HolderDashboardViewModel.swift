@@ -382,7 +382,8 @@ extension HolderDashboardViewModel.MyQRCard {
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
 						validityText: { now in
-							localizedDateExplanation(forOrigin: origin, forNow: now, remoteConfig: remoteConfigManager)
+							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
+							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
 						}
 					)
 				}
@@ -436,7 +437,8 @@ extension HolderDashboardViewModel.MyQRCard {
 							}
 						}(),
 						validityText: { now in
-							localizedDateExplanation(forOrigin: origin, forNow: now, remoteConfig: remoteConfigManager)
+							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
+							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
 						}
 					)
 				}

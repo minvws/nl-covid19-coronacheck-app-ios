@@ -64,6 +64,18 @@ extension GreenCard {
 		return nil
 	}
 
+	func originsActiveNowOrBeforeThresholdFromNow(now: Date, thresholdDays: Int) -> [Origin]? {
+		let thresholdEndDate = now.addingTimeInterval(TimeInterval(60 * 60 * 24 * thresholdDays))
+
+		return castOrigins()?
+			.filter { origin in
+				(origin.validFromDate ?? .distantFuture) < thresholdEndDate
+			}
+			.filter { origin in
+				(origin.expirationTime ?? .distantPast) > now
+			}
+	}
+
 	func hasActiveCredentialNowOrInFuture(forDate now: Date = Date()) -> Bool {
 
 		return !activeCredentialsNowOrInFuture(forDate: now).isEmpty

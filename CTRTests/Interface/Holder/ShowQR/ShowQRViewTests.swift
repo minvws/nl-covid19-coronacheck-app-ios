@@ -32,7 +32,7 @@ class ShowQRViewTests: XCTestCase {
 
 	func testScreenshotBlocking() {
 		let sut = ShowQRImageView()
-		sut.visibilityState = .screenshotBlocking(timeRemainingText: "123:34")
+		sut.visibilityState = .screenshotBlocking(timeRemainingText: "0:02", voiceoverTimeRemainingText: "in twee seconden")
 		sut.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
 		sut.assertImage()
 	}
