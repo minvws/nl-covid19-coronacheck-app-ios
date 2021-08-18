@@ -256,7 +256,7 @@ platform :ios do
     if gitbranch == "main"
       releasenotes = "Latest commit: #{gitcommitmessage}"
     else
-      releasenotes = "Branch '#{gitcommitmessage}'\nLatest commit: '#{gitcommitmessage}'"
+      releasenotes = "Branch '#{gitbranch}'\nLatest commit: '#{gitcommitmessage}'"
     end
 
     # Deploy to Firebase:
