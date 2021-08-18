@@ -42,7 +42,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 	/// the update button
 	private let primaryButton: Button = {
 
-		let button = Button(title: "Button 1", style: .primary)
+		let button = Button(title: "Button 1", style: .roundedBlue)
 		button.rounded = true
 		return button
 	}()

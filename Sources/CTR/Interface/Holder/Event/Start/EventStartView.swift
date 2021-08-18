@@ -38,7 +38,7 @@ class EventStartView: ScrolledStackWithButtonView {
 
 	let secondaryButton: Button = {
 
-		let button = Button(title: "", style: .tertiary)
+		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
 		return button

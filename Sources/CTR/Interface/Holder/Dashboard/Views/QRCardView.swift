@@ -50,7 +50,7 @@ class QRCardView: BaseView {
 
 	private let viewQRButton: Button = {
 
-		let button = Button(title: "", style: .primary)
+		let button = Button(title: "", style: .roundedBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.rounded = true
 		button.contentEdgeInsets = .topBottom(10) + .leftRight(32)

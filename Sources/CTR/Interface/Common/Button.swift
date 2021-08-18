@@ -9,14 +9,19 @@ import UIKit
 
 /// A styled UIButton subclass
 class Button: UIButton {
-
+	
     enum ButtonType {
-        case primary
-        case secondary
-        case tertiary
+		// Rounded, blue background, white text
+        case roundedBlue
+		// Rounded, white background, dark text
+        case roundedWhite
+		// Rounded, clear background, dark border
+		case roundedClear
+		// Text only, blue text
+        case textLabelBlue
     }
 
-    var style = ButtonType.primary {
+    var style = ButtonType.roundedBlue {
         didSet {
             updateButtonType()
         }
@@ -44,7 +49,7 @@ class Button: UIButton {
 
     // MARK: - Init
 
-    required init(title: String = "", style: ButtonType = .primary) {
+    required init(title: String = "", style: ButtonType = .roundedBlue) {
 
         super.init(frame: .zero)
 
@@ -105,19 +110,23 @@ class Button: UIButton {
 	private func updateButtonType() {
 		
 		switch style {
-			case .primary:
+			case .roundedBlue:
 				updatePrimaryStyleColors()
 				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-			case .secondary:
+			case .roundedWhite:
 				backgroundColor = Theme.colors.secondary
 				setTitleColor(Theme.colors.dark, for: .normal)
-				self.titleLabel?.font = Theme.fonts.subheadBold
 				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
-			case .tertiary:
+			case .textLabelBlue:
 				backgroundColor = .clear
 				setTitleColor(Theme.colors.iosBlue, for: .normal)
 				setTitleColor(Theme.colors.grey2, for: .disabled)
-				self.titleLabel?.font = Theme.fonts.bodySemiBold
+			case .roundedClear:
+				backgroundColor = .clear
+				setTitleColor(Theme.colors.dark, for: .normal)
+				layer.borderWidth = 1
+				layer.borderColor = Theme.colors.dark.cgColor
+				contentEdgeInsets = .topBottom(13.5) + .leftRight(20)
 				
 		}
 		tintColor = Theme.colors.viewControllerBackground
@@ -125,7 +134,7 @@ class Button: UIButton {
 	
 	private func updatePrimaryStyleColors() {
 		
-		guard style == .primary else { return }
+		guard style == .roundedBlue else { return }
 		
 		if isEnabled {
 			backgroundColor = Theme.colors.primary

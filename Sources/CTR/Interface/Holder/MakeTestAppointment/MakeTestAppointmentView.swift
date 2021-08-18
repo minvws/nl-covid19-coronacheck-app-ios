@@ -46,7 +46,7 @@ final class MakeTestAppointmentView: BaseView {
 	
 	let button: Button = {
 
-		let button = Button(title: "Button", style: .primary)
+		let button = Button(title: "Button", style: .roundedBlue)
 		button.titleLabel?.font = Theme.fonts.bodySemiBold
 		button.rounded = true
 		button.translatesAutoresizingMaskIntoConstraints = false

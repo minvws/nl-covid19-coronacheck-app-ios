@@ -14,12 +14,15 @@ final class DeniedView: ScrolledStackWithButtonView {
 		enum Margin {
 			static let top: CGFloat = 4
 			static let secondaryButtonBottom: CGFloat = 20
+			static let buttonMargin: CGFloat = 36
 		}
 		enum Spacing {
 			static let views: CGFloat = UIDevice.current.isSmallScreen ? 24 : 40
 		}
 		enum Size {
 			static let imageWidth: CGFloat = 200
+			static let buttonHeight: CGFloat = 52
+			static let buttonWidth: CGFloat = 234.0
 		}
 	}
 	
@@ -44,6 +47,8 @@ final class DeniedView: ScrolledStackWithButtonView {
 
 		let button = Button()
 		button.rounded = true
+		button.style = .roundedClear
+		button.title = L.verifierResultDeniedReadmore()
 		button.titleLabel?.textAlignment = .center
 		return button
 	}()
@@ -58,7 +63,9 @@ final class DeniedView: ScrolledStackWithButtonView {
 		actionColor = Theme.colors.denied
 		footerActionColor = Theme.colors.denied
 
-		primaryButton.style = .secondary
+		primaryButton.style = .roundedWhite
+		
+		primaryButton.title = L.verifierResultNext()
 		
 		hasFooterView = true
 	}
@@ -74,13 +81,7 @@ final class DeniedView: ScrolledStackWithButtonView {
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		setupPrimaryButton(useFullWidth: {
-			switch traitCollection.preferredContentSizeCategory {
-				case .unspecified: return true
-				case let size where size > .extraLarge: return true
-				default: return false
-			}
-		}())
+		setupPrimaryButton()
 		
 		// Disable the bottom constraint of the scroll view, add our own
 		bottomScrollViewConstraint?.isActive = false
@@ -96,10 +97,14 @@ final class DeniedView: ScrolledStackWithButtonView {
 			}(),
 			
 			secondaryButton.topAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor, constant: ViewTraits.Spacing.views),
-			secondaryButton.leftAnchor.constraint(equalTo: contentScrollView.leftAnchor),
-			secondaryButton.rightAnchor.constraint(equalTo: contentScrollView.rightAnchor),
-			secondaryButton.widthAnchor.constraint(equalTo: contentScrollView.widthAnchor),
-			secondaryButton.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom)
+			secondaryButton.leftAnchor.constraint(greaterThanOrEqualTo: contentScrollView.leftAnchor, constant: ViewTraits.Margin.buttonMargin),
+			secondaryButton.rightAnchor.constraint(lessThanOrEqualTo: contentScrollView.rightAnchor, constant: -ViewTraits.Margin.buttonMargin),
+			secondaryButton.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor),
+			secondaryButton.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom),
+			secondaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonWidth),
+			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonHeight),
+			
+			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonWidth)
 		])
 	}
 	
