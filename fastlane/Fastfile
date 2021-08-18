@@ -250,7 +250,8 @@ platform :ios do
     # Deploy to Firebase:
     firebase_app_distribution(
       app: firebase_app_id,
-      groups: firebase_groups_csv
+      groups: firebase_groups_csv,
+      release_notes: "Branch: '#{ENV['GITBRANCH']}'"
     )
     
     inform_slack(
