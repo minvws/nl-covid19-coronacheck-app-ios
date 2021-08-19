@@ -32,6 +32,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - title: the title
 	///   - content: the content
 	func displayContent(title: String, content: [Content])
+
+	func userWishesToNavigateToScanInstruction()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -127,6 +129,10 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		viewController.modalTransitionStyle = .coverVertical
 
 		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
+	}
+
+	func userWishesToNavigateToScanInstruction() {
+		navigateToScanInstruction()
 	}
 
 	private func navigateToScanInstruction() {
