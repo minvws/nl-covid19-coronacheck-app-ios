@@ -30,14 +30,6 @@ class VerifierCheckIdentityView: BaseView {
 		view.backgroundColor = Theme.colors.viewControllerBackground
 		return view
 	}()
-	
-	private let contentView: UIView = {
-		
-		let view = UIView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.backgroundColor = Theme.colors.viewControllerBackground
-		return view
-	}()
 
 	/// The title label
 	private let headerLabel: Label = {
@@ -70,8 +62,7 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(headerLabel)
 		addSubview(scrollView)
 		addSubview(footerButtonView)
-		scrollView.addSubview(contentView)
-		contentView.addSubview(identity)
+		scrollView.addSubview(identity)
 	}
 
 	/// Setup the constraints
@@ -95,35 +86,35 @@ class VerifierCheckIdentityView: BaseView {
 			),
 			headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			
+			// Scroll view
 			scrollView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ViewTraits.Margin.headerBottom),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
-			
-			contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-			contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
-			contentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
-			contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-			contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
 			// Identity
 			identity.topAnchor.constraint(
-				equalTo: contentView.topAnchor,
+				equalTo: scrollView.topAnchor,
 				constant: ViewTraits.Margin.identityTop
 			),
 			identity.leadingAnchor.constraint(
-				equalTo: contentView.leadingAnchor,
+				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.identitySide
 			),
 			identity.trailingAnchor.constraint(
-				equalTo: contentView.trailingAnchor,
+				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.identitySide
 			),
 			identity.bottomAnchor.constraint(
-				equalTo: contentView.bottomAnchor,
+				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.Margin.edge
 			),
+			identity.widthAnchor.constraint(
+				equalTo: scrollView.widthAnchor,
+				constant: -ViewTraits.Margin.identitySide * 2
+			),
 			
+			// Footer view
 			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
