@@ -35,7 +35,8 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		// Make the navbar the same color as the background
+		setupTranslucentNavigationBar()
 
 //		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 //		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
@@ -93,8 +94,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
-		// Make the navbar the same color as the background.
-		navigationController?.navigationBar.backgroundColor = .clear
+		
 		layoutForOrientation()
 	}
 
