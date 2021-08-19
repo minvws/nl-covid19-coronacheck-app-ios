@@ -79,44 +79,29 @@ class HolderCoordinator: SharedCoordinator {
 	// Designated starter method
 	override func start() {
 
-		if onboardingManager.needsOnboarding {
-			// Start with the onboarding
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			startChildCoordinator(coordinator)
+		handleOnboarding(factory: onboardingFactory) {
 
-		} else if onboardingManager.needsConsent {
-			// Show the consent page
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent(shouldHideBackButton: true)
-		} else if forcedInformationManager.needsUpdating {
-			// Show Forced Information
-			let coordinator = ForcedInformationCoordinator(
-				navigationController: navigationController,
-				forcedInformationManager: forcedInformationManager,
-				delegate: self
-			)
-			startChildCoordinator(coordinator)
-		} else if let unhandledUniversalLink = unhandledUniversalLink {
+			if forcedInformationManager.needsUpdating {
+				// Show Forced Information
+				let coordinator = ForcedInformationCoordinator(
+					navigationController: navigationController,
+					forcedInformationManager: forcedInformationManager,
+					delegate: self
+				)
+				startChildCoordinator(coordinator)
+			} else if let unhandledUniversalLink = unhandledUniversalLink {
 
-            // Attempt to consume the universal link again:
-            self.unhandledUniversalLink = nil // prevent potential infinite loops
-            navigateToHolderStart {
-                self.consume(universalLink: unhandledUniversalLink)
-            }
+				// Attempt to consume the universal link again:
+				self.unhandledUniversalLink = nil // prevent potential infinite loops
+				navigateToHolderStart {
+					self.consume(universalLink: unhandledUniversalLink)
+				}
 
-        } else {
+			} else {
 
-			// Start with the holder app
-			navigateToHolderStart()
+				// Start with the holder app
+				navigateToHolderStart()
+			}
 		}
 	}
 
@@ -155,6 +140,12 @@ class HolderCoordinator: SharedCoordinator {
 				}
 
 				thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
+
+				// Reset the dashboard back to the domestic tab:
+				if let navigationController = sidePanel?.selectedViewController as? UINavigationController,
+				   let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
+					dashboardViewController.viewModel.selectTab = .domestic
+				}
 				return true
 		}
     }

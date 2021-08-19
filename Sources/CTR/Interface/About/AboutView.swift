@@ -21,9 +21,9 @@ class AboutView: ScrolledStackView {
 		static let versionLineKerning: CGFloat = -0.24
 	}
 
-	private let messageLabel: Label = {
+	private let messageTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 
 	private let listHeaderLabel: Label = {
@@ -62,7 +62,7 @@ class AboutView: ScrolledStackView {
 
 		super.setupViewHierarchy()
 
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(messageTextView)
 		stackView.addArrangedSubview(listHeaderLabel)
 		stackView.setCustomSpacing(0, after: listHeaderLabel)
 		stackView.addArrangedSubview(itemStackView)
@@ -83,7 +83,7 @@ class AboutView: ScrolledStackView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
+			messageTextView.attributedText = .makeFromHtml(
 				text: message,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark

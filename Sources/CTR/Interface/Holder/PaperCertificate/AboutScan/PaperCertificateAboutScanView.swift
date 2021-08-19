@@ -28,10 +28,10 @@ final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	/// The message label
-	private let messageLabel: Label = {
+	/// The message text
+	private let messageTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 	
 	override func setupViews() {
@@ -46,7 +46,7 @@ final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 		
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(messageTextView)
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
 	}
 	
@@ -75,7 +75,7 @@ final class PaperCertificateAboutScanView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(text: message,
+			messageTextView.attributedText = .makeFromHtml(text: message,
 														font: Theme.fonts.body,
 														textColor: Theme.colors.dark,
 														paragraphSpacing: 0)

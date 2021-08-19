@@ -13,7 +13,7 @@ class ShowQRImageView: BaseView {
 		case loading
 		case visible(qrImage: UIImage)
 		case hiddenForScreenCapture
-		case screenshotBlocking(timeRemainingText: String)
+		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
 
 		var isVisible: Bool {
 			if case .visible = self { return true }
@@ -180,12 +180,12 @@ class ShowQRImageView: BaseView {
 					largeQRimageView.isHidden = true
 					screenshotBlockingView.isHidden = true
 					spinner.isHidden = false
-
-				case .screenshotBlocking(let timeRemainingText):
-					returnToThirdPartyAppButton.isHidden = true
+                    
+				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
 					spinner.stopAnimating()
+					returnToThirdPartyAppButton.isHidden = true
 					largeQRimageView.isHidden = true
-					screenshotBlockingView.countdown = timeRemainingText
+					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
 					screenshotBlockingView.isHidden = false
 					spinner.isHidden = true
 
@@ -196,6 +196,23 @@ class ShowQRImageView: BaseView {
 					largeQRimageView.image = qrImage
 					screenshotBlockingView.isHidden = true
 					spinner.isHidden = true
+			}
+
+			// Update accessibility at the moment that it becomes .screenshotBlocking from another state:
+			switch (oldValue, visibilityState) {
+				case (.screenshotBlocking, .screenshotBlocking): break // ignore
+				case (_, .screenshotBlocking):
+					accessibilityElements = [screenshotBlockingView]
+
+					UIAccessibility.post(notification: .layoutChanged, argument: screenshotBlockingView)
+
+					DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+						UIAccessibility.post(
+							notification: .announcement,
+							argument: L.holderShowqrScreenshotwarningTitle()
+						)
+					}
+				default: break
 			}
 		}
 	}

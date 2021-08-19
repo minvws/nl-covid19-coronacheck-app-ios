@@ -32,6 +32,8 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - title: the title
 	///   - content: the content
 	func displayContent(title: String, content: [Content])
+
+	func userWishesToNavigateToScanInstruction()
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -43,30 +45,11 @@ class VerifierCoordinator: SharedCoordinator {
 
 	// Designated starter method
 	override func start() {
-		
-		if onboardingManager.needsOnboarding {
-			/// Start with the onboarding
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			startChildCoordinator(coordinator)
-			
-		} else if onboardingManager.needsConsent {
-			// Show the consent page
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent(shouldHideBackButton: true)
 
-		} else {
-			
+		handleOnboarding(factory: onboardingFactory) {
 			navigateToVerifierWelcome()
 		}
+
 	}
 }
 
@@ -146,6 +129,10 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		viewController.modalTransitionStyle = .coverVertical
 
 		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
+	}
+
+	func userWishesToNavigateToScanInstruction() {
+		navigateToScanInstruction()
 	}
 
 	private func navigateToScanInstruction() {
