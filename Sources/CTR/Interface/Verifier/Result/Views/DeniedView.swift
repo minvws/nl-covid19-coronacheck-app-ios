@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DeniedView: ScrolledStackWithButtonView {
+final class DeniedView: BaseView {
 	
 	private enum ViewTraits {
 		
@@ -25,6 +25,24 @@ final class DeniedView: ScrolledStackWithButtonView {
 			static let buttonWidth: CGFloat = 234.0
 		}
 	}
+	
+	/// The scrollview
+	private let scrollView: ScrolledContentHeightView = {
+
+		let view = ScrolledContentHeightView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
+	/// The stackview for the content
+	private let stackView: UIStackView = {
+
+		let view = UIStackView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.axis = .vertical
+		view.spacing = ViewTraits.Spacing.views
+		return view
+	}()
 	
 	private let imageView: UIImageView = {
 
@@ -52,42 +70,46 @@ final class DeniedView: ScrolledStackWithButtonView {
 		return button
 	}()
 	
+	private let footerButtonView: VerifierFooterButtonView = {
+		
+		let footerView = VerifierFooterButtonView()
+		footerView.translatesAutoresizingMaskIntoConstraints = false
+		return footerView
+	}()
+	
 	override func setupViews() {
 		super.setupViews()
-	
-		stackView.spacing = ViewTraits.Spacing.views
-		stackView.distribution = .fill
-		stackViewInset.top = ViewTraits.Margin.top
 		
-		actionColor = Theme.colors.denied
-		footerActionColor = Theme.colors.denied
-
-		primaryButton.style = .roundedWhite
-		
-		primaryButton.title = L.verifierResultNext()
-		
-		hasFooterView = true
+		backgroundColor = Theme.colors.denied
+		scrollView.backgroundColor = Theme.colors.denied
+		footerButtonView.primaryButton.style = .roundedWhite
+		footerButtonView.footerActionColor = Theme.colors.denied
 	}
 	
 	override func setupViewHierarchy() {
 		super.setupViewHierarchy()
 		
+		addSubview(scrollView)
+		scrollView.contentView.addSubview(stackView)
+		scrollView.contentView.addSubview(secondaryButton)
+		addSubview(footerButtonView)
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(titleLabel)
-		insertSubview(secondaryButton, belowSubview: footerGradientView)
 	}
 	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
-		setupPrimaryButton()
-		
-		// Disable the bottom constraint of the scroll view, add our own
-		bottomScrollViewConstraint?.isActive = false
-		
 		NSLayoutConstraint.activate([
 			
-			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor),
+			scrollView.topAnchor.constraint(equalTo: topAnchor),
+			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
+			
+			stackView.topAnchor.constraint(equalTo: scrollView.contentView.topAnchor),
+			stackView.leftAnchor.constraint(equalTo: scrollView.contentView.leftAnchor),
+			stackView.rightAnchor.constraint(equalTo: scrollView.contentView.rightAnchor),
 			
 			{
 				let constraint = imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.imageWidth)
@@ -96,14 +118,17 @@ final class DeniedView: ScrolledStackWithButtonView {
 			}(),
 			
 			secondaryButton.topAnchor.constraint(greaterThanOrEqualTo: stackView.bottomAnchor, constant: ViewTraits.Spacing.views),
-			secondaryButton.leftAnchor.constraint(greaterThanOrEqualTo: contentScrollView.leftAnchor, constant: ViewTraits.Margin.buttonMargin),
-			secondaryButton.rightAnchor.constraint(lessThanOrEqualTo: contentScrollView.rightAnchor, constant: -ViewTraits.Margin.buttonMargin),
-			secondaryButton.centerXAnchor.constraint(equalTo: contentScrollView.centerXAnchor),
-			secondaryButton.bottomAnchor.constraint(equalTo: contentScrollView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom),
+			secondaryButton.leftAnchor.constraint(greaterThanOrEqualTo: scrollView.contentView.leftAnchor, constant: ViewTraits.Margin.buttonMargin),
+			secondaryButton.rightAnchor.constraint(lessThanOrEqualTo: scrollView.contentView.rightAnchor, constant: -ViewTraits.Margin.buttonMargin),
+			secondaryButton.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
+			secondaryButton.bottomAnchor.constraint(equalTo: scrollView.contentView.bottomAnchor, constant: -ViewTraits.Margin.secondaryButtonBottom),
 			secondaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonWidth),
 			secondaryButton.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonHeight),
-			
-			primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.Size.buttonWidth)
+						
+			// Footer view
+			footerButtonView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
 	}
 	

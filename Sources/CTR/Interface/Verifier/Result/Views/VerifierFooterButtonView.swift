@@ -42,7 +42,7 @@ final class VerifierFooterButtonView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = Theme.colors.viewControllerBackground
+		backgroundColor = footerActionColor
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		primaryTitle = L.verifierResultNext()
@@ -89,9 +89,9 @@ final class VerifierFooterButtonView: BaseView {
 		let gradient = CAGradientLayer()
 		gradient.frame = gradientView.bounds
 		gradient.colors = [
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+			footerActionColor.withAlphaComponent(0.0).cgColor,
+			footerActionColor.withAlphaComponent(0.5).cgColor,
+			footerActionColor.withAlphaComponent(1.0).cgColor
 		]
 		gradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		gradientView.layer.insertSublayer(gradient, at: 0)
@@ -109,6 +109,14 @@ final class VerifierFooterButtonView: BaseView {
 	var primaryTitle: String? {
 		didSet {
 			primaryButton.setTitle(primaryTitle, for: .normal)
+		}
+	}
+	
+	/// The color to use for the backgrounds and gradient. Defaults to Theme.colors.viewControllerBackground
+	var footerActionColor: UIColor = Theme.colors.viewControllerBackground {
+		didSet {
+			setFooterGradient()
+			backgroundColor = footerActionColor
 		}
 	}
 }
