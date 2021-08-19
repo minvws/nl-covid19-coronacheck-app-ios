@@ -79,13 +79,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
 	}
 
-	override func viewWillAppear(_ animated: Bool) {
-
-		super.viewWillAppear(animated)
-		
-		layoutForOrientation()
-	}
-
 	/// User tapped on the button
 	@objc func closeButtonTapped() {
 
@@ -101,22 +94,5 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.lastNameHeader = L.verifierResultIdentityLastname()
 		sceneView.checkIdentityView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
 		sceneView.checkIdentityView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
-	}
-
-	// Rotation
-
-	override func willTransition(
-		to newCollection: UITraitCollection,
-		with coordinator: UIViewControllerTransitionCoordinator) {
-
-		coordinator.animate { [weak self] _ in
-			self?.layoutForOrientation()
-		}
-	}
-
-	/// Layout for different orientations
-	private func layoutForOrientation() {
-
-		sceneView.layoutForOrientation()
 	}
 }

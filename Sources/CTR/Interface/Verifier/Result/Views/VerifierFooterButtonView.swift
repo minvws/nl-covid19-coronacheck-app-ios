@@ -14,7 +14,7 @@ final class VerifierFooterButtonView: BaseView {
 
 		enum Button {
 			static let height: CGFloat = 52
-			static let width: CGFloat = 253.0
+			static let width: CGFloat = 234.0
 		}
 		enum Gradient {
 			static let height: CGFloat = 15.0

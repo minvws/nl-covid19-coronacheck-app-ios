@@ -40,8 +40,6 @@ class VerifierResultView: BaseView {
 		return view
 	}()
 
-	private var imageHeightConstraint: NSLayoutConstraint?
-
 	/// Setup the views
 	override func setupViews() {
 		super.setupViews()
@@ -69,19 +67,6 @@ class VerifierResultView: BaseView {
 				view.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
 				view.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 				setup(view: view)
-		}
-	}
-
-	func layoutForOrientation() {
-
-		if traitCollection.verticalSizeClass == .compact ||
-			OrientationUtility.currentOrientation() == .landscapeLeft ||
-			OrientationUtility.currentOrientation() == .landscapeRight {
-			// Image should be 0.3 times the screen height in a compact vertical screen
-			imageHeightConstraint?.isActive = true
-		} else {
-			// Image height should be bound by the width only
-			imageHeightConstraint?.isActive = false
 		}
 	}
 	
