@@ -47,10 +47,10 @@ class OnboardingPageView: ScrolledStackView {
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	/// The message label
-	let messageLabel: Label = {
+	/// The message text
+	let messageTextView: TextView = {
 		
-		return Label(body: nil).multiline()
+        return TextView()
 	}()
 	
 	/// setup the views
@@ -66,7 +66,7 @@ class OnboardingPageView: ScrolledStackView {
 		super.setupViewHierarchy()
 
 		bottomStackView.addArrangedSubview(titleLabel)
-		bottomStackView.addArrangedSubview(messageLabel)
+		bottomStackView.addArrangedSubview(messageTextView)
 
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
@@ -99,7 +99,7 @@ class OnboardingPageView: ScrolledStackView {
 	/// The onboarding message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(
+			messageTextView.attributedText = .makeFromHtml(
 				text: message,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark

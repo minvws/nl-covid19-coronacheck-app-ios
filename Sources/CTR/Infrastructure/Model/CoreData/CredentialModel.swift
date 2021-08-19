@@ -44,7 +44,7 @@ extension Array {
 	}
 
 	/// Find the Credential element with the latest expiry date (note: this could still be in the past).
-	func furthestFutureCredentialExpiryTime() -> Date? where Element == Credential {
+	func latestCredentialExpiryTime() -> Date? where Element == Credential {
 		sorted(by: { ($0.expirationTime ?? .distantPast) < ($1.expirationTime ?? .distantPast) })
 			.last?
 			.expirationTime

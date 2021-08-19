@@ -138,13 +138,10 @@ class FetchEventsViewModelTests: XCTestCase {
 		eventInformationAvailable: nil
 	)
 
-	let eventInformationAvailable = (
-		EventFlow.EventInformationAvailable(
-			providerIdentifier: "CC",
-			protocolVersion: "3.0",
-			informationAvailable: true
-		),
-		SignedResponse(payload: "test", signature: "test")
+	let eventInformationAvailable = EventFlow.EventInformationAvailable(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		informationAvailable: true
 	)
 
 	let identity = EventFlow.Identity(

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
+class VerifierStartView: ScrolledStackWithHeaderView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -47,6 +47,14 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 		return button
 	}()
 
+	private let showInstructionsButton: Button = {
+
+		let button = Button(title: "Button 2", style: .tertiary)
+		button.titleLabel?.font = Theme.fonts.bodyMedium
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	private let spacer: UIView = {
 		let view = UIView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -73,6 +81,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 
 		super.setupViews()
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
+		showInstructionsButton.touchUpInside(self, action: #selector(showInstructionsButtonTapped))
 	}
 
 	/// Setup the hierarchy
@@ -81,6 +90,7 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 		super.setupViewHierarchy()
 		contentView.addSubview(titleLabel)
 		contentView.addSubview(contentTextView)
+		contentView.addSubview(showInstructionsButton)
 		contentView.addSubview(spacer)
 		addSubview(footerGradientView)
 		footerBackground.addSubview(primaryButton)
@@ -122,9 +132,25 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 				constant: -ViewTraits.margin
 			),
 
+			showInstructionsButton.centerXAnchor.constraint(
+				equalTo: contentView.centerXAnchor
+			),
+			showInstructionsButton.topAnchor.constraint(
+				equalTo: contentTextView.bottomAnchor,
+				constant: ViewTraits.margin
+			),
+			showInstructionsButton.leadingAnchor.constraint(
+				equalTo: contentView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			showInstructionsButton.trailingAnchor.constraint(
+				equalTo: contentView.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+
 			// Spacer
 			spacer.topAnchor.constraint(
-				equalTo: contentTextView.bottomAnchor,
+				equalTo: showInstructionsButton.bottomAnchor,
 				constant: ViewTraits.margin
 			),
 			spacer.leadingAnchor.constraint(
@@ -169,6 +195,12 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 	@objc func primaryButtonTapped() {
 
 		primaryButtonTappedCommand?()
+	}
+
+	/// User tapped on the showInstructions button
+	@objc func showInstructionsButtonTapped() {
+
+		showInstructionsButtonTappedCommand?()
 	}
 
 	private func setFooterGradient() {
@@ -218,8 +250,18 @@ class HeaderTitleMessageButtonView: ScrolledStackWithHeaderView {
 		}
 	}
 
+	/// The title of the showInstructions Button
+	var showInstructionsTitle: String = "" {
+		didSet {
+			showInstructionsButton.setTitle(showInstructionsTitle, for: .normal)
+		}
+	}
+
 	/// The user tapped on the primary button
 	var primaryButtonTappedCommand: (() -> Void)?
+
+	/// The user tapped on the showInstructions button
+	var showInstructionsButtonTappedCommand: (() -> Void)?
 
 	/// The header image
 	var headerImage: UIImage? {

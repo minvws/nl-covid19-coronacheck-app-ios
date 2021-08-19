@@ -20,7 +20,7 @@ class OpenSSLChainTests: XCTestCase {
 	}
 
 	// swiftlint:disable:next function_body_length
-	func test_cms_fake_chain() {
+	func needs_fixing_expired_certificates_test_cms_fake_chain() {
 
 		let fakeChain = [ OpenSSLData.fakeChain02, OpenSSLData.fakeChain01 ]
 		let realChain = [

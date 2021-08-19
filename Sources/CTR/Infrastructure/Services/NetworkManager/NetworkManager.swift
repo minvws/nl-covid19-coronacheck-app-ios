@@ -93,16 +93,8 @@ class NetworkManager: Logging {
 				completion: completion)
 		}
 	}
-	
-	private func decodedJSONData<Object: Decodable>(request: Result<URLRequest, NetworkError>, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
-		data(request: request, session: session, ignore400: ignore400) { result in
-			let decodedResult: Result<(URLResponse, Object), NetworkError> = self.jsonResponseHandler(result: result)
-			
-			DispatchQueue.main.async {
-				completion(decodedResult)
-			}
-		}
-	}
+
+	// MARK: - Decode Signed Data
 	
 	/// Decode a signed response into Data
 	/// - Parameters:
@@ -124,7 +116,7 @@ class NetworkManager: Logging {
 					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
 						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-						completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						completion(.failure(NetworkError.cannotDeserialize))
 						return
 					}
 
@@ -137,7 +129,7 @@ class NetworkManager: Logging {
 								}
 							} else {
 								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+								completion(.failure(NetworkError.invalidSignature))
 							}
 						}
 					}
@@ -170,7 +162,7 @@ class NetworkManager: Logging {
 						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
 						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
 						DispatchQueue.main.async {
-							completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+							completion(.failure(NetworkError.cannotDeserialize))
 						}
 						return
 					}
@@ -179,19 +171,19 @@ class NetworkManager: Logging {
 						// Validate signature (on the base64 payload)
 						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
 							if valid {
-								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+								let decodedResult: Result<Object, NetworkError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
 									switch (decodedResult, decodedPayloadData) {
 										case (.success(let object), let decodedPayloadData):
 											completion(.success((object, decodedPayloadData, urlResponse)))
 										case (.failure(let responseError), _):
-											completion(.failure(responseError.asNetworkError))
+											completion(.failure(responseError))
 									}
 								}
 							} else {
 								self.logError("We got an invalid signature!")
 								DispatchQueue.main.async {
-									completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+									completion(.failure(NetworkError.invalidSignature))
 								}
 							}
 						}
@@ -244,7 +236,7 @@ class NetworkManager: Logging {
 					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
 						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
 						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-						completion(.failure(NetworkResponseHandleError.cannotDeserialize.asNetworkError))
+						completion(.failure(NetworkError.cannotDeserialize))
 						return
 					}
 
@@ -252,18 +244,18 @@ class NetworkManager: Logging {
 						// Validate signature (on the base64 payload)
 						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
 							if valid {
-								let decodedResult: Result<Object, NetworkResponseHandleError> = self.decodeJson(data: decodedPayloadData)
+								let decodedResult: Result<Object, NetworkError> = self.decodeJson(data: decodedPayloadData)
 								DispatchQueue.main.async {
 									switch decodedResult {
 										case let .success(object):
 											completion(.success((object, signedResponse, urlResponse)))
 										case let .failure(responseError):
-											completion(.failure(responseError.asNetworkError))
+											completion(.failure(responseError))
 									}
 								}
 							} else {
 								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkResponseHandleError.invalidSignature.asNetworkError))
+								completion(.failure(NetworkError.invalidSignature))
 							}
 						}
 					}
@@ -336,7 +328,7 @@ class NetworkManager: Logging {
 	}
 	
 	/// Utility function to decode JSON
-	private func decodeJson<Object: Decodable>(data: Data) -> Result<Object, NetworkResponseHandleError> {
+	private func decodeJson<Object: Decodable>(data: Data) -> Result<Object, NetworkError> {
 		do {
 			let object = try self.jsonDecoder.decode(Object.self, from: data)
 			self.logVerbose("Response Object: \(object)")
@@ -354,7 +346,7 @@ class NetworkManager: Logging {
 			case let .success(result):
 				return decodeJson(data: result.1)
 					.mapError {
-						$0.asNetworkError
+						$0
 					}
 					.map {
 						(result.0, $0)
@@ -611,7 +603,7 @@ extension NetworkManager: NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
@@ -642,13 +634,7 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
 			delegateQueue: nil
 		)
-		decodedAndReturnSignedJSONData(
-			request: urlRequest,
-			session: session,
-			completion: { result in
-				completion(result.map { object, signedResponse, urlResponse in (object, signedResponse) })
-			}
-		)
+		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
 	}
 
 	/// Get  events from an event provider
@@ -723,18 +709,6 @@ extension NetworkManager: NetworkManaging {
 		} catch {
 			logError("Could not serialize dictionary")
 			completion(.failure(.encodingError))
-		}
-	}
-}
-
-private extension Result where Success == (URLResponse, Data) {
-	
-	func data() -> Data? {
-		switch self {
-			case .success((_, let data)):
-				return data
-			default:
-				return nil
 		}
 	}
 }

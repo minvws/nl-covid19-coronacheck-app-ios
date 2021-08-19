@@ -98,6 +98,32 @@ extension GreenCard {
 		return greencard
 	}
 
+	static func sampleDomesticCredentialsBecomingValidIn28DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
+		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
+		greencard.type = GreenCardType.domestic.rawValue
+
+		greencard.origins = [
+			Origin.sampleVaccination(eventTime: 2 * hours * ago, validFromDate: 28 * days * fromNow, expirationTime: 1 * years * fromNow, dataStoreManager: dataStoreManager)
+		]
+
+		greencard.credentials = []
+
+		return greencard
+	}
+
+	static func sampleDomesticCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: DataStoreManager) -> GreenCard {
+		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
+		greencard.type = GreenCardType.domestic.rawValue
+
+		greencard.origins = [
+			Origin.sampleVaccination(eventTime: 25 * days * ago, validFromDate: 3 * days * fromNow, expirationTime: 1 * years * fromNow, dataStoreManager: dataStoreManager)
+		]
+
+		greencard.credentials = []
+
+		return greencard
+	}
+
 	static func sampleDomesticCredentialsExpiredWithMoreToFetch(dataStoreManager: DataStoreManager) -> GreenCard {
 		let greencard = GreenCard(context: dataStoreManager.managedObjectContext())
 		greencard.type = GreenCardType.domestic.rawValue
@@ -203,11 +229,11 @@ extension GreenCard {
 }
 
 extension Origin {
-	static func sampleVaccination(eventTime: TimeInterval, expirationTime: TimeInterval, dataStoreManager: DataStoreManager) -> Origin {
+	static func sampleVaccination(eventTime: TimeInterval, validFromDate: TimeInterval? = nil, expirationTime: TimeInterval, dataStoreManager: DataStoreManager) -> Origin {
 		let origin = Origin(context: dataStoreManager.managedObjectContext())
 		origin.type = OriginType.vaccination.rawValue
 		origin.eventDate = now.addingTimeInterval(eventTime)
-		origin.validFromDate = origin.eventDate
+		origin.validFromDate = validFromDate.map { now.addingTimeInterval($0) } ?? origin.eventDate
 		origin.expirationTime = now.addingTimeInterval(expirationTime)
 		return origin
 	}
@@ -267,6 +293,20 @@ extension WalletManagerSpy {
 
 		stubbedGreencardsWithUnexpiredOriginsResult = [
 			.sampleDomesticCredentialsExpiringWithNoMoreToFetch(dataStoreManager: dataStoreManager)
+		]
+	}
+
+	func loadDomesticEmptyCredentialsWithDistantFutureValidity(dataStoreManager: DataStoreManager) {
+
+		stubbedGreencardsWithUnexpiredOriginsResult = [
+			.sampleDomesticCredentialsBecomingValidIn28DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
+		]
+	}
+
+	func loadDomesticEmptyCredentialsWithImminentFutureValidity(dataStoreManager: DataStoreManager) {
+
+		stubbedGreencardsWithUnexpiredOriginsResult = [
+			.sampleDomesticCredentialsBecomingValidIn3DaysForOneYearWithNoInitialCredentials(dataStoreManager: dataStoreManager)
 		]
 	}
 }
