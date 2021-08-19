@@ -128,10 +128,9 @@ class HolderDashboardViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$dashboardRegionToggleValue.binding = { [weak self, sceneView] region in
+		viewModel.$selectTab.binding = { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
-			let selectedTab: DashboardTab = region == .domestic ? .domestic : .international
-			sceneView.selectTab(tab: selectedTab)
+			sceneView.selectTab(tab: region)
 		}
 	}
 	
@@ -204,7 +203,7 @@ class HolderDashboardViewController: BaseViewController {
 						
 						let errorView = ErrorDashboardView()
 						errorView.message = message
-						errorView.messageView.linkTouched { url in
+						errorView.messageTextView.linkTouched { url in
 							if url.absoluteString == AppAction.tryAgain {
 								didTapTryAgain()
 							} else {

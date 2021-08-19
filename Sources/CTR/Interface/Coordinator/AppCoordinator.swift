@@ -9,7 +9,7 @@ import UIKit
 
 protocol AppCoordinatorDelegate: AnyObject {
 
-	func openUrl(_ url: URL)
+	func openUrl(_ url: URL, completionHandler: (() -> Void)?)
 
     func handleLaunchState(_ state: LaunchState)
 
@@ -155,6 +155,7 @@ class AppCoordinator: Coordinator, Logging {
 
 	/// Show an alert for the recommended update
 	private func showRecommendedUpdate(updateURL: URL) {
+		userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
 
 		let alertController = UIAlertController(
 			title: L.recommendedUpdateAppTitle(),
@@ -166,7 +167,7 @@ class AppCoordinator: Coordinator, Logging {
 				title: L.recommendedUpdateAppActionCancel(),
 				style: .cancel,
 				handler: { [weak self] _ in
-					self?.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
+					self?.startApplication()
 				}
 			)
 		)
@@ -175,9 +176,9 @@ class AppCoordinator: Coordinator, Logging {
 				title: L.recommendedUpdateAppActionOk(),
 				style: .default,
 				handler: { [weak self] _ in
-					self?.userSettings.lastRecommendUpdateDismissalTimestamp = Date().timeIntervalSince1970
-					self?.openUrl(updateURL)
-					
+					self?.openUrl(updateURL) {
+						self?.startApplication()
+					}
 				}
 			)
 		)
@@ -225,9 +226,9 @@ class AppCoordinator: Coordinator, Logging {
 
 extension AppCoordinator: AppCoordinatorDelegate {
 
-	func openUrl(_ url: URL) {
+	func openUrl(_ url: URL, completionHandler: (() -> Void)? = nil) {
 
-		UIApplication.shared.open(url)
+		UIApplication.shared.open(url, completionHandler: { _ in completionHandler?() })
 	}
 
     /// Handle the launch state
@@ -263,13 +264,9 @@ extension AppCoordinator: AppCoordinatorDelegate {
 							versionInformation: remoteConfiguration
 						)
 					)
-				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending {
+				} else if recommendedVersion.compare(currentVersion, options: .numeric) == .orderedDescending,
+						  let updateURL = remoteConfiguration.appStoreURL {
 					// Recommended update
-
-					guard let updateURL = remoteConfiguration.appStoreURL else {
-						startApplication()
-						return
-					}
 
 					let now = Date().timeIntervalSince1970
 					let interval: Int = remoteConfiguration.recommendedNagIntervalHours ?? 24

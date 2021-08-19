@@ -4,7 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-  
+
 import UIKit
 
 class ShowQRViewModel: Logging {
@@ -121,7 +121,7 @@ class ShowQRViewModel: Logging {
 			showInternationalAnimation = false
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = L.holderShowqrEuTitle()
-            qrAccessibility = L.holderShowqrEuTitle()
+            qrAccessibility = L.holderShowqrEuQrTitle()
 			infoButtonAccessibility = L.holderShowqrEuAboutTitle()
 			showInternationalAnimation = true
 		}
@@ -165,7 +165,21 @@ class ShowQRViewModel: Logging {
 			let zeroPaddedSeconds = String(format: "%02d", secs)
 
 			let message = L.holderShowqrScreenshotwarningMessage("\(mins):\(zeroPaddedSeconds)")
-			self.visibilityState = .screenshotBlocking(timeRemainingText: message)
+
+			// Attempt to make a nicer voiceover string:
+			let voiceoverTimeRemaining: String
+
+			let durationFormatter = DateComponentsFormatter()
+			durationFormatter.unitsStyle = . full
+			durationFormatter.maximumUnitCount = 2
+			durationFormatter.allowedUnits = [.minute, .second]
+
+			// e.g. "in ten seconds"
+			let relativeString = durationFormatter.string(from: Date(), to: Date().addingTimeInterval(TimeInterval(screenshotBlockTimeRemaining)))
+			voiceoverTimeRemaining = relativeString.map { L.holderShowqrScreenshotwarningMessage($0) } ?? message
+
+			self.visibilityState = .screenshotBlocking(timeRemainingText: message, voiceoverTimeRemainingText: voiceoverTimeRemaining)
+
 		} else if screenIsBeingCaptured {
 			self.visibilityState = .hiddenForScreenCapture
 		} else if let currentQRImage = self.currentQRImage {
@@ -176,7 +190,7 @@ class ShowQRViewModel: Logging {
 	}
 
 	private func screenshotWasTaken(blockQRUntil: Date) {
-		// Cleanup the busted old timer
+		// Cleanup the old timer
 		screenshotWarningTimer?.invalidate()
 		screenshotWarningTimer = nil
 
@@ -185,7 +199,7 @@ class ShowQRViewModel: Logging {
 
 			let timeRemaining = blockQRUntil.timeIntervalSince(self.now())
 
-			if timeRemaining <= 0 {
+			if timeRemaining <= 1 {
 				timer.invalidate()
 				self.screenIsBlockedForScreenshotWithSecondsRemaining = nil
 			} else {
@@ -236,9 +250,7 @@ class ShowQRViewModel: Logging {
 
 	func showMoreInformation() {
 
-		guard let credential = greenCard.getActiveCredential(), let data = credential.data else {
-			return
-		}
+		guard let credential = greenCard.getActiveCredential(), let data = credential.data else { return }
 
 		if greenCard.type == GreenCardType.domestic.rawValue {
 			if let domesticCredentialAttributes = cryptoManager?.readDomesticCredentials(data) {

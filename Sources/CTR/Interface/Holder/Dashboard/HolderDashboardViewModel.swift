@@ -28,6 +28,8 @@ final class HolderDashboardViewModel: Logging {
 	@Bindable private(set) var hasAddCertificateMode: Bool = false
 
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
+	
+	@Bindable var selectTab: DashboardTab = .domestic
 
 	// MARK: - Private types
 
@@ -57,7 +59,7 @@ final class HolderDashboardViewModel: Logging {
 	private let notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 	private var userSettings: UserSettingsProtocol
 
-	@Bindable var dashboardRegionToggleValue: QRCodeValidityRegion {
+	var dashboardRegionToggleValue: QRCodeValidityRegion {
 		didSet {
 			DispatchQueue.global().async {
 				self.userSettings.dashboardRegionToggleValue = self.dashboardRegionToggleValue
@@ -112,7 +114,8 @@ final class HolderDashboardViewModel: Logging {
 			myQRCards: [],
 			expiredGreenCards: [],
 			showCreateCard: true,
-			isRefreshingStrippen: false
+			isRefreshingStrippen: false,
+			deviceHasClockDeviation: Services.clockDeviationManager.hasSignificantDeviation ?? false
 		)
 
 		self.dashboardRegionToggleValue = userSettings.dashboardRegionToggleValue
@@ -293,7 +296,7 @@ final class HolderDashboardViewModel: Logging {
 			]
 		}
 
-		if state.deviceHasClockDeviation && validityRegion == .domestic && !regionFilteredMyQRCards.isEmpty {
+		if state.deviceHasClockDeviation && !allQRCards.isEmpty {
 			viewControllerCards += [
 				.deviceHasClockDeviation(message: L.holderDashboardClockDeviationDetectedMessage(), didTapMoreInfo: {
 					coordinatorDelegate.userWishesMoreInfoAboutClockDeviation()
@@ -381,7 +384,8 @@ extension HolderDashboardViewModel.MyQRCard {
 					HolderDashboardViewController.Card.QRCardRow(
 						typeText: origin.type.localizedProof.capitalizingFirstLetter(),
 						validityText: { now in
-							localizedDateExplanation(forOrigin: origin, forNow: now, remoteConfig: remoteConfigManager)
+							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
+							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
 						}
 					)
 				}
@@ -398,12 +402,12 @@ extension HolderDashboardViewModel.MyQRCard {
 
 						// if all origins will be expired in next six hours:
 						let sixHours: TimeInterval = 6 * 60 * 60
-						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: sixHours)
+						guard mostDistantFutureExpiryDate > now && mostDistantFutureExpiryDate < now.addingTimeInterval(sixHours)
 						else { return nil }
  
 						let fiveMinutes: TimeInterval = 5 * 60
 						let formatter: DateComponentsFormatter = {
-							if mostDistantFutureExpiryDate < Date(timeIntervalSinceNow: fiveMinutes) {
+							if mostDistantFutureExpiryDate < now.addingTimeInterval(fiveMinutes) {
 								// e.g. "4 minuten en 15 seconden"
 								return HolderDashboardViewModel.hmsRelativeFormatter
 							} else {
@@ -435,7 +439,8 @@ extension HolderDashboardViewModel.MyQRCard {
 							}
 						}(),
 						validityText: { now in
-							localizedDateExplanation(forOrigin: origin, forNow: now, remoteConfig: remoteConfigManager)
+							let validityType = MyQRCard.ValidityType(expiration: origin.expirationTime, validFrom: origin.validFromDate, now: now)
+							return validityType.text(myQRCard: self, origin: origin, now: now, remoteConfigManager: remoteConfigManager)
 						}
 					)
 				}

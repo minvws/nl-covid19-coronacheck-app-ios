@@ -226,7 +226,20 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 				guard let latestOriginExpiryDate = allOriginsForGreencard.latestOriginExpiryTime()
 				else { return } // unlikely logical error, origins should have an expiry time, even if it's in the past.
 
-				guard let latestCredentialExpiryDate = allCredentialsForGreencard.furthestFutureCredentialExpiryTime()
+				guard !allCredentialsForGreencard.isEmpty else {
+					// It can be that a greencard is issued with zero credentials, but that it can still become valid in the future
+					// (receiving credentials at some later point beyond the current signer horizon).
+					if let originsValidWithinThreshold = greencard.originsActiveNowOrBeforeThresholdFromNow(now: now, thresholdDays: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh),
+					   !originsValidWithinThreshold.isEmpty {
+
+						// Expired here is not quite accurate, because it never had a credential before.
+						// But this is the correct external state for the Refresher to adopt for this greencard.
+						expiredGreencards += [greencard]
+					}
+					return
+				}
+
+				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
 				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
 
 				// Calculate if the latest credential expiration time is < than the origin expiration time

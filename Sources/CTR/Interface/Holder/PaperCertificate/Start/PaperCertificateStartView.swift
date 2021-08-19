@@ -29,10 +29,10 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 		return Label(title1: nil, montserrat: true).multiline().header()
 	}()
 	
-	/// The message label
-	private let messageLabel: Label = {
+	/// The message text
+	private let messageTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 	
 	private let highlightedMessageLabel = RoundedLabel()
@@ -49,10 +49,10 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 		super.setupViewHierarchy()
 		
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(messageTextView)
 		stackView.addArrangedSubview(highlightedMessageLabel)
 		stackView.setCustomSpacing(ViewTraits.Spacing.title, after: titleLabel)
-		stackView.setCustomSpacing(ViewTraits.Spacing.messageLabel, after: messageLabel)
+		stackView.setCustomSpacing(ViewTraits.Spacing.messageLabel, after: messageTextView)
 	}
 	
 	override func setupViewConstraints() {
@@ -80,7 +80,7 @@ final class PaperCertificateStartView: ScrolledStackWithButtonView {
 	/// The message
 	var message: String? {
 		didSet {
-			messageLabel.attributedText = .makeFromHtml(text: message,
+			messageTextView.attributedText = .makeFromHtml(text: message,
 														font: Theme.fonts.body,
 														textColor: Theme.colors.dark)
 		}

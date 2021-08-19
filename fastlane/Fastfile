@@ -247,10 +247,23 @@ platform :ios do
       }
     )
 
+    # It's useful to see the originating git branch in Firebase release notes:
+    gitbranch = ENV['GITBRANCH'].delete_prefix("refs/heads/")
+
+    # Also useful to see the latest commit message, because often building from `main` anyway: 
+    gitcommitmessage = `git log -1 --pretty=format:%B`
+
+    if gitbranch == "main"
+      releasenotes = "Latest commit: #{gitcommitmessage}"
+    else
+      releasenotes = "Branch '#{gitbranch}'\nLatest commit: '#{gitcommitmessage}'"
+    end
+
     # Deploy to Firebase:
     firebase_app_distribution(
       app: firebase_app_id,
-      groups: firebase_groups_csv
+      groups: firebase_groups_csv,
+      release_notes: releasenotes
     )
     
     inform_slack(

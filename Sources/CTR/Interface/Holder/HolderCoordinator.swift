@@ -144,7 +144,7 @@ class HolderCoordinator: SharedCoordinator {
 				// Reset the dashboard back to the domestic tab:
 				if let navigationController = sidePanel?.selectedViewController as? UINavigationController,
 				   let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
-					dashboardViewController.viewModel.dashboardRegionToggleValue = .domestic
+					dashboardViewController.viewModel.selectTab = .domestic
 				}
 				return true
 		}
