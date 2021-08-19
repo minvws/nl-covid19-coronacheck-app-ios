@@ -27,11 +27,10 @@ class VerifierResultView: BaseView {
 	/// The display constants
 	private struct ViewTraits {
 
-		// Margins
-		static let margin: CGFloat = 20.0
-		static let imageMargin: CGFloat = 70.0
-		static let verifiedMessageMargin: CGFloat = UIDevice.current.isSmallScreen ? 95.0 : 108.0
-		static let identityTopMargin: CGFloat = UIDevice.current.isSmallScreen ? 10.0 : 20.0
+		enum Animation {
+			static let duration: TimeInterval = 0.25
+			static let delay: TimeInterval = 0.8
+		}
 	}
 
 	let checkIdentityView: VerifierCheckIdentityView = {
@@ -43,12 +42,11 @@ class VerifierResultView: BaseView {
 
 	private var imageHeightConstraint: NSLayoutConstraint?
 
-	/// setup the views
+	/// Setup the views
 	override func setupViews() {
 		super.setupViews()
 		
 		backgroundColor = Theme.colors.viewControllerBackground
-		checkIdentityView.alpha = 0
 	}
 	
 	func setup(for result: Result) {
@@ -68,7 +66,8 @@ class VerifierResultView: BaseView {
 			case .denied:
 				let view = DeniedView()
 				view.title = L.verifierResultDeniedTitle()
-				view.footerButtonView.primaryButtonTappedCommand = primaryButtonTappedCommand
+				view.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+				view.secondaryButton.addTarget(self, action: #selector(readMoreTapped), for: .touchUpInside)
 				setup(view: view)
 		}
 	}
@@ -87,7 +86,10 @@ class VerifierResultView: BaseView {
 	}
 	
 	/// The user tapped on the primary button
-	var primaryButtonTappedCommand: (() -> Void)?
+	var scanNextTappedCommand: (() -> Void)?
+	
+	/// The user tapped on the secondary button in the denied view
+	var readMoreTappedCommand: (() -> Void)?
 }
 
 private extension VerifierResultView {
@@ -100,14 +102,23 @@ private extension VerifierResultView {
 	func revealIdentityView(for result: Result) {
 		
 		checkIdentityView.backgroundColor = result.colors
-		checkIdentityView.footerButtonView.primaryButtonTappedCommand = primaryButtonTappedCommand
+		checkIdentityView.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+		checkIdentityView.alpha = 0
 		setup(view: checkIdentityView)
 
-		UIView.animate(withDuration: 0.25, delay: 0.8, options: .curveLinear) {
+		UIView.animate(withDuration: ViewTraits.Animation.duration,
+					   delay: ViewTraits.Animation.delay,
+					   options: .curveLinear) {
+			
 			self.checkIdentityView.alpha = 1
-		} completion: { _ in
-//			self.accessibilityElements = [self.checkIdentityView, self.primaryButton]
-//			UIAccessibility.post(notification: .screenChanged, argument: self.checkIdentityView)
+		} completion: { [weak self] _ in
+			
+			UIAccessibility.post(notification: .screenChanged, argument: self?.checkIdentityView)
 		}
+	}
+	
+	@objc func readMoreTapped() {
+		
+		readMoreTappedCommand?()
 	}
 }

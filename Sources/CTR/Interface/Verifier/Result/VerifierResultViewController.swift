@@ -41,9 +41,14 @@ class VerifierResultViewController: BaseViewController, Logging {
 //		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 //		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
-		sceneView.primaryButtonTappedCommand = { [weak self] in
+		sceneView.scanNextTappedCommand = { [weak self] in
 
 			self?.viewModel.scanAgain()
+		}
+		
+		sceneView.readMoreTappedCommand = { [weak self] in
+			
+			self?.viewModel.linkTapped()
 		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
@@ -60,7 +65,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 //		viewModel.$linkedMessage.binding = { [weak self] in
 //			if $0 != nil {
-//				self?.setupLink()
+//				self?.buttonTapped()
 //			}
 //		}
 
@@ -80,7 +85,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
 
-		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
+//		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
 
 		addCloseButton(action: #selector(closeButtonTapped))
 	}
@@ -99,20 +104,10 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.dismiss()
 	}
 
-	// MARK: Helper methods
-
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
-
-//		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-//		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-//		sceneView.messageLabel.isUserInteractionEnabled = true
-	}
-
 	// MARK: User interaction
 
 	/// User tapped on the link
-	@objc func linkTapped() {
+	@objc func buttonTapped() {
 
 		viewModel.linkTapped()
 	}

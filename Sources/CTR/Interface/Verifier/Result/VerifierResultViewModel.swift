@@ -201,6 +201,8 @@ class VerifierResultViewModel: Logging {
 
 		title = L.verifierResultDemoTitle()
 	}
+	
+	// MARK: - Actions
 
 	func dismiss() {
 
