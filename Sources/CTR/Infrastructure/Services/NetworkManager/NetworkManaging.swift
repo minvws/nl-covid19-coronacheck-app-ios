@@ -7,6 +7,15 @@
 
 import Foundation
 
+struct ServerResponse: Decodable {
+	let status: String
+	let code: Int
+}
+
+enum ServerError: Error {
+	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
+}
+
 enum NetworkError: String, Error {
 	case invalidRequest
 	case requestTimedOut
@@ -15,10 +24,10 @@ enum NetworkError: String, Error {
 	case responseCached
 	case serverError
 	case resourceNotFound
-	case encodingError
 	case redirection
 	case serverBusy
 	case invalidSignature
+	case cannotSerialize
 	case cannotDeserialize
 }
 
@@ -113,5 +122,5 @@ protocol NetworkManaging: AnyObject {
 	///   - completion: completion handler
 	func checkCouplingStatus(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
+		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void)
 }

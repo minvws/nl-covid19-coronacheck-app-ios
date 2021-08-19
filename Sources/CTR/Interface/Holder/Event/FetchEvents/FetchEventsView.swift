@@ -45,10 +45,20 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		return view
 	}()
 
+	let secondaryButton: Button = {
+
+		let button = Button(title: "", style: .tertiary)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
+
 	override func setupViews() {
 
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		secondaryButton.touchUpInside(self, action: #selector(secondaryButtonTapped))
 	}
 
 	override func setupViewHierarchy() {
@@ -58,6 +68,7 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		addSubview(spinner)
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(contentTextView)
+		stackView.addArrangedSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
@@ -80,6 +91,11 @@ class FetchEventsView: ScrolledStackWithButtonView {
 		setupPrimaryButton()
 	}
 
+	@objc func secondaryButtonTapped() {
+
+		secondaryButtonTappedCommand?()
+	}
+
 	// MARK: Public Access
 
 	/// The title
@@ -96,6 +112,16 @@ class FetchEventsView: ScrolledStackWithButtonView {
 	var message: String? {
 		didSet {
 			contentTextView.html(message)
+		}
+	}
+
+	var secondaryButtonTappedCommand: (() -> Void)?
+
+	/// The title for the secondary white/blue button
+	var secondaryButtonTitle: String? {
+		didSet {
+			secondaryButton.setTitle(secondaryButtonTitle, for: .normal)
+			secondaryButton.isHidden = secondaryButtonTitle?.isEmpty ?? true
 		}
 	}
 }

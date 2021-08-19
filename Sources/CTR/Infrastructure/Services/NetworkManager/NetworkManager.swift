@@ -507,7 +507,7 @@ extension NetworkManager: NetworkManaging {
 			decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
 		} catch {
 			logError("Could not serialize dictionary")
-			completion(.failure(.encodingError))
+			completion(.failure(.cannotSerialize))
 		}
 	}
 
@@ -691,24 +691,26 @@ extension NetworkManager: NetworkManaging {
 	///   - completion: completion handler
 	func checkCouplingStatus(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
+		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {
 
-		do {
-			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-			let urlRequest = constructRequest(
-				url: networkConfiguration.couplingUrl,
-				method: .POST,
-				body: jsonData
-			)
-			let session = URLSession(
-				configuration: .ephemeral,
-				delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-				delegateQueue: nil
-			)
-			decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
-		} catch {
-			logError("Could not serialize dictionary")
-			completion(.failure(.encodingError))
+		guard JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
+			  let body = try? JSONSerialization.data(withJSONObject: dictionary) else {
+			logError("NetworkManager - checkCouplingStatus: could not serialize dictionary")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)))
+			return
 		}
+
+		let urlRequest = constructRequest(
+			url: networkConfiguration.couplingUrl,
+			method: .POST,
+			body: body
+		)
+		let session = URLSession(
+			configuration: .ephemeral,
+			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
+			delegateQueue: nil
+		)
+//		completion(.failure(ServerError.error(statusCode: 403, response: ServerResponse(status: "error", code: 99345), error: .resourceNotFound)))
+//		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
 	}
 }
