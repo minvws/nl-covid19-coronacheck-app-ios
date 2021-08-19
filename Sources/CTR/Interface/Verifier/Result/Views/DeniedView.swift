@@ -61,7 +61,7 @@ final class DeniedView: BaseView {
 		return label
 	}()
 	
-	private let secondaryButton: Button = {
+	let secondaryButton: Button = {
 
 		let button = Button()
 		button.style = .roundedClear
@@ -70,7 +70,7 @@ final class DeniedView: BaseView {
 		return button
 	}()
 	
-	private let footerButtonView: VerifierFooterButtonView = {
+	let footerButtonView: VerifierFooterButtonView = {
 		
 		let footerView = VerifierFooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false

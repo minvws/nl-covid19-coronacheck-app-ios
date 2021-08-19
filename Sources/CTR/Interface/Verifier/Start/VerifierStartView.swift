@@ -44,7 +44,7 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 
 	private let showInstructionsButton: Button = {
 
-		let button = Button(title: "Button 2", style: .tertiary)
+		let button = Button(title: "Button 2", style: .textLabelBlue)
 		button.titleLabel?.font = Theme.fonts.bodyMedium
 		button.contentHorizontalAlignment = .leading
 		return button

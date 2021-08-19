@@ -48,7 +48,7 @@ class VerifierCheckIdentityView: BaseView {
 		return view
 	}()
 	
-	private let footerButtonView: VerifierFooterButtonView = {
+	let footerButtonView: VerifierFooterButtonView = {
 		
 		let footerView = VerifierFooterButtonView()
 		footerView.translatesAutoresizingMaskIntoConstraints = false

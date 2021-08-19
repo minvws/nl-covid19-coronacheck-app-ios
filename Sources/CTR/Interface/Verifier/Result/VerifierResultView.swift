@@ -68,6 +68,7 @@ class VerifierResultView: BaseView {
 			case .denied:
 				let view = DeniedView()
 				view.title = L.verifierResultDeniedTitle()
+				view.footerButtonView.primaryButtonTappedCommand = primaryButtonTappedCommand
 				setup(view: view)
 		}
 	}
@@ -84,6 +85,9 @@ class VerifierResultView: BaseView {
 			imageHeightConstraint?.isActive = false
 		}
 	}
+	
+	/// The user tapped on the primary button
+	var primaryButtonTappedCommand: (() -> Void)?
 }
 
 private extension VerifierResultView {
@@ -96,6 +100,7 @@ private extension VerifierResultView {
 	func revealIdentityView(for result: Result) {
 		
 		checkIdentityView.backgroundColor = result.colors
+		checkIdentityView.footerButtonView.primaryButtonTappedCommand = primaryButtonTappedCommand
 		setup(view: checkIdentityView)
 
 		UIView.animate(withDuration: 0.25, delay: 0.8, options: .curveLinear) {

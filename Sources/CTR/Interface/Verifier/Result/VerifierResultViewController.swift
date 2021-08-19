@@ -41,10 +41,10 @@ class VerifierResultViewController: BaseViewController, Logging {
 //		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
 //		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
-//		sceneView.primaryButtonTappedCommand = { [weak self] in
+		sceneView.primaryButtonTappedCommand = { [weak self] in
 
-//			self?.viewModel.scanAgain()
-//		}
+			self?.viewModel.scanAgain()
+		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
 
