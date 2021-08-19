@@ -1,3 +1,15 @@
+"verifier.scaninstructions.navigation.title" = "Over scannen";
+"verifier.scaninstructions.scanQR.title" = "Scan de QR-code";
+"verifier.scaninstructions.scanQR.content" = "De bezoeker laat een QR-code zien in de CoronaCheck-app of op papier. Een toerist kan een QR-code in een buitenlandse app of op papier tonen.";
+"verifier.scaninstructions.checkthedetails.title" = "Controleer altijd de gegevens";
+"verifier.scaninstructions.checkthedetails.message" = "Groen scherm? Controleer of de gegevens op jouw scherm hetzelfde zijn als die op het identiteitsbewijs van de bezoeker. Zo weet je zeker dat de QR-code van de bezoeker is.";
+"verifier.scaninstructions.checkonlythevisibledata.title" = "Soms vallen gegevens weg";
+"verifier.scaninstructions.checkonlythevisibledata.message" = "Dat gebeurt om de privacy van de bezoeker te beschermen. Je ziet dan een streepje (-) staan. Controleer in dat geval alleen de gegevens die je wel ziet.";
+"verifier.scaninstructions.redscreennowwhat.title" = "Rood scherm, wat nu?";
+"verifier.scaninstructions.redscreennowwhat.message" = "Bij een rood scherm krijg je uitleg om de bezoeker te helpen. Blijft het scherm rood? Dan kun je de bezoeker geen toegang geven.";
+"verifier.scaninstructions.button.startscanning" = "Start scannen";
+"verifier.scaninstructions.step.title" = "Stap %@";
+"verifier.scaninstructions.navigation.skipbutton.title" = "Sla over";
 "verifier.start.button.showinstructions" = "Waar moet ik op letten?";
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
@@ -63,7 +75,7 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR-code";
 "verifier.start.header" = "Aan de slag";
-"verifier.start.message" = "Scan nu de QR-codes van jouw bezoekers. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven. <a href=\"https://coronacheck.nl/nl/scanner\">Zo werkt scannen.</a>";
+"verifier.start.message" = "Scan nu de QR-codes van jouw bezoekers. Maar let op: je mag alleen bezoekers met een geldige QR-code toegang geven.";
 "verifier.start.button.title" = "Start scannen";
 "verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 
@@ -81,7 +93,7 @@
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
 "verifier.scan.message" = "Richt je telefoon op de QR-code op het scherm van de bezoeker. Of op het papieren bewijs.";
-"verifier.scan.permission.title" = "Geen toegang tot camera";
+"verifier.scan.permission.title" = "Scanner wil toegang tot de camera";
 "verifier.scan.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
 "verifier.scan.permission.settings" = "Naar instellingen";
 
