@@ -53,14 +53,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToScanResult = false
 	var invokedNavigateToScanResultCount = 0
-	var invokedNavigateToScanResultParameters: (scanResult: MobilecoreVerificationResult, Void)?
-	var invokedNavigateToScanResultParametersList = [(scanResult: MobilecoreVerificationResult, Void)]()
+	var invokedNavigateToScanResultParameters: (verificationResult: MobilecoreVerificationResult, Void)?
+	var invokedNavigateToScanResultParametersList = [(verificationResult: MobilecoreVerificationResult, Void)]()
 
-	func navigateToScanResult(_ scanResult: MobilecoreVerificationResult) {
+	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
 		invokedNavigateToScanResult = true
 		invokedNavigateToScanResultCount += 1
-		invokedNavigateToScanResultParameters = (scanResult, ())
-		invokedNavigateToScanResultParametersList.append((scanResult, ()))
+		invokedNavigateToScanResultParameters = (verificationResult, ())
+		invokedNavigateToScanResultParametersList.append((verificationResult, ()))
 	}
 
 	var invokedDisplayContent = false
@@ -73,6 +73,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedDisplayContentCount += 1
 		invokedDisplayContentParameters = (title, content)
 		invokedDisplayContentParametersList.append((title, content))
+	}
+
+	var invokedUserWishesToNavigateToScanInstruction = false
+	var invokedUserWishesToNavigateToScanInstructionCount = 0
+
+	func userWishesToNavigateToScanInstruction() {
+		invokedUserWishesToNavigateToScanInstruction = true
+		invokedUserWishesToNavigateToScanInstructionCount += 1
 	}
 
 	var invokedOpenUrl = false
