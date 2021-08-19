@@ -11,12 +11,10 @@ struct ErrorCode: CustomStringConvertible {
 
 	struct Flow: RawRepresentable {
 		var rawValue: String
-		static let unknown = Flow(rawValue: "-")
 	}
 
 	struct Step: RawRepresentable {
 		var rawValue: String
-		static let unknown = Step(rawValue: "--")
 	}
 
 	var flow: String
@@ -34,7 +32,7 @@ struct ErrorCode: CustomStringConvertible {
 	}
 
 	var description: String {
-		// s/xyy/ppp/hhh/bbbbbb (flow.step / provider / errorcode / detailederrorcode)
+		// s/xyy/ppp/hhh/bbbbbb (system / flow.step / provider / errorcode / detailederrorcode)
 		var result = "i/\(flow)\(step)/\(provider ?? "000")/\(errorCode)"
 		if let detailedCode = detailedCode {
 			result += "/\(detailedCode)"
