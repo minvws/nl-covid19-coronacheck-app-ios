@@ -93,6 +93,7 @@
 "verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
 "verifier.result.denied.readmore" = "Wat kan ik doen?";
+"verifier.result.access.readmore" = "Kloppen de gegevens niet?";
 
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Dit is geen bewijs voor CoronaCheck";

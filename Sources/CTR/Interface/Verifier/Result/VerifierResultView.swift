@@ -25,7 +25,7 @@ class VerifierResultView: BaseView {
 	}
 
 	/// The display constants
-	private struct ViewTraits {
+	private enum ViewTraits {
 
 		enum Animation {
 			static let duration: TimeInterval = 0.25
@@ -67,7 +67,7 @@ class VerifierResultView: BaseView {
 				let view = DeniedView()
 				view.title = L.verifierResultDeniedTitle()
 				view.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
-				view.secondaryButton.addTarget(self, action: #selector(readMoreTapped), for: .touchUpInside)
+				view.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 				setup(view: view)
 		}
 	}
@@ -103,6 +103,7 @@ private extension VerifierResultView {
 		
 		checkIdentityView.backgroundColor = result.colors
 		checkIdentityView.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+		checkIdentityView.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		checkIdentityView.alpha = 0
 		setup(view: checkIdentityView)
 

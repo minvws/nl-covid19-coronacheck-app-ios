@@ -10,7 +10,7 @@ import UIKit
 class VerifierCheckIdentityView: BaseView {
 
 	/// The display constants
-	private struct ViewTraits {
+	private enum ViewTraits {
 		
 		enum Margin {
 			static let edge: CGFloat = 20.0
@@ -19,6 +19,9 @@ class VerifierCheckIdentityView: BaseView {
 			static let headerTop: CGFloat = 32.0
 			static let headerBottom: CGFloat = 24.0
 			static let headerSide: CGFloat = 80.0
+		}
+		enum Spacing {
+			static let identityToSecondaryButton: CGFloat = 32
 		}
 	}
 	
@@ -40,7 +43,7 @@ class VerifierCheckIdentityView: BaseView {
 		return label
 	}()
 
-	private let identity: VerifierIdentityView = {
+	private let identityView: VerifierIdentityView = {
 		
 		let view = VerifierIdentityView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +57,13 @@ class VerifierCheckIdentityView: BaseView {
 		footerView.translatesAutoresizingMaskIntoConstraints = false
 		return footerView
 	}()
+	
+	let secondaryButton: Button = {
+		let button = Button(style: .textLabelBlue)
+		button.title = L.verifierResultAccessReadmore()
+		button.contentHorizontalAlignment = .leading
+		return button
+	}()
 
 	/// Setup the hierarchy
 	override func setupViewHierarchy() {
@@ -62,7 +72,8 @@ class VerifierCheckIdentityView: BaseView {
 		addSubview(headerLabel)
 		addSubview(scrollView)
 		addSubview(footerButtonView)
-		scrollView.addSubview(identity)
+		scrollView.addSubview(identityView)
+		scrollView.addSubview(secondaryButton)
 	}
 
 	/// Setup the constraints
@@ -77,41 +88,57 @@ class VerifierCheckIdentityView: BaseView {
 				constant: -ViewTraits.Margin.headerTop
 			),
 			headerLabel.leadingAnchor.constraint(
-				greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
+				equalTo: safeAreaLayoutGuide.leadingAnchor,
 				constant: ViewTraits.Margin.headerSide
 			),
 			headerLabel.trailingAnchor.constraint(
-				lessThanOrEqualTo: safeAreaLayoutGuide.trailingAnchor,
+				equalTo: safeAreaLayoutGuide.trailingAnchor,
 				constant: -ViewTraits.Margin.headerSide
 			),
-			headerLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			
 			// Scroll view
-			scrollView.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: ViewTraits.Margin.headerBottom),
+			scrollView.topAnchor.constraint(
+				equalTo: headerLabel.bottomAnchor,
+				constant: ViewTraits.Margin.headerBottom
+			),
 			scrollView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
 			scrollView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			scrollView.bottomAnchor.constraint(equalTo: footerButtonView.topAnchor),
 
 			// Identity
-			identity.topAnchor.constraint(
+			identityView.topAnchor.constraint(
 				equalTo: scrollView.topAnchor,
 				constant: ViewTraits.Margin.identityTop
 			),
-			identity.leadingAnchor.constraint(
+			identityView.leadingAnchor.constraint(
 				equalTo: scrollView.leadingAnchor,
 				constant: ViewTraits.Margin.identitySide
 			),
-			identity.trailingAnchor.constraint(
+			identityView.trailingAnchor.constraint(
 				equalTo: scrollView.trailingAnchor,
 				constant: -ViewTraits.Margin.identitySide
 			),
-			identity.bottomAnchor.constraint(
-				equalTo: scrollView.bottomAnchor,
-				constant: -ViewTraits.Margin.edge
-			),
-			identity.widthAnchor.constraint(
+			identityView.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
 				constant: -ViewTraits.Margin.identitySide * 2
+			),
+			
+			// Secondary button
+			secondaryButton.topAnchor.constraint(
+				equalTo: identityView.bottomAnchor,
+				constant: ViewTraits.Spacing.identityToSecondaryButton
+			),
+			secondaryButton.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
+				constant: ViewTraits.Margin.identitySide
+			),
+			secondaryButton.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
+				constant: -ViewTraits.Margin.identitySide
+			),
+			secondaryButton.bottomAnchor.constraint(
+				equalTo: scrollView.bottomAnchor,
+				constant: -ViewTraits.Margin.edge
 			),
 			
 			// Footer view
@@ -119,12 +146,6 @@ class VerifierCheckIdentityView: BaseView {
 			footerButtonView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
 			footerButtonView.bottomAnchor.constraint(equalTo: bottomAnchor)
 		])
-	}
-
-	/// User tapped on the primary button
-	@objc private func disclaimerButtonTapped() {
-
-		disclaimerButtonTappedCommand?()
 	}
 
 	// Public Access
@@ -137,52 +158,49 @@ class VerifierCheckIdentityView: BaseView {
 
 	var firstNameHeader: String? {
 		didSet {
-			identity.firstNameHeader = firstNameHeader
+			identityView.firstNameHeader = firstNameHeader
 		}
 	}
 
 	var firstName: String? {
 		didSet {
-			identity.firstName = firstName
+			identityView.firstName = firstName
 		}
 	}
 
 	var lastNameHeader: String? {
 		didSet {
-			identity.lastNameHeader = lastNameHeader
+			identityView.lastNameHeader = lastNameHeader
 		}
 	}
 
 	var lastName: String? {
 		didSet {
-			identity.lastName = lastName
+			identityView.lastName = lastName
 		}
 	}
 
 	var dayOfBirthHeader: String? {
 		didSet {
-			identity.dayOfBirthHeader = dayOfBirthHeader
+			identityView.dayOfBirthHeader = dayOfBirthHeader
 		}
 	}
 
 	var dayOfBirth: String? {
 		didSet {
-			identity.dayOfBirth = dayOfBirth
+			identityView.dayOfBirth = dayOfBirth
 		}
 	}
 
 	var monthOfBirthHeader: String? {
 		didSet {
-			identity.monthOfBirthHeader = monthOfBirthHeader
+			identityView.monthOfBirthHeader = monthOfBirthHeader
 		}
 	}
 
 	var monthOfBirth: String? {
 		didSet {
-			identity.monthOfBirth = monthOfBirth
+			identityView.monthOfBirth = monthOfBirth
 		}
 	}
-
-	/// The user tapped on the disclaimer button
-	var disclaimerButtonTappedCommand: (() -> Void)?
 }

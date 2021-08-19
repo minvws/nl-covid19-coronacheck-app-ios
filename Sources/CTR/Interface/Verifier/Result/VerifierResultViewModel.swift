@@ -53,12 +53,6 @@ class VerifierResultViewModel: Logging {
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String = "-"
 
-	/// The linked message of the scene
-	@Bindable var linkedMessage: String?
-
-	/// The title of the button
-	@Bindable private(set) var primaryButtonTitle: String
-
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
 
@@ -76,8 +70,6 @@ class VerifierResultViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
-
-		primaryButtonTitle = L.verifierResultNext()
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -108,25 +100,16 @@ class VerifierResultViewModel: Logging {
 		
 		guard verificationResult.status == MobilecoreVERIFICATION_SUCCESS else {
 			allowAccess = .denied
-			showAccessDeniedInvalidQR()
 			return
 		}
 		
 		guard let details = verificationResult.details else {
 			allowAccess = .denied
-			showAccessDeniedInvalidQR()
 			return
 		}
 
-		if details.isSpecimen == "1" {
-			allowAccess = .demo
-			setHolderIdentity(details)
-			showAccessDemo()
-		} else {
-			allowAccess = .verified
-			setHolderIdentity(details)
-			showAccessAllowed()
-		}
+		allowAccess = details.isSpecimen == "1" ? .demo : .verified
+		setHolderIdentity(details)
 	}
 
 	func setHolderIdentity(_ details: MobilecoreVerificationDetails) {
@@ -184,23 +167,6 @@ class VerifierResultViewModel: Logging {
 		dateFormatter.dateFormat = "E d MMMM HH:mm:ss"
 		return dateFormatter
 	}()
-
-	private func showAccessAllowed() {
-
-		title = L.verifierResultAccessTitle()
-		message = nil
-	}
-
-	private func showAccessDeniedInvalidQR() {
-
-		title = L.verifierResultDeniedTitle()
-		linkedMessage = L.verifierResultDeniedLink()
-	}
-
-	private func showAccessDemo() {
-
-		title = L.verifierResultDemoTitle()
-	}
 	
 	// MARK: - Actions
 
@@ -216,7 +182,7 @@ class VerifierResultViewModel: Logging {
         coordinator?.navigateToScan()
     }
 
-	func linkTapped() {
+	func showMoreInformation() {
 
 		switch allowAccess {
 			case .verified, .demo:

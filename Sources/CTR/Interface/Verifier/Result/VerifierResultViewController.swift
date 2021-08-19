@@ -35,12 +35,10 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 		super.viewDidLoad()
 		
+		addCloseButton(action: #selector(closeButtonTapped))
+		
 		// Make the navbar the same color as the background
 		setupTranslucentNavigationBar()
-
-//		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-//		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-//		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
 		sceneView.scanNextTappedCommand = { [weak self] in
 
@@ -49,7 +47,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		
 		sceneView.readMoreTappedCommand = { [weak self] in
 			
-			self?.viewModel.linkTapped()
+			self?.viewModel.showMoreInformation()
 		}
 
 		viewModel.$allowAccess.binding = { [weak self] in
@@ -63,12 +61,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 					self?.sceneView.setup(for: .denied)
 			}
 		}
-
-//		viewModel.$linkedMessage.binding = { [weak self] in
-//			if $0 != nil {
-//				self?.buttonTapped()
-//			}
-//		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
 
@@ -85,10 +77,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.$firstName.binding = { [weak self] in self?.sceneView.checkIdentityView.firstName = $0 }
 		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
-
-//		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
-
-		addCloseButton(action: #selector(closeButtonTapped))
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -105,12 +93,6 @@ class VerifierResultViewController: BaseViewController, Logging {
 	}
 
 	// MARK: User interaction
-
-	/// User tapped on the link
-	@objc func buttonTapped() {
-
-		viewModel.linkTapped()
-	}
 
 	private func setupIdentityView() {
 
