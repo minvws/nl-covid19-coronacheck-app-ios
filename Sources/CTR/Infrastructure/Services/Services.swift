@@ -100,7 +100,6 @@ final class Services {
         let networkConfiguration: NetworkConfiguration
 
         let configurations: [String: NetworkConfiguration] = [
-            NetworkConfiguration.development.name: NetworkConfiguration.development,
             NetworkConfiguration.test.name: NetworkConfiguration.test,
             NetworkConfiguration.acceptance.name: NetworkConfiguration.acceptance,
             NetworkConfiguration.production.name: NetworkConfiguration.production

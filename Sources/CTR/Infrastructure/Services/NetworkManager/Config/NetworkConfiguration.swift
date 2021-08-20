@@ -20,22 +20,6 @@ struct NetworkConfiguration {
     let api: EndpointConfiguration
 	let cdn: EndpointConfiguration
 
-    static let development = NetworkConfiguration(
-        name: "Development",
-        api: .init(
-            scheme: "https",
-            host: "api-ct.bananenhalen.nl",
-            port: nil,
-            path: ["v4"]
-        ),
-		cdn: .init(
-			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
-			port: nil,
-			path: ["v4"]
-		)
-    )
-
     static let test = NetworkConfiguration(
         name: "Test",
 		api: .init(

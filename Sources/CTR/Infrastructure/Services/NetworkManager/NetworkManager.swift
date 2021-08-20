@@ -68,8 +68,7 @@ class NetworkManager: Logging {
 
 	private func data(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
 
-		session
-			.dataTask(with: request, completionHandler: { data, response, error in
+		session.dataTask(with: request, completionHandler: { data, response, error in
 				self.handleNetworkResponse(
 					data,
 					response: response,
@@ -77,8 +76,8 @@ class NetworkManager: Logging {
 					ignore400: ignore400,
 					completion: completion
 				)
-			})
-			.resume()
+			}
+		).resume()
 	}
 
 	// MARK: - Decode Signed Data
@@ -131,7 +130,7 @@ class NetworkManager: Logging {
 	/// Decode a signed response into JSON
 	/// - Parameters:
 	///   - request: the network request
-	///   - completion: completion handler
+	///   - completion: completion handler with object, data, urlResponse or network error
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
 		session: URLSession,
@@ -187,7 +186,7 @@ class NetworkManager: Logging {
 	/// Decode a signed response into JSON
 	/// - Parameters:
 	///   - request: the network request
-	///   - completion: completion handler
+	///   - completion: completion handler with object, signed, urlResponse or network error
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
 		session: URLSession,
@@ -207,7 +206,7 @@ class NetworkManager: Logging {
 	/// Decode a signed response into JSON
 	/// - Parameters:
 	///   - request: the network request
-	///   - completion: completion handler
+	///   - completion:completion handler with object, signed response, urlResponse or network error
 	private func decodedAndReturnSignedJSONData<Object: Decodable>(
 		request: URLRequest,
 		session: URLSession,
@@ -253,7 +252,84 @@ class NetworkManager: Logging {
 			}
 		}
 	}
-	
+
+	/// Decode a signed response into JSON
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler with object, signed response, data, urlResponse or server error
+	private func decodeSignedJSONData<Object: Decodable>(
+		request: URLRequest,
+		session: URLSession,
+		ignore400: Bool = false,
+		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
+		data(request: request, session: session, ignore400: ignore400) { [self] result in
+
+			/// Decode to SignedResult
+			let signedResult: Result<(URLResponse, SignedResponse), NetworkError> = self.jsonResponseHandler(result: result)
+			switch signedResult {
+				case let .success((urlResponse, signedResponse)):
+
+					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
+						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
+						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
+						completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
+						return
+					}
+
+					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
+						// Validate signature (on the base64 payload)
+						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+							if valid {
+								let decodedResult: Result<Object, NetworkError> = self.decodeJson(data: decodedPayloadData)
+								DispatchQueue.main.async {
+									switch decodedResult {
+										case let .success(object):
+											completion(.success((object, signedResponse, decodedPayloadData, urlResponse)))
+										case let .failure(responseError):
+
+											let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(data: decodedPayloadData)
+
+											completion(
+												.failure(
+													ServerError.error(
+														statusCode: (urlResponse as? HTTPURLResponse)?.statusCode,
+														response: serverResponseResult.successValue,
+														error: responseError
+													)
+												)
+											)
+									}
+								}
+							} else {
+								self.logError("We got an invalid signature!")
+								completion(
+									.failure(
+										ServerError.error(
+											statusCode: nil,
+											response: nil,
+											error: .invalidSignature
+										)
+									)
+								)
+							}
+						}
+					}
+				case let .failure(networkError):
+					DispatchQueue.main.async {
+						completion(
+							.failure(
+								ServerError.error(
+									statusCode: nil, // (urlResponse as? HTTPURLResponse)?.statusCode,
+									response: nil,
+									error: networkError
+								)
+							)
+						)
+					}
+			}
+		}
+	}
+
 	// MARK: - Utilities
 	
 	/// Checks for failures and inspects status code
@@ -702,17 +778,23 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let urlRequest = constructRequest(
+		guard let urlRequest = constructRequest(
 			url: networkConfiguration.couplingUrl,
 			method: .POST,
 			body: body
-		)
+		) else {
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
+			return
+		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-//		completion(.failure(ServerError.error(statusCode: 403, response: ServerResponse(status: "error", code: 99345), error: .resourceNotFound)))
-//		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
+
+		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
+			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
+			completion(result.map { decodable, _, _, _ in (decodable) })
+		}
 	}
 }

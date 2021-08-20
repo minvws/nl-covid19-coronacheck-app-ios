@@ -127,9 +127,6 @@ class PaperCertificateCheckViewModel: Logging {
 						secondaryAction: nil
 					)
 				)
-			default:
-				logWarning("PaperCertificateCheckViewModel - Unhandled response: \(response.status)")
-				showTechnicalError("110, unhandled status \(response.status)")
 		}
 	}
 
@@ -149,11 +146,12 @@ class PaperCertificateCheckViewModel: Logging {
 				case .invalidRequest, .invalidSignature:
 
 					break
+				case .cannotDeserialize:
+					
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "030")
+					displayErrorCode(errorCode)
 				case .cannotSerialize:
 					 let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "031")
-					displayErrorCode(errorCode)
-				case .cannotDeserialize:
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "030")
 					displayErrorCode(errorCode)
 
 				default:
