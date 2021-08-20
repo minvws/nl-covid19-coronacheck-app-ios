@@ -263,8 +263,11 @@ class NetworkManager: Logging {
 		error: Error?,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
-		if let error = error {
 
+		logVerbose("--RESPONSE--")
+
+		if let error = error {
+			logDebug("Error with response: \(error)")
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet, .networkConnectionLost:
 					completion(.failure(.noInternetConnection))
@@ -274,29 +277,11 @@ class NetworkManager: Logging {
 					completion(.failure(.invalidResponse))
 			}
 			return
+		} else if let response = response as? HTTPURLResponse {
+			logResponse(response, object: object)
 		}
-		
-		logVerbose("--RESPONSE--")
-		if let response = response as? HTTPURLResponse {
-			logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
-			
-			//			let headers = response.allHeaderFields.map { header, value in
-			//				return String("\(header): \(value)")
-			//			}.joined(separator: "\n")
-			//
-			//			logDebug("Response headers: \n\(headers)")
-			
-			if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
-				if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
-					logVerbose("Response body: \n\(body)")
-				}
-			}
-		} else if let error = error {
-			logDebug("Error with response: \(error)")
-		}
-		
 		logVerbose("--END RESPONSE--")
-		
+
 		guard let response = response,
 			  let object = object else {
 			completion(.failure(.invalidResponse))
@@ -312,6 +297,20 @@ class NetworkManager: Logging {
 		}
 		
 		completion(.success((response, object)))
+	}
+
+	func logResponse<Object>(_ response: HTTPURLResponse, object: Object?) {
+
+		logDebug("Finished response to URL \(response.url?.absoluteString ?? "") with status \(response.statusCode)")
+		let headers = response.allHeaderFields.map { header, value in
+			return String("\(header): \(value)")
+		}.joined(separator: "\n")
+		logVerbose("Response headers: \n\(headers)")
+		if let objectData = object as? Data, let body = String(data: objectData, encoding: .utf8) {
+			if !body.starts(with: "{\"signature") && !body.starts(with: "{\"payload") {
+				logVerbose("Response body: \n\(body)")
+			}
+		}
 	}
 	
 	/// Utility function to decode JSON
