@@ -42,7 +42,7 @@ class AppUpdateViewModel {
 
 		self.coordinator = coordinator
 		title = L.updateAppTitle()
-		message = versionInformation?.minimumVersionMessage ?? L.updateAppContent()
+		message = L.updateAppContent()
 		actionTitle = L.updateAppButton()
 		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
