@@ -51,13 +51,7 @@ class VerifierResultView: BaseView {
 	
 	func setup(for result: Result) {
 		switch result {
-			case .verified:
-				let view = VerifiedView()
-				view.backgroundColor = result.colors
-				setup(view: view)
-				revealIdentityView(for: result)
-				accessView = view
-			case .demo:
+			case .verified, .demo:
 				let view = VerifiedView()
 				view.backgroundColor = result.colors
 				setup(view: view)
