@@ -63,8 +63,7 @@ final class DeniedView: BaseView, AccessViewable {
 	
 	let secondaryButton: Button = {
 
-		let button = Button()
-		button.style = .roundedClear
+		let button = Button(style: .roundedClear)
 		button.titleLabel?.textAlignment = .center
 		return button
 	}()

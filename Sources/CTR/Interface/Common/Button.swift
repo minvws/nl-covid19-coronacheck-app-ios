@@ -72,19 +72,19 @@ class Button: UIButton {
 
     var style = ButtonType.roundedBlue {
         didSet {
-            updateButtonType()
+			setupButtonType()
         }
     }
 
 	var title: String? = "" {
         didSet {
-            self.setTitle(title, for: .normal)
+            setTitle(title, for: .normal)
         }
     }
 
     override var isEnabled: Bool {
         didSet {
-			updateButtonType()
+			setupColors()
         }
     }
 
@@ -96,26 +96,22 @@ class Button: UIButton {
 
         super.init(frame: .zero)
 
-        self.setTitle(title, for: .normal)
-        self.title = title
+		defer {
+			self.title = title
+			self.style = style
+		}
+		
         self.titleLabel?.font = Theme.fonts.bodySemiBold
 		// multiline
 		self.titleLabel?.lineBreakMode = .byWordWrapping
 		self.titleLabel?.numberOfLines = 0
 
-        self.layer.cornerRadius = 5
         self.clipsToBounds = true
 
-        self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchDragExit)
-        self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchCancel)
-        self.addTarget(self, action: #selector(self.touchUpAnimation), for: .touchUpInside)
+		self.addTarget(self, action: #selector(self.touchUpAnimation), for: [.touchDragExit, .touchCancel, .touchUpInside])
         self.addTarget(self, action: #selector(self.touchDownAnimation), for: .touchDown)
 
 		self.translatesAutoresizingMaskIntoConstraints = false
-
-        self.style = style
-
-        updateButtonType()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -150,16 +146,21 @@ class Button: UIButton {
 
     // MARK: - Private
 
-	private func updateButtonType() {
+	private func setupButtonType() {
+		
+		setupColors()
+		contentEdgeInsets = style.contentEdgeInsets
+		layer.borderWidth = style.borderWidth
+		
+		setNeedsLayout()
+	}
+	
+	private func setupColors() {
 		
 		backgroundColor = style.backgroundColor(isEnabled: isEnabled)
 		setTitleColor(style.textColor(isEnabled: true), for: .normal)
 		setTitleColor(style.textColor(isEnabled: false), for: .disabled)
-		contentEdgeInsets = style.contentEdgeInsets
-		layer.borderWidth = style.borderWidth
 		layer.borderColor = style.borderColor(isEnabled: isEnabled).cgColor
-		
-		setNeedsLayout()
 	}
 
     @objc private func touchDownAnimation() {
@@ -177,6 +178,4 @@ class Button: UIButton {
             self.transform = CGAffineTransform.identity
         })
     }
-
-    private var isFlashingTitle: Bool = false
 }
