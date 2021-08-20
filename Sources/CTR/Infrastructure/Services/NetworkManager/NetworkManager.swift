@@ -26,16 +26,17 @@ class NetworkManager: Logging {
 		url: URL?,
 		method: HTTPMethod = .GET,
 		body: Encodable? = nil,
-		headers: [HTTPHeaderKey: String] = [:]) -> Result<URLRequest, NetworkError> {
+		headers: [HTTPHeaderKey: String] = [:]) -> URLRequest? {
 
 		guard let url = url else {
-			return .failure(.invalidRequest)
+			return nil
 		}
 		
 		var request = URLRequest(
 			url: url,
 			cachePolicy: .useProtocolCachePolicy,
-			timeoutInterval: 30)
+			timeoutInterval: 30
+		)
 		request.httpMethod = method.rawValue
 		
 		let defaultHeaders = [
@@ -52,10 +53,6 @@ class NetworkManager: Logging {
 
 		if body is Data {
 			request.httpBody = body as? Data
-		} else {
-			if let body = body.flatMap({ try? self.jsonEncoder.encode(AnyEncodable($0)) }) {
-				request.httpBody = body
-			}
 		}
 		
 		logVerbose("--REQUEST--")
@@ -64,34 +61,24 @@ class NetworkManager: Logging {
 		if let httpBody = request.httpBody { logVerbose(String(data: httpBody, encoding: .utf8)!) }
 		logVerbose("--END REQUEST--")
 		
-		return .success(request)
+		return request
 	}
 	
 	// MARK: - Download Data
-	func dataTask(with request: URLRequest, session: URLSession, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
-		session
-			.dataTask(with: request, completionHandler: completionHandler)
-			.resume()
-	}
-
-	private func data(request: Result<URLRequest, NetworkError>, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
-		switch request {
-			case let .success(request):
-				data(request: request, session: session, ignore400: ignore400, completion: completion)
-			case let .failure(error):
-				completion(.failure(error))
-		}
-	}
 
 	private func data(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
-		dataTask(with: request, session: session) { data, response, error in
-			self.handleNetworkResponse(
-				data,
-				response: response,
-				error: error,
-				ignore400: ignore400,
-				completion: completion)
-		}
+
+		session
+			.dataTask(with: request, completionHandler: { data, response, error in
+				self.handleNetworkResponse(
+					data,
+					response: response,
+					error: error,
+					ignore400: ignore400,
+					completion: completion
+				)
+			})
+			.resume()
 	}
 
 	// MARK: - Decode Signed Data
@@ -101,7 +88,7 @@ class NetworkManager: Logging {
 	///   - request: the network request
 	///   - completion: completion handler
 	private func decodeSignedData(
-		request: Result<URLRequest, NetworkError>,
+		request: URLRequest,
 		session: URLSession,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
@@ -146,7 +133,7 @@ class NetworkManager: Logging {
 	///   - request: the network request
 	///   - completion: completion handler
 	private func decodeSignedJSONData<Object: Decodable>(
-		request: Result<URLRequest, NetworkError>,
+		request: URLRequest,
 		session: URLSession,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(Object, Data, URLResponse), NetworkError>) -> Void) {
@@ -202,7 +189,7 @@ class NetworkManager: Logging {
 	///   - request: the network request
 	///   - completion: completion handler
 	private func decodeSignedJSONData<Object: Decodable>(
-		request: Result<URLRequest, NetworkError>,
+		request: URLRequest,
 		session: URLSession,
 		ignore400: Bool = false,
 		completion: @escaping (Result<Object, NetworkError>) -> Void) {
@@ -222,7 +209,7 @@ class NetworkManager: Logging {
 	///   - request: the network request
 	///   - completion: completion handler
 	private func decodedAndReturnSignedJSONData<Object: Decodable>(
-		request: Result<URLRequest, NetworkError>,
+		request: URLRequest,
 		session: URLSession,
 		ignore400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse, URLResponse), NetworkError>) -> Void) {
@@ -420,11 +407,14 @@ extension NetworkManager: NetworkManaging {
 			HTTPHeaderKey.authorization: "Bearer \(tvsToken)"
 		]
 
-		let urlRequest = constructRequest(
+		guard let urlRequest = constructRequest(
 			url: networkConfiguration.vaccinationAccessTokensUrl,
 			method: .POST,
 			headers: headers
-		)
+		) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 
 		func open(result: Result<ArrayEnvelope<EventFlow.AccessToken>, NetworkError>) {
 			completion(result.map { $0.items })
@@ -441,10 +431,11 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
 
-		let urlRequest = constructRequest(
-			url: networkConfiguration.prepareIssueUrl,
-			method: .GET
-		)
+		guard let urlRequest = constructRequest(url: networkConfiguration.prepareIssueUrl) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
+
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
@@ -457,10 +448,10 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void) {
 
-		let urlRequest = constructRequest(
-			url: networkConfiguration.publicKeysUrl,
-			method: .GET
-		)
+		guard let urlRequest = constructRequest(url: networkConfiguration.publicKeysUrl) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
@@ -474,10 +465,10 @@ extension NetworkManager: NetworkManaging {
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
 	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
-		let urlRequest = constructRequest(
-			url: networkConfiguration.remoteConfigurationUrl,
-			method: .GET
-		)
+		guard let urlRequest = constructRequest(url: networkConfiguration.remoteConfigurationUrl) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
@@ -494,11 +485,14 @@ extension NetworkManager: NetworkManaging {
 
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-			let urlRequest = constructRequest(
+			guard let urlRequest = constructRequest(
 				url: networkConfiguration.credentialUrl,
 				method: .POST,
 				body: jsonData
-			)
+			) else {
+				completion(.failure(.invalidRequest))
+				return
+			}
 			let session = URLSession(
 				configuration: .ephemeral,
 				delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
@@ -515,10 +509,10 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
 
-		let urlRequest = constructRequest(
-			url: networkConfiguration.providersUrl,
-			method: .GET
-		)
+		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
@@ -535,10 +529,10 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
 
-		let urlRequest = constructRequest(
-			url: networkConfiguration.providersUrl,
-			method: .GET
-		)
+		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		func open(result: Result<ArrayEnvelope<EventFlow.EventProvider>, NetworkError>) {
 			completion(result.map { $0.items })
 		}
@@ -579,7 +573,10 @@ extension NetworkManager: NetworkManaging {
 			let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
 			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
 		}
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
@@ -628,7 +625,10 @@ extension NetworkManager: NetworkManaging {
 			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
 		}
 
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
@@ -670,7 +670,10 @@ extension NetworkManager: NetworkManaging {
 			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
 		}
 
-		let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers)
+		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+			completion(.failure(.invalidRequest))
+			return
+		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
@@ -695,11 +698,14 @@ extension NetworkManager: NetworkManaging {
 
 		do {
 			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-			let urlRequest = constructRequest(
+			guard let urlRequest = constructRequest(
 				url: networkConfiguration.couplingUrl,
 				method: .POST,
 				body: jsonData
-			)
+			) else {
+				completion(.failure(.invalidRequest))
+				return
+			}
 			let session = URLSession(
 				configuration: .ephemeral,
 				delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
