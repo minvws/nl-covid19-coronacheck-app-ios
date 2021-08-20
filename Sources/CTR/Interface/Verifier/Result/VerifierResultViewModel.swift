@@ -38,9 +38,6 @@ class VerifierResultViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = ""
 
-	/// The message of the scene
-	@Bindable private(set) var message: String?
-
 	/// The first name of the holder
 	@Bindable private(set) var firstName: String = "-"
 
@@ -52,6 +49,8 @@ class VerifierResultViewModel: Logging {
 
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String = "-"
+	
+	@Bindable private(set) var secondaryTitle: String = ""
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -100,16 +99,25 @@ class VerifierResultViewModel: Logging {
 		
 		guard verificationResult.status == MobilecoreVERIFICATION_SUCCESS else {
 			allowAccess = .denied
+			showAccessDeniedInvalidQR()
 			return
 		}
 		
 		guard let details = verificationResult.details else {
 			allowAccess = .denied
+			showAccessDeniedInvalidQR()
 			return
 		}
 
-		allowAccess = details.isSpecimen == "1" ? .demo : .verified
-		setHolderIdentity(details)
+		if details.isSpecimen == "1" {
+			allowAccess = .demo
+			setHolderIdentity(details)
+			showAccessDemo()
+		} else {
+			allowAccess = .verified
+			setHolderIdentity(details)
+			showAccessAllowed()
+		}
 	}
 
 	func setHolderIdentity(_ details: MobilecoreVerificationDetails) {
@@ -167,8 +175,24 @@ class VerifierResultViewModel: Logging {
 		dateFormatter.dateFormat = "E d MMMM HH:mm:ss"
 		return dateFormatter
 	}()
-	
-	// MARK: - Actions
+
+	private func showAccessAllowed() {
+
+		title = L.verifierResultAccessTitle()
+		secondaryTitle = L.verifierResultAccessReadmore()
+	}
+
+	private func showAccessDeniedInvalidQR() {
+
+		title = L.verifierResultDeniedTitle()
+		secondaryTitle = L.verifierResultDeniedReadmore()
+	}
+
+	private func showAccessDemo() {
+
+		title = L.verifierResultDemoTitle()
+		secondaryTitle = L.verifierResultAccessReadmore()
+	}
 
 	func dismiss() {
 

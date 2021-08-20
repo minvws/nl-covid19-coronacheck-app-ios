@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class VerifiedView: BaseView {
+final class VerifiedView: BaseView, AccessViewable {
 	
 	/// The display constants
 	private enum ViewTraits {
@@ -91,12 +91,10 @@ final class VerifiedView: BaseView {
 		])
 	}
 	
-	// MARK: Public Access
+	// MARK: - AccessViewable
 
 	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.text = title
-		}
+	func title(_ title: String?) {
+		titleLabel.text = title
 	}
 }

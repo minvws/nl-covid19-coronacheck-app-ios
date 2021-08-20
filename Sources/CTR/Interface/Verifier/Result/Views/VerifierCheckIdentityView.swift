@@ -60,7 +60,6 @@ class VerifierCheckIdentityView: BaseView {
 	
 	let secondaryButton: Button = {
 		let button = Button(style: .textLabelBlue)
-		button.title = L.verifierResultAccessReadmore()
 		button.contentHorizontalAlignment = .leading
 		return button
 	}()
@@ -148,7 +147,7 @@ class VerifierCheckIdentityView: BaseView {
 		])
 	}
 
-	// Public Access
+	// MARK: - Public Access
 
 	var header: String? {
 		didSet {
@@ -201,6 +200,18 @@ class VerifierCheckIdentityView: BaseView {
 	var monthOfBirth: String? {
 		didSet {
 			identityView.monthOfBirth = monthOfBirth
+		}
+	}
+	
+	var primaryTitle: String? {
+		didSet {
+			footerButtonView.primaryTitle = primaryTitle
+		}
+	}
+	
+	var secondaryTitle: String? {
+		didSet {
+			secondaryButton.title = secondaryTitle
 		}
 	}
 }

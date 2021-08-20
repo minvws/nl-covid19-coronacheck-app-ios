@@ -39,17 +39,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		
 		// Make the navbar the same color as the background
 		setupTranslucentNavigationBar()
-
-		sceneView.scanNextTappedCommand = { [weak self] in
-
-			self?.viewModel.scanAgain()
-		}
 		
-		sceneView.readMoreTappedCommand = { [weak self] in
-			
-			self?.viewModel.showMoreInformation()
-		}
-
 		viewModel.$allowAccess.binding = { [weak self] in
 
 			switch $0 {
@@ -62,6 +52,16 @@ class VerifierResultViewController: BaseViewController, Logging {
 			}
 		}
 
+		sceneView.scanNextTappedCommand = { [weak self] in
+
+			self?.viewModel.scanAgain()
+		}
+		
+		sceneView.readMoreTappedCommand = { [weak self] in
+			
+			self?.viewModel.showMoreInformation()
+		}
+
 		viewModel.$hideForCapture.binding = { [weak self] in
 
             #if DEBUG
@@ -70,6 +70,11 @@ class VerifierResultViewController: BaseViewController, Logging {
             self?.sceneView.isHidden = $0
             #endif
 		}
+		
+		sceneView.primaryTitle = L.verifierResultNext()
+		
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
 		
 		// Identity
 		setupIdentityView()

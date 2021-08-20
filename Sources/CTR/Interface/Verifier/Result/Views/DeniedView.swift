@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class DeniedView: BaseView {
+final class DeniedView: BaseView, AccessViewable {
 	
 	private enum ViewTraits {
 		
@@ -65,7 +65,6 @@ final class DeniedView: BaseView {
 
 		let button = Button()
 		button.style = .roundedClear
-		button.title = L.verifierResultDeniedReadmore()
 		button.titleLabel?.textAlignment = .center
 		return button
 	}()
@@ -132,12 +131,17 @@ final class DeniedView: BaseView {
 		])
 	}
 	
-	// MARK: Public Access
-
-	/// The title
-	var title: String? {
-		didSet {
-			titleLabel.text = title
-		}
+	// MARK: - AccessViewable
+	
+	func title(_ title: String?) {
+		titleLabel.text = title
+	}
+	
+	func primaryTitle(_ title: String?) {
+		footerButtonView.primaryTitle = title
+	}
+	
+	func secondaryTitle(_ title: String?) {
+		secondaryButton.title = title
 	}
 }

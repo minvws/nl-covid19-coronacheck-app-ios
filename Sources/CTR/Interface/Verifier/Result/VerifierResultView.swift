@@ -39,6 +39,8 @@ class VerifierResultView: BaseView {
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
+	
+	private var accessView: AccessView?
 
 	/// Setup the views
 	override func setupViews() {
@@ -52,21 +54,43 @@ class VerifierResultView: BaseView {
 			case .verified:
 				let view = VerifiedView()
 				view.backgroundColor = result.colors
-				view.title = L.verifierResultAccessTitle()
 				setup(view: view)
 				revealIdentityView(for: result)
+				accessView = view
 			case .demo:
 				let view = VerifiedView()
 				view.backgroundColor = result.colors
-				view.title = L.verifierResultDemoTitle()
 				setup(view: view)
 				revealIdentityView(for: result)
+				accessView = view
 			case .denied:
 				let view = DeniedView()
-				view.title = L.verifierResultDeniedTitle()
-				view.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+				view.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.scanNextTappedCommand?() }
 				view.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 				setup(view: view)
+				accessView = view
+		}
+	}
+	
+	// MARK: - Public
+	
+	var title: String? {
+		didSet {
+			accessView?.title(title)
+		}
+	}
+	
+	var primaryTitle: String? {
+		didSet {
+			accessView?.primaryTitle(primaryTitle)
+			checkIdentityView.primaryTitle = primaryTitle
+		}
+	}
+	
+	var secondaryTitle: String? {
+		didSet {
+			accessView?.secondaryTitle(secondaryTitle)
+			checkIdentityView.secondaryTitle = secondaryTitle
 		}
 	}
 	
@@ -87,7 +111,7 @@ private extension VerifierResultView {
 	func revealIdentityView(for result: Result) {
 		
 		checkIdentityView.backgroundColor = result.colors
-		checkIdentityView.footerButtonView.primaryButtonTappedCommand = scanNextTappedCommand
+		checkIdentityView.footerButtonView.primaryButtonTappedCommand = { [weak self] in self?.scanNextTappedCommand?() }
 		checkIdentityView.secondaryButton.touchUpInside(self, action: #selector(readMoreTapped))
 		checkIdentityView.alpha = 0
 		setup(view: checkIdentityView)

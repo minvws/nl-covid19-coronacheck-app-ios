@@ -44,8 +44,6 @@ final class VerifierFooterButtonView: BaseView {
 		
 		backgroundColor = footerActionColor
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
-		
-		primaryTitle = L.verifierResultNext()
 	}
 
 	/// Setup the view hierarchy
@@ -108,7 +106,7 @@ final class VerifierFooterButtonView: BaseView {
 	/// The title for the primary button
 	var primaryTitle: String? {
 		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
+			primaryButton.title = primaryTitle
 		}
 	}
 	
