@@ -41,7 +41,7 @@ class PaperCertificateScanViewController: ScanViewController {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		

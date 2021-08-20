@@ -59,7 +59,7 @@ class ListEventsView: ScrolledStackWithButtonView {
 
 	let somethingIsWrongButton: Button = {
 
-		let button = Button(title: "", style: .tertiary)
+		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.isHidden = true
 		button.contentHorizontalAlignment = .leading

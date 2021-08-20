@@ -7,14 +7,14 @@
 
 import UIKit
 
-final class DashboardFooterButtonView: BaseView {
+final class VerifierFooterButtonView: BaseView {
 	
 	/// The display constants
 	private struct ViewTraits {
 
 		enum Button {
 			static let height: CGFloat = 52
-			static let width: CGFloat = 253.0
+			static let width: CGFloat = 234.0
 		}
 		enum Gradient {
 			static let height: CGFloat = 15.0
@@ -42,7 +42,7 @@ final class DashboardFooterButtonView: BaseView {
 	override func setupViews() {
 		super.setupViews()
 		
-		backgroundColor = .clear
+		backgroundColor = footerActionColor
 		primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 	}
 
@@ -87,9 +87,9 @@ final class DashboardFooterButtonView: BaseView {
 		let gradient = CAGradientLayer()
 		gradient.frame = gradientView.bounds
 		gradient.colors = [
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.0).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(0.5).cgColor,
-			Theme.colors.viewControllerBackground.withAlphaComponent(1.0).cgColor
+			footerActionColor.withAlphaComponent(0.0).cgColor,
+			footerActionColor.withAlphaComponent(0.5).cgColor,
+			footerActionColor.withAlphaComponent(1.0).cgColor
 		]
 		gradientView.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
 		gradientView.layer.insertSublayer(gradient, at: 0)
@@ -106,7 +106,15 @@ final class DashboardFooterButtonView: BaseView {
 	/// The title for the primary button
 	var primaryTitle: String? {
 		didSet {
-			primaryButton.setTitle(primaryTitle, for: .normal)
+			primaryButton.title = primaryTitle
+		}
+	}
+	
+	/// The color to use for the backgrounds and gradient. Defaults to Theme.colors.viewControllerBackground
+	var footerActionColor: UIColor = Theme.colors.viewControllerBackground {
+		didSet {
+			setFooterGradient()
+			backgroundColor = footerActionColor
 		}
 	}
 }
