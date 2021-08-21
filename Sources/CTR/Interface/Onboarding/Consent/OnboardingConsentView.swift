@@ -25,12 +25,13 @@ final class OnboardingConsentView: BaseView {
 		static let margin: CGFloat = 20.0
 		static let bottomMargin: CGFloat = 8.0
 		static let itemSpacing: CGFloat = 24.0
+		static let iconToLabelSpacing: CGFloat = 16.0
 	}
 
 	/// The scrollview
-	let scrollView: UIScrollView = {
+	let scrollView: ScrolledContentHeightView = {
 
-		let view = UIScrollView(frame: .zero)
+		let view = ScrolledContentHeightView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -105,12 +106,8 @@ final class OnboardingConsentView: BaseView {
 		stackView.addArrangedSubview(titleLabel)
 		stackView.addArrangedSubview(messageLabel)
 		stackView.addArrangedSubview(itemStackView)
-		stackView.addArrangedSubview(consentButton)
-
-		stackView.embed(
-			in: scrollView,
-			insets: UIEdgeInsets.all(ViewTraits.margin)
-		)
+		scrollView.contentView.addSubview(stackView)
+		scrollView.contentView.addSubview(consentButton)
 
 		addSubview(scrollView)
 		addSubview(lineView)
@@ -134,11 +131,41 @@ final class OnboardingConsentView: BaseView {
 			),
 
 			// StackView
+			stackView.topAnchor.constraint(
+				equalTo: scrollView.contentView.topAnchor,
+				constant: ViewTraits.margin
+			),
+			stackView.leftAnchor.constraint(
+				equalTo: scrollView.contentView.leftAnchor,
+				constant: ViewTraits.margin
+			),
+			stackView.rightAnchor.constraint(
+				equalTo: scrollView.contentView.rightAnchor,
+				constant: -ViewTraits.margin
+			),
 			stackView.widthAnchor.constraint(
 				equalTo: scrollView.widthAnchor,
 				constant: -2.0 * ViewTraits.margin
 			),
-			stackView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+			stackView.centerXAnchor.constraint(equalTo: scrollView.contentView.centerXAnchor),
+			
+			// Consent button
+			consentButton.topAnchor.constraint(
+				greaterThanOrEqualTo: stackView.bottomAnchor,
+				constant: ViewTraits.itemSpacing
+			),
+			consentButton.leftAnchor.constraint(
+				equalTo: scrollView.contentView.leftAnchor,
+				constant: ViewTraits.margin
+			),
+			consentButton.rightAnchor.constraint(
+				equalTo: scrollView.contentView.rightAnchor,
+				constant: -ViewTraits.margin
+			),
+			consentButton.bottomAnchor.constraint(
+				equalTo: scrollView.contentView.bottomAnchor,
+				constant: -ViewTraits.margin
+			),
 
 			// Line
 			lineView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -211,9 +238,13 @@ final class OnboardingConsentView: BaseView {
 			accessibiliyHint += L.generalListAccessibilityEnd()
 		}
 		textView.accessibilityHint = accessibiliyHint
+		
+		let imageView = ImageView(imageName: I.onboarding.privacyItem.name).asIcon()
+		imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+		
 		let stack = HStack(
-			spacing: 16,
-			ImageView(imageName: I.onboarding.privacyItem.name).asIcon(),
+			spacing: ViewTraits.iconToLabelSpacing,
+			imageView,
 			textView
 		)
 		.alignment(.center)
