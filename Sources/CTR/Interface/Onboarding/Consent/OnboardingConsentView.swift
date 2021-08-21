@@ -238,9 +238,13 @@ final class OnboardingConsentView: BaseView {
 			accessibiliyHint += L.generalListAccessibilityEnd()
 		}
 		textView.accessibilityHint = accessibiliyHint
+		
+		let imageView = ImageView(imageName: I.onboarding.privacyItem.name).asIcon()
+		imageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+		
 		let stack = HStack(
-			spacing: 16,
-			ImageView(imageName: I.onboarding.privacyItem.name).asIcon(),
+			spacing: ViewTraits.iconToLabelSpacing,
+			imageView,
 			textView
 		)
 		.alignment(.center)
