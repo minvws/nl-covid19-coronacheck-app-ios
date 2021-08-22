@@ -131,19 +131,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to the QR scanner
 	func navigateToScan() {
 
-//		navigateToScanResult(
-//			(attributes: CryptoAttributes(
-//				birthDay: "27",
-//				birthMonth: "5",
-//				credentialVersion: "1",
-//				domesticDcc: "0",
-//				firstNameInitial: "G",
-//				lastNameInitial: "C",
-//				specimen: "0"),
-//			 errorMessage: nil
-//			)
-//		)
-
 		let destination = VerifierScanViewController(
 			viewModel: VerifierScanViewModel(
 				coordinator: self,

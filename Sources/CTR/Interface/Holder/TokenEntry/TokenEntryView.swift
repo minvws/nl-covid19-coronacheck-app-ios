@@ -81,7 +81,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 
 	let resendVerificationCodeButton: Button = {
 
-		let button = Button(title: "Button 1", style: .tertiary)
+		let button = Button(title: "Button 1", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.isHidden = true
 		button.contentHorizontalAlignment = .leading
@@ -90,7 +90,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 
 	let userNeedsATokenButton: Button = {
 		
-		let button = Button(title: "", style: .tertiary)
+		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.isHidden = true
 		button.contentHorizontalAlignment = .leading

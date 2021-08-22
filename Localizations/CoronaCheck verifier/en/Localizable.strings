@@ -100,8 +100,6 @@
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Valid QR code";
 "verifier.result.demo.title" = "Demo QR code scanned";
-"verifier.result.denied.title" = "Invalid QR code";
-"verifier.result.denied.message" = "The visitor doesn't have a valid coronavirus pass. See possible causes.";
 "verifier.result.denied.link" = "See possible causes.";
 "verifier.result.next" = "Scan next";
 

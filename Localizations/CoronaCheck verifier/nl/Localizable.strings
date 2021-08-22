@@ -101,9 +101,9 @@
 "verifier.result.access.title" = "Geldige QR-code";
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.denied.title" = "Ongeldige QR-code";
-"verifier.result.denied.message" = "De bezoeker heeft geen geldig coronabewijs. Lees mogelijke oorzaken.";
-"verifier.result.denied.link" = "Lees mogelijke oorzaken";
 "verifier.result.next" = "Scan volgende";
+"verifier.result.denied.readmore" = "Wat kan ik doen?";
+"verifier.result.access.readmore" = "Kloppen de gegevens niet?";
 
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Dit is geen bewijs voor CoronaCheck";

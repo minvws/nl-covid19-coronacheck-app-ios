@@ -55,7 +55,6 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.allowAccess) == .demo
 		expect(self.sut.title) == L.verifierResultDemoTitle()
-		expect(self.sut.message).to(beNil(), description: "Message should be nil")
 	}
 	
 	func test_checkAttributes_whenNoAttributesAreSet_shouldDisplayDeniedInvalidQR() {
@@ -69,7 +68,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.allowAccess) == .denied
 		expect(self.sut.title) == L.verifierResultDeniedTitle()
-		expect(self.sut.message) == L.verifierResultDeniedMessage()
+		expect(self.sut.secondaryTitle) == L.verifierResultDeniedReadmore()
 	}
 	
 	func test_checkAttributes_shouldDisplayVerified() {
@@ -87,7 +86,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.allowAccess) == .verified
 		expect(self.sut.title) == L.verifierResultAccessTitle()
-		expect(self.sut.message).to(beNil(), description: "Message should be nil")
+		expect(self.sut.secondaryTitle) == L.verifierResultAccessReadmore()
 	}
 
 	func test_holderIdentity_allNil() {
@@ -162,7 +161,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.sut.monthOfBirth) == "X"
 	}
 
-	func testDismiss() {
+	func test_dismiss_shouldNavigateToVerifierWelcome() {
 		
 		// Given
 		
@@ -173,7 +172,7 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
 	}
 	
-	func testScanAgain() {
+	func test_scanAgain_shouldNavigateToScan() {
 		
 		// Given
 		
@@ -184,25 +183,25 @@ class VerifierResultViewModelTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScan) == true
 	}
 	
-	func testLinkTappedDenied() {
+	func test_showMoreInformation_whenDenied_shouldDisplayContent() {
 		
 		// Given
 		sut.allowAccess = .denied
 		
 		// When
-		sut.linkTapped()
+		sut.showMoreInformation()
 		
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
 	}
 	
-	func testLinkTappedAllowed() {
+	func test_showMoreInformation_whenAllowed_shouldDisplayContent() {
 		
 		// Given
 		sut.allowAccess = .verified
 		
 		// When
-		sut.linkTapped()
+		sut.showMoreInformation()
 		
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true

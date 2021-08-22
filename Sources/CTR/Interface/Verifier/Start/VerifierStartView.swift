@@ -40,16 +40,11 @@ class VerifierStartView: ScrolledStackWithHeaderView {
 	}()
 
 	/// the update button
-	private let primaryButton: Button = {
-
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
-		return button
-	}()
+	private let primaryButton = Button()
 
 	private let showInstructionsButton: Button = {
 
-		let button = Button(title: "Button 2", style: .tertiary)
+		let button = Button(title: "Button 2", style: .textLabelBlue)
 		button.titleLabel?.font = Theme.fonts.bodyMedium
 		button.contentHorizontalAlignment = .leading
 		return button

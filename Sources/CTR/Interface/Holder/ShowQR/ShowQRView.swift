@@ -65,7 +65,7 @@ class ShowQRImageView: BaseView {
 
 	let returnToThirdPartyAppButton: Button = {
 
-		let button = Button(title: "", style: .tertiary)
+		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.isHidden = true
 		return button
