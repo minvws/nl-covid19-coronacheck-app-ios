@@ -7,70 +7,42 @@
 
 import UIKit
 
-enum ScanInstructionsResult {
-
-	// The user has read the scan instructions and pressed next
-	case scanInstructionsCompleted
-}
-
-typealias ScanInstructions = (title: String, text: String, image: UIImage?, imageDescription: String?)
-
-class ScanInstructionsViewModel: Logging {
-
+class ScanInstructionsViewModel {
+	
 	/// Coordination Delegate
-	weak private var coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)?
+	weak var coordinator: ScanInstructionsCoordinatorDelegate?
 	
-	// MARK: - Bindable properties
-	
-	/// The title of the scene
-	@Bindable private(set) var title: String
-	
-	/// The content of the scene
-    @Bindable private(set) var content: [ScanInstructions]
-    
-	// MARK: - Initializer
+	/// The pages for onboarding
+	@Bindable private(set) var pages: [ScanInstructionsPage]
 
 	/// Initializer
 	/// - Parameters:
-	///   - coordinator: the verifier coordinator delegate
-	init(coordinator: (VerifierCoordinatorDelegate & OpenUrlProtocol)) {
+	///   - coordinator: the coordinator delegate
+	///   - onboardingInfo: the container with onboarding info
+	///   - numberOfPages: the total number of pages
+	init(
+		coordinator: ScanInstructionsCoordinatorDelegate,
+		pages: [ScanInstructionsPage]) {
 		
 		self.coordinator = coordinator
-		self.title = L.verifierInstructionsTitle()
-		self.content = [
-			(
-				title: L.verifierInstructionsDistanceTitle(),
-				text: L.verifierInstructionsDistanceText(),
-				image: nil,
-                imageDescription: nil
-			), (
-				title: L.verifierInstructionsScanTitle(),
-				text: L.verifierInstructionsScanText(),
-				image: nil,
-                imageDescription: nil
-			), (
-				title: L.verifierInstructionsAccessTitle(),
-				text: L.verifierInstructionsAccessText(),
-				image: .greenScreen,
-                imageDescription: L.verifierInstructionsAccessImage()
-			), (
-				title: L.verifierInstructionsDeniedTitle(),
-				text: L.verifierInstructionsDeniedText(),
-				image: .redScreen,
-                imageDescription: L.verifierInstructionsDeniedImage()
-			)
-		]
+		self.pages = pages
+	}
+	
+	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
+		let viewController = ScanInstructionsPageViewController(
+			viewModel: ScanInstructionsPageViewModel(page: page)
+		)
+		viewController.isAccessibilityElement = true
+		return viewController
+	}
+	
+	func finishScanInstructions() {
+		
+		coordinator?.userDidCompletePages()
 	}
 
-	// MARK: - User Interaction
-
-	func primaryButtonTapped() {
-
-		coordinator?.didFinish(.scanInstructionsCompleted)
-	}
-
-	func linkTapped(_ url: URL) {
-
-		coordinator?.openUrl(url, inApp: true)
+	/// i.e. exit the Scan Instructions
+	func userTappedBackOnFirstPage() {
+		coordinator?.userDidCancelScanInstructions()
 	}
 }
