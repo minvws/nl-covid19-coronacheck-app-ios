@@ -42,7 +42,7 @@ class ScanInstructionsViewController: BaseViewController {
 		
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 		
 		setupPageController()
 
