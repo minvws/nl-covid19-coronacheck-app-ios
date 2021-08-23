@@ -32,6 +32,8 @@ class ScanView: BaseView {
 
 		let button = Button(title: "", style: Button.ButtonType.textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
+		button.titleLabel?.textAlignment = .center
+		
 		return button
 	}()
 
