@@ -21,7 +21,7 @@ class IdentityElementView: BaseView {
 
 		// Margins
 		static let marginBelowHeader: CGFloat = 6.0
-		static let titleOffset: CGFloat = 4.0
+		static let titleYOffset: CGFloat = 0
 		static let minimalTextTopMargin: CGFloat = 4.0
 		static let minimalTextMargin: CGFloat = 7.0
 
@@ -29,7 +29,7 @@ class IdentityElementView: BaseView {
 		static let borderHeight: CGFloat = 62.0
 		static let borderWidth: CGFloat = 1.0
 		static let headerAlignment: NSTextAlignment = .natural
-		static let bodyFont: UIFont = Theme.fonts.headlineBold
+		static let bodyFont: UIFont = Theme.fonts.title2
 
 		static let hasContentHeaderColor: UIColor = Theme.colors.dark
 		static let hasContentBorderColor: UIColor = Theme.colors.grey3
@@ -127,7 +127,7 @@ class IdentityElementView: BaseView {
 			// Title
 			bodyLabel.centerYAnchor.constraint(
 				lessThanOrEqualTo: borderView.centerYAnchor,
-				constant: -ViewTraits.titleOffset
+				constant: -ViewTraits.titleYOffset
 			),
 			bodyLabel.centerXAnchor.constraint(equalTo: borderView.centerXAnchor),
 			bodyLabel.leadingAnchor.constraint(
