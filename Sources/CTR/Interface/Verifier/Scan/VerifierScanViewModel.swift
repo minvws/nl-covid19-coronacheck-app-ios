@@ -23,7 +23,10 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	@Bindable private(set) var title: String
 
 	/// The message of the scene
-	@Bindable private(set) var message: String
+	@Bindable private(set) var message: String?
+
+	/// "Waar moet ik op letten?"
+	@Bindable private(set) var moreInformationButtonText: String?
 
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
@@ -42,7 +45,8 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 		self.cryptoManager = cryptoManager
 
 		self.title = L.verifierScanTitle()
-		self.message = L.verifierScanMessage()
+		self.message = nil
+		self.moreInformationButtonText = "moreInformationButtonText"
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
 		super.init(coordinator: coordinator)
@@ -71,5 +75,9 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	func dismiss() {
 
 		theCoordinator?.navigateToVerifierWelcome()
+	}
+
+	func didTapMoreInformationButton() {
+		theCoordinator?.navigateFromScanToScanInstructions()
 	}
 }
