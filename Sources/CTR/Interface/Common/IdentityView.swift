@@ -20,7 +20,7 @@ class IdentityElementView: BaseView {
 		static let cornerRadius: CGFloat = 4.0
 
 		// Margins
-		static let margin: CGFloat = 10.0
+		static let marginBelowHeader: CGFloat = 6.0
 		static let titleOffset: CGFloat = 2.0
 		static let minimalTextTopMargin: CGFloat = 4.0
 		static let minimalTextMargin: CGFloat = 7.0
@@ -30,6 +30,14 @@ class IdentityElementView: BaseView {
 		static let borderWidth: CGFloat = 1.0
 		static let headerAlignment: NSTextAlignment = .natural
 		static let bodyFont: UIFont = Theme.fonts.headlineBold
+
+		static let hasContentHeaderColor: UIColor = Theme.colors.dark
+		static let hasContentBorderColor: UIColor = Theme.colors.grey3
+		static let hasContentBackgroundColor = UIColor.white
+
+		static let noContentHeaderColor: UIColor = Theme.colors.grey5
+		static let noContentBorderColor: UIColor = Theme.colors.grey5
+		static let noContentBackgroundColor = Theme.colors.grey5
 	}
 
 	/// Initialize the identity element view
@@ -66,6 +74,20 @@ class IdentityElementView: BaseView {
 		borderView.layer.cornerRadius = ViewTraits.cornerRadius
 		borderView.layer.borderWidth = ViewTraits.borderWidth
 		bodyLabel.font = ViewTraits.bodyFont
+
+		updateStylingForContent()
+	}
+
+	func updateStylingForContent() {
+		if body == nil {
+			headerLabel.textColor = ViewTraits.noContentHeaderColor
+			borderView.layer.borderColor = ViewTraits.noContentBorderColor.cgColor
+			borderView.backgroundColor = ViewTraits.noContentBackgroundColor
+		} else {
+			headerLabel.textColor = ViewTraits.hasContentHeaderColor
+			borderView.layer.borderColor = ViewTraits.hasContentBorderColor.cgColor
+			borderView.backgroundColor = ViewTraits.hasContentBackgroundColor
+		}
 	}
 
 	/// Setup the hierarchy
@@ -94,7 +116,7 @@ class IdentityElementView: BaseView {
 			// Border / Background
 			borderView.topAnchor.constraint(
 				equalTo: headerLabel.bottomAnchor,
-				constant: ViewTraits.margin
+				constant: ViewTraits.marginBelowHeader
 			),
 			borderView.leadingAnchor.constraint(equalTo: leadingAnchor),
 			borderView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -144,66 +166,13 @@ class IdentityElementView: BaseView {
 	/// The title
 	var body: String? {
 		didSet {
-			bodyLabel.attributedText = body?.setLineHeight(
+			bodyLabel.attributedText = (self.body ?? "-").setLineHeight(
 				ViewTraits.titleLineHeight,
 				alignment: .center,
 				kerning: ViewTraits.titleKerning
 			)
-		}
-	}
-}
 
-class IdentityView: BaseView {
-
-	/// The display constants
-	private struct ViewTraits {
-
-		// Dimensions
-		static let spacing: CGFloat = 12.0
-	}
-
-	private let stackView: UIStackView = {
-
-		let view = UIStackView()
-		view.translatesAutoresizingMaskIntoConstraints = false
-		view.axis = .horizontal
-		view.alignment = .center
-		view.distribution = .fill
-		view.spacing = ViewTraits.spacing
-		return view
-	}()
-
-	/// Setup the hierarchy
-	override func setupViewHierarchy() {
-
-		super.setupViewHierarchy()
-		addSubview(stackView)
-	}
-
-	/// Setup the constraints
-	override func setupViewConstraints() {
-
-		super.setupViewConstraints()
-		NSLayoutConstraint.activate([
-
-			stackView.topAnchor.constraint(equalTo: topAnchor),
-			stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-			stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			stackView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor)
-		])
-	}
-
-	// MARK: Public Access
-
-	/// The identity elements (header, body)
-	var elements: [(header: String, body: String)] = [] {
-		didSet {
-			for element in elements {
-				let view = IdentityElementView()
-				view.header = element.header
-				view.body = element.body
-				stackView.addArrangedSubview(view)
-			}
+			updateStylingForContent()
 		}
 	}
 }
