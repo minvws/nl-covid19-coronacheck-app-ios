@@ -15,7 +15,6 @@
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
-"verifier.scan.button.moreInformation" = "Waar moet ik op letten?";
 "verifier.result.identity.label" = "Kenmerk %@ is %@";
 /* Link naar web accessibility pagina */
 "verifier.url.accessibility" = "https://coronacheck.nl/nl/accessibility-in-app";
