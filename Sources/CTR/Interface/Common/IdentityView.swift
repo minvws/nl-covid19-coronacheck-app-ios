@@ -21,7 +21,7 @@ class IdentityElementView: BaseView {
 
 		// Margins
 		static let marginBelowHeader: CGFloat = 6.0
-		static let titleOffset: CGFloat = 2.0
+		static let titleOffset: CGFloat = 4.0
 		static let minimalTextTopMargin: CGFloat = 4.0
 		static let minimalTextMargin: CGFloat = 7.0
 
