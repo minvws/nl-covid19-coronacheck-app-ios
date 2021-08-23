@@ -46,7 +46,7 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 
 		self.title = L.verifierScanTitle()
 		self.message = nil
-		self.moreInformationButtonText = "moreInformationButtonText"
+		self.moreInformationButtonText = L.verifierScanButtonMoreInformation()
 		self.torchLabels = [L.verifierScanTorchEnable(), L.verifierScanTorchDisable()]
 
 		super.init(coordinator: coordinator)
