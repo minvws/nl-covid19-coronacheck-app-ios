@@ -249,7 +249,7 @@
 "endOfLife.error.message" = "De website kan niet geopend worden.";
 "endOfLife.title" = "App buiten werking";
 "endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-"endOfLife.button" = "Ga naar CoronaCheck.nl";
+"endOfLife.button" = "Naar CoronaCheck.nl";
 
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";

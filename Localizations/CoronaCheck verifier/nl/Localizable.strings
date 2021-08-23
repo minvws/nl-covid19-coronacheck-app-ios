@@ -1,3 +1,4 @@
+"verifier.scan.button.moreInformation" = "Waar moet ik op letten?";
 "verifier.scaninstructions.navigation.title" = "Over scannen";
 "verifier.scaninstructions.scanQR.title" = "Scan de QR-code";
 "verifier.scaninstructions.scanQR.content" = "De bezoeker laat een QR-code zien in de CoronaCheck-app of op papier. Een toerist kan een QR-code in een buitenlandse app of op papier tonen.";
@@ -9,8 +10,8 @@
 "verifier.scaninstructions.redscreennowwhat.message" = "Bij een rood scherm krijg je uitleg om de bezoeker te helpen. Blijft het scherm rood? Dan kun je de bezoeker geen toegang geven.";
 "verifier.scaninstructions.button.startscanning" = "Start scannen";
 "verifier.scaninstructions.step.title" = "Stap %@";
-"verifier.scaninstructions.navigation.skipbutton.title" = "Sla over";
 "verifier.start.button.showinstructions" = "Waar moet ik op letten?";
+"verifier.scaninstructions.navigation.skipbutton.title" = "Sla over";
 "general.error.cryptolib.message" = "Neem contact op met de helpdesk van CoronaCheck en geef de foutcode (%@) door.";
 "verifier.scan.torch.enable" = "Zet de zaklamp aan.";
 "verifier.scan.torch.disable" = "Zet de zaklamp uit.";
@@ -78,9 +79,11 @@
 "verifier.start.button.title" = "Start scannen";
 "verifier.start.ontimeinternet" = "De app heeft eenmalig internet nodig om de laatste gegevens op te halen.";
 
+"verifier.result.denied.readmore" = "Wat kan ik doen?";
+"verifier.result.access.readmore" = "Kloppen de gegevens niet?";
+
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR-code";
-"verifier.scan.message" = "Richt je telefoon op de QR-code op het scherm van de bezoeker. Of op het papieren bewijs.";
 "verifier.scan.permission.title" = "Scanner wil toegang tot de camera";
 "verifier.scan.permission.message" = "De app wil toegang tot de camera om de QR-code te scannen.";
 "verifier.scan.permission.settings" = "Naar instellingen";
@@ -90,9 +93,6 @@
 "verifier.result.demo.title" = "Demo QR-code gescand";
 "verifier.result.denied.title" = "Ongeldige QR-code";
 "verifier.result.next" = "Scan volgende";
-"verifier.result.denied.readmore" = "Wat kan ik doen?";
-"verifier.result.access.readmore" = "Kloppen de gegevens niet?";
-
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Dit is geen bewijs voor CoronaCheck";
 "verifier.result.alert.unknown.message" = "Je hebt een onbekende QR-code gescand. Vraag de bezoeker een bewijs in de CoronaCheck-app te laten zien. Of een QR-code op papier.";

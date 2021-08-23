@@ -9,8 +9,8 @@
 "verifier.scaninstructions.redscreennowwhat.message" = "In case of a red screen, you will get information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
 "verifier.scaninstructions.button.startscanning" = "Start scanning";
 "verifier.scaninstructions.step.title" = "Step %@";
-"verifier.scaninstructions.navigation.skipbutton.title" = "Skip";
 "verifier.start.button.showinstructions" = "Which things should I pay attention to?";
+"verifier.scaninstructions.navigation.skipbutton.title" = "Skip";
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "verifier.scan.torch.enable" = "Turn the flashlight on.";
 "verifier.scan.torch.disable" = "Turn the flashlight off.";
@@ -77,9 +77,11 @@
 "verifier.start.button.title" = "Start scanning";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 
+"verifier.result.denied.readmore" = "What should I do?";
+"verifier.result.access.readmore" = "Are the details incorrect?";
+
 /* MARK: - Verifier QR Scan */
 "verifier.scan.title" = "Scan QR code";
-"verifier.scan.message" = "Point your device at the QR code on the visitor's screen. Or point it at the paper version of their valid certificate.";
 "verifier.scan.permission.title" = "Scanner wants to access the camera";
 "verifier.scan.permission.message" = "The app wants to access your camera to scan the QR code.";
 "verifier.scan.permission.settings" = "To settings";
@@ -89,9 +91,6 @@
 "verifier.result.demo.title" = "Demo QR code scanned";
 "verifier.result.denied.title" = "Invalid QR code";
 "verifier.result.next" = "Scan next";
-"verifier.result.denied.readmore" = "What should I do?";
-"verifier.result.access.readmore" = "Are the details incorrect?";
-
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "This is no certificate for CoronaCheck";
 "verifier.result.alert.unknown.message" = "You have scanned an unknown QR code. Ask the visitor to show either a certificate in the CoronaCheck app or a QR code on paper.";
