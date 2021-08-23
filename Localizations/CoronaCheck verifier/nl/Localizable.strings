@@ -99,11 +99,14 @@
 "verifier.result.alert.dcc.title" = "Scan een Nederlandse QR-code";
 "verifier.result.alert.dcc.message" = "Je hebt een internationale QR-code gescand. Dat is geen geldig bewijs in Nederland. Vraag de bezoeker om een Nederlands bewijs en scan de QR-code.";
 /* MARK: - Verifier Check Result */
-"verifier.result.check.title" = "Over de controle";
+"verifier.result.check.title" = "Kloppen de gegevens niet?";
+
 /* MARK: - Verifier Denied Instructions */
-"verifier.denied.title" = "Ongeldige QR-code";
-"verifier.denied.message.one" = "<p>Dit betekent <b>niet</b> dat deze bezoeker corona heeft.</p><p><b>Mogelijke oorzaken</b></p><ul><li>De QR-code van de internationale bezoeker voldoet niet aan Nederlandse toegangseisen</li><li>De QR-code is doorgestuurd</li><li>De QR-code is vervalst</li><li>De tijdinstellingen op de telefoon van de bezoeker wijken af</li></ul>";
-"verifier.denied.message.two" = "<p><b>Wat nu?</b><br />De bezoeker kan een test doen of zich laten vaccineren. Daarna kan in de CoronaCheck-app een geldige QR-code gemaakt worden.</p>";
+"verifier.denied.title" = "Wat kan ik doen?";
+"verifier.denied.message.one" = "<p>Een rood scherm betekent dat de QR-code niet aan Nederlandse eisen voldoet.</p>";
+"verifier.denied.message.two" = "<p><b>Dit kun je doen:</b></p><ul><li>Controleer of de tijd op de telefoon van de bezoeker goed staat ingesteld.</li><li>Controleer of de bezoeker een origineel bewijs laat zien. Een screenshot van een bewijs kan voor problemen zorgen.</li><li>Vraag de bezoeker om de app volledig af te sluiten en opnieuw op te starten. Scan daarna opnieuw de QR-code.</li></ul>";
+"verifier.denied.message.three" = "<p><b>Blijft het scherm rood?</b><br />Vraag de bezoeker contact op te nemen met de helpdesk van CoronaCheck.</p>";
+"verifier.denied.message.four" = "<p><b>Zonder groen scherm mag de bezoeker niet toegelaten worden.</b></p>";
 
 /* MARK: - Verifier About */
 "verifier.about.title" = "Over deze app";
