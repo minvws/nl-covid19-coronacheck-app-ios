@@ -9,16 +9,18 @@ import UIKit
 import Clcore
 
 protocol VerifierCoordinatorDelegate: AnyObject {
-	
-	func navigateToVerifierWelcome()
 
 	/// The user finished the start scene
 	/// - Parameter result: the result of the start scene
 	func didFinish(_ result: VerifierStartResult)
 
+	func navigateToVerifierWelcome()
+
 	func navigateToScan()
 
 	func navigateToScanInstruction()
+
+	func navigateFromScanToScanInstructions()
 
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
@@ -29,6 +31,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - title: the title
 	///   - content: the content
 	func displayContent(title: String, content: [Content])
+
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -42,23 +45,31 @@ class VerifierCoordinator: SharedCoordinator {
 	override func start() {
 
 		handleOnboarding(factory: onboardingFactory) {
+			setupMenu()
 			navigateToVerifierWelcome()
 		}
+	}
 
+	fileprivate func setupMenu() {
+		let menu = MenuViewController(
+			viewModel: MenuViewModel(delegate: self)
+		)
+		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+
+		dashboardNavigationController = UINavigationController()
+		sidePanel?.selectedViewController = dashboardNavigationController
+
+		// Replace the root with the side panel controller
+		window.rootViewController = sidePanel
 	}
 }
 
 // MARK: - VerifierCoordinatorDelegate
 
 extension VerifierCoordinator: VerifierCoordinatorDelegate {
-	
+
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome() {
-		
-		let menu = MenuViewController(
-            viewModel: MenuViewModel(delegate: self)
-		)
-		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 		
 		let dashboardViewController = VerifierStartViewController(
 			viewModel: VerifierStartViewModel(
@@ -67,11 +78,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				proofManager: proofManager
 			)
 		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationController
-		
-		// Replace the root with the side panel controller
-		window.rootViewController = sidePanel
+
+		dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
 	}
 
 	func didFinish(_ result: VerifierStartResult) {
@@ -96,6 +104,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+
+	func navigateFromScanToScanInstructions() {
+		dashboardNavigationController?.popToRootViewController(animated: true) {
+			self.navigateToScanInstruction()
+		}
 	}
 
 	/// Display content
@@ -131,14 +145,17 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// Navigate to the QR scanner
 	func navigateToScan() {
 
-		let destination = VerifierScanViewController(
-			viewModel: VerifierScanViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager
+		if let existingScanViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierScanViewController }) {
+			dashboardNavigationController?.popToViewController(existingScanViewController, animated: true)
+		} else {
+			let destination = VerifierScanViewController(
+				viewModel: VerifierScanViewModel(
+					coordinator: self,
+					cryptoManager: cryptoManager
+				)
 			)
-		)
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.setViewControllers([destination], animated: true)
+			dashboardNavigationController?.setViewControllers([destination], animated: true)
+		}
 	}
 }
 
@@ -157,12 +174,7 @@ extension VerifierCoordinator: ScanInstructionsDelegate {
 	/// User cancelled the flow (i.e. back button), thus don't proceed to scan.
 	func scanInstructionsWasCancelled() {
 		removeScanInstructionsCoordinator()
-
-		guard let navigationController = dashboardNavigationController,
-			  let verifierStartViewController = navigationController.viewControllers.first(where: { $0 is VerifierStartViewController })
-		else { return }
-
-		navigationController.popToViewController(verifierStartViewController, animated: true)
+		dashboardNavigationController?.popToRootViewController(animated: true)
 	}
 
 	private func removeScanInstructionsCoordinator() {

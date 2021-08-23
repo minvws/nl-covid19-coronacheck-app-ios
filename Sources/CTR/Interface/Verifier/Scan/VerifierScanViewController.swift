@@ -44,6 +44,8 @@ class VerifierScanViewController: ScanViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+
+		viewModel.$moreInformationButtonText.binding = { [weak self] in self?.sceneView.moreInformationButtonText = $0 }
 		
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
@@ -61,12 +63,17 @@ class VerifierScanViewController: ScanViewController {
 				self?.showPermissionError()
 			}
 		}
+
+		sceneView.moreInformationButtonCommand = { [viewModel] in
+			viewModel.didTapMoreInformationButton()
+		}
 		
 		addCloseButton(
 			action: #selector(closeButtonTapped),
 			backgroundColor: .clear,
 			tintColor: .white
 		)
+
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
 	}
