@@ -21,4 +21,12 @@ struct SignedResponse: Codable, Equatable {
 		case payload
 		case signature
 	}
+
+	var decodedPayload: Data? {
+		Data(base64Encoded: payload)
+	}
+
+	var decodedSignature: Data? {
+		Data(base64Encoded: signature)
+	}
 }
