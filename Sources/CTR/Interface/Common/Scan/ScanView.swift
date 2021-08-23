@@ -28,6 +28,15 @@ class ScanView: BaseView {
 		return Label(bodySemiBold: nil).multiline()
 	}()
 
+	private let moreInformationButton: Button = {
+
+		let button = Button(title: "", style: Button.ButtonType.textLabelBlue)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.titleLabel?.textAlignment = .center
+		
+		return button
+	}()
+
 	let cameraView: UIView = {
 
 		let view = UIView()
@@ -74,6 +83,8 @@ class ScanView: BaseView {
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
 		messageLabel.textColor = .white
+
+		moreInformationButton.addTarget(self, action: #selector(moreInformationButtonTapped), for: .touchUpInside)
 	}
 
 	/// Setup the hierarchy
@@ -88,6 +99,7 @@ class ScanView: BaseView {
 		addSubview(dummyView)
 		addSubview(scrollView)
 		scrollView.addSubview(messageLabel)
+		scrollView.addSubview(moreInformationButton)
 	}
 
 	/// Setup the constraints
@@ -126,7 +138,18 @@ class ScanView: BaseView {
 				constant: -2 * ViewTraits.margin
 			),
 			messageLabel.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-			messageLabel.bottomAnchor.constraint(
+
+			moreInformationButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor),
+			moreInformationButton.leadingAnchor.constraint(
+				equalTo: scrollView.leadingAnchor,
+				constant: ViewTraits.margin
+			),
+			moreInformationButton.trailingAnchor.constraint(
+				equalTo: scrollView.trailingAnchor,
+				constant: -ViewTraits.margin
+			),
+
+			moreInformationButton.bottomAnchor.constraint(
 				equalTo: scrollView.bottomAnchor,
 				constant: -ViewTraits.margin
 			)
@@ -173,6 +196,11 @@ class ScanView: BaseView {
 		sampleMask.layer.mask = maskLayer
 	}
 
+	@objc func moreInformationButtonTapped() {
+
+		moreInformationButtonCommand?()
+	}
+
 	// MARK: Public Access
 	
 	/// The message
@@ -185,4 +213,22 @@ class ScanView: BaseView {
 			)
 		}
 	}
+
+	/// The message
+	var moreInformationButtonText: String? {
+		didSet {
+			guard let moreInformationButtonText = moreInformationButtonText else {
+				moreInformationButton.title = nil
+				return
+			}
+
+			let attributedTitle = moreInformationButtonText.underline(
+				underlined: moreInformationButtonText,
+				with: .white
+			)
+			moreInformationButton.setAttributedTitle(attributedTitle, for: .normal)
+		}
+	}
+
+	var moreInformationButtonCommand: (() -> Void)?
 }
