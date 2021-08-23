@@ -11,14 +11,6 @@ import Clcore
 
 class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtocol, Dismissable {
 
-	var invokedNavigateToVerifierWelcome = false
-	var invokedNavigateToVerifierWelcomeCount = 0
-
-	func navigateToVerifierWelcome() {
-		invokedNavigateToVerifierWelcome = true
-		invokedNavigateToVerifierWelcomeCount += 1
-	}
-
 	var invokedDidFinish = false
 	var invokedDidFinishCount = 0
 	var invokedDidFinishParameters: (result: VerifierStartResult, Void)?
@@ -29,6 +21,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 		invokedDidFinishCount += 1
 		invokedDidFinishParameters = (result, ())
 		invokedDidFinishParametersList.append((result, ()))
+	}
+
+	var invokedNavigateToVerifierWelcome = false
+	var invokedNavigateToVerifierWelcomeCount = 0
+
+	func navigateToVerifierWelcome() {
+		invokedNavigateToVerifierWelcome = true
+		invokedNavigateToVerifierWelcomeCount += 1
 	}
 
 	var invokedNavigateToScan = false
@@ -45,6 +45,14 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 	func navigateToScanInstruction() {
 		invokedNavigateToScanInstruction = true
 		invokedNavigateToScanInstructionCount += 1
+	}
+
+	var invokedNavigateFromScanToScanInstructions = false
+	var invokedNavigateFromScanToScanInstructionsCount = 0
+
+	func navigateFromScanToScanInstructions() {
+		invokedNavigateFromScanToScanInstructions = true
+		invokedNavigateFromScanToScanInstructionsCount += 1
 	}
 
 	var invokedNavigateToScanResult = false
