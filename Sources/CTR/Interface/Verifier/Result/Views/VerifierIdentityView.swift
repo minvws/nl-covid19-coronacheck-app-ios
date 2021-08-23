@@ -40,37 +40,26 @@ class VerifierIdentityView: BaseView {
 		return view
 	}()
 
-	static func createIdentityElementView() -> IdentityElementView {
-
-		return IdentityElementView(
-			borderHeight: ViewTraits.borderHeight,
-			borderWidth: ViewTraits.borderWidth,
-			borderColor: Theme.colors.grey3,
-			headerAlignment: .natural,
-			bodyFont: Theme.fonts.title2
-		)
-	}
-
 	private let lastNameView: IdentityElementView = {
-		let view = createIdentityElementView()
+		let view = IdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	private let firstNameView: IdentityElementView = {
-		let view = createIdentityElementView()
+		let view = IdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	private let dayOfBirthView: IdentityElementView = {
-		let view = createIdentityElementView()
+		let view = IdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
 
 	private let monthOfBirthView: IdentityElementView = {
-		let view = createIdentityElementView()
+		let view = IdentityElementView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()

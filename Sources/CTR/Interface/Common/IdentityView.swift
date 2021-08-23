@@ -24,40 +24,22 @@ class IdentityElementView: BaseView {
 		static let titleOffset: CGFloat = 2.0
 		static let minimalTextTopMargin: CGFloat = 4.0
 		static let minimalTextMargin: CGFloat = 7.0
+
+		// Styling
+		static let borderHeight: CGFloat = 62.0
+		static let borderWidth: CGFloat = 1.0
+		static let headerAlignment: NSTextAlignment = .natural
+		static let bodyFont: UIFont = Theme.fonts.headlineBold
 	}
 
 	/// Initialize the identity element view
-	/// - Parameters:
-	///   - borderHeight: the height of the border
-	///   - borderWidth: the width of the border
-	///   - borderColor: the color of the border
-	///   - headerAlignment: the text alignment of the header text
-	///   - bodyFont: the font of the body
-	init(
-		borderHeight: CGFloat = 44.0,
-		borderWidth: CGFloat = 2.0,
-		borderColor: UIColor = Theme.colors.dark,
-		headerAlignment: NSTextAlignment = .center,
-		bodyFont: UIFont = Theme.fonts.headlineBold) {
-
-		self.borderHeight = borderHeight
-		self.borderWidth = borderWidth
-		self.borderColor = borderColor
-		self.headerAlignment = headerAlignment
-		self.bodyFont = bodyFont
+	init() {
 		super.init(frame: .zero)
 	}
 
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-
-	var borderWidth: CGFloat
-	var borderHeight: CGFloat
-	var borderColor: UIColor
-
-	var headerAlignment: NSTextAlignment
-	var bodyFont: UIFont
 
 	/// The title label
 	private let headerLabel: Label = {
@@ -82,9 +64,8 @@ class IdentityElementView: BaseView {
 		super.setupViews()
 
 		borderView.layer.cornerRadius = ViewTraits.cornerRadius
-		borderView.layer.borderWidth = borderWidth
-		borderView.layer.borderColor = borderColor.cgColor
-		bodyLabel.font = bodyFont
+		borderView.layer.borderWidth = ViewTraits.borderWidth
+		bodyLabel.font = ViewTraits.bodyFont
 	}
 
 	/// Setup the hierarchy
@@ -119,7 +100,7 @@ class IdentityElementView: BaseView {
 			borderView.trailingAnchor.constraint(equalTo: trailingAnchor),
 			borderView.bottomAnchor.constraint(equalTo: bottomAnchor),
 			borderView.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.width),
-			borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: borderHeight),
+			borderView.heightAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.borderHeight),
 
 			// Title
 			bodyLabel.centerYAnchor.constraint(
@@ -155,7 +136,7 @@ class IdentityElementView: BaseView {
 		didSet {
 			headerLabel.attributedText = header?.setLineHeight(
 				ViewTraits.headerLineHeight,
-				alignment: headerAlignment
+				alignment: ViewTraits.headerAlignment
 			)
 		}
 	}
