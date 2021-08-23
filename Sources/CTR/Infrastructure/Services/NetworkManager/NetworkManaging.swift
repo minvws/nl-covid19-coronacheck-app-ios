@@ -29,6 +29,33 @@ enum NetworkError: String, Error {
 	case invalidSignature
 	case cannotSerialize
 	case cannotDeserialize
+
+	func getClientErrorCode() -> String? {
+
+		switch self {
+
+			case .invalidRequest:
+				return "002"
+			//			case .requestTimedOut:
+			//			case .noInternetConnection:
+			case .invalidResponse:
+				return "003"
+			//			case .responseCached:
+			//			case .serverError:
+			//			case .resourceNotFound:
+			//			case .redirection:
+			//			case .serverBusy:
+			case .invalidSignature:
+				return "020"
+			case .cannotDeserialize:
+				return "030"
+			case .cannotSerialize:
+				return "031"
+			default:
+				return nil
+		}
+	}
+
 }
 
 enum HTTPHeaderKey: String {

@@ -1,7 +1,9 @@
-"holder.event.error.title" = "Sorry, er gaat iets mis";
-"holder.event.error.message" = "We zijn hard bezig om dit probleem op te lossen (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
-"holder.event.malfunctions.title" = "Bekijk de actuele storingen";
-"holder.event.malfunctions.url" = "https://status.coronacheck.nl/";
+"holder.errorstate.title" = "Sorry, er gaat iets mis";
+"holder.errorstate.server.message" = "We zijn hard bezig om dit probleem op te lossen (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
+"holder.errorstate.client.message" = "Er gaat iets mis bij het maken van je bewijs (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
+"holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
+"holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
+
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
 "recommended.updateApp.action.ok" = "Installeer update";

@@ -142,21 +142,11 @@ class PaperCertificateCheckViewModel: Logging {
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
-					displayErrorCode(errorCode)
-				case .invalidRequest, .invalidSignature:
-
-					break
-				case .cannotDeserialize:
-					
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "030")
-					displayErrorCode(errorCode)
-				case .cannotSerialize:
-					 let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "031")
-					displayErrorCode(errorCode)
-
-				default:
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
-					displayErrorCode(errorCode)
+					displayServerErrorCode(errorCode)
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+					// Client side
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+					displayClientErrorCode(errorCode)
 			}
 		}
 	}
@@ -192,19 +182,41 @@ class PaperCertificateCheckViewModel: Logging {
 		)
 	}
 
-	private func displayErrorCode(_ errorCode: ErrorCode) {
+	private func displayServerErrorCode(_ errorCode: ErrorCode) {
 
 		viewState = .feedback(
 			content: PaperCertificateCheckViewController.Content(
-				title: L.holderEventErrorTitle(),
-				subTitle: L.holderEventErrorMessage("\(errorCode)"),
+				title: L.holderErrorstateTitle(),
+				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
 				primaryAction: {[weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},
-				secondaryActionTitle: L.holderEventMalfunctionsTitle(),
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderEventMalfunctionsUrl()) else {
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+						return
+					}
+
+					self?.coordinator?.openUrl(url, inApp: true)
+				}
+			)
+		)
+	}
+
+	private func displayClientErrorCode(_ errorCode: ErrorCode) {
+
+		viewState = .feedback(
+			content: PaperCertificateCheckViewController.Content(
+				title: L.holderErrorstateTitle(),
+				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
+				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryAction: {[weak self] in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				},
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
 						return
 					}
 

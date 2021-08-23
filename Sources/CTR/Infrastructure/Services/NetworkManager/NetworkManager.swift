@@ -249,72 +249,57 @@ class NetworkManager: Logging {
 
 		data2(request: request, session: session, ignore400: ignore400) { data, response, error in
 
-			self.logVerbose("--RESPONSE--")
+			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
+			// Result<(URLResponse, Data), ServerError>
 
-			if let error = error {
-				self.logDebug("Error with response: \(error)")
-				switch URLError.Code(rawValue: (error as NSError).code) {
-					case .notConnectedToInternet:
-						completion(.failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .noInternetConnection)))
-					case .timedOut:
-						completion(.failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .requestTimedOut)))
-					default:
-						completion(.failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse)))
-				}
-				return
-			} else if let response = response as? HTTPURLResponse {
-				self.logResponse(response, object: data)
-			}
-			self.logVerbose("--END RESPONSE--")
+			switch networkResult {
+				case let .failure(serverError):
+					completion(.failure(serverError))
+				case let .success(networkResponse):
 
-			guard let response = response,
-				  let data = data else {
-				completion(.failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse)))
-				return
-			}
+					// Decode to SignedResponse
+					let signedResult: Result<SignedResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
+					switch signedResult {
+						case let .success(signedResponse):
 
-			if let networkError = self.inspect(response: response), networkError == .serverBusy {
-					completion(.failure(.error(statusCode: response.httpStatusCode, response: nil, error: .serverBusy)))
-			}
-
-			let signedResult: Result<SignedResponse, NetworkError> = self.decodeJson(json: data)
-			switch signedResult {
-				case let .success(signedResponse):
-					guard let decodedPayloadData = signedResponse.decodedPayload,
-						  let signatureData = signedResponse.decodedSignature else {
-						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-						completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
-						return
-					}
-
-					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
-						// Validate signature (on the base64 payload)
-						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-							if valid {
-
-								// Decode to the expected object
-								let decodedResult: Result<Object, NetworkError> = self.decodeJson(json: decodedPayloadData)
-
-								switch decodedResult {
-									case let .success(object):
-										completion(.success((object, signedResponse, decodedPayloadData, response)))
-									case let .failure(responseError):
-
-										// Decode to a server response
-										let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
-										let networkError = self.inspect(response: response)
-
-										completion(.failure(ServerError.error(statusCode: response.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
-								}
-							} else {
-								self.logError("We got an invalid signature!")
-								completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
+							// Make sure we have an actual payload and signature
+							guard let decodedPayloadData = signedResponse.decodedPayload,
+								  let signatureData = signedResponse.decodedSignature else {
+								self.logError("we cannot decode the payload or signature (base64 decoding failed)")
+								completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotDeserialize)))
+								return
 							}
-						}
-					}
 
-				case let .failure(networkError):
-					completion(.failure(ServerError.error(statusCode: response.httpStatusCode, response: nil, error: networkError)))
+							if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
+								// Validate signature (on the base64 payload)
+								checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
+									if valid {
+
+										// Decode to the expected object
+										let decodedResult: Result<Object, NetworkError> = self.decodeJson(json: decodedPayloadData)
+
+										switch decodedResult {
+											case let .success(object):
+												completion(.success((object, signedResponse, decodedPayloadData, networkResponse.urlResponse)))
+											case let .failure(responseError):
+
+												// Decode to a server response
+												let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
+												let networkError = self.inspect(response: networkResponse.urlResponse)
+
+												completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
+										}
+									} else {
+										self.logError("We got an invalid signature!")
+										completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
+									}
+								}
+							}
+
+						case let .failure(networkError):
+							// No signed response. Abort.
+							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
+					}
 			}
 
 		}
@@ -384,6 +369,40 @@ class NetworkManager: Logging {
 		}
 		
 		completion(.success((response, object)))
+	}
+
+	func handleNetworkResponse(
+		response: URLResponse?,
+		data: Data?,
+		error: Error?) -> Result<(urlResponse: URLResponse, data: Data), ServerError> {
+
+		self.logVerbose("--RESPONSE--")
+
+		if let error = error {
+			self.logDebug("Error with response: \(error)")
+			switch URLError.Code(rawValue: (error as NSError).code) {
+				case .notConnectedToInternet:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .noInternetConnection))
+				case .timedOut:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .requestTimedOut))
+				default:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
+			}
+		} else if let response = response as? HTTPURLResponse {
+			self.logResponse(response, object: data)
+		}
+		self.logVerbose("--END RESPONSE--")
+
+		guard let response = response,
+			  let data = data else {
+			return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
+		}
+
+		if let networkError = self.inspect(response: response), networkError == .serverBusy {
+			return .failure(.error(statusCode: response.httpStatusCode, response: nil, error: .serverBusy))
+		}
+
+		return .success((response, data))
 	}
 
 	func logResponse<Object>(_ response: HTTPURLResponse, object: Object?) {

@@ -1,7 +1,8 @@
-"holder.event.error.title" = "Sorry, something went wrong";
-"holder.event.error.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
-"holder.event.malfunctions.title" = "Check the latest outages";
-"holder.event.malfunctions.url" = "https://status.coronacheck.nl/en/";
+"holder.errorstate.title" = "Sorry, something went wrong";
+"holder.errorstate.server.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
+"holder.errorstate.malfunctions.title" = "Check the latest outages";
+"holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
+
 "recommended.updateApp.title" = "Want to update the app?";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";
 "recommended.updateApp.action.ok" = "Install update";
