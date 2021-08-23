@@ -98,11 +98,11 @@
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. This is no valid certificate in the Netherlands. Ask the visitor for a Dutch certificate and scan the QR code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "About the check";
+
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "Invalid QR code";
 "verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b></p><ul><li>The QR code of the visitor does not conform to the Dutch entry requirements</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul>";
 "verifier.denied.message.two" = "<b>What to do now?</b><p>The visitor can get vaccinated or can take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
-
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";
 "verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. Visitors create a coronavirus pass of a vaccination, a negative test result or if they've had corona and are recovered. With this app, only visitors with a coronavirus pass gain access. This way, the Netherlands can head out more often.";
