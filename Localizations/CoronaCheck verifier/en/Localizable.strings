@@ -34,7 +34,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p>Make sure the QR code belongs to the visitor by checking if the details on your screen correspond with their proof of identity.</p><p><b>Note: details may be incomplete</b><br />In order to protect the visitor’s privacy, not all data is displayed. Some fields may contain a hyphen (-). It’s sufficient to check the details that are displayed.</p><p><b>If the details are incorrect</b>, the visitor is not allowed access.</p>";
+"verifier.result.check.text" = "<p><b>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</b></p><p><b>Please note: sometimes details may disappear</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
@@ -97,12 +97,15 @@
 "verifier.result.alert.dcc.title" = "Scan a Dutch QR code";
 "verifier.result.alert.dcc.message" = "You have scanned an international QR code. This is no valid certificate in the Netherlands. Ask the visitor for a Dutch certificate and scan the QR code.";
 /* MARK: - Verifier Check Result */
-"verifier.result.check.title" = "About the check";
+"verifier.result.check.title" = "Are the details incorrect?";
 
 /* MARK: - Verifier Denied Instructions */
-"verifier.denied.title" = "Invalid QR code";
-"verifier.denied.message.one" = "<p>This does <b>not</b> mean this visitor has coronavirus.</p><p><b>Possible causes</b></p><ul><li>The QR code of the visitor does not conform to the Dutch entry requirements</li><li>The QR code has been forwarded</li><li>The QR code has been forged</li><li>The time on the visitor's phone is incorrect</li></ul>";
-"verifier.denied.message.two" = "<b>What to do now?</b><p>The visitor can get vaccinated or can take a test. After that, the visitor can use the CoronaCheck app to turn it into a QR code.</p>";
+"verifier.denied.title" = "What should I do?";
+"verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
+"verifier.denied.message.two" = "<p><b>Here’s what you can do:</b></p><ul><li>Verify if the time on the visitor’s phone is set correctly.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
+"verifier.denied.message.three" = "<p><b>Still looking at a red screen?</b><br />Please ask the visitor to contact the CoronaCheck help desk.</p>";
+"verifier.denied.message.four" = "<p><b> Without a green screen, you can’t grant the visitor access.</b></p>";
+
 /* MARK: - Verifier About */
 "verifier.about.title" = "About this app";
 "verifier.about.text" = "CoronaCheck Scanner is created so that certain locations and activities can open their doors again. Think for example of football matches and concerts. Visitors create a coronavirus pass of a vaccination, a negative test result or if they've had corona and are recovered. With this app, only visitors with a coronavirus pass gain access. This way, the Netherlands can head out more often.";
