@@ -228,23 +228,22 @@ class VerifierResultViewModel: Logging {
 
 	private func showDeniedInfo() {
 
-		let textView1 = TextView(
-            htmlText: L.verifierDeniedMessageOne(),
-            font: Theme.fonts.body,
-            textColor: Theme.colors.dark,
-            boldTextColor: Theme.colors.dark
-        )
-
-        let textView2 = TextView(
-            htmlText: L.verifierDeniedMessageTwo(),
-            font: Theme.fonts.body,
-            textColor: Theme.colors.dark,
-            boldTextColor: Theme.colors.dark
-        )
+		let textViews = [L.verifierDeniedMessageOne(),
+			L.verifierDeniedMessageTwo(),
+			L.verifierDeniedMessageThree(),
+			L.verifierDeniedMessageFour()
+		] .map { text -> (TextView, CGFloat) in
+			(TextView(
+				htmlText: text,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark,
+				boldTextColor: Theme.colors.dark
+			), 16)
+		}
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),
-			content: [(textView1, 16), (textView2, 0)]
+			content: textViews
 		)
 	}
 
