@@ -11,7 +11,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 	private let viewModel: VerifierResultViewModel
 
-	let sceneView = ResultView()
+	let sceneView = VerifierResultView()
 
 	init(viewModel: VerifierResultViewModel) {
 
@@ -35,49 +35,31 @@ class VerifierResultViewController: BaseViewController, Logging {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		addCloseButton(action: #selector(closeButtonTapped))
+		
+		// Make the navbar the same color as the background
+		setupTranslucentNavigationBar()
+		
+		viewModel.$allowAccess.binding = { [weak self] in
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
+			switch $0 {
+				case .verified:
+					self?.sceneView.setup(for: .verified)
+				case .demo:
+					self?.sceneView.setup(for: .demo)
+				case .denied:
+					self?.sceneView.setup(for: .denied)
+			}
+		}
 
-		sceneView.primaryButtonTappedCommand = { [weak self] in
+		sceneView.scanNextTappedCommand = { [weak self] in
 
 			self?.viewModel.scanAgain()
 		}
-
-		viewModel.$allowAccess.binding = { [weak self] in
-
-			if $0 == .verified {
-				self?.sceneView.imageView.image = .access
-				self?.sceneView.actionColor = Theme.colors.access
-				self?.sceneView.footerActionColor = Theme.colors.secondary
-				self?.sceneView.setupForVerified()
-				self?.sceneView.revealIdentityView { [weak self] in
-					self?.title = self?.viewModel.title
-				}
-
-			} else if $0 == .demo {
-				self?.sceneView.imageView.image = .access
-				self?.sceneView.actionColor = Theme.colors.grey4
-				self?.sceneView.footerActionColor = Theme.colors.secondary
-				self?.sceneView.setupForVerified()
-				self?.sceneView.revealIdentityView { [weak self] in
-					self?.title = self?.viewModel.title
-				}
-			} else {
-				self?.sceneView.imageView.image = .denied
-				self?.sceneView.actionColor = Theme.colors.denied
-				self?.sceneView.footerActionColor = Theme.colors.denied
-				self?.sceneView.setupForDenied()
-			}
-		}
-
-		viewModel.$linkedMessage.binding = { [weak self] in
-			if $0 != nil {
-				self?.sceneView.underline($0)
-				self?.setupLink()
-			}
+		
+		sceneView.readMoreTappedCommand = { [weak self] in
+			
+			self?.viewModel.showMoreInformation()
 		}
 
 		viewModel.$hideForCapture.binding = { [weak self] in
@@ -89,24 +71,17 @@ class VerifierResultViewController: BaseViewController, Logging {
             #endif
 		}
 		
+		sceneView.primaryTitle = L.verifierResultNext()
+		
+		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		viewModel.$secondaryTitle.binding = { [weak self] in self?.sceneView.secondaryTitle = $0 }
+		
 		// Identity
 		setupIdentityView()
 		viewModel.$lastName.binding = { [weak self] in self?.sceneView.checkIdentityView.lastName = $0 }
 		viewModel.$firstName.binding = { [weak self] in self?.sceneView.checkIdentityView.firstName = $0 }
 		viewModel.$dayOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.dayOfBirth = $0 }
 		viewModel.$monthOfBirth.binding = { [weak self] in self?.sceneView.checkIdentityView.monthOfBirth = $0 }
-
-		sceneView.checkIdentityView.disclaimerButtonTappedCommand = { [weak self] in self?.linkTapped() }
-
-		addCloseButton(action: #selector(closeButtonTapped))
-	}
-
-	override func viewWillAppear(_ animated: Bool) {
-
-		super.viewWillAppear(animated)
-		// Make the navbar the same color as the background.
-		navigationController?.navigationBar.backgroundColor = .clear
-		layoutForOrientation()
 	}
 
 	/// User tapped on the button
@@ -115,23 +90,7 @@ class VerifierResultViewController: BaseViewController, Logging {
 		viewModel.dismiss()
 	}
 
-	// MARK: Helper methods
-
-	/// Setup a gesture recognizer for underlined text
-	private func setupLink() {
-
-		let tapGesture = UITapGestureRecognizer(target: self, action: #selector(linkTapped))
-		sceneView.messageLabel.addGestureRecognizer(tapGesture)
-		sceneView.messageLabel.isUserInteractionEnabled = true
-	}
-
 	// MARK: User interaction
-
-	/// User tapped on the link
-	@objc func linkTapped() {
-
-		viewModel.linkTapped()
-	}
 
 	private func setupIdentityView() {
 
@@ -140,22 +99,5 @@ class VerifierResultViewController: BaseViewController, Logging {
 		sceneView.checkIdentityView.lastNameHeader = L.verifierResultIdentityLastname()
 		sceneView.checkIdentityView.dayOfBirthHeader = L.verifierResultIdentityDayofbirth()
 		sceneView.checkIdentityView.monthOfBirthHeader = L.verifierResultIdentityMonthofbirth()
-	}
-
-	// Rotation
-
-	override func willTransition(
-		to newCollection: UITraitCollection,
-		with coordinator: UIViewControllerTransitionCoordinator) {
-
-		coordinator.animate { [weak self] _ in
-			self?.layoutForOrientation()
-		}
-	}
-
-	/// Layout for different orientations
-	private func layoutForOrientation() {
-
-		sceneView.layoutForOrientation()
 	}
 }

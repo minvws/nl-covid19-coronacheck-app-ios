@@ -38,9 +38,6 @@ class VerifierResultViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = ""
 
-	/// The message of the scene
-	@Bindable private(set) var message: String?
-
 	/// The first name of the holder
 	@Bindable private(set) var firstName: String = "-"
 
@@ -52,12 +49,8 @@ class VerifierResultViewModel: Logging {
 
 	/// The birth mont of the holder
 	@Bindable private(set) var monthOfBirth: String = "-"
-
-	/// The linked message of the scene
-	@Bindable var linkedMessage: String?
-
-	/// The title of the button
-	@Bindable private(set) var primaryButtonTitle: String
+	
+	@Bindable private(set) var secondaryTitle: String = ""
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -76,8 +69,6 @@ class VerifierResultViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
-
-		primaryButtonTitle = L.verifierResultNext()
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -188,20 +179,19 @@ class VerifierResultViewModel: Logging {
 	private func showAccessAllowed() {
 
 		title = L.verifierResultAccessTitle()
-		message = nil
+		secondaryTitle = L.verifierResultAccessReadmore()
 	}
 
 	private func showAccessDeniedInvalidQR() {
 
 		title = L.verifierResultDeniedTitle()
-		message = L.verifierResultDeniedMessage()
-		linkedMessage = L.verifierResultDeniedLink()
+		secondaryTitle = L.verifierResultDeniedReadmore()
 	}
 
 	private func showAccessDemo() {
 
 		title = L.verifierResultDemoTitle()
-		message = nil
+		secondaryTitle = L.verifierResultAccessReadmore()
 	}
 
 	func dismiss() {
@@ -216,7 +206,7 @@ class VerifierResultViewModel: Logging {
         coordinator?.navigateToScan()
     }
 
-	func linkTapped() {
+	func showMoreInformation() {
 
 		switch allowAccess {
 			case .verified, .demo:

@@ -41,7 +41,7 @@ class LaunchViewController: BaseViewController {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 
 		// Bindings
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }

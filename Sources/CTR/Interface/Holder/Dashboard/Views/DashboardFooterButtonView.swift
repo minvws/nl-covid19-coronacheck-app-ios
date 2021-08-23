@@ -34,7 +34,6 @@ final class DashboardFooterButtonView: BaseView {
 	/// The primary button
 	let primaryButton: Button = {
 		let button = Button()
-		button.rounded = true
 		button.titleLabel?.textAlignment = .center
 		return button
 	}()
