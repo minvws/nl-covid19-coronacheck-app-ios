@@ -89,7 +89,7 @@ protocol NetworkManaging: AnyObject {
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void)
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void)
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler

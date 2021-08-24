@@ -25,7 +25,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		case failedToSave
 		case failedToPrepareIssue
 		
-		case preparingIssue117
+//		case preparingIssue117
 		case stoken118
 		case credentials119
 	}
@@ -48,21 +48,22 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<Void, Swift.Error>) -> Void) {
 		
-		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
+		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
-				case .failure(let networkError):
-					self.logError("error: \(networkError)")
+				case .failure(let serverError):
+					self.logError("error: \(serverError)")
+					completion(.failure(serverError))
 
-					switch networkError {
-						case .serverBusy:
-							completion(.failure(NetworkError.serverBusy))
-						case .noInternetConnection:
-							completion(.failure(NetworkError.noInternetConnection))
-						case .requestTimedOut:
-							completion(.failure(NetworkError.requestTimedOut))
-						default:
-							completion(.failure(Error.preparingIssue117))
-					}
+//					switch networkError {
+//						case .serverBusy:
+//							completion(.failure(NetworkError.serverBusy))
+//						case .noInternetConnection:
+//							completion(.failure(NetworkError.noInternetConnection))
+//						case .requestTimedOut:
+//							completion(.failure(NetworkError.requestTimedOut))
+//						default:
+//							completion(.failure(Error.preparingIssue117))
+//					}
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
