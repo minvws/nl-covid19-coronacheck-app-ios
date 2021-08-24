@@ -316,7 +316,7 @@
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
 "holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
-"holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><br /><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
+"holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
 "holder.dashboard.qr.minute" = "min";

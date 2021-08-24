@@ -98,10 +98,10 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.setHolderIdentity(details)
 
 		// Then
-		expect(self.sut.firstName) == "-"
-		expect(self.sut.lastName) == "-"
-		expect(self.sut.dayOfBirth) == "-"
-		expect(self.sut.monthOfBirth) == "-"
+		expect(self.sut.firstName).to(beNil())
+		expect(self.sut.lastName).to(beNil())
+		expect(self.sut.dayOfBirth).to(beNil())
+		expect(self.sut.monthOfBirth).to(beNil())
 	}
 
 	func test_holderIdentity_allEmpty() {
@@ -117,10 +117,10 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.setHolderIdentity(details)
 
 		// Then
-		expect(self.sut.firstName) == "-"
-		expect(self.sut.lastName) == "-"
-		expect(self.sut.dayOfBirth) == "-"
-		expect(self.sut.monthOfBirth) == "-"
+		expect(self.sut.firstName).to(beNil())
+		expect(self.sut.lastName).to(beNil())
+		expect(self.sut.dayOfBirth).to(beNil())
+		expect(self.sut.monthOfBirth).to(beNil())
 	}
 
 	func test_holderIdentity_allNotEmpty() {
@@ -155,8 +155,8 @@ class VerifierResultViewModelTests: XCTestCase {
 		sut.setHolderIdentity(details)
 
 		// Then
-		expect(self.sut.firstName) == "-"
-		expect(self.sut.lastName) == "-"
+		expect(self.sut.firstName).to(beNil())
+		expect(self.sut.lastName).to(beNil())
 		expect(self.sut.dayOfBirth) == "X"
 		expect(self.sut.monthOfBirth) == "X"
 	}
