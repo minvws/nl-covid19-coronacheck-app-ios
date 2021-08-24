@@ -70,14 +70,12 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	///   - versionInformation: the version information
 	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
 
-		super.init(coordinator: coordinator, versionInformation: versionInformation)
+		super.init(coordinator: coordinator, versionInformation: nil)
 
 		self.title = L.endOfLifeTitle()
 		self.message = L.endOfLifeDescription()
 		self.errorMessage = L.endOfLifeErrorMessage()
 		self.actionTitle = L.endOfLifeButton()
-		self.updateURL = versionInformation?.informationURL
-		self.errorMessage = L.endOfLifeErrorMessage()
 		self.image = .endOfLife
 		self.updateURL = URL(string: "https://coronacheck.nl")
 	}
