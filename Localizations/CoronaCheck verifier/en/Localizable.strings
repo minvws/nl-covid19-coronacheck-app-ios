@@ -1,3 +1,4 @@
+"verifier.scan.button.moreInformation" = "Which things should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
 "verifier.scaninstructions.scanQR.content" = "The visitor shows a QR code in the CoronaCheck app or on paper. A tourist may show a QR code in a foreign app, or on paper.";
@@ -34,7 +35,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p><b>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</b></p><p><b>Please note: sometimes details may disappear</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing</p>";
+"verifier.result.check.text" = "<p><b>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</b></p><p><b>Please note: sometimes details may disappear</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
@@ -73,7 +74,7 @@
 /* MARK: - Verifier Start */
 "verifier.start.title" = "Scan QR code";
 "verifier.start.header" = "Get started";
-"verifier.start.message" = "Now scan the QR codes of your visitors. But please note: you're only allowed to give access to visitors with a valid QR code.";
+"verifier.start.message" = "Now scan the QR codes of your visitors. Is the QR code valid and do the details match the proof of identity? You're allowed to give access to the visitor.";
 "verifier.start.button.title" = "Start scanning";
 "verifier.start.ontimeinternet" = "The app needs a one-time connection to the internet to retrieve the latest data.";
 
@@ -92,10 +93,10 @@
 "verifier.result.denied.title" = "Invalid QR code";
 "verifier.result.next" = "Scan next";
 /* MARK: - Verifier Result Alert */
-"verifier.result.alert.unknown.title" = "This is no certificate for CoronaCheck";
-"verifier.result.alert.unknown.message" = "You have scanned an unknown QR code. Ask the visitor to show either a certificate in the CoronaCheck app or a QR code on paper.";
-"verifier.result.alert.dcc.title" = "Scan a Dutch QR code";
-"verifier.result.alert.dcc.message" = "You have scanned an international QR code. This is no valid certificate in the Netherlands. Ask the visitor for a Dutch certificate and scan the QR code.";
+"verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
+"verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";
+"verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
+"verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR-code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Are the details incorrect?";
 

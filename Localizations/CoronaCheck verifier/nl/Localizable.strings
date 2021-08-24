@@ -90,7 +90,7 @@
 /* MARK: - Verifier Result */
 "verifier.result.access.title" = "Geldige QR-code";
 "verifier.result.demo.title" = "Demo QR-code gescand";
-"verifier.result.denied.title" = "Ongeldige QR-code";
+"verifier.result.denied.title" = "Geen geldige QR-code";
 "verifier.result.next" = "Scan volgende";
 /* MARK: - Verifier Result Alert */
 "verifier.result.alert.unknown.title" = "Deze QR-code bevat geen coronabewijs";
