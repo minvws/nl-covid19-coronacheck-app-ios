@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import Foundation
 
@@ -247,7 +248,7 @@ class NetworkManager: Logging {
 		ignore400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
-		data2(request: request, session: session, ignore400: ignore400) { data, response, error in
+		data(request: request, session: session, ignore400: ignore400) { data, response, error in
 
 			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
 			// Result<(URLResponse, Data), ServerError>
@@ -275,33 +276,46 @@ class NetworkManager: Logging {
 								checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
 									if valid {
 
-										// Decode to the expected object
-										let decodedResult: Result<Object, NetworkError> = self.decodeJson(json: decodedPayloadData)
-
-										switch decodedResult {
-											case let .success(object):
-												completion(.success((object, signedResponse, decodedPayloadData, networkResponse.urlResponse)))
-											case let .failure(responseError):
-
-												// Decode to a server response
-												let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
-												let networkError = self.inspect(response: networkResponse.urlResponse)
-
-												completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
-										}
+										self.decodeToObject(
+											decodedPayloadData,
+											signedResponse: signedResponse,
+											urlResponse: networkResponse.urlResponse,
+											completion: completion
+										)
 									} else {
 										self.logError("We got an invalid signature!")
 										completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)))
 									}
 								}
 							}
-
 						case let .failure(networkError):
 							// No signed response. Abort.
 							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
 					}
 			}
+		}
+	}
 
+	private func decodeToObject<Object: Decodable>(
+		_ decodedPayloadData: Data,
+		signedResponse: SignedResponse,
+		urlResponse: URLResponse,
+		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
+
+		// Decode to the expected object
+		let decodedResult: Result<Object, NetworkError> = decodeJson(json: decodedPayloadData)
+
+		switch decodedResult {
+			case let .success(object):
+				completion(.success((object, signedResponse, decodedPayloadData, urlResponse)))
+				
+			case let .failure(responseError):
+
+				// Decode to a server response
+				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
+				let networkError = self.inspect(response: urlResponse)
+
+				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
 		}
 	}
 
@@ -321,7 +335,7 @@ class NetworkManager: Logging {
 		).resume()
 	}
 
-	private func data2(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+	private func data(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
 		session.dataTask(with: request, completionHandler: completion).resume()
 	}
