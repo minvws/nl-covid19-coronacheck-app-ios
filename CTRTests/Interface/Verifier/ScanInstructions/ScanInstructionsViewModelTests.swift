@@ -91,7 +91,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.shouldShowSkipButton(forPageIndex: 0)) == true
-		expect(self.self.sut.shouldShowSkipButton(forPageIndex: 1)) == false
+		expect(self.sut.shouldShowSkipButton(forPageIndex: 1)) == false
 	}
 
 	func test_skipButtonNotShownWhenNotFirstViewingOfInstructions() {
@@ -116,6 +116,6 @@ class ScanInstructionsViewModelTests: XCTestCase {
 
 		// Assert
 		expect(self.sut.shouldShowSkipButton(forPageIndex: 0)) == false
-		expect(self.self.sut.shouldShowSkipButton(forPageIndex: 1)) == false
+		expect(self.sut.shouldShowSkipButton(forPageIndex: 1)) == false
 	}
 }
