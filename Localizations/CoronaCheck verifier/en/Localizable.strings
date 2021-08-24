@@ -1,16 +1,16 @@
-"verifier.scan.button.moreInformation" = "Which things should I pay attention to?";
+"verifier.scan.button.moreInformation" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.title" = "About scanning";
 "verifier.scaninstructions.scanQR.title" = "Scan the QR code";
 "verifier.scaninstructions.scanQR.content" = "The visitor shows a QR code in the CoronaCheck app or on paper. A tourist may show a QR code in a foreign app, or on paper.";
 "verifier.scaninstructions.checkthedetails.title" = "Always check the details";
 "verifier.scaninstructions.checkthedetails.message" = "Green screen? Verify if the details on your screen are the same as those on the identity document. This way you can ensure the QR code belongs to the visitor.";
-"verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes details may disappear";
+"verifier.scaninstructions.checkonlythevisibledata.title" = "Sometimes not all details are shown";
 "verifier.scaninstructions.checkonlythevisibledata.message" = "This happens to protect the visitor’s privacy. You will see a hyphen (-). In this case, verify only the details you’re seeing.";
 "verifier.scaninstructions.redscreennowwhat.title" = "Red screen - what happens now?";
 "verifier.scaninstructions.redscreennowwhat.message" = "In case of a red screen, you will get information to assist the visitor. If the screen stays red, you cannot grant the visitor access.";
 "verifier.scaninstructions.button.startscanning" = "Start scanning";
 "verifier.scaninstructions.step.title" = "Step %@";
-"verifier.start.button.showinstructions" = "Which things should I pay attention to?";
+"verifier.start.button.showinstructions" = "What should I pay attention to?";
 "verifier.scaninstructions.navigation.skipbutton.title" = "Skip";
 "general.error.cryptolib.message" = "Contact the CoronaCheck help desk and give them error code (%@).";
 "verifier.scan.torch.enable" = "Turn the flashlight on.";
@@ -35,7 +35,7 @@
 "verifier.result.identity.dayofbirth" = "Day of birth";
 "verifier.result.identity.monthofbirth" = "Birth month";
 
-"verifier.result.check.text" = "<p><b>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</b></p><p><b>Please note: sometimes details may disappear</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
+"verifier.result.check.text" = "<p><b>You cannot grant the visitor access if the details on your screen are different from those on the identity document.</b></p><p><b>Please note: sometimes not all details are shown</b><br />This happens to protect the visitor’s privacy. You will see a dash (-) in the field. In this case, verify only the details you’re seeing.</p>";
 
 
 "updateApp.content" = "To continue, install the latest version of the app";
