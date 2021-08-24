@@ -56,11 +56,6 @@ class VerifierStartViewController: BaseViewController {
 			}
 		}
 
-		sceneView.contentTextView.linkTouched { [weak self] _ in
-
-			self?.viewModel.linkTapped()
-		}
-
 		sceneView.headerImage = .scanStart
 		// Only show an arrow as back button
 		styleBackButton(buttonText: "")
