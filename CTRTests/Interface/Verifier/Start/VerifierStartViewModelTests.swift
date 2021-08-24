@@ -55,19 +55,6 @@ class VerifierStartViewModelTests: XCTestCase {
 			.to(equal(L.verifierStartMessage()), description: "Message should match")
 	}
 
-	func test_linkTapped() {
-
-		// Given
-
-		// When
-		sut.linkTapped()
-
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishParameters?.result)
-			.to(equal(.userTappedProceedToScanInstructions), description: "Result should match")
-	}
-
 	func test_primaryButtonTapped_noScanInstructionsShown() {
 
 		// Given

@@ -87,11 +87,6 @@ class VerifierStartViewModel: Logging {
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 
-	func linkTapped() {
-
-		coordinator?.didFinish(.userTappedProceedToScanInstructions)
-	}
-
 	/// Update the public keys
 	private func updatePublicKeys() {
 

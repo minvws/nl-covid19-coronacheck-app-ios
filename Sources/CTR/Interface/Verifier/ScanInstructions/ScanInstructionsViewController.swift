@@ -8,16 +8,46 @@
 import UIKit
 
 class ScanInstructionsViewController: BaseViewController {
-	
-	/// The model
-	private let viewModel: ScanInstructionsViewModel
-	
-	/// The view
 	let sceneView = ScanInstructionsView()
-	
-	/// The page controller
+
+	private let viewModel: ScanInstructionsViewModel
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-	
+
+	private let backButton: UIButton = {
+		// Create a button with a back arrow and a .previous title
+		let button = UIButton(type: .custom)
+		button.setTitleColor(Theme.colors.dark, for: .normal)
+		button.setTitleColor(Theme.colors.gray, for: .highlighted)
+		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
+		button.setImage(.backArrow, for: .normal)
+		button.translatesAutoresizingMaskIntoConstraints = false
+
+		// Increase the hit area, move the button 5 px to the right
+		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 10)
+
+		// Make sure the text won't be truncated if the user opts for bold texts
+		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
+
+		return button
+	}()
+
+	private let skipButton: UIButton = {
+		// Create a button with a back arrow and a .previous title
+		let button = UIButton(type: .custom)
+		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
+		button.setTitleColor(Theme.colors.iosBlue, for: .normal)
+		button.translatesAutoresizingMaskIntoConstraints = false
+
+		// Add a little spacing between the image and the title, shift the title 5 px right
+		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
+		// Increase the hit area, move the button 5 px to the left
+		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
+
+		// Make sure the text won't be truncated if the user opts for bold texts
+		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
+		return button
+	}()
+
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: ScanInstructionsViewModel) {
@@ -69,55 +99,27 @@ class ScanInstructionsViewController: BaseViewController {
 		
 		setupBackButton()
 		setupSkipButton()
+
+		updateSkipButtonVisibility(currentPageIndex: 0)
 	}
 
-	/// Create a custom back button so we can catch the tapped on the back button.
+	/// Create a custom back button so we can catch the tapp on the back button.
 	private func setupBackButton() {
 
 		// hide the original back button
 		navigationItem.hidesBackButton = true
 
-		// Create a button with a back arrow and a .previous title
-		let button = UIButton(type: .custom)
-		button.setTitleColor(Theme.colors.dark, for: .normal)
-		button.setTitleColor(Theme.colors.gray, for: .highlighted)
-		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
-		button.setImage(.backArrow, for: .normal)
-		button.translatesAutoresizingMaskIntoConstraints = false
+		backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
 
-		// Increase the hit area, move the button 5 px to the right
-		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 10)
-
-		// Handle touches
-		button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
-
-		// Make sure the text won't be truncated if the user opts for bold texts
-		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-
-		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
+		navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
 	}
 
 	/// Create a custom back button so we can catch the tapped on the back button.
 	private func setupSkipButton() {
 
-		// Create a button with a back arrow and a .previous title
-		let button = UIButton(type: .custom)
-		button.setTitle(L.verifierScaninstructionsNavigationSkipbuttonTitle(), for: .normal)
-		button.setTitleColor(Theme.colors.iosBlue, for: .normal)
-		button.translatesAutoresizingMaskIntoConstraints = false
+		skipButton.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
 
-		// Add a little spacing between the image and the title, shift the title 5 px right
-		button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
-		// Increase the hit area, move the button 5 px to the left
-		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: -5, bottom: 10, right: 10)
-
-		// Handle touches
-		button.addTarget(self, action: #selector(skipButtonTapped), for: .touchUpInside)
-
-		// Make sure the text won't be truncated if the user opts for bold texts
-		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-
-		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
+		navigationItem.rightBarButtonItem = UIBarButtonItem(customView: skipButton)
 	}
 
 	@objc func backButtonTapped() {
@@ -145,7 +147,7 @@ class ScanInstructionsViewController: BaseViewController {
 		sceneView.containerView.addSubview(pageViewController.view)
 		addChild(pageViewController)
 		pageViewController.didMove(toParent: self)
-		sceneView.pageControl.addTarget(self, action: #selector(valueChanged), for: .valueChanged)
+		sceneView.pageControl.addTarget(self, action: #selector(pageControlValueChanged), for: .valueChanged)
 	}
 	
 	/// User tapped on the button
@@ -161,13 +163,17 @@ class ScanInstructionsViewController: BaseViewController {
 	}
 
 	/// User tapped on the page control
-	@objc func valueChanged(_ pageControl: UIPageControl) {
+	@objc func pageControlValueChanged(_ pageControl: UIPageControl) {
 
 		if pageControl.currentPage > pageViewController.currentIndex {
 			pageViewController.nextPage()
 		} else {
 			pageViewController.previousPage()
 		}
+	}
+
+	func updateSkipButtonVisibility(currentPageIndex: Int) {
+		skipButton.isHidden = !viewModel.shouldShowSkipButton(forPageIndex: currentPageIndex)
 	}
 }
 
@@ -177,6 +183,7 @@ extension ScanInstructionsViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.currentPage = index
+		updateSkipButtonVisibility(currentPageIndex: index)
 	}
 }
 

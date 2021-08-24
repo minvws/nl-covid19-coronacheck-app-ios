@@ -45,7 +45,8 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 
 		let viewModel = ScanInstructionsViewModel(
 			coordinator: self,
-			pages: pages
+			pages: pages,
+			userSettings: UserSettings()
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
 		navigationController.pushViewController(viewController, animated: true)
