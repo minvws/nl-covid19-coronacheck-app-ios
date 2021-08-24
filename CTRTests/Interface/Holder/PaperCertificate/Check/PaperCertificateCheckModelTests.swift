@@ -29,7 +29,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 	func test_success_accepted_wrongDCC() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .accepted)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -48,7 +49,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 	func test_success_accepted_correctDCC() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .accepted)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .accepted)), ())
 		couplingManagerSpy.stubbedConvertResult = EventFlow.EventResultWrapper(
 			providerIdentifier: "CC",
 			protocolVersion: "3.0",
@@ -73,7 +75,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 	func test_success_blocked() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .blocked)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -99,7 +102,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 	func test_success_expired() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .expired)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -125,7 +129,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 	func test_success_rejected() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .rejected)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -151,7 +156,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 	func test_failure_serverBusy() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.serverBusy), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -163,15 +169,21 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.generalNetworkwasbusyTitle()
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.generalNetworkwasbusyTitle()
+			expect(content.subTitle) == L.generalNetworkwasbusyText()
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle).to(beNil())
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_failure_noInternet() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.noInternetConnection), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -188,10 +200,11 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		expect(self.sut.alert?.title) == L.generalErrorNointernetTitle()
 	}
 
-	func test_failure_other() {
+	func test_failure_requestTimeOut() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.invalidResponse), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When
@@ -205,7 +218,215 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.generalErrorTitle()
+		expect(self.sut.alert?.title) == L.generalErrorNointernetTitle()
+	}
+
+	func test_failure_responseCached() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 304, response: nil, error: .responseCached)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 304")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_resourceNotFound() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 404 99707")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_serverError() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 500, response: ServerResponse(status: "error", code: 99707), error: .serverError)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 500 99707")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_invalidResponse() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 003")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_invalidRequest() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 002")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_invalidSignature() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 020")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_cannotDeserialize() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .cannotDeserialize)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 030")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
+	func test_failure_cannotSerialize() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .cannotSerialize)), ())
+		couplingManagerSpy.stubbedConvertResult = nil
+
+		// When
+		sut = PaperCertificateCheckViewModel(
+			coordinator: coordinatorDelegateSpy,
+			scannedDcc: "test",
+			couplingCode: "test",
+			couplingManager: couplingManagerSpy
+		)
+
+		// Then
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 031")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
 	}
 }
 
@@ -217,7 +438,7 @@ class CouplingManagerSpy: CouplingManaging {
 	var invokedConvertCount = 0
 	var invokedConvertParameters: (dcc: String, couplingCode: String)?
 	var invokedConvertParametersList = [(dcc: String, couplingCode: String)]()
-	var stubbedConvertResult: EventFlow.EventResultWrapper?
+	var stubbedConvertResult: EventFlow.EventResultWrapper!
 
 	func convert(_ dcc: String, couplingCode: String) -> EventFlow.EventResultWrapper? {
 		invokedConvert = true
@@ -231,12 +452,12 @@ class CouplingManagerSpy: CouplingManaging {
 	var invokedCheckCouplingStatusCount = 0
 	var invokedCheckCouplingStatusParameters: (dcc: String, couplingCode: String)?
 	var invokedCheckCouplingStatusParametersList = [(dcc: String, couplingCode: String)]()
-	var stubbedCheckCouplingStatusOnCompletionResult: (Result<DccCoupling.CouplingResponse, NetworkError>, Void)?
+	var stubbedCheckCouplingStatusOnCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
 
 	func checkCouplingStatus(
 		dcc: String,
 		couplingCode: String,
-		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
+		onCompletion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {
 		invokedCheckCouplingStatus = true
 		invokedCheckCouplingStatusCount += 1
 		invokedCheckCouplingStatusParameters = (dcc, couplingCode)
