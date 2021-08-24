@@ -85,7 +85,8 @@ class PaperCertificateCheckViewModel: Logging {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 					coordinator?.userWishesToSeeScannedEvent(remoteEvent)
 				} else {
-					showTechnicalError("110, invalid DCC")
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "052")
+					displayClientErrorCode(errorCode)
 				}
 			case .blocked:
 				viewState = .feedback(
@@ -131,7 +132,7 @@ class PaperCertificateCheckViewModel: Logging {
 	}
 
 	private func handleError(serverError: ServerError, scannedDcc: String, couplingCode: String) {
-		logError("CouplingManager validate: \(serverError)")
+		logError("CouplingManager handleError: \(serverError)")
 		
 		if case let .error(statusCode, serverResponse, error) = serverError {
 			switch error {
@@ -223,22 +224,6 @@ class PaperCertificateCheckViewModel: Logging {
 					self?.coordinator?.openUrl(url, inApp: true)
 				}
 			)
-		)
-	}
-
-	private func showTechnicalError(_ customCode: String?) {
-
-		var subTitle = L.generalErrorTechnicalText()
-		if let code = customCode {
-			subTitle = L.generalErrorTechnicalCustom(code)
-		}
-		alert = AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: subTitle,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			okTitle: L.generalClose()
 		)
 	}
 }

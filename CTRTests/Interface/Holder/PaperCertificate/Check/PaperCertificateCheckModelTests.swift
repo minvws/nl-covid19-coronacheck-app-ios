@@ -43,7 +43,15 @@ class PaperCertificateCheckModelTests: XCTestCase {
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
-		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert).to(beNil())
+		if case let .feedback(content: content) = sut.viewState {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 052")
+			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_success_accepted_correctDCC() {
