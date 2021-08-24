@@ -15,6 +15,16 @@ class ScanInstructionsViewModel {
 	/// The pages for onboarding
 	@Bindable private(set) var pages: [ScanInstructionsPage]
 
+	@Bindable private(set) var shouldShowSkipButton: Bool = true
+
+	@Bindable private(set) var nextButtonTitle: String?
+
+	private var currentPage: Int {
+		didSet {
+			updateState()
+		}
+	}
+
 	private let userSettings: UserSettingsProtocol
 
 	/// Initializer
@@ -30,6 +40,9 @@ class ScanInstructionsViewModel {
 		self.coordinator = coordinator
 		self.pages = pages
 		self.userSettings = userSettings
+		self.currentPage = 0
+
+		updateState()
 	}
 	
 	func scanInstructionsViewController(forPage page: ScanInstructionsPage) -> ScanInstructionsPageViewController {
@@ -50,8 +63,20 @@ class ScanInstructionsViewModel {
 		coordinator?.userDidCancelScanInstructions()
 	}
 
-	func shouldShowSkipButton(forPageIndex pageIndex: Int) -> Bool {
-		guard !userSettings.scanInstructionShown else { return false }
-		return pageIndex < (pages.count - 1)
+	func userDidChangeCurrentPage(toPageIndex pageIndex: Int) {
+		currentPage = pageIndex
+	}
+
+	private func updateState() {
+		shouldShowSkipButton = {
+			guard !userSettings.scanInstructionShown else { return false }
+			return currentPage < (pages.count - 1)
+		}()
+
+		nextButtonTitle = {
+			currentPage < (pages.count - 1)
+				? L.generalNext()
+				: L.verifierScaninstructionsButtonStartscanning()
+		}()
 	}
 }

@@ -93,14 +93,19 @@ class ScanInstructionsViewController: BaseViewController {
 			self.sceneView.pageControl.currentPage = 0
 		}
 
+		viewModel.$shouldShowSkipButton.binding = { [weak self] shouldShowSkipButton in
+			self?.skipButton.isHidden = !shouldShowSkipButton
+		}
+
+		viewModel.$nextButtonTitle.binding = { [weak self] nextButtonTitle in
+			self?.sceneView.primaryButton.setTitle(nextButtonTitle, for: .normal)
+		}
+
 		title = L.verifierScaninstructionsNavigationTitle()
-		sceneView.primaryButton.setTitle(L.generalNext(), for: .normal)
 		sceneView.primaryButton.touchUpInside(self, action: #selector(primaryButtonTapped))
 		
 		setupBackButton()
 		setupSkipButton()
-
-		updateSkipButtonVisibility(currentPageIndex: 0)
 	}
 
 	/// Create a custom back button so we can catch the tapp on the back button.
@@ -171,10 +176,6 @@ class ScanInstructionsViewController: BaseViewController {
 			pageViewController.previousPage()
 		}
 	}
-
-	func updateSkipButtonVisibility(currentPageIndex: Int) {
-		skipButton.isHidden = !viewModel.shouldShowSkipButton(forPageIndex: currentPageIndex)
-	}
 }
 
 // MARK: - PageViewControllerDelegate
@@ -183,7 +184,7 @@ extension ScanInstructionsViewController: PageViewControllerDelegate {
 	
 	func pageViewController(_ pageViewController: PageViewController, didSwipeToPendingViewControllerAt index: Int) {
 		sceneView.pageControl.currentPage = index
-		updateSkipButtonVisibility(currentPageIndex: index)
+		viewModel.userDidChangeCurrentPage(toPageIndex: index)
 	}
 }
 
