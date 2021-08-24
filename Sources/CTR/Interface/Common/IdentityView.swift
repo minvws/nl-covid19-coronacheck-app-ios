@@ -30,12 +30,11 @@ class IdentityElementView: BaseView {
 		static let borderWidth: CGFloat = 1.0
 		static let headerAlignment: NSTextAlignment = .natural
 		static let bodyFont: UIFont = Theme.fonts.title2
+		static let headerColor: UIColor = Theme.colors.dark
 
-		static let hasContentHeaderColor: UIColor = Theme.colors.dark
 		static let hasContentBorderColor: UIColor = Theme.colors.grey3
 		static let hasContentBackgroundColor = UIColor.white
 
-		static let noContentHeaderColor: UIColor = Theme.colors.grey5
 		static let noContentBorderColor: UIColor = Theme.colors.grey5
 		static let noContentBackgroundColor = Theme.colors.grey5
 	}
@@ -74,17 +73,16 @@ class IdentityElementView: BaseView {
 		borderView.layer.cornerRadius = ViewTraits.cornerRadius
 		borderView.layer.borderWidth = ViewTraits.borderWidth
 		bodyLabel.font = ViewTraits.bodyFont
+		headerLabel.textColor = ViewTraits.headerColor
 
 		updateStylingForContent()
 	}
 
 	func updateStylingForContent() {
 		if body == nil {
-			headerLabel.textColor = ViewTraits.noContentHeaderColor
 			borderView.layer.borderColor = ViewTraits.noContentBorderColor.cgColor
 			borderView.backgroundColor = ViewTraits.noContentBackgroundColor
 		} else {
-			headerLabel.textColor = ViewTraits.hasContentHeaderColor
 			borderView.layer.borderColor = ViewTraits.hasContentBorderColor.cgColor
 			borderView.backgroundColor = ViewTraits.hasContentBackgroundColor
 		}
