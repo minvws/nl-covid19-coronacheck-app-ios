@@ -70,7 +70,6 @@ class ScanInstructionsViewModelTests: XCTestCase {
 	}
 
 	func test_skipButtonShownWhenUserFirstTimeExceptOnLastPage() {
-		// Arrange
 		userSettingsSpy.stubbedScanInstructionShown = false
 		
 		let pages = [
@@ -88,16 +87,15 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			)
 		]
 		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		expect(self.sut.shouldShowSkipButton) == true
 
-		// Assert
-		expect(self.sut.shouldShowSkipButton(forPageIndex: 0)) == true
-		expect(self.sut.shouldShowSkipButton(forPageIndex: 1)) == false
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.shouldShowSkipButton) == false
 	}
 
 	func test_skipButtonNotShownWhenNotFirstViewingOfInstructions() {
 		userSettingsSpy.stubbedScanInstructionShown = true
 
-		// Arrange
 		let pages = [
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
@@ -113,9 +111,31 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			)
 		]
 		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		expect(self.sut.shouldShowSkipButton) == false
 
-		// Assert
-		expect(self.sut.shouldShowSkipButton(forPageIndex: 0)) == false
-		expect(self.sut.shouldShowSkipButton(forPageIndex: 1)) == false
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.shouldShowSkipButton) == false
+	}
+
+	func test_nextButtonTitleChangesOnLastPage() {
+		let pages = [
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			),
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		expect(self.sut.nextButtonTitle) == L.generalNext()
+
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.nextButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
 	}
 }
