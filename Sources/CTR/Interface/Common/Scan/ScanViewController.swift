@@ -23,13 +23,12 @@ class ScanViewController: BaseViewController, AVCaptureMetadataOutputObjectsDele
     var torchEnableLabel: String?
     var torchDisableLabel: String?
 
-	// Actions to perform on the navigationController at the
-	// moment that we are removing this screen.
-	// Background:
-	// 	we use `dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)`
-	// 	when dismissing this screen, which removes the reference to `self.navigationController` even before
-	// 	`self.viewWillDisappear` is called. So we need to maintain a (weak) reference to the navigationController
-	// 	inside this closure, so that we can perform some teardown steps on it as we're dismissed.
+	// Actions to perform on the navigationController at the moment that we are removing this screen.
+	// 	Background:
+	// 		we use `dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)`
+	// 		when dismissing this screen, which removes the reference to `self.navigationController` even before
+	// 		`self.viewWillDisappear` is called. So we need to maintain a (weak) reference to the navigationController
+	// 		inside this closure, so that we can perform some teardown steps on it as we're dismissed.
 	private var navigationControllerTeardown: (() -> Void)?
 
 	// MARK: View lifecycle
