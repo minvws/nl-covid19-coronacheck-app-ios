@@ -57,7 +57,6 @@ class VerifierCoordinator: SharedCoordinator {
 		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
 
 		dashboardNavigationController = UINavigationController()
-		sidePanel?.selectedViewController = dashboardNavigationController
 
 		// Replace the root with the side panel controller
 		window.rootViewController = sidePanel
@@ -80,6 +79,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		)
 
 		dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
+		sidePanel?.selectedViewController = dashboardNavigationController
 	}
 
 	func didFinish(_ result: VerifierStartResult) {
