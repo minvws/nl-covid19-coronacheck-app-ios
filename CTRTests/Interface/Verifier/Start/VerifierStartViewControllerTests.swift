@@ -7,19 +7,24 @@
 
 import XCTest
 @testable import CTR
+import SnapshotTesting
 import Nimble
-import Rswift
+import ViewControllerPresentationSpy
 
-class VerifierStartViewModelTests: XCTestCase {
+class VerifierStartViewControllerTests: XCTestCase {
 
-	/// Subject under test
-	private var sut: VerifierStartViewModel!
+	// MARK: Subject under test
+	private var sut: VerifierStartViewController!
 
-	private var cryptoManagerSpy: CryptoManagerSpy!
-	private  var proofManagerSpy: ProofManagingSpy!
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	private var viewModel: VerifierStartViewModel!
+	private var cryptoManagerSpy: CryptoManagerSpy!
+	private var proofManagerSpy: ProofManagingSpy!
 	private var userSettingsSpy: UserSettingsSpy!
+	
+	var window = UIWindow()
 
+	// MARK: Test lifecycle
 	override func setUp() {
 
 		super.setUp()
@@ -28,40 +33,49 @@ class VerifierStartViewModelTests: XCTestCase {
 		proofManagerSpy = ProofManagingSpy()
 		userSettingsSpy = UserSettingsSpy()
 
-		sut = VerifierStartViewModel(
+		viewModel = VerifierStartViewModel(
 			coordinator: verifyCoordinatorDelegateSpy,
 			cryptoManager: cryptoManagerSpy,
 			proofManager: proofManagerSpy,
 			userSettings: userSettingsSpy
 		)
+		sut = VerifierStartViewController(viewModel: viewModel)
+	}
+
+	func loadView() {
+		
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
 
-	func test_defaultContent() {
+	func test_content() {
 
 		// Given
 
 		// When
+		loadView()
 
 		// Then
-		expect(self.sut.primaryButtonTitle)
-			.to(equal(L.verifierStartButtonTitle()), description: "Button title should match")
-		expect(self.sut.title)
-			.to(equal(L.verifierStartTitle()), description: "Title should match")
-		expect(self.sut.header)
-			.to(equal(L.verifierStartHeader()), description: "Header should match")
-		expect(self.sut.message)
-			.to(equal(L.verifierStartMessage()), description: "Message should match")
+		expect(self.sut.title) == L.verifierStartTitle()
+		expect(self.sut.sceneView.title) == L.verifierStartHeader()
+		expect(self.sut.sceneView.message) == L.verifierStartMessage()
+		expect(self.sut.sceneView.showInstructionsTitle) == L.verifierStartButtonShowinstructions()
+		expect(self.sut.sceneView.primaryTitle) == L.verifierStartButtonTitle()
+
+		// Snapshot
+		sut.assertImage()
 	}
 
 	func test_primaryButtonTapped_noScanInstructionsShown() {
 
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = false
+		loadView()
 
 		// When
-		sut.primaryButtonTapped()
+		sut.sceneView.primaryButtonTapped()
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
@@ -75,9 +89,10 @@ class VerifierStartViewModelTests: XCTestCase {
 		// Given
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = true
+		loadView()
 
 		// When
-		sut.primaryButtonTapped()
+		sut.sceneView.primaryButtonTapped()
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true
@@ -88,24 +103,34 @@ class VerifierStartViewModelTests: XCTestCase {
 	func test_primaryButtonTapped_scanInstructionsShown_noPublicKeys() {
 
 		// Given
+		let alertVerifier = AlertVerifier()
 		userSettingsSpy.stubbedScanInstructionShown = true
 		cryptoManagerSpy.stubbedHasPublicKeysResult = false
+		loadView()
 
 		// When
-		sut.primaryButtonTapped()
+		sut.sceneView.primaryButtonTapped()
 
 		// Then
+		alertVerifier.verify(
+			title: L.generalErrorTitle(),
+			message: L.verifierStartOntimeinternet(),
+			animated: true,
+			actions: [
+				.default(L.generalOk())
+			],
+			presentingViewController: sut
+		)
 		expect(self.proofManagerSpy.invokedFetchIssuerPublicKeys) == true
-		expect(self.sut.showError) == true
 	}
 
-	func test_showInstructionsButtonTapped() {
+	func test_howInstructionsButtonTapped() {
 
 		// Given
-		userSettingsSpy.stubbedScanInstructionShown = false
+		loadView()
 
 		// When
-		sut.showInstructionsButtonTapped()
+		sut.sceneView.showInstructionsButtonTapped()
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinish) == true

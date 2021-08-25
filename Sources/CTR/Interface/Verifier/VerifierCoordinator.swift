@@ -69,17 +69,22 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome() {
-		
-		let dashboardViewController = VerifierStartViewController(
-			viewModel: VerifierStartViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager
-			)
-		)
 
-		dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
-		sidePanel?.selectedViewController = dashboardNavigationController
+		if let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
+			dashboardNavigationController?.popToViewController(existingStartViewController, animated: true)
+		} else {
+
+			let dashboardViewController = VerifierStartViewController(
+				viewModel: VerifierStartViewModel(
+					coordinator: self,
+					cryptoManager: cryptoManager,
+					proofManager: proofManager
+				)
+			)
+
+			dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
+			sidePanel?.selectedViewController = dashboardNavigationController
+		}
 	}
 
 	func didFinish(_ result: VerifierStartResult) {
@@ -154,7 +159,8 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 					cryptoManager: cryptoManager
 				)
 			)
-			dashboardNavigationController?.setViewControllers([destination], animated: true)
+			dashboardNavigationController?.pushViewController(destination, animated: true)
+//			dashboardNavigationController?.setViewControllers([destination], animated: true)
 		}
 	}
 }
