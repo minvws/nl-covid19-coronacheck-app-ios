@@ -409,48 +409,46 @@ class ListEventsViewModel: Logging {
 		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
-		onCompletion(false)
+		var success = true
 
-//		var success = true
-//
-//		if replaceExistingEventGroups {
-//			walletManager.removeExistingEventGroups()
-//		}
-//
-//		for response in remoteEvents where response.wrapper.status == .complete {
-//
-//			var data: Data?
-//
-//			if let signedResponse = response.signedResponse,
-//			   let jsonData = try? JSONEncoder().encode(signedResponse) {
-//				data = jsonData
-//			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
-//					  let jsonData = try? JSONEncoder().encode(dccEvent) {
-//				data = jsonData
-//			}
-//
-//			// Remove any existing events for the provider
-//			walletManager.removeExistingEventGroups(
-//				type: eventModeForStorage,
-//				providerIdentifier: response.wrapper.providerIdentifier
-//			)
-//
-//			// Store the new events
-//			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
-//			   let jsonData = data {
-//				success = success && walletManager.storeEventGroup(
-//					eventModeForStorage,
-//					providerIdentifier: response.wrapper.providerIdentifier,
-//					jsonData: jsonData,
-//					issuedAt: maxIssuedAt
-//				)
-//				if !success {
-//					break
-//				}
-//			} else {
-//				logWarning("Could not store event group")
-//			}
-//		}
-//		onCompletion(success)
+		if replaceExistingEventGroups {
+			walletManager.removeExistingEventGroups()
+		}
+
+		for response in remoteEvents where response.wrapper.status == .complete {
+
+			var data: Data?
+
+			if let signedResponse = response.signedResponse,
+			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+				data = jsonData
+			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
+					  let jsonData = try? JSONEncoder().encode(dccEvent) {
+				data = jsonData
+			}
+
+			// Remove any existing events for the provider
+			walletManager.removeExistingEventGroups(
+				type: eventModeForStorage,
+				providerIdentifier: response.wrapper.providerIdentifier
+			)
+
+			// Store the new events
+			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
+			   let jsonData = data {
+				success = success && walletManager.storeEventGroup(
+					eventModeForStorage,
+					providerIdentifier: response.wrapper.providerIdentifier,
+					jsonData: jsonData,
+					issuedAt: maxIssuedAt
+				)
+				if !success {
+					break
+				}
+			} else {
+				logWarning("Could not store event group")
+			}
+		}
+		onCompletion(success)
 	}
 }
