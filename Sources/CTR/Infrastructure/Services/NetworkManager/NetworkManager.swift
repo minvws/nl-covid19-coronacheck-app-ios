@@ -551,22 +551,22 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
-//		guard let urlRequest = constructRequest(url: networkConfiguration.prepareIssueUrl) else {
+		guard let urlRequest = constructRequest(url: networkConfiguration.prepareIssueUrl) else {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
-//		}
+		}
 
-//		let session = URLSession(
-//			configuration: .ephemeral,
-//			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-//			delegateQueue: nil
-//		)
-//
-//		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
-//			DispatchQueue.main.async {
-//				completion(result.map { decodable, _, _, _ in (decodable) })
-//			}
-//		}
+		let session = URLSession(
+			configuration: .ephemeral,
+			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
+			delegateQueue: nil
+		)
+
+		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, _, _ in (decodable) })
+			}
+		}
 	}
 
 	/// Get the public keys

@@ -26,7 +26,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		var errorDescription: String? {
 			switch self {
 				case .greencardLoaderError(let error):
-					return error.rawValue
+					return "TODO" //error.rawValue
 				case .networkError(let error):
 					return error.rawValue
 				case .logicalErrorA:

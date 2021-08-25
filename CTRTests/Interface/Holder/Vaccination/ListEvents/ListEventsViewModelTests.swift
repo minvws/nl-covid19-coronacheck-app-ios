@@ -65,7 +65,7 @@ class ListEventsViewModelTests: XCTestCase {
 	func test_backButtonTapped_emptyState() {
 
 		// Given
-		sut.viewState = .emptyEvents(
+		sut.viewState = .feedback(
 			content: defaultContent
 		)
 

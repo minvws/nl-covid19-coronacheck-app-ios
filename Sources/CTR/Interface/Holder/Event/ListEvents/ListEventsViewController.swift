@@ -12,7 +12,7 @@ class ListEventsViewController: BaseViewController {
 	enum State {
 		case loading(content: Content)
 		case listEvents(content: Content, rows: [Row])
-		case emptyEvents(content: Content)
+		case feedback(content: Content)
 	}
 
 	struct Content {
@@ -81,7 +81,7 @@ class ListEventsViewController: BaseViewController {
 		viewModel.$viewState.binding = { [weak self] in
 
 			switch $0 {
-				case let .emptyEvents(content):
+				case let .feedback(content):
 					self?.setForNoEvents(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)

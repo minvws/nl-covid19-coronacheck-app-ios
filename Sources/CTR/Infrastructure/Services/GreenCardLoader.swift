@@ -18,14 +18,15 @@ protocol GreenCardLoading {
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
-	enum Error: String, Swift.Error, Equatable {
+//	enum Error: String, Swift.Error, Equatable {
+	enum Error: Swift.Error, Equatable {
 		case noEvents
 		case didNotEvaluate
 
 		case failedToSave
 		case failedToPrepareIssue
 		
-//		case preparingIssue117
+		case preparingIssue(ServerError)
 		case stoken118
 		case credentials119
 	}
@@ -52,18 +53,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			switch prepareIssueResult {
 				case .failure(let serverError):
 					self.logError("error: \(serverError)")
-					completion(.failure(serverError))
-
-//					switch networkError {
-//						case .serverBusy:
-//							completion(.failure(NetworkError.serverBusy))
-//						case .noInternetConnection:
-//							completion(.failure(NetworkError.noInternetConnection))
-//						case .requestTimedOut:
-//							completion(.failure(NetworkError.requestTimedOut))
-//						default:
-//							completion(.failure(Error.preparingIssue117))
-//					}
+					completion(.failure(Error.preparingIssue(serverError)))
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {

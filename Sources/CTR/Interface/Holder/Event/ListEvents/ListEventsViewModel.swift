@@ -136,7 +136,7 @@ class ListEventsViewModel: Logging {
 		switch viewState {
 			case .loading, .listEvents:
 				warnBeforeGoBack()
-			case .emptyEvents:
+			case .feedback:
 				goBack()
 		}
 	}
@@ -264,8 +264,8 @@ class ListEventsViewModel: Logging {
 					case .failure(NetworkError.serverBusy):
 						self.showServerTooBusyError()
 
-//					case .failure(GreenCardLoader.Error.preparingIssue117):
-//						self.showTechnicalError("117 prepareIssue")
+					case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
+						self.handleServerError(serverError, for: .nonce, with: remoteEvents)
 
 					case .failure(GreenCardLoader.Error.stoken118):
 						self.showTechnicalError("118 stoken")
@@ -273,45 +273,55 @@ class ListEventsViewModel: Logging {
 					case .failure(GreenCardLoader.Error.credentials119):
 						self.showTechnicalError("118 credentials")
 
-					case .failure(let otherError):
+					case .failure(let error):
+						self.logDebug("TODO: unhandled \(error)")
 
-						if case let ServerError.error(statusCode, serverResponse, error) = otherError {
-							self.logDebug("Rolus -> ServerError \(otherError)")
-
-							switch error {
-//								case .serverBusy:
-//									showServerTooBusyError()
-//								case .noInternetConnection, .requestTimedOut:
-//									showNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-								case .responseCached, .redirection, .resourceNotFound, .serverError:
-									// 304, 3xx, 4xx, 5xx
-									let errorCode = ErrorCode(
-										flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents),
-										step: .nonce,
-										provider: self.determineErrorCodeProvider(remoteEvents: remoteEvents),
-										errorCode: "\(statusCode ?? 000)",
-										detailedCode: serverResponse?.code
-									)
-									self.logDebug("errorCode: \(errorCode)")
-									self.viewState = self.displayServerErrorCode(errorCode)
-								case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-									// Client side
-									let errorCode = ErrorCode(
-										flow: self.determineErrorCodeFlow(remoteEvents: remoteEvents),
-										step: .nonce,
-										provider: self.determineErrorCodeProvider(remoteEvents: remoteEvents),
-										errorCode: error.getClientErrorCode() ?? "000",
-										detailedCode: serverResponse?.code
-									)
-									self.logDebug("errorCode: \(errorCode)")
-									self.viewState = self.displayClientErrorCode(errorCode)
-								default:
-									break
-							}
-						}
 				}
 			})
 		}
+	}
+
+	func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+
+		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
+			self.logDebug("handleServerError \(serverError)")
+
+			switch error {
+				case .serverBusy:
+					showServerTooBusyError()
+
+				case .noInternetConnection, .requestTimedOut:
+					showNoInternet(remoteEvents: remoteEvents)
+					shouldPrimaryButtonBeEnabled = true
+
+				case .responseCached, .redirection, .resourceNotFound, .serverError:
+					// 304, 3xx, 4xx, 5xx
+					let errorCode = ErrorCode(
+						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
+						step: step,
+						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+						errorCode: "\(statusCode ?? 000)",
+						detailedCode: serverResponse?.code
+					)
+					logDebug("errorCode: \(errorCode)")
+					viewState = displayServerErrorCode(errorCode)
+					shouldPrimaryButtonBeEnabled = true
+
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+					// Client side
+					let errorCode = ErrorCode(
+						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
+						step: step,
+						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+						errorCode: error.getClientErrorCode() ?? "000",
+						detailedCode: serverResponse?.code
+					)
+					logDebug("errorCode: \(errorCode)")
+					viewState = displayClientErrorCode(errorCode)
+					shouldPrimaryButtonBeEnabled = true
+			}
+		}
+
 	}
 
 	// MARK: Errors

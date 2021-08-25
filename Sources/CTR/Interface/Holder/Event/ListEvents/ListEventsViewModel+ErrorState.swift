@@ -11,7 +11,7 @@ extension ListEventsViewModel {
 
 	internal func displayClientErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
@@ -33,7 +33,7 @@ extension ListEventsViewModel {
 
 	internal func displayServerErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),

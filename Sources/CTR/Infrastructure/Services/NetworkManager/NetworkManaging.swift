@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct ServerResponse: Decodable {
+struct ServerResponse: Decodable, Equatable {
 	let status: String
 	let code: Int
 }
 
-enum ServerError: Error {
+enum ServerError: Error, Equatable {
 	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
 }
 
-enum NetworkError: String, Error {
+enum NetworkError: String, Error, Equatable {
 	case invalidRequest
 	case requestTimedOut
 	case noInternetConnection
