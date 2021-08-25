@@ -109,7 +109,7 @@ protocol NetworkManaging: AnyObject {
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void)
 
 	/// Get a test result
 	/// - Parameters:

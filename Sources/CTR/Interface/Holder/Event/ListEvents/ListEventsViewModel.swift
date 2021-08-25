@@ -213,7 +213,7 @@ class ListEventsViewModel: Logging {
 			guard saved else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
-				completion(false)
+				self.handleClientSideError(code: "056", for: .storingEvents, with: remoteEvents)
 				return
 			}
 
@@ -250,35 +250,43 @@ class ListEventsViewModel: Logging {
 						self.viewState = self.cannotCreateEventsState()
 						self.shouldPrimaryButtonBeEnabled = true
 
-					case .failure(GreenCardLoader.Error.failedToSave), .failure(GreenCardLoader.Error.noEvents):
+					case .failure(GreenCardLoader.Error.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 
-					case .failure(NetworkError.requestTimedOut), .failure(NetworkError.noInternetConnection):
-						self.showNoInternet(remoteEvents: remoteEvents)
-						self.shouldPrimaryButtonBeEnabled = true
-
-					case .failure(GreenCardLoader.Error.failedToPrepareIssue):
-						self.showTechnicalError("116 decodePrepareIssueMessage")
-
-					case .failure(NetworkError.serverBusy):
-						self.showServerTooBusyError()
+					case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
+						self.handleClientSideError(code: "053", for: .nonce, with: remoteEvents)
 
 					case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
 						self.handleServerError(serverError, for: .nonce, with: remoteEvents)
 
-					case .failure(GreenCardLoader.Error.stoken118):
-						self.showTechnicalError("118 stoken")
+					case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
+						self.handleClientSideError(code: "054", for: .nonce, with: remoteEvents)
 
-					case .failure(GreenCardLoader.Error.credentials119):
-						self.showTechnicalError("118 credentials")
+					case .failure(GreenCardLoader.Error.credentials(let serverError)):
+						self.handleServerError(serverError, for: .signer, with: remoteEvents)
+
+					case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
+						self.handleClientSideError(code: "055", for: .storingCredentials, with: remoteEvents)
 
 					case .failure(let error):
-						self.logDebug("TODO: unhandled \(error)")
-
+						self.handleClientSideError(code: "000", for: .signer, with: remoteEvents)
 				}
 			})
 		}
+	}
+
+	func handleClientSideError(code: String, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+
+		let errorCode = ErrorCode(
+			flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
+			step: step,
+			provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+			errorCode: code
+		)
+		logDebug("errorCode: \(errorCode)")
+		viewState = displayClientErrorCode(errorCode)
+		shouldPrimaryButtonBeEnabled = true
 	}
 
 	func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
@@ -393,24 +401,6 @@ class ListEventsViewModel: Logging {
 		)
 	}
 
-	private func showTechnicalError(_ customCode: String?) {
-
-		var subTitle = L.generalErrorTechnicalText()
-		if let code = customCode {
-			subTitle = L.generalErrorTechnicalCustom(code)
-		}
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: subTitle,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { _ in
-				self.coordinator?.listEventsScreenDidFinish(.back(eventMode: self.eventMode))
-			},
-			okTitle: L.generalClose()
-		)
-	}
-
 	// MARK: Store events
 
 	private func storeEvent(
@@ -419,46 +409,48 @@ class ListEventsViewModel: Logging {
 		replaceExistingEventGroups: Bool,
 		onCompletion: @escaping (Bool) -> Void) {
 
-		var success = true
+		onCompletion(false)
 
-		if replaceExistingEventGroups {
-			walletManager.removeExistingEventGroups()
-		}
-
-		for response in remoteEvents where response.wrapper.status == .complete {
-
-			var data: Data?
-
-			if let signedResponse = response.signedResponse,
-			   let jsonData = try? JSONEncoder().encode(signedResponse) {
-				data = jsonData
-			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
-					  let jsonData = try? JSONEncoder().encode(dccEvent) {
-				data = jsonData
-			}
-
-			// Remove any existing events for the provider
-			walletManager.removeExistingEventGroups(
-				type: eventModeForStorage,
-				providerIdentifier: response.wrapper.providerIdentifier
-			)
-
-			// Store the new events
-			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
-			   let jsonData = data {
-				success = success && walletManager.storeEventGroup(
-					eventModeForStorage,
-					providerIdentifier: response.wrapper.providerIdentifier,
-					jsonData: jsonData,
-					issuedAt: maxIssuedAt
-				)
-				if !success {
-					break
-				}
-			} else {
-				logWarning("Could not store event group")
-			}
-		}
-		onCompletion(success)
+//		var success = true
+//
+//		if replaceExistingEventGroups {
+//			walletManager.removeExistingEventGroups()
+//		}
+//
+//		for response in remoteEvents where response.wrapper.status == .complete {
+//
+//			var data: Data?
+//
+//			if let signedResponse = response.signedResponse,
+//			   let jsonData = try? JSONEncoder().encode(signedResponse) {
+//				data = jsonData
+//			} else if let dccEvent = response.wrapper.events?.first?.dccEvent,
+//					  let jsonData = try? JSONEncoder().encode(dccEvent) {
+//				data = jsonData
+//			}
+//
+//			// Remove any existing events for the provider
+//			walletManager.removeExistingEventGroups(
+//				type: eventModeForStorage,
+//				providerIdentifier: response.wrapper.providerIdentifier
+//			)
+//
+//			// Store the new events
+//			if let maxIssuedAt = response.wrapper.getMaxIssuedAt(),
+//			   let jsonData = data {
+//				success = success && walletManager.storeEventGroup(
+//					eventModeForStorage,
+//					providerIdentifier: response.wrapper.providerIdentifier,
+//					jsonData: jsonData,
+//					issuedAt: maxIssuedAt
+//				)
+//				if !success {
+//					break
+//				}
+//			} else {
+//				logWarning("Could not store event group")
+//			}
+//		}
+//		onCompletion(success)
 	}
 }

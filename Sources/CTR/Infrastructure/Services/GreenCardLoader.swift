@@ -18,17 +18,15 @@ protocol GreenCardLoading {
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
-//	enum Error: String, Swift.Error, Equatable {
 	enum Error: Swift.Error, Equatable {
 		case noEvents
 		case didNotEvaluate
 
-		case failedToSave
-		case failedToPrepareIssue
-		
 		case preparingIssue(ServerError)
-		case stoken118
-		case credentials119
+		case failedToParsePrepareIssue
+		case failedToGenerateCommitmentMessage
+		case credentials(ServerError)
+		case failedToSaveGreenCards
 	}
 
 	private let networkManager: NetworkManaging
@@ -58,15 +56,13 @@ class GreenCardLoader: GreenCardLoading, Logging {
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
 						self.logError("Can't save the nonce / prepareIssueMessage")
-						completion(.failure(Error.failedToPrepareIssue))
+						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
 
 					self.logVerbose("ok: \(prepareIssueEnvelope)")
-
 					self.cryptoManager.setNonce(nonce)
 					self.cryptoManager.setStoken(prepareIssueEnvelope.stoken)
-
 					self.fetchGreenCards { response in
 						switch response {
 							case .failure(let error):
@@ -81,10 +77,10 @@ class GreenCardLoader: GreenCardLoading, Logging {
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self.logError("Failed to save greenCards")
-										completion(.failure(Error.failedToSave))
+										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
-									
+
 									completion(.success(()))
 								}
 						}
@@ -106,7 +102,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
 		else {
-			onCompletion(.failure(Error.stoken118))
+			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
 
@@ -116,24 +112,15 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
 		]
 
-		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, NetworkError>) in
+		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
-				case let .success(greencardResponse):
-					self?.logVerbose("ok: \(greencardResponse)")
-					onCompletion(.success(greencardResponse))
-				case let .failure(networkError):
-					self?.logError("error: \(networkError)")
+				case .failure(let serverError):
+					self?.logError("error: \(serverError)")
+					onCompletion(.failure(Error.credentials(serverError)))
 
-					switch networkError {
-						case .serverBusy:
-							onCompletion(.failure(NetworkError.serverBusy))
-						case .noInternetConnection:
-							onCompletion(.failure(NetworkError.noInternetConnection))
-						case .requestTimedOut:
-							onCompletion(.failure(NetworkError.requestTimedOut))
-						default:
-							onCompletion(.failure(Error.credentials119))
-					}
+				case let .success(greencardResponse):
+					self?.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
+					onCompletion(.success(greencardResponse))
 			}
 		}
 	}

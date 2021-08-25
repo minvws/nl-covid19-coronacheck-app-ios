@@ -552,6 +552,7 @@ extension NetworkManager: NetworkManaging {
 	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.prepareIssueUrl) else {
+			logError("NetworkManager - prepareIssue: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -606,27 +607,35 @@ extension NetworkManager: NetworkManaging {
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void) {
 
-		do {
-			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-			guard let urlRequest = constructRequest(
-				url: networkConfiguration.credentialUrl,
-				method: .POST,
-				body: jsonData
-			) else {
-				completion(.failure(.invalidRequest))
-				return
+		guard JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
+			  let body = try? JSONSerialization.data(withJSONObject: dictionary) else {
+			logError("NetworkManager - fetchGreencards: could not serialize dictionary")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)))
+			return
+		}
+
+		guard let urlRequest = constructRequest(
+			url: networkConfiguration.credentialUrl,
+			method: .POST,
+			body: body
+		) else {
+			logError("NetworkManager - fetchGreencards: invalid request")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
+			return
+		}
+		let session = URLSession(
+			configuration: .ephemeral,
+			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
+			delegateQueue: nil
+		)
+
+		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
+			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, _, _ in (decodable) })
 			}
-			let session = URLSession(
-				configuration: .ephemeral,
-				delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-				delegateQueue: nil
-			)
-			decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
-		} catch {
-			logError("Could not serialize dictionary")
-			completion(.failure(.cannotSerialize))
 		}
 	}
 
@@ -833,6 +842,7 @@ extension NetworkManager: NetworkManaging {
 			method: .POST,
 			body: body
 		) else {
+			logError("NetworkManager - checkCouplingStatus: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
