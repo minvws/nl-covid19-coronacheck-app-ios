@@ -55,7 +55,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self.logError("Can't save the nonce / prepareIssueMessage")
+						self.logError("Can't parse the nonce / prepareIssueMessage")
 						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
