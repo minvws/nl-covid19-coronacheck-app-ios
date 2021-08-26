@@ -299,7 +299,11 @@ class ListEventsViewModel: Logging {
 				case .serverBusy:
 					showServerTooBusyError()
 
-				case .noInternetConnection, .requestTimedOut:
+				case .requestTimedOut:
+					showServerUnreachable(remoteEvents: remoteEvents)
+					shouldPrimaryButtonBeEnabled = true
+
+				case .noInternetConnection:
 					showNoInternet(remoteEvents: remoteEvents)
 					shouldPrimaryButtonBeEnabled = true
 
@@ -398,7 +402,26 @@ class ListEventsViewModel: Logging {
 					}
 				}
 			},
-			okTitle: L.holderVaccinationErrorAgain()
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func showServerUnreachable(remoteEvents: [RemoteEvent]) {
+
+		// this is a retry-able situation
+		alert = ListEventsViewController.AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					if !success {
+						self?.showEventError(remoteEvents: remoteEvents)
+					}
+				}
+			},
+			okTitle: L.generalRetry()
 		)
 	}
 

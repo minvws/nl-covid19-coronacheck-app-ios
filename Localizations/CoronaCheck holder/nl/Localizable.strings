@@ -231,6 +231,7 @@
 "general.error.technical.custom" = "Dat komt door een technische fout (%@)";
 "general.error.nointernet.title" = "Geen internetverbinding";
 "general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
+"general.error.server.unreachable" = "Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
 "general.government.logo" = "Logo Rijksoverheid";
