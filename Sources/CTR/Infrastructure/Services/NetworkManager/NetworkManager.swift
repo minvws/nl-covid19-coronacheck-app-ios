@@ -521,30 +521,32 @@ extension NetworkManager: NetworkManaging {
 	///   - completion: completion handler
 	func fetchEventAccessTokens(
 		tvsToken: String,
-		completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
-
-		let headers: [HTTPHeaderKey: String] = [
-			HTTPHeaderKey.authorization: "Bearer \(tvsToken)"
-		]
+		completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(
 			url: networkConfiguration.vaccinationAccessTokensUrl,
 			method: .POST,
-			headers: headers
+			headers: [HTTPHeaderKey.authorization: "Bearer \(tvsToken)"]
 		) else {
-			completion(.failure(.invalidRequest))
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
-		func open(result: Result<ArrayEnvelope<EventFlow.AccessToken>, NetworkError>) {
-			completion(result.map { $0.items })
-		}
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: open)
+		decodeSignedJSONData(
+			request: urlRequest,
+			session: session,
+			ignore400: false,
+			completion: {(result: Result<(ArrayEnvelope<EventFlow.AccessToken>, SignedResponse, Data, URLResponse), ServerError>) in
+				DispatchQueue.main.async {
+					completion(result.map { decodable, _, _, _ in (decodable.items) })
+				}
+			}
+		)
 	}
 
 	/// Prepare the issue (get the nonce)
@@ -641,14 +643,11 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
-			completion(.failure(.invalidRequest))
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
-		}
-		func open(result: Result<ArrayEnvelope<TestProvider>, NetworkError>) {
-			completion(result.map { $0.items })
 		}
 
 		let session = URLSession(
@@ -656,7 +655,17 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: open)
+
+		decodeSignedJSONData(
+			request: urlRequest,
+			session: session,
+			ignore400: false,
+			completion: {(result: Result<(ArrayEnvelope<TestProvider>, SignedResponse, Data, URLResponse), ServerError>) in
+				DispatchQueue.main.async {
+					completion(result.map { decodable, _, _, _ in (decodable.items) })
+				}
+			}
+		)
 	}
 
 	/// Get the event providers

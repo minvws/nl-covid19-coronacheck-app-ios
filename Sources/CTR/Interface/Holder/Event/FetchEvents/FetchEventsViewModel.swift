@@ -108,7 +108,7 @@ final class FetchEventsViewModel: Logging {
 		// Needed because we can't present an Alert at the same time as change the navigation stack
 		// so sometimes the next step must be triggered as we dismiss the Alert.
 		func nextStep() {
-			fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
+			fetchRemoteEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
 		}
 
 		switch (eventProvidersWithEventInformation.isEmpty, someNetworkWasTooBusy, someNetworkDidError) {
@@ -278,25 +278,25 @@ final class FetchEventsViewModel: Logging {
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(
-		completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
+		completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 
-		var accessTokenResult: Result<[EventFlow.AccessToken], NetworkError>?
+		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
 		prefetchingGroup.enter()
 		fetchEventAccessTokens { result in
 			accessTokenResult = result
 			self.prefetchingGroup.leave()
 		}
 
-		var vaccinationEventProvidersResult: Result<[EventFlow.EventProvider], NetworkError>?
+		var remoteEventProvidersResult: Result<[EventFlow.EventProvider], ServerError>?
 		prefetchingGroup.enter()
 		fetchEventProviders { result in
-			vaccinationEventProvidersResult = result
+			remoteEventProvidersResult = result
 			self.prefetchingGroup.leave()
 		}
 
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
-			switch (accessTokenResult, vaccinationEventProvidersResult) {
+			switch (accessTokenResult, remoteEventProvidersResult) {
 				case (.success(let accessTokens), .success(let eventProviders)):
 					var eventProviders = eventProviders // mutable
 					for index in 0 ..< eventProviders.count {
@@ -325,7 +325,7 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
+	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventAccessTokens(tvsToken: tvsToken) { [weak self] result in
@@ -334,7 +334,7 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
+	private func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventProviders { [weak self] result in
@@ -409,9 +409,9 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	// MARK: Fetch vaccination events
+	// MARK: Fetch remote events
 
-	private func fetchVaccinationEvents(
+	private func fetchRemoteEvents(
 		eventProviders: [EventFlow.EventProvider],
 		filter: String?,
 		completion: @escaping ([RemoteEvent], [NetworkError]) -> Void) {

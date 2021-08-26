@@ -85,7 +85,7 @@ protocol NetworkManaging: AnyObject {
 	/// - Parameters:
 	///   - tvsToken: the tvs token
 	///   - completion: completion handler
-	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void)
+	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void)
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
@@ -105,7 +105,7 @@ protocol NetworkManaging: AnyObject {
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
-	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void)
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void)
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
