@@ -27,7 +27,7 @@ final class FetchEventsViewModel: Logging {
 
 	@Bindable internal var viewState: FetchEventsViewController.State
 
-	@Bindable private(set) var alert: FetchEventsViewController.AlertContent?
+	@Bindable private(set) var alert: AlertContent?
 
 	private let prefetchingGroup = DispatchGroup()
 	private let hasEventInformationFetchingGroup = DispatchGroup()
@@ -115,7 +115,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -126,7 +126,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, _, true): // No results and >=1 network had an error (5.5.1)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 					okAction: { _ in
@@ -137,7 +137,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -148,7 +148,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
 					subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
 					okAction: { _ in
@@ -163,9 +163,9 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func noInternetAlertContent() -> FetchEventsViewController.AlertContent {
+	private func noInternetAlertContent() -> AlertContent {
 
-		return FetchEventsViewController.AlertContent(
+		return AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
 			okAction: { _ in
@@ -196,7 +196,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -207,7 +207,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (true, _, true): // No results and >=1 network had an error (5.5.1)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
 					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
 					okAction: { _ in
@@ -218,7 +218,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
 
-				self.alert = FetchEventsViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
 					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
 					okAction: { _ in
@@ -229,7 +229,7 @@ final class FetchEventsViewModel: Logging {
 
 			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
-			   self.alert = FetchEventsViewController.AlertContent(
+			   self.alert = AlertContent(
 				title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
 				subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
 				   okAction: { _ in
@@ -251,7 +251,7 @@ final class FetchEventsViewModel: Logging {
 
 	func warnBeforeGoBack() {
 
-		alert = FetchEventsViewController.AlertContent(
+		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: eventMode == .vaccination
 				? L.holderVaccinationAlertMessage()

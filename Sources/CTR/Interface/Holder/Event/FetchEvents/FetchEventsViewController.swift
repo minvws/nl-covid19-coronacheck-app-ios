@@ -20,15 +20,6 @@ class FetchEventsViewController: BaseViewController {
 		let action: (() -> Void)?
 	}
 
-	struct AlertContent {
-		var title: String
-		var subTitle: String
-		var cancelAction: ((UIAlertAction) -> Void)?
-		var cancelTitle: String?
-		var okAction: ((UIAlertAction) -> Void)?
-		var okTitle: String
-	}
-
 	private let viewModel: FetchEventsViewModel
 	private let sceneView = FetchEventsView()
 
@@ -117,37 +108,5 @@ class FetchEventsViewController: BaseViewController {
 			sceneView.footerGradientView.isHidden = true
 		}
 		sceneView.primaryButtonTappedCommand = content.action
-	}
-
-	func showAlert(_ alertContent: AlertContent?) {
-
-		guard let content = alertContent else {
-			return
-		}
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: content.okAction
-			)
-		)
-
-		// Optional cancel button:
-		if let cancelTitle = content.cancelTitle {
-			alertController.addAction(
-				UIAlertAction(
-					title: cancelTitle,
-					style: .cancel,
-					handler: content.cancelAction
-				)
-			)
-		}
-		present(alertController, animated: true, completion: nil)
 	}
 }
