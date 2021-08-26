@@ -270,6 +270,7 @@ class ListEventsViewModel: Logging {
 						self.handleClientSideError(code: "055", for: .storingCredentials, with: remoteEvents)
 
 					case .failure(let error):
+						self.logError("storeAndSign - unhandled: \(error)")
 						self.handleClientSideError(code: "000", for: .signer, with: remoteEvents)
 				}
 			})
