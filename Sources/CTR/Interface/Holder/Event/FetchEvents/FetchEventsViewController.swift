@@ -11,6 +11,7 @@ class FetchEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
+		case feedback(content: Content)
 	}
 
 	private let viewModel: FetchEventsViewModel
@@ -57,6 +58,8 @@ class FetchEventsViewController: BaseViewController {
 			switch $0 {
 				case let .loading(content):
 					self?.setForLoadingState(content)
+				case let .feedback(content):
+					self?.setForFeedback(content)
 			}
 		}
 
@@ -78,6 +81,12 @@ class FetchEventsViewController: BaseViewController {
 	private func setForLoadingState(_ content: Content) {
 
 		sceneView.spinner.isHidden = false
+		displayContent(content)
+	}
+
+	private func setForFeedback(_ content: Content) {
+
+		sceneView.spinner.isHidden = true
 		displayContent(content)
 	}
 

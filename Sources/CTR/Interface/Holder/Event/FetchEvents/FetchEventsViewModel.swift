@@ -70,28 +70,22 @@ final class FetchEventsViewModel: Logging {
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 
-	func handleFetchEventProvidersWithAccessTokensResponse(response eventProvidersResult: Result<[EventFlow.EventProvider], NetworkError>) {
-		switch eventProvidersResult {
-			case .failure(let networkError):
-				// No error tolerance here, if any failures then bail out.
-				self.coordinator?.fetchEventsScreenDidFinish(
-					.errorRequiringRestart(
-						error: networkError,
-						eventMode: self.eventMode
-					)
-				)
+	func handleFetchEventProvidersWithAccessTokensResponse(eventProviders: [EventFlow.EventProvider], errorCodes: [ErrorCode]) {
 
-			case .success(let eventProviders):
-
-				self.mappingManager.setEventProviders(eventProviders)
-
-				// Do the Unomi call
-				self.fetchHasEventInformation(
-					forEventProviders: eventProviders,
-					filter: eventMode.queryFilterValue,
-					completion: handleFetchHasEventInformationResponse
-				)
+		// No error tolerance here, if any failures then bail out.
+		guard errorCodes.isEmpty else {
+			displayErrorCodes(errorCodes)
+			return
 		}
+
+		self.mappingManager.setEventProviders(eventProviders)
+
+		// Do the Unomi call
+		self.fetchHasEventInformation(
+			forEventProviders: eventProviders,
+			filter: eventMode.queryFilterValue,
+			completion: handleFetchHasEventInformationResponse
+		)
 	}
 
 	func handleFetchHasEventInformationResponse(
@@ -165,18 +159,6 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func noInternetAlertContent() -> AlertContent {
-
-		return AlertContent(
-			title: L.generalErrorNointernetTitle(),
-			subTitle: L.generalErrorNointernetText(),
-			okAction: { _ in
-				self.coordinator?.fetchEventsScreenDidFinish(.stop)
-			},
-			okTitle: L.generalOk()
-		)
-	}
-
 	func handleFetchEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
@@ -248,7 +230,13 @@ final class FetchEventsViewModel: Logging {
 
 	func backButtonTapped() {
 
-		warnBeforeGoBack()
+		switch viewState {
+			case .loading:
+				warnBeforeGoBack()
+			case .feedback:
+				goBack()
+		}
+
 	}
 
 	func warnBeforeGoBack() {
@@ -280,7 +268,7 @@ final class FetchEventsViewModel: Logging {
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(
-		completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
+		completion: @escaping ([EventFlow.EventProvider], [ErrorCode]) -> Void) {
 
 		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
 		prefetchingGroup.enter()
@@ -298,33 +286,78 @@ final class FetchEventsViewModel: Logging {
 
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
+			var errorCodes = [ErrorCode]()
+			var providers = [EventFlow.EventProvider]()
+
 			switch (accessTokenResult, remoteEventProvidersResult) {
 				case (.success(let accessTokens), .success(let eventProviders)):
-					var eventProviders = eventProviders // mutable
-					for index in 0 ..< eventProviders.count {
-						for accessToken in accessTokens where eventProviders[index].identifier == accessToken.providerIdentifier {
-							eventProviders[index].accessToken = accessToken
+					providers = eventProviders // mutable
+					for index in 0 ..< providers.count {
+						for accessToken in accessTokens where providers[index].identifier == accessToken.providerIdentifier {
+							providers[index].accessToken = accessToken
 						}
 					}
 					if self.eventMode == .test || self.eventMode == .recovery {
 						// only retrieve negative / positive test 3.0 from the GGD
-						eventProviders = eventProviders.filter { $0.identifier.lowercased() == "ggd" }
+						providers = providers.filter { $0.identifier.lowercased() == "ggd" }
 					}
-					completion(.success(eventProviders))
+				case (.failure(let accessError), .failure(let providerError)):
+					self.logError("Error getting access tokens: \(accessError)")
+					if let code = self.convert(accessError, step: .accessTokens) {
+						errorCodes.append(code)
+					}
 
-				case (.failure(let error), _):
-					self.logError("Error getting access tokens: \(error)")
-					completion(.failure(error))
+					self.logError("Error getting access tokens: \(providerError)")
+					if let code = self.convert(providerError, step: .providers) {
+						errorCodes.append(code)
+					}
 
-				case (_, .failure(let error)):
-					self.logError("Error getting event providers: \(error)")
-					completion(.failure(error))
+				case (.failure(let accessError), _):
+					self.logError("Error getting access tokens: \(accessError)")
+					if let code = self.convert(accessError, step: .accessTokens) {
+						errorCodes.append(code)
+					}
+
+				case (_, .failure(let providerError)):
+					self.logError("Error getting event providers: \(providerError)")
+					if let code = self.convert(providerError, step: .providers) {
+						errorCodes.append(code)
+					}
 
 				default:
 					// this should not happen due to the prefetching group
 					self.logError("Unexpected: did not receive response from accessToken or eventProviders call")
 			}
+			completion(providers, errorCodes)
 		}
+	}
+
+	private func convert(_ serverError: ServerError, step: ErrorCode.Step) -> ErrorCode? {
+
+		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
+			return ErrorCode(
+				flow: flow,
+				step: step,
+				errorCode: error.getClientErrorCode() ?? "\(statusCode ?? 000)",
+				detailedCode: serverResponse?.code
+			)
+		}
+		return nil
+	}
+
+	private var flow: ErrorCode.Flow {
+
+		switch eventMode {
+			case .vaccination:
+				return .vaccination
+			case .paperflow:
+				return .hkvi
+			case .recovery:
+				return .recovery
+			case .test:
+				return .ggdTest
+		}
+
 	}
 
 	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
@@ -426,7 +459,7 @@ final class FetchEventsViewModel: Logging {
 			   let eventInformationAvailable = provider.eventInformationAvailable, eventInformationAvailable.informationAvailable {
 
 				eventFetchingGroup.enter()
-				fetchVaccinationEvent(from: provider, filter: filter) { result in
+				fetchRemoteEvent(from: provider, filter: filter) { result in
 					if Configuration().getEnvironment() == "production" {
 						eventResponseResults += [result.map({ ($0, $1) })]
 					} else {
@@ -454,7 +487,7 @@ final class FetchEventsViewModel: Logging {
 		}
 	}
 
-	private func fetchVaccinationEvent(
+	private func fetchRemoteEvent(
 		from provider: EventFlow.EventProvider,
 		filter: String?,
 		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
@@ -480,5 +513,56 @@ private extension EventMode {
 			case .test: return "negativetest"
 			case .vaccination: return "vaccination"
 		}
+	}
+}
+
+// MARK: - Error states
+
+private extension FetchEventsViewModel {
+
+	func displayErrorCodes(_ errorCodes: [ErrorCode]) {
+
+		var subTitle: String
+		if errorCodes.count == 1 {
+			if errorCodes[0].errorCode.starts(with: "0") {
+				subTitle = L.holderErrorstateClientMessage("\(errorCodes[0])")
+			} else {
+				subTitle = L.holderErrorstateServerMessage("\(errorCodes[0])")
+			}
+		} else {
+			let lineBreak = "<br />"
+			let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+			subTitle = L.holderErrorstateServerMessages("\(errorString)")
+		}
+		viewState = .feedback(
+			content: Content(
+				title: L.holderErrorstateTitle(),
+				subTitle: subTitle,
+				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+						return
+					}
+
+					self?.coordinator?.openUrl(url, inApp: true)
+				}
+			)
+		)
+	}
+
+	func noInternetAlertContent() -> AlertContent {
+
+		return AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			okAction: { _ in
+				self.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			okTitle: L.generalOk()
+		)
 	}
 }
