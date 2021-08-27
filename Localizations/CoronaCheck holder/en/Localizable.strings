@@ -1,5 +1,6 @@
 "holder.errorstate.title" = "Sorry, something went wrong";
-"holder.errorstate.server.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
+"holder.errorstate.server.message" = "<p>We are working to solve the problem. Do you want to try again later?</p><p><b>Error code:</b><br />%@</p>";
+"holder.errorstate.client.message" = "<p>Something is going wrong while creating your certificate. ould you please try again later?</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.malfunctions.title" = "Check the latest outages";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
 
@@ -230,6 +231,7 @@
 "general.error.technical.custom" = "Because of a technical error (%@)";
 "general.error.nointernet.title" = "No internet connection";
 "general.error.nointernet.text" = "You're not connected to the internet right now.";
+"general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";

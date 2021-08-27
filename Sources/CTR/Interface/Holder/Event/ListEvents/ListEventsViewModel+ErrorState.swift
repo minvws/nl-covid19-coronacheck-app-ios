@@ -9,6 +9,96 @@ import Foundation
 
 extension ListEventsViewModel {
 
+	// MARK: Errors
+
+	internal func showIdentityMismatch(onReplace: @escaping () -> Void) {
+
+		alert = AlertContent(
+			title: L.holderEventIdentityAlertTitle(),
+			subTitle: L.holderEventIdentityAlertMessage(),
+			cancelAction: { [weak self] _ in
+				self?.coordinator?.listEventsScreenDidFinish(.stop)
+			},
+			cancelTitle: L.holderEventIdentityAlertCancel(),
+			okAction: { _ in
+				onReplace()
+			},
+			okTitle: L.holderEventIdentityAlertOk()
+		)
+	}
+
+	internal func showEventError(remoteEvents: [RemoteEvent]) {
+
+		alert = AlertContent(
+			title: L.generalErrorTitle(),
+			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
+			cancelAction: nil,
+			cancelTitle: L.holderVaccinationErrorClose(),
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					if !success {
+						self?.showEventError(remoteEvents: remoteEvents)
+					}
+				}
+			},
+			okTitle: L.holderVaccinationErrorAgain()
+		)
+	}
+
+	internal func showServerTooBusyError() {
+
+		viewState = .feedback(
+			content: ListEventsViewController.Content(
+				title: L.generalNetworkwasbusyTitle(),
+				subTitle: L.generalNetworkwasbusyText(),
+				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.listEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	internal func showNoInternet(remoteEvents: [RemoteEvent]) {
+
+		// this is a retry-able situation
+		alert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					if !success {
+						self?.showEventError(remoteEvents: remoteEvents)
+					}
+				}
+			},
+			okTitle: L.generalRetry()
+		)
+	}
+
+	internal func showServerUnreachable(remoteEvents: [RemoteEvent]) {
+
+		// this is a retry-able situation
+		alert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
+					if !success {
+						self?.showEventError(remoteEvents: remoteEvents)
+					}
+				}
+			},
+			okTitle: L.generalRetry()
+		)
+	}
+
 	internal func displayClientErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
 
 		return .feedback(
