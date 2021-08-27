@@ -513,7 +513,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_prepareIssueError() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidResponse() {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -529,7 +529,7 @@ class ListEventsViewModelTests: XCTestCase {
 		networkSpy.stubbedPrepareIssueCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
 
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
@@ -545,9 +545,186 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
 		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 003")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsError() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_requestTimeOut() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
+		expect(self.sut.alert?.cancelTitle) == L.generalClose()
+		expect(self.sut.alert?.okTitle) == L.generalRetry()
+	}
+
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverBusy() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.generalNetworkwasbusyTitle()
+		expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidSignature() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 020")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99857), error: .serverError)), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 270 CC 500 99857")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidResponse() {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -589,6 +766,186 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 280 CC 003")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_requestTimedOut() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.sut.alert).toNot(beNil())
+		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
+		expect(self.sut.alert?.cancelTitle) == L.generalClose()
+		expect(self.sut.alert?.okTitle) == L.generalRetry()
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.generalNetworkwasbusyTitle()
+		expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle).to(beNil())
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidSignature() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .invalidSignature)), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 280 CC 020")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverError() {
+
+		// Given
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [defaultRemoteVaccinationEvent()],
+			greenCardLoader: greenCardLoader,
+			walletManager: walletSpy,
+			remoteConfigManager: remoteConfigSpy
+		)
+
+		walletSpy.stubbedStoreEventGroupResult = true
+		walletSpy.stubbedFetchSignedEventsResult = ["test"]
+		networkSpy.stubbedPrepareIssueCompletionResult =
+			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
+		networkSpy.stubbedFetchGreencardsCompletionResult =
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99857), error: .serverError)), ())
+		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
+		cryptoSpy.stubbedGetStokenResult = "test"
+
+		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+
+		// When
+		content.primaryAction?()
+
+		// Then
+		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
+		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
+		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
+		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+
+		guard case let .feedback(content: feedback) = sut.viewState else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 280 CC 500 99857")
 		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
