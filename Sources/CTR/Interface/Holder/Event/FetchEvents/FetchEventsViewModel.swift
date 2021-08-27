@@ -46,7 +46,7 @@ final class FetchEventsViewModel: Logging {
 		self.mappingManager = mappingManager
 
 		viewState = .loading(
-			content: FetchEventsViewController.Content(
+			content: Content(
 				title: {
 					switch eventMode {
 						case .recovery:
@@ -60,8 +60,10 @@ final class FetchEventsViewModel: Logging {
 					}
 				}(),
 				subTitle: nil,
-				actionTitle: nil,
-				action: nil
+				primaryActionTitle: nil,
+				primaryAction: nil,
+				secondaryActionTitle: nil,
+				secondaryAction: nil
 			)
 		)
 

@@ -103,7 +103,7 @@ class ListEventsViewModel: Logging {
 		self.mappingManager = mappingManager
 
 		viewState = .loading(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: {
 					switch eventMode {
 						case .recovery:

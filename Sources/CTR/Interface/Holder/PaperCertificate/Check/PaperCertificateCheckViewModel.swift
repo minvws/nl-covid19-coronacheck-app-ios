@@ -43,7 +43,7 @@ class PaperCertificateCheckViewModel: Logging {
 		self.couplingManager = couplingManager
 
 		viewState = .loading(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.holderDccListTitle(),
 				subTitle: nil,
 				primaryActionTitle: nil,
@@ -90,7 +90,7 @@ class PaperCertificateCheckViewModel: Logging {
 				}
 			case .blocked:
 				viewState = .feedback(
-					content: PaperCertificateCheckViewController.Content(
+					content: Content(
 						title: L.holderCheckdccBlockedTitle(),
 						subTitle: L.holderCheckdccBlockedMessage(),
 						primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
@@ -103,7 +103,7 @@ class PaperCertificateCheckViewModel: Logging {
 				)
 			case .expired:
 				viewState = .feedback(
-					content: PaperCertificateCheckViewController.Content(
+					content: Content(
 						title: L.holderCheckdccExpiredTitle(),
 						subTitle: L.holderCheckdccExpiredMessage(),
 						primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
@@ -117,7 +117,7 @@ class PaperCertificateCheckViewModel: Logging {
 
 			case .rejected:
 				viewState = .feedback(
-					content: PaperCertificateCheckViewController.Content(
+					content: Content(
 						title: L.holderCheckdccRejectedTitle(),
 						subTitle: L.holderCheckdccRejectedMessage(),
 						primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
@@ -157,7 +157,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private func showServerTooBusyError() {
 
 		viewState = .feedback(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.generalNetworkwasbusyTitle(),
 				subTitle: L.generalNetworkwasbusyText(),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
@@ -186,7 +186,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private func displayServerErrorCode(_ errorCode: ErrorCode) {
 
 		viewState = .feedback(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
@@ -208,7 +208,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private func displayClientErrorCode(_ errorCode: ErrorCode) {
 
 		viewState = .feedback(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),

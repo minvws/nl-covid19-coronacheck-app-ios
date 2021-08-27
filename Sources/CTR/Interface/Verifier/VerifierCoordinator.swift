@@ -30,7 +30,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title
 	///   - content: the content
-	func displayContent(title: String, content: [Content])
+	func displayContent(title: String, content: [DisplayContent])
 
 }
 
@@ -116,7 +116,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 	/// - Parameters:
 	///   - title: the title
 	///   - content: the content
-	func displayContent(title: String, content: [Content]) {
+	func displayContent(title: String, content: [DisplayContent]) {
 
 		let viewController = DisplayContentViewController(
 			viewModel: DisplayContentViewModel(

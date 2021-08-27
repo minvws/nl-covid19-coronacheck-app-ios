@@ -28,7 +28,7 @@ class FetchEventsViewModelTests: XCTestCase {
 	func test_backButtonTapped_loadingState() {
 
 		// Given
-		sut.viewState = .loading(content: FetchEventsViewController.Content(title: "test", subTitle: nil, actionTitle: nil, action: nil))
+		sut.viewState = .loading(content: Content(title: "test", subTitle: nil, primaryActionTitle: nil, primaryAction: nil, secondaryActionTitle: nil, secondaryAction: nil))
 
 		// When
 		sut.backButtonTapped()

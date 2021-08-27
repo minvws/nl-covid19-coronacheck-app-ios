@@ -6,7 +6,7 @@
 */
 
 import UIKit
-typealias Content = (view: UIView, customSpacing: CGFloat)
+typealias DisplayContent = (view: UIView, customSpacing: CGFloat)
 
 class DisplayContentViewModel {
 
@@ -17,7 +17,7 @@ class DisplayContentViewModel {
 	@Bindable private(set) var title: String
 
 	/// The array of content
-	@Bindable private(set) var content: [Content] = []
+	@Bindable private(set) var content: [DisplayContent] = []
 
 	@Bindable private(set) var hideForCapture: Bool = false
 
@@ -31,7 +31,7 @@ class DisplayContentViewModel {
 	init(
 		coordinator: Dismissable,
 		title: String,
-		content: [Content]) {
+		content: [DisplayContent]) {
 
 		self.coordinator = coordinator
 		self.content = content

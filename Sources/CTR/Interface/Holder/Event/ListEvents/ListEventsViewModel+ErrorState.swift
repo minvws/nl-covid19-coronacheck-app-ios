@@ -48,7 +48,7 @@ extension ListEventsViewModel {
 	internal func showServerTooBusyError() {
 
 		viewState = .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.generalNetworkwasbusyTitle(),
 				subTitle: L.generalNetworkwasbusyText(),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
@@ -102,7 +102,7 @@ extension ListEventsViewModel {
 	internal func displayClientErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
@@ -124,7 +124,7 @@ extension ListEventsViewModel {
 	internal func displayServerErrorCode(_ errorCode: ErrorCode) -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),

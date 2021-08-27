@@ -13,13 +13,6 @@ class FetchEventsViewController: BaseViewController {
 		case loading(content: Content)
 	}
 
-	struct Content {
-		let title: String
-		let subTitle: String?
-		let actionTitle: String?
-		let action: (() -> Void)?
-	}
-
 	private let viewModel: FetchEventsViewModel
 	private let sceneView = FetchEventsView()
 
@@ -96,7 +89,7 @@ class FetchEventsViewController: BaseViewController {
 
 		// Button
 		sceneView.showLineView = false
-		if let actionTitle = content.actionTitle {
+		if let actionTitle = content.primaryActionTitle {
 			sceneView.primaryTitle = actionTitle
 			sceneView.footerBackground.isHidden = false
 			sceneView.primaryButton.isHidden = false
@@ -107,6 +100,8 @@ class FetchEventsViewController: BaseViewController {
 			sceneView.primaryButton.isHidden = true
 			sceneView.footerGradientView.isHidden = true
 		}
-		sceneView.primaryButtonTappedCommand = content.action
+		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.secondaryButtonTappedCommand = content.secondaryAction
+		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

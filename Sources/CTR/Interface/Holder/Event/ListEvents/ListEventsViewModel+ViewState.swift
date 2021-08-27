@@ -79,7 +79,7 @@ extension ListEventsViewModel {
 	private func emptyVaccinationState() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderVaccinationNolistTitle(),
 				subTitle: L.holderVaccinationNolistMessage(),
 				primaryActionTitle: L.holderVaccinationNolistAction(),
@@ -95,7 +95,7 @@ extension ListEventsViewModel {
 	private func emptyTestState() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderTestNolistTitle(),
 				subTitle: L.holderTestNolistMessage(),
 				primaryActionTitle: L.holderTestNolistAction(),
@@ -111,7 +111,7 @@ extension ListEventsViewModel {
 	private func emptyDccState() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderCheckdccExpiredTitle(),
 				subTitle: L.holderCheckdccExpiredMessage(),
 				primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
@@ -127,7 +127,7 @@ extension ListEventsViewModel {
 	private func emptyRecoveryState() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderRecoveryNolistTitle(),
 				subTitle: L.holderRecoveryNolistMessage(),
 				primaryActionTitle: L.holderRecoveryNolistAction(),
@@ -143,7 +143,7 @@ extension ListEventsViewModel {
 	private func recoveryEventsTooOld() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderRecoveryTooOldTitle(),
 				subTitle: L.holderRecoveryTooOldMessage(),
 				primaryActionTitle: L.holderTestNolistAction(),
@@ -159,7 +159,7 @@ extension ListEventsViewModel {
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderEventOriginmismatchTitle(),
 				subTitle: {
 					switch eventMode {
@@ -242,7 +242,7 @@ extension ListEventsViewModel {
 		}
 
 		return .listEvents(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: title,
 				subTitle: subTitle,
 				primaryActionTitle: L.holderVaccinationListAction(),
@@ -780,7 +780,7 @@ private extension ListEventsViewModel {
 	func pendingEventsState() -> ListEventsViewController.State {
 
 		return .feedback(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderTestresultsPendingTitle(),
 				subTitle: L.holderTestresultsPendingText(),
 				primaryActionTitle: L.holderTestNolistAction(),
@@ -801,7 +801,7 @@ private extension ListEventsViewModel {
 		}
 
 		return .listEvents(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: L.holderTestresultsResultsTitle(),
 				subTitle: L.holderTestresultsResultsText(),
 				primaryActionTitle: L.holderTestresultsResultsButton(),

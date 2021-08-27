@@ -1548,7 +1548,7 @@ class ListEventsViewModelTests: XCTestCase {
 		validUntil: "2022-12-31" // This will fail the test after 2022-12-31
 	)
 
-	private let defaultContent = ListEventsViewController.Content(
+	private let defaultContent = Content(
 		title: "test",
 		subTitle: nil,
 		primaryActionTitle: nil,
