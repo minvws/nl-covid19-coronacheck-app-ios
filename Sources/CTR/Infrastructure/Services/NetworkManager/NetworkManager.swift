@@ -278,6 +278,7 @@ class NetworkManager: Logging {
 
 										self.decodeToObject(
 											decodedPayloadData,
+											ignore400: ignore400,
 											signedResponse: signedResponse,
 											urlResponse: networkResponse.urlResponse,
 											completion: completion
@@ -288,9 +289,14 @@ class NetworkManager: Logging {
 									}
 								}
 							}
-						case let .failure(networkError):
-							// No signed response. Abort.
-							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
+						case let .failure(decodeError):
+							if let networkError = self.inspect(response: networkResponse.urlResponse) {
+								// Is there a actual network error? Report that rather than the signed response decode fail.
+								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
+							} else {
+								// No signed response. Abort.
+								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: decodeError)))
+							}
 					}
 			}
 		}
@@ -298,23 +304,29 @@ class NetworkManager: Logging {
 
 	private func decodeToObject<Object: Decodable>(
 		_ decodedPayloadData: Data,
+		ignore400: Bool = false,
 		signedResponse: SignedResponse,
 		urlResponse: URLResponse,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
+		// Did we experience a network error?
+		let networkError = self.inspect(response: urlResponse)
+
 		// Decode to the expected object
 		let decodedResult: Result<Object, NetworkError> = decodeJson(json: decodedPayloadData)
 
-		switch decodedResult {
-			case let .success(object):
+		switch (decodedResult, ignore400, networkError) {
+			case (let .success(object), _, nil), (let .success(object), true, .resourceNotFound):
+				// Success and no network error, or success and ignore 400
 				completion(.success((object, signedResponse, decodedPayloadData, urlResponse)))
-				
-			case let .failure(responseError):
 
+			case (.success, false, _), (.success, true, _):
+				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
+				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? .invalidResponse)))
+
+			case (let .failure(responseError), _, _):
 				// Decode to a server response
 				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
-				let networkError = self.inspect(response: urlResponse)
-
 				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
 		}
 	}
