@@ -85,7 +85,7 @@ class PaperCertificateCheckViewModel: Logging {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 					coordinator?.userWishesToSeeScannedEvent(remoteEvent)
 				} else {
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "052")
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: .failedToConvertDCCToV3Event)
 					displayClientErrorCode(errorCode)
 				}
 			case .blocked:
@@ -226,4 +226,11 @@ class PaperCertificateCheckViewModel: Logging {
 			)
 		)
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let failedToConvertDCCToV3Event = ErrorCode.ClientCode(value: "052")
 }

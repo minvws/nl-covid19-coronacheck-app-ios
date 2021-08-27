@@ -213,7 +213,7 @@ class ListEventsViewModel: Logging {
 			guard saved else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
-				self.handleClientSideError(code: "056", for: .storingEvents, with: remoteEvents)
+				self.handleClientSideError(clientCode: .storingEvents, for: .storingEvents, with: remoteEvents)
 				return
 			}
 
@@ -255,35 +255,35 @@ class ListEventsViewModel: Logging {
 						completion(false)
 
 					case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
-						self.handleClientSideError(code: "053", for: .nonce, with: remoteEvents)
+						self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce, with: remoteEvents)
 
 					case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
 						self.handleServerError(serverError, for: .nonce, with: remoteEvents)
 
 					case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
-						self.handleClientSideError(code: "054", for: .nonce, with: remoteEvents)
+						self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce, with: remoteEvents)
 
 					case .failure(GreenCardLoader.Error.credentials(let serverError)):
 						self.handleServerError(serverError, for: .signer, with: remoteEvents)
 
 					case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
-						self.handleClientSideError(code: "055", for: .storingCredentials, with: remoteEvents)
+						self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials, with: remoteEvents)
 
 					case .failure(let error):
 						self.logError("storeAndSign - unhandled: \(error)")
-						self.handleClientSideError(code: "000", for: .signer, with: remoteEvents)
+						self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
 				}
 			})
 		}
 	}
 
-	func handleClientSideError(code: String, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
+	func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
 		let errorCode = ErrorCode(
 			flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
 			step: step,
 			provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
-			errorCode: code
+			errorCode: clientCode.value
 		)
 		logDebug("errorCode: \(errorCode)")
 		viewState = displayClientErrorCode(errorCode)
@@ -388,4 +388,15 @@ class ListEventsViewModel: Logging {
 		}
 		onCompletion(success)
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let failedToParsePrepareIssue = ErrorCode.ClientCode(value: "053")
+	static let failedToGenerateCommitmentMessage = ErrorCode.ClientCode(value: "054")
+	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
+	static let storingEvents = ErrorCode.ClientCode(value: "056")
+	static let unhandled = ErrorCode.ClientCode(value: "999")
 }

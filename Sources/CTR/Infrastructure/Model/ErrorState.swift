@@ -17,6 +17,10 @@ struct ErrorCode: CustomStringConvertible {
 		var value: String
 	}
 
+	struct ClientCode {
+		var value: String
+	}
+
 	var flow: String
 	var step: String
 	var provider: String?
@@ -28,6 +32,14 @@ struct ErrorCode: CustomStringConvertible {
 		self.step = step.value
 		self.provider = provider
 		self.errorCode = errorCode
+		self.detailedCode = detailedCode
+	}
+
+	init(flow: Flow, step: Step, provider: String? = nil, clientCode: ClientCode, detailedCode: Int? = nil) {
+		self.flow = flow.value
+		self.step = step.value
+		self.provider = provider
+		self.errorCode = clientCode.value
 		self.detailedCode = detailedCode
 	}
 
