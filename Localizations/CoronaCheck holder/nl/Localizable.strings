@@ -1,6 +1,6 @@
 "holder.errorstate.title" = "Sorry, er gaat iets mis";
-"holder.errorstate.server.message" = "We zijn hard bezig om dit probleem op te lossen (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
-"holder.errorstate.client.message" = "Er gaat iets mis bij het maken van je bewijs (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
+"holder.errorstate.server.message" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.client.message" = "<p>Er gaat iets mis bij het maken van je bewijs. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
 

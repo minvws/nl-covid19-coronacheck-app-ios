@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable file_length
+// swiftlint:disable type_body_length
 
 import Foundation
 
