@@ -1,5 +1,6 @@
 "holder.errorstate.title" = "Sorry, something went wrong";
 "holder.errorstate.server.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
+"holder.errorstate.client.message" = "Something is going wrong while creating your certificate (error code <b>%@</b>). Could you please try again later?";
 "holder.errorstate.malfunctions.title" = "Check the latest outages";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
 

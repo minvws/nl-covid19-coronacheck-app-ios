@@ -631,12 +631,16 @@ extension NetworkManager: NetworkManaging {
 			delegateQueue: nil
 		)
 
-		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
-			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
+		decodeSignedJSONData(
+			request: urlRequest,
+			session: session,
+			ignore400: false,
+			completion: { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
+
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
 			}
-		}
+		})
 	}
 
 	/// Get the test providers

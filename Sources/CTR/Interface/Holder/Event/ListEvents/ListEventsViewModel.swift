@@ -67,7 +67,7 @@ class ListEventsViewModel: Logging {
 
 	@Bindable internal var viewState: ListEventsViewController.State
 
-	@Bindable private(set) var alert: ListEventsViewController.AlertContent?
+	@Bindable internal var alert: AlertContent?
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
@@ -143,7 +143,7 @@ class ListEventsViewModel: Logging {
 
 	func warnBeforeGoBack() {
 
-		alert = ListEventsViewController.AlertContent(
+		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: {
 				switch eventMode {
@@ -298,7 +298,8 @@ class ListEventsViewModel: Logging {
 			switch error {
 				case .serverBusy:
 					showServerTooBusyError()
-
+					shouldPrimaryButtonBeEnabled = true
+					
 				case .requestTimedOut:
 					showServerUnreachable(remoteEvents: remoteEvents)
 					shouldPrimaryButtonBeEnabled = true
@@ -335,94 +336,6 @@ class ListEventsViewModel: Logging {
 			}
 		}
 
-	}
-
-	// MARK: Errors
-
-	internal func showIdentityMismatch(onReplace: @escaping () -> Void) {
-
-		alert = ListEventsViewController.AlertContent(
-			title: L.holderEventIdentityAlertTitle(),
-			subTitle: L.holderEventIdentityAlertMessage(),
-			cancelAction: { [weak self] _ in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.holderEventIdentityAlertCancel(),
-			okAction: { _ in
-				onReplace()
-			},
-			okTitle: L.holderEventIdentityAlertOk()
-		)
-	}
-
-	internal func showEventError(remoteEvents: [RemoteEvent]) {
-
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationErrorClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
-			},
-			okTitle: L.holderVaccinationErrorAgain()
-		)
-	}
-
-	private func showServerTooBusyError() {
-
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyText(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			okTitle: L.generalNetworkwasbusyButton()
-		)
-	}
-
-	private func showNoInternet(remoteEvents: [RemoteEvent]) {
-
-		// this is a retry-able situation
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalErrorNointernetTitle(),
-			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
-			},
-			okTitle: L.generalRetry()
-		)
-	}
-
-	private func showServerUnreachable(remoteEvents: [RemoteEvent]) {
-
-		// this is a retry-able situation
-		alert = ListEventsViewController.AlertContent(
-			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
-			},
-			okTitle: L.generalRetry()
-		)
 	}
 
 	// MARK: Store events
