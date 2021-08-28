@@ -70,11 +70,11 @@ final class FetchEventsViewModel: Logging {
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 
-	func handleFetchEventProvidersWithAccessTokensResponse(eventProviders: [EventFlow.EventProvider], errorCodes: [ErrorCode]) {
+	func handleFetchEventProvidersWithAccessTokensResponse(eventProviders: [EventFlow.EventProvider], errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		// No error tolerance here, if any failures then bail out.
-		guard errorCodes.isEmpty else {
-			displayErrorCodes(errorCodes)
+		if !errorCodes.isEmpty || !serverErrors.isEmpty {
+			handleErrorCodes(errorCodes, serverErrors: serverErrors)
 			return
 		}
 
@@ -97,7 +97,7 @@ final class FetchEventsViewModel: Logging {
 		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
 
 		guard !networkOffline else {
-			self.alert = noInternetAlertContent()
+			displayNoInternet()
 			return
 		}
 
@@ -166,7 +166,7 @@ final class FetchEventsViewModel: Logging {
 		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
 		
 		guard !networkOffline else {
-			self.alert = noInternetAlertContent()
+			displayNoInternet()
 			return
 		}
 
@@ -268,7 +268,7 @@ final class FetchEventsViewModel: Logging {
 	// MARK: Fetch access tokens and event providers
 
 	private func fetchEventProvidersWithAccessTokens(
-		completion: @escaping ([EventFlow.EventProvider], [ErrorCode]) -> Void) {
+		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
 
 		var accessTokenResult: Result<[EventFlow.AccessToken], ServerError>?
 		prefetchingGroup.enter()
@@ -287,6 +287,7 @@ final class FetchEventsViewModel: Logging {
 		prefetchingGroup.notify(queue: DispatchQueue.main) {
 
 			var errorCodes = [ErrorCode]()
+			var serverErrors = [ServerError]()
 			var providers = [EventFlow.EventProvider]()
 
 			switch (accessTokenResult, remoteEventProvidersResult) {
@@ -306,29 +307,33 @@ final class FetchEventsViewModel: Logging {
 					if let code = self.convert(accessError, step: .accessTokens) {
 						errorCodes.append(code)
 					}
+					serverErrors.append(accessError)
 
 					self.logError("Error getting access tokens: \(providerError)")
 					if let code = self.convert(providerError, step: .providers) {
 						errorCodes.append(code)
 					}
+					serverErrors.append(providerError)
 
 				case (.failure(let accessError), _):
 					self.logError("Error getting access tokens: \(accessError)")
 					if let code = self.convert(accessError, step: .accessTokens) {
 						errorCodes.append(code)
 					}
+					serverErrors.append(accessError)
 
 				case (_, .failure(let providerError)):
 					self.logError("Error getting event providers: \(providerError)")
 					if let code = self.convert(providerError, step: .providers) {
 						errorCodes.append(code)
 					}
+					serverErrors.append(providerError)
 
 				default:
 					// this should not happen due to the prefetching group
 					self.logError("Unexpected: did not receive response from accessToken or eventProviders call")
 			}
-			completion(providers, errorCodes)
+			completion(providers, errorCodes, serverErrors)
 		}
 	}
 
@@ -520,8 +525,114 @@ private extension EventMode {
 
 private extension FetchEventsViewModel {
 
-	func displayErrorCodes(_ errorCodes: [ErrorCode]) {
+	func handleErrorCodes(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
+		let hasNoBSN = !errorCodes.filter { $0.detailedCode == 99782 }.isEmpty
+		let sessionExpired = !errorCodes.filter { $0.detailedCode == 99702 }.isEmpty
+		let requestTimedOut = !serverErrors.filter { serverError in
+			if case let ServerError.error(_, _, error) = serverError {
+				return error == .requestTimedOut
+			}
+			return false
+		}.isEmpty
+		let serverBusy = !serverErrors.filter { serverError in
+			if case let ServerError.error(_, _, error) = serverError {
+				return error == .serverBusy
+			}
+			return false
+		}.isEmpty
+		let noInternet = !serverErrors.filter { serverError in
+			if case let ServerError.error(_, _, error) = serverError {
+				return error == .noInternetConnection
+			}
+			return false
+		}.isEmpty
+
+		if hasNoBSN {
+			displayNoBSN()
+		} else if sessionExpired {
+			displaySessionExpired()
+		} else if requestTimedOut {
+			displayRequestTimedOut()
+		} else if serverBusy {
+			displayServerBusy()
+		} else if noInternet {
+			displayNoInternet()
+		} else {
+			displayErrorCode(errorCodes)
+		}
+	}
+
+	func displayNoBSN() {
+
+		viewState = .feedback(
+			content: Content(
+				title: L.holderErrorstateNobsnTitle(),
+				subTitle: L.holderErrorstateNobsnMessage(),
+				primaryActionTitle: L.holderErrorstateNobsnAction(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	func displaySessionExpired() {
+
+		viewState = .feedback(
+			content: Content(
+				title: L.holderErrorstateNosessionTitle(),
+				subTitle: L.holderErrorstateNosessionMessage(),
+				primaryActionTitle: L.holderErrorstateNosessionAction(),
+				primaryAction: { [weak self] in
+					guard let self = self else { return }
+					self.coordinator?.fetchEventsScreenDidFinish(.back(eventMode: self.eventMode))
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	func displayRequestTimedOut() {
+
+		// this is a retry-able situation
+		alert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: { _ in
+				self.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				guard let self = self else { return }
+				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+			},
+			okTitle: L.generalRetry()
+		)
+	}
+
+	func displayServerBusy() {
+
+		viewState = .feedback(
+			content: Content(
+				title: L.generalNetworkwasbusyTitle(),
+				subTitle: L.generalNetworkwasbusyText(),
+				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryAction: { [weak self] in
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
+		)
+	}
+
+	func displayErrorCode(_ errorCodes: [ErrorCode]) {
+
+		// Other error:
 		var subTitle: String
 		if errorCodes.count == 1 {
 			if errorCodes[0].errorCode.starts(with: "0") {
@@ -534,13 +645,14 @@ private extension FetchEventsViewModel {
 			let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
 			subTitle = L.holderErrorstateServerMessages("\(errorString)")
 		}
+
 		viewState = .feedback(
 			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: subTitle,
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.listEventsScreenDidFinish(.stop)
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
 				secondaryAction: { [weak self] in
@@ -554,15 +666,21 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func noInternetAlertContent() -> AlertContent {
+	func displayNoInternet() {
 
-		return AlertContent(
+		// this is a retry-able situation
+		alert = AlertContent(
 			title: L.generalErrorNointernetTitle(),
 			subTitle: L.generalErrorNointernetText(),
-			okAction: { _ in
+			cancelAction: { _ in
 				self.coordinator?.fetchEventsScreenDidFinish(.stop)
 			},
-			okTitle: L.generalOk()
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in
+				guard let self = self else { return }
+				self.fetchEventProvidersWithAccessTokens(completion: self.handleFetchEventProvidersWithAccessTokensResponse)
+			},
+			okTitle: L.generalRetry()
 		)
 	}
 }
