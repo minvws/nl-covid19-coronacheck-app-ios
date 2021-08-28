@@ -528,7 +528,7 @@ private extension FetchEventsViewModel {
 	func handleErrorCodes(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		let hasNoBSN = !errorCodes.filter { $0.detailedCode == 99782 }.isEmpty
-		let sessionExpired = !errorCodes.filter { $0.detailedCode == 99702 }.isEmpty
+		let sessionExpired = !errorCodes.filter { $0.detailedCode == 99708 }.isEmpty
 		let requestTimedOut = !serverErrors.filter { serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .requestTimedOut
