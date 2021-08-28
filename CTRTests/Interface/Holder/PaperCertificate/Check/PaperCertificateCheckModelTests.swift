@@ -206,6 +206,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
 		expect(self.sut.alert?.title) == L.generalErrorNointernetTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorNointernetText()
 	}
 
 	func test_failure_requestTimeOut() {
@@ -226,7 +227,8 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToSeeScannedEvent) == false
 		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.generalErrorNointernetTitle()
+		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
+		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
 	}
 
 	func test_failure_responseCached() {

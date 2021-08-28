@@ -230,6 +230,7 @@
 "general.error.technical.custom" = "Because of a technical error (%@)";
 "general.error.nointernet.title" = "No internet connection";
 "general.error.nointernet.text" = "You're not connected to the internet right now.";
+"general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";

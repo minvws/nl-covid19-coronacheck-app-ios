@@ -138,8 +138,10 @@ class PaperCertificateCheckViewModel: Logging {
 			switch error {
 				case .serverBusy:
 					showServerTooBusyError()
-				case .noInternetConnection, .requestTimedOut:
-					showNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .noInternetConnection:
+					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .requestTimedOut:
+					displayRequestTimedOut(scannedDcc: scannedDcc, couplingCode: couplingCode)
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
@@ -170,7 +172,20 @@ class PaperCertificateCheckViewModel: Logging {
 		)
 	}
 
-	private func showNoInternet(scannedDcc: String, couplingCode: String) {
+	private func displayRequestTimedOut(scannedDcc: String, couplingCode: String) {
+
+		// this is a retry-able situation
+		alert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func displayNoInternet(scannedDcc: String, couplingCode: String) {
 
 		// this is a retry-able situation
 		alert = AlertContent(
