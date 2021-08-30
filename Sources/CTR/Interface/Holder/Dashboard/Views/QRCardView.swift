@@ -66,7 +66,7 @@ class QRCardView: BaseView {
 
 	private let largeIconImageView: UIImageView = {
 
-		let view = UIImageView(image: .domesticQRIcon)
+		let view = UIImageView(image: I.dashboard.domesticIcon())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
@@ -266,7 +266,7 @@ class QRCardView: BaseView {
 		regionLabel.textColor = Theme.colors.europa
 		viewQRButton.backgroundColor = Theme.colors.europa
 		viewQRButton.setTitleColor(Theme.colors.greenGrey, for: .normal)
-		largeIconImageView.image = .euQRIcon
+		largeIconImageView.image = I.dashboard.internationalIcon()
 	}
 
 	// MARK: - Callbacks

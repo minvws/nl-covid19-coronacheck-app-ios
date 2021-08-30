@@ -26,7 +26,7 @@ final class EmptyDashboardViewTests: XCTestCase {
 	func test_domestic() {
 		// Arrange
 		sut.title = "Hier komt jouw Nederlandse bewijs"
-		sut.image = I.empty_Dashboard_Domestic()
+		sut.image = I.dashboard.domesticIcon()
 		sut.message = "Je kunt een bewijs toevoegen als je bent gevaccineerd of hersteld. Of als je bent getest bij een aangesloten testlocatie. De app maakt een Nederlands en een internationaal bewijs."
 
 		// Act
@@ -37,7 +37,7 @@ final class EmptyDashboardViewTests: XCTestCase {
 	func test_international() {
 		// Arrange
 		sut.title = "Hier komt jouw internationale bewijs"
-		sut.image = I.empty_Dashboard_International()
+		sut.image = I.dashboard.internationalIcon()
 		sut.message = """
 		Ben je in het buitenland of ga je de grens over? Gebruik dan altijd jouw internationale bewijs. Controleer voor vertrek welk bewijs je nodig hebt.
 		

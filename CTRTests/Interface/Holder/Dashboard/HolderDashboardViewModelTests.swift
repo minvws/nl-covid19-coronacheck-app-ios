@@ -101,12 +101,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 
 		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message in
-			expect(image) == I.empty_Dashboard_Domestic()
+			expect(image) == I.dashboard.domesticIcon()
 			expect(title) == L.holderDashboardEmptyDomesticTitle()
 			expect(message) == L.holderDashboardEmptyDomesticMessage()
 		}))
 		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message in
-			expect(image) == I.empty_Dashboard_International()
+			expect(image) == I.dashboard.internationalIcon()
 			expect(title) == L.holderDashboardEmptyInternationalTitle()
 			expect(message) == L.holderDashboardEmptyInternationalMessage()
 		}))
