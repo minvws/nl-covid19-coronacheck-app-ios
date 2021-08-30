@@ -131,7 +131,7 @@ protocol NetworkManaging: AnyObject {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void)
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void)
 
 	/// Get  events from an event provider
 	/// - Parameters:

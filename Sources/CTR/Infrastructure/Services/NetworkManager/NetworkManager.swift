@@ -760,17 +760,17 @@ extension NetworkManager: NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
 		guard let providerUrl = provider.unomiURL else {
 			self.logError("No url provided for \(provider.name)")
-			completion(.failure(NetworkError.invalidRequest))
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
 		guard let accessToken = provider.accessToken?.unomiAccessToken else {
 			self.logError("No unomi token provided for \(provider.name)")
-			completion(.failure(NetworkError.invalidRequest))
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
@@ -782,11 +782,15 @@ extension NetworkManager: NetworkManaging {
 		var body: Data?
 		if let filter = filter {
 			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
-			body = try? JSONSerialization.data(withJSONObject: dictionary, options: [])
+
+			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
+			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
+				body = jsonBody
+			}
 		}
 
 		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
-			completion(.failure(.invalidRequest))
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 		let session = URLSession(
@@ -794,7 +798,16 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
+		decodeSignedJSONData(
+			request: urlRequest,
+			session: session,
+			proceedToSuccessIfResponseIs400: false,
+			completion: { (result: Result<(EventFlow.EventInformationAvailable, SignedResponse, Data, URLResponse), ServerError>) in
+				DispatchQueue.main.async {
+					completion(result.map { decodable, _, _, _ in (decodable) })
+				}
+			}
+		)
 	}
 
 	/// Get  events from an event provider

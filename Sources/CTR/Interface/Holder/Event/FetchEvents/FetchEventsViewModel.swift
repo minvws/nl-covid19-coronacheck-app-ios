@@ -90,7 +90,8 @@ final class FetchEventsViewModel: Logging {
 
 	func handleFetchHasEventInformationResponse(
 		eventProvidersWithEventInformation: [EventFlow.EventProvider],
-		networkErrors: [NetworkError]) {
+		errorCodes: [ErrorCode],
+		serverErrors: [ServerError]) {
 
 		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
@@ -388,9 +389,9 @@ final class FetchEventsViewModel: Logging {
 	private func fetchHasEventInformation(
 		forEventProviders eventProviders: [EventFlow.EventProvider],
 		filter: String?,
-		completion: @escaping ([EventFlow.EventProvider], [NetworkError]) -> Void) {
+		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
 
-		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, NetworkError>]()
+		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, ServerError>]()
 
 		for provider in eventProviders {
 			guard let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") else { continue }
@@ -426,14 +427,14 @@ final class FetchEventsViewModel: Logging {
 			// Process failures:
 			let failuresExperienced = eventInformationAvailableResults.compactMap { $0.failureError }
 
-			completion(outputEventProviders, failuresExperienced)
+			completion(outputEventProviders, [], failuresExperienced)
 		}
 	}
 
 	private func fetchHasEventInformationResponse(
 		from provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 
 		self.logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
