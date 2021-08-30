@@ -3,6 +3,7 @@
 "holder.errorstate.client.message" = "Er gaat iets mis bij het maken van je bewijs (foutcode <b>%@</b>). Wil je het later nog eens proberen?";
 "holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
+"holder.errorstate.overview.action" = "Naar mijn bewijzen";
 
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";

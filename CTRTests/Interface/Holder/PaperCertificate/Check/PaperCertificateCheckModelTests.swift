@@ -47,7 +47,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 052")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -250,7 +250,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 304")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -276,7 +276,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 404 99707")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -302,7 +302,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 500 99707")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -328,7 +328,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 003")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -354,7 +354,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 002")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -380,7 +380,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 020")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -406,7 +406,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 030")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
@@ -432,7 +432,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 510 031")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
