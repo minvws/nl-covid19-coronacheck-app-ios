@@ -9,7 +9,7 @@ import Foundation
 
 class PaperCertificateCheckViewModel: Logging {
 
-	weak var coordinator: PaperCertificateCoordinatorDelegate?
+	weak var coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol)?
 
 	private let couplingManager: CouplingManaging
 
@@ -33,7 +33,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private let eventFetchingGroup = DispatchGroup()
 
 	init(
-		coordinator: PaperCertificateCoordinatorDelegate,
+		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol),
 		scannedDcc: String,
 		couplingCode: String,
 		couplingManager: CouplingManaging = Services.couplingManager
@@ -47,7 +47,9 @@ class PaperCertificateCheckViewModel: Logging {
 				title: L.holderDccListTitle(),
 				subTitle: nil,
 				primaryActionTitle: nil,
-				primaryAction: nil
+				primaryAction: nil,
+				secondaryActionTitle: nil,
+				secondaryAction: nil
 			)
 		)
 
@@ -63,14 +65,14 @@ class PaperCertificateCheckViewModel: Logging {
 
 		// Validate coupling code
 		couplingManager.checkCouplingStatus(dcc: scannedDcc, couplingCode: couplingCode) { [weak self] result in
-			// result = Result<DccCoupling.CouplingResponse, NetworkError>
+			// result = Result<DccCoupling.CouplingResponse, ServerError>
 			self?.progressIndicationCounter.decrement()
 			self?.shouldPrimaryButtonBeEnabled = true
 			switch result {
 				case let .success(response):
 					self?.handleSuccess(response: response, scannedDcc: scannedDcc, couplingCode: couplingCode)
 				case let .failure(error):
-					self?.handleError(error: error, scannedDcc: scannedDcc, couplingCode: couplingCode)
+					self?.handleError(serverError: error, scannedDcc: scannedDcc, couplingCode: couplingCode)
 			}
 		}
 	}
@@ -83,7 +85,8 @@ class PaperCertificateCheckViewModel: Logging {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 					coordinator?.userWishesToSeeScannedEvent(remoteEvent)
 				} else {
-					showTechnicalError("110, invalid DCC")
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "052")
+					displayClientErrorCode(errorCode)
 				}
 			case .blocked:
 				viewState = .feedback(
@@ -93,7 +96,9 @@ class PaperCertificateCheckViewModel: Logging {
 						primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
 						primaryAction: { [weak self] in
 							self?.coordinator?.userWantsToGoBackToDashboard()
-						}
+						},
+						secondaryActionTitle: nil,
+						secondaryAction: nil
 					)
 				)
 			case .expired:
@@ -104,7 +109,9 @@ class PaperCertificateCheckViewModel: Logging {
 						primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
 						primaryAction: { [weak self] in
 							self?.coordinator?.userWantsToGoBackToDashboard()
-						}
+						},
+						secondaryActionTitle: nil,
+						secondaryAction: nil
 					)
 				)
 
@@ -116,24 +123,34 @@ class PaperCertificateCheckViewModel: Logging {
 						primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
 						primaryAction: {[weak self] in
 							self?.coordinator?.userWantsToGoBackToTokenEntry()
-						}
+						},
+						secondaryActionTitle: nil,
+						secondaryAction: nil
 					)
 				)
-			default:
-				logWarning("PaperCertificateCheckViewModel - Unhandled response: \(response.status)")
-				showTechnicalError("110, unhandled status \(response.status)")
 		}
 	}
 
-	func handleError(error: NetworkError, scannedDcc: String, couplingCode: String) {
-		logError("CouplingManager validate: \(error)")
-		switch error {
-			case .serverBusy:
-				showServerTooBusyError()
-			case .noInternetConnection:
-				showNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-			default:
-				showTechnicalError("110, check coupling code")
+	private func handleError(serverError: ServerError, scannedDcc: String, couplingCode: String) {
+		logError("CouplingManager handleError: \(serverError)")
+		
+		if case let .error(statusCode, serverResponse, error) = serverError {
+			switch error {
+				case .serverBusy:
+					showServerTooBusyError()
+				case .noInternetConnection:
+					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .requestTimedOut:
+					displayRequestTimedOut(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .responseCached, .redirection, .resourceNotFound, .serverError:
+					// 304, 3xx, 4xx, 5xx
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+					displayServerErrorCode(errorCode)
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+					// Client side
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+					displayClientErrorCode(errorCode)
+			}
 		}
 	}
 
@@ -141,17 +158,34 @@ class PaperCertificateCheckViewModel: Logging {
 
 	private func showServerTooBusyError() {
 
-		alert = AlertContent(
-			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyText(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			okTitle: L.generalNetworkwasbusyButton()
+		viewState = .feedback(
+			content: PaperCertificateCheckViewController.Content(
+				title: L.generalNetworkwasbusyTitle(),
+				subTitle: L.generalNetworkwasbusyText(),
+				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryAction: {[weak self] in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				},
+				secondaryActionTitle: nil,
+				secondaryAction: nil
+			)
 		)
 	}
 
-	private func showNoInternet(scannedDcc: String, couplingCode: String) {
+	private func displayRequestTimedOut(scannedDcc: String, couplingCode: String) {
+
+		// this is a retry-able situation
+		alert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.checkCouplingCode(scannedDcc: scannedDcc, couplingCode: couplingCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func displayNoInternet(scannedDcc: String, couplingCode: String) {
 
 		// this is a retry-able situation
 		alert = AlertContent(
@@ -164,19 +198,47 @@ class PaperCertificateCheckViewModel: Logging {
 		)
 	}
 
-	private func showTechnicalError(_ customCode: String?) {
+	private func displayServerErrorCode(_ errorCode: ErrorCode) {
 
-		var subTitle = L.generalErrorTechnicalText()
-		if let code = customCode {
-			subTitle = L.generalErrorTechnicalCustom(code)
-		}
-		alert = AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: subTitle,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in self?.coordinator?.userWantsToGoBackToDashboard() },
-			okTitle: L.generalClose()
+		viewState = .feedback(
+			content: PaperCertificateCheckViewController.Content(
+				title: L.holderErrorstateTitle(),
+				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
+				primaryActionTitle: L.holderErrorstateOverviewAction(),
+				primaryAction: {[weak self] in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				},
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+						return
+					}
+
+					self?.coordinator?.openUrl(url, inApp: true)
+				}
+			)
+		)
+	}
+
+	private func displayClientErrorCode(_ errorCode: ErrorCode) {
+
+		viewState = .feedback(
+			content: PaperCertificateCheckViewController.Content(
+				title: L.holderErrorstateTitle(),
+				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
+				primaryActionTitle: L.holderErrorstateOverviewAction(),
+				primaryAction: {[weak self] in
+					self?.coordinator?.userWantsToGoBackToDashboard()
+				},
+				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+				secondaryAction: { [weak self] in
+					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+						return
+					}
+
+					self?.coordinator?.openUrl(url, inApp: true)
+				}
+			)
 		)
 	}
 }

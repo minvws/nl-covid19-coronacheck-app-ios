@@ -19,6 +19,8 @@ class PaperCertificateCheckViewController: BaseViewController {
 		let subTitle: String?
 		let primaryActionTitle: String?
 		let primaryAction: (() -> Void)?
+		let secondaryActionTitle: String?
+		let secondaryAction: (() -> Void)?
 	}
 
 	private let viewModel: PaperCertificateCheckViewModel
@@ -108,5 +110,7 @@ class PaperCertificateCheckViewController: BaseViewController {
 			sceneView.footerGradientView.isHidden = true
 		}
 		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.secondaryButtonTappedCommand = content.secondaryAction
+		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

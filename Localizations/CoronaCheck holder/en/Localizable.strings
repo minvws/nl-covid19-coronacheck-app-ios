@@ -1,7 +1,9 @@
-"holder.event.error.title" = "Sorry, something went wrong";
-"holder.event.error.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
-"holder.event.malfunctions.title" = "Check the latest outages";
-"holder.event.malfunctions.url" = "https://status.coronacheck.nl/en/";
+"holder.errorstate.title" = "Sorry, something went wrong";
+"holder.errorstate.server.message" = "We are working to solve the problem (error code %@). Do you want to try again later?";
+"holder.errorstate.malfunctions.title" = "Check the latest outages";
+"holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
+"holder.errorstate.overview.action" = "To my certificates";
+
 "recommended.updateApp.title" = "Want to update the app?";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";
 "recommended.updateApp.action.ok" = "Install update";
@@ -229,6 +231,7 @@
 "general.error.technical.custom" = "Because of a technical error (%@)";
 "general.error.nointernet.title" = "No internet connection";
 "general.error.nointernet.text" = "You're not connected to the internet right now.";
+"general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";
