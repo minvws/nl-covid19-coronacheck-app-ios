@@ -351,7 +351,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99782), error: .serverError)), ())
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeNoBSN), error: .serverError)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
 
 		// When
@@ -380,7 +380,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99708), error: .serverError)), ())
+			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: FetchEventsViewModel.detailedCodeSessionExpired), error: .serverError)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
 
 		// When

@@ -521,14 +521,20 @@ private extension EventMode {
 	}
 }
 
+extension FetchEventsViewModel {
+
+	static let detailedCodeNoBSN: Int = 99782
+	static let detailedCodeSessionExpired: Int = 99708
+}
+
 // MARK: - Error states
 
 private extension FetchEventsViewModel {
 
 	func handleErrorCodes(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
-		let hasNoBSN = !errorCodes.filter { $0.detailedCode == 99782 }.isEmpty
-		let sessionExpired = !errorCodes.filter { $0.detailedCode == 99708 }.isEmpty
+		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
+		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
 		let requestTimedOut = !serverErrors.filter { serverError in
 			if case let ServerError.error(_, _, error) = serverError {
 				return error == .requestTimedOut
