@@ -553,7 +553,7 @@ extension NetworkManager: NetworkManaging {
 		decodeSignedJSONData(
 			request: urlRequest,
 			session: session,
-			ignore400: false,
+			proceedToSuccessIfResponseIs400: false,
 			completion: {(result: Result<(ArrayEnvelope<EventFlow.AccessToken>, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
 					completion(result.map { decodable, _, _, _ in (decodable.items) })
@@ -696,7 +696,7 @@ extension NetworkManager: NetworkManaging {
 		decodeSignedJSONData(
 			request: urlRequest,
 			session: session,
-			ignore400: false,
+			proceedToSuccessIfResponseIs400: false,
 			completion: {(result: Result<(ArrayEnvelope<EventFlow.EventProvider>, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
 					completion(result.map { decodable, _, _, _ in (decodable.items) })
