@@ -14,6 +14,7 @@ struct ServerResponse: Decodable, Equatable {
 
 enum ServerError: Error, Equatable {
 	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
+	case provider(provider: String?, statusCode: Int?, response: ServerResponse?, error: NetworkError)
 }
 
 enum NetworkError: String, Error, Equatable {

@@ -90,30 +90,29 @@ final class FetchEventsViewModel: Logging {
 
 	func handleFetchHasEventInformationResponse(
 		eventProvidersWithEventInformation: [EventFlow.EventProvider],
-		errorCodes: [ErrorCode],
 		serverErrors: [ServerError]) {
 
-		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
-		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
-		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
-
-		guard !networkOffline else {
-			displayNoInternet()
-			return
-		}
-
-		// Needed because we can't present an Alert at the same time as change the navigation stack
-		// so sometimes the next step must be triggered as we dismiss the Alert.
-		func nextStep() {
-			fetchRemoteEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
-		}
-
-		determineActionFromResponse(
-			hasNoResult: eventProvidersWithEventInformation.isEmpty,
-			someNetworkWasTooBusy: someNetworkWasTooBusy,
-			someNetworkDidError: someNetworkDidError,
-			nextStep: nextStep
-		)
+//		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
+//		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
+//		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
+//
+//		guard !networkOffline else {
+//			displayNoInternet()
+//			return
+//		}
+//
+//		// Needed because we can't present an Alert at the same time as change the navigation stack
+//		// so sometimes the next step must be triggered as we dismiss the Alert.
+//		func nextStep() {
+//			fetchRemoteEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
+//		}
+//
+//		determineActionFromResponse(
+//			hasNoResult: eventProvidersWithEventInformation.isEmpty,
+//			someNetworkWasTooBusy: someNetworkWasTooBusy,
+//			someNetworkDidError: someNetworkDidError,
+//			nextStep: nextStep
+//		)
 	}
 
 	private func determineActionFromResponse(hasNoResult: Bool, someNetworkWasTooBusy: Bool, someNetworkDidError: Bool, nextStep: @escaping (() -> Void)) {
@@ -364,7 +363,15 @@ final class FetchEventsViewModel: Logging {
 
 			hasEventInformationFetchingGroup.enter()
 			fetchHasEventInformationResponse(from: provider, filter: filter) { result in
-				eventInformationAvailableResults += [result]
+
+				let mappedToProviderError = result.mapError { serverError -> ServerError in
+
+					if case let ServerError.error(statusCode, serverResponse, error) = serverError {
+						return ServerError.provider(provider: provider.identifier, statusCode: statusCode, response: serverResponse, error: error)
+					}
+					return serverError
+				}
+				eventInformationAvailableResults += [mappedToProviderError]
 				self.hasEventInformationFetchingGroup.leave()
 			}
 		}
@@ -393,7 +400,7 @@ final class FetchEventsViewModel: Logging {
 			// Process failures:
 			let failuresExperienced = eventInformationAvailableResults.compactMap { $0.failureError }
 
-			completion(outputEventProviders, [], failuresExperienced)
+			completion(outputEventProviders, failuresExperienced)
 		}
 	}
 
