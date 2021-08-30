@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct ServerResponse: Decodable {
+struct ServerResponse: Decodable, Equatable {
 	let status: String
 	let code: Int
 }
 
-enum ServerError: Error {
+enum ServerError: Error, Equatable {
 	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
 }
 
-enum NetworkError: String, Error {
+enum NetworkError: String, Error, Equatable {
 	case invalidRequest
 	case requestTimedOut
 	case noInternetConnection
@@ -89,7 +89,7 @@ protocol NetworkManaging: AnyObject {
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void)
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void)
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
@@ -109,7 +109,7 @@ protocol NetworkManaging: AnyObject {
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void)
 
 	/// Get a test result
 	/// - Parameters:

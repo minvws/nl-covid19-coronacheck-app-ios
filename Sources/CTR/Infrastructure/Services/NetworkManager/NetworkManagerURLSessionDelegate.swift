@@ -13,7 +13,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 	/// The network configuration
 	private let networkConfiguration: NetworkConfiguration
 
-	/// The security strategy, defaults to none.
+	/// The security strategy
 	private (set) var securityStrategy: SecurityStrategy
 
 	/// Initialise session delegate with certificate used for SSL pinning

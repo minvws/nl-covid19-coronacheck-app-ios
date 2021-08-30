@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable file_length
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -278,6 +279,7 @@ class NetworkManager: Logging {
 
 										self.decodeToObject(
 											decodedPayloadData,
+											proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
 											signedResponse: signedResponse,
 											urlResponse: networkResponse.urlResponse,
 											completion: completion
@@ -288,9 +290,14 @@ class NetworkManager: Logging {
 									}
 								}
 							}
-						case let .failure(networkError):
-							// No signed response. Abort.
-							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
+						case let .failure(decodeError):
+							if let networkError = self.inspect(response: networkResponse.urlResponse) {
+								// Is there a actual network error? Report that rather than the signed response decode fail.
+								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: networkError)))
+							} else {
+								// No signed response. Abort.
+								completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: nil, error: decodeError)))
+							}
 					}
 			}
 		}
@@ -298,23 +305,29 @@ class NetworkManager: Logging {
 
 	private func decodeToObject<Object: Decodable>(
 		_ decodedPayloadData: Data,
+		proceedToSuccessIfResponseIs400: Bool = false,
 		signedResponse: SignedResponse,
 		urlResponse: URLResponse,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
+		// Did we experience a network error?
+		let networkError = self.inspect(response: urlResponse)
+
 		// Decode to the expected object
 		let decodedResult: Result<Object, NetworkError> = decodeJson(json: decodedPayloadData)
 
-		switch decodedResult {
-			case let .success(object):
+		switch (decodedResult, proceedToSuccessIfResponseIs400, networkError) {
+			case (let .success(object), _, nil), (let .success(object), true, .resourceNotFound):
+				// Success and no network error, or success and ignore 400
 				completion(.success((object, signedResponse, decodedPayloadData, urlResponse)))
-				
-			case let .failure(responseError):
 
+			case (.success, _, _):
+				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
+				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? .invalidResponse)))
+
+			case (let .failure(responseError), _, _):
 				// Decode to a server response
 				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
-				let networkError = self.inspect(response: urlResponse)
-
 				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
 		}
 	}
@@ -547,12 +560,13 @@ extension NetworkManager: NetworkManaging {
 		decodeSignedJSONData(request: urlRequest, session: session, completion: open)
 	}
 
-	/// Get the nonce
+	/// Prepare the issue (get the nonce)
 	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.prepareIssueUrl) else {
-			completion(.failure(.invalidRequest))
+			logError("NetworkManager - prepareIssue: invalid request")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
@@ -561,7 +575,12 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
+
+		decodeSignedJSONData(request: urlRequest, session: session, proceedToSuccessIfResponseIs400: false) { result in
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, _, _ in (decodable) })
+			}
+		}
 	}
 
 	/// Get the public keys
@@ -601,28 +620,40 @@ extension NetworkManager: NetworkManaging {
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void) {
 
-		do {
-			let jsonData = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
-			guard let urlRequest = constructRequest(
-				url: networkConfiguration.credentialUrl,
-				method: .POST,
-				body: jsonData
-			) else {
-				completion(.failure(.invalidRequest))
-				return
-			}
-			let session = URLSession(
-				configuration: .ephemeral,
-				delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-				delegateQueue: nil
-			)
-			decodeSignedJSONData(request: urlRequest, session: session, completion: completion)
-		} catch {
-			logError("Could not serialize dictionary")
-			completion(.failure(.cannotSerialize))
+		guard JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
+			  let body = try? JSONSerialization.data(withJSONObject: dictionary) else {
+			logError("NetworkManager - fetchGreencards: could not serialize dictionary")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .cannotSerialize)))
+			return
 		}
+
+		guard let urlRequest = constructRequest(
+			url: networkConfiguration.credentialUrl,
+			method: .POST,
+			body: body
+		) else {
+			logError("NetworkManager - fetchGreencards: invalid request")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
+			return
+		}
+		let session = URLSession(
+			configuration: .ephemeral,
+			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
+			delegateQueue: nil
+		)
+
+		decodeSignedJSONData(
+			request: urlRequest,
+			session: session,
+			proceedToSuccessIfResponseIs400: false,
+			completion: { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
+
+			DispatchQueue.main.async {
+				completion(result.map { decodable, _, _, _ in (decodable) })
+			}
+		})
 	}
 
 	/// Get the test providers
@@ -828,6 +859,7 @@ extension NetworkManager: NetworkManaging {
 			method: .POST,
 			body: body
 		) else {
+			logError("NetworkManager - checkCouplingStatus: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}

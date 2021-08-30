@@ -78,7 +78,7 @@ extension ListEventsViewModel {
 
 	private func emptyVaccinationState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderVaccinationNolistTitle(),
 				subTitle: L.holderVaccinationNolistMessage(),
@@ -94,7 +94,7 @@ extension ListEventsViewModel {
 
 	private func emptyTestState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderTestNolistTitle(),
 				subTitle: L.holderTestNolistMessage(),
@@ -110,7 +110,7 @@ extension ListEventsViewModel {
 
 	private func emptyDccState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderCheckdccExpiredTitle(),
 				subTitle: L.holderCheckdccExpiredMessage(),
@@ -126,7 +126,7 @@ extension ListEventsViewModel {
 
 	private func emptyRecoveryState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderRecoveryNolistTitle(),
 				subTitle: L.holderRecoveryNolistMessage(),
@@ -142,7 +142,7 @@ extension ListEventsViewModel {
 
 	private func recoveryEventsTooOld() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderRecoveryTooOldTitle(),
 				subTitle: L.holderRecoveryTooOldMessage(),
@@ -158,7 +158,7 @@ extension ListEventsViewModel {
 
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderEventOriginmismatchTitle(),
 				subTitle: {
@@ -779,7 +779,7 @@ private extension ListEventsViewModel {
 
 	func pendingEventsState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderTestresultsPendingTitle(),
 				subTitle: L.holderTestresultsPendingText(),
