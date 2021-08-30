@@ -465,8 +465,6 @@ class FetchEventsViewModelTests: XCTestCase {
 		}
 	}
 
-
-
 	// MARK: Default values
 
 	let accessToken = EventFlow.AccessToken(
