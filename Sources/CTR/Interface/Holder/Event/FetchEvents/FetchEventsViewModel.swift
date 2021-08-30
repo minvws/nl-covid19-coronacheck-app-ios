@@ -107,7 +107,17 @@ final class FetchEventsViewModel: Logging {
 			fetchRemoteEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
 		}
 
-		switch (eventProvidersWithEventInformation.isEmpty, someNetworkWasTooBusy, someNetworkDidError) {
+		determineActionFromResponse(
+			hasNoResult: eventProvidersWithEventInformation.isEmpty,
+			someNetworkWasTooBusy: someNetworkWasTooBusy,
+			someNetworkDidError: someNetworkDidError,
+			nextStep: nextStep
+		)
+	}
+
+	private func determineActionFromResponse(hasNoResult: Bool, someNetworkWasTooBusy: Bool, someNetworkDidError: Bool, nextStep: @escaping (() -> Void)) {
+
+		switch (hasNoResult, someNetworkWasTooBusy, someNetworkDidError) {
 
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
@@ -176,56 +186,12 @@ final class FetchEventsViewModel: Logging {
 			self.coordinator?.fetchEventsScreenDidFinish(.showEvents(events: remoteEvents, eventMode: self.eventMode))
 		}
 
-		switch (remoteEvents.isEmpty, someNetworkWasTooBusy, someNetworkDidError) {
-
-			case (true, true, _): // No results and >=1 network was busy (5.3.0)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
-					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
-					okAction: { _ in
-						self.coordinator?.fetchEventsScreenDidFinish(.stop)
-					},
-					okTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyButton()
-				)
-
-			case (true, _, true): // No results and >=1 network had an error (5.5.1)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
-					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-					okAction: { _ in
-						self.coordinator?.fetchEventsScreenDidFinish(.stop)
-					},
-					okTitle: L.holderFetcheventsErrorNoresultsNetworkerrorButton()
-				)
-
-			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
-					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
-					okAction: { _ in
-						nextStep()
-					},
-					okTitle: L.generalOk()
-				)
-
-			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
-
-			   self.alert = AlertContent(
-				title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
-				subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
-				   okAction: { _ in
-					   nextStep()
-				   },
-					okTitle: L.generalOk()
-			   )
-			// 🥳 Some or no results and no network was busy or had an error:
-			case (_, false, false):
-
-				nextStep()
-		}
+		determineActionFromResponse(
+			hasNoResult: remoteEvents.isEmpty,
+			someNetworkWasTooBusy: someNetworkWasTooBusy,
+			someNetworkDidError: someNetworkDidError,
+			nextStep: nextStep
+		)
 	}
 
 	func backButtonTapped() {

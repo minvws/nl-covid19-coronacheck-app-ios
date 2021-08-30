@@ -433,7 +433,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 260 CC 056")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -471,7 +471,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 360 CC 056")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -509,7 +509,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 160 CC 056")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -552,7 +552,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 003")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -677,7 +677,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 270 CC 020")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -720,7 +720,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 270 CC 500 99857")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -766,7 +766,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 280 CC 003")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -900,7 +900,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 280 CC 020")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -946,7 +946,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 280 CC 500 99857")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
@@ -1032,7 +1032,7 @@ class ListEventsViewModelTests: XCTestCase {
 		}
 		expect(feedback.title) == L.holderErrorstateTitle()
 		expect(feedback.subTitle) == L.holderErrorstateClientMessage("i 290 CC 055")
-		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.primaryActionTitle) == L.holderErrorstateOverviewAction()
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 

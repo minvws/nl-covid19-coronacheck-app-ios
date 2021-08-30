@@ -1,9 +1,10 @@
 "holder.errorstate.title" = "Sorry, something went wrong";
 "holder.errorstate.server.message" = "<p>We are working to solve the problem. Do you want to try again later?</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.server.messages" = "<p>We are working to solve the problem. Do you want to try again later?</p><p><b>Error codes:</b><br />%@</p>";
-"holder.errorstate.client.message" = "<p>Something is going wrong while creating your certificate. ould you please try again later?</p><p><b>Error code:</b><br />%@</p>";
+"holder.errorstate.client.message" = "<p>Something is going wrong while creating your certificate. Could you please try again later?</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.malfunctions.title" = "Check the latest outages";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
+"holder.errorstate.overview.action" = "To my certificates";
 
 "recommended.updateApp.title" = "Want to update the app?";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";
