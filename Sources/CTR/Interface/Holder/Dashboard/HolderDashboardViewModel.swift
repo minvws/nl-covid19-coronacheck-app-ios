@@ -322,13 +322,13 @@ final class HolderDashboardViewModel: Logging {
 					switch validityRegion {
 						case .domestic:
 							return HolderDashboardViewController.Card.emptyState(
-								image: I.dashboard.domesticIcon(),
+								image: I.dashboard.domestic(),
 								title: L.holderDashboardEmptyDomesticTitle(),
 								message: L.holderDashboardEmptyDomesticMessage()
 							)
 						case .europeanUnion:
 							return HolderDashboardViewController.Card.emptyState(
-								image: I.dashboard.internationalIcon(),
+								image: I.dashboard.international(),
 								title: L.holderDashboardEmptyInternationalTitle(),
 								message: L.holderDashboardEmptyInternationalMessage()
 							)

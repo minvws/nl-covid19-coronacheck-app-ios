@@ -70,7 +70,7 @@ class QRCardView: BaseView {
 
 	private let largeIconImageView: UIImageView = {
 
-		let view = UIImageView(image: I.dashboard.domesticIcon())
+		let view = UIImageView(image: I.dashboard.domestic())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
@@ -269,7 +269,7 @@ class QRCardView: BaseView {
 	}
 
 	private func applyEUStyle() {
-		largeIconImageView.image = I.dashboard.internationalIcon()
+		largeIconImageView.image = I.dashboard.international()
 	}
 
 	// MARK: - Callbacks
