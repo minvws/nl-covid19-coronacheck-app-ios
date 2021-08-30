@@ -204,7 +204,7 @@ class PaperCertificateCheckViewModel: Logging {
 			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryActionTitle: L.holderErrorstateOverviewAction(),
 				primaryAction: {[weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},
@@ -226,7 +226,7 @@ class PaperCertificateCheckViewModel: Logging {
 			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryActionTitle: L.holderErrorstateOverviewAction(),
 				primaryAction: {[weak self] in
 					self?.coordinator?.userWantsToGoBackToDashboard()
 				},

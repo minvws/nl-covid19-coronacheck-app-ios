@@ -246,10 +246,10 @@ class NetworkManager: Logging {
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
 		session: URLSession,
-		ignore400: Bool = false,
+		proceedToSuccessIfResponseIs400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
-		data(request: request, session: session, ignore400: ignore400) { data, response, error in
+		data(request: request, session: session, proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400) { data, response, error in
 
 			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
 			// Result<(URLResponse, Data), ServerError>
@@ -279,7 +279,7 @@ class NetworkManager: Logging {
 
 										self.decodeToObject(
 											decodedPayloadData,
-											ignore400: ignore400,
+											proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400,
 											signedResponse: signedResponse,
 											urlResponse: networkResponse.urlResponse,
 											completion: completion
@@ -305,7 +305,7 @@ class NetworkManager: Logging {
 
 	private func decodeToObject<Object: Decodable>(
 		_ decodedPayloadData: Data,
-		ignore400: Bool = false,
+		proceedToSuccessIfResponseIs400: Bool = false,
 		signedResponse: SignedResponse,
 		urlResponse: URLResponse,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
@@ -316,12 +316,12 @@ class NetworkManager: Logging {
 		// Decode to the expected object
 		let decodedResult: Result<Object, NetworkError> = decodeJson(json: decodedPayloadData)
 
-		switch (decodedResult, ignore400, networkError) {
+		switch (decodedResult, proceedToSuccessIfResponseIs400, networkError) {
 			case (let .success(object), _, nil), (let .success(object), true, .resourceNotFound):
 				// Success and no network error, or success and ignore 400
 				completion(.success((object, signedResponse, decodedPayloadData, urlResponse)))
 
-			case (.success, false, _), (.success, true, _):
+			case (.success, _, _):
 				let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: decodedPayloadData)
 				completion(.failure(ServerError.error(statusCode: urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? .invalidResponse)))
 
@@ -348,7 +348,7 @@ class NetworkManager: Logging {
 		).resume()
 	}
 
-	private func data(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+	private func data(request: URLRequest, session: URLSession, proceedToSuccessIfResponseIs400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
 		session.dataTask(with: request, completionHandler: completion).resume()
 	}
@@ -578,7 +578,7 @@ extension NetworkManager: NetworkManaging {
 			delegateQueue: nil
 		)
 
-		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
+		decodeSignedJSONData(request: urlRequest, session: session, proceedToSuccessIfResponseIs400: false) { result in
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
 			}
@@ -649,7 +649,7 @@ extension NetworkManager: NetworkManaging {
 		decodeSignedJSONData(
 			request: urlRequest,
 			session: session,
-			ignore400: false,
+			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
 
 			DispatchQueue.main.async {
@@ -878,7 +878,7 @@ extension NetworkManager: NetworkManaging {
 			delegateQueue: nil
 		)
 
-		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
+		decodeSignedJSONData(request: urlRequest, session: session, proceedToSuccessIfResponseIs400: false) { result in
 			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
