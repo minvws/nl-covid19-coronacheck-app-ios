@@ -245,10 +245,10 @@ class NetworkManager: Logging {
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
 		session: URLSession,
-		ignore400: Bool = false,
+		proceedToSuccessIfResponseIs400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
-		data(request: request, session: session, ignore400: ignore400) { data, response, error in
+		data(request: request, session: session, proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400) { data, response, error in
 
 			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
 			// Result<(URLResponse, Data), ServerError>
@@ -335,7 +335,7 @@ class NetworkManager: Logging {
 		).resume()
 	}
 
-	private func data(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+	private func data(request: URLRequest, session: URLSession, proceedToSuccessIfResponseIs400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
 		session.dataTask(with: request, completionHandler: completion).resume()
 	}
@@ -837,7 +837,7 @@ extension NetworkManager: NetworkManaging {
 			delegateQueue: nil
 		)
 
-		decodeSignedJSONData(request: urlRequest, session: session, ignore400: false) { result in
+		decodeSignedJSONData(request: urlRequest, session: session, proceedToSuccessIfResponseIs400: false) { result in
 			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
