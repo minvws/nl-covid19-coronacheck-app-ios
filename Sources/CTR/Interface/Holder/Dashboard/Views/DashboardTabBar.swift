@@ -208,6 +208,8 @@ private class TabBarButton: UIControl {
 	override var isSelected: Bool {
 		didSet {
 			titleLabel.textColor = isSelected ? Theme.colors.dark : Theme.colors.secondaryText
+			titleLabel.font = isSelected ? Theme.fonts.subheadBold : Theme.fonts.subheadMedium
+			
 			if isSelected {
 				accessibilityTraits.insert(.selected)
 			} else {
@@ -241,8 +243,8 @@ private class TabBarButton: UIControl {
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
 			titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margin.top),
 			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margin.bottom),
-			titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor),
-			titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor)
+			titleLabel.leftAnchor.constraint(equalTo: leftAnchor),
+			titleLabel.rightAnchor.constraint(equalTo: rightAnchor)
 		])
 	}
 	

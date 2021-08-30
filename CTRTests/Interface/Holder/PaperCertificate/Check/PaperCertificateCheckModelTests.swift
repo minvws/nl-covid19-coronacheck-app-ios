@@ -250,7 +250,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		if case let .feedback(content: content) = sut.viewState {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateServerMessage("i 510 000 304")
-			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 		} else {
 			fail("Invalid state")
