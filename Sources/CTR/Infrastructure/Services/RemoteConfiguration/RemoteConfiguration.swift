@@ -110,6 +110,8 @@ struct RemoteConfiguration: Codable {
 	var universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?
 
 	var clockDeviationThresholdSeconds: Int?
+	
+	var isLuhnCheckEnabled: Bool?
 
 	/// Key mapping
 	enum CodingKeys: String, CodingKey {
@@ -142,6 +144,7 @@ struct RemoteConfiguration: Codable {
 		case domesticQRRefreshSeconds = "domesticQRRefreshSeconds"
 		case universalLinkPermittedDomains = "universalLinkDomains"
 		case clockDeviationThresholdSeconds = "clockDeviationThresholdSeconds"
+		case isLuhnCheckEnabled = "luhnCheckEnabled"
 	}
 
 	init(
@@ -165,7 +168,8 @@ struct RemoteConfiguration: Codable {
 		credentialRenewalDays: Int?,
 		domesticQRRefreshSeconds: Int?,
 		universalLinkPermittedDomains: [UniversalLinkPermittedDomain]?,
-		clockDeviationThresholdSeconds: Int?) {
+		clockDeviationThresholdSeconds: Int?,
+		isLuhnCheckEnabled: Bool?) {
 
 		self.minimumVersion = minVersion
 		self.minimumVersionMessage = minVersionMessage
@@ -188,6 +192,7 @@ struct RemoteConfiguration: Codable {
 		self.domesticQRRefreshSeconds = domesticQRRefreshSeconds
 		self.universalLinkPermittedDomains = universalLinkPermittedDomains
 		self.clockDeviationThresholdSeconds = clockDeviationThresholdSeconds
+		self.isLuhnCheckEnabled = isLuhnCheckEnabled
 	}
 
 	/// Default remote configuration
@@ -213,7 +218,8 @@ struct RemoteConfiguration: Codable {
 			credentialRenewalDays: 5,
 			domesticQRRefreshSeconds: 60,
 			universalLinkPermittedDomains: nil,
-			clockDeviationThresholdSeconds: 30
+			clockDeviationThresholdSeconds: 30,
+			isLuhnCheckEnabled: true
 		)
 	}
 
