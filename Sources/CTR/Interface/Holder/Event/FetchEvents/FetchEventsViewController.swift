@@ -11,22 +11,7 @@ class FetchEventsViewController: BaseViewController {
 
 	enum State {
 		case loading(content: Content)
-	}
-
-	struct Content {
-		let title: String
-		let subTitle: String?
-		let actionTitle: String?
-		let action: (() -> Void)?
-	}
-
-	struct AlertContent {
-		var title: String
-		var subTitle: String
-		var cancelAction: ((UIAlertAction) -> Void)?
-		var cancelTitle: String?
-		var okAction: ((UIAlertAction) -> Void)?
-		var okTitle: String
+		case feedback(content: Content)
 	}
 
 	private let viewModel: FetchEventsViewModel
@@ -73,6 +58,8 @@ class FetchEventsViewController: BaseViewController {
 			switch $0 {
 				case let .loading(content):
 					self?.setForLoadingState(content)
+				case let .feedback(content):
+					self?.setForFeedback(content)
 			}
 		}
 
@@ -97,6 +84,12 @@ class FetchEventsViewController: BaseViewController {
 		displayContent(content)
 	}
 
+	private func setForFeedback(_ content: Content) {
+
+		sceneView.spinner.isHidden = true
+		displayContent(content)
+	}
+
 	private func displayContent(_ content: Content) {
 
 		// Texts
@@ -105,7 +98,7 @@ class FetchEventsViewController: BaseViewController {
 
 		// Button
 		sceneView.showLineView = false
-		if let actionTitle = content.actionTitle {
+		if let actionTitle = content.primaryActionTitle {
 			sceneView.primaryTitle = actionTitle
 			sceneView.footerBackground.isHidden = false
 			sceneView.primaryButton.isHidden = false
@@ -116,38 +109,8 @@ class FetchEventsViewController: BaseViewController {
 			sceneView.primaryButton.isHidden = true
 			sceneView.footerGradientView.isHidden = true
 		}
-		sceneView.primaryButtonTappedCommand = content.action
-	}
-
-	func showAlert(_ alertContent: AlertContent?) {
-
-		guard let content = alertContent else {
-			return
-		}
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: content.okAction
-			)
-		)
-
-		// Optional cancel button:
-		if let cancelTitle = content.cancelTitle {
-			alertController.addAction(
-				UIAlertAction(
-					title: cancelTitle,
-					style: .cancel,
-					handler: content.cancelAction
-				)
-			)
-		}
-		present(alertController, animated: true, completion: nil)
+		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.secondaryButtonTappedCommand = content.secondaryAction
+		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

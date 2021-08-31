@@ -26,9 +26,9 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchEventAccessTokensCount = 0
 	var invokedFetchEventAccessTokensParameters: (tvsToken: String, Void)?
 	var invokedFetchEventAccessTokensParametersList = [(tvsToken: String, Void)]()
-	var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], NetworkError>, Void)?
+	var stubbedFetchEventAccessTokensCompletionResult: (Result<[EventFlow.AccessToken], ServerError>, Void)?
 
-	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], NetworkError>) -> Void) {
+	func fetchEventAccessTokens(tvsToken: String, completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {
 		invokedFetchEventAccessTokens = true
 		invokedFetchEventAccessTokensCount += 1
 		invokedFetchEventAccessTokensParameters = (tvsToken, ())
@@ -88,9 +88,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchEventProviders = false
 	var invokedFetchEventProvidersCount = 0
-	var stubbedFetchEventProvidersCompletionResult: (Result<[EventFlow.EventProvider], NetworkError>, Void)?
+	var stubbedFetchEventProvidersCompletionResult: (Result<[EventFlow.EventProvider], ServerError>, Void)?
 
-	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], NetworkError>) -> Void) {
+	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 		invokedFetchEventProviders = true
 		invokedFetchEventProvidersCount += 1
 		if let result = stubbedFetchEventProvidersCompletionResult {

@@ -15,15 +15,6 @@ class ListEventsViewController: BaseViewController {
 		case feedback(content: Content)
 	}
 
-	struct Content {
-		let title: String
-		let subTitle: String?
-		let primaryActionTitle: String?
-		let primaryAction: (() -> Void)?
-		let secondaryActionTitle: String?
-		let secondaryAction: (() -> Void)?
-	}
-
 	struct Row {
 		let title: String
 		let subTitle: String

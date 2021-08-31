@@ -1,9 +1,17 @@
 "holder.errorstate.title" = "Sorry, er gaat iets mis";
 "holder.errorstate.server.message" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.server.messages" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
 "holder.errorstate.client.message" = "<p>Er gaat iets mis bij het maken van je bewijs. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
 "holder.errorstate.overview.action" = "Naar mijn bewijzen";
+
+"holder.errorstate.nobsn.title" = "Geen BSN gevonden";
+"holder.errorstate.nobsn.message" = "De zorgverlener waar je bent gevaccineerd kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";
+"holder.errorstate.nobsn.action" =  "Naar mijn bewijzen";
+"holder.errorstate.nosession.title" = "Je sessie is gestopt";
+"holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
+"holder.errorstate.nosession.action" =  "Log in met DigiD";
 
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";

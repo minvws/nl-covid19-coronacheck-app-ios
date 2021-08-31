@@ -69,10 +69,10 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedDisplayContent = false
 	var invokedDisplayContentCount = 0
-	var invokedDisplayContentParameters: (title: String, content: [Content])?
-	var invokedDisplayContentParametersList = [(title: String, content: [Content])]()
+	var invokedDisplayContentParameters: (title: String, content: [DisplayContent])?
+	var invokedDisplayContentParametersList = [(title: String, content: [DisplayContent])]()
 
-	func displayContent(title: String, content: [Content]) {
+	func displayContent(title: String, content: [DisplayContent]) {
 		invokedDisplayContent = true
 		invokedDisplayContentCount += 1
 		invokedDisplayContentParameters = (title, content)
