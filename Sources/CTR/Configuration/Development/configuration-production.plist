@@ -6,12 +6,6 @@
 	<dict>
 		<key>autoCloseTime</key>
 		<integer>180</integer>
-		<key>testresultWarningTTL</key>
-		<integer>21600</integer>
-		<key>QRTTL</key>
-		<integer>180</integer>
-		<key>QRRefresh</key>
-		<integer>90</integer>
 	</dict>
 	<key>digid</key>
 	<dict>

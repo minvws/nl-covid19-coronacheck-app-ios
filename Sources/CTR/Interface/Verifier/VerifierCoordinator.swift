@@ -9,19 +9,18 @@ import UIKit
 import Clcore
 
 protocol VerifierCoordinatorDelegate: AnyObject {
-	
-	/// Navigate to verifier welcome scene
-	func navigateToVerifierWelcome()
 
 	/// The user finished the start scene
 	/// - Parameter result: the result of the start scene
 	func didFinish(_ result: VerifierStartResult)
 
-	/// The user finished the instruction scene
-	/// - Parameter result: the result of the instruction scene
-	func didFinish(_ result: ScanInstructionsResult)
+	func navigateToVerifierWelcome()
 
 	func navigateToScan()
+
+	func navigateToScanInstruction()
+
+	func navigateFromScanToScanInstructions()
 
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
@@ -32,6 +31,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	///   - title: the title
 	///   - content: the content
 	func displayContent(title: String, content: [Content])
+
 }
 
 class VerifierCoordinator: SharedCoordinator {
@@ -43,57 +43,48 @@ class VerifierCoordinator: SharedCoordinator {
 
 	// Designated starter method
 	override func start() {
-		
-		if onboardingManager.needsOnboarding {
-			/// Start with the onboarding
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			startChildCoordinator(coordinator)
-			
-		} else if onboardingManager.needsConsent {
-			// Show the consent page
-			let coordinator = OnboardingCoordinator(
-				navigationController: navigationController,
-				onboardingDelegate: self,
-				factory: onboardingFactory
-			)
-			addChildCoordinator(coordinator)
-			coordinator.navigateToConsent(shouldHideBackButton: true)
 
-		} else {
-			
+		handleOnboarding(factory: onboardingFactory) {
+			setupMenu()
 			navigateToVerifierWelcome()
 		}
+	}
+
+	fileprivate func setupMenu() {
+		let menu = MenuViewController(
+			viewModel: MenuViewModel(delegate: self)
+		)
+		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
+
+		dashboardNavigationController = UINavigationController()
+
+		// Replace the root with the side panel controller
+		window.rootViewController = sidePanel
 	}
 }
 
 // MARK: - VerifierCoordinatorDelegate
 
 extension VerifierCoordinator: VerifierCoordinatorDelegate {
-	
+
 	/// Navigate to verifier welcome scene
 	func navigateToVerifierWelcome() {
-		
-		let menu = MenuViewController(
-            viewModel: MenuViewModel(delegate: self)
-		)
-		sidePanel = SidePanelController(sideController: UINavigationController(rootViewController: menu))
-		
-		let dashboardViewController = VerifierStartViewController(
-			viewModel: VerifierStartViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager,
-				proofManager: proofManager
+
+		if let existingStartViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierStartViewController }) {
+			dashboardNavigationController?.popToViewController(existingStartViewController, animated: true)
+		} else {
+
+			let dashboardViewController = VerifierStartViewController(
+				viewModel: VerifierStartViewModel(
+					coordinator: self,
+					cryptoManager: cryptoManager,
+					proofManager: proofManager
+				)
 			)
-		)
-		dashboardNavigationController = UINavigationController(rootViewController: dashboardViewController)
-		sidePanel?.selectedViewController = dashboardNavigationController
-		
-		// Replace the root with the side panel controller
-		window.rootViewController = sidePanel
+
+			dashboardNavigationController?.setViewControllers([dashboardViewController], animated: false)
+			sidePanel?.selectedViewController = dashboardNavigationController
+		}
 	}
 
 	func didFinish(_ result: VerifierStartResult) {
@@ -107,13 +98,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		}
 	}
 
-	/// The user finished the instruction scene
-	/// - Parameter result: the result of the instruction scene
-	func didFinish(_ result: ScanInstructionsResult) {
-
-		navigateToScan()
-	}
-	
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
 	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult) {
@@ -125,6 +109,12 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 			)
 		)
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
+	}
+
+	func navigateFromScanToScanInstructions() {
+		dashboardNavigationController?.popToRootViewController(animated: true) {
+			self.navigateToScanInstruction()
+		}
 	}
 
 	/// Display content
@@ -148,42 +138,60 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
 	}
 
-	private func navigateToScanInstruction() {
+	func navigateToScanInstruction() {
 
-		let destination = ScanInstructionsViewController(
-			viewModel: ScanInstructionsViewModel(
-				coordinator: self
-			)
+		let coordinator = ScanInstructionsCoordinator(
+			navigationController: dashboardNavigationController!,
+			delegate: self
 		)
-		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(destination, animated: true)
+		startChildCoordinator(coordinator)
 	}
 
 	/// Navigate to the QR scanner
 	func navigateToScan() {
 
-//		navigateToScanResult(
-//			(attributes: CryptoAttributes(
-//				birthDay: "27",
-//				birthMonth: "5",
-//				credentialVersion: "1",
-//				domesticDcc: "0",
-//				firstNameInitial: "G",
-//				lastNameInitial: "C",
-//				specimen: "0"),
-//			 errorMessage: nil
-//			)
-//		)
-
-		let destination = VerifierScanViewController(
-			viewModel: VerifierScanViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager
+		if let existingScanViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierScanViewController }) {
+			dashboardNavigationController?.popToViewController(existingScanViewController, animated: true)
+		} else {
+			let destination = VerifierScanViewController(
+				viewModel: VerifierScanViewModel(
+					coordinator: self,
+					cryptoManager: cryptoManager
+				)
 			)
-		)
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.setViewControllers([destination], animated: true)
+			dashboardNavigationController?.pushViewController(destination, animated: true)
+//			dashboardNavigationController?.setViewControllers([destination], animated: true)
+		}
 	}
 }
+
+// MARK: ScanInstructions Delegate
+
+extension VerifierCoordinator: ScanInstructionsDelegate {
+
+	/// User completed (or skipped) the Scan Instructions flow
+	func scanInstructionsDidFinish() {
+		UserSettings().scanInstructionShown = true
+
+		removeScanInstructionsCoordinator()
+		navigateToScan()
+	}
+
+	/// User cancelled the flow (i.e. back button), thus don't proceed to scan.
+	func scanInstructionsWasCancelled() {
+		removeScanInstructionsCoordinator()
+		dashboardNavigationController?.popToRootViewController(animated: true)
+	}
+
+	private func removeScanInstructionsCoordinator() {
+		guard let childCoordinator = self.childCoordinators.first(
+			where: { $0 is ScanInstructionsCoordinator }
+		) else { return }
+		
+		self.removeChildCoordinator(childCoordinator)
+	}
+}
+
 // MARK: - MenuDelegate
 
 extension VerifierCoordinator: MenuDelegate {

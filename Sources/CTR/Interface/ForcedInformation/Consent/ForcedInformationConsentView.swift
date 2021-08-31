@@ -62,9 +62,9 @@ class ForcedInformationConsentView: BaseView {
 		return view
 	}()
 
-	private let highlightLabel: Label = {
+	private let highlightTextView: TextView = {
 
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 
 	let contentTextView: TextView = {
@@ -72,17 +72,12 @@ class ForcedInformationConsentView: BaseView {
 		return TextView()
 	}()
 
-	let primaryButton: Button = {
-
-		let button = Button(title: "Button 1", style: .primary)
-		button.rounded = true
-		return button
-	}()
+	let primaryButton = Button()
 
 	/// the secondary button
 	let secondaryButton: Button = {
 
-		let button = Button(title: "Button 2", style: .tertiary)
+		let button = Button(title: "Button 2", style: .textLabelBlue)
 		button.titleLabel?.font = Theme.fonts.bodySemiBold
 		button.isHidden = true
 		return button
@@ -115,7 +110,7 @@ class ForcedInformationConsentView: BaseView {
 
 		super.setupViewHierarchy()
 
-		highlightLabel.embed(
+		highlightTextView.embed(
 			in: highlightView,
 			insets: UIEdgeInsets.all(ViewTraits.margin)
 		)
@@ -219,7 +214,7 @@ class ForcedInformationConsentView: BaseView {
 	/// The highlight
 	var highlight: String? {
 		didSet {
-			highlightLabel.attributedText = .makeFromHtml(
+			highlightTextView.attributedText = .makeFromHtml(
 				text: highlight,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark

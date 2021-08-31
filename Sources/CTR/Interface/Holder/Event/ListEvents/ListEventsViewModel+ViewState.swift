@@ -78,7 +78,7 @@ extension ListEventsViewModel {
 
 	private func emptyVaccinationState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderVaccinationNolistTitle(),
 				subTitle: L.holderVaccinationNolistMessage(),
@@ -94,7 +94,7 @@ extension ListEventsViewModel {
 
 	private func emptyTestState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderTestNolistTitle(),
 				subTitle: L.holderTestNolistMessage(),
@@ -110,7 +110,7 @@ extension ListEventsViewModel {
 
 	private func emptyDccState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderCheckdccExpiredTitle(),
 				subTitle: L.holderCheckdccExpiredMessage(),
@@ -126,7 +126,7 @@ extension ListEventsViewModel {
 
 	private func emptyRecoveryState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderRecoveryNolistTitle(),
 				subTitle: L.holderRecoveryNolistMessage(),
@@ -142,7 +142,7 @@ extension ListEventsViewModel {
 
 	private func recoveryEventsTooOld() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderRecoveryTooOldTitle(),
 				subTitle: L.holderRecoveryTooOldMessage(),
@@ -158,7 +158,7 @@ extension ListEventsViewModel {
 
 	internal func cannotCreateEventsState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderEventOriginmismatchTitle(),
 				subTitle: {
@@ -291,39 +291,102 @@ extension ListEventsViewModel {
 		return (filteredDataSource: filteredSource, hasTooOldEvents: filteredSource.count != dataSource.count)
 	}
 
+	/// Filter all duplicate vaccination events (same provider, same hpkCode, same manufacturer, same date)
+	/// - Parameter dataSource: the remote events
+	/// - Returns: filtered events
+	private func filterDuplicateVaccinationEvents(_ dataSource: [EventDataTuple]) -> [EventDataTuple] {
+
+		var filteredDataSource = [EventDataTuple]()
+		var counter = 0
+
+		while counter <= dataSource.count - 1 {
+			let currentRow = dataSource[counter]
+			if counter < dataSource.count - 1,
+			   let currentVaccinationEvent = currentRow.event.vaccination,
+			   let nextVaccinationEvent = dataSource[counter + 1].event.vaccination {
+				// Two vaccination rows, let's check for duplicates.
+				let nextRow = dataSource[counter + 1]
+				if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
+					if currentRow.providerIdentifier != nextRow.providerIdentifier {
+						// Next row matches, but is not the same provider
+						filteredDataSource.append(currentRow)
+					}
+				} else {
+					// Next row does not match
+					filteredDataSource.append(currentRow)
+				}
+			} else {
+				// Next row or this row is not a vaccination
+				filteredDataSource.append(currentRow)
+			}
+			counter += 1
+		}
+		return filteredDataSource
+	}
+
 	private func getSortedRowsFromEvents(_ dataSource: [EventDataTuple]) -> [ListEventsViewController.Row] {
 
-		let sortedDataSource = dataSource.sorted { lhs, rhs in
+		var sortedDataSource = dataSource.sorted { lhs, rhs in
 			if let lhsDate = lhs.event.getSortDate(with: dateFormatter),
 			   let rhsDate = rhs.event.getSortDate(with: dateFormatter) {
+
+				if lhsDate == rhsDate {
+					return lhs.providerIdentifier < rhs.providerIdentifier
+				}
 				return lhsDate < rhsDate
 			}
 			return false
 		}
 
-		var rows = [ListEventsViewController.Row]()
-		for dataRow in sortedDataSource {
+		sortedDataSource = filterDuplicateVaccinationEvents(sortedDataSource)
 
-			if dataRow.event.recovery != nil {
-				rows.append(getRowFromRecoveryEvent(dataRow: dataRow))
-			} else if dataRow.event.positiveTest != nil {
-				rows.append(getRowFromPositiveTestEvent(dataRow: dataRow))
-			} else if dataRow.event.vaccination != nil {
-				rows.append(getRowFromVaccinationEvent(dataRow: dataRow))
-			} else if dataRow.event.negativeTest != nil {
-				rows.append(getRowFromNegativeTestEvent(dataRow: dataRow))
-			} else if dataRow.event.dccEvent != nil {
+		var rows = [ListEventsViewController.Row]()
+		var counter = 0
+
+		while counter <= sortedDataSource.count - 1 {
+			let currentRow = sortedDataSource[counter]
+
+			if currentRow.event.recovery != nil {
+				rows.append(getRowFromRecoveryEvent(dataRow: currentRow))
+			} else if currentRow.event.positiveTest != nil {
+				rows.append(getRowFromPositiveTestEvent(dataRow: currentRow))
+			} else if currentRow.event.vaccination != nil {
+
+				if counter < sortedDataSource.count - 1,
+				   let currentVaccinationEvent = currentRow.event.vaccination,
+				   let nextVaccinationEvent = sortedDataSource[counter + 1].event.vaccination {
+					let nextRow = sortedDataSource[counter + 1]
+
+					if currentVaccinationEvent.doesMatchEvent(nextVaccinationEvent) {
+						if currentRow.providerIdentifier != nextRow.providerIdentifier {
+							logVerbose("Matching vaccinations, different provider. Skipping next row \(nextRow.providerIdentifier) \(nextRow.event.type) \(nextVaccinationEvent.dateString ?? "n/a")")
+							rows.append(getRowFromVaccinationEvent(dataRow: currentRow, combineWith: nextRow))
+							counter += 1
+						}
+					} else {
+						logVerbose("not Matching vaccinations")
+						rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
+					}
+				} else {
+					// Next row is not an vaccination
+					logVerbose("nextRow is not a vaccination")
+					rows.append(getRowFromVaccinationEvent(dataRow: currentRow))
+				}
+			} else if currentRow.event.negativeTest != nil {
+				rows.append(getRowFromNegativeTestEvent(dataRow: currentRow))
+			} else if currentRow.event.dccEvent != nil {
 				if let cryptoManager = cryptoManager,
-				   let euCredentialAttributes = dataRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
+				   let euCredentialAttributes = currentRow.event.dccEvent?.getAttributes(cryptoManager: cryptoManager) {
 					if let vaccination = euCredentialAttributes.digitalCovidCertificate.vaccinations?.first {
-						rows.append(getRowFromDCCVaccinationEvent(dataRow: dataRow, vaccination: vaccination))
+						rows.append(getRowFromDCCVaccinationEvent(dataRow: currentRow, vaccination: vaccination))
 					} else if let recovery = euCredentialAttributes.digitalCovidCertificate.recoveries?.first {
-						rows.append(getRowFromDCCRecoveryEvent(dataRow: dataRow, recovery: recovery))
+						rows.append(getRowFromDCCRecoveryEvent(dataRow: currentRow, recovery: recovery))
 					} else if let test = euCredentialAttributes.digitalCovidCertificate.tests?.first {
-						rows.append(getRowFromDCCTestEvent(dataRow: dataRow, test: test))
+						rows.append(getRowFromDCCTestEvent(dataRow: currentRow, test: test))
 					}
 				}
 			}
+			counter += 1
 		}
 		return rows
 	}
@@ -344,18 +407,19 @@ extension ListEventsViewModel {
 			dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
 		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
 			dataRow.event.negativeTest?.manufacturer) ?? (dataRow.event.negativeTest?.manufacturer ?? "")
-
-		let body = L.holderEventAboutBodyTest3(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			testType,
-			dataRow.event.negativeTest?.name ?? "",
-			formattedTestLongDate,
-			L.holderShowqrEuAboutTestNegative(),
-			dataRow.event.negativeTest?.facility ?? "",
-			manufacturer,
-			dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsTest.subtitle, value: nil),
+			EventDetails(field: EventDetailsTest.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsTest.testType, value: testType),
+			EventDetails(field: EventDetailsTest.testName, value: dataRow.event.negativeTest?.name),
+			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
+			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
+			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.negativeTest?.facility),
+			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsNegative(),
@@ -366,17 +430,49 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
 	}
 
-	private func getRowFromVaccinationEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
+	private func getRowFromVaccinationEvent(dataRow: EventDataTuple, combineWith: EventDataTuple? = nil) -> ListEventsViewController.Row {
+
+		let formattedBirthDate: String = dataRow.identity.birthDateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
+		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
+			.flatMap(Formatter.getDateFrom)
+			.map(printMonthFormatter.string) ?? ""
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
+
+		var details = getEventDetail(dataRow: dataRow)
+
+		let title = L.holderVaccinationElementTitle("\(formattedShotMonth)")
+		var subTitle = L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate)
+		if let nextRow = combineWith {
+			let otherProviderString: String = mappingManager.getProviderIdentifierMapping(nextRow.providerIdentifier) ?? nextRow.providerIdentifier
+			subTitle += L.holderVaccinationElementCombined(provider, otherProviderString)
+			details += [EventDetails(field: EventDetailsVaccination.separator, value: nil)]
+			details += getEventDetail(dataRow: nextRow)
+		} else {
+			subTitle += L.holderVaccinationElementSingle(provider)
+		}
+
+		return ListEventsViewController.Row(
+			title: title,
+			subTitle: subTitle,
+			action: { [weak self] in
+				self?.coordinator?.listEventsScreenDidFinish(
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
+				)
+			}
+		)
+	}
+
+	private func getEventDetail(dataRow: EventDataTuple) -> [EventDetails] {
 
 		let formattedBirthDate: String = dataRow.identity.birthDateString
 			.flatMap(Formatter.getDateFrom)
@@ -384,55 +480,56 @@ extension ListEventsViewModel {
 		let formattedShotDate: String = dataRow.event.vaccination?.dateString
 			.flatMap(Formatter.getDateFrom)
 			.map(printDateFormatter.string) ?? (dataRow.event.vaccination?.dateString ?? "")
-		let formattedShotMonth: String = dataRow.event.vaccination?.dateString
-			.flatMap(Formatter.getDateFrom)
-			.map(printMonthFormatter.string) ?? ""
-		let provider: String = remoteConfigManager.getConfiguration().getProviderIdentifierMapping(dataRow.providerIdentifier) ?? ""
+		let provider: String = mappingManager.getProviderIdentifierMapping(dataRow.providerIdentifier) ?? dataRow.providerIdentifier
 
-		var vaccinName = ""
-		if let hpkCode = dataRow.event.vaccination?.hpkCode {
-			vaccinName = remoteConfigManager.getConfiguration().getHpkMapping(hpkCode) ?? ""
-		} else if let brand = dataRow.event.vaccination?.brand {
-			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand) ?? ""
+		var vaccinName: String?
+		var vaccineType: String?
+		var vaccineManufacturer: String?
+		if let hpkCode = dataRow.event.vaccination?.hpkCode, !hpkCode.isEmpty {
+			let hpkData = remoteConfigManager.getConfiguration().getHpkData(hpkCode)
+			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(hpkData?.mp)
+			vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(hpkData?.vp)
+			vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(hpkData?.ma)
 		}
 
-		let vaccineType = remoteConfigManager.getConfiguration().getTypeMapping(
-			dataRow.event.vaccination?.type) ?? dataRow.event.vaccination?.type ?? ""
-		let vaccineManufacturer = remoteConfigManager.getConfiguration().getVaccinationManufacturerMapping(
-			dataRow.event.vaccination?.manufacturer) ?? dataRow.event.vaccination?.manufacturer ?? ""
+		if vaccinName == nil, let brand = dataRow.event.vaccination?.brand {
+			vaccinName = remoteConfigManager.getConfiguration().getBrandMapping(brand)
+		}
+		if vaccineType == nil {
+			vaccineType = remoteConfigManager.getConfiguration()
+				.getTypeMapping(dataRow.event.vaccination?.type)
+				?? dataRow.event.vaccination?.type
+		}
+		if vaccineManufacturer == nil {
+			vaccineManufacturer = remoteConfigManager.getConfiguration()
+				.getVaccinationManufacturerMapping(dataRow.event.vaccination?.manufacturer)
+				?? dataRow.event.vaccination?.manufacturer
+		}
 
-		var dosage = ""
+		var dosage: String?
 		if let doseNumber = dataRow.event.vaccination?.doseNumber,
 		   let totalDose = dataRow.event.vaccination?.totalDoses {
 			dosage = L.holderVaccinationAboutOff("\(doseNumber)", "\(totalDose)")
 		}
 
-		let body = L.holderEventAboutBodyVaccination(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			vaccinName,
-			vaccineType,
-			vaccineManufacturer,
-			dosage,
-			dataRow.event.vaccination?.completionStatus ?? "",
-			formattedShotDate,
-			dataRow.event.vaccination?.country ?? "",
-			dataRow.event.unique ?? ""
-		)
+		let country = getDisplayCountry(dataRow.event.vaccination?.country ?? "")
 
-		return ListEventsViewController.Row(
-			title: L.holderVaccinationElementTitle("\(formattedShotMonth) (\(provider))"),
-			subTitle: L.holderVaccinationElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
-			action: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
-				)
-			}
-		)
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsVaccination.subtitle(provider: provider), value: nil),
+			EventDetails(field: EventDetailsVaccination.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsVaccination.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsVaccination.pathogen, value: L.holderEventAboutVaccinationPathogenvalue()),
+			EventDetails(field: EventDetailsVaccination.vaccineBrand, value: vaccinName),
+			EventDetails(field: EventDetailsVaccination.vaccineType, value: vaccineType),
+			EventDetails(field: EventDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			EventDetails(field: EventDetailsVaccination.dosage, value: dosage),
+			EventDetails(field: EventDetailsVaccination.completionReason, value: dataRow.event.vaccination?.completionStatus),
+			EventDetails(field: EventDetailsVaccination.date, value: formattedShotDate),
+			EventDetails(field: EventDetailsVaccination.country, value: country),
+			EventDetails(field: EventDetailsVaccination.uniqueIdentifer, value: dataRow.event.unique)
+		]
+
+		return details
 	}
 
 	private func getRowFromRecoveryEvent(dataRow: EventDataTuple) -> ListEventsViewController.Row {
@@ -452,15 +549,16 @@ extension ListEventsViewModel {
 		let formattedShortValidUntilDate: String = dataRow.event.recovery?.validUntil
 			.flatMap(Formatter.getDateFrom)
 			.map(printDateFormatter.string) ?? (dataRow.event.recovery?.validUntil ?? "")
-
-		let body = L.holderEventAboutBodyRecovery(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			formattedShortTestDate,
-			formattedShortValidFromDate,
-			formattedShortValidUntilDate,
-			dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsRecovery.subtitle, value: nil),
+			EventDetails(field: EventDetailsRecovery.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsRecovery.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsRecovery.date, value: formattedShortTestDate),
+			EventDetails(field: EventDetailsRecovery.validFrom, value: formattedShortValidFromDate),
+			EventDetails(field: EventDetailsRecovery.validUntil, value: formattedShortValidUntilDate),
+			EventDetails(field: EventDetailsRecovery.uniqueIdentifer, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -471,11 +569,8 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					EventScreenResult.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -497,16 +592,19 @@ extension ListEventsViewModel {
 			dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
 		let manufacturer = remoteConfigManager.getConfiguration().getTestManufacturerMapping(
 			dataRow.event.positiveTest?.manufacturer) ?? (dataRow.event.positiveTest?.manufacturer ?? "")
-
-		let body = L.holderEventAboutBodyTest3(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			testType, dataRow.event.positiveTest?.name ?? "",
-			formattedTestLongDate,
-			L.holderShowqrEuAboutTestPostive(),
-			dataRow.event.positiveTest?.facility ?? "",
-			manufacturer, dataRow.event.unique ?? ""
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsTest.subtitle, value: nil),
+			EventDetails(field: EventDetailsTest.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsTest.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsTest.testType, value: testType),
+			EventDetails(field: EventDetailsTest.testName, value: dataRow.event.positiveTest?.name),
+			EventDetails(field: EventDetailsTest.date, value: formattedTestLongDate),
+			EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestPostive()),
+			EventDetails(field: EventDetailsTest.facility, value: dataRow.event.positiveTest?.facility),
+			EventDetails(field: EventDetailsTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsTest.uniqueIdentifer, value: dataRow.event.unique)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.holderTestresultsPositive(),
@@ -517,11 +615,8 @@ extension ListEventsViewModel {
 			),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -551,31 +646,29 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(vaccination.issuer)
 		let country = getDisplayCountry(vaccination.country)
-
-		let body: String = L.holderDccVaccinationMessage(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			vaccineBrand,
-			vaccineType,
-			vaccineManufacturer,
-			dosage ?? " ",
-			formattedVaccinationDate,
-			country,
-			issuer,
-			vaccination.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsDCCVaccination.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCVaccination.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsDCCVaccination.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCVaccination.pathogen, value: L.holderDccVaccinationPathogenvalue()),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineBrand, value: vaccineBrand),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineType, value: vaccineType),
+			EventDetails(field: EventDetailsDCCVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			EventDetails(field: EventDetailsDCCVaccination.dosage, value: dosage),
+			EventDetails(field: EventDetailsDCCVaccination.date, value: formattedVaccinationDate),
+			EventDetails(field: EventDetailsDCCVaccination.country, value: country),
+			EventDetails(field: EventDetailsDCCVaccination.issuer, value: issuer),
+			EventDetails(field: EventDetailsDCCVaccination.certificateIdentifier, value: vaccination.certificateIdentifier)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.generalVaccinationcertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -598,29 +691,26 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(recovery.issuer)
 		let country = getDisplayCountry(recovery.country)
-
-		let body: String = L.holderDccRecoveryMessage(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			formattedFirstPostiveDate,
-			country,
-			issuer,
-			formattedValidFromDate,
-			formattedValidUntilDate,
-			recovery.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsDCCRecovery.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCRecovery.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsDCCRecovery.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCRecovery.date, value: formattedFirstPostiveDate),
+			EventDetails(field: EventDetailsDCCRecovery.country, value: country),
+			EventDetails(field: EventDetailsDCCRecovery.issuer, value: issuer),
+			EventDetails(field: EventDetailsDCCRecovery.validFrom, value: formattedValidFromDate),
+			EventDetails(field: EventDetailsDCCRecovery.validUntil, value: formattedValidUntilDate),
+			EventDetails(field: EventDetailsDCCRecovery.certificateIdentifier, value: recovery.certificateIdentifier)
+		]
 
 		return ListEventsViewController.Row(
-			title: L.generalRecoverycertificate().capitalizingFirstLetter(),
+			title: L.generalRecoverystatement().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -652,32 +742,31 @@ extension ListEventsViewModel {
 		
 		let issuer = getDisplayIssuer(test.issuer)
 		let country = getDisplayCountry(test.country)
-
-		let body: String = L.holderDccTestMessage(
-			dataRow.identity.fullName,
-			formattedBirthDate,
-			testType,
-			test.name ?? "",
-			formattedTestDate,
-			testResult,
-			test.testCenter,
-			manufacturer,
-			country,
-			issuer,
-			test.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
+		let facility = getDisplayFacility(test.testCenter)
+		
+		let details: [EventDetails] = [
+			EventDetails(field: EventDetailsDCCTest.subtitle, value: nil),
+			EventDetails(field: EventDetailsDCCTest.name, value: dataRow.identity.fullName),
+			EventDetails(field: EventDetailsDCCTest.dateOfBirth, value: formattedBirthDate),
+			EventDetails(field: EventDetailsDCCTest.pathogen, value: L.holderDccTestPathogenvalue()),
+			EventDetails(field: EventDetailsDCCTest.testType, value: testType),
+			EventDetails(field: EventDetailsDCCTest.testName, value: test.name),
+			EventDetails(field: EventDetailsDCCTest.date, value: formattedTestDate),
+			EventDetails(field: EventDetailsDCCTest.result, value: testResult),
+			EventDetails(field: EventDetailsDCCTest.facility, value: facility),
+			EventDetails(field: EventDetailsDCCTest.manufacturer, value: manufacturer),
+			EventDetails(field: EventDetailsDCCTest.country, value: country),
+			EventDetails(field: EventDetailsDCCTest.issuer, value: issuer),
+			EventDetails(field: EventDetailsDCCTest.certificateIdentifier, value: test.certificateIdentifier)
+		]
 
 		return ListEventsViewController.Row(
 			title: L.generalTestcertificate().capitalizingFirstLetter(),
 			subTitle: L.holderDccElementSubtitle(dataRow.identity.fullName, formattedBirthDate),
 			action: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -690,7 +779,7 @@ private extension ListEventsViewModel {
 
 	func pendingEventsState() -> ListEventsViewController.State {
 
-		return .emptyEvents(
+		return .feedback(
 			content: ListEventsViewController.Content(
 				title: L.holderTestresultsPendingTitle(),
 				subTitle: L.holderTestresultsPendingText(),
@@ -753,20 +842,18 @@ private extension ListEventsViewModel {
 			title: L.holderTestresultsNegative(),
 			subTitle: L.holderEventElementSubtitleTest2(printSampleDate, holderID),
 			action: { [weak self] in
-
-				let body = L.holderEventAboutBodyTest2(
-					holderID,
-					self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType,
-					printSampleLongDate,
-					L.holderShowqrEuAboutTestNegative(),
-					result.unique
-				)
+				
+				let details: [EventDetails] = [
+					EventDetails(field: EventDetailsTest.name, value: holderID),
+					EventDetails(field: EventDetailsTest.testType, value: self?.remoteConfigManager.getConfiguration().getNlTestType(result.testType) ?? result.testType),
+					EventDetails(field: EventDetailsTest.date, value: printSampleLongDate),
+					EventDetails(field: EventDetailsTest.result, value: L.holderShowqrEuAboutTestNegative()),
+					EventDetails(field: EventDetailsTest.uniqueIdentifer, value: result.unique)
+				]
+				
 				self?.coordinator?.listEventsScreenDidFinish(
-					.moreInformation(
-						title: L.holderEventAboutTitle(),
-						body: body,
-						hideBodyForScreenCapture: true
-					)
+					.showEventDetails(title: L.holderEventAboutTitle(),
+									  details: details)
 				)
 			}
 		)
@@ -798,28 +885,28 @@ private extension ListEventsViewModel {
 	}
 	
 	func getDisplayCountry(_ country: String) -> String {
-		guard country == "NL" else {
+		guard ["NL", "NLD"].contains(country) else {
 			return country
 		}
 		return L.generalNetherlands()
+	}
+	
+	func getDisplayFacility(_ facility: String) -> String {
+		guard facility == "Facility approved by the State of The Netherlands" else {
+			return facility
+		}
+		return L.holderDccListFacility()
 	}
 }
 
 private extension EventFlow.VaccinationEvent {
 	
 	/// Get a display version of the vaccination completion status
-	var completionStatus: String {
-		
-		let status = completedByMedicalStatement ?? completedByPersonalStatement
-		
-		// No data: Unknown status
-		guard status != nil else {
-			return L.holderVaccinationStatusUnknown()
-		}
+	var completionStatus: String? {
 		
 		// Neither statements are completed: Vaccination incomplete
-		guard status == true else {
-			return L.holderVaccinationStatusIncomplete()
+		guard completedByMedicalStatement == true || completedByPersonalStatement == true else {
+			return nil
 		}
 		
 		// Vaccination completed: Optional clarification for completion

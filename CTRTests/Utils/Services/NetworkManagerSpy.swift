@@ -40,9 +40,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedPrepareIssue = false
 	var invokedPrepareIssueCount = 0
-	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, NetworkError>, Void)?
+	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, ServerError>, Void)?
 
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 		invokedPrepareIssue = true
 		invokedPrepareIssueCount += 1
 		if let result = stubbedPrepareIssueCompletionResult {
@@ -64,9 +64,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedGetRemoteConfiguration = false
 	var invokedGetRemoteConfigurationCount = 0
-	var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data), NetworkError>, Void)?
+	var stubbedGetRemoteConfigurationCompletionResult: (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>, Void)?
 
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
 		invokedGetRemoteConfiguration = true
 		invokedGetRemoteConfigurationCount += 1
 		if let result = stubbedGetRemoteConfigurationCompletionResult {
@@ -102,11 +102,11 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchGreencardsCount = 0
 	var invokedFetchGreencardsParameters: (dictionary: [String: AnyObject], Void)?
 	var invokedFetchGreencardsParametersList = [(dictionary: [String: AnyObject], Void)]()
-	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, NetworkError>, Void)?
+	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, ServerError>, Void)?
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void) {
 		invokedFetchGreencards = true
 		invokedFetchGreencardsCount += 1
 		invokedFetchGreencardsParameters = (dictionary, ())
@@ -140,12 +140,12 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchEventInformationCount = 0
 	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, filter: String?)?
 	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
-	var stubbedFetchEventInformationCompletionResult: (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>, Void)?
+	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, NetworkError>, Void)?
 
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 		invokedFetchEventInformation = true
 		invokedFetchEventInformationCount += 1
 		invokedFetchEventInformationParameters = (provider, filter)
@@ -178,11 +178,11 @@ class NetworkSpy: NetworkManaging {
 	var invokedCheckCouplingStatusCount = 0
 	var invokedCheckCouplingStatusParameters: (dictionary: [String: AnyObject], Void)?
 	var invokedCheckCouplingStatusParametersList = [(dictionary: [String: AnyObject], Void)]()
-	var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, NetworkError>, Void)?
+	var stubbedCheckCouplingStatusCompletionResult: (Result<DccCoupling.CouplingResponse, ServerError>, Void)?
 
 	func checkCouplingStatus(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void) {
+		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void) {
 		invokedCheckCouplingStatus = true
 		invokedCheckCouplingStatusCount += 1
 		invokedCheckCouplingStatusParameters = (dictionary, ())

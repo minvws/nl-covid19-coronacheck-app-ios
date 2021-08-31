@@ -14,6 +14,7 @@ final class FetchEventsViewModel: Logging {
 	private var tvsToken: String
 	private var eventMode: EventMode
 	private var networkManager: NetworkManaging
+	private let mappingManager: MappingManaging
 
 	private lazy var progressIndicationCounter: ProgressIndicationCounter = {
 		ProgressIndicationCounter { [weak self] in
@@ -36,11 +37,13 @@ final class FetchEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		tvsToken: String,
 		eventMode: EventMode,
-		networkManager: NetworkManaging = Services.networkManager) {
+		networkManager: NetworkManaging = Services.networkManager,
+		mappingManager: MappingManaging = Services.mappingManager) {
 		self.coordinator = coordinator
 		self.tvsToken = tvsToken
 		self.eventMode = eventMode
 		self.networkManager = networkManager
+		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: FetchEventsViewController.Content(
@@ -77,6 +80,9 @@ final class FetchEventsViewModel: Logging {
 				)
 
 			case .success(let eventProviders):
+
+				self.mappingManager.setEventProviders(eventProviders)
+
 				// Do the Unomi call
 				self.fetchHasEventInformation(
 					forEventProviders: eventProviders,
@@ -105,7 +111,17 @@ final class FetchEventsViewModel: Logging {
 			fetchVaccinationEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
 		}
 
-		switch (eventProvidersWithEventInformation.isEmpty, someNetworkWasTooBusy, someNetworkDidError) {
+		determineActionFromResponse(
+			hasNoResult: eventProvidersWithEventInformation.isEmpty,
+			someNetworkWasTooBusy: someNetworkWasTooBusy,
+			someNetworkDidError: someNetworkDidError,
+			nextStep: nextStep
+		)
+	}
+
+	private func determineActionFromResponse(hasNoResult: Bool, someNetworkWasTooBusy: Bool, someNetworkDidError: Bool, nextStep: @escaping (() -> Void)) {
+
+		switch (hasNoResult, someNetworkWasTooBusy, someNetworkDidError) {
 
 			case (true, true, _): // No results and >=1 network was busy (5.3.0)
 
@@ -186,56 +202,12 @@ final class FetchEventsViewModel: Logging {
 			self.coordinator?.fetchEventsScreenDidFinish(.showEvents(events: remoteEvents, eventMode: self.eventMode))
 		}
 
-		switch (remoteEvents.isEmpty, someNetworkWasTooBusy, someNetworkDidError) {
-
-			case (true, true, _): // No results and >=1 network was busy (5.3.0)
-
-				self.alert = FetchEventsViewController.AlertContent(
-					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
-					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
-					okAction: { _ in
-						self.coordinator?.fetchEventsScreenDidFinish(.stop)
-					},
-					okTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyButton()
-				)
-
-			case (true, _, true): // No results and >=1 network had an error (5.5.1)
-
-				self.alert = FetchEventsViewController.AlertContent(
-					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
-					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-					okAction: { _ in
-						self.coordinator?.fetchEventsScreenDidFinish(.stop)
-					},
-					okTitle: L.holderFetcheventsErrorNoresultsNetworkerrorButton()
-				)
-
-			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
-
-				self.alert = FetchEventsViewController.AlertContent(
-					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
-					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
-					okAction: { _ in
-						nextStep()
-					},
-					okTitle: L.generalOk()
-				)
-
-			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
-
-			   self.alert = FetchEventsViewController.AlertContent(
-				title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
-				subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
-				   okAction: { _ in
-					   nextStep()
-				   },
-					okTitle: L.generalOk()
-			   )
-			// 🥳 Some or no results and no network was busy or had an error:
-			case (_, false, false):
-
-				nextStep()
-		}
+		determineActionFromResponse(
+			hasNoResult: remoteEvents.isEmpty,
+			someNetworkWasTooBusy: someNetworkWasTooBusy,
+			someNetworkDidError: someNetworkDidError,
+			nextStep: nextStep
+		)
 	}
 
 	func backButtonTapped() {
@@ -389,20 +361,16 @@ final class FetchEventsViewModel: Logging {
 		filter: String?,
 		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
 
-		self.logInfo("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
+		self.logDebug("eventprovider: \(provider.identifier) - \(provider.name) - \(String(describing: provider.unomiURL?.absoluteString))")
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
+			// Result<EventFlow.EventInformationAvailable, NetworkError>
 
-			// Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>
-			switch result {
-				case let .success(result):
-					self?.logDebug("EventInformationAvailable: \(result.0)")
-					completion(.success(result.0))
-				case let .failure(error):
-					completion(.failure(error))
+			if case let .success(info) = result {
+				self?.logDebug("EventInformationAvailable: \(info)")
 			}
-
+			completion(result)
 			self?.progressIndicationCounter.decrement()
 		}
 	}
@@ -423,7 +391,17 @@ final class FetchEventsViewModel: Logging {
 
 				eventFetchingGroup.enter()
 				fetchVaccinationEvent(from: provider, filter: filter) { result in
-					eventResponseResults += [result.map({ ($0, $1) })]
+					if Configuration().getEnvironment() == "production" {
+						eventResponseResults += [result.map({ ($0, $1) })]
+					} else {
+						eventResponseResults += [result.map({ wrapper, signed in
+							var mappedWrapper = wrapper
+							/// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
+							mappedWrapper.providerIdentifier = provider.identifier
+							return (mappedWrapper, signed)
+						})]
+
+					}
 					self.eventFetchingGroup.leave()
 				}
 			}

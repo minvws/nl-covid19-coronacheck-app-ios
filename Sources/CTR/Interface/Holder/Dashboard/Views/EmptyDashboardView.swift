@@ -13,7 +13,7 @@ final class EmptyDashboardView: BaseView {
 	private enum ViewTraits {
 		
 		enum Spacing {
-			static let cardToMessage: CGFloat = 24
+			static let cardToMessage: CGFloat = 32
 		}
 	}
 	
@@ -43,8 +43,8 @@ final class EmptyDashboardView: BaseView {
 		super.setupViewHierarchy()
 		
 		addSubview(stackView)
-		stackView.addArrangedSubview(cardView)
 		stackView.addArrangedSubview(contentTextView)
+		stackView.addArrangedSubview(cardView)
 	}
 	
 	/// Setup the constraints
@@ -116,6 +116,8 @@ private final class EmptyStateCardView: BaseView {
 	private let titleLabel: Label = {
 		let label = Label(headlineBold: nil, montserrat: true).multiline()
 		label.translatesAutoresizingMaskIntoConstraints = false
+		label.textAlignment = .center
+		label.textColor = Theme.colors.dark
 		return label
 	}()
 	

@@ -53,6 +53,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_holder_acc_ci
 
@@ -111,6 +112,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_verifier_acc_ci
 
@@ -169,6 +171,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_holder_prod_ci
 
@@ -226,6 +229,7 @@ jobs:
         CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERT_PASSWORD }}
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         SLACK_URL: ${{ secrets.SLACK_URL }}
+        GITBRANCH: ${{ github.ref }}
       run: |
         bundle exec fastlane ios deploy_verifier_prod_ci
 

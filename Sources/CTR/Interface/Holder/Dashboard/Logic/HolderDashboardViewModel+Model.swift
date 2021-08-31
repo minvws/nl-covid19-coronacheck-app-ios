@@ -17,7 +17,7 @@ extension HolderDashboardViewModel {
 
 	// Future: it's turned out that this can be converted to a struct with a `.region` enum instead
 	enum MyQRCard {
-		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool)
+		case europeanUnion(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool, evaluateDCC: (Date) -> EuCredentialAttributes.DigitalCovidCertificate?)
 		case netherlands(greenCardObjectID: NSManagedObjectID, origins: [Origin], shouldShowErrorBeneathCard: Bool, evaluateEnabledState: (Date) -> Bool)
 
 		/// Represents an Origin
@@ -59,113 +59,16 @@ extension HolderDashboardViewModel {
 			}
 		}
 
-		func localizedDateExplanation(forOrigin origin: Origin, forNow now: Date) -> HolderDashboardViewController.ValidityText {
-
-			if origin.expirationTime < now { // expired
-				return .init(text: "", kind: .past)
-			} else if origin.validFromDate > now {
-				if origin.validFromDate > (now.addingTimeInterval(60 * 60 * 24)) { // > 1 day until valid
-
-					// we want "full" days in future, so calculate by midnight of the validFromDate day, minus 1 second.
-					// (note, when there is <1 day remaining, it switches to counting down in
-					// hours/minutes using `HolderDashboardViewModel.hmsRelativeFormatter`
-					// elsewhere, so this doesn't apply there anyway.
-					let validFromDateEndOfDay: Date? = origin.validFromDate.oneSecondBeforeMidnight
-
-					let dateString = validFromDateEndOfDay.flatMap {
-						HolderDashboardViewModel.daysRelativeFormatter.string(from: Date(), to: $0)
-					} ?? "-"
-
-					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-					return .init(
-						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-						kind: .future
-					)
-				} else {
-					let dateString = HolderDashboardViewModel.hmsRelativeFormatter.string(from: Date(), to: origin.validFromDate) ?? "-"
-					let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-					return .init(
-						text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-						kind: .future
-					)
-				}
-			} else {
-				switch self {
-					// Netherlands uses expireTime
-					case .netherlands:
-						if origin.expiryIsBeyondThreeYearsFromNow(now: now) {
-							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-							return .init(text: prefix, kind: .future)
-						} else {
-							let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.expirationTime)
-							let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-								return .init(
-									text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-									kind: .current
-								)
-						}
-
-					// EU cards use Valid From (eventTime) because we don't know the expiry date
-					case .europeanUnion:
-						let dateString = localizedDateExplanationDateFormatter(forOrigin: origin).string(from: origin.validFromDate)
-						let prefix = localizedDateExplanationPrefix(forOrigin: origin, forNow: now)
-						return .init(
-							text: (prefix + " " + dateString).trimmingCharacters(in: .whitespacesAndNewlines),
-							kind: .current
-						)
-				}
-			}
-		}
-
 		/// There is a particular order to sort these onscreen
 		var customSortIndex: Int {
 			guard let firstOrigin = origins.first else { return .max }
 			return firstOrigin.customSortIndex
 		}
 
-		// MARK: - private
-
-		/// Each origin has its own prefix
-		private func localizedDateExplanationPrefix(forOrigin origin: Origin, forNow now: Date) -> String {
-
+		var greencardID: NSManagedObjectID {
 			switch self {
-				case .netherlands:
-					if origin.isCurrentlyValid(now: now) {
-						if origin.expiryIsBeyondThreeYearsFromNow(now: now) {
-							return ""
-						} else {
-							return L.holderDashboardQrExpiryDatePrefixValidUptoAndIncluding()
-						}
-
-					} else {
-						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
-					}
-
-				case .europeanUnion:
-					if !origin.isCurrentlyValid(now: now) && origin.isNotYetExpired(now: now) {
-						return L.holderDashboardQrValidityDatePrefixAutomaticallyBecomesValidOn()
-					} else {
-						return ""
-					}
-			}
-		}
-
-		/// Each origin has a different date/time format
-		/// (Region + Origin) -> DateFormatter
-		private func localizedDateExplanationDateFormatter(forOrigin origin: Origin) -> DateFormatter {
-			switch (self, origin.type) {
-				case (.netherlands, .test):
-					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
-
-				case (.netherlands, _):
-					return HolderDashboardViewModel.dateWithoutTimeFormatter
-
-				case (.europeanUnion, .vaccination),
-					 (.europeanUnion, .recovery):
-					return HolderDashboardViewModel.dateWithoutTimeFormatter
-
-				case (.europeanUnion, .test):
-					return HolderDashboardViewModel.dateWithDayAndTimeFormatter
+				case let .europeanUnion(greenCardObjectID, _, _, _, _), let .netherlands(greenCardObjectID, _, _, _):
+					return greenCardObjectID
 			}
 		}
 
@@ -177,7 +80,7 @@ extension HolderDashboardViewModel {
 		/// Without distinguishing NL/EU, just give me the origins:
 		var origins: [Origin] {
 			switch self {
-				case .europeanUnion(_, let origins, _, _), .netherlands(_, let origins, _, _):
+				case .europeanUnion(_, let origins, _, _, _), .netherlands(_, let origins, _, _):
 					return origins
 			}
 		}

@@ -35,7 +35,7 @@ class MenuViewController: BaseViewController {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 
 		viewModel.$topMenu.binding = { [weak self] items in
 
@@ -92,6 +92,7 @@ class MenuViewController: BaseViewController {
 				action: action
 			)
             button.title = accessibilityLabel
+            button.accessibilityLabel = accessibilityLabel
 			button.accessibilityIdentifier = "CloseButton"
 			button.accessibilityTraits = .button
 			button.tintColor = Theme.colors.secondary

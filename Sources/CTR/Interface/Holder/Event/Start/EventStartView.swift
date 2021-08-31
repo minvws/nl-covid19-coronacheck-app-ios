@@ -38,7 +38,7 @@ class EventStartView: ScrolledStackWithButtonView {
 
 	let secondaryButton: Button = {
 
-		let button = Button(title: "", style: .tertiary)
+		let button = Button(title: "", style: .textLabelBlue)
 		button.translatesAutoresizingMaskIntoConstraints = false
 		button.contentHorizontalAlignment = .center
 		return button
@@ -68,6 +68,7 @@ class EventStartView: ScrolledStackWithButtonView {
 		super.setupViewConstraints()
 		setupPrimaryButton(useFullWidth: true)
 
+		bottomScrollViewConstraint?.isActive = false
 		bottomButtonConstraint?.isActive = false
 
 		NSLayoutConstraint.activate([
@@ -93,7 +94,10 @@ class EventStartView: ScrolledStackWithButtonView {
 			secondaryButton.bottomAnchor.constraint(
 				equalTo: safeAreaLayoutGuide.bottomAnchor,
 				constant: -ViewTraits.margin
-			)
+			),
+			
+			// Scroll View
+			scrollView.bottomAnchor.constraint(equalTo: footerBackground.topAnchor)
 		])
 	}
 

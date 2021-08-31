@@ -155,7 +155,7 @@ public final class LogHandler: Logging {
 
 		isSetup = true
 
-		let level = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String ?? "debug"
+		let level = Bundle.main.infoDictionary?["LOG_LEVEL"] as? String ?? "error"
 
 		switch level {
 			case "verbose":
@@ -190,7 +190,6 @@ public final class LogHandler: Logging {
 			#if DEBUG
 			assertionFailure("File Logger Not Found")
 			#endif
-			print("File Logger not Found")
 			return []
 		}
 		return fileLogger.logFileManager.sortedLogFilePaths.compactMap { URL(fileURLWithPath: $0) }

@@ -7,15 +7,16 @@
 
 import Foundation
 
-enum NetworkResponseHandleError: Error {
-	case cannotUnzip
-	case invalidSignature
-	case cannotDeserialize
-	case invalidPublicKeys
-	case unexpectedCondition
+struct ServerResponse: Decodable, Equatable {
+	let status: String
+	let code: Int
 }
 
-enum NetworkError: String, Error {
+enum ServerError: Error, Equatable {
+	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
+}
+
+enum NetworkError: String, Error, Equatable {
 	case invalidRequest
 	case requestTimedOut
 	case noInternetConnection
@@ -23,16 +24,38 @@ enum NetworkError: String, Error {
 	case responseCached
 	case serverError
 	case resourceNotFound
-	case encodingError
 	case redirection
 	case serverBusy
-}
+	case invalidSignature
+	case cannotSerialize
+	case cannotDeserialize
 
-extension NetworkResponseHandleError {
-	
-	var asNetworkError: NetworkError {
-		return .invalidResponse
+	func getClientErrorCode() -> String? {
+
+		switch self {
+
+			case .invalidRequest:
+				return "002"
+			//			case .requestTimedOut:
+			//			case .noInternetConnection:
+			case .invalidResponse:
+				return "003"
+			//			case .responseCached:
+			//			case .serverError:
+			//			case .resourceNotFound:
+			//			case .redirection:
+			//			case .serverBusy:
+			case .invalidSignature:
+				return "020"
+			case .cannotDeserialize:
+				return "030"
+			case .cannotSerialize:
+				return "031"
+			default:
+				return nil
+		}
 	}
+
 }
 
 enum HTTPHeaderKey: String {
@@ -48,7 +71,7 @@ enum HTTPContentType: String {
 }
 
 /// - Tag: NetworkManaging
-protocol NetworkManaging {
+protocol NetworkManaging: AnyObject {
 	
 	/// The network configuration
 	var networkConfiguration: NetworkConfiguration { get }
@@ -66,7 +89,7 @@ protocol NetworkManaging {
 
 	/// Get the nonce
 	/// - Parameter completion: completion handler
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void)
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void)
 	
 	/// Get the public keys
 	/// - Parameter completion: completion handler
@@ -74,7 +97,7 @@ protocol NetworkManaging {
 	
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data), NetworkError>) -> Void)
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void)
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
@@ -86,7 +109,7 @@ protocol NetworkManaging {
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void)
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void)
 
 	/// Get a test result
 	/// - Parameters:
@@ -108,7 +131,7 @@ protocol NetworkManaging {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventInformationAvailable, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void)
 
 	/// Get  events from an event provider
 	/// - Parameters:
@@ -126,5 +149,5 @@ protocol NetworkManaging {
 	///   - completion: completion handler
 	func checkCouplingStatus(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
+		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void)
 }

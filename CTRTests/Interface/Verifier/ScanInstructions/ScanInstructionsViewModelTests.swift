@@ -5,60 +5,137 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 
+import Foundation
 import XCTest
-@testable import CTR
 import Nimble
+@testable import CTR
 
 class ScanInstructionsViewModelTests: XCTestCase {
 
-	/// Subject under test
-	private var sut: ScanInstructionsViewModel!
-
-	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
+	var sut: ScanInstructionsViewModel!
+	var coordinatorSpy: ScanInstructionsCoordinatorDelegateSpy!
+	var userSettingsSpy: UserSettingsSpy!
 
 	override func setUp() {
-
 		super.setUp()
-		verifyCoordinatorDelegateSpy = VerifierCoordinatorDelegateSpy()
-		sut = ScanInstructionsViewModel(coordinator: verifyCoordinatorDelegateSpy)
+		coordinatorSpy = ScanInstructionsCoordinatorDelegateSpy()
+		userSettingsSpy = UserSettingsSpy()
 	}
 
-	// MARK: - Tests
+	func test_finishScanInstructions_callsCoordinator() {
 
-	func test_defaultContent() {
+		// Arrange
+		sut = ScanInstructionsViewModel(
+			coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy
+		)
 
-		// Given
+		// Act
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == false
+		sut.finishScanInstructions()
 
-		// When
-
-		// Then
-		expect(self.sut.title) == L.verifierInstructionsTitle()
-		expect(self.sut.content)
-			.to(haveCount(4), description: "Number of elements should match")
+		// Assert
+		expect(self.coordinatorSpy.invokedUserDidCompletePages) == true
 	}
 
-	func test_linkTapped() throws {
+	func test_userTappedBackOnFirstPage_callsCoordinator() {
 
-		// Given
-		let url = try XCTUnwrap(URL(string: "https://coronacheck.nl"))
+		// Arrange
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: [], userSettings: userSettingsSpy)
 
-		// When
-		sut.linkTapped(url)
+		// Act
+		expect(self.coordinatorSpy.invokedUserDidCancelScanInstructions) == false
+		sut.userTappedBackOnFirstPage()
 
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedOpenUrl) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedOpenUrlParameters?.url) == url
+		// Assert
+		expect(self.coordinatorSpy.invokedUserDidCancelScanInstructions) == true
 	}
 
-	func test_primaryButtonTapped() {
+	func test_creatingViewController() {
+		// Arrange
+		let pages = [
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
 
-		// Given
+		// Act
+		let viewController = sut.scanInstructionsViewController(forPage: pages[0])
 
-		// When
-		sut.primaryButtonTapped()
+		// Assert
+		viewController.assertImage()
+	}
 
-		// Then
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishScanInstructionsResult) == true
-		expect(self.verifyCoordinatorDelegateSpy.invokedDidFinishScanInstructionsResultParameters?.result) == .scanInstructionsCompleted
+	func test_skipButtonShownWhenUserFirstTimeExceptOnLastPage() {
+		userSettingsSpy.stubbedScanInstructionShown = false
+		
+		let pages = [
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			),
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		expect(self.sut.shouldShowSkipButton) == true
+
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.shouldShowSkipButton) == false
+	}
+
+	func test_skipButtonNotShownWhenNotFirstViewingOfInstructions() {
+		userSettingsSpy.stubbedScanInstructionShown = true
+
+		let pages = [
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			),
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		expect(self.sut.shouldShowSkipButton) == false
+
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.shouldShowSkipButton) == false
+	}
+
+	func test_nextButtonTitleChangesOnLastPage() {
+		let pages = [
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			),
+			ScanInstructionsPage(
+				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
+				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
+				image: I.newScanInstructions.redScreenNowWhat(),
+				step: .redScreenNowWhat
+			)
+		]
+		sut = ScanInstructionsViewModel(coordinator: coordinatorSpy, pages: pages, userSettings: userSettingsSpy)
+		expect(self.sut.nextButtonTitle) == L.generalNext()
+
+		sut.userDidChangeCurrentPage(toPageIndex: 1)
+		expect(self.sut.nextButtonTitle) == L.verifierScaninstructionsButtonStartscanning()
 	}
 }

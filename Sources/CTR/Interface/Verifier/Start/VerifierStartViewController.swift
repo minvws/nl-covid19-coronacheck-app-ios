@@ -11,7 +11,7 @@ class VerifierStartViewController: BaseViewController {
 
 	private let viewModel: VerifierStartViewModel
 
-	let sceneView = HeaderTitleMessageButtonView()
+	let sceneView = VerifierStartView()
 
 	init(viewModel: VerifierStartViewModel) {
 
@@ -38,6 +38,7 @@ class VerifierStartViewController: BaseViewController {
 		viewModel.$title.binding = { [weak self] in self?.title = $0 }
 		viewModel.$header.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
+		viewModel.$showInstructionsTitle.binding = { [weak self] in self?.sceneView.showInstructionsTitle = $0 }
 		viewModel.$primaryButtonTitle.binding = { [weak self] in self?.sceneView.primaryTitle = $0 }
 
 		sceneView.primaryButtonTappedCommand = { [weak self] in
@@ -45,15 +46,14 @@ class VerifierStartViewController: BaseViewController {
 			self?.viewModel.primaryButtonTapped()
 		}
 
+		sceneView.showInstructionsButtonTappedCommand = { [weak self] in
+			self?.viewModel.showInstructionsButtonTapped()
+		}
+
 		viewModel.$showError.binding = { [weak self] in
 			if $0 {
 				self?.showError(L.generalErrorTitle(), message: L.verifierStartOntimeinternet())
 			}
-		}
-
-		sceneView.contentTextView.linkTouched { [weak self] _ in
-
-			self?.viewModel.linkTapped()
 		}
 
 		sceneView.headerImage = .scanStart

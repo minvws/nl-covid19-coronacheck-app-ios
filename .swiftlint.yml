@@ -59,3 +59,13 @@ trailing_whitespace:
 custom_rules:
   no_empty_comment_above_the_copyright:
     regex: "//\\n/\\*"
+  disable_print:
+    included: "Sources/.*\\.swift"
+    name: "print usage"
+    regex: "((\\bprint)|(Swift\\.print))\\s*\\("
+    message: "Prefer logDebug over print"
+  disable_dump:
+    included: "Sources/.*\\.swift"
+    name: "dump usage"
+    regex: "((\\bdump)|(Swift\\.dump))\\s*\\("
+    message: "Prefer logDebug over dump"

@@ -5,9 +5,8 @@ name: testflight
 on:
   push:
     tags:
-      - '*.*.*-RC*'
-      - '*.*.*-RC*-Verifier'
-      - '*.*.*-RC*-Holder'
+      - 'Verifier-*.*.*-RC*'
+      - 'Holder-*.*.*-RC*'
   workflow_dispatch:
 
 env: 

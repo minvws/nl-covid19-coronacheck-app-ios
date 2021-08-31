@@ -8,7 +8,14 @@
 import Foundation
 import Reachability
 
-class DashboardStrippenRefresher: Logging {
+protocol DashboardStrippenRefreshing: AnyObject {
+	func load()
+	func userDismissedALoadingError()
+
+	var didUpdate: ((DashboardStrippenRefresher.State?, DashboardStrippenRefresher.State) -> Void)? { get set }
+}
+
+class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 	enum Error: Swift.Error, LocalizedError, Equatable {
 		case unknownErrorA
@@ -18,14 +25,24 @@ class DashboardStrippenRefresher: Logging {
 
 		var errorDescription: String? {
 			switch self {
-				case .greencardLoaderError(let error):
-					return error.rawValue
+				case .greencardLoaderError(let greenCardError):
+					switch greenCardError {
+						case let .credentials(serverError), let .preparingIssue(serverError):
+							if case let ServerError.error(_, _, networkError) = serverError {
+								return networkError.rawValue
+							} else {
+								return nil // Can not happen, there is always a networkError for a serverError.
+							}
+						default:
+							return "GreenCard error" // greenCardError.rawValue can not be used, no longer a String type.
+					}
 				case .networkError(let error):
 					return error.rawValue
 				case .logicalErrorA:
 					return "Logical error A"
 				case .unknownErrorA:
 					return "Unknown error A"
+
 			}
 		}
 	}
@@ -93,8 +110,20 @@ class DashboardStrippenRefresher: Logging {
 					state.loadingState = .failed(error: .networkError(error: error))
 
 				case let error as GreenCardLoader.Error:
-					state.errorOccurenceCount += 1
-					state.loadingState = .failed(error: .greencardLoaderError(error: error))
+					switch error {
+						case let .credentials(serverError), let .preparingIssue(serverError):
+							if case let ServerError.error(_, _, networkError) = serverError {
+								if networkError == .noInternetConnection || networkError == .requestTimedOut {
+									state.loadingState = .noInternet
+								} else {
+									state.errorOccurenceCount += 1
+									state.loadingState = .failed(error: .networkError(error: networkError))
+								}
+							}
+						default:
+							state.errorOccurenceCount += 1
+							state.loadingState = .failed(error: .greencardLoaderError(error: error))
+					}
 
 				case let error as DashboardStrippenRefresher.Error:
 					state.loadingState = .failed(error: error)
@@ -203,7 +232,10 @@ class DashboardStrippenRefresher: Logging {
 	}
 
 	/// Greencards where the number of valid credentials is <= 5 and the latest credential expiration time is < than the origin expiration time
-	private static func calculateGreenCardsCredentialExpiryState(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, now: Date) -> State.GreencardsCredentialExpiryState {
+	private static func calculateGreenCardsCredentialExpiryState(
+		minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int,
+		walletManager: WalletManaging,
+		now: Date) -> State.GreencardsCredentialExpiryState {
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(now: now)
 
 		var expiredGreencards = [GreenCard]()
@@ -219,7 +251,22 @@ class DashboardStrippenRefresher: Logging {
 				guard let latestOriginExpiryDate = allOriginsForGreencard.latestOriginExpiryTime()
 				else { return } // unlikely logical error, origins should have an expiry time, even if it's in the past.
 
-				guard let latestCredentialExpiryDate = allCredentialsForGreencard.furthestFutureCredentialExpiryTime()
+				guard !allCredentialsForGreencard.isEmpty else {
+					// It can be that a greencard is issued with zero credentials, but that it can still become valid in the future
+					// (receiving credentials at some later point beyond the current signer horizon).
+					if let originsValidWithinThreshold = greencard.originsActiveNowOrBeforeThresholdFromNow(
+						now: now,
+						thresholdDays: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh),
+					   !originsValidWithinThreshold.isEmpty {
+
+						// Expired here is not quite accurate, because it never had a credential before.
+						// But this is the correct external state for the Refresher to adopt for this greencard.
+						expiredGreencards += [greencard]
+					}
+					return
+				}
+
+				guard let latestCredentialExpiryDate = allCredentialsForGreencard.latestCredentialExpiryTime()
 				else { return } // unlikely logical error, credentials should have an expiry time, even if it's in the past.
 
 				// Calculate if the latest credential expiration time is < than the origin expiration time

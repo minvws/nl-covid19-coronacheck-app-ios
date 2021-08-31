@@ -37,6 +37,9 @@ class VerifierStartViewModel: Logging {
 	/// The title of the button
 	@Bindable private(set) var primaryButtonTitle: String
 
+	/// The title of the showInstructions button
+	@Bindable private(set) var showInstructionsTitle: String
+
 	/// The title of the button
 	@Bindable private(set) var showError: Bool = false
 
@@ -61,6 +64,7 @@ class VerifierStartViewModel: Logging {
 		title = L.verifierStartTitle()
 		header = L.verifierStartHeader()
 		message = L.verifierStartMessage()
+		showInstructionsTitle = L.verifierStartButtonShowinstructions()
 	}
 
 	func primaryButtonTapped() {
@@ -75,13 +79,11 @@ class VerifierStartViewModel: Logging {
 			}
 		} else {
 			// Show the scan instructions the first time no matter what link was tapped
-			userSettings.scanInstructionShown = true
 			coordinator?.didFinish(.userTappedProceedToScanInstructions)
 		}
 	}
 
-	func linkTapped() {
-
+	func showInstructionsButtonTapped() {
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 
@@ -89,6 +91,6 @@ class VerifierStartViewModel: Logging {
 	private func updatePublicKeys() {
 
 		// Fetch the public keys from the issuer
-		proofManager?.fetchIssuerPublicKeys(onCompletion: nil, onError: nil)
+		proofManager?.fetchIssuerPublicKeys(onCompletion: nil)
 	}
 }

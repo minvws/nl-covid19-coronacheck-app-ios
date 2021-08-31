@@ -9,6 +9,17 @@ import UIKit
 
 class ShowQRImageView: BaseView {
 
+	enum VisibilityState: Equatable {
+		case loading
+		case visible(qrImage: UIImage)
+		case hiddenForScreenCapture
+		case screenshotBlocking(timeRemainingText: String, voiceoverTimeRemainingText: String)
+
+		var isVisible: Bool {
+			if case .visible = self { return true }
+			return false
+		}
+	}
 	/// The display constants
 	private struct ViewTraits {
 
@@ -18,10 +29,10 @@ class ShowQRImageView: BaseView {
 		static let internationalSecurityMargin: CGFloat = 49.0
 	}
 
-	var securityViewBottomConstraint: NSLayoutConstraint?
+	private var securityViewBottomConstraint: NSLayoutConstraint?
 
 	/// The spinner
-	let spinner: UIActivityIndicatorView = {
+	private let spinner: UIActivityIndicatorView = {
 
 		let view = UIActivityIndicatorView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +47,7 @@ class ShowQRImageView: BaseView {
 	}()
 
 	/// The image view for the QR image
-	internal let largeQRimageView: UIImageView = {
+	let largeQRimageView: UIImageView = {
 
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,10 +63,26 @@ class ShowQRImageView: BaseView {
 		return view
 	}()
 
+	let returnToThirdPartyAppButton: Button = {
+
+		let button = Button(title: "", style: .textLabelBlue)
+		button.translatesAutoresizingMaskIntoConstraints = false
+		button.isHidden = true
+		return button
+	}()
+
+	private let screenshotBlockingView: ShowQRScreenshotBlockingView = {
+
+		let view = ShowQRScreenshotBlockingView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+
 	/// Setup all the views
 	override func setupViews() {
 
 		super.setupViews()
+		returnToThirdPartyAppButton.touchUpInside(self, action: #selector(didTapThirdPartyAppButton))
 		spinner.startAnimating()
 	}
 	
@@ -66,6 +93,8 @@ class ShowQRImageView: BaseView {
 		addSubview(securityView)
 		addSubview(spinner)
 		addSubview(largeQRimageView)
+		addSubview(returnToThirdPartyAppButton)
+		addSubview(screenshotBlockingView)
 	}
 
 	/// Setup the constraints
@@ -90,13 +119,21 @@ class ShowQRImageView: BaseView {
 				constant: -ViewTraits.margin
 			),
 
+			screenshotBlockingView.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor),
+			screenshotBlockingView.trailingAnchor.constraint(equalTo: largeQRimageView.trailingAnchor),
+			screenshotBlockingView.topAnchor.constraint(equalTo: largeQRimageView.topAnchor),
+			screenshotBlockingView.bottomAnchor.constraint(equalTo: largeQRimageView.bottomAnchor),
+
 			spinner.centerYAnchor.constraint(equalTo: largeQRimageView.centerYAnchor),
 			spinner.centerXAnchor.constraint(equalTo: largeQRimageView.centerXAnchor),
 
 			// Security
 			securityView.heightAnchor.constraint(equalTo: securityView.widthAnchor),
 			securityView.leadingAnchor.constraint(equalTo: leadingAnchor),
-			securityView.trailingAnchor.constraint(equalTo: trailingAnchor)
+			securityView.trailingAnchor.constraint(equalTo: trailingAnchor),
+
+			returnToThirdPartyAppButton.topAnchor.constraint(equalTo: largeQRimageView.bottomAnchor, constant: 24),
+			returnToThirdPartyAppButton.leadingAnchor.constraint(equalTo: largeQRimageView.leadingAnchor, constant: 4)
 		])
 
 		securityViewBottomConstraint = securityView.bottomAnchor.constraint(
@@ -119,13 +156,64 @@ class ShowQRImageView: BaseView {
         accessibilityElements = [largeQRimageView]
 	}
 
+	@objc func didTapThirdPartyAppButton() {
+
+		didTapThirdPartyAppButtonCommand?()
+	}
+
 	// MARK: Public Access
 
-	/// The qr  image
-	var qrImage: UIImage? {
+	var visibilityState: VisibilityState = .loading {
 		didSet {
-			largeQRimageView.image = qrImage
-			qrImage == nil ? spinner.startAnimating() : spinner.stopAnimating()
+
+			switch visibilityState {
+				case .hiddenForScreenCapture:
+					returnToThirdPartyAppButton.isHidden = true
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = true
+					screenshotBlockingView.isHidden = true
+					spinner.isHidden = true
+
+				case .loading:
+					returnToThirdPartyAppButton.isHidden = true
+					spinner.startAnimating()
+					largeQRimageView.isHidden = true
+					screenshotBlockingView.isHidden = true
+					spinner.isHidden = false
+                    
+				case .screenshotBlocking(let timeRemainingText, let voiceoverTimeRemainingText):
+					spinner.stopAnimating()
+					returnToThirdPartyAppButton.isHidden = true
+					largeQRimageView.isHidden = true
+					screenshotBlockingView.setCountdown(text: timeRemainingText, voiceoverText: voiceoverTimeRemainingText)
+					screenshotBlockingView.isHidden = false
+					spinner.isHidden = true
+
+				case .visible(let qrImage):
+					returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil
+					spinner.stopAnimating()
+					largeQRimageView.isHidden = false
+					largeQRimageView.image = qrImage
+					screenshotBlockingView.isHidden = true
+					spinner.isHidden = true
+			}
+
+			// Update accessibility at the moment that it becomes .screenshotBlocking from another state:
+			switch (oldValue, visibilityState) {
+				case (.screenshotBlocking, .screenshotBlocking): break // ignore
+				case (_, .screenshotBlocking):
+					accessibilityElements = [screenshotBlockingView]
+
+					UIAccessibility.post(notification: .layoutChanged, argument: screenshotBlockingView)
+
+					DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+						UIAccessibility.post(
+							notification: .announcement,
+							argument: L.holderShowqrScreenshotwarningTitle()
+						)
+					}
+				default: break
+			}
 		}
 	}
 
@@ -136,12 +224,14 @@ class ShowQRImageView: BaseView {
 		}
 	}
 
-	/// Hide the QR Image
-	var hideQRImage: Bool = false {
+	var returnToThirdPartyAppButtonTitle: String? {
 		didSet {
-			largeQRimageView.isHidden = hideQRImage
+			returnToThirdPartyAppButton.title = returnToThirdPartyAppButtonTitle
+			returnToThirdPartyAppButton.isHidden = returnToThirdPartyAppButtonTitle == nil || !self.visibilityState.isVisible
 		}
 	}
+
+	var didTapThirdPartyAppButtonCommand: (() -> Void)?
 
 	/// Play the animation
 	func play() {

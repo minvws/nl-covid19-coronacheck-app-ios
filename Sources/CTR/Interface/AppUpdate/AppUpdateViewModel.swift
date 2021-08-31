@@ -38,11 +38,11 @@ class AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the version information
-	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
+	init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
 
 		self.coordinator = coordinator
 		title = L.updateAppTitle()
-		message = versionInformation?.minimumVersionMessage ?? L.updateAppContent()
+		message = L.updateAppContent()
 		actionTitle = L.updateAppButton()
 		updateURL = versionInformation?.appStoreURL
 		showCannotOpenAlert = false
@@ -57,7 +57,7 @@ class AppUpdateViewModel {
 			showCannotOpenAlert = true
 			return
 		}
-		coordinator?.openUrl(url)
+		coordinator?.openUrl(url, completionHandler: nil)
 	}
 }
 
@@ -68,16 +68,14 @@ class EndOfLifeViewModel: AppUpdateViewModel {
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - versionInformation: the version information
-	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteInformation?) {
+	override init(coordinator: AppCoordinatorDelegate, versionInformation: RemoteConfiguration?) {
 
-		super.init(coordinator: coordinator, versionInformation: versionInformation)
+		super.init(coordinator: coordinator, versionInformation: nil)
 
 		self.title = L.endOfLifeTitle()
 		self.message = L.endOfLifeDescription()
 		self.errorMessage = L.endOfLifeErrorMessage()
 		self.actionTitle = L.endOfLifeButton()
-		self.updateURL = versionInformation?.informationURL
-		self.errorMessage = L.endOfLifeErrorMessage()
 		self.image = .endOfLife
 		self.updateURL = URL(string: "https://coronacheck.nl")
 	}

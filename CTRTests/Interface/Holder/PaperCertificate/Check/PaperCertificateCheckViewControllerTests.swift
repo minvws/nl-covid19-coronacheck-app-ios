@@ -46,7 +46,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_viewStateBlocked() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .blocked)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -71,7 +72,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_viewStateBlocked_primaryAction() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .blocked)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .blocked)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -93,7 +95,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_viewStateExpired() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .expired)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -118,7 +121,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_viewStateExpired_primaryAction() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .expired)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .expired)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -140,7 +144,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_viewStateRejected() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .rejected)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -165,7 +170,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_viewStateRejected_primaryAction() {
 
 		// Given
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.success(DccCoupling.CouplingResponse(status: .rejected)), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.success(DccCoupling.CouplingResponse(status: .rejected)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -187,8 +193,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	func test_alertServerBusy() {
 
 		// Given
-		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.serverBusy), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -203,23 +209,16 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		alertVerifier.verify(
-			title: L.generalNetworkwasbusyTitle(),
-			message: L.generalNetworkwasbusyText(),
-			animated: true,
-			actions: [
-				.default(L.generalNetworkwasbusyButton())
-			],
-			preferredStyle: .alert,
-			presentingViewController: sut
-		)
+		expect(self.sut.sceneView.title) == L.generalNetworkwasbusyTitle()
+		expect(self.sut.sceneView.message) == L.generalNetworkwasbusyText()
+		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
 	}
 
 	func test_alertServerBusy_okAction() throws {
 
 		// Given
-		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.serverBusy), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -232,7 +231,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		try alertVerifier.executeAction(forButton: L.generalNetworkwasbusyButton())
+		sut.sceneView.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
@@ -242,7 +241,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.noInternetConnection), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -274,7 +274,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.noInternetConnection), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -297,7 +298,8 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Given
 		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.noInternetConnection), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -316,11 +318,11 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		expect(self.couplingManagerSpy.invokedCheckCouplingStatusCount).toEventually(equal(2))
 	}
 
-	func test_alertTechnicalError() {
+	func test_serverError() {
 
 		// Given
-		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.invalidResponse), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -335,23 +337,17 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// Then
-		alertVerifier.verify(
-			title: L.generalErrorTitle(),
-			message: L.generalErrorTechnicalCustom("110, check coupling code"),
-			animated: true,
-			actions: [
-				.default(L.generalClose())
-			],
-			preferredStyle: .alert,
-			presentingViewController: sut
-		)
+		expect(self.sut.sceneView.title) == L.holderErrorstateTitle()
+		expect(self.sut.sceneView.message) == L.holderErrorstateServerMessage("i 510 000 404 99707")
+		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
+		expect(self.sut.sceneView.secondaryButtonTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_alertTechnicalError_okAction() throws {
+	func test_serverError_primaryAction() {
 
 		// Given
-		let alertVerifier = AlertVerifier()
-		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult = (.failure(.invalidResponse), ())
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
 
 		sut = PaperCertificateCheckViewController(
 			viewModel: PaperCertificateCheckViewModel(
@@ -364,9 +360,103 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		try alertVerifier.executeAction(forButton: L.generalClose())
+		sut.sceneView.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
+	}
+
+	func test_serverError_secondaryAction() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: 404, response: ServerResponse(status: "error", code: 99707), error: .resourceNotFound)), ())
+
+		sut = PaperCertificateCheckViewController(
+			viewModel: PaperCertificateCheckViewModel(
+				coordinator: coordinatorDelegateSpy,
+				scannedDcc: "test",
+				couplingCode: "test",
+				couplingManager: couplingManagerSpy
+			)
+		)
+		loadView()
+
+		// When
+		sut.sceneView.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
+	}
+
+	func test_clientError() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
+
+		sut = PaperCertificateCheckViewController(
+			viewModel: PaperCertificateCheckViewModel(
+				coordinator: coordinatorDelegateSpy,
+				scannedDcc: "test",
+				couplingCode: "test",
+				couplingManager: couplingManagerSpy
+			)
+		)
+
+		// When
+		loadView()
+
+		// Then
+		expect(self.sut.sceneView.title) == L.holderErrorstateTitle()
+		expect(self.sut.sceneView.message) == L.holderErrorstateClientMessage("i 510 000 002")
+		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
+		expect(self.sut.sceneView.secondaryButtonTitle) == L.holderErrorstateMalfunctionsTitle()
+	}
+
+	func test_clientError_primaryAction() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
+
+		sut = PaperCertificateCheckViewController(
+			viewModel: PaperCertificateCheckViewModel(
+				coordinator: coordinatorDelegateSpy,
+				scannedDcc: "test",
+				couplingCode: "test",
+				couplingManager: couplingManagerSpy
+			)
+		)
+		loadView()
+
+		// When
+		sut.sceneView.primaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedUserWantsToGoBackToDashboard) == true
+	}
+
+	func test_clientError_secondaryAction() {
+
+		// Given
+		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
+			(.failure(.error(statusCode: nil, response: nil, error: .invalidRequest)), ())
+
+		sut = PaperCertificateCheckViewController(
+			viewModel: PaperCertificateCheckViewModel(
+				coordinator: coordinatorDelegateSpy,
+				scannedDcc: "test",
+				couplingCode: "test",
+				couplingManager: couplingManagerSpy
+			)
+		)
+		loadView()
+
+		// When
+		sut.sceneView.secondaryButtonTapped()
+
+		// Then
+		expect(self.coordinatorDelegateSpy.invokedOpenUrl) == true
 	}
 }

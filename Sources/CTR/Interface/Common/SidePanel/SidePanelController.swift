@@ -20,6 +20,8 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 			oldValue?.willMove(toParent: nil)
 			oldValue?.removeFromParent()
 			updateSelectedViewController()
+
+			setNeedsStatusBarAppearanceUpdate()
 		}
 	}
 
@@ -69,6 +71,7 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
                 target: self,
                 action: #selector(showSidePanel))
             button.title = L.generalMenuOpen()
+            button.accessibilityLabel = button.title
             button.accessibilityIdentifier = "OpenMenuButton"
             navItem.leftBarButtonItem = button
         }

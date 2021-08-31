@@ -17,6 +17,8 @@ final class ForcedInformationPageView: ScrolledStackView {
 		static let imageHeightPercentage: CGFloat = 0.38
 		static let taglineLineHeight: CGFloat = 22
 		static let taglineKerning: CGFloat = -0.41
+		static let topMargin: CGFloat = 0
+		static let margin: CGFloat = 20
 		
 		// Margins
 		static let taglineSpacing: CGFloat = 8
@@ -29,6 +31,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 		let view = UIImageView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
+		view.backgroundColor = C.forcedInformationImage()
 		return view
 	}()
 	
@@ -52,9 +55,9 @@ final class ForcedInformationPageView: ScrolledStackView {
 		return Label(bodySemiBold: nil)
 	}()
 	
-	private let contentLabel: Label = {
+	private let contentTextView: TextView = {
 		
-		return Label(body: nil).multiline()
+		return TextView()
 	}()
 	
 	/// setup the views
@@ -62,6 +65,18 @@ final class ForcedInformationPageView: ScrolledStackView {
 		
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		// No margins on the horizontal sides to display image full width
+		stackViewInset = UIEdgeInsets(top: ViewTraits.topMargin,
+									  left: 0,
+									  bottom: ViewTraits.margin,
+									  right: 0)
+		// Apply side margins for labels
+		bottomStackView.layoutMargins = UIEdgeInsets(top: 0,
+													 left: ViewTraits.margin,
+													 bottom: 0,
+													 right: ViewTraits.margin)
+		bottomStackView.isLayoutMarginsRelativeArrangement = true
 	}
 	
 	/// Setup the hierarchy
@@ -73,22 +88,10 @@ final class ForcedInformationPageView: ScrolledStackView {
 		bottomStackView.setCustomSpacing(ViewTraits.taglineSpacing, after: taglineLabel)
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.setCustomSpacing(ViewTraits.titleSpacing, after: titleLabel)
-		bottomStackView.addArrangedSubview(contentLabel)
+		bottomStackView.addArrangedSubview(contentTextView)
 
 		stackView.addArrangedSubview(imageView)
 		stackView.addArrangedSubview(bottomStackView)
-	}
-	
-	override func setupViewConstraints() {
-		super.setupViewConstraints()
-
-		NSLayoutConstraint.activate([
-
-			imageView.heightAnchor.constraint(
-				lessThanOrEqualTo: heightAnchor,
-				multiplier: ViewTraits.imageHeightPercentage
-			)
-		])
 	}
 	
 	var image: UIImage? {
@@ -118,7 +121,7 @@ final class ForcedInformationPageView: ScrolledStackView {
 	
 	var content: String? {
 		didSet {
-			contentLabel.attributedText = .makeFromHtml(
+			contentTextView.attributedText = .makeFromHtml(
 				text: content,
 				font: Theme.fonts.body,
 				textColor: Theme.colors.dark
