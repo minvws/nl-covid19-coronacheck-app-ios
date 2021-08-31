@@ -40,9 +40,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedPrepareIssue = false
 	var invokedPrepareIssueCount = 0
-	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, NetworkError>, Void)?
+	var stubbedPrepareIssueCompletionResult: (Result<PrepareIssueEnvelope, ServerError>, Void)?
 
-	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, NetworkError>) -> Void) {
+	func prepareIssue(completion: @escaping (Result<PrepareIssueEnvelope, ServerError>) -> Void) {
 		invokedPrepareIssue = true
 		invokedPrepareIssueCount += 1
 		if let result = stubbedPrepareIssueCompletionResult {
@@ -102,11 +102,11 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchGreencardsCount = 0
 	var invokedFetchGreencardsParameters: (dictionary: [String: AnyObject], Void)?
 	var invokedFetchGreencardsParametersList = [(dictionary: [String: AnyObject], Void)]()
-	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, NetworkError>, Void)?
+	var stubbedFetchGreencardsCompletionResult: (Result<RemoteGreenCards.Response, ServerError>, Void)?
 
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<RemoteGreenCards.Response, NetworkError>) -> Void) {
+		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void) {
 		invokedFetchGreencards = true
 		invokedFetchGreencardsCount += 1
 		invokedFetchGreencardsParameters = (dictionary, ())

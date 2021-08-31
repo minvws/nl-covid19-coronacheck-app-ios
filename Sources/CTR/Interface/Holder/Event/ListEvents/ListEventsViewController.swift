@@ -12,7 +12,7 @@ class ListEventsViewController: BaseViewController {
 	enum State {
 		case loading(content: Content)
 		case listEvents(content: Content, rows: [Row])
-		case emptyEvents(content: Content)
+		case feedback(content: Content)
 	}
 
 	struct Content {
@@ -28,15 +28,6 @@ class ListEventsViewController: BaseViewController {
 		let title: String
 		let subTitle: String
 		let action: (() -> Void)?
-	}
-
-	struct AlertContent {
-		let title: String
-		let subTitle: String
-		let cancelAction: ((UIAlertAction) -> Void)?
-		let cancelTitle: String?
-		let okAction: ((UIAlertAction) -> Void)?
-		let okTitle: String
 	}
 
 	private let viewModel: ListEventsViewModel
@@ -81,7 +72,7 @@ class ListEventsViewController: BaseViewController {
 		viewModel.$viewState.binding = { [weak self] in
 
 			switch $0 {
-				case let .emptyEvents(content):
+				case let .feedback(content):
 					self?.setForNoEvents(content)
 				case let .loading(content):
 					self?.setForLoadingState(content)
@@ -180,36 +171,6 @@ class ListEventsViewController: BaseViewController {
 		sceneView.primaryButtonTappedCommand = content.primaryAction
 		sceneView.somethingIsWrongTappedCommand = content.secondaryAction
 		sceneView.somethingIsWrongButtonTitle = content.secondaryActionTitle
-	}
-
-	func showAlert(_ alertContent: AlertContent?) {
-
-		guard let content = alertContent else {
-			return
-		}
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: content.okAction
-			)
-		)
-		if let cancelTitle = content.cancelTitle {
-			alertController.addAction(
-				UIAlertAction(
-					title: cancelTitle,
-					style: .default,
-					handler: content.cancelAction
-				)
-			)
-		}
-		present(alertController, animated: true, completion: nil)
 	}
 }
 
