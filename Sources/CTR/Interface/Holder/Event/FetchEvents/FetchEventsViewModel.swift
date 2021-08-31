@@ -95,44 +95,18 @@ final class FetchEventsViewModel: Logging {
 		eventProvidersWithEventInformation: [EventFlow.EventProvider],
 		serverErrors: [ServerError]) {
 
-		let someServerUnreachableErrror: Bool = !serverErrors.filter { serverError in
-			switch serverError {
-				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
-					return error == .serverBusy || error == .requestTimedOut
-			}
-		}.isEmpty
-
-		let someNetworkDidError: Bool = !someServerUnreachableErrror && !serverErrors.isEmpty
-		let networkOffline: Bool = !serverErrors.filter { serverError in
-			switch serverError {
-				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
-					return error == .noInternetConnection
-			}
-		}.isEmpty
-
-		guard !networkOffline else {
-			displayNoInternet()
-			return
-		}
-
-		// Needed because we can't present an Alert at the same time as change the navigation stack
-		// so sometimes the next step must be triggered as we dismiss the Alert.
-		func nextStep() {
-			fetchRemoteEvents(
-				eventProviders: eventProvidersWithEventInformation,
-				filter: eventMode.queryFilterValue,
-				completion: handleFetchEventsResponse
-			)
-		}
-
-		let errorCodes = mapServerErrors(serverErrors, for: flow, step: .unomi)
-
 		determineActionFromResponse(
 			hasNoResult: eventProvidersWithEventInformation.isEmpty,
-			someNetworkWasTooBusy: someServerUnreachableErrror,
-			someNetworkDidError: someNetworkDidError,
-			errorCodes: errorCodes,
-			nextStep: nextStep
+			serverErrors: serverErrors,
+			step: .unomi,
+			nextAction: { informationMightBeMissing in
+				self.fetchRemoteEvents(
+					eventProviders: eventProvidersWithEventInformation,
+					filter: self.eventMode.queryFilterValue,
+					someInformationMightBeMissing: informationMightBeMissing,
+					completion: self.handleFetchEventsResponse
+				)
+			}
 		)
 	}
 
@@ -160,79 +134,72 @@ final class FetchEventsViewModel: Logging {
 		return errorCodes
 	}
 
-	private func determineActionFromResponse(
+	func determineActionFromResponse(
 		hasNoResult: Bool,
-		someNetworkWasTooBusy: Bool,
-		someNetworkDidError: Bool,
-		errorCodes: [ErrorCode],
-		nextStep: @escaping (() -> Void)) {
+		serverErrors: [ServerError],
+		step: ErrorCode.Step,
+		nextAction: @escaping ((_ someEventsMightBeMissing: Bool) -> Void)) {
 
-		logDebug("determineActionFromResponse: hasNoResult: \(hasNoResult), someNetworkWasTooBusy: \(someNetworkWasTooBusy), someNetworkDidError: \(someNetworkDidError) ")
+		let someServerUnreachableErrror: Bool = !serverErrors.filter { serverError in
+			switch serverError {
+				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
+					return error == .serverBusy || error == .requestTimedOut
+			}
+		}.isEmpty
 
-		switch (hasNoResult, someNetworkWasTooBusy, someNetworkDidError) {
+		let someNetworkDidError: Bool = !someServerUnreachableErrror && !serverErrors.isEmpty
+		let networkOffline: Bool = !serverErrors.filter { serverError in
+			switch serverError {
+				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
+					return error == .noInternetConnection
+			}
+		}.isEmpty
+
+		guard !networkOffline else {
+			displayNoInternet()
+			return
+		}
+
+		logDebug("determineActionFromResponse: hasNoResult: \(hasNoResult), someServerUnreachableErrror: \(someServerUnreachableErrror), someNetworkDidError: \(someNetworkDidError), step: \(step)")
+
+		switch (hasNoResult, someServerUnreachableErrror, someNetworkDidError) {
 
 			case (true, true, _): // No results and >=1 network was busy or timed out
 				displayRequestTimedOut()
 
 			case (true, _, true): // No results and >=1 network had an error
+				let errorCodes = mapServerErrors(serverErrors, for: flow, step: step)
 				displayErrorCodeForUnomiAndEvent(errorCodes)
 
-			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
-			break
-//
-//				self.alert = AlertContent(
-//					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
-//					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
-//					okAction: { _ in
-//						nextStep()
-//					},
-//					okTitle: L.generalOk()
-//				)
-//
-			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
-			break
-//
-//				self.alert = AlertContent(
-//					title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
-//					subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
-//					okAction: { _ in
-//						nextStep()
-//					},
-//					okTitle: L.generalOk()
-//				)
-//
-			// 🥳 Some or no results and no network was busy or had an error:
-			case (_, false, false):
-				nextStep()
+			case (false, true, _), // Some results and >=1 network was busy (5.5.3)
+				 (false, _, true): // Some results and >=1 network had an error (5.5.3)
 
-			default:
-				logDebug("still to do.")
+				nextAction(true)
+
+			case (_, false, false): // 🥳 Some or no results and no network was busy or had an error
+				nextAction(false)
 		}
 	}
 
-	func handleFetchEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
+	func handleFetchEventsResponse(
+		remoteEvents: [RemoteEvent],
+		serverErrors: [ServerError],
+		someInformationMightBeMissing: Bool) {
 
-//		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
-//		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
-//		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
-//
-//		guard !networkOffline else {
-//			displayNoInternet()
-//			return
-//		}
-//
-//		// Needed because we can't present an Alert at the same time as change the navigation stack
-//		// so sometimes the next step must be triggered as we dismiss the Alert.
-//		func nextStep() {
-//			self.coordinator?.fetchEventsScreenDidFinish(.showEvents(events: remoteEvents, eventMode: self.eventMode))
-//		}
-//
-//		determineActionFromResponse(
-//			hasNoResult: remoteEvents.isEmpty,
-//			someNetworkWasTooBusy: someNetworkWasTooBusy,
-//			someNetworkDidError: someNetworkDidError,
-//			nextStep: nextStep
-//		)
+		determineActionFromResponse(
+			hasNoResult: remoteEvents.isEmpty,
+			serverErrors: serverErrors,
+			step: .event,
+			nextAction: { someEventsMightBeMissing in
+				self.coordinator?.fetchEventsScreenDidFinish(
+					.showEvents(
+						events: remoteEvents,
+						eventMode: self.eventMode,
+						eventsMightBeMissing: someEventsMightBeMissing || someInformationMightBeMissing
+					)
+				)
+			}
+		)
 	}
 
 	func backButtonTapped() {
@@ -464,7 +431,7 @@ final class FetchEventsViewModel: Logging {
 
 		progressIndicationCounter.increment()
 		networkManager.fetchEventInformation(provider: provider, filter: filter) { [weak self] result in
-			// Result<EventFlow.EventInformationAvailable, NetworkError>
+			// Result<EventFlow.EventInformationAvailable, ServerError>
 
 			if case let .success(info) = result {
 				self?.logDebug("EventInformationAvailable: \(info)")
@@ -479,9 +446,10 @@ final class FetchEventsViewModel: Logging {
 	private func fetchRemoteEvents(
 		eventProviders: [EventFlow.EventProvider],
 		filter: String?,
-		completion: @escaping ([RemoteEvent], [NetworkError]) -> Void) {
+		someInformationMightBeMissing: Bool,
+		completion: @escaping ([RemoteEvent], [ServerError], Bool) -> Void) {
 
-		var eventResponseResults = [Result<RemoteEvent, NetworkError>]()
+		var eventResponseResults = [Result<RemoteEvent, ServerError>]()
 
 		for provider in eventProviders {
 
@@ -490,10 +458,24 @@ final class FetchEventsViewModel: Logging {
 
 				eventFetchingGroup.enter()
 				fetchRemoteEvent(from: provider, filter: filter) { result in
+
+					let mapped = result.mapError { serverError -> ServerError in
+						switch serverError {
+							case let ServerError.error(statusCode, serverResponse, networkError):
+								return ServerError.provider(
+									provider: provider.identifier,
+									statusCode: statusCode,
+									response: serverResponse,
+									error: networkError
+								)
+							default:
+								return serverError
+						}
+					}
 					if Configuration().getEnvironment() == "production" {
-						eventResponseResults += [result.map({ ($0, $1) })]
+						eventResponseResults += [mapped.map({ ($0, $1) })]
 					} else {
-						eventResponseResults += [result.map({ wrapper, signed in
+						eventResponseResults += [mapped.map({ wrapper, signed in
 							var mappedWrapper = wrapper
 							/// ZZZ is used for both Test and Fake GGD. Overwrite the response with the right identifier
 							mappedWrapper.providerIdentifier = provider.identifier
@@ -513,19 +495,19 @@ final class FetchEventsViewModel: Logging {
 			// Process failures:
 			let failuresExperienced = eventResponseResults.compactMap { $0.failureError }
 
-			completion(successfulEventResponses, failuresExperienced)
+			completion(successfulEventResponses, failuresExperienced, someInformationMightBeMissing)
 		}
 	}
 
 	private func fetchRemoteEvent(
 		from provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		progressIndicationCounter.increment()
 
 		networkManager.fetchEvents(provider: provider, filter: filter) { [weak self] result in
-			// (Result<(TestResultWrapper, SignedResponse), NetworkError>
+			// (Result<(TestResultWrapper, SignedResponse), ServerError>
 			completion(result)
 
 			self?.progressIndicationCounter.decrement()

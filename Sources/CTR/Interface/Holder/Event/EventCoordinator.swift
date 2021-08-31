@@ -40,7 +40,7 @@ enum EventScreenResult: Equatable {
 	case `continue`(value: String?, eventMode: EventMode)
 
 	/// Show the vaccination events
-	case showEvents(events: [RemoteEvent], eventMode: EventMode)
+	case showEvents(events: [RemoteEvent], eventMode: EventMode, eventsMightBeMissing: Bool)
 
 	/// Show some more information
 	case moreInformation(title: String, body: String, hideBodyForScreenCapture: Bool)
@@ -54,13 +54,9 @@ enum EventScreenResult: Equatable {
 				return true
 			case (let .moreInformation(lhsTitle, lhsBody, lhsCapture), let .moreInformation(rhsTitle, rhsBody, rhsCapture)):
 				return (lhsTitle, lhsBody, lhsCapture) == (rhsTitle, rhsBody, rhsCapture)
-			case (let showEvents(lhsEvents, lhsMode), let showEvents(rhsEvents, rhsMode)):
+			case (let showEvents(lhsEvents, lhsMode, lhsComplete), let showEvents(rhsEvents, rhsMode, rhsComplete)):
 
-				if lhsEvents.count != rhsEvents.count {
-					return false
-				}
-
-				if lhsMode != rhsMode {
+				if lhsEvents.count != rhsEvents.count || lhsMode != rhsMode || lhsComplete != rhsComplete {
 					return false
 				}
 
@@ -139,12 +135,12 @@ class EventCoordinator: Coordinator, Logging {
 
 	func startWithListTestEvents(_ events: [RemoteEvent]) {
 
-		navigateToListEvents(events, eventMode: .test)
+		navigateToListEvents(events, eventMode: .test, eventsMightBeMissing: false)
 	}
 
 	func startWithScannedEvent(_ event: RemoteEvent) {
 
-		navigateToListEvents([event], eventMode: .paperflow)
+		navigateToListEvents([event], eventMode: .paperflow, eventsMightBeMissing: false)
 	}
 
 	func startWithTVS(eventMode: EventMode) {
@@ -196,13 +192,15 @@ class EventCoordinator: Coordinator, Logging {
 
 	private func navigateToListEvents(
 		_ remoteEvents: [RemoteEvent],
-		eventMode: EventMode) {
+		eventMode: EventMode,
+		eventsMightBeMissing: Bool) {
 
 		let viewController = ListEventsViewController(
 			viewModel: ListEventsViewModel(
 				coordinator: self,
 				eventMode: eventMode,
-				remoteEvents: remoteEvents
+				remoteEvents: remoteEvents,
+				eventsMightBeMissing: eventsMightBeMissing
 			)
 		)
 		navigationController.pushViewController(viewController, animated: false)
@@ -342,8 +340,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 						break
 				}
-			case let .showEvents(remoteEvents, eventMode):
-				navigateToListEvents(remoteEvents, eventMode: eventMode)
+			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
+				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
 			case .errorRequiringRestart(let error, let eventMode):
 				handleErrorRequiringRestart(error: error, eventMode: eventMode)

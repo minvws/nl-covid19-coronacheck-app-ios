@@ -142,7 +142,7 @@ protocol NetworkManaging: AnyObject {
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Check the coupling status
 	/// - Parameters:

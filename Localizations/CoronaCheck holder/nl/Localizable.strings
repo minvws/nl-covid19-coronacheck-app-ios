@@ -7,7 +7,8 @@
 "holder.errorstate.overview.action" = "Naar mijn bewijzen";
 "holder.errorstate.fetch.message" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.errorstate.fetch.messages" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
-
+"holder.errorstate.someresult.title" = "Zijn dit al je vaccinaties?";
+"holder.errorstate.someresult.message" = "Door een storing of drukte zijn mogelijk niet al jouw gegevens opgehaald. Mist er een vaccinatie? Kom later terug en haal opnieuw je gegevens op.";
 
 "holder.errorstate.nobsn.title" = "Geen BSN gevonden";
 "holder.errorstate.nobsn.message" = "De zorgverlener waar je bent gevaccineerd kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";
@@ -544,16 +545,16 @@
 "holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\"\>de Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.test.nolist.action" = "Naar mijn bewijzen";
 
-"holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
-"holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
-"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar mijn bewijzen";
-"holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
+//"holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
+//"holder.fetchevents.error.noresults.networkwasbusy.message" = "Het is druk of er is een storing bij een aangesloten partij. Daardoor kunnen je gegevens nu niet worden opgehaald. Probeer het later nog eens.";
+//"holder.fetchevents.error.noresults.networkwasbusy.button" = "Naar mijn bewijzen";
+//"holder.fetchevents.error.noresults.networkerror.title" = "Sorry, er gaat iets mis";
 "holder.fetchevents.error.noresults.networkerror.message" = "Het is niet gelukt om de %@ op te halen. Probeer het nog eens.";
-"holder.fetchevents.error.noresults.networkerror.button" = "Naar mijn bewijzen";
-"holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
-"holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
-"holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
-"holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
+//"holder.fetchevents.error.noresults.networkerror.button" = "Naar mijn bewijzen";
+//"holder.fetchevents.warning.someresults.networkwasbusy.title" = "Gegevens mogelijk niet compleet";
+//"holder.fetchevents.warning.someresults.networkwasbusy.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het later nog een keer.";
+//"holder.fetchevents.warning.someresults.networkerror.title" = "Gegevens mogelijk niet compleet";
+//"holder.fetchevents.warning.someresults.networkerror.message" = "Door een storing bij een van de partijen kunnen er gegevens ontbreken. Probeer het eventueel later nog een keer.";
 
 /* MARK: - Start Paper Certificate */
 "holder.papercertificate.start.title" = "Papieren bewijs toevoegen";
