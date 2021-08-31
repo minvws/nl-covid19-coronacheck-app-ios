@@ -34,11 +34,6 @@ class AboutViewControllerTests: XCTestCase {
 		window = UIWindow()
 	}
 
-	override func tearDown() {
-
-		super.tearDown()
-	}
-
 	func loadView() {
 
 		window.addSubview(sut.view)
@@ -59,7 +54,7 @@ class AboutViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holderAboutText()
 		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
-			.to(haveCount(2))
+			.to(haveCount(3))
 		expect(self.sut.sceneView.version).toNot(beNil())
 
 		sut.assertImage()
