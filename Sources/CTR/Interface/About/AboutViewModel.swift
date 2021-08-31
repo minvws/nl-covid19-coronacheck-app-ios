@@ -15,6 +15,8 @@ enum AboutMenuIdentifier: String {
 	case privacyStatement
 
 	case terms
+	
+	case colophon
 }
 
 ///// Struct for information to display the different test providers
@@ -72,7 +74,8 @@ class AboutViewModel: Logging {
 
 		menu = [
 			AboutMenuOption(identifier: .privacyStatement, name: L.holderMenuPrivacy()) ,
-			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility())
+			AboutMenuOption(identifier: .accessibility, name: L.holderMenuAccessibility()),
+			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
 	}
 
@@ -80,7 +83,8 @@ class AboutViewModel: Logging {
 
 		menu = [
 			AboutMenuOption(identifier: .terms, name: L.verifierMenuPrivacy()) ,
-			AboutMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility())
+			AboutMenuOption(identifier: .accessibility, name: L.verifierMenuAccessibility()),
+			AboutMenuOption(identifier: .colophon, name: L.holderMenuColophon())
 		]
 	}
 
@@ -97,6 +101,9 @@ class AboutViewModel: Logging {
 				} else {
 					openUrlString(L.verifierUrlAccessibility())
 				}
+			case .colophon:
+				openUrlString(L.holderUrlColophon())
+				
 		}
 	}
 

@@ -182,6 +182,8 @@
 "holder.url.appointment" = "https://coronacheck.nl/nl/testafspraak-in-app";
 /* Link to the privacy policy for the holder */
 "holder.url.privacy" = "https://coronacheck.nl/nl/privacy-in-app";
+/* Link to colophon */
+"holder.url.colophon" = "https://coronacheck.nl/nl/colofon-in-app.html";
 
 "holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Lees hier</a> welke informatie in de QR-code staat.";
 
@@ -294,6 +296,7 @@
 "holder.menu.feedback" = "Geef ons feedback";
 "holder.menu.privacy" = "Privacyverklaring";
 "holder.menu.papercertificate" = "Papieren bewijs toevoegen";
+"holder.menu.colophon" = "Colofon";
 
 /* MARK: - Holder Onboarding */
 "holder.onboarding.title.safely" = "Alleen toegang met een bewijs";
