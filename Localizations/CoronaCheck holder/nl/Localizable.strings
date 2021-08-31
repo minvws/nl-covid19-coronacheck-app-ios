@@ -5,6 +5,9 @@
 "holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
 "holder.errorstate.overview.action" = "Naar mijn bewijzen";
+"holder.errorstate.fetch.message" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.fetch.messages" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
+
 
 "holder.errorstate.nobsn.title" = "Geen BSN gevonden";
 "holder.errorstate.nobsn.message" = "De zorgverlener waar je bent gevaccineerd kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";

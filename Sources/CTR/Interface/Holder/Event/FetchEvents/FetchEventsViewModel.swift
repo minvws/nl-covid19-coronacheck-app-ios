@@ -70,11 +70,14 @@ final class FetchEventsViewModel: Logging {
 		fetchEventProvidersWithAccessTokens(completion: handleFetchEventProvidersWithAccessTokensResponse)
 	}
 
-	func handleFetchEventProvidersWithAccessTokensResponse(eventProviders: [EventFlow.EventProvider], errorCodes: [ErrorCode], serverErrors: [ServerError]) {
+	func handleFetchEventProvidersWithAccessTokensResponse(
+		eventProviders: [EventFlow.EventProvider],
+		errorCodes: [ErrorCode],
+		serverErrors: [ServerError]) {
 
 		// No error tolerance here, if any failures then bail out.
 		if !errorCodes.isEmpty || !serverErrors.isEmpty {
-			handleErrorCodes(errorCodes, serverErrors: serverErrors)
+			handleErrorCodesForAccesTokenAndProviders(errorCodes, serverErrors: serverErrors)
 			return
 		}
 
@@ -92,6 +95,123 @@ final class FetchEventsViewModel: Logging {
 		eventProvidersWithEventInformation: [EventFlow.EventProvider],
 		serverErrors: [ServerError]) {
 
+		let someServerUnreachableErrror: Bool = !serverErrors.filter { serverError in
+			switch serverError {
+				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
+					return error == .serverBusy || error == .requestTimedOut
+			}
+		}.isEmpty
+
+		let someNetworkDidError: Bool = !someServerUnreachableErrror && !serverErrors.isEmpty
+		let networkOffline: Bool = !serverErrors.filter { serverError in
+			switch serverError {
+				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
+					return error == .noInternetConnection
+			}
+		}.isEmpty
+
+		guard !networkOffline else {
+			displayNoInternet()
+			return
+		}
+
+		// Needed because we can't present an Alert at the same time as change the navigation stack
+		// so sometimes the next step must be triggered as we dismiss the Alert.
+		func nextStep() {
+			fetchRemoteEvents(
+				eventProviders: eventProvidersWithEventInformation,
+				filter: eventMode.queryFilterValue,
+				completion: handleFetchEventsResponse
+			)
+		}
+
+		let errorCodes = mapServerErrors(serverErrors, for: flow, step: .unomi)
+
+		determineActionFromResponse(
+			hasNoResult: eventProvidersWithEventInformation.isEmpty,
+			someNetworkWasTooBusy: someServerUnreachableErrror,
+			someNetworkDidError: someNetworkDidError,
+			errorCodes: errorCodes,
+			nextStep: nextStep
+		)
+	}
+
+	func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> [ErrorCode] {
+
+		let errorCodes: [ErrorCode] = serverErrors.map { serverError in
+			switch serverError {
+				case let ServerError.error(statusCode, serverResponse, networkError):
+					return ErrorCode(
+						flow: flowCode,
+						step: step,
+						errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+						detailedCode: serverResponse?.code
+					)
+				case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
+					return ErrorCode(
+						flow: flowCode,
+						step: step,
+						provider: provider,
+						errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+						detailedCode: serverResponse?.code
+					)
+			}
+		}
+		return errorCodes
+	}
+
+	private func determineActionFromResponse(
+		hasNoResult: Bool,
+		someNetworkWasTooBusy: Bool,
+		someNetworkDidError: Bool,
+		errorCodes: [ErrorCode],
+		nextStep: @escaping (() -> Void)) {
+
+		logDebug("determineActionFromResponse: hasNoResult: \(hasNoResult), someNetworkWasTooBusy: \(someNetworkWasTooBusy), someNetworkDidError: \(someNetworkDidError) ")
+
+		switch (hasNoResult, someNetworkWasTooBusy, someNetworkDidError) {
+
+			case (true, true, _): // No results and >=1 network was busy or timed out
+				displayRequestTimedOut()
+
+			case (true, _, true): // No results and >=1 network had an error
+				displayErrorCodeForUnomiAndEvent(errorCodes)
+
+			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
+			break
+//
+//				self.alert = AlertContent(
+//					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
+//					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
+//					okAction: { _ in
+//						nextStep()
+//					},
+//					okTitle: L.generalOk()
+//				)
+//
+			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
+			break
+//
+//				self.alert = AlertContent(
+//					title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
+//					subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
+//					okAction: { _ in
+//						nextStep()
+//					},
+//					okTitle: L.generalOk()
+//				)
+//
+			// 🥳 Some or no results and no network was busy or had an error:
+			case (_, false, false):
+				nextStep()
+
+			default:
+				logDebug("still to do.")
+		}
+	}
+
+	func handleFetchEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
+
 //		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
 //		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
 //		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
@@ -104,94 +224,15 @@ final class FetchEventsViewModel: Logging {
 //		// Needed because we can't present an Alert at the same time as change the navigation stack
 //		// so sometimes the next step must be triggered as we dismiss the Alert.
 //		func nextStep() {
-//			fetchRemoteEvents(eventProviders: eventProvidersWithEventInformation, filter: eventMode.queryFilterValue, completion: handleFetchEventsResponse)
+//			self.coordinator?.fetchEventsScreenDidFinish(.showEvents(events: remoteEvents, eventMode: self.eventMode))
 //		}
 //
 //		determineActionFromResponse(
-//			hasNoResult: eventProvidersWithEventInformation.isEmpty,
+//			hasNoResult: remoteEvents.isEmpty,
 //			someNetworkWasTooBusy: someNetworkWasTooBusy,
 //			someNetworkDidError: someNetworkDidError,
 //			nextStep: nextStep
 //		)
-	}
-
-	private func determineActionFromResponse(hasNoResult: Bool, someNetworkWasTooBusy: Bool, someNetworkDidError: Bool, nextStep: @escaping (() -> Void)) {
-
-		switch (hasNoResult, someNetworkWasTooBusy, someNetworkDidError) {
-
-			case (true, true, _): // No results and >=1 network was busy (5.3.0)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsErrorNoresultsNetworkwasbusyTitle(),
-					subTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyMessage(),
-					okAction: { _ in
-						self.coordinator?.fetchEventsScreenDidFinish(.stop)
-					},
-					okTitle: L.holderFetcheventsErrorNoresultsNetworkwasbusyButton()
-				)
-
-			case (true, _, true): // No results and >=1 network had an error (5.5.1)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsErrorNoresultsNetworkerrorTitle(),
-					subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-					okAction: { _ in
-						self.coordinator?.fetchEventsScreenDidFinish(.stop)
-					},
-					okTitle: L.holderFetcheventsErrorNoresultsNetworkerrorButton()
-				)
-
-			case (false, true, _): // Some results and >=1 network was busy (5.5.3)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsWarningSomeresultsNetworkwasbusyTitle(),
-					subTitle: L.holderFetcheventsWarningSomeresultsNetworkwasbusyMessage(),
-					okAction: { _ in
-						nextStep()
-					},
-					okTitle: L.generalOk()
-				)
-
-			case (false, _, true): // Some results and >=1 network had an error (5.5.3)
-
-				self.alert = AlertContent(
-					title: L.holderFetcheventsWarningSomeresultsNetworkerrorTitle(),
-					subTitle: L.holderFetcheventsWarningSomeresultsNetworkerrorMessage(),
-					okAction: { _ in
-						nextStep()
-					},
-					okTitle: L.generalOk()
-				)
-
-			// 🥳 Some or no results and no network was busy or had an error:
-			case (_, false, false):
-				nextStep()
-		}
-	}
-
-	func handleFetchEventsResponse(remoteEvents: [RemoteEvent], networkErrors: [NetworkError]) {
-
-		let someNetworkWasTooBusy: Bool = networkErrors.contains { $0 == .serverBusy }
-		let someNetworkDidError: Bool = !someNetworkWasTooBusy && !networkErrors.isEmpty
-		let networkOffline: Bool = networkErrors.contains { $0 == .noInternetConnection || $0 == .requestTimedOut }
-		
-		guard !networkOffline else {
-			displayNoInternet()
-			return
-		}
-
-		// Needed because we can't present an Alert at the same time as change the navigation stack
-		// so sometimes the next step must be triggered as we dismiss the Alert.
-		func nextStep() {
-			self.coordinator?.fetchEventsScreenDidFinish(.showEvents(events: remoteEvents, eventMode: self.eventMode))
-		}
-
-		determineActionFromResponse(
-			hasNoResult: remoteEvents.isEmpty,
-			someNetworkWasTooBusy: someNetworkWasTooBusy,
-			someNetworkDidError: someNetworkDidError,
-			nextStep: nextStep
-		)
 	}
 
 	func backButtonTapped() {
@@ -354,7 +395,7 @@ final class FetchEventsViewModel: Logging {
 	private func fetchHasEventInformation(
 		forEventProviders eventProviders: [EventFlow.EventProvider],
 		filter: String?,
-		completion: @escaping ([EventFlow.EventProvider], [ErrorCode], [ServerError]) -> Void) {
+		completion: @escaping ([EventFlow.EventProvider], [ServerError]) -> Void) {
 
 		var eventInformationAvailableResults = [Result<EventFlow.EventInformationAvailable, ServerError>]()
 
@@ -362,18 +403,28 @@ final class FetchEventsViewModel: Logging {
 			guard let url = provider.unomiURL?.absoluteString, provider.accessToken != nil, url.starts(with: "https") else { continue }
 
 			hasEventInformationFetchingGroup.enter()
-			fetchHasEventInformationResponse(from: provider, filter: filter) { result in
+			fetchHasEventInformationResponse(
+				from: provider,
+				filter: filter,
+				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
 
-				let mappedToProviderError = result.mapError { serverError -> ServerError in
-
-					if case let ServerError.error(statusCode, serverResponse, error) = serverError {
-						return ServerError.provider(provider: provider.identifier, statusCode: statusCode, response: serverResponse, error: error)
+					let mappedToProviderError = result.mapError { serverError -> ServerError in
+						switch serverError {
+							case let ServerError.error(statusCode, serverResponse, networkError):
+								return ServerError.provider(
+									provider: provider.identifier,
+									statusCode: statusCode,
+									response: serverResponse,
+									error: networkError
+								)
+							default:
+								return serverError
+						}
 					}
-					return serverError
+					eventInformationAvailableResults += [mappedToProviderError]
+					self.hasEventInformationFetchingGroup.leave()
 				}
-				eventInformationAvailableResults += [mappedToProviderError]
-				self.hasEventInformationFetchingGroup.leave()
-			}
+			)
 		}
 
 		hasEventInformationFetchingGroup.notify(queue: DispatchQueue.main) {
@@ -395,7 +446,7 @@ final class FetchEventsViewModel: Logging {
 					}
 				}
 				return eventProvider
-			}
+			}.filter { $0.eventInformationAvailable != nil }
 
 			// Process failures:
 			let failuresExperienced = eventInformationAvailableResults.compactMap { $0.failureError }
@@ -505,7 +556,7 @@ extension FetchEventsViewModel {
 
 private extension FetchEventsViewModel {
 
-	func handleErrorCodes(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
+	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
 		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
 		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
@@ -539,7 +590,7 @@ private extension FetchEventsViewModel {
 		} else if noInternet {
 			displayNoInternet()
 		} else {
-			displayErrorCode(errorCodes)
+			displayErrorCodeForAccesTokenAndProviders(errorCodes)
 		}
 	}
 
@@ -609,7 +660,7 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func displayErrorCode(_ errorCodes: [ErrorCode]) {
+	func displayErrorCodeForAccesTokenAndProviders(_ errorCodes: [ErrorCode]) {
 
 		// Other error:
 		var subTitle: String
@@ -625,11 +676,31 @@ private extension FetchEventsViewModel {
 			subTitle = L.holderErrorstateServerMessages("\(errorString)")
 		}
 
+		displayErrorCode(subTitle: subTitle)
+	}
+
+	func displayErrorCodeForUnomiAndEvent(_ errorCodes: [ErrorCode]) {
+
+		// Other error:
+		var subTitle: String
+		if errorCodes.count == 1 {
+			subTitle = L.holderErrorstateFetchMessage("\(errorCodes[0])")
+		} else {
+			let lineBreak = "<br />"
+			let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+			subTitle = L.holderErrorstateFetchMessages("\(errorString)")
+		}
+
+		displayErrorCode(subTitle: subTitle)
+	}
+
+	func displayErrorCode(subTitle: String) {
+
 		viewState = .feedback(
 			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: subTitle,
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
+				primaryActionTitle: L.holderErrorstateOverviewAction(),
 				primaryAction: { [weak self] in
 					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
