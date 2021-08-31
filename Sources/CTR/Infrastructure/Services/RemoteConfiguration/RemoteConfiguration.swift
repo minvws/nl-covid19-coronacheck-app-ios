@@ -111,6 +111,7 @@ struct RemoteConfiguration: Codable {
 
 	var clockDeviationThresholdSeconds: Int?
 	
+	/// Enables luhn check for token validation
 	var isLuhnCheckEnabled: Bool?
 
 	/// Key mapping
