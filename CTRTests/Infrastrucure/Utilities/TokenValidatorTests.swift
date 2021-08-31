@@ -12,11 +12,15 @@ import Nimble
 class TokenValidatorTests: XCTestCase {
 
 	var sut = TokenValidator()
+	var remoteConfigManagerSpy: RemoteConfigManagingSpy!
 
 	override func setUp() {
 
 		super.setUp()
-		sut = TokenValidator()
+		remoteConfigManagerSpy = RemoteConfigManagingSpy(networkManager: NetworkSpy())
+		remoteConfigManagerSpy.stubbedGetConfigurationResult = .default
+		
+		sut = TokenValidator(remoteConfigManager: remoteConfigManagerSpy)
 	}
 
 	// MARK: - Tests
@@ -129,6 +133,52 @@ class TokenValidatorTests: XCTestCase {
 
 			// When
 			let result = sut.luhnModN(token)
+
+			// Then
+			expect(result) == false
+		}
+	}
+	
+	/// Test the validator with invalid tokens and Luhn check disabled
+	func test_validator_whenLuhnCheckIsDisabled_withInvalidTokens() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.isLuhnCheckEnabled = false
+		remoteConfigManagerSpy.stubbedGetConfigurationResult = config
+		
+		let invalidTokens: [String] = [
+			"ZZZ-5343CQ2BJ3UV7X-Z2",
+			"ZZZ-Q343CQ2BJ3UV7X-Q2"
+		]
+
+		for token in invalidTokens {
+
+			// When
+			let result = sut.validate(token)
+
+			// Then
+			expect(result) == true
+		}
+	}
+	
+	/// Test the validator with invalid tokens and Luhn check enabled
+	func test_validator_whenLuhnCheckIsEnabled_withInvalidTokens() {
+
+		// Given
+		var config = RemoteConfiguration.default
+		config.isLuhnCheckEnabled = true
+		remoteConfigManagerSpy.stubbedGetConfigurationResult = config
+		
+		let invalidTokens: [String] = [
+			"ZZZ-5343CQ2BJ3UV7X-Z2",
+			"ZZZ-Q343CQ2BJ3UV7X-Q2"
+		]
+
+		for token in invalidTokens {
+
+			// When
+			let result = sut.validate(token)
 
 			// Then
 			expect(result) == false
