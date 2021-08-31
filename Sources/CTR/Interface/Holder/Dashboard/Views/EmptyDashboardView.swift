@@ -92,14 +92,15 @@ private final class EmptyStateCardView: BaseView {
 	private enum ViewTraits {
 		
 		enum Size {
-			static let image: CGSize = CGSize(width: 111, height: 120)
+			static let image: CGSize = CGSize(width: 56, height: 56)
 		}
 		enum Margins {
-			static let vertical: CGFloat = 40
+			static let topImage: CGFloat = 48
+			static let bottomLabel: CGFloat = 40
 			static let maxHorizontal: CGFloat = 20
 		}
 		enum Spacing {
-			static let imageToLabel: CGFloat = 24
+			static let imageToLabel: CGFloat = 35
 		}
 		enum Radius {
 			static let corner: CGFloat = 15
@@ -145,7 +146,7 @@ private final class EmptyStateCardView: BaseView {
 		
 		NSLayoutConstraint.activate([
 			imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
-			imageView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margins.vertical),
+			imageView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.Margins.topImage),
 			imageView.heightAnchor.constraint(equalToConstant: ViewTraits.Size.image.height),
 			imageView.widthAnchor.constraint(equalToConstant: ViewTraits.Size.image.width),
 			
@@ -153,7 +154,7 @@ private final class EmptyStateCardView: BaseView {
 			titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: ViewTraits.Margins.maxHorizontal),
 			titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -ViewTraits.Margins.maxHorizontal),
 			titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margins.vertical)
+			titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -ViewTraits.Margins.bottomLabel)
 		])
 	}
 	
