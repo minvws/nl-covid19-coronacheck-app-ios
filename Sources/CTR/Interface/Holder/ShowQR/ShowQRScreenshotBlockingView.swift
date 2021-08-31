@@ -64,7 +64,7 @@ class ShowQRScreenshotBlockingView: BaseView {
 	}()
 
 	private let headerImageView: UIImageView = {
-		let imageView = UIImageView(image: I.redScreenSmall())
+		let imageView = UIImageView(image: I.dashboard.redScreenSmall())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.contentMode = .center
 		imageView.setContentCompressionResistancePriority(UILayoutPriority.defaultLow, for: .vertical)
