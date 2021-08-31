@@ -28,7 +28,7 @@ class ExpiredQRView: BaseView {
 	/// The expired image
 	private let expiredImageView: UIImageView = {
 		
-		let view = UIImageView(image: .expiredQR)
+		let view = UIImageView(image: I.dashboard.expiredQR())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		return view
 	}()
@@ -44,7 +44,7 @@ class ExpiredQRView: BaseView {
 
 		let button = UIButton()
 		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setImage(.smallCross, for: .normal)
+		button.setImage(I.smallCross(), for: .normal)
 		return button
 	}()
 
