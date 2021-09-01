@@ -110,30 +110,6 @@ final class FetchEventsViewModel: Logging {
 		)
 	}
 
-	func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> [ErrorCode] {
-
-		let errorCodes: [ErrorCode] = serverErrors.map { serverError in
-			switch serverError {
-				case let ServerError.error(statusCode, serverResponse, networkError):
-					return ErrorCode(
-						flow: flowCode,
-						step: step,
-						errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
-						detailedCode: serverResponse?.code
-					)
-				case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
-					return ErrorCode(
-						flow: flowCode,
-						step: step,
-						provider: provider,
-						errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
-						detailedCode: serverResponse?.code
-					)
-			}
-		}
-		return errorCodes
-	}
-
 	func determineActionFromResponse(
 		hasNoResult: Bool,
 		serverErrors: [ServerError],
@@ -278,29 +254,21 @@ final class FetchEventsViewModel: Logging {
 					}
 				case (.failure(let accessError), .failure(let providerError)):
 					self.logError("Error getting access tokens: \(accessError)")
-					if let code = self.convert(accessError, step: .accessTokens) {
-						errorCodes.append(code)
-					}
+					errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
 					serverErrors.append(accessError)
 
 					self.logError("Error getting access tokens: \(providerError)")
-					if let code = self.convert(providerError, step: .providers) {
-						errorCodes.append(code)
-					}
+					errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
 					serverErrors.append(providerError)
 
 				case (.failure(let accessError), _):
 					self.logError("Error getting access tokens: \(accessError)")
-					if let code = self.convert(accessError, step: .accessTokens) {
-						errorCodes.append(code)
-					}
+					errorCodes.append(self.convert(accessError, for: self.flow, step: .accessTokens))
 					serverErrors.append(accessError)
 
 				case (_, .failure(let providerError)):
 					self.logError("Error getting event providers: \(providerError)")
-					if let code = self.convert(providerError, step: .providers) {
-						errorCodes.append(code)
-					}
+					errorCodes.append(self.convert(providerError, for: self.flow, step: .providers))
 					serverErrors.append(providerError)
 
 				default:
@@ -309,19 +277,6 @@ final class FetchEventsViewModel: Logging {
 			}
 			completion(providers, errorCodes, serverErrors)
 		}
-	}
-
-	private func convert(_ serverError: ServerError, step: ErrorCode.Step) -> ErrorCode? {
-
-		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
-			return ErrorCode(
-				flow: flow,
-				step: step,
-				errorCode: error.getClientErrorCode() ?? "\(statusCode ?? 000)",
-				detailedCode: serverResponse?.code
-			)
-		}
-		return nil
 	}
 
 	private var flow: ErrorCode.Flow {
@@ -537,6 +492,36 @@ extension FetchEventsViewModel {
 // MARK: - Error states
 
 private extension FetchEventsViewModel {
+
+	func mapServerErrors(_ serverErrors: [ServerError], for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> [ErrorCode] {
+
+		let errorCodes: [ErrorCode] = serverErrors.map { serverError in
+
+			return convert(serverError, for: flowCode, step: step)
+		}
+		return errorCodes
+	}
+
+	private func convert(_ serverError: ServerError, for flowCode: ErrorCode.Flow, step: ErrorCode.Step) -> ErrorCode {
+
+		switch serverError {
+			case let ServerError.error(statusCode, serverResponse, networkError):
+				return ErrorCode(
+					flow: flowCode,
+					step: step,
+					errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+					detailedCode: serverResponse?.code
+				)
+			case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
+				return ErrorCode(
+					flow: flowCode,
+					step: step,
+					provider: provider,
+					errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+					detailedCode: serverResponse?.code
+				)
+		}
+	}
 
 	func handleErrorCodesForAccesTokenAndProviders(_ errorCodes: [ErrorCode], serverErrors: [ServerError]) {
 
