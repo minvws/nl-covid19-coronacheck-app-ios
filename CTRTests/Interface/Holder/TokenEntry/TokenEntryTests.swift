@@ -17,6 +17,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
 	private var proofManagerSpy: ProofManagingSpy!
+	private var networkManagerSpy: NetworkSpy!
 	private var tokenValidatorSpy: TokenValidatorSpy!
 
 	private var sut: TokenEntryViewModel!
@@ -26,6 +27,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		proofManagerSpy = ProofManagingSpy()
+		networkManagerSpy = NetworkSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
 	}
 
@@ -78,7 +80,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 	func test_withoutInitialRequestToken_makesNoCallToProofManager() {
 		sut = mockedViewModel(withRequestToken: nil)
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
 	}
 
 	// MARK: - Handle Input
@@ -194,8 +196,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	func test_withInitialRequestTokenSet_handleInput_withEmptyTokenInput_withNonemptyVerificationInput_enablesNextButton() {
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-		proofManagerSpy.stubbedGetTestProviderResult = .fake
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		let nonemptyVerificationInput = "1234"
@@ -227,7 +228,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: nil)
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true
@@ -247,7 +248,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: "1234")
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == false
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == false
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
@@ -266,7 +267,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == true
 		expect(self.sut.shouldShowTokenEntryField) == false
@@ -283,50 +284,47 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_initWithInitialRequestTokenSet_fetchesProviders_failure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
+	func test_initWithInitialRequestTokenSet_fetchesProviders_serverBusy_stopsProgressAndShowsServerBusyDialog() {
 		// Arrange
-		proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
 		tokenValidatorSpy.stubbedValidateResult = true
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-		expect(self.proofManagerSpy.invokedGetTestProvider) == false
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.shouldShowResendVerificationButton) == false
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
+		expect(self.sut.message).toEventually(equal(L.generalNetworkwasbusyText()))
+		expect(self.sut.primaryTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beTrue())
+		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_initWithInitialRequestTokenSet_fetchResult_networkFailure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
+	func test_initWithInitialRequestTokenSet_fetchesProviders_requestTimedOut_stopsProgressAndShowsErrorDialog() {
 		// Arrange
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
 		tokenValidatorSpy.stubbedValidateResult = true
-		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-		proofManagerSpy.stubbedGetTestProviderResult = .fake
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchCoronaTestProviders) == true
-		expect(self.proofManagerSpy.invokedGetTestProvider) == true
-		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
+		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
+		expect(self.sut.networkErrorAlert?.title) == L.holderErrorstateTitle()
+		expect(self.sut.networkErrorAlert?.subTitle) == L.generalErrorServerUnreachable()
 		expect(self.sut.shouldShowTokenEntryField) == true
 		expect(self.sut.shouldShowVerificationEntryField) == false
 		expect(self.sut.shouldShowUserNeedsATokenButton) == true

@@ -20,7 +20,7 @@ final class NetworkManagerURLSessionDelegate: NSObject, URLSessionDelegate {
 	init(_ configuration: NetworkConfiguration, strategy: SecurityStrategy) {
 
 		self.networkConfiguration = configuration
-		self.securityStrategy = strategy
+		self.securityStrategy = .none // strategy
 	}
 
 	/// The security checker (certificate ssl check, PKSC7 signature check)

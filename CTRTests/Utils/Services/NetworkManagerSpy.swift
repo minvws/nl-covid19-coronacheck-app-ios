@@ -76,9 +76,9 @@ class NetworkSpy: NetworkManaging {
 
 	var invokedFetchTestProviders = false
 	var invokedFetchTestProvidersCount = 0
-	var stubbedFetchTestProvidersCompletionResult: (Result<[TestProvider], NetworkError>, Void)?
+	var stubbedFetchTestProvidersCompletionResult: (Result<[TestProvider], ServerError>, Void)?
 
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void) {
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 		invokedFetchTestProviders = true
 		invokedFetchTestProvidersCount += 1
 		if let result = stubbedFetchTestProvidersCompletionResult {

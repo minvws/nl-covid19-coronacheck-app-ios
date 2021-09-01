@@ -75,42 +75,4 @@ class ProofManagerTests: XCTestCase {
 		// Then
 		expect(self.networkSpy.invokedGetPublicKeys).toEventually(beTrue())
 	}
-
-	func test_fetchTestProviders() {
-
-		// Given
-		networkSpy.stubbedFetchTestProvidersCompletionResult = (
-			.success(
-				[
-					TestProvider(
-						identifier: "test_fetchTestProviders",
-						name: "test",
-						resultURLString: "https://coronacheck.nl",
-						publicKey: "key",
-						certificate: "certificate")
-				]
-			), ()
-		)
-
-		// When
-		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedFetchTestProviders).toEventually(beTrue())
-		expect(self.sut.testProviders).toEventually(haveCount(1))
-		expect(self.sut.testProviders.first?.identifier).toEventually(equal("test_fetchTestProviders"))
-	}
-
-	func test_fetchTestProviders_withError() {
-
-		// Given
-		networkSpy.stubbedFetchTestProvidersCompletionResult = (.failure(NetworkError.invalidRequest), ())
-
-		// When
-		sut.fetchCoronaTestProviders(onCompletion: nil, onError: nil)
-
-		// Then
-		expect(self.networkSpy.invokedFetchTestProviders).toEventually(beTrue())
-		expect(self.sut.testProviders).toEventually(beEmpty())
-	}
 }

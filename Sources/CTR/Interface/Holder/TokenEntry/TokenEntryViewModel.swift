@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
 
 import UIKit
 
@@ -16,11 +17,13 @@ class TokenEntryViewModel {
 		case inputToken
 		case inputTokenWithVerificationCode
 		case inputVerificationCode
+		case error
 	}
 
 	fileprivate enum InitializationMode: Equatable {
 		case regular
 		case withRequestTokenProvided(originalRequestToken: RequestToken)
+		case error(serverError: ServerError)
 	}
 
 	// MARK: - Bindable Strings
@@ -128,9 +131,6 @@ class TokenEntryViewModel {
 		}
 	}()
 
-	private var errorOccuredBackToOverview = false
-	private var overrideNeedsATokenButtonWithMalfunctioning = false
-
 	// MARK: - Initializer
 
 	/// - Parameters:
@@ -218,6 +218,8 @@ class TokenEntryViewModel {
 				}
 
 				allowEnablingOfNextButton = receivedNonemptyVerificationInput
+			case .error:
+				allowEnablingOfNextButton = true
 		}
 	}
 
@@ -227,12 +229,6 @@ class TokenEntryViewModel {
 	///   - verificationInput: the verification input
 	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
 
-		guard !errorOccuredBackToOverview else {
-			errorOccuredBackToOverview = false
-			coordinator?.navigateBackToStart()
-			return
-		}
-
 		guard progressIndicationCounter.isInactive else { return }
 
 		switch initializationMode {
@@ -240,6 +236,8 @@ class TokenEntryViewModel {
 				handleNextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
 			case .withRequestTokenProvided:
 				handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
+			case .error:
+				coordinator?.navigateBackToStart()
 		}
 	}
 
@@ -256,23 +254,22 @@ class TokenEntryViewModel {
 
 	func userHasNoTokenButtonTapped() {
 
-		guard !overrideNeedsATokenButtonWithMalfunctioning else {
-
-			guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-				return
-			}
-			coordinator?.openUrl(url, inApp: true)
-			return
-		}
-
 		guard progressIndicationCounter.isInactive else { return }
 
-		coordinator?.presentInformationPage(
-			title: L.holderTokenentryModalNotokenTitle(),
-			body: L.holderTokenentryModalNotokenDetails(),
-			hideBodyForScreenCapture: false,
-			openURLsInApp: true
-		)
+		switch initializationMode {
+			case .regular, .withRequestTokenProvided:
+				coordinator?.presentInformationPage(
+					title: L.holderTokenentryModalNotokenTitle(),
+					body: L.holderTokenentryModalNotokenDetails(),
+					hideBodyForScreenCapture: false,
+					openURLsInApp: true
+				)
+			case .error:
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+				coordinator?.openUrl(url, inApp: true)
+		}
 	}
 
 	// MARK: - Private tap handlers:
@@ -326,30 +323,18 @@ class TokenEntryViewModel {
 					self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
 					self?.progressIndicationCounter.decrement()
 				case let .failure(serverError):
-
-					if case let .error(statusCode, serverResponse, error) = serverError {
+					if case let .error(_, _, error) = serverError {
 						switch error {
-							case .serverBusy:
-								self?.errorOccuredBackToOverview = true
-								self?.showServerTooBusyError()
 							case .noInternetConnection:
 								self?.displayNoInternet(requestToken, verificationCode: verificationCode)
 							case .requestTimedOut:
 								self?.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
-							case .responseCached, .redirection, .resourceNotFound, .serverError:
-								// 304, 3xx, 4xx, 5xx
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
-								self?.overrideNeedsATokenButtonWithMalfunctioning = true
-								self?.displayServerErrorCode(errorCode)
-							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-								// Client side
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
-								self?.overrideNeedsATokenButtonWithMalfunctioning = true
-								self?.displayClientErrorCode(errorCode)
+							default:
+								self?.initializationMode = .error(serverError: serverError)
 						}
-						self?.decideWhetherToAbortRequestTokenProvidedMode()
-						self?.progressIndicationCounter.decrement()
 					}
+					self?.progressIndicationCounter.decrement()
+					self?.decideWhetherToAbortRequestTokenProvidedMode()
 			}
 		}
 	}
@@ -425,7 +410,7 @@ class TokenEntryViewModel {
 	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
 	private func decideWhetherToAbortRequestTokenProvidedMode() {
 		switch self.initializationMode {
-			case .regular:
+			case .regular, .error:
 				// There must have been a token already entered, so this can be assumed:
 				self.allowEnablingOfNextButton = true
 			case .withRequestTokenProvided:
@@ -497,6 +482,13 @@ class TokenEntryViewModel {
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = true
 				shouldShowUserNeedsATokenButton = false
+
+			case .error:
+				shouldShowTokenEntryField = false
+				shouldShowVerificationEntryField = false
+				shouldShowNextButton = true
+				shouldShowResendVerificationButton = false
+				shouldShowUserNeedsATokenButton = true
 		}
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
@@ -508,7 +500,7 @@ class TokenEntryViewModel {
 		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		userNeedsATokenButtonTitle = L.holderTokenentryButtonNotoken()
+		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
 		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
@@ -550,6 +542,8 @@ extension TokenEntryViewModel.InitializationMode {
 						return .inputVerificationCode
 					}
 				}
+			case .error:
+				return .error
 		}
 	}
 }
@@ -564,11 +558,40 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTitle()
+				case .error(serverError: let serverError):
+					if case let .error(_, _, error) = serverError {
+						switch error {
+							case .serverBusy:
+								return L.generalNetworkwasbusyTitle()
+							case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+								 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								return L.holderErrorstateTitle()
+							default:
+								break
+						}
+					}
+					return ""
 			}
 		}
 
 		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
 			switch (initializationMode, inputMode) {
+				case (.error(serverError: let serverError), _):
+					if case let .error(statusCode, serverResponse, error) = serverError {
+						switch error {
+							case .serverBusy:
+								return L.generalNetworkwasbusyText()
+							case .responseCached, .redirection, .resourceNotFound, .serverError:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								return L.holderErrorstateServerMessage("\(errorCode)")
+							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								return L.holderErrorstateClientMessage("\(errorCode)")
+							default:
+								break
+						}
+					}
+					return ""
 				case (_, .none):
 					return nil
 				case (.regular, _):
@@ -578,12 +601,23 @@ extension TokenEntryViewModel {
 			}
 		}
 
+		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
+			switch mode {
+				case .regular, .withRequestTokenProvided:
+					return L.holderTokenentryButtonNotoken()
+				case .error:
+					return L.holderErrorstateMalfunctionsTitle()
+			}
+		}
+
 		fileprivate static func resendVerificationButtonTitle(forMode mode: InitializationMode) -> String {
 			switch mode {
 				case .regular:
 					return L.holderTokenentryRegularflowRetryTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowRetryTitle()
+				case .error:
+					return ""
 			}
 		}
 
@@ -593,6 +627,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
+				case .error:
+					return ""
 			}
 		}
 
@@ -602,24 +638,28 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowTokenTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTokenTitle()
+				case .error:
+					return ""
 			}
 		}
 
 		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-            switch mode {
-                case .regular:
-                    if UIAccessibility.isVoiceOverRunning {
-                        return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
-                    } else {
-                        return L.holderTokenentryRegularflowTokenPlaceholder()
-                    }
-                case .withRequestTokenProvided:
-                    if UIAccessibility.isVoiceOverRunning {
-                        return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
-                    } else {
-                        return L.holderTokenentryUniversallinkflowTokenPlaceholder()
-                    }
-            }
+			switch mode {
+				case .regular:
+					if UIAccessibility.isVoiceOverRunning {
+						return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
+					} else {
+						return L.holderTokenentryRegularflowTokenPlaceholder()
+					}
+				case .withRequestTokenProvided:
+					if UIAccessibility.isVoiceOverRunning {
+						return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
+					} else {
+						return L.holderTokenentryUniversallinkflowTokenPlaceholder()
+					}
+				case .error:
+					return ""
+			}
 		}
 
 		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
@@ -628,6 +668,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowVerificationTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationTitle()
+				case .error:
+					return ""
 			}
 		}
 
@@ -637,6 +679,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowVerificationInfo()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationInfo()
+				case .error:
+					return ""
 			}
 		}
 
@@ -646,6 +690,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowVerificationPlaceholder()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
+				case .error:
+					return ""
 			}
 		}
 
@@ -655,6 +701,19 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowNext()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowNext()
+				case .error(serverError: let serverError):
+					if case let .error(_, _, error) = serverError {
+						switch error {
+							case .serverBusy:
+								return L.generalNetworkwasbusyButton()
+							case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+								 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								return L.holderErrorstateOverviewAction()
+							default:
+								break
+						}
+					}
+					return ""
 			}
 		}
 
@@ -666,6 +725,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
+				case .error:
+					return ""
 			}
 		}
 
@@ -675,6 +736,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
+				case .error:
+					return ""
 			}
 		}
 
@@ -684,6 +747,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
+				case .error:
+					return ""
 			}
 		}
 
@@ -693,6 +758,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
+				case .error:
+					return ""
 			}
 		}
 	}
@@ -755,16 +822,6 @@ private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowP
 
 extension TokenEntryViewModel {
 
-	private func showServerTooBusyError() {
-
-		self.title = L.generalNetworkwasbusyTitle()
-		self.message = L.generalNetworkwasbusyText()
-		self.primaryTitle = L.generalNetworkwasbusyButton()
-		self.shouldShowTokenEntryField = false
-		self.shouldShowVerificationEntryField = false
-		self.shouldShowUserNeedsATokenButton = false
-	}
-
 	private func displayNoInternet(_ requestToken: RequestToken, verificationCode: String?) {
 
 		// this is a retry-able situation
@@ -789,27 +846,5 @@ extension TokenEntryViewModel {
 			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
 			okTitle: L.generalRetry()
 		)
-	}
-
-	private func displayServerErrorCode(_ errorCode: ErrorCode) {
-
-		self.title = L.holderErrorstateTitle()
-		self.message = L.holderErrorstateServerMessage("\(errorCode)")
-		self.primaryTitle = L.holderErrorstateOverviewAction()
-		self.shouldShowTokenEntryField = false
-		self.shouldShowVerificationEntryField = false
-		self.shouldShowUserNeedsATokenButton = true
-		self.userNeedsATokenButtonTitle = L.holderErrorstateMalfunctionsTitle()
-	}
-
-	private func displayClientErrorCode(_ errorCode: ErrorCode) {
-
-		self.title = L.holderErrorstateTitle()
-		self.message = L.holderErrorstateClientMessage("\(errorCode)")
-		self.primaryTitle = L.holderErrorstateOverviewAction()
-		self.shouldShowTokenEntryField = false
-		self.shouldShowVerificationEntryField = false
-		self.shouldShowUserNeedsATokenButton = true
-		self.userNeedsATokenButtonTitle = L.holderErrorstateMalfunctionsTitle()
 	}
 }

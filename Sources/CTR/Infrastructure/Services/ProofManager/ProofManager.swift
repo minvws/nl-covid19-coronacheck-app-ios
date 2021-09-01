@@ -14,11 +14,6 @@ class ProofManager: ProofManaging, Logging {
 
 	var networkManager: NetworkManaging = Services.networkManager
 
-	/// Array of constants
-	private struct Constants {
-		static let keychainService = "ProofManager\(Configuration().getEnvironment())\(ProcessInfo.processInfo.isTesting ? "Test" : "")"
-	}
-
 	/// Initializer
 	required init() {
 		// Required by protocol

@@ -12,24 +12,6 @@ class ProofManagingSpy: ProofManaging {
 
 	required init() {}
 
-	var invokedFetchCoronaTestProviders = false
-	var invokedFetchCoronaTestProvidersCount = 0
-	var shouldInvokeFetchCoronaTestProvidersOnCompletion = false
-	var stubbedFetchCoronaTestProvidersOnErrorResult: (Error, Void)?
-
-	func fetchCoronaTestProviders(
-		onCompletion: (() -> Void)?,
-		onError: ((Error) -> Void)?) {
-		invokedFetchCoronaTestProviders = true
-		invokedFetchCoronaTestProvidersCount += 1
-		if shouldInvokeFetchCoronaTestProvidersOnCompletion {
-			onCompletion?()
-		}
-		if let result = stubbedFetchCoronaTestProvidersOnErrorResult {
-			onError?(result.0)
-		}
-	}
-
 	var invokedFetchIssuerPublicKeys = false
 	var invokedFetchIssuerPublicKeysCount = 0
 	var stubbedFetchIssuerPublicKeysOnCompletionResult: (Result<Data, NetworkError>, Void)?
@@ -60,19 +42,5 @@ class ProofManagingSpy: ProofManaging {
 		if let result = stubbedFetchTestResultOnCompletionResult {
 			onCompletion(result.0)
 		}
-	}
-
-	var invokedGetTestProvider = false
-	var invokedGetTestProviderCount = 0
-	var invokedGetTestProviderParameters: (token: RequestToken, Void)?
-	var invokedGetTestProviderParametersList = [(token: RequestToken, Void)]()
-	var stubbedGetTestProviderResult: TestProvider!
-
-	func getTestProvider(_ token: RequestToken) -> TestProvider? {
-		invokedGetTestProvider = true
-		invokedGetTestProviderCount += 1
-		invokedGetTestProviderParameters = (token, ())
-		invokedGetTestProviderParametersList.append((token, ()))
-		return stubbedGetTestProviderResult
 	}
 }
