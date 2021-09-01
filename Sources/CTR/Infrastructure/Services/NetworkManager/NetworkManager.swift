@@ -721,11 +721,11 @@ extension NetworkManager: NetworkManaging {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 
 		guard let providerUrl = provider.resultURL else {
 			self.logError("No url provided for \(provider)")
-			completion(.failure(NetworkError.invalidRequest))
+			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 
@@ -733,14 +733,18 @@ extension NetworkManager: NetworkManaging {
 			HTTPHeaderKey.authorization: "Bearer \(token.token)",
 			HTTPHeaderKey.tokenProtocolVersion: token.protocolVersion
 		]
-		var body: Data?
 
+		var body: Data?
 		if let requiredCode = code {
 			let dictionary: [String: AnyObject] = ["verificationCode": requiredCode as AnyObject]
-			body = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
+			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
+			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
+				body = jsonBody
+			}
 		}
+
 		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
-			completion(.failure(.invalidRequest))
+			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
 		let session = URLSession(
@@ -748,12 +752,14 @@ extension NetworkManager: NetworkManaging {
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
 			delegateQueue: nil
 		)
-		decodedAndReturnSignedJSONData(
+		decodeSignedJSONData(
 			request: urlRequest,
 			session: session,
-			ignore400: true,
-			completion: { result in
-				completion(result.map { object, signedResponse, urlResponse in (object, signedResponse) })
+			proceedToSuccessIfResponseIs400: true,
+			completion: { (result: Result<(EventFlow.EventResultWrapper, SignedResponse, Data, URLResponse), ServerError>) in
+				DispatchQueue.main.async {
+					completion(result.map { decodable, signedResponse, _, _ in (decodable, signedResponse) })
+				}
 			}
 		)
 	}
@@ -846,7 +852,6 @@ extension NetworkManager: NetworkManaging {
 		var body: Data?
 		if let filter = filter {
 			let dictionary: [String: AnyObject] = ["filter": filter as AnyObject]
-
 			if JSONSerialization.isValidJSONObject(dictionary), // <=== first, check it is valid
 			   let jsonBody = try? JSONSerialization.data(withJSONObject: dictionary) {
 				body = jsonBody

@@ -108,6 +108,10 @@ protocol NetworkManaging: AnyObject {
 	/// - Parameter completion: completion handler
 	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void)
 
+	/// Get the greenCards
+	/// - Parameters:
+	///   - dictionary: a dictionary of events
+	///   - completion: completion handler
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void)
@@ -122,7 +126,7 @@ protocol NetworkManaging: AnyObject {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
