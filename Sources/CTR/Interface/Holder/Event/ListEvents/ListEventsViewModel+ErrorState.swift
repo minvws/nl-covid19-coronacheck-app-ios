@@ -179,4 +179,14 @@ extension ListEventsViewModel {
 			return nil
 		}
 	}
+
+	func displaySomeResultsMightBeMissing() {
+
+		alert = AlertContent(
+			title: L.holderErrorstateSomeresultTitle(),
+			subTitle: L.holderErrorstateSomeresultMessage(),
+			okAction: nil,
+			okTitle: L.generalOk()
+		)
+	}
 }

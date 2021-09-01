@@ -89,7 +89,8 @@ class ListEventsViewModel: Logging {
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-		mappingManager: MappingManaging = Services.mappingManager
+		mappingManager: MappingManaging = Services.mappingManager,
+		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
@@ -126,6 +127,12 @@ class ListEventsViewModel: Logging {
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
+		}
+
+		if eventsMightBeMissing {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+				self?.displaySomeResultsMightBeMissing()
+			}
 		}
 
 		viewState = getViewState(from: remoteEvents)

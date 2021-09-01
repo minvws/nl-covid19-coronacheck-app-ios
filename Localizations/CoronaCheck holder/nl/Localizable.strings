@@ -5,6 +5,10 @@
 "holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
 "holder.errorstate.overview.action" = "Naar mijn bewijzen";
+"holder.errorstate.fetch.message" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.fetch.messages" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
+"holder.errorstate.someresult.title" = "Zijn dit al je vaccinaties?";
+"holder.errorstate.someresult.message" = "Door een storing of drukte zijn mogelijk niet al jouw gegevens opgehaald. Mist er een vaccinatie? Kom later terug en haal opnieuw je gegevens op.";
 
 "holder.errorstate.nobsn.title" = "Geen BSN gevonden";
 "holder.errorstate.nobsn.message" = "De zorgverlener waar je bent gevaccineerd kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";
@@ -37,7 +41,7 @@
 "holder.checkdcc.rejected.message" = "Deze lettercombinatie en QR-code horen niet bij elkaar.";
 "holder.checkdcc.rejected.actionTitle" = "Probeer opnieuw";
 "holder.dcc.alert.message" = "Je kunt later opnieuw proberen deze QR-code in de app te zetten.";
-"holder.event.originmismatch.dcc.body" = "Op dit moment kunnen we van jouw gescande QR-code geen bewijs maken. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer.</a>";
+"holder.event.originmismatch.dcc.body" = "Op dit moment kunnen we van jouw gescande QR-code geen bewijs maken. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\"> Wegwijzer.</a>";
 "holder.dcc.list.title" = "Opgehaalde gegevens";
 "holder.dcc.list.message" = "Met de gegevens die zijn opgehaald kun je een QR-code maken. Dat is jouw bewijs.";
 "holder.dcc.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
@@ -194,7 +198,7 @@
 "holder.tokenentry.regularflow.verification.info" = "Je krijgt een code via sms of e-mail";
 "holder.tokenentry.regularflow.verification.title" = "Verificatiecode";
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
-"holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige combinatie";
+"holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige ophaalcode";
 "holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
 "holder.tokenentry.regularflow.next" = "Haal testuitslag op";
 /* MARK: - Holder Token entry - Universal Link flow */
@@ -242,6 +246,13 @@
 "general.error.technical.custom" = "Dat komt door een technische fout (%@)";
 "general.error.nointernet.title" = "Geen internetverbinding";
 "general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
+"holder.errorstate.server.messages" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
+"holder.errorstate.nobsn.title" = "Geen BSN gevonden";
+"holder.errorstate.nobsn.message" = "De zorgverlener waar je bent gevaccineerd kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";
+"holder.errorstate.nobsn.action" = "Naar mijn bewijzen";
+"holder.errorstate.nosession.title" = "Je sessie is gestopt";
+"holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
+"holder.errorstate.nosession.action" = "Log in met DigiD";
 "general.error.server.unreachable" = "Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
@@ -262,8 +273,8 @@
 /* MARK: - EndOfLife */
 "endOfLife.error.message" = "De website kan niet geopend worden.";
 "endOfLife.title" = "App buiten werking";
-"endOfLife.description" = "De app is niet meer in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-"endOfLife.button" = "Naar CoronaCheck.nl";
+"endOfLife.description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
+"endOfLife.button" = "Ga naar CoronaCheck.nl";
 
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
@@ -345,7 +356,7 @@
 "holder.dashboard.qr.button.viewQR" = "Bekijk QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Je internationale QR-code wordt automatisch geldig als de Europese regelgeving ingaat (vanaf %@).";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccinatiebewijs: dosis %@ van %@";
-"holder.dashboard.qr.backToThirdPartyApp" = "Naar de %@";
+"holder.dashboard.qr.backToThirdPartyApp" = "Terug naar de %@";
 
 "holder.clockDeviationDetected.title" = "Controleer de tijd van je telefoon";
 "holder.clockDeviationDetected.message" = "<p>Mogelijk klopt de tijd van jouw telefoon niet. Het kan bijvoorbeeld zijn dat je telefoon een paar minuten voor loopt. Om de CoronaCheck-app goed te kunnen gebruiken is het belangrijk dat de tijd juist staat ingesteld.</p><p><a href=\"%@\">Ga naar de instellingen</a> van jouw telefoon en zet de datum en tijd op 'automatisch instellen'.</p>";
@@ -450,10 +461,10 @@
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.action" = "Naar mijn bewijzen";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.event.nolist.action" = "Naar mijn bewijzen";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
@@ -463,7 +474,7 @@
 "holder.vaccination.about.off" = "%@ van %@";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
 "holder.vaccination.wrong.title" = "Er klopt iets niet";
-"holder.vaccination.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Of staat er onjuiste informatie over je vaccinatie? Op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
+"holder.vaccination.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Of staat er onjuiste informatie over je vaccinatie? Op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
 
 "holder.vaccination.start.nodigid" = "Ik heb geen DigiD";
 "holder.vaccination.start.nodigid.url" = "https://www.digid.nl/digid-aanvragen-activeren#hoe-vraag-ik-digid-aan";
@@ -519,7 +530,7 @@
 "holder.event.about.recovery.validuntil" = "Geldig tot:";
 "holder.event.about.recovery.identifier" = "Uniek testnummer:";
 
-"holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
+"holder.testresults.wrong.body" = "<p>Kloppen je naam en/of geboortedatum niet? Op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a> vind je meer informatie over wat te doen.</p>";
 
 "holder.event.element.subtitle.test2" = "<p>Testdatum: %@</p><p>Jouw gegevens: %@</p>";
 "holder.event.element.subtitle.test3" = "<p>Testdatum: %@</p><p>Naam: %@</p><p>Geboortedatum: %@</p>";
@@ -536,12 +547,12 @@
 "holder.notest.button.title" = "Maak een afspraak";
 
 "holder.event.originmismatch.title" = "We kunnen geen bewijs maken";
-"holder.event.originmismatch.vaccination.body" = "Op dit moment kunnen we van jouw vaccinatie geen bewijs maken. Dit kan verschillende oorzaken hebben. Lees meer op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer.</a>";
-"holder.event.originmismatch.recovery.body" = "Op dit moment kunnen we geen bewijs maken van jouw positieve testuitslag. Dit kan verschillende oorzaken hebben. Lees meer op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer.</a>";
-"holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. Lees meer op <a href=\"https://coronacheck.nl/wegwijzer\">de Wegwijzer.</a>";
+"holder.event.originmismatch.vaccination.body" = "Op dit moment kunnen we van jouw vaccinatie geen bewijs maken. Dit kan verschillende oorzaken hebben. Lees meer op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a>";
+"holder.event.originmismatch.recovery.body" = "Op dit moment kunnen we geen bewijs maken van jouw positieve testuitslag. Dit kan verschillende oorzaken hebben. Lees meer op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a>";
+"holder.event.originmismatch.test.body" = "Op dit moment kunnen we van jouw negatieve testuitslag geen bewijs maken. Dit kan verschillende oorzaken hebben. Lees meer op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer.</a>";
 "holder.notest.action.title" = "Maak een afspraak";
 "holder.test.nolist.title" = "Geen testuitslag beschikbaar";
-"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op <a href=\"https://coronacheck.nl/wegwijzer\"\>de Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
+"holder.test.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de  <a href=\"https://coronacheck.nl/wegwijzer\"\>Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Dan kan het nog een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
 "holder.test.nolist.action" = "Naar mijn bewijzen";
 
 "holder.fetchevents.error.noresults.networkwasbusy.title" = "Sorry, het is erg druk";
