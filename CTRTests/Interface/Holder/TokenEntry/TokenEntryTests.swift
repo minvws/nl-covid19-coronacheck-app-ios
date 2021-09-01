@@ -1099,7 +1099,7 @@ class TokenEntryViewModelTests: XCTestCase {
 //		// Arrange
 //		let validToken = "xxx-yyyyyyyyyyyy-z2"
 //		tokenValidatorSpy.stubbedValidateResult = true
-//		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
+//		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 //		sut = mockedViewModel(withRequestToken: nil)
 //
 //		// Act
@@ -1115,52 +1115,54 @@ class TokenEntryViewModelTests: XCTestCase {
 //
 //		TokenEntryViewController(viewModel: sut).assertImage()
 //	}
-//
-//	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_failure_stopsProgressAndShowsTechnicalErrorAlert() {
-//		// Arrange
-//		let validToken = "xxx-yyyyyyyyyyyy-z2"
-//		tokenValidatorSpy.stubbedValidateResult = true
-//		proofManagerSpy.stubbedFetchCoronaTestProvidersOnErrorResult = (NSError(), ())
-//		sut = mockedViewModel(withRequestToken: nil)
-//
-//		// Act
-//		sut.nextButtonTapped(validToken, verificationInput: "")
-//
-//		// Assert
-//		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
-//		expect(self.sut.fieldErrorMessage).to(beNil())
-//		expect(self.sut.shouldShowProgress) == false
-//		expect(self.sut.networkErrorAlert).toNot(beNil())
-//		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
-//		expect(self.sut.shouldEnableNextButton) == true
-//		expect(self.sut.shouldShowNextButton) == true
-//		expect(self.proofManagerSpy.invokedGetTestProvider) == false
-//		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-//		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-//
-//		TokenEntryViewController(viewModel: sut).assertImage()
-//	}
-//
-//	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
-//		// Arrange
-//		let validToken = "zzz-yyyyyyyyyyyy-z2"
-//		tokenValidatorSpy.stubbedValidateResult = true
-//		proofManagerSpy.shouldInvokeFetchCoronaTestProvidersOnCompletion = true
-//		sut = mockedViewModel(withRequestToken: nil)
-//
-//		// Act
-//		sut.nextButtonTapped(validToken, verificationInput: "")
-//
-//		// Assert
-//		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorInvalidCode()
-//		expect(self.sut.shouldShowProgress) == false
-//		expect(self.sut.shouldEnableNextButton) == true
-//		expect(self.sut.shouldShowNextButton) == true
-//		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-//		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-//
-//		TokenEntryViewController(viewModel: sut).assertImage()
-//	}
+
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_failure_stopsProgressAndShowsTechnicalErrorAlert() {
+		// Arrange
+		let validToken = "xxx-yyyyyyyyyyyy-z2"
+		tokenValidatorSpy.stubbedValidateResult = true
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
+		sut = mockedViewModel(withRequestToken: nil)
+
+		// Act
+		sut.nextButtonTapped(validToken, verificationInput: "")
+
+		// Assert
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
+		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
+		expect(self.sut.message).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
+		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
+		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beTrue())
+		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
+
+	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
+		// Arrange
+		let validToken = "zzz-yyyyyyyyyyyy-z2"
+		tokenValidatorSpy.stubbedValidateResult = true
+		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
+		sut = mockedViewModel(withRequestToken: nil)
+
+		// Act
+		sut.nextButtonTapped(validToken, verificationInput: "")
+
+		// Assert
+		expect(self.sut.fieldErrorMessage) == L.holderTokenentryRegularflowErrorInvalidCode()
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.sut.shouldEnableNextButton) == true
+		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
+		expect(self.sut.message) == L.holderTokenentryRegularflowText()
+
+		TokenEntryViewController(viewModel: sut).assertImage()
+	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_startsProgress() {
 		// Arrange
