@@ -557,7 +557,7 @@ private extension FetchEventsViewModel {
 		} else if noInternet {
 			displayNoInternet()
 		} else {
-			displayErrorCodeForAccesTokenAndProviders(errorCodes)
+			displayErrorCodeForAccessTokenAndProviders(errorCodes)
 		}
 	}
 
@@ -627,7 +627,7 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func displayErrorCodeForAccesTokenAndProviders(_ errorCodes: [ErrorCode]) {
+	func displayErrorCodeForAccessTokenAndProviders(_ errorCodes: [ErrorCode]) {
 
 		// Other error:
 		var subTitle: String

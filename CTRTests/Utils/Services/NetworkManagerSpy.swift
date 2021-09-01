@@ -140,12 +140,12 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchEventInformationCount = 0
 	var invokedFetchEventInformationParameters: (provider: EventFlow.EventProvider, filter: String?)?
 	var invokedFetchEventInformationParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
-	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, NetworkError>, Void)?
+	var stubbedFetchEventInformationCompletionResult: (Result<EventFlow.EventInformationAvailable, ServerError>, Void)?
 
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void) {
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void) {
 		invokedFetchEventInformation = true
 		invokedFetchEventInformationCount += 1
 		invokedFetchEventInformationParameters = (provider, filter)
@@ -159,12 +159,12 @@ class NetworkSpy: NetworkManaging {
 	var invokedFetchEventsCount = 0
 	var invokedFetchEventsParameters: (provider: EventFlow.EventProvider, filter: String?)?
 	var invokedFetchEventsParametersList = [(provider: EventFlow.EventProvider, filter: String?)]()
-	var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>, Void)?
+	var stubbedFetchEventsCompletionResult: (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>, Void)?
 
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void) {
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void) {
 		invokedFetchEvents = true
 		invokedFetchEventsCount += 1
 		invokedFetchEventsParameters = (provider, filter)

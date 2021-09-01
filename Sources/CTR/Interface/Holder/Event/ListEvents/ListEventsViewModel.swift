@@ -90,7 +90,7 @@ class ListEventsViewModel: Logging {
 		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
 		mappingManager: MappingManaging = Services.mappingManager,
-		eventsMightBeMissing: Bool
+		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
