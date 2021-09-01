@@ -32,11 +32,12 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		
         return Label(title1: nil, montserrat: true).multiline().header()
 	}()
-	
-	/// The message label
-	private let messageLabel: Label = {
-		
-		return Label(body: nil).multiline()
+
+	private let contentTextView: TextView = {
+
+		let view = TextView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
 	}()
 	
 	/// The request token entry view
@@ -118,7 +119,7 @@ class TokenEntryView: ScrolledStackWithButtonView {
 		
 		super.setupViewHierarchy()
 		stackView.addArrangedSubview(titleLabel)
-		stackView.addArrangedSubview(messageLabel)
+		stackView.addArrangedSubview(contentTextView)
 
 		stackView.addArrangedSubview(tokenEntryView)
 		stackView.setCustomSpacing(8, after: tokenEntryView)
@@ -182,10 +183,10 @@ class TokenEntryView: ScrolledStackWithButtonView {
 	var message: String? {
 		didSet {
 			if let message = message {
-				messageLabel.attributedText = message.setLineHeight(ViewTraits.messageLineHeight)
-				messageLabel.isHidden = false
+				contentTextView.html(message)
+				contentTextView.isHidden = false
 			} else {
-				messageLabel.isHidden = true
+				contentTextView.isHidden = true
 			}
 		}
 	}

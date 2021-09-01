@@ -11,14 +11,6 @@ protocol ProofManaging: AnyObject {
 
 	init()
 
-	/// Get the providers
-	/// - Parameters:
-	///   - onCompletion: completion handler
-	///   - onError: error handler
-	func fetchCoronaTestProviders(
-		onCompletion: (() -> Void)?,
-		onError: ((Error) -> Void)?)
-
 	/// Fetch the issuer public keys
 	/// - Parameters:
 	///   - onCompletion: completion handler
@@ -34,11 +26,6 @@ protocol ProofManaging: AnyObject {
 		code: String?,
 		provider: TestProvider,
 		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void)
-
-	/// Get the provider for a test token
-	/// - Parameter token: the test token
-	/// - Returns: the test provider
-	func getTestProvider(_ token: RequestToken) -> TestProvider?
 }
 
 enum ProofError: Error {

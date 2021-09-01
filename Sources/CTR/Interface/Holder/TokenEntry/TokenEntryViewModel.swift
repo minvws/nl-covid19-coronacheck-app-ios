@@ -78,6 +78,7 @@ class TokenEntryViewModel {
 
 	private weak var coordinator: HolderCoordinatorDelegate?
 	private let proofManager: ProofManaging?
+	private let networkManager: NetworkManaging?
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -127,6 +128,9 @@ class TokenEntryViewModel {
 		}
 	}()
 
+	private var errorOccuredBackToOverview = false
+	private var overrideNeedsATokenButtonWithMalfunctioning = false
+
 	// MARK: - Initializer
 
 	/// - Parameters:
@@ -136,11 +140,13 @@ class TokenEntryViewModel {
 	init(
 		coordinator: HolderCoordinatorDelegate,
 		proofManager: ProofManaging,
+		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
 		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
 
 		self.coordinator = coordinator
 		self.proofManager = proofManager
+		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
@@ -220,6 +226,13 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
 	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
+
+		guard !errorOccuredBackToOverview else {
+			errorOccuredBackToOverview = false
+			coordinator?.navigateBackToStart()
+			return
+		}
+
 		guard progressIndicationCounter.isInactive else { return }
 
 		switch initializationMode {
@@ -242,6 +255,16 @@ class TokenEntryViewModel {
 	}
 
 	func userHasNoTokenButtonTapped() {
+
+		guard !overrideNeedsATokenButtonWithMalfunctioning else {
+
+			guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+				return
+			}
+			coordinator?.openUrl(url, inApp: true)
+			return
+		}
+
 		guard progressIndicationCounter.isInactive else { return }
 
 		coordinator?.presentInformationPage(
@@ -296,38 +319,47 @@ class TokenEntryViewModel {
 
 		progressIndicationCounter.increment()
 
-		proofManager?.fetchCoronaTestProviders(
-			onCompletion: { [weak self] in
+		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
-				self?.fetchResult(requestToken, verificationCode: verificationCode)
-				self?.progressIndicationCounter.decrement()
+			switch result {
+				case let .success(providers):
+					self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
+					self?.progressIndicationCounter.decrement()
+				case let .failure(serverError):
 
-			}, onError: { [weak self] error in
-				self?.networkErrorAlert = error.toAlertContent(coordinator: self?.coordinator)
-				self?.decideWhetherToAbortRequestTokenProvidedMode()
-				self?.progressIndicationCounter.decrement()
+					if case let .error(statusCode, serverResponse, error) = serverError {
+						switch error {
+							case .serverBusy:
+								self?.errorOccuredBackToOverview = true
+								self?.showServerTooBusyError()
+							case .noInternetConnection:
+								self?.displayNoInternet(requestToken, verificationCode: verificationCode)
+							case .requestTimedOut:
+								self?.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+							case .responseCached, .redirection, .resourceNotFound, .serverError:
+								// 304, 3xx, 4xx, 5xx
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								self?.overrideNeedsATokenButtonWithMalfunctioning = true
+								self?.displayServerErrorCode(errorCode)
+							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								// Client side
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								self?.overrideNeedsATokenButtonWithMalfunctioning = true
+								self?.displayClientErrorCode(errorCode)
+						}
+						self?.decideWhetherToAbortRequestTokenProvidedMode()
+						self?.progressIndicationCounter.decrement()
+					}
 			}
-		)
-	}
-
-	private func showServerTooBusyError() {
-
-		self.networkErrorAlert = AlertContent(
-			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyText(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.coordinator?.navigateBackToStart()
-			},
-			okTitle: L.generalNetworkwasbusyButton()
-		)
+		}
 	}
 
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
-	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
-		guard let provider = proofManager?.getTestProvider(requestToken) else {
+	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?, providers: [TestProvider]) {
+
+		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
+		guard let provider = provider.first else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
@@ -375,7 +407,7 @@ class TokenEntryViewModel {
 						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
 					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
 						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
-							self?.fetchResult(requestToken, verificationCode: verificationCode)
+							self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
 						})
 					} else {
 						// For now, display the network error.
@@ -717,4 +749,67 @@ extension Error {
 /// Returns the `enabled` state to be used for `shouldEnableNextButton`
 private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
 	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
+}
+
+// MARK: - Error States
+
+extension TokenEntryViewModel {
+
+	private func showServerTooBusyError() {
+
+		self.title = L.generalNetworkwasbusyTitle()
+		self.message = L.generalNetworkwasbusyText()
+		self.primaryTitle = L.generalNetworkwasbusyButton()
+		self.shouldShowTokenEntryField = false
+		self.shouldShowVerificationEntryField = false
+		self.shouldShowUserNeedsATokenButton = false
+	}
+
+	private func displayNoInternet(_ requestToken: RequestToken, verificationCode: String?) {
+
+		// this is a retry-able situation
+		self.networkErrorAlert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func displayRequestTimedOut(_ requestToken: RequestToken, verificationCode: String?) {
+
+		// this is a retry-able situation
+		self.networkErrorAlert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func displayServerErrorCode(_ errorCode: ErrorCode) {
+
+		self.title = L.holderErrorstateTitle()
+		self.message = L.holderErrorstateServerMessage("\(errorCode)")
+		self.primaryTitle = L.holderErrorstateOverviewAction()
+		self.shouldShowTokenEntryField = false
+		self.shouldShowVerificationEntryField = false
+		self.shouldShowUserNeedsATokenButton = true
+		self.userNeedsATokenButtonTitle = L.holderErrorstateMalfunctionsTitle()
+	}
+
+	private func displayClientErrorCode(_ errorCode: ErrorCode) {
+
+		self.title = L.holderErrorstateTitle()
+		self.message = L.holderErrorstateClientMessage("\(errorCode)")
+		self.primaryTitle = L.holderErrorstateOverviewAction()
+		self.shouldShowTokenEntryField = false
+		self.shouldShowVerificationEntryField = false
+		self.shouldShowUserNeedsATokenButton = true
+		self.userNeedsATokenButtonTitle = L.holderErrorstateMalfunctionsTitle()
+	}
 }
