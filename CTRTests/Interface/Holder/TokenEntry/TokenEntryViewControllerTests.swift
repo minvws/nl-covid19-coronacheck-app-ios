@@ -18,7 +18,6 @@ class TokenEntryViewControllerTests: XCTestCase {
 	private var window: UIWindow!
 
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
-	private var proofManagerSpy: ProofManagingSpy!
 	private var tokenValidatorSpy: TokenValidatorSpy!
 	private var networkManagerSpy: NetworkSpy!
 

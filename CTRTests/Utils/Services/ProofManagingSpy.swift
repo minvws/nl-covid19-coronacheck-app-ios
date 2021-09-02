@@ -23,24 +23,4 @@ class ProofManagingSpy: ProofManaging {
 			onCompletion?(result.0)
 		}
 	}
-
-	var invokedFetchTestResult = false
-	var invokedFetchTestResultCount = 0
-	var invokedFetchTestResultParameters: (token: RequestToken, code: String?, provider: TestProvider)?
-	var invokedFetchTestResultParametersList = [(token: RequestToken, code: String?, provider: TestProvider)]()
-	var stubbedFetchTestResultOnCompletionResult: (Result<RemoteEvent, Error>, Void)?
-
-	func fetchTestResult(
-		_ token: RequestToken,
-		code: String?,
-		provider: TestProvider,
-		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void) {
-		invokedFetchTestResult = true
-		invokedFetchTestResultCount += 1
-		invokedFetchTestResultParameters = (token, code, provider)
-		invokedFetchTestResultParametersList.append((token, code, provider))
-		if let result = stubbedFetchTestResultOnCompletionResult {
-			onCompletion(result.0)
-		}
-	}
 }
