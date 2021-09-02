@@ -32,7 +32,7 @@ extension TestProvider {
         TestProvider(
 			identifier: "xxx",
 			name: "Fake Test Provider",
-			resultURLString: "",
+			resultURLString: "https://coronacheck.nl/test",
 			publicKey: "",
 			certificate: ""
 		)

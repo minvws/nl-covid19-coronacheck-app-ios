@@ -5,6 +5,7 @@
 *  SPDX-License-Identifier: EUPL-1.2
 */
 // swiftlint:disable file_length
+// swiftlint:disable type_body_length
 
 import UIKit
 
@@ -80,7 +81,6 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let proofManager: ProofManaging?
 	private let networkManager: NetworkManaging?
 	private let tokenValidator: TokenValidatorProtocol
 
@@ -135,17 +135,14 @@ class TokenEntryViewModel {
 
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
 	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
 		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
 		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
 
 		self.coordinator = coordinator
-		self.proofManager = proofManager
 		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
@@ -318,23 +315,25 @@ class TokenEntryViewModel {
 
 		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
+			guard let self = self else { return }
+
 			switch result {
 				case let .success(providers):
-					self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
-					self?.progressIndicationCounter.decrement()
+					self.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
+					self.progressIndicationCounter.decrement()
 				case let .failure(serverError):
 					if case let .error(_, _, error) = serverError {
 						switch error {
 							case .noInternetConnection:
-								self?.displayNoInternet(requestToken, verificationCode: verificationCode)
+								self.displayNoInternet(requestToken, verificationCode: verificationCode)
 							case .requestTimedOut:
-								self?.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+								self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
 							default:
-								self?.initializationMode = .error(serverError: serverError)
+								self.initializationMode = .error(serverError: serverError)
 						}
 					}
-					self?.progressIndicationCounter.decrement()
-					self?.decideWhetherToAbortRequestTokenProvidedMode()
+					self.progressIndicationCounter.decrement()
+					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
 		}
 	}
@@ -351,59 +350,109 @@ class TokenEntryViewModel {
 		}
 		logVerbose("fetching result with \(provider.resultURLString)")
 
+		if provider.resultURL == nil {
+			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+			self.decideWhetherToAbortRequestTokenProvidedMode()
+			return
+		}
+
 		progressIndicationCounter.increment()
 
-		proofManager?.fetchTestResult(
-			requestToken,
+		networkManager?.fetchTestResult(
+			provider: provider,
+			token: requestToken,
 			code: verificationCode,
-			provider: provider) {  [weak self] response in
-			guard let self = self else { return }
+			completion: { [weak self] (result: Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) in
 
-			self.fieldErrorMessage = nil
+				guard let self = self else { return }
+				self.fieldErrorMessage = nil
 
-			switch response {
-				case let .success(remoteEvent):
-					switch remoteEvent.wrapper.status {
-						case .complete, .pending:
-							self.screenHasCompleted = true
-							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
-						case .verificationRequired:
-							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
-								// the user has just submitted a wrong verification code & should see an error message
+				switch result {
+					case let .success(remoteEvent):
+						switch remoteEvent.0.status {
+							case .complete, .pending:
+								self.screenHasCompleted = true
+								self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
+							case .verificationRequired:
+								if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+									// the user has just submitted a wrong verification code & should see an error message
+									self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+								}
+								self.allowEnablingOfNextButton = false
+								self.verificationCodeIsKnownToBeRequired = true
+
+							case .invalid:
 								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							}
-							self.allowEnablingOfNextButton = false
-							self.verificationCodeIsKnownToBeRequired = true
+								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
-						case .invalid:
-							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+							default:
+								self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+								self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
+								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+						}
 
-						default:
-							self.logDebug("Unhandled test result status: \(remoteEvent.wrapper.status)")
-							self.fieldErrorMessage = "Unhandled: \(remoteEvent.wrapper.status)"
-							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-					}
-
-				case let .failure(error):
-					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
-						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
-					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
-						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
-							self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
-						})
-					} else {
-						// For now, display the network error.
-						self.fieldErrorMessage = error.localizedDescription
-						self.networkErrorAlert = error.toAlertContent(coordinator: self.coordinator)
-					}
-					self.decideWhetherToAbortRequestTokenProvidedMode()
+					case let .failure(serverError):
+						switch serverError {
+							case let .error(_, _, error), let .provider(_, _, _, error):
+								switch error {
+									case .noInternetConnection:
+										self.displayNoInternet(requestToken, verificationCode: verificationCode)
+									case .requestTimedOut:
+										self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+									case .invalidRequest:
+										self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+									default:
+										if case let .error(statusCode, serverResponse, networkError) = serverError {
+											self.initializationMode = .error(
+												serverError: ServerError.provider(
+													provider: provider.identifier,
+													statusCode: statusCode,
+													response: serverResponse,
+													error: networkError
+												)
+											)
+										} else {
+											self.initializationMode = .error(serverError: serverError)
+										}
+								}
+								self.decideWhetherToAbortRequestTokenProvidedMode()
+						}
+				}
+				self.progressIndicationCounter.decrement()
 			}
+		)
 
-			self.progressIndicationCounter.decrement()
-		}
+//		proofManager?.fetchTestResult(
+//			requestToken,
+//			code: verificationCode,
+//			provider: provider) {  [weak self] response in
+//			guard let self = self else { return }
+//
+//			self.fieldErrorMessage = nil
+//
+//			switch response {
+//				case let .success(remoteEvent):
+
+//
+//				case let .failure(error):
+//					if let castedError = error as? ProofError, castedError == .invalidUrl {
+//						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+//					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
+//						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
+//					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
+//						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
+//							self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
+//						})
+//					} else {
+//						// For now, display the network error.
+//						self.fieldErrorMessage = error.localizedDescription
+//						self.networkErrorAlert = error.toAlertContent(coordinator: self.coordinator)
+//					}
+//					self.decideWhetherToAbortRequestTokenProvidedMode()
+//			}
+//
+//			self.progressIndicationCounter.decrement()
+//		}
 	}
 
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
@@ -559,16 +608,17 @@ extension TokenEntryViewModel {
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTitle()
 				case .error(serverError: let serverError):
-					if case let .error(_, _, error) = serverError {
-						switch error {
-							case .serverBusy:
-								return L.generalNetworkwasbusyTitle()
-							case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
-								 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-								return L.holderErrorstateTitle()
-							default:
-								break
-						}
+					switch serverError {
+						case let .error(_, _, error), let .provider(_, _, _, error):
+							switch error {
+								case .serverBusy:
+									return L.generalNetworkwasbusyTitle()
+								case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+									 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+									return L.holderErrorstateTitle()
+								default:
+									break
+							}
 					}
 					return ""
 			}
@@ -578,6 +628,7 @@ extension TokenEntryViewModel {
 			switch (initializationMode, inputMode) {
 				case (.error(serverError: let serverError), _):
 					if case let .error(statusCode, serverResponse, error) = serverError {
+						// this is an error fetching the providers
 						switch error {
 							case .serverBusy:
 								return L.generalNetworkwasbusyText()
@@ -587,6 +638,21 @@ extension TokenEntryViewModel {
 							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
 								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
 								return L.holderErrorstateClientMessage("\(errorCode)")
+							default:
+								break
+						}
+					}
+					if case let .provider(provider, statusCode, serverResponse, error) = serverError {
+						// this is an error getting the test result.
+						switch error {
+							case .serverBusy:
+								return L.generalNetworkwasbusyText()
+							case .responseCached, .redirection, .resourceNotFound, .serverError:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								return L.holderErrorstateTestMessage("\(errorCode)")
+							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								return L.holderErrorstateTestMessage("\(errorCode)")
 							default:
 								break
 						}
@@ -702,16 +768,17 @@ extension TokenEntryViewModel {
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowNext()
 				case .error(serverError: let serverError):
-					if case let .error(_, _, error) = serverError {
-						switch error {
-							case .serverBusy:
-								return L.generalNetworkwasbusyButton()
-							case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
-								 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-								return L.holderErrorstateOverviewAction()
-							default:
-								break
-						}
+					switch serverError {
+						case let .error(_, _, error), let .provider(_, _, _, error):
+							switch error {
+								case .serverBusy:
+									return L.generalNetworkwasbusyButton()
+								case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+									 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+									return L.holderErrorstateOverviewAction()
+								default:
+									break
+							}
 					}
 					return ""
 			}

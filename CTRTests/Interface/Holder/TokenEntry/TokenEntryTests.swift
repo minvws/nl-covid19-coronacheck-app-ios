@@ -16,7 +16,6 @@ import SnapshotTesting
 class TokenEntryViewModelTests: XCTestCase {
 
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
-	private var proofManagerSpy: ProofManagingSpy!
 	private var networkManagerSpy: NetworkSpy!
 	private var tokenValidatorSpy: TokenValidatorSpy!
 
@@ -26,14 +25,12 @@ class TokenEntryViewModelTests: XCTestCase {
 		super.setUp()
 
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
-		proofManagerSpy = ProofManagingSpy()
 		networkManagerSpy = NetworkSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
-
-//		isRecording = true
 	}
 
 	func test_withoutInitialRequestToken_initialState() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -57,6 +54,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_initialState() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -89,6 +87,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// `func handleInput(_ tokenInput: String?, verificationInput: String?) `
 
 	func test_withoutInitialRequestToken_handleInput_withNilTokenInput_disablesNextButton() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -107,6 +106,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_handleInput_withInvalidToken_disablesNextButtonAndHidesVerification() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 		let invalidToken = "HELLO"
@@ -132,6 +132,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_handleInput_withValidToken_hidingVerification_enablesNextButtonAndHidesVerification() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		let validToken = "XXX-YYYYYYYYYYYY-Z2"
@@ -156,6 +157,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_handleInput_withEmptyTokenInput_withEmptyVerificationInput_disablesNextButton() {
+
 		// Arrange
 		let emptyVerificationInput = ""
 		sut = mockedViewModel(withRequestToken: nil)
@@ -176,6 +178,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_handleInput_withEmptyTokenInput_withNonemptyVerificationInput_enablesNextButton() {
+
 		// Arrange
 		let nonemptyVerificationInput = "1234"
 		sut = mockedViewModel(withRequestToken: nil)
@@ -196,10 +199,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withInitialRequestTokenSet_handleInput_withEmptyTokenInput_withNonemptyVerificationInput_enablesNextButton() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		let nonemptyVerificationInput = "1234"
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -223,6 +228,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// `func nextButtonPressed(_ tokenInput: String?, verificationInput: String?)`
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withNilTokenInput_doesNothing() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -243,6 +249,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - nextButtonPressed withNonemptyVerificationInput
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withNonemptyVerificationInput_withNoPreviousRequestTokenSet_doesNothing() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -263,6 +270,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - initWithInitialRequestTokenSet
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders() {
+
 		// Arrange
 
 		// Act
@@ -287,6 +295,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_serverBusy_stopsProgressAndShowsServerBusyDialog() {
+
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
@@ -312,6 +321,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_requestTimedOut_stopsProgressAndShowsErrorDialog() {
+
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
@@ -340,6 +350,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_noInternet_stopsProgressAndShowsErrorDialog() {
+
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
@@ -368,6 +379,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_clientError_stopsProgressAndShowsErrorDialog() {
+
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidSignature)), ())
@@ -393,6 +405,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_serverError_stopsProgressAndShowsErrorDialog() {
+
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 500, response: ServerResponse(status: "error", code: 99780), error: .serverError)), ())
@@ -418,33 +431,34 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchResult_networkFailure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
-
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
+		
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
-		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
+		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.shouldShowResendVerificationButton) == false
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
+		expect(self.sut.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
+		expect(self.sut.message).toEventually(equal(L.generalNetworkwasbusyText()))
+		expect(self.sut.primaryTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beTrue())
+		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withUnidentifiableTestProvider_showsErrorMessage() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([]), ())
@@ -466,6 +480,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_startsProgress() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
@@ -487,6 +502,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
@@ -495,8 +511,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == RequestToken.fake.token
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == RequestToken.fake.token
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message).to(beNil())
@@ -507,11 +523,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
-
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -525,10 +542,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -543,10 +562,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_verificationRequired_codeIsEmpty_resetsUIForVerification() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -565,10 +587,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_invalid_showsError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
+
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -586,10 +611,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_success_unknown_showsError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -608,10 +635,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.failure(ServerError.provider(provider: "xxx", statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
@@ -629,25 +658,28 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withIdentifiableTestProvider_failure_showsError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.failure(ServerError.error(statusCode: 400, response: nil, error: .resourceNotFound)), ())
 
 		// Act
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Assert
-		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
-
-		expect(self.sut.shouldShowNextButton) == true
+		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
+		expect(self.sut.fieldErrorMessage).to(beNil())
+		expect(self.sut.shouldShowProgress) == false
+		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
+		expect(self.sut.message).toEventually(equal(L.holderErrorstateTestMessage("i 120 xxx 400")))
+		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
+		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beTrue())
+		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
+		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
+		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -655,10 +687,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: initWithInitialRequestTokenSet nextButtonPressed
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_fetchesProviders() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
@@ -685,19 +719,20 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_success_stopsProgress() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Reset spies after init, (which does it's own `fetchProvider` pass):
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
-
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: "1234")
 
@@ -717,15 +752,16 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_failure_stopsProgressAndShowsTechnicalErrorAlert() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Reset spies after init, (which does it's own `fetchProvider` pass):
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
 			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
@@ -750,15 +786,16 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_startsProgress() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
 		// Reset spies after init, (which does it's own `fetchProvider` pass):
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 
 		// Act
@@ -778,16 +815,17 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
+
 		// Arrange
 		let validToken = RequestToken.fake.token
 		let verificationInput = "1234"
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 
@@ -795,9 +833,9 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == validToken
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code) == verificationInput
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == validToken
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.code) == verificationInput
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
@@ -808,18 +846,20 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -834,18 +874,20 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -860,19 +902,21 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_codeIsNotEmpty_showsErrorAndResetsUIForVerification() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = RequestToken.fake.token
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(validToken, verificationInput: verificationInput)
@@ -892,18 +936,20 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_invalid_showsError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -921,18 +967,20 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_success_unknown_showsError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -949,18 +997,20 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let verificationInput = "1234"
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.failure(ServerError.provider(provider: "xxx", statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 		// Act
 		sut.nextButtonTapped(nil, verificationInput: verificationInput)
@@ -973,38 +1023,6 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
 		expect(self.sut.shouldEnableNextButton) == true
 		expect(self.sut.shouldShowNextButton) == true
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
-	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_failure_showsError() {
-		// Arrange
-		tokenValidatorSpy.stubbedValidateResult = true
-		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
-		let verificationInput = "1234"
-
-		sut = mockedViewModel(withRequestToken: .fake)
-
-		proofManagerSpy.reset()
-		networkManagerSpy.reset()
-		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
-
-		// Act
-		sut.nextButtonTapped(nil, verificationInput: verificationInput)
-
-		// Assert
-		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
-		expect(self.sut.shouldShowTokenEntryField) == false
-		expect(self.sut.shouldShowVerificationEntryField) == true
-		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
-		expect(self.sut.message) == L.holderTokenentryUniversallinkflowText()
-		expect(self.sut.shouldEnableNextButton) == true
-		expect(self.sut.shouldShowNextButton) == true
-
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
@@ -1117,6 +1135,7 @@ class TokenEntryViewModelTests: XCTestCase {
 //	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_failure_stopsProgressAndShowsTechnicalErrorAlert() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
@@ -1144,6 +1163,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
+
 		// Arrange
 		let validToken = "zzz-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
@@ -1165,6 +1185,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_startsProgress() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
@@ -1187,6 +1208,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_fetchesTestResultWithCorrectParameters() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
@@ -1198,9 +1220,9 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.nextButtonTapped(validToken, verificationInput: "")
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.provider) == .fake
 		expect(self.sut.shouldEnableNextButton) == false
 		expect(self.sut.shouldShowNextButton) == true
 		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
@@ -1210,11 +1232,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_complete_navigatesToListResults() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1230,11 +1254,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_pending_navigatesToListResults() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakePending, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1253,7 +1279,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1274,10 +1301,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_clearTokenField_resetsUIForTokenEntry() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1302,10 +1331,12 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_verificationRequired_changeTokenField_resetsUIForTokenEntry() {
+
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 
 		sut = mockedViewModel(withRequestToken: nil)
@@ -1330,11 +1361,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_invalid_showsError() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeInvalid, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1352,11 +1385,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_success_unknown_showsError() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeUnknown, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1374,11 +1409,13 @@ class TokenEntryViewModelTests: XCTestCase {
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_failure_withInvalidURL_showsCustomError() {
+
 		// Arrange
 		let validToken = "xxx-yyyyyyyyyyyy-z2"
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.invalidUrl), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.failure(ServerError.provider(provider: "xxx", statusCode: nil, response: nil, error: .invalidRequest)), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1395,35 +1432,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
-	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withIdentifiableTestProvider_failure_showsError() {
-		// Arrange
-		let validToken = "xxx-yyyyyyyyyyyy-z2"
-		tokenValidatorSpy.stubbedValidateResult = true
-		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.failure(ProofError.missingParams), ())
-
-		sut = mockedViewModel(withRequestToken: nil)
-
-		// Act
-		sut.nextButtonTapped(validToken, verificationInput: "")
-
-		// Assert
-		expect(self.sut.fieldErrorMessage) == "De bewerking kan niet worden voltooid. (CTR.ProofError fout 1.)"
-		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.generalErrorTitle()
-		expect(self.sut.shouldEnableNextButton) == true
-		expect(self.sut.shouldShowNextButton) == true
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-
-		TokenEntryViewController(viewModel: sut).assertImage()
-	}
-
 	// MARK: - Skipping the entry when no verification is needed:
 
 	func test_withInitialRequestToken_whenNoVerificationIsRequired_shouldHideTheInputFields() {
+
 		// Arrange
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeComplete, SignedResponse(payload: "test", signature: "test"))), ())
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 
 		// Act
@@ -1449,6 +1464,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - resendVerificationCodeButtonTapped
 
 	func test_withoutInitialRequestToken_withoutAnInitialFetch_resendVerificationCodeButtonTapped_shouldNotFetchProviders() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1456,19 +1472,21 @@ class TokenEntryViewModelTests: XCTestCase {
 		sut.resendVerificationCodeButtonTapped()
 
 		// Assert
-		expect(self.proofManagerSpy.invokedFetchTestResult) == false
+		expect(self.networkManagerSpy.invokedFetchTestResult) == false
 		expect(self.sut.shouldShowProgress) == false
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
 
 	func test_withoutInitialRequestToken_withAnInitialFetch_resendVerificationCodeButtonTapped_shouldFetchProviders() {
+
 		// Arrange
 		let validToken = "XXX-YYYYYYYYYYYY-Z2"
 
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 		sut.nextButtonTapped(validToken, verificationInput: "")
@@ -1478,8 +1496,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Assert
 		// clear error message
 		// should not present an error message  Strings.holderTokenEntryErrorInvalidCode
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == "YYYYYYYYYYYY"
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
 		expect(self.sut.fieldErrorMessage).to(beNil())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
@@ -1490,20 +1508,20 @@ class TokenEntryViewModelTests: XCTestCase {
 		// Arrange
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: .fake)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		// Act
  		sut.resendVerificationCodeButtonTapped()
 
 		// Assert
-
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.shouldShowTokenEntryField) == false
 		expect(self.sut.shouldShowVerificationEntryField) == true
@@ -1515,8 +1533,8 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.title) == L.holderTokenentryUniversallinkflowTitle()
 		expect(self.sut.fieldErrorMessage).to(beNil())
 
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token) == .fake
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token) == .fake
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}
@@ -1524,6 +1542,7 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - resendVerificationCodeButtonTapped
 
 	func test_userHasNoTokenButtonTapped_shouldCallToDelegate() {
+
 		// Arrange
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1537,12 +1556,14 @@ class TokenEntryViewModelTests: XCTestCase {
 	// MARK: - Other
 
 	func test_withoutInitialRequestToken_withAnInitialFetch_typedVerificationCode_clearTokenField_retypeToken_shouldIgnoreExistingVerificationCodeFieldValue() {
+
 		// Arrange
 		let validToken = "XXX-YYYYYYYYYYYY-Z2"
 
 		tokenValidatorSpy.stubbedValidateResult = true
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
-		proofManagerSpy.stubbedFetchTestResultOnCompletionResult = (.success(RemoteEvent(.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
+		networkManagerSpy.stubbedFetchTestResultCompletionResult =
+			(.success((.fakeVerificationRequired, SignedResponse(payload: "test", signature: "test"))), ())
 
 		sut = mockedViewModel(withRequestToken: nil)
 
@@ -1562,7 +1583,6 @@ class TokenEntryViewModelTests: XCTestCase {
 		let currentValueOfVerificationInput = "1234"
 		sut.userDidUpdateTokenField(rawTokenInput: "XXX-\(nextValidToken)-Z2", currentValueOfVerificationInput: currentValueOfVerificationInput)
 
-		proofManagerSpy.reset()
 		networkManagerSpy.reset()
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult = (.success([.fake]), ())
 
@@ -1572,8 +1592,8 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// The VM should ignore the verification input because it should be still in `inputToken` mode
 		// So it should submit to fetchTestResult with a nil Verification Code:
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.token.token) == nextValidToken
-		expect(self.proofManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.token.token) == nextValidToken
+		expect(self.networkManagerSpy.invokedFetchTestResultParameters?.code).to(beNil())
 	}
 	
 	// MARK: - Sugar
@@ -1581,23 +1601,10 @@ class TokenEntryViewModelTests: XCTestCase {
 	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {
 		return TokenEntryViewModel(
 			coordinator: holderCoordinatorSpy,
-			proofManager: proofManagerSpy,
 			networkManager: networkManagerSpy,
 			requestToken: requestToken,
 			tokenValidator: tokenValidatorSpy
 		)
-	}
-}
-
-extension ProofManagingSpy {
-
-	// NB: only resets the members used so far in this file..
-	func reset() {
-		invokedFetchTestResult = false
-		invokedFetchTestResultCount = 0
-		invokedFetchTestResultParameters = nil
-		invokedFetchTestResultParametersList = []
-		stubbedFetchTestResultOnCompletionResult = nil
 	}
 }
 
