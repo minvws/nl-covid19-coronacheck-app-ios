@@ -1,18 +1,16 @@
-"holder.errorstate.title" = "Sorry, er gaat iets mis";
-"holder.errorstate.server.message" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
-"holder.errorstate.server.messages" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
-"holder.errorstate.client.message" = "<p>Er gaat iets mis bij het maken van je bewijs. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
-"holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
-"holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
-"holder.errorstate.overview.action" = "Naar mijn bewijzen";
+"holder.errorstate.login.cancel.title" = "Inloggen afgebroken";
+"holder.errorstate.login.cancel.message" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder.errorstate.test.message" = "<p>Er gaat iets mis bij de testlocatie. Daardoor kunnen jouw gegevens niet worden opgehaald.</p><p><b>Wat nu?</b><br />Neem contact op met je testlocatie en geef de volgende foutcode door:</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.errorstate.fetch.message" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
 "holder.errorstate.fetch.messages" = "<p>Er gaat iets mis bij het ophalen van je gegevens. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
 "holder.errorstate.someresult.title" = "Zijn dit al je vaccinaties?";
 "holder.errorstate.someresult.message" = "Door een storing of drukte zijn mogelijk niet al jouw gegevens opgehaald. Mist er een vaccinatie? Kom later terug en haal opnieuw je gegevens op.";
-
-"holder.errorstate.login.cancel.title" = "Inloggen afgebroken";
-"holder.errorstate.login.cancel.message" = "Wil je jouw vaccinatiegegevens  ophalen? Log dan opnieuw in met DigiD.";
-"holder.errorstate.test.message" = "<p>Er gaat iets mis bij de testlocatie. Daardoor kunnen jouw gegevens niet worden opgehaald.</p><p><b>Wat nu?</b><br />Neem contact op met je testlocatie en geef de volgende foutcode door:</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.title" = "Sorry, er gaat iets mis";
+"holder.errorstate.server.message" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.client.message" = "<p>Er gaat iets mis bij het maken van je bewijs. Wil je het later nog eens proberen?</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
+"holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
+"holder.errorstate.overview.action" = "Naar mijn bewijzen";
 
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
@@ -245,7 +243,7 @@
 "general.error.nointernet.text" = "Je bent nu niet verbonden met het internet.";
 "holder.errorstate.server.messages" = "<p>We zijn hard bezig om dit probleem op te lossen. Wil je het later nog eens proberen?</p><p><b>Foutcodes:</b><br />%@</p>";
 "holder.errorstate.nobsn.title" = "Geen BSN gevonden";
-"holder.errorstate.nobsn.message" = "De zorgverlener waar je bent gevaccineerd kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";
+"holder.errorstate.nobsn.message" = "De zorgverlener waar je gevaccineerd of getest bent kan je verder helpen. Neem contact op en geef door dat de CoronaCheck-app geen BSN gevonden heeft.";
 "holder.errorstate.nobsn.action" = "Naar mijn bewijzen";
 "holder.errorstate.nosession.title" = "Je sessie is gestopt";
 "holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
