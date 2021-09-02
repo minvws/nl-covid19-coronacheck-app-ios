@@ -102,7 +102,7 @@ protocol NetworkManaging: AnyObject {
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void)
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler

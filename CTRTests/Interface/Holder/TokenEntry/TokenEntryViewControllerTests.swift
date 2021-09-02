@@ -20,6 +20,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 	private var holderCoordinatorSpy: HolderCoordinatorDelegateSpy!
 	private var proofManagerSpy: ProofManagingSpy!
 	private var tokenValidatorSpy: TokenValidatorSpy!
+	private var networkManagerSpy: NetworkSpy!
 
 	override func setUp() {
 		super.setUp()
@@ -28,6 +29,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 		// currently not possible due to @Bindable not working in protocols.
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
 		proofManagerSpy = ProofManagingSpy()
+		networkManagerSpy = NetworkSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
 
 		window = UIWindow()
@@ -90,6 +92,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 		return TokenEntryViewModel(
 			coordinator: holderCoordinatorSpy,
 			proofManager: proofManagerSpy,
+			networkManager: networkManagerSpy,
 			requestToken: requestToken,
 			tokenValidator: tokenValidatorSpy
 		)
@@ -97,7 +100,7 @@ class TokenEntryViewControllerTests: XCTestCase {
 
 	private func loadView(viewController: UIViewController) {
 		_ = viewController.view
-//		window.addSubview(view)
-//		RunLoop.current.run(until: Date())
+		//		window.addSubview(view)
+		//		RunLoop.current.run(until: Date())
 	}
 }

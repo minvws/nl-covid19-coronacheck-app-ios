@@ -181,6 +181,7 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				proofManager: proofManager,
+				networkManager: networkManager,
 				requestToken: token
 			)
 		)
