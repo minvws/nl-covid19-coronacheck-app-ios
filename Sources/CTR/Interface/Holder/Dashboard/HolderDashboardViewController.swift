@@ -265,7 +265,7 @@ class HolderDashboardViewController: BaseViewController {
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.addProofTapped)
 		)
-		plusbutton.title = L.generalAdd()
+		plusbutton.title = L.holderMenuProof()
         plusbutton.accessibilityLabel = plusbutton.title
 		navigationItem.rightBarButtonItem = plusbutton
 	}
