@@ -113,7 +113,7 @@ class AppCoordinatorTests: XCTestCase {
 		expect(self.sut.childCoordinators).to(haveCount(0))
 		alertVerifier.verify(
 			title: L.generalErrorCryptolibTitle(),
-			message: L.generalErrorCryptolibMessage("\(142)"),
+			message: L.generalErrorCryptolibMessage("i 020 000 057"),
 			animated: true,
 			actions: [
 				.cancel(L.generalErrorCryptolibRetry())

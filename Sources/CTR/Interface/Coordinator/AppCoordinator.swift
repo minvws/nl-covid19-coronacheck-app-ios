@@ -133,8 +133,9 @@ class AppCoordinator: Coordinator, Logging {
 	
 	/// Show the error alert when crypto library is not initialized
 	private func showCryptoLibNotInitializedError() {
-		
-		let message = L.generalErrorCryptolibMessage("\(142)")
+
+		let errorCode = ErrorCode(flow: .onboarding, step: .publicKeys, clientCode: .failedToLoadCryptoLibrary)
+		let message = L.generalErrorCryptolibMessage("\(errorCode)")
 		
 		let alertController = UIAlertController(
 			title: L.generalErrorCryptolibTitle(),
@@ -394,4 +395,10 @@ extension AppCoordinator {
 			object: nil
 		)
     }
+}
+
+extension ErrorCode.ClientCode {
+
+	static let failedToLoadCryptoLibrary = ErrorCode.ClientCode(value: "057")
+
 }
