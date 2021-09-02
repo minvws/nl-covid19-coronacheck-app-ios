@@ -1490,6 +1490,25 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(completionReason.value) == completionStatus
 	}
 
+	func test_someEventsMightBeMissing() {
+
+		// Given
+
+		// When
+		sut = ListEventsViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination,
+			remoteEvents: [],
+			eventsMightBeMissing: true
+		)
+
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateSomeresultTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.holderErrorstateSomeresultMessage()))
+		expect(self.sut.alert?.cancelTitle).to(beNil())
+		expect(self.sut.alert?.okTitle).toEventually(equal( L.generalOk()))
+	}
+
 	// MARK: Default values
 
 	private func defaultRemoteVaccinationEvent() -> RemoteEvent {

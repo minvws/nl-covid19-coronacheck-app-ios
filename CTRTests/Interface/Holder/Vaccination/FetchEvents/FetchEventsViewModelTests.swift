@@ -51,75 +51,6 @@ class FetchEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert).toNot(beNil())
 	}
 
-	func test_happyFlow_willInvokeCoordinator() {
-
-		// Given
-		let eventWrapper = EventFlow.EventResultWrapper(
-			providerIdentifier: "CC",
-			protocolVersion: "3.0",
-			identity: identity,
-			status: .complete,
-			result: nil,
-			events: [
-				EventFlow.Event(
-					type: "vaccination",
-					unique: "1234",
-					isSpecimen: false,
-					vaccination: vaccinationEvent,
-					negativeTest: nil,
-					positiveTest: nil,
-					recovery: nil,
-					dccEvent: nil
-				)
-			]
-		)
-
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
-
-		// When
-		sut = FetchEventsViewModel(
-			coordinator: coordinatorSpy,
-			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
-		)
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
-	}
-
-	func test_happyFlow_noEvents() {
-
-		// Given
-		let eventWrapper = EventFlow.EventResultWrapper(
-			providerIdentifier: "CC",
-			protocolVersion: "3.0",
-			identity: identity,
-			status: .complete,
-			result: nil,
-			events: []
-		)
-
-		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
-		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
-		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
-		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
-
-		// When
-		sut = FetchEventsViewModel(
-			coordinator: coordinatorSpy,
-			tvsToken: "test",
-			eventMode: .vaccination,
-			networkManager: networkSpy
-		)
-
-		// Then
-		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue(), timeout: .seconds(5))
-	}
-
 	func test_accessTokenOK_providersRequestTimeOut() {
 
 		// Given
@@ -466,6 +397,105 @@ class FetchEventsViewModelTests: XCTestCase {
 		}
 	}
 
+	func test_happyFlow_willInvokeCoordinator() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: "test",
+			eventMode: .vaccination,
+			networkManager: networkSpy
+		)
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue())
+	}
+
+	func test_happyFlow_noEvents() {
+
+		// Given
+		let eventWrapper = EventFlow.EventResultWrapper(
+			providerIdentifier: "CC",
+			protocolVersion: "3.0",
+			identity: FetchEventsViewModelTests.identity,
+			status: .complete,
+			result: nil,
+			events: []
+		)
+
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((eventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: "test",
+			eventMode: .vaccination,
+			networkManager: networkSpy
+		)
+
+		// Then
+		expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish).toEventually(beTrue(), timeout: .seconds(5))
+	}
+
+	func test_unomiServerBusy_eventOk() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
+		networkSpy.stubbedFetchEventsCompletionResult = (.success((succesEventWrapper, signedResponse)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: "test",
+			eventMode: .vaccination,
+			networkManager: networkSpy
+		)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+	}
+
+	func test_unomiOK_eventServerBusy() {
+
+		// Given
+		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
+		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
+		networkSpy.stubbedFetchEventInformationCompletionResult = (.success(eventInformationAvailable), ())
+		networkSpy.stubbedFetchEventsCompletionResult =
+			(.failure(ServerError.error(statusCode: 429, response: nil, error: .serverBusy)), ())
+
+		// When
+		sut = FetchEventsViewModel(
+			coordinator: coordinatorSpy,
+			tvsToken: "test",
+			eventMode: .vaccination,
+			networkManager: networkSpy
+		)
+
+		// Then
+		expect(self.sut.alert).toEventuallyNot(beNil())
+		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
+		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
+		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
+		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+	}
+
 	// MARK: Default values
 
 	let accessToken = EventFlow.AccessToken(
@@ -491,14 +521,34 @@ class FetchEventsViewModelTests: XCTestCase {
 		informationAvailable: true
 	)
 
-	let identity = EventFlow.Identity(
+	static let identity = EventFlow.Identity(
 		infix: "",
 		firstName: "Corona",
 		lastName: "Check",
 		birthDateString: "2021-05-16"
 	)
 
-	let vaccinationEvent = EventFlow.VaccinationEvent(
+	let succesEventWrapper = EventFlow.EventResultWrapper(
+		providerIdentifier: "CC",
+		protocolVersion: "3.0",
+		identity: identity,
+		status: .complete,
+		result: nil,
+		events: [
+			EventFlow.Event(
+				type: "vaccination",
+				unique: "1234",
+				isSpecimen: false,
+				vaccination: vaccinationEvent,
+				negativeTest: nil,
+				positiveTest: nil,
+				recovery: nil,
+				dccEvent: nil
+			)
+		]
+	)
+
+	static let vaccinationEvent = EventFlow.VaccinationEvent(
 		dateString: "2021-05-16",
 		hpkCode: nil,
 		type: nil,

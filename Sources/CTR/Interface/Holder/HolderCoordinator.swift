@@ -180,7 +180,7 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
-				proofManager: proofManager,
+				networkManager: networkManager,
 				requestToken: token
 			)
 		)

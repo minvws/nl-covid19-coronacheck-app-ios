@@ -14,6 +14,7 @@ struct ServerResponse: Decodable, Equatable {
 
 enum ServerError: Error, Equatable {
 	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
+	case provider(provider: String?, statusCode: Int?, response: ServerResponse?, error: NetworkError)
 }
 
 enum NetworkError: String, Error, Equatable {
@@ -101,12 +102,16 @@ protocol NetworkManaging: AnyObject {
 	
 	/// Get the test providers
 	/// - Parameter completion: completion handler
-	func fetchTestProviders(completion: @escaping (Result<[TestProvider], NetworkError>) -> Void)
+	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void)
 
 	/// Get the event providers
 	/// - Parameter completion: completion handler
 	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void)
 
+	/// Get the greenCards
+	/// - Parameters:
+	///   - dictionary: a dictionary of events
+	///   - completion: completion handler
 	func fetchGreencards(
 		dictionary: [String: AnyObject],
 		completion: @escaping (Result<RemoteGreenCards.Response, ServerError>) -> Void)
@@ -121,7 +126,7 @@ protocol NetworkManaging: AnyObject {
 		provider: TestProvider,
 		token: RequestToken,
 		code: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Get a unomi result (check if a event provider knows me)
 	/// - Parameters:
@@ -131,7 +136,7 @@ protocol NetworkManaging: AnyObject {
 	func fetchEventInformation(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<EventFlow.EventInformationAvailable, NetworkError>) -> Void)
+		completion: @escaping (Result<EventFlow.EventInformationAvailable, ServerError>) -> Void)
 
 	/// Get  events from an event provider
 	/// - Parameters:
@@ -141,7 +146,7 @@ protocol NetworkManaging: AnyObject {
 	func fetchEvents(
 		provider: EventFlow.EventProvider,
 		filter: String?,
-		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), NetworkError>) -> Void)
+		completion: @escaping (Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) -> Void)
 
 	/// Check the coupling status
 	/// - Parameters:
