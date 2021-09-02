@@ -807,47 +807,6 @@ extension TokenEntryViewModel: Logging {
 	}
 }
 
-extension Error {
-
-	fileprivate func toAlertContent(
-		coordinator: HolderCoordinatorDelegate?,
-		retryAction: ((UIAlertAction) -> Void)? = nil) -> AlertContent {
-
-		switch self as? NetworkError {
-			case .serverBusy?:
-				return AlertContent(
-					title: L.generalNetworkwasbusyTitle(),
-					subTitle: L.generalNetworkwasbusyText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: { _ in
-						coordinator?.navigateBackToStart()
-					},
-					okTitle: L.generalNetworkwasbusyButton()
-				)
-
-			case .requestTimedOut?, .noInternetConnection:
-				return AlertContent(
-					title: L.generalErrorNointernetTitle(),
-					subTitle: L.generalErrorNointernetText(),
-					cancelAction: nil,
-					cancelTitle: L.generalClose(),
-					okAction: retryAction,
-					okTitle: L.internetRequiredButton()
-				)
-			default:
-				return AlertContent(
-					title: L.generalErrorTitle(),
-					subTitle: L.generalErrorTechnicalText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: { _ in },
-					okTitle: L.generalOk()
-				)
-		}
-	}
-}
-
 /// Returns the `enabled` state to be used for `shouldEnableNextButton`
 private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
 	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
