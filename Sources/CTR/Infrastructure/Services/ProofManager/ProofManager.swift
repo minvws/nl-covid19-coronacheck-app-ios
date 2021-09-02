@@ -29,35 +29,4 @@ class ProofManager: ProofManaging, Logging {
 			onCompletion?(result)
 		}
 	}
-	
-	/// Get the test result for a token
-	/// - Parameters:
-	///   - token: the request token
-	///   - code: the verification code
-	///   - onCompletion: completion handler
-	func fetchTestResult(
-		_ token: RequestToken,
-		code: String?,
-		provider: TestProvider,
-		onCompletion: @escaping (Result<RemoteEvent, Error>) -> Void) {
-
-		if provider.resultURL == nil {
-			self.logError("No url provided for \(provider)")
-			onCompletion(.failure(ProofError.invalidUrl))
-			return
-		}
-
-		networkManager.fetchTestResult(provider: provider, token: token, code: code) { response in
-			// response is of type (Result<(TestResultWrapper, SignedResponse), NetworkError>)
-
-			switch response {
-				case let .success(wrapper):
-					self.logDebug("We got \(wrapper.0.status) wrapper.")
-					onCompletion(.success(wrapper))
-				case let .failure(error):
-					self.logError("Error getting the result: \(error)")
-					onCompletion(.failure(error))
-			}
-		}
-	}
 }

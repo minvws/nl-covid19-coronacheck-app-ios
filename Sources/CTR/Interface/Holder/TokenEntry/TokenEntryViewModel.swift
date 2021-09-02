@@ -421,38 +421,6 @@ class TokenEntryViewModel {
 				self.progressIndicationCounter.decrement()
 			}
 		)
-
-//		proofManager?.fetchTestResult(
-//			requestToken,
-//			code: verificationCode,
-//			provider: provider) {  [weak self] response in
-//			guard let self = self else { return }
-//
-//			self.fieldErrorMessage = nil
-//
-//			switch response {
-//				case let .success(remoteEvent):
-
-//
-//				case let .failure(error):
-//					if let castedError = error as? ProofError, castedError == .invalidUrl {
-//						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-//					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
-//						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
-//					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
-//						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
-//							self?.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
-//						})
-//					} else {
-//						// For now, display the network error.
-//						self.fieldErrorMessage = error.localizedDescription
-//						self.networkErrorAlert = error.toAlertContent(coordinator: self.coordinator)
-//					}
-//					self.decideWhetherToAbortRequestTokenProvidedMode()
-//			}
-//
-//			self.progressIndicationCounter.decrement()
-//		}
 	}
 
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
