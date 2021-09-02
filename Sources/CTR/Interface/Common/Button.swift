@@ -135,13 +135,21 @@ class Button: UIButton {
     }
 
 	override var intrinsicContentSize: CGSize {
-		let size = titleLabel?.intrinsicContentSize ?? CGSize.zero
-		let insets = contentEdgeInsets
+        let fittingSize = titleLabel?.sizeThatFits(
+            CGSize(width: frame.width, height: .greatestFiniteMagnitude)
+        ) ?? .zero
+        let intrinsicSize = titleLabel?.intrinsicContentSize ?? CGSize.zero
 
-		return CGSize(
-			width: size.width + insets.left + insets.right,
-			height: size.height + insets.top + insets.bottom
-		)
+        let maxWidth = max(fittingSize.width, intrinsicSize.width)
+        let maxHeight = max(fittingSize.height, intrinsicSize.height)
+
+        let horizontalPadding = contentEdgeInsets.left + contentEdgeInsets.right
+        let verticalPadding = contentEdgeInsets.top + contentEdgeInsets.bottom
+
+        return CGSize(
+            width: maxWidth + horizontalPadding,
+            height: maxHeight + verticalPadding
+        )
 	}
 
     // MARK: - Private
