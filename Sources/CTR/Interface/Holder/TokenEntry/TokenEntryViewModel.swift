@@ -399,6 +399,8 @@ class TokenEntryViewModel {
 										self.displayNoInternet(requestToken, verificationCode: verificationCode)
 									case .requestTimedOut:
 										self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+									case .invalidRequest:
+										self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 									default:
 										if case let .error(statusCode, serverResponse, networkError) = serverError {
 											self.initializationMode = .error(
