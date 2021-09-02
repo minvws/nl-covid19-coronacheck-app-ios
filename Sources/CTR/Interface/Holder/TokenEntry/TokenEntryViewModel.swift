@@ -81,7 +81,6 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let proofManager: ProofManaging?
 	private let networkManager: NetworkManaging?
 	private let tokenValidator: TokenValidatorProtocol
 
@@ -136,17 +135,14 @@ class TokenEntryViewModel {
 
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
 	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
 		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
 		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
 
 		self.coordinator = coordinator
-		self.proofManager = proofManager
 		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator

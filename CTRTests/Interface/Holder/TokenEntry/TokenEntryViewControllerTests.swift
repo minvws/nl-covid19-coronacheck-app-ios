@@ -28,7 +28,6 @@ class TokenEntryViewControllerTests: XCTestCase {
 		// Ideally we'd be able to use a `TokenEntryViewModelSpy` but
 		// currently not possible due to @Bindable not working in protocols.
 		holderCoordinatorSpy = HolderCoordinatorDelegateSpy()
-		proofManagerSpy = ProofManagingSpy()
 		networkManagerSpy = NetworkSpy()
 		tokenValidatorSpy = TokenValidatorSpy()
 
@@ -91,7 +90,6 @@ class TokenEntryViewControllerTests: XCTestCase {
 	private func mockedViewModel(withRequestToken requestToken: RequestToken?) -> TokenEntryViewModel {
 		return TokenEntryViewModel(
 			coordinator: holderCoordinatorSpy,
-			proofManager: proofManagerSpy,
 			networkManager: networkManagerSpy,
 			requestToken: requestToken,
 			tokenValidator: tokenValidatorSpy
