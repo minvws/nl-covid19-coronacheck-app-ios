@@ -147,6 +147,16 @@ class HolderCoordinator: SharedCoordinator {
 					dashboardViewController.viewModel.selectTab = .domestic
 				}
 				return true
+				
+			case .tvsAuth(let returnURL):
+				
+				if let url = returnURL,
+				   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+				   let authorizationFlow = appDelegate.currentAuthorizationFlow,
+				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+					appDelegate.currentAuthorizationFlow = nil
+				}
+				return true
 		}
     }
 
