@@ -247,7 +247,7 @@
 "holder.errorstate.nobsn.action" = "Naar mijn bewijzen";
 "holder.errorstate.nosession.title" = "Je sessie is gestopt";
 "holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
-"holder.errorstate.nosession.action" = "Log in met DigiD";
+"holder.errorstate.nosession.action" = "Naar mijn bewijzen";
 "general.error.server.unreachable" = "Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";

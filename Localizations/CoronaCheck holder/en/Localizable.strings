@@ -247,7 +247,7 @@
 "holder.errorstate.nobsn.action" = "To my certificates";
 "holder.errorstate.nosession.title" = "Your session has expired";
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
-"holder.errorstate.nosession.action" = "Login with DigiD";
+"holder.errorstate.nosession.action" = "To my certificates";
 "general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";

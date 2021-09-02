@@ -585,7 +585,7 @@ private extension FetchEventsViewModel {
 				subTitle: L.holderErrorstateNosessionMessage(),
 				primaryActionTitle: L.holderErrorstateNosessionAction(),
 				primaryAction: { [weak self] in
-					self?.goBack()
+					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
