@@ -165,17 +165,7 @@ final class FetchEventsViewModel: Logging {
 		unomiServerErrors: [ServerError],
 		someInformationMightBeMissing: Bool) {
 
-		var hasNoResults = remoteEvents.isEmpty
-		if !hasNoResults {
-			// There are remoteEvents, but they might not contain events.
-			hasNoResults = remoteEvents.filter { removeEvent in
-				if let events = removeEvent.wrapper.events {
-					return !events.isEmpty
-				} else {
-					return false
-				}
-			}.isEmpty
-		}
+		let hasNoResults = remoteEvents.compactMap { $0.wrapper.events }.isEmpty
 
 		determineActionFromResponse(
 			hasNoResult: hasNoResults,
