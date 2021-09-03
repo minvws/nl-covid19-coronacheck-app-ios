@@ -11,40 +11,47 @@ class Fonts {
     // Using default textStyles from Apple typography guidelines:
     // https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/typography/
     // Table with point in sizes can be found on the link.
+	
+	enum Weight {
+		case medium
+		case semiBold
+		case bold
+		case heavyBold
+	}
 
 	/// Size 34 points
     var largeTitle: UIFont {
-        font(textStyle: .largeTitle, isBold: true)
+		font(textStyle: .largeTitle, weight: .bold)
     }
 
 	/// Size 28 points
     var title1: UIFont {
-        font(textStyle: .title1, isBold: true)
+        font(textStyle: .title1, weight: .bold)
     }
 
 	/// Size 28 points
 	var title1Montserrat: UIFont {
-		font(textStyle: .title1, isBold: true, customFont: "Montserrat-Bold")
+		font(textStyle: .title1, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 22 points
     var title2: UIFont {
-        font(textStyle: .title2, isBold: true)
+        font(textStyle: .title2, weight: .bold)
     }
 
 	/// Size 20 points
     var title3: UIFont {
-        font(textStyle: .title3, isBold: true)
+        font(textStyle: .title3, weight: .bold)
     }
 
 	/// Size 20 points
 	var title3Montserrat: UIFont {
-		font(textStyle: .title3, isBold: true, customFont: "Montserrat-Bold")
+		font(textStyle: .title3, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 20 points
 	var title3Medium: UIFont {
-		font(textStyle: .title3, isMedium: true)
+		font(textStyle: .title3, weight: .medium)
 	}
 
 	/// Size 17 points
@@ -54,12 +61,12 @@ class Fonts {
 
 	/// Size 17 points
 	var headlineBold: UIFont {
-		font(textStyle: .headline, isBold: true)
+		font(textStyle: .headline, weight: .bold)
 	}
 	
 	/// Size 17 points
 	var headlineBoldMontserrat: UIFont {
-		font(textStyle: .headline, isBold: true, customFont: "Montserrat-Bold")
+		font(textStyle: .headline, weight: .bold, customFont: "Montserrat-Bold")
 	}
 
 	/// Size 17 points
@@ -83,7 +90,7 @@ class Fonts {
 
 	/// Size 17 points
     var bodyBold: UIFont {
-        font(textStyle: .body, isBold: true)
+        font(textStyle: .body, weight: .bold)
     }
 
 	/// Size 17 points
@@ -93,12 +100,12 @@ class Fonts {
 
 	/// Size 17 points
 	var bodySemiBold: UIFont {
-		font(textStyle: .body, isSemiBold: true)
+		font(textStyle: .body, weight: .semiBold)
 	}
 
 	/// Size 17 points
 	var bodyMedium: UIFont {
-		font(textStyle: .body, isMedium: true)
+		font(textStyle: .body, weight: .medium)
 	}
 
 	/// Size 16 points
@@ -108,7 +115,7 @@ class Fonts {
 	
 	/// Size 16 points
 	var calloutSemiBold: UIFont {
-		font(textStyle: .callout, isSemiBold: true)
+		font(textStyle: .callout, weight: .semiBold)
 	}
 
 	/// Size 15 points
@@ -120,15 +127,20 @@ class Fonts {
 	var subheadMontserrat: UIFont {
 		font(textStyle: .subheadline, customFont: "Montserrat-SemiBold")
 	}
+	
+	/// Size 15 points
+	var subheadHeavyBold: UIFont {
+		font(textStyle: .subheadline, weight: .heavyBold)
+	}
 
 	/// Size 15 points
     var subheadBold: UIFont {
-        font(textStyle: .subheadline, isBold: true)
+		font(textStyle: .subheadline, weight: .bold)
     }
 
 	/// Size 15 points
 	var subheadMedium: UIFont {
-		font(textStyle: .subheadline, isMedium: true)
+		font(textStyle: .subheadline, weight: .medium)
 	}
 
 	/// Size 13 points
@@ -143,21 +155,19 @@ class Fonts {
 
 	/// size 12 points
     var caption1: UIFont {
-        font(textStyle: .caption1, isBold: true)
+		font(textStyle: .caption1, weight: .bold)
     }
 
 	/// size 12 points
 	var caption1SemiBold: UIFont {
-		font(textStyle: .caption1, isSemiBold: true)
+		font(textStyle: .caption1, weight: .semiBold)
 	}
 
     // MARK: - Private
 
 	private func font(
 		textStyle: UIFont.TextStyle,
-		isBold: Bool = false,
-		isSemiBold: Bool = false,
-		isMedium: Bool = false,
+		weight: Weight? = nil,
 		customFont: String? = nil) -> UIFont {
 
 		if let customFontName = customFont {
@@ -168,23 +178,27 @@ class Fonts {
 		}
 
         var fontDescriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: textStyle)
+		
+		if weight == .heavyBold {
+			fontDescriptor = fontDescriptor.addingAttributes(
+				[.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.bold]]
+			)
+		}
 
-        if isBold, let boldFontDescriptor = fontDescriptor.withSymbolicTraits(.traitBold) {
+        if weight == .bold, let boldFontDescriptor = fontDescriptor.withSymbolicTraits(.traitBold) {
             fontDescriptor = boldFontDescriptor
         }
 
-		if isSemiBold {
-			let semiBoldDescriptor = fontDescriptor.addingAttributes(
+		if weight == .semiBold {
+			fontDescriptor = fontDescriptor.addingAttributes(
 				[.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.semibold]]
 			)
-			fontDescriptor = semiBoldDescriptor
 		}
 
-		if isMedium {
-			let mediumDescriptor = fontDescriptor.addingAttributes(
+		if weight == .medium {
+			fontDescriptor = fontDescriptor.addingAttributes(
 				[.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.medium]]
 			)
-			fontDescriptor = mediumDescriptor
 		}
 
 		return UIFont(descriptor: fontDescriptor, size: fontDescriptor.pointSize)
