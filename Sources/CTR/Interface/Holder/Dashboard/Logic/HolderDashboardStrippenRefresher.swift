@@ -113,6 +113,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
 					 GreenCardLoader.Error.preparingIssue(.error(_, _, let networkError)):
 					endLoadingWithError(error: networkError)
+					return // don't update `state` on this iteration.
 
 				case let error as GreenCardLoader.Error:
 					state.errorOccurenceCount += 1
