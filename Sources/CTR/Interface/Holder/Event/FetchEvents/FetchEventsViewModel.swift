@@ -104,6 +104,7 @@ final class FetchEventsViewModel: Logging {
 					eventProviders: eventProvidersWithEventInformation,
 					filter: self.eventMode.queryFilterValue,
 					someInformationMightBeMissing: informationMightBeMissing,
+					unomiServerErrors: serverErrors,
 					completion: self.handleFetchEventsResponse
 				)
 			}
@@ -160,20 +161,39 @@ final class FetchEventsViewModel: Logging {
 	func handleFetchEventsResponse(
 		remoteEvents: [RemoteEvent],
 		serverErrors: [ServerError],
+		unomiServerErrors: [ServerError],
 		someInformationMightBeMissing: Bool) {
 
+		var hasNoResults = remoteEvents.isEmpty
+		if !hasNoResults {
+			// There are remoteEvents, but they might not contain events.
+			hasNoResults = remoteEvents.filter { removeEvent in
+				if let events = removeEvent.wrapper.events {
+					return !events.isEmpty
+				} else {
+					return false
+				}
+			}.isEmpty
+		}
+
 		determineActionFromResponse(
-			hasNoResult: remoteEvents.isEmpty,
+			hasNoResult: hasNoResults,
 			serverErrors: serverErrors,
 			step: .event,
 			nextAction: { someEventsMightBeMissing in
-				self.coordinator?.fetchEventsScreenDidFinish(
-					.showEvents(
-						events: remoteEvents,
-						eventMode: self.eventMode,
-						eventsMightBeMissing: someEventsMightBeMissing || someInformationMightBeMissing
+				if hasNoResults && !unomiServerErrors.isEmpty {
+					self.logDebug("There are unomi errors, some unomi results and no event results. Show the unomi errors.")
+					let errorCodes = self.mapServerErrors(unomiServerErrors, for: self.flow, step: .unomi)
+					self.displayErrorCodeForUnomiAndEvent(errorCodes)
+				} else {
+					self.coordinator?.fetchEventsScreenDidFinish(
+						.showEvents(
+							events: remoteEvents,
+							eventMode: self.eventMode,
+							eventsMightBeMissing: someEventsMightBeMissing || someInformationMightBeMissing
+						)
 					)
-				)
+				}
 			}
 		)
 	}
@@ -402,7 +422,8 @@ final class FetchEventsViewModel: Logging {
 		eventProviders: [EventFlow.EventProvider],
 		filter: String?,
 		someInformationMightBeMissing: Bool,
-		completion: @escaping ([RemoteEvent], [ServerError], Bool) -> Void) {
+		unomiServerErrors: [ServerError],
+		completion: @escaping ([RemoteEvent], [ServerError], [ServerError], Bool) -> Void) {
 
 		var eventResponseResults = [Result<RemoteEvent, ServerError>]()
 
@@ -450,7 +471,9 @@ final class FetchEventsViewModel: Logging {
 			// Process failures:
 			let failuresExperienced = eventResponseResults.compactMap { $0.failureError }
 
-			completion(successfulEventResponses, failuresExperienced, someInformationMightBeMissing)
+			// We propagate the potential unomi server errors and not append them to failuresExperienced,
+			// because we need to distinguish between them in the error states.
+			completion(successfulEventResponses, failuresExperienced, unomiServerErrors, someInformationMightBeMissing)
 		}
 	}
 
