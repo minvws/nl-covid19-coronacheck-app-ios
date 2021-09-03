@@ -307,7 +307,7 @@ class ListEventsViewModel: Logging {
 					showServerTooBusyError()
 					shouldPrimaryButtonBeEnabled = true
 					
-				case .requestTimedOut:
+				case .serverUnreachable:
 					showServerUnreachable(remoteEvents: remoteEvents)
 					shouldPrimaryButtonBeEnabled = true
 

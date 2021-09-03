@@ -300,7 +300,7 @@ class NetworkManager: Logging {
 				case .notConnectedToInternet:
 					completion(.failure(.noInternetConnection))
 				case .timedOut, .cannotConnectToHost, .cannotFindHost, .networkConnectionLost:
-					completion(.failure(.requestTimedOut))
+					completion(.failure(.serverUnreachable))
 				default:
 					completion(.failure(.invalidResponse))
 			}
@@ -340,7 +340,7 @@ class NetworkManager: Logging {
 				case .notConnectedToInternet:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .noInternetConnection))
 				case .timedOut, .cannotConnectToHost, .cannotFindHost, .networkConnectionLost:
-					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .requestTimedOut))
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachable))
 				default:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
 			}

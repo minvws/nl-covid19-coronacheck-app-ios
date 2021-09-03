@@ -119,7 +119,7 @@ final class FetchEventsViewModel: Logging {
 		let someServerUnreachableErrror: Bool = !serverErrors.filter { serverError in
 			switch serverError {
 				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
-					return error == .serverBusy || error == .requestTimedOut
+					return error == .serverBusy || error == .serverUnreachable
 			}
 		}.isEmpty
 
@@ -141,7 +141,7 @@ final class FetchEventsViewModel: Logging {
 		switch (hasNoResult, someServerUnreachableErrror, someNetworkDidError) {
 
 			case (true, true, _): // No results and >=1 network was busy or timed out
-				displayRequestTimedOut()
+				displayServerUnreachable()
 
 			case (true, _, true): // No results and >=1 network had an error
 				let errorCodes = mapServerErrors(serverErrors, for: flow, step: step)
@@ -527,9 +527,9 @@ private extension FetchEventsViewModel {
 
 		let hasNoBSN = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeNoBSN }.isEmpty
 		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
-		let requestTimedOut = !serverErrors.filter { serverError in
+		let serverUnreachable = !serverErrors.filter { serverError in
 			if case let ServerError.error(_, _, error) = serverError {
-				return error == .requestTimedOut
+				return error == .serverUnreachable
 			}
 			return false
 		}.isEmpty
@@ -550,8 +550,8 @@ private extension FetchEventsViewModel {
 			displayNoBSN()
 		} else if sessionExpired {
 			displaySessionExpired()
-		} else if requestTimedOut {
-			displayRequestTimedOut()
+		} else if serverUnreachable {
+			displayServerUnreachable()
 		} else if serverBusy {
 			displayServerBusy()
 		} else if noInternet {
@@ -593,7 +593,7 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func displayRequestTimedOut() {
+	func displayServerUnreachable() {
 
 		// this is a retry-able situation
 		alert = AlertContent(
