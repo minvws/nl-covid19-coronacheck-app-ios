@@ -326,8 +326,8 @@ class TokenEntryViewModel {
 						switch error {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
-							case .requestTimedOut:
-								self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+							case .serverUnreachable:
+								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							default:
 								self.initializationMode = .error(serverError: serverError)
 						}
@@ -397,8 +397,8 @@ class TokenEntryViewModel {
 								switch error {
 									case .noInternetConnection:
 										self.displayNoInternet(requestToken, verificationCode: verificationCode)
-									case .requestTimedOut:
-										self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+									case .serverUnreachable:
+										self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 									case .invalidRequest:
 										self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 									default:
@@ -616,10 +616,10 @@ extension TokenEntryViewModel {
 							case .serverBusy:
 								return L.generalNetworkwasbusyText()
 							case .responseCached, .redirection, .resourceNotFound, .serverError:
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 								return L.holderErrorstateTestMessage("\(errorCode)")
 							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
 								return L.holderErrorstateTestMessage("\(errorCode)")
 							default:
 								break
@@ -829,7 +829,7 @@ extension TokenEntryViewModel {
 		)
 	}
 
-	private func displayRequestTimedOut(_ requestToken: RequestToken, verificationCode: String?) {
+	private func displayServerUnreachable(_ requestToken: RequestToken, verificationCode: String?) {
 
 		// this is a retry-able situation
 		self.networkErrorAlert = AlertContent(

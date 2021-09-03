@@ -56,7 +56,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -78,7 +78,7 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
 
 		// When
@@ -101,9 +101,9 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 
 		// When
 		sut = FetchEventsViewModel(

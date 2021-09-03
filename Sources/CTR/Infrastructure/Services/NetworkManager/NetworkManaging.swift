@@ -19,7 +19,7 @@ enum ServerError: Error, Equatable {
 
 enum NetworkError: String, Error, Equatable {
 	case invalidRequest
-	case requestTimedOut
+	case serverUnreachable
 	case noInternetConnection
 	case invalidResponse
 	case responseCached
@@ -37,7 +37,7 @@ enum NetworkError: String, Error, Equatable {
 
 			case .invalidRequest:
 				return "002"
-			//			case .requestTimedOut:
+			//			case .serverUnreachable:
 			//			case .noInternetConnection:
 			case .invalidResponse:
 				return "003"

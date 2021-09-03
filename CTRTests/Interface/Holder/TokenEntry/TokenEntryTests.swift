@@ -324,7 +324,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		tokenValidatorSpy.stubbedValidateResult = true
 
 		// Act
@@ -673,7 +673,7 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
 		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.message).toEventually(equal(L.holderErrorstateTestMessage("i 120 xxx 400")))
+		expect(self.sut.message).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 400")))
 		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
 		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beTrue())
 		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())

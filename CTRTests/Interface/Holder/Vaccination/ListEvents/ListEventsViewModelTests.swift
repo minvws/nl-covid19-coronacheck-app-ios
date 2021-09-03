@@ -570,7 +570,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		walletSpy.stubbedStoreEventGroupResult = true
 		networkSpy.stubbedPrepareIssueCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
 
@@ -787,7 +787,7 @@ class ListEventsViewModelTests: XCTestCase {
 		networkSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
 
