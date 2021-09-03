@@ -130,7 +130,7 @@
 "holder.tokenscan.torch.disable" = "Zet de zaklamp uit.";
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
-"general.networkwasbusy.text" = "Probeer het later nog eens.";
+"general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
 "general.networkwasbusy.button" = "Naar mijn bewijzen";
 "general.add" = "Toevoegen";
 /* Link naar web accessibility pagina */
@@ -269,7 +269,7 @@
 "endOfLife.error.message" = "De website kan niet geopend worden.";
 "endOfLife.title" = "App buiten werking";
 "endOfLife.description" = "Op dit moment is de app niet in gebruik. Ga voor meer informatie naar CoronaCheck.nl";
-"endOfLife.button" = "Ga naar CoronaCheck.nl";
+"endOfLife.button" = "Naar CoronaCheck.nl";
 
 /* MARK: - Internet Required */
 "internet.required.button" = "Probeer opnieuw";
