@@ -128,7 +128,7 @@ class ScrolledStackWithButtonView: ScrolledStackView {
 		} else {
 			NSLayoutConstraint.activate([
 
-				primaryButton.widthAnchor.constraint(equalToConstant: ViewTraits.buttonWidth),
+				primaryButton.widthAnchor.constraint(greaterThanOrEqualToConstant: ViewTraits.buttonWidth),
 				primaryButton.leadingAnchor.constraint(
 					greaterThanOrEqualTo: safeAreaLayoutGuide.leadingAnchor,
 					constant: ViewTraits.buttonMargin
