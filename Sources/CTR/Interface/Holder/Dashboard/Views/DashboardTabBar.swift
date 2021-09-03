@@ -208,7 +208,7 @@ private class TabBarButton: UIControl {
 	override var isSelected: Bool {
 		didSet {
 			titleLabel.textColor = isSelected ? Theme.colors.dark : Theme.colors.secondaryText
-			titleLabel.font = isSelected ? Theme.fonts.subheadBold : Theme.fonts.subheadMedium
+			titleLabel.font = isSelected ? Theme.fonts.subheadHeavyBold : Theme.fonts.subheadMedium
 			
 			if isSelected {
 				accessibilityTraits.insert(.selected)
