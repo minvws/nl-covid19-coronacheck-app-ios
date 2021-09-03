@@ -30,9 +30,14 @@ class GreenCardLoader: GreenCardLoading, Logging {
 
 		var errorDescription: String? {
 			switch self {
-				case .credentials(.error(_, _, let networkError)),
-					 .preparingIssue(.error(_, _, let networkError)):
-					return networkError.rawValue
+				case .credentials(.error(_, _, let networkError)):
+					return "credentials/" + networkError.rawValue
+				case .credentials(.provider(_, _, _, let networkError)):
+					return "credentials/provider/" + networkError.rawValue
+				case .preparingIssue(.error(_, _, let networkError)):
+					return "preparingIssue/" + networkError.rawValue
+				case .preparingIssue(.provider(_, _, _, let networkError)):
+					return "preparingIssue/provider/" + networkError.rawValue
 				case .noEvents:
 					return "noEvents"
 				case .didNotEvaluate:
