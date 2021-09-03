@@ -25,24 +25,14 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 
 		var errorDescription: String? {
 			switch self {
-				case .greencardLoaderError(let greenCardError):
-					switch greenCardError {
-						case let .credentials(serverError), let .preparingIssue(serverError):
-							if case let ServerError.error(_, _, networkError) = serverError {
-								return networkError.rawValue
-							} else {
-								return nil // Can not happen, there is always a networkError for a serverError.
-							}
-						default:
-							return "GreenCard error" // greenCardError.rawValue can not be used, no longer a String type.
-					}
+				case .greencardLoaderError(let error):
+					return error.errorDescription
 				case .networkError(let error):
 					return error.rawValue
 				case .logicalErrorA:
 					return "Logical error A"
 				case .unknownErrorA:
 					return "Unknown error A"
-
 			}
 		}
 	}
