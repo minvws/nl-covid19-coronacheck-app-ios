@@ -324,7 +324,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		tokenValidatorSpy.stubbedValidateResult = true
 
 		// Act

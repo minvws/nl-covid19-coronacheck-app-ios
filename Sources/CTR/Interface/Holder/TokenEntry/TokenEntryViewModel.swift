@@ -326,8 +326,8 @@ class TokenEntryViewModel {
 						switch error {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
-							case .requestTimedOut:
-								self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+							case .serverUnreachable:
+								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							default:
 								self.initializationMode = .error(serverError: serverError)
 						}
@@ -397,8 +397,8 @@ class TokenEntryViewModel {
 								switch error {
 									case .noInternetConnection:
 										self.displayNoInternet(requestToken, verificationCode: verificationCode)
-									case .requestTimedOut:
-										self.displayRequestTimedOut(requestToken, verificationCode: verificationCode)
+									case .serverUnreachable:
+										self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 									case .invalidRequest:
 										self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
 									default:
@@ -829,7 +829,7 @@ extension TokenEntryViewModel {
 		)
 	}
 
-	private func displayRequestTimedOut(_ requestToken: RequestToken, verificationCode: String?) {
+	private func displayServerUnreachable(_ requestToken: RequestToken, verificationCode: String?) {
 
 		// this is a retry-able situation
 		self.networkErrorAlert = AlertContent(

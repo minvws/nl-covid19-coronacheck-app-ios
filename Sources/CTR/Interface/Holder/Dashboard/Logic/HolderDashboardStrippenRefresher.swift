@@ -113,7 +113,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					switch error {
 						case let .credentials(serverError), let .preparingIssue(serverError):
 							if case let ServerError.error(_, _, networkError) = serverError {
-								if networkError == .noInternetConnection || networkError == .requestTimedOut {
+								if networkError == .noInternetConnection || networkError == .serverUnreachable {
 									state.loadingState = .noInternet
 								} else {
 									state.errorOccurenceCount += 1

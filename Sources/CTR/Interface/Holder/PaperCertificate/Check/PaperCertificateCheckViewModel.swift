@@ -140,8 +140,8 @@ class PaperCertificateCheckViewModel: Logging {
 					showServerTooBusyError()
 				case .noInternetConnection:
 					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-				case .requestTimedOut:
-					displayRequestTimedOut(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .serverUnreachable:
+					displayServerUnreachable(scannedDcc: scannedDcc, couplingCode: couplingCode)
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
@@ -172,7 +172,7 @@ class PaperCertificateCheckViewModel: Logging {
 		)
 	}
 
-	private func displayRequestTimedOut(scannedDcc: String, couplingCode: String) {
+	private func displayServerUnreachable(scannedDcc: String, couplingCode: String) {
 
 		// this is a retry-able situation
 		alert = AlertContent(

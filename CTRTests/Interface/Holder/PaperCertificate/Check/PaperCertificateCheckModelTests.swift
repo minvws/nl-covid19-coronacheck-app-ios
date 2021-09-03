@@ -213,7 +213,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 
 		// Given
 		couplingManagerSpy.stubbedCheckCouplingStatusOnCompletionResult =
-			(.failure(.error(statusCode: nil, response: nil, error: .requestTimedOut)), ())
+			(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
 		couplingManagerSpy.stubbedConvertResult = nil
 
 		// When

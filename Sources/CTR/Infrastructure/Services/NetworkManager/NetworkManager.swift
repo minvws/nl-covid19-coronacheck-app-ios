@@ -299,8 +299,8 @@ class NetworkManager: Logging {
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet:
 					completion(.failure(.noInternetConnection))
-				case .timedOut:
-					completion(.failure(.requestTimedOut))
+				case .timedOut, .cannotConnectToHost, .cannotFindHost, .networkConnectionLost:
+					completion(.failure(.serverUnreachable))
 				default:
 					completion(.failure(.invalidResponse))
 			}
@@ -339,8 +339,8 @@ class NetworkManager: Logging {
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .noInternetConnection))
-				case .timedOut:
-					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .requestTimedOut))
+				case .timedOut, .cannotConnectToHost, .cannotFindHost, .networkConnectionLost:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachable))
 				default:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
 			}
