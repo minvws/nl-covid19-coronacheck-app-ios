@@ -616,10 +616,10 @@ extension TokenEntryViewModel {
 							case .serverBusy:
 								return L.generalNetworkwasbusyText()
 							case .responseCached, .redirection, .resourceNotFound, .serverError:
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 								return L.holderErrorstateTestMessage("\(errorCode)")
 							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
 								return L.holderErrorstateTestMessage("\(errorCode)")
 							default:
 								break
