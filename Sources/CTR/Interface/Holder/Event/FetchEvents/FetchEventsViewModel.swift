@@ -186,7 +186,6 @@ final class FetchEventsViewModel: Logging {
 			case .feedback:
 				goBack()
 		}
-
 	}
 
 	func warnBeforeGoBack() {
