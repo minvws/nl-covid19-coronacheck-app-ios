@@ -107,7 +107,6 @@ class ShowQRViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.greenCard = greenCard
-		self.thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 		self.cryptoManager = cryptoManager
 		self.remoteConfigManager = remoteConfigManager
 		self.screenCaptureDetector = screenCaptureDetector
@@ -119,6 +118,7 @@ class ShowQRViewModel: Logging {
 			qrAccessibility = L.holderShowqrDomesticQrTitle()
 			infoButtonAccessibility = L.holderShowqrDomesticAboutTitle()
 			showInternationalAnimation = false
+			thirdPartyTicketAppButtonTitle = thirdPartyTicketAppName.map { L.holderDashboardQrBackToThirdPartyApp($0) }
 		} else if greenCard.type == GreenCardType.eu.rawValue {
 			title = L.holderShowqrEuTitle()
             qrAccessibility = L.holderShowqrEuQrTitle()
