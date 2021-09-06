@@ -301,7 +301,6 @@ final class FetchEventsViewModel: Logging {
 			case .test:
 				return .ggdTest
 		}
-
 	}
 
 	private func fetchEventAccessTokens(completion: @escaping (Result<[EventFlow.AccessToken], ServerError>) -> Void) {

@@ -17,7 +17,7 @@ struct ErrorCode: CustomStringConvertible {
 		var value: String
 	}
 
-	struct ClientCode {
+	struct ClientCode: Equatable {
 		var value: String
 	}
 

@@ -12,6 +12,11 @@
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
 "holder.errorstate.overview.action" = "Naar mijn bewijzen";
 
+"holder.errorstate.login.title" = "Inloggen afgebroken";
+"holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder.errorstate.login.message.recovery" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder.errorstate.login.message.test" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
+
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
 "recommended.updateApp.action.ok" = "Installeer update";
@@ -483,9 +488,6 @@
 "holder.vaccination.status.complete" = "ja";
 "holder.vaccination.status.complete.recovery" = "ja (eerder corona gehad)";
 "holder.vaccination.status.complete.priorevent" = "ja (ergens anders gevaccineerd)";
-
-"holder.ggdlogin.failure.general.title" = "Het ophalen is afgebroken";
-"holder.ggdlogin.failure.general.message" = "Mogelijk is het te druk, probeer het later opnieuw.";
 
 "holder.event.about.title" = "Wat is er opgehaald?";
 

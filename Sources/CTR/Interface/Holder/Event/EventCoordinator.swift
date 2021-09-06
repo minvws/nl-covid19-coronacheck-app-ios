@@ -34,7 +34,7 @@ enum EventScreenResult: Equatable {
 	case stop
 
 	/// Skip back to the beginning of the flow
-	case errorRequiringRestart(error: Error?, eventMode: EventMode)
+	case errorRequiringRestart(eventMode: EventMode)
 
 	/// Continue with the next step in the flow
 	case `continue`(value: String?, eventMode: EventMode)
@@ -307,8 +307,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					start()
 				}
 
-			case .errorRequiringRestart(let error, let eventMode):
-				handleErrorRequiringRestart(error: error, eventMode: eventMode)
+			case .errorRequiringRestart(let eventMode):
+				handleErrorRequiringRestart(eventMode: eventMode)
 
 			case .back(let eventMode):
 				switch eventMode {
@@ -319,6 +319,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 					break
 				}
+			case .stop:
+				delegate?.eventFlowDidComplete()
 
 			default:
 				break
@@ -343,8 +345,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
-			case .errorRequiringRestart(let error, let eventMode):
-				handleErrorRequiringRestart(error: error, eventMode: eventMode)
 			default:
 				break
 		}
@@ -373,7 +373,7 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 	}
 
-	private func handleErrorRequiringRestart(error: Error?, eventMode: EventMode) {
+	private func handleErrorRequiringRestart(eventMode: EventMode) {
 		let popback = navigationController.viewControllers.first {
 			// arrange `case`s in the order of matching priority
 			switch $0 {
@@ -387,22 +387,24 @@ extension EventCoordinator: EventCoordinatorDelegate {
 		}
 
 		let presentError = {
-			let alertController: UIAlertController
+			let alertController = UIAlertController(
+				title: L.holderErrorstateLoginTitle(),
+				message: {
+					switch eventMode {
+						case .recovery:
+							return L.holderErrorstateLoginMessageRecovery()
+						case .paperflow:
+							return "" // HKVI is not a part of this flow
+						case .test:
+							return L.holderErrorstateLoginMessageTest()
+						case .vaccination:
+							return L.holderErrorstateLoginMessageVaccination()
+					}
+				}(),
+				preferredStyle: .alert
+			)
 
-			switch error {
-				case let error? where (error as NSError).domain.contains("org.openid.appauth"):
-					alertController = UIAlertController(
-						title: L.holderGgdloginFailureGeneralTitle(),
-						message: L.holderGgdloginFailureGeneralMessage(),
-						preferredStyle: .alert)
-				default:
-					alertController = UIAlertController(
-						title: L.generalErrorTitle(),
-						message: L.generalErrorTechnicalCustom(error?.localizedDescription ?? ""),
-						preferredStyle: .alert)
-			}
-
-			alertController.addAction(.init(title: L.generalOk(), style: .default, handler: nil))
+			alertController.addAction(.init(title: L.generalClose(), style: .default, handler: nil))
 			self.navigationController.present(alertController, animated: true, completion: nil)
 		}
 
