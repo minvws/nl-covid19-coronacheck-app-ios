@@ -49,13 +49,8 @@ class LoginTVSViewController: BaseViewController {
 
 		// Hide button part
 		sceneView.showLineView = false
-//		sceneView.primaryTitle = L.generalCancel()
-//		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.cancel() }
 
 		// Binding
-
-//		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
-
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
 			if $0 {
