@@ -114,13 +114,27 @@ extension LoginTVSViewModel {
 
 	func handleError(_ error: Error?) {
 
+		self.logError("TVS error: \(error?.localizedDescription ?? "Unknown error")")
 		let clientCode = mapError(error)
+
+		if let error = error, error.localizedDescription.contains("login_required") {
+			logDebug("Server busy")
+			displayServerBusy()
+			return
+		}
+		if let error = error, error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
+			logDebug("User cancelled")
+			userCancelled()
+			return
+		}
+
 		let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: clientCode ?? ErrorCode.ClientCode(value: "000"))
-
 		self.displayErrorCode(errorCode: errorCode)
+	}
 
-		self.logError("Authorization error: \(error?.localizedDescription ?? "Unknown error")")
-//		self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(error: error, eventMode: self.eventMode))
+	func userCancelled() {
+
+		self.coordinator?.loginTVSScreenDidFinish(.errorRequiringRestart(eventMode: self.eventMode))
 	}
 
 	func displayErrorCode(errorCode: ErrorCode) {
@@ -182,11 +196,11 @@ extension LoginTVSViewModel {
 				return ErrorCode.ClientCode.openIDResourceError
 
 			case OIDOAuthRegistrationErrorDomain:
-				break
+				return mapAuthRegistrationError(nsError)
+
 			default:
 				return nil
 		}
-		return nil
 	}
 
 	private func mapGeneralError(_ error: NSError) -> ErrorCode.ClientCode? {

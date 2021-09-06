@@ -12,6 +12,7 @@
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
 "holder.errorstate.overview.action" = "To my certificates";
 
+
 "recommended.updateApp.title" = "Want to update the app?";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";
 "recommended.updateApp.action.ok" = "Install update";
@@ -483,9 +484,6 @@
 "holder.vaccination.status.complete" = "yes";
 "holder.vaccination.status.complete.recovery" = "yes (I’ve had coronavirus earlier)";
 "holder.vaccination.status.complete.priorevent" = "yes (I have been vaccinated elsewhere)";
-
-"holder.ggdlogin.failure.general.title" = "Retrieval is cancelled";
-"holder.ggdlogin.failure.general.message" = "It might be too busy. Please try again later.";
 
 "holder.event.about.title" = "What was retrieved?";
 
