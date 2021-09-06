@@ -14,11 +14,11 @@ protocol ScreenCaptureDetectorProtocol: AnyObject {
 	var screenCaptureDidChangeCallback: ((Bool) -> Void)? { get set }
 }
 
-final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
+final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol, Logging {
 
 	private var notificationCenter: NotificationCenterProtocol = NotificationCenter.default
 
-	private(set) var screenIsBeingCaptured: Bool
+	private(set) var screenIsBeingCaptured: Bool = false
 
 	var screenshotWasTakenCallback: (() -> Void)?
 	var screenCaptureDidChangeCallback: ((Bool) -> Void)? {
@@ -29,7 +29,7 @@ final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 
 	/// Initializer
 	init() {
-		screenIsBeingCaptured = UIScreen.main.isCaptured
+		screenIsBeingCaptured = isCaptured
 		addObservers()
 	}
 
@@ -73,12 +73,24 @@ final class ScreenCaptureDetector: ScreenCaptureDetectorProtocol {
 
 	/// Prevent screen capture
 	@objc internal func updateScreenCaptureDidChangeCallback() {
-		screenIsBeingCaptured = UIScreen.main.isCaptured
-		screenCaptureDidChangeCallback?(UIScreen.main.isCaptured)
+		screenIsBeingCaptured = isCaptured
+		screenCaptureDidChangeCallback?(isCaptured)
 	}
 
 	/// handle a screen shot taken
 	@objc internal func handleScreenShot() {
 		screenshotWasTakenCallback?()
+	}
+}
+
+private extension ScreenCaptureDetector {
+	
+	var isCaptured: Bool {
+		#if DEBUG
+		logInfo("Screen is being captured and allowed for debug mode")
+		return false
+		#else
+		return UIScreen.main.isCaptured
+		#endif
 	}
 }
