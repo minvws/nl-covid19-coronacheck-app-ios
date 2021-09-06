@@ -109,21 +109,15 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 					state.errorOccurenceCount += 1
 					state.loadingState = .failed(error: .networkError(error: error))
 
+				// Catch the specific case of a wrapped NetworkError.noInternetConnection and recurse it
+				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
+					 GreenCardLoader.Error.preparingIssue(.error(_, _, let networkError)):
+					endLoadingWithError(error: networkError)
+					return // don't update `state` on this iteration.
+
 				case let error as GreenCardLoader.Error:
-					switch error {
-						case let .credentials(serverError), let .preparingIssue(serverError):
-							if case let ServerError.error(_, _, networkError) = serverError {
-								if networkError == .noInternetConnection || networkError == .serverUnreachable {
-									state.loadingState = .noInternet
-								} else {
-									state.errorOccurenceCount += 1
-									state.loadingState = .failed(error: .networkError(error: networkError))
-								}
-							}
-						default:
-							state.errorOccurenceCount += 1
-							state.loadingState = .failed(error: .greencardLoaderError(error: error))
-					}
+					state.errorOccurenceCount += 1
+					state.loadingState = .failed(error: .greencardLoaderError(error: error))
 
 				case let error as DashboardStrippenRefresher.Error:
 					state.loadingState = .failed(error: error)

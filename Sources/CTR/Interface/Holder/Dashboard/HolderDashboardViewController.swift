@@ -128,7 +128,7 @@ class HolderDashboardViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$selectTab.binding = { [weak self, sceneView] region in
+		viewModel.$selectedTab.binding = { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
 			sceneView.selectTab(tab: region)
 		}

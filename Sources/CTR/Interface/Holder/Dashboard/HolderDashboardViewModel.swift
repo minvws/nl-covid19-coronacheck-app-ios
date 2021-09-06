@@ -29,7 +29,7 @@ final class HolderDashboardViewModel: Logging {
 
 	@Bindable private(set) var currentlyPresentedAlert: AlertContent?
 	
-	@Bindable var selectTab: DashboardTab = .domestic
+	@Bindable private(set) var selectedTab: DashboardTab = .domestic
 
 	// MARK: - Private types
 
@@ -83,6 +83,13 @@ final class HolderDashboardViewModel: Logging {
 			)
 			
 			hasAddCertificateMode = state.myQRCards.isEmpty
+		}
+	}
+	
+	var selectTab: DashboardTab = .domestic {
+		didSet {
+			dashboardRegionToggleValue = selectedTab == .domestic ? .domestic : .europeanUnion
+			selectedTab = selectTab
 		}
 	}
 
