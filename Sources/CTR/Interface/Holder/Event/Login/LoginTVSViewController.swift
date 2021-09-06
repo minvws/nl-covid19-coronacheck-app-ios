@@ -18,6 +18,11 @@ class LoginTVSViewController: BaseViewController {
 		let okTitle: String
 	}
 
+	enum State {
+		case login(content: Content)
+		case feedback(content: Content)
+	}
+
 	/// Initializer
 	/// - Parameter viewModel: view model
 	init(viewModel: LoginTVSViewModel) {
@@ -44,12 +49,12 @@ class LoginTVSViewController: BaseViewController {
 
 		// Hide button part
 		sceneView.showLineView = false
-		sceneView.primaryTitle = L.generalCancel()
-		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.cancel() }
+//		sceneView.primaryTitle = L.generalCancel()
+//		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.cancel() }
 
 		// Binding
 
-		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+//		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 
 		viewModel.$shouldShowProgress.binding = { [weak self] in
 
@@ -57,6 +62,16 @@ class LoginTVSViewController: BaseViewController {
 				self?.sceneView.spinner.startAnimating()
 			} else {
 				self?.sceneView.spinner.stopAnimating()
+			}
+		}
+
+		viewModel.$viewState.binding = { [weak self] in
+
+			switch $0 {
+				case let .login(content):
+					self?.displayContent(content)
+				case let .feedback(content):
+					self?.displayContent(content)
 			}
 		}
 
@@ -83,5 +98,29 @@ class LoginTVSViewController: BaseViewController {
 			)
 		)
 		present(alertController, animated: true, completion: nil)
+	}
+
+	private func displayContent(_ content: Content) {
+
+		// Texts
+		sceneView.title = content.title
+		sceneView.message = content.subTitle
+
+		// Button
+		sceneView.showLineView = false
+		if let actionTitle = content.primaryActionTitle {
+			sceneView.primaryTitle = actionTitle
+			sceneView.footerBackground.isHidden = false
+			sceneView.primaryButton.isHidden = false
+			sceneView.footerGradientView.isHidden = false
+		} else {
+			sceneView.primaryTitle = nil
+			sceneView.footerBackground.isHidden = true
+			sceneView.primaryButton.isHidden = true
+			sceneView.footerGradientView.isHidden = true
+		}
+		sceneView.primaryButtonTappedCommand = content.primaryAction
+		sceneView.secondaryButtonTappedCommand = content.secondaryAction
+		sceneView.secondaryButtonTitle = content.secondaryActionTitle
 	}
 }

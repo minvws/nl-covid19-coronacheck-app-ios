@@ -319,6 +319,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 					break
 				}
+			case .stop:
+				delegate?.eventFlowDidComplete()
 
 			default:
 				break
