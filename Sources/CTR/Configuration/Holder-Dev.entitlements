@@ -5,7 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:iandundas.github.io</string>
-		<string>applinks:web.acc.coronacheck.nl</string>
+		<string>applinks:web.dev.coronacheck.nl</string>
 	</array>
 </dict>
 </plist>

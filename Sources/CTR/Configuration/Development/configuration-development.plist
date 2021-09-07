@@ -14,7 +14,7 @@
 		<key>consumerId</key>
 		<string>cc_app</string>
 		<key>redirectUri</key>
-		<string>https://web.acc.coronacheck.nl/app/auth</string>
+		<string>https://web.dev.coronacheck.nl/app/auth</string>
 	</dict>
 </dict>
 </plist>
