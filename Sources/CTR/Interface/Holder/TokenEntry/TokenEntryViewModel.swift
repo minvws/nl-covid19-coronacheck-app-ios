@@ -253,20 +253,12 @@ class TokenEntryViewModel {
 
 		guard progressIndicationCounter.isInactive else { return }
 
-		switch initializationMode {
-			case .regular, .withRequestTokenProvided:
-				coordinator?.presentInformationPage(
-					title: L.holderTokenentryModalNotokenTitle(),
-					body: L.holderTokenentryModalNotokenDetails(),
-					hideBodyForScreenCapture: false,
-					openURLsInApp: true
-				)
-			case .error:
-				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-					return
-				}
-				coordinator?.openUrl(url, inApp: true)
-		}
+		coordinator?.presentInformationPage(
+			title: L.holderTokenentryModalNotokenTitle(),
+			body: L.holderTokenentryModalNotokenDetails(),
+			hideBodyForScreenCapture: false,
+			openURLsInApp: true
+		)
 	}
 
 	// MARK: - Private tap handlers:
@@ -505,7 +497,7 @@ class TokenEntryViewModel {
 				shouldShowVerificationEntryField = false
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = false
-				shouldShowUserNeedsATokenButton = true
+				shouldShowUserNeedsATokenButton = false
 		}
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
@@ -517,7 +509,7 @@ class TokenEntryViewModel {
 		verificationPlaceholder = Strings.verificationPlaceholder(forMode: initializationMode)
 		primaryTitle = Strings.primaryTitle(forMode: initializationMode)
 		resendVerificationButtonTitle = Strings.resendVerificationButtonTitle(forMode: initializationMode)
-		userNeedsATokenButtonTitle = Strings.userNeedsATokenButtonTitle(forMode: initializationMode)
+		userNeedsATokenButtonTitle = L.holderTokenentryButtonNotoken()
 		confirmResendVerificationAlertTitle = Strings.confirmResendVerificationAlertTitle(forMode: initializationMode)
 		confirmResendVerificationAlertMessage = Strings.confirmResendVerificationAlertMessage(forMode: initializationMode)
 		confirmResendVerificationAlertOkayButton = Strings.confirmResendVerificationAlertOkayButton(forMode: initializationMode)
@@ -632,15 +624,6 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowText()
 				case (.withRequestTokenProvided, _):
 					return L.holderTokenentryUniversallinkflowText()
-			}
-		}
-
-		fileprivate static func userNeedsATokenButtonTitle(forMode mode: InitializationMode) -> String {
-			switch mode {
-				case .regular, .withRequestTokenProvided:
-					return L.holderTokenentryButtonNotoken()
-				case .error:
-					return L.holderErrorstateMalfunctionsTitle()
 			}
 		}
 
