@@ -401,7 +401,7 @@ extension ListEventsViewModel {
 			.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 		let formattedTestLongDate: String = dataRow.event.negativeTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestLongDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
+			.map(printTestDateFormatter.string) ?? (dataRow.event.negativeTest?.sampleDateString ?? "")
 
 		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
 			dataRow.event.negativeTest?.type) ?? (dataRow.event.negativeTest?.type ?? "")
@@ -586,7 +586,7 @@ extension ListEventsViewModel {
 			.map(printTestDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 		let formattedTestLongDate: String = dataRow.event.positiveTest?.sampleDateString
 			.flatMap(Formatter.getDateFrom)
-			.map(printTestLongDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
+			.map(printTestDateFormatter.string) ?? (dataRow.event.positiveTest?.sampleDateString ?? "")
 
 		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
 			dataRow.event.positiveTest?.type) ?? (dataRow.event.positiveTest?.type ?? "")
@@ -724,7 +724,7 @@ extension ListEventsViewModel {
 			.flatMap(Formatter.getDateFrom)
 			.map(printDateFormatter.string) ?? (dataRow.identity.birthDateString ?? "")
 		let formattedTestDate: String = Formatter.getDateFrom(dateString8601: test.sampleDate)
-			.map(printTestLongDateFormatter.string) ?? test.sampleDate
+			.map(printTestDateFormatter.string) ?? test.sampleDate
 
 		let testType = remoteConfigManager.getConfiguration().getTestTypeMapping(
 			test.typeOfTest) ?? test.typeOfTest
@@ -835,7 +835,7 @@ private extension ListEventsViewModel {
 		}
 
 		let printSampleDate: String = printTestDateFormatter.string(from: sampleDate)
-		let printSampleLongDate: String = printTestLongDateFormatter.string(from: sampleDate)
+		let printSampleLongDate: String = printTestDateFormatter.string(from: sampleDate)
 		let holderID = getDisplayIdentity(result.holder)
 		
 		return ListEventsViewController.Row(

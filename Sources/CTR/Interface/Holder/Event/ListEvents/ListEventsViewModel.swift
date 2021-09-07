@@ -45,13 +45,6 @@ class ListEventsViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EE d MMMM HH:mm"
-		return dateFormatter
-	}()
-	lazy var printTestLongDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
