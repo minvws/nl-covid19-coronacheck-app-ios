@@ -58,6 +58,6 @@ class SnapshotViewControllerTests: XCTestCase {
 		// Then
 		let strongSut = try XCTUnwrap(sut)
 		XCTAssertEqual(strongSut.sceneView.title, L.holderLaunchTitle(), "Title should match")
-		XCTAssertEqual(strongSut.sceneView.appIcon, I.launch.holderAppIcon(), "Icon should match")
+		XCTAssertEqual(strongSut.sceneView.appIcon, I.holderAppIcon(), "Icon should match")
 	}
 }
