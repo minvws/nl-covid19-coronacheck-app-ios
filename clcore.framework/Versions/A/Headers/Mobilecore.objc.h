@@ -53,13 +53,11 @@
 - (nullable instancetype)init:(NSString* _Nullable)pksPath expectEuropeanKeys:(BOOL)expectEuropeanKeys;
 // skipped field PublicKeysConfig.DomesticPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-mobile-core.DomesticPksLookup
 
-// skipped field PublicKeysConfig.EuropeanPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-hcert/verifier.EuropeanPksLookup
+// skipped field PublicKeysConfig.EuropeanPks with unsupported type: github.com/minvws/nl-covid19-coronacheck-hcert/verifier.PksLookup
 
 // skipped field PublicKeysConfig.LegacyDomesticPks with unsupported type: []*github.com/minvws/nl-covid19-coronacheck-mobile-core.AnnotatedDomesticPk
 
 // skipped method PublicKeysConfig.FindAndCacheDomestic with unsupported parameter or return types
-
-// skipped method PublicKeysConfig.FindAndCacheEuropean with unsupported parameter or return types
 
 /**
  * DEPRECATED: Remove this legacy transformation together with LegacyDomesticPks
@@ -111,7 +109,6 @@ FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreDOB_EMPTY_VALUE;
 FOUNDATION_EXPORT const int64_t MobilecoreHCERT_SPECIMEN_EXPIRATION_TIME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_CONFIG_FILENAME;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreHOLDER_PUBLIC_KEYS_FILENAME;
-FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreNL_COUNTRY_CODE;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreTEST_RESULT_NOT_DETECTED;
 FOUNDATION_EXPORT NSString* _Nonnull const MobilecoreVACCINE_MEDICINAL_PRODUCT_JANSSEN;
 FOUNDATION_EXPORT const int64_t MobilecoreVERIFICATION_FAILED_ERROR;
