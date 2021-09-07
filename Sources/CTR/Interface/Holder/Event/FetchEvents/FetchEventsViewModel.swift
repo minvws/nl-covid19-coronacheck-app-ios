@@ -339,7 +339,8 @@ final class FetchEventsViewModel: Logging {
 				filter: filter,
 				completion: { (result: Result<EventFlow.EventInformationAvailable, ServerError>) in
 
-					let mappedToProviderError = result.mapError { serverError -> ServerError in
+					let mappedToProvider = result.mapError { serverError -> ServerError in
+						// Transform regular .error to .provider to display the provider identifier
 						switch serverError {
 							case let ServerError.error(statusCode, serverResponse, networkError):
 								return ServerError.provider(
@@ -351,8 +352,15 @@ final class FetchEventsViewModel: Logging {
 							default:
 								return serverError
 						}
+					}.map { info in
+						// Map the right provider identifier (fixes duplication on ACC for ZZZ and GGD)
+						return EventFlow.EventInformationAvailable(
+							providerIdentifier: provider.identifier,
+							protocolVersion: info.protocolVersion,
+							informationAvailable: info.informationAvailable
+						)
 					}
-					eventInformationAvailableResults += [mappedToProviderError]
+					eventInformationAvailableResults += [mappedToProvider]
 					self.hasEventInformationFetchingGroup.leave()
 				}
 			)
@@ -364,17 +372,9 @@ final class FetchEventsViewModel: Logging {
 			let successfulEventInformationAvailable = eventInformationAvailableResults.compactMap { $0.successValue }
 			let outputEventProviders = eventProviders.map { eventProvider -> EventFlow.EventProvider in
 				var eventProvider = eventProvider
-				for response in successfulEventInformationAvailable {
-					if Configuration().getEnvironment() == "production" {
-						if eventProvider.identifier == response.providerIdentifier {
-							eventProvider.eventInformationAvailable = response
-						}
-					} else {
-						if eventProvider.identifier == response.providerIdentifier ||
-							(eventProvider.name == "FakeGGD" && response.providerIdentifier == "ZZZ") {
-							eventProvider.eventInformationAvailable = response
-						}
-					}
+				for response in successfulEventInformationAvailable where
+					eventProvider.identifier == response.providerIdentifier {
+					eventProvider.eventInformationAvailable = response
 				}
 				return eventProvider
 			}.filter { $0.eventInformationAvailable != nil }
