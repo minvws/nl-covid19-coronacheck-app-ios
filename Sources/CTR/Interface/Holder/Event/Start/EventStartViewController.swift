@@ -68,7 +68,7 @@ class EventStartViewController: BaseViewController {
 		}
 
 		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
-		styleBackButton(buttonText: "")
+		styleBackButton()
 	}
 
 	@objc func backButtonTapped() {
