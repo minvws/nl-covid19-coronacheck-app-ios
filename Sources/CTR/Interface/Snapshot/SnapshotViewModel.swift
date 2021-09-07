@@ -40,7 +40,7 @@ class SnapshotViewModel: Logging {
 		self.versionSupplier = versionSupplier
 
 		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
-		appIcon = flavor == .holder ? .holderAppIcon : .verifierAppIcon
+		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 
 		version = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier.getCurrentVersion(), versionSupplier.getCurrentBuild())

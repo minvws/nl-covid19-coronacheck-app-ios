@@ -66,7 +66,7 @@ class LaunchViewModel: Logging {
 
 		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		message = flavor == .holder  ? L.holderLaunchText() : L.verifierLaunchText()
-		appIcon = flavor == .holder ? .holderAppIcon : .verifierAppIcon
+		appIcon = flavor == .holder ? I.launch.holderAppIcon() : I.launch.verifierAppIcon()
 
 		version = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")

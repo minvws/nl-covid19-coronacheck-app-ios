@@ -57,7 +57,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.holderLaunchTitle()
 		expect(self.sut.message) == L.holderLaunchText()
-		expect(self.sut.appIcon) == .holderAppIcon
+		expect(self.sut.appIcon) == I.launch.holderAppIcon()
 	}
 
 	func test_initializeVerifier() {
@@ -77,7 +77,7 @@ class LaunchViewModelTests: XCTestCase {
 		// Then
 		expect(self.sut.title) == L.verifierLaunchTitle()
 		expect(self.sut.message) == L.verifierLaunchText()
-		expect(self.sut.appIcon) == .verifierAppIcon
+		expect(self.sut.appIcon) == I.launch.verifierAppIcon()
 	}
 
 	func test_noActionRequired() {
