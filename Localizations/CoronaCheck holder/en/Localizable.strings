@@ -1,6 +1,10 @@
+"holder.errorstate.login.title" = "Login was cancelled";
+"holder.errorstate.login.message.vaccination" = "Want to retrieve your vaccination details? Login again with DigiD.";
+"holder.errorstate.login.message.recovery" = "Want to retrieve your recovery details? Login again with DigiD.";
+"holder.errorstate.login.message.test" = "Want to retrieve your test details? Login again with DigiD.";
 "holder.errorstate.login.cancel.title" = "Login was cancelled";
 "holder.errorstate.login.cancel.message" = "Want to retrieve your vaccination details? Login again with DigiD.";
-"holder.errorstate.test.message" = "<p>Something is going wrong at the test location. Therefore, your details can’t be retrieved.</p><p><b>What now?</b><br />Contact the test location and give them the following error code:</p><p><b>Error code:</b><br />%@</p>";
+"holder.errorstate.test.message" = "<p>Something is going wrong at the test location. Therefore, your details can’t be retrieved.</p><p><b>What's next?</b><br />Contact the test location and give them the following error code:</p><p><b>Error code:</b><br />%@</p>";
 "holder.errorstate.fetch.message" = "<p>Something is going wrong while retrieving your details. Could you please try again later?</p><p><b>Error code: </b><br />%@</p>";
 "holder.errorstate.fetch.messages" = "<p>Something is going wrong while retrieving your details. Could you please try again later?</p><p><b>Error codes: </b><br />%@</p>";
 "holder.errorstate.someresult.title" = "Are these all your vaccinations?";
@@ -11,7 +15,6 @@
 "holder.errorstate.malfunctions.title" = "Check the latest outages";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/en/";
 "holder.errorstate.overview.action" = "To my certificates";
-
 
 "recommended.updateApp.title" = "Want to update the app?";
 "recommended.updateApp.subtitle" = "There's a new version of the app available.";
@@ -248,7 +251,7 @@
 "holder.errorstate.nobsn.action" = "To my certificates";
 "holder.errorstate.nosession.title" = "Your session has expired";
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
-"holder.errorstate.nosession.action" = "To my certificates";
+"holder.errorstate.nosession.action" = "Start over";
 "general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
@@ -269,7 +272,7 @@
 /* MARK: - EndOfLife */
 "endOfLife.error.message" = "Can't open website.";
 "endOfLife.title" = "App out of order";
-"endOfLife.description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl";
+"endOfLife.description" = "The app is not in use at the moment. For more information, go to CoronaCheck.nl/en";
 "endOfLife.button" = "Go to CoronaCheck.nl/en";
 
 /* MARK: - Internet Required */

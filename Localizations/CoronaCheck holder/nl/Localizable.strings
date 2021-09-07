@@ -1,3 +1,7 @@
+"holder.errorstate.login.title" = "Inloggen afgebroken";
+"holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder.errorstate.login.message.recovery" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
+"holder.errorstate.login.message.test" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
 "holder.errorstate.login.cancel.title" = "Inloggen afgebroken";
 "holder.errorstate.login.cancel.message" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder.errorstate.test.message" = "<p>Er gaat iets mis bij de testlocatie. Daardoor kunnen jouw gegevens niet worden opgehaald.</p><p><b>Wat nu?</b><br />Neem contact op met je testlocatie en geef de volgende foutcode door:</p><p><b>Foutcode:</b><br />%@</p>";
@@ -11,11 +15,6 @@
 "holder.errorstate.malfunctions.title" = "Bekijk de actuele storingen";
 "holder.errorstate.malfunctions.url" = "https://status.coronacheck.nl/";
 "holder.errorstate.overview.action" = "Naar mijn bewijzen";
-
-"holder.errorstate.login.title" = "Inloggen afgebroken";
-"holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
-"holder.errorstate.login.message.recovery" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
-"holder.errorstate.login.message.test" = "Wil je jouw testuitslag ophalen? Log dan opnieuw in met DigiD.";
 
 "recommended.updateApp.title" = "Wil je de app updaten?";
 "recommended.updateApp.subtitle" = "Er is een nieuwe versie van de app beschikbaar.";
