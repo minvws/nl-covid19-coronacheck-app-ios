@@ -215,6 +215,32 @@ class IdentityCheckerTests: XCTestCase {
 		expect(matched) == true
 	}
 
+	func test_eventGroupV3IdentityAlternative_remoteEventV3IdentityAlternative2() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV3IdentityAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
+	func test_eventGroupV2IdentityAlternative_remoteEventV3IdentityAlternative2() throws {
+
+		// Given
+		let eventGroup = try XCTUnwrap( createEventGroup(wrapper: .fakeWithV2IdentityAlternative))
+		let remoteEventV3 = RemoteEvent(wrapper: .fakeWithV3IdentityAlternative2, signedResponse: nil)
+
+		// When
+		let matched = sut.compare(eventGroups: [eventGroup], with: [remoteEventV3])
+
+		// Then
+		expect(matched) == true
+	}
+
 	// MARK: - Helper
 
 	private func createEventGroup(wrapper: EventFlow.EventResultWrapper) -> EventGroup? {
@@ -309,6 +335,16 @@ extension EventFlow.EventResultWrapper {
 		)
 	}
 
+	static var fakeWithV3IdentityAlternative2: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "3,0",
+			identity: EventFlow.Identity(infix: nil, firstName: "Henk", lastName: "Paap", birthDateString: "1970-05-27"),
+			status: .complete,
+			result: nil
+		)
+	}
+
 	static var fakeWithV3IdentityFirstNameWithDiacritic: EventFlow.EventResultWrapper {
 		EventFlow.EventResultWrapper(
 			providerIdentifier: "CoronaCheck",
@@ -345,6 +381,27 @@ extension EventFlow.EventResultWrapper {
 					lastNameInitial: "D",
 					birthDay: "12",
 					birthMonth: "12"
+				)
+			)
+		)
+	}
+
+	static var fakeWithV2IdentityAlternative: EventFlow.EventResultWrapper {
+		EventFlow.EventResultWrapper(
+			providerIdentifier: "CoronaCheck",
+			protocolVersion: "2,0",
+			identity: nil,
+			status: .complete,
+			result: TestResult(
+				unique: "test",
+				sampleDate: "2021-01-01T12:00:00",
+				testType: "PCR",
+				negativeResult: true,
+				holder: TestHolderIdentity(
+					firstNameInitial: "H",
+					lastNameInitial: "P",
+					birthDay: "27",
+					birthMonth: "5"
 				)
 			)
 		)

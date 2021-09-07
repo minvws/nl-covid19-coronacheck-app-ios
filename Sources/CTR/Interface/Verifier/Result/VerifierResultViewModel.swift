@@ -38,26 +38,19 @@ class VerifierResultViewModel: Logging {
 	/// The title of the scene
 	@Bindable private(set) var title: String = ""
 
-	/// The message of the scene
-	@Bindable private(set) var message: String?
-
 	/// The first name of the holder
-	@Bindable private(set) var firstName: String = "-"
+	@Bindable private(set) var firstName: String?
 
 	/// The last name of the holder
-	@Bindable private(set) var lastName: String = "-"
+	@Bindable private(set) var lastName: String?
 
 	/// The birth day of the holder
-	@Bindable private(set) var dayOfBirth: String = "-"
+	@Bindable private(set) var dayOfBirth: String?
 
 	/// The birth mont of the holder
-	@Bindable private(set) var monthOfBirth: String = "-"
-
-	/// The linked message of the scene
-	@Bindable var linkedMessage: String?
-
-	/// The title of the button
-	@Bindable private(set) var primaryButtonTitle: String
+	@Bindable private(set) var monthOfBirth: String?
+	
+	@Bindable private(set) var secondaryTitle: String = ""
 
 	/// Allow Access?
 	@Bindable var allowAccess: AccessAction = .denied
@@ -76,8 +69,6 @@ class VerifierResultViewModel: Logging {
 
 		self.coordinator = coordinator
 		self.verificationResult = verificationResult
-
-		primaryButtonTitle = L.verifierResultNext()
 
 		screenCaptureDetector.screenCaptureDidChangeCallback = { [weak self] isBeingCaptured in
 			self?.hideForCapture = isBeingCaptured
@@ -140,17 +131,17 @@ class VerifierResultViewModel: Logging {
 	/// Determine the value for display
 	/// - Parameter value: the crypto attribute value
 	/// - Returns: the value of the attribute, or a hyphen if empty
-	private func determineAttributeValue(_ value: String?) -> String {
+	private func determineAttributeValue(_ value: String?) -> String? {
 
 		if let value = value, !value.isEmpty {
 			return value
 		}
-		return "-"
+		return nil
 	}
 
 	/// Set the monthOfBirth as MMM (mm)
 	/// - Parameter value: the possible month value
-	private func determineMonthOfBirth(_ value: String?) -> String {
+	private func determineMonthOfBirth(_ value: String?) -> String? {
 
 		if let birthMonthAsString = value, !birthMonthAsString.isEmpty {
 			if let birthMonthAsInt = Int(birthMonthAsString),
@@ -165,7 +156,7 @@ class VerifierResultViewModel: Logging {
 				return birthMonthAsString
 			}
 		}
-		return "-"
+		return nil
 	}
 
 	private func mapMonth(month: Int, months: [String]) -> String? {
@@ -188,20 +179,19 @@ class VerifierResultViewModel: Logging {
 	private func showAccessAllowed() {
 
 		title = L.verifierResultAccessTitle()
-		message = nil
+		secondaryTitle = L.verifierResultAccessReadmore()
 	}
 
 	private func showAccessDeniedInvalidQR() {
 
 		title = L.verifierResultDeniedTitle()
-		message = L.verifierResultDeniedMessage()
-		linkedMessage = L.verifierResultDeniedLink()
+		secondaryTitle = L.verifierResultDeniedReadmore()
 	}
 
 	private func showAccessDemo() {
 
 		title = L.verifierResultDemoTitle()
-		message = nil
+		secondaryTitle = L.verifierResultAccessReadmore()
 	}
 
 	func dismiss() {
@@ -216,7 +206,7 @@ class VerifierResultViewModel: Logging {
         coordinator?.navigateToScan()
     }
 
-	func linkTapped() {
+	func showMoreInformation() {
 
 		switch allowAccess {
 			case .verified, .demo:
@@ -238,23 +228,22 @@ class VerifierResultViewModel: Logging {
 
 	private func showDeniedInfo() {
 
-		let textView1 = TextView(
-            htmlText: L.verifierDeniedMessageOne(),
-            font: Theme.fonts.body,
-            textColor: Theme.colors.dark,
-            boldTextColor: Theme.colors.dark
-        )
-
-        let textView2 = TextView(
-            htmlText: L.verifierDeniedMessageTwo(),
-            font: Theme.fonts.body,
-            textColor: Theme.colors.dark,
-            boldTextColor: Theme.colors.dark
-        )
+		let textViews = [L.verifierDeniedMessageOne(),
+			L.verifierDeniedMessageTwo(),
+			L.verifierDeniedMessageThree(),
+			L.verifierDeniedMessageFour()
+		] .map { text -> (TextView, CGFloat) in
+			(TextView(
+				htmlText: text,
+				font: Theme.fonts.body,
+				textColor: Theme.colors.dark,
+				boldTextColor: Theme.colors.dark
+			), 16)
+		}
 
 		coordinator?.displayContent(
 			title: L.verifierDeniedTitle(),
-			content: [(textView1, 16), (textView2, 0)]
+			content: textViews
 		)
 	}
 

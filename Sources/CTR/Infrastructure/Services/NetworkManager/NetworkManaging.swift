@@ -7,6 +7,15 @@
 
 import Foundation
 
+struct ServerResponse: Decodable {
+	let status: String
+	let code: Int
+}
+
+enum ServerError: Error {
+	case error(statusCode: Int?, response: ServerResponse?, error: NetworkError)
+}
+
 enum NetworkError: String, Error {
 	case invalidRequest
 	case requestTimedOut
@@ -15,11 +24,38 @@ enum NetworkError: String, Error {
 	case responseCached
 	case serverError
 	case resourceNotFound
-	case encodingError
 	case redirection
 	case serverBusy
 	case invalidSignature
+	case cannotSerialize
 	case cannotDeserialize
+
+	func getClientErrorCode() -> String? {
+
+		switch self {
+
+			case .invalidRequest:
+				return "002"
+			//			case .requestTimedOut:
+			//			case .noInternetConnection:
+			case .invalidResponse:
+				return "003"
+			//			case .responseCached:
+			//			case .serverError:
+			//			case .resourceNotFound:
+			//			case .redirection:
+			//			case .serverBusy:
+			case .invalidSignature:
+				return "020"
+			case .cannotDeserialize:
+				return "030"
+			case .cannotSerialize:
+				return "031"
+			default:
+				return nil
+		}
+	}
+
 }
 
 enum HTTPHeaderKey: String {
@@ -113,5 +149,5 @@ protocol NetworkManaging: AnyObject {
 	///   - completion: completion handler
 	func checkCouplingStatus(
 		dictionary: [String: AnyObject],
-		completion: @escaping (Result<DccCoupling.CouplingResponse, NetworkError>) -> Void)
+		completion: @escaping (Result<DccCoupling.CouplingResponse, ServerError>) -> Void)
 }

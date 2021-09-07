@@ -79,17 +79,11 @@ class VerifierStartViewModel: Logging {
 			}
 		} else {
 			// Show the scan instructions the first time no matter what link was tapped
-			userSettings.scanInstructionShown = true
 			coordinator?.didFinish(.userTappedProceedToScanInstructions)
 		}
 	}
 
 	func showInstructionsButtonTapped() {
-		coordinator?.userWishesToNavigateToScanInstruction()
-	}
-
-	func linkTapped() {
-
 		coordinator?.didFinish(.userTappedProceedToScanInstructions)
 	}
 

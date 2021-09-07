@@ -35,7 +35,7 @@ class MenuViewController: BaseViewController {
 
 		super.viewDidLoad()
 		
-		configureTranslucentNavigationBar()
+		setupTranslucentNavigationBar()
 
 		viewModel.$topMenu.binding = { [weak self] items in
 

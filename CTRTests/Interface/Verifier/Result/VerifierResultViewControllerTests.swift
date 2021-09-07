@@ -19,6 +19,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 	private var verifyCoordinatorDelegateSpy: VerifierCoordinatorDelegateSpy!
 	private var viewModel: VerifierResultViewModel!
+	
+	var window = UIWindow()
 
 	// MARK: Test lifecycle
 	override func setUp() {
@@ -34,7 +36,9 @@ class VerifierResultViewControllerTests: XCTestCase {
 	}
 
 	func loadView() {
-		_ = sut.view
+		
+		window.addSubview(sut.view)
+		RunLoop.current.run(until: Date())
 	}
 
 	// MARK: - Tests
@@ -55,8 +59,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultDemoTitle()
-		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
-		expect(self.sut.sceneView.imageView.image) == UIImage.access
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
 		sut.assertImage()
@@ -75,8 +79,8 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultDeniedTitle()
-		expect(self.sut.sceneView.message) == L.verifierResultDeniedMessage()
-		expect(self.sut.sceneView.imageView.image) == UIImage.denied
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultDeniedReadmore()
 
 		// Snapshot
 		sut.assertImage()
@@ -97,14 +101,14 @@ class VerifierResultViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.verifierResultAccessTitle()
-		expect(self.sut.sceneView.message).to(beNil(), description: "Message should be nil")
-		expect(self.sut.sceneView.imageView.image) == UIImage.access
+		expect(self.sut.sceneView.primaryTitle) == L.verifierResultNext()
+		expect(self.sut.sceneView.secondaryTitle) == L.verifierResultAccessReadmore()
 
 		// Snapshot
 		sut.assertImage()
 	}
 
-	func testDismiss() {
+	func test_dismiss_shouldNavigateToVerifierWelcome() {
 
 		// Given
 
@@ -115,24 +119,25 @@ class VerifierResultViewControllerTests: XCTestCase {
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToVerifierWelcome) == true
  	}
 
-    func testPrimaryButtonTapped() {
+    func test_scanNextTappedCommand_shouldNavigateToScan() {
 
         // Given
         loadView()
 
         // When
-        sut.sceneView.primaryButtonTapped()
+		sut.sceneView.scanNextTappedCommand?()
 
         // Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedNavigateToScan) == true
     }
 
-	func testLinkTapped() {
+	func test_readMoreTappedCommand_shouldDisplayContent() {
 
 		// Given
+		loadView()
 
 		// When
-		sut.linkTapped()
+		sut.sceneView.readMoreTappedCommand?()
 
 		// Then
 		expect(self.verifyCoordinatorDelegateSpy.invokedDisplayContent) == true
