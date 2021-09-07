@@ -21,7 +21,7 @@ class PaperCertificateCheckModelTests: XCTestCase {
 		super.setUp()
 
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .test)
+		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
 		couplingManagerSpy = CouplingManagerSpy(cryptoManager: cryptoSpy, networkManager: networkSpy)
 	}
