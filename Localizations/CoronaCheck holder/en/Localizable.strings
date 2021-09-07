@@ -467,8 +467,8 @@
 "holder.event.nolist.action" = "To my certificates";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to login with DigiD later to retrieve your vaccination.";
-"holder.vaccination.alert.cancel" = "No, continue";
-"holder.vaccination.alert.ok" = "Yes, stop";
+"holder.vaccination.alert.continue" = "No, continue";
+"holder.vaccination.alert.stop" = "Yes, stop";
 "holder.vaccination.about.text" = "About your vaccination";
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.list.wrong" = "Is something wrong?";

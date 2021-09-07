@@ -467,8 +467,8 @@
 "holder.event.nolist.action" = "Naar mijn bewijzen";
 "holder.vaccination.alert.title" = "Weet je zeker dat je wilt stoppen?";
 "holder.vaccination.alert.message" = "Je moet dan later opnieuw met DigiD inloggen om je vaccinatie op te halen.";
-"holder.vaccination.alert.cancel" = "Nee, ga verder";
-"holder.vaccination.alert.ok" = "Ja, stop";
+"holder.vaccination.alert.continue" = "Nee, ga verder";
+"holder.vaccination.alert.stop" = "Ja, stop";
 "holder.vaccination.about.text" = "Over jouw vaccinatie";
 "holder.vaccination.about.off" = "%@ van %@";
 "holder.vaccination.list.wrong" = "Klopt er iets niet?";
