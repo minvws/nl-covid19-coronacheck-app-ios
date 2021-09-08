@@ -347,7 +347,7 @@
 "holder.dashboard.qr.minute.long" = "minuut";
 "holder.dashboard.qr.minutes.long" = "minuten";
 "holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Verloopt over";
-"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig tot";
+"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig t/m";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
 "holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "Wordt automatisch geldig";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
