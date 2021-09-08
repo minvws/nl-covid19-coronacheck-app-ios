@@ -49,7 +49,13 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 			userSettings: UserSettings()
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
-		navigationController.pushViewController(viewController, animated: true)
+		
+		// Replace navigation stack when more than one view controller is stacked
+		if navigationController.viewControllers.count <= 1 {
+			navigationController.pushViewController(viewController, animated: true)
+		} else {
+			navigationController.replaceTopViewController(with: viewController, animated: true)
+		}
 	}
 
 	func userDidCompletePages() {

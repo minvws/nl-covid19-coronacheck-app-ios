@@ -10,7 +10,7 @@ import UIKit
 // Extend push/pop with completion blocks:
 
 extension UINavigationController {
-	public func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
+	func pushViewController( _ viewController: UIViewController, animated: Bool, completion: @escaping () -> Void) {
 		pushViewController(viewController, animated: animated)
 
 		guard animated, let coordinator = transitionCoordinator else {
@@ -54,5 +54,11 @@ extension UINavigationController {
 		}
 
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
+	}
+	
+	func replaceTopViewController(with viewController: UIViewController, animated: Bool) {
+		var updatedViewControllers = viewControllers
+		updatedViewControllers[updatedViewControllers.count - 1] = viewController
+		setViewControllers(updatedViewControllers, animated: animated)
 	}
 }
