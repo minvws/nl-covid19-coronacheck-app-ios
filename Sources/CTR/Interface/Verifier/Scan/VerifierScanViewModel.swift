@@ -78,6 +78,6 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 	}
 
 	func didTapMoreInformationButton() {
-		theCoordinator?.navigateToScanInstruction(isFromScanner: true)
+		theCoordinator?.navigateToScanInstruction()
 	}
 }

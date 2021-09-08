@@ -31,13 +31,11 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
-	private let isFromScanner: Bool
 
-	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate, isFromScanner: Bool) {
+	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
-		self.isFromScanner = isFromScanner
 
 		pages = pagesFactory.create()
 	}
@@ -51,14 +49,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 			userSettings: UserSettings()
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
-		
-		if isFromScanner {
-			// Replace scan view controller
-			navigationController.replaceTopViewController(with: viewController, animated: true)
-		} else {
-			// Push when starting from start view controller
-			navigationController.pushViewController(viewController, animated: true)
-		}
+		navigationController.pushOrReplaceTopViewController(with: viewController, animated: true)
 	}
 
 	func userDidCompletePages() {

@@ -18,7 +18,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScan()
 
-	func navigateToScanInstruction(isFromScanner: Bool)
+	func navigateToScanInstruction()
 
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
@@ -92,7 +92,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 				navigateToScan()
 
 			case .userTappedProceedToScanInstructions:
-				navigateToScanInstruction(isFromScanner: false)
+				navigateToScanInstruction()
 		}
 	}
 
@@ -130,12 +130,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		sidePanel?.selectedViewController?.present(viewController, animated: true, completion: nil)
 	}
 
-	func navigateToScanInstruction(isFromScanner: Bool) {
+	func navigateToScanInstruction() {
 
 		let coordinator = ScanInstructionsCoordinator(
 			navigationController: dashboardNavigationController!,
-			delegate: self,
-			isFromScanner: isFromScanner
+			delegate: self
 		)
 		startChildCoordinator(coordinator)
 	}
@@ -152,7 +151,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 					cryptoManager: cryptoManager
 				)
 			)
-			dashboardNavigationController?.pushViewController(destination, animated: true)
+			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
 }

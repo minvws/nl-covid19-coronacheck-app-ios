@@ -41,14 +41,10 @@ class VerifierCoordinatorDelegateSpy: VerifierCoordinatorDelegate, OpenUrlProtoc
 
 	var invokedNavigateToScanInstruction = false
 	var invokedNavigateToScanInstructionCount = 0
-	var invokedNavigateToScanInstructionParameters: (isFromScanner: Bool, Void)?
-	var invokedNavigateToScanInstructionParametersList = [(isFromScanner: Bool, Void)]()
 
-	func navigateToScanInstruction(isFromScanner: Bool) {
+	func navigateToScanInstruction() {
 		invokedNavigateToScanInstruction = true
 		invokedNavigateToScanInstructionCount += 1
-		invokedNavigateToScanInstructionParameters = (isFromScanner, ())
-		invokedNavigateToScanInstructionParametersList.append((isFromScanner, ()))
 	}
 
 	var invokedNavigateToScanResult = false

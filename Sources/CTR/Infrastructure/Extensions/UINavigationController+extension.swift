@@ -56,9 +56,18 @@ extension UINavigationController {
 		coordinator.animate(alongsideTransition: nil) { _ in completion() }
 	}
 	
-	func replaceTopViewController(with viewController: UIViewController, animated: Bool) {
-		var updatedViewControllers = viewControllers
-		updatedViewControllers[updatedViewControllers.count - 1] = viewController
-		setViewControllers(updatedViewControllers, animated: animated)
+	/// Pushes view controller if no stack is present. Or replaces top view controller when a stack is present.
+	/// This prevents an endless stack and increasing memory pressure while preserving native push animation.
+	/// - Parameters:
+	///   - viewController: The view controller to push onto the stack or replace to.
+	///   - animated: Specify true to animate the transition or false if you do not want the transition to be animated.
+	func pushOrReplaceTopViewController(with viewController: UIViewController, animated: Bool) {
+		if viewControllers.count <= 1 {
+			pushViewController(viewController, animated: animated)
+		} else {
+			var updatedViewControllers = viewControllers
+			updatedViewControllers[updatedViewControllers.count - 1] = viewController
+			setViewControllers(updatedViewControllers, animated: animated)
+		}
 	}
 }
