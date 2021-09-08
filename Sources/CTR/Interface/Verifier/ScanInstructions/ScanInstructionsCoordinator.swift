@@ -31,11 +31,13 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 
 	private let pagesFactory: ScanInstructionsFactoryProtocol = ScanInstructionsFactory()
 	private let pages: [ScanInstructionsPage]
+	private let isFromScanner: Bool
 
-	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate) {
+	init(navigationController: UINavigationController, delegate: ScanInstructionsDelegate, isFromScanner: Bool) {
 
 		self.navigationController = navigationController
 		self.delegate = delegate
+		self.isFromScanner = isFromScanner
 
 		pages = pagesFactory.create()
 	}
@@ -50,11 +52,12 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
 		
-		// Replace navigation stack when more than one view controller is stacked
-		if navigationController.viewControllers.count <= 1 {
-			navigationController.pushViewController(viewController, animated: true)
-		} else {
+		if isFromScanner {
+			// Replace scan view controller
 			navigationController.replaceTopViewController(with: viewController, animated: true)
+		} else {
+			// Push when starting from start view controller
+			navigationController.pushViewController(viewController, animated: true)
 		}
 	}
 
