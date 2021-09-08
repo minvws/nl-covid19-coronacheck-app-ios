@@ -231,7 +231,6 @@
 "general.cancel" = "Cancel";
 /* MARK: - General */
 "general.close" = "Close";
-"general.previous" = "Previous";
 "general.back" = "Back";
 "general.next" = "Next";
 "general.done" = "Done";

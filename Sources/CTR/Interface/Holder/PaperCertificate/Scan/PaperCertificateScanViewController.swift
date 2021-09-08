@@ -64,7 +64,7 @@ class PaperCertificateScanViewController: ScanViewController {
 		}
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+		styleBackButton()
 	}
 
 	override func found(code: String) {
