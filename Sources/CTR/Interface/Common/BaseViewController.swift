@@ -29,15 +29,15 @@ class BaseViewController: UIViewController {
 		styleBackButton()
 	}
 
-	func styleBackButton(buttonText: String = L.generalPrevious()) {
+	func styleBackButton() {
 
 		let backbutton = UIBarButtonItem(
-			title: buttonText,
+			title: nil,
 			style: .plain,
 			target: nil,
 			action: nil
 		)
-        backbutton.accessibilityLabel = buttonText
+		backbutton.accessibilityLabel = L.generalBack()
 
 		navigationController?.navigationBar.backIndicatorImage = .backArrow
 		navigationController?.navigationBar.backIndicatorTransitionMaskImage = .backArrow
