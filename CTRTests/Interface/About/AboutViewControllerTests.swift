@@ -54,9 +54,30 @@ class AboutViewControllerTests: XCTestCase {
 		expect(self.sut.sceneView.message) == L.holderAboutText()
 		expect(self.sut.sceneView.listHeader) == L.holderAboutReadmore()
 		expect(self.sut.sceneView.itemStackView.arrangedSubviews)
-			.to(haveCount(3))
+			.to(haveCount(4))
 		expect(self.sut.sceneView.version).toNot(beNil())
 
 		sut.assertImage()
+	}
+
+	func test_alertDialog() {
+
+		// Given
+		let alertVerifier = AlertVerifier()
+		loadView()
+
+		// When
+		(sut.sceneView.itemStackView.arrangedSubviews.last as? SimpleDisclosureButton)?.primaryButtonTapped()
+
+		// Then
+		alertVerifier.verify(
+			title: L.holderCleardataAlertTitle(),
+			message: L.holderCleardataAlertSubtitle(),
+			animated: true,
+			actions: [
+				.default(L.holderCleardataAlertRemove()),
+				.cancel(L.generalCancel())
+			]
+		)
 	}
 }

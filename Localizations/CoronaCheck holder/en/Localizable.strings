@@ -591,3 +591,8 @@
 "holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
+
+"holder.cleardata.menu.title" = "Remove data";
+"holder.cleardata.alert.title" = "Remove data";
+"holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
+"holder.cleardata.alert.remove" = "Remove";
