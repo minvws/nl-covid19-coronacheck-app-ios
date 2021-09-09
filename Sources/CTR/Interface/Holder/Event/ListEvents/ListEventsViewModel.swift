@@ -164,7 +164,7 @@ class ListEventsViewModel: Logging {
 			cancelTitle: L.holderVaccinationAlertStop(),
 			okAction: nil,
 			okTitle: L.holderVaccinationAlertContinue()
-		)
+ 		)
 	}
 
 	func goBack() {

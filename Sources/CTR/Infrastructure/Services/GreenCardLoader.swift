@@ -18,7 +18,7 @@ protocol GreenCardLoading {
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
-	enum Error: Swift.Error, Equatable {
+	enum Error: Swift.Error, Equatable, LocalizedError {
 		case noEvents
 		case didNotEvaluate
 
@@ -27,6 +27,29 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		case failedToGenerateCommitmentMessage
 		case credentials(ServerError)
 		case failedToSaveGreenCards
+
+		var errorDescription: String? {
+			switch self {
+				case .credentials(.error(_, _, let networkError)):
+					return "credentials/" + networkError.rawValue
+				case .credentials(.provider(_, _, _, let networkError)):
+					return "credentials/provider/" + networkError.rawValue
+				case .preparingIssue(.error(_, _, let networkError)):
+					return "preparingIssue/" + networkError.rawValue
+				case .preparingIssue(.provider(_, _, _, let networkError)):
+					return "preparingIssue/provider/" + networkError.rawValue
+				case .noEvents:
+					return "noEvents"
+				case .didNotEvaluate:
+					return "didNotEvaluate"
+				case .failedToParsePrepareIssue:
+					return "failedToParsePrepareIssue"
+				case .failedToGenerateCommitmentMessage:
+					return "failedToGenerateCommitmentMessage"
+				case .failedToSaveGreenCards:
+					return "failedToSaveGreenCards"
+			}
+		}
 	}
 
 	private let networkManager: NetworkManaging

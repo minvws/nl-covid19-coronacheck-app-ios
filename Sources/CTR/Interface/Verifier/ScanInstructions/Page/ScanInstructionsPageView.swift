@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import Lottie
 
 class ScanInstructionsPageView: ScrolledStackView {
 	
@@ -15,18 +16,21 @@ class ScanInstructionsPageView: ScrolledStackView {
 		// Dimensions
 		static let titleLineHeight: CGFloat = 32
 		static let titleKerning: CGFloat = -0.26
-		static let imageHeightPercentage: CGFloat = 0.38
+		static let imageHeightPercentage: CGFloat = 0.5
 		
 		// Margins
 		static let spacing: CGFloat = 24
-		static let marginBeneathImage: CGFloat = 60
+		static let marginBeneathImage: CGFloat = 18
 	}
 	
-	private let imageView: UIImageView = {
+	private let animationView: AnimationView = {
 		
-		let view = UIImageView()
+		let view = AnimationView()
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.contentMode = .scaleAspectFit
+		view.respectAnimationFrameRate = true
+		view.backgroundBehavior = .pauseAndRestore
+		view.loopMode = .loop
 		return view
 	}()
 
@@ -62,6 +66,9 @@ class ScanInstructionsPageView: ScrolledStackView {
 		
 		super.setupViews()
 		backgroundColor = Theme.colors.viewControllerBackground
+		
+		// Align animation view to top
+		stackViewInset.top = 0
 	}
 	
 	override func setupViewHierarchy() {
@@ -73,8 +80,8 @@ class ScanInstructionsPageView: ScrolledStackView {
 		bottomStackView.addArrangedSubview(titleLabel)
 		bottomStackView.addArrangedSubview(messageTextView)
 
-		stackView.addArrangedSubview(imageView)
-		stackView.setCustomSpacing(ViewTraits.marginBeneathImage, after: imageView)
+		stackView.addArrangedSubview(animationView)
+		stackView.setCustomSpacing(ViewTraits.marginBeneathImage, after: animationView)
 		stackView.addArrangedSubview(bottomStackView)
 	}
 
@@ -83,7 +90,7 @@ class ScanInstructionsPageView: ScrolledStackView {
 
 		NSLayoutConstraint.activate([
 
-			imageView.heightAnchor.constraint(
+			animationView.heightAnchor.constraint(
 				lessThanOrEqualTo: heightAnchor,
 				multiplier: ViewTraits.imageHeightPercentage
 			)
@@ -117,19 +124,32 @@ class ScanInstructionsPageView: ScrolledStackView {
 		}
 	}
 	
-	var image: UIImage? {
+	var animationName: String? {
 		didSet {
-			imageView.image = image
+			guard let animationName = animationName else { return }
+			animationView.animation = Animation.named(animationName)
 		}
 	}
 
 	func hideImage() {
 
-		imageView.isHidden = true
+		animationView.isHidden = true
 	}
 
 	func showImage() {
 
-		imageView.isHidden = false
+		animationView.isHidden = false
+	}
+	
+	/// Play the animation
+	func play() {
+		
+		animationView.play()
+	}
+	
+	/// Resets animation to start frame in case it appears again
+	func reset() {
+		
+		animationView.currentProgress = 0
 	}
 }
