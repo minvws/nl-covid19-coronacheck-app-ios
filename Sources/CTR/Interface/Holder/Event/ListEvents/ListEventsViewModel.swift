@@ -166,11 +166,11 @@ class ListEventsViewModel: Logging {
 				}
 			}(),
 			cancelAction: nil,
-			cancelTitle: L.holderVaccinationAlertCancel(),
+			cancelTitle: L.holderVaccinationAlertStop(),
 			okAction: { [weak self] _ in
 				self?.goBack()
 			},
-			okTitle: L.holderVaccinationAlertOk()
+			okTitle: L.holderVaccinationAlertContinue()
 		)
 	}
 

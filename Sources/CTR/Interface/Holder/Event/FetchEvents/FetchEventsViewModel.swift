@@ -207,11 +207,11 @@ final class FetchEventsViewModel: Logging {
 				? L.holderVaccinationAlertMessage()
 				: L.holderTestresultsAlertMessage(),
 			cancelAction: nil,
-			cancelTitle: L.holderVaccinationAlertCancel(),
+			cancelTitle: L.holderVaccinationAlertStop(),
 			okAction: { _ in
 				self.goBack()
 			},
-			okTitle: L.holderVaccinationAlertOk()
+			okTitle: L.holderVaccinationAlertContinue()
 		)
 	}
 
