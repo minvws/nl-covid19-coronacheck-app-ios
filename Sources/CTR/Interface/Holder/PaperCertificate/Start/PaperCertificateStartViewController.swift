@@ -35,7 +35,7 @@ final class PaperCertificateStartViewController: BaseViewController {
 		super.viewDidLoad()
 		
 		setupBinding()
-		styleBackButton(buttonText: "")
+		styleBackButton()
 	}
 	
 	func setupBinding() {
@@ -50,6 +50,6 @@ final class PaperCertificateStartViewController: BaseViewController {
 		
 		sceneView.primaryButtonTappedCommand = { [weak self] in self?.viewModel.primaryButtonTapped() }
 
-		styleBackButton(buttonText: "")
+		styleBackButton()
 	}
 }

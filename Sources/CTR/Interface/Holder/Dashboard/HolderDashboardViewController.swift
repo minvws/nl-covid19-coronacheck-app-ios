@@ -82,7 +82,7 @@ class HolderDashboardViewController: BaseViewController {
 		setupBindings()
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+		styleBackButton()
 		setupPlusButton()
 		
 		sceneView.delegate = self

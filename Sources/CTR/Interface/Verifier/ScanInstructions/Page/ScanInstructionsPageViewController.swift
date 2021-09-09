@@ -55,13 +55,25 @@ class ScanInstructionsPageViewController: BaseViewController {
 		
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		viewModel.$message.binding = { [weak self] in self?.sceneView.message = $0 }
-		viewModel.$image.binding = { [weak self] in self?.sceneView.image = $0 }
+		viewModel.$animationName.binding = { [weak self] in self?.sceneView.animationName = $0 }
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
 
 		super.viewWillAppear(animated)
 		layoutForOrientation()
+	}
+	
+	override func viewDidAppear(_ animated: Bool) {
+
+		super.viewDidAppear(animated)
+		sceneView.play()
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		
+		super.viewDidDisappear(animated)
+		sceneView.reset()
 	}
 
 	// Rotation

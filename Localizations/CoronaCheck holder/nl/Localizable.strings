@@ -231,7 +231,6 @@
 "general.cancel" = "Annuleer";
 /* MARK: - General */
 "general.close" = "Sluiten";
-"general.previous" = "Vorige";
 "general.back" = "Terug";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
@@ -592,3 +591,9 @@
 "holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Gegevens opgehaald bij: %@</p>";
 "holder.vaccination.element.combined" = "<p>Gegevens opgehaald bij: %@ en %@</p>";
+
+"holder.cleardata.menu.title" = "Verwijder data";
+"holder.cleardata.alert.title" = "Verwijder data";
+"holder.cleardata.alert.subtitle" = "Weet je zeker dat je alle greencards en events wilt verwijderen?";
+"holder.cleardata.alert.remove" = "Verwijder";
+

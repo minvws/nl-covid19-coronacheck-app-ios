@@ -49,7 +49,7 @@ class ScanInstructionsCoordinator: Coordinator, Logging, ScanInstructionsCoordin
 			userSettings: UserSettings()
 		)
 		let viewController = ScanInstructionsViewController(viewModel: viewModel)
-		navigationController.pushViewController(viewController, animated: true)
+		navigationController.pushOrReplaceTopViewController(with: viewController, animated: true)
 	}
 
 	func userDidCompletePages() {
