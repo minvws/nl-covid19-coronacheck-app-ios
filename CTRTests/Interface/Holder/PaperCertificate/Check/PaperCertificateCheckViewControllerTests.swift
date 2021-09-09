@@ -24,7 +24,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .test)
+		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
 		couplingManagerSpy = CouplingManagerSpy(cryptoManager: cryptoSpy, networkManager: networkSpy)
 		window = UIWindow()

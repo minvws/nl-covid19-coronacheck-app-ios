@@ -18,7 +18,7 @@ class ProofManagerTests: XCTestCase {
 
 		super.setUp()
 		sut = ProofManager()
-		networkSpy = NetworkSpy(configuration: .test)
+		networkSpy = NetworkSpy(configuration: .development)
 		sut.networkManager = networkSpy
 	}
 
