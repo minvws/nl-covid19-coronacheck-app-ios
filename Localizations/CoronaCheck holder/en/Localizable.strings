@@ -1,3 +1,7 @@
+"holder.cleardata.menu.title" = "Clear data";
+"holder.cleardata.alert.title" = "Clear data";
+"holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
+"holder.cleardata.alert.remove" = "Remove";
 "holder.errorstate.login.title" = "Login was cancelled";
 "holder.errorstate.login.message.vaccination" = "Want to retrieve your vaccination details? Login again with DigiD.";
 "holder.errorstate.login.message.recovery" = "Want to retrieve your recovery details? Login again with DigiD.";
@@ -184,7 +188,7 @@
 /* Link to colophon */
 "holder.url.colophon" = "https://coronacheck.nl/en/colofon-in-app.html";
 
-"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/nl/faq-in-app\">Go here</a> to read which information the QR code contains.";
+"holder.banner.newqr.message" = "<a href=\"https://coronacheck.nl/en/faq-in-app\">Go here</a> to read which information the QR code contains.";
 
 /* MARK: - Holder Token entry - Regular Flow */
 "holder.tokenentry.button.notoken" = "I don't have a code";
@@ -338,7 +342,7 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dashboard.intro.domestic" = "Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
+"holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";
@@ -350,7 +354,7 @@
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "automatically becomes valid in";
 "holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "automatically becomes valid";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "valid from";
-"holder.dashboard.qr.title" = "My QR code";
+"holder.dashboard.qr.title" = "My certificate";
 "holder.dashboard.qr.button.viewQR" = "View QR";
 "holder.dashboard.qr.eulaunchcardfootermessage" = "Your international QR code will automatically become valid when the European legislation goes into effect (from %@).";
 "holder.dashboard.qr.eu.vaccinecertificatedoses" = "Vaccination certificate: dose %@ of %@";
@@ -385,7 +389,7 @@
 
 "holder.showqr.domestic.title" = "Dutch QR code";
 "holder.showqr.domestic.about.title" = "About my Dutch QR code";
-"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p>Always use the Dutch QR code within the Netherlands. The international QR code isn't valid in the Netherlands.</p>";
+"holder.showqr.domestic.about.message" = "<p>Your Dutch QR code contains minimal data. The QR code doesn't say whether or not you have a test certificate or vaccination. It does say whether or not the QR code is valid.</p><p> The QR code also contains several of your details. This is for verification purposes, to make sure this QR code belongs to you. </p><p>The details consist of the first letter of your first name, the first letter of your last name, your birth month, and your day of birth. For security reasons, some details may disappear.</p><p>Your details: <b>%@</b></p><p></p>";
 "holder.showqr.eu.title" = "International QR code";
 "holder.showqr.eu.about.title" = "About my international QR code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Travelling outside of the Netherlands? Then more data is required. That’s why the international QR code contains the following details:</p><p>Name:<br /><b>%@</b></p><p>Date of birth*:<br /><b>%@</b></p><p>Disease targeted:<br /><b>COVID-19</b></p><p>Vaccine:<br /><b>%@</b></p><p>Vaccine medicinal product:<br /><b>%@</b></p><p>Vaccine manufacturer:<br /><b>%@</b></p><p>Number in series of doses:<br /><b>%@</b></p><p>Date of vaccination*:<br /><b>%@</b></p><p>Member state of vaccination:<br /><b>%@</b></p><p>Certificate issuer:<br /><b>%@</b></p><p>Unique certificate identifier:<br /><b>%@</b></p><p>*Date noted in day-month-year</p>";
@@ -417,7 +421,7 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Check your test result";
-"holder.testresults.results.text" = "<p>This test result is retrieved from the test location.</p><p>Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.</p>";
+"holder.testresults.results.text" = "This test result is retrieved from the test location. Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.";
 "holder.testresults.results.button" = "Make certificate";
 "holder.testresults.pending.title" = "Test result not yet known";
 "holder.testresults.pending.text" = "<p>Please try again later.</p><p>If you have any questions, contact your test location.</p>";
@@ -466,8 +470,8 @@
 "holder.event.nolist.action" = "To my certificates";
 "holder.vaccination.alert.title" = "Are you sure you want to stop?";
 "holder.vaccination.alert.message" = "You have to login with DigiD later to retrieve your vaccination.";
-"holder.vaccination.alert.cancel" = "No, continue";
-"holder.vaccination.alert.ok" = "Yes, stop";
+"holder.vaccination.alert.continue" = "No, continue";
+"holder.vaccination.alert.stop" = "Yes, stop";
 "holder.vaccination.about.text" = "About your vaccination";
 "holder.vaccination.about.off" = "%@ of %@";
 "holder.vaccination.list.wrong" = "Is something wrong?";
@@ -518,7 +522,7 @@
 
 /* MARK: - Recovery Event */
 "holder.event.about.recovery.subtitle" = "The following details were retrieved at the test location:";
-"holder.event.about.recovery.name" = "Your details:";
+"holder.event.about.recovery.name" = "Name:";
 "holder.event.about.recovery.dateofbirth" = "Date of birth:";
 "holder.event.about.recovery.date" = "Test date:";
 "holder.event.about.recovery.validfrom" = "Valid from:";
@@ -591,8 +595,3 @@
 "holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
-
-"holder.cleardata.menu.title" = "Remove data";
-"holder.cleardata.alert.title" = "Remove data";
-"holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
-"holder.cleardata.alert.remove" = "Remove";
