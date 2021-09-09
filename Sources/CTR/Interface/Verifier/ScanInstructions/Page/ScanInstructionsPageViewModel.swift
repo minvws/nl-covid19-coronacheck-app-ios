@@ -11,12 +11,12 @@ class ScanInstructionsPageViewModel {
 
 	@Bindable private(set) var title: String
 	@Bindable private(set) var message: String
-	@Bindable private(set) var image: UIImage?
+	@Bindable private(set) var animationName: String?
 	
 	init(page: ScanInstructionsPage) {
 
 		title = page.title
 		message = page.message
-		image = page.image
+		animationName = page.animationName
 	}
 }
