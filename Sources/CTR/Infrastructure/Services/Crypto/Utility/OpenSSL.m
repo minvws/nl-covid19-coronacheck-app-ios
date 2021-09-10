@@ -500,9 +500,14 @@ errit:
 		return NULL;
 	}
 
-	X509 *certificate = PEM_read_bio_X509(blob, NULL, 0, NULL);
+	X509 *x509 = PEM_read_bio_X509(blob, NULL, 0, NULL);
+	if (x509 == NULL) {
+		NSLog(@"Can not read bio to create x509");
+		BIO_free(blob); blob = NULL;
+		return NULL;
+	}
 	BIO_free(blob); blob = NULL;
-	return certificate;
+	return x509;
 }
 
 - (BOOL)compare:(NSData *)certificateData withTrustedCertificate:(NSData *)trustedCertificateData {
