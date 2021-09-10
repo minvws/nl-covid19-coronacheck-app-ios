@@ -26,7 +26,7 @@ class DeviceAuthenticationDetector: DeviceAuthenticationProtocol, Logging {
 		if let error = error {
 			logError("Error checking LocalAuthentication status: \(error)")
 		}
-		logDebug("LocalAuthentication status: \(deviceOwnerAuthentication)")
+		logVerbose("LocalAuthentication status: \(deviceOwnerAuthentication)")
 		return deviceOwnerAuthentication
 	}
 }
