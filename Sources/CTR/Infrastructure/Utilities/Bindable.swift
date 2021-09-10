@@ -41,7 +41,7 @@ import Foundation
     class Binder {
 
         private var valueProvider: () -> T
-        var binding: ((T) -> Void)? = nil { didSet { binding?(valueProvider()) } }
+        var binding: ((T) -> Void)? { didSet { binding?(valueProvider()) } }
         
         init(valueProvider: @escaping () -> T) {
 			
