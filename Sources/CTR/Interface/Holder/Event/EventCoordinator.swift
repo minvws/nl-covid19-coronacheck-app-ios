@@ -6,7 +6,6 @@
 */
 
 import UIKit
-import SafariServices
 
 enum EventMode: String {
 
@@ -99,7 +98,7 @@ protocol EventFlowDelegate: AnyObject {
 	func eventFlowDidCancel()
 }
 
-class EventCoordinator: Coordinator, Logging {
+class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 
 	var childCoordinators: [Coordinator] = []
 
@@ -223,12 +222,7 @@ class EventCoordinator: Coordinator, Logging {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		navigationController.visibleViewController?.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
 	}
 	
 	private func navigateToEventDetails(_ title: String, details: [EventDetails]) {
@@ -241,6 +235,10 @@ class EventCoordinator: Coordinator, Logging {
 				hideBodyForScreenCapture: true
 			)
 		)
+		presentAsBottomSheet(viewController)
+	}
+
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
 
 		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
 		viewController.modalPresentationStyle = .custom
@@ -415,35 +413,6 @@ extension EventCoordinator: EventCoordinatorDelegate {
 			navigationController.popToViewController(popback, animated: true, completion: presentError)
 		} else {
 			navigationController.popToRootViewController(animated: true, completion: presentError)
-		}
-	}
-}
-
-extension EventCoordinator: OpenUrlProtocol {
-
-	/// Open a url
-	/// - Parameters:
-	///   - url: The url to open
-	///   - inApp: True if we should open the url in a in-app browser, False if we want the OS to handle the url
-	func openUrl(_ url: URL, inApp: Bool) {
-
-		var shouldOpenInApp = inApp
-		if url.scheme == "tel" {
-			// Do not open phone numbers in app, doesn't work & will crash.
-			shouldOpenInApp = false
-		}
-
-		if shouldOpenInApp {
-			let safariController = SFSafariViewController(url: url)
-			if let presentedViewController = navigationController.presentedViewController {
-				presentedViewController.presentingViewController?.dismiss(animated: true, completion: {
-					self.navigationController.viewControllers.last?.present(safariController, animated: true)
-				})
-			} else {
-				navigationController.viewControllers.last?.present(safariController, animated: true)
-			}
-		} else {
-			UIApplication.shared.open(url)
 		}
 	}
 }
