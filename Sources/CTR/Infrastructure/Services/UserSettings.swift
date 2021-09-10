@@ -22,6 +22,8 @@ protocol UserSettingsProtocol: AnyObject {
 	var issuerKeysFetchedTimestamp: TimeInterval? { get set }
 
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? { get set }
+
+	var deviceAuthenticationWarningShown: Bool { get set }
 }
 
 class UserSettings: UserSettingsProtocol {
@@ -46,4 +48,7 @@ class UserSettings: UserSettingsProtocol {
 
 	@UserDefaults(key: "lastRecommendUpdateDismissalTimestamp", defaultValue: nil)
 	var lastRecommendUpdateDismissalTimestamp: TimeInterval? // swiftlint:disable:this let_var_whitespace
+
+	@UserDefaults(key: "deviceAuthenticationWarningShown", defaultValue: false)
+	var deviceAuthenticationWarningShown: Bool // swiftlint:disable:this let_var_whitespace
 }
