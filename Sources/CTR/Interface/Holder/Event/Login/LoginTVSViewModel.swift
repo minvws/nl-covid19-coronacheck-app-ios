@@ -15,6 +15,8 @@ class LoginTVSViewModel: Logging {
 
 	private var eventMode: EventMode
 
+	private var title: String
+
 	@Bindable internal var viewState: LoginTVSViewController.State
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
@@ -28,20 +30,22 @@ class LoginTVSViewModel: Logging {
 		self.coordinator = coordinator
 		self.eventMode = eventMode
 
+		self.title = {
+			switch eventMode {
+				case .recovery:
+					return L.holderRecoveryListTitle()
+				case .paperflow:
+					return L.holderDccListTitle()
+				case .test:
+					return L.holderTestListTitle()
+				case .vaccination:
+					return L.holderVaccinationListTitle()
+			}
+		}()
+
 		viewState = .login(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
+				title: title,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -62,18 +66,7 @@ class LoginTVSViewModel: Logging {
 		shouldShowProgress = true
 		viewState = .login(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
+				title: title,
 				subTitle: nil,
 				primaryActionTitle: L.generalClose(),
 				primaryAction: { [weak self] in
@@ -166,7 +159,7 @@ extension LoginTVSViewModel {
 				subTitle: L.generalNetworkwasbusyText(),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.coordinator?.loginTVSScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -246,6 +239,7 @@ extension LoginTVSViewModel {
 
 			case OIDErrorCode.idTokenFailedValidationError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralInvalidIDToken
+
 			default:
 				return nil
 		}

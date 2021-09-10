@@ -71,6 +71,9 @@ enum EventScreenResult: Equatable {
 			case (let showEventDetails(lhsTitle, lhsDetails), let showEventDetails(rhsTitle, rhsDetails)):
 				return (lhsTitle, lhsDetails) == (rhsTitle, rhsDetails)
 
+			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
+				return lhsMode == rhsMode
+				
 			default:
 				return false
 		}

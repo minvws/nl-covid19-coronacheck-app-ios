@@ -61,8 +61,8 @@ final class Services {
 
 	/// Override the OpenIdManaging type that will be instantiated
 	/// - parameter openIdManager: The type conforming to OpenIdManaging to be used as the global openID manager
-	static func use(_ openIdManager: OpenIdManaging.Type) {
-		openIdManagerType = openIdManager
+	static func use(_ openIdManaging: OpenIdManaging) {
+		openIdManager = openIdManaging
 	}
 
 	/// Override the ProofManaging type that will be instantiated
