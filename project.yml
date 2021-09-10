@@ -396,7 +396,7 @@ schemeTemplates:
       targets:
         - name: ${testTargetName}
           parallelizable: false
-          randomExecutionOrder: false
+          randomExecutionOrder: true
 
 # - Schemes
 
