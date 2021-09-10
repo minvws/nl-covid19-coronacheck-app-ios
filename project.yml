@@ -7,13 +7,11 @@ name: CTR
 
 packages:
   AppAuth:
-    ## When this PR is merged, switch back to official repo. 
-    ## For now, use the pinned (and reviewed) commit below 👇🏻
-    ## https://github.com/openid/AppAuth-iOS/pull/604/commits/f8487f6e147f41629f6c0a979fd1bc23d47d5bd0
-    # github: openid/AppAuth-iOS.git
-    # majorVersion: 1.4.0
-    github: davbeck/AppAuth-iOS
-    revision: f8487f6e147f41629f6c0a979fd1bc23d47d5bd0
+    ## A fork has been used to support both universal links and url schemes
+    ## and fix Xcode compile warnings.
+    ## Forked from: https://github.com/openid/AppAuth-iOS
+    github: GlennChiu/AppAuth-iOS
+    revision: 1818e38a9171eb9a883fc4d4a2a6b2fc14fdee0d
   CocoaLumberjack:
     github: CocoaLumberjack/CocoaLumberjack
     majorVersion: 3.7.2
