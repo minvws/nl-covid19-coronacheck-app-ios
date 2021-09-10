@@ -36,7 +36,7 @@ class CryptoManager: CryptoManaging, Logging {
 	@Keychain(name: "cryptoData", service: Constants.keychainService, clearOnReinstall: true)
 	private var cryptoData: CryptoData = .empty
 	
-	private let cryptoLibUtility: CryptoLibUtility = Services.cryptoLibUtility
+	private let cryptoLibUtility: CryptoLibUtilityProtocol = Services.cryptoLibUtility
 	
 	/// Initializer
 	required init() {

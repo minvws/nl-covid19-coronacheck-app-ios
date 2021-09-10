@@ -163,4 +163,26 @@ class UserSettingsSpy: UserSettingsProtocol {
 			return stubbedLastRecommendUpdateDismissalTimestamp
 		}
 	}
+
+	var invokedDeviceAuthenticationWarningShownSetter = false
+	var invokedDeviceAuthenticationWarningShownSetterCount = 0
+	var invokedDeviceAuthenticationWarningShown: Bool?
+	var invokedDeviceAuthenticationWarningShownList = [Bool]()
+	var invokedDeviceAuthenticationWarningShownGetter = false
+	var invokedDeviceAuthenticationWarningShownGetterCount = 0
+	var stubbedDeviceAuthenticationWarningShown: Bool! = false
+
+	var deviceAuthenticationWarningShown: Bool {
+		set {
+			invokedDeviceAuthenticationWarningShownSetter = true
+			invokedDeviceAuthenticationWarningShownSetterCount += 1
+			invokedDeviceAuthenticationWarningShown = newValue
+			invokedDeviceAuthenticationWarningShownList.append(newValue)
+		}
+		get {
+			invokedDeviceAuthenticationWarningShownGetter = true
+			invokedDeviceAuthenticationWarningShownGetterCount += 1
+			return stubbedDeviceAuthenticationWarningShown
+		}
+	}
 }

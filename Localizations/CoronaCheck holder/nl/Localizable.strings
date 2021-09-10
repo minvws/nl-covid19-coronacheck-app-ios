@@ -595,3 +595,6 @@
 "holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Gegevens opgehaald bij: %@</p>";
 "holder.vaccination.element.combined" = "<p>Gegevens opgehaald bij: %@ en %@</p>";
+
+"holder.device.authentication.warning.title" = "** iOS apps usable without device lock (title) **";
+"holder.device.authentication.warning.message" = "** iOS apps usable without device lock (message) **";

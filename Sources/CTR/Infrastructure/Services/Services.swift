@@ -10,10 +10,12 @@ import Foundation
 /// Global container for the different services used in the app
 final class Services {
 	
-	private static var cryptoLibUtilityType: CryptoLibUtility.Type = CryptoLibUtility.self
+	private static var cryptoLibUtilityType: CryptoLibUtilityProtocol.Type = CryptoLibUtility.self
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
+	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
+	private static var jailBreakType: JailBreakProtocol.Type = JailBreakDetector.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
 	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
@@ -25,73 +27,81 @@ final class Services {
 	private static var mappingManagingType: MappingManaging.Type = MappingManager.self
 	private static var clockDeviationType: ClockDeviationManaging.Type = ClockDeviationManager.self
 
-	/// Override the CryptoManaging type that will be instantiated
-	/// - parameter cryptoManager: The type conforming to CryptoManaging to be used as the global cryptoManager
+	// MARK: use override for testing
+
 	static func use(_ cryptoManager: CryptoManaging.Type) {
 
 		cryptoManagingType = cryptoManager
 	}
 
-	/// Override the ForcedInformationManaging type that will be instantiated
-	/// - parameter forcedInformationManager: The type conforming to ForcedInformationManaging to be used as the global forcedInformationManager
+	static func use(_ cryptoUtilityProtocol: CryptoLibUtilityProtocol) {
+
+		cryptoLibUtility = cryptoUtilityProtocol
+	}
+
+	static func use(_ deviceAuthenticationProtocol: DeviceAuthenticationProtocol) {
+
+		deviceAuthenticationDetector = deviceAuthenticationProtocol
+	}
+
+	static func use(_ jailBreakProtocol: JailBreakProtocol) {
+
+		jailBreakDetector = jailBreakProtocol
+	}
+
 	static func use(_ forcedInformationManager: ForcedInformationManaging.Type) {
 
 		forcedInformationManagingType = forcedInformationManager
 	}
 
-    /// Override the NetworkManaging type that will be instantiated
-    /// - parameter networkManager: The type conforming to NetworkManaging to be used as the global networkManager
     static func use(_ networkManager: NetworkManaging.Type) {
 
         networkManagingType = networkManager
     }
 
-    /// Override the RemoteConfigManaging type that will be instantiated
-    /// - parameter configManager: The type conforming to RemoteConfigManaging to be used as the global configManager
-    static func use(_ configManager: RemoteConfigManaging.Type) {
+    static func use(_ remoteConfigManaging: RemoteConfigManaging) {
 
-		remoteConfigManagingType = configManager
+		remoteConfigManager = remoteConfigManaging
     }
 
-    /// Override the OnboardingManaging type that will be instantiated
-    /// - parameter onboardingManaging: The type conforming to OnboardingManaging to be used as the global onboardingManager
     static func use(_ onboardingManager: OnboardingManaging.Type) {
-        onboardingManagingType = onboardingManager
+
+		onboardingManagingType = onboardingManager
     }
 
-	/// Override the OpenIdManaging type that will be instantiated
-	/// - parameter openIdManager: The type conforming to OpenIdManaging to be used as the global openID manager
 	static func use(_ openIdManager: OpenIdManaging.Type) {
+
 		openIdManagerType = openIdManager
 	}
 
-	/// Override the ProofManaging type that will be instantiated
-	/// - parameter proofManager: The type conforming to ProofManaging to be used as the global proof manager
-	static func use(_ proofManager: ProofManaging.Type) {
-		proofManagerType = proofManager
+	static func use(_ proofManaging: ProofManaging) {
+
+		proofManager = proofManaging
 	}
 
-	/// Override the GreenCardLoading type that will be instantiated
-	/// - parameter greenCardLoader: The type conforming to GreenCardLoading to be used as the global greencard loader
 	static func use(_ greenCardLoader: GreenCardLoading.Type) {
+
 		greenCardLoadingType = greenCardLoader
 	}
 
-	/// Override the couplingManaging type  that will be instantiated
-	/// - parameter couplingManager: The type conforming to CouplingManaging to be used as the global coupling manager
 	static func use(_ couplingManager: CouplingManaging.Type) {
+
 		couplingManagingType = couplingManager
 	}
 
-	/// Override the mappingManaging type  that will be instantiated
-	/// - parameter mappingManager: The type conforming to MappingManaging to be used as the global mapping manager
 	static func use(_ mappingManager: MappingManaging.Type) {
+
 		mappingManagingType = mappingManager
 	}
 
 	static func use(_ clockDeviationManager: ClockDeviationManaging.Type) {
 
 		clockDeviationType = clockDeviationManager
+	}
+
+	static func use(_ walletManaging: WalletManaging) {
+
+		walletManager = walletManaging
 	}
 
 	// MARK: Static access
@@ -116,13 +126,20 @@ final class Services {
         return networkManagingType.init(configuration: networkConfiguration)
     }()
 
-	static private(set) var cryptoLibUtility: CryptoLibUtility = cryptoLibUtilityType.init()
+	static private(set) var cryptoLibUtility: CryptoLibUtilityProtocol = cryptoLibUtilityType.init(
+		fileStorage: FileStorage(),
+		flavor: AppFlavor.flavor
+	)
 
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
+
+	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
 	
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
+
+	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
 
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,
