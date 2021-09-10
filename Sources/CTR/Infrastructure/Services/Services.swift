@@ -15,6 +15,7 @@ final class Services {
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
 	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
+	private static var jailBreakType: JailBreakProtocol.Type = JailBreakDetector.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
 	private static var openIdManagerType: OpenIdManaging.Type = OpenIdManager.self
@@ -38,6 +39,13 @@ final class Services {
 	static func use(_ deviceAuthenticationProtocol: DeviceAuthenticationProtocol) {
 
 		deviceAuthenticationDetector = deviceAuthenticationProtocol
+	}
+
+	/// Override the JailBreakProtocol type that will be instantiated
+	/// - parameter jailBreakProtocol: The type conforming to JailBreakProtocol to be used as the global jailBreakDetector
+	static func use(_ jailBreakProtocol: JailBreakProtocol) {
+
+		jailBreakDetector = jailBreakProtocol
 	}
 
 	/// Override the ForcedInformationManaging type that will be instantiated
@@ -133,6 +141,8 @@ final class Services {
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 
 	static private(set) var forcedInformationManager: ForcedInformationManaging = forcedInformationManagingType.init()
+
+	static private(set) var jailBreakDetector: JailBreakProtocol = jailBreakType.init()
 
 	static private(set) var greenCardLoader: GreenCardLoading = greenCardLoadingType.init(
 		networkManager: networkManager,

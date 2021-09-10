@@ -40,6 +40,7 @@ class LaunchViewModelTests: XCTestCase {
 		Services.use(remoteConfigSpy)
 		Services.use(proofManagerSpy)
 		Services.use(deviceAuthenticationSpy)
+		Services.use(jailBreakProtocolSpy)
 	}
 
 	let remoteConfig = RemoteConfiguration.default
@@ -97,7 +98,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -129,7 +129,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -161,7 +160,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -193,7 +191,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -227,7 +224,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -264,7 +260,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -296,7 +291,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -331,7 +325,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -366,7 +359,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			cryptoLibUtility: cryptoLibUtilitySpy,
 			walletManager: walletSpy
@@ -394,7 +386,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -422,7 +413,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -448,7 +438,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -473,7 +462,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -499,7 +487,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -529,7 +516,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -559,7 +545,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -588,7 +573,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -613,7 +597,6 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			jailBreakDetector: jailBreakProtocolSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)

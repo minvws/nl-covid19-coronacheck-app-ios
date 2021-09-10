@@ -16,7 +16,7 @@ class LaunchViewModel: Logging {
 	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private weak var walletManager: WalletManaging?
 	private weak var proofManager: ProofManaging? = Services.proofManager
-	private weak var jailBreakDetector: JailBreakProtocol?
+	private weak var jailBreakDetector: JailBreakProtocol? = Services.jailBreakDetector
 	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Services.deviceAuthenticationDetector
 	private var userSettings: UserSettingsProtocol?
 	private weak var cryptoLibUtility: CryptoLibUtilityProtocol?
@@ -40,14 +40,12 @@ class LaunchViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
-	///   - jailBreakDetector: the detector for detecting jailbreaks
 	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
 	///   - cryptoLibUtility: the crypto library utility
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
-		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
 		userSettings: UserSettingsProtocol? = UserSettings(),
 		cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility,
 		walletManager: WalletManaging?) {
@@ -55,7 +53,6 @@ class LaunchViewModel: Logging {
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
 		self.flavor = flavor
-		self.jailBreakDetector = jailBreakDetector
 		self.userSettings = userSettings
 		self.cryptoLibUtility = cryptoLibUtility
 		self.walletManager = walletManager
