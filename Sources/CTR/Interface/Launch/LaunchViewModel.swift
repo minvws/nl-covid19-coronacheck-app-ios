@@ -332,7 +332,7 @@ class LaunchViewModel: Logging {
 		alert = nil
 		// Warning has been shown, do not show twice
 		userSettings?.jailbreakWarningShown = true
-		// Continu with flow
+		// Continue with flow
 		startChecks()
 	}
 
@@ -372,7 +372,7 @@ class LaunchViewModel: Logging {
 		alert = nil
 		// Warning has been shown, do not show twice
 		userSettings?.deviceAuthenticationWarningShown = true
-		// Continu with flow
+		// Continue with flow
 		startChecks()
 	}
 }

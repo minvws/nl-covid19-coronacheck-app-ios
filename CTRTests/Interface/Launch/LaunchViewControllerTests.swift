@@ -20,6 +20,7 @@ class LaunchViewControllerTests: XCTestCase {
 	private var remoteConfigSpy: RemoteConfigManagingSpy!
 	private var proofManagerSpy: ProofManagingSpy!
 	private var jailBreakProtocolSpy: JailBreakProtocolSpy!
+	private var deviceAuthenticationSpy: DeviceAuthenticationSpy!
 	private var userSettingsSpy: UserSettingsSpy!
 	private var walletSpy: WalletManagerSpy!
 
@@ -36,6 +37,7 @@ class LaunchViewControllerTests: XCTestCase {
 		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 		proofManagerSpy = ProofManagingSpy()
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
+		deviceAuthenticationSpy = DeviceAuthenticationSpy()
 		userSettingsSpy = UserSettingsSpy()
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 
@@ -46,6 +48,7 @@ class LaunchViewControllerTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
+			deviceAuthenticationDetector: deviceAuthenticationSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -90,7 +93,9 @@ class LaunchViewControllerTests: XCTestCase {
 
 		// Given
 		userSettingsSpy.stubbedJailbreakWarningShown = false
+		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = true
+		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
@@ -99,6 +104,7 @@ class LaunchViewControllerTests: XCTestCase {
 			remoteConfigManager: remoteConfigSpy,
 			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
+			deviceAuthenticationDetector: deviceAuthenticationSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -113,6 +119,46 @@ class LaunchViewControllerTests: XCTestCase {
 		alertVerifier.verify(
 			title: L.jailbrokenTitle(),
 			message: L.jailbrokenMessage(),
+			animated: true,
+			actions: [
+				.default(L.generalOk())
+			],
+			presentingViewController: sut
+		)
+
+		sut.assertImage()
+	}
+
+	func test_showDeviceAuthenticationAlert() {
+
+		// Given
+		userSettingsSpy.stubbedJailbreakWarningShown = false
+		userSettingsSpy.stubbedDeviceAuthenticationWarningShown = false
+		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
+		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = false
+
+		let viewModel = LaunchViewModel(
+			coordinator: appCoordinatorSpy,
+			versionSupplier: versionSupplierSpy,
+			flavor: AppFlavor.holder,
+			remoteConfigManager: remoteConfigSpy,
+			proofManager: proofManagerSpy,
+			jailBreakDetector: jailBreakProtocolSpy,
+			deviceAuthenticationDetector: deviceAuthenticationSpy,
+			userSettings: userSettingsSpy,
+			walletManager: walletSpy
+		)
+		sut = LaunchViewController(viewModel: viewModel)
+
+		let alertVerifier = AlertVerifier()
+
+		// When
+		loadView()
+
+		// Then
+		alertVerifier.verify(
+			title: L.holderDeviceAuthenticationWarningTitle(),
+			message: L.holderDeviceAuthenticationWarningMessage(),
 			animated: true,
 			actions: [
 				.default(L.generalOk())
