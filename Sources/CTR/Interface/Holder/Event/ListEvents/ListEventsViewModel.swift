@@ -45,13 +45,6 @@ class ListEventsViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EE d MMMM HH:mm"
-		return dateFormatter
-	}()
-	lazy var printTestLongDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
@@ -165,13 +158,13 @@ class ListEventsViewModel: Logging {
 
 				}
 			}(),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationAlertCancel(),
-			okAction: { [weak self] _ in
+			cancelAction: { [weak self] _ in
 				self?.goBack()
 			},
-			okTitle: L.holderVaccinationAlertOk()
-		)
+			cancelTitle: L.holderVaccinationAlertStop(),
+			okAction: nil,
+			okTitle: L.holderVaccinationAlertContinue()
+ 		)
 	}
 
 	func goBack() {

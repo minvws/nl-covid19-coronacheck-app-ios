@@ -4,6 +4,7 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable type_body_length
 
 import Foundation
 
@@ -203,15 +204,25 @@ final class FetchEventsViewModel: Logging {
 
 		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
-			subTitle: eventMode == .vaccination
-				? L.holderVaccinationAlertMessage()
-				: L.holderTestresultsAlertMessage(),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationAlertCancel(),
-			okAction: { _ in
+			subTitle: {
+				switch eventMode {
+					case .recovery:
+						return L.holderRecoveryAlertMessage()
+					case .paperflow:
+						return L.holderDccAlertMessage()
+					case .test:
+						return L.holderTestAlertMessage()
+					case .vaccination:
+						return L.holderVaccinationAlertMessage()
+
+				}
+			}(),
+			cancelAction: { _ in
 				self.goBack()
 			},
-			okTitle: L.holderVaccinationAlertOk()
+			cancelTitle: L.holderVaccinationAlertStop(),
+			okAction: nil,
+			okTitle: L.holderVaccinationAlertContinue()
 		)
 	}
 

@@ -121,7 +121,7 @@ targetTemplates:
       configs:
         Development:
           PRODUCT_MODULE_NAME: CTR
-          NETWORK_CONFIGURATION: ACC # bananahalen no longer works.
+          NETWORK_CONFIGURATION: DEV
           CODE_SIGN_IDENTITY: iPhone Developer
           VALIDATE_PRODUCT: NO
           LOG_LEVEL: debug
