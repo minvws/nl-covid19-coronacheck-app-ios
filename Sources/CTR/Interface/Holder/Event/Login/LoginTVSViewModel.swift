@@ -11,25 +11,21 @@ import AppAuth
 class LoginTVSViewModel: Logging {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging?
+	private weak var openIdManager: OpenIdManaging? = Services.openIdManager
 
 	private var eventMode: EventMode
 
 	@Bindable internal var viewState: LoginTVSViewController.State
 
-//	@Bindable private(set) var title: String
-
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable private(set) var alert: LoginTVSViewController.AlertContent?
+	@Bindable private(set) var alert: AlertContent?
 
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
-		eventMode: EventMode,
-		openIdManager: OpenIdManaging = Services.openIdManager) {
+		eventMode: EventMode) {
 
 		self.coordinator = coordinator
-		self.openIdManager = openIdManager
 		self.eventMode = eventMode
 
 		viewState = .login(
@@ -95,9 +91,12 @@ class LoginTVSViewModel: Logging {
 			if let token = accessToken {
 				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
 			} else {
-				self.alert = LoginTVSViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.generalErrorTitle(),
 					subTitle: L.generalErrorTechnicalText(),
+					cancelAction: nil,
+					cancelTitle: nil,
+					okAction: nil,
 					okTitle: L.generalOk()
 				)
 			}
