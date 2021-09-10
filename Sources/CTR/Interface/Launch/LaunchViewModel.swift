@@ -19,7 +19,7 @@ class LaunchViewModel: Logging {
 	private weak var jailBreakDetector: JailBreakProtocol? = Services.jailBreakDetector
 	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Services.deviceAuthenticationDetector
 	private var userSettings: UserSettingsProtocol?
-	private weak var cryptoLibUtility: CryptoLibUtilityProtocol?
+	private weak var cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility
 
 	private var isUpdatingConfiguration = false
 	private var isUpdatingIssuerPublicKeys = false
@@ -41,21 +41,16 @@ class LaunchViewModel: Logging {
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
 	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
-	///   - cryptoLibUtility: the crypto library utility
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
-		userSettings: UserSettingsProtocol? = UserSettings(),
-		cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility,
-		walletManager: WalletManaging?) {
+		userSettings: UserSettingsProtocol? = UserSettings()) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
 		self.flavor = flavor
 		self.userSettings = userSettings
-		self.cryptoLibUtility = cryptoLibUtility
-		self.walletManager = walletManager
 
 		title = flavor == .holder ? L.holderLaunchTitle() : L.verifierLaunchTitle()
 		message = flavor == .holder  ? L.holderLaunchText() : L.verifierLaunchText()
@@ -64,6 +59,8 @@ class LaunchViewModel: Logging {
 		version = flavor == .holder
 			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
+
+		walletManager = flavor == .holder ? Services.walletManager : nil
 
 		startChecks()
 	}

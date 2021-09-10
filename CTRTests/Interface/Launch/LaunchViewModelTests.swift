@@ -33,14 +33,16 @@ class LaunchViewModelTests: XCTestCase {
 		jailBreakProtocolSpy = JailBreakProtocolSpy()
 		deviceAuthenticationSpy = DeviceAuthenticationSpy()
 		userSettingsSpy = UserSettingsSpy()
-		cryptoLibUtilitySpy = CryptoLibUtilitySpy()
+		cryptoLibUtilitySpy = CryptoLibUtilitySpy(fileStorage: FileStorage(), flavor: AppFlavor.flavor)
 		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 
-		Services.use(remoteConfigSpy)
-		Services.use(proofManagerSpy)
+		Services.use(cryptoLibUtilitySpy)
 		Services.use(deviceAuthenticationSpy)
 		Services.use(jailBreakProtocolSpy)
+		Services.use(proofManagerSpy)
+		Services.use(remoteConfigSpy)
+		Services.use(walletSpy)
 	}
 
 	let remoteConfig = RemoteConfiguration.default
@@ -55,8 +57,7 @@ class LaunchViewModelTests: XCTestCase {
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.holder,
-			walletManager: walletSpy
+			flavor: AppFlavor.holder
 		)
 
 		// Then
@@ -73,8 +74,7 @@ class LaunchViewModelTests: XCTestCase {
 		sut = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
-			flavor: AppFlavor.verifier,
-			walletManager: walletSpy
+			flavor: AppFlavor.verifier
 		)
 
 		// Then
@@ -98,9 +98,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -129,9 +127,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -160,9 +156,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -191,9 +185,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -224,9 +216,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -260,9 +250,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -291,9 +279,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -325,9 +311,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -359,9 +343,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			cryptoLibUtility: cryptoLibUtilitySpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -386,8 +368,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -413,8 +394,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -438,8 +418,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -462,8 +441,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// When
@@ -487,8 +465,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -516,8 +493,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -545,8 +521,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.verifier,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -573,8 +548,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// Then
@@ -597,8 +571,7 @@ class LaunchViewModelTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		// When

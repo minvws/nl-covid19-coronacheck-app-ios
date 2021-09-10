@@ -45,13 +45,13 @@ class LaunchViewControllerTests: XCTestCase {
 		Services.use(proofManagerSpy)
 		Services.use(deviceAuthenticationSpy)
 		Services.use(jailBreakProtocolSpy)
+		Services.use(walletSpy)
 
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 
 		sut = LaunchViewController(viewModel: viewModel)
@@ -102,8 +102,7 @@ class LaunchViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 
@@ -138,8 +137,7 @@ class LaunchViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			userSettings: userSettingsSpy,
-			walletManager: walletSpy
+			userSettings: userSettingsSpy
 		)
 		sut = LaunchViewController(viewModel: viewModel)
 

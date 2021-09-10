@@ -10,6 +10,8 @@ import XCTest
 
 final class CryptoLibUtilitySpy: CryptoLibUtilityProtocol {
 
+	required init(fileStorage: FileStorage, flavor: AppFlavor) {}
+
 	var invokedHasPublicKeysGetter = false
 	var invokedHasPublicKeysGetterCount = 0
 	var stubbedHasPublicKeys: Bool! = false
