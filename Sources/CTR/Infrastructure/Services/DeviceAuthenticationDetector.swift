@@ -10,6 +10,8 @@ import LocalAuthentication
 
 protocol DeviceAuthenticationProtocol: AnyObject {
 
+	init()
+
 	/// Does this device have an authentication policy set? (biometrics, touch, passcode)
 	/// - Returns: True if it does
 	func hasAuthenticationPolicy() -> Bool
@@ -17,12 +19,19 @@ protocol DeviceAuthenticationProtocol: AnyObject {
 
 class DeviceAuthenticationDetector: DeviceAuthenticationProtocol, Logging {
 
+	let context: LAContext!
+
+	required init() {
+
+		context = LAContext()
+	}
+
 	/// Does this device have an authentication policy set? (biometrics, touch, passcode)
 	/// - Returns: True if it does
 	func hasAuthenticationPolicy() -> Bool {
 
 		var error: NSError?
-		let deviceOwnerAuthentication = LAContext().canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
+		let deviceOwnerAuthentication = context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error)
 		if let error = error {
 			logError("Error checking LocalAuthentication status: \(error)")
 		}

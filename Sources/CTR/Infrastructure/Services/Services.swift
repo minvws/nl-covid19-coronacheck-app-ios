@@ -13,6 +13,7 @@ final class Services {
 	private static var cryptoLibUtilityType: CryptoLibUtility.Type = CryptoLibUtility.self
 	private static var cryptoManagingType: CryptoManaging.Type = CryptoManager.self
 	private static var dataStoreManagingType: DataStoreManaging.Type = DataStoreManager.self
+	private static var deviceAuthenticationType: DeviceAuthenticationProtocol.Type = DeviceAuthenticationDetector.self
 	private static var forcedInformationManagingType: ForcedInformationManaging.Type = ForcedInformationManager.self
 	private static var networkManagingType: NetworkManaging.Type = NetworkManager.self
     private static var onboardingManagingType: OnboardingManaging.Type = OnboardingManager.self
@@ -32,6 +33,13 @@ final class Services {
 		cryptoManagingType = cryptoManager
 	}
 
+	/// Override the DeviceAuthenticationProtocol type that will be instantiated
+	/// - parameter deviceAuthenticationProtocol: The type conforming to DeviceAuthenticationProtocol to be used as the global deviceAuthenticationDetector
+	static func use(_ deviceAuthenticationProtocol: DeviceAuthenticationProtocol) {
+
+		deviceAuthenticationDetector = deviceAuthenticationProtocol
+	}
+
 	/// Override the ForcedInformationManaging type that will be instantiated
 	/// - parameter forcedInformationManager: The type conforming to ForcedInformationManaging to be used as the global forcedInformationManager
 	static func use(_ forcedInformationManager: ForcedInformationManaging.Type) {
@@ -47,10 +55,10 @@ final class Services {
     }
 
     /// Override the RemoteConfigManaging type that will be instantiated
-    /// - parameter configManager: The type conforming to RemoteConfigManaging to be used as the global configManager
-    static func use(_ configManager: RemoteConfigManaging.Type) {
+    /// - parameter RemoteConfigManaging: The type conforming to RemoteConfigManaging to be used as the global configManager
+    static func use(_ remoteConfigManaging: RemoteConfigManaging) {
 
-		remoteConfigManagingType = configManager
+		remoteConfigManager = remoteConfigManaging
     }
 
     /// Override the OnboardingManaging type that will be instantiated
@@ -66,9 +74,9 @@ final class Services {
 	}
 
 	/// Override the ProofManaging type that will be instantiated
-	/// - parameter proofManager: The type conforming to ProofManaging to be used as the global proof manager
-	static func use(_ proofManager: ProofManaging.Type) {
-		proofManagerType = proofManager
+	/// - parameter proofManaging: The type conforming to ProofManaging to be used as the global proof manager
+	static func use(_ proofManaging: ProofManaging) {
+		proofManager = proofManaging
 	}
 
 	/// Override the GreenCardLoading type that will be instantiated
@@ -119,6 +127,8 @@ final class Services {
 	static private(set) var cryptoLibUtility: CryptoLibUtility = cryptoLibUtilityType.init()
 
 	static private(set) var cryptoManager: CryptoManaging = cryptoManagingType.init()
+
+	static private(set) var deviceAuthenticationDetector: DeviceAuthenticationProtocol = deviceAuthenticationType.init()
 	
 	static private(set) var dataStoreManager: DataStoreManaging = dataStoreManagingType.init(StorageType.persistent)
 

@@ -41,14 +41,15 @@ class LaunchViewControllerTests: XCTestCase {
 		userSettingsSpy = UserSettingsSpy()
 		walletSpy = WalletManagerSpy(dataStoreManager: DataStoreManager(.inMemory))
 
+		Services.use(remoteConfigSpy)
+		Services.use(proofManagerSpy)
+		Services.use(deviceAuthenticationSpy)
+
 		let viewModel = LaunchViewModel(
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			deviceAuthenticationDetector: deviceAuthenticationSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -101,10 +102,7 @@ class LaunchViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			deviceAuthenticationDetector: deviceAuthenticationSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)
@@ -141,10 +139,7 @@ class LaunchViewControllerTests: XCTestCase {
 			coordinator: appCoordinatorSpy,
 			versionSupplier: versionSupplierSpy,
 			flavor: AppFlavor.holder,
-			remoteConfigManager: remoteConfigSpy,
-			proofManager: proofManagerSpy,
 			jailBreakDetector: jailBreakProtocolSpy,
-			deviceAuthenticationDetector: deviceAuthenticationSpy,
 			userSettings: userSettingsSpy,
 			walletManager: walletSpy
 		)

@@ -10,6 +10,8 @@ import XCTest
 
 class DeviceAuthenticationSpy: DeviceAuthenticationProtocol {
 
+	required init() {}
+
 	var invokedHasAuthenticationPolicy = false
 	var invokedHasAuthenticationPolicyCount = 0
 	var stubbedHasAuthenticationPolicyResult: Bool! = false

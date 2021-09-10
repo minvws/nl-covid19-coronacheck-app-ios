@@ -13,11 +13,11 @@ class LaunchViewModel: Logging {
 	private weak var coordinator: AppCoordinatorDelegate?
 
 	private var versionSupplier: AppVersionSupplierProtocol?
-	private weak var remoteConfigManager: RemoteConfigManaging?
+	private weak var remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager
 	private weak var walletManager: WalletManaging?
-	private weak var proofManager: ProofManaging?
+	private weak var proofManager: ProofManaging? = Services.proofManager
 	private weak var jailBreakDetector: JailBreakProtocol?
-	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol?
+	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol? = Services.deviceAuthenticationDetector
 	private var userSettings: UserSettingsProtocol?
 	private weak var cryptoLibUtility: CryptoLibUtilityProtocol?
 
@@ -40,31 +40,22 @@ class LaunchViewModel: Logging {
 	///   - coordinator: the coordinator delegate
 	///   - versionSupplier: the version supplier
 	///   - flavor: the app flavor (holder or verifier)
-	///   - remoteConfigManager: the manager for fetching the remote configuration
-	///   - proofManager: the proof manager for fetching the keys
 	///   - jailBreakDetector: the detector for detecting jailbreaks
-	///   - deviceAuthenticationDetector: the detector for detecting device authentication
 	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
 	///   - cryptoLibUtility: the crypto library utility
 	init(
 		coordinator: AppCoordinatorDelegate,
 		versionSupplier: AppVersionSupplierProtocol?,
 		flavor: AppFlavor,
-		remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager,
-		proofManager: ProofManaging? = Services.proofManager,
 		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
-		deviceAuthenticationDetector: DeviceAuthenticationProtocol? = DeviceAuthenticationDetector(),
 		userSettings: UserSettingsProtocol? = UserSettings(),
 		cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility,
 		walletManager: WalletManaging?) {
 
 		self.coordinator = coordinator
 		self.versionSupplier = versionSupplier
-		self.remoteConfigManager = remoteConfigManager
-		self.proofManager = proofManager
 		self.flavor = flavor
 		self.jailBreakDetector = jailBreakDetector
-		self.deviceAuthenticationDetector = deviceAuthenticationDetector
 		self.userSettings = userSettings
 		self.cryptoLibUtility = cryptoLibUtility
 		self.walletManager = walletManager
