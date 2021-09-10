@@ -6,6 +6,7 @@
 */
 
 import UIKit
+import LocalAuthentication
 
 class LaunchViewModel: Logging {
 
@@ -16,6 +17,7 @@ class LaunchViewModel: Logging {
 	private weak var walletManager: WalletManaging?
 	private weak var proofManager: ProofManaging?
 	private weak var jailBreakDetector: JailBreakProtocol?
+	private weak var deviceAuthenticationDetector: DeviceAuthenticationProtocol?
 	private var userSettings: UserSettingsProtocol?
 	private weak var cryptoLibUtility: CryptoLibUtilityProtocol?
 
@@ -31,7 +33,7 @@ class LaunchViewModel: Logging {
 	@Bindable private(set) var message: String
 	@Bindable private(set) var version: String
 	@Bindable private(set) var appIcon: UIImage?
-	@Bindable private(set) var interruptForJailBreakDialog: Bool = false
+	@Bindable private(set) var alert: AlertContent?
 
 	/// Initializer
 	/// - Parameters:
@@ -41,6 +43,7 @@ class LaunchViewModel: Logging {
 	///   - remoteConfigManager: the manager for fetching the remote configuration
 	///   - proofManager: the proof manager for fetching the keys
 	///   - jailBreakDetector: the detector for detecting jailbreaks
+	///   - deviceAuthenticationDetector: the detector for detecting device authentication
 	///   - userSettings: the settings used for storing if the user has seen the jail break warning (if device is jailbroken)
 	///   - cryptoLibUtility: the crypto library utility
 	init(
@@ -50,6 +53,7 @@ class LaunchViewModel: Logging {
 		remoteConfigManager: RemoteConfigManaging? = Services.remoteConfigManager,
 		proofManager: ProofManaging? = Services.proofManager,
 		jailBreakDetector: JailBreakProtocol? = JailBreakDetector(),
+		deviceAuthenticationDetector: DeviceAuthenticationProtocol? = DeviceAuthenticationDetector(),
 		userSettings: UserSettingsProtocol? = UserSettings(),
 		cryptoLibUtility: CryptoLibUtilityProtocol? = Services.cryptoLibUtility,
 		walletManager: WalletManaging?) {
@@ -60,6 +64,7 @@ class LaunchViewModel: Logging {
 		self.proofManager = proofManager
 		self.flavor = flavor
 		self.jailBreakDetector = jailBreakDetector
+		self.deviceAuthenticationDetector = deviceAuthenticationDetector
 		self.userSettings = userSettings
 		self.cryptoLibUtility = cryptoLibUtility
 		self.walletManager = walletManager
@@ -72,12 +77,16 @@ class LaunchViewModel: Logging {
 			? L.holderLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 			: L.verifierLaunchVersion(versionSupplier?.getCurrentVersion() ?? "", versionSupplier?.getCurrentBuild() ?? "")
 
+		startChecks()
+	}
+
+	private func startChecks() {
+
 		if shouldShowJailBreakAlert() {
-			// Interrupt, do not continu the flow
-			interruptForJailBreakDialog = true
+			showJailBreakAlert()
+		} else if shouldShowDeviceAuthenticationAlert() {
+			showDeviceAuthenticationAlert()
 		} else {
-			// Continu with the flow
-			interruptForJailBreakDialog = false
 			updateDependencies()
 		}
 	}
@@ -141,30 +150,6 @@ class LaunchViewModel: Logging {
 					self.logWarning("Unhandled \(configStatus), \(issuerPublicKeysStatus)")
 			}
 		}
-	}
-
-	private func shouldShowJailBreakAlert() -> Bool {
-
-		guard flavor == .holder else {
-			// Only enable for the holder
-			return false
-		}
-
-		guard let jailBreakDetector = jailBreakDetector, let userSettings = userSettings else {
-			return false
-		}
-
-		return !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken()
-	}
-
-	func userDismissedJailBreakWarning() {
-
-		// Interruption is over
-		interruptForJailBreakDialog = false
-		// Warning has been shown, do not show twice
-		userSettings?.jailbreakWarningShown = true
-		// Continu with flow
-		updateDependencies()
 	}
 
 	/// Update the configuration
@@ -309,5 +294,85 @@ class LaunchViewModel: Logging {
 					completion(.internetRequired)
 			}
 		}
+	}
+
+	// MARK: Jailbreak
+
+	private func shouldShowJailBreakAlert() -> Bool {
+
+		guard flavor == .holder else {
+			// Only enable for the holder
+			return false
+		}
+
+		guard let jailBreakDetector = jailBreakDetector, let userSettings = userSettings else {
+			return false
+		}
+
+		return !userSettings.jailbreakWarningShown && jailBreakDetector.isJailBroken()
+	}
+
+	func showJailBreakAlert() {
+
+		alert = AlertContent(
+			title: L.jailbrokenTitle(),
+			subTitle: L.jailbrokenMessage(),
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.userDismissedJailBreakWarning()
+			},
+			okTitle: L.generalOk()
+		)
+	}
+
+	func userDismissedJailBreakWarning() {
+
+		// Interruption is over
+		alert = nil
+		// Warning has been shown, do not show twice
+		userSettings?.jailbreakWarningShown = true
+		// Continu with flow
+		startChecks()
+	}
+
+	// MARK: DeviceAuthentication
+
+	private func shouldShowDeviceAuthenticationAlert() -> Bool {
+
+		guard flavor == .holder else {
+			// Only enable for the holder
+			return false
+		}
+
+		guard let deviceAuthenticationDetector = deviceAuthenticationDetector, let userSettings = userSettings else {
+			return false
+		}
+
+		return !userSettings.deviceAuthenticationWarningShown && !deviceAuthenticationDetector.hasAuthenticationPolicy()
+	}
+
+	func showDeviceAuthenticationAlert() {
+
+		alert = AlertContent(
+			title: L.holderDeviceAuthenticationWarningTitle(),
+			subTitle: L.holderDeviceAuthenticationWarningMessage(),
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.userDismissedDeviceAuthenticationWarning()
+			},
+			okTitle: L.generalOk()
+		)
+	}
+
+	func userDismissedDeviceAuthenticationWarning() {
+
+		// Interruption is over
+		alert = nil
+		// Warning has been shown, do not show twice
+		userSettings?.deviceAuthenticationWarningShown = true
+		// Continu with flow
+		startChecks()
 	}
 }
