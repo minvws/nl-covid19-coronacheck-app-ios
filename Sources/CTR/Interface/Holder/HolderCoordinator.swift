@@ -142,9 +142,18 @@ class HolderCoordinator: SharedCoordinator {
 				thirdpartyTicketApp = (name: matchingMetadata.name, returnURL: returnURL)
 
 				// Reset the dashboard back to the domestic tab:
-				if let navigationController = sidePanel?.selectedViewController as? UINavigationController,
-				   let dashboardViewController = navigationController.viewControllers.last as? HolderDashboardViewController {
+				if let dashboardViewController = dashboardNavigationController?.viewControllers.last as? HolderDashboardViewController {
 					dashboardViewController.viewModel.selectTab = .domestic
+				}
+				return true
+				
+			case .tvsAuth(let returnURL):
+				
+				if let url = returnURL,
+				   let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+				   let authorizationFlow = appDelegate.currentAuthorizationFlow,
+				   authorizationFlow.resumeExternalUserAgentFlow(with: url) {
+					appDelegate.currentAuthorizationFlow = nil
 				}
 				return true
 		}
@@ -180,7 +189,7 @@ class HolderCoordinator: SharedCoordinator {
 		let destination = TokenEntryViewController(
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
-				proofManager: proofManager,
+				networkManager: networkManager,
 				requestToken: token
 			)
 		)

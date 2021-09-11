@@ -14,15 +14,6 @@ class PaperCertificateCheckViewController: BaseViewController {
 		case feedback(content: Content)
 	}
 
-	struct Content {
-		let title: String
-		let subTitle: String?
-		let primaryActionTitle: String?
-		let primaryAction: (() -> Void)?
-		let secondaryActionTitle: String?
-		let secondaryAction: (() -> Void)?
-	}
-
 	private let viewModel: PaperCertificateCheckViewModel
 	let sceneView = FetchEventsView()
 

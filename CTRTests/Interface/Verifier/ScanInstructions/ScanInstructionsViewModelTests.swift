@@ -56,7 +56,7 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
@@ -76,13 +76,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
@@ -100,13 +100,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]
@@ -122,13 +122,13 @@ class ScanInstructionsViewModelTests: XCTestCase {
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]

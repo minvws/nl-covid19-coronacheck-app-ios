@@ -30,7 +30,7 @@ final class ErrorDashboardView: BaseView {
 	}
 	
 	private let iconImageView: UIImageView = {
-		let imageView = UIImageView(image: .errorDashboard)
+		let imageView = UIImageView(image: I.dashboard.error())
 		imageView.translatesAutoresizingMaskIntoConstraints = false
 		imageView.tintColor = ViewTraits.Color.tint
 		imageView.contentMode = .scaleAspectFit

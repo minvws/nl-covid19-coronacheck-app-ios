@@ -24,9 +24,13 @@ class QRCardView: BaseView {
 		static let cornerRadius: CGFloat = 15
 		static let shadowRadius: CGFloat = 24
 		static let shadowOpacity: Float = 0.15
+		static let imageDimension: CGFloat = 40
+		
+		// Margins
+		static let imageMargin: CGFloat = 32
 		
 		// Spacing
-		static let topVerticalLabelSpacing: CGFloat = 16
+		static let topVerticalLabelSpacing: CGFloat = 24
 	}
 
 	// MARK: - Private properties
@@ -66,7 +70,7 @@ class QRCardView: BaseView {
 
 	private let largeIconImageView: UIImageView = {
 
-		let view = UIImageView(image: .domesticQRIcon)
+		let view = UIImageView(image: I.dashboard.domestic())
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.setContentCompressionResistancePriority(.required, for: .horizontal)
 		return view
@@ -129,9 +133,11 @@ class QRCardView: BaseView {
 			regionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
 			regionLabel.trailingAnchor.constraint(lessThanOrEqualTo: largeIconImageView.leadingAnchor, constant: -16),
 
-			largeIconImageView.topAnchor.constraint(equalTo: topAnchor, constant: 24),
-			largeIconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -24),
+			largeIconImageView.topAnchor.constraint(equalTo: topAnchor, constant: ViewTraits.imageMargin),
+			largeIconImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -ViewTraits.imageMargin),
 			largeIconImageView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+			largeIconImageView.widthAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
+			largeIconImageView.heightAnchor.constraint(equalToConstant: ViewTraits.imageDimension),
 
 			titleLabel.leadingAnchor.constraint(equalTo: regionLabel.leadingAnchor),
 			titleLabel.topAnchor.constraint(equalTo: regionLabel.bottomAnchor, constant: 8),
@@ -263,10 +269,7 @@ class QRCardView: BaseView {
 	}
 
 	private func applyEUStyle() {
-		regionLabel.textColor = Theme.colors.europa
-		viewQRButton.backgroundColor = Theme.colors.europa
-		viewQRButton.setTitleColor(Theme.colors.greenGrey, for: .normal)
-		largeIconImageView.image = .euQRIcon
+		largeIconImageView.image = I.dashboard.international()
 	}
 
 	// MARK: - Callbacks

@@ -4,6 +4,8 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
+// swiftlint:disable file_length
+// swiftlint:disable type_body_length
 
 import UIKit
 
@@ -16,11 +18,13 @@ class TokenEntryViewModel {
 		case inputToken
 		case inputTokenWithVerificationCode
 		case inputVerificationCode
+		case error
 	}
 
 	fileprivate enum InitializationMode: Equatable {
 		case regular
 		case withRequestTokenProvided(originalRequestToken: RequestToken)
+		case error(serverError: ServerError)
 	}
 
 	// MARK: - Bindable Strings
@@ -77,7 +81,7 @@ class TokenEntryViewModel {
 	// MARK: - Private Dependencies:
 
 	private weak var coordinator: HolderCoordinatorDelegate?
-	private let proofManager: ProofManaging?
+	private let networkManager: NetworkManaging?
 	private let tokenValidator: TokenValidatorProtocol
 
 	// MARK: - Private State:
@@ -131,16 +135,15 @@ class TokenEntryViewModel {
 
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
-	///   - proofManager: the proof manager
 	///   - requestToken: an optional existing request token
 	init(
 		coordinator: HolderCoordinatorDelegate,
-		proofManager: ProofManaging,
+		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
 		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
 
 		self.coordinator = coordinator
-		self.proofManager = proofManager
+		self.networkManager = networkManager
 		self.requestToken = requestToken
 		self.tokenValidator = tokenValidator
 		self.message = nil
@@ -212,6 +215,8 @@ class TokenEntryViewModel {
 				}
 
 				allowEnablingOfNextButton = receivedNonemptyVerificationInput
+			case .error:
+				allowEnablingOfNextButton = true
 		}
 	}
 
@@ -220,6 +225,7 @@ class TokenEntryViewModel {
 	///   - tokenInput: the token input
 	///   - verificationInput: the verification input
 	func nextButtonTapped(_ tokenInput: String?, verificationInput: String?) {
+
 		guard progressIndicationCounter.isInactive else { return }
 
 		switch initializationMode {
@@ -227,6 +233,8 @@ class TokenEntryViewModel {
 				handleNextButtonPressedDuringRegularFlow(tokenInput, verificationInput: verificationInput)
 			case .withRequestTokenProvided:
 				handleNextButtonPressedDuringInitialRequestTokenFlow(verificationInput: verificationInput)
+			case .error:
+				coordinator?.navigateBackToStart()
 		}
 	}
 
@@ -242,6 +250,7 @@ class TokenEntryViewModel {
 	}
 
 	func userHasNoTokenButtonTapped() {
+
 		guard progressIndicationCounter.isInactive else { return }
 
 		coordinator?.presentInformationPage(
@@ -296,104 +305,121 @@ class TokenEntryViewModel {
 
 		progressIndicationCounter.increment()
 
-		proofManager?.fetchCoronaTestProviders(
-			onCompletion: { [weak self] in
+		networkManager?.fetchTestProviders { [weak self] (result: Result<[TestProvider], ServerError>) in
 
-				self?.fetchResult(requestToken, verificationCode: verificationCode)
-				self?.progressIndicationCounter.decrement()
+			guard let self = self else { return }
 
-			}, onError: { [weak self] error in
-				self?.networkErrorAlert = error.toAlertContent(coordinator: self?.coordinator)
-				self?.decideWhetherToAbortRequestTokenProvidedMode()
-				self?.progressIndicationCounter.decrement()
+			switch result {
+				case let .success(providers):
+					self.fetchResult(requestToken, verificationCode: verificationCode, providers: providers)
+					self.progressIndicationCounter.decrement()
+				case let .failure(serverError):
+					if case let .error(_, _, error) = serverError {
+						switch error {
+							case .noInternetConnection:
+								self.displayNoInternet(requestToken, verificationCode: verificationCode)
+							case .serverUnreachable:
+								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
+							default:
+								self.initializationMode = .error(serverError: serverError)
+						}
+					}
+					self.progressIndicationCounter.decrement()
+					self.decideWhetherToAbortRequestTokenProvidedMode()
 			}
-		)
-	}
-
-	private func showServerTooBusyError() {
-
-		self.networkErrorAlert = AlertContent(
-			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyText(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.coordinator?.navigateBackToStart()
-			},
-			okTitle: L.generalNetworkwasbusyButton()
-		)
+		}
 	}
 
 	/// Fetch a test result
 	/// - Parameter requestToken: the request token
-	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?) {
-		guard let provider = proofManager?.getTestProvider(requestToken) else {
+	private func fetchResult(_ requestToken: RequestToken, verificationCode: String?, providers: [TestProvider]) {
+
+		let provider = providers.filter { $0.identifier.lowercased() == requestToken.providerIdentifier.lowercased() }
+		guard let provider = provider.first else {
 			fieldErrorMessage = Strings.errorInvalidCode(forMode: initializationMode)
 			self.decideWhetherToAbortRequestTokenProvidedMode()
 			return
 		}
 		logVerbose("fetching result with \(provider.resultURLString)")
 
+		if provider.resultURL == nil {
+			fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+			self.decideWhetherToAbortRequestTokenProvidedMode()
+			return
+		}
+
 		progressIndicationCounter.increment()
 
-		proofManager?.fetchTestResult(
-			requestToken,
+		networkManager?.fetchTestResult(
+			provider: provider,
+			token: requestToken,
 			code: verificationCode,
-			provider: provider) {  [weak self] response in
-			guard let self = self else { return }
+			completion: { [weak self] (result: Result<(EventFlow.EventResultWrapper, SignedResponse), ServerError>) in
 
-			self.fieldErrorMessage = nil
+				guard let self = self else { return }
+				self.fieldErrorMessage = nil
 
-			switch response {
-				case let .success(remoteEvent):
-					switch remoteEvent.wrapper.status {
-						case .complete, .pending:
-							self.screenHasCompleted = true
-							self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
-						case .verificationRequired:
-							if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
-								// the user has just submitted a wrong verification code & should see an error message
+				switch result {
+					case let .success(remoteEvent):
+						switch remoteEvent.0.status {
+							case .complete, .pending:
+								self.screenHasCompleted = true
+								self.coordinator?.userWishesToMakeQRFromNegativeTest(remoteEvent)
+							case .verificationRequired:
+								if self.verificationCodeIsKnownToBeRequired && verificationCode != nil {
+									// the user has just submitted a wrong verification code & should see an error message
+									self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+								}
+								self.allowEnablingOfNextButton = false
+								self.verificationCodeIsKnownToBeRequired = true
+
+							case .invalid:
 								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							}
-							self.allowEnablingOfNextButton = false
-							self.verificationCodeIsKnownToBeRequired = true
+								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
 
-						case .invalid:
-							self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+							default:
+								self.logDebug("Unhandled test result status: \(remoteEvent.0.status)")
+								self.fieldErrorMessage = "Unhandled: \(remoteEvent.0.status)"
+								self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
+						}
 
-						default:
-							self.logDebug("Unhandled test result status: \(remoteEvent.wrapper.status)")
-							self.fieldErrorMessage = "Unhandled: \(remoteEvent.wrapper.status)"
-							self.decideWhetherToAbortRequestTokenProvidedMode() // TODO: write tests //swiftlint:disable:this todo
-					}
-
-				case let .failure(error):
-					if let castedError = error as? ProofError, castedError == .invalidUrl {
-						self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
-					} else if let networkError = error as? NetworkError, networkError == .serverBusy {
-						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator)
-					} else if let networkError = error as? NetworkError, networkError == .requestTimedOut || networkError == .noInternetConnection {
-						self.networkErrorAlert = networkError.toAlertContent(coordinator: self.coordinator, retryAction: { [weak self] _ in
-							self?.fetchResult(requestToken, verificationCode: verificationCode)
-						})
-					} else {
-						// For now, display the network error.
-						self.fieldErrorMessage = error.localizedDescription
-						self.networkErrorAlert = error.toAlertContent(coordinator: self.coordinator)
-					}
-					self.decideWhetherToAbortRequestTokenProvidedMode()
+					case let .failure(serverError):
+						switch serverError {
+							case let .error(_, _, error), let .provider(_, _, _, error):
+								switch error {
+									case .noInternetConnection:
+										self.displayNoInternet(requestToken, verificationCode: verificationCode)
+									case .serverUnreachable:
+										self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
+									case .invalidRequest:
+										self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
+									default:
+										if case let .error(statusCode, serverResponse, networkError) = serverError {
+											self.initializationMode = .error(
+												serverError: ServerError.provider(
+													provider: provider.identifier,
+													statusCode: statusCode,
+													response: serverResponse,
+													error: networkError
+												)
+											)
+										} else {
+											self.initializationMode = .error(serverError: serverError)
+										}
+								}
+								self.decideWhetherToAbortRequestTokenProvidedMode()
+						}
+				}
+				self.progressIndicationCounter.decrement()
 			}
-
-			self.progressIndicationCounter.decrement()
-		}
+		)
 	}
 
 	/// If the path where `.withRequestTokenProvided` fails due to networking,
 	/// we want to reset back to `.regular` mode, where the tokenEntry field is shown again
 	private func decideWhetherToAbortRequestTokenProvidedMode() {
 		switch self.initializationMode {
-			case .regular:
+			case .regular, .error:
 				// There must have been a token already entered, so this can be assumed:
 				self.allowEnablingOfNextButton = true
 			case .withRequestTokenProvided:
@@ -465,6 +491,13 @@ class TokenEntryViewModel {
 				shouldShowNextButton = true
 				shouldShowResendVerificationButton = true
 				shouldShowUserNeedsATokenButton = false
+
+			case .error:
+				shouldShowTokenEntryField = false
+				shouldShowVerificationEntryField = false
+				shouldShowNextButton = true
+				shouldShowResendVerificationButton = false
+				shouldShowUserNeedsATokenButton = false
 		}
 
 		message = Strings.text(forMode: initializationMode, inputMode: newInputMode)
@@ -518,6 +551,8 @@ extension TokenEntryViewModel.InitializationMode {
 						return .inputVerificationCode
 					}
 				}
+			case .error:
+				return .error
 		}
 	}
 }
@@ -532,11 +567,57 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTitle()
+				case .error(serverError: let serverError):
+					switch serverError {
+						case let .error(_, _, error), let .provider(_, _, _, error):
+							switch error {
+								case .serverBusy:
+									return L.generalNetworkwasbusyTitle()
+								case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+									 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+									return L.holderErrorstateTitle()
+								default:
+									break
+							}
+					}
+					return ""
 			}
 		}
 
 		fileprivate static func text(forMode initializationMode: InitializationMode, inputMode: InputMode) -> String? {
 			switch (initializationMode, inputMode) {
+				case (.error(serverError: let serverError), _):
+					if case let .error(statusCode, serverResponse, error) = serverError {
+						// this is an error fetching the providers
+						switch error {
+							case .serverBusy:
+								return L.generalNetworkwasbusyText()
+							case .responseCached, .redirection, .resourceNotFound, .serverError:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								return L.holderErrorstateServerMessage("\(errorCode)")
+							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								return L.holderErrorstateClientMessage("\(errorCode)")
+							default:
+								break
+						}
+					}
+					if case let .provider(provider, statusCode, serverResponse, error) = serverError {
+						// this is an error getting the test result.
+						switch error {
+							case .serverBusy:
+								return L.generalNetworkwasbusyText()
+							case .responseCached, .redirection, .resourceNotFound, .serverError:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
+								return L.holderErrorstateTestMessage("\(errorCode)")
+							case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+								return L.holderErrorstateTestMessage("\(errorCode)")
+							default:
+								break
+						}
+					}
+					return ""
 				case (_, .none):
 					return nil
 				case (.regular, _):
@@ -552,6 +633,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowRetryTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowRetryTitle()
+				case .error:
+					return ""
 			}
 		}
 
@@ -561,6 +644,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowErrorInvalidCode()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowErrorInvalidCode()
+				case .error:
+					return ""
 			}
 		}
 
@@ -570,24 +655,28 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowTokenTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowTokenTitle()
+				case .error:
+					return ""
 			}
 		}
 
 		fileprivate static func tokenEntryPlaceholder(forMode mode: InitializationMode) -> String {
-            switch mode {
-                case .regular:
-                    if UIAccessibility.isVoiceOverRunning {
-                        return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
-                    } else {
-                        return L.holderTokenentryRegularflowTokenPlaceholder()
-                    }
-                case .withRequestTokenProvided:
-                    if UIAccessibility.isVoiceOverRunning {
-                        return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
-                    } else {
-                        return L.holderTokenentryUniversallinkflowTokenPlaceholder()
-                    }
-            }
+			switch mode {
+				case .regular:
+					if UIAccessibility.isVoiceOverRunning {
+						return L.holderTokenentryRegularflowTokenPlaceholderScreenreader()
+					} else {
+						return L.holderTokenentryRegularflowTokenPlaceholder()
+					}
+				case .withRequestTokenProvided:
+					if UIAccessibility.isVoiceOverRunning {
+						return L.holderTokenentryUniversallinkflowTokenPlaceholderScreenreader()
+					} else {
+						return L.holderTokenentryUniversallinkflowTokenPlaceholder()
+					}
+				case .error:
+					return ""
+			}
 		}
 
 		fileprivate static func verificationEntryHeaderTitle(forMode mode: InitializationMode) -> String {
@@ -596,6 +685,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowVerificationTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationTitle()
+				case .error:
+					return ""
 			}
 		}
 
@@ -605,6 +696,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowVerificationInfo()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationInfo()
+				case .error:
+					return ""
 			}
 		}
 
@@ -614,6 +707,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowVerificationPlaceholder()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowVerificationPlaceholder()
+				case .error:
+					return ""
 			}
 		}
 
@@ -623,6 +718,20 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowNext()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowNext()
+				case .error(serverError: let serverError):
+					switch serverError {
+						case let .error(_, _, error), let .provider(_, _, _, error):
+							switch error {
+								case .serverBusy:
+									return L.generalNetworkwasbusyButton()
+								case .responseCached, .redirection, .resourceNotFound, .serverError, .invalidResponse,
+									 .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+									return L.holderErrorstateOverviewAction()
+								default:
+									break
+							}
+					}
+					return ""
 			}
 		}
 
@@ -634,6 +743,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertTitle()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertTitle()
+				case .error:
+					return ""
 			}
 		}
 
@@ -643,6 +754,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertMessage()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertMessage()
+				case .error:
+					return ""
 			}
 		}
 
@@ -652,6 +765,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertOkaybutton()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertOkaybutton()
+				case .error:
+					return ""
 			}
 		}
 
@@ -661,6 +776,8 @@ extension TokenEntryViewModel {
 					return L.holderTokenentryRegularflowConfirmresendverificationalertCancelbutton()
 				case .withRequestTokenProvided:
 					return L.holderTokenentryUniversallinkflowConfirmresendverificationalertCancelbutton()
+				case .error:
+					return ""
 			}
 		}
 	}
@@ -673,48 +790,38 @@ extension TokenEntryViewModel: Logging {
 	}
 }
 
-extension Error {
-
-	fileprivate func toAlertContent(
-		coordinator: HolderCoordinatorDelegate?,
-		retryAction: ((UIAlertAction) -> Void)? = nil) -> AlertContent {
-
-		switch self as? NetworkError {
-			case .serverBusy?:
-				return AlertContent(
-					title: L.generalNetworkwasbusyTitle(),
-					subTitle: L.generalNetworkwasbusyText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: { _ in
-						coordinator?.navigateBackToStart()
-					},
-					okTitle: L.generalNetworkwasbusyButton()
-				)
-
-			case .requestTimedOut?, .noInternetConnection:
-				return AlertContent(
-					title: L.generalErrorNointernetTitle(),
-					subTitle: L.generalErrorNointernetText(),
-					cancelAction: nil,
-					cancelTitle: L.generalClose(),
-					okAction: retryAction,
-					okTitle: L.internetRequiredButton()
-				)
-			default:
-				return AlertContent(
-					title: L.generalErrorTitle(),
-					subTitle: L.generalErrorTechnicalText(),
-					cancelAction: nil,
-					cancelTitle: nil,
-					okAction: { _ in },
-					okTitle: L.generalOk()
-				)
-		}
-	}
-}
-
 /// Returns the `enabled` state to be used for `shouldEnableNextButton`
 private func nextButtonEnabledState(allowEnablingOfNextButton: Bool, shouldShowProgress: Bool, screenHasCompleted: Bool) -> Bool {
 	return allowEnablingOfNextButton && !shouldShowProgress && !screenHasCompleted
+}
+
+// MARK: - Error States
+
+extension TokenEntryViewModel {
+
+	private func displayNoInternet(_ requestToken: RequestToken, verificationCode: String?) {
+
+		// this is a retry-able situation
+		self.networkErrorAlert = AlertContent(
+			title: L.generalErrorNointernetTitle(),
+			subTitle: L.generalErrorNointernetText(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
+			okTitle: L.generalRetry()
+		)
+	}
+
+	private func displayServerUnreachable(_ requestToken: RequestToken, verificationCode: String?) {
+
+		// this is a retry-able situation
+		self.networkErrorAlert = AlertContent(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachable(),
+			cancelAction: nil,
+			cancelTitle: L.generalClose(),
+			okAction: { [weak self] _ in self?.fetchProviders(requestToken, verificationCode: verificationCode) },
+			okTitle: L.generalRetry()
+		)
+	}
 }

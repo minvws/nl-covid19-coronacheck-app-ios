@@ -20,8 +20,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScanInstruction()
 
-	func navigateFromScanToScanInstructions()
-
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
 	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
@@ -30,7 +28,7 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 	/// - Parameters:
 	///   - title: the title
 	///   - content: the content
-	func displayContent(title: String, content: [Content])
+	func displayContent(title: String, content: [DisplayContent])
 
 }
 
@@ -111,17 +109,11 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 
-	func navigateFromScanToScanInstructions() {
-		dashboardNavigationController?.popToRootViewController(animated: true) {
-			self.navigateToScanInstruction()
-		}
-	}
-
 	/// Display content
 	/// - Parameters:
 	///   - title: the title
 	///   - content: the content
-	func displayContent(title: String, content: [Content]) {
+	func displayContent(title: String, content: [DisplayContent]) {
 
 		let viewController = DisplayContentViewController(
 			viewModel: DisplayContentViewModel(
@@ -159,8 +151,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 					cryptoManager: cryptoManager
 				)
 			)
-			dashboardNavigationController?.pushViewController(destination, animated: true)
-//			dashboardNavigationController?.setViewControllers([destination], animated: true)
+			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
 }

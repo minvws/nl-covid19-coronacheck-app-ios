@@ -133,8 +133,9 @@ class AppCoordinator: Coordinator, Logging {
 	
 	/// Show the error alert when crypto library is not initialized
 	private func showCryptoLibNotInitializedError() {
-		
-		let message = L.generalErrorCryptolibMessage("\(142)")
+
+		let errorCode = ErrorCode(flow: .onboarding, step: .publicKeys, clientCode: .failedToLoadCryptoLibrary)
+		let message = L.generalErrorCryptolibMessage("\(errorCode)")
 		
 		let alertController = UIAlertController(
 			title: L.generalErrorCryptolibTitle(),
@@ -213,7 +214,8 @@ class AppCoordinator: Coordinator, Logging {
 
 		switch universalLink {
 			case .redeemHolderToken,
-				 .thirdPartyTicketApp:
+				 .thirdPartyTicketApp,
+				 .tvsAuth:
 				/// If we reach here it means that there was no holderCoordinator initialized at the time
 				/// the universal link was received. So hold onto it here, for when it is ready.
 				unhandledUniversalLink = universalLink
@@ -394,4 +396,10 @@ extension AppCoordinator {
 			object: nil
 		)
     }
+}
+
+extension ErrorCode.ClientCode {
+
+	static let failedToLoadCryptoLibrary = ErrorCode.ClientCode(value: "057")
+
 }

@@ -11,6 +11,7 @@ enum UniversalLink: Equatable {
 	
     case redeemHolderToken(requestToken: RequestToken)
 	case thirdPartyTicketApp(returnURL: URL?)
+	case tvsAuth(returnURL: URL?)
 
     init?(userActivity: NSUserActivity, appFlavor: AppFlavor = .flavor) {
 
@@ -40,6 +41,9 @@ enum UniversalLink: Equatable {
 
 				self = .thirdPartyTicketApp(returnURL: nil)
 			}
+		} else if url.path == "/app/auth" {
+			
+			self = .tvsAuth(returnURL: url)
 		} else {
 			return nil
 		}

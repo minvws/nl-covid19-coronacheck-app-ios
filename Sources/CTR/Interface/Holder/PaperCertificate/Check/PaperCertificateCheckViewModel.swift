@@ -43,7 +43,7 @@ class PaperCertificateCheckViewModel: Logging {
 		self.couplingManager = couplingManager
 
 		viewState = .loading(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.holderDccListTitle(),
 				subTitle: nil,
 				primaryActionTitle: nil,
@@ -85,12 +85,12 @@ class PaperCertificateCheckViewModel: Logging {
 					let remoteEvent = RemoteEvent(wrapper: wrapper, signedResponse: nil)
 					coordinator?.userWishesToSeeScannedEvent(remoteEvent)
 				} else {
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "052")
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: .failedToConvertDCCToV3Event)
 					displayClientErrorCode(errorCode)
 				}
 			case .blocked:
 				viewState = .feedback(
-					content: PaperCertificateCheckViewController.Content(
+					content: Content(
 						title: L.holderCheckdccBlockedTitle(),
 						subTitle: L.holderCheckdccBlockedMessage(),
 						primaryActionTitle: L.holderCheckdccBlockedActionTitle(),
@@ -103,7 +103,7 @@ class PaperCertificateCheckViewModel: Logging {
 				)
 			case .expired:
 				viewState = .feedback(
-					content: PaperCertificateCheckViewController.Content(
+					content: Content(
 						title: L.holderCheckdccExpiredTitle(),
 						subTitle: L.holderCheckdccExpiredMessage(),
 						primaryActionTitle: L.holderCheckdccExpiredActionTitle(),
@@ -117,7 +117,7 @@ class PaperCertificateCheckViewModel: Logging {
 
 			case .rejected:
 				viewState = .feedback(
-					content: PaperCertificateCheckViewController.Content(
+					content: Content(
 						title: L.holderCheckdccRejectedTitle(),
 						subTitle: L.holderCheckdccRejectedMessage(),
 						primaryActionTitle: L.holderCheckdccRejectedActionTitle(),
@@ -140,8 +140,8 @@ class PaperCertificateCheckViewModel: Logging {
 					showServerTooBusyError()
 				case .noInternetConnection:
 					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-				case .requestTimedOut:
-					displayRequestTimedOut(scannedDcc: scannedDcc, couplingCode: couplingCode)
+				case .serverUnreachable:
+					displayServerUnreachable(scannedDcc: scannedDcc, couplingCode: couplingCode)
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
 					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
@@ -159,7 +159,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private func showServerTooBusyError() {
 
 		viewState = .feedback(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.generalNetworkwasbusyTitle(),
 				subTitle: L.generalNetworkwasbusyText(),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
@@ -172,7 +172,7 @@ class PaperCertificateCheckViewModel: Logging {
 		)
 	}
 
-	private func displayRequestTimedOut(scannedDcc: String, couplingCode: String) {
+	private func displayServerUnreachable(scannedDcc: String, couplingCode: String) {
 
 		// this is a retry-able situation
 		alert = AlertContent(
@@ -201,7 +201,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private func displayServerErrorCode(_ errorCode: ErrorCode) {
 
 		viewState = .feedback(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
 				primaryActionTitle: L.holderErrorstateOverviewAction(),
@@ -223,7 +223,7 @@ class PaperCertificateCheckViewModel: Logging {
 	private func displayClientErrorCode(_ errorCode: ErrorCode) {
 
 		viewState = .feedback(
-			content: PaperCertificateCheckViewController.Content(
+			content: Content(
 				title: L.holderErrorstateTitle(),
 				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
 				primaryActionTitle: L.holderErrorstateOverviewAction(),
@@ -241,4 +241,11 @@ class PaperCertificateCheckViewModel: Logging {
 			)
 		)
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let failedToConvertDCCToV3Event = ErrorCode.ClientCode(value: "052")
 }

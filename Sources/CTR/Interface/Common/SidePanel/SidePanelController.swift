@@ -20,6 +20,8 @@ open class SidePanelController: UIViewController, UIGestureRecognizerDelegate {
 			oldValue?.willMove(toParent: nil)
 			oldValue?.removeFromParent()
 			updateSelectedViewController()
+
+			setNeedsStatusBarAppearanceUpdate()
 		}
 	}
 

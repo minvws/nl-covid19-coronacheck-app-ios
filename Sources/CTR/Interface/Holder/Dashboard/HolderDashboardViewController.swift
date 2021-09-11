@@ -82,7 +82,7 @@ class HolderDashboardViewController: BaseViewController {
 		setupBindings()
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+		styleBackButton()
 		setupPlusButton()
 		
 		sceneView.delegate = self
@@ -128,7 +128,7 @@ class HolderDashboardViewController: BaseViewController {
 			}
 		}
 
-		viewModel.$selectTab.binding = { [weak self, sceneView] region in
+		viewModel.$selectedTab.binding = { [weak self, sceneView] region in
 			guard let self = self, self.didSetInitialStartingTabOnSceneView else { return }
 			sceneView.selectTab(tab: region)
 		}
@@ -265,7 +265,7 @@ class HolderDashboardViewController: BaseViewController {
 			target: viewModel,
 			action: #selector(HolderDashboardViewModel.addProofTapped)
 		)
-		plusbutton.title = L.generalAdd()
+		plusbutton.title = L.holderMenuProof()
         plusbutton.accessibilityLabel = plusbutton.title
 		navigationItem.rightBarButtonItem = plusbutton
 	}

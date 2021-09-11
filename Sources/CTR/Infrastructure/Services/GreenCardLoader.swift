@@ -18,16 +18,38 @@ protocol GreenCardLoading {
 
 class GreenCardLoader: GreenCardLoading, Logging {
 
-	enum Error: String, Swift.Error, Equatable {
+	enum Error: Swift.Error, Equatable, LocalizedError {
 		case noEvents
 		case didNotEvaluate
 
-		case failedToSave
-		case failedToPrepareIssue
-		
-		case preparingIssue117
-		case stoken118
-		case credentials119
+		case preparingIssue(ServerError)
+		case failedToParsePrepareIssue
+		case failedToGenerateCommitmentMessage
+		case credentials(ServerError)
+		case failedToSaveGreenCards
+
+		var errorDescription: String? {
+			switch self {
+				case .credentials(.error(_, _, let networkError)):
+					return "credentials/" + networkError.rawValue
+				case .credentials(.provider(_, _, _, let networkError)):
+					return "credentials/provider/" + networkError.rawValue
+				case .preparingIssue(.error(_, _, let networkError)):
+					return "preparingIssue/" + networkError.rawValue
+				case .preparingIssue(.provider(_, _, _, let networkError)):
+					return "preparingIssue/provider/" + networkError.rawValue
+				case .noEvents:
+					return "noEvents"
+				case .didNotEvaluate:
+					return "didNotEvaluate"
+				case .failedToParsePrepareIssue:
+					return "failedToParsePrepareIssue"
+				case .failedToGenerateCommitmentMessage:
+					return "failedToGenerateCommitmentMessage"
+				case .failedToSaveGreenCards:
+					return "failedToSaveGreenCards"
+			}
+		}
 	}
 
 	private let networkManager: NetworkManaging
@@ -48,34 +70,22 @@ class GreenCardLoader: GreenCardLoading, Logging {
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
 		completion: @escaping (Result<Void, Swift.Error>) -> Void) {
 		
-		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, NetworkError>) in
+		networkManager.prepareIssue { (prepareIssueResult: Result<PrepareIssueEnvelope, ServerError>) in
 			switch prepareIssueResult {
-				case .failure(let networkError):
-					self.logError("error: \(networkError)")
-
-					switch networkError {
-						case .serverBusy:
-							completion(.failure(NetworkError.serverBusy))
-						case .noInternetConnection:
-							completion(.failure(NetworkError.noInternetConnection))
-						case .requestTimedOut:
-							completion(.failure(NetworkError.requestTimedOut))
-						default:
-							completion(.failure(Error.preparingIssue117))
-					}
+				case .failure(let serverError):
+					self.logError("error: \(serverError)")
+					completion(.failure(Error.preparingIssue(serverError)))
 
 				case .success(let prepareIssueEnvelope):
 					guard let nonce = prepareIssueEnvelope.prepareIssueMessage.base64Decoded() else {
-						self.logError("Can't save the nonce / prepareIssueMessage")
-						completion(.failure(Error.failedToPrepareIssue))
+						self.logError("Can't parse the nonce / prepareIssueMessage")
+						completion(.failure(Error.failedToParsePrepareIssue))
 						return
 					}
 
 					self.logVerbose("ok: \(prepareIssueEnvelope)")
-
 					self.cryptoManager.setNonce(nonce)
 					self.cryptoManager.setStoken(prepareIssueEnvelope.stoken)
-
 					self.fetchGreenCards { response in
 						switch response {
 							case .failure(let error):
@@ -90,10 +100,10 @@ class GreenCardLoader: GreenCardLoading, Logging {
 								self.storeGreenCards(response: greenCardResponse) { greenCardsSaved in
 									guard greenCardsSaved else {
 										self.logError("Failed to save greenCards")
-										completion(.failure(Error.failedToSave))
+										completion(.failure(Error.failedToSaveGreenCards))
 										return
 									}
-									
+
 									completion(.success(()))
 								}
 						}
@@ -115,7 +125,7 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			let utf8 = issueCommitmentMessage.data(using: .utf8),
 			let stoken = cryptoManager.getStoken()
 		else {
-			onCompletion(.failure(Error.stoken118))
+			onCompletion(.failure(Error.failedToGenerateCommitmentMessage))
 			return
 		}
 
@@ -125,24 +135,15 @@ class GreenCardLoader: GreenCardLoading, Logging {
 			"issueCommitmentMessage": utf8.base64EncodedString() as AnyObject
 		]
 
-		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, NetworkError>) in
+		self.networkManager.fetchGreencards(dictionary: dictionary) { [weak self] (result: Result<RemoteGreenCards.Response, ServerError>) in
 			switch result {
-				case let .success(greencardResponse):
-					self?.logVerbose("ok: \(greencardResponse)")
-					onCompletion(.success(greencardResponse))
-				case let .failure(networkError):
-					self?.logError("error: \(networkError)")
+				case .failure(let serverError):
+					self?.logError("error: \(serverError)")
+					onCompletion(.failure(Error.credentials(serverError)))
 
-					switch networkError {
-						case .serverBusy:
-							onCompletion(.failure(NetworkError.serverBusy))
-						case .noInternetConnection:
-							onCompletion(.failure(NetworkError.noInternetConnection))
-						case .requestTimedOut:
-							onCompletion(.failure(NetworkError.requestTimedOut))
-						default:
-							onCompletion(.failure(Error.credentials119))
-					}
+				case let .success(greencardResponse):
+					self?.logVerbose("GreenCardLoader - succes: \(greencardResponse)")
+					onCompletion(.success(greencardResponse))
 			}
 		}
 	}

@@ -101,12 +101,12 @@ class HolderDashboardViewModelTests: XCTestCase {
 		expect(self.sut.internationalCards).toEventually(haveCount(1))
 
 		expect(self.sut.domesticCards.first).to(beEmptyStateCard(test: { image, title, message in
-			expect(image) == I.empty_Dashboard_Domestic()
+			expect(image) == I.dashboard.domestic()
 			expect(title) == L.holderDashboardEmptyDomesticTitle()
 			expect(message) == L.holderDashboardEmptyDomesticMessage()
 		}))
 		expect(self.sut.internationalCards.first).to(beEmptyStateCard(test: { image, title, message in
-			expect(image) == I.empty_Dashboard_International()
+			expect(image) == I.dashboard.international()
 			expect(title) == L.holderDashboardEmptyInternationalTitle()
 			expect(message) == L.holderDashboardEmptyInternationalMessage()
 		}))
@@ -840,10 +840,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// Exercise the validityText with different sample dates:
 			expect(rows.first?.validityText(now).kind) == .current
-			expect(rows.first?.validityText(now).texts.first) == "geldig t/m vrijdag 16 juli 16:02"
+			expect(rows.first?.validityText(now).texts.first) == "geldig tot vrijdag 16 juli 16:02"
 
 			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig t/m vrijdag 16 juli 16:02"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig tot vrijdag 16 juli 16:02"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -884,10 +884,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// Exercise the validityText with different sample dates:
 			expect(rows.first?.validityText(now).kind) == .current
-			expect(rows.first?.validityText(now).texts.first) == "geldig t/m 11 mei 2022"
+			expect(rows.first?.validityText(now).texts.first) == "geldig tot 11 mei 2022"
 
 			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig t/m 11 mei 2022"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -1194,10 +1194,10 @@ class HolderDashboardViewModelTests: XCTestCase {
 
 			// Exercise the validityText with different sample dates:
 			expect(rows.first?.validityText(now).kind) == .current
-			expect(rows.first?.validityText(now).texts.first) == "geldig t/m 11 mei 2022"
+			expect(rows.first?.validityText(now).texts.first) == "geldig tot 11 mei 2022"
 
 			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).kind) == .current
-			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig t/m 11 mei 2022"
+			expect(rows.first?.validityText(now.addingTimeInterval(22 * hours * fromNow)).texts.first) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false
@@ -1255,7 +1255,7 @@ class HolderDashboardViewModelTests: XCTestCase {
 			expect(rows[1].validityText(now).kind) == .future(desiresToShowAutomaticallyBecomesValidFooter: true)
 			expect(rows[1].validityText(now).texts.first) == "geldig vanaf 17 juli 17:02 t/m 11 mei 2022"
 			expect(rows[1].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).kind) == .current
-			expect(rows[1].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts.first) == "geldig t/m 11 mei 2022"
+			expect(rows[1].validityText(now.addingTimeInterval(2 * days + 23 * hours * fromNow)).texts.first) == "geldig tot 11 mei 2022"
 
 			// check didTapViewQR
 			expect(self.holderCoordinatorDelegateSpy.invokedUserWishesToViewQR) == false

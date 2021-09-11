@@ -24,7 +24,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 	override func setUp() {
 		super.setUp()
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
-		networkSpy = NetworkSpy(configuration: .test)
+		networkSpy = NetworkSpy(configuration: .development)
 		cryptoSpy = CryptoManagerSpy()
 		couplingManagerSpy = CouplingManagerSpy(cryptoManager: cryptoSpy, networkManager: networkSpy)
 		window = UIWindow()
@@ -338,7 +338,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.holderErrorstateTitle()
-		expect(self.sut.sceneView.message) == L.holderErrorstateServerMessage("i 510 404 99707")
+		expect(self.sut.sceneView.message) == L.holderErrorstateServerMessage("i 510 000 404 99707")
 		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
 		expect(self.sut.sceneView.secondaryButtonTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
@@ -409,7 +409,7 @@ class PaperCertificateCheckViewControllerTests: XCTestCase {
 
 		// Then
 		expect(self.sut.sceneView.title) == L.holderErrorstateTitle()
-		expect(self.sut.sceneView.message) == L.holderErrorstateClientMessage("i 510 002")
+		expect(self.sut.sceneView.message) == L.holderErrorstateClientMessage("i 510 000 002")
 		expect(self.sut.sceneView.primaryTitle) == L.generalNetworkwasbusyButton()
 		expect(self.sut.sceneView.secondaryButtonTitle) == L.holderErrorstateMalfunctionsTitle()
 	}

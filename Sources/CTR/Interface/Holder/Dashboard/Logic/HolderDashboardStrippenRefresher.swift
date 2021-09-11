@@ -26,7 +26,7 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 		var errorDescription: String? {
 			switch self {
 				case .greencardLoaderError(let error):
-					return error.rawValue
+					return error.errorDescription
 				case .networkError(let error):
 					return error.rawValue
 				case .logicalErrorA:
@@ -98,6 +98,12 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 				case let error as NetworkError:
 					state.errorOccurenceCount += 1
 					state.loadingState = .failed(error: .networkError(error: error))
+
+				// Catch the specific case of a wrapped NetworkError.noInternetConnection and recurse it
+				case GreenCardLoader.Error.credentials(.error(_, _, let networkError)),
+					 GreenCardLoader.Error.preparingIssue(.error(_, _, let networkError)):
+					endLoadingWithError(error: networkError)
+					return // don't update `state` on this iteration.
 
 				case let error as GreenCardLoader.Error:
 					state.errorOccurenceCount += 1
@@ -210,7 +216,10 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 	}
 
 	/// Greencards where the number of valid credentials is <= 5 and the latest credential expiration time is < than the origin expiration time
-	private static func calculateGreenCardsCredentialExpiryState(minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int, walletManager: WalletManaging, now: Date) -> State.GreencardsCredentialExpiryState {
+	private static func calculateGreenCardsCredentialExpiryState(
+		minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh: Int,
+		walletManager: WalletManaging,
+		now: Date) -> State.GreencardsCredentialExpiryState {
 		let validGreenCardsForCurrentWallet = walletManager.greencardsWithUnexpiredOrigins(now: now)
 
 		var expiredGreencards = [GreenCard]()
@@ -229,7 +238,9 @@ class DashboardStrippenRefresher: DashboardStrippenRefreshing, Logging {
 				guard !allCredentialsForGreencard.isEmpty else {
 					// It can be that a greencard is issued with zero credentials, but that it can still become valid in the future
 					// (receiving credentials at some later point beyond the current signer horizon).
-					if let originsValidWithinThreshold = greencard.originsActiveNowOrBeforeThresholdFromNow(now: now, thresholdDays: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh),
+					if let originsValidWithinThreshold = greencard.originsActiveNowOrBeforeThresholdFromNow(
+						now: now,
+						thresholdDays: minimumThresholdOfValidCredentialDaysRemainingToTriggerRefresh),
 					   !originsValidWithinThreshold.isEmpty {
 
 						// Expired here is not quite accurate, because it never had a credential before.

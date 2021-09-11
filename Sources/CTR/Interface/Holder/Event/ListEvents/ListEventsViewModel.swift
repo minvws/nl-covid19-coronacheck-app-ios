@@ -45,13 +45,6 @@ class ListEventsViewModel: Logging {
 
 		let dateFormatter = DateFormatter()
 		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
-		dateFormatter.dateFormat = "EE d MMMM HH:mm"
-		return dateFormatter
-	}()
-	lazy var printTestLongDateFormatter: DateFormatter = {
-
-		let dateFormatter = DateFormatter()
-		dateFormatter.timeZone = TimeZone(identifier: "Europe/Amsterdam")
 		dateFormatter.dateFormat = "EEEE d MMMM HH:mm"
 		return dateFormatter
 	}()
@@ -67,7 +60,7 @@ class ListEventsViewModel: Logging {
 
 	@Bindable internal var viewState: ListEventsViewController.State
 
-	@Bindable private(set) var alert: ListEventsViewController.AlertContent?
+	@Bindable internal var alert: AlertContent?
 
 	@Bindable internal var shouldPrimaryButtonBeEnabled: Bool = true
 
@@ -89,7 +82,8 @@ class ListEventsViewModel: Logging {
 		cryptoManager: CryptoManaging = Services.cryptoManager,
 		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-		mappingManager: MappingManaging = Services.mappingManager
+		mappingManager: MappingManaging = Services.mappingManager,
+		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
@@ -103,7 +97,7 @@ class ListEventsViewModel: Logging {
 		self.mappingManager = mappingManager
 
 		viewState = .loading(
-			content: ListEventsViewController.Content(
+			content: Content(
 				title: {
 					switch eventMode {
 						case .recovery:
@@ -128,6 +122,12 @@ class ListEventsViewModel: Logging {
 			self?.hideForCapture = isBeingCaptured
 		}
 
+		if eventsMightBeMissing {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+				self?.displaySomeResultsMightBeMissing()
+			}
+		}
+
 		viewState = getViewState(from: remoteEvents)
 	}
 
@@ -136,14 +136,14 @@ class ListEventsViewModel: Logging {
 		switch viewState {
 			case .loading, .listEvents:
 				warnBeforeGoBack()
-			case .emptyEvents:
+			case .feedback:
 				goBack()
 		}
 	}
 
 	func warnBeforeGoBack() {
 
-		alert = ListEventsViewController.AlertContent(
+		alert = AlertContent(
 			title: L.holderVaccinationAlertTitle(),
 			subTitle: {
 				switch eventMode {
@@ -158,13 +158,13 @@ class ListEventsViewModel: Logging {
 
 				}
 			}(),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationAlertCancel(),
-			okAction: { [weak self] _ in
+			cancelAction: { [weak self] _ in
 				self?.goBack()
 			},
-			okTitle: L.holderVaccinationAlertOk()
-		)
+			cancelTitle: L.holderVaccinationAlertStop(),
+			okAction: nil,
+			okTitle: L.holderVaccinationAlertContinue()
+ 		)
 	}
 
 	func goBack() {
@@ -213,7 +213,7 @@ class ListEventsViewModel: Logging {
 			guard saved else {
 				self.progressIndicationCounter.decrement()
 				self.shouldPrimaryButtonBeEnabled = true
-				completion(false)
+				self.handleClientSideError(clientCode: .storingEvents, for: .storingEvents, with: remoteEvents)
 				return
 			}
 
@@ -250,121 +250,92 @@ class ListEventsViewModel: Logging {
 						self.viewState = self.cannotCreateEventsState()
 						self.shouldPrimaryButtonBeEnabled = true
 
-					case .failure(GreenCardLoader.Error.failedToSave), .failure(GreenCardLoader.Error.noEvents):
+					case .failure(GreenCardLoader.Error.noEvents):
 						self.shouldPrimaryButtonBeEnabled = true
 						completion(false)
 
-					case .failure(NetworkError.requestTimedOut), .failure(NetworkError.noInternetConnection):
-						self.showNoInternet(remoteEvents: remoteEvents)
-						self.shouldPrimaryButtonBeEnabled = true
+					case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
+						self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce, with: remoteEvents)
 
-					case .failure(GreenCardLoader.Error.failedToPrepareIssue):
-						self.showTechnicalError("116 decodePrepareIssueMessage")
+					case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
+						self.handleServerError(serverError, for: .nonce, with: remoteEvents)
 
-					case .failure(NetworkError.serverBusy):
-						self.showServerTooBusyError()
+					case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
+						self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce, with: remoteEvents)
 
-					case .failure(GreenCardLoader.Error.preparingIssue117):
-						self.showTechnicalError("117 prepareIssue")
+					case .failure(GreenCardLoader.Error.credentials(let serverError)):
+						self.handleServerError(serverError, for: .signer, with: remoteEvents)
 
-					case .failure(GreenCardLoader.Error.stoken118):
-						self.showTechnicalError("118 stoken")
-
-					case .failure(GreenCardLoader.Error.credentials119):
-						self.showTechnicalError("118 credentials")
+					case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
+						self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials, with: remoteEvents)
 
 					case .failure(let error):
-						self.showTechnicalError("119 error: \(error)")
+						self.logError("storeAndSign - unhandled: \(error)")
+						self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
 				}
 			})
 		}
 	}
 
-	// MARK: Errors
+	func handleClientSideError(clientCode: ErrorCode.ClientCode, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
-	internal func showIdentityMismatch(onReplace: @escaping () -> Void) {
-
-		alert = ListEventsViewController.AlertContent(
-			title: L.holderEventIdentityAlertTitle(),
-			subTitle: L.holderEventIdentityAlertMessage(),
-			cancelAction: { [weak self] _ in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			cancelTitle: L.holderEventIdentityAlertCancel(),
-			okAction: { _ in
-				onReplace()
-			},
-			okTitle: L.holderEventIdentityAlertOk()
+		let errorCode = ErrorCode(
+			flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
+			step: step,
+			provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+			errorCode: clientCode.value
 		)
+		logDebug("errorCode: \(errorCode)")
+		viewState = displayClientErrorCode(errorCode)
+		shouldPrimaryButtonBeEnabled = true
 	}
 
-	internal func showEventError(remoteEvents: [RemoteEvent]) {
+	func handleServerError(_ serverError: ServerError, for step: ErrorCode.Step, with remoteEvents: [RemoteEvent]) {
 
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: L.holderFetcheventsErrorNoresultsNetworkerrorMessage(eventMode.localized),
-			cancelAction: nil,
-			cancelTitle: L.holderVaccinationErrorClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
-			},
-			okTitle: L.holderVaccinationErrorAgain()
-		)
-	}
+		if case let ServerError.error(statusCode, serverResponse, error) = serverError {
+			self.logDebug("handleServerError \(serverError)")
 
-	private func showServerTooBusyError() {
+			switch error {
+				case .serverBusy:
+					showServerTooBusyError()
+					shouldPrimaryButtonBeEnabled = true
+					
+				case .serverUnreachable:
+					showServerUnreachable(remoteEvents: remoteEvents)
+					shouldPrimaryButtonBeEnabled = true
 
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyText(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			okTitle: L.generalNetworkwasbusyButton()
-		)
-	}
+				case .noInternetConnection:
+					showNoInternet(remoteEvents: remoteEvents)
+					shouldPrimaryButtonBeEnabled = true
 
-	private func showNoInternet(remoteEvents: [RemoteEvent]) {
+				case .responseCached, .redirection, .resourceNotFound, .serverError:
+					// 304, 3xx, 4xx, 5xx
+					let errorCode = ErrorCode(
+						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
+						step: step,
+						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+						errorCode: "\(statusCode ?? 000)",
+						detailedCode: serverResponse?.code
+					)
+					logDebug("errorCode: \(errorCode)")
+					viewState = displayServerErrorCode(errorCode)
+					shouldPrimaryButtonBeEnabled = true
 
-		// this is a retry-able situation
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalErrorNointernetTitle(),
-			subTitle: L.generalErrorNointernetText(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
-			},
-			okTitle: L.holderVaccinationErrorAgain()
-		)
-	}
-
-	private func showTechnicalError(_ customCode: String?) {
-
-		var subTitle = L.generalErrorTechnicalText()
-		if let code = customCode {
-			subTitle = L.generalErrorTechnicalCustom(code)
+				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
+					// Client side
+					let errorCode = ErrorCode(
+						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
+						step: step,
+						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
+						errorCode: error.getClientErrorCode() ?? "000",
+						detailedCode: serverResponse?.code
+					)
+					logDebug("errorCode: \(errorCode)")
+					viewState = displayClientErrorCode(errorCode)
+					shouldPrimaryButtonBeEnabled = true
+			}
 		}
-		alert = ListEventsViewController.AlertContent(
-			title: L.generalErrorTitle(),
-			subTitle: subTitle,
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { _ in
-				self.coordinator?.listEventsScreenDidFinish(.back(eventMode: self.eventMode))
-			},
-			okTitle: L.generalClose()
-		)
+
 	}
 
 	// MARK: Store events
@@ -417,4 +388,15 @@ class ListEventsViewModel: Logging {
 		}
 		onCompletion(success)
 	}
+}
+
+// MARK: ErrorCode.ClientCode
+
+extension ErrorCode.ClientCode {
+
+	static let failedToParsePrepareIssue = ErrorCode.ClientCode(value: "053")
+	static let failedToGenerateCommitmentMessage = ErrorCode.ClientCode(value: "054")
+	static let failedToSaveGreenCards = ErrorCode.ClientCode(value: "055")
+	static let storingEvents = ErrorCode.ClientCode(value: "056")
+	static let unhandled = ErrorCode.ClientCode(value: "999")
 }
