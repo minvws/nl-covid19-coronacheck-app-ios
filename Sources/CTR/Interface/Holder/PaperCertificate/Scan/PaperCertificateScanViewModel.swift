@@ -10,7 +10,7 @@ import UIKit
 class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	
 	/// The crypto manager
-	weak var cryptoManager: CryptoManaging?
+	weak var cryptoManager: CryptoManaging? = Services.cryptoManager
 
 	/// Coordination Delegate
 	weak var theCoordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol)?
@@ -24,18 +24,18 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	/// The accessibility labels for the torch
 	@Bindable private(set) var torchLabels: [String]
 	
-	@Bindable private(set) var alert: PaperCertificateScanViewController.AlertContent?
+	@Bindable private(set) var alert: AlertContent?
+
+	@Bindable private(set) var shouldResumeScanning: Bool?
 
 	/// Initializer
 	/// - Parameters:
 	///   - coordinator: the coordinator delegate
 	///   - cryptoManager: the crypto manager
 	init(
-		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol),
-		cryptoManager: CryptoManaging?) {
+		coordinator: (PaperCertificateCoordinatorDelegate & OpenUrlProtocol)) {
 		
 		self.theCoordinator = coordinator
-		self.cryptoManager = cryptoManager
 		
 		self.title = L.holderScannerTitle()
 		self.message = L.holderScannerMessage()
@@ -49,21 +49,47 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 	func parseQRMessage(_ message: String) {
 		
 		if message.lowercased().hasPrefix("nl") {
+
 			logInfo("Invalid: Domestic QR-code")
-			
-			alert = .init(title: L.holderScannerAlertDccTitle(),
-						  subTitle: L.holderScannerAlertDccMessage(),
-						  okTitle: L.generalOk())
+			alertDomesticQCode()
+
 		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
+
 			logInfo("Valid DCC")
-			
 			theCoordinator?.userWishesToCreateACertificate(message: message)
+
 		} else {
+
 			logInfo("Invalid: Unknown QR-code")
-			
-			alert = .init(title: L.holderScannerAlertUnknownTitle(),
-						  subTitle: L.holderScannerAlertUnknownMessage(),
-						  okTitle: L.generalOk())
+			alertUnknownQRCode()
 		}
+	}
+
+	private func alertDomesticQCode() {
+
+		alert = AlertContent(
+			title: L.holderScannerAlertDccTitle(),
+			subTitle: L.holderScannerAlertDccMessage(),
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.shouldResumeScanning = true
+			},
+			okTitle: L.generalOk()
+		)
+	}
+
+	private func alertUnknownQRCode() {
+
+		alert = AlertContent(
+			title: L.holderScannerAlertUnknownTitle(),
+			subTitle: L.holderScannerAlertUnknownMessage(),
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.shouldResumeScanning = true
+			},
+			okTitle: L.generalOk()
+		)
 	}
 }
