@@ -1,3 +1,7 @@
+"holder.cleardata.menu.title" = "Clear data";
+"holder.cleardata.alert.title" = "Clear data";
+"holder.cleardata.alert.subtitle" = "Are you sure you want to remove all the green cards and events?";
+"holder.cleardata.alert.remove" = "Remove";
 "holder.errorstate.login.title" = "Login was cancelled";
 "holder.errorstate.login.message.vaccination" = "Want to retrieve your vaccination details? Login again with DigiD.";
 "holder.errorstate.login.message.recovery" = "Want to retrieve your recovery details? Login again with DigiD.";
@@ -231,7 +235,6 @@
 "general.cancel" = "Cancel";
 /* MARK: - General */
 "general.close" = "Close";
-"general.previous" = "Previous";
 "general.back" = "Back";
 "general.next" = "Next";
 "general.done" = "Done";
@@ -339,7 +342,7 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "My certificates";
-"holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your QR code and your proof of identity at the entrance of the location you're visiting.";
+"holder.dashboard.intro.domestic" = "Visiting a location within the Netherlands? Show both your Dutch QR code and your proof of identity at the entrance of the location you're visiting.";
 "holder.dashboard.intro.international" = "<p>Are you abroad, or planning to cross the border? Then always use the international QR code below. Please check before leaving which certificate you need.</p><p><a href=\"https://www.netherlandsworldwide.nl/travelling-outside-the-netherlands\">Is my certificate valid where I’m heading?</a></p>";
 "holder.dashboard.qr.expired" = "Your QR code has expired.";
 "holder.dashboard.qr.hour" = "hour(s)";

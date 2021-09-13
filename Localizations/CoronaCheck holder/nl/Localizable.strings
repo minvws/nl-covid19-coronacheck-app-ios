@@ -1,3 +1,7 @@
+"holder.cleardata.menu.title" = "Verwijder data";
+"holder.cleardata.alert.title" = "Verwijder data";
+"holder.cleardata.alert.subtitle" = "Weet je zeker dat je alle greencards en events wilt verwijderen?";
+"holder.cleardata.alert.remove" = "Verwijder";
 "holder.errorstate.login.title" = "Inloggen afgebroken";
 "holder.errorstate.login.message.vaccination" = "Wil je jouw vaccinatiegegevens ophalen? Log dan opnieuw in met DigiD.";
 "holder.errorstate.login.message.recovery" = "Wil je jouw herstelgegevens ophalen? Log dan opnieuw in met DigiD.";
@@ -231,7 +235,6 @@
 "general.cancel" = "Annuleer";
 /* MARK: - General */
 "general.close" = "Sluiten";
-"general.previous" = "Vorige";
 "general.back" = "Terug";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
@@ -339,7 +342,7 @@
 
 /* MARK: - Holder Dashboard */
 "holder.dashboard.title" = "Mijn bewijzen";
-"holder.dashboard.intro.domestic" = "Bezoek je een locatie binnen Nederland? Laat de QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";
+"holder.dashboard.intro.domestic" = "Bezoek je een locatie binnen Nederland? Laat je Nederlandse QR-code en je identiteitsbewijs zien bij de ingang van de locatie die je bezoekt.";
 "holder.dashboard.intro.international" = "<p>Ben je in het buitenland of ga je de grens over? Gebruik dan altijd de internationale QR-code hieronder. Controleer voor vertrek welk bewijs je nodig hebt.</p><p><a href=\"https://www.nederlandwereldwijd.nl/reizen/reisadviezen\">Is mijn bewijs geldig op mijn bestemming?</a></p>";
 "holder.dashboard.qr.expired" = "Je QR-code is verlopen.";
 "holder.dashboard.qr.hour" = "uur";
@@ -347,7 +350,7 @@
 "holder.dashboard.qr.minute.long" = "minuut";
 "holder.dashboard.qr.minutes.long" = "minuten";
 "holder.dashboard.qr.expiryDate.prefix.expiresIn" = "Verloopt over";
-"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig t/m";
+"holder.dashboard.qr.expiryDate.prefix.validUptoAndIncluding" = "geldig tot";
 "holder.dashboard.qr.validityDate.prefix.automaticallyBecomesValidOn" = "wordt automatisch geldig over";
 "holder.dashboard.qr.validityDate.automaticallyBecomesValidOn" = "Wordt automatisch geldig";
 "holder.dashboard.qr.validityDate.prefix.validFrom" = "geldig vanaf";
@@ -592,3 +595,6 @@
 "holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Gegevens opgehaald bij: %@</p>";
 "holder.vaccination.element.combined" = "<p>Gegevens opgehaald bij: %@ en %@</p>";
+
+"holder.device.authentication.warning.title" = "** iOS apps usable without device lock (title) **";
+"holder.device.authentication.warning.message" = "** iOS apps usable without device lock (message) **";

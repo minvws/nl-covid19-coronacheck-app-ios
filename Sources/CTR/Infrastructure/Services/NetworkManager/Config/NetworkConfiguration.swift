@@ -20,21 +20,21 @@ struct NetworkConfiguration {
     let api: EndpointConfiguration
 	let cdn: EndpointConfiguration
 
-    static let test = NetworkConfiguration(
-        name: "Test",
+	static let development = NetworkConfiguration(
+		name: "DEV",
 		api: .init(
 			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
 			path: ["v4"]
 		),
 		cdn: .init(
 			scheme: "https",
-			host: "api-ct.bananenhalen.nl",
+			host: AppFlavor.flavor == .holder ? "holder-api.acc.coronacheck.nl" : "verifier-api.acc.coronacheck.nl",
 			port: nil,
 			path: ["v4"]
 		)
-    )
+	)
 
 	static let acceptance = NetworkConfiguration(
 		name: "ACC",

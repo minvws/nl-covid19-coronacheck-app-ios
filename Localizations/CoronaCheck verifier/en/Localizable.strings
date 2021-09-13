@@ -29,7 +29,7 @@
 "verifier.url.faq" = "https://coronacheck.nl/en/faq-scanner-in-app";
 "verifier.url.privacy" = "https://coronacheck.nl/en/gebruikersvoorwaarden-in-app";
 
-"verifier.result.identity.title" = "Check personal details";
+"verifier.result.identity.title" = "Check details";
 "verifier.result.identity.lastname" = "Last name";
 "verifier.result.identity.firstname" = "First name";
 "verifier.result.identity.dayofbirth" = "Day of birth";
@@ -96,14 +96,14 @@
 "verifier.result.alert.unknown.title" = "This QR code does not contain a coronavirus pass";
 "verifier.result.alert.unknown.message" = "Ask the visitor to show a QR code of a coronavirus pass.";
 "verifier.result.alert.dcc.title" = "Ask for a Dutch QR code";
-"verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR-code.";
+"verifier.result.alert.dcc.message" = "You have scanned an international QR code. In the Netherlands, CoronaCheck users should show their Dutch QR code.";
 /* MARK: - Verifier Check Result */
 "verifier.result.check.title" = "Are the details incorrect?";
 
 /* MARK: - Verifier Denied Instructions */
 "verifier.denied.title" = "What should I do?";
 "verifier.denied.message.one" = "<p>A red screen means that the QR code does not meet Dutch requirements.</p>";
-"verifier.denied.message.two" = "<p><b>Here’s what you can do:</b></p><ul><li>Verify if the time on the visitor’s phone is set correctly.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
+"verifier.denied.message.two" = "<p><b>Here’s what you can do:</b></p><ul><li>Verify if the time on the visitor’s phone is set correctly. Make sure to set the date and time to ‘set automatically’.</li><li>Verify if the visitor is showing an original certificate. A screenshot of a certificate may cause problems.</li><li>Ask the visitor to completely shut down the app and restart it. Please scan the QR code again after.</li></ul>";
 "verifier.denied.message.three" = "<p><b>Still looking at a red screen?</b><br />Please ask the visitor to contact the CoronaCheck help desk.</p>";
 "verifier.denied.message.four" = "<p><b> Without a green screen, you can’t grant the visitor access.</b></p>";
 

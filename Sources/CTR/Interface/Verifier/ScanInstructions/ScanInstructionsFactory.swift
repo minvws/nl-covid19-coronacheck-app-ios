@@ -9,12 +9,25 @@ import UIKit
 
 enum ScanInstructionsStep: CaseIterable {
 	case scanQR, checkTheDetails, checkOnlyTheVisibleData, redScreenNowWhat
+	
+	var animationName: String {
+		switch self {
+			case .scanQR:
+				return "Scanner_1"
+			case .checkTheDetails:
+				return "Scanner_2"
+			case .checkOnlyTheVisibleData:
+				return "Scanner_3"
+			case .redScreenNowWhat:
+				return "Scanner_4"
+		}
+	}
 }
 
 struct ScanInstructionsPage {
 	let title: String
 	let message: String
-	let image: UIImage?
+	let animationName: String?
 	let step: ScanInstructionsStep
 }
 
@@ -30,25 +43,25 @@ struct ScanInstructionsFactory: ScanInstructionsFactoryProtocol {
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsScanQRTitle(),
 				message: L.verifierScaninstructionsScanQRContent(),
-				image: I.onboarding.who(),
+				animationName: ScanInstructionsStep.scanQR.animationName,
 				step: .scanQR
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsCheckthedetailsTitle(),
 				message: L.verifierScaninstructionsCheckthedetailsMessage(),
-				image: I.newScanInstructions.checkTheDetails(),
+				animationName: ScanInstructionsStep.checkTheDetails.animationName,
 				step: .checkTheDetails
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsCheckonlythevisibledataTitle(),
 				message: L.verifierScaninstructionsCheckonlythevisibledataMessage(),
-				image: I.newScanInstructions.checkOnlyTheVisibleData(),
+				animationName: ScanInstructionsStep.checkOnlyTheVisibleData.animationName,
 				step: .checkOnlyTheVisibleData
 			),
 			ScanInstructionsPage(
 				title: L.verifierScaninstructionsRedscreennowwhatTitle(),
 				message: L.verifierScaninstructionsRedscreennowwhatMessage(),
-				image: I.newScanInstructions.redScreenNowWhat(),
+				animationName: ScanInstructionsStep.redScreenNowWhat.animationName,
 				step: .redScreenNowWhat
 			)
 		]

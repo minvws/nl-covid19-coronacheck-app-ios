@@ -49,7 +49,7 @@ class ChooseTestLocationViewController: BaseViewController {
 		setupBinding()
 
 		// Only show an arrow as back button
-		styleBackButton(buttonText: "")
+		styleBackButton()
 	}
 
 	func setupBinding() {

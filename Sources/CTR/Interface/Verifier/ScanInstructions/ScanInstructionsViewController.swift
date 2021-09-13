@@ -14,20 +14,11 @@ class ScanInstructionsViewController: BaseViewController {
 	private let pageViewController = PageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 
 	private let backButton: UIButton = {
-		// Create a button with a back arrow and a .previous title
+		// Create a button with a back arrow
 		let button = UIButton(type: .custom)
-		button.setTitleColor(Theme.colors.dark, for: .normal)
-		button.setTitleColor(Theme.colors.gray, for: .highlighted)
-		button.titleLabel?.font = Theme.fonts.bodyBoldFixed
 		button.setImage(.backArrow, for: .normal)
-		button.translatesAutoresizingMaskIntoConstraints = false
-
-		// Increase the hit area, move the button 5 px to the right
-		button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 10)
-
-		// Make sure the text won't be truncated if the user opts for bold texts
-		button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
-
+		button.accessibilityLabel = L.generalBack()
+		button.accessibilityIdentifier = "BackButton"
 		return button
 	}()
 

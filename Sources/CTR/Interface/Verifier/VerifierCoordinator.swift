@@ -20,8 +20,6 @@ protocol VerifierCoordinatorDelegate: AnyObject {
 
 	func navigateToScanInstruction()
 
-	func navigateFromScanToScanInstructions()
-
 	/// Navigate to the scan result
 	/// - Parameter attributes: the scanned result
 	func navigateToScanResult(_ verificationResult: MobilecoreVerificationResult)
@@ -111,12 +109,6 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 
-	func navigateFromScanToScanInstructions() {
-		dashboardNavigationController?.popToRootViewController(animated: true) {
-			self.navigateToScanInstruction()
-		}
-	}
-
 	/// Display content
 	/// - Parameters:
 	///   - title: the title
@@ -159,8 +151,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 					cryptoManager: cryptoManager
 				)
 			)
-			dashboardNavigationController?.pushViewController(destination, animated: true)
-//			dashboardNavigationController?.setViewControllers([destination], animated: true)
+			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
 }

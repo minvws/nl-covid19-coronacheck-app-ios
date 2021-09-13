@@ -76,8 +76,7 @@ class AppCoordinator: Coordinator, Logging {
             viewModel: LaunchViewModel(
                 coordinator: self,
                 versionSupplier: versionSupplier,
-                flavor: flavor,
-				walletManager: flavor == .holder ? Services.walletManager : nil
+                flavor: flavor
             )
         )
         // Set the root
