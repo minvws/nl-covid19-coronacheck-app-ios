@@ -59,32 +59,31 @@ class VerifierScanViewModel: ScanPermissionViewModel {
 			switch Int64(verificationResult.status) {
 				case MobilecoreVERIFICATION_FAILED_IS_NL_DCC:
 
-					alert = AlertContent(
-						title: L.verifierResultAlertDccTitle(),
-						subTitle: L.verifierResultAlertDccMessage(),
-						cancelAction: nil,
-						cancelTitle: nil,
-						okAction: { [weak self] _ in
-							self?.shouldResumeScanning = true
-						},
-						okTitle: L.generalOk()
-					)
+					displayAlert(title: L.verifierResultAlertDccTitle(), message: L.verifierResultAlertDccMessage())
+
 				case MobilecoreVERIFICATION_FAILED_UNRECOGNIZED_PREFIX:
 
-					alert = AlertContent(
-						title: L.verifierResultAlertUnknownTitle(),
-						subTitle: L.verifierResultAlertUnknownMessage(),
-						cancelAction: nil,
-						cancelTitle: nil,
-						okAction: { [weak self] _ in
-							self?.shouldResumeScanning = true
-						},
-						okTitle: L.generalOk())
+					displayAlert(title: L.verifierResultAlertUnknownTitle(), message: L.verifierResultAlertUnknownMessage())
+
 				default:
 					
 					theCoordinator?.navigateToScanResult(verificationResult)
 			}
 		}
+	}
+
+	private func displayAlert(title: String, message: String) {
+
+		alert = AlertContent(
+			title: title,
+			subTitle: message,
+			cancelAction: nil,
+			cancelTitle: nil,
+			okAction: { [weak self] _ in
+				self?.shouldResumeScanning = true
+			},
+			okTitle: L.generalOk()
+		)
 	}
 
 	func dismiss() {

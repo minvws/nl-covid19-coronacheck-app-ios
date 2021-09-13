@@ -51,7 +51,7 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 		if message.lowercased().hasPrefix("nl") {
 
 			logInfo("Invalid: Domestic QR-code")
-			alertDomesticQCode()
+			displayAlert(title: L.holderScannerAlertDccTitle(), message: L.holderScannerAlertDccMessage())
 
 		} else if cryptoManager?.readEuCredentials(Data(message.utf8)) != nil {
 
@@ -61,29 +61,15 @@ class PaperCertificateScanViewModel: ScanPermissionViewModel {
 		} else {
 
 			logInfo("Invalid: Unknown QR-code")
-			alertUnknownQRCode()
+			displayAlert(title: L.holderScannerAlertUnknownTitle(), message: L.holderScannerAlertUnknownMessage())
 		}
 	}
 
-	private func alertDomesticQCode() {
+	private func displayAlert(title: String, message: String) {
 
 		alert = AlertContent(
-			title: L.holderScannerAlertDccTitle(),
-			subTitle: L.holderScannerAlertDccMessage(),
-			cancelAction: nil,
-			cancelTitle: nil,
-			okAction: { [weak self] _ in
-				self?.shouldResumeScanning = true
-			},
-			okTitle: L.generalOk()
-		)
-	}
-
-	private func alertUnknownQRCode() {
-
-		alert = AlertContent(
-			title: L.holderScannerAlertUnknownTitle(),
-			subTitle: L.holderScannerAlertUnknownMessage(),
+			title: title,
+			subTitle: message,
 			cancelAction: nil,
 			cancelTitle: nil,
 			okAction: { [weak self] _ in
