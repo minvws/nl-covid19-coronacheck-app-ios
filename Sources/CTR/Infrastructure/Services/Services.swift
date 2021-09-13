@@ -69,9 +69,9 @@ final class Services {
 		onboardingManagingType = onboardingManager
     }
 
-	static func use(_ openIdManager: OpenIdManaging.Type) {
+	static func use(_ openIdManaging: OpenIdManaging) {
 
-		openIdManagerType = openIdManager
+		openIdManager = openIdManaging
 	}
 
 	static func use(_ proofManaging: ProofManaging) {

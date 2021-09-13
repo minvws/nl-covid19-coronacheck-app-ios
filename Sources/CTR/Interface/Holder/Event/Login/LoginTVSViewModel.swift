@@ -11,41 +11,41 @@ import AppAuth
 class LoginTVSViewModel: Logging {
 
 	private weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
-	private weak var openIdManager: OpenIdManaging?
+	private weak var openIdManager: OpenIdManaging? = Services.openIdManager
 
 	private var eventMode: EventMode
 
-	@Bindable internal var viewState: LoginTVSViewController.State
+	private var title: String
 
-//	@Bindable private(set) var title: String
+	@Bindable internal var viewState: LoginTVSViewController.State
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
-	@Bindable private(set) var alert: LoginTVSViewController.AlertContent?
+	@Bindable private(set) var alert: AlertContent?
 
 	init(
 		coordinator: (EventCoordinatorDelegate & OpenUrlProtocol),
-		eventMode: EventMode,
-		openIdManager: OpenIdManaging = Services.openIdManager) {
+		eventMode: EventMode) {
 
 		self.coordinator = coordinator
-		self.openIdManager = openIdManager
 		self.eventMode = eventMode
+
+		self.title = {
+			switch eventMode {
+				case .recovery:
+					return L.holderRecoveryListTitle()
+				case .paperflow:
+					return L.holderDccListTitle()
+				case .test:
+					return L.holderTestListTitle()
+				case .vaccination:
+					return L.holderVaccinationListTitle()
+			}
+		}()
 
 		viewState = .login(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
+				title: title,
 				subTitle: nil,
 				primaryActionTitle: nil,
 				primaryAction: nil,
@@ -66,18 +66,7 @@ class LoginTVSViewModel: Logging {
 		shouldShowProgress = true
 		viewState = .login(
 			content: Content(
-				title: {
-					switch eventMode {
-						case .recovery:
-							return L.holderRecoveryListTitle()
-						case .paperflow:
-							return L.holderDccListTitle()
-						case .test:
-							return L.holderTestListTitle()
-						case .vaccination:
-							return L.holderVaccinationListTitle()
-					}
-				}(),
+				title: title,
 				subTitle: nil,
 				primaryActionTitle: L.generalClose(),
 				primaryAction: { [weak self] in
@@ -95,9 +84,12 @@ class LoginTVSViewModel: Logging {
 			if let token = accessToken {
 				self.coordinator?.loginTVSScreenDidFinish(.continue(value: token, eventMode: self.eventMode))
 			} else {
-				self.alert = LoginTVSViewController.AlertContent(
+				self.alert = AlertContent(
 					title: L.generalErrorTitle(),
 					subTitle: L.generalErrorTechnicalText(),
+					cancelAction: nil,
+					cancelTitle: nil,
+					okAction: nil,
 					okTitle: L.generalOk()
 				)
 			}
@@ -167,7 +159,7 @@ extension LoginTVSViewModel {
 				subTitle: L.generalNetworkwasbusyText(),
 				primaryActionTitle: L.generalNetworkwasbusyButton(),
 				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+					self?.coordinator?.loginTVSScreenDidFinish(.stop)
 				},
 				secondaryActionTitle: nil,
 				secondaryAction: nil
@@ -247,6 +239,7 @@ extension LoginTVSViewModel {
 
 			case OIDErrorCode.idTokenFailedValidationError.rawValue:
 				return ErrorCode.ClientCode.openIDGeneralInvalidIDToken
+
 			default:
 				return nil
 		}
