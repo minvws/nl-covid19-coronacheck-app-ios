@@ -41,8 +41,8 @@ enum UniversalLink: Equatable {
 
 				self = .thirdPartyTicketApp(returnURL: nil)
 			}
-		} else if url.path == "/app/auth" {
-			
+        } else if url.path.hasPrefix("/app/auth") {
+			// Currently '/app/auth2' path is in use
 			self = .tvsAuth(returnURL: url)
 		} else {
 			return nil
