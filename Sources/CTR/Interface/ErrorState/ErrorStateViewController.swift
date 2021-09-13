@@ -7,14 +7,14 @@
 
 import UIKit
 
-class LoginTVSViewController: BaseViewController {
+class ErrorStateViewController: BaseViewController {
 
-	private let viewModel: LoginTVSViewModel
-	private let sceneView = FetchEventsView()
+	private let viewModel: ErrorStateViewModel
+	private let sceneView = ErrorStateView()
 
 	/// Initializer
 	/// - Parameter viewModel: view model
-	init(viewModel: LoginTVSViewModel) {
+	init(viewModel: ErrorStateViewModel) {
 
 		self.viewModel = viewModel
 		super.init(nibName: nil, bundle: nil)
@@ -36,22 +36,17 @@ class LoginTVSViewController: BaseViewController {
 
 		super.viewDidLoad()
 
-		// Hide button part
-		sceneView.showLineView = false
+		navigationItem.hidesBackButton = true
+		addCustomBackButton(action: #selector(backButtonTapped), accessibilityLabel: L.generalBack())
 
-		// Binding
-		viewModel.$shouldShowProgress.binding = { [weak self] in
-
-			if $0 {
-				self?.sceneView.spinner.startAnimating()
-			} else {
-				self?.sceneView.spinner.stopAnimating()
-			}
+		viewModel.$content.binding = { [weak self] in
+			self?.displayContent($0)
 		}
+	}
 
-		viewModel.$content.binding = { [weak self] in self?.displayContent($0) }
-		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
-		viewModel.login()
+	@objc func backButtonTapped() {
+
+		viewModel.backButtonTapped()
 	}
 
 	private func displayContent(_ content: Content) {

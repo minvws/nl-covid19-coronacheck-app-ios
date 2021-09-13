@@ -17,7 +17,7 @@ class LoginTVSViewModel: Logging {
 
 	private var title: String
 
-	@Bindable internal var viewState: LoginTVSViewController.State
+	@Bindable internal var content: Content
 
 	@Bindable private(set) var shouldShowProgress: Bool = false
 
@@ -43,15 +43,13 @@ class LoginTVSViewModel: Logging {
 			}
 		}()
 
-		viewState = .login(
-			content: Content(
-				title: title,
-				subTitle: nil,
-				primaryActionTitle: nil,
-				primaryAction: nil,
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		content = Content(
+			title: title,
+			subTitle: nil,
+			primaryActionTitle: nil,
+			primaryAction: nil,
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
 	}
 
@@ -64,17 +62,15 @@ class LoginTVSViewModel: Logging {
 	func login() {
 
 		shouldShowProgress = true
-		viewState = .login(
-			content: Content(
-				title: title,
-				subTitle: nil,
-				primaryActionTitle: L.generalClose(),
-				primaryAction: { [weak self] in
-					self?.cancel()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		content = Content(
+			title: title,
+			subTitle: nil,
+			primaryActionTitle: L.generalClose(),
+			primaryAction: { [weak self] in
+				self?.cancel()
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
 
 		openIdManager?.requestAccessToken() { accessToken in
@@ -131,40 +127,38 @@ extension LoginTVSViewModel {
 
 	func displayErrorCode(errorCode: ErrorCode) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-				primaryActionTitle: L.holderErrorstateOverviewAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.loginTVSScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
+			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
 	func displayServerBusy() {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.generalNetworkwasbusyTitle(),
-				subTitle: L.generalNetworkwasbusyText(),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.loginTVSScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyText(),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
 	func mapError(_ error: Error?) -> ErrorCode.ClientCode? {
