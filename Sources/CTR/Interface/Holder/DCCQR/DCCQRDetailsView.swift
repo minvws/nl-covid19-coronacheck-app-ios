@@ -56,7 +56,27 @@ final class DCCQRDetailsView: BaseView {
 		}
 	}
 	
+	var details: [(field: String, value: String)]? {
+		didSet {
+			guard let details = details else { return }
+			loadDetails(details)
+		}
+	}
+	
 	func handleScreenCapture(shouldHide: Bool) {
 		stackView.isHidden = shouldHide
+	}
+}
+
+private extension DCCQRDetailsView {
+	
+	func loadDetails(_ details: [(field: String, value: String)]) {
+		details.forEach { detail in
+			
+			let labelView = DCCQRLabelView()
+			labelView.field = detail.field
+			labelView.value = detail.value
+			stackView.addArrangedSubview(labelView)
+		}
 	}
 }

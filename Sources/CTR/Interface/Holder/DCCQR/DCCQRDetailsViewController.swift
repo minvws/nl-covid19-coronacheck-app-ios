@@ -40,6 +40,8 @@ final class DCCQRDetailsViewController: BaseViewController {
 		super.viewDidLoad()
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
+		
+		viewModel.$details.binding = { [weak self] in self?.sceneView.details = $0 }
 
 		viewModel.$hideForCapture.binding = { [weak self] in self?.sceneView.handleScreenCapture(shouldHide: $0) }
 	}
