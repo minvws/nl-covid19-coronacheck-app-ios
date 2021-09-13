@@ -21,10 +21,8 @@ final class PaperCertificateScanViewModelTests: XCTestCase {
 		
 		coordinatorDelegateSpy = PaperCertificateCoordinatorDelegateSpy()
 		cryptoManagerSpy = CryptoManagerSpy()
-		sut = PaperCertificateScanViewModel(
-			coordinator: coordinatorDelegateSpy,
-			cryptoManager: cryptoManagerSpy
-		)
+		Services.use(cryptoManagerSpy)
+		sut = PaperCertificateScanViewModel(coordinator: coordinatorDelegateSpy)
 	}
 	
 	func test_initialState() {

@@ -44,19 +44,13 @@ final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
 	var scannedQR: String?
 
 	fileprivate var bottomSheetTransitioningDelegate = BottomSheetTransitioningDelegate() // swiftlint:disable:this weak_delegate
-	
-	/// The crypto manager
-	private weak var cryptoManager: CryptoManaging?
 
 	/// Initializer
 	/// - Parameters:
-	///   - navigationController: the navigation controller
-	init(
-		delegate: PaperCertificateFlowDelegate,
-		cryptoManager: CryptoManaging) {
+	///   - delegate: flow delegate
+	init(delegate: PaperCertificateFlowDelegate) {
 		
 		self.delegate = delegate
-		self.cryptoManager = cryptoManager
 	}
 	
 	/// Start the scene
@@ -157,8 +151,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 		let destination = PaperCertificateScanViewController(
 			viewModel: PaperCertificateScanViewModel(
-				coordinator: self,
-				cryptoManager: cryptoManager
+				coordinator: self
 			)
 		)
 		navigationController.pushViewController(destination, animated: true)

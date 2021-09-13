@@ -29,9 +29,9 @@ final class Services {
 
 	// MARK: use override for testing
 
-	static func use(_ cryptoManager: CryptoManaging.Type) {
+	static func use(_ cryptoManaging: CryptoManaging) {
 
-		cryptoManagingType = cryptoManager
+		cryptoManager = cryptoManaging
 	}
 
 	static func use(_ cryptoUtilityProtocol: CryptoLibUtilityProtocol) {

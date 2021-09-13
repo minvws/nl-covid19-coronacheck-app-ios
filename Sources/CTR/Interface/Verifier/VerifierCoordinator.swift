@@ -145,12 +145,7 @@ extension VerifierCoordinator: VerifierCoordinatorDelegate {
 		if let existingScanViewController = dashboardNavigationController?.viewControllers.first(where: { $0 is VerifierScanViewController }) {
 			dashboardNavigationController?.popToViewController(existingScanViewController, animated: true)
 		} else {
-			let destination = VerifierScanViewController(
-				viewModel: VerifierScanViewModel(
-					coordinator: self,
-					cryptoManager: cryptoManager
-				)
-			)
+			let destination = VerifierScanViewController(viewModel: VerifierScanViewModel(coordinator: self))
 			dashboardNavigationController?.pushOrReplaceTopViewController(with: destination, animated: true)
 		}
 	}
