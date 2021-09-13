@@ -11,12 +11,12 @@ class ListEventsViewModel: Logging {
 
 	weak var coordinator: (EventCoordinatorDelegate & OpenUrlProtocol)?
 
-	private var walletManager: WalletManaging
-	var remoteConfigManager: RemoteConfigManaging
-	private let greenCardLoader: GreenCardLoading
-	let cryptoManager: CryptoManaging?
-	private let couplingManager: CouplingManaging
-	let mappingManager: MappingManaging
+	private let walletManager: WalletManaging = Services.walletManager
+	let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
+	private let greenCardLoader: GreenCardLoading = Services.greenCardLoader
+	let cryptoManager: CryptoManaging? = Services.cryptoManager
+	private let couplingManager: CouplingManaging = Services.couplingManager
+	let mappingManager: MappingManaging = Services.mappingManager
 	private let identityChecker: IdentityCheckerProtocol
 
 	var eventMode: EventMode
@@ -76,25 +76,25 @@ class ListEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
-		walletManager: WalletManaging = Services.walletManager,
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-		cryptoManager: CryptoManaging = Services.cryptoManager,
-		couplingManager: CouplingManaging = Services.couplingManager,
+//		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
+//		walletManager: WalletManaging = Services.walletManager,
+//		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
+//		cryptoManager: CryptoManaging = Services.cryptoManager,
+//		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-		mappingManager: MappingManaging = Services.mappingManager,
+//		mappingManager: MappingManaging = Services.mappingManager,
 		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
-		self.walletManager = walletManager
-		self.remoteConfigManager = remoteConfigManager
-		self.greenCardLoader = greenCardLoader
-		self.cryptoManager = cryptoManager
-		self.couplingManager = couplingManager
+//		self.walletManager = walletManager
+//		self.remoteConfigManager = remoteConfigManager
+//		self.greenCardLoader = greenCardLoader
+//		self.cryptoManager = cryptoManager
+//		self.couplingManager = couplingManager
 		self.identityChecker = identityChecker
-		self.mappingManager = mappingManager
+//		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: Content(

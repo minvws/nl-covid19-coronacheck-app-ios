@@ -79,9 +79,9 @@ final class Services {
 		proofManager = proofManaging
 	}
 
-	static func use(_ greenCardLoader: GreenCardLoading.Type) {
+	static func use(_ greenCardLoading: GreenCardLoading) {
 
-		greenCardLoadingType = greenCardLoader
+		greenCardLoader = greenCardLoading
 	}
 
 	static func use(_ couplingManager: CouplingManaging.Type) {
