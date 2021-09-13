@@ -49,6 +49,12 @@ class VerifierScanViewController: ScanViewController {
 		
 		viewModel.$alert.binding = { [weak self] in self?.showAlert($0) }
 
+		viewModel.$shouldResumeScanning.binding = { [weak self] in
+			if let value = $0, value {
+				self?.resumeScanning()
+			}
+		}
+
 		viewModel.$torchLabels.binding = { [weak self] in
 			guard let strongSelf = self else { return }
             strongSelf.addTorchButton(
@@ -111,28 +117,6 @@ class VerifierScanViewController: ScanViewController {
 				title: L.generalCancel(),
 				style: .cancel,
 				handler: nil
-			)
-		)
-		present(alertController, animated: true, completion: nil)
-	}
-	
-	func showAlert(_ alertContent: AlertContent?) {
-
-		guard let content = alertContent else { return }
-
-		let alertController = UIAlertController(
-			title: content.title,
-			message: content.subTitle,
-			preferredStyle: .alert
-		)
-		alertController.addAction(
-			UIAlertAction(
-				title: content.okTitle,
-				style: .default,
-				handler: { [weak self] _ in
-					// Resume scanning
-					self?.resumeScanning()
-				}
 			)
 		)
 		present(alertController, animated: true, completion: nil)
