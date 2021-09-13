@@ -140,7 +140,7 @@ class TokenEntryViewModel {
 		coordinator: HolderCoordinatorDelegate,
 		networkManager: NetworkManaging,
 		requestToken: RequestToken?,
-		tokenValidator: TokenValidatorProtocol = TokenValidator()) {
+		tokenValidator: TokenValidatorProtocol) {
 
 		self.coordinator = coordinator
 		self.networkManager = networkManager

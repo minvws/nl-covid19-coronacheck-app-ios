@@ -24,7 +24,8 @@ enum UniversalLink: Equatable {
         guard appFlavor == .holder else { return nil }
 
 		if url.path == "/app/redeem", let fragment = url.fragment {
-			guard let requestToken = RequestToken(input: fragment) else {
+			let tokenValidator = TokenValidator(isLuhnCheckEnabled: Services.remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
+			guard let requestToken = RequestToken(input: fragment, tokenValidator: tokenValidator) else {
 				return nil
 			}
 
