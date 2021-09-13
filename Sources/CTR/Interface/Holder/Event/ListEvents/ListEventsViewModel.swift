@@ -15,7 +15,6 @@ class ListEventsViewModel: Logging {
 	let remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
 	private let greenCardLoader: GreenCardLoading = Services.greenCardLoader
 	let cryptoManager: CryptoManaging? = Services.cryptoManager
-	private let couplingManager: CouplingManaging = Services.couplingManager
 	let mappingManager: MappingManaging = Services.mappingManager
 	private let identityChecker: IdentityCheckerProtocol
 
@@ -76,25 +75,13 @@ class ListEventsViewModel: Logging {
 		coordinator: EventCoordinatorDelegate & OpenUrlProtocol,
 		eventMode: EventMode,
 		remoteEvents: [RemoteEvent],
-//		greenCardLoader: GreenCardLoading = Services.greenCardLoader,
-//		walletManager: WalletManaging = Services.walletManager,
-//		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager,
-//		cryptoManager: CryptoManaging = Services.cryptoManager,
-//		couplingManager: CouplingManaging = Services.couplingManager,
 		identityChecker: IdentityCheckerProtocol = IdentityChecker(),
-//		mappingManager: MappingManaging = Services.mappingManager,
 		eventsMightBeMissing: Bool = false
 	) {
 
 		self.coordinator = coordinator
 		self.eventMode = eventMode
-//		self.walletManager = walletManager
-//		self.remoteConfigManager = remoteConfigManager
-//		self.greenCardLoader = greenCardLoader
-//		self.cryptoManager = cryptoManager
-//		self.couplingManager = couplingManager
 		self.identityChecker = identityChecker
-//		self.mappingManager = mappingManager
 
 		viewState = .loading(
 			content: Content(
@@ -236,44 +223,51 @@ class ListEventsViewModel: Logging {
 
 			}, completion: { result in
 				self.progressIndicationCounter.decrement()
-
-				switch result {
-					case .success:
-						self.coordinator?.listEventsScreenDidFinish(
-							.continue(
-								value: nil,
-								eventMode: self.eventMode
-							)
-						)
-
-					case .failure(GreenCardLoader.Error.didNotEvaluate):
-						self.viewState = self.cannotCreateEventsState()
-						self.shouldPrimaryButtonBeEnabled = true
-
-					case .failure(GreenCardLoader.Error.noEvents):
-						self.shouldPrimaryButtonBeEnabled = true
-						completion(false)
-
-					case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
-						self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
-						self.handleServerError(serverError, for: .nonce, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
-						self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.credentials(let serverError)):
-						self.handleServerError(serverError, for: .signer, with: remoteEvents)
-
-					case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
-						self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials, with: remoteEvents)
-
-					case .failure(let error):
-						self.logError("storeAndSign - unhandled: \(error)")
-						self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
-				}
+				self.handleGreenCardResult(result, remoteEvents: remoteEvents, completion: completion)
 			})
+		}
+	}
+
+	private func handleGreenCardResult(
+		_ result: Result<Void, Error>,
+		remoteEvents: [RemoteEvent],
+		completion: @escaping (Bool) -> Void) {
+
+		switch result {
+			case .success:
+				self.coordinator?.listEventsScreenDidFinish(
+					.continue(
+						value: nil,
+						eventMode: self.eventMode
+					)
+				)
+
+			case .failure(GreenCardLoader.Error.didNotEvaluate):
+				self.viewState = self.cannotCreateEventsState()
+				self.shouldPrimaryButtonBeEnabled = true
+
+			case .failure(GreenCardLoader.Error.noEvents):
+				self.shouldPrimaryButtonBeEnabled = true
+				completion(false)
+
+			case .failure(GreenCardLoader.Error.failedToParsePrepareIssue):
+				self.handleClientSideError(clientCode: .failedToParsePrepareIssue, for: .nonce, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.preparingIssue(let serverError)):
+				self.handleServerError(serverError, for: .nonce, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.failedToGenerateCommitmentMessage):
+				self.handleClientSideError(clientCode: .failedToGenerateCommitmentMessage, for: .nonce, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.credentials(let serverError)):
+				self.handleServerError(serverError, for: .signer, with: remoteEvents)
+
+			case .failure(GreenCardLoader.Error.failedToSaveGreenCards):
+				self.handleClientSideError(clientCode: .failedToSaveGreenCards, for: .storingCredentials, with: remoteEvents)
+
+			case .failure(let error):
+				self.logError("storeAndSign - unhandled: \(error)")
+				self.handleClientSideError(clientCode: .unhandled, for: .signer, with: remoteEvents)
 		}
 	}
 
