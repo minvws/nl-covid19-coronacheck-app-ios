@@ -61,7 +61,7 @@ class RequestTokenTests: XCTestCase {
     }
 
     func test_invalidParameters_returnNil() {
-        let tokenValidator = TokenValidator() // use a real one for an integration test here
+        let tokenValidator = TokenValidator(isLuhnCheckEnabled: false) // use a real one for an integration test here
         XCTAssertNil(RequestToken(input: "XXX-YYYYYYYYYYYY-ZV", tokenValidator: tokenValidator))
         XCTAssertNil(RequestToken(input: "XXX-YYYY", tokenValidator: tokenValidator))
         XCTAssertNil(RequestToken(input: "XXX-YYYYYYYYYYYY-Z", tokenValidator: tokenValidator))
