@@ -393,6 +393,21 @@
 "holder.showqr.eu.title" = "Internationale QR-code";
 "holder.showqr.eu.about.title" = "Over mijn internationale QR-code";
 "holder.showqr.eu.about.vaccination.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /><b>%@</b></p><p>Geboortedatum / Date of birth*: <br /><b>%@</b></p><p>Ziekteverwekker / Disease targeted:<br /><b>COVID-19</b></p><p>Vaccin / Vaccine:<br /><b>%@</b></p><p>Type vaccin / Vaccine medicinal product:<br /><b>%@</b></p><p>Producent / Vaccine manufacturer:<br /><b>%@</b></p><p>Dosis / Number in series of doses:<br /><b>%@</b></p><p>Vaccinatiedatum / Date of vaccination*:<br /><b>%@</b></p><p>Gevaccineerd in / Member state of vaccination:<br /><b>%@</b></p><p>Afgever certificaat / Certificate issuer:<br /><b>%@</b></p><p>Uniek certificaatnummer /  Unique certificate identifier:<br /><b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
+"holder.showqr.eu.about.vaccination.description" = "Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:";
+"holder.showqr.eu.about.vaccination.name" = "Naam / Name:";
+"holder.showqr.eu.about.vaccination.dateofbirth" = "Geboortedatum / Date of birth*:";
+"holder.showqr.eu.about.vaccination.pathogen" = "Ziekteverwekker / Disease targeted:";
+"holder.showqr.eu.about.vaccination.pathogenvalue" = "COVID-19";
+"holder.showqr.eu.about.vaccination.brand" = "Vaccin / Vaccine:";
+"holder.showqr.eu.about.vaccination.type" = "Type vaccin / Vaccine medicinal product:";
+"holder.showqr.eu.about.vaccination.manufacturer" = "Producent / Vaccine manufacturer:";
+"holder.showqr.eu.about.vaccination.dosage" = "Dosis / Number in series of doses:";
+"holder.showqr.eu.about.vaccination.date" = "Vaccinatiedatum / Date of vaccination*:";
+"holder.showqr.eu.about.vaccination.country" = "Gevaccineerd in / Member state of vaccination:";
+"holder.showqr.eu.about.vaccination.issuer" = "Afgever certificaat / Certificate issuer:";
+"holder.showqr.eu.about.vaccination.identifier" = "Uniek certificaatnummer /  Unique certificate identifier:";
+"holder.showqr.eu.about.vaccination.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
+
 "holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /><b>%@</b></p><p>Geboortedatum / Date of birth*:<br /><b>%@</b></p><p>Ziekteverwekker / Disease targeted:<br /><b>COVID-19</b></p><p>Type test / Type of test:<br /><b>%@</b></p><p>Testnaam / Test name:<br /><b>%@</b></p><p>Testdatum / Test date*:<br /><b>%@</b></p><p>Testuitslag / Test result:<br /><b>%@</b></p><p>Testlocatie / Testing centre:<br /><b>%@</b></p><p>Producent / Test manufacturer:<br /><b>%@</b></p><p>Getest in / Member state of test:<br /><b>%@</b></p><p>Afgever certificaat / Certificate issuer:<br /><b>%@</b></p><p>Uniek certificaatnummer / Unique certificate identifier:<br /><b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
 "holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
