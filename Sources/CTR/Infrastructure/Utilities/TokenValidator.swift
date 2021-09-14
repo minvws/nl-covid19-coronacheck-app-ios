@@ -20,18 +20,17 @@ class TokenValidator: TokenValidatorProtocol {
 
 	private let tokenChars: [String.Element]
 	private let allowedCharacterSet: CharacterSet
-	private let remoteConfigManager: RemoteConfigManaging
+	private let isLuhnCheckEnabled: Bool
 
-	/// Initialize
-	/// - Parameter alphabet: the alphabet to use
-	init(
-		alphabet: String = "BCFGJLQRSTUVXYZ23456789",
-		remoteConfigManager: RemoteConfigManaging = Services.remoteConfigManager
-	) {
+	/// Initializer
+	/// - Parameters:
+	///   - alphabet: the alphabet to use
+	///   - isLuhnCheckEnabled: True if we should use the Luhn Check
+	init( alphabet: String = "BCFGJLQRSTUVXYZ23456789", isLuhnCheckEnabled: Bool ) {
 
-		tokenChars = Array(alphabet)
-		allowedCharacterSet = CharacterSet(charactersIn: alphabet)
-		self.remoteConfigManager = remoteConfigManager
+		self.tokenChars = Array(alphabet)
+		self.allowedCharacterSet = CharacterSet(charactersIn: alphabet)
+		self.isLuhnCheckEnabled = isLuhnCheckEnabled
 	}
 
 	/// Validate the token
@@ -72,7 +71,7 @@ class TokenValidator: TokenValidatorProtocol {
 			return false
 		}
 
-		guard remoteConfigManager.getConfiguration().isLuhnCheckEnabled == true else {
+		guard isLuhnCheckEnabled == true else {
 			// Skip Luhn check if disabled
 			return true
 		}

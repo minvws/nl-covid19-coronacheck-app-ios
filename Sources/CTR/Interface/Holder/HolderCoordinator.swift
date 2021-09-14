@@ -190,7 +190,8 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				networkManager: networkManager,
-				requestToken: token
+				requestToken: token,
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
 			)
 		)
 
@@ -493,7 +494,7 @@ extension HolderCoordinator: MenuDelegate {
 				sidePanel?.selectedViewController = navigationController
 				
 			case .addPaperCertificate:
-				let coordinator = PaperCertificateCoordinator(delegate: self, cryptoManager: cryptoManager)
+				let coordinator = PaperCertificateCoordinator(delegate: self)
 				let destination = PaperCertificateStartViewController(viewModel: .init(coordinator: coordinator))
 				navigationController = UINavigationController(rootViewController: destination)
 				coordinator.navigationController = navigationController

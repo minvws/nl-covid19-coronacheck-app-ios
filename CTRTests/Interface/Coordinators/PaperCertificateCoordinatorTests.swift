@@ -23,7 +23,9 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		flowSpy = PaperCertificateFlowDelegateSpy()
 		navigationSpy = NavigationControllerSpy()
 
-		sut = PaperCertificateCoordinator(delegate: flowSpy, cryptoManager: cryptoSpy)
+		Services.use(cryptoSpy)
+
+		sut = PaperCertificateCoordinator(delegate: flowSpy)
 		sut.navigationController = navigationSpy
 	}
 
@@ -123,7 +125,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		navigationSpy.viewControllers = [
 			PaperCertificateStartViewController(viewModel: PaperCertificateStartViewModel(coordinator: sut)),
 			PaperCertificateTokenEntryViewController(viewModel: PaperCertificateTokenEntryViewModel(coordinator: sut)),
-			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut, cryptoManager: cryptoSpy))
+			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
 		]
 		sut.scannedQR = "test"
 		sut.token = "test"
@@ -184,7 +186,7 @@ class PaperCertificateCoordinatorTests: XCTestCase {
 		navigationSpy.viewControllers = [
 			PaperCertificateStartViewController(viewModel: PaperCertificateStartViewModel(coordinator: sut)),
 			PaperCertificateTokenEntryViewController(viewModel: PaperCertificateTokenEntryViewModel(coordinator: sut)),
-			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut, cryptoManager: cryptoSpy))
+			PaperCertificateScanViewController(viewModel: PaperCertificateScanViewModel(coordinator: sut))
 		]
 
 		// When
