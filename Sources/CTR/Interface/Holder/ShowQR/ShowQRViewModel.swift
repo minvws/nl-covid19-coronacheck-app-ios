@@ -297,6 +297,8 @@ class ShowQRViewModel: Logging {
 			vaccination.medicalProduct) ?? vaccination.medicalProduct
 		let vaccineManufacturer = remoteConfigManager?.getConfiguration().getVaccinationManufacturerMapping(
 			vaccination.marketingAuthorizationHolder) ?? vaccination.marketingAuthorizationHolder
+		
+		let name = "\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)"
 
 		let formattedBirthDate = euCredentialAttributes.dateOfBirth(printDateFormatter)
 
@@ -305,25 +307,26 @@ class ShowQRViewModel: Logging {
 		
 		let issuer = getDisplayIssuer(vaccination.issuer)
 		let country = getDisplayCountry(vaccination.country)
-
-		let body: String = L.holderShowqrEuAboutVaccinationMessage(
-			"\(euCredentialAttributes.digitalCovidCertificate.name.familyName), \(euCredentialAttributes.digitalCovidCertificate.name.givenName)",
-			formattedBirthDate,
-			vaccineBrand,
-			vaccineType,
-			vaccineManufacturer,
-			dosage ?? " ",
-			formattedVaccinationDate,
-			country,
-			issuer,
-			vaccination.certificateIdentifier
-				.breakingAtColumn(column: 20) // hotfix for webview
-		)
-		coordinator?.presentInformationPage(
+		
+		let details: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: name),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: formattedBirthDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.pathogen, value: L.holderShowqrEuAboutVaccinationPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineBrand, value: vaccineBrand),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineType, value: vaccineType),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: vaccineManufacturer),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: dosage),
+			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: formattedVaccinationDate),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: country),
+			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: issuer),
+			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: vaccination.certificateIdentifier)
+		]
+		
+		coordinator?.presentDCCQRDetails(
 			title: L.holderShowqrEuAboutTitle(),
-			body: body,
-			hideBodyForScreenCapture: true,
-			openURLsInApp: true
+			description: L.holderShowqrEuAboutVaccinationDescription(),
+			details: details,
+			dateInformation: L.holderShowqrEuAboutVaccinationDateinformation()
 		)
 	}
 
