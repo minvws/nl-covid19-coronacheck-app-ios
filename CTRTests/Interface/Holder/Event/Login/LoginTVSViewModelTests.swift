@@ -181,7 +181,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
+		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			(NSError(domain: "LoginTVS", code: 429, userInfo: [NSLocalizedDescriptionKey: "login_required"]), ())
 
 		// When
 		sut.login()
@@ -191,7 +192,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
-			expect(content.subTitle) == L.generalNetworkwasbusyText()
+			expect(content.subTitle) == L.generalNetworkwasbusyErrorcode("i 210 000 429")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(content.secondaryAction).to(beNil())
@@ -208,7 +209,8 @@ class LoginTVSViewModelTests: XCTestCase {
 			coordinator: coordinatorSpy,
 			eventMode: .vaccination
 		)
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
+		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			(NSError(domain: "LoginTVS", code: 200, userInfo: [NSLocalizedDescriptionKey: "saml_authn_failed"]), ())
 
 		// When
 		sut.login()
@@ -262,7 +264,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDGeneralErrorDomain, code: code, userInfo: nil), ())
+			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+				(NSError(domain: OIDGeneralErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
 			// Then
@@ -304,7 +307,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDOAuthAuthorizationErrorDomain, code: code, userInfo: nil), ())
+			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+				(NSError(domain: OIDOAuthAuthorizationErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
 			// Then
@@ -345,7 +349,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDOAuthTokenErrorDomain, code: code, userInfo: nil), ())
+			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+				(NSError(domain: OIDOAuthTokenErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
 			// Then
@@ -373,7 +378,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// When
-		openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDResourceServerAuthorizationErrorDomain, code: 123, userInfo: nil), ())
+		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			(NSError(domain: OIDResourceServerAuthorizationErrorDomain, code: 123, userInfo: nil), ())
 		sut.login()
 
 		// Then
@@ -411,7 +417,8 @@ class LoginTVSViewModelTests: XCTestCase {
 		for (code, clientcode) in cases {
 
 			// When
-			openIDSpy.stubbedRequestAccessTokenOnErrorResult = (NSError(domain: OIDOAuthRegistrationErrorDomain, code: code, userInfo: nil), ())
+			openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+				(NSError(domain: OIDOAuthRegistrationErrorDomain, code: code, userInfo: nil), ())
 			sut.login()
 
 			// Then

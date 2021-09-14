@@ -107,7 +107,7 @@ extension LoginTVSViewModel {
 
 		if let error = error, error.localizedDescription.contains("login_required") {
 			logDebug("Server busy")
-			displayServerBusy()
+			displayServerBusy(errorCode: ErrorCode(flow: flow, step: .tvs, errorCode: "429"))
 			return
 		}
 		if let error = error, error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
@@ -115,7 +115,6 @@ extension LoginTVSViewModel {
 			userCancelled()
 			return
 		}
-
 		let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: clientCode ?? ErrorCode.ClientCode(value: "000"))
 		self.displayErrorCode(errorCode: errorCode)
 	}
@@ -146,11 +145,11 @@ extension LoginTVSViewModel {
 		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}
 
-	func displayServerBusy() {
+	func displayServerBusy(errorCode: ErrorCode) {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyText(),
+			subTitle: L.generalNetworkwasbusyErrorcode("\(errorCode)"),
 			primaryActionTitle: L.generalNetworkwasbusyButton(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.loginTVSScreenDidFinish(.stop)

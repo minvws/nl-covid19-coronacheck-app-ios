@@ -139,6 +139,7 @@
 "holder.test.alert.message" = "You can try to retrieve your test result again later";
 "general.networkwasbusy.title" = "Sorry, it's very busy at the moment";
 "general.networkwasbusy.text" = "Please try again later.";
+"general.networkwasbusy.errorcode" = "<p>Please try again later.</p><p><b>Error code:</b><br />%@</p>";
 "general.networkwasbusy.button" = "To my certificates";
 "general.add" = "Add";
 /* Link naar web accessibility pagina */
