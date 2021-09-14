@@ -39,16 +39,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		if case let .login(content: content) = sut.viewState {
-			expect(content.title) == L.holderVaccinationListTitle()
-			expect(content.subTitle).to(beNil())
-			expect(content.primaryAction).to(beNil())
-			expect(content.primaryActionTitle).to(beNil())
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
-		} else {
-			fail("Invalid state")
-		}
+		expect(self.sut.content.title) == L.holderVaccinationListTitle()
+		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.primaryAction).to(beNil())
+		expect(self.sut.content.primaryActionTitle).to(beNil())
+		expect(self.sut.content.secondaryAction).to(beNil())
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}
 
 	func test_loadingState_recoveryMode() {
@@ -62,16 +58,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		if case let .login(content: content) = sut.viewState {
-			expect(content.title) == L.holderRecoveryListTitle()
-			expect(content.subTitle).to(beNil())
-			expect(content.primaryAction).to(beNil())
-			expect(content.primaryActionTitle).to(beNil())
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
-		} else {
-			fail("Invalid state")
-		}
+		expect(self.sut.content.title) == L.holderRecoveryListTitle()
+		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.primaryAction).to(beNil())
+		expect(self.sut.content.primaryActionTitle).to(beNil())
+		expect(self.sut.content.secondaryAction).to(beNil())
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}
 
 	func test_loadingState_testMode() {
@@ -85,16 +77,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		if case let .login(content: content) = sut.viewState {
-			expect(content.title) == L.holderTestListTitle()
-			expect(content.subTitle).to(beNil())
-			expect(content.primaryAction).to(beNil())
-			expect(content.primaryActionTitle).to(beNil())
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
-		} else {
-			fail("Invalid state")
-		}
+		expect(self.sut.content.title) == L.holderTestListTitle()
+		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.primaryAction).to(beNil())
+		expect(self.sut.content.primaryActionTitle).to(beNil())
+		expect(self.sut.content.secondaryAction).to(beNil())
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}
 
 	func test_loadingState_hkviMode() {
@@ -108,16 +96,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		)
 
 		// Then
-		if case let .login(content: content) = sut.viewState {
-			expect(content.title) == L.holderDccListTitle()
-			expect(content.subTitle).to(beNil())
-			expect(content.primaryAction).to(beNil())
-			expect(content.primaryActionTitle).to(beNil())
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
-		} else {
-			fail("Invalid state")
-		}
+		expect(self.sut.content.title) == L.holderDccListTitle()
+		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.primaryAction).to(beNil())
+		expect(self.sut.content.primaryActionTitle).to(beNil())
+		expect(self.sut.content.secondaryAction).to(beNil())
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 	}
 
 	func test_cancel() {
@@ -149,16 +133,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		if case let .login(content: content) = sut.viewState {
-			expect(content.title) == L.holderVaccinationListTitle()
-			expect(content.subTitle).to(beNil())
-			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.generalClose()
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
-		} else {
-			fail("Invalid state")
-		}
+		expect(self.sut.content.title) == L.holderVaccinationListTitle()
+		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.primaryAction).toNot(beNil())
+		expect(self.sut.content.primaryActionTitle) == L.generalClose()
+		expect(self.sut.content.secondaryAction).to(beNil())
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.continue(value: "test", eventMode: .vaccination)
@@ -177,16 +157,12 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		if case let .login(content: content) = sut.viewState {
-			expect(content.title) == L.holderVaccinationListTitle()
-			expect(content.subTitle).to(beNil())
-			expect(content.primaryAction).toNot(beNil())
-			expect(content.primaryActionTitle) == L.generalClose()
-			expect(content.secondaryAction).to(beNil())
-			expect(content.secondaryActionTitle).to(beNil())
-		} else {
-			fail("Invalid state")
-		}
+		expect(self.sut.content.title) == L.holderVaccinationListTitle()
+		expect(self.sut.content.subTitle).to(beNil())
+		expect(self.sut.content.primaryAction).toNot(beNil())
+		expect(self.sut.content.primaryActionTitle) == L.generalClose()
+		expect(self.sut.content.secondaryAction).to(beNil())
+		expect(self.sut.content.secondaryActionTitle).to(beNil())
 
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == false
 		expect(self.sut.alert).toNot(beNil())
@@ -198,7 +174,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.alert?.okTitle) == L.generalOk()
 	}
 
-	func test_openID_error_serverbusy() {
+	func test_openID_error_serverbusy() throws {
 
 		// Given
 		sut = LoginTVSViewModel(
@@ -211,7 +187,9 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.generalNetworkwasbusyTitle()
 			expect(content.subTitle) == L.generalNetworkwasbusyText()
 			expect(content.primaryAction).toNot(beNil())
@@ -257,7 +235,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinishParameters?.0) == EventScreenResult.errorRequiringRestart(eventMode: .vaccination)
 	}
 
-	func test_openID_error_generalError() {
+	func test_openID_error_generalError() throws {
 
 		// Given
 		sut = LoginTVSViewModel(
@@ -288,7 +266,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			if case let .feedback(content: content) = sut.viewState {
+			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
@@ -301,7 +281,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_openID_error_AuthAuthorizationError() {
+	func test_openID_error_AuthAuthorizationError() throws {
 
 		// Given
 		sut = LoginTVSViewModel(
@@ -328,7 +308,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			if case let .feedback(content: content) = sut.viewState {
+			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
@@ -341,7 +323,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_openID_error_AuthTokenError() {
+	func test_openID_error_AuthTokenError() throws {
 
 		// Given
 		sut = LoginTVSViewModel(
@@ -367,7 +349,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			if case let .feedback(content: content) = sut.viewState {
+			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())
@@ -380,7 +364,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_openID_error_ResourceServerAuthorizationError() {
+	func test_openID_error_ResourceServerAuthorizationError() throws {
 
 		// Given
 		sut = LoginTVSViewModel(
@@ -393,7 +377,9 @@ class LoginTVSViewModelTests: XCTestCase {
 		sut.login()
 
 		// Then
-		if case let .feedback(content: content) = sut.viewState {
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
 			expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(ErrorCode.ClientCode.openIDResourceError.value)")
 			expect(content.primaryAction).toNot(beNil())
@@ -405,7 +391,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		}
 	}
 
-	func test_openID_error_AuthRegistrationError() {
+	func test_openID_error_AuthRegistrationError() throws {
 
 		// Given
 		sut = LoginTVSViewModel(
@@ -429,7 +415,9 @@ class LoginTVSViewModelTests: XCTestCase {
 			sut.login()
 
 			// Then
-			if case let .feedback(content: content) = sut.viewState {
+			expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+			let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+			if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 				expect(content.title) == L.holderErrorstateTitle()
 				expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 \(clientcode.value)")
 				expect(content.primaryAction).toNot(beNil())

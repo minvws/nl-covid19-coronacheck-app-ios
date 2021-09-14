@@ -35,6 +35,8 @@ enum EventScreenResult: Equatable {
 	/// Skip back to the beginning of the flow
 	case errorRequiringRestart(eventMode: EventMode)
 
+	case error(content: Content, backAction: () -> Void)
+
 	/// Continue with the next step in the flow
 	case `continue`(value: String?, eventMode: EventMode)
 
@@ -72,7 +74,10 @@ enum EventScreenResult: Equatable {
 
 			case (let errorRequiringRestart(lhsMode), let errorRequiringRestart(rhsMode)):
 				return lhsMode == rhsMode
-				
+
+			case (let error(lhsContent, _), let error(rhsContent, _)):
+				return lhsContent == rhsContent
+
 			default:
 				return false
 		}
@@ -281,6 +286,17 @@ class EventCoordinator: Coordinator, Logging, OpenUrlProtocol {
 			)
 		}
 	}
+
+	private func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
 }
 
 extension EventCoordinator: EventCoordinatorDelegate {
@@ -310,6 +326,9 @@ extension EventCoordinator: EventCoordinatorDelegate {
 
 			case .errorRequiringRestart(let eventMode):
 				handleErrorRequiringRestart(eventMode: eventMode)
+
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
 
 			case .back(let eventMode):
 				switch eventMode {
@@ -343,6 +362,10 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 						break
 				}
+
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
+
 			case let .showEvents(remoteEvents, eventMode, eventsMightBeMissing):
 				navigateToListEvents(remoteEvents, eventMode: eventMode, eventsMightBeMissing: eventsMightBeMissing)
 
@@ -365,6 +388,8 @@ extension EventCoordinator: EventCoordinatorDelegate {
 					case .paperflow:
 						delegate?.eventFlowDidCancel()
 				}
+			case let .error(content: content, backAction: backAction):
+				displayError(content: content, backAction: backAction)
 			case let .moreInformation(title, body, hideBodyForScreenCapture):
 				navigateToMoreInformation(title, body: body, hideBodyForScreenCapture: hideBodyForScreenCapture)
 			case let .showEventDetails(title, details):
