@@ -90,6 +90,30 @@ class PaperCertificateCoordinatorDelegateSpy: PaperCertificateCoordinatorDelegat
 		invokedUserWishesToCreateACertificateParametersList.append((message, ()))
 	}
 
+	var invokedDisplayError = false
+	var invokedDisplayErrorCount = 0
+	var invokedDisplayErrorParameters: (content: Content, Void)?
+	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
+	var shouldInvokeDisplayErrorBackAction = false
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+		invokedDisplayError = true
+		invokedDisplayErrorCount += 1
+		invokedDisplayErrorParameters = (content, ())
+		invokedDisplayErrorParametersList.append((content, ()))
+		if shouldInvokeDisplayErrorBackAction {
+			backAction()
+		}
+	}
+
+	var invokedUserWishesToGoBackToScanCertificate = false
+	var invokedUserWishesToGoBackToScanCertificateCount = 0
+
+	func userWishesToGoBackToScanCertificate() {
+		invokedUserWishesToGoBackToScanCertificate = true
+		invokedUserWishesToGoBackToScanCertificateCount += 1
+	}
+
 	var invokedOpenUrl = false
 	var invokedOpenUrlCount = 0
 	var invokedOpenUrlParameters: (url: URL, inApp: Bool)?

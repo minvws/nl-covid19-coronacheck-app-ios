@@ -84,9 +84,9 @@ final class Services {
 		greenCardLoader = greenCardLoading
 	}
 
-	static func use(_ couplingManager: CouplingManaging.Type) {
+	static func use(_ couplingManaging: CouplingManaging) {
 
-		couplingManagingType = couplingManager
+		couplingManager = couplingManaging
 	}
 
 	static func use(_ mappingManager: MappingManaging.Type) {
