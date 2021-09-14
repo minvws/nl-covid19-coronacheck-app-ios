@@ -133,7 +133,7 @@
 "holder.showqr.eu.about.recovery.issuer" = "Afgever certificaat / Certificate issuer:";
 "holder.showqr.eu.about.recovery.validfrom" = "Geldig vanaf / Valid from*:";
 "holder.showqr.eu.about.recovery.validuntil" = "Geldig tot / Valid to*:";
-"holder.showqr.eu.about.recovery.identifier" = "Uniek certificaatnummer /  Unique certificate identifier:";
+"holder.showqr.eu.about.recovery.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.recovery.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "general.error.cryptolib.title" = "Sorry, er gaat iets mis";
 "general.error.cryptolib.message" = "Neem contact op met onze helpdesk en geef de foutcode (%@) door.";
@@ -417,7 +417,7 @@
 "holder.showqr.eu.about.vaccination.date" = "Vaccinatiedatum / Date of vaccination*:";
 "holder.showqr.eu.about.vaccination.country" = "Gevaccineerd in / Member state of vaccination:";
 "holder.showqr.eu.about.vaccination.issuer" = "Afgever certificaat / Certificate issuer:";
-"holder.showqr.eu.about.vaccination.identifier" = "Uniek certificaatnummer /  Unique certificate identifier:";
+"holder.showqr.eu.about.vaccination.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 
 "holder.showqr.eu.about.test.message" = "<p>Reis je buiten Nederland? Dan zijn er meer gegevens nodig. Daarom staan in de internationale QR-code de volgende gegevens:</p><p>Naam / Name:<br /><b>%@</b></p><p>Geboortedatum / Date of birth*:<br /><b>%@</b></p><p>Ziekteverwekker / Disease targeted:<br /><b>COVID-19</b></p><p>Type test / Type of test:<br /><b>%@</b></p><p>Testnaam / Test name:<br /><b>%@</b></p><p>Testdatum / Test date*:<br /><b>%@</b></p><p>Testuitslag / Test result:<br /><b>%@</b></p><p>Testlocatie / Testing centre:<br /><b>%@</b></p><p>Producent / Test manufacturer:<br /><b>%@</b></p><p>Getest in / Member state of test:<br /><b>%@</b></p><p>Afgever certificaat / Certificate issuer:<br /><b>%@</b></p><p>Uniek certificaatnummer / Unique certificate identifier:<br /><b>%@</b></p><p>*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year</p>";
@@ -434,7 +434,7 @@
 "holder.showqr.eu.about.test.manufacturer" = "Producent / Test manufacturer:";
 "holder.showqr.eu.about.test.country" = "Getest in / Member state of test:";
 "holder.showqr.eu.about.test.issuer" = "Afgever certificaat / Certificate issuer:";
-"holder.showqr.eu.about.test.identifier" = "Uniek certificaatnummer /  Unique certificate identifier:";
+"holder.showqr.eu.about.test.identifier" = "Uniek certificaatnummer / Unique certificate identifier:";
 "holder.showqr.eu.about.test.dateinformation" = "*Datum weergegeven in dag-maand-jaar / Date noted in day-month-year";
 "holder.showqr.eu.about.test.negative" = "negatief (geen corona)";
 "holder.showqr.eu.about.test.postive" = "positief (corona)";
