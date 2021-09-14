@@ -576,7 +576,7 @@ private extension FetchEventsViewModel {
 		} else if serverUnreachable {
 			displayServerUnreachable()
 		} else if serverBusy {
-			displayServerBusy()
+			displayServerBusy(errorCodes)
 		} else if noInternet {
 			displayNoInternet()
 		} else {
@@ -586,34 +586,32 @@ private extension FetchEventsViewModel {
 
 	func displayNoBSN() {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateNobsnTitle(),
-				subTitle: L.holderErrorstateNobsnMessage(),
-				primaryActionTitle: L.holderErrorstateNobsnAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.holderErrorstateNobsnTitle(),
+			subTitle: L.holderErrorstateNobsnMessage(),
+			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displaySessionExpired() {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateNosessionTitle(),
-				subTitle: L.holderErrorstateNosessionMessage(),
-				primaryActionTitle: L.holderErrorstateNosessionAction(),
-				primaryAction: { [weak self] in
-					self?.goBack()
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let content = Content(
+			title: L.holderErrorstateNosessionTitle(),
+			subTitle: L.holderErrorstateNosessionMessage(),
+			primaryActionTitle: L.holderErrorstateNosessionAction(),
+			primaryAction: { [weak self] in
+				self?.goBack()
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displayServerUnreachable() {
@@ -634,20 +632,22 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func displayServerBusy() {
+	func displayServerBusy(_ errorCodes: [ErrorCode]) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.generalNetworkwasbusyTitle(),
-				subTitle: L.generalNetworkwasbusyText(),
-				primaryActionTitle: L.generalNetworkwasbusyButton(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: nil,
-				secondaryAction: nil
-			)
+		let lineBreak = "<br />"
+		let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+
+		let content = Content(
+			title: L.generalNetworkwasbusyTitle(),
+			subTitle: L.generalNetworkwasbusyErrorcode(String(errorString)),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: nil,
+			secondaryAction: nil
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displayErrorCodeForAccessTokenAndProviders(_ errorCodes: [ErrorCode]) {
@@ -686,24 +686,23 @@ private extension FetchEventsViewModel {
 
 	func displayErrorCode(subTitle: String) {
 
-		viewState = .feedback(
-			content: Content(
-				title: L.holderErrorstateTitle(),
-				subTitle: subTitle,
-				primaryActionTitle: L.holderErrorstateOverviewAction(),
-				primaryAction: { [weak self] in
-					self?.coordinator?.fetchEventsScreenDidFinish(.stop)
-				},
-				secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-				secondaryAction: { [weak self] in
-					guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-						return
-					}
-
-					self?.coordinator?.openUrl(url, inApp: true)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: subTitle,
+			primaryActionTitle: L.holderErrorstateOverviewAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
 				}
-			)
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
 	}
 
 	func displayNoInternet() {

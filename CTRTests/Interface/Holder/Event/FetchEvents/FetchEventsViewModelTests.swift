@@ -208,12 +208,17 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
-			expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 220 000 429")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle).to(beNil())
 			done()
@@ -238,12 +243,17 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
-			expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 230 000 429<br />i 220 000 429")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle).to(beNil())
 			done()
@@ -267,12 +277,17 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.generalNetworkwasbusyTitle()
-			expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+			expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 230 000 429")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 			expect(feedback.secondaryActionTitle).to(beNil())
 			done()
@@ -296,10 +311,15 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.holderErrorstateNobsnTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNobsnMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNobsnAction()
@@ -325,10 +345,15 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.holderErrorstateNosessionTitle()
 			expect(feedback.subTitle) == L.holderErrorstateNosessionMessage()
 			expect(feedback.primaryActionTitle) == L.holderErrorstateNosessionAction()
@@ -354,10 +379,15 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle) == L.holderErrorstateServerMessage("i 230 000 500 99000")
 			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
@@ -384,10 +414,15 @@ class FetchEventsViewModelTests: XCTestCase {
 
 		// Then
 		waitUntil { done in
-			guard case let .feedback(content: feedback) = self.sut.viewState else {
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 				fail("wrong state")
 				return
 			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
 			expect(feedback.title) == L.holderErrorstateTitle()
 			expect(feedback.subTitle).to(contain("i 230 000 500 99000"))
 			expect(feedback.subTitle).to(contain("i 220 000 500 99001"))
