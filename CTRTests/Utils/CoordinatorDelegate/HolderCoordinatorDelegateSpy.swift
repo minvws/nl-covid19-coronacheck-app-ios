@@ -31,6 +31,18 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedPresentInformationPageParametersList.append((title, body, hideBodyForScreenCapture, openURLsInApp))
 	}
 
+	var invokedPresentDCCQRDetails = false
+	var invokedPresentDCCQRDetailsCount = 0
+	var invokedPresentDCCQRDetailsParameters: (title: String, description: String, details: [DCCQRDetails], dateInformation: String)?
+	var invokedPresentDCCQRDetailsParametersList = [(title: String, description: String, details: [DCCQRDetails], dateInformation: String)]()
+
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
+		invokedPresentDCCQRDetails = true
+		invokedPresentDCCQRDetailsCount += 1
+		invokedPresentDCCQRDetailsParameters = (title, description, details, dateInformation)
+		invokedPresentDCCQRDetailsParametersList.append((title, description, details, dateInformation))
+	}
+
 	var invokedUserWishesToMakeQRFromNegativeTest = false
 	var invokedUserWishesToMakeQRFromNegativeTestCount = 0
 	var invokedUserWishesToMakeQRFromNegativeTestParameters: (remoteEvent: RemoteEvent, Void)?

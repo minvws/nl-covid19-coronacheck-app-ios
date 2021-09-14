@@ -22,6 +22,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	///   - body: the body of the page
 	///   - hideBodyForScreenCapture: hide sensitive data for screen capture
 	func presentInformationPage(title: String, body: String, hideBodyForScreenCapture: Bool, openURLsInApp: Bool)
+	
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String)
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent)
 
@@ -242,6 +244,15 @@ class HolderCoordinator: SharedCoordinator {
 		guard let coordinator = childCoordinators.last else { return }
 		removeChildCoordinator(coordinator)
 	}
+	
+	private func presentAsBottomSheet(_ viewController: UIViewController) {
+		
+		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
+		viewController.modalPresentationStyle = .custom
+		viewController.modalTransitionStyle = .coverVertical
+
+		(sidePanel?.selectedViewController as? UINavigationController)?.visibleViewController?.present(viewController, animated: true, completion: nil)
+	}
 }
 
 // MARK: - HolderCoordinatorDelegate
@@ -322,12 +333,21 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				hideBodyForScreenCapture: hideBodyForScreenCapture
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
-			.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
+	}
+	
+	func presentDCCQRDetails(title: String, description: String, details: [DCCQRDetails], dateInformation: String) {
+		
+		let viewController = DCCQRDetailsViewController(
+			viewModel: DCCQRDetailsViewModel(
+				coordinator: self,
+				title: title,
+				description: description,
+				details: details,
+				dateInformation: dateInformation
+			)
+		)
+		presentAsBottomSheet(viewController)
 	}
 
 	func userWishesToMakeQRFromNegativeTest(_ remoteEvent: RemoteEvent) {
@@ -365,12 +385,7 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 				buttonTitle: L.holderNotestButtonTitle()
 			)
 		)
-		viewController.transitioningDelegate = bottomSheetTransitioningDelegate
-		viewController.modalPresentationStyle = .custom
-		viewController.modalTransitionStyle = .coverVertical
-
-		(sidePanel?.selectedViewController as? UINavigationController)?.viewControllers.last?
-			.present(viewController, animated: true, completion: nil)
+		presentAsBottomSheet(viewController)
 	}
 
 	func userWishesToCreateANegativeTestQRFromGGD() {
