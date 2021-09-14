@@ -190,7 +190,8 @@ class HolderCoordinator: SharedCoordinator {
 			viewModel: TokenEntryViewModel(
 				coordinator: self,
 				networkManager: networkManager,
-				requestToken: token
+				requestToken: token,
+				tokenValidator: TokenValidator(isLuhnCheckEnabled: remoteConfigManager.getConfiguration().isLuhnCheckEnabled ?? false)
 			)
 		)
 

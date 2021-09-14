@@ -12,8 +12,7 @@ protocol GreenCardLoading {
 
 	func signTheEventsIntoGreenCardsAndCredentials(
 		responseEvaluator: ((RemoteGreenCards.Response) -> Bool)?,
-		completion: @escaping (Result<Void, Swift.Error>
-	) -> Void)
+		completion: @escaping (Result<Void, Swift.Error>) -> Void)
 }
 
 class GreenCardLoader: GreenCardLoading, Logging {
