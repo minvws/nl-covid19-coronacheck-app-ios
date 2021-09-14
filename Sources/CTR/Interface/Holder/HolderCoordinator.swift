@@ -50,6 +50,8 @@ protocol HolderCoordinatorDelegate: AnyObject {
 	func userWishesToViewQR(greenCardObjectID: NSManagedObjectID)
 
 	func userWishesToLaunchThirdPartyTicketApp()
+
+	func displayError(content: Content, backAction: @escaping () -> Void)
 }
 
 // swiftlint:enable class_delegate_protocol
@@ -439,6 +441,17 @@ extension HolderCoordinator: HolderCoordinatorDelegate {
 	func userWishesToLaunchThirdPartyTicketApp() {
 		guard let thirdpartyTicketApp = thirdpartyTicketApp else { return }
 		openUrl(thirdpartyTicketApp.returnURL, inApp: false)
+	}
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		(sidePanel?.selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: false)
 	}
 }
 

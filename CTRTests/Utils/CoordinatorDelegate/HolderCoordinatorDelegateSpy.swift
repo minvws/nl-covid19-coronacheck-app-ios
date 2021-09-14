@@ -163,6 +163,22 @@ class HolderCoordinatorDelegateSpy: HolderCoordinatorDelegate, Dismissable, Open
 		invokedUserWishesToLaunchThirdPartyTicketAppCount += 1
 	}
 
+	var invokedDisplayError = false
+	var invokedDisplayErrorCount = 0
+	var invokedDisplayErrorParameters: (content: Content, Void)?
+	var invokedDisplayErrorParametersList = [(content: Content, Void)]()
+	var shouldInvokeDisplayErrorBackAction = false
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+		invokedDisplayError = true
+		invokedDisplayErrorCount += 1
+		invokedDisplayErrorParameters = (content, ())
+		invokedDisplayErrorParametersList.append((content, ()))
+		if shouldInvokeDisplayErrorBackAction {
+			backAction()
+		}
+	}
+
 	var invokedDismiss = false
 	var invokedDismissCount = 0
 

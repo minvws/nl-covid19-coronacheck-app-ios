@@ -308,16 +308,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
-		expect(self.sut.message).toEventually(equal(L.generalNetworkwasbusyText()))
-		expect(self.sut.primaryTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
+			expect(content.subTitle).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 120 000 429")))
+			expect(content.primaryActionTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_requestTimedOut_stopsProgressAndShowsErrorDialog() {
@@ -392,16 +390,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.message).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
-		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.subTitle).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
+			expect(content.primaryActionTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_serverError_stopsProgressAndShowsErrorDialog() {
@@ -418,16 +414,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.message).toEventually(equal(L.holderErrorstateServerMessage("i 120 000 500 99780")))
-		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.subTitle).toEventually(equal(L.holderErrorstateServerMessage("i 120 000 500 99780")))
+			expect(content.primaryActionTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchResult_networkFailure_stopsProgressAndShowsTechnicalErrorAlertAndShowsTokenEntryField() {
@@ -445,16 +439,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
-		expect(self.sut.message).toEventually(equal(L.generalNetworkwasbusyText()))
-		expect(self.sut.primaryTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
+			expect(content.subTitle).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 150 xxx 429")))
+			expect(content.primaryActionTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_initWithInitialRequestTokenSet_fetchesProviders_withUnidentifiableTestProvider_showsErrorMessage() {
@@ -672,16 +664,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.message).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 400")))
-		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.subTitle).toEventually(equal(L.holderErrorstateTestMessage("i 150 xxx 400")))
+			expect(content.primaryActionTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	// MARK: initWithInitialRequestTokenSet nextButtonPressed
@@ -773,16 +763,15 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
-		expect(self.sut.message).toEventually(equal(L.generalNetworkwasbusyText()))
-		expect(self.sut.primaryTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
 
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.generalNetworkwasbusyTitle()))
+			expect(content.subTitle).toEventually(equal(L.generalNetworkwasbusyErrorcode("i 120 000 429")))
+			expect(content.primaryActionTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_initWithInitialRequestTokenSet_validationRequired_nextButtonPressed_withNonemptyVerificationInput_withIdentifiableTestProvider_startsProgress() {
@@ -1150,16 +1139,14 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.message).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
-		expect(self.sut.primaryTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
-		expect(self.sut.shouldShowUserNeedsATokenButton).toEventually(beFalse())
-		expect(self.sut.shouldEnableNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-		expect(self.sut.shouldShowVerificationEntryField).toEventually(beFalse())
-		expect(self.sut.shouldShowNextButton).toEventually(beTrue())
-
-		TokenEntryViewController(viewModel: sut).assertImage()
+		expect(self.holderCoordinatorSpy.invokedDisplayError).toEventually(beTrue())
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.subTitle).toEventually(equal(L.holderErrorstateClientMessage("i 120 000 020")))
+			expect(content.primaryActionTitle).toEventually(equal(L.holderErrorstateOverviewAction()))
+		} else {
+			fail("Invalid state")
+		}
 	}
 
 	func test_withoutInitialRequestToken_nextButtonPressed_withEmptyVerificationInput_withUnidentifiableTestProvider_showsErrorMessage() {
