@@ -466,13 +466,29 @@ class ShowQRViewModelTests: XCTestCase {
 			issuedAt: Date().timeIntervalSince1970 + 3600,
 			issuer: "NL"
 		)
+		let expectedDetails: [DCCQRDetails] = [
+			DCCQRDetails(field: DCCQRDetailsVaccination.name, value: "Corona, Check"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dateOfBirth, value: "01-06-2021"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.pathogen, value: L.holderShowqrEuAboutVaccinationPathogenvalue()),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineBrand, value: "Test"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineType, value: "test"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.vaccineManufacturer, value: "Test"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.dosage, value: "2 / 2"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.date, value: "01-06-2021"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.country, value: "NLS"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.issuer, value: "Test"),
+			DCCQRDetails(field: DCCQRDetailsVaccination.uniqueIdentifer, value: "test")
+		]
 
 		// When
 		sut?.showMoreInformation()
 
 		// Then
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPage) == true
-		expect(self.holderCoordinatorDelegateSpy.invokedPresentInformationPageParameters?.title) == L.holderShowqrEuAboutTitle()
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetails) == true
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.title) == L.holderShowqrEuAboutTitle()
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.description) == L.holderShowqrEuAboutVaccinationDescription()
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.details) == expectedDetails
+		expect(self.holderCoordinatorDelegateSpy.invokedPresentDCCQRDetailsParameters?.dateInformation) == L.holderShowqrEuAboutVaccinationDateinformation()
 	}
 
 	func test_canShowThirdPartyAppButton() throws {

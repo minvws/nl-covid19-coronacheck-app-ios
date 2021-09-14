@@ -105,3 +105,11 @@ enum DCCQRDetailsRecovery: DCCQRDetailable {
 		}
 	}
 }
+
+extension DCCQRDetails: Equatable {
+	
+	static func == (lhs: DCCQRDetails, rhs: DCCQRDetails) -> Bool {
+		return lhs.field.displayTitle == rhs.field.displayTitle &&
+			lhs.value == rhs.value
+	}
+}
