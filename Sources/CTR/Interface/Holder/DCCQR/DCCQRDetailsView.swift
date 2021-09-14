@@ -18,7 +18,21 @@ final class DCCQRDetailsView: BaseView {
 	
 	/// The title label
 	private let titleLabel: Label = {
-		return Label(title1: nil, montserrat: true).multiline().header()
+		let label = Label(title1: nil, montserrat: true).multiline().header()
+		label.textColor = Theme.colors.dark
+		return label
+	}()
+	
+	private let descriptionLabel: Label = {
+		let label = Label(subhead: nil).multiline()
+		label.textColor = Theme.colors.dark
+		return label
+	}()
+	
+	private let dateInformationLabel: Label = {
+		let label = Label(footnote: nil).multiline()
+		label.textColor = Theme.colors.dark
+		return label
 	}()
 	
 	/// The stack view to add all labels to
@@ -35,7 +49,6 @@ final class DCCQRDetailsView: BaseView {
 		super.setupViewHierarchy()
 		
 		addSubview(stackView)
-		stackView.addArrangedSubview(titleLabel)
 	}
 	
 	override func setupViewConstraints() {
@@ -56,10 +69,22 @@ final class DCCQRDetailsView: BaseView {
 		}
 	}
 	
+	var detailsDescription: String? {
+		didSet {
+			descriptionLabel.text = detailsDescription
+		}
+	}
+	
 	var details: [(field: String, value: String)]? {
 		didSet {
 			guard let details = details else { return }
 			loadDetails(details)
+		}
+	}
+	
+	var dateInformation: String? {
+		didSet {
+			dateInformationLabel.text = dateInformation
 		}
 	}
 	
@@ -71,6 +96,10 @@ final class DCCQRDetailsView: BaseView {
 private extension DCCQRDetailsView {
 	
 	func loadDetails(_ details: [(field: String, value: String)]) {
+		
+		stackView.addArrangedSubview(titleLabel)
+		stackView.addArrangedSubview(descriptionLabel)
+		
 		details.forEach { detail in
 			
 			let labelView = DCCQRLabelView()
@@ -78,5 +107,7 @@ private extension DCCQRDetailsView {
 			labelView.value = detail.value
 			stackView.addArrangedSubview(labelView)
 		}
+		
+		stackView.addArrangedSubview(dateInformationLabel)
 	}
 }

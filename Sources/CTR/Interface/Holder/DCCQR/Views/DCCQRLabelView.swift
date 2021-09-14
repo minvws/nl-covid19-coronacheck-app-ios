@@ -9,6 +9,10 @@ import UIKit
 
 final class DCCQRLabelView: BaseView {
 	
+	private enum ViewTraits {
+		static let spacing: CGFloat = 1
+	}
+	
 	private let fieldLabel: Label = {
 		let label = Label(subhead: "").multiline()
 		label.textColor = Theme.colors.dark
@@ -27,6 +31,13 @@ final class DCCQRLabelView: BaseView {
 		backgroundColor = Theme.colors.viewControllerBackground
 	}
 	
+	override func setupViewHierarchy() {
+		super.setupViewHierarchy()
+		
+		addSubview(fieldLabel)
+		addSubview(valueLabel)
+	}
+	
 	override func setupViewConstraints() {
 		super.setupViewConstraints()
 		
@@ -35,8 +46,7 @@ final class DCCQRLabelView: BaseView {
 			fieldLabel.leftAnchor.constraint(equalTo: leftAnchor),
 			fieldLabel.rightAnchor.constraint(equalTo: rightAnchor),
 			
-			valueLabel.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor),
-			valueLabel.topAnchor.constraint(equalTo: topAnchor),
+			valueLabel.topAnchor.constraint(equalTo: fieldLabel.bottomAnchor, constant: ViewTraits.spacing),
 			valueLabel.leftAnchor.constraint(equalTo: leftAnchor),
 			valueLabel.rightAnchor.constraint(equalTo: rightAnchor),
 			valueLabel.bottomAnchor.constraint(equalTo: bottomAnchor)

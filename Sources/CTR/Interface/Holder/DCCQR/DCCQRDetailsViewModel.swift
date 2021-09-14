@@ -41,7 +41,6 @@ final class DCCQRDetailsViewModel {
 			guard let value = $0.value else {
 				return nil
 			}
-			
 			return (field: $0.field.displayTitle, value: value)
 		}
 		

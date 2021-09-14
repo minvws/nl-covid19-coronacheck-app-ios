@@ -41,7 +41,11 @@ final class DCCQRDetailsViewController: BaseViewController {
 
 		viewModel.$title.binding = { [weak self] in self?.sceneView.title = $0 }
 		
+		viewModel.$description.binding = { [weak self] in self?.sceneView.detailsDescription = $0 }
+		
 		viewModel.$details.binding = { [weak self] in self?.sceneView.details = $0 }
+		
+		viewModel.$dateInformation.binding = { [weak self] in self?.sceneView.dateInformation = $0 }
 
 		viewModel.$hideForCapture.binding = { [weak self] in self?.sceneView.handleScreenCapture(shouldHide: $0) }
 	}
