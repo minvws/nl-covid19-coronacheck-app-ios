@@ -23,12 +23,14 @@ final class DCCQRDetailsView: BaseView {
 		return label
 	}()
 	
+	/// The description label
 	private let descriptionLabel: Label = {
 		let label = Label(subhead: nil).multiline()
 		label.textColor = Theme.colors.dark
 		return label
 	}()
 	
+	/// The footer date information label
 	private let dateInformationLabel: Label = {
 		let label = Label(footnote: nil).multiline()
 		label.textColor = Theme.colors.dark
@@ -69,12 +71,14 @@ final class DCCQRDetailsView: BaseView {
 		}
 	}
 	
+	/// The description
 	var detailsDescription: String? {
 		didSet {
 			descriptionLabel.text = detailsDescription
 		}
 	}
 	
+	/// The dcc details
 	var details: [(field: String, value: String)]? {
 		didSet {
 			guard let details = details else { return }
@@ -82,6 +86,7 @@ final class DCCQRDetailsView: BaseView {
 		}
 	}
 	
+	/// The footer date information
 	var dateInformation: String? {
 		didSet {
 			dateInformationLabel.text = dateInformation

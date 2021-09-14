@@ -9,16 +9,19 @@ import UIKit
 
 final class DCCQRLabelView: BaseView {
 	
+	/// The display constants
 	private enum ViewTraits {
 		static let spacing: CGFloat = 1
 	}
 	
+	/// The field label
 	private let fieldLabel: Label = {
 		let label = Label(subhead: "").multiline()
 		label.textColor = Theme.colors.dark
 		return label
 	}()
 	
+	/// The value label
 	private let valueLabel: Label = {
 		let label = Label(bodyBold: "").multiline()
 		label.textColor = Theme.colors.dark
@@ -55,12 +58,14 @@ final class DCCQRLabelView: BaseView {
 	
 	// MARK: Public Access
 	
+	/// The dcc field
 	var field: String? {
 		didSet {
 			fieldLabel.text = field
 		}
 	}
 	
+	/// The dcc value
 	var value: String? {
 		didSet {
 			valueLabel.text = value
