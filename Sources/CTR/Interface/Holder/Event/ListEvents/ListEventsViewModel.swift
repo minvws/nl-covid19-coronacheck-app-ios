@@ -286,7 +286,7 @@ class ListEventsViewModel: Logging {
 			errorCode: clientCode.value
 		)
 		logDebug("errorCode: \(errorCode)")
-		viewState = displayClientErrorCode(errorCode)
+		displayClientErrorCode(errorCode)
 		shouldPrimaryButtonBeEnabled = true
 	}
 
@@ -297,7 +297,7 @@ class ListEventsViewModel: Logging {
 
 			switch error {
 				case .serverBusy:
-					showServerTooBusyError()
+					showServerTooBusyError(errorCode: ErrorCode(flow: determineErrorCodeFlow(remoteEvents: remoteEvents), step: step, errorCode: "429"))
 					shouldPrimaryButtonBeEnabled = true
 					
 				case .serverUnreachable:
@@ -318,7 +318,7 @@ class ListEventsViewModel: Logging {
 						detailedCode: serverResponse?.code
 					)
 					logDebug("errorCode: \(errorCode)")
-					viewState = displayServerErrorCode(errorCode)
+					displayServerErrorCode(errorCode)
 					shouldPrimaryButtonBeEnabled = true
 
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
@@ -331,11 +331,10 @@ class ListEventsViewModel: Logging {
 						detailedCode: serverResponse?.code
 					)
 					logDebug("errorCode: \(errorCode)")
-					viewState = displayClientErrorCode(errorCode)
+					displayClientErrorCode(errorCode)
 					shouldPrimaryButtonBeEnabled = true
 			}
 		}
-
 	}
 
 	// MARK: Store events
