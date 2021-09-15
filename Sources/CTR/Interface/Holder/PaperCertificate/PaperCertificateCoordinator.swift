@@ -29,6 +29,10 @@ protocol PaperCertificateCoordinatorDelegate: AnyObject {
 	func userWishesToScanCertificate()
 
 	func userWishesToCreateACertificate(message: String)
+
+	func displayError(content: Content, backAction: @escaping () -> Void)
+
+	func userWishesToGoBackToScanCertificate()
 }
 
 final class PaperCertificateCoordinator: Coordinator, Logging, OpenUrlProtocol {
@@ -137,6 +141,8 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 
 	func userWishesToEnterToken() {
 
+//		userDidSubmitPaperCertificateToken(token: "NDREB5")
+
 		let destination = PaperCertificateTokenEntryViewController(
 			viewModel: PaperCertificateTokenEntryViewModel(coordinator: self)
 		)
@@ -147,7 +153,7 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 	/// Navigate to the scanner
 	func userWishesToScanCertificate() {
 
-		//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
+//		userWishesToCreateACertificate(message: CouplingManager.vaccinationDCC)
 
 		let destination = PaperCertificateScanViewController(
 			viewModel: PaperCertificateScanViewModel(
@@ -172,6 +178,29 @@ extension PaperCertificateCoordinator: PaperCertificateCoordinatorDelegate {
 				)
 			)
 			navigationController.pushViewController(viewController, animated: false)
+		}
+	}
+
+	func displayError(content: Content, backAction: @escaping () -> Void) {
+
+		let viewController = ErrorStateViewController(
+			viewModel: ErrorStateViewModel(
+				content: content,
+				backAction: backAction
+			)
+		)
+		navigationController.pushViewController(viewController, animated: false)
+	}
+
+	func userWishesToGoBackToScanCertificate() {
+
+		if let scanViewController = navigationController.viewControllers
+			.first(where: { $0 is PaperCertificateScanViewController }) {
+
+			navigationController.popToViewController(
+				scanViewController,
+				animated: true
+			)
 		}
 	}
 }

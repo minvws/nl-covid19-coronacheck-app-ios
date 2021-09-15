@@ -150,6 +150,7 @@
 "holder.test.alert.message" = "Je kunt later opnieuw proberen je testuitslag op te halen";
 "general.networkwasbusy.title" = "Sorry, het is erg druk";
 "general.networkwasbusy.text" = "Probeer het op een later moment nog eens.";
+"general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
 "general.networkwasbusy.button" = "Naar mijn bewijzen";
 "general.add" = "Toevoegen";
 /* Link naar web accessibility pagina */

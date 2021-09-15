@@ -366,7 +366,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(rows).to(haveCount(2))
 	}
 
-	func test_makeQR_saveEventGroupError_eventModeVaccination() {
+	func test_makeQR_saveEventGroupError_eventModeVaccination() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -389,10 +389,11 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedFetchGreencards) == false
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.sut.alert).to(beNil())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -402,7 +403,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupError_eventModeRecovery() {
+	func test_makeQR_saveEventGroupError_eventModeRecovery() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -417,17 +418,19 @@ class ListEventsViewModelTests: XCTestCase {
 			fail("wrong state")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedFetchGreencards) == false
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.sut.alert).to(beNil())
-		guard case let .feedback(content: feedback) = sut.viewState else {
+
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -437,7 +440,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupError_eventModeTest() {
+	func test_makeQR_saveEventGroupError_eventModeTest() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -452,17 +455,18 @@ class ListEventsViewModelTests: XCTestCase {
 			fail("wrong state")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedFetchGreencards) == false
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == false
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish) == true
 		expect(self.sut.alert).to(beNil())
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -472,7 +476,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidResponse() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidResponse() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -491,18 +495,19 @@ class ListEventsViewModelTests: XCTestCase {
 			fail("wrong state")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -548,7 +553,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.okTitle) == L.generalRetry()
 	}
 
-	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverBusy() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverBusy() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -576,19 +581,20 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
-		expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+		expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 270 000 429")
 		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidSignature() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_invalidSignature() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -616,9 +622,10 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -628,7 +635,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverError() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverError() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -656,9 +663,10 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -668,7 +676,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidResponse() {
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidResponse() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -685,23 +693,24 @@ class ListEventsViewModelTests: XCTestCase {
 			(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidResponse)), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
-		
+
 		guard case let .listEvents(content: content, rows: _) = sut.viewState else {
 			fail("wrong state")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.sut.alert).to(beNil())
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -750,7 +759,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.sut.alert?.okTitle) == L.generalRetry()
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() {
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -781,19 +790,20 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
 		expect(feedback.title) == L.generalNetworkwasbusyTitle()
-		expect(feedback.subTitle) == L.generalNetworkwasbusyText()
+		expect(feedback.subTitle) == L.generalNetworkwasbusyErrorcode("i 280 000 429")
 		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
 		expect(feedback.secondaryActionTitle).to(beNil())
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidSignature() {
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_invalidSignature() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -824,9 +834,10 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -836,7 +847,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverError() {
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverError() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -867,9 +878,10 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
@@ -917,7 +929,7 @@ class ListEventsViewModelTests: XCTestCase {
 //		expect(self.sut.alert).toEventuallyNot(beNil())
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveDomesticGreencardError() {
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsNoError_saveDomesticGreencardError() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -940,19 +952,20 @@ class ListEventsViewModelTests: XCTestCase {
 			fail("wrong state")
 			return
 		}
-		
+
 		// When
 		content.primaryAction?()
-		
+
 		// Then
 		expect(self.walletSpy.invokedRemoveExistingEventGroups) == false
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.walletSpy.invokedRemoveExistingGreenCards).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
 		expect(self.sut.alert).to(beNil())
-		guard case let .feedback(content: feedback) = sut.viewState else {
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
 			fail("wrong state")
 			return
 		}
