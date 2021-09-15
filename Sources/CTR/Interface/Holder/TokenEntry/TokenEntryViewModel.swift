@@ -749,7 +749,7 @@ extension TokenEntryViewModel {
 					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateServerMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateClientMessage("\(errorCode)")
 				default:
 					break
@@ -764,7 +764,7 @@ extension TokenEntryViewModel {
 					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: error.getClientErrorCode() ?? "000", detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				default:
 					break

@@ -532,7 +532,7 @@ private extension FetchEventsViewModel {
 				return ErrorCode(
 					flow: flowCode,
 					step: step,
-					errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
 					detailedCode: serverResponse?.code
 				)
 			case let ServerError.provider(provider: provider, statusCode, serverResponse, networkError):
@@ -540,7 +540,7 @@ private extension FetchEventsViewModel {
 					flow: flowCode,
 					step: step,
 					provider: provider,
-					errorCode: networkError.getClientErrorCode() ?? "\(statusCode ?? 000)",
+					clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode(value: "\(statusCode ?? 000)"),
 					detailedCode: serverResponse?.code
 				)
 		}

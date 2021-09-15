@@ -267,6 +267,7 @@
 "holder.errorstate.nosession.message" = "You’ve waited too long. For safety reasons, you were logged out. Login again with your DigiD to retrieve your details.";
 "holder.errorstate.nosession.action" = "Start over";
 "general.error.server.unreachable" = "We failed to reach the server. Can you check if you’re connected to the internet?";
+"general.error.server.unreachable.errorCode" = "<p>We failed to reach the server. Can you check if you’re connected to the internet?</p><p><b>Error code:</b><br />%@</p>";
 "general.menu.version" = "App version %@ (%@)";
 "general.government" = "Central Government";
 "general.government.logo" = "Logo of Central Government";
