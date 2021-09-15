@@ -5,6 +5,7 @@ on:
       - "main"
 jobs:
   sigridci:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
