@@ -1,21 +1,21 @@
-#name: sigrid-pullrequest
-#on: [pull_request, workflow_dispatch]
-#jobs:
-#  sigridci:
-#    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Check out repository
-#        uses: actions/checkout@v2.3.4
-#      - run: "git clone https://github.com/Software-Improvement-Group/sigridci.git sigridci"
-#      - name: "Run Sigrid CI"
-#        env:
-#          SIGRID_CI_ACCOUNT: "${{ secrets.SIGRID_CI_ACCOUNT }}"
-#          SIGRID_CI_TOKEN: "${{ secrets.SIGRID_CI_TOKEN }}"
-#        run: "./sigridci/sigridci/sigridci.py --customer vws --system coronacheck-ios --source . --targetquality 3.5"
-#      - name: "Save Sigrid CI results"
-#        if: ${{ success() || failure() }}
-#        uses: actions/upload-artifact@v2
-#        with:
-#          path: "sigrid-ci-output/**"
-#          retention-days: 7
+name: sigrid-pullrequest
+on: [pull_request, workflow_dispatch]
+jobs:
+  sigridci:
+    if: github.event.repository.name == 'nl-covid19-coronacheck-app-ios-private'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2.3.4
+      - run: "git clone https://github.com/Software-Improvement-Group/sigridci.git sigridci"
+      - name: "Run Sigrid CI"
+        env:
+          SIGRID_CI_ACCOUNT: "${{ secrets.SIGRID_CI_ACCOUNT }}"
+          SIGRID_CI_TOKEN: "${{ secrets.SIGRID_CI_TOKEN }}"
+        run: "./sigridci/sigridci/sigridci.py --customer vws --system coronacheck-ios --source . --targetquality 3.5"
+      - name: "Save Sigrid CI results"
+        if: ${{ success() || failure() }}
+        uses: actions/upload-artifact@v2
+        with:
+          path: "sigrid-ci-output/**"
+          retention-days: 7
