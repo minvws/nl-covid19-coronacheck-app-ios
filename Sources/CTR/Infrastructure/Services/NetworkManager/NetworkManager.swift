@@ -4,7 +4,6 @@
 *
 *  SPDX-License-Identifier: EUPL-1.2
 */
-// swiftlint:disable file_length
 
 import Foundation
 
@@ -66,51 +65,6 @@ class NetworkManager: Logging {
 	}
 
 	// MARK: - Decode Signed Data
-	
-	/// Decode a signed response into Data
-	/// - Parameters:
-	///   - request: the network request
-	///   - completion: completion handler
-	private func decodeSignedData(
-		request: URLRequest,
-		session: URLSession,
-		ignore400: Bool = false,
-		completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
-		// Fetch data
-		data(request: request, session: session, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
-			
-			/// Decode to SignedResult
-			let signedResult: Result<(URLResponse, SignedResponse), NetworkError> = self.jsonResponseHandler(result: result)
-			switch signedResult {
-				case let .success((urlResponse, signedResponse)):
-					
-					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
-						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
-						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-						completion(.failure(NetworkError.cannotDeserialize))
-						return
-					}
-
-					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
-						// Validate signature (on the base64 payload)
-						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-							if valid {
-								DispatchQueue.main.async {
-									completion(.success((urlResponse, decodedPayloadData)))
-								}
-							} else {
-								self.logError("We got an invalid signature!")
-								completion(.failure(NetworkError.invalidSignature))
-							}
-						}
-					}
-				case let .failure(networkError):
-					DispatchQueue.main.async {
-						completion(.failure(networkError))
-					}
-			}
-		}
-	}
 
 	/// Decode a signed response into JSON
 	/// - Parameters:
@@ -118,10 +72,11 @@ class NetworkManager: Logging {
 	///   - completion: completion handler with object, signed response, data, urlResponse or server error
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
-		session: URLSession,
+		strategy: SecurityStrategy,
 		proceedToSuccessIfResponseIs400: Bool = false,
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
+		let session = createSession(strategy: strategy)
 		data(request: request, session: session, proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400) { data, response, error in
 
 			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
@@ -207,73 +162,12 @@ class NetworkManager: Logging {
 
 	// MARK: - Download Data
 
-	private func data(request: URLRequest, session: URLSession, ignore400: Bool = false, completion: @escaping (Result<(URLResponse, Data), NetworkError>) -> Void) {
-
-		session.dataTask(with: request, completionHandler: { data, response, error in
-			self.handleNetworkResponse(
-				data,
-				response: response,
-				error: error,
-				ignore400: ignore400,
-				completion: completion
-			)
-		}
-		).resume()
-	}
-
 	private func data(request: URLRequest, session: URLSession, proceedToSuccessIfResponseIs400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
 		session.dataTask(with: request, completionHandler: completion).resume()
 	}
 
 	// MARK: - Utilities
-	
-	/// Checks for failures and inspects status code
-	private func handleNetworkResponse<Object>(
-		_ object: Object?,
-		response: URLResponse?,
-		error: Error?,
-		ignore400: Bool = false,
-		completion: @escaping (Result<(URLResponse, Object), NetworkError>) -> Void) {
-
-		logVerbose("--RESPONSE--")
-
-		if let error = error {
-			logDebug("Error with response: \(error)")
-			switch URLError.Code(rawValue: (error as NSError).code) {
-				case .notConnectedToInternet:
-					completion(.failure(.noInternetConnection))
-				case .timedOut:
-					completion(.failure(.serverUnreachableTimedOut))
-				case .cannotConnectToHost, .cannotFindHost:
-					completion(.failure(.serverUnreachableInvalidHost))
-				case .networkConnectionLost:
-					completion(.failure(.serverUnreachableConnectionLost))
-				default:
-					completion(.failure(.invalidResponse))
-			}
-			return
-		} else if let response = response as? HTTPURLResponse {
-			logResponse(response, object: object)
-		}
-		logVerbose("--END RESPONSE--")
-
-		guard let response = response,
-			  let object = object else {
-			completion(.failure(.invalidResponse))
-			return
-		}
-
-		if let error = self.inspect(response: response) {
-			// serverBusy == 429, resourceNotFound = 4xx
-			if !ignore400 || !(error == .resourceNotFound || error == .serverBusy) {
-				completion(.failure(error))
-				return
-			}
-		}
-		
-		completion(.success((response, object)))
-	}
 
 	func handleNetworkResponse(
 		response: URLResponse?,
@@ -340,22 +234,6 @@ class NetworkManager: Logging {
 			return .failure(.cannotDeserialize)
 		}
 	}
-	
-	/// Response handler which decodes JSON
-	private func jsonResponseHandler<Object: Decodable>(result: Result<(URLResponse, Data), NetworkError>) -> Result<(URLResponse, Object), NetworkError> {
-		switch result {
-			case let .success(result):
-				return decodeJson(json: result.1)
-					.mapError {
-						$0
-					}
-					.map {
-						(result.0, $0)
-					}
-			case let .failure(error):
-				return .failure(error)
-		}
-	}
 
 	/// Checks for valid HTTPResponse and status codes
 	private func inspect(response: URLResponse) -> NetworkError? {
@@ -405,6 +283,15 @@ class NetworkManager: Logging {
 		decoder.source = .api
 		return decoder
 	}()
+
+	private func createSession(strategy: SecurityStrategy) -> URLSession {
+
+		return  URLSession(
+			configuration: .ephemeral,
+			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: strategy),
+			delegateQueue: nil
+		)
+	}
 }
 
 extension NetworkManager: NetworkManaging {
@@ -426,14 +313,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.data,
 			proceedToSuccessIfResponseIs400: false,
 			completion: {(result: Result<(ArrayEnvelope<EventFlow.AccessToken>, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
@@ -453,13 +335,7 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
-
-		decodeSignedJSONData(request: urlRequest, session: session, proceedToSuccessIfResponseIs400: false) { result in
+		decodeSignedJSONData(request: urlRequest, strategy: SecurityStrategy.data, proceedToSuccessIfResponseIs400: false) { result in
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
 			}
@@ -468,20 +344,24 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the public keys
 	/// - Parameter completion: completion handler
-	func getPublicKeys(completion: @escaping (Result<Data, NetworkError>) -> Void) {
+	func getPublicKeys(completion: @escaping (Result<Data, ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.publicKeysUrl) else {
-			completion(.failure(.invalidRequest))
+			logError("NetworkManager - getPublicKeys: invalid request")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
-		decodeSignedData(request: urlRequest, session: session, completion: { result in
-			completion(result.map { _, data in data })
-		})
+
+		decodeSignedJSONData(
+			request: urlRequest,
+			strategy: SecurityStrategy.data,
+			proceedToSuccessIfResponseIs400: false,
+			completion: { (result: Result<(AnyCodable, SignedResponse, Data, URLResponse), ServerError>) in
+				// Not interested in the object (anycodable), we just want the data.
+				DispatchQueue.main.async {
+					completion(result.map { _, _, data, _ in (data) })
+				}
+			})
 	}
 
 	/// Get the remote configuration
@@ -494,15 +374,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
-
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.data,
 			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(RemoteConfiguration, SignedResponse, Data, URLResponse), ServerError>) in
 
@@ -532,15 +406,10 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
 
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.data,
 			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
 
@@ -559,14 +428,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.data,
 			proceedToSuccessIfResponseIs400: false,
 			completion: {(result: Result<(ArrayEnvelope<TestProvider>, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
@@ -585,15 +449,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
-
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.data,
 			proceedToSuccessIfResponseIs400: false,
 			completion: {(result: Result<(ArrayEnvelope<EventFlow.EventProvider>, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
@@ -639,14 +497,10 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
-			delegateQueue: nil
-		)
+
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.provider(provider),
 			proceedToSuccessIfResponseIs400: true,
 			completion: { (result: Result<(EventFlow.EventResultWrapper, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
@@ -697,14 +551,10 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
-			delegateQueue: nil
-		)
+
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.provider(provider),
 			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(EventFlow.EventInformationAvailable, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
@@ -754,14 +604,10 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.provider(provider)),
-			delegateQueue: nil
-		)
+
 		decodeSignedJSONData(
 			request: urlRequest,
-			session: session,
+			strategy: SecurityStrategy.provider(provider),
 			proceedToSuccessIfResponseIs400: false,
 			completion: { (result: Result<(EventFlow.EventResultWrapper, SignedResponse, Data, URLResponse), ServerError>) in
 				DispatchQueue.main.async {
@@ -795,13 +641,8 @@ extension NetworkManager: NetworkManaging {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
-		let session = URLSession(
-			configuration: .ephemeral,
-			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
-			delegateQueue: nil
-		)
 
-		decodeSignedJSONData(request: urlRequest, session: session, proceedToSuccessIfResponseIs400: false) { result in
+		decodeSignedJSONData(request: urlRequest, strategy: SecurityStrategy.data, proceedToSuccessIfResponseIs400: false) { result in
 			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
 			DispatchQueue.main.async {
 				completion(result.map { decodable, _, _, _ in (decodable) })
