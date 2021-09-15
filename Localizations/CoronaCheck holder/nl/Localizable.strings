@@ -94,7 +94,7 @@
 "holder.dcc.test.issuer" = "Afgever certificaat:";
 "holder.dcc.test.identifier" = "Uniek testnummer:";
 
-"holder.recovery.wrong.body" = "<p>Zijn deze gegevens anders dan op je identiteitsbewijs? Neem contact op met je testlocatie. Zij kunnen je gegevens laten aanpassen.</p>";
+"holder.recovery.wrong.body" = "<p>Kloppen er gegevens niet? Neem contact op met je testlocatie. Zij kunnen de gegevens aanpassen.</p>";
 "general.retry" = "Probeer opnieuw";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "<p>Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a></p>";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "<p>Je kunt de QR-code niet gebruiken door een fout op de server. <a href=\"%@\">Probeer opnieuw</a> of bel de helpdesk op <a href=\"tel:08001421\">0800-1421</a> (gratis)</p>";
@@ -249,7 +249,7 @@
 "general.back" = "Terug";
 "general.next" = "Volgende";
 "general.done" = "Klaar";
-"general.ok" = "Ok";
+"general.ok" = "Oke";
 "general.europeanUnion" = "Internationaal";
 "general.netherlands" = "Nederland";
 "general.dutch" = "Nederlandse";
@@ -460,7 +460,7 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Controleer je testuitslag";
-"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Kloppen je gegevens? Dan kun je van de negatieve testuitslag een QR-code maken. Dat is jouw bewijs.";
+"holder.testresults.results.text" = "Deze testuitslag is opgehaald bij de testlocatie. Kloppen je gegevens? Dan kun je een QR-code maken van je testuitslag. Dat is jouw bewijs.";
 "holder.testresults.results.button" = "Maak bewijs";
 "holder.testresults.pending.title" = "Testuitslag nog niet bekend";
 "holder.testresults.pending.text" = "<p>Probeer het later nog eens.</p><p>Neem voor vragen contact op met jouw testlocatie.</p>";
@@ -492,7 +492,7 @@
 "holder.about.link" = "Lees hier de privacyverklaring";
 
 "holder.vaccination.start.title" = "Gegevens van je vaccinatie ophalen";
-"holder.vaccination.start.message" = "<p>Ben je al gevaccineerd? Log in met DigiD. De gegevens van je vaccinatie worden dan automatisch opgehaald.</p><p>Om een Nederlandse QR-code te maken moet je volledig gevaccineerd zijn. Een internationale QR-code krijg je al na één vaccinatie.</p><p>Let op: of een QR-code van een onvolledige vaccinatie geldig is hangt af van de regels van het land dat je bezoekt.</p>";
+"holder.vaccination.start.message" = "<p>Ben je gevaccineerd? Log in met DigiD. De gegevens van je vaccinatie worden dan automatisch opgehaald.</p><p>Om een Nederlandse QR-code te maken moet je volledig gevaccineerd zijn. Een internationale QR-code krijg je al na één vaccinatie.</p><p>Let op: of een QR-code van een onvolledige vaccinatie geldig is hangt af van de regels van het land dat je bezoekt.</p>";
 "holder.vaccination.start.action" = "Log in met je DigiD";
 "holder.vaccination.loading.title" = "Je vaccinaties worden opgehaald";
 "holder.vaccination.list.title" = "Jouw opgehaalde vaccinaties";
@@ -502,7 +502,7 @@
 "holder.vaccination.element.title" = "Vaccinatie %@";
 "holder.vaccination.element.subtitle" = "<p>Naam: %@</p><p>Geboortedatum: %@</p>";
 "holder.vaccination.nolist.title" = "Geen vaccinaties beschikbaar";
-"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens van je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
+"holder.vaccination.nolist.message" = "<p>Er zijn geen gegevens over je vaccinatie beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Ben je kortgeleden gevaccineerd? Het kan een paar uur duren tot de gegevens beschikbaar zijn.</p>";
 "holder.vaccination.nolist.action" = "Naar mijn bewijzen";
 "holder.event.nolist.title" = "Geen testuitslag beschikbaar";
 "holder.event.nolist.message" = "<p>Er zijn geen gegevens over je testuitslag beschikbaar. Dit kan verschillende oorzaken hebben. Kijk voor meer informatie op de <a href=\"https://coronacheck.nl/wegwijzer\">Wegwijzer</a>.</p><p>Heb je al een testuitslag van de GGD gekregen? Het kan een paar uur duren voordat je de uitslag hier kunt ophalen. Probeer het later opnieuw.</p>";
@@ -635,5 +635,6 @@
 "holder.vaccination.element.single" = "<p>Gegevens opgehaald bij: %@</p>";
 "holder.vaccination.element.combined" = "<p>Gegevens opgehaald bij: %@ en %@</p>";
 
-"holder.device.authentication.warning.title" = "** iOS apps usable without device lock (title) **";
-"holder.device.authentication.warning.message" = "** iOS apps usable without device lock (message) **";
+"general.networkwasbusy.errorcode" = "<p>Probeer het op een later moment nog eens.</p><p><b>Foutcode:</b><br />%@</p>";
+"holder.device.authentication.warning.title" = "Er zijn beveiligingsrisico’s gevonden";
+"holder.device.authentication.warning.message" = "Let op: je iPhone is niet beveiligd met een pincode of met FaceID/Touch ID. Daardoor kunnen anderen je data inzien en zijn je gegevens mogelijk niet veilig.";
