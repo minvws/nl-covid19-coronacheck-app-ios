@@ -94,7 +94,7 @@
 "holder.dcc.test.issuer" = "Certificate issuer:";
 "holder.dcc.test.identifier" = "Unique certificate identifier:";
 
-"holder.recovery.wrong.body" = "<p>Are these details different than the details on your identification card? Contact your test location. They can edit your details.</p>";
+"holder.recovery.wrong.body" = "<p>Are these details incorrect? Contact your test location. They can edit your details.</p>";
 "general.retry" = "Try again";
 "holder.dashboard.strippen.expired.errorfooter.server.tryagain" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a>";
 "holder.dashboard.strippen.expired.errorfooter.server.helpdesk" = "You can't use the QR code because of a server error. <a href=\"%@\">Try again</a><br />or call the help desk at <a href=\"tel:08001421\">0800-1421</a> (free)";
@@ -417,6 +417,7 @@
 "holder.showqr.eu.about.vaccination.issuer" = "Certificate issuer:";
 "holder.showqr.eu.about.vaccination.identifier" = "Unique certificate identifier:";
 "holder.showqr.eu.about.vaccination.dateinformation" = "Date noted in day-month-year";
+
 "holder.showqr.eu.about.test.description" = "Travelling outside the Netherlands? Then more data is required. That's why the international QR code contains the following details:";
 "holder.showqr.eu.about.test.name" = "Name:";
 "holder.showqr.eu.about.test.dateofbirth" = "Date of birth*:";
@@ -459,7 +460,7 @@
 
 /* MARK: - Holder Test Results */
 "holder.testresults.results.title" = "Check your test result";
-"holder.testresults.results.text" = "This test result is retrieved from the test location. Is the below correct? Then you can convert the negative test result into a QR code. This is your test certificate.";
+"holder.testresults.results.text" = "This test result is retrieved from the test location. Are the details correct? Then you can convert the test result into a QR code. This is your certificate.";
 "holder.testresults.results.button" = "Make certificate";
 "holder.testresults.pending.title" = "Test result not yet known";
 "holder.testresults.pending.text" = "<p>Please try again later.</p><p>If you have any questions, contact your test location.</p>";
@@ -633,3 +634,7 @@
 "holder.event.details" = "Details";
 "holder.vaccination.element.single" = "<p>Data retrieved from: %@</p>";
 "holder.vaccination.element.combined" = "<p>Data retrieved from: %@ and %@</p>";
+
+"general.networkwasbusy.errorcode" = "<p>Please try again later.</p><p><b>Error code:</b><br />%@</p>";
+"holder.device.authentication.warning.title" = "Security risks have been found";
+"holder.device.authentication.warning.message" = "Please note that your iPhone is not protected by PIN or Face ID/Touch ID. This means others can see your data and your details may not be secure.";
