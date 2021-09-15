@@ -116,7 +116,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequired_forRemoteConfig() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.success(Data()), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
@@ -174,7 +174,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequired_forBothActions() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
@@ -203,7 +203,7 @@ class LaunchViewModelTests: XCTestCase {
 	func test_internetRequired_forBothActions_butWithinTTL() {
 
 		// Given
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())
 		jailBreakProtocolSpy.stubbedIsJailBrokenResult = false
 		deviceAuthenticationSpy.stubbedHasAuthenticationPolicyResult = true
@@ -330,7 +330,7 @@ class LaunchViewModelTests: XCTestCase {
 		var remoteConfig = RemoteConfiguration.default
 		remoteConfig.appDeactivated = true
 
-		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.noInternetConnection), ())
+		remoteConfigSpy.stubbedUpdateCompletionResult = (.failure(.error(statusCode: nil, response: nil, error: .noInternetConnection)), ())
 		remoteConfigSpy.stubbedGetConfigurationResult = remoteConfig
 
 		proofManagerSpy.stubbedFetchIssuerPublicKeysOnCompletionResult = (.failure(.noInternetConnection), ())

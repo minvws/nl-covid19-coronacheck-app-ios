@@ -115,62 +115,6 @@ class NetworkManager: Logging {
 	/// Decode a signed response into JSON
 	/// - Parameters:
 	///   - request: the network request
-	///   - completion: completion handler with object, data, urlResponse or network error
-	private func decodeSignedJSONData<Object: Decodable>(
-		request: URLRequest,
-		session: URLSession,
-		ignore400: Bool = false,
-		completion: @escaping (Result<(Object, Data, URLResponse), NetworkError>) -> Void) {
-		// Fetch data
-		data(request: request, session: session, ignore400: ignore400) { (result: Result<(URLResponse, Data), NetworkError>) in
-
-			/// Decode to SignedResult
-			let signedResult: Result<(URLResponse, SignedResponse), NetworkError> = self.jsonResponseHandler(result: result)
-			switch signedResult {
-				case let .success((urlResponse, signedResponse)):
-
-					guard let decodedPayloadData = Data(base64Encoded: signedResponse.payload),
-						  let signatureData = Data(base64Encoded: signedResponse.signature) else {
-						self.logError("we cannot decode the payload or signature (base64 decoding failed)")
-						DispatchQueue.main.async {
-							completion(.failure(NetworkError.cannotDeserialize))
-						}
-						return
-					}
-
-					if let checker = (session.delegate as? NetworkManagerURLSessionDelegate)?.checker {
-						// Validate signature (on the base64 payload)
-						checker.validate(data: decodedPayloadData, signature: signatureData) { valid in
-							if valid {
-								let decodedResult: Result<Object, NetworkError> = self.decodeJson(json: decodedPayloadData)
-								DispatchQueue.main.async {
-									switch (decodedResult, decodedPayloadData) {
-										case (.success(let object), let decodedPayloadData):
-											completion(.success((object, decodedPayloadData, urlResponse)))
-										case (.failure(let responseError), _):
-											completion(.failure(responseError))
-									}
-								}
-							} else {
-								self.logError("We got an invalid signature!")
-								DispatchQueue.main.async {
-									completion(.failure(NetworkError.invalidSignature))
-								}
-							}
-						}
-					}
-
-				case let .failure(networkError):
-					DispatchQueue.main.async {
-						completion(.failure(networkError))
-					}
-			}
-		}
-	}
-
-	/// Decode a signed response into JSON
-	/// - Parameters:
-	///   - request: the network request
 	///   - completion: completion handler with object, signed response, data, urlResponse or server error
 	private func decodeSignedJSONData<Object: Decodable>(
 		request: URLRequest,
@@ -542,19 +486,30 @@ extension NetworkManager: NetworkManaging {
 
 	/// Get the remote configuration
 	/// - Parameter completion: completion handler
-	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), NetworkError>) -> Void) {
+	func getRemoteConfiguration(completion: @escaping (Result<(RemoteConfiguration, Data, URLResponse), ServerError>) -> Void) {
+
 		guard let urlRequest = constructRequest(url: networkConfiguration.remoteConfigurationUrl) else {
-			completion(.failure(.invalidRequest))
+			logError("NetworkManager - getRemoteConfiguration: invalid request")
+			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
+
 		let session = URLSession(
 			configuration: .ephemeral,
 			delegate: NetworkManagerURLSessionDelegate(networkConfiguration, strategy: SecurityStrategy.data),
 			delegateQueue: nil
 		)
-		decodeSignedJSONData(request: urlRequest, session: session, completion: { result in
-			completion(result.map { decodable, data, urlResponse in (decodable, data, urlResponse) })
-		})
+
+		decodeSignedJSONData(
+			request: urlRequest,
+			session: session,
+			proceedToSuccessIfResponseIs400: false,
+			completion: { (result: Result<(RemoteConfiguration, SignedResponse, Data, URLResponse), ServerError>) in
+
+				DispatchQueue.main.async {
+					completion(result.map { decodable, _, data, urlResponse in (decodable, data, urlResponse) })
+				}
+			})
 	}
 
 	func fetchGreencards(
