@@ -517,7 +517,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_prepareIssueError_requestTimeOut() {
+	func test_makeQR_saveEventGroupNoError_prepareIssueError_requestTimeOut() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -528,7 +528,7 @@ class ListEventsViewModelTests: XCTestCase {
 
 		walletSpy.stubbedStoreEventGroupResult = true
 		networkSpy.stubbedPrepareIssueCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult =
 			(.success(RemoteGreenCards.Response(domesticGreenCard: nil, euGreenCards: nil)), ())
 
@@ -545,12 +545,17 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beFalse())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
-		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
-		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
-		expect(self.sut.alert?.cancelTitle) == L.generalClose()
-		expect(self.sut.alert?.okTitle) == L.generalRetry()
+
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 270 000 004")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
 	func test_makeQR_saveEventGroupNoError_prepareIssueError_serverBusy() throws {
@@ -720,7 +725,7 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
-	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_requestTimedOut() {
+	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_requestTimedOut() throws {
 
 		// Given
 		sut = ListEventsViewModel(
@@ -734,7 +739,7 @@ class ListEventsViewModelTests: XCTestCase {
 		networkSpy.stubbedPrepareIssueCompletionResult =
 			(.success(PrepareIssueEnvelope(prepareIssueMessage: "VGVzdA==", stoken: "test")), ())
 		networkSpy.stubbedFetchGreencardsCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		cryptoSpy.stubbedGenerateCommitmentMessageResult = "test"
 		cryptoSpy.stubbedGetStokenResult = "test"
 
@@ -751,12 +756,16 @@ class ListEventsViewModelTests: XCTestCase {
 		expect(self.walletSpy.invokedRemoveExistingEventGroupsType) == true
 		expect(self.networkSpy.invokedPrepareIssue).toEventually(beTrue())
 		expect(self.networkSpy.invokedFetchGreencards).toEventually(beTrue())
-		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beFalse())
-		expect(self.sut.alert).toNot(beNil())
-		expect(self.sut.alert?.title) == L.holderErrorstateTitle()
-		expect(self.sut.alert?.subTitle) == L.generalErrorServerUnreachable()
-		expect(self.sut.alert?.cancelTitle) == L.generalClose()
-		expect(self.sut.alert?.okTitle) == L.generalRetry()
+		expect(self.coordinatorSpy.invokedListEventsScreenDidFinish).toEventually(beTrue())
+		let params = try XCTUnwrap(coordinatorSpy.invokedListEventsScreenDidFinishParameters)
+		guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+			fail("wrong state")
+			return
+		}
+		expect(feedback.title) == L.holderErrorstateTitle()
+		expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 280 000 004")
+		expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+		expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
 	}
 
 	func test_makeQR_saveEventGroupNoError_fetchGreencardsError_serverBusy() throws {

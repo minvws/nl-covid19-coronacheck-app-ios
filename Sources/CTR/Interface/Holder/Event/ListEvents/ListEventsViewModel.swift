@@ -295,7 +295,7 @@ class ListEventsViewModel: Logging {
 					shouldPrimaryButtonBeEnabled = true
 					
 				case .serverUnreachable, .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					showServerUnreachable(remoteEvents: remoteEvents)
+					showServerUnreachable(ErrorCode(flow: determineErrorCodeFlow(remoteEvents: remoteEvents), step: step, clientCode: error.getClientErrorCode() ?? .unhandled))
 					shouldPrimaryButtonBeEnabled = true
 
 				case .noInternetConnection:

@@ -80,51 +80,26 @@ extension ListEventsViewModel {
 		)
 	}
 
-	internal func showServerUnreachable(remoteEvents: [RemoteEvent]) {
+	internal func showServerUnreachable(_ errorCode: ErrorCode) {
 
-		// this is a retry-able situation
-		alert = AlertContent(
-			title: L.holderErrorstateTitle(),
-			subTitle: L.generalErrorServerUnreachable(),
-			cancelAction: nil,
-			cancelTitle: L.generalClose(),
-			okAction: { [weak self] _ in
-				self?.userWantsToMakeQR(remoteEvents: remoteEvents) { [weak self] success in
-					if !success {
-						self?.showEventError(remoteEvents: remoteEvents)
-					}
-				}
-			},
-			okTitle: L.generalRetry()
-		)
+		displayErrorCode(title: L.holderErrorstateTitle(), message: L.generalErrorServerUnreachableErrorCode("\(errorCode)"))
 	}
 
 	internal func displayClientErrorCode(_ errorCode: ErrorCode) {
 
-		let content = Content(
-			title: L.holderErrorstateTitle(),
-			subTitle: L.holderErrorstateClientMessage("\(errorCode)"),
-			primaryActionTitle: L.generalNetworkwasbusyButton(),
-			primaryAction: { [weak self] in
-				self?.coordinator?.listEventsScreenDidFinish(.stop)
-			},
-			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
-			secondaryAction: { [weak self] in
-				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
-					return
-				}
-
-				self?.coordinator?.openUrl(url, inApp: true)
-			}
-		)
-		coordinator?.listEventsScreenDidFinish(.error(content: content, backAction: goBack))
+		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateClientMessage("\(errorCode)"))
 	}
 
 	internal func displayServerErrorCode(_ errorCode: ErrorCode) {
 
+		displayErrorCode(title: L.holderErrorstateTitle(), message: L.holderErrorstateServerMessage("\(errorCode)"))
+	}
+
+	private func displayErrorCode(title: String, message: String) {
+
 		let content = Content(
-			title: L.holderErrorstateTitle(),
-			subTitle: L.holderErrorstateServerMessage("\(errorCode)"),
+			title: title,
+			subTitle: message,
 			primaryActionTitle: L.generalNetworkwasbusyButton(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.listEventsScreenDidFinish(.stop)
