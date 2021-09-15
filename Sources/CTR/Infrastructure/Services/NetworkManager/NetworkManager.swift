@@ -343,8 +343,12 @@ class NetworkManager: Logging {
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .noInternetConnection))
-				case .timedOut, .cannotConnectToHost, .cannotFindHost, .networkConnectionLost:
-					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachable))
+				case .timedOut:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachableTimedOut))
+				case .cannotConnectToHost, .cannotFindHost:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachableInvalidHost))
+				case .networkConnectionLost:
+					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .serverUnreachableConnectionLost))
 				default:
 					return .failure(.error(statusCode: response?.httpStatusCode, response: nil, error: .invalidResponse))
 			}
@@ -594,6 +598,9 @@ extension NetworkManager: NetworkManaging {
 	/// Get the test providers
 	/// - Parameter completion: completion handler
 	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
+
+		completion(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)))
+		return
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))

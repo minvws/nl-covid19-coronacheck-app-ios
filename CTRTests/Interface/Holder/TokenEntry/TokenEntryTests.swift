@@ -322,7 +322,7 @@ class TokenEntryViewModelTests: XCTestCase {
 
 		// Arrange
 		networkManagerSpy.stubbedFetchTestProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableConnectionLost)), ())
 		tokenValidatorSpy.stubbedValidateResult = true
 
 		// Act
@@ -332,17 +332,13 @@ class TokenEntryViewModelTests: XCTestCase {
 		expect(self.networkManagerSpy.invokedFetchTestProviders) == true
 		expect(self.sut.fieldErrorMessage).to(beNil())
 		expect(self.sut.shouldShowProgress) == false
-		expect(self.sut.networkErrorAlert).toNot(beNil())
-		expect(self.sut.networkErrorAlert?.title) == L.holderErrorstateTitle()
-		expect(self.sut.networkErrorAlert?.subTitle) == L.generalErrorServerUnreachable()
-		expect(self.sut.shouldShowTokenEntryField) == true
-		expect(self.sut.shouldShowVerificationEntryField) == false
-		expect(self.sut.shouldShowUserNeedsATokenButton) == true
-		expect(self.sut.shouldShowResendVerificationButton) == false
-		expect(self.sut.title) == L.holderTokenentryRegularflowTitle()
-		expect(self.sut.message) == L.holderTokenentryRegularflowText()
-		expect(self.sut.shouldEnableNextButton) == false
-		expect(self.sut.shouldShowNextButton) == true
+		if let content = holderCoordinatorSpy.invokedDisplayErrorParameters?.0 {
+			expect(content.title).toEventually(equal(L.holderErrorstateTitle()))
+			expect(content.subTitle).toEventually(equal(L.generalErrorServerUnreachableErrorCode("i 120 000 005")))
+			expect(content.primaryActionTitle).toEventually(equal(L.generalNetworkwasbusyButton()))
+		} else {
+			fail("Invalid state")
+		}
 
 		TokenEntryViewController(viewModel: sut).assertImage()
 	}

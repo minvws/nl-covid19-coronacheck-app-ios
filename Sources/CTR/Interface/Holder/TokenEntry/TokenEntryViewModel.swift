@@ -311,8 +311,9 @@ class TokenEntryViewModel {
 						switch error {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
-							case .serverUnreachable:
-								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
+							case .serverUnreachableInvalidHost, .serverUnreachableTimedOut, .serverUnreachableConnectionLost:
+								let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled)
+								self.displayServerUnreachable(errorCode)
 							default:
 								self.displayError(serverError)
 						}
@@ -382,7 +383,7 @@ class TokenEntryViewModel {
 						switch networkError {
 							case .noInternetConnection:
 								self.displayNoInternet(requestToken, verificationCode: verificationCode)
-							case .serverUnreachable:
+							case .serverUnreachableInvalidHost, .serverUnreachableConnectionLost, .serverUnreachableTimedOut:
 								self.displayServerUnreachable(requestToken, verificationCode: verificationCode)
 							case .invalidRequest:
 								self.fieldErrorMessage = Strings.errorInvalidCode(forMode: self.initializationMode)
@@ -721,6 +722,29 @@ extension TokenEntryViewModel {
 		)
 	}
 
+	func displayServerUnreachable(_ errorCode: ErrorCode) {
+
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.navigateBackToStart()
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		coordinator?.displayError(content: content) { [weak self] in
+			self?.coordinator?.navigateBackToStart()
+		}
+	}
+
 	private func getTitleForError(_ serverError: ServerError) -> String {
 
 		switch serverError {
@@ -749,7 +773,7 @@ extension TokenEntryViewModel {
 					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateServerMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .providers, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateClientMessage("\(errorCode)")
 				default:
 					break
@@ -764,7 +788,7 @@ extension TokenEntryViewModel {
 					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, errorCode: "\(statusCode ?? 000)", detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
-					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .commercialTest, step: .testResult, provider: provider, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					return L.holderErrorstateTestMessage("\(errorCode)")
 				default:
 					break

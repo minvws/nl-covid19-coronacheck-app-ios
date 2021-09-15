@@ -19,7 +19,6 @@ enum ServerError: Error, Equatable {
 
 enum NetworkError: String, Error, Equatable {
 	case invalidRequest
-	case serverUnreachable
 	case serverUnreachableTimedOut
 	case serverUnreachableInvalidHost
 	case serverUnreachableConnectionLost

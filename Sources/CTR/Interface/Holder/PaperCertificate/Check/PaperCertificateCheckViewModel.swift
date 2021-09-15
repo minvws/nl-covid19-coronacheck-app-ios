@@ -138,8 +138,8 @@ class PaperCertificateCheckViewModel: Logging {
 					showServerTooBusyError(ErrorCode(flow: .hkvi, step: .coupling, errorCode: "429"))
 				case .noInternetConnection:
 					displayNoInternet(scannedDcc: scannedDcc, couplingCode: couplingCode)
-				case .serverUnreachable, .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled)
+				case .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled)
 					displayServerUnreachable(errorCode)
 				case .responseCached, .redirection, .resourceNotFound, .serverError:
 					// 304, 3xx, 4xx, 5xx
@@ -147,7 +147,7 @@ class PaperCertificateCheckViewModel: Logging {
 					displayServerErrorCode(errorCode)
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
 					// Client side
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? .unhandled, detailedCode: serverResponse?.code)
 					displayClientErrorCode(errorCode)
 			}
 		}

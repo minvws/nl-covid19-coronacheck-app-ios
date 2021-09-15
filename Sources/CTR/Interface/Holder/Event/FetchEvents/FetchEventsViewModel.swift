@@ -121,7 +121,10 @@ final class FetchEventsViewModel: Logging {
 		let someServerUnreachableErrror: Bool = !serverErrors.filter { serverError in
 			switch serverError {
 				case let ServerError.error(_, _, error), let ServerError.provider(_, _, _, error):
-					return error == .serverBusy || error == .serverUnreachable
+					return error == .serverBusy ||
+						error == .serverUnreachableInvalidHost ||
+						error == .serverUnreachableConnectionLost ||
+						error == .serverUnreachableTimedOut
 			}
 		}.isEmpty
 
