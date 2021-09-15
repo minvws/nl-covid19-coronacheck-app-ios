@@ -299,8 +299,12 @@ class NetworkManager: Logging {
 			switch URLError.Code(rawValue: (error as NSError).code) {
 				case .notConnectedToInternet:
 					completion(.failure(.noInternetConnection))
-				case .timedOut, .cannotConnectToHost, .cannotFindHost, .networkConnectionLost:
-					completion(.failure(.serverUnreachable))
+				case .timedOut:
+					completion(.failure(.serverUnreachableTimedOut))
+				case .cannotConnectToHost, .cannotFindHost:
+					completion(.failure(.serverUnreachableInvalidHost))
+				case .networkConnectionLost:
+					completion(.failure(.serverUnreachableConnectionLost))
 				default:
 					completion(.failure(.invalidResponse))
 			}

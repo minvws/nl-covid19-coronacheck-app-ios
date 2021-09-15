@@ -105,16 +105,28 @@ extension LoginTVSViewModel {
 		self.logError("TVS error: \(error?.localizedDescription ?? "Unknown error")")
 		let clientCode = mapError(error)
 
-		if let error = error, error.localizedDescription.contains("login_required") {
-			logDebug("Server busy")
-			displayServerBusy(errorCode: ErrorCode(flow: flow, step: .tvs, errorCode: "429"))
-			return
+		if let error = error {
+			if  error.localizedDescription.contains("login_required") {
+				logDebug("Server busy")
+				displayServerBusy(errorCode: ErrorCode(flow: flow, step: .tvs, errorCode: "429"))
+				return
+			} else if error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
+				logDebug("User cancelled")
+				userCancelled()
+				return
+			} else if case let ServerError.error(_, _, networkError) = error {
+				switch networkError {
+					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
+
+						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled)
+						self.displayErrorCode(errorCode: errorCode)
+						return
+					default:
+						break
+				}
+			}
 		}
-		if let error = error, error.localizedDescription.contains("saml_authn_failed") || clientCode == ErrorCode.ClientCode.openIDGeneralUserCancelledFlow {
-			logDebug("User cancelled")
-			userCancelled()
-			return
-		}
+
 		let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: clientCode ?? ErrorCode.ClientCode(value: "000"))
 		self.displayErrorCode(errorCode: errorCode)
 	}
