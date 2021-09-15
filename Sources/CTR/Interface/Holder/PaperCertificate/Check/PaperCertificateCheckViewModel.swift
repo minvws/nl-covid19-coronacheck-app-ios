@@ -146,7 +146,7 @@ class PaperCertificateCheckViewModel: Logging {
 					displayServerErrorCode(errorCode)
 				case .invalidResponse, .invalidRequest, .invalidSignature, .cannotDeserialize, .cannotSerialize:
 					// Client side
-					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled , detailedCode: serverResponse?.code)
+					let errorCode = ErrorCode(flow: .hkvi, step: .coupling, clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled, detailedCode: serverResponse?.code)
 					displayClientErrorCode(errorCode)
 			}
 		}
