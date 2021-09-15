@@ -41,7 +41,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubTitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateAVaccinationQR) == true
@@ -53,7 +53,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews[1] as? DisclosureSubTitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews[1] as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateARecoveryQR) == true
@@ -65,7 +65,7 @@ class ChooseQRCodeTypeViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.last as? DisclosureSubTitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews.last as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToChooseLocation) == true

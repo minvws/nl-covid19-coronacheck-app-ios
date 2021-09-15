@@ -8,7 +8,7 @@
 import UIKit
 
 /// A grey full width button with a title, sub title and a disclosure icon
-class DisclosureSubTitleButton: BaseView {
+class DisclosureSubtitleButton: BaseView {
 
 	/// The display constants
 	private struct ViewTraits {
@@ -19,10 +19,11 @@ class DisclosureSubTitleButton: BaseView {
 		static let shadowOpacity: Float = 0.2
 
 		// Margins
-		static let textMargin: CGFloat = 2.0
+		static let textMargin: CGFloat = 4.0
 		static let margin: CGFloat = 20.0
 		static let topMargin: CGFloat = 18.0
 		static let leadingMargin: CGFloat = 16.0
+		static let iconSpacing: CGFloat = 12.0
 	}
 
 	/// The title label
@@ -32,7 +33,7 @@ class DisclosureSubTitleButton: BaseView {
 	}()
 
 	/// The sub title label
-	let subTitleLabel: Label = {
+	let subtitleLabel: Label = {
 
 		return Label(subhead: nil).multiline()
 	}()
@@ -42,6 +43,16 @@ class DisclosureSubTitleButton: BaseView {
 
 		let view = UIImageView(image: UIImage.disclosure)
 		view.translatesAutoresizingMaskIntoConstraints = false
+		return view
+	}()
+	
+	/// The subtitle icon image view
+	private let iconImageView: UIImageView = {
+		
+		let view = UIImageView()
+		view.translatesAutoresizingMaskIntoConstraints = false
+		view.adjustsImageSizeForAccessibilityContentSizeCategory = true
+		view.contentMode = .scaleAspectFit
 		return view
 	}()
 
@@ -80,7 +91,8 @@ class DisclosureSubTitleButton: BaseView {
 		super.setupViewHierarchy()
 		addSubview(disclosureView)
 		addSubview(titleLabel)
-		addSubview(subTitleLabel)
+		addSubview(subtitleLabel)
+		addSubview(iconImageView)
 		button.embed(in: self)
 		bringSubviewToFront(button)
 	}
@@ -103,21 +115,29 @@ class DisclosureSubTitleButton: BaseView {
 			),
 			titleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
 			titleLabel.bottomAnchor.constraint(
-				equalTo: subTitleLabel.topAnchor,
+				equalTo: subtitleLabel.topAnchor,
 				constant: -ViewTraits.textMargin
 			),
 
 			// Message
-			subTitleLabel.leadingAnchor.constraint(
+			subtitleLabel.leadingAnchor.constraint(
 				equalTo: leadingAnchor,
 				constant: ViewTraits.leadingMargin
 			),
-			subTitleLabel.trailingAnchor.constraint(equalTo: disclosureView.leadingAnchor),
-
-			subTitleLabel.bottomAnchor.constraint(
+			subtitleLabel.bottomAnchor.constraint(
 				equalTo: bottomAnchor,
 				constant: -ViewTraits.topMargin
-			)
+			),
+			
+			iconImageView.leadingAnchor.constraint(
+				equalTo: subtitleLabel.trailingAnchor,
+				constant: ViewTraits.iconSpacing
+			),
+			iconImageView.trailingAnchor.constraint(
+				lessThanOrEqualTo: disclosureView.leadingAnchor,
+				constant: -ViewTraits.iconSpacing
+			),
+			iconImageView.bottomAnchor.constraint(equalTo: subtitleLabel.bottomAnchor)
 		])
 
 		setupDisclosureViewConstraints()
@@ -141,10 +161,8 @@ class DisclosureSubTitleButton: BaseView {
 	override func setupAccessibility() {
 
 		super.setupAccessibility()
-
-		titleLabel.isAccessibilityElement = false
-		disclosureView.isAccessibilityElement = false
-		subTitleLabel.isAccessibilityElement = false
+		
+		accessibilityElements = [button]
 	}
 
 	func setAccessibilityLabel() {
@@ -174,8 +192,15 @@ class DisclosureSubTitleButton: BaseView {
 	/// The sub title
 	var subtitle: String? {
 		didSet {
-			subTitleLabel.text = subtitle
+			subtitleLabel.text = subtitle
 			setAccessibilityLabel()
+		}
+	}
+	
+	/// The icon next to subtitle
+	var subtitleIcon: UIImage? {
+		didSet {
+			iconImageView.image = subtitleIcon
 		}
 	}
 }
