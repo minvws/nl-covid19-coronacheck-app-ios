@@ -599,9 +599,6 @@ extension NetworkManager: NetworkManaging {
 	/// - Parameter completion: completion handler
 	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 
-		completion(.failure(.error(statusCode: nil, response: nil, error: .serverUnreachableInvalidHost)))
-		return
-
 		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
