@@ -56,7 +56,7 @@ class FetchEventsViewModelTests: XCTestCase {
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult = (.success([accessToken]), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -67,18 +67,29 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.alert).toEventuallyNot(beNil())
-		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 220 000 004")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
 	}
 
 	func test_accessTokenRequestTimeOut_providersOK() {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult = (.success([provider]), ())
 
 		// When
@@ -90,20 +101,31 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.alert).toEventuallyNot(beNil())
-		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
 	}
 
 	func test_accessTokenRequestTimeOut_providersRequestTimeOut() {
 
 		// Given
 		networkSpy.stubbedFetchEventAccessTokensCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 		networkSpy.stubbedFetchEventProvidersCompletionResult =
-			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachable)), ())
+			(.failure(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut)), ())
 
 		// When
 		sut = FetchEventsViewModel(
@@ -114,11 +136,22 @@ class FetchEventsViewModelTests: XCTestCase {
 		)
 
 		// Then
-		expect(self.sut.alert).toEventuallyNot(beNil())
-		expect(self.sut.alert?.title).toEventually(equal(L.holderErrorstateTitle()))
-		expect(self.sut.alert?.subTitle).toEventually(equal(L.generalErrorServerUnreachable()))
-		expect(self.sut.alert?.cancelTitle).toEventually(equal(L.generalClose()))
-		expect(self.sut.alert?.okTitle).toEventually(equal(L.generalRetry()))
+		waitUntil { done in
+			guard let params = self.coordinatorSpy.invokedFetchEventsScreenDidFinishParameters else {
+				fail("invalid params")
+				return
+			}
+			guard case let EventScreenResult.error(content: feedback, backAction: _) = params.0 else {
+				fail("wrong state")
+				return
+			}
+			expect(self.coordinatorSpy.invokedFetchEventsScreenDidFinish) == true
+			expect(feedback.title) == L.holderErrorstateTitle()
+			expect(feedback.subTitle) == L.generalErrorServerUnreachableErrorCode("i 230 000 004<br />i 220 000 004")
+			expect(feedback.primaryActionTitle) == L.generalNetworkwasbusyButton()
+			expect(feedback.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+			done()
+		}
 	}
 
 	func test_accessTokenOK_providersNoInternet() {

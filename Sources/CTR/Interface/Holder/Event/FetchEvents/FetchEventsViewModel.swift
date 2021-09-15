@@ -552,7 +552,7 @@ private extension FetchEventsViewModel {
 		let sessionExpired = !errorCodes.filter { $0.detailedCode == FetchEventsViewModel.detailedCodeSessionExpired }.isEmpty
 		let serverUnreachable = !serverErrors.filter { serverError in
 			if case let ServerError.error(_, _, error) = serverError {
-				return error == .serverUnreachable
+				return error == .serverUnreachableTimedOut || error == .serverUnreachableInvalidHost || error == .serverUnreachableConnectionLost
 			}
 			return false
 		}.isEmpty
@@ -574,7 +574,7 @@ private extension FetchEventsViewModel {
 		} else if sessionExpired {
 			displaySessionExpired()
 		} else if serverUnreachable {
-			displayServerUnreachable()
+			displayServerUnreachable(errorCodes)
 		} else if serverBusy {
 			displayServerBusy(errorCodes)
 		} else if noInternet {
@@ -632,14 +632,32 @@ private extension FetchEventsViewModel {
 		)
 	}
 
-	func displayServerBusy(_ errorCodes: [ErrorCode]) {
+	func displayServerUnreachable(_ errorCodes: [ErrorCode]) {
 
-		let lineBreak = "<br />"
-		let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachableErrorCode(flattenErrorCodes(errorCodes)),
+			primaryActionTitle: L.holderErrorstateNobsnAction(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
+		)
+		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
+	}
+
+	func displayServerBusy(_ errorCodes: [ErrorCode]) {
 
 		let content = Content(
 			title: L.generalNetworkwasbusyTitle(),
-			subTitle: L.generalNetworkwasbusyErrorcode(String(errorString)),
+			subTitle: L.generalNetworkwasbusyErrorcode(flattenErrorCodes(errorCodes)),
 			primaryActionTitle: L.generalNetworkwasbusyButton(),
 			primaryAction: { [weak self] in
 				self?.coordinator?.fetchEventsScreenDidFinish(.stop)
@@ -648,6 +666,13 @@ private extension FetchEventsViewModel {
 			secondaryAction: nil
 		)
 		coordinator?.fetchEventsScreenDidFinish(.error(content: content, backAction: goBack))
+	}
+
+	private func flattenErrorCodes(_ errorCodes: [ErrorCode]) -> String {
+
+		let lineBreak = "<br />"
+		let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
+		return String(errorString)
 	}
 
 	func displayErrorCodeForAccessTokenAndProviders(_ errorCodes: [ErrorCode]) {
@@ -661,9 +686,7 @@ private extension FetchEventsViewModel {
 				subTitle = L.holderErrorstateServerMessage("\(errorCodes[0])")
 			}
 		} else {
-			let lineBreak = "<br />"
-			let errorString = errorCodes.map { "\($0)\(lineBreak)" }.reduce("", +).dropLast(lineBreak.count)
-			subTitle = L.holderErrorstateServerMessages("\(errorString)")
+			subTitle = L.holderErrorstateServerMessages(flattenErrorCodes(errorCodes))
 		}
 
 		displayErrorCode(subTitle: subTitle)
