@@ -119,7 +119,7 @@ extension LoginTVSViewModel {
 					case .serverUnreachableTimedOut, .serverUnreachableConnectionLost, .serverUnreachableInvalidHost:
 
 						let errorCode = ErrorCode(flow: flow, step: .tvs, clientCode: networkError.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled)
-						self.displayErrorCode(errorCode: errorCode)
+						self.displayUnreachable(errorCode: errorCode)
 						return
 					default:
 						break
@@ -168,6 +168,27 @@ extension LoginTVSViewModel {
 			},
 			secondaryActionTitle: nil,
 			secondaryAction: nil
+		)
+		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
+	}
+
+	func displayUnreachable(errorCode: ErrorCode) {
+
+		let content = Content(
+			title: L.holderErrorstateTitle(),
+			subTitle: L.generalErrorServerUnreachableErrorCode("\(errorCode)"),
+			primaryActionTitle: L.generalNetworkwasbusyButton(),
+			primaryAction: { [weak self] in
+				self?.coordinator?.loginTVSScreenDidFinish(.stop)
+			},
+			secondaryActionTitle: L.holderErrorstateMalfunctionsTitle(),
+			secondaryAction: { [weak self] in
+				guard let url = URL(string: L.holderErrorstateMalfunctionsUrl()) else {
+					return
+				}
+
+				self?.coordinator?.openUrl(url, inApp: true)
+			}
 		)
 		self.coordinator?.loginTVSScreenDidFinish(.error(content: content, backAction: cancel))
 	}

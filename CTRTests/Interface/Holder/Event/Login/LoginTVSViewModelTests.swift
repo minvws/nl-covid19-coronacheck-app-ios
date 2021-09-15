@@ -192,7 +192,7 @@ class LoginTVSViewModelTests: XCTestCase {
 		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
 		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
 			expect(content.title) == L.holderErrorstateTitle()
-			expect(content.subTitle) == L.holderErrorstateClientMessage("i 210 000 004")
+			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
 			expect(content.primaryAction).toNot(beNil())
 			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
 			expect(content.secondaryAction).toNot(beNil())
