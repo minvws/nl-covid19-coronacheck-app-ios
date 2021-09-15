@@ -267,6 +267,7 @@
 "holder.errorstate.nosession.message" = "Je hebt te lang gewacht. Voor de veiligheid ben je daarom uitgelogd. Log opnieuw in met DigiD om je gegevens op te halen.";
 "holder.errorstate.nosession.action" = "Begin opnieuw";
 "general.error.server.unreachable" = "Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?";
+"general.error.server.unreachable.errorCode" = "<p>Het is niet gelukt de server te bereiken. Wil je controleren of je verbinding met het internet hebt?</p><p><b>Fout code:</b><br />%@</p>";
 "general.menu.version" = "App versie %@ (%@)";
 "general.government" = "Rijksoverheid";
 "general.government.logo" = "Logo Rijksoverheid";

@@ -294,7 +294,7 @@ class ListEventsViewModel: Logging {
 					showServerTooBusyError(errorCode: ErrorCode(flow: determineErrorCodeFlow(remoteEvents: remoteEvents), step: step, errorCode: "429"))
 					shouldPrimaryButtonBeEnabled = true
 					
-				case .serverUnreachable:
+				case .serverUnreachable, .serverUnreachableTimedOut, .serverUnreachableInvalidHost, .serverUnreachableConnectionLost:
 					showServerUnreachable(remoteEvents: remoteEvents)
 					shouldPrimaryButtonBeEnabled = true
 
@@ -321,7 +321,7 @@ class ListEventsViewModel: Logging {
 						flow: determineErrorCodeFlow(remoteEvents: remoteEvents),
 						step: step,
 						provider: determineErrorCodeProvider(remoteEvents: remoteEvents),
-						errorCode: error.getClientErrorCode() ?? "000",
+						clientCode: error.getClientErrorCode() ?? ErrorCode.ClientCode.unhandled,
 						detailedCode: serverResponse?.code
 					)
 					logDebug("errorCode: \(errorCode)")

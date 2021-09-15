@@ -174,6 +174,34 @@ class LoginTVSViewModelTests: XCTestCase {
 		expect(self.sut.alert?.okTitle) == L.generalOk()
 	}
 
+	func test_openID_error_serverUnreachable() throws {
+
+		// Given
+		sut = LoginTVSViewModel(
+			coordinator: coordinatorSpy,
+			eventMode: .vaccination
+		)
+		openIDSpy.stubbedRequestAccessTokenOnErrorResult =
+			(ServerError.error(statusCode: nil, response: nil, error: .serverUnreachableTimedOut), ())
+
+		// When
+		sut.login()
+
+		// Then
+		expect(self.coordinatorSpy.invokedLoginTVSScreenDidFinish) == true
+		let params = try XCTUnwrap(coordinatorSpy.invokedLoginTVSScreenDidFinishParameters)
+		if case let EventScreenResult.error(content: content, backAction: _) = params.0 {
+			expect(content.title) == L.holderErrorstateTitle()
+			expect(content.subTitle) == L.generalErrorServerUnreachableErrorCode("i 210 000 004")
+			expect(content.primaryAction).toNot(beNil())
+			expect(content.primaryActionTitle) == L.holderErrorstateOverviewAction()
+			expect(content.secondaryAction).toNot(beNil())
+			expect(content.secondaryActionTitle) == L.holderErrorstateMalfunctionsTitle()
+		} else {
+			fail("Invalid state")
+		}
+	}
+
 	func test_openID_error_serverbusy() throws {
 
 		// Given
