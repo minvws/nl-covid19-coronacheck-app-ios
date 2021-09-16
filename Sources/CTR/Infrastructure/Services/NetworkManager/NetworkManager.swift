@@ -77,7 +77,7 @@ class NetworkManager: Logging {
 		completion: @escaping (Result<(Object, SignedResponse, Data, URLResponse), ServerError>) -> Void) {
 
 		let session = createSession(strategy: strategy)
-		data(request: request, session: session, proceedToSuccessIfResponseIs400: proceedToSuccessIfResponseIs400) { data, response, error in
+		data(request: request, session: session) { data, response, error in
 
 			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
 			// Result<(URLResponse, Data), ServerError>
@@ -137,10 +137,9 @@ class NetworkManager: Logging {
 	///   - completion: completion handler with object or server error
 	private func decodeUnsignedJSONData<Object: Decodable>(
 		request: URLRequest,
-		strategy: SecurityStrategy = .data,
 		completion: @escaping (Result<Object, ServerError>) -> Void) {
 
-		let session = createSession(strategy: strategy)
+		let session = createSession(strategy: .data)
 		data(request: request, session: session) { data, response, error in
 
 			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
@@ -200,7 +199,7 @@ class NetworkManager: Logging {
 
 	// MARK: - Download Data
 
-	private func data(request: URLRequest, session: URLSession, proceedToSuccessIfResponseIs400: Bool = false, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
+	private func data(request: URLRequest, session: URLSession, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
 
 		session.dataTask(with: request, completionHandler: completion).resume()
 	}
@@ -299,22 +298,6 @@ class NetworkManager: Logging {
 	
 	// MARK: - Private
 	
-	private lazy var dateFormatter: DateFormatter = {
-		let dateFormatter = DateFormatter()
-		dateFormatter.calendar = .current
-		dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-		dateFormatter.dateFormat = "yyyy-MM-dd"
-		
-		return dateFormatter
-	}()
-	
-	private lazy var jsonEncoder: JSONEncoder = {
-		let encoder = JSONEncoder()
-		encoder.dateEncodingStrategy = .formatted(dateFormatter)
-		encoder.target = .api
-		return encoder
-	}()
-	
 	private lazy var jsonDecoder: JSONDecoder = {
 		let decoder = JSONDecoder()
 		decoder.dateDecodingStrategy = .iso8601
@@ -351,14 +334,11 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeUnsignedJSONData(
-			request: urlRequest,
-			completion: { (result: Result<ArrayEnvelope<EventFlow.AccessToken>, ServerError>) in
-				DispatchQueue.main.async {
-					completion(result.map { decodable in (decodable.items) })
-				}
+		decodeUnsignedJSONData(request: urlRequest) { (result: Result<ArrayEnvelope<EventFlow.AccessToken>, ServerError>) in
+			DispatchQueue.main.async {
+				completion(result.map { decodable in (decodable.items) })
 			}
-		)
+		}
 	}
 
 	/// Prepare the issue (get the nonce)
@@ -448,6 +428,7 @@ extension NetworkManager: NetworkManaging {
 	func fetchTestProviders(completion: @escaping (Result<[TestProvider], ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
+			logError("NetworkManager - fetchTestProviders: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -464,6 +445,7 @@ extension NetworkManager: NetworkManaging {
 	func fetchEventProviders(completion: @escaping (Result<[EventFlow.EventProvider], ServerError>) -> Void) {
 
 		guard let urlRequest = constructRequest(url: networkConfiguration.providersUrl) else {
+			logError("NetworkManager - fetchEventProviders: invalid request")
 			completion(.failure(ServerError.error(statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
@@ -508,6 +490,7 @@ extension NetworkManager: NetworkManaging {
 		}
 
 		guard let urlRequest = constructRequest(url: providerUrl, method: .POST, body: body, headers: headers) else {
+			logError("NetworkManager - fetchTestResult: invalid request")
 			completion(.failure(ServerError.provider(provider: provider.identifier, statusCode: nil, response: nil, error: .invalidRequest)))
 			return
 		}
