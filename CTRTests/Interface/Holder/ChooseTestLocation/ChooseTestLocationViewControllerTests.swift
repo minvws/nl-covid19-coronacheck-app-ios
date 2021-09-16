@@ -56,7 +56,7 @@ class ChooseTestLocationViewControllerTests: XCTestCase {
 		loadView()
 
 		// When
-		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubTitleButton)?.primaryButtonTapped()
+		(self.sut.sceneView.buttonsStackView.arrangedSubviews.first as? DisclosureSubtitleButton)?.primaryButtonTapped()
 
 		// Then
 		expect(self.coordinatorDelegateSpy.invokedUserWishesToCreateANegativeTestQRFromGGD) == true

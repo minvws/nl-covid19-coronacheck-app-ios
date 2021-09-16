@@ -36,13 +36,15 @@ class ChooseTestLocationViewModel: Logging {
 		buttonModels = [
 			.init(
 				title: L.holderLocationGgdTitle(),
-				subtitle: L.holderLocationGgdSubtitle()) { [weak self] in
+				subtitle: L.holderLocationGgdSubtitle(),
+				subtitleIcon: I.digid()) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateANegativeTestQRFromGGD()
 			},
 			.init(
 				title: L.holderLocationOtherTitle(),
-				subtitle: nil) { [weak self] in
+				subtitle: nil,
+				subtitleIcon: nil) { [weak self] in
 
 				self?.coordinator?.userWishesToCreateANegativeTestQR()
 			}

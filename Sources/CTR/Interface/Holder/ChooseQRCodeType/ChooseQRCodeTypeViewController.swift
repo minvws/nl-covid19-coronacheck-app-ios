@@ -66,10 +66,10 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 
 			// Add new buttons:
 			buttons
-				.map { buttonModel -> DisclosureSubTitleButton in
-					DisclosureSubTitleButton.makeButton(
+				.map { buttonModel -> DisclosureSubtitleButton in
+					DisclosureSubtitleButton.makeButton(
 						title: buttonModel.title,
-						subTitle: buttonModel.subtitle,
+						subtitle: buttonModel.subtitle,
 						command: buttonModel.action
 					)
 				}
@@ -78,7 +78,7 @@ class ChooseQRCodeTypeViewController: BaseViewController {
 	}
 }
 
-extension DisclosureSubTitleButton {
+extension DisclosureSubtitleButton {
 
 	/// Create a disclosure button with subtitle
 	/// - Parameters:
@@ -88,13 +88,15 @@ extension DisclosureSubTitleButton {
 	/// - Returns: A disclosure button
 	static func makeButton(
 		title: String,
-		subTitle: String,
-		command: (() -> Void)? ) -> DisclosureSubTitleButton {
+		subtitle: String,
+		subtitleIcon: UIImage? = nil,
+		command: (() -> Void)? ) -> DisclosureSubtitleButton {
 
-		let button = DisclosureSubTitleButton()
+		let button = DisclosureSubtitleButton()
 		button.isUserInteractionEnabled = true
 		button.title = title
-		button.subtitle = subTitle
+		button.subtitle = subtitle
+		button.subtitleIcon = subtitleIcon
 		button.primaryButtonTappedCommand = command
 		return button
 	}
