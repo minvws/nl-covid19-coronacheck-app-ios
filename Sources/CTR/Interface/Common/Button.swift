@@ -177,7 +177,7 @@ class Button: UIButton {
 		layer.borderWidth = style.borderWidth
 		imageEdgeInsets = style.imageEdgeInsets
 		
-		if style.imageEdgeInsets.right > 0 {
+		if style == .roundedBlueImage {
 			// Position image to the right of the label
 			semanticContentAttribute = .forceRightToLeft
 		}
