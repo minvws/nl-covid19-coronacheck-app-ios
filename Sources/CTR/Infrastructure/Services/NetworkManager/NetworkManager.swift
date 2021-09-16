@@ -131,6 +131,44 @@ class NetworkManager: Logging {
 		}
 	}
 
+	/// Decode an unsigned response into JSON
+	/// - Parameters:
+	///   - request: the network request
+	///   - completion: completion handler with object or server error
+	private func decodeUnsignedJSONData<Object: Decodable>(
+		request: URLRequest,
+		strategy: SecurityStrategy = .data,
+		completion: @escaping (Result<Object, ServerError>) -> Void) {
+
+		let session = createSession(strategy: strategy)
+		data(request: request, session: session) { data, response, error in
+
+			let networkResult = self.handleNetworkResponse(response: response, data: data, error: error)
+			// Result<(URLResponse, Data), ServerError>
+
+			switch networkResult {
+				case let .failure(serverError):
+					completion(.failure(serverError))
+
+				case let .success(networkResponse):
+
+					// Decode to the expected object
+					let decodedResult: Result<Object, NetworkError> = self.decodeJson(json: networkResponse.data)
+					switch decodedResult {
+						case let .success(object):
+							completion(.success(object))
+
+						case let .failure(responseError):
+							// Did we experience a network error?
+							let networkError = self.inspect(response: networkResponse.urlResponse)
+							// Decode to a server response
+							let serverResponseResult: Result<ServerResponse, NetworkError> = self.decodeJson(json: networkResponse.data)
+							completion(.failure(ServerError.error(statusCode: networkResponse.urlResponse.httpStatusCode, response: serverResponseResult.successValue, error: networkError ?? responseError)))
+					}
+			}
+		}
+	}
+
 	private func decodeToObject<Object: Decodable>(
 		_ decodedPayloadData: Data,
 		proceedToSuccessIfResponseIs400: Bool = false,
@@ -313,11 +351,11 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(
+		decodeUnsignedJSONData(
 			request: urlRequest,
-			completion: {(result: Result<(ArrayEnvelope<EventFlow.AccessToken>, SignedResponse, Data, URLResponse), ServerError>) in
+			completion: { (result: Result<ArrayEnvelope<EventFlow.AccessToken>, ServerError>) in
 				DispatchQueue.main.async {
-					completion(result.map { decodable, _, _, _ in (decodable.items) })
+					completion(result.map { decodable in (decodable.items) })
 				}
 			}
 		)
@@ -333,9 +371,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest) { result in
+		decodeUnsignedJSONData(request: urlRequest) { (result: Result<PrepareIssueEnvelope, ServerError>) in
 			DispatchQueue.main.async {
-				completion(result.map { decodable, _, _, _ in (decodable) })
+				completion(result)
 			}
 		}
 	}
@@ -398,9 +436,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest) { (result: Result<(RemoteGreenCards.Response, SignedResponse, Data, URLResponse), ServerError>) in
+		decodeUnsignedJSONData(request: urlRequest) { (result: Result<RemoteGreenCards.Response, ServerError>) in
 			DispatchQueue.main.async {
-				completion(result.map { decodable, _, _, _ in (decodable) })
+				completion(result)
 			}
 		}
 	}
@@ -616,10 +654,9 @@ extension NetworkManager: NetworkManaging {
 			return
 		}
 
-		decodeSignedJSONData(request: urlRequest) { result in
-			// Result<(Object, SignedResponse, Data, URLResponse), ServerError>
+		decodeUnsignedJSONData(request: urlRequest) { (result: Result<DccCoupling.CouplingResponse, ServerError>) in
 			DispatchQueue.main.async {
-				completion(result.map { decodable, _, _, _ in (decodable) })
+				completion(result)
 			}
 		}
 	}
