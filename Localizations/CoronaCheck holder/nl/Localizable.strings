@@ -214,7 +214,7 @@
 "holder.tokenentry.regularflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Geen geldige ophaalcode";
 "holder.tokenentry.regularflow.retry.title" = "Ik heb geen code gekregen";
-"holder.tokenentry.regularflow.next" = "Haal testuitslag op";
+"holder.tokenentry.regularflow.next" = "Volgende";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Testuitslag ophalen";
 "holder.tokenentry.universallinkflow.text" = "Vul jouw verificatiecode in om je negatieve testuitslag op te halen.";
@@ -226,7 +226,7 @@
 "holder.tokenentry.universallinkflow.verification.placeholder" = "Bijv. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "Deze ophaalcode is verlopen";
 "holder.tokenentry.universallinkflow.retry.title" = "Ik heb geen code gekregen";
-"holder.tokenentry.universallinkflow.next" = "Haal testuitslag op";
+"holder.tokenentry.universallinkflow.next" = "Volgende";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "Geen lettercombinatie?";

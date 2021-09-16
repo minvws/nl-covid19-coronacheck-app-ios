@@ -214,7 +214,7 @@
 "holder.tokenentry.regularflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.regularflow.error.invalid.code" = "Invalid retrieval code";
 "holder.tokenentry.regularflow.retry.title" = "I haven't received a code";
-"holder.tokenentry.regularflow.next" = "Retrieve test result";
+"holder.tokenentry.regularflow.next" = "Next";
 /* MARK: - Holder Token entry - Universal Link flow */
 "holder.tokenentry.universallinkflow.title" = "Retrieve test result";
 "holder.tokenentry.universallinkflow.text" = "Enter your verification code to retrieve your negative test result.";
@@ -226,7 +226,7 @@
 "holder.tokenentry.universallinkflow.verification.placeholder" = "E.g. 123456";
 "holder.tokenentry.universallinkflow.error.invalid.code" = "This retrieval code has expired";
 "holder.tokenentry.universallinkflow.retry.title" = "I haven't received a code";
-"holder.tokenentry.universallinkflow.next" = "Retrieve test result";
+"holder.tokenentry.universallinkflow.next" = "Next";
 
 /* MARK: - Holder DCC Token entry */
 "holder.dcctokenentry.button.notoken" = "No letter combination?";
